@@ -1,0 +1,1 @@
+[DESTINATION_URL]<?= $separator?>utm_medium=email&utm_source=<?php echo $utm_source?>&utm_campaign=<?php echo $utm_campaign?>&utm_content=<?php echo $utm_content?>

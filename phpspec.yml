@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: Stensul
+        psr4_prefix: Stensul
+        src_path: app

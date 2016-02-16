@@ -1,0 +1,21 @@
+webdisney:
+  image: "fanbridge/web:v1.7"
+  command: /start.sh
+  ports:
+   - "49155:80"
+  volumes:
+   - /home/fbridge/storage/disney/:/storage/
+   - ../logs/:/var/log/
+   - .:/home/fbridge/app/
+   - ./conf.d/httpd/env.conf:/etc/httpd/conf.d/env.conf
+   - ./conf.d/php.d/newrelic.ini:/etc/php.d/newrelic.ini
+
+
+queuedisney:
+  image: "fanbridge/web:v1.7"
+  command: php /home/fbridge/app/artisan queue:work --daemon
+  volumes:
+   - /home/fbridge/storage/disney/:/storage/
+   - ../logs/:/var/log/
+   - .:/home/fbridge/app/
+   - ./conf.d/php.d/newrelic.ini:/etc/php.d/newrelic.ini

@@ -1,0 +1,1 @@
+@include('vzw.rauxa_acquisition.modals.image_plus_text_config')

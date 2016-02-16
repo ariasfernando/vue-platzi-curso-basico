@@ -1,0 +1,61 @@
+table{
+	background: transparent;	
+}
+.table{
+	background: @table-bg;
+	.border-radius( 5px );
+
+	th, th a{
+		color: @table-header-font-color;
+	}
+
+	th a, th a:hover{
+		text-decoration: none;
+	}
+
+	thead tr th.sortable{
+		a{
+			width: 100%;
+
+			i{
+				margin: 4px 0 0;
+			}
+		}
+	}
+
+	thead tr th,
+	tbody tr td{
+		font-size: 12px;
+		line-height: 20px;
+		vertical-align: middle;
+	}
+
+	thead tr{
+		background: @table-header-bg;
+
+		th{
+			height: 45px;
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+	}
+
+	a.sortable-option{
+		i{
+			.opacity(0.5);
+		}
+
+		&.sort-order-asc,
+		&.sort-order-desc{
+			i{
+				.opacity(1);
+			}
+		}
+
+		&.sort-order-asc{
+			i{
+				.glyphicon-triangle-top();
+			}
+		}
+	}
+}
