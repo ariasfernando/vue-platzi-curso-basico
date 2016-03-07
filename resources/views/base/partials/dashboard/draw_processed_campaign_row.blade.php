@@ -16,9 +16,9 @@
             <a href="{{ action('CampaignController@getPublicPath', $campaign->id  ) }}" title="View hosted version" target="_blank"><i class="glyphicon glyphicon-eye-open"></i></a>
             <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
             <a href="{{ action('CampaignController@getEdit', array( 'id' => $campaign->id )) }}" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-            @if ($app_config['api']['upload_modal'])
-				<a href="#" title="Upload to {{ $app_config['api'][ $app_config['api']['api_driver'] ]['title'] }}" class="btn-upload-api" data-campaign-id="{{ $campaign->id }}"><i class="glyphicon glyphicon-cloud-upload"></i></a>
-            @endif
+            @foreach ( Helper::getApiDrivers( $campaign->library ) as $api)
+				<a href="#" title="Upload to {{ $app_config['api'][ $api ]['title'] }}" class="btn-upload-api" data-campaign-id="{{ $campaign->id }}" data-api-driver="{{ $api }}"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+            @endforeach
             <a href="#" class="delete" title="Delete"><i class="glyphicon glyphicon-ban-circle"></i></a>
         </td>
     </tr>

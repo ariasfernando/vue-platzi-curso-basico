@@ -9,14 +9,14 @@
                 <textarea></textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-html">HTML</button>
                 @if (isset($app_config["campaign"]["process_plaintext"]) && $app_config["campaign"]["process_plaintext"])
                     <button type="button" class="btn btn-default btn-html">HTML</button>
                     <button type="button" class="btn btn-default btn-plain-text">Plaintext</button>
                 @endif
-                @if(isset($app_config['api']) && $app_config['api']['upload_modal'])
-                    <button type="button" class="btn btn-default btn-upload-api" data-campaign-id="{{ $params['campaign_id'] }}">Upload to {{ $app_config['api'][ $app_config['api']['api_driver'] ]['title'] }}</button>
-                @endif
+                {{-- Modal Upload --}}
+                @foreach (Helper::getApiDrivers($params['campaign_data']->library) as $api)
+                    <button type="button" class="btn btn-default btn-upload-api" data-campaign-id="{{ $params['campaign_id'] }}" data-api-driver="{{ $api }}">Upload to {{ $app_config['api'][ $api ]['title'] }}</button>
+                @endforeach
                 <a href="{{ action('CampaignController@getPublicPath', $params['campaign_id']  ) }}" target="_blank" type="button" class="btn btn-default">View in browser</a>
                 <button class="btn btn-default btn-back-to-dashboard" data-dismiss="modal">Go back to the dashboard</button>
             </div>

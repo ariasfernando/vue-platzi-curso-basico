@@ -83,10 +83,10 @@
         {{-- Modal Confirm --}}
         @include('base/partials/modal_confirm')
 
-        @if ($app_config['api']['upload_modal'])
-            {{-- Modal Upload --}}
-            @include('base.partials.campaign.modal_campaign_'.$app_config['api']['api_driver'].'_upload')
-        @endif
+        {{-- Modal Upload --}}
+        @foreach (Helper::getApiDrivers() as $api)
+            @include('base.partials.campaign.modal_campaign_'.$api.'_upload')
+        @endforeach
 
         <!-- Scripts -->
         <script src="{{ url( elixir('js/library.js') ) }}"></script>

@@ -13,67 +13,44 @@ Application.api = (function($){
         domSelector: document,
         modalSelector: "#modal-campaign-upload",
         btnUploadSelector: ".btn-upload-api",
-        btnModalUploadSelector: ".btn-upload-api",
-        uploadApiForm : "#upload-api-form",
-        campaignId : "#campaign_id",
+        btnModalUploadSelector: ".btn-upload-submit",
+        uploadApiForm : ".upload-api-form",
+        campaignId : ".campaign_id",
         campaignIdData : "campaign-id",
-        dataTable : "#uploaded-data"
+        apiDriver : "api-driver",
+        dataTable : ".uploaded-data"
     };
 
     this.openUpload = function(elem){
         var _this = this;
-        $( options.uploadApiForm ).find( options.campaignId ).val($(elem).data( options.campaignIdData ));
-        var $campaignUploadModal = $( options.modalSelector );
+        var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).data(options.apiDriver) );
+        $campaignUploadModal.find( options.campaignId ).val( $(elem).data( options.campaignIdData ) );
         $campaignUploadModal.find('.response-message').html('').removeClass('alert-success').removeClass('alert-danger').hide();
-        $campaignUploadModal.find('#filename').val('');
+        $campaignUploadModal.find('.filename').val('');
         $campaignUploadModal.find(options.dataTable).hide();
-        _this.updateModalTable();
+        _this.updateModalTable(elem);
         if( $campaignUploadModal ){
             $campaignUploadModal.modal();
         }
     };
 
-    this.uploadEmail = function(elem){
-        var _this = this;
-        var $uploadForm = $( options.uploadApiForm );
-        $( options.modalSelector ).find('.response-message').html('').removeClass('alert-success').removeClass('alert-danger').hide();
-        if( Application.utils.validate.validateForm( $uploadForm[0] ) ){
-            $( elem ).addClass("ajax-loader-small").attr("disabled","disabled");
-            $( elem ).parent().removeClass("success").addClass("spinner");
-            var data = $uploadForm.serialize();
-            var processCampaignUpload = Application.utils.doAjax("/api/upload-email", {data: data});
-            processCampaignUpload.done(function( response ){
-                $('.response-message-success').show();
-                _this.updateModalTable();
-                $uploadForm.find('#filename').val('');
-            });
-            processCampaignUpload.fail(function(){
-                $('.response-message-error').show();
-            });
-            processCampaignUpload.always(function(){
-                $( elem ).parent().removeClass("spinner");
-                $( elem ).removeClass("ajax-loader-small").removeAttr("disabled","disabled");
-            });
-        }
-        return false;
-    };
-
-    this.updateModalTable = function(){
-        var campaign_id = $( options.modalSelector ).find( options.campaignId ).val();
+    this.updateModalTable = function(elem){
+        var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).data(options.apiDriver) );
+        var campaign_id = $campaignUploadModal.find( options.campaignId ).val();
         var data = { campaign_id: campaign_id };
         var getHistory = Application.utils.doAjax("/api/history", { type: "GET", data: data });
         getHistory.done(function( response ){
-            var table = $( options.modalSelector ).find( options.dataTable );
+            var table = $campaignUploadModal.find( options.dataTable );
             if (response.length) {
                 var tableContent = '';
-                var dataInfo = $( options.modalSelector ).find(options.dataTable).data('info') || 'filename';
+                var dataInfo = $campaignUploadModal.find(options.dataTable).data('info') || 'filename';
 
                 for (var i = response.length - 1; i >= 0; i--) {
                     if( i == (response.length - 1)) {
                         for (var key in response[i]) {
-                            if ($(options.modalSelector + " #" + key).length && key != 'campaign_id' && response[i][key]) {
+                            if ($(options.modalSelector + " ." + key).length && key != 'campaign_id' && response[i][key]) {
                                 var fieldContent = (key=='filename')? response[i]['original_filename'] : response[i][key];
-                                $(options.modalSelector + " #" + key).val(fieldContent);
+                                $(options.modalSelector + " ." + key).val(fieldContent);
                             }
                         }
                     }
@@ -88,13 +65,41 @@ Application.api = (function($){
                 table.find('tbody').html(tableContent);
                 table.fadeIn();
             }else{
-                $(options.modalSelector + " input[type='text']").each(function(){
-                   $(this).val('');
+                $campaignUploadModal.find(" input[type='text']").each(function(){
+                    $(this).val('');
                 });
                 table.hide();
             }
         });
     };
+
+    this.uploadEmail = function(elem){
+        var _this = this;
+        var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).data(options.apiDriver) );
+        var $uploadForm = $campaignUploadModal.find(options.uploadApiForm);
+        $campaignUploadModal.find('.response-message').html('').removeClass('alert-success').removeClass('alert-danger').hide();
+        if( Application.utils.validate.validateForm( $uploadForm[0] ) ){
+            $( elem ).addClass("ajax-loader-small").attr("disabled","disabled");
+            $( elem ).parent().removeClass("success").addClass("spinner");
+            var data = $uploadForm.serialize();
+            var processCampaignUpload = Application.utils.doAjax("/api/upload-email", {data: data});
+            processCampaignUpload.done(function( response ){
+                $('.response-message-success').show();
+                _this.updateModalTable(elem);
+                $uploadForm.find('#filename').val('');
+            });
+            processCampaignUpload.fail(function(){
+                $('.response-message-error').show();
+            });
+            processCampaignUpload.always(function(){
+                $( elem ).parent().removeClass("spinner");
+                $( elem ).removeClass("ajax-loader-small").removeAttr("disabled","disabled");
+            });
+        }
+        return false;
+    };
+
+
 
     this.init = function(){
         var _this = this;
@@ -106,7 +111,7 @@ Application.api = (function($){
         });
 
         // -- Upload email to api --
-        $( options.modalSelector ).on("click", options.btnModalUploadSelector, function(){
+        $(document).on("click", options.btnModalUploadSelector, function(){
             _this.uploadEmail( this );
             return false;
         });
