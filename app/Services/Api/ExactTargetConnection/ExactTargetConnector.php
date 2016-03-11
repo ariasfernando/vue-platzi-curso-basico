@@ -217,7 +217,7 @@ class ExactTargetConnector
         $email->authStub = $this->fuel;
         $email->props = array(
             'CustomerKey'=> $campaign->id,
-            'Name'=>$campaign->campaign_name,
+            'Name'=>(isset($request['campaign_name']))? $request['campaign_name'] : $campaign->campaign_name,
             'HTMLBody' => $campaign->body_html,
             'TextBody' => $campaign->plain_text,
             'CharacterSet' => 'UTF-8',
@@ -291,7 +291,7 @@ class ExactTargetConnector
         $email->authStub = $this->fuel;
         $email->props = array(
             'ID'=> $id,
-            'Name'=>$campaign->campaign_name,
+            'Name'=>(isset($request['campaign_name']))? $request['campaign_name'] : $campaign->campaign_name,
             'HTMLBody' => $campaign->body_html,
             'TextBody' => $campaign->plain_text,
             'PreHeader' => (isset($request['preheader']))? $request['preheader'] : '',

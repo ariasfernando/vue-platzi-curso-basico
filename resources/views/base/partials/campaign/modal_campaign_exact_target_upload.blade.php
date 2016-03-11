@@ -15,6 +15,11 @@
                         <input type="hidden" name="api_driver" value="{{ $app_config['api']['exact_target']['class'] }}" class="api_driver" />
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         <div class="form-group">
+                            <label for="filename">Enter the name of your campaign.</label>
+                            <input type="text" class="form-control" name="campaign_name" id="campaign_name" value=""
+                                placeholder="Enter the name of your campaign" data-validation='{ "required":"true" }'/>
+                        </div>
+                        <div class="form-group">
                             <label for="filename">Subject</label>
                             <input type="text" class="form-control subject" name="subject" value=""
                                 placeholder="Enter the subject for your campaign" data-validation='{ "required":"true" }'/>
