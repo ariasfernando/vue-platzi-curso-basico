@@ -3,6 +3,7 @@ namespace Stensul\Services\Api\SilverpopConnection;
 
 use Illuminate\Support\Facades\Log;
 use Stensul\Models\Upload;
+use GuzzleHttp\Client as Client;
 
 class SilverpopConnector
 {
@@ -10,14 +11,10 @@ class SilverpopConnector
     protected $endpoint;
     protected $username;
     protected $password;
-    protected $sessionID;
-    public $sessionLog = array();
-    public $faultLog = array();
-    public $logTransactions = false;
-    public $logFaults = false;
-    protected $callStack;
+    protected $session_id;
     protected $connection;
     protected $config;
+    protected $client;
 
     /**
      * Constructor for SilverpopConnection class.
@@ -34,8 +31,9 @@ class SilverpopConnector
         $this->endpoint = $endpoint;
         $this->username = $username;
         $this->password = $password;
-        $this->login();
         $this->config = \Config::get("api.silverpop");
+        $this->client = new Client();
+        $this->login();
     }
     /**
      * Public wrapper for making an API call to the Silverpop XMLAPI endpoint.
@@ -47,7 +45,7 @@ class SilverpopConnector
      */
     public function call($xml)
     {
-        $url = ($this->sessionID) ? $this->endpoint . ';jsessionid=' . $this->sessionID : $this->endpoint;
+        $url = ($this->session_id) ? $this->endpoint . ';jsessionid=' . $this->session_id : $this->endpoint;
         return $this->getXMLResponse($url, utf8_encode($xml));
     }
     /**
@@ -61,50 +59,74 @@ class SilverpopConnector
      */
     protected function getXMLResponse($url, $xml)
     {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
-        curl_setopt($ch, CURLINFO_HEADER_OUT, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 180);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: text/xml;charset=UTF-8',
-            'Content-Length: ' . strlen($xml),
-        ));
+        $client = $this->client;
 
-        $call_time = microtime(true);
-        $response = curl_exec($ch);
-        $response_time = microtime(true);
+        $options = [
+            'headers' => [
+              'Content-Type' => 'text/xml;charset=UTF-8',
+              'Content-Length' => strlen($xml),
+            ],
+            'body' => $xml,
+            'connect_timeout' => 60
+        ];
 
-        if ($this->logTransactions) {
-            $this->sessionLog[] = array(
-                'call_time' => date('Y/m/d [g:i:sa]', $call_time),
-                'executed_in' => ($response_time - $call_time) . ' seconds',
-                'call_xml' => $xml,
-                'response_xml' => $response,
-            );
+        try {
+            $response = $client->request("POST", $url, $options);
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $error = [
+                'status' => 'error_request',
+                'code' => $e->getResponse()->getStatusCode(),
+                'data' => json_decode($e->getResponse()->getBody()->getContents(), true)
+            ];
+        } catch (\GuzzleHttp\Exception\ClientErrorResponseException $e) {
+            $error = [
+                'status' => 'error_client',
+                'code' => $e->getResponse()->getStatusCode(),
+                'data' => json_decode($e->getResponse()->getBody()->getContents(), true)
+            ];
+        } catch (\GuzzleHttp\Exception\ServerErrorResponseException $e) {
+            $error = [
+                'status' => 'error_server',
+                'code' => $e->getResponse()->getStatusCode(),
+                'data' => json_decode($e->getResponse()->getBody()->getContents(), true)
+            ];
+        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+            $error = [
+                'status' => 'error_response',
+                'code' => $e->getResponse()->getStatusCode(),
+                'data' => json_decode($e->getResponse()->getBody()->getContents(), true)
+            ];
+        } catch (\GuzzleHttp\Exception\ConnectException $e) {
+            $error = [
+                'status' => 'error_connect',
+                'code' => $e->getResponse()->getStatusCode(),
+                'data' => json_decode($e->getResponse()->getBody()->getContents(), true)
+            ];
+        } catch (\Exception $e) {
+            $error = [
+                'status' => 'error',
+                'code' => $e->getCode(),
+                'data' => [
+                    'reason' => $e->getMessage()
+                ]
+            ];
         }
 
-        if ($this->logFaults) {
-            $xml = new \DOMDocument();
-            $xml->loadXML($response);
-            $fault_tags = $xml->getElementsByTagName('FaultString');
-            for ($i = 0; $i < $fault_tags->length; $i++) {
-                $this->faultLog[] = $fault_tags->item($i)->nodeValue;
-            }
+        if (isset($error)) {
+            $error_message = (isset($error['data']['error_description']))? $error['data']['error_description'] : $error['status'];
+            Activity::log('Error Eloqua ['.$error['status'].']', array('properties' => ['message' => $error_message]));
+            throw new \Exception($error_message);
+        } else {
+            return $response->getBody()->getContents();
         }
-        if ($response) {
-            curl_close($ch);
-        }
-        return $response;
+
+
     }
     /**
      * Create a login request and retrieve a session id.
      *
-     * ID is stored in $this->sessionID for use by all subsequent requests.
+     * ID is stored in $this->session_id for use by all subsequent requests.
      */
     protected function login()
     {
@@ -128,7 +150,7 @@ class SilverpopConnector
         $fault_tags = $xml->getElementsByTagName('FaultString');
         $fault_codes = $xml->getElementsByTagName('errorid');
         $id_tag = $xml->getElementsByTagName('SESSIONID');
-        // Received a fault response from Silverpop.
+
         if ($fault_tags->length > 0) {
             $message = $fault_tags->item(0)->nodeValue;
             $code = $fault_codes->item(0)->nodeValue;
@@ -140,7 +162,7 @@ class SilverpopConnector
             Log::error('Silverpop api error message: ', [$error_msg]);
             throw new \Exception($error_msg);
         } else {
-            $this->sessionID = $id_tag->item(0)->nodeValue;
+            $this->session_id = $id_tag->item(0)->nodeValue;
         }
     }
     /**
@@ -150,30 +172,6 @@ class SilverpopConnector
     {
         $logout_response = $this->call('<Envelope><Body></Logout></Body></Envelope>');
     }
-
-    /**
-     * Disables logging of API calls.
-     */
-    public function enableLogging()
-    {
-        $this->logTransactions = true;
-        $this->logFaults = true;
-    }
-    /**
-     * Return the session log from the connection.
-     */
-    public function getSessionLog()
-    {
-        return $this->sessionLog;
-    }
-    /**
-     * Return the fault log from the connection.
-     */
-    public function getFaultLog()
-    {
-        return $this->faultLog;
-    }
-
     /**
      * Send email template to Silverpop XMLAPI.
      *
@@ -223,11 +221,9 @@ class SilverpopConnector
             $xml = new \DOMDocument();
             $xml->loadXML($save);
             $fault_tags = $xml->getElementsByTagName('FaultString');
-            $fault_codes = $xml->getElementsByTagName('errorid');
 
             if ($fault_tags->length > 0) {
                 $message = $fault_tags->item(0)->nodeValue;
-                $code = $fault_codes->item(0)->nodeValue;
                 $error_msg = 'Could not connect to the Silverpop XMLAPI. Silverpop says: "' . $message . '"';
                 Log::error('Silverpop api error message: ', [$error_msg]);
                 return [ 'error' => $error_msg ];

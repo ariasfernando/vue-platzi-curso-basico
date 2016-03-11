@@ -30,7 +30,6 @@ class Silverpop implements ApiConnector
                 $this->silverpop_config["user_name"],
                 $this->silverpop_config["password"]
             );
-
         } catch (Exception $e) {
             throw new \Exception($e);
         }
@@ -45,6 +44,7 @@ class Silverpop implements ApiConnector
      */
     public function uploadEmail($campaign = null, $request = null)
     {
+
         if (!is_null($campaign)) {
             $response = $this->client->saveMailing($campaign, $request);
 
