@@ -47,7 +47,11 @@ class CampaignController extends Controller
                 $params = Campaign::find($campaign_id);
 
                 if ($params) {
-                    $params['menu_list'] = \Config::get('menu.default');
+                    $library = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
+                        ? $params['campaign_data']['library']
+                        : "default";
+
+                    $params['menu_list'] = \Config::get('menu.'.$library);
                 } else {
                     return redirect(env('APP_BASE_URL', '/'))->with('campaign_not_found', $campaign_id);
                 }
