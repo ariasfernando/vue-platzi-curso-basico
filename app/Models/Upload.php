@@ -6,8 +6,6 @@ use Jenssegers\Mongodb\Model as Eloquent;
 
 class Upload extends Eloquent
 {
-    protected $connection = 'mongodb';
-
     /**
      * The database table used by the model.
      *
