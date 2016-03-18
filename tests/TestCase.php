@@ -33,7 +33,7 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
             'email' => 'test@stensul.com',
             'password' => bcrypt('qwe123')
         ];
-
+ 
         $registrar = new \Stensul\Services\Registrar;
         $this->user = $registrar->create($params);
 
