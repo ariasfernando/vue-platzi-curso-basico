@@ -6,9 +6,13 @@ function deploy_composer {
 	echo "updating php dependencies..."
 	if [ -f ./composer.phar ]; then
 		echo "using local composer instalation..."
+		php composer.phar self-update
+		php composer.phar clear-cache
 		php composer.phar install -o
 	else
 		echo "using global composer instalation..."
+		composer self-update
+		composer clear-cache
 		composer install -o
 	fi
 }

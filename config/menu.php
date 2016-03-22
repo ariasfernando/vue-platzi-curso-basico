@@ -51,6 +51,14 @@ $default = [
             'level' => 'single'
         ],
 
+        'hero_image_bg' => [
+            'title' => 'Hero Image Background',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'hero_image_bg',
+            'level' => 'single'
+        ],
+
         'spacer' => [
             'title' => 'Configurable spacer',
             'action' => 'add',
