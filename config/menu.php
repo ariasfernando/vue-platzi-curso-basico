@@ -51,6 +51,14 @@ $default = [
             'level' => 'single'
         ],
 
+        'hero_image_bg' => [
+            'title' => 'Hero Image Background',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'hero_image_bg',
+            'level' => 'single'
+        ],
+
         'spacer' => [
             'title' => 'Configurable spacer',
             'action' => 'add',
@@ -179,7 +187,21 @@ $default = [
             'module_id' => 'two_columns',
             'level' => 'single',
         ],
-        
+        'text_with_image' => [
+            'title' => 'Text + CTA Button + Image',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'text_with_image',
+            'level' => 'single'
+        ],
+
+        'two_column_media_shared_height' => [
+            'title' => 'Two Columns Shared Height',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'two_column_media_shared_height',
+            'level' => 'single'
+        ]
     ]
 
 ];

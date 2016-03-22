@@ -10,7 +10,37 @@ $overrideFile = (env('APP_NAME', false))
     ? str_replace(basename(__FILE__), ucwords(strtolower(env('APP_NAME'))) . '/' . basename(__FILE__), __FILE__)
     : false;
 
+/*
+ | ===== Configs =====
+ | You should use array_merge(arr1,arr2) if you want override some value
+ */
+$single_image_editor = [
+    "app_name" => "base",
+    "view" => "single_image_editor", // Blade template name
+    "config_modal_key" => "single_image_editor", // Key for configModals script
+    "title" => "Image editor",
+    "enabled_options" => "destination_url alt_text image_upload og_image image_crop",
+    "image_size" => [
+        "height" => 250,
+        "width" => 300
+    ]
+];
+
 $default = [
+    "single" => array_merge($single_image_editor,[
+        "image_size" => [
+            "height" => 240,
+            "width" => 320
+        ]
+    ]),
+
+    "single_shared_height" => array_merge($single_image_editor,[
+        "image_size" => [
+            "height" => 240,
+            "width" => 320
+        ],
+        "enabled_options" => "destination_url alt_text image_upload adjustable_height image_crop"
+    ]),
 
     /* -- Hero Image: Full image editor -- */
     "hero" => [
@@ -43,6 +73,7 @@ $default = [
         ],
         "image_library" => "enabled",
         "image_crop" => "enabled",
+        "image_size_adjustable" => "enabled",
         "text_overlay" => "enabled",
         "multi_crop" => "enabled",
         "toolbox" => [
@@ -133,6 +164,24 @@ $default = [
         "image_size" => [
             "width" => 240,
             "height" => 90
+        ]
+    ],
+    "text_with_image" => [
+        "title" => "Text with image",
+        "image_crop" => "enabled",
+        "image_size" => [
+            "width" => 175,
+            "height" => 131
+        ],
+        "adjustable_height" => "enabled",
+        "adjustable_height_options" => [
+            "max" => 300,
+            "min" => 100
+        ],
+        "adjustable_width" => "enabled",
+        "adjustable_width_options" => [
+            "max" => 280,
+            "min" => 100
         ]
      ]
 ];

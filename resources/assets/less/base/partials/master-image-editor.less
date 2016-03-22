@@ -18,10 +18,6 @@
 		margin-left: auto;
 		margin-right: auto;
 
-		label{
-			display: inline;
-		}
-
 		#canvas-zoom-sel{
 			width: 70%;
 			float: right;
@@ -31,7 +27,6 @@
 	.modal-two-column{
 		.section-box-zoom{
 			width: 49%;
-			padding-top: 2px;
 		}
 	}
 
@@ -306,12 +301,23 @@
 		display: none;
 	}
 
-	// Previer Content
+	.preview-box{
+		position: relative;
+		.custom-image-loading{
+			&.spinner-loading{
+				width: 100%;
+				height: 100%;
+				cursor: default;
+				position: absolute;
+				top: 0;
+				background: rgba(255,255,255,0.7);
 
-	#image-cropper-mobile{
-		.cropit-image-preview{
-			width: 318px!important;
-			height: 200px!important;
+				img{
+					top: 50%;
+					margin-top: -27px;
+					position: relative;
+				}
+			}
 		}
-	} 
+	}
 }

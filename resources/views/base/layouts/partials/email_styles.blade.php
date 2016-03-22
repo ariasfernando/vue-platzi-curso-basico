@@ -55,6 +55,7 @@
 		table.wrapper-table {
             width: 100% !important;
         }
+        th.element-block-center,
 		td.element-block-center {
             display: block !important;
             width: 100% !important;

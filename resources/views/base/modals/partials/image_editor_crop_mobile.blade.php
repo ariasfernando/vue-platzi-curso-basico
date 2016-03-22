@@ -10,9 +10,13 @@
 	{{-- Image Preview --}}
 	<div class="section-box preview-box">
 
-		<div class="{{ ( $params['image_crop'] == 'enabled' && $params['image_overlay'] == 'enabled' )? 'modal-two-column':'' }}">
+		<div class="{{ ( $params['image_crop'] == 'enabled' &&  $params['image_overlay'] == 'enabled' || $params['adjustable_height'] == 'enabled' )? 'modal-two-column':'' }}">
 			{{-- Image Zoom --}}
 			@include('base.modals.partials.image_editor_zoom_control')
+
+			{{-- Image height control --}}
+			@include('base.modals.partials.image_editor_height_control')
+
 		</div>
 
 		<div class="section-title"><h2>Preview Image</h2></div>

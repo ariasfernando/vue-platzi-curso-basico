@@ -23,6 +23,7 @@ var moduleManager = {
     actionsButtonsTpl: '<div class="actions-buttons-tooltip">' +
     '<a href="#" class="action-sortable"><i class="glyphicon glyphicon-resize-vertical"></i></a>' +
     '<a href="#" class="action-config"><i class="glyphicon glyphicon-cog"></i></a>' +
+							'<a href="#" class="action-duplicate"><i class="glyphicon glyphicon-duplicate"></i></a>'+
     '<a href="#" class="action-remove"><i class="glyphicon glyphicon-remove-sign"></i></a>' +
 						'</div>',
 
@@ -94,10 +95,46 @@ var moduleManager = {
 			}
 		}
 	},
+	duplicateModule: function( moduleName, moduleAppName, inheritedData ){
+        var selectedMode = $('.switch-input:checked').val();
+
+		if( moduleName ){
+
+			var module = this;
+
+			// Reset module variables.
+			module.reset();
+
+			// Set module id
+			module.moduleName = moduleName;
+			// Set module app name
+			module.moduleAppName = moduleAppName;
+
+			// Get view content by ajax.
+			var getViewRequest = module.getModuleView(inheritedData);
+
+			// Request Success
+            getViewRequest.done(function (html) {
+				// Set module html content
+				module.viewContent = html;
+				// Draw module on canvas
+                module.drawOnCanvas(function () {
+					// init module plugins
+					module.initPlugins();
+                    Application.utils.changeBuildingMode(selectedMode);
+				});
+			});
+
+			// Request Fail
+            getViewRequest.fail(function () {
+                Application.utils.alert.display("Error:", "An error occurred while trying to get the module, please try again later.", "danger");
+			});
+		}
+	},
 
  	// Make Ajax Request.
 	// Return the ajax object.
-    getModuleView: function () {
+    getModuleView: function (inheritedData) {
 		var _this = this;
 
 		var url = Application.globals.baseUrl + "/template/module";
@@ -105,8 +142,12 @@ var moduleManager = {
 			app_name: _this.moduleAppName,
 			name: _this.moduleName,
 			library_name: Application.globals.library_name,
-			campaign_id: campaignManager.getCampaignId()
+			campaign_id: campaignManager.getCampaignId(),
 		};
+		//For cloning modules
+		if(inheritedData) {
+			data.module_data = inheritedData;
+		}
 
 		// Do request
 		return request = $.ajax({
@@ -512,6 +553,25 @@ var moduleManager = {
 		}
 	},
 
+    getModuleData: function( $module, dataKey ){
+        if( !$module ){
+            return false;
+        }
+
+        var data = {};
+        var dataParams = $module.data("params") || $module.parents("[data-params]").data("params");
+
+        if( dataKey ){
+            if( dataParams.data[dataKey] ){
+                data = dataParams.data[dataKey];
+            }
+        }else{
+            data = dataParams.data;
+        }
+
+        return data;
+    },
+
 	/*
 	 *	Save in module data.
 	 *	@param $module ( jQuery element )
@@ -521,6 +581,7 @@ var moduleManager = {
         if (!key || !$module) {
 			return false;
 		}
+
 
 		// Get module params
 		var dataParams = $module.data("params");
@@ -599,29 +660,54 @@ var moduleManager = {
 				module.deleteModule($deleteModule);
 				return false;
 			})
-			// Action Config
-            .on("click", '.action-config', function () {
-				var $moduleElement = $(this).parents("[data-params]")
-
-				// Set config modal default or from data-params
-				var modalName = $moduleElement.data("params").type  + "_config";
-                if ($moduleElement.data('params').config_modal && $moduleElement.data('params').config_modal != "") {
-					modalName = $moduleElement.data('params').config_modal;
-				}
-
-				var appName = $moduleElement.data("params").app_name || $moduleElement.data("params").file_parent;
-				//Call function configModal
-				module.configModal({
-					appName: appName,
-					view: modalName,
-					type: $moduleElement.data("params").type
-				});
-
-				//Set target in modalTarget  
-				module.modalTarget = $moduleElement;
-
+			.on("click",'.action-duplicate', function(){
+				// Duplicate module 
+				var moduleToDuplicate = $(this).closest("[data-params]").data('params');
+				module.duplicateModule(moduleToDuplicate.type, moduleToDuplicate.file_parent, moduleToDuplicate.data);
 				return false;
 			})
+            // Action Config
+            .on("click", '.action-config', function () {
+                var $moduleElement = $(this).parents("[data-params]")
+
+                // Set config modal default or from data-params
+                var modalName = $moduleElement.data("params").type  + "_config";
+                if ($moduleElement.data('params').config_modal && $moduleElement.data('params').config_modal != "") {
+                    modalName = $moduleElement.data('params').config_modal;
+                }
+
+                var appName = $moduleElement.data("params").app_name || $moduleElement.data("params").file_parent;
+
+                // configModal
+                var configModal = new modalManager({
+                    app_name: appName,
+                    view: modalName,
+                    config_modal_key: $moduleElement.data("params").type
+                });
+                configModal.modalTarget = $moduleElement;;
+                configModal.open();
+
+                return false;
+            })
+
+            // Open config element
+            .on("click", "[data-open-element-config]", function () {
+                // Get modal config from data attr
+                var modalConfig = {};
+                if ($(this).data("open-element-config") != "") {
+                    modalConfig = module.modalConfig[$(this).data("open-element-config")];
+                }else{
+                    return false;
+                }
+
+                if( modalConfig.config_modal_key && ConfigModals && ConfigModals[modalConfig.config_modal_key] ){
+                    modalConfig.target = this;
+                    var configurationModalObj = ConfigModals[ modalConfig.config_modal_key ](modalConfig);
+                    configurationModalObj.open();
+                }
+
+                return false;
+            })
 			// Call function configModal to open modal
             .on("click", "[data-master-image-editor]", function () {
 				//Set target in modalTarget
@@ -788,5 +874,13 @@ var moduleManager = {
 
 		// Set true to prevent set this events again.
 		this.eventsSet = true;
+	},
+
+	getModuleParent: function($element){
+		if( $element.data("params") ){
+			return $element;
+		}else{
+			return $element.parents("[data-params]");
+		}
 	}
 };

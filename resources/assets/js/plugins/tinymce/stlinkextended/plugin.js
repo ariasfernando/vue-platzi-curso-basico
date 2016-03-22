@@ -4,421 +4,473 @@
 
 /*global tinymce:true */
 
-tinymce.PluginManager.add('stlinkextended', function(editor) {
-	function createLinkList(callback) {
-		return function() {
-			var linkList = editor.settings.link_list;
+tinymce.PluginManager.add('stlinkextended', function (editor) {
+    function createLinkList(callback) {
+        return function () {
+            var linkList = editor.settings.link_list;
 
-			if (typeof linkList == "string") {
-				tinymce.util.XHR.send({
-					url: linkList,
-					success: function(text) {
-						callback(tinymce.util.JSON.parse(text));
-					}
-				});
-			} else if (typeof linkList == "function") {
-				linkList(callback);
-			} else {
-				callback(linkList);
-			}
-		};
-	}
+            if (typeof linkList == "string") {
+                tinymce.util.XHR.send({
+                    url: linkList,
+                    success: function (text) {
+                        callback(tinymce.util.JSON.parse(text));
+                    }
+                });
+            } else if (typeof linkList == "function") {
+                linkList(callback);
+            } else {
+                callback(linkList);
+            }
+        };
+    }
 
-	function buildListItems(inputList, itemCallback, startItems) {
-		function appendItems(values, output) {
-			output = output || [];
+    function buildListItems(inputList, itemCallback, startItems) {
+        function appendItems(values, output) {
+            output = output || [];
 
-			tinymce.each(values, function(item) {
-				var menuItem = {text: item.text || item.title};
+            tinymce.each(values, function (item) {
+                var menuItem = { text: item.text || item.title };
 
-				if (item.menu) {
-					menuItem.menu = appendItems(item.menu);
-				} else {
-					menuItem.value = item.value;
+                if (item.menu) {
+                    menuItem.menu = appendItems(item.menu);
+                } else {
+                    menuItem.value = item.value;
 
-					if (itemCallback) {
-						itemCallback(menuItem);
-					}
-				}
+                    if (itemCallback) {
+                        itemCallback(menuItem);
+                    }
+                }
 
-				output.push(menuItem);
-			});
+                output.push(menuItem);
+            });
 
-			return output;
-		}
+            return output;
+        }
 
-		return appendItems(inputList, startItems || []);
-	}
+        return appendItems(inputList, startItems || []);
+    }
 
-	function showDialog(linkList) {
-		var data = {}, selection = editor.selection, dom = editor.dom, selectedElm, anchorElm, initialText;
-		var win, onlyText, textListCtrl, linkListCtrl, relListCtrl, targetListCtrl, classListCtrl, linkTitleCtrl, value;
+    function showDialog(linkList) {
+        var data = {}, selection = editor.selection, dom = editor.dom, selectedElm, anchorElm, initialText;
+        var win, onlyText, textListCtrl, linkListCtrl, tagListCtrl, relListCtrl, targetListCtrl, classListCtrl, linkTitleCtrl, value;
 
-		function linkListChangeHandler(e) {
-			var textCtrl = win.find('#text');
+        function linkListChangeHandler(e) {
+            var textCtrl = win.find('#text');
 
-			if (!textCtrl.value() || (e.lastControl && textCtrl.value() == e.lastControl.text())) {
-				textCtrl.value(e.control.text());
-			}
+            if (!textCtrl.value() || (e.lastControl && textCtrl.value() == e.lastControl.text())) {
+                textCtrl.value(e.control.text());
+            }
 
-			win.find('#href').value(e.control.value());
-		}
+            win.find('#href').value(e.control.value());
+        }
 
-		function buildAnchorListControl(url) {
-			var anchorList = [];
+        function buildAnchorListControl(url) {
+            var anchorList = [];
 
-			tinymce.each(editor.dom.select('a:not([href])'), function(anchor) {
-				var id = anchor.name || anchor.id;
+            tinymce.each(editor.dom.select('a:not([href])'), function (anchor) {
+                var id = anchor.name || anchor.id;
 
-				if (id) {
-					anchorList.push({
-						text: id,
-						value: '#' + id,
-						selected: url.indexOf('#' + id) != -1
-					});
-				}
-			});
+                if (id) {
+                    anchorList.push({
+                        text: id,
+                        value: '#' + id,
+                        selected: url.indexOf('#' + id) != -1
+                    });
+                }
+            });
 
-			if (anchorList.length) {
-				anchorList.unshift({text: 'None', value: ''});
+            if (anchorList.length) {
+                anchorList.unshift({ text: 'None', value: '' });
 
-				return {
-					name: 'anchor',
-					type: 'listbox',
-					label: 'Anchors',
-					values: anchorList,
-					onselect: linkListChangeHandler
-				};
-			}
-		}
+                return {
+                    name: 'anchor',
+                    type: 'listbox',
+                    label: 'Anchors',
+                    values: anchorList,
+                    onselect: linkListChangeHandler
+                };
+            }
+        }
 
-		function updateText() {
-			if (!initialText && data.text.length === 0 && onlyText) {
-				this.parent().parent().find('#text')[0].value(this.value());
-			}
-		}
+        function updateText() {
+            if (!initialText && data.text.length === 0 && onlyText) {
+                this.parent().parent().find('#text')[0].value(this.value());
+            }
+        }
 
-		function urlChange(e) {
-			var meta = e.meta || {};
+        function urlChange(e) {
+            var meta = e.meta || {};
 
-			if (linkListCtrl) {
-				linkListCtrl.value(editor.convertURL(this.value(), 'href'));
-			}
+            if (linkListCtrl) {
+                linkListCtrl.value(editor.convertURL(this.value(), 'href'));
+            }
 
-			tinymce.each(e.meta, function(value, key) {
-				win.find('#' + key).value(value);
-			});
+            tinymce.each(e.meta, function (value, key) {
+                win.find('#' + key).value(value);
+            });
 
-			if (!meta.text) {
-				updateText.call(this);
-			}
+            if (!meta.text) {
+                updateText.call(this);
+            }
 
-			data.href = this.value();
-		}
+            data.href = this.value();
+        }
 
-		function urlValidate(e) {
-			var href = e.value;
-			if (href.length > 0) {
-				if (href.indexOf('@') > 0 && href.indexOf('//') == -1 && href.indexOf('mailto:') == -1) {
-					href = 'mailto:' + href;
-				} else if (href.indexOf('http://') == -1 && href.indexOf('https://') == -1 && href.indexOf('mailto:') == -1) {
-					href = 'http://' + href;
-				}
-			}
-			e.value = href;
-			data.href = href;
-		}
+        function urlValidate(e) {
+            var href = e.value;
+            var matches = [];
 
-		function isOnlyTextSelected(anchorElm) {
-			var html = selection.getContent();
+            // Check if value is a script tag
+            if (editor.settings.tag_list) {
+                matches = editor.settings.tag_list.filter(function (tag) {
+                    return tag.value == win.find('#href').value();
+                });
+            }
 
-			// Partial html and not a fully selected anchor element
-			if (/</.test(html) && (!/^<a [^>]+>[^<]+<\/a>$/.test(html) || html.indexOf('href=') == -1)) {
-				return false;
-			}
+            // Validate only urls
+            if (!matches.length && href.length > 0) {
+                if (href.indexOf('@') > 0 && href.indexOf('//') == -1 && href.indexOf('mailto:') == -1) {
+                    href = 'mailto:' + href;
+                } else if (href.indexOf('http://') == -1 && href.indexOf('https://') == -1 && href.indexOf('mailto:') == -1) {
+                    href = 'http://' + href;
+                }
+            }
 
-			if (anchorElm) {
-				var nodes = anchorElm.childNodes, i;
+            e.value = href;
+            data.href = href;
+        }
 
-				if (nodes.length === 0) {
-					return false;
-				}
+        function isOnlyTextSelected(anchorElm) {
+            var html = selection.getContent();
 
-				for (i = nodes.length - 1; i >= 0; i--) {
-					if (nodes[i].nodeType != 3) {
-						return false;
-					}
-				}
-			}
+            // Partial html and not a fully selected anchor element
+            if (/</.test(html) && (!/^<a [^>]+>[^<]+<\/a>$/.test(html) || html.indexOf('href=') == -1)) {
+                return false;
+            }
 
-			return true;
-		}
+            if (anchorElm) {
+                var nodes = anchorElm.childNodes, i;
 
-		selectedElm = selection.getNode();
-		anchorElm = dom.getParent(selectedElm, 'a[href]');
-		onlyText = isOnlyTextSelected();
+                if (nodes.length === 0) {
+                    return false;
+                }
 
-		data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : selection.getContent({format: 'text'});
-		data.href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
+                for (i = nodes.length - 1; i >= 0; i--) {
+                    if (nodes[i].nodeType != 3) {
+                        return false;
+                    }
+                }
+            }
 
-		if (anchorElm) {
-			data.target = dom.getAttrib(anchorElm, 'target');
-		} else if (editor.settings.default_link_target) {
-			data.target = editor.settings.default_link_target;
-		}
+            return true;
+        }
 
-		if ((value = dom.getAttrib(anchorElm, 'rel'))) {
-			data.rel = value;
-		}
+        selectedElm = selection.getNode();
+        anchorElm = dom.getParent(selectedElm, 'a[href]');
+        onlyText = isOnlyTextSelected();
 
-		if ((value = dom.getAttrib(anchorElm, 'class'))) {
-			data['class'] = value;
-		}
+        data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : selection.getContent({ format: 'text' });
+        data.href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
 
-		if ((value = dom.getAttrib(anchorElm, 'title'))) {
-			data.title = value;
-		}
+        if (anchorElm) {
+            data.target = dom.getAttrib(anchorElm, 'target');
+        } else if (editor.settings.default_link_target) {
+            data.target = editor.settings.default_link_target;
+        }
 
-		if (editor.settings.link_text_to_display !== false && onlyText) {
-			textListCtrl = {
-				name: 'text',
-				type: 'textbox',
-				size: 40,
-				label: 'Text to display',
-				onchange: function() {
-					data.text = this.value();
-				}
-			};
-		}
+        if ((value = dom.getAttrib(anchorElm, 'rel'))) {
+            data.rel = value;
+        }
 
-		if (linkList) {
-			linkListCtrl = {
-				type: 'listbox',
-				label: 'Link list',
-				values: buildListItems(
-					linkList,
-					function(item) {
-						item.value = editor.convertURL(item.value || item.url, 'href');
-					},
-					[{text: 'None', value: ''}]
-				),
-				onselect: linkListChangeHandler,
-				value: editor.convertURL(data.href, 'href'),
-				onPostRender: function() {
-					/*eslint consistent-this:0*/
-					linkListCtrl = this;
-				}
-			};
-		}
+        if ((value = dom.getAttrib(anchorElm, 'class'))) {
+            data['class'] = value;
+        }
 
-		if (editor.settings.target_list !== false) {
-			if (!editor.settings.target_list) {
-				editor.settings.target_list = [
-					{text: 'None', value: ''},
-					{text: 'New window', value: '_blank'}
-				];
-			}
+        if ((value = dom.getAttrib(anchorElm, 'title'))) {
+            data.title = value;
+        }
 
-			targetListCtrl = {
-				name: 'target',
-				type: 'listbox',
-				label: 'Target',
-				values: buildListItems(editor.settings.target_list)
-			};
-		}
+        if (editor.settings.link_text_to_display !== false && onlyText) {
+            textListCtrl = {
+                name: 'text',
+                type: 'textbox',
+                size: 40,
+                label: 'Text to display',
+                onchange: function () {
+                    data.text = this.value();
+                }
+            };
+        }
 
-		if (editor.settings.rel_list) {
-			relListCtrl = {
-				name: 'rel',
-				type: 'listbox',
-				label: 'Rel',
-				values: buildListItems(editor.settings.rel_list)
-			};
-		}
+        if (linkList) {
+            linkListCtrl = {
+                type: 'listbox',
+                label: 'Link list',
+                values: buildListItems(
+                    linkList,
+                    function (item) {
+                        item.value = editor.convertURL(item.value || item.url, 'href');
+                    },
+                    [{ text: 'None', value: '' }]
+                    ),
+                onselect: linkListChangeHandler,
+                value: editor.convertURL(data.href, 'href'),
+                onPostRender: function () {
+                    /*eslint consistent-this:0*/
+                    linkListCtrl = this;
+                }
+            };
+        }
 
-		if (editor.settings.link_class_list) {
-			classListCtrl = {
-				name: 'class',
-				type: 'listbox',
-				label: 'Class',
-				values: buildListItems(
-					editor.settings.link_class_list,
-					function(item) {
-						if (item.value) {
-							item.textStyle = function() {
-								return editor.formatter.getCssText({inline: 'a', classes: [item.value]});
-							};
-						}
-					}
-				)
-			};
-		}
+        if (editor.settings.tag_list) {
+            tagListCtrl = {
+                type: 'listbox',
+                label: 'AMP Scripts',
+                values: buildListItems(
+                    editor.settings.tag_list,
+                    function (item) {
+                        item.value = item.value;
+                    },
+                    [{ text: 'Select', value: '' }]
+                    ),
+                onselect: function (e) {
+                    win.find('#href').value(e.control.value());
+                },
+                onPostRender: function () {
+                    tagListCtrl = this;
+                }
+            };
+        }
 
-		if (editor.settings.link_title !== false) {
-			linkTitleCtrl = {
-				name: 'title',
-				type: 'textbox',
-				label: 'Title',
-				value: data.title
-			};
-		}
+        if (editor.settings.target_list !== false) {
+            if (!editor.settings.target_list) {
+                editor.settings.target_list = [
+                    { text: 'None', value: '' },
+                    { text: 'New window', value: '_blank' }
+                ];
+            }
 
-		win = editor.windowManager.open({
-			title: 'Insert link',
-			data: data,
-			body: [
-				{
-					name: 'href',
-					type: 'filepicker',
-					classes: 'link-input',
-					filetype: 'file',
-					size: 40,
-					autofocus: true,
-					label: 'Url',
-					tooltip: 'Insert a valid url',
-					onchange: urlChange,
-					onkeyup: updateText,
-					onfocusout: function(e) {
-						urlValidate(e.target);
-					}
-				},
-				textListCtrl,
-				linkTitleCtrl,
-				buildAnchorListControl(data.href),
-				linkListCtrl,
-				relListCtrl,
-				targetListCtrl,
-				classListCtrl
-			],
-			onSubmit: function(e) {
+            targetListCtrl = {
+                name: 'target',
+                type: 'listbox',
+                label: 'Target',
+                values: buildListItems(editor.settings.target_list)
+            };
+        }
 
-				// Force validate url input
-				urlValidate($('.mce-link-input .mce-textbox')[0]);
+        if (editor.settings.rel_list) {
+            relListCtrl = {
+                name: 'rel',
+                type: 'listbox',
+                label: 'Rel',
+                values: buildListItems(editor.settings.rel_list)
+            };
+        }
 
-				var href;
-				href = data.href;
+        if (editor.settings.link_class_list) {
+            classListCtrl = {
+                name: 'class',
+                type: 'listbox',
+                label: 'Class',
+                values: buildListItems(
+                    editor.settings.link_class_list,
+                    function (item) {
+                        if (item.value) {
+                            item.textStyle = function () {
+                                return editor.formatter.getCssText({ inline: 'a', classes: [item.value] });
+                            };
+                        }
+                    }
+                    )
+            };
+        }
 
-				// Validate an url
-				function validateUrl(url) {
-					var pattern = new RegExp(
-						"^" +
-							"(?:(?:https?://|ftps?://|mailto:))" +
-							"(?:\\S+(?::\\S*)?@)?" +
-							"(?:" +
-								"(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
-								"(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
-								"(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
-								"(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-								"(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-								"(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
-							"|" +
-								"(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)" +
-								"(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*" +
-								"(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" +
-								"\\.?" +
-							")" +
-							"(?::\\d{2,5})?" +
-							"(?:[/?#]\\S*)?" +
-						"$", "i"
-						);
-					return (pattern.test(url));
-				}
+        if (editor.settings.link_title !== false) {
+            linkTitleCtrl = {
+                name: 'title',
+                type: 'textbox',
+                label: 'Title',
+                value: data.title
+            };
+        }
 
-				// Delay confirm since onSubmit will move focus
-				function delayedConfirm(message, callback) {
-					var rng = editor.selection.getRng();
+        win = editor.windowManager.open({
+            title: 'Insert link',
+            data: data,
+            body: [
+                {
+                    name: 'href',
+                    type: 'filepicker',
+                    classes: 'link-input',
+                    filetype: 'file',
+                    size: 40,
+                    autofocus: true,
+                    label: 'Url',
+                    tooltip: 'Insert a valid url',
+                    onchange: urlChange,
+                    onkeyup: updateText,
+                    onfocusout: function (e) {
+                        urlValidate(e.target);
+                    }
+                },
+                textListCtrl,
+                linkTitleCtrl,
+                buildAnchorListControl(data.href),
+                linkListCtrl,
+                tagListCtrl,
+                relListCtrl,
+                targetListCtrl,
+                classListCtrl
+            ],
+            onSubmit: function (e) {
 
-					window.setTimeout(function() {
-						editor.windowManager.confirm(message, function(state) {
-							editor.selection.setRng(rng);
-							callback(state);
-						});
-					}, 0);
-				}
+                // Force validate url input
+                urlValidate($('.mce-link-input .mce-textbox')[0]);
 
-				function insertLink() {
-					var linkAttrs = {
-						href: href,
-						target: data.target ? data.target : null,
-						rel: data.rel ? data.rel : null,
-						"class": data["class"] ? data["class"] : null,
-						title: data.title ? data.title : null
-					};
+                var href;
+                href = data.href;
 
-					if (anchorElm) {
-						editor.focus();
+                // Validate an url
+                function validateUrl(url) {
+                    var pattern = new RegExp(
+                        "^" +
+                        "(?:(?:https?://|ftps?://|mailto:))" +
+                        "(?:\\S+(?::\\S*)?@)?" +
+                        "(?:" +
+                        "(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
+                        "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
+                        "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
+                        "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
+                        "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
+                        "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
+                        "|" +
+                        "(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)" +
+                        "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*" +
+                        "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" +
+                        "\\.?" +
+                        ")" +
+                        "(?::\\d{2,5})?" +
+                        "(?:[/?#]\\S*)?" +
+                        "$", "i"
+                        );
+                    return (pattern.test(url));
+                }
 
-						if (onlyText && data.text != initialText) {
-							if ("innerText" in anchorElm) {
-								anchorElm.innerText = data.text;
-							} else {
-								anchorElm.textContent = data.text;
-							}
-						}
+                // Delay confirm since onSubmit will move focus
+                function delayedConfirm(message, callback) {
+                    var rng = editor.selection.getRng();
 
-						dom.setAttribs(anchorElm, linkAttrs);
+                    window.setTimeout(function () {
+                        editor.windowManager.confirm(message, function (state) {
+                            editor.selection.setRng(rng);
+                            callback(state);
+                        });
+                    }, 0);
+                }
 
-						selection.select(anchorElm);
-						editor.undoManager.add();
-					} else {
-						if (onlyText) {
-							editor.insertContent(dom.createHTML('a', linkAttrs, dom.encode(data.text)));
-						} else {
-							editor.execCommand('mceInsertLink', false, linkAttrs);
-						}
-					}
-				}
+                function insertLink() {
+                    var linkAttrs = {
+                        href: href,
+                        target: data.target ? data.target : null,
+                        rel: data.rel ? data.rel : null,
+                        "class": data["class"] ? data["class"] : null,
+                        title: data.title ? data.title : null,
+                        "data-mce-href": href
+                    };
 
-				if (!href) {
-					editor.execCommand('unlink');
-					return;
-				}
+                    if (anchorElm) {
+                        editor.focus();
 
-				// Validate the inserted url
-				if (editor.settings.link_validate_url) {
-					if (!validateUrl(href)) {
-						$('.mce-link-input .mce-textbox')
-							.css('cssText', 'border-color: red !important')
-							.focus();
-						win.find('#href')[0].tooltip().text('Entered URL is invalid or incomplete.').show();
-						return false;
-					}
-				}
+                        if (onlyText && data.text != initialText) {
+                            if ("innerText" in anchorElm) {
+                                anchorElm.innerText = data.text;
+                            } else {
+                                anchorElm.textContent = data.text;
+                            }
+                        }
 
-				$('.mce-link-input .mce-textbox').removeAttr('style');
+                        dom.setAttribs(anchorElm, linkAttrs);
+                        anchorElm.href = linkAttrs.href;
 
-				insertLink();
-			}
-		});
-	}
+                        selection.select(anchorElm);
+                        editor.undoManager.add();
+                    } else {
+                        if (onlyText) {
 
-	editor.addButton('link', {
-		icon: 'link',
-		tooltip: 'Insert/edit link',
-		shortcut: 'Meta+K',
-		onclick: createLinkList(showDialog),
-		stateSelector: 'a[href]'
-	});
+                            var matches = [];
 
-	editor.addButton('unlink', {
-		icon: 'unlink',
-		tooltip: 'Remove link',
-		cmd: 'unlink',
-		stateSelector: 'a[href]'
-	});
+                            if (editor.settings.tag_list) {
+                                matches = editor.settings.tag_list.filter(function (tag) {
+                                    return tag.value == win.find('#href').value();
+                                });
+                            }
+                            // Encode only urls
+                            editor.insertContent(dom.createHTML('a', linkAttrs, (!matches.length) ? dom.encode(data.text) : data.text));
+                        } else {
+                            editor.execCommand('mceInsertLink', false, linkAttrs);
+                        }
+                    }
+                }
 
-	editor.addShortcut('Meta+K', '', createLinkList(showDialog));
-	editor.addCommand('mceLink', createLinkList(showDialog));
+                if (!href) {
+                    editor.execCommand('unlink');
+                    return;
+                }
 
-	this.showDialog = showDialog;
+                // Validate the inserted url
+                if (editor.settings.link_validate_url) {
+                    var matches = [];
 
-	editor.addMenuItem('link', {
-		icon: 'link',
-		text: 'Insert/edit link',
-		shortcut: 'Meta+K',
-		onclick: createLinkList(showDialog),
-		stateSelector: 'a[href]',
-		context: 'insert',
-		prependToContext: true
-	});
+                    if (editor.settings.tag_list) {
+                        matches = editor.settings.tag_list.filter(function (tag) {
+                            return tag.value == win.find('#href').value();
+                        });
+                    }
+
+                    // Validate only urls
+                    if (!matches.length && !validateUrl(href)) {
+                        $('.mce-link-input .mce-textbox')
+                            .css('cssText', 'border-color: red !important')
+                            .focus();
+                        win.find('#href')[0].tooltip().text('Entered URL is invalid or incomplete.').show();
+                        return false;
+                    }
+                }
+
+                $('.mce-link-input .mce-textbox').removeAttr('style');
+
+                insertLink();
+            }
+        });
+    }
+
+    editor.addButton('link', {
+        icon: 'link',
+        tooltip: 'Insert/edit link',
+        shortcut: 'Meta+K',
+        onclick: createLinkList(showDialog),
+        stateSelector: 'a[href]'
+    });
+
+    editor.addButton('unlink', {
+        icon: 'unlink',
+        tooltip: 'Remove link',
+        cmd: 'unlink',
+        stateSelector: 'a[href]'
+    });
+
+    editor.addShortcut('Meta+K', '', createLinkList(showDialog));
+    editor.addCommand('mceLink', createLinkList(showDialog));
+
+    this.showDialog = showDialog;
+
+    editor.addMenuItem('link', {
+        icon: 'link',
+        text: 'Insert/edit link',
+        shortcut: 'Meta+K',
+        onclick: createLinkList(showDialog),
+        stateSelector: 'a[href]',
+        context: 'insert',
+        prependToContext: true
+    });
 });

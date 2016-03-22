@@ -41,11 +41,12 @@ class TemplateController extends Controller
             ? Campaign::findOrFail($request->input('campaign_id'))
             : null;
 
-        $params = ['campaign_data' => $campaign_data];
+        $options = [];
+        $options['params'] = $request->all();
+        $options['params']['campaign_data'] = $campaign_data;
+        $options["module"] = ($request->has('module_data'))? ["data"=> $request->input('module_data')] : [];
 
-        $params += $request->all();
-
-        return $this->getComponent($request, 'modules', $params);
+        return $this->getComponent($request, 'modules', $options);
 
     }
 
@@ -58,7 +59,7 @@ class TemplateController extends Controller
      */
     public function getModal(Request $request)
     {
-        return $this->getComponent($request, 'modals', $request->all());
+        return $this->getComponent($request, 'modals', [ 'params' => $request->all()]);
     }
 
     /**
@@ -215,10 +216,9 @@ class TemplateController extends Controller
         // component name
         $component = $request->input('name');
         $parts[] = $component;
-
         return $this->renderView(
             implode('.', $parts),
-            ['params' => $params]
+            $params
         );
     }
 }
