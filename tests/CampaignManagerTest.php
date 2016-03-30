@@ -1,5 +1,5 @@
 <?php
- 
+
 namespace Stensul\Tests;
 
 use Stensul\Services\CampaignManager;
