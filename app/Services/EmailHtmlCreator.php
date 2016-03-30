@@ -240,5 +240,4 @@ class EmailHtmlCreator
     {
         $this->body = $body;
     }
-
 }
