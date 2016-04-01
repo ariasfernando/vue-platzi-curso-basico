@@ -686,7 +686,6 @@ var masterImageEditor = function( customOptions ){
 		});
 	};
 
-
 	this.initAdjustableHeight = function($cropitElement,params){
 		var settings = $.extend({
 			max: 660,
@@ -699,23 +698,26 @@ var masterImageEditor = function( customOptions ){
 			$cropitElement.find("#adjustable-height-value").text(settings.currentVal);
 		}
 
-		$cropitElement.find(".canvas-size-sel").slider({
-			max: settings.max,
-			min: settings.min,
-			value: settings.currentVal,
-			slide: function(event, ui) {
-				var _size = ui.value;
-				var previewWidth = $cropitElement.find(".cropit-image-preview").width();
-				$cropitElement.cropit('previewSize', { width: previewWidth, height: _size });
-
-				// Update height label text
-				if( $cropitElement.find("#adjustable-height-value").length ){
-					$cropitElement.find("#adjustable-height-value").text(_size);
-				}
-			}
-		}).on('slidestop', function(event, ui) {
-			settings.onSlideStop( event, ui );
-		});
+		if( $cropitElement.find(".cropit-image-height-input").length ){
+			$cropitElement.find(".cropit-image-height-input")
+				.attr({
+					max: settings.max,
+					min: settings.min,
+					step: 1
+				})
+				.val(settings.currentVal)
+				.on("mousemove touchmove change",function(){
+					if( this.value != $cropitElement.find(".cropit-image-preview").height() ){
+						var previewWidth = $cropitElement.find(".cropit-image-preview").width();
+						$cropitElement.cropit('previewSize', { width: previewWidth, height: this.value });
+						// Update height label text
+						if( $cropitElement.find("#adjustable-height-value").length ){
+							$cropitElement.find("#adjustable-height-value").text(this.value);
+						}
+						settings.onSlideStop(event);
+					}
+				});
+		}
 	};
 
 	this.callAdjustableHeight = function($cropitElement){
@@ -724,18 +726,14 @@ var masterImageEditor = function( customOptions ){
 			currentVal: currentVal,
 			onSlideStop: function(){
 				if (!$cropitElement.cropit( 'isZoomable' )){
-					if( $cropitElement.find(".canvas-zoom-sel").length ){
-						if( $cropitElement.find(".canvas-zoom-sel").hasClass("ui-slider") ){
-							$cropitElement.find(".canvas-zoom-sel").slider( "option", "disabled", true );
-						}
+					if( $cropitElement.find(".cropit-image-zoom-input").length ){
+						$cropitElement.find(".cropit-image-zoom-input").attr("disabled","disabled");
 					}
 					$cropitElement.cropit( 'onZoomDisabled' );
 				}else{
-					if( $cropitElement.find(".canvas-zoom-sel").length ){
-						if( $cropitElement.find(".canvas-zoom-sel").hasClass("ui-slider") ){
-							$cropitElement.find(".canvas-zoom-sel").slider( "option", "disabled", false );
-						}
-						$cropitElement.cropit('zoom', $cropitElement.find(".canvas-zoom-sel").slider("value"));
+					if( $cropitElement.find(".cropit-image-zoom-input").length ){
+						$cropitElement.find(".cropit-image-zoom-input").removeAttr("disabled");
+						$cropitElement.cropit('zoom', $cropitElement.find(".cropit-image-zoom-input").val());
 					}
 					$cropitElement.cropit( 'onZoomEnable' );
 				}
@@ -761,23 +759,26 @@ var masterImageEditor = function( customOptions ){
 			$("#adjustable-width-value").text(settings.currentVal);
 		}
 
-		$cropitElement.find(".canvas-size-width-sel").slider({
-			max: settings.max,
-			min: settings.min,
-			value: settings.currentVal,
-			slide: function(event, ui) {
-				var _size = ui.value;
-				var previewHeight = $cropitElement.find(".cropit-image-preview").height();
-				$cropitElement.cropit('previewSize', { width: _size, height: previewHeight });
-
-				// Update height label text
-				if( $("#adjustable-width-value").length ){
-					$("#adjustable-width-value").text(_size);
-				}
-			}
-		}).on('slidestop', function(event, ui) {
-			settings.onSlideStop( event, ui );
-		});
+		if( $cropitElement.find(".cropit-image-width-input").length ){
+			$cropitElement.find(".cropit-image-width-input")
+				.attr({
+					max: settings.max,
+					min: settings.min,
+					step: 1
+				})
+				.val(settings.currentVal)
+				.on("mousemove touchmove change",function(){
+					if( this.value != $cropitElement.find(".cropit-image-preview").width() ){
+						var previewHeight = $cropitElement.find(".cropit-image-preview").height();
+						$cropitElement.cropit('previewSize', { width: this.value, height: previewHeight });
+						// Update width label text
+						if( $cropitElement.find("#adjustable-width-value").length ){
+							$cropitElement.find("#adjustable-width-value").text(this.value);
+						}
+						settings.onSlideStop(event);
+					}
+				});
+		}
 	};
 
 	this.callAdjustableWidth = function($cropitElement){
@@ -785,18 +786,14 @@ var masterImageEditor = function( customOptions ){
 			currentVal: $cropitElement.find(".cropit-image-preview").width(),
 			onSlideStop: function(){
 				if (!$cropitElement.cropit( 'isZoomable' )){
-					if( $cropitElement.find(".canvas-zoom-sel").length ){
-						if( $cropitElement.find(".canvas-zoom-sel").hasClass("ui-slider") ){
-							$cropitElement.find(".canvas-zoom-sel").slider( "option", "disabled", true );
-						}
+					if( $cropitElement.find(".cropit-image-zoom-input").length ){
+						$cropitElement.find(".cropit-image-zoom-input").attr("disabled","disabled");
 					}
 					$cropitElement.cropit( 'onZoomDisabled' );
 				}else{
-					if( $cropitElement.find(".canvas-zoom-sel").length ){
-						if( $cropitElement.find(".canvas-zoom-sel").hasClass("ui-slider") ){
-							$cropitElement.find(".canvas-zoom-sel").slider( "option", "disabled", false );
-						}
-						$cropitElement.cropit('zoom', $cropitElement.find(".canvas-zoom-sel").slider("value"));
+					if( $cropitElement.find(".cropit-image-zoom-input").length ){
+						$cropitElement.find(".cropit-image-zoom-input").removeAttr("disabled");
+						$cropitElement.cropit('zoom', $cropitElement.find(".cropit-image-zoom-input").val());
 					}
 					$cropitElement.cropit( 'onZoomEnable' );
 				}
@@ -839,6 +836,8 @@ var masterImageEditor = function( customOptions ){
 
 			// Show preview on image load.
 			onImageLoaded: function(){
+				var $previewContainer = this.$preview;
+
 				$modalContent.find(".preview-box .upload-warning").remove();
 				var isMobile = false;
 
@@ -846,13 +845,11 @@ var masterImageEditor = function( customOptions ){
 					isMobile = true;
 				}
 
-				var $previewContainer = this.$preview;
 				var currentZoom = 0;
 				var currentZoomVal = 0;
 				var currentHeightVal = (isMobile)? placeHolderSize.mobile.height : placeHolderSize.height;
 				var currentWidthVal = (isMobile)? placeHolderSize.mobile.width : placeHolderSize.width;
 				var isZoomable = $cropitElement.cropit( 'isZoomable' );
-				var minZoom = $cropitElement.cropit( 'zoom');
 				var newImage = !( (Application.globals.campaignImageUrl + updateImage.background_image) == $cropitElement.cropit('imageSrc') );
 				
 				// Show tab Multicrop
@@ -878,45 +875,32 @@ var masterImageEditor = function( customOptions ){
 					_this.callAdjustableWidth($cropitElement);
 				}
 
-				// Set background size
-				if( !newImage && isZoomable && updateImage && updateImage.background_size ){
-					updateImage.background_position.x = Number( updateImage.background_position.x );
-					updateImage.background_position.y = Number( updateImage.background_position.y );
-					$cropitElement.find('.cropit-image-preview').css('background-size', updateImage.background_size);
-				}
-
 				// Set zoom
-				if( !newImage && isZoomable && updateImage && updateImage.background_zoom ){
-					$cropitElement.cropit( 'zoom', updateImage.background_zoom );
-					currentZoomVal = updateImage.background_zoom;
+				if( !newImage && updateImage && updateImage.background_zoom ){
+					$cropitElement.cropit('zoom', Number(updateImage.background_zoom));
+
+					if(!isZoomable){
+						$cropitElement.find('cropit-image-zoom-input').attr('disabled','disabled');
+					}else{
+						$cropitElement.find('cropit-image-zoom-input').removeAttr('disabled');
+					}
 				}
 
 				// Set background position
-				if( !newImage && isZoomable && updateImage && updateImage.background_position ){
+				if( !newImage && updateImage && updateImage.background_position ){
+					updateImage.background_position.x = Number( updateImage.background_position.x );
+					updateImage.background_position.y = Number( updateImage.background_position.y );
 					$cropitElement.cropit('offset', updateImage.background_position);
 				}
-
-				// Init Zoom
-				$cropitElement.find(".canvas-zoom-sel").slider({
-					max: 1,
-					min: minZoom,
-					disabled: !isZoomable,
-					step: ((1 - currentZoom) / 100),
-					value: currentZoomVal, 
-					slide: function(event, ui) {
-						var _zoom = ui.value;
-						$cropitElement.cropit('zoom', _zoom);
-					}
-				});
 
 				// Don't do it for desktop preview
 				if( $cropitElement.attr('id') != 'image-cropper-mobile' ){
 					// If image adjustable set image preview size
-		            if( editorOptions.adjustable_height == 'enabled' || editorOptions.adjustable_width == 'enabled' ){
-		                currentHeightVal = (updateImage.background_height)? updateImage.background_height : placeHolderSize.height;
-		                currentWidthVal = (updateImage.background_width)? updateImage.background_width : placeHolderSize.width;
-		                $cropitElement.cropit('previewSize', { width: currentWidthVal, height: currentHeightVal });
-		            }
+					if( editorOptions.adjustable_height == 'enabled' || editorOptions.adjustable_width == 'enabled' ){
+						currentHeightVal = (updateImage.background_height)? updateImage.background_height : placeHolderSize.height;
+						currentWidthVal = (updateImage.background_width)? updateImage.background_width : placeHolderSize.width;
+						$cropitElement.cropit('previewSize', { width: currentWidthVal, height: currentHeightVal });
+					}
 
 					//Init height
 					if( editorOptions.adjustable_height == 'enabled' ){
@@ -929,7 +913,7 @@ var masterImageEditor = function( customOptions ){
 					}
 				}
 
-				if( !isZoomable && editorOptions.scale_ratio > 1 ){
+				if( !isZoomable && editorOptions.scale_ratio > 1 && editorOptions.adjustable_height != 'enabled' ){
 					displayWarning( 'Recommended image size for better quality: more than '+placeHolderSize.width+'x'+placeHolderSize.height+'px.' );
 				}
 
@@ -962,12 +946,12 @@ var masterImageEditor = function( customOptions ){
 	 * Save cropit edition.
 	 * Save cropit data and generate canvas.
 	 */
-	 var saveCropitEdition = function( params ){
+	var saveCropitEdition = function( params ){
 
-	 	saveOptions = $.extend({
-	 		elementCropit : $modalContent.find(".init-cropper").eq(0),
-	 		isMobile: false,
-	 		generateCanvas: false,
+		saveOptions = $.extend({
+			elementCropit : $modalContent.find(".init-cropper").eq(0),
+			isMobile: false,
+			generateCanvas: false,
 	 		onSuccess : function( response ){
 				actualConfig.path = response.path;
 
@@ -977,13 +961,12 @@ var masterImageEditor = function( customOptions ){
 				// On Save
 				_this.moduleUpdate();
 				_this.closeModal();							
-	 		},
-	 	}, params);
+			},
+		}, params);
 
-
-	 	var cropitConfig = {
-			background_zoom: (saveOptions.elementCropit.find('.canvas-zoom-sel').length)? saveOptions.elementCropit.find('.canvas-zoom-sel').slider('value') : 0,
-			background_position : (saveOptions.elementCropit.find('.cropit-image-preview').length)? saveOptions.elementCropit.cropit('offset') : '',
+		var cropitConfig = {
+			background_zoom: saveOptions.elementCropit.cropit('zoom'),
+			background_position : saveOptions.elementCropit.cropit('offset'),
 			background_size : (saveOptions.elementCropit.find('.cropit-image-preview').length)? saveOptions.elementCropit.find('.cropit-image-preview').css('background-size') : '',
 			background_image: actualConfig.background_image || imageData.background_image
 		}

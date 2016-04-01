@@ -51,10 +51,18 @@ ConfigModals.single_image_editor = function( params ){
         masterImageEditorObj.initCropit( $modalContent.find(".init-cropper"), {
             $fileInput:  $modalContent.find('input.cropit-image-input'),
             onImageLoaded: function(){
-                // Init zoom
-                masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), this);
+                var currentWidthVal = options.image_size.width;
+                var currentHeightVal = options.image_size.height;
+
+                $modalContent.find(".init-cropper:visible:eq(0)").cropit('previewSize', {
+                    width: (masterImageEditorObj.imageData.background_width)? masterImageEditorObj.imageData.background_width : currentWidthVal,
+                    height: (masterImageEditorObj.imageData.background_height)? masterImageEditorObj.imageData.background_height : currentHeightVal
+                });
+
                 // Init Height Adjustable
                 masterImageEditorObj.initAdjustableHeight($modalContent.find(".init-cropper:visible:eq(0)"));
+                // Init zoom
+                masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), this);
                 // Default cropit onload: display preview and hide spinner
                 masterImageEditorObj.cropitOnImageLoaded(this);
             }
