@@ -530,8 +530,13 @@ function masterImageEditorv2( customOptions ){
 
         // Set background position
         if( _this.imageData && _this.imageData.background_position ){
-            _this.imageData.background_position.x = Number( _this.imageData.background_position.x );
-            _this.imageData.background_position.y = Number( _this.imageData.background_position.y );
+            if( _this.imageData.background_position.x && typeof _this.imageData.background_position.x == "string" ){
+                _this.imageData.background_position.x = Number( _this.imageData.background_position.x );
+            }
+            if( _this.imageData.background_position.y && typeof _this.imageData.background_position.y == "string" ){
+                _this.imageData.background_position.y = Number( _this.imageData.background_position.y );
+            }
+
             $cropitElement.cropit('offset', _this.imageData.background_position);
         }
     };
