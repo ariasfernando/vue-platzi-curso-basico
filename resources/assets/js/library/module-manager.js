@@ -534,6 +534,8 @@ var moduleManager = {
 							_this.initTinymce( $module, pluginConfig );
 						}
 					}
+
+                    $canvas.trigger("modulePluginsInit",[$module,plugin]);
 				});
 
 				moduleParams.initialized = true;
