@@ -415,6 +415,12 @@ $default = [
     'view_in_browser' => [
         'type' => 'view_in_browser',
         'file_parent' => 'base'
+    ],
+
+    'hero_image_bg' => [
+        'type' => 'hero_image_bg',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ]
 ];
 
