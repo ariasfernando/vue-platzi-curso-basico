@@ -87,10 +87,17 @@ ConfigModals.spacer = function( params ){
             moduleManager.saveInData( $targetModule, "background_color", options.moduleData.data.background_color );
         }
 
+        var tdBackground = "";
+        if( Application.utils.validateHexVal(options.moduleData.data.background_color) ){
+            tdBackground = options.moduleData.data.background_color;
+        }else{
+            tdBackground = "transparent";
+        }
+
         // Set data into module.
         $targetModule.find(">td")
             .attr( "bgcolor", options.moduleData.data.background_color )
-            .css( "background-color", options.moduleData.data.background_color );
+            .css( "background-color", tdBackground );
 
         // Close Popup
         $.magnificPopup.close();
