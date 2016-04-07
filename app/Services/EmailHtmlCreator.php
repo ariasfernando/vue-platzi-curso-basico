@@ -230,4 +230,14 @@ class EmailHtmlCreator
 
         return $body;
     }
+
+    /**
+     * Sets the html body, useful for testing.
+     *
+     * @param string $body
+     */
+    public function setBody($body)
+    {
+        $this->body = $body;
+    }
 }

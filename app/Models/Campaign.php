@@ -9,8 +9,6 @@ class Campaign extends Eloquent
 {
     use SoftDeletes;
 
-    protected $connection = 'mongodb';
-
     /**
      * The database table used by the model.
      *
@@ -92,7 +90,7 @@ class Campaign extends Eloquent
      */
     public function fsRelativePath()
     {
-        return DS.implode(DS, [$this->id, $this->locale]);
+        return '/' . implode('/', [$this->id, $this->locale]);
     }
 
     /**
@@ -102,7 +100,7 @@ class Campaign extends Eloquent
      */
     public function url()
     {
-        return \Config::get('app.url').DS.'images/campaigns'.DS.$this->fsRelativePath();
+        return rtrim(\Config::get('app.url'), '/') . '/images/campaigns' . $this->fsRelativePath();
     }
 
     /**

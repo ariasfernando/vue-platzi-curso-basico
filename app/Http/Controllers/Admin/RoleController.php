@@ -105,71 +105,71 @@ class RoleController extends Controller
      *
      * @return View
      */
-        public function getEdit(Request $request)
-        {
+    public function getEdit(Request $request)
+    {
         $role_data = Role::findOrFail($request->input("roleId"))->toArray();
         $modelData = $this->getModelData();
         $params = [
-            "title" => "Edit Role",
-            "permissions" => $modelData["permissions"],
-            "libraries" => $modelData["libraries"],
-            "role" => $role_data
+        "title" => "Edit Role",
+        "permissions" => $modelData["permissions"],
+        "libraries" => $modelData["libraries"],
+        "role" => $role_data
         ];
 
         return $this->renderView('base.admin.modals.role_form', array('params' => $params));
-        }
+    }
 
     /**
      * Role post edit.
      *
      * @return boolean
      */
-        public function postEdit(Request $request)
-        {
-            $role_data = Role::findOrFail($request->input("roleId"));
-            $role_data->description = $request->input("description");
-            $role_data->permissions = (is_null($request->input("permissions")))? [] : $request->input("permissions");
-            $role_data->libraries = (is_null($request->input("libraries"))
-            || $request->input("libraries") == "default" )? [] : $request->input("libraries");
+    public function postEdit(Request $request)
+    {
+        $role_data = Role::findOrFail($request->input("roleId"));
+        $role_data->description = $request->input("description");
+        $role_data->permissions = (is_null($request->input("permissions")))? [] : $request->input("permissions");
+        $role_data->libraries = (is_null($request->input("libraries"))
+        || $request->input("libraries") == "default" )? [] : $request->input("libraries");
 
-            $role_data->save();
-            return array("message"=> "SUCCESS");
-        }
+        $role_data->save();
+        return array("message"=> "SUCCESS");
+    }
 
     /**
      * Role post create.
      *
      * @return Boolean
      */
-        public function postCreate(Request $request)
-        {
-            $params = [
-            "name" => $request->input("name"),
-            "description" => $request->input("description"),
-            "permissions" => (!is_null($request->input("permissions")))? $request->input("permissions") : [],
-            "libraries" => (is_null($request->input("libraries"))
-                || $request->input("libraries") == "default" )? [] : $request->input("libraries")
-            ];
+    public function postCreate(Request $request)
+    {
+        $params = [
+        "name" => $request->input("name"),
+        "description" => $request->input("description"),
+        "permissions" => (!is_null($request->input("permissions")))? $request->input("permissions") : [],
+        "libraries" => (is_null($request->input("libraries"))
+            || $request->input("libraries") == "default" )? [] : $request->input("libraries")
+        ];
 
-            if (Role::where('name', '=', $params["name"])->exists()) {
-                $response_message = array("message"=> "ERROR_EXISTS");
-            } else {
-                Role::create($params);
-                $response_message = array("message"=> "SUCCESS");
-            }
-
-            return $response_message;
+        if (Role::where('name', '=', $params["name"])->exists()) {
+            $response_message = array("message"=> "ERROR_EXISTS");
+        } else {
+            Role::create($params);
+            $response_message = array("message"=> "SUCCESS");
         }
+
+        return $response_message;
+    }
 
     /**
      * Role post delete.
      *
      * @return array
      */
-        public function postDelete(Request $request)
-        {
-            $user = Role::findOrFail($request->input("roleId"));
-            $user->delete();
-            return array("deleted" => $request->input("roleId"));
-        }
+    public function postDelete(Request $request)
+    {
+        $user = Role::findOrFail($request->input("roleId"));
+        $user->delete();
+        return array("deleted" => $request->input("roleId"));
+    }
 }

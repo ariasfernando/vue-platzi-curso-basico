@@ -7,8 +7,6 @@ use Jenssegers\Mongodb\Model as Eloquent;
 class Role extends Eloquent
 {
 
-    protected $connection = 'mongodb';
-
     /**
      * The database table used by the model.
      *
