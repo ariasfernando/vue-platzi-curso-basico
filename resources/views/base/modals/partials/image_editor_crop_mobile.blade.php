@@ -21,7 +21,7 @@
 
 		<div class="section-title"><h2>Preview Image</h2></div>
 
-		<div class="cropit-image-preview"></div>
+		<div class="cropit-preview"></div>
 	</div>
 
 </div>

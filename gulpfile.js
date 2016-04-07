@@ -120,7 +120,7 @@ gulp.task( "elixir-scripts", function() {
 					"bower/jquery-ui/jquery-ui.min.js",
 					"bower/bootstrap/dist/js/bootstrap.min.js",
 					"bower/magnific-popup/dist/jquery.magnific-popup.js",
-					"bower/cropit/dist/jquery.cropit.min.js",
+					"bower/cropit/dist/jquery.cropit.js",
 					"bower/bootstrapcolorpicker/dist/js/bootstrap-colorpicker.min.js",
 					"bower/bootstrap-select/dist/js/bootstrap-select.min.js",
 					// -- Jquery Simple colorpicker List --

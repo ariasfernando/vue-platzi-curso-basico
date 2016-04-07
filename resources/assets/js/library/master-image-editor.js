@@ -183,11 +183,11 @@ var masterImageEditor = function( customOptions ){
 
 
 		// Set preview size.
-		$content.find(".cropit-image-preview")
+		$content.find(".cropit-preview")
 			.width( placeHolderSize.width )
 			.height( placeHolderSize.height );
 		
-		$content.find("#image-cropper-mobile .cropit-image-preview")
+		$content.find("#image-cropper-mobile .cropit-preview")
 			.width( placeHolderSize.mobile.width )
 			.height( placeHolderSize.mobile.height );
 
@@ -707,8 +707,8 @@ var masterImageEditor = function( customOptions ){
 				})
 				.val(settings.currentVal)
 				.on("mousemove touchmove change",function(){
-					if( this.value != $cropitElement.find(".cropit-image-preview").height() ){
-						var previewWidth = $cropitElement.find(".cropit-image-preview").width();
+					if( this.value != $cropitElement.find(".cropit-preview").height() ){
+						var previewWidth = $cropitElement.find(".cropit-preview").width();
 						$cropitElement.cropit('previewSize', { width: previewWidth, height: this.value });
 						// Update height label text
 						if( $cropitElement.find("#adjustable-height-value").length ){
@@ -768,8 +768,8 @@ var masterImageEditor = function( customOptions ){
 				})
 				.val(settings.currentVal)
 				.on("mousemove touchmove change",function(){
-					if( this.value != $cropitElement.find(".cropit-image-preview").width() ){
-						var previewHeight = $cropitElement.find(".cropit-image-preview").height();
+					if( this.value != $cropitElement.find(".cropit-preview").width() ){
+						var previewHeight = $cropitElement.find(".cropit-preview").height();
 						$cropitElement.cropit('previewSize', { width: this.value, height: previewHeight });
 						// Update width label text
 						if( $cropitElement.find("#adjustable-width-value").length ){
@@ -783,7 +783,7 @@ var masterImageEditor = function( customOptions ){
 
 	this.callAdjustableWidth = function($cropitElement){
 		var params = {
-			currentVal: $cropitElement.find(".cropit-image-preview").width(),
+			currentVal: $cropitElement.find(".cropit-preview").width(),
 			onSlideStop: function(){
 				if (!$cropitElement.cropit( 'isZoomable' )){
 					if( $cropitElement.find(".cropit-image-zoom-input").length ){
@@ -811,11 +811,14 @@ var masterImageEditor = function( customOptions ){
 	this.initCropit = function( $cropitElement ){
 
 		var updateImage = {};
+		var  newImage = false;
 
 		// If there are an image to load.
 		if( imageData && imageData.path ){
 			// show spinner.
 			_this.showImageLoading();
+			//Set newImage false becouse this image was created.  
+			newImage = false;
 		
 			// Create a new object by type of cropit.
 			if ($cropitElement.attr('id') == 'image-cropper-mobile'){
@@ -834,6 +837,10 @@ var masterImageEditor = function( customOptions ){
 
 			$fileInput :  $modalContent.find('input.cropit-image-input'),
 
+			onFileChange: function(){
+                newImage = true;
+            },
+
 			// Show preview on image load.
 			onImageLoaded: function(){
 				var $previewContainer = this.$preview;
@@ -850,7 +857,6 @@ var masterImageEditor = function( customOptions ){
 				var currentHeightVal = (isMobile)? placeHolderSize.mobile.height : placeHolderSize.height;
 				var currentWidthVal = (isMobile)? placeHolderSize.mobile.width : placeHolderSize.width;
 				var isZoomable = $cropitElement.cropit( 'isZoomable' );
-				var newImage = !( (Application.globals.campaignImageUrl + updateImage.background_image) == $cropitElement.cropit('imageSrc') );
 				
 				// Show tab Multicrop
 				if( $modalContent.find('.container-tabs-multi-crop:hidden').length ){
@@ -967,22 +973,21 @@ var masterImageEditor = function( customOptions ){
 		var cropitConfig = {
 			background_zoom: saveOptions.elementCropit.cropit('zoom'),
 			background_position : saveOptions.elementCropit.cropit('offset'),
-			background_size : (saveOptions.elementCropit.find('.cropit-image-preview').length)? saveOptions.elementCropit.find('.cropit-image-preview').css('background-size') : '',
 			background_image: actualConfig.background_image || imageData.background_image
 		}
 
 		if( editorOptions.adjustable_height == 'enabled' ){
-			cropitConfig.background_height = (saveOptions.elementCropit.find('.cropit-image-preview').length)? saveOptions.elementCropit.find('.cropit-image-preview').height() : '';
+			cropitConfig.background_height = (saveOptions.elementCropit.find('.cropit-preview').length)? saveOptions.elementCropit.find('.cropit-preview').height() : '';
 		}
 		if( editorOptions.adjustable_width == 'enabled' ){
-			cropitConfig.background_width = (saveOptions.elementCropit.find('.cropit-image-preview').length)? saveOptions.elementCropit.find('.cropit-image-preview').width() : '';
+			cropitConfig.background_width = (saveOptions.elementCropit.find('.cropit-preview').length)? saveOptions.elementCropit.find('.cropit-preview').width() : '';
 		}
 
 		if( saveOptions.isMobile){
 			actualConfig.mobile = cropitConfig
 		}else{
 			if (editorOptions.multi_crop == 'enabled' && !actualConfig.title_mobile){
-				actualConfig.title_mobile = saveOptions.elementCropit.find('.cropit-image-preview #text-overlay').text();
+				actualConfig.title_mobile = saveOptions.elementCropit.find('.cropit-preview #text-overlay').text();
 			}
 			actualConfig = $.extend(actualConfig, cropitConfig);
 		}
@@ -1025,9 +1030,9 @@ var masterImageEditor = function( customOptions ){
 					height: placeHolderSize.height
 				});
 				// Append image elment in cropit preview. This fix the blurring of html2canvas.
-				saveOptions.elementCropit.find('.cropit-image-preview').append(overlayImage);
+				saveOptions.elementCropit.find('.cropit-preview').append(overlayImage);
 
-				imageManager.generateCanvas( saveOptions.elementCropit.find('.cropit-image-preview'), function( canvas ){
+				imageManager.generateCanvas( saveOptions.elementCropit.find('.cropit-preview'), function( canvas ){
 					// save url data canvas and complete input hidden data_image.
 					var urlImageData = canvas.toDataURL("image/png");
 					var ajaxData = {
@@ -1078,7 +1083,7 @@ var masterImageEditor = function( customOptions ){
 	 * Is used to show a preview when the upload is direct, without copit or canvas.
 	 */
 	this.previewOriginalImage = function( url, title, ext){
-		$modalContent.find(".cropit-image-preview").removeClass("preview-original");
+		$modalContent.find(".cropit-preview").removeClass("preview-original");
 		$modalContent.find(".preview-box .upload-warning").remove();
 
 		var $image = $('<img class="original" src="'+ url +'"/>');
@@ -1094,7 +1099,7 @@ var masterImageEditor = function( customOptions ){
 		$image.css("max-width",placeHolderSize.width);
 
 		// Render thumbnail.
-		$modalContent.find(".cropit-image-preview")
+		$modalContent.find(".cropit-preview")
 			.empty()
 			.append( $image );
 
@@ -1111,7 +1116,7 @@ var masterImageEditor = function( customOptions ){
 				if( editorOptions.image_resize == 'enabled'){//if the image has auto height.
 					displayWarning( 'This source image does not have the proper dimensions or size ratio for this image spot. The recommended image width is: '+placeHolderSize.width+'px.' );
 				}else{//if the image has fix height.
-					$modalContent.find(".cropit-image-preview").addClass("preview-original")
+					$modalContent.find(".cropit-preview").addClass("preview-original")
 					displayWarning( 'This source image does not have the proper dimensions or size ratio for this image spot. The recommended image size is: '+placeHolderSize.width+'x'+placeHolderSize.height+'px.' );
 				}
 			}
@@ -1300,7 +1305,7 @@ var masterImageEditor = function( customOptions ){
 
 				// If cropit is enabled get base64 from div preview background
 				if( editorOptions.image_crop == "enabled" ){
-					ajaxData.data_image = $modalContent.find('#image-cropper .cropit-image-preview').css('background-image').replace('url(','').replace(')','');
+					ajaxData.data_image = $modalContent.find('#image-cropper .cropit-preview').css('background-image').replace('url(','').replace(')','');
 				}else{
 				// If cropit is disabled get base64 from img source and extension from data.
 					ajaxData.data_image = $modalContent.find('.preview-box img').attr('src');

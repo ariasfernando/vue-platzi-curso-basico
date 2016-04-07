@@ -303,8 +303,8 @@ function masterImageEditorv2( customOptions ){
                 })
                 .val(settings.currentVal)
                 .on("mousemove touchmove change",function(){
-                    if( this.value != $cropitElement.find(".cropit-image-preview").height() ){
-                        var previewWidth = $cropitElement.find(".cropit-image-preview").width();
+                    if( this.value != $cropitElement.find(".cropit-preview").height() ){
+                        var previewWidth = $cropitElement.find(".cropit-preview").width();
                         $cropitElement.cropit('previewSize', { width: previewWidth, height: this.value });
                         // Update height label text
                         if( $cropitElement.find("#adjustable-height-value").length ){
@@ -370,8 +370,8 @@ function masterImageEditorv2( customOptions ){
                 })
                 .val(settings.currentVal)
                 .on("mousemove touchmove change",function(){
-                    if( this.value != $cropitElement.find(".cropit-image-preview").width() ){
-                        var previewHeight = $cropitElement.find(".cropit-image-preview").height();
+                    if( this.value != $cropitElement.find(".cropit-preview").width() ){
+                        var previewHeight = $cropitElement.find(".cropit-preview").height();
                         $cropitElement.cropit('previewSize', { width: this.value, height: previewHeight });
                         // Update width label text
                         if( $cropitElement.find("#adjustable-width-value").length ){
@@ -439,8 +439,8 @@ function masterImageEditorv2( customOptions ){
         var cropitData = {
             background_position: $cropitElement.cropit('offset'),
             background_zoom: $cropitElement.cropit('zoom'),
-            background_height: $cropitElement.find('.cropit-image-preview').height(),
-            background_width: $cropitElement.find('.cropit-image-preview').width()
+            background_height: $cropitElement.find('.cropit-preview').height(),
+            background_width: $cropitElement.find('.cropit-preview').width()
         };
 
         $.each(cropitData, function( key, value){
