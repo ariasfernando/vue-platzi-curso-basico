@@ -836,28 +836,32 @@ var masterImageEditor = function( customOptions ){
         var cropitOptions = {
 
             $fileInput :  $modalContent.find('input.cropit-image-input'),
+            smallImage : 'stretch',
 
             onFileChange: function(){
                 newImage = true;
+                this.$preview.removeClass('outline-class');
+                $modalContent.find(".cropit-preview-image").css('transform-origin', 'left top 0px'); 
+                this.$preview.parent().hide();
             },
 
             // Show preview on image load.
             onImageLoaded: function(){
-                var $previewContainer = this.$preview;
 
-                $modalContent.find(".preview-box .upload-warning").remove();
                 var isMobile = false;
-
                 if ($cropitElement.attr('id') == 'image-cropper-mobile'){
                     isMobile = true;
                 }
 
+                var $previewContainer = this.$preview;
                 var currentZoom = 0;
                 var currentZoomVal = 0;
                 var currentHeightVal = (isMobile)? placeHolderSize.mobile.height : placeHolderSize.height;
                 var currentWidthVal = (isMobile)? placeHolderSize.mobile.width : placeHolderSize.width;
                 var isZoomable = $cropitElement.cropit( 'isZoomable' );
                 
+                $modalContent.find(".preview-box .upload-warning").remove();
+
                 // Show tab Multicrop
                 if( $modalContent.find('.container-tabs-multi-crop:hidden').length ){
                     $modalContent.find('.container-tabs-multi-crop:hidden').show();
@@ -929,7 +933,14 @@ var masterImageEditor = function( customOptions ){
                         // Remove spinner
                         _this.hideImageLoading();
                         // Show image preview box
-                        $previewContainer.parent().slideDown();
+                        $previewContainer.parent().slideDown( function() {
+                            $previewContainer.addClass('outline-class'); 
+                            if (newImage ){
+                                if ($cropitElement.cropit('zoom') > 1){
+                                    $modalContent.find(".cropit-preview-image").css('transform-origin', 'center top 0px'); 
+                                }
+                            }
+                        });
                     }, 1000);
                 }else if( $previewContainer.find('.spinner-loading:visible').length ){
                     _this.hideImageLoading();
@@ -1305,7 +1316,7 @@ var masterImageEditor = function( customOptions ){
 
                 // If cropit is enabled get base64 from div preview background
                 if( editorOptions.image_crop == "enabled" ){
-                    ajaxData.data_image = $modalContent.find('#image-cropper .cropit-preview').css('background-image').replace('url(','').replace(')','');
+                    ajaxData.data_image = $modalContent.find('#image-cropper .cropit-preview-image').attr('src');
                 }else{
                 // If cropit is disabled get base64 from img source and extension from data.
                     ajaxData.data_image = $modalContent.find('.preview-box img').attr('src');
