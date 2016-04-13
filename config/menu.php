@@ -42,6 +42,14 @@ $default = [
             'module_id' => 'hero_image',
             'level' => 'single'
         ],
+
+        'hero_image_bg' => [
+            'title' => 'Hero Image Background',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'hero_image_bg',
+            'level' => 'single'
+        ],
         
         'hero_image_mobile' => [
             'title' => 'Full Width Image',
