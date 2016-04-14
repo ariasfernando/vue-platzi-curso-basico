@@ -508,6 +508,11 @@ function masterImageEditorv2( customOptions ){
         }else if( cropitObj.$preview.find('.spinner-loading:visible').length ){
             _this.hideImageLoading();
         }
+
+        // Show multi crop tabs if there are hidden.
+        if( $modalContent.find(".container-tabs-multi-crop").is(":hidden") ){
+            $modalContent.find(".container-tabs-multi-crop").show();
+        }
     };
 
     // Init cropit zoom
