@@ -413,6 +413,32 @@ function masterImageEditorv2( customOptions ){
     };
 
     /*
+     * ====== IMAGE OVERLAY ======
+     */
+    this.initImageOverlay = function( $cropitElement ){
+        var $checkbox = $cropitElement.find("#image-overlay-config input[type=checkbox]");
+
+        if( _this.imageData.image_overlay == "off" ){
+            $checkbox.removeAttr("checked");
+            $cropitElement.find('img.image-overlay').hide();
+        }else{
+            $checkbox.attr("checked","checked");
+            $cropitElement.find('img.image-overlay').show();
+        }
+
+        // Show/Hide Image overlay
+        $checkbox.on("change",function(){
+            if( $(this).is(":checked") ){
+                _this.editedImageData.image_overlay = "on";
+                $cropitElement.find('img.image-overlay').show();
+            }else{
+                _this.editedImageData.image_overlay = "off";
+                $cropitElement.find('img.image-overlay').hide();
+            }
+        });
+    };
+
+    /*
      * ====== CROPIT ======
      */
     this.initCropit = function($arrayCropitElement,cropitOptions){
