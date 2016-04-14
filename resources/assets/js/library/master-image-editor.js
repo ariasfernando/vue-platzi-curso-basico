@@ -10,7 +10,7 @@ var masterImageEditor = function( customOptions ){
     var placeHolderSize = {
         height: null,
         width: null,
-         mobile: {
+        mobile: {
             width: 318,
             height: 200
         }
@@ -811,7 +811,7 @@ var masterImageEditor = function( customOptions ){
     this.initCropit = function( $cropitElement ){
 
         var updateImage = {};
-        var  newImage = false;
+        var newImage = false;
 
         // If there are an image to load.
         if( imageData && imageData.path ){
@@ -841,7 +841,6 @@ var masterImageEditor = function( customOptions ){
             onFileChange: function(){
                 newImage = true;
                 this.$preview.removeClass('outline-class');
-                $modalContent.find(".cropit-preview-image").css('transform-origin', 'left top 0px'); 
                 this.$preview.parent().hide();
             },
 
@@ -935,11 +934,6 @@ var masterImageEditor = function( customOptions ){
                         // Show image preview box
                         $previewContainer.parent().slideDown( function() {
                             $previewContainer.addClass('outline-class'); 
-                            if (newImage ){
-                                if ($cropitElement.cropit('zoom') > 1){
-                                    $modalContent.find(".cropit-preview-image").css('transform-origin', 'center top 0px'); 
-                                }
-                            }
                         });
                     }, 1000);
                 }else if( $previewContainer.find('.spinner-loading:visible').length ){
@@ -1035,14 +1029,21 @@ var masterImageEditor = function( customOptions ){
             }else{
                 // Create image elment width cropit export src
                 var overlayImage = $("<img>");
-                overlayImage.attr({
-                    src: exportedSrc,
-                    width: placeHolderSize.width,
-                    height: placeHolderSize.height
-                });
+                if (!saveOptions.isMobile){
+                    overlayImage.attr({
+                        src: exportedSrc,
+                        width: placeHolderSize.width,
+                        height: placeHolderSize.height
+                    });
+                }else{
+                    overlayImage.attr({
+                        src: exportedSrc,
+                        width: placeHolderSize.mobile.width,
+                        height: placeHolderSize.mobile.height
+                    });
+                }    
                 // Append image elment in cropit preview. This fix the blurring of html2canvas.
                 saveOptions.elementCropit.find('.cropit-preview').append(overlayImage);
-
                 imageManager.generateCanvas( saveOptions.elementCropit.find('.cropit-preview'), function( canvas ){
                     // save url data canvas and complete input hidden data_image.
                     var urlImageData = canvas.toDataURL("image/png");
