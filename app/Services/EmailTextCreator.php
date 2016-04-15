@@ -43,7 +43,11 @@ class EmailTextCreator
                     break;
 
                 default:
-                    $plain_text .= trim($this->defaultHtml2TextConverter($module));
+                    if (\view::exists('base.modules.txt_version.' . $module['type'])){
+                        $plain_text .= $this->getTxtByTpl($module);
+                    }else{
+                        $plain_text .= trim($this->defaultHtml2TextConverter($module));
+                    }
                     $plain_text .= self::$module_break;
                     break;
             }
@@ -107,5 +111,21 @@ class EmailTextCreator
         $htmlToText = new TextConverter($html, array('do_links' => 'inline'));
 
         return $htmlToText->getText();
+    }
+
+    /**
+     * Get txt module version.
+     *
+     * @param array $module module data
+     * @return string
+     */
+    protected function getTxtByTpl($module)
+    {
+        $modulePath = $module['file_parent'] . '.modules.txt_version.' . $module['type'];
+        $moduleText = \View::make($modulePath)
+            ->with('module', $module)
+            ->render();
+
+        return $moduleText;
     }
 }
