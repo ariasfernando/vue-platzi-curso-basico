@@ -460,6 +460,14 @@ function masterImageEditorv2( customOptions ){
         }
     };
 
+    this.disableCropit = function(){
+        $modalContent.find("#image-cropper").cropit("disable");
+    };
+
+    this.reenableCropit = function(){
+        $modalContent.find("#image-cropper").cropit("reenable");
+    };
+
     // Save cropit config in data
     this.saveCropitEdition = function( $cropitElement, index ){
         var cropitData = {
