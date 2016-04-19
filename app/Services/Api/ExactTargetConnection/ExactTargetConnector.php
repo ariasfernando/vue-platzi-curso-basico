@@ -56,11 +56,12 @@ class ExactTargetConnector
      * @param ET_DataExtension_Column $fuelDeColumn
      * @param ET_DataExtension $fuelDext
      */
-    public function __construct(Client $client,
+    public function __construct(
+        Client $client,
         ET_DataExtension_Row $fuelDe,
         ET_DataExtension_Column $fuelDeColumn,
-        ET_DataExtension $fuelDext)
-    {
+        ET_DataExtension $fuelDext
+    ) {
         $this->config = \Config::get("api.exact_target.credentials", []);
         $this->getTokenUri = $this->config["authPath"];
         $this->client = $client;
