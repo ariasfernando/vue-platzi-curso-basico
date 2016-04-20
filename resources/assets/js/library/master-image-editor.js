@@ -186,7 +186,7 @@ var masterImageEditor = function( customOptions ){
 		$content.find(".cropit-image-preview")
 			.width( placeHolderSize.width )
 			.height( placeHolderSize.height );
-		
+
 		$content.find("#image-cropper-mobile .cropit-image-preview")
 			.width( placeHolderSize.mobile.width )
 			.height( placeHolderSize.mobile.height );
@@ -238,8 +238,60 @@ var masterImageEditor = function( customOptions ){
 			// Init each Cropit
 			$.each( $arrayCropitElement, function( index, cropitElement ){
 				_this.initCropit( $(cropitElement) );
-
 			});
+		}
+		
+		// Load custom plugins
+		if ( editorOptions.plugins.length > 0 ) {
+			$.each(editorOptions.plugins, function(i, plugin){
+				globalMasterImageEditor.plugins[plugin](_this, editorOptions, $modalContent, imageData);
+			});
+		}
+
+		// -- Init Custom Tag --
+		if( editorOptions.custom_tag && editorOptions.custom_tag.id && $modalContent.find("#"+editorOptions.custom_tag.id).length ){
+			_this.initCustomTags();
+		}
+	};
+
+	// -- Init Custom Tags
+	this.initCustomTags = function(){
+		var $customTagContainer = $modalContent.find("#" + editorOptions.custom_tag.id);
+		var $select = $customTagContainer.find("select");
+
+		if( imageData && imageData.path && imageData.path.search(/(%%=v)|(=%%)/g) >= 0 ){
+			_this.hideImageLoading();
+			$modalContent.find(".nav-tabs ." + editorOptions.custom_tag.id).click();
+			$select.find("option[value='"+imageData.path+"']").attr("selected","selected");
+		}
+
+		// Set confirm event
+		$customTagContainer.on("click","button[type=submit]",function(){
+			if( $select.val() != "" ){
+				// Confirm tag
+				_this.confirmCustomTag();
+				// Remove any error message
+				if( $customTagContainer.find(".error").length ){
+					$customTagContainer.find("label.error").remove();
+					$customTagContainer.find(".error").removeClass("error");
+				}
+				// Disable button
+				$customTagContainer.find("button").attr("disabled","disabled");
+			}
+			return false;
+		});
+
+		// Set on change event in select
+		$select.on("change",function(){
+			if( $customTagContainer.find("button").is(":disabled") ){
+				$customTagContainer.find("button").removeAttr("disabled");
+			}
+		});
+	};
+
+	this.confirmCustomTag = function(){
+		if( $modalContent.find(".preview-box").is(":visible") ){
+			$modalContent.find(".preview-box").slideUp();
 		}
 	};
 
@@ -259,7 +311,7 @@ var masterImageEditor = function( customOptions ){
 			$modalContent.find("#image-destination-url").val( imageData.destination_url );
 		}
 
-		$modalContent.on("blur", "#image-destination-url", function(){
+		$modalContent.on("change", "#image-destination-url", function(){
 			var resultUrl = Application.utils.validate.parseUrl( $(this).val() );
 			if( resultUrl ){
 				actualConfig.destination_url = resultUrl;
@@ -755,8 +807,8 @@ var masterImageEditor = function( customOptions ){
 			onSlideStop: function( event, ui ){}
 		},params);
 
-		if( $("#adjustable-width-value").length ){
-			$("#adjustable-width-value").text(settings.currentVal);
+		if( $cropitElement.find("#adjustable-width-value").length ){
+			$cropitElement.find("#adjustable-width-value").text(settings.currentVal);
 		}
 
 		if( $cropitElement.find(".cropit-image-width-input").length ){
@@ -782,8 +834,9 @@ var masterImageEditor = function( customOptions ){
 	};
 
 	this.callAdjustableWidth = function($cropitElement){
+		var currentVal = $cropitElement.cropit('previewSize').width;
 		var params = {
-			currentVal: $cropitElement.find(".cropit-image-preview").width(),
+			currentVal: currentVal,
 			onSlideStop: function(){
 				if (!$cropitElement.cropit( 'isZoomable' )){
 					if( $cropitElement.find(".cropit-image-zoom-input").length ){
@@ -891,26 +944,6 @@ var masterImageEditor = function( customOptions ){
 					updateImage.background_position.x = Number( updateImage.background_position.x );
 					updateImage.background_position.y = Number( updateImage.background_position.y );
 					$cropitElement.cropit('offset', updateImage.background_position);
-				}
-
-				// Don't do it for desktop preview
-				if( $cropitElement.attr('id') != 'image-cropper-mobile' ){
-					// If image adjustable set image preview size
-					if( editorOptions.adjustable_height == 'enabled' || editorOptions.adjustable_width == 'enabled' ){
-						currentHeightVal = (updateImage.background_height)? updateImage.background_height : placeHolderSize.height;
-						currentWidthVal = (updateImage.background_width)? updateImage.background_width : placeHolderSize.width;
-						$cropitElement.cropit('previewSize', { width: currentWidthVal, height: currentHeightVal });
-					}
-
-					//Init height
-					if( editorOptions.adjustable_height == 'enabled' ){
-						_this.callAdjustableHeight($cropitElement);
-					}
-
-					//Init width
-					if( editorOptions.adjustable_width == 'enabled' ){
-						_this.callAdjustableWidth($cropitElement);
-					}
 				}
 
 				if( !isZoomable && editorOptions.scale_ratio > 1 && editorOptions.adjustable_height != 'enabled' ){
@@ -1027,31 +1060,31 @@ var masterImageEditor = function( customOptions ){
 				// Append image elment in cropit preview. This fix the blurring of html2canvas.
 				saveOptions.elementCropit.find('.cropit-image-preview').append(overlayImage);
 
-				imageManager.generateCanvas( saveOptions.elementCropit.find('.cropit-image-preview'), function( canvas ){
-					// save url data canvas and complete input hidden data_image.
-					var urlImageData = canvas.toDataURL("image/png");
-					var ajaxData = {
-						data_image: urlImageData,
-						campaign_id: $modalContent.find('input[name=campaign_id]').val()
-					};
+			imageManager.generateCanvas( saveOptions.elementCropit.find('.cropit-image-preview'), function( canvas ){
+				// save url data canvas and complete input hidden data_image.
+				var urlImageData = canvas.toDataURL("image/png");
+				var ajaxData = {
+					data_image: urlImageData,
+					campaign_id: $modalContent.find('input[name=campaign_id]').val()
+				};
 
-					// Upload Edited image.
-					imageManager.uploadImage(
-						ajaxData,
-						// Done
-						function( response ){
-							if ( saveOptions.onSuccess ){
-								saveOptions.onSuccess( response );
-							}
-						},
-						// Fail
-						function(){
-							// Hide Spinner
-							_this.hideBtnSpinner();
+				// Upload Edited image.
+				imageManager.uploadImage(
+					ajaxData,
+					// Done
+					function( response ){						
+						if ( saveOptions.onSuccess ){
+							saveOptions.onSuccess( response );
 						}
-					);
-				}, editorOptions.scale_ratio);
-			}
+					},
+					// Fail
+					function(){
+						// Hide Spinner
+						_this.hideBtnSpinner();
+					}
+				);
+			}, editorOptions.scale_ratio);
+		}
 
 		}
 	};
@@ -1174,8 +1207,14 @@ var masterImageEditor = function( customOptions ){
 		var dataKey = getDataKey();
 
 		if( dataKey ){
+
 			// Merge Actual config with imageData
 			imageData = $.extend( imageData, actualConfig );
+			var globalsCampaignImageUrl = Application.globals.campaignImageUrl;
+
+			if( imageData.path && imageData.path.search(/(%%=v)|(=%%)/g) >= 0 ){
+				globalsCampaignImageUrl = "";
+			}
 
 			var $module = $(moduleManager.modalTarget).parents("[data-params]");
 
@@ -1187,7 +1226,7 @@ var masterImageEditor = function( customOptions ){
 			// Update module layout
 			if( imageData.path != "" ){
 				$imagesModalUpdate.eq(0)
-					.attr("src", Application.globals.campaignImageUrl + imageData.path );
+					.attr("src", globalsCampaignImageUrl + imageData.path );
 			}
 
 			// update image alt
@@ -1212,7 +1251,7 @@ var masterImageEditor = function( customOptions ){
 			}
 
 			// update image link
-			if( imageData["destination_url"] != "" ){
+			if( imageData["destination_url"] && imageData["destination_url"] != "" ){
 				// If target is intro a table with class st-data-modal-parent, it's mean there are another link to set destination_url
 				if( $(moduleManager.modalTarget).parents(".st-data-modal-parent").length ){
 					$.each( $(moduleManager.modalTarget).parents(".st-data-modal-parent").find("a"), function( index, link){
@@ -1230,7 +1269,7 @@ var masterImageEditor = function( customOptions ){
 			if (editorOptions.multi_crop == 'enabled'){
 				if( imageData.mobile.path != "" ){
 					$imagesModalUpdate.eq(1)
-						.attr("src", Application.globals.campaignImageUrl + imageData.mobile.path );
+						.attr("src", globalsCampaignImageUrl + imageData.mobile.path );
 				}
 
 				if( imageData.title_mobile != "" ){
@@ -1258,6 +1297,24 @@ var masterImageEditor = function( customOptions ){
 		var $fetchImageField = $modalContent.find("#single-image-url-og");
 		if( $fetchImageField.length ){
 			$fetchImageField.data("validation").required = false;
+		}
+
+		// Custom Tags: Set validation
+		if( editorOptions.custom_tag && editorOptions.custom_tag.id && $modalContent.find("#"+editorOptions.custom_tag.id).length ){
+			$modalContent.find("#"+editorOptions.custom_tag.id+" select").data("validation").required = false;
+			$modalContent.find("#"+editorOptions.custom_tag.id+" select").find("label.error").remove();
+
+			if( $modalContent.find("#"+editorOptions.custom_tag.id+" button").is(":enabled") ){
+				$modalContent.find("#"+editorOptions.custom_tag.id+" select")
+					.addClass("error")
+					.after('<label class="error">Please, confirm AMPScript value.</label>');
+				return false;
+			}
+
+			if( $modalContent.find("#"+editorOptions.custom_tag.id+" select").is(":visible") ){
+				$modalContent.find("#"+editorOptions.custom_tag.id+" select").data("validation").required = true;
+				uploadImage = false;
+			}
 		}
 
 		if( editorOptions.og_image == "enabled" ){
@@ -1401,7 +1458,30 @@ var masterImageEditor = function( customOptions ){
 					);
 				}
 			}else{
-				if( editorOptions.image_crop == "enabled" ){
+				if( editorOptions.custom_tag && editorOptions.custom_tag.id && $modalContent.find("#"+editorOptions.custom_tag.id+" select:visible").length ){
+
+					actualConfig.path = $modalContent.find("#"+editorOptions.custom_tag.id+" select").val();
+					actualConfig.background_image = "";
+					actualConfig.background_position = {};
+					actualConfig.background_size = "";
+					actualConfig.background_zoom = "";
+
+					if (editorOptions.multi_crop == 'enabled'){
+						actualConfig.mobile = actualConfig.mobile || {};
+						actualConfig.mobile.path = actualConfig.path;
+
+						// Hide Spinner
+						_this.hideBtnSpinner();
+
+						// On Save
+						_this.moduleUpdate();
+						_this.closeModal();
+					}else{
+						// Save data and close
+						_this.moduleUpdate();
+						_this.closeModal();
+					}
+				}else if( editorOptions.image_crop == "enabled" ){
 					// Save cropit data and generate canvas
 					var saveCropitOptions = {
 						generateCanvas : true,
@@ -1429,7 +1509,7 @@ var masterImageEditor = function( customOptions ){
 
 									// On Save
 									_this.moduleUpdate();
-									_this.closeModal();		
+									_this.closeModal();
 								}
 							});	
 						};
