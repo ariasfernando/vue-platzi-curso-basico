@@ -46,7 +46,8 @@ class Roles extends Command
                         $roles_array[] = $role['name'];
                     }
 
-                    $roles = $this->ask('What is the user role ? (none, '.join(", ", $roles_array).')', join(",", $user_data->roles));
+                    $roles = $this->ask('What is the user role ? (none, '
+                        . join(", ", $roles_array).')', join(",", $user_data->roles));
 
                     $selected_array = [];
 
