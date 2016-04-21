@@ -15,6 +15,12 @@
 	if($count>1){
 		$two_col_format = true;
 	}
+
+    // Image Overlay Class
+    $image_overlay_class = 'image-overlay';
+    if( isset($params["image_overlay_config"]["image_class"]) ){
+        $image_overlay_class = 'image-overlay ' . $params["image_overlay_config"]["image_class"];
+    }
 ?>
 
 <div {{ $attrId }}  {{ $attrTabpanel }} class="{{ $tabClass }} {{ $initCropperClass }}" >
@@ -50,7 +56,7 @@
 						'width' => $params["image_overlay_config"]["image_width"],
 						'height'=> $params["image_overlay_config"]["image_height"],
 						'border' => '0',
-						'class' => 'image-overlay',
+						'class' => $image_overlay_class,
 						'style' => 'display:block; border:none;'
 				)) !!}
 			@endif
