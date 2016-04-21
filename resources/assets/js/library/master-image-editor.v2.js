@@ -29,6 +29,21 @@ function masterImageEditorv2( customOptions ){
     this.getModalContent = function(){
         return $modalContent;
     };
+    // Display Message
+    this.displayMessage = function( message, type ){
+        var errorMsg = '<i class="glyphicon glyphicon-alert"></i> ' + message;
+
+        if( !$modalContent.find(".preview-box .upload-warning").is(":visible") ){
+            var errorEl = '<p class="alert alert-warning upload-warning">'+errorMsg+'</p>';
+            if( $modalContent.find(".preview-box .section-title").length ){
+                $modalContent.find(".preview-box .section-title").after( errorEl );
+            }else{
+                $modalContent.find(".preview-box").prepend( errorEl );
+            }
+        }else{
+            $modalContent.find(".preview-box .upload-warning").text(errorMsg);
+        }
+    };
 
     /*
      * ====== FILE UPLOAD ======
