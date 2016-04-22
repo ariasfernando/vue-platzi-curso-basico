@@ -29,6 +29,10 @@ function masterImageEditorv2( customOptions ){
     this.getModalContent = function(){
         return $modalContent;
     };
+    // Remove message
+    this.removeMesage = function(){
+        $modalContent.find(".preview-box .upload-warning").remove();
+    };
     // Display Message
     this.displayMessage = function( message, type ){
         var errorMsg = '<i class="glyphicon glyphicon-alert"></i> ' + message;
