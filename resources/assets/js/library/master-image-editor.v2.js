@@ -33,15 +33,19 @@ function masterImageEditorv2( customOptions ){
     this.displayMessage = function( message, type ){
         var errorMsg = '<i class="glyphicon glyphicon-alert"></i> ' + message;
 
+        if( !type ){
+            type = "warning";
+        }
+
         if( !$modalContent.find(".preview-box .upload-warning").is(":visible") ){
-            var errorEl = '<p class="alert alert-warning upload-warning">'+errorMsg+'</p>';
+            var errorEl = '<p class="alert alert-'+type+' upload-warning">'+errorMsg+'</p>';
             if( $modalContent.find(".preview-box .section-title").length ){
                 $modalContent.find(".preview-box .section-title").after( errorEl );
             }else{
                 $modalContent.find(".preview-box").prepend( errorEl );
             }
         }else{
-            $modalContent.find(".preview-box .upload-warning").text(errorMsg);
+            $modalContent.find(".preview-box .upload-warning").html(errorMsg);
         }
     };
 
