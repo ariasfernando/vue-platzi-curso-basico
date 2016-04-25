@@ -2,7 +2,7 @@
  | Master Image Editor v2.
  | Required: imageManager, moduleManager, campaignManager.
  | ==== IMPORTANT: This file should be modified in base app ====
- | TODO: mobile edition, add image library, text overlay, image overlay.
+ | TODO: mobile edition, add image library.
  */
 
 function masterImageEditorv2( customOptions ){
@@ -433,6 +433,34 @@ function masterImageEditorv2( customOptions ){
     };
     this.initAdjustableWidth = function($cropitElement){
         _this.callAdjustableWidth($cropitElement);
+    };
+
+    /*
+     * ====== TEXT OVERLAY ======
+     * Set events on text overlay switch and show or hide text element in preview.
+     */
+    this.initTextOverlayControl = function( $cropitElement ){
+        var _this = this;
+        var $checkbox = $cropitElement.find("#text-overlay-config input[type=checkbox]");
+
+        if( _this.imageData && _this.imageData.text_overlay == "off" ){
+            $checkbox.removeAttr("checked");
+            $cropitElement.find('.text-overlay').hide();
+        }else{
+            $checkbox.attr("checked","checked");
+            $cropitElement.find('.text-overlay').show();
+        }
+
+         // Show/Hide Image overlay
+         $checkbox.on("change",function(){
+            if( $(this).is(":checked") ){
+                _this.editedImageData.text_overlay = "on";
+                $cropitElement.find('.text-overlay').show();
+            }else{
+                _this.editedImageData.text_overlay = "off";
+                $cropitElement.find('.text-overlay').hide();
+            }
+        });
     };
 
     /*
