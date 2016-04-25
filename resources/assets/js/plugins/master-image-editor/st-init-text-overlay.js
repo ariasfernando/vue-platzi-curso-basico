@@ -4,7 +4,7 @@
  * [!] tinyMCE plugin is required and masterImageEditor.v2
  */
 (function($){
-    $.fn.stInitTextOverlay = function( params, masterImageEditorObj ){
+    $.fn.stInitTextOverlay = function( params, masterImageEditorObj, tinyOptions ){
         var textOverlayOptions = params;
         var $textOverlay = this;
 
@@ -52,8 +52,9 @@
         if( tinyMCE.editors['text-editable'] ){
             tinyMCE.editors['text-editable'].destroy();
         }
+        tinyOptions = tinyOptions || {};
 
-        tinymce.init({
+        tinymce.init($.extend({
             selector: ".text-editable",
             inline: true,
             menubar: false,
@@ -67,7 +68,7 @@
             relative_urls: false,
             document_base_url: Application.globals.baseUrl + "/js/tinymce/",
             skin_url: Application.globals.baseUrl + '/css/tinymce/lightgray/'
-        });
+        },tinyOptions));
 
         // Disable/Enable cropit on mouse enter and leave.
         $textOverlay
