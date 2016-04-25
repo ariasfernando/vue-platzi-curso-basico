@@ -521,6 +521,19 @@ function masterImageEditorv2( customOptions ){
         }
     };
 
+    // Build image preview: use for animated gif
+    this.buildGifPreview = function($cropitElement,cropitObj){
+        // Build and append image
+        var $gifImage = $("<img>");
+        $gifImage
+            .attr("src",$cropitElement.cropit("imageSrc"))
+            .addClass("animated-gif");
+        // Append image
+        cropitObj.$preview
+            .addClass("loading-gif")
+            .append($gifImage);
+    }
+
     // Init cropit
     this.initCropitElement = function($cropitElement, cropitOptions){
         if (!$cropitElement) {
