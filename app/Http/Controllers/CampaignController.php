@@ -270,4 +270,16 @@ class CampaignController extends Controller
     {
         return Campaign::getEmailSentHistory($request->input('campaign_id'));
     }
+
+    /**
+     *  Create image with custom layers and return local file path.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array Path or error
+     */
+    public function postCustomImageMerge(Request $request)
+    {
+        return Campaign::customImageMerge($request->all());
+    }
 }
