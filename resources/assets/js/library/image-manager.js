@@ -108,5 +108,23 @@ var imageManager = {
 		fileName = fileName.toString().replace(".","-");
 
 		return fileName;
+	},
+
+	/*
+	 * Get image type from a file path
+	 */
+	getImageType: function( path ){
+		if(!path){
+			return false;
+		}
+
+		if( path.indexOf(";base64,") >= 0 ){
+			var tempPath = path.replace("data:","[#split]").replace(";base64,","[#split]");
+			tempPath = tempPath.split("[#split]");
+			return tempPath[1];
+		}else{
+			var sourceArr = path.split(".");
+			return "image/" + sourceArr[sourceArr.length-1];
+		}
 	}
 };
