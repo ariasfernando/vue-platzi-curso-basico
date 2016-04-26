@@ -516,7 +516,11 @@ function masterImageEditorv2( customOptions ){
     };
 
     this.reenableCropit = function(){
-        $modalContent.find("#image-cropper").cropit("reenable");
+        var imageType = imageManager.getImageType($modalContent.find("#image-cropper").cropit("imageSrc"));
+
+        if( imageType != "image/gif"){
+            $modalContent.find("#image-cropper").cropit("reenable");
+        }
     };
 
     // Save cropit config in data
