@@ -551,7 +551,11 @@ function masterImageEditorv2( customOptions ){
         if( cropitElements.length ){
             _this.imageData.background_position = {};
             _this.imageData.background_zoom = 0;
-            // TODO: clear mobile vars too
+            // clear mobile vars
+            if( _this.imageData.mobile ){
+                _this.imageData.mobile.background_position = {};
+                _this.imageData.mobile.background_zoom = 0;
+            }
         }
     };
 
@@ -595,7 +599,11 @@ function masterImageEditorv2( customOptions ){
         // Init Cropit
         $cropitElement.cropit( cropitOptions );
         // Set preview size
-        $cropitElement.cropit('previewSize', options.imageSize);
+        var previewSize = cropitOptions.imageSize || options.imageSize || null;
+
+        if( previewSize != null ){
+            $cropitElement.cropit('previewSize', previewSize);
+        }
     };
 
     // Cropit image onload event
@@ -620,15 +628,19 @@ function masterImageEditorv2( customOptions ){
     };
 
     // Init cropit zoom
-    this.initCropitZoom = function($cropitElement, cropitObj){
+    this.initCropitZoom = function($cropitElement, cropitObj, imageData){
         var currentZoom = 0;
         var currentZoomVal = 0;
         var isZoomable = $cropitElement.cropit( 'isZoomable' );
 
+        if(!imageData){
+            imageData = _this.imageData;
+        }
+
         // Set zoom
-        if( isZoomable && _this.imageData.background_zoom ){
-            $cropitElement.cropit( 'zoom', _this.imageData.background_zoom );
-            currentZoomVal = _this.imageData.background_zoom;
+        if( isZoomable && imageData.background_zoom ){
+            $cropitElement.cropit( 'zoom', imageData.background_zoom );
+            currentZoomVal = imageData.background_zoom;
         }
 
         if(isZoomable){
@@ -636,17 +648,16 @@ function masterImageEditorv2( customOptions ){
         }else{
             $cropitElement.find('cropit-image-zoom-input').attr('disabled','disabled');
         }
-
         // Set background position
-        if( _this.imageData && _this.imageData.background_position ){
-            if( _this.imageData.background_position.x && typeof _this.imageData.background_position.x == "string" ){
-                _this.imageData.background_position.x = Number( _this.imageData.background_position.x );
+        if( imageData.background_position ){
+            if( imageData.background_position.x && typeof imageData.background_position.x == "string" ){
+                imageData.background_position.x = Number( imageData.background_position.x );
             }
-            if( _this.imageData.background_position.y && typeof _this.imageData.background_position.y == "string" ){
-                _this.imageData.background_position.y = Number( _this.imageData.background_position.y );
+            if( imageData.background_position.y && typeof imageData.background_position.y == "string" ){
+                imageData.background_position.y = Number( imageData.background_position.y );
             }
 
-            $cropitElement.cropit('offset', _this.imageData.background_position);
+            $cropitElement.cropit('offset', imageData.background_position);
         }
     };
 
@@ -681,7 +692,6 @@ function masterImageEditorv2( customOptions ){
     // Upload cropit image
     this.uploadCropitImages = function(fnDone){
         $.each(cropitElements, function(index, element){
-            // TODO: save multi crop tabs.
             // Save background of visible cropit.
             if( $(element).is(":visible") ){
                 var backgroundImage = $(element).cropit("imageSrc");
