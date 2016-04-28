@@ -418,7 +418,7 @@ $default = [
                 'link_title' => false,
                 'paste_as_text' => true,
                 'menubar' => false,
-                'link_validate_url' => true, 
+                'link_validate_url' => true,
                 'relative_urls' => false,
                 'remove_script_host' => false
             ]

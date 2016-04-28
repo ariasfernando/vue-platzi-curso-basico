@@ -1,6 +1,37 @@
 #!/usr/bin/env bash
 
+RUN_GULP=false
+RUN_COMPOSER=false
+RUN_BOWER=false
+RUN_NPM=false
+GIT_DIFF=`git diff --name-only HEAD@{0} HEAD@{1}`
 
+while read srcfile
+do
+	REGEX_GULP=".js|.less|resources|public|gulpfile"
+
+	#Check if you need to run gulp
+	if [[ $srcfile =~ $REGEX_GULP ]]; then
+		RUN_GULP=true
+	fi
+
+	#Check if you need to run composer
+	if [ $srcfile = "composer.json" ] ; then
+		RUN_COMPOSER=true
+	fi
+
+	#Check if you need to run bower
+	if [ $srcfile = "bower.json" ] ; then
+		RUN_BOWER=true
+		RUN_GULP=true
+	fi
+
+	#Check if you need to run npm
+	if [ $srcfile = "package.json" ] ; then
+		RUN_NPM=true
+		RUN_GULP=true
+	fi
+done <<< "$(echo -e "$GIT_DIFF")"
 
 function deploy_composer {
 	echo "updating php dependencies..."
@@ -31,7 +62,6 @@ function deploy_gulp {
 	gulp --production
 }
 
-
 case "$1" in
 
   "--composer")
@@ -41,20 +71,35 @@ case "$1" in
   "--bower")
 	deploy_bower
   ;;
-  
+
   "--npm")
 	deploy_npm
   ;;
-  
+
   "--gulp")
 	deploy_gulp
   ;;
 
-  *)
+  "--force-all")
 	deploy_composer
 	deploy_bower
 	deploy_npm
 	deploy_gulp
+  ;;
+
+  *)
+	if $RUN_COMPOSER ; then
+		deploy_composer
+	fi
+	if $RUN_BOWER ; then
+		deploy_bower
+	fi
+	if $RUN_NPM ; then
+		deploy_npm
+	fi
+	if $RUN_GULP ; then
+		deploy_gulp
+	fi
 
   esac
 
