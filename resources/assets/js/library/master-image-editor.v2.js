@@ -492,35 +492,37 @@ function masterImageEditorv2( customOptions ){
     /*
      * ====== CROPIT ======
      */
-    this.initCropit = function($arrayCropitElement,cropitOptions){
-        if(!$arrayCropitElement){
+    this.initCropit = function($cropitElement,cropitOptions){
+        if(!$cropitElement){
             Application.utils.alert.display("Warning:", "An error occurred while trying to init the configuration modal, missing cropit element.", "warning");
             return false;
         }
 
         // Init each Cropit
-        $.each( $arrayCropitElement, function( index, cropitElement ){
-            _this.initCropitElement($(cropitElement),cropitOptions);
-            cropitElements.push(cropitElement);
-        });
+        _this.initCropitElement($cropitElement,cropitOptions);
+        cropitElements.push($cropitElement[0]);
 
         _this.afterDataBuild = function(){
-            $.each( $arrayCropitElement, function( index, cropitElement ){
-                _this.saveCropitEdition($(cropitElement), index);
+            $.each(cropitElements,function(index, element){
+                _this.saveCropitEdition($(element), index);
             });
         }
     };
 
     this.disableCropit = function(){
-        $modalContent.find("#image-cropper").cropit("disable");
+        $.each(cropitElements,function(index, element){
+            $(element).cropit("disable");
+        });
     };
 
     this.reenableCropit = function(){
-        var imageType = imageManager.getImageType($modalContent.find("#image-cropper").cropit("imageSrc"));
+        $.each(cropitElements,function(index, element){
+            var imageType = imageManager.getImageType($(element).cropit("imageSrc"));
 
-        if( imageType != "image/gif"){
-            $modalContent.find("#image-cropper").cropit("reenable");
-        }
+            if( imageType != "image/gif"){
+                $(element).cropit("reenable");
+            }
+        });
     };
 
     // Save cropit config in data
