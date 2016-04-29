@@ -37,6 +37,7 @@
         "Fideloper\\Proxy\\TrustedProxyServiceProvider",
         "Laravel\\Socialite\\SocialiteServiceProvider",
         "Folklore\\Image\\ImageServiceProvider",
+        "Stensul\\Providers\\ChallengeServiceProvider"
         "Stensul\\Providers\\ApiServiceProvider"
     ],
     "eager": [
@@ -61,7 +62,8 @@
         "Stensul\\Providers\\MongodbServiceProvider",
         "Stensul\\Providers\\CdnServiceProvider",
         "Fideloper\\Proxy\\TrustedProxyServiceProvider",
-        "Folklore\\Image\\ImageServiceProvider"
+        "Folklore\\Image\\ImageServiceProvider",
+        "Stensul\\Providers\\ChallengeServiceProvider"
     ],
     "deferred": {
         "command.app.name": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
