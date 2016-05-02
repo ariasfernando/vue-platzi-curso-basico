@@ -113,7 +113,7 @@ class EmailTextCreator
      */
     protected function getTxtByTpl($module)
     {
-        $modulePath = $module['file_parent'] . '.modules.txt_version.' . $module['type'];
+        $modulePath = $module['file_parent'] . '.modules.text.' . $module['type'];
         $moduleText = \View::make($modulePath)
             ->with('module', $module)
             ->render();
