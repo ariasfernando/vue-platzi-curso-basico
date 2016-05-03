@@ -52,6 +52,21 @@ function masterImageEditorv2( customOptions ){
             $modalContent.find(".preview-box .upload-warning").html(errorMsg);
         }
     };
+    this.buildAlert = function( params ){
+        var options = $.extend({
+            message: "",
+            type: "warning"
+        },params);
+
+        var message = $("<i>")
+            .addClass("glyphicon glyphicon-alert")
+            .text(options.text);
+        var alert = $("<p>")
+            .addClass("alert alert-"+options.type+" upload-warning")
+            .append(options.message);
+
+        return alert;
+    };
 
     /*
      * ====== FILE UPLOAD ======
@@ -518,10 +533,7 @@ function masterImageEditorv2( customOptions ){
     this.reenableCropit = function(){
         $.each(cropitElements,function(index, element){
             var imageType = imageManager.getImageType($(element).cropit("imageSrc"));
-
-            if( imageType != "image/gif"){
-                $(element).cropit("reenable");
-            }
+            $(element).cropit("reenable");
         });
     };
 
