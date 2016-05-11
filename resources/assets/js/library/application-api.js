@@ -25,7 +25,7 @@ Application.api = (function($){
         var _this = this;
         var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).data(options.apiDriver) );
         $campaignUploadModal.find( options.campaignId ).val( $(elem).data( options.campaignIdData ) );
-        $campaignUploadModal.find('.response-message').html('').removeClass('alert-success').removeClass('alert-danger').hide();
+        $campaignUploadModal.find('.response-message').hide();
         $campaignUploadModal.find('.filename').val('');
         $campaignUploadModal.find(options.dataTable).hide();
         _this.updateModalTable(elem);
@@ -77,7 +77,7 @@ Application.api = (function($){
         var _this = this;
         var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).data(options.apiDriver) );
         var $uploadForm = $campaignUploadModal.find(options.uploadApiForm);
-        $campaignUploadModal.find('.response-message').html('').removeClass('alert-success').removeClass('alert-danger').hide();
+        $campaignUploadModal.find('.response-message').hide();
         if( Application.utils.validate.validateForm( $uploadForm[0] ) ){
             $( elem ).addClass("ajax-loader-small").attr("disabled","disabled");
             $( elem ).parent().removeClass("success").addClass("spinner");
