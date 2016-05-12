@@ -79,7 +79,8 @@ $default = [
             "font_family_bold_css" => "font-family:Arial, Helvetica, sans-serif;font-weight:normal",
             "font_family_bold" => "Arial, Helvetica, sans-serif",
             "font_family" => "Arial, Helvetica, sans-serif",
-            "building_mode_select" => true
+            "building_mode_select" => true,
+            "api_connection" => false,
         ]
     ]
 ];
