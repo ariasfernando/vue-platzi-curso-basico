@@ -252,7 +252,11 @@ class CampaignController extends Controller
      */
     public function postGifLayer(Request $request)
     {
-        return Campaign::gifLayer($request->input('campaign_id'), $request->input('gif_image'), $request->input('layer_image'));
+        return Campaign::gifLayer(
+            $request->input('campaign_id'),
+            $request->input('gif_image'),
+            $request->input('layer_image')
+        );
     }
 
     /**

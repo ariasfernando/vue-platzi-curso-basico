@@ -76,7 +76,7 @@ class TextConverter extends Html2Text
         "\\1\n", // <dd> and </dd>
         "\t* \\1", // <dt> and </dt>
         "\n\t* ", // <li>
-        "\n\n=====================================", // <hr>
+        "\n\n", // <hr>
         "<div>\n", // <div>
         '', // <table> and </table>
         '', // <tr> and </tr>
@@ -291,7 +291,7 @@ class TextConverter extends Html2Text
                 return $matches[3]."\n\n";
             case 'span':
                 if (strpos($matches[2], 'class="hr"') !== false) {
-                    return "\n=====================================";
+                    return "\n";
                 }
 
                 return $matches[3];

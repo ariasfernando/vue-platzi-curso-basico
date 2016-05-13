@@ -1,4 +1,5 @@
 var Application = Application || {};
+var ModuleActions = ModuleActions || {};
 
 Application.init = function(){
 	// -- AJAX Setup --

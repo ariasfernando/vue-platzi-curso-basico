@@ -23,7 +23,7 @@ class PermissionController extends Controller
     /**
      * Create a new controller instance.
      */
-    public function __construct(Request $request)
+    public function __construct()
     {
         $this->middleware('admin');
     }

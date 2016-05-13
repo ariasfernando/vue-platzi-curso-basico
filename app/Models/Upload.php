@@ -6,8 +6,6 @@ use Jenssegers\Mongodb\Model as Eloquent;
 
 class Upload extends Eloquent
 {
-    protected $connection = 'mongodb';
-
     /**
      * The database table used by the model.
      *
@@ -20,7 +18,18 @@ class Upload extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['api', 'campaign_id', 'user_id', 'ip', 'original_filename', 'filename', 'path', 'folder_id', 'subject', 'preheader'];
+    protected $fillable = [
+        'api',
+        'campaign_id',
+        'user_id',
+        'ip',
+        'original_filename',
+        'filename',
+        'path',
+        'folder_id',
+        'subject',
+        'preheader'
+    ];
 
     protected $defaults = array(
         'api' => '',

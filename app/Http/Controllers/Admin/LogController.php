@@ -22,7 +22,7 @@ class LogController extends Controller
     /**
      * Create a new controller instance.
      */
-    public function __construct(Request $request)
+    public function __construct()
     {
         $this->middleware('admin');
     }
@@ -59,7 +59,8 @@ class LogController extends Controller
         ];
 
         if (!is_null($search_type) && !is_null($search_text)) {
-            $logs = Log::where($search_type, $search_operator, $search_text)->orderBy($data_order_field, $data_order_type)->paginate((int) $data_page);
+            $logs = Log::where($search_type, $search_operator, $search_text)
+                ->orderBy($data_order_field, $data_order_type)->paginate((int) $data_page);
         } else {
             $logs = Log::orderBy($data_order_field, $data_order_type)->paginate((int) $data_page);
         }
