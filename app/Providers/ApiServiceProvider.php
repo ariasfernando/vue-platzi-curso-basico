@@ -43,6 +43,12 @@ class ApiServiceProvider extends ServiceProvider
         return [];
     }
 
+    /**
+     * Driver
+     * @param string $api_provider
+     * @throws Exception
+     * @return \Stensul\Services\Api\Eloqua|\Stensul\Services\Api\Responsys
+     */
     public static function driver($api_provider)
     {
         $class_name = 'Stensul\\Services\\Api\\'.ucwords($api_provider);

@@ -15,6 +15,8 @@ var masterImageEditor = function( customOptions ){
 	// Default options
 	var customOptions = customOptions || {}; 
 	var editorOptions = $.extend({
+		app_name: "base",
+		name: "master_image_editor",
 		title: "Image editor",
 		alt_text: "enabled",
 		destination_url: "enabled",
@@ -1242,10 +1244,6 @@ var masterImageEditor = function( customOptions ){
 	 *	Open magnific popup by ajax and init editor when ajax content are added
 	 */
 	this.openModal = function(){
-
-		editorOptions.app_name = "base";
-		editorOptions.name = "master_image_editor"; 
-
 		$.magnificPopup.open({
 			type: 'ajax',
 			closeOnBgClick: false, //-> closeOnBgClick: prevent close on background click.

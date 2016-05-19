@@ -118,6 +118,15 @@ $default = [
         ]
     ],
 
+    'silverpop' => [
+        'title' => 'Silverpop',
+        'class' => 'Silverpop',
+        'api_path' => 'http://api.pilot.silverpop.com/XMLAPI',
+        'user_name' => env('API_SILVERPOP_USERNAME', ''),
+        'password' => env('API_SILVERPOP_PASSWORD', ''),
+        'folder_path' => ''
+    ],
+
 ];
 
 return include('recursive.php');

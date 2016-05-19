@@ -189,7 +189,8 @@ class StaticProcessor
         }
 
         switch ($extension) {
-            case (\Config::get("image.force_conversion_jpg", false) || in_array($extension, ['jpg', 'jpeg', 'pjpeg', 'pjpg'])):
+            case (\Config::get("image.force_conversion_jpg", false)
+                || in_array($extension, ['jpg', 'jpeg', 'pjpeg', 'pjpg'])):
                 $options = [ 'jpeg_quality' => 100 ];
                 $extension = 'jpg';
                 break;

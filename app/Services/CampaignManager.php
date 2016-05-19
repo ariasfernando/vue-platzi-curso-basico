@@ -81,17 +81,16 @@ class CampaignManager
      */
     public static function delete($campaign_id = null)
     {
-        $campaign_data = Campaign::find($campaign_id);
-        $campaign_data->status = 2;
-        $response = $campaign_data->save();
 
-        if ($response) {
-            Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new \MongoId($campaign_id)]));
-
-            return array('success' => $campaign_id);
-        } else {
-            return array('error' => $campaign_id);
+        if ($campaign_data = Campaign::find($campaign_id)) {
+            $campaign_data->status = 2;
+            if ($response = $campaign_data->save()) {
+                Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new \MongoId($campaign_id)]));
+                return array('success' => $campaign_id);
+            }
         }
+
+        return array('error' => $campaign_id);
     }
 
     /**

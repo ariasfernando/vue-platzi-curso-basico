@@ -5,7 +5,7 @@ namespace Stensul\Http\Controllers;
 use Auth;
 use Stensul\Models\Campaign;
 
-class DashboardController extends Controller 
+class DashboardController extends Controller
 {
     /*
     |--------------------------------------------------------------------------

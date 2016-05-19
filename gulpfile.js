@@ -27,16 +27,12 @@ if( configEnv.APP_NAME ){
  */
 
 function jsAppFilePath (file) {
-
-    var path = "base";
-
-    fs.access('js/' + appName + '/' + file, fs.R_OK, function (err) {
-        if (!err) {
-            path = appName;
-        }
-    });
-
-    return 'js/' + path + '/' + file;
+    try {
+        fs.accessSync('resources/assets/js/' + appName + '/' + file, fs.F_OK);
+        return 'js/' + appName + '/' + file;
+    } catch (e) {
+        return 'js/base/' + file;
+    }
 }
 
 /*

@@ -356,6 +356,9 @@ var campaignManager = {
                 $( element ).removeAttr("id");
             });
         }
+        
+        // Remove every element with class st-remove-element
+        $cleanedHtml.find("[class^=st-remove-element]").remove();
 
         // Remove every class starting with "st-"
         $cleanedHtml.find("[class^=st-]").removeClass(function (index, css) {
@@ -534,7 +537,9 @@ var campaignManager = {
             var links = $(module).find("a");
             $.each( links, function( index, link){
                 var linkHref = $(link).attr("href");
-                $(link).attr("href",linkHref.replace('[DATE-SUBMITTED]',dateSubmitted));
+                if( linkHref && linkHref != "" ){
+                    $(link).attr("href",linkHref.replace('[DATE-SUBMITTED]',dateSubmitted));
+                }
             });
 
         });
@@ -619,7 +624,7 @@ var campaignManager = {
         // If validation is invalid return false
         if( !saveCampaign ){
             // Display Error Alert
-            Application.utils.alert.display("","To continue, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.","danger");
+            Application.utils.alert.display("",Application.globals.campaignValidationError,"danger");
             return false;
         }
         // Save campaign Request: On success

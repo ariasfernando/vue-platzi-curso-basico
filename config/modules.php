@@ -38,6 +38,12 @@ $default = [
         'placeholder_image' => '/images/default/image-placeholder-660x400.png',
         'library_name' => 'test'
     ],
+    'hero_image_bg' => [
+        'type' => 'hero_image_bg',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png',
+        'library_name' => 'test'
+    ],
     'hero_image_mobile' => [
         'type' => 'hero_image_mobile',
         'file_parent' => 'base',
@@ -81,6 +87,12 @@ $default = [
                 'relative_urls' => false
             ]
         ]
+    ],
+    'hero_image_bg' => [
+        'type' => 'hero_image_bg',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png',
+        'library_name' => 'test'
     ],
     'three_column_media_with_text' => [
         'type' => 'three_column_media_with_text',
@@ -406,7 +418,7 @@ $default = [
                 'link_title' => false,
                 'paste_as_text' => true,
                 'menubar' => false,
-                'link_validate_url' => true,
+                'link_validate_url' => true, 
                 'relative_urls' => false,
                 'remove_script_host' => false
             ]

@@ -236,7 +236,7 @@ Application.utils = {
 			return true;
 		},
 		parseUrl: function( url ){
-			if( url == "" ){
+			if( url == "" || Application.utils.isAmpScript(url) ){
 				return false;
 			}
 			var result = url.search(new RegExp(/^http/i));
@@ -264,8 +264,8 @@ Application.utils = {
 				return true;
 			}
 
-			var re = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i;
-			if( !re.test( value ) ){
+			var re = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[^\s]*)?$/i;
+			if( !re.test( value ) && !Application.utils.isAmpScript(value) ){
 				return false;
 			}
 
@@ -332,7 +332,7 @@ Application.utils = {
 				// Get validation params.
 				var validationParams = $field.data("validation");
 				// REQUIRED FIELD: If is a required field
-				if( validationParams.required ||  validationParams.required === "true"){
+				if( validationParams.required && validationParams.required === true || validationParams.required === "true"){
 					// Set the result of the validation
 					validationResult.success = validate.validateRequiredField( field );
 
@@ -514,5 +514,20 @@ Application.utils = {
     		}
     	});	
 
-    }
+    },
+
+    validateHexVal: function(hexVal){
+        return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(hexVal);
+    },
+
+	isAmpScript: function(string){
+		if( !Application.globals.enableAmpscript ){
+			return false;
+		}
+
+		if( string.search(/(%%=v)|(=%%)/g) >= 0 ){
+			return true;
+		}
+		return false;
+	}
 }
