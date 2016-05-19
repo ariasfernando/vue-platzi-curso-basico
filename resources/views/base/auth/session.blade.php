@@ -1,5 +1,5 @@
 {{-- Extend master layout --}}
-@extends('base.layouts.master')
+@extends('base.layouts.public')
 
 {{-- For an empty header --}}
 @section('header')
