@@ -1,5 +1,5 @@
 {{-- Extend master layout --}}
-@extends('base.layouts.master')
+@extends('base.layouts.public')
 
 {{-- For an empty header --}}
 @section('header')
@@ -44,3 +44,7 @@
     </section>
 <!-- Scripts -->
 @endsection
+@include('base/partials/application_script')
+@section('footer-script')
+    <script src="{{ url( elixir('js/library.js') ) }}"></script>
+@stop
