@@ -19,7 +19,8 @@
 		"laravel/socialite": "2.0.14",
 		"folklore/image": "0.2.4",
 		"exacttarget/fuel-sdk-php": "^0.9.0",
-		"sabberworm/php-css-parser": "^7.0"
+		"sabberworm/php-css-parser": "^7.0",
+		"graylog2/gelf-php": "^1.4"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",

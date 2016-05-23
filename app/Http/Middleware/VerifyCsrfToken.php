@@ -22,7 +22,7 @@ class VerifyCsrfToken extends BaseVerifier
             return $this->addCookieToResponse($request, $next($request));
         }
 
-        throw new TokenMismatchException();
+        abort(403, "CSRF Token Mismatch");
     }
 
     /**
