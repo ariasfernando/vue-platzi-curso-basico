@@ -22,11 +22,9 @@ class ApiController extends Controller
      */
     public function postUploadEmail(Request $request)
     {
-        $api_config = \Config::get("api");
-        $api_client = Api::driver($api_config[$api_config['api_driver']]['class']);
+        $api_client = Api::driver($request->input('api_driver'));
         $campaign_data = Campaign::findOrFail($request->input('campaign_id'));
         return $api_client->uploadEmail($campaign_data, $request->all());
-
     }
 
     /**
@@ -38,10 +36,8 @@ class ApiController extends Controller
     public function getHistory(Request $request)
     {
         $resp = [];
-        $api_config = \Config::get("api");
         $campaign_id = $request->input('campaign_id');
         $history = Upload::where('campaign_id', '=', new \MongoId($campaign_id))
-            ->where('api', '=', $api_config['api_driver'])
             ->orderBy('updated_at', 'desc')
             ->paginate(5)->toArray();
 
