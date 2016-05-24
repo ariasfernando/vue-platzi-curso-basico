@@ -1,5 +1,4 @@
 <?php
-
 namespace Stensul\Adapters\Filesystem;
 
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
