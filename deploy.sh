@@ -35,17 +35,18 @@ done <<< "$(echo -e "$GIT_DIFF")"
 
 function deploy_composer {
 	echo "updating php dependencies..."
-	if [ -f ./composer.phar ]; then
-		echo "using local composer instalation..."
-		php composer.phar self-update
-		php composer.phar clear-cache
-		php composer.phar install -o
-	else
-		echo "using global composer instalation..."
-		composer self-update
-		composer clear-cache
-		composer install -o
+
+	if [ ! -f ./composer.phar ]; then
+		echo "downloading composer..."
+		curl -o composer.phar "https://s3.amazonaws.com/fbridge-ops/composer/composer.phar" 2>/dev/null
 	fi
+
+	echo "updating composer..."
+	php composer.phar self-update
+
+	echo "updating packages dependencies..."
+	php composer.phar update -o
+
 }
 
 function deploy_bower {
