@@ -5,9 +5,11 @@ namespace Stensul\Formatters;
 use Auth;
 use Monolog\Formatter\GelfMessageFormatter as MonologGelfMessageFormatter;
 
+/**
+ * {@inheritDoc}
+ */
 class GelfMessageFormatter extends MonologGelfMessageFormatter
 {
-
 
     public function __construct($systemName = null, $extraPrefix = null, $contextPrefix = '')
     {
@@ -20,6 +22,12 @@ class GelfMessageFormatter extends MonologGelfMessageFormatter
     }
 
 
+    /**
+     * Add stensul own information that will help us to spot the problem
+     * easily.
+     * @param  array  $record the exception record as is
+     * @return array         return the record to the parent class so it can be logged
+     */
     public function format(array $record)
     {
         $record['extra']['com.stensul.environment'] = strtolower(env('APP_ENV'));
