@@ -505,6 +505,80 @@ function masterImageEditorv2( customOptions ){
     };
 
     /*
+     * ====== Init Single image Upload ======
+     * Used in modals without cropit option.
+     */
+    this.createImageElement = function(){
+        // Display preview.
+        var $image = $("<img>");
+        $image
+            .addClass("uploaded-image")
+        return $image;
+    };
+    this.initSingleImageUpload = function( inputId, $previewContent ){
+        if( !inputId ){
+            return false;
+        }
+
+        var spotSize = options.imageSize;
+        if( typeof spotSize != "undefined" && typeof spotSize.width == "number" ){
+            $modalContent.find(".cropit-image-preview").css("width",spotSize.width);
+        }
+
+        $modalContent
+            .on("change", "#"+inputId, function(event){
+                if(this.files.length && this.files[0] ){
+                    // Show loading
+                    _this.showImageLoading();
+
+                    var fileInput = this;
+                    var FR = new FileReader();
+
+                    FR.onload = function(event) {
+                        $modalContent.find(".upload-warning").remove();
+
+                        // Create image element
+                        if( $previewContent.find(".uploaded-image").length ){
+                            var $image = $previewContent.find(".uploaded-image");
+                        }else{
+                            // Display preview.
+                            var $image = _this.createImageElement();
+                            $previewContent.append($image);
+                        }
+
+                        // Set image source
+                        $image.attr("src",event.target.result);
+
+                        // On image load
+                        $image.on("load",function(){
+                            var imageWidth = $(this).outerWidth();
+
+                            // Validate image dimension
+                            if( typeof spotSize != "undefined" && typeof spotSize.width == "number" ){
+                                // Check gif image dimension
+                                if( fileInput.files[0].type == "image/gif" && $(this).outerWidth() != spotSize.width ){
+                                    _this.displayMessage(warningMessages.wrongImageDimension);
+                                    // Hide spinner
+                                    _this.hideImageLoading();
+                                // Check image dimension
+                                }else if( $(this).outerWidth() < spotSize.width ){
+                                    _this.displayMessage(warningMessages.wrongImageDimension);
+                                    // Hide spinner
+                                    _this.hideImageLoading();
+                                    return false;
+                                }
+                            }
+
+                            // Hide spinner
+                            _this.hideImageLoading();
+                        });
+                    };
+                    FR.readAsDataURL( this.files[0] );
+                }
+            });
+    };
+
+    /*
      * ====== CROPIT ======
      */
     this.initCropit = function($cropitElement,cropitOptions){
