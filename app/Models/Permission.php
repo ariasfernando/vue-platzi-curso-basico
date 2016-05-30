@@ -7,8 +7,6 @@ use Jenssegers\Mongodb\Model as Eloquent;
 class Permission extends Eloquent
 {
 
-    protected $connection = 'mongodb';
-
     /**
      * The database table used by the model.
      *
@@ -46,6 +44,10 @@ class Permission extends Eloquent
         parent::__construct($attributes);
     }
 
+    /**
+     * Return all roles for the current permission.
+     * @return array
+     */
     public function inRoles()
     {
 

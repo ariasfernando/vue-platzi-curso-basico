@@ -652,7 +652,7 @@ var campaignManager = {
         // If validation is invalid return false
         if( !saveCampaign ){
             // Display Error Alert
-            Application.utils.alert.display("","To continue, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.","danger");
+            Application.utils.alert.display("",Application.globals.campaignValidationError,"danger");
             return false;
         }
         // Save campaign Request: On success

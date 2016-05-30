@@ -7,7 +7,7 @@ use Stensul\Services\TextConverter;
 class EmailTextCreator
 {
     public static $line_break = "\n";
-    public static $module_break = "\n";
+    public static $module_break = "\n\n";
 
     protected $campaign;
 
@@ -34,7 +34,7 @@ class EmailTextCreator
             switch ($module['type']) {
                 case 'header_image':
                     $text_module = $this->defaultHtml2TextConverter($module);
-                    $text_module = str_replace("\n\n","\n", $text_module);
+                    $text_module = trim(str_replace("\n\n","\n", $text_module));
                     $plain_text .= $text_module;
                     $plain_text .= self::$module_break;
                     break;
@@ -43,7 +43,7 @@ class EmailTextCreator
                     break;
 
                 default:
-                    $plain_text .= $this->defaultHtml2TextConverter($module);
+                    $plain_text .= trim($this->defaultHtml2TextConverter($module));
                     $plain_text .= self::$module_break;
                     break;
             }

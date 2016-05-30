@@ -56,7 +56,14 @@ $default = [
             'password' => env('DB_PASSWORD', ''),
             'database' => env('DB_DATABASE', 'email_creator'),
         ),
-
+        'mongodb_testing' => array(
+            'driver'   => 'mongodb',
+            'host'     => env('DB_HOST', 'localhost'),
+            'port'     => env('DB_PORT', 27017),
+            'username' => env('DB_USERNAME', ''),
+            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE_TESTING', 'stensul_base_testing'),
+        )
     ],
 
     /*

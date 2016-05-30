@@ -44,6 +44,12 @@ $default = [
         'placeholder_image' => '/images/default/image-placeholder-660x400.png',
         'library_name' => 'test'
     ],
+    'hero_image_bg' => [
+        'type' => 'hero_image_bg',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png',
+        'library_name' => 'test'
+    ],
     'hero_image_mobile' => [
         'type' => 'hero_image_mobile',
         'file_parent' => 'base',

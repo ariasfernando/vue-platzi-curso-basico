@@ -287,7 +287,16 @@ var moduleManager = {
 		// Default config
 		var defaultConfigTinymce = {
 			document_base_url: Application.globals.baseUrl + "/js/tinymce/",
-			skin_url: Application.globals.baseUrl + '/css/tinymce/lightgray'
+			skin_url: Application.globals.baseUrl + '/css/tinymce/lightgray',
+			setup: function (editor) {
+				var dataParams = $module.data("params");
+				if( ModuleActions && dataParams.type && ModuleActions[dataParams.type] ){
+					var actions = new ModuleActions[dataParams.type]();
+					if( actions.onTinymceInit ){
+						actions.onTinymceInit( editor );
+					}
+				}
+			}
 		}
  	
 		// Set editor index & class name 
