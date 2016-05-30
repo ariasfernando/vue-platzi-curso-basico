@@ -557,12 +557,12 @@ function masterImageEditorv2( customOptions ){
                             if( typeof spotSize != "undefined" && typeof spotSize.width == "number" ){
                                 // Check gif image dimension
                                 if( fileInput.files[0].type == "image/gif" && $(this).outerWidth() != spotSize.width ){
-                                    _this.displayMessage(warningMessages.wrongImageDimension);
+                                    _this.displayMessage("This source image does not have the proper dimensions or size ratio for this image spot.");
                                     // Hide spinner
                                     _this.hideImageLoading();
                                 // Check image dimension
                                 }else if( $(this).outerWidth() < spotSize.width ){
-                                    _this.displayMessage(warningMessages.wrongImageDimension);
+                                    _this.displayMessage("This source image does not have the proper dimensions or size ratio for this image spot.");
                                     // Hide spinner
                                     _this.hideImageLoading();
                                     return false;
