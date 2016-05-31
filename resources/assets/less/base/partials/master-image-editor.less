@@ -137,6 +137,18 @@
 			border: 1px dashed @body-bg;
 		}
 
+		&.loading-gif,
+        &.no-cropit{
+            cursor: default;
+            overflow: hidden;
+            height: auto!important;
+            background-image: none!important;
+
+            .uploaded-image{
+                max-width: 100%;
+            }
+        }
+
 		img{
 			cursor: default;
 
