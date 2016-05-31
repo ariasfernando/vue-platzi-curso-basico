@@ -12,7 +12,8 @@ function masterImageEditorv2( customOptions ){
         loadingContainerSelector: null,
         spinnerClass: '',
         $fileInputUpload: '',
-        imageData: {}
+        imageData: {},
+        imagePreviewSelector: '.cropit-image-preview'
     }, customOptions);
 
     var $modalContent = options.modalContent || null;
@@ -67,6 +68,9 @@ function masterImageEditorv2( customOptions ){
 
         return alert;
     };
+    this.getPreviewElement = function(){
+        return $modalContent.find(options.imagePreviewSelector);
+    }
 
     /*
      * ====== FILE UPLOAD ======
@@ -341,8 +345,8 @@ function masterImageEditorv2( customOptions ){
                 })
                 .val(settings.currentVal)
                 .on("mousemove touchmove change",function(){
-                    if( this.value != $cropitElement.find(".cropit-image-preview").height() ){
-                        var previewWidth = $cropitElement.find(".cropit-image-preview").width();
+                    if( this.value != _this.getPreviewElement().height() ){
+                        var previewWidth = _this.getPreviewElement().width();
                         $cropitElement.cropit('previewSize', { width: previewWidth, height: this.value });
                         // Update height label text
                         if( $cropitElement.find("#adjustable-height-value").length ){
@@ -408,8 +412,8 @@ function masterImageEditorv2( customOptions ){
                 })
                 .val(settings.currentVal)
                 .on("mousemove touchmove change",function(){
-                    if( this.value != $cropitElement.find(".cropit-image-preview").width() ){
-                        var previewHeight = $cropitElement.find(".cropit-image-preview").height();
+                    if( this.value != _this.getPreviewElement().width() ){
+                        var previewHeight = _this.getPreviewElement().height();
                         $cropitElement.cropit('previewSize', { width: this.value, height: previewHeight });
                         // Update width label text
                         if( $cropitElement.find("#adjustable-width-value").length ){
@@ -594,8 +598,8 @@ function masterImageEditorv2( customOptions ){
         var cropitData = {
             background_position: $cropitElement.cropit('offset'),
             background_zoom: $cropitElement.cropit('zoom'),
-            background_height: $cropitElement.find('.cropit-image-preview').height(),
-            background_width: $cropitElement.find('.cropit-image-preview').width()
+            background_height: _this.getPreviewElement().height(),
+            background_width: _this.getPreviewElement().width()
         };
 
         $.each(cropitData, function( key, value){

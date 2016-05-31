@@ -64,11 +64,6 @@ ConfigModals.image_modal_no_crop = function( params ){
         return validation;
     }
 
-    // Return preview container element
-    this.getPreviewContainer = function(){
-        return $modalContent.find('.cropit-image-preview');
-    }
-
     /*
      * -- Update module view --
      */
@@ -155,7 +150,7 @@ ConfigModals.image_modal_no_crop = function( params ){
      */
     this.saveStaticImage = function( fnDone ){
         // Convert html to canvas
-        imageManager.generateCanvas( $modalContent.find('.cropit-image-preview'), function( canvas ){
+        imageManager.generateCanvas( masterImageEditorObj.getPreviewElement(), function( canvas ){
             // save url data canvas and complete input hidden data_image.
             var backgroundImage = $modalContent.find(".uploaded-image").attr("src");
             var urlImageData = canvas.toDataURL("image/png");
@@ -235,18 +230,18 @@ ConfigModals.image_modal_no_crop = function( params ){
             masterImageOptions.imageData = options.moduleData.data[imageKey];
         }
 
-        if( options.image_size && options.image_size.width ){
-            $modalContent.find(".cropit-image-preview").width(options.image_size.width);
-        }
-
         masterImageEditorObj = new masterImageEditorv2(masterImageOptions);
+
+        if( options.image_size && options.image_size.width ){
+            masterImageEditorObj.getPreviewElement().width(options.image_size.width);
+        }
 
         // Hide image overlay control
         $modalContent.find("#image-overlay-config").hide();
 
         // Add no cropit class
-        if( !$modalContent.find('.cropit-image-preview').hasClass("no-cropit") ){
-            $modalContent.find('.cropit-image-preview').addClass("no-cropit");
+        if( !masterImageEditorObj.getPreviewElement().hasClass("no-cropit") ){
+            masterImageEditorObj.getPreviewElement().addClass("no-cropit");
         }
 
         /*
@@ -255,7 +250,7 @@ ConfigModals.image_modal_no_crop = function( params ){
          */
         masterImageEditorObj.initSingleImageUpload(
             "file-image-upload",
-            _this.getPreviewContainer(),
+            masterImageEditorObj.getPreviewElement(),
             function(fileInput,imageElement){
                 var spotSize = masterImageOptions.imageSize;
                 if(!validateImageSize($(imageElement),spotSize)){
@@ -290,7 +285,7 @@ ConfigModals.image_modal_no_crop = function( params ){
         if( masterImageEditorObj.imageData && masterImageEditorObj.imageData.background_image){
             masterImageEditorObj.showImageLoading();
                 var $image = masterImageEditorObj.createImageElement();
-                $previewContainer = _this.getPreviewContainer();
+                $previewContainer = masterImageEditorObj.getPreviewElement();
                 $image.attr("src",Application.globals.campaignImageUrl + masterImageEditorObj.imageData.background_image);
                 $previewContainer.append($image);
 
