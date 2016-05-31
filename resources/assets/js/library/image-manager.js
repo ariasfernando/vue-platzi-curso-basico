@@ -99,6 +99,48 @@ var imageManager = {
 	},
 
 	/*
+	 * == Custom image merge ==
+	 * Used to merge layers to an animated gif.
+	 * Params:
+		-	campaign_id: current campaign id by default | campaignManager.getCampaignId()
+		-	background_path: saved background path | Example: /574c9a227f8b9a661360742e/en_us/574da65d41141-1464706653.2666.gif
+		-	layers: [{
+				top: pixels position number,  | Example: 27
+				left: pixels position number, | Example: 10
+				path: local path or base64	  | Example: /_common/images/en_us/logo.png
+			},{
+				top: pixels position number,
+				left: pixels position number,
+				path: local path or base64
+			}]
+	 */
+	customImageMerge: function( ajaxData, fnDone, fnFail ){
+		if( !ajaxData ){
+			return false
+		}
+
+		var dataParams = $.extend({
+			campaign_id: campaignManager.getCampaignId()
+		},ajaxData);
+
+		// Do ajax to get process status.
+		var ajaxRequest = Application.utils.doAjax("/campaign/custom-image-merge",{ data: dataParams });
+
+		// On ajax Done
+		ajaxRequest.done(function( response ){
+			if( fnDone ){
+				fnDone( response );
+			}
+		});
+
+		ajaxRequest.fail(function(){
+			if( fnFail ){
+				fnFail();
+			}
+		});
+	},
+
+	/*
 	 * Get file name from a complete file path
 	 */
 	getNameFromPath: function( path ){
