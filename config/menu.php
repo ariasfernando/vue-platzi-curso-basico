@@ -66,7 +66,20 @@ $default = [
             'module_id' => 'hero_image_bg',
             'level' => 'single'
         ],
-
+        'hero_v2_group' => [
+            'title' => 'Image Editor v2',
+            'action' => 'expand',
+            'level' => 'level-1',
+            'sub_menu' => [
+                'hero_image_v2_no_crop' => [
+                    'title' => 'Hero Image - no crop',
+                    'action' => 'add',
+                    'app_name' => 'base',
+                    'module_id' => 'hero_image_v2_no_crop',
+                    'level' => 'single'
+                ]
+            ]
+        ],
         'spacer' => [
             'title' => 'Configurable spacer',
             'action' => 'add',

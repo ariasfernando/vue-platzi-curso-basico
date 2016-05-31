@@ -183,7 +183,22 @@ $default = [
             "max" => 280,
             "min" => 100
         ]
-     ]
+    ],
+    // == Master image editor v2 modals ==
+    "mie_v2_default_no_crop" => [
+        "title" => "Header image editor",
+        "app_name" => "base",
+        "view" => "single_image_editor",
+        "config_modal_key" => "image_modal_no_crop",
+        "enabled_options" => "destination_url alt_text image_upload",
+        'image_crop' => "disabled",    // Rewrite old version param
+        'image_overlay' => "disabled", // Rewrite old version param
+        'text_overlay' => "disabled",  // Rewrite old version param
+        "image_size" => [
+            "height" => 400,
+            "width" => 660
+        ]
+    ]
 ];
 
 return include('recursive.php');
