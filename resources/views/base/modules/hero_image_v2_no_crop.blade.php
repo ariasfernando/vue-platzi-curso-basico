@@ -2,12 +2,12 @@
     // Get module params from config file.
     $module_params = $app_config["modules"]["hero_image_v2_no_crop"];
 
-    // Get module Params from mongo
+    // Get module Params
     if( !isset($module_params['data']) ){
         $module_params['data'] = (isset($module['data']))? $module['data']:'';
     }
 
-    // Get image data from mongo
+    // Get image data
     if( isset($module_params['data']['image0']) ){// Saved image
         $image0 = $module_params['data']['image0'];
         $image_source = "/images/campaigns". $image0['path'];
