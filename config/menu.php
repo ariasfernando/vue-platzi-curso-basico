@@ -77,6 +77,13 @@ $default = [
                     'app_name' => 'base',
                     'module_id' => 'hero_image_v2_no_crop',
                     'level' => 'single'
+                ],
+                'hero_image_v2_single_crop' => [
+                    'title' => 'Hero Image - single crop',
+                    'action' => 'add',
+                    'app_name' => 'base',
+                    'module_id' => 'hero_image_v2_single_crop',
+                    'level' => 'single'
                 ]
             ]
         ],

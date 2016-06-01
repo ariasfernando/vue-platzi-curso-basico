@@ -198,6 +198,17 @@ $default = [
             "height" => 400,
             "width" => 660
         ]
+    ],
+    "mie_v2_single_crop" => [
+        "title" => "Header image editor",
+        "app_name" => "base",
+        "view" => "single_image_editor",
+        "config_modal_key" => "image_modal_single_crop",
+        "enabled_options" => "destination_url alt_text image_upload image_crop",
+        "image_size" => [
+            "height" => 400,
+            "width" => 660
+        ]
     ]
 ];
 
