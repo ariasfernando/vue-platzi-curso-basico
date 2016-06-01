@@ -242,7 +242,7 @@ var masterImageEditor = function( customOptions ){
         }
         
         // Load custom plugins
-        if ( editorOptions.plugins.length > 0 ) {
+        if ( editorOptions.plugins && editorOptions.plugins.length > 0 ) {
             $.each(editorOptions.plugins, function(i, plugin){
                 globalMasterImageEditor.plugins[plugin](_this, editorOptions, $modalContent, imageData);
             });
@@ -820,7 +820,7 @@ var masterImageEditor = function( customOptions ){
                 })
                 .val(settings.currentVal)
                 .on("mousemove touchmove change",function(){
-\                    if( this.value != $cropitElement.find(".cropit-preview").width() ){
+                    if( this.value != $cropitElement.find(".cropit-preview").width() ){
                         var previewHeight = $cropitElement.find(".cropit-preview").height();
                         $cropitElement.cropit('previewSize', { width: this.value, height: previewHeight });
                         // Update width label text

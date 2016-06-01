@@ -13,7 +13,7 @@ function masterImageEditorv2( customOptions ){
         spinnerClass: '',
         $fileInputUpload: '',
         imageData: {},
-        imagePreviewSelector: '.cropit-image-preview'
+        imagePreviewSelector: '.cropit-preview'
     }, customOptions);
 
     var $modalContent = options.modalContent || null;
