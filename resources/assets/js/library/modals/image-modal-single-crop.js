@@ -29,7 +29,7 @@ ConfigModals.image_modal_single_crop = function( params ){
         if(!$image){
             return false;
         }
-        // Valite image size: return false if image size is different than placeholder size.
+        // Validate image size: return false if image size is different than placeholder size.
         if( $image.width() != params.image_size.width || $image.height() != params.image_size.height ){
             return false;
         }
