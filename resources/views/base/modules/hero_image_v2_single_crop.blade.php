@@ -1,6 +1,6 @@
 <?php
     // Get module params from config file.
-    $module_params = $app_config["modules"]["hero_image_v2_no_crop"];
+    $module_params = $app_config["modules"]["hero_image_v2_single_crop"];
 
     // Get module Params
     if( !isset($module_params['data']) ){
@@ -34,7 +34,7 @@
                 >
                     <a href='{{ isset($image['destination_url'])? $image['destination_url'] : '#' }}'
                         data-key="image0"
-                        data-open-element-config="mie_v2_default_no_crop">
+                        data-open-element-config="mie_v2_single_crop">
                         {!! Html::image( url() . $image_source ,
                             ( isset($image['alt']) )? $image['alt']:'',
                             array(
