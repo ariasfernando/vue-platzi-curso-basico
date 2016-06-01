@@ -414,6 +414,7 @@ function masterImageEditorv2( customOptions ){
                 .on("mousemove touchmove change",function(){
                     if( this.value != _this.getPreviewElement().width() ){
                         var previewHeight = _this.getPreviewElement().height();
+
                         $cropitElement.cropit('previewSize', { width: this.value, height: previewHeight });
                         // Update width label text
                         if( $cropitElement.find("#adjustable-width-value").length ){

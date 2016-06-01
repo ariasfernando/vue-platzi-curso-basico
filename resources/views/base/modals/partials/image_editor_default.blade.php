@@ -44,7 +44,7 @@
 
 		<div class="section-title"><h2>Preview Image</h2></div>
 
-		<div class="cropit-image-preview">
+		<div class="cropit-preview">
 
 			{{-- Image overlay --}}
 			@if ( isset($params["image_overlay"]) && $params["image_overlay"] == "enabled" )
