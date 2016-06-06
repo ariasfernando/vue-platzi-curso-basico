@@ -759,11 +759,15 @@ function masterImageEditorv2( customOptions ){
 
     // Upload cropit image
     this.uploadCropitImages = function(fnDone){
+        if( !params ){
+            params = {};
+        }
+
         $.each(cropitElements, function(index, element){
             // Save background of visible cropit.
             if( $(element).is(":visible") ){
                 var backgroundImage = $(element).cropit("imageSrc");
-                var exportedImage = _this.exportCropit($(element));
+                var exportedImage = _this.exportCropit($(element),params);
 
                 // If background image is base64
                 if( backgroundImage.indexOf(";base64,") >= 0 ){

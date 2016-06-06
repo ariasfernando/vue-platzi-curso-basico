@@ -176,6 +176,8 @@ ConfigModals.single_image_editor = function( params ){
                 }else{
                     $targetElement.parents("tr[data-params]").removeClass("st-validation-error");
                 }
+            },{
+                originalSize: true
             });
         }else{
             masterImageEditorObj.hideImageLoading();
