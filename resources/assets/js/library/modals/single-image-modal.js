@@ -44,6 +44,10 @@ ConfigModals.single_image_editor = function( params ){
             masterImageOptions.imageData = options.moduleData.data[imageKey];
         }
 
+        if( options.adjustable_height_options ){
+            masterImageOptions.adjustable_height_options = options.adjustable_height_options;
+        }
+
         // Master image editor
         masterImageEditorObj = new masterImageEditorv2(masterImageOptions);
 
