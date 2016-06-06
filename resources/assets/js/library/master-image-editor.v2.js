@@ -758,7 +758,7 @@ function masterImageEditorv2( customOptions ){
     };
 
     // Upload cropit image
-    this.uploadCropitImages = function(fnDone){
+    this.uploadCropitImages = function(fnDone, params){
         if( !params ){
             params = {};
         }
