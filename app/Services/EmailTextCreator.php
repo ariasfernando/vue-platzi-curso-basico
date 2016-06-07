@@ -29,14 +29,11 @@ class EmailTextCreator
      */
     public function createTextVersion($modules)
     {
-        $plain_text = '';
-
-        $email_title = (isset($this->campaign['title'])) ? $this->campaign['title'] : '';
-
-        $plain_text = $email_title.self::$line_break;
+        $plain_text = (isset($this->campaign['title'])) ? $this->campaign['title'] . self::$line_break : '';
 
         foreach ($modules as $module) {
-            if (\view::exists($module['file_parent'] . '.modules.text.' . $module['type'])) {
+            $path = $this->getModulesPath($module['file_parent']);
+            if (\view::exists($path . '.text.' . $module['type'])) {
                 $plain_text .= $this->getTxtByTpl($module);
             } else {
                 $plain_text .= trim($this->defaultHtml2TextConverter($module));
@@ -46,6 +43,25 @@ class EmailTextCreator
         $plain_text = $this->replaceTags($plain_text);
 
         return $plain_text;
+    }
+
+    /**
+     * Return a view path according to campaign_format
+     *
+     * @param  string $file_parent
+     * @return string or false
+     */
+    public function getModulesPath($file_parent)
+    {
+        $apth = false;
+        if (\Config::get('view.campaign_format') == 'libraries') {
+            $path = $file_parent . '.';
+            $path .= strpos($file_parent, 'base') === false ? $this->campaign['library'] . '.' : '';
+            $path .= 'modules';
+        } else {
+            $path = $file_parent . '.modules';
+        }
+        return $path;
     }
 
     /**
@@ -83,7 +99,7 @@ class EmailTextCreator
         $params = [
             'campaign_data' => $this->campaign
         ];
-        $modulePath = $module['file_parent'] . '.modules.' . $module['type'];
+        $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['type'];
         $moduleHtml = \View::make($modulePath)
             ->with('params', $params)
             ->with('module', $module)
@@ -98,7 +114,7 @@ class EmailTextCreator
      * @param  string $html
      * @return string
      */
-    public function htmlToText($html)
+    public static function htmlToText($html)
     {
         $htmlToText = new TextConverter($html, array('do_links' => 'inline'));
 
@@ -113,7 +129,7 @@ class EmailTextCreator
      */
     protected function getTxtByTpl($module)
     {
-        $modulePath = $module['file_parent'] . '.modules.text.' . $module['type'];
+        $modulePath = $this->getModulesPath($module['file_parent']) . '.text.' . $module['type'];
         $moduleText = \View::make($modulePath)
             ->with('module', $module)
             ->render();
