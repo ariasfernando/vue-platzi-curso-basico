@@ -53,7 +53,7 @@ class EmailTextCreator
      */
     public function getModulesPath($file_parent)
     {
-        $apth = false;
+        $path = false;
         if (\Config::get('view.campaign_format') == 'libraries') {
             $path = $file_parent . '.';
             $path .= strpos($file_parent, 'base') === false ? $this->campaign['library'] . '.' : '';
