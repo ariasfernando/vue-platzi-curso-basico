@@ -190,35 +190,11 @@ ConfigModals.image_modal_single_crop = function( params ){
 
     this.updateModuleView = function(imageData){
         // Update module view.
+        $targetElement.attr("href",imageData.destination_url);
         $targetElement.find('img')
             .attr("src", Application.globals.campaignImageUrl + imageData.path )
             .attr("alt", imageData.alt)
             .attr("title", imageData.alt);
-        $targetElement.attr("href",imageData.destination_url);
-
-        // Update social icons
-        var $shareEls = $targetElement.parents('[data-params]').find('[data-share]');
-
-        $shareEls.each(function(k, el) {
-            var $el = $(el);
-
-            var url = new URI($el.attr('href'));
-
-            if ( $el.data('share') == "facebook" ) {
-                url.search({ u: imageData.destination_url});
-            } else {
-                url.search({ url: imageData.destination_url});
-
-                if ( $el.data('share') == "twitter" ) {
-                    url.search(function(data) {
-                        data.text = imageData.alt;
-                    });
-                }
-            }
-
-            $el.attr('href', url.href());
-        });
-
     };
 
     this.applyUpdates = function(){
