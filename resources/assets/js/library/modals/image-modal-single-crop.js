@@ -42,8 +42,8 @@ ConfigModals.image_modal_single_crop = function( params ){
         if( $modalContent.find('input.cropit-image-input')[0].files.length ){
             imageExtension = $modalContent.find('input.cropit-image-input')[0].files[0].type;
         }else{
-            var backgroundImageArr = $cropitElement.cropit("imageSrc").split(".");
-            imageExtension = "image/" + backgroundImageArr[backgroundImageArr.length-1];
+            var backgroundImageArr = $cropitElement.cropit("imageSrc");
+            imageExtension = imageManager.getImageType(backgroundImageArr);
         }
         return imageExtension;
     };
@@ -97,6 +97,7 @@ ConfigModals.image_modal_single_crop = function( params ){
         // Init Cropit
         masterImageEditorObj.initCropit( $modalContent.find(".init-cropper"), {
             $fileInput:  $modalContent.find('input.cropit-image-input'),
+            smallImage:'strech',
             onImageLoaded: function(){
                 masterImageEditorObj.removeMesage();
 
@@ -217,6 +218,11 @@ ConfigModals.image_modal_single_crop = function( params ){
      */
     this.saveStaticImage = function(){
         var $cropitElement = $modalContent.find(".init-cropper:visible:eq(0)");
+        var exportedSrc = masterImageEditorObj.exportCropit( $cropitElement );
+
+        //replace src and remove attr to generateCanvas.
+        masterImageEditorObj.getPreviewElement().find('img.cropit-preview-image').removeAttr('style').attr('src', exportedSrc);
+        
         // Convert html to canvas
         imageManager.generateCanvas( masterImageEditorObj.getPreviewElement(), function( canvas ){
             // save url data canvas and complete input hidden data_image.
