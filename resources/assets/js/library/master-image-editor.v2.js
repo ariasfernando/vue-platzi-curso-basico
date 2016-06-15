@@ -21,6 +21,7 @@ function masterImageEditorv2( customOptions ){
 
     this.imageData = options.imageData;
     this.editedImageData = {};
+    this.newImage = false;
 
     var _this = this;
 
@@ -650,9 +651,17 @@ function masterImageEditorv2( customOptions ){
 
         var cropitOptions = $.extend({
             $fileInput: '',
+            smallImage:'allow',
+            minZoom:'fill',
+            exportZoom: 1,
+            maxZoom: 1,
+
             onFileChange: function(){
                 _this.showImageLoading();
+                _this.newImage = true;
+                this.$preview.removeClass('outline-class');
             },
+
             onImageLoaded: function(){
                 _this.cropitOnImageLoaded(this);
             }
@@ -684,7 +693,12 @@ function masterImageEditorv2( customOptions ){
                 // Remove spinner
                 _this.hideImageLoading();
                 // Show image preview box
-                $preview.parent().slideDown();
+                $preview.parent().slideDown( function() {
+                    $preview.addClass('outline-class'); 
+                    // if ( editorOptions.adjustable_width == 'enabled' && newImage ){
+                    //     _this.chooseMinZoom( $preview , $cropitElement ); 
+                    // }
+                });
             }, 1000);
         }else if( cropitObj.$preview.find('.spinner-loading:visible').length ){
             _this.hideImageLoading();
