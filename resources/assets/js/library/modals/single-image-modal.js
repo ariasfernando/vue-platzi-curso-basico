@@ -50,6 +50,10 @@ ConfigModals.single_image_editor = function( params ){
         if ( options.image_size.width != 'auto' && options.image_size.height != 'auto'){
             smallImage = 'stretch';
         }
+        
+        if( options.adjustable_height_options ){
+            masterImageOptions.adjustable_height_options = options.adjustable_height_options;
+        }
 
         // Master image editor
         masterImageEditorObj = new masterImageEditorv2(masterImageOptions);
@@ -214,6 +218,8 @@ ConfigModals.single_image_editor = function( params ){
                 }else{
                     $targetElement.parents("tr[data-params]").removeClass("st-validation-error");
                 }
+            },{
+                originalSize: true
             });
         }else{
             masterImageEditorObj.hideImageLoading();
