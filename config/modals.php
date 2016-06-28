@@ -42,6 +42,15 @@ $default = [
         "enabled_options" => "destination_url alt_text image_upload adjustable_height image_crop"
     ]),
 
+    "mie_v2_default_height_proportional" => array_merge($single_image_editor,[
+        "image_size" => [
+            "height" => 'auto',
+            "width" => 526
+        ],
+        "title" => "Hero image proportional editor",
+        "enabled_options" => "destination_url alt_text image_upload adjustable_width image_crop"
+    ]),
+
     /* -- Hero Image: Full image editor -- */
     "hero" => [
         "title" => "Hero image editor",
@@ -204,6 +213,7 @@ $default = [
         "app_name" => "base",
         "view" => "single_image_editor",
         "config_modal_key" => "image_modal_single_crop",
+        "scale_ratio" => 2,
         "enabled_options" => "destination_url alt_text image_upload image_crop",
         "image_size" => [
             "height" => 400,

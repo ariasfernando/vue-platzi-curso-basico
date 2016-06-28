@@ -94,10 +94,13 @@ ConfigModals.image_modal_single_crop = function( params ){
             $cropitElement.cropit("reenable");
         });
 
+        console.log( options.scale_ratio );
         // Init Cropit
         masterImageEditorObj.initCropit( $modalContent.find(".init-cropper"), {
             $fileInput:  $modalContent.find('input.cropit-image-input'),
             smallImage:'strech',
+            exportZoom: (options.scale_ratio)? options.scale_ratio: 1,
+            maxZoom : (options.scale_ratio)? options.scale_ratio * 2: 2,
             onImageLoaded: function(){
                 masterImageEditorObj.removeMesage();
 
@@ -221,7 +224,7 @@ ConfigModals.image_modal_single_crop = function( params ){
         var exportedSrc = masterImageEditorObj.exportCropit( $cropitElement );
 
         //replace src and remove attr to generateCanvas.
-        masterImageEditorObj.getPreviewElement().find('img.cropit-preview-image').removeAttr('style').attr('src', exportedSrc);
+        masterImageEditorObj.getPreviewElement().find('img.cropit-preview-image').removeAttr('style').attr('src', exportedSrc).attr('width','100%');
         
         // Convert html to canvas
         imageManager.generateCanvas( masterImageEditorObj.getPreviewElement(), function( canvas ){
@@ -248,7 +251,7 @@ ConfigModals.image_modal_single_crop = function( params ){
                     _this.applyUpdates();
                 });
             }
-        });
+        }, options.scale_ratio );
     };
 
     /*

@@ -322,6 +322,52 @@ function masterImageEditorv2( customOptions ){
     };
 
     /*
+     * ====== Init cropit preview depending if minZoom. ======
+     */
+    var recalculatePreview = function( imagePreviewWidth, imagePreviewHeight, minZoomPreview, $cropitElement ){
+        $cropitElement.cropit('zoom', minZoomPreview);
+        $cropitElement.cropit('previewSize', {
+            width: imagePreviewWidth,
+            height: imagePreviewHeight
+        });
+
+    };
+
+    
+    this.initMinZoom = function( $previewContainer, $cropitElement ){
+        var imagePreviewHeight, imagePreviewWidth, minZoomPreview;
+        var imageOriginalHeight = $previewContainer.find('img.cropit-preview-image').height(); 
+        var imageOriginalWidth = $previewContainer.find('img.cropit-preview-image').width();
+
+        if (options.imageSize.width == 'auto'){
+            minZoomPreview = options.imageSize.height / imageOriginalHeight;
+            imagePreviewHeight = options.imageSize.height;
+            imagePreviewWidth = Math.round( minZoomPreview * imageOriginalWidth );
+        }
+        
+        if (options.imageSize.height == 'auto'){
+            minZoomPreview = options.imageSize.width / imageOriginalWidth;
+            imagePreviewWidth = options.imageSize.width;
+            imagePreviewHeight = Math.round( minZoomPreview * imageOriginalHeight );
+        }
+
+        // If the image upload width is greater than the width preview.    
+        if ( options.imageSize.width >= imageOriginalWidth ){
+            $cropitElement.cropit('minZoom','fit');
+            recalculatePreview( imagePreviewWidth, imagePreviewHeight, minZoomPreview , $cropitElement );
+        }else{
+            //Set minZoom depending on the orientation of the image.
+            if (imageOriginalHeight  >=  imageOriginalWidth ){
+                $cropitElement.cropit( 'minZoom', 'fill' );
+                recalculatePreview( imagePreviewWidth, imagePreviewHeight, minZoomPreview, $cropitElement ); 
+            }else{
+                $cropitElement.cropit( 'minZoom', 'fit' );
+                recalculatePreview( imagePreviewWidth, imagePreviewHeight, minZoomPreview, $cropitElement ); 
+            }
+        }
+    };
+
+    /*
      * ====== ADJUSTABLE HEIGHT ======
      */
     this.adjustableHeight = function($cropitElement,params){
@@ -347,33 +393,42 @@ function masterImageEditorv2( customOptions ){
                 .val(settings.currentVal)
                 .on("mousemove touchmove change",function(){
                     if( this.value != _this.getPreviewElement().height() ){
-                        var previewWidth = _this.getPreviewElement().width();
-                        $cropitElement.cropit('previewSize', { width: previewWidth, height: this.value });
+
+                        if ( params.original_options_width != 'auto' ){
+                            var previewWidth = _this.getPreviewElement().width();
+                            $cropitElement.cropit('previewSize', { width: previewWidth, height: this.value });
+                        }else{
+                            var imagePreviewHeight = $cropitElement.find(".cropit-preview img.cropit-preview-image").height(); 
+                            var imagePreviewWidth = $cropitElement.find(".cropit-preview img.cropit-preview-image").width();
+                            var minZoomPreview = this.value / imagePreviewHeight;
+                            $cropitElement.cropit('previewSize', { width: imagePreviewWidth * minZoomPreview, height: this.value  });
+                            $cropitElement.cropit('zoom', minZoomPreview);
+                        }    
+                        
                         // Update height label text
                         if( $cropitElement.find("#adjustable-height-value").length ){
                             $cropitElement.find("#adjustable-height-value").text(this.value);
                         }
+
                         settings.onSlideStop(event);
                     }
                 });
         }
     };
-    this.callAdjustableHeight = function($cropitElement){
+    this.callAdjustableHeight = function($cropitElement, original_options_width){
         var currentVal = $cropitElement.cropit('previewSize').height;
         var params = {
+            original_options_width: original_options_width,
             currentVal: currentVal,
             onSlideStop: function(){
                 if (!$cropitElement.cropit( 'isZoomable' )){
                     if( $cropitElement.find(".cropit-image-zoom-input").length ){
                         $cropitElement.find(".cropit-image-zoom-input").attr("disabled","disabled");
                     }
-                    $cropitElement.cropit( 'onZoomDisabled' );
                 }else{
                     if( $cropitElement.find(".cropit-image-zoom-input").length ){
                         $cropitElement.find(".cropit-image-zoom-input").removeAttr("disabled");
-                        $cropitElement.cropit('zoom', $cropitElement.find(".cropit-image-zoom-input").val());
                     }
-                    $cropitElement.cropit( 'onZoomEnable' );
                 }
             }
         };
@@ -384,14 +439,14 @@ function masterImageEditorv2( customOptions ){
 
         _this.adjustableHeight($cropitElement,params);
     };
-    this.initAdjustableHeight = function($cropitElement){
-        _this.callAdjustableHeight($cropitElement);
+    this.initAdjustableHeight = function($cropitElement, original_options_width){
+        _this.callAdjustableHeight($cropitElement, original_options_width);
     };
 
     /*
      * ====== ADJUSTABLE WIDTH ======
      */
-    this.adjustableWidth = function($cropitElement,params){
+    this.adjustableWidth = function($cropitElement, params){
         var settings = $.extend({
             max: 660,
             min: 150,
@@ -414,9 +469,18 @@ function masterImageEditorv2( customOptions ){
                 .val(settings.currentVal)
                 .on("mousemove touchmove change",function(){
                     if( this.value != _this.getPreviewElement().width() ){
-                        var previewHeight = _this.getPreviewElement().height();
+                        
+                        if ( params.original_options_height != 'auto' ){
+                            var previewHeight = _this.getPreviewElement().height();
+                            $cropitElement.cropit('previewSize', { width: this.value, height: previewHeight });
+                        }else{
+                            var imagePreviewHeight = $cropitElement.find(".cropit-preview img.cropit-preview-image").height(); 
+                            var imagePreviewWidth = $cropitElement.find(".cropit-preview img.cropit-preview-image").width();
+                            var minZoomPreview = this.value / imagePreviewWidth;
+                            $cropitElement.cropit('previewSize', { width: this.value, height: imagePreviewHeight * minZoomPreview });
+                            $cropitElement.cropit('zoom', minZoomPreview);
+                        }
 
-                        $cropitElement.cropit('previewSize', { width: this.value, height: previewHeight });
                         // Update width label text
                         if( $cropitElement.find("#adjustable-width-value").length ){
                             $cropitElement.find("#adjustable-width-value").text(this.value);
@@ -426,22 +490,20 @@ function masterImageEditorv2( customOptions ){
                 });
         }
     };
-    this.callAdjustableWidth = function($cropitElement){
+    this.callAdjustableWidth = function($cropitElement, original_options_height){
         var currentVal = $cropitElement.cropit('previewSize').width;
         var params = {
+            original_options_height: original_options_height,
             currentVal: currentVal,
             onSlideStop: function(){
                 if (!$cropitElement.cropit( 'isZoomable' )){
                     if( $cropitElement.find(".cropit-image-zoom-input").length ){
                         $cropitElement.find(".cropit-image-zoom-input").attr("disabled","disabled");
                     }
-                    $cropitElement.cropit( 'onZoomDisabled' );
                 }else{
                     if( $cropitElement.find(".cropit-image-zoom-input").length ){
                         $cropitElement.find(".cropit-image-zoom-input").removeAttr("disabled");
-                        $cropitElement.cropit('zoom', $cropitElement.find(".cropit-image-zoom-input").val());
                     }
-                    $cropitElement.cropit( 'onZoomEnable' );
                 }
             }
         };
@@ -452,8 +514,8 @@ function masterImageEditorv2( customOptions ){
 
         _this.adjustableWidth($cropitElement,params);
     };
-    this.initAdjustableWidth = function($cropitElement){
-        _this.callAdjustableWidth($cropitElement);
+    this.initAdjustableWidth = function($cropitElement, original_options_height){
+        _this.callAdjustableWidth($cropitElement, original_options_height);
     };
 
     /*
@@ -599,6 +661,7 @@ function masterImageEditorv2( customOptions ){
     this.saveCropitEdition = function( $cropitElement, index ){
         var cropitData = {
             background_position: $cropitElement.cropit('offset'),
+            cropit_min_zoom: $cropitElement.cropit('minZoom'),
             background_zoom: $cropitElement.cropit('zoom'),
             background_height: _this.getPreviewElement().height(),
             background_width: _this.getPreviewElement().width()
@@ -663,7 +726,7 @@ function masterImageEditorv2( customOptions ){
             },
 
             onImageLoaded: function(){
-                _this.cropitOnImageLoaded(this);
+                _this.cropitOnImageLoaded( this, $cropitElement );
             }
         },cropitOptions);
 
@@ -679,13 +742,15 @@ function masterImageEditorv2( customOptions ){
         // Set preview size
         var previewSize = cropitOptions.imageSize || options.imageSize || null;
 
-        if( previewSize != null ){
-            $cropitElement.cropit('previewSize', previewSize);
+        if( previewSize != null  ){
+            if ( previewSize.width != 'auto' && previewSize.height != 'auto' ){
+                $cropitElement.cropit('previewSize', previewSize);
+            }
         }
     };
 
     // Cropit image onload event
-    this.cropitOnImageLoaded = function( cropitObj ){
+    this.cropitOnImageLoaded = function( cropitObj, $cropitElement ){
         // Show preview box after 1 second.
         if( cropitObj.$preview && cropitObj.$preview.not(":visible") ){
             var $preview = cropitObj.$preview;
@@ -695,9 +760,11 @@ function masterImageEditorv2( customOptions ){
                 // Show image preview box
                 $preview.parent().slideDown( function() {
                     $preview.addClass('outline-class'); 
-                    // if ( editorOptions.adjustable_width == 'enabled' && newImage ){
-                    //     _this.chooseMinZoom( $preview , $cropitElement ); 
-                    // }
+                    if( _this.newImage ){
+                        if (options.imageSize.width == 'auto' || options.imageSize.height == 'auto'){
+                            _this.initMinZoom( $preview, $cropitElement );
+                        }
+                    }
                 });
             }, 1000);
         }else if( cropitObj.$preview.find('.spinner-loading:visible').length ){
@@ -780,8 +847,8 @@ function masterImageEditorv2( customOptions ){
                 var backgroundImage = $(element).cropit("imageSrc");
                 var exportedImage = _this.exportCropit($(element));
 
-                // If background image is base64
-                if( backgroundImage.indexOf(";base64,") >= 0 ){
+                // If new image
+                if( _this.newImage ){
                     // Save background image
                     _this.uploadImage( backgroundImage, function(response){
                         _this.editedImageData.background_image = response.path;

@@ -44,27 +44,46 @@ ConfigModals.single_image_editor = function( params ){
             masterImageOptions.imageData = options.moduleData.data[imageKey];
         }
 
+        //Set smallImage
+        var smallImage = 'allow';
+        
+        if ( options.image_size.width != 'auto' && options.image_size.height != 'auto'){
+            smallImage = 'stretch';
+        }
+
         // Master image editor
         masterImageEditorObj = new masterImageEditorv2(masterImageOptions);
 
         // Init Cropit
         masterImageEditorObj.initCropit( $modalContent.find(".init-cropper"), {
             $fileInput:  $modalContent.find('input.cropit-image-input'),
+            smallImage : smallImage,
+            minZoom : (masterImageEditorObj.imageData.cropit_min_zoom)? masterImageEditorObj.imageData.cropit_min_zoom : 'fill',
+            exportZoom: (options.scale_ratio)? options.scale_ratio: 1,
+            maxZoom : (options.scale_ratio)? options.scale_ratio * 2: 2,
+
             onImageLoaded: function(){
-                var currentWidthVal = options.image_size.width;
-                var currentHeightVal = options.image_size.height;
+                var currentWidthVal = (options.image_size.width != 'auto')? options.image_size.width : 560;
+                var currentHeightVal = (options.image_size.height != 'auto')? options.image_size.height : 350;
 
                 $modalContent.find(".init-cropper:visible:eq(0)").cropit('previewSize', {
                     width: (masterImageEditorObj.imageData.background_width)? masterImageEditorObj.imageData.background_width : currentWidthVal,
                     height: (masterImageEditorObj.imageData.background_height)? masterImageEditorObj.imageData.background_height : currentHeightVal
                 });
 
-                // Init Height Adjustable
-                masterImageEditorObj.initAdjustableHeight($modalContent.find(".init-cropper:visible:eq(0)"));
-                // Init zoom
+
+                // Default cropit onload: display preview and hide spinner.
+                masterImageEditorObj.cropitOnImageLoaded(this, $modalContent.find(".init-cropper:visible:eq(0)"));
+                
+                // Init Height Adjustable.
+                // masterImageEditorObj.initAdjustableHeight($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.width);
+
+                // Init Width Adjustable.
+                masterImageEditorObj.initAdjustableWidth($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.height);
+                
+                // Init zoom.
                 masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), this);
-                // Default cropit onload: display preview and hide spinner
-                masterImageEditorObj.cropitOnImageLoaded(this);
+                
             }
         });
 
