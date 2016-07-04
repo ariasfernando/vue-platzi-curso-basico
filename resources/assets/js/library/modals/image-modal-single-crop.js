@@ -21,6 +21,16 @@ ConfigModals.image_modal_single_crop = function( params ){
     var enabledOptionsArr = [];
     var _this = this;
 
+    var messages = {
+        wrongImageSize: "This source image does not have the proper dimensions or size ratio for this image spot. The recommended image width size is: ",
+        savingError: "An error ocurred trying to save the image, please try later.",
+        missingKey: "An error occurred while trying to init the configuration modal, missing data-key attr."
+    };
+
+    if( params.image_size && params.image_size.width && params.image_size.height ){
+       messages.wrongImageSize += " The recommended image width size is: " + params.image_size.width + "x" + params.image_size.height+"px.";
+    }
+
     /*
      * -- Helpers --
      */
@@ -55,7 +65,7 @@ ConfigModals.image_modal_single_crop = function( params ){
         // Get image key
         imageKey = $(options.target).data("key");
         if( !imageKey ){
-            Application.utils.alert.display("Warning:", "An error occurred while trying to init the configuration modal, missing data-key attr.", "warning");
+            Application.utils.alert.display("Warning:", messages.missingKey, "warning");
             return false;
         }
 
@@ -128,7 +138,7 @@ ConfigModals.image_modal_single_crop = function( params ){
                     setTimeout(function(){
                         if(!_this.validateImageSize(cropitObj.$preview.find(".animated-gif"))){
                             masterImageEditorObj.displayMessage(
-                                'This source image does not have the proper dimensions or size ratio for this image spot.',
+                                messages.wrongImageSize,
                                 'danger'
                             );
                             return false;
@@ -264,7 +274,7 @@ ConfigModals.image_modal_single_crop = function( params ){
         if(!_this.validateImageSize($image)){
             masterImageEditorObj.hideImageLoading();
             masterImageEditorObj.displayMessage(
-                'This source image does not have the proper dimensions or size ratio for this image spot.',
+                messages.wrongImageSize,
                 'danger'
             );
             return false;
@@ -276,7 +286,7 @@ ConfigModals.image_modal_single_crop = function( params ){
             masterImageEditorObj.uploadImage( $image.attr("src"), function(response){
                 if( !response.path  ){
                     masterImageEditorObj.hideImageLoading();
-                    masterImageEditorObj.displayMessage('An error ocurred trying to save the image, please try later.');
+                    masterImageEditorObj.displayMessage(messages.savingError);
                     return false;
                 }
                 // Generate gif
