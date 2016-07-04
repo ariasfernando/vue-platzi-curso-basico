@@ -94,7 +94,6 @@ ConfigModals.image_modal_single_crop = function( params ){
             $cropitElement.cropit("reenable");
         });
 
-        console.log( options.scale_ratio );
         // Init Cropit
         masterImageEditorObj.initCropit( $modalContent.find(".init-cropper"), {
             $fileInput:  $modalContent.find('input.cropit-image-input'),
