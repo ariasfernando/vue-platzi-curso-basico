@@ -1,6 +1,7 @@
 /*
- | Configuration Modals: custom_table
- | The code below contains custom_table default functionalinty.
+ | Configuration Modals: single_image_editor
+ | The code below contains single_image_editor default functionalinty.
+ | Available features: Image zoom & crop, adjustable width (propotional resize).
  */
 
 var ConfigModals = ConfigModals || {};
@@ -78,9 +79,6 @@ ConfigModals.single_image_editor = function( params ){
 
                 // Default cropit onload: display preview and hide spinner.
                 masterImageEditorObj.cropitOnImageLoaded(this, $modalContent.find(".init-cropper:visible:eq(0)"));
-                
-                // Init Height Adjustable.
-                // masterImageEditorObj.initAdjustableHeight($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.width);
 
                 // Init Width Adjustable.
                 masterImageEditorObj.initAdjustableWidth($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.height);
@@ -137,6 +135,10 @@ ConfigModals.single_image_editor = function( params ){
             .attr("src", Application.globals.campaignImageUrl + imageData.path )
             .attr("alt", imageData.alt);
         $targetElement.attr("href",imageData.destination_url);
+
+        if( options.enabled_options.indexOf("adjustable_width") >= 0 && imageData.background_width ){
+            $targetElement.find("img").attr("width",imageData.background_width);
+        }
 
         // Update social icons
         var $shareEls = $targetElement.parents('[data-params]').find('[data-share]');

@@ -491,7 +491,7 @@ function masterImageEditorv2( customOptions ){
         }
     };
     this.callAdjustableWidth = function($cropitElement, original_options_height){
-        var currentVal = $cropitElement.cropit('previewSize').width;
+        var currentVal = _this.imageData.background_width || $cropitElement.cropit('previewSize').width;
         var params = {
             original_options_height: original_options_height,
             currentVal: currentVal,

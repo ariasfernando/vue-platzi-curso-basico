@@ -15,6 +15,11 @@
         // Or placeholder
         $image_source = $module_params['placeholder_image'];
     }
+
+    $image_width = $params['campaign_data']->getLibraryConfig('template_width');
+    if( !empty($image0['background_width']) ){
+        $image_width = $image0['background_width'];
+    }
 ?>
 
 <tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>'>
@@ -39,9 +44,8 @@
                             ( isset($image['alt']) )? $image['alt']:'',
                             array(
                                 'title' => ( isset($image['alt']) )? $image['alt']:'',
-                                'width' => $params['campaign_data']->getLibraryConfig('template_width'),
+                                'width' => $image_width,
                                 'border' => '0',
-                                'class' => 'full-width',
                                 'style' => 'display:block;border:none;max-width:100%;height:auto;'
                             ))
                         !!}
