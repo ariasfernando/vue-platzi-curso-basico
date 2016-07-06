@@ -1,7 +1,7 @@
 /*
  | Configuration Modals: single_image_editor
  | The code below contains single_image_editor default functionalinty.
- | Available features: Image zoom & crop, adjustable width (propotional resize).
+ | Available features: Image zoom & crop, adjustable width (proportional resize).
  */
 
 var ConfigModals = ConfigModals || {};
@@ -80,8 +80,10 @@ ConfigModals.single_image_editor = function( params ){
                 // Default cropit onload: display preview and hide spinner.
                 masterImageEditorObj.cropitOnImageLoaded(this, $modalContent.find(".init-cropper:visible:eq(0)"));
 
-                // Init Width Adjustable.
-                masterImageEditorObj.initAdjustableWidth($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.height);
+                // Init Adjustable Width.
+                if( options.enabled_options.indexOf("adjustable_width") != -1 ){
+                    masterImageEditorObj.initAdjustableWidth($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.height);
+                }
                 
                 // Init zoom.
                 masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), this);

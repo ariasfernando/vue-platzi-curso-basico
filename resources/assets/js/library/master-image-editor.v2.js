@@ -333,22 +333,21 @@ function masterImageEditorv2( customOptions ){
 
     };
 
-    
-    this.initMinZoom = function( $previewContainer, $cropitElement ){
+    this.initMinZoom = function( image, $cropitElement ){
         var imagePreviewHeight, imagePreviewWidth, minZoomPreview;
-        var imageOriginalHeight = $previewContainer.find('img.cropit-preview-image').height(); 
-        var imageOriginalWidth = $previewContainer.find('img.cropit-preview-image').width();
+        var imageOriginalHeight = image.height;
+        var imageOriginalWidth = image.width;
 
         if (options.imageSize.width == 'auto'){
+            imagePreviewHeight = _this.imageData.background_height || options.imageSize.height;
+            imagePreviewWidth = (imagePreviewHeight * imageOriginalWidth) / imageOriginalHeight;
             minZoomPreview = options.imageSize.height / imageOriginalHeight;
-            imagePreviewHeight = options.imageSize.height;
-            imagePreviewWidth = Math.round( minZoomPreview * imageOriginalWidth );
         }
         
         if (options.imageSize.height == 'auto'){
-            minZoomPreview = options.imageSize.width / imageOriginalWidth;
-            imagePreviewWidth = options.imageSize.width;
-            imagePreviewHeight = Math.round( minZoomPreview * imageOriginalHeight );
+            imagePreviewWidth = _this.imageData.background_width || options.imageSize.width;
+            imagePreviewHeight = (imagePreviewWidth * imageOriginalHeight) / imageOriginalWidth;
+            minZoomPreview = imagePreviewWidth / imageOriginalWidth;
         }
 
         // If the image upload width is greater than the width preview.    
@@ -491,7 +490,7 @@ function masterImageEditorv2( customOptions ){
         }
     };
     this.callAdjustableWidth = function($cropitElement, original_options_height){
-        var currentVal = _this.imageData.background_width || $cropitElement.cropit('previewSize').width;
+        var currentVal = $cropitElement.cropit('previewSize').width;
         var params = {
             original_options_height: original_options_height,
             currentVal: currentVal,
@@ -754,7 +753,11 @@ function masterImageEditorv2( customOptions ){
         // Show preview box after 1 second.
         if( cropitObj.$preview && cropitObj.$preview.not(":visible") ){
             var $preview = cropitObj.$preview;
-            setTimeout(function(){
+
+            var tempImage = new Image();
+            tempImage.src = $cropitElement.cropit("imageSrc");
+
+            $(tempImage).on("load",function(){
                 // Remove spinner
                 _this.hideImageLoading();
                 // Show image preview box
@@ -762,11 +765,11 @@ function masterImageEditorv2( customOptions ){
                     $preview.addClass('outline-class'); 
                     if( _this.newImage ){
                         if (options.imageSize.width == 'auto' || options.imageSize.height == 'auto'){
-                            _this.initMinZoom( $preview, $cropitElement );
+                            _this.initMinZoom( tempImage, $cropitElement );
                         }
                     }
                 });
-            }, 1000);
+            });
         }else if( cropitObj.$preview.find('.spinner-loading:visible').length ){
             _this.hideImageLoading();
         }

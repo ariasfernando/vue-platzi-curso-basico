@@ -44,8 +44,8 @@ $default = [
 
     "mie_v2_default_height_proportional" => array_merge($single_image_editor,[
         "image_size" => [
-            "height" => 'auto',
-            "width" => 526
+            "height" => 200,
+            "width" => 'auto'
         ],
         "title" => "Hero image proportional editor",
         "enabled_options" => "destination_url alt_text image_upload adjustable_width image_crop"
