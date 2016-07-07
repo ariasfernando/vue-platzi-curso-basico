@@ -86,10 +86,17 @@ $default = [
                     'level' => 'single'
                 ],
                 'hero_image_v2_height_proportional' => [
-                    'title' => 'Hero Image - height proportional',
+                    'title' => 'Adjustable Width',
                     'action' => 'add',
                     'app_name' => 'base',
                     'module_id' => 'hero_image_v2_height_proportional',
+                    'level' => 'single'
+                ],
+                'mie_v2_default_adjustable_height' => [
+                    'title' => 'Adjustable Height',
+                    'action' => 'add',
+                    'app_name' => 'base',
+                    'module_id' => 'mie_v2_default_adjustable_height',
                     'level' => 'single'
                 ]
             ]

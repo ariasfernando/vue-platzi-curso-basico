@@ -51,6 +51,15 @@ $default = [
         "enabled_options" => "destination_url alt_text image_upload adjustable_width image_crop"
     ]),
 
+    "mie_v2_default_adjustable_height" => array_merge($single_image_editor,[
+        "image_size" => [
+            "height" => 250,
+            "width" => "auto"
+        ],
+        "title" => "Hero image - Adjustable height",
+        "enabled_options" => "destination_url alt_text image_upload adjustable_height image_crop"
+    ]),
+
     /* -- Hero Image: Full image editor -- */
     "hero" => [
         "title" => "Hero image editor",

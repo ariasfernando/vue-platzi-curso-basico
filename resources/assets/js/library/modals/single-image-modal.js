@@ -84,6 +84,11 @@ ConfigModals.single_image_editor = function( params ){
                 if( options.enabled_options.indexOf("adjustable_width") != -1 ){
                     masterImageEditorObj.initAdjustableWidth($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.height);
                 }
+
+                // Init Adjustable Height.
+                if( options.enabled_options.indexOf("adjustable_height") != -1 ){
+                    masterImageEditorObj.initAdjustableHeight($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.width);
+                }
                 
                 // Init zoom.
                 masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), this);

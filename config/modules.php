@@ -115,6 +115,11 @@ $default = [
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
+    'mie_v2_default_adjustable_height' => [
+        'type' => 'mie_v2_default_adjustable_height',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png'
+    ],
     'three_column_media_with_text' => [
         'type' => 'three_column_media_with_text',
         'file_parent' => 'base',
