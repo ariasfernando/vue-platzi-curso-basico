@@ -415,8 +415,14 @@ function masterImageEditorv2( customOptions ){
         }
     };
     this.callAdjustableHeight = function($cropitElement, original_options_width){
+        // Get current height from preview.
         var currentVal = $cropitElement.cropit('previewSize').height;
+        // Calculate max image height to avoid the image to grow in width more than modal limits.
+        var imageDimension = imageManager.getNaturalDimensions($cropitElement.cropit('imageSrc'));
+        var maxHeight = ($cropitElement.width() * imageDimension.height) / imageDimension.width;
+        // Build params object
         var params = {
+            max: maxHeight,
             original_options_width: original_options_width,
             currentVal: currentVal,
             onSlideStop: function(){
