@@ -401,7 +401,6 @@ function masterImageEditorv2( customOptions ){
                             var imagePreviewWidth = $cropitElement.find(".cropit-preview img.cropit-preview-image").width();
                             var minZoomPreview = this.value / imagePreviewHeight;
                             $cropitElement.cropit('previewSize', { width: imagePreviewWidth * minZoomPreview, height: this.value  });
-                            $cropitElement.cropit('zoom', minZoomPreview);
                         }    
                         
                         // Update height label text
@@ -483,7 +482,6 @@ function masterImageEditorv2( customOptions ){
                             var imagePreviewWidth = $cropitElement.find(".cropit-preview img.cropit-preview-image").width();
                             var minZoomPreview = this.value / imagePreviewWidth;
                             $cropitElement.cropit('previewSize', { width: this.value, height: imagePreviewHeight * minZoomPreview });
-                            $cropitElement.cropit('zoom', minZoomPreview);
                         }
 
                         // Update width label text
