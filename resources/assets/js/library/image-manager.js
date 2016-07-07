@@ -168,5 +168,14 @@ var imageManager = {
 			var sourceArr = path.split(".");
 			return "image/" + sourceArr[sourceArr.length-1];
 		}
+	},
+
+	getNaturalDimensions: function(src){
+		var image = new Image();
+		image.src = src;
+		return {
+			width: image.width,
+			height: image.height
+		}
 	}
 };
