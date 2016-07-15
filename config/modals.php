@@ -237,6 +237,7 @@ $default = [
         "scale_ratio" => 2,
         "enabled_options" => "destination_url alt_text image_upload image_crop image_library",
         "enabled_plugins" => "imageLibrary",
+        "library_folder" => "hero",
         "image_size" => [
             "height" => 400,
             "width" => 660

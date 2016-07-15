@@ -104,9 +104,12 @@ ConfigModals.single_image_editor = function( params ){
 
         // Init image library.
         if( options.enabled_options.indexOf("image_library") != -1 ){
-            if(masterImageEditorObj.imageLibrary){
+            if(!options.library_folder){
+                Application.utils.alert.display("Warning:", "An error occurred while trying to init image library, missing folder name.", "warning");
+            }
+            if(masterImageEditorObj.imageLibrary && options.library_folder){
                 masterImageEditorObj.imageLibrary.init({
-                    folder: 'hero',
+                    folder: options.library_folder,
                     // On image library submit
                     onSubmit: function(imageData){
                         masterImageEditorObj.showImageLoading();

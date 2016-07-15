@@ -173,6 +173,40 @@ ConfigModals.image_modal_single_crop = function( params ){
             }
         });
 
+        // Init image library.
+        if( options.enabled_options.indexOf("image_library") != -1 ){
+            if(!options.library_folder){
+                Application.utils.alert.display("Warning:", "An error occurred while trying to init image library, missing folder name.", "warning");
+            }
+            if(masterImageEditorObj.imageLibrary && options.library_folder){
+                masterImageEditorObj.imageLibrary.init({
+                    folder: options.library_folder,
+                    // On image library submit
+                    onSubmit: function(imageData){
+                        masterImageEditorObj.showImageLoading();
+                        masterImageEditorObj.imageLibrary.copyImageFromLibrary(
+                            // Image Data
+                            imageData,
+                            // Fn Success
+                            function(imagePath){
+                                // Set returned path
+                                masterImageEditorObj.editedImageData.background_image = imagePath;
+                                // Reset cropit position and zoom
+                                masterImageEditorObj.editedImageData.background_zoom = 0;
+                                masterImageEditorObj.editedImageData.background_position = {};
+                                // Display image in cropit preview.
+                                masterImageEditorObj.getModalContent().find(".init-cropper:eq(0)").cropit('imageSrc', Application.globals.campaignImageUrl + imagePath );
+                                masterImageEditorObj.hideImageLoading();
+                            },
+                            // Fn Fail
+                            function(){
+                                // TODO: Show error.
+                            });
+                    }
+                });
+            }
+        }
+
         // Set click on submit button
         $modalContent.on("click", ".submit-config", function(){
             _this.onSubmit();
