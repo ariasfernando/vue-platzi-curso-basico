@@ -129,7 +129,7 @@ ConfigModals.image_modal_single_crop = function( params ){
                         this.$preview.find(".animated-gif").attr("src",$cropitElement.cropit("imageSrc"));
                     }
 
-                    masterImageEditorObj.cropitOnImageLoaded(this);
+                    masterImageEditorObj.cropitOnImageLoaded(this, $cropitElement);
                     // Hide loading.
                     masterImageEditorObj.hideImageLoading();
 
@@ -157,7 +157,7 @@ ConfigModals.image_modal_single_crop = function( params ){
                     // Init zoom
                     masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), this);
                     // Default cropit onload: display preview and hide spinner
-                    masterImageEditorObj.cropitOnImageLoaded(this);
+                    masterImageEditorObj.cropitOnImageLoaded(this, $cropitElement);
                 }
 
                 // Init Text overlay
