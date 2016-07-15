@@ -755,12 +755,12 @@ function masterImageEditorv2( customOptions ){
 
     // Cropit image onload event
     this.cropitOnImageLoaded = function( cropitObj, $cropitElement ){
+        var $preview = cropitObj.$preview;
+        var tempImage = new Image();
+        tempImage.src = $cropitElement.cropit("imageSrc");
+
         // Show preview box after 1 second.
         if( cropitObj.$preview && cropitObj.$preview.not(":visible") ){
-            var $preview = cropitObj.$preview;
-
-            var tempImage = new Image();
-            tempImage.src = $cropitElement.cropit("imageSrc");
 
             $(tempImage).on("load",function(){
                 // Remove spinner
@@ -776,7 +776,9 @@ function masterImageEditorv2( customOptions ){
                 });
             });
         }else if( cropitObj.$preview.find('.spinner-loading:visible').length ){
-            _this.hideImageLoading();
+            $(tempImage).on("load",function(){
+                _this.hideImageLoading();
+            });
         }
 
         // Show multi crop tabs if there are hidden.

@@ -125,7 +125,6 @@ ConfigModals.single_image_editor = function( params ){
                                 masterImageEditorObj.editedImageData.background_position = {};
                                 // Display image in cropit preview.
                                 masterImageEditorObj.getModalContent().find(".init-cropper:eq(0)").cropit('imageSrc', Application.globals.campaignImageUrl + imagePath );
-                                masterImageEditorObj.hideImageLoading();
                             },
                             // Fn Fail
                             function(){
