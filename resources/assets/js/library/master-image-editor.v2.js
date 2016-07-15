@@ -29,7 +29,7 @@ function masterImageEditorv2( customOptions ){
      * ====== HELPERS ======
      */
     this.getModalContent = function(){
-        return $modalContent;
+        return $("#"+$modalContent.attr("id"));
     };
     // Remove message
     this.removeMesage = function(){
@@ -99,6 +99,7 @@ function masterImageEditorv2( customOptions ){
      */
     // Show image loading
     this.showImageLoading = function(){
+        $modalContent = _this.getModalContent();
         if( $modalContent.find(".spinner-loading").length || options.loadingContainerSelector == null ){
             return false;
         }

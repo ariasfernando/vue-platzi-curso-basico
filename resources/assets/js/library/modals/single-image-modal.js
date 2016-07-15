@@ -115,14 +115,14 @@ ConfigModals.single_image_editor = function( params ){
                             imageData,
                             // Fn Success
                             function(imagePath){
-                                masterImageEditorObj.hideImageLoading();
                                 // Set returned path
                                 masterImageEditorObj.editedImageData.background_image = imagePath;
                                 // Reset cropit position and zoom
                                 masterImageEditorObj.editedImageData.background_zoom = 0;
                                 masterImageEditorObj.editedImageData.background_position = {};
                                 // Display image in cropit preview.
-                                $("#"+$modalContent.attr("id")).find(".init-cropper:eq(0)").cropit('imageSrc', Application.globals.campaignImageUrl + imagePath );
+                                masterImageEditorObj.getModalContent().find(".init-cropper:eq(0)").cropit('imageSrc', Application.globals.campaignImageUrl + imagePath );
+                                masterImageEditorObj.hideImageLoading();
                             },
                             // Fn Fail
                             function(){
