@@ -644,7 +644,7 @@ var masterImageEditor = function( customOptions ){
      | Display images from a library folder.
      | User is able to select one and use it in the module.
     */
-    this.imageLibraryTab = '.btn-image-libary';
+    this.imageLibraryTab = '.btn-image-library';
     this.imageLibraryContent = '#image-libary-box';
     this.initImageLibrary = function(){
 
@@ -707,7 +707,6 @@ var masterImageEditor = function( customOptions ){
             }else{
                 selectedItem = imageData.background_image;
             }
-
             library.open( selectedItem );
             return false;
         });
