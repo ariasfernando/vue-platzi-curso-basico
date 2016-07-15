@@ -159,7 +159,7 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
                 item.addClass( options.itemContainerClass );
                 item.append( $( options.itemWrapper ) );
                 item.find("a").addClass( options.itemWrapperClass );
-                if( imageManager.getNameFromPath(options.itemActiveValue) == imageManager.getNameFromPath(imagePath) ){
+                if( options.itemActiveValue && imageManager.getNameFromPath(options.itemActiveValue) == imageManager.getNameFromPath(imagePath) ){
                     item.find("a").addClass("active");
                 }
                 item.find("a").data( "image", { src: imagePath } );
@@ -292,7 +292,6 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
             folder: "",
             closeOnSubmit: true,
             modalId: "#image-library-modal",
-            $target: null,
             // Layout
             itemWrapper: '<a href="#"></a>',
             itemWrapperClass: "thumbnail",
