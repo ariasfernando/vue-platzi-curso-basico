@@ -791,7 +791,8 @@ function masterImageEditorv2( customOptions ){
         var isZoomable = $cropitElement.cropit( 'isZoomable' );
 
         if(!imageData){
-            imageData = _this.imageData;
+            console.log(_this.editedImageData, _this.imageData);
+            imageData = $.extend(_this.imageData,_this.editedImageData);
         }
 
         // Set zoom
