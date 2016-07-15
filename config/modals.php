@@ -228,6 +228,19 @@ $default = [
             "height" => 400,
             "width" => 660
         ]
+    ],
+    "mie_v2_library" => [
+        "title" => "Hero image editor",
+        "app_name" => "base",
+        "view" => "single_image_editor",
+        "config_modal_key" => "single_image_editor",
+        "scale_ratio" => 2,
+        "enabled_options" => "destination_url alt_text image_upload image_crop image_library",
+        "enabled_plugins" => "imageLibrary",
+        "image_size" => [
+            "height" => 400,
+            "width" => 660
+        ]
     ]
 ];
 

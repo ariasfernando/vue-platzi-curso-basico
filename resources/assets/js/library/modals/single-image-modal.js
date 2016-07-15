@@ -17,7 +17,7 @@ ConfigModals.single_image_editor = function( params ){
         options.moduleData = $targetElement.data("params") || $targetElement.parents("tr[data-params]").data("params");
     }
 
-    var configModal, $modalContent, masterImageEditorObj = null;
+    var configModal, $modalContent, masterImageEditorObj, $cropitElement = null;
     var imageKey = false;
     var _this = this;
 
@@ -41,8 +41,15 @@ ConfigModals.single_image_editor = function( params ){
             $fileInputUpload: $modalContent.find("#file-image-upload")
         };
 
+        $cropitElement = $modalContent.find(".init-cropper:eq(0)");
+
         if( options.moduleData.data && options.moduleData.data[imageKey] ){
             masterImageOptions.imageData = options.moduleData.data[imageKey];
+        }
+
+        // Add Enabled Plugins
+        if( options.enabled_plugins ){
+            masterImageOptions.plugins = options.enabled_plugins;
         }
 
         //Set smallImage
@@ -60,7 +67,7 @@ ConfigModals.single_image_editor = function( params ){
         masterImageEditorObj = new masterImageEditorv2(masterImageOptions);
 
         // Init Cropit
-        masterImageEditorObj.initCropit( $modalContent.find(".init-cropper"), {
+        masterImageEditorObj.initCropit( $cropitElement, {
             $fileInput:  $modalContent.find('input.cropit-image-input'),
             smallImage : smallImage,
             minZoom : (masterImageEditorObj.imageData.cropit_min_zoom)? masterImageEditorObj.imageData.cropit_min_zoom : 'fill',
@@ -71,30 +78,60 @@ ConfigModals.single_image_editor = function( params ){
                 var currentWidthVal = (options.image_size.width != 'auto')? options.image_size.width : 560;
                 var currentHeightVal = (options.image_size.height != 'auto')? options.image_size.height : 350;
 
-                $modalContent.find(".init-cropper:visible:eq(0)").cropit('previewSize', {
+                $cropitElement.cropit('previewSize', {
                     width: (masterImageEditorObj.imageData.background_width)? masterImageEditorObj.imageData.background_width : currentWidthVal,
                     height: (masterImageEditorObj.imageData.background_height)? masterImageEditorObj.imageData.background_height : currentHeightVal
                 });
 
 
                 // Default cropit onload: display preview and hide spinner.
-                masterImageEditorObj.cropitOnImageLoaded(this, $modalContent.find(".init-cropper:visible:eq(0)"));
+                masterImageEditorObj.cropitOnImageLoaded(this, $cropitElement);
 
                 // Init Adjustable Width.
                 if( options.enabled_options.indexOf("adjustable_width") != -1 ){
-                    masterImageEditorObj.initAdjustableWidth($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.height);
+                    masterImageEditorObj.initAdjustableWidth($cropitElement, options.image_size.height);
                 }
 
                 // Init Adjustable Height.
                 if( options.enabled_options.indexOf("adjustable_height") != -1 ){
-                    masterImageEditorObj.initAdjustableHeight($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.width);
+                    masterImageEditorObj.initAdjustableHeight($cropitElement, options.image_size.width);
                 }
                 
                 // Init zoom.
-                masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), this);
-                
+                masterImageEditorObj.initCropitZoom($cropitElement, this);
             }
         });
+
+        // Init image library.
+        if( options.enabled_options.indexOf("image_library") != -1 ){
+            if(masterImageEditorObj.imageLibrary){
+                masterImageEditorObj.imageLibrary.init({
+                    folder: 'hero',
+                    // On image library submit
+                    onSubmit: function(imageData){
+                        masterImageEditorObj.showImageLoading();
+                        masterImageEditorObj.imageLibrary.copyImageFromLibrary(
+                            // Image Data
+                            imageData,
+                            // Fn Success
+                            function(imagePath){
+                                masterImageEditorObj.hideImageLoading();
+                                // Set returned path
+                                masterImageEditorObj.editedImageData.background_image = imagePath;
+                                // Reset cropit position and zoom
+                                masterImageEditorObj.editedImageData.background_zoom = 0;
+                                masterImageEditorObj.editedImageData.background_position = {};
+                                // Display image in cropit preview.
+                                $("#"+$modalContent.attr("id")).find(".init-cropper:eq(0)").cropit('imageSrc', Application.globals.campaignImageUrl + imagePath );
+                            },
+                            // Fn Fail
+                            function(){
+                                // TODO: Show error.
+                            });
+                    }
+                });
+            }
+        }
 
         // Set click on submit button
         $modalContent.on("click", ".submit-config", function(){
