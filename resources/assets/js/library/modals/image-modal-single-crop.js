@@ -215,6 +215,8 @@ ConfigModals.image_modal_single_crop = function( params ){
                                 masterImageEditorObj.editedImageData.background_position = {};
                                 // Display image in cropit preview.
                                 masterImageEditorObj.getModalContent().find(".init-cropper:eq(0)").cropit('imageSrc', Application.globals.campaignImageUrl + imagePath );
+
+                                Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
                             },
                             // Fn Fail
                             function(){
