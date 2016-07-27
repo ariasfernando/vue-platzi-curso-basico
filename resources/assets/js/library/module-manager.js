@@ -526,6 +526,17 @@ var moduleManager = {
 			var $module = $(module);
 			var moduleParams = $module.data("params");
 			
+            // Init module actions
+            if( !moduleParams.initialized ){
+                var dataParams = $module.data("params");
+                if( dataParams.type && ModuleActions && ModuleActions[dataParams.type] ){
+                    var actions = new ModuleActions[dataParams.type]();
+                    if( typeof actions.init == "function" ){
+                        actions.init($module);
+                    }
+                }
+            }
+
             if (moduleParams.plugins && !moduleParams.initialized) {
 				
                 $.each(moduleParams.plugins, function (plugin, pluginConfig) {
