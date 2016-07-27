@@ -81,7 +81,6 @@ ConfigModals.image_modal_single_crop = function( params ){
         // Master image Editor Options
         var masterImageOptions = {
             imageKey: imageKey,
-            loadingContainerSelector: ".preview-box",
             spinnerClass: "custom-image-loading",
             imageSize: options.image_size,
             modalContent: $modalContent,

@@ -34,7 +34,6 @@ ConfigModals.single_image_editor = function( params ){
 
         var masterImageOptions = {
             imageKey: imageKey,
-            loadingContainerSelector: ".preview-box",
             spinnerClass: "custom-image-loading",
             imageSize: options.image_size,
             modalContent: $modalContent,
