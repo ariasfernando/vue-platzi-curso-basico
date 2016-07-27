@@ -9,7 +9,7 @@ function masterImageEditorv2( customOptions ){
     var options = $.extend({
         // Default options
         imageKey: null,
-        loadingContainerSelector: null,
+        loadingContainerSelector: '.init-cropper',
         spinnerClass: '',
         $fileInputUpload: '',
         imageData: {},
@@ -893,6 +893,11 @@ function masterImageEditorv2( customOptions ){
     // Validate if there are an image loaded
     this.beforeValidation = function(){
         // -- Set image input required --
+        if( $modalContent.find(".cropit-preview-image").length & $modalContent.find(".cropit-preview-image").attr("src") == undefined ){
+            options.$fileInputUpload.data("validation").required = true;
+        }else{
+            options.$fileInputUpload.data("validation").required = false;
+        }
         // Check if preview is visible
         if( !$modalContent.find(".preview-box:visible").length ){
             // Get visible file input
