@@ -16,9 +16,9 @@
         $image_source = $module_params['placeholder_image'];
     }
 
-    $image_height = "400";
-    if( !empty($image0['background_height']) ){
-        $image_height = $image0['background_height'];
+    $image_width = "100%";
+    if( !empty($image0['background_width']) ){
+        $image_width = $image0['background_width'];
     }
 ?>
 
@@ -44,9 +44,9 @@
                             ( isset($image['alt']) )? $image['alt']:'',
                             array(
                                 'title' => ( isset($image['alt']) )? $image['alt']:'',
-                                'height' => $image_height,
+                                'width' => $image_width,
                                 'border' => '0',
-                                'style' => 'display:block;border:none;max-width:100%;width:auto;'
+                                'style' => 'display:block;border:none;max-width:100%;width:'.$image_width.';'
                             ))
                         !!}
                     </a>
