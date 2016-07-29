@@ -76,22 +76,21 @@ ConfigModals.single_image_editor = function( params ){
                     height: (masterImageEditorObj.imageData.background_height)? masterImageEditorObj.imageData.background_height : currentHeightVal
                 });
 
-
                 // Default cropit onload: display preview and hide spinner.
-                masterImageEditorObj.cropitOnImageLoaded(this, $modalContent.find(".init-cropper:visible:eq(0)"));
+                masterImageEditorObj.cropitOnImageLoaded(this, $modalContent.find(".init-cropper"));
 
                 // Init Adjustable Width.
                 if( options.enabled_options.indexOf("adjustable_width") != -1 ){
-                    masterImageEditorObj.initAdjustableWidth($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.height);
+                    masterImageEditorObj.initAdjustableWidth($modalContent.find(".init-cropper"), options.image_size.height);
                 }
 
                 // Init Adjustable Height.
                 if( options.enabled_options.indexOf("adjustable_height") != -1 ){
-                    masterImageEditorObj.initAdjustableHeight($modalContent.find(".init-cropper:visible:eq(0)"), options.image_size.width);
+                    masterImageEditorObj.initAdjustableHeight($modalContent.find(".init-cropper"), options.image_size.width);
                 }
                 
                 // Init zoom.
-                masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), this);
+                masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper"), this);
                 
             }
         });
@@ -143,32 +142,12 @@ ConfigModals.single_image_editor = function( params ){
             .attr("alt", imageData.alt);
         $targetElement.attr("href",imageData.destination_url);
 
-        if( options.enabled_options.indexOf("adjustable_width") >= 0 && imageData.background_width ){
-            $targetElement.find("img").attr("width",imageData.background_width);
+        if( (options.enabled_options.indexOf("adjustable_width") >= 0 || options.enabled_options.indexOf("adjustable_height") >= 0)
+            && imageData.background_width ){
+            $targetElement.find("img")
+                .attr("width",imageData.background_width)
+                .width(imageData.background_width);
         }
-
-        // Update social icons
-        var $shareEls = $targetElement.parents('[data-params]').find('[data-share]');
-
-        $shareEls.each(function(k, el) {
-            var $el = $(el);
-
-            var url = new URI($el.attr('href'));
-
-            if ( $el.data('share') == "facebook" ) {
-                url.search({ u: imageData.destination_url});
-            } else {
-                url.search({ url: imageData.destination_url});
-
-                if ( $el.data('share') == "twitter" ) {
-                    url.search(function(data) {
-                        data.text = imageData.alt;
-                    });
-                }
-            }
-
-            $el.attr('href', url.href());
-        });
     };
 
     /*
