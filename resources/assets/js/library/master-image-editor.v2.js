@@ -325,12 +325,11 @@ function masterImageEditorv2( customOptions ){
      * ====== Init cropit preview depending if minZoom. ======
      */
     var recalculatePreview = function( imagePreviewWidth, imagePreviewHeight, minZoomPreview, $cropitElement ){
-        $cropitElement.cropit('zoom', minZoomPreview);
         $cropitElement.cropit('previewSize', {
             width: imagePreviewWidth,
             height: imagePreviewHeight
         });
-
+        $cropitElement.cropit('zoom', minZoomPreview);
     };
 
     this.initMinZoom = function( image, $cropitElement ){
@@ -340,6 +339,15 @@ function masterImageEditorv2( customOptions ){
 
         if (options.imageSize.width == 'auto'){
             imagePreviewHeight = _this.imageData.background_height || options.imageSize.height;
+            // If height control exist
+            if( $cropitElement.find(".cropit-image-height-input").length
+                // If max attr is defined
+                && typeof $cropitElement.find(".cropit-image-height-input").attr("max") != "undefined"
+                // If imagePreviewHeight > max height
+                && imagePreviewHeight > parseInt($cropitElement.find(".cropit-image-height-input").attr("max"))){
+                // Set height as max height.
+                imagePreviewHeight = parseInt($cropitElement.find(".cropit-image-height-input").attr("max"));
+            }
             imagePreviewWidth = (imagePreviewHeight * imageOriginalWidth) / imageOriginalHeight;
             minZoomPreview = options.imageSize.height / imageOriginalHeight;
         }
@@ -379,7 +387,7 @@ function masterImageEditorv2( customOptions ){
         },params);
 
         if( $cropitElement.find("#adjustable-height-value").length ){
-            $cropitElement.find("#adjustable-height-value").text(settings.currentVal);
+            $cropitElement.find("#adjustable-height-value").text(Math.round(settings.currentVal));
         }
 
         if( $cropitElement.find(".cropit-image-height-input").length ){
@@ -411,6 +419,8 @@ function masterImageEditorv2( customOptions ){
                         settings.onSlideStop(event);
                     }
                 });
+            // Trigget event to update value.
+            $cropitElement.find(".cropit-image-height-input").change();
         }
     };
     this.callAdjustableHeight = function($cropitElement, original_options_width){
@@ -419,6 +429,10 @@ function masterImageEditorv2( customOptions ){
         // Calculate max image height to avoid the image to grow in width more than modal limits.
         var imageDimension = imageManager.getNaturalDimensions($cropitElement.cropit('imageSrc'));
         var maxHeight = ($cropitElement.width() * imageDimension.height) / imageDimension.width;
+
+        if( currentVal > maxHeight ){
+            currentVal = maxHeight;
+        }
         // Build params object
         var params = {
             max: maxHeight,
@@ -486,7 +500,7 @@ function masterImageEditorv2( customOptions ){
 
                         // Update width label text
                         if( $cropitElement.find("#adjustable-width-value").length ){
-                            $cropitElement.find("#adjustable-width-value").text(this.value);
+                            $cropitElement.find("#adjustable-width-value").text(Math.round(this.value));
                         }
                         settings.onSlideStop(event);
                     }
