@@ -34,7 +34,7 @@ class EmailTextCreator
             switch ($module['type']) {
                 case 'header_image':
                     $text_module = $this->defaultHtml2TextConverter($module);
-                    $text_module = trim(str_replace("\n\n","\n", $text_module));
+                    $text_module = trim(str_replace("\n\n", "\n", $text_module));
                     $plain_text .= $text_module;
                     $plain_text .= self::$module_break;
                     break;

@@ -99,7 +99,7 @@ class BaseAuthController extends Controller
      */
     public function postLogin(LoginRequest $request, Guard $auth)
     {
-        $error = "";
+        $error = false;
 
         if (\Config::get('challenge.enabled')) {
             $challenge_provider = \Config::get('challenge.default');
@@ -110,7 +110,8 @@ class BaseAuthController extends Controller
                 Cache::increment($cache_key);
             }
             if (Cache::get($cache_key) > $config['max_failed_attemtps'] && !Challenge::provider()->isValid($request)) {
-                $error = Activity::log('User login fail [ERROR_CAPTCHA]');
+                Activity::log('User login fail [ERROR_CAPTCHA]');
+                $error = true;
             }
         }
 
@@ -118,7 +119,7 @@ class BaseAuthController extends Controller
         $password = $request->input('password');
         $remember = $request->input('remember');
 
-        if (User::where('email', '=', $email)->exists() && $error == "") {
+        if (User::where('email', '=', $email)->exists() && !$error) {
             if ($auth->validate(['email' => $email, 'password' => $password])) {
                 $roles_array = array_column(Role::all(['name'])->toArray(), 'name');
                 $user_roles = User::where('email', '=', $email)->firstOrFail()->roles;
@@ -130,17 +131,20 @@ class BaseAuthController extends Controller
                         Activity::log('User Logged in');
                     }
                 } else {
-                    $error = Activity::log('User login fail [ERROR_ROLE]');
+                    Activity::log('User login fail [ERROR_ROLE]');
+                    $error = true;
                 }
             } else {
-                $error = Activity::log('User login fail [ERROR_LOGIN]');
+                Activity::log('User login fail [ERROR_LOGIN]');
+                $error = true;
             }
 
         } else {
-            $error = Activity::log('User login fail [ERROR_EMAIL]');
+            Activity::log('User login fail [ERROR_EMAIL]');
+            $error = true;
         }
 
-        if (isset($error)) {
+        if ($error) {
             return redirect()->back()->with(array("message" => "ERROR_DEFAULT"));
         } else {
             if (isset($user_data) && isset($user_data->force_password)

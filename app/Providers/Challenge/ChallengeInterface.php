@@ -1,6 +1,7 @@
 <?php
 
 namespace Stensul\Providers\Challenge;
+
 use Illuminate\Http\Request;
 
 /*
