@@ -202,26 +202,13 @@ ConfigModals.image_modal_single_crop = function( params ){
                     folder: options.library_folder,
                     // On image library submit
                     onSubmit: function(imageData){
-                        masterImageEditorObj.showImageLoading();
-                        masterImageEditorObj.imageLibrary.copyImageFromLibrary(
-                            // Image Data
-                            imageData,
-                            // Fn Success
-                            function(imagePath){
-                                // Set returned path
-                                masterImageEditorObj.editedImageData.background_image = imagePath;
-                                // Reset cropit position and zoom
-                                masterImageEditorObj.editedImageData.background_zoom = 0;
-                                masterImageEditorObj.editedImageData.background_position = {};
-                                // Display image in cropit preview.
-                                masterImageEditorObj.getModalContent().find(".init-cropper:eq(0)").cropit('imageSrc', Application.globals.campaignImageUrl + imagePath );
+                        masterImageEditorObj.setNewImage();
+                        // Reset cropit position and zoom
+                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom', 0 );
+                        // Display image in cropit preview.
+                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', Application.globals.baseUrl + imageData.src );
 
-                                Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
-                            },
-                            // Fn Fail
-                            function(){
-                                // TODO: Show error.
-                            });
+                        Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
                     }
                 });
             }

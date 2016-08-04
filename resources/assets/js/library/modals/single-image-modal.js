@@ -111,26 +111,14 @@ ConfigModals.single_image_editor = function( params ){
                     folder: options.library_folder,
                     // On image library submit
                     onSubmit: function(imageData){
-                        masterImageEditorObj.showImageLoading();
-                        masterImageEditorObj.imageLibrary.copyImageFromLibrary(
-                            // Image Data
-                            imageData,
-                            // Fn Success
-                            function(imagePath){
-                                // Set returned path
-                                masterImageEditorObj.editedImageData.background_image = imagePath;
-                                // Reset cropit position and zoom
-                                masterImageEditorObj.editedImageData.background_zoom = 0;
-                                masterImageEditorObj.editedImageData.background_position = {};
-                                // Display image in cropit preview.
-                                masterImageEditorObj.getModalContent().find(".init-cropper:eq(0)").cropit('imageSrc', Application.globals.campaignImageUrl + imagePath );
-                                // Reset file input
-                                Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
-                            },
-                            // Fn Fail
-                            function(){
-                                // TODO: Show error.
-                            });
+                        // Active new image var.
+                        masterImageEditorObj.setNewImage();
+                        // Reset cropit position and zoom
+                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom', 0 );
+                        // Display image in cropit preview.
+                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', Application.globals.baseUrl + imageData.src );
+                        // Reset file input
+                        Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
                     }
                 });
             }
@@ -186,29 +174,6 @@ ConfigModals.single_image_editor = function( params ){
         if( options.enabled_options.indexOf("adjustable_width") >= 0 && imageData.background_width ){
             $targetElement.find("img").attr("width",imageData.background_width);
         }
-
-        // Update social icons
-        var $shareEls = $targetElement.parents('[data-params]').find('[data-share]');
-
-        $shareEls.each(function(k, el) {
-            var $el = $(el);
-
-            var url = new URI($el.attr('href'));
-
-            if ( $el.data('share') == "facebook" ) {
-                url.search({ u: imageData.destination_url});
-            } else {
-                url.search({ url: imageData.destination_url});
-
-                if ( $el.data('share') == "twitter" ) {
-                    url.search(function(data) {
-                        data.text = imageData.alt;
-                    });
-                }
-            }
-
-            $el.attr('href', url.href());
-        });
     };
 
     /*
