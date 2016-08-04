@@ -227,7 +227,8 @@ ConfigModals.image_modal_no_crop = function( params ){
 
         // Load image data
         if( options.moduleData.data && options.moduleData.data[imageKey] ){
-            masterImageOptions.imageData = options.moduleData.data[imageKey];
+            // Get imageData not with reference.
+            masterImageOptions.imageData = JSON.parse(JSON.stringify(options.moduleData.data[imageKey]));
         }
 
         masterImageEditorObj = new masterImageEditorv2(masterImageOptions);

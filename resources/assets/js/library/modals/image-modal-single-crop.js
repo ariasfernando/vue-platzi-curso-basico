@@ -86,13 +86,13 @@ ConfigModals.image_modal_single_crop = function( params ){
             modalContent: $modalContent,
             $fileInputUpload: $modalContent.find("#file-image-upload")
         };
-
         if( options.enabled_plugins !== undefined ){
             masterImageOptions.plugins = options.enabled_plugins;
         }
 
         if( options.moduleData.data && options.moduleData.data[imageKey] ){
-            masterImageOptions.imageData = options.moduleData.data[imageKey];
+            // Get imageData not with reference.
+            masterImageOptions.imageData = JSON.parse(JSON.stringify(options.moduleData.data[imageKey]));
         }
 
         // Master image editor
@@ -203,10 +203,10 @@ ConfigModals.image_modal_single_crop = function( params ){
                     // On image library submit
                     onSubmit: function(imageData){
                         masterImageEditorObj.setNewImage();
-                        // Reset cropit position and zoom
-                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom', 0 );
                         // Display image in cropit preview.
                         masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', Application.globals.baseUrl + imageData.src );
+                        // Reset cropit position and zoom
+                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom',0);
 
                         Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
                     }

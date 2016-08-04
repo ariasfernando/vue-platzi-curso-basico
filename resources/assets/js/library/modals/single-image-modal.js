@@ -43,7 +43,8 @@ ConfigModals.single_image_editor = function( params ){
         $cropitElement = $modalContent.find(".init-cropper:eq(0)");
 
         if( options.moduleData.data && options.moduleData.data[imageKey] ){
-            masterImageOptions.imageData = options.moduleData.data[imageKey];
+            // Get imageData not with reference.
+            masterImageOptions.imageData = JSON.parse(JSON.stringify(options.moduleData.data[imageKey]));
         }
 
         // Add Enabled Plugins
@@ -113,10 +114,10 @@ ConfigModals.single_image_editor = function( params ){
                     onSubmit: function(imageData){
                         // Active new image var.
                         masterImageEditorObj.setNewImage();
-                        // Reset cropit position and zoom
-                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom', 0 );
                         // Display image in cropit preview.
                         masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', Application.globals.baseUrl + imageData.src );
+                        // Reset cropit position and zoom
+                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom', 0 );
                         // Reset file input
                         Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
                     }
