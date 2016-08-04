@@ -70,7 +70,13 @@ function masterImageEditorv2( customOptions ){
         return alert;
     };
     this.getPreviewElement = function(){
-        return $modalContent.find(options.imagePreviewSelector);
+        return _this.getModalContent().find(options.imagePreviewSelector);
+    }
+    this.isNewImage = function(){
+        return _this.getPreviewElement().data("new-image") === "true";
+    }
+    this.setNewImage = function(){
+        _this.getPreviewElement().data("new-image","true");
     }
 
     /*
@@ -193,8 +199,8 @@ function masterImageEditorv2( customOptions ){
 
         _this.afterDataBuild();
 
-        _this.editedImageData = $.extend( _this.imageData, _this.editedImageData );
-        return _this.editedImageData;
+        $.extend( _this.imageData, _this.editedImageData );
+        return _this.imageData;
     };
 
     this.saveData = function( $targetModule ){
@@ -202,8 +208,9 @@ function masterImageEditorv2( customOptions ){
             return false;
         }
 
-        _this.editedImageData = $.extend( _this.imageData, _this.editedImageData );
-        moduleManager.saveInData( $targetModule, options.imageKey, _this.imageData );
+        $.extend( _this.imageData, _this.editedImageData );
+        var imageData = $.extend(true, {}, _this.imageData);
+        moduleManager.saveInData( $targetModule, options.imageKey, imageData );
     };
 
     /*
@@ -725,7 +732,7 @@ function masterImageEditorv2( customOptions ){
 
             onFileChange: function(){
                 _this.showImageLoading();
-                _this.newImage = true;
+                _this.setNewImage();
                 this.$preview.removeClass('outline-class');
             },
 
@@ -768,7 +775,7 @@ function masterImageEditorv2( customOptions ){
                 // Show image preview box
                 $preview.parent().slideDown( function() {
                     $preview.addClass('outline-class'); 
-                    if( _this.newImage ){
+                    if( _this.isNewImage() ){
                         if (options.imageSize.width == 'auto' || options.imageSize.height == 'auto'){
                             _this.initMinZoom( tempImage, $cropitElement );
                         }
@@ -794,7 +801,8 @@ function masterImageEditorv2( customOptions ){
         var isZoomable = $cropitElement.cropit( 'isZoomable' );
 
         if(!imageData){
-            imageData = $.extend(_this.imageData,_this.editedImageData);
+            imageData = {};
+            $.extend(imageData, _this.imageData, _this.editedImageData);
         }
 
         // Set zoom
@@ -860,9 +868,8 @@ function masterImageEditorv2( customOptions ){
             if( $(element).is(":visible") ){
                 var backgroundImage = $(element).cropit("imageSrc");
                 var exportedImage = _this.exportCropit($(element),params);
-
                 // If new image
-                if( _this.newImage ){
+                if( _this.isNewImage() ){
                     // Save background image
                     _this.uploadImage( backgroundImage, function(response){
                         _this.editedImageData.background_image = response.path;
