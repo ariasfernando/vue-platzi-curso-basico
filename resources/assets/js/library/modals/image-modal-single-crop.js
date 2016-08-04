@@ -205,10 +205,11 @@ ConfigModals.image_modal_single_crop = function( params ){
                         masterImageEditorObj.setNewImage();
                         // Display image in cropit preview.
                         masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', Application.globals.baseUrl + imageData.src );
-                        // Reset cropit position and zoom
-                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom',0);
-
-                        Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
+                        masterImageEditorObj.getModalContent().find(".cropit-preview-image").on("load",function(){
+                            // Reset cropit position and zoom
+                            masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom',0);
+                            Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
+                        });
                     }
                 });
             }
