@@ -98,6 +98,13 @@ $default = [
                     'app_name' => 'base',
                     'module_id' => 'mie_v2_default_adjustable_height',
                     'level' => 'single'
+                ],
+                'hero_image_mie_v2_library' => [
+                    'title' => 'Image Library',
+                    'action' => 'add',
+                    'app_name' => 'base',
+                    'module_id' => 'hero_image_mie_v2_library',
+                    'level' => 'single'
                 ]
             ]
         ],

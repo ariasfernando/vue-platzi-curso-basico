@@ -120,6 +120,11 @@ $default = [
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
+    'hero_image_mie_v2_library' => [
+        'type' => 'hero_image_mie_v2_library',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png'
+    ],
     'three_column_media_with_text' => [
         'type' => 'three_column_media_with_text',
         'file_parent' => 'base',

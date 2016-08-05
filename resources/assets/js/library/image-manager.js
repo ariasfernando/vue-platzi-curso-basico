@@ -144,6 +144,9 @@ var imageManager = {
 	 * Get file name from a complete file path
 	 */
 	getNameFromPath: function( path ){
+		if( typeof path == undefined){
+			return false;
+		}
 		var fileName = path.split("/").pop();
 		fileName = fileName.split(".");
 		fileName.pop();

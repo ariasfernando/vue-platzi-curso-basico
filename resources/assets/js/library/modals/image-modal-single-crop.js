@@ -35,12 +35,12 @@ ConfigModals.image_modal_single_crop = function( params ){
      * -- Helpers --
      */
     // validate image size
-    this.validateImageSize = function( $image ){
-        if(!$image){
+    this.validateImageSize = function( imageEl ){
+        if(!imageEl){
             return false;
         }
         // Validate image size: return false if image size is different than placeholder size.
-        if( $image.width() != params.image_size.width || $image.height() != params.image_size.height ){
+        if( imageEl.width != params.image_size.width || imageEl.height != params.image_size.height ){
             return false;
         }
 
@@ -81,19 +81,18 @@ ConfigModals.image_modal_single_crop = function( params ){
         // Master image Editor Options
         var masterImageOptions = {
             imageKey: imageKey,
-            loadingContainerSelector: ".preview-box",
             spinnerClass: "custom-image-loading",
             imageSize: options.image_size,
             modalContent: $modalContent,
             $fileInputUpload: $modalContent.find("#file-image-upload")
         };
-
         if( options.enabled_plugins !== undefined ){
             masterImageOptions.plugins = options.enabled_plugins;
         }
 
         if( options.moduleData.data && options.moduleData.data[imageKey] ){
-            masterImageOptions.imageData = options.moduleData.data[imageKey];
+            // Get imageData not with reference.
+            masterImageOptions.imageData = JSON.parse(JSON.stringify(options.moduleData.data[imageKey]));
         }
 
         // Master image editor
@@ -121,29 +120,49 @@ ConfigModals.image_modal_single_crop = function( params ){
                     && this.$fileInput[0].files.length
                     && this.$fileInput[0].files[0].type == "image/gif" ){
 
-                    // Disable cropit edition.
-                    $cropitElement.cropit("disable");
-                    if( !this.$preview.find(".animated-gif").length ){
-                        masterImageEditorObj.buildGifPreview($cropitElement,this);
-                    }else{
-                        this.$preview.find(".animated-gif").attr("src",$cropitElement.cropit("imageSrc"));
-                    }
-
-                    masterImageEditorObj.cropitOnImageLoaded(this);
-                    // Hide loading.
-                    masterImageEditorObj.hideImageLoading();
-
-                    // Check image size
+                    // Validate image size
                     var cropitObj = this;
-                    setTimeout(function(){
-                        if(!_this.validateImageSize(cropitObj.$preview.find(".animated-gif"))){
+                    var tempImage = new Image();
+                    tempImage.src = $cropitElement.cropit("imageSrc");
+
+                    $(tempImage)
+                        // On image load
+                        .on("load",function(){
+                            if(!_this.validateImageSize(tempImage)){
+                                if( cropitObj.$preview.find(".animated-gif").length ){
+                                    cropitObj.$preview.find(".animated-gif").remove();
+                                    cropitObj.$preview.removeClass("loading-gif");
+                                }
+                                // If wrong size display error
+                                masterImageEditorObj.displayMessage(
+                                    messages.wrongImageSize,
+                                    'danger'
+                                );
+                            }else{
+                                // If correct size disable cropit and preview gif image.
+                                $cropitElement.cropit("disable");
+                                if( !cropitObj.$preview.find(".animated-gif").length ){
+                                    masterImageEditorObj.buildGifPreview($cropitElement,cropitObj);
+                                }else{
+                                    cropitObj.$preview.find(".animated-gif").attr("src",$cropitElement.cropit("imageSrc"));
+                                }
+
+                                // Default on image load to display preview if it's hidden.
+                                masterImageEditorObj.cropitOnImageLoaded(cropitObj, $cropitElement);
+                            }
+
+                            // Hide loading.
+                            masterImageEditorObj.hideImageLoading();
+                        // On image error
+                        }).on("error",function(){
+                            // Hide preview & display message.
+                            cropitObj.$preview.parent().hide();
                             masterImageEditorObj.displayMessage(
-                                messages.wrongImageSize,
+                                messages.imageLoadingError,
                                 'danger'
                             );
                             return false;
-                        }
-                    }, 1000);
+                        });
                 /*
                  * Else init cropit previe
                  */
@@ -157,7 +176,7 @@ ConfigModals.image_modal_single_crop = function( params ){
                     // Init zoom
                     masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), this);
                     // Default cropit onload: display preview and hide spinner
-                    masterImageEditorObj.cropitOnImageLoaded(this,$cropitElement);
+                    masterImageEditorObj.cropitOnImageLoaded(this, $cropitElement);
                 }
 
                 // Init Text overlay
@@ -172,6 +191,29 @@ ConfigModals.image_modal_single_crop = function( params ){
                 }
             }
         });
+
+        // Init image library.
+        if( options.enabled_options.indexOf("image_library") != -1 ){
+            if(!options.library_folder){
+                Application.utils.alert.display("Warning:", "An error occurred while trying to init image library, missing folder name.", "warning");
+            }
+            if(masterImageEditorObj.imageLibrary && options.library_folder){
+                masterImageEditorObj.imageLibrary.init({
+                    folder: options.library_folder,
+                    // On image library submit
+                    onSubmit: function(imageData){
+                        masterImageEditorObj.setNewImage();
+                        // Display image in cropit preview.
+                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', Application.globals.baseUrl + imageData.src );
+                        masterImageEditorObj.getModalContent().find(".cropit-preview-image").on("load",function(){
+                            // Reset cropit position and zoom
+                            masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom',0);
+                            Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
+                        });
+                    }
+                });
+            }
+        }
 
         // Set click on submit button
         $modalContent.on("click", ".submit-config", function(){
@@ -208,6 +250,13 @@ ConfigModals.image_modal_single_crop = function( params ){
             .attr("src", Application.globals.campaignImageUrl + imageData.path )
             .attr("alt", imageData.alt)
             .attr("title", imageData.alt);
+
+        $targetElement.find('img').on("load",function(){
+            // Hide Loading
+            masterImageEditorObj.hideImageLoading();
+            // Close Popup
+            configModal.close();
+        });
     };
 
     this.applyUpdates = function(){
@@ -217,10 +266,6 @@ ConfigModals.image_modal_single_crop = function( params ){
         masterImageEditorObj.saveData(moduleManager.getModuleParent($targetElement));
         // Update module view.
         this.updateModuleView(imageData);
-        // Hide Loading
-        masterImageEditorObj.hideImageLoading();
-        // Close Popup
-        configModal.close();
     };
 
     /*
@@ -235,32 +280,33 @@ ConfigModals.image_modal_single_crop = function( params ){
         //replace src and remove attr to generateCanvas.
         masterImageEditorObj.getPreviewElement().find('img.cropit-preview-image').removeAttr('style').attr('src', exportedSrc).attr('width','100%');
         
-        // Convert html to canvas
-        imageManager.generateCanvas( masterImageEditorObj.getPreviewElement(), function( canvas ){
-            // save url data canvas and complete input hidden data_image.
-            var urlImageData = canvas.toDataURL("image/png");
-            var backgroundImage = $cropitElement.cropit("imageSrc");
+        // -- Export cropit image and save --
+        var backgroundImage = $cropitElement.cropit("imageSrc");
 
-            // If background image is base64, it's a new image, so we must save the background after upload final image.
-            if( backgroundImage.indexOf(";base64,") >= 0 ){
-                // Upload Background
-                masterImageEditorObj.uploadImage( backgroundImage, function(response){
-                    masterImageEditorObj.editedImageData.background_image = response.path;
-                    // Upload converted canvas
-                    masterImageEditorObj.uploadImage( urlImageData, function(response){
-                        masterImageEditorObj.editedImageData.path = response.path;
-                        _this.applyUpdates();
-                    });
-                });
-            // Enter here when background it's a saved image.
-            }else{
-                // Upload canvas
-                masterImageEditorObj.uploadImage( urlImageData, function(response){
+        // Export Cropit image
+        var exportedImage = masterImageEditorObj.exportCropit($cropitElement,{
+            type: 'image/png',
+            originalSize: true
+        });
+        // If background image is base64, it's a new image, so we must save the background after upload final image.
+        if( backgroundImage.indexOf(";base64,") >= 0 ){
+            // Upload Background
+            masterImageEditorObj.uploadImage( backgroundImage, function(response){
+                masterImageEditorObj.editedImageData.background_image = response.path;
+                // Upload converted canvas
+                masterImageEditorObj.uploadImage( exportedImage, function(response){
                     masterImageEditorObj.editedImageData.path = response.path;
                     _this.applyUpdates();
                 });
-            }
-        }, options.scale_ratio );
+            });
+        // Enter here when background it's a saved image.
+        }else{
+            // Upload canvas
+            masterImageEditorObj.uploadImage( exportedImage, function(response){
+                masterImageEditorObj.editedImageData.path = response.path;
+                _this.applyUpdates();
+            });
+        }
     };
 
     /*
@@ -271,7 +317,7 @@ ConfigModals.image_modal_single_crop = function( params ){
     this.saveAnimatedGif = function(){
         var $image = $cropitElement.find("img.animated-gif");
 
-        if(!_this.validateImageSize($image)){
+        if(!_this.validateImageSize($image[0])){
             masterImageEditorObj.hideImageLoading();
             masterImageEditorObj.displayMessage(
                 messages.wrongImageSize,

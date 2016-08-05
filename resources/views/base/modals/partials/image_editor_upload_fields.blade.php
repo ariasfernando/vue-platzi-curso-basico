@@ -12,7 +12,7 @@
 			@endif
 
 			@if ( isset($params["image_library"]) && $params["image_library"] == "enabled" )
-				<li role="presentation"><a href="#" class="btn-image-libary"><i class="glyphicon glyphicon-picture"></i>Library</a></li>
+				<li role="presentation"><a href="#" class="btn-image-library"><i class="glyphicon glyphicon-picture"></i>Library</a></li>
 			@endif
 		</ul>
 	</div>
