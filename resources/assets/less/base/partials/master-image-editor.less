@@ -323,7 +323,7 @@
 
 	.preview-box,
 	.init-cropper{
-		position: relative;
+
 		.custom-image-loading{
 			&.spinner-loading{
 				width: 100%;
@@ -331,7 +331,10 @@
 				cursor: default;
 				position: absolute;
 				top: 0;
+				left: 0;
 				background: rgba(255,255,255,0.7);
+				.border-radius(10px);
+				z-index: 1900;
 
 				img{
 					top: 50%;
