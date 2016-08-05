@@ -96,8 +96,10 @@ function masterImageEditorv2( customOptions ){
             input.files = $(input).data("files");
         }
 
-        // Clear cropit data
-        _this.afterFileUploadChange();
+        if(_this.isNewImage()){
+            // Clear cropit data
+            _this.afterFileUploadChange();
+        }
     };
 
     /*
@@ -413,15 +415,15 @@ function masterImageEditorv2( customOptions ){
                             var previewWidth = _this.getPreviewElement().width();
                             $cropitElement.cropit('previewSize', { width: previewWidth, height: this.value });
                         }else{
-                            var imagePreviewHeight = $cropitElement.find(".cropit-preview img.cropit-preview-image").height(); 
-                            var imagePreviewWidth = $cropitElement.find(".cropit-preview img.cropit-preview-image").width();
+                            var imagePreviewHeight = $cropitElement.find(".cropit-preview img.cropit-preview-image")[0].height;
+                            var imagePreviewWidth = $cropitElement.find(".cropit-preview img.cropit-preview-image")[0].width;
                             var minZoomPreview = this.value / imagePreviewHeight;
                             $cropitElement.cropit('previewSize', { width: imagePreviewWidth * minZoomPreview, height: this.value  });
                         }    
                         
                         // Update height label text
                         if( $cropitElement.find("#adjustable-height-value").length ){
-                            $cropitElement.find("#adjustable-height-value").text(this.value);
+                            $cropitElement.find("#adjustable-height-value").text(Math.round(this.value));
                         }
 
                         settings.onSlideStop(event);
@@ -437,6 +439,10 @@ function masterImageEditorv2( customOptions ){
         // Calculate max image height to avoid the image to grow in width more than modal limits.
         var imageDimension = imageManager.getNaturalDimensions($cropitElement.cropit('imageSrc'));
         var maxHeight = ($cropitElement.width() * imageDimension.height) / imageDimension.width;
+        var minHeight = (maxHeight * 20 ) / 100;
+        if( minHeight > 20 ){
+            minHeight = 20;
+        }
 
         if( currentVal > maxHeight ){
             currentVal = maxHeight;
@@ -444,6 +450,7 @@ function masterImageEditorv2( customOptions ){
         // Build params object
         var params = {
             max: maxHeight,
+            min: minHeight,
             original_options_width: original_options_width,
             currentVal: currentVal,
             onSlideStop: function(){
