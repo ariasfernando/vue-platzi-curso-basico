@@ -115,7 +115,7 @@ ConfigModals.single_image_editor = function( params ){
                         masterImageEditorObj.setNewImage();
                         // Display image in cropit preview.
                         masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', Application.globals.baseUrl + imageData.src );
-                        masterImageEditorObj.getModalContent().find(".cropit-preview-image").on("load",function(){
+                        masterImageEditorObj.getModalContent().find(".cropit-preview-image").one("load",function(){
                             // Reset cropit position and zoom
                             masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom',0);
                             Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
