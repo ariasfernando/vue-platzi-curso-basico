@@ -75,6 +75,11 @@ ConfigModals.image_modal_no_crop = function( params ){
             .attr("title", imageData.alt);
         // Update link
         $targetElement.attr("href",imageData.destination_url)
+
+        // Remove error class
+        if( $targetElement.hasClass("default-image-error") ){
+            $targetElement.removeClass('default-image-error');
+        }
     };
 
     /*

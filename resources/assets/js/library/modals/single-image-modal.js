@@ -178,6 +178,11 @@ ConfigModals.single_image_editor = function( params ){
                 .attr("width",imageData.background_width)
                 .width(imageData.background_width);
         }
+
+        // Remove error class
+        if( $targetElement.hasClass("default-image-error") ){
+            $targetElement.removeClass('default-image-error');
+        }
     };
 
     /*

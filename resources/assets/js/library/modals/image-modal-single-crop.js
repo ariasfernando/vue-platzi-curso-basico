@@ -257,6 +257,11 @@ ConfigModals.image_modal_single_crop = function( params ){
             // Close Popup
             configModal.close();
         });
+
+        // Remove error class
+        if( $targetElement.hasClass("default-image-error") ){
+            $targetElement.removeClass('default-image-error');
+        }
     };
 
     this.applyUpdates = function(){
