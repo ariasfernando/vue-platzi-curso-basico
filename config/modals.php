@@ -48,7 +48,10 @@ $default = [
             "width" => 526
         ],
         "title" => "Hero image proportional editor",
-        "enabled_options" => "destination_url alt_text image_upload adjustable_width image_crop"
+        "enabled_options" => "destination_url alt_text image_upload adjustable_width image_crop",
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
+        ]
     ]),
 
     "mie_v2_default_adjustable_height" => array_merge($single_image_editor,[
@@ -57,7 +60,10 @@ $default = [
             "width" => "auto"
         ],
         "title" => "Hero image - Adjustable height",
-        "enabled_options" => "destination_url alt_text image_upload adjustable_height image_crop"
+        "enabled_options" => "destination_url alt_text image_upload adjustable_height image_crop",
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
+        ]
     ]),
 
     /* -- Hero Image: Full image editor -- */
@@ -215,6 +221,9 @@ $default = [
         "image_size" => [
             "height" => 400,
             "width" => 660
+        ],
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
         ]
     ],
     "mie_v2_single_crop" => [
@@ -227,6 +236,9 @@ $default = [
         "image_size" => [
             "height" => 400,
             "width" => 660
+        ],
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
         ]
     ],
     "mie_v2_library" => [
@@ -241,6 +253,9 @@ $default = [
         "image_size" => [
             "height" => 400,
             "width" => 660
+        ],
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
         ]
     ]
 ];

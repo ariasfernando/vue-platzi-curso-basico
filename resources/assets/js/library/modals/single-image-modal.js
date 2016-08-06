@@ -134,11 +134,16 @@ ConfigModals.single_image_editor = function( params ){
 
     // Open config modal
     this.open = function(){
-        configModal = new modalManager({
-            view: options.view,
-            app_name: options.app_name,
-            enabled_options: options.enabled_options
+        var modalOptions = {};
+        var excludeOptions = ['target','config_modal_key'];
+
+        $.each(options,function(key,value){
+            if( excludeOptions.indexOf(key) < 0 ){
+                modalOptions[key] = value;
+            }
         });
+
+        configModal = new modalManager(modalOptions);
 
         configModal.open({
             ajaxContentAdded: function(){

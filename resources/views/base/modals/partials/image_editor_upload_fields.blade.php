@@ -1,4 +1,11 @@
 {{-- File upload tabs --}}
+<?php
+	$uploadFileLabel = 'Maximum allowed size: 2mb. Allowed file types: png, jpg and gif.';
+
+	if(isset($params["labels"]) && isset($params["labels"]["file_upload"])){
+		$uploadFileLabel = $params["labels"]["file_upload"];
+	}
+?>
 
 @if ( (isset($params["image_upload"]) && $params["image_upload"] == "enabled") || (isset($params["og_image"]) && $params["og_image"] == "enabled") )
 	<div>
@@ -29,7 +36,7 @@
 		{{-- File Upload --}}
 		@if ( isset($params["image_upload"]) && $params["image_upload"] == "enabled" )
 			<div class="tab-pane active modal-mpf-row file-tab-section section-upload-file" role="tabpanel" id="file-upload-box">
-				{!! Form::label('file-image-upload', 'Maximum allowed size: 2mb. Allowed file types: png, jpg and gif.') !!}
+				{!! Form::label('file-image-upload', $uploadFileLabel ) !!}
 				{!! Form::file(
 					'file-image-upload',
 					array (
