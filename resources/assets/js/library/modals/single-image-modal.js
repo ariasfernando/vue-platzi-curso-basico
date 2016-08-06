@@ -242,7 +242,8 @@ ConfigModals.single_image_editor = function( params ){
                     $targetElement.parents("tr[data-params]").removeClass("st-validation-error");
                 }
             },{
-                originalSize: true
+                originalSize: true,
+                type: imageManager.getImageType($cropitElement.cropit("imageSrc"))
             });
         }else{
             masterImageEditorObj.hideImageLoading();
