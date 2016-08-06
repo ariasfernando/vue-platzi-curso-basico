@@ -21,6 +21,25 @@ ConfigModals.single_image_editor = function( params ){
     var imageKey = false;
     var _this = this;
 
+    var messages = {
+        animatedGif: "Animated GIFs are not supported.",
+        missingKey: "An error occurred while trying to init the configuration modal, missing data-key attr.",
+        missingLibraryName: "An error occurred while trying to init image library, missing folder name.",
+        sharedHeight: "The height of the image was modified, you should crop the other image too."
+    };
+
+    // Get file extension.
+    this.getFileExtension = function(){
+        var imageExtension = "";
+        if( $modalContent.find('input.cropit-image-input')[0].files.length ){
+            imageExtension = $modalContent.find('input.cropit-image-input')[0].files[0].type;
+        }else{
+            var backgroundImageArr = $cropitElement.cropit("imageSrc");
+            imageExtension = imageManager.getImageType(backgroundImageArr);
+        }
+        return imageExtension;
+    };
+
     /*
      * -- Init config modal --
      */
@@ -28,7 +47,7 @@ ConfigModals.single_image_editor = function( params ){
         // Get image key
         imageKey = $(options.target).data("key");
         if( !imageKey ){
-            Application.utils.alert.display("Warning:", "An error occurred while trying to init the configuration modal, missing data-key attr.", "warning");
+            Application.utils.alert.display("Warning:", messages.missingKey, "warning");
             return false;
         }
 
@@ -75,6 +94,17 @@ ConfigModals.single_image_editor = function( params ){
             maxZoom : (options.scale_ratio)? options.scale_ratio * 2: 2,
 
             onImageLoaded: function(){
+                console.log(_this.getFileExtension());
+                if( _this.getFileExtension() == "image/gif"
+                    || this.$fileInput[0].files
+                    && this.$fileInput[0].files.length
+                    && this.$fileInput[0].files[0].type == "image/gif" ){
+                    masterImageEditorObj.displayMessage(
+                        messages.animatedGif,
+                        'warning'
+                    );
+                }
+
                 var currentWidthVal = (options.image_size.width != 'auto')? options.image_size.width : 560;
                 var currentHeightVal = (options.image_size.height != 'auto')? options.image_size.height : 350;
 
@@ -104,7 +134,7 @@ ConfigModals.single_image_editor = function( params ){
         // Init image library.
         if( options.enabled_options.indexOf("image_library") != -1 ){
             if(!options.library_folder){
-                Application.utils.alert.display("Warning:", "An error occurred while trying to init image library, missing folder name.", "warning");
+                Application.utils.alert.display("Warning:", messages.missingLibraryName, "warning");
             }
             if(masterImageEditorObj.imageLibrary && options.library_folder){
                 masterImageEditorObj.imageLibrary.init({
@@ -159,7 +189,7 @@ ConfigModals.single_image_editor = function( params ){
         // Create confirm modal.
         var confirmModal = new Application.utils.confirm({
             // Message to display
-            message: "The height of the image was modified, you should crop the other image too.",
+            message: messages.sharedHeight,
             // Function to execute when confirm is true.
             onSubmit: function(){
                 $(targetElement).click();
