@@ -50,11 +50,11 @@ ConfigModals.image_modal_no_crop = function( params ){
         if( typeof spotSize != "undefined" && typeof spotSize.width == "number" ){
             // Check gif image dimension
             if( imageType == "image/gif" && tempImage.width != spotSize.width ){
-                masterImageEditorObj.displayMessage(messages.wrongImageSize + spotSize.width + "px.");
+                masterImageEditorObj.displayMessage(messages.wrongImageSize + spotSize.width + "px.", "danger");
                 validation = false
             // Check image dimension
             }else if( $image.outerWidth() < spotSize.width ){
-                masterImageEditorObj.displayMessage(messages.wrongImageSize + spotSize.width + "px.");
+                masterImageEditorObj.displayMessage(messages.wrongImageSize + spotSize.width + "px.", "danger");
                 validation = false;
             }
         }else{
