@@ -47,7 +47,7 @@ $default = [
             "height" => 'auto',
             "width" => 526
         ],
-        "title" => "Hero image proportional editor",
+        "title" => "Adjustable Width",
         "enabled_options" => "destination_url alt_text image_upload adjustable_width image_crop",
         "labels" => [
             "file_upload" => "Allowed file types: png, jpg and gif."
@@ -59,7 +59,7 @@ $default = [
             "height" => 250,
             "width" => "auto"
         ],
-        "title" => "Hero image - Adjustable height",
+        "title" => "Adjustable Height",
         "enabled_options" => "destination_url alt_text image_upload adjustable_height image_crop",
         "labels" => [
             "file_upload" => "Allowed file types: png, jpg and gif."
@@ -210,7 +210,7 @@ $default = [
     ],
     // == Master image editor v2 modals ==
     "mie_v2_default_no_crop" => [
-        "title" => "Header image editor",
+        "title" => "Hero Image - no crop",
         "app_name" => "base",
         "view" => "single_image_editor",
         "config_modal_key" => "image_modal_no_crop",
@@ -227,7 +227,7 @@ $default = [
         ]
     ],
     "mie_v2_single_crop" => [
-        "title" => "Header image editor",
+        "title" => "Hero Image - single crop",
         "app_name" => "base",
         "view" => "single_image_editor",
         "config_modal_key" => "image_modal_single_crop",
@@ -242,7 +242,7 @@ $default = [
         ]
     ],
     "mie_v2_library" => [
-        "title" => "Hero image editor",
+        "title" => "Image Library",
         "app_name" => "base",
         "view" => "single_image_editor",
         "config_modal_key" => "image_modal_single_crop",
