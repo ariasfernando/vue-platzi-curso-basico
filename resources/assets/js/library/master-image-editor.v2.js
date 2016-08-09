@@ -665,6 +665,10 @@ function masterImageEditorv2( customOptions ){
             return false;
         }
 
+        if( _this.imageData && _this.imageData.background_image ){
+            _this.showImageLoading();
+        }
+
         // Init each Cropit
         _this.initCropitElement($cropitElement,cropitOptions);
         cropitElements.push($cropitElement[0]);
