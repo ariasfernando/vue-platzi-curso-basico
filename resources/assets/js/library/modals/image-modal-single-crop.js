@@ -22,7 +22,7 @@ ConfigModals.image_modal_single_crop = function( params ){
     var _this = this;
 
     var messages = {
-        wrongImageSize: "This source image does not have the proper dimensions or size ratio for this image spot. The recommended image width size is: ",
+        wrongImageSize: "This source image does not have the proper dimensions or size ratio for this image spot.",
         savingError: "An error ocurred trying to save the image, please try later.",
         missingKey: "An error occurred while trying to init the configuration modal, missing data-key attr."
     };
