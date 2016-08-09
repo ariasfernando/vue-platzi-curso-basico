@@ -354,12 +354,12 @@ function masterImageEditorv2( customOptions ){
                 // If max attr is defined
                 && typeof $cropitElement.find(".cropit-image-height-input").attr("max") != "undefined"
                 // If imagePreviewHeight > max height
-                && imagePreviewHeight > parseInt($cropitElement.find(".cropit-image-height-input").attr("max"))){
+                && imagePreviewHeight > parseFloat($cropitElement.find(".cropit-image-height-input").attr("max"))){
                 // Set height as max height.
-                imagePreviewHeight = parseInt($cropitElement.find(".cropit-image-height-input").attr("max"));
+                imagePreviewHeight = parseFloat($cropitElement.find(".cropit-image-height-input").attr("max"));
             }
             imagePreviewWidth = (imagePreviewHeight * imageOriginalWidth) / imageOriginalHeight;
-            minZoomPreview = options.imageSize.height / imageOriginalHeight;
+            minZoomPreview = imagePreviewHeight / imageOriginalHeight;
         }
         
         if (options.imageSize.height == 'auto'){

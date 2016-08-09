@@ -94,7 +94,6 @@ ConfigModals.single_image_editor = function( params ){
             maxZoom : (options.scale_ratio)? options.scale_ratio * 2: 2,
 
             onImageLoaded: function(){
-                console.log(_this.getFileExtension());
                 if( _this.getFileExtension() == "image/gif"
                     || this.$fileInput[0].files
                     && this.$fileInput[0].files.length
