@@ -147,9 +147,9 @@ ConfigModals.image_modal_single_crop = function( params ){
                                     cropitObj.$preview.find(".animated-gif").attr("src",$cropitElement.cropit("imageSrc"));
                                 }
 
-                                // Default on image load to display preview if it's hidden.
-                                masterImageEditorObj.cropitOnImageLoaded(cropitObj, $cropitElement);
                             }
+                            // Default on image load to display preview if it's hidden.
+                            masterImageEditorObj.cropitOnImageLoaded(cropitObj, $cropitElement);
 
                             // Hide loading.
                             masterImageEditorObj.hideImageLoading();
@@ -161,6 +161,9 @@ ConfigModals.image_modal_single_crop = function( params ){
                                 messages.imageLoadingError,
                                 'danger'
                             );
+
+                            // Default on image load to display preview if it's hidden.
+                            masterImageEditorObj.cropitOnImageLoaded(cropitObj, $cropitElement);
                             return false;
                         });
                 /*
