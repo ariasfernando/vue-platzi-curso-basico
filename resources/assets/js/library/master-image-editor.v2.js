@@ -699,8 +699,8 @@ function masterImageEditorv2( customOptions ){
             background_position: $cropitElement.cropit('offset'),
             cropit_min_zoom: $cropitElement.cropit('minZoom'),
             background_zoom: $cropitElement.cropit('zoom'),
-            background_height: _this.getPreviewElement().height(),
-            background_width: _this.getPreviewElement().width()
+            background_height: $cropitElement.cropit("previewSize").height,
+            background_width: $cropitElement.cropit("previewSize").width
         };
 
         $.each(cropitData, function( key, value){
