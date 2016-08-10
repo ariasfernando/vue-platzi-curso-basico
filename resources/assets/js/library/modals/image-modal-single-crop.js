@@ -110,77 +110,70 @@ ConfigModals.image_modal_single_crop = function( params ){
             exportZoom: (options.scale_ratio)? options.scale_ratio: 1,
             maxZoom : (options.scale_ratio)? options.scale_ratio * 2: 2,
             onImageLoaded: function(){
-                masterImageEditorObj.removeMesage();
+                masterImageEditorObj.removeMessage();
+                // Validate image size
+                var cropitObj = this;
+                var tempImage = new Image();
+                tempImage.src = $cropitElement.cropit("imageSrc");
 
-                /*
-                 * If it's a gif image, we hide cropit preview and show gif as an image element.
-                 */
-                if( _this.getFileExtension() == "image/gif"
-                    || this.$fileInput[0].files
-                    && this.$fileInput[0].files.length
-                    && this.$fileInput[0].files[0].type == "image/gif" ){
-
-                    // Validate image size
-                    var cropitObj = this;
-                    var tempImage = new Image();
-                    tempImage.src = $cropitElement.cropit("imageSrc");
-
-                    $(tempImage)
-                        // On image load
-                        .on("load",function(){
-                            if(!_this.validateImageSize(tempImage)){
-                                if( cropitObj.$preview.find(".animated-gif").length ){
-                                    cropitObj.$preview.find(".animated-gif").remove();
-                                    cropitObj.$preview.removeClass("loading-gif");
-                                }
-                                // If wrong size display error
-                                masterImageEditorObj.displayMessage(
-                                    messages.wrongImageSize,
-                                    'danger'
-                                );
-                            }else{
-                                // If correct size disable cropit and preview gif image.
-                                $cropitElement.cropit("disable");
-                                if( !cropitObj.$preview.find(".animated-gif").length ){
-                                    masterImageEditorObj.buildGifPreview($cropitElement,cropitObj);
-                                }else{
-                                    cropitObj.$preview.find(".animated-gif").attr("src",$cropitElement.cropit("imageSrc"));
-                                }
-
+                // On image load
+                $(tempImage).off("load").on("load",function(){
+                    /*
+                     * If it's a gif image, we hide cropit preview and show gif as an image element.
+                     */
+                    if( imageManager.getImageType(tempImage.src) == "image/gif" ){
+                        if(!_this.validateImageSize(tempImage)){
+                            if( cropitObj.$preview.find(".animated-gif").length ){
+                                cropitObj.$preview.find(".animated-gif").remove();
+                                cropitObj.$preview.removeClass("loading-gif");
                             }
-                            // Default on image load to display preview if it's hidden.
-                            masterImageEditorObj.cropitOnImageLoaded(cropitObj, $cropitElement);
-
-                            // Hide loading.
-                            masterImageEditorObj.hideImageLoading();
-                        // On image error
-                        }).on("error",function(){
-                            // Hide preview & display message.
-                            cropitObj.$preview.parent().hide();
+                            // If wrong size display error
                             masterImageEditorObj.displayMessage(
-                                messages.imageLoadingError,
+                                messages.wrongImageSize,
                                 'danger'
                             );
+                        }else{
+                            // If correct size disable cropit and preview gif image.
+                            $cropitElement.cropit("disable");
+                            if( !cropitObj.$preview.find(".animated-gif").length ){
+                                masterImageEditorObj.buildGifPreview($cropitElement,cropitObj);
+                            }else{
+                                cropitObj.$preview.find(".animated-gif").attr("src",$cropitElement.cropit("imageSrc"));
+                            }
 
-                            // Default on image load to display preview if it's hidden.
-                            masterImageEditorObj.cropitOnImageLoaded(cropitObj, $cropitElement);
-                            return false;
-                        });
-                /*
-                 * Else init cropit previe
-                 */
-                }else{
-                    // Remove animated gif
-                    if( this.$preview.find(".animated-gif").length ){
-                        this.$preview.find(".animated-gif").remove();
-                        this.$preview.removeClass("loading-gif");
+                        }
+                        // Default on image load to display preview if it's hidden.
+                        masterImageEditorObj.cropitOnImageLoaded(cropitObj, $cropitElement);
+
+                        // Hide loading.
+                        masterImageEditorObj.hideImageLoading();
+                    /*
+                     * Else init cropit previe
+                     */
+                    }else{
+                        // Remove animated gif
+                        if( cropitObj.$preview.find(".animated-gif").length ){
+                            cropitObj.$preview.find(".animated-gif").remove();
+                            cropitObj.$preview.removeClass("loading-gif");
+                        }
+
+                        // Init zoom
+                        masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), cropitObj);
+                        // Default cropit onload: display preview and hide spinner
+                        masterImageEditorObj.cropitOnImageLoaded(cropitObj, $cropitElement);
                     }
+                }).on("error",function(){
+                    // Hide preview & display message.
+                    cropitObj.$preview.parent().hide();
+                    masterImageEditorObj.displayMessage(
+                        messages.imageLoadingError,
+                        'danger'
+                    );
 
-                    // Init zoom
-                    masterImageEditorObj.initCropitZoom($modalContent.find(".init-cropper:visible:eq(0)"), this);
-                    // Default cropit onload: display preview and hide spinner
-                    masterImageEditorObj.cropitOnImageLoaded(this, $cropitElement);
-                }
+                    // Default on image load to display preview if it's hidden.
+                    masterImageEditorObj.cropitOnImageLoaded(cropitObj, $cropitElement);
+                    return false;
+                });
 
                 // Init Text overlay
                 if( enabledOptionsArr.indexOf("text_overlay") >= 0 ){
@@ -209,6 +202,7 @@ ConfigModals.image_modal_single_crop = function( params ){
                         // Display image in cropit preview.
                         masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', Application.globals.baseUrl + imageData.src );
                         masterImageEditorObj.getModalContent().find(".cropit-preview-image").one("load",function(){
+                            masterImageEditorObj.removeMessage();
                             // Reset cropit position and zoom
                             masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom',0);
                             Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
