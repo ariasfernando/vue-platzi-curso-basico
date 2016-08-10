@@ -198,7 +198,10 @@ ConfigModals.image_modal_single_crop = function( params ){
                     folder: options.library_folder,
                     // On image library submit
                     onSubmit: function(imageData){
+                        // Set as a new image
                         masterImageEditorObj.setNewImage();
+                        // Clean file input value
+                        masterImageEditorObj.getFileInput().val("");
                         // Display image in cropit preview.
                         masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', Application.globals.baseUrl + imageData.src );
                         masterImageEditorObj.getModalContent().find(".cropit-preview-image").one("load",function(){

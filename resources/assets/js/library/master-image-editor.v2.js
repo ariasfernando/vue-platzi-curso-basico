@@ -72,6 +72,9 @@ function masterImageEditorv2( customOptions ){
     this.getPreviewElement = function(){
         return _this.getModalContent().find(options.imagePreviewSelector);
     }
+    this.getFileInput = function(){
+        return options.$fileInputUpload;
+    }
     this.isNewImage = function(){
         return _this.getPreviewElement().data("new-image") === "true";
     }
