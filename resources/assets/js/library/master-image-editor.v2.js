@@ -32,7 +32,7 @@ function masterImageEditorv2( customOptions ){
         return $("#"+$modalContent.attr("id"));
     };
     // Remove message
-    this.removeMesage = function(){
+    this.removeMessage = function(){
         $modalContent.find(".preview-box .upload-warning").remove();
     };
     // Display Message
