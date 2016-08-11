@@ -73,7 +73,7 @@ function masterImageEditorv2( customOptions ){
         return _this.getModalContent().find(options.imagePreviewSelector);
     }
     this.getFileInput = function(){
-        return options.$fileInputUpload;
+        return _this.getModalContent().find("#" + options.$fileInputUpload.attr("id") );
     }
     this.isNewImage = function(){
         return _this.getPreviewElement().data("new-image") === "true";
