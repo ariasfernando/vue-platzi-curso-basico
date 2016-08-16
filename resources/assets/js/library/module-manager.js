@@ -20,11 +20,11 @@ var moduleManager = {
 
 	// Template of the action tooltip.
 	// We append this buttons into the module on mouseenter/mouseleave.
-	actionsButtonsTpl: '<div class="actions-buttons-tooltip">'+
-							'<a href="#" class="action-sortable"><i class="glyphicon glyphicon-resize-vertical"></i></a>'+
-							'<a href="#" class="action-config"><i class="glyphicon glyphicon-cog"></i></a>'+
+    actionsButtonsTpl: '<div class="actions-buttons-tooltip">' +
+    '<a href="#" class="action-sortable"><i class="glyphicon glyphicon-resize-vertical"></i></a>' +
+    '<a href="#" class="action-config"><i class="glyphicon glyphicon-cog"></i></a>' +
 							'<a href="#" class="action-duplicate"><i class="glyphicon glyphicon-duplicate"></i></a>'+
-							'<a href="#" class="action-remove"><i class="glyphicon glyphicon-remove-sign"></i></a>'+
+    '<a href="#" class="action-remove"><i class="glyphicon glyphicon-remove-sign"></i></a>' +
 						'</div>',
 
 	// The internal name of the modal. Used to get the modal by ajax.
@@ -526,6 +526,17 @@ var moduleManager = {
 			var $module = $(module);
 			var moduleParams = $module.data("params");
 			
+            // Init module actions
+            if( !moduleParams.initialized ){
+                var dataParams = $module.data("params");
+                if( dataParams.type && ModuleActions && ModuleActions[dataParams.type] ){
+                    var actions = new ModuleActions[dataParams.type]();
+                    if( typeof actions.init == "function" ){
+                        actions.init($module);
+                    }
+                }
+            }
+
             if (moduleParams.plugins && !moduleParams.initialized) {
 				
                 $.each(moduleParams.plugins, function (plugin, pluginConfig) {
@@ -562,6 +573,25 @@ var moduleManager = {
 		}
 	},
 
+    getModuleData: function( $module, dataKey ){
+        if( !$module ){
+            return false;
+        }
+
+        var data = {};
+        var dataParams = $module.data("params") || $module.parents("[data-params]").data("params");
+
+        if( dataKey ){
+            if( dataParams.data[dataKey] ){
+                data = dataParams.data[dataKey];
+            }
+        }else{
+            data = dataParams.data;
+        }
+
+        return data;
+    },
+
 	/*
 	 *	Save in module data.
 	 *	@param $module ( jQuery element )
@@ -571,6 +601,7 @@ var moduleManager = {
         if (!key || !$module) {
 			return false;
 		}
+
 
 		// Get module params
 		var dataParams = $module.data("params");
@@ -655,29 +686,48 @@ var moduleManager = {
 				module.duplicateModule(moduleToDuplicate.type, moduleToDuplicate.file_parent, moduleToDuplicate.data);
 				return false;
 			})
-			// Action Config
+            // Action Config
             .on("click", '.action-config', function () {
-				var $moduleElement = $(this).parents("[data-params]")
+                var $moduleElement = $(this).parents("[data-params]")
 
-				// Set config modal default or from data-params
-				var modalName = $moduleElement.data("params").type  + "_config";
+                // Set config modal default or from data-params
+                var modalName = $moduleElement.data("params").type  + "_config";
                 if ($moduleElement.data('params').config_modal && $moduleElement.data('params').config_modal != "") {
-					modalName = $moduleElement.data('params').config_modal;
-				}
+                    modalName = $moduleElement.data('params').config_modal;
+                }
 
-				var appName = $moduleElement.data("params").app_name || $moduleElement.data("params").file_parent;
-				//Call function configModal
-				module.configModal({
-					appName: appName,
-					view: modalName,
-					type: $moduleElement.data("params").type
-				});
+                var appName = $moduleElement.data("params").app_name || $moduleElement.data("params").file_parent;
 
-				//Set target in modalTarget  
-				module.modalTarget = $moduleElement;
+                // configModal
+                var configModal = new modalManager({
+                    app_name: appName,
+                    view: modalName,
+                    config_modal_key: $moduleElement.data("params").type
+                });
+                configModal.modalTarget = $moduleElement;;
+                configModal.open();
 
-				return false;
-			})
+                return false;
+            })
+
+            // Open config element
+            .on("click", "[data-open-element-config]", function () {
+                // Get modal config from data attr
+                var modalConfig = {};
+                if ($(this).data("open-element-config") != "") {
+                    modalConfig = module.modalConfig[$(this).data("open-element-config")];
+                }else{
+                    return false;
+                }
+
+                if( modalConfig.config_modal_key && ConfigModals && ConfigModals[modalConfig.config_modal_key] ){
+                    modalConfig.target = this;
+                    var configurationModalObj = ConfigModals[ modalConfig.config_modal_key ](modalConfig);
+                    configurationModalObj.open();
+                }
+
+                return false;
+            })
 			// Call function configModal to open modal
             .on("click", "[data-master-image-editor]", function () {
 				//Set target in modalTarget
@@ -844,5 +894,13 @@ var moduleManager = {
 
 		// Set true to prevent set this events again.
 		this.eventsSet = true;
+	},
+
+	getModuleParent: function($element){
+		if( $element.data("params") ){
+			return $element;
+		}else{
+			return $element.parents("[data-params]");
+		}
 	}
 };

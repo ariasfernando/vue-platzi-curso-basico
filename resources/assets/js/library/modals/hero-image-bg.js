@@ -112,7 +112,7 @@ ConfigModals.hero_image_bg = function( params ){
      */
     this.init = function(){
         // Set placeholder width and height
-        $( options.modalSelector ).find(".cropit-image-preview")
+        $( options.modalSelector ).find(".cropit-preview")
             .width( options.placeHolderSize.width )
             .height( options.placeHolderSize.height );
 
@@ -124,6 +124,7 @@ ConfigModals.hero_image_bg = function( params ){
 
         // Load button link.
         if( options.moduleData.data.button0 && options.moduleData.data.button0.link ){
+            newImage = false;
             $( options.modalSelector ).find("input[name=button-link-url]").val(options.moduleData.data.button0.link);
         }
 
@@ -133,18 +134,30 @@ ConfigModals.hero_image_bg = function( params ){
         // Set cropit options
         var cropitOptions = {
             $fileInput :  $( options.modalSelector ).find('input.cropit-image-input'),
+            smallImage : 'stretch',
+
+            onFileChange: function(){
+                newImage = true;
+                this.$preview.removeClass('outline-class');
+                this.$preview.parent().hide();
+            },
+
             // Show preview on image load.
             onImageLoaded: function(){
+
                 var $previewContainer = this.$preview;
                 var currentZoom = 0;
                 var currentZoomVal = 0;
                 var isZoomable = $cropitElement.cropit( 'isZoomable' );
-                var minZoom = $cropitElement.cropit( 'zoom');
-                var newImage = !( (Application.globals.campaignImageUrl + imageData.original_image) == $cropitElement.cropit('imageSrc') );
 
                 // Set zoom
                 if( !newImage && isZoomable && imageData.background_zoom){
-                    $cropitElement.cropit( 'zoom', imageData.background_zoom );
+                    $cropitElement.cropit( 'zoom', Number(imageData.background_zoom));
+                    if(!isZoomable){
+                        $cropitElement.find('cropit-image-zoom-input').attr('disabled','disabled');
+                    }else{
+                        $cropitElement.find('cropit-image-zoom-input').removeAttr('disabled');
+                    }
                     currentZoomVal = imageData.background_zoom;
                 }
 
@@ -155,26 +168,15 @@ ConfigModals.hero_image_bg = function( params ){
                     $cropitElement.cropit('offset', imageData.background_position);
                 }
 
-                // Init Zoom
-                $cropitElement.find(".canvas-zoom-sel").slider({
-                    max: 1,
-                    min: minZoom,
-                    disabled: !isZoomable,
-                    step: ((1 - currentZoom) / 100),
-                    value: currentZoomVal,
-                    slide: function(event, ui) {
-                        var _zoom = ui.value;
-                        $cropitElement.cropit('zoom', _zoom);
-                    }
-                });
-
                 // Show preview box after 1 second.
                 if( $previewContainer && $previewContainer.not(":visible") ){
                     setTimeout(function(){
                         // Remove spinner
                         _this.hideImageLoading();
                         // Show image preview box
-                        $previewContainer.parent().slideDown();
+                        $previewContainer.parent().slideDown( function() {
+                            $previewContainer.addClass('outline-class'); 
+                        });
                     }, 1000);
                 }else if( $previewContainer.find('.spinner-loading:visible').length ){
                     _this.hideImageLoading();
@@ -194,7 +196,7 @@ ConfigModals.hero_image_bg = function( params ){
 
         // Set click on submit button
         $( options.modalSelector ).on("click", ".submit-config", function(){
-            _this.onSubmit();
+            _this.onSubmit(newImage);
             return false;
         });
     };
@@ -274,7 +276,7 @@ ConfigModals.hero_image_bg = function( params ){
     /*
      * Submit changes
      */
-    this.onSubmit = function(){
+    this.onSubmit = function( newImage ){
         if( !moduleManager ){
             return false;
         }
@@ -299,14 +301,14 @@ ConfigModals.hero_image_bg = function( params ){
 
             var doBackgroundUpload = true;
             if( imageData ){
-                doBackgroundUpload = !( (Application.globals.campaignImageUrl + imageData.original_image) == $cropitElement.cropit('imageSrc') );
+                doBackgroundUpload = newImage;
             }
 
             if(doBackgroundUpload){
                 // Save original image
                 imageManager.uploadImage(
                     {
-                        data_image: $( options.modalSelector ).find('#image-cropper .cropit-image-preview').css('background-image').replace('url(','').replace(')',''),
+                        data_image: $( options.modalSelector ).find('#image-cropper .cropit-preview-image').attr('src'),
                         campaign_id: campaignId
                     },
                     function( response ){
