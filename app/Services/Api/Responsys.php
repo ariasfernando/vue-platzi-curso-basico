@@ -2,9 +2,12 @@
 
 namespace Stensul\Services\Api;
 
+use Auth;
+use Activity;
+use Stensul\Models\Upload;
 use GuzzleHttp\Client as Client;
 
-class Responsys
+class Responsys implements ApiConnector
 {
     /**
      * Make a call to Responsys api.
@@ -63,5 +66,79 @@ class Responsys
             ];
         }
         return is_callable($callback) ? $callback($resp) : $resp;
+    }
+
+    /**
+     * Upload email
+     *
+     * @param Object $campaign
+     *
+     * @return array $response
+     */
+    public function uploadEmail($campaign = null, $request = null)
+    {
+
+        if (!is_null($campaign)) {
+            $original_filename = (is_null($request) || !isset($request['filename']))? $campaign->campaign_name : $request['filename'];
+            if (strlen($original_filename)) {
+                $campaign_id = $request['campaign_id'];
+                $filename = Upload::versioningFilename($original_filename);
+                $auth = $this->call('auth');
+                if (isset($auth['data']['endPoint']) && isset($auth['data']['authToken'])) {
+                    $path = \Config::get('api.responsys.default_path');
+                    $resp = $this->call(
+                        'create_doc',
+                        [
+                            'config' => [
+                                'base_uri' => $auth['data']['endPoint']
+                            ],
+                            'options' => [
+                                'headers' => [
+                                    'Authorization' => $auth['data']['authToken']
+                                ],
+                                'json' => [
+                                    "documentPath" => $path . $filename,
+                                    "content" => $campaign->body_html
+                                ]
+                            ]
+                        ]
+                    );
+                    if ($resp['status'] == 'success') {
+                        Activity::log(
+                            'Campaign uploaded to Responsys',
+                            [
+                                'properties' => [
+                                    'campaign_id' => new \MongoId($campaign_id),
+                                    'filename' => $filename,
+                                    'user_id' => new \MongoId(Auth::id())
+                                ]
+                            ]
+                        );
+
+                        Upload::create(
+                            [
+                                'api' => 'responsys',
+                                'campaign_id' => new \MongoId($campaign_id),
+                                'original_filename' => $original_filename,
+                                'filename' => $filename,
+                                'path' => $path,
+                                'user_id' => new \MongoId(Auth::id())
+                            ]
+                        );
+
+                        return [
+                            'status' => 'success'
+                        ];
+
+                    } else {
+                        throw new \Exception("Unable to confirm Responsys received the file.");
+                    }
+                } else {
+                    throw new \Exception("Unable to connect to Responsys.");
+                }
+            }
+        } else {
+            throw new \Exception("campaign_missing");
+        }
     }
 }
