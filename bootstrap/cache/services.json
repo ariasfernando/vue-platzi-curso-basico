@@ -37,7 +37,7 @@
         "Fideloper\\Proxy\\TrustedProxyServiceProvider",
         "Laravel\\Socialite\\SocialiteServiceProvider",
         "Folklore\\Image\\ImageServiceProvider",
-        "Stensul\\Providers\\ChallengeServiceProvider"
+        "Stensul\\Providers\\ChallengeServiceProvider",
         "Stensul\\Providers\\ApiServiceProvider"
     ],
     "eager": [
@@ -62,8 +62,7 @@
         "Stensul\\Providers\\MongodbServiceProvider",
         "Stensul\\Providers\\CdnServiceProvider",
         "Fideloper\\Proxy\\TrustedProxyServiceProvider",
-        "Folklore\\Image\\ImageServiceProvider",
-        "Stensul\\Providers\\ChallengeServiceProvider"
+        "Folklore\\Image\\ImageServiceProvider"
     ],
     "deferred": {
         "command.app.name": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
@@ -166,6 +165,7 @@
         "Illuminate\\Html\\HtmlServiceProvider": [],
         "Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider": [],
         "Laravel\\Socialite\\SocialiteServiceProvider": [],
+        "Stensul\\Providers\\ChallengeServiceProvider": [],
         "Stensul\\Providers\\ApiServiceProvider": []
     }
 }

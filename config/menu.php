@@ -42,7 +42,7 @@ $default = [
             'module_id' => 'hero_image',
             'level' => 'single'
         ],
-
+        
         'hero_image_bg' => [
             'title' => 'Hero Image Background',
             'action' => 'add',
@@ -66,7 +66,48 @@ $default = [
             'module_id' => 'hero_image_bg',
             'level' => 'single'
         ],
-
+        'hero_v2_group' => [
+            'title' => 'Image Editor v2',
+            'action' => 'expand',
+            'level' => 'level-1',
+            'sub_menu' => [
+                'hero_image_v2_no_crop' => [
+                    'title' => 'Hero Image - no crop',
+                    'action' => 'add',
+                    'app_name' => 'base',
+                    'module_id' => 'hero_image_v2_no_crop',
+                    'level' => 'single'
+                ],
+                'hero_image_v2_single_crop' => [
+                    'title' => 'Hero Image - single crop',
+                    'action' => 'add',
+                    'app_name' => 'base',
+                    'module_id' => 'hero_image_v2_single_crop',
+                    'level' => 'single'
+                ],
+                'hero_image_v2_height_proportional' => [
+                    'title' => 'Adjustable Width',
+                    'action' => 'add',
+                    'app_name' => 'base',
+                    'module_id' => 'hero_image_v2_height_proportional',
+                    'level' => 'single'
+                ],
+                'mie_v2_default_adjustable_height' => [
+                    'title' => 'Adjustable Height',
+                    'action' => 'add',
+                    'app_name' => 'base',
+                    'module_id' => 'mie_v2_default_adjustable_height',
+                    'level' => 'single'
+                ],
+                'hero_image_mie_v2_library' => [
+                    'title' => 'Image Library',
+                    'action' => 'add',
+                    'app_name' => 'base',
+                    'module_id' => 'hero_image_mie_v2_library',
+                    'level' => 'single'
+                ]
+            ]
+        ],
         'spacer' => [
             'title' => 'Configurable spacer',
             'action' => 'add',
@@ -195,7 +236,21 @@ $default = [
             'module_id' => 'two_columns',
             'level' => 'single',
         ],
-        
+        'text_with_image' => [
+            'title' => 'Text + CTA Button + Image',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'text_with_image',
+            'level' => 'single'
+        ],
+
+        'two_column_media_shared_height' => [
+            'title' => 'Two Columns Shared Height',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'two_column_media_shared_height',
+            'level' => 'single'
+        ]
     ]
 ];
 

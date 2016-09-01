@@ -35,16 +35,22 @@
         <div class="tab-content">
             <div id="image-cropper" class="init-cropper">
                 <div class="section-box preview-box">
-                    <div class="section-box-zoom modal-mpf-row">
-                        <div class="container-canvas relative">
-                            <div class="disabled-zoom"></div>
-                            <label>Image zoom:</label>
-                            <div class="canvas-zoom-sel"></div>
+                    <div class="modal-two-column">
+                        
+                        <div class="section-box-zoom modal-mpf-row">
+                            <div class="container-canvas relative">
+                                <label>Image zoom:</label>
+                                <input type="range" class="cropit-image-zoom-input" />
+                            </div>
                         </div>
-                        <input type="hidden" class="cropit-image-zoom-input" />     
-                    </div>
+
+                        <div class="modal-mpf-row"></div>
+                    </div>        
+                    
                     <div class="section-title"><h2>Preview Image</h2></div>
-                    <div class="cropit-image-preview"></div>
+                    
+                    <div class="cropit-preview"></div>
+                
                 </div>
             </div>
         </div>

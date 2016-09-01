@@ -8,15 +8,15 @@ var fileEnv = fs.readFileSync('.env').toString().split("\n");
 var configEnv = [];
 
 for(var i=0;i<fileEnv.length;i++){
-    if(fileEnv[i]){
-        var envArray = fileEnv[i].split("=");
-        configEnv[envArray[0]] = envArray[1];
-    }
+	if(fileEnv[i]){
+		var envArray = fileEnv[i].split("=");
+		configEnv[envArray[0]] = envArray[1];
+	}
 }
 
 var appName = "base";
 if( configEnv.APP_NAME ){
-    appName = configEnv.APP_NAME.toLowerCase().replace("\r","");
+	appName = configEnv.APP_NAME.toLowerCase().replace("\r","");
 }
 
 
@@ -32,7 +32,7 @@ function jsAppFilePath (file) {
         return 'js/' + appName + '/' + file;
     } catch (e) {
         return 'js/base/' + file;
-    }
+		}
 }
 
 /*
@@ -63,7 +63,7 @@ elixir.config.cssOutput = "public/css";
 elixir.config.sourcemaps = false;
 
 if( elixir.config.babel ){
-    elixir.config.babel.enabled = false;
+	elixir.config.babel.enabled = false;
 }
 
 /*
@@ -72,11 +72,11 @@ if( elixir.config.babel ){
  | --------------------------------------------------------------------------
  */
 gulp.task( "elixir-jshint", function() {
-    elixir(function(mix) {
-        mix.jshint([
-            "resources/assets/js/**/*"
-        ]);
-    });
+	elixir(function(mix) {
+		mix.jshint([
+			"resources/assets/js/**/*"
+		]);
+	});
 });
 
 
@@ -86,18 +86,18 @@ gulp.task( "elixir-jshint", function() {
  | --------------------------------------------------------------------------
  */
 gulp.task( "elixir-copy-bower", function() {
-    var bowerPath = "resources/assets/bower/";
+	var bowerPath = "resources/assets/bower/";
 
-    elixir(function(mix) {
-        mix
-            // Bootstrap colorpicker
-            .copy(bowerPath + "bootstrapcolorpicker/dist/img/bootstrap-colorpicker", "public/css/images/bootstrap-colorpicker")
-            // jQuery UI
-            .copy(bowerPath + "jquery-ui/themes/ui-lightness/images", "public/css/images/jquery-ui")
-            // TinyMCE
-            .copy(bowerPath + "tinymce/skins", "public/css/tinymce")
-            .copy(bowerPath + "tinymce/plugins/textcolor", "public/js/plugins/tinymce/plugins/textcolor");
-    });
+	elixir(function(mix) {
+		mix
+			// Bootstrap colorpicker
+			.copy(bowerPath + "bootstrapcolorpicker/dist/img/bootstrap-colorpicker", "public/css/images/bootstrap-colorpicker")
+			// jQuery UI
+			.copy(bowerPath + "jquery-ui/themes/ui-lightness/images", "public/css/images/jquery-ui")
+			// TinyMCE
+			.copy(bowerPath + "tinymce/skins", "public/css/tinymce")
+			.copy(bowerPath + "tinymce/plugins/textcolor", "public/js/plugins/tinymce/plugins/textcolor");
+	});
 });
 
 
@@ -108,99 +108,101 @@ gulp.task( "elixir-copy-bower", function() {
  | --------------------------------------------------------------------------
  */
 gulp.task( "elixir-scripts", function() {
-    var assetsPath = "resources/assets/";
-    var jsDestinationPath = "public/js/";
+	var assetsPath = "resources/assets/";
+	var jsDestinationPath = "public/js/";
 
-    elixir(function(mix) {
-        mix
-            // === Compile Vendor and Application scripts to library.js ===
-            .scripts(
-                [
-                    "bower/jquery/dist/jquery.min.js",
-                    "bower/jquery-ui/jquery-ui.min.js",
-                    "bower/bootstrap/dist/js/bootstrap.min.js",
-                    "bower/magnific-popup/dist/jquery.magnific-popup.js",
-                    "bower/cropit/dist/jquery.cropit.min.js",
-                    "bower/bootstrapcolorpicker/dist/js/bootstrap-colorpicker.min.js",
-                    "bower/bootstrap-select/dist/js/bootstrap-select.min.js",
-                    // -- Jquery Simple colorpicker List --
-                    "bower/jquery-simplecolorpicker/jquery.simplecolorpicker.js",
-                    // -- TinyMCE editor --
-                    "bower/tinymce/tinymce.js",
-                    "bower/tinymce/themes/modern/theme.js",
-                    "bower/tinymce/plugins/paste/plugin.js",
-                    "bower/tinymce/plugins/textcolor/plugin.js",
-                    "bower/tinymce/plugins/colorpicker/plugin.js",
-                    'bower/tinymce/plugins/lists/plugin.js',
-                    'bower/tinymce/plugins/autolink/plugin.js',
-                    'bower/tinymce/plugins/link/plugin.js',
-                    'bower/tinymce/plugins/advlist/plugin.js',
-                    // -- Extended plugins --
-                    "js/plugins/**/*.js",
-                    // -- Common scripts --
-                    'js/library/custom-plugins/html2canvas-0.5.0-modified.js', // include always after application-utils.js
-                    "js/library/application-globals.js",
-                    "js/library/application-utils.js",
-                    "js/library/application-init.js",
+	elixir(function(mix) {
+		mix
+			// === Compile Vendor and Application scripts to library.js ===
+			.scripts(
+				[
+					"bower/jquery/dist/jquery.min.js",
+					"bower/jquery-ui/jquery-ui.min.js",
+					"bower/bootstrap/dist/js/bootstrap.min.js",
+					"bower/magnific-popup/dist/jquery.magnific-popup.js",
+					"bower/cropit/dist/jquery.cropit.js",
+					"bower/bootstrapcolorpicker/dist/js/bootstrap-colorpicker.min.js",
+					"bower/bootstrap-select/dist/js/bootstrap-select.min.js",
+					// -- Jquery Simple colorpicker List --
+					"bower/jquery-simplecolorpicker/jquery.simplecolorpicker.js",
+					// -- TinyMCE editor --
+					"bower/tinymce/tinymce.js",
+					"bower/tinymce/themes/modern/theme.js",
+					"bower/tinymce/plugins/paste/plugin.js",
+					"bower/tinymce/plugins/textcolor/plugin.js",
+					"bower/tinymce/plugins/colorpicker/plugin.js",
+					'bower/tinymce/plugins/lists/plugin.js',
+					'bower/tinymce/plugins/autolink/plugin.js',
+					'bower/tinymce/plugins/link/plugin.js',
+					'bower/tinymce/plugins/advlist/plugin.js',
+					// -- Extended plugins --
+					"js/plugins/**/*.js",
+					// -- Common scripts --
+					'js/library/custom-plugins/html2canvas-0.5.0-modified.js', // include always after application-utils.js
+					"js/library/application-globals.js",
+					"js/library/application-utils.js",
+					"js/library/application-init.js",
                     "js/library/application-api.js",
-                    "js/library/login.js"
-                ],
-                jsDestinationPath + "library.js",
-                assetsPath
-            )
+					"js/library/login.js"
+				],
+				jsDestinationPath + "library.js",
+				assetsPath
+			)
 
-            // === Dashboard page ===
-            .scripts(
-                [
-                    "js/library/custom-plugins/st-pagination-bar.jquery.js",
-                    "js/library/campaign-controller.js",
-                    "js/library/dashboard-controller.js",
-                    jsAppFilePath("dashboard.js")
-                ],
-                jsDestinationPath + "dashboard.js",
-                assetsPath
-            )
+			// === Dashboard page ===
+			.scripts(
+				[
+					"js/library/custom-plugins/st-pagination-bar.jquery.js",
+					"js/library/campaign-controller.js",
+					"js/library/dashboard-controller.js",
+					jsAppFilePath("dashboard.js")
+				],
+				jsDestinationPath + "dashboard.js",
+				assetsPath
+			)
 
-            // === Admin page ===
-            .scripts(
-                [
-                    "js/library/custom-plugins/st-pagination-bar.jquery.js",
-                    "js/library/admin/user-controller.js",
-                    "js/library/admin/role-controller.js",
-                    "js/library/admin/permission-controller.js",
-                    "js/library/admin/log-controller.js",
-                    jsAppFilePath("admin.js")
-                ],
-                jsDestinationPath + "admin.js",
-                assetsPath
-            )
+			// === Admin page ===
+			.scripts(
+				[
+					"js/library/custom-plugins/st-pagination-bar.jquery.js",
+					"js/library/admin/user-controller.js",
+					"js/library/admin/role-controller.js",
+					"js/library/admin/permission-controller.js",
+					"js/library/admin/log-controller.js",
+					jsAppFilePath("admin.js")
+				],
+				jsDestinationPath + "admin.js",
+				assetsPath
+			)
 
-            // === Campaign page ===
-            .scripts(
-                [
-                    // Transformers
-                    "js/library/transformers.js",
-                    // Custom Plugins
-                    "js/library/custom-plugins/st-pagination-bar.jquery.js",
-                    "js/library/custom-plugins/st-color-picker.js",
-                    // Configuration Modals
-                    "js/library/modals/*",
+			// === Campaign page ===
+			.scripts(
+				[
+					// Transformers
+					"js/library/transformers.js",
+					// Custom Plugins
+					"js/library/custom-plugins/st-pagination-bar.jquery.js",
+					"js/library/custom-plugins/st-color-picker.js",
+					// Configuration Modals
+					"js/library/modals/*",
                     // Base Modules
                     "js/library/modules/*.js",
-                    // Library
-                    "js/library/image-library.js",
-                    "js/library/master-image-editor.js",
-                    "js/library/master-button-editor.js",
-                    "js/library/module-manager.js",
-                    "js/library/campaign-manager.js",
-                    "js/library/campaign-menu.js",
-                    "js/library/image-manager.js",
-                    jsAppFilePath("campaign.js")
-                ],
-                jsDestinationPath + "campaign.js",
-                assetsPath
-            );
-    });
+					// Library
+					"js/library/image-library.js",
+					"js/library/master-image-editor.js",
+					"js/library/master-image-editor.v2.js",
+					"js/library/master-button-editor.js",
+					"js/library/module-manager.js",
+					"js/library/modal-manager.js",
+					"js/library/campaign-manager.js",
+					"js/library/campaign-menu.js",
+					"js/library/image-manager.js",
+					jsAppFilePath("campaign.js")
+				],
+				jsDestinationPath + "campaign.js",
+				assetsPath
+			);
+	});
 });
 
 /*
@@ -209,9 +211,9 @@ gulp.task( "elixir-scripts", function() {
  | --------------------------------------------------------------------------
  */
 gulp.task("elixir-less", function() {
-    elixir(function(mix) {
-        mix.less( appName + "/*.less");
-    });
+	elixir(function(mix) {
+		mix.less( appName + "/*.less");
+	});
 });
 
 
@@ -221,13 +223,13 @@ gulp.task("elixir-less", function() {
  | --------------------------------------------------------------------------
  */
 gulp.task("elixir-version", function() {
-    elixir(function(mix) {
-        mix.version([
-            "css/admin.css",
-            "css/base.css",
-            "js/*"
-        ]);
-    });
+	elixir(function(mix) {
+		mix.version([
+			"css/admin.css",
+			"css/base.css",
+			"js/*"
+		]);
+	});
 });
 
 
