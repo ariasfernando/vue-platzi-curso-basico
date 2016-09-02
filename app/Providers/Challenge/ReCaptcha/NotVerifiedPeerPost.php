@@ -1,6 +1,6 @@
 <?php
 
-namespace Stensul\Challenge\ReCaptcha;
+namespace Stensul\Providers\Challenge\ReCaptcha;
 
 use ReCaptcha\RequestMethod;
 use ReCaptcha\RequestParameters;
