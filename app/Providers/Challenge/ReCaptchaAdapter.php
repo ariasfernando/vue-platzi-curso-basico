@@ -5,6 +5,7 @@ namespace Stensul\Providers\Challenge;
 use Log;
 use ReCaptcha;
 use Illuminate\Http\Request;
+use Stensul\Providers\Challenge\ReCaptcha\NotVerifiedPeerPost;
 
 class RecaptchaAdapter implements ChallengeInterface
 {
@@ -28,13 +29,9 @@ class RecaptchaAdapter implements ChallengeInterface
      */
     public function isValid(Request $request)
     {
-        $recaptcha = new ReCaptcha($this->config['secret']);
+        $recaptcha = new ReCaptcha($this->config['secret'], new NotVerifiedPeerPost());
         $resp = $recaptcha->verify($request->input('g-recaptcha-response'), $request->ip());
         
-        if ($resp->isSuccess()) {
-            return true;
-        } else {
-            return false;
-        }
+        return $resp->isSuccess();
     }
 }

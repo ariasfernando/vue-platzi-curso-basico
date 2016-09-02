@@ -80,7 +80,6 @@ class Silverpop implements ApiConnector
             } else {
                 throw new \Exception("Silverpop api error [ ".$response["error"]." ]");
             }
-
         } else {
             throw new \Exception("campaign_missing");
         }

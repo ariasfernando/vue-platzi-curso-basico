@@ -43,7 +43,6 @@ class EventServiceProvider extends ServiceProvider
                     $data['id'],
                     $data['attempts']
                 ));
-
             }
         );
     }

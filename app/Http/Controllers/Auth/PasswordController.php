@@ -134,7 +134,6 @@ class PasswordController extends Controller
                 $user->password = bcrypt($password);
 
                 $user->save();
-
             }
         );
 

@@ -47,7 +47,6 @@ class TemplateController extends Controller
         $options["module"] = ($request->has('module_data'))? ["data"=> $request->input('module_data')] : [];
 
         return $this->getComponent($request, 'modules', $options);
-
     }
 
     /**
@@ -108,7 +107,6 @@ class TemplateController extends Controller
         }
 
         return ["image" => $campaign_path];
-
     }
 
     /**

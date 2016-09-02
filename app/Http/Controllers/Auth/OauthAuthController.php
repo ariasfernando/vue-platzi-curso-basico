@@ -86,7 +86,6 @@ class OauthAuthController extends Controller
             } else {
                 $error = array( "message" => "ERROR_EMAIL" );
             }
-
         } else {
             $error['message'] = $request->input('error');
         }

@@ -310,7 +310,6 @@ class StaticProcessor
                     usleep(50000);
                     $success = $storage->put($file_path, $image->resize($size)->get($extension, $options));
                 }
-
             } else {
                 return $this->saveImage($blob);
             }
@@ -440,7 +439,6 @@ class StaticProcessor
                 usleep(50000);
                 $success = $storage->put($file_path, $background_image->get($background_extension, $background_options));
             }
-
         }
 
         if (isset($success)) {

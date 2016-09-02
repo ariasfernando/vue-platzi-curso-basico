@@ -119,7 +119,6 @@ class Eloqua implements ApiConnector
 
         try {
             $response = $client->request($options['type'], $options['base_url'].$options['path'], $params);
-
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $error = [
                 'status' => 'error_request',
@@ -250,7 +249,6 @@ class Eloqua implements ApiConnector
         } else {
             return [ "error" => "folder_creation" ];
         }
-
     }
 
     /**
@@ -314,7 +312,6 @@ class Eloqua implements ApiConnector
                     'status' => 'success'
                 ];
             }
-
         } else {
             throw new \Exception("campaign_missing");
         }
