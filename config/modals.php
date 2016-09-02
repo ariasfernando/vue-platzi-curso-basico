@@ -27,14 +27,14 @@ $single_image_editor = [
 ];
 
 $default = [
-    "single" => array_merge($single_image_editor,[
+    "single" => array_merge($single_image_editor, [
         "image_size" => [
             "height" => 240,
             "width" => 320
         ]
     ]),
 
-    "single_shared_height" => array_merge($single_image_editor,[
+    "single_shared_height" => array_merge($single_image_editor, [
         "image_size" => [
             "height" => 240,
             "width" => 320
@@ -42,7 +42,7 @@ $default = [
         "enabled_options" => "destination_url alt_text image_upload adjustable_height image_crop"
     ]),
 
-    "mie_v2_default_height_proportional" => array_merge($single_image_editor,[
+    "mie_v2_default_height_proportional" => array_merge($single_image_editor, [
         "image_size" => [
             "height" => 'auto',
             "width" => 526
@@ -54,7 +54,7 @@ $default = [
         ]
     ]),
 
-    "mie_v2_default_adjustable_height" => array_merge($single_image_editor,[
+    "mie_v2_default_adjustable_height" => array_merge($single_image_editor, [
         "image_size" => [
             "height" => 250,
             "width" => "auto"
@@ -189,8 +189,8 @@ $default = [
             "width" => 240,
             "height" => 90
         ]
-    ],
-    "text_with_image" => [
+     ],
+     "text_with_image" => [
         "title" => "Text with image",
         "image_crop" => "enabled",
         "image_size" => [
@@ -207,9 +207,9 @@ $default = [
             "max" => 280,
             "min" => 100
         ]
-    ],
+     ],
     // == Master image editor v2 modals ==
-    "mie_v2_default_no_crop" => [
+     "mie_v2_default_no_crop" => [
         "title" => "Hero Image - no crop",
         "app_name" => "base",
         "view" => "single_image_editor",
@@ -225,8 +225,8 @@ $default = [
         "labels" => [
             "file_upload" => "Allowed file types: png, jpg and gif."
         ]
-    ],
-    "mie_v2_single_crop" => [
+     ],
+     "mie_v2_single_crop" => [
         "title" => "Hero Image - single crop",
         "app_name" => "base",
         "view" => "single_image_editor",
@@ -240,8 +240,8 @@ $default = [
         "labels" => [
             "file_upload" => "Allowed file types: png, jpg and gif."
         ]
-    ],
-    "mie_v2_library" => [
+     ],
+     "mie_v2_library" => [
         "title" => "Image Library",
         "app_name" => "base",
         "view" => "single_image_editor",
@@ -257,7 +257,7 @@ $default = [
         "labels" => [
             "file_upload" => "Allowed file types: png, jpg and gif."
         ]
-    ]
+     ]
 ];
 
 return include('recursive.php');
