@@ -60,7 +60,7 @@ $default = [
     |
     */
 
-    'timezone' => 'America/Los_Angeles',
+    'timezone' => 'America/New_York',
 
     /*
     |--------------------------------------------------------------------------
