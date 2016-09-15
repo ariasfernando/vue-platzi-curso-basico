@@ -41,6 +41,13 @@ $app->singleton(
     'Stensul\Exceptions\Handler'
 );
 
+$app->singleton(
+    'Illuminate\Foundation\Bootstrap\ConfigureLogging',
+    'Stensul\Bootstrap\ConfigureLogging'
+);
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application
