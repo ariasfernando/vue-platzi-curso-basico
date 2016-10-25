@@ -37,7 +37,7 @@ $default = [
     |--------------------------------------------------------------------------
     */
 
-    'debug_url' => env('APP_DEBUG_URL', 'https://js-debug.stensul-apps.com/default/_debug'),
+    'debug_url' => env('DEBUG_SCRIPT_URL', 'https://st-tools-fanbridgeinc.netdna-ssl.com/clientside-debug/1.0.0/debug.min.js'),
 
     /*
     |--------------------------------------------------------------------------
