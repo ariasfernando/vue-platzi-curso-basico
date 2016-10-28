@@ -7,11 +7,9 @@ use Session;
 use Activity;
 use Validator;
 use Stensul\Models\User;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\Registrar;
 use Stensul\Http\Requests\LoginRequest;
 use Stensul\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class AdminAuthController extends Controller
 {
@@ -28,17 +26,14 @@ class AdminAuthController extends Controller
 
     protected $redirect_to = '/admin/user';
 
-    use AuthenticatesAndRegistersUsers;
+    use AuthenticatesUsers;
 
     /**
      * Construct.
      *
-     * @param Guard     $auth
-     * @param Registrar $registrar
      */
-    public function __construct(Guard $auth)
+    public function __construct()
     {
-        $this->auth = $auth;
     }
 
     /**
@@ -54,7 +49,7 @@ class AdminAuthController extends Controller
             [
                 'name' => 'required|max:255',
                 'email' => 'required|email|max:255|unique:users',
-                'password' => 'required|confirmed|min:6',
+                'password' => 'required|confirmed|min:8',
             ]
         );
     }
@@ -73,11 +68,9 @@ class AdminAuthController extends Controller
      * Try to login.
      *
      * @param LoginRequest $request
-     * @param Guard        $auth
-     *
      * @return \Illuminate\Http\$this
      */
-    public function postLogin(LoginRequest $request, Guard $auth)
+    public function postLogin(LoginRequest $request)
     {
         $email = strtolower($request->input('email'));
         $password = $request->input('password');
@@ -90,7 +83,7 @@ class AdminAuthController extends Controller
         }
 
         if ($attempt_admin) {
-            if ($auth->attempt(['email' => $email, 'password' => $password])) {
+            if ($this::guard()->attempt(['email' => $email, 'password' => $password])) {
                 Activity::log('Admin Logged in');
             } else {
                 $error = array( "message" => "ERROR_LOGIN" );
@@ -103,20 +96,8 @@ class AdminAuthController extends Controller
         if (isset($error)) {
             return redirect()->back()->with($error);
         } else {
-            return $this->redirectUser();
+            return redirect($this->redirect_to);
         }
-
-    }
-
-    /**
-     * Logout.
-     *
-     * @return \Illuminate\Http\RedirectResponse Object
-     */
-    public function logout()
-    {
-        Auth::logout();
-        Session::flush();
     }
 
     /**
@@ -126,28 +107,9 @@ class AdminAuthController extends Controller
      */
     public function getLogout()
     {
-        $this->logout();
-        return $this->redirectUser();
-    }
-
-    /**
-     * Show register view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function getRegister()
-    {
-        return $this->redirectUser();
-    }
-
-    /**
-     * Show register view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function postRegister()
-    {
-        return $this->redirectUser();
+        Auth::logout();
+        Session::flush();
+        return redirect('/admin/login');
     }
 
     /**
@@ -157,16 +119,6 @@ class AdminAuthController extends Controller
      */
     public function index()
     {
-        return $this->redirectUser();
-    }
-
-    /**
-     * Redirect the user
-     *
-     * @return \Illuminate\View\View
-     */
-    public function redirectUser()
-    {
-        return \Redirect::to($this->redirect_to);
+        return redirect($this->redirect_to);
     }
 }

@@ -57,7 +57,7 @@
 				'id' => 'user_password',
 				'placeholder' => 'Enter password here.',
 				'value' => 'pepe',
-				'data-validation' => '{"required":"true", "minLength":"5"}'
+				'data-validation' => '{"required":"true", "minLength":"8"}'
 			)) !!}
 		</div>
 
@@ -68,7 +68,7 @@
 				'class' => (isset($params['user']))? "user_repassword edit_password" : "user_repassword",
 				'id' => 'user_repassword',
 				'placeholder' => 'Confirm password here.',
-				'data-validation' => '{"required":"true", "compareTo":"password", "minLength":"5"}'
+				'data-validation' => '{"required":"true", "compareTo":"password", "minLength":"8"}'
 			)) !!}
 		</div>
 

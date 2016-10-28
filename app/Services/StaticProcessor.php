@@ -187,9 +187,10 @@ class StaticProcessor
             }
         } catch (\Exception $e) {
             $error_msg =sprintf(
-                "[%s] image open %s failed.",
+                "[%s] image open %s failed.\nError: %s",
                 $this->getCampaign()->id,
-                $blob
+                $blob,
+                $e->getMessage()
             );
             Log::warning($error_msg);
             throw new \Exception($error_msg);

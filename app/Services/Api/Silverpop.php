@@ -5,6 +5,7 @@ namespace Stensul\Services\Api;
 use Auth;
 use Cache;
 use Activity;
+use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
 use Folklore\Image\Exception\Exception;
 use Stensul\Models\Upload;
@@ -56,9 +57,9 @@ class Silverpop implements ApiConnector
                     'Campaign uploaded to Silverpop',
                     [
                         'properties' => [
-                            'campaign_id' => new \MongoId($campaign->id),
+                            'campaign_id' => new ObjectID($campaign->id),
                             'name' => $filename,
-                            'user_id' => new \MongoId(Auth::id())
+                            'user_id' => new ObjectID(Auth::id())
                         ]
                     ]
                 );
@@ -66,10 +67,10 @@ class Silverpop implements ApiConnector
                 Upload::create(
                     [
                         'api' => 'silverpop',
-                        'campaign_id' => new \MongoId($campaign->id),
+                        'campaign_id' => new ObjectID($campaign->id),
                         'original_filename' => $original_file,
                         'filename' => $filename,
-                        'user_id' => new \MongoId(Auth::id()),
+                        'user_id' => new ObjectID(Auth::id()),
                         'subject' => (!is_null($request) || isset($request['subject']))? $request['subject'] : ''
                     ]
                 );

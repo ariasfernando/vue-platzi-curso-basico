@@ -2,7 +2,7 @@
 
 namespace Stensul\Models;
 
-use Jenssegers\Mongodb\Model as Eloquent;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class Campaign extends Eloquent

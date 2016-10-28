@@ -6,6 +6,7 @@ use Auth;
 use Activity;
 use Stensul\Models\Upload;
 use Stensul\Services\Api\ExactTargetConnection\ExactTargetConnector;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class ExactTarget implements ApiConnector
 {
@@ -45,9 +46,9 @@ class ExactTarget implements ApiConnector
                 'Campaign uploaded to Exact Target',
                 [
                     'properties' => [
-                        'campaign_id' => new \MongoId($campaign->id),
+                        'campaign_id' => new ObjectID($campaign->id),
                         'name' => $campaign->campaign_name,
-                        'user_id' => new \MongoId(Auth::id())
+                        'user_id' => new ObjectID(Auth::id())
                     ]
                 ]
             );
@@ -55,10 +56,10 @@ class ExactTarget implements ApiConnector
             Upload::create(
                 [
                     'api' => 'exact_target',
-                    'campaign_id' => new \MongoId($campaign->id),
+                    'campaign_id' => new ObjectID($campaign->id),
                     'original_filename' => $campaign->campaign_name,
                     'filename' => $campaign->campaign_name,
-                    'user_id' => new \MongoId(Auth::id()),
+                    'user_id' => new ObjectID(Auth::id()),
                     'subject' => (!is_null($request) || isset($request['subject']))? $request['subject'] : '',
                     'preheader' => (!is_null($request) || isset($request['preheader']))? $request['preheader'] : '',
                 ]

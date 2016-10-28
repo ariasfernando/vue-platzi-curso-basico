@@ -4,6 +4,7 @@ namespace Stensul\Services;
 
 use Cache;
 use Carbon\Carbon;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +79,7 @@ class Worker
      */
     public static function write($job_id, $task, $status = 'queued', $decrement = null)
     {
+        
         $route = explode('@', last(explode('\\', \Route::currentRouteAction())));
 
         $metadata = [
@@ -86,7 +88,7 @@ class Worker
             'controller' => head($route),
             'action' => last($route),
             'properties' => [
-                'user_id' => new \MongoId(\Auth::id()),
+                'user_id' => \Auth::id(),
             ],
         ];
 

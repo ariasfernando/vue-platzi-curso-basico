@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Stensul\Models\Role;
 use Stensul\Models\Permission;
 use Stensul\Http\Controllers\Auth\AdminAuthController as AdminAuth;
+use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
 
 class RoleController extends Controller
 {
@@ -25,7 +26,7 @@ class RoleController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('admin');
+        $this->middleware('AdminAuthenticate');
     }
 
     /**

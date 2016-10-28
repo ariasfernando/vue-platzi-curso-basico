@@ -36,7 +36,7 @@ class TemplateController extends Controller
      */
     public function getModule(Request $request)
     {
-    
+
         $campaign_data = $request->has('campaign_id')
             ? Campaign::findOrFail($request->input('campaign_id'))
             : null;

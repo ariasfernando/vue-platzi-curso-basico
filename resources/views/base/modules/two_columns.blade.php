@@ -16,12 +16,12 @@
 
     // Set image Button
     $imageData0 = [
-        'source' => isset($module_params['placeholder_image_button'])? url() . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image_button']): '',
+        'source' => isset($module_params['placeholder_image_button'])? url('/') . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image_button']): '',
         'alt' => 'image-button-1'
     ];
 
     if( isset($module_params['data']['button0']['path']) && !empty($module_params['data']['button0']['path']) ){
-        $imageData0['source'] = url() . "/images/campaigns". $module_params['data']['button0']['path'];
+        $imageData0['source'] = url('/') . "/images/campaigns". $module_params['data']['button0']['path'];
     }
 
     if( isset($module_params['data']['button0']['label']) && !empty($module_params['data']['button0']['label']) ){
@@ -37,12 +37,12 @@
     ];
 
     $imageData1 = [
-        'source' => isset($module_params['placeholder_image_button'])? url() . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image_button']): '',
+        'source' => isset($module_params['placeholder_image_button'])? url('/') . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image_button']): '',
         'alt' => 'image-button-2'
     ];
 
     if( isset($module_params['data']['button1']['path']) && !empty($module_params['data']['button1']['path']) ){
-        $imageData1['source'] = url() . "/images/campaigns". $module_params['data']['button1']['path'];
+        $imageData1['source'] = url('/') . "/images/campaigns". $module_params['data']['button1']['path'];
     }
 
     if( isset($module_params['data']['button1']['label']) && !empty($module_params['data']['button1']['label']) ){
@@ -78,7 +78,7 @@
                                                             data-master-image-editor="two_columns"
                                                           >
                                                             @if ( isset($image0['path']) && !empty($image0['path']) )
-                                                                {!! Html::image( url() . "/images/campaigns". $image0['path'],
+                                                                {!! Html::image( url('/') . "/images/campaigns". $image0['path'],
                                                                     ( isset($image0['alt']) )? $image0['alt']:'',
                                                                     array(
                                                                         'title' => ( isset($image0['alt']) )? $image0['alt']:'',
@@ -88,7 +88,7 @@
                                                                     ))
                                                                 !!}
                                                             @else
-                                                                {!! Html::image( url() . $module_params['placeholder_image'],
+                                                                {!! Html::image( url('/') . $module_params['placeholder_image'],
                                                                     'content-module-2',
                                                                     array(
                                                                         'title' => 'content-module-2',
@@ -97,7 +97,7 @@
                                                                         'width' => 242,
                                                                         'height' => 90,
                                                                         'style' => 'display:block;border:none;max-width:242px;'
-                                                                    )) 
+                                                                    ))
                                                                 !!}
                                                             @endif
                                                         </a>
@@ -107,12 +107,12 @@
                                                     <td height="10" width="100%" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; mso-line-height-rule:exactly; line-height:10px;"><!--[if gte mso 15]>&nbsp;<![endif]--></td>
                                                 </tr>
                                                 <tr>
-                                                    <td valign="middle" 
-                                                        align="left" 
+                                                    <td valign="middle"
+                                                        align="left"
                                                         >
                                                             <span style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size: 12px;color:#000000;font-weight:bold;line-height:18px;" >Title: </span>
-                                                            <span class="st-save-only-text" 
-                                                                  contenteditable="true" 
+                                                            <span class="st-save-only-text"
+                                                                  contenteditable="true"
                                                                   style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size: 12px;color:#000000;font-weight:normal;line-height:18px;"
                                                                   >
                                                                     @if ( isset($module_params['data']['text0']) && !empty($module_params['data']['text0']) )
@@ -120,7 +120,7 @@
                                                                     @else
                                                                         Lorem ipsum dolor sit amet.
                                                                     @endif
-                                                            </span>    
+                                                            </span>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -189,7 +189,7 @@
                                                             data-master-image-editor="two_columns"
                                                         >
                                                             @if ( isset($image1['path']) && !empty($image1['path']) )
-                                                                {!! Html::image( url() . "/images/campaigns". $image1['path'],
+                                                                {!! Html::image( url('/') . "/images/campaigns". $image1['path'],
                                                                     ( isset($image1['alt']) )? $image1['alt']:'',
                                                                     array(
                                                                         'title' => ( isset($image1['alt']) )? $image1['alt']:'',
@@ -199,7 +199,7 @@
                                                                     ))
                                                                 !!}
                                                             @else
-                                                                {!! Html::image( url() . $module_params['placeholder_image'],
+                                                                {!! Html::image( url('/') . $module_params['placeholder_image'],
                                                                     'content-module-2',
                                                                     array(
                                                                         'title' => 'content-module-2',
@@ -208,7 +208,7 @@
                                                                         'width' => 242,
                                                                         'height' => 90,
                                                                         'style' => 'display:block;border:none;max-width:242px;'
-                                                                    )) 
+                                                                    ))
                                                                 !!}
                                                             @endif
                                                         </a>
@@ -218,12 +218,12 @@
                                                     <td height="10" width="100%" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; mso-line-height-rule:exactly; line-height:10px;"><!--[if gte mso 15]>&nbsp;<![endif]--></td>
                                                 </tr>
                                                 <tr>
-                                                    <td valign="middle" 
-                                                        align="left" 
+                                                    <td valign="middle"
+                                                        align="left"
                                                         >
                                                             <span style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size: 12px;color:#000000;font-weight:bold;line-height:18px;" >Title: </span>
-                                                            <span class="st-save-only-text" 
-                                                                  contenteditable="true" 
+                                                            <span class="st-save-only-text"
+                                                                  contenteditable="true"
                                                                   style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size: 12px;color:#000000;font-weight:normal;line-height:18px;"
                                                                   >
                                                                     @if ( isset($module_params['data']['text2']) && !empty($module_params['data']['text2']) )
@@ -231,7 +231,7 @@
                                                                     @else
                                                                         Lorem ipsum dolor sit amet.
                                                                     @endif
-                                                            </span>    
+                                                            </span>
                                                     </td>
                                                 </tr>
                                                 <tr>

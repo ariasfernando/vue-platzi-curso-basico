@@ -8,6 +8,7 @@
 /tmp/
 /public/tmp/
 /public/vendor/
+/bower_components
 /bootstrap/cache/
 composer.lock
 npm-debug.log

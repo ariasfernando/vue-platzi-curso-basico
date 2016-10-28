@@ -1,7 +1,7 @@
 <div class="modal-mpf-content-data custom-table-editor" id="custom-table-editor">
 	<h1>Custom Table Config</h1>
 	{!! Form::open ( array ( 'method' => 'post', 'files' => true ,'id' => 'master-image-editor-form'  )) !!}
-		
+
 		<!-- Input pretext -->
 		<div class="clearfix">
 			<div class="control-form-fields">
@@ -21,7 +21,7 @@
 				!!}
 			</div>
 			<div class="control-form-fields">
-				{!! Html::image( url() . "/images/ajax-loader.gif", 'spinner', array('class'=>'spinner', 'title' => 'spinner', 'alt' => 'spinner')) !!}
+				{!! Html::image( url('/') . "/images/ajax-loader.gif", 'spinner', array('class'=>'spinner', 'title' => 'spinner', 'alt' => 'spinner')) !!}
 			</div>
 		</div>
 

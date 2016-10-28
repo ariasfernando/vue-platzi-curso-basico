@@ -11,9 +11,9 @@
     }
 
     if ( isset($image['background_image']) && !empty($image['background_image']) ){
-        $bg_image_src = url() . '/images/campaigns'. $image['background_image'];
+        $bg_image_src = url('/') . '/images/campaigns'. $image['background_image'];
     }else{
-        $bg_image_src = url() . $module_params['placeholder_image'];
+        $bg_image_src = url('/') . $module_params['placeholder_image'];
     }
 ?>
 

@@ -8,6 +8,7 @@ use Activity;
 use Carbon\Carbon;
 use Stensul\Models\Upload;
 use GuzzleHttp\Client as Client;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class Eloqua implements ApiConnector
 {
@@ -292,9 +293,9 @@ class Eloqua implements ApiConnector
                     'Campaign uploaded to Eloqua',
                     [
                         'properties' => [
-                            'campaign_id' => new \MongoId($campaign->id),
+                            'campaign_id' => new ObjectID($campaign->id),
                             'filename' => $name,
-                            'user_id' => new \MongoId(Auth::id())
+                            'user_id' => new ObjectID(Auth::id())
                         ]
                     ]
                 );
@@ -302,10 +303,10 @@ class Eloqua implements ApiConnector
                 Upload::create(
                     [
                         'api' => 'eloqua',
-                        'campaign_id' => new \MongoId($campaign->id),
+                        'campaign_id' => new ObjectID($campaign->id),
                         'original_filename' => $name,
                         'filename' => $versioning_name,
-                        'user_id' => new \MongoId(Auth::id()),
+                        'user_id' => new ObjectID(Auth::id()),
                         'folder_id' => $response['folderId'],
                     ]
                 );

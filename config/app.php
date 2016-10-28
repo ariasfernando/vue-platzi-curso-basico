@@ -19,9 +19,26 @@ $default = [
     |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
+    |
+    | This value is the name of your application. This value is used when the
+    | framework needs to place the application's name in a notification or
+    | any other location as required by the application or its packages.
     */
 
     'name' => strtolower(env('APP_NAME', 'base')),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Environment
+    |--------------------------------------------------------------------------
+    |
+    | This value determines the "environment" your application is currently
+    | running in. This may determine how you prefer to configure various
+    | services your application utilizes. Set this in your ".env" file.
+    |
+    */
+
+    'env' => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -112,7 +129,7 @@ $default = [
 
     'key' => env('APP_KEY', 'typQzkJx013BVXBKI8DjRIxElVwNjZTs'),
 
-    'cipher' => MCRYPT_RIJNDAEL_128,
+    'cipher' => 'AES-256-CBC',
 
     /*
     |--------------------------------------------------------------------------
@@ -129,7 +146,7 @@ $default = [
 
     'log' => 'daily',
 
-    'log_max_files' => 0, // unlimited
+    'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
     /*
     |--------------------------------------------------------------------------
@@ -147,97 +164,117 @@ $default = [
         /*
          * Laravel Framework Service Providers...
          */
-        'Illuminate\Foundation\Providers\ArtisanServiceProvider',
-        'Illuminate\Auth\AuthServiceProvider',
-        'Illuminate\Bus\BusServiceProvider',
-        'Illuminate\Cache\CacheServiceProvider',
-        'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
-        'Illuminate\Routing\ControllerServiceProvider',
-        'Illuminate\Cookie\CookieServiceProvider',
-        'Illuminate\Database\DatabaseServiceProvider',
-        'Illuminate\Encryption\EncryptionServiceProvider',
-        'Illuminate\Foundation\Providers\FoundationServiceProvider',
-        'Illuminate\Hashing\HashServiceProvider',
-        'Illuminate\Mail\MailServiceProvider',
-        'Illuminate\Pagination\PaginationServiceProvider',
-        'Illuminate\Pipeline\PipelineServiceProvider',
-        'Illuminate\Queue\QueueServiceProvider',
-        'Illuminate\Redis\RedisServiceProvider',
-        'Jenssegers\Mongodb\Auth\PasswordResetServiceProvider',
-        'Illuminate\Session\SessionServiceProvider',
-        'Illuminate\Translation\TranslationServiceProvider',
-        'Illuminate\Validation\ValidationServiceProvider',
-        'Illuminate\View\ViewServiceProvider',
-        'Illuminate\Html\HtmlServiceProvider',
+        Illuminate\Auth\AuthServiceProvider::class,
+        Illuminate\Broadcasting\BroadcastServiceProvider::class,
+        Illuminate\Bus\BusServiceProvider::class,
+        Illuminate\Cache\CacheServiceProvider::class,
+        Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
+        Illuminate\Cookie\CookieServiceProvider::class,
+        Illuminate\Database\DatabaseServiceProvider::class,
+        Illuminate\Encryption\EncryptionServiceProvider::class,
+        Illuminate\Filesystem\FilesystemServiceProvider::class,
+        Illuminate\Foundation\Providers\FoundationServiceProvider::class,
+        Illuminate\Hashing\HashServiceProvider::class,
+        Illuminate\Mail\MailServiceProvider::class,
+        Illuminate\Notifications\NotificationServiceProvider::class,
+        Illuminate\Pagination\PaginationServiceProvider::class,
+        Illuminate\Pipeline\PipelineServiceProvider::class,
+        Illuminate\Queue\QueueServiceProvider::class,
+        Illuminate\Redis\RedisServiceProvider::class,
+        Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
+        Illuminate\Session\SessionServiceProvider::class,
+        Illuminate\Translation\TranslationServiceProvider::class,
+        Illuminate\Validation\ValidationServiceProvider::class,
+        Illuminate\View\ViewServiceProvider::class,
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
+        Jenssegers\Mongodb\Auth\PasswordResetServiceProvider::class,
+        Jenssegers\Mongodb\MongodbQueueServiceProvider::class,
+
+        /*
+         * Package Service Providers...
+         */
+         Collective\Html\HtmlServiceProvider::class,
 
         /*
          * Application Service Providers...
          */
-        'Stensul\Providers\FilesystemServiceProvider',
-        'Stensul\Providers\AppServiceProvider',
-        'Stensul\Providers\BusServiceProvider',
-        'Stensul\Providers\ConfigServiceProvider',
-        'Stensul\Providers\EventServiceProvider',
-        'Stensul\Providers\RouteServiceProvider',
-        'Stensul\Providers\ComposerServiceProvider',
-        'Stensul\Providers\HelperServiceProvider',
-        'Stensul\Providers\MongodbServiceProvider',
-        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
-        'Illuminate\Redis\RedisServiceProvider',
-        'Stensul\Providers\CdnServiceProvider',
-        'Fideloper\Proxy\TrustedProxyServiceProvider',
-        Laravel\Socialite\SocialiteServiceProvider::class,
-        'Folklore\Image\ImageServiceProvider',
-        'Stensul\Providers\ApiServiceProvider',
+        Stensul\Providers\AppServiceProvider::class,
+        Stensul\Providers\AuthServiceProvider::class,
+        Stensul\Providers\FilesystemServiceProvider::class,
+        Stensul\Providers\ConfigServiceProvider::class,
+        Stensul\Providers\EventServiceProvider::class,
+        Stensul\Providers\RouteServiceProvider::class,
+        Stensul\Providers\ComposerServiceProvider::class,
+        Stensul\Providers\HelperServiceProvider::class,
+        Stensul\Providers\MongodbServiceProvider::class,
+        Illuminate\Redis\RedisServiceProvider::class,
+        Stensul\Providers\CdnServiceProvider::class,
+        Stensul\Providers\ApiServiceProvider::class,
+        Folklore\Image\ImageServiceProvider::class,
+        Fideloper\Proxy\TrustedProxyServiceProvider::class,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Class Aliases
+    |--------------------------------------------------------------------------
+    |
+    | This array of class aliases will be registered when this application
+    | is started. However, feel free to register as many as you wish as
+    | the aliases are "lazy" loaded so they don't hinder performance.
+    |
+    */
+
     'aliases' => [
-        'App'         => 'Illuminate\Support\Facades\App',
-        'Artisan'     => 'Illuminate\Support\Facades\Artisan',
-        'Auth'        => 'Illuminate\Support\Facades\Auth',
-        'Blade'       => 'Illuminate\Support\Facades\Blade',
-        'Bus'         => 'Illuminate\Support\Facades\Bus',
-        'Cache'       => 'Illuminate\Support\Facades\Cache',
-        'Config'      => 'Illuminate\Support\Facades\Config',
-        'Cookie'      => 'Illuminate\Support\Facades\Cookie',
-        'Crypt'       => 'Illuminate\Support\Facades\Crypt',
-        'DB'          => 'Illuminate\Support\Facades\DB',
-        'Eloquent'    => 'Illuminate\Database\Eloquent\Model',
-        'Event'       => 'Illuminate\Support\Facades\Event',
-        'File'        => 'Illuminate\Support\Facades\File',
-        'Hash'        => 'Illuminate\Support\Facades\Hash',
-        'Input'       => 'Illuminate\Support\Facades\Input',
-        'Inspiring'   => 'Illuminate\Foundation\Inspiring',
-        'Lang'        => 'Illuminate\Support\Facades\Lang',
-        'Log'         => 'Illuminate\Support\Facades\Log',
-        'Mail'        => 'Illuminate\Support\Facades\Mail',
-        'Password'    => 'Illuminate\Support\Facades\Password',
-        'Queue'       => 'Illuminate\Support\Facades\Queue',
-        'Redirect'    => 'Illuminate\Support\Facades\Redirect',
-        'Redis'       => 'Illuminate\Support\Facades\Redis',
-        'Request'     => 'Illuminate\Support\Facades\Request',
-        'Response'    => 'Illuminate\Support\Facades\Response',
-        'Route'       => 'Illuminate\Support\Facades\Route',
-        'Schema'      => 'Illuminate\Support\Facades\Schema',
-        'Session'     => 'Illuminate\Support\Facades\Session',
-        'Storage'     => 'Illuminate\Support\Facades\Storage',
-        'URL'         => 'Illuminate\Support\Facades\URL',
-        'Validator'   => 'Illuminate\Support\Facades\Validator',
-        'View'        => 'Illuminate\Support\Facades\View',
-        'Form'        => 'Illuminate\Html\FormFacade',
-        'Html'        => 'Illuminate\Html\HtmlFacade',
-        'Activity'    => 'Stensul\Services\Logger',
-        'Helper'      => 'Stensul\Providers\HelperServiceProvider',
-        'Cdn'         => 'Stensul\Providers\CdnServiceProvider',
-        'Statics'     => 'Stensul\Services\StaticProcessor',
-        'HtmlCreator' => 'Stensul\Services\EmailHtmlCreator',
-        'TextCreator' => 'Stensul\Services\EmailTextCreator',
-        'Worker'      => 'Stensul\Services\Worker',
-        'Campaign'    => 'Stensul\Services\CampaignManager',
-        'EmailSender' => 'Stensul\Services\EmailSender',
+
+        'App' => Illuminate\Support\Facades\App::class,
+        'Artisan' => Illuminate\Support\Facades\Artisan::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
+        'Blade' => Illuminate\Support\Facades\Blade::class,
+        'Bus' => Illuminate\Support\Facades\Bus::class,
+        'Cache' => Illuminate\Support\Facades\Cache::class,
+        'Config' => Illuminate\Support\Facades\Config::class,
+        'Cookie' => Illuminate\Support\Facades\Cookie::class,
+        'Crypt' => Illuminate\Support\Facades\Crypt::class,
+        'DB' => Illuminate\Support\Facades\DB::class,
+        'Eloquent' => Illuminate\Database\Eloquent\Model::class,
+        'Event' => Illuminate\Support\Facades\Event::class,
+        'File' => Illuminate\Support\Facades\File::class,
+        'Gate' => Illuminate\Support\Facades\Gate::class,
+        'Hash' => Illuminate\Support\Facades\Hash::class,
+        'Lang' => Illuminate\Support\Facades\Lang::class,
+        'Log' => Illuminate\Support\Facades\Log::class,
+        'Mail' => Illuminate\Support\Facades\Mail::class,
+        'Notification' => Illuminate\Support\Facades\Notification::class,
+        'Password' => Illuminate\Support\Facades\Password::class,
+        'Queue' => Illuminate\Support\Facades\Queue::class,
+        'Redirect' => Illuminate\Support\Facades\Redirect::class,
+        'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Request' => Illuminate\Support\Facades\Request::class,
+        'Response' => Illuminate\Support\Facades\Response::class,
+        'Route' => Illuminate\Support\Facades\Route::class,
+        'Schema' => Illuminate\Support\Facades\Schema::class,
+        'Session' => Illuminate\Support\Facades\Session::class,
+        'Storage' => Illuminate\Support\Facades\Storage::class,
+        'URL' => Illuminate\Support\Facades\URL::class,
+        'Validator' => Illuminate\Support\Facades\Validator::class,
+        'View' => Illuminate\Support\Facades\View::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
+        'Activity' => Stensul\Services\Logger::class,
+        'Helper' => Stensul\Providers\HelperServiceProvider::class,
+        'Cdn'         => Stensul\Providers\CdnServiceProvider::class,
+        'Statics'     => Stensul\Services\StaticProcessor::class,
+        'HtmlCreator' => Stensul\Services\EmailHtmlCreator::class,
+        'TextCreator' => Stensul\Services\EmailTextCreator::class,
+        'Worker'      => Stensul\Services\Worker::class,
+        'Campaign'    => Stensul\Services\CampaignManager::class,
+        'EmailSender' => Stensul\Services\EmailSender::class,
         'Socialite'   => Laravel\Socialite\Facades\Socialite::class,
-        'Imagine'     => 'Folklore\Image\Facades\Image',
-        'Api'         => 'Stensul\Providers\ApiServiceProvider',
+        'Imagine'     => Folklore\Image\Facades\Image::class,
+        'Api'         => Stensul\Providers\ApiServiceProvider::class,
+        'Authenticate' => Stensul\Http\Middleware\Authenticate::class,
+        'AdminAuthenticate' => Stensul\Http\Middleware\AdminAuthenticate::class
     ],
 
 ];

@@ -8,6 +8,7 @@ use Activity;
 use Campaign;
 use EmailSender;
 use Illuminate\Http\Request;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class CampaignController extends Controller
 {
@@ -39,7 +40,7 @@ class CampaignController extends Controller
             if (Cache::has('lock:'.$campaign_id) && Cache::get('lock:'.$campaign_id) !== Auth::id()) {
                 Activity::log(
                     'Campaign edit deny',
-                    array('properties' => ['campaign_id' => new \MongoId($campaign_id)])
+                    array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
                 );
 
                 return redirect(env('APP_BASE_URL', '/'))->with('campaign_lock', $campaign_id);
@@ -93,7 +94,7 @@ class CampaignController extends Controller
         ) {
             Activity::log(
                 'Campaign edit deny',
-                array('properties' => ['campaign_id' => new \MongoId($request->input('campaign_id'))])
+                array('properties' => ['campaign_id' => new ObjectID($request->input('campaign_id'))])
             );
 
             return array('campaign_lock' => $request->input('campaign_id'));

@@ -2,6 +2,7 @@
 
 namespace Stensul\Services;
 
+use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Models\Campaign as ModelCampaign;
 use Stensul\Models\User;
 use Activity;
@@ -63,7 +64,7 @@ class EmailSender
 
                 Activity::log(
                     'Campaign email send try',
-                    array('properties' => ['campaign_id' => new \MongoId($campaign_id),
+                    array('properties' => ['campaign_id' => new ObjectID($campaign_id),
                     'email' => $email])
                 );
 
@@ -73,7 +74,7 @@ class EmailSender
 
         return $response;
     }
-    
+
     /**
      * Send campaign email as attached files.
      *
@@ -129,13 +130,13 @@ class EmailSender
                         )
                             ->to($params['email'])
                             ->subject(env('MAIL_PREVIEW_SUBJECT', $params['subject']));
-                        
+
                         $message->attachData(
                             $params['html_email'],
                             env('PREVIEW_HTML_FILE_NAME', 'preview_email') . "_" . date("m_d_y") . ".html",
                             []
                         );
-                        
+
                         if ($params['plain_text_email']) {
                             $message->attachData(
                                 $params['plain_text_email'],
@@ -148,7 +149,7 @@ class EmailSender
 
                 Activity::log(
                     'Campaign email send try',
-                    array('properties' => ['campaign_id' => new \MongoId($campaign_id),
+                    array('properties' => ['campaign_id' => new ObjectID($campaign_id),
                     'email' => $email])
                 );
 

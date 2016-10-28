@@ -4,6 +4,7 @@ namespace Stensul\Providers;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Queue\Events\JobFailed;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -20,30 +21,29 @@ class EventServiceProvider extends ServiceProvider
 
     /**
      * Register any other events for your application.
-     * (Ignoring unused variables $connection and $job as they're not used
-     * but important for the Queue::failing callback to work)
      *
      * @SuppressWarnings("unused")
      *
-     * @param \Illuminate\Contracts\Events\Dispatcher $events
-     *
      */
-    public function boot(DispatcherContract $events)
+    public function boot()
     {
-        parent::boot($events);
+        parent::boot();
 
         \Queue::failing(
-            function ($connection, $job, $data) {
+            function (JobFailed $event) {
 
+                // @todo find out why job id is empty.
+                // @see Illuminate\Queue\Jobs\SyncJob
                 // Set job status as failed.
-                \Worker::failed($data['id']);
-
-                \Log::error(sprintf(
-                    "Failed to process job\n\nid: %s\nAttempts: %d",
-                    $data['id'],
-                    $data['attempts']
-                ));
-
+                if ($event->job->getJobId() && $event->job->attempts())
+                {
+                    \Worker::failed($event->job->getJobId());
+                    \Log::error(sprintf(
+                        "Failed to process job\n\nid: %s\nAttempts: %d",
+                        $event->job->getJobId(),
+                        $event->job->attempts()
+                    ));
+                }
             }
         );
     }

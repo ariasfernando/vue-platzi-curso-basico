@@ -75,7 +75,7 @@ $default = array(
             'emergency' => 'Monolog\Logger::addEmergency',
         )
     ),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Interface implementations
@@ -85,7 +85,7 @@ $default = array(
     | are detected by the helpers, others can be listed below.
     |
     */
-    
+
     'interfaces' => array(
         '\Illuminate\Contracts\Auth\Authenticatable' => config('auth.model', 'App\User'),
     )

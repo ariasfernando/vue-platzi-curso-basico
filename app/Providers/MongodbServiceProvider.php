@@ -4,7 +4,7 @@ namespace Stensul\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-use Jenssegers\Mongodb\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 use Stensul\Providers\MongoDb\Connection;
 
 class MongodbServiceProvider extends \Jenssegers\Mongodb\MongodbServiceProvider
@@ -30,9 +30,9 @@ class MongodbServiceProvider extends \Jenssegers\Mongodb\MongodbServiceProvider
     public function register()
     {
         $this->app->resolving('db', function ($db) {
-        
+
             $db->extend('mongodb', function ($config) {
-            
+
                 return new Connection($config);
             });
         });

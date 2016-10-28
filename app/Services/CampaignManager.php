@@ -12,12 +12,15 @@ use Queue;
 use Helper;
 use Worker;
 use Activity;
+use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
 use Stensul\Models\Campaign;
-use Stensul\Commands\ProcessCampaignCommand;
+use Stensul\Jobs\StoreAssetsInCdn;
+use Stensul\Jobs\ProcessCampaign;
 use HtmlCreator as Html;
 use TextCreator as Text;
 use Statics as Assets;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +54,7 @@ class CampaignManager
             $campaign->campaign_name = $campaign_name;
             $campaign->modules_data = $modules_data;
             $campaign->processed = 0;
-            $campaign->user_id = new \MongoId(Auth::id());
+            $campaign->user_id = new ObjectID(Auth::id());
             $campaign->user_email = Auth::user()->email;
 
             if (isset($inputs['body_html'])) {
@@ -64,7 +67,7 @@ class CampaignManager
 
             $campaign->save();
 
-            Activity::log('Campaign updated', array('properties' => ['campaign_id' => new \MongoId($campaign_id)]));
+            Activity::log('Campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
         }
 
         return $campaign_id;
@@ -85,7 +88,7 @@ class CampaignManager
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->status = 2;
             if ($response = $campaign_data->save()) {
-                Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new \MongoId($campaign_id)]));
+                Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
                 return array('success' => $campaign_id);
             }
         }
@@ -132,25 +135,17 @@ class CampaignManager
         if (!isset($data['cdn_path']) || !strlen($data['cdn_path'])) {
             $data['cdn_path'] = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 10);
         }
-
-        $data['user_id'] = new \MongoId(Auth::id());
+        $data['user_id'] = new ObjectID(Auth::id());
 
         $campaign = Campaign::create($data);
 
-        Activity::log('Campaign created', array('properties' => ['campaign_id' => new \MongoId($campaign->id)]));
+        Activity::log('Campaign created', array('properties' => ['campaign_id' => new ObjectID($campaign->id)]));
 
         //upload assets on save to accelerate user experience
         if (!env('CDN_UPLOAD_PRETEND', false)) {
-            Log::info('Upload common assets for campaign ['.$campaign->id.']');
+            Log::info('Upload common assets for campaign [' . $campaign->id . ']');
 
-            Queue::push(
-                function ($job) use ($campaign) {
-
-                    $assets = new Assets($campaign);
-                    $assets->storeAssetsInCdn();
-                    $job->delete();
-                }
-            );
+            dispatch(new StoreAssetsInCdn($campaign));
         }
 
         return $campaign;
@@ -194,8 +189,8 @@ class CampaignManager
 
         Activity::log(
             'Campaign cloned',
-            array('properties' => ['new_campaign_id' => new \MongoId($new_campaign->id),
-            'old_campaign_id' => new \MongoId($campaign_id)])
+            array('properties' => ['new_campaign_id' => new ObjectID($new_campaign->id),
+            'old_campaign_id' => new ObjectID($campaign_id)])
         );
 
         return ['campaign_id' => $new_campaign->id];
@@ -204,17 +199,14 @@ class CampaignManager
     /**
      * Process campaign.
      *
-     * @param string campaign id
+     * @param string campaign_id
      *
      * @return array Job id or Campaign id
      */
     public static function process($campaign_id = null)
     {
-        $job_id = Queue::push(
-            function ($job) use ($campaign_id) {
-                Bus::dispatch(new ProcessCampaignCommand($job, $campaign_id));
-            }
-        );
+
+       $job_id = dispatch(new ProcessCampaign($campaign_id));
 
         Worker::queue($job_id, 'process');
 
@@ -239,7 +231,7 @@ class CampaignManager
             $response = $text->createTextVersion();
             Activity::log(
                 'Campaign plain text created',
-                array('properties' => ['campaign_id' => new \MongoId($campaign_id)])
+                array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
             );
         } else {
             $response = $campaign->plain_text;
@@ -281,7 +273,7 @@ class CampaignManager
             $response = $assets->saveImage($file);
             Activity::log(
                 'Campaign save file',
-                array('properties' => ['campaign_id' => new \MongoId($campaign_id)])
+                array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
             );
         }
 
@@ -309,7 +301,7 @@ class CampaignManager
             $response = $assets->resizeImage($file, $width, $height);
             Activity::log(
                 'Campaign resize image',
-                array('properties' => ['campaign_id' => new \MongoId($campaign_id)])
+                array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
             );
         }
 
@@ -325,6 +317,7 @@ class CampaignManager
      */
     public static function lock($campaign_id = null)
     {
+
         if (Auth::check()) {
             Cache::add('lock:'.$campaign_id, Auth::id(), Carbon::now()->addMinutes(1));
         }
@@ -342,7 +335,6 @@ class CampaignManager
     public static function publicPath($campaign_id = null)
     {
         $campaign_data = Campaign::findOrFail($campaign_id);
-
         if ($campaign_data->processed) {
             $path = $campaign_data->getCdnPath(true) . DS . 'index.html';
         } else {
@@ -414,7 +406,7 @@ class CampaignManager
             $response = $assets->mergeGif($gif, $layer);
             Activity::log(
                 'Campaign gif generated file',
-                array('properties' => ['campaign_id' => new \MongoId($campaign_id)])
+                array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
             );
         }
 
@@ -445,7 +437,7 @@ class CampaignManager
             $campaign->push('email_sent_history', $email_sent_data);
             $campaign->save();
 
-            Activity::log('Campaign updated', array('properties' => ['campaign_id' => new \MongoId($campaign_id)]));
+            Activity::log('Campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
         }
 
         return $campaign_id;

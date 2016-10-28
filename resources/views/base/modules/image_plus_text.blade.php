@@ -22,7 +22,7 @@
                             data-master-image-editor="image_plus_text"
                             style="display:inline-block;">
                             @if ( isset($image['path']) && !empty($image['path']) )
-                                {!! Html::image( url() . "/images/campaigns". $image['path'],
+                                {!! Html::image( url('/') . "/images/campaigns". $image['path'],
                                     ( isset($image['alt']) )? $image['alt']:'',
                                     array(
                                         'title' => ( isset($image['alt']) )? $image['alt']:'',
@@ -32,14 +32,14 @@
                                     ))
                                 !!}
                             @else
-                                {!! Html::image( url() . $module_params['placeholder_image'],
+                                {!! Html::image( url('/') . $module_params['placeholder_image'],
                                     'hero-area-three',
                                     array(
                                         'title' => 'image-text',
                                         'border' => '0',
                                         'data-image' => '',
                                         'style' => 'display:block;border:none;max-width:318px;width:100%;'
-                                    )) 
+                                    ))
                                 !!}
                             @endif
                         </a>

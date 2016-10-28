@@ -50,7 +50,7 @@ $default = [
             'module_id' => 'hero_image_bg',
             'level' => 'single'
         ],
-        
+
         'hero_image_mobile' => [
             'title' => 'Full Width Image',
             'action' => 'add',

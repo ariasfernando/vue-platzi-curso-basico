@@ -28,7 +28,7 @@
 
 					<div class="row list-action-container">
 						<div class="col-xs-8 admin-search-box">
-							{!! Form::open ( array ( 'method' => 'get' ,'id' => 'admin-user-search', 'url' => url().'/admin/user' )) !!}
+							{!! Form::open ( array ( 'method' => 'get' ,'id' => 'admin-user-search', 'url' => url('/') .'/admin/user' )) !!}
 
 								{!! Form::select('type', $search_fields, (count($search_query))? $search_query['type'] : '',array (
 									'class' => 'form-control',

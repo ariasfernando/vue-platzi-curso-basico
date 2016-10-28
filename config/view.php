@@ -9,17 +9,18 @@ $overrideFile = (env('APP_NAME', false))
 $default = [
 
     /*
-	|--------------------------------------------------------------------------
-	| View Storage Paths
-	|--------------------------------------------------------------------------
-	|
-	| Most templating systems load templates from disk. Here you may specify
-	| an array of paths that should be checked for your views. Of course
-	| the usual Laravel view path has already been registered for you.
-	|
-	*/
+    |--------------------------------------------------------------------------
+    | View Storage Paths
+    |--------------------------------------------------------------------------
+    |
+    | Most templating systems load templates from disk. Here you may specify
+    | an array of paths that should be checked for your views. Of course
+    | the usual Laravel view path has already been registered for you.
+    |
+    */
+
     'paths' => [
-        realpath(base_path('resources/views'))
+        realpath(base_path('resources/views')),
     ],
 
     /*
@@ -32,7 +33,8 @@ $default = [
     | directory. However, as usual, you are free to change this value.
     |
     */
-    'compiled' => realpath(storage_path().'/framework/views'),
+
+    'compiled' => realpath(storage_path('framework/views')),
 
     /*
     |--------------------------------------------------------------------------

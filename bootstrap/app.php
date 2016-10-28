@@ -27,26 +27,24 @@ $app = new Illuminate\Foundation\Application(
 */
 
 $app->singleton(
-    'Illuminate\Contracts\Http\Kernel',
-    'Stensul\Http\Kernel'
+    Illuminate\Contracts\Http\Kernel::class,
+    Stensul\Http\Kernel::class
 );
 
 $app->singleton(
-    'Illuminate\Contracts\Console\Kernel',
-    'Stensul\Console\Kernel'
+    Illuminate\Contracts\Console\Kernel::class,
+    Stensul\Console\Kernel::class
 );
 
 $app->singleton(
-    'Illuminate\Contracts\Debug\ExceptionHandler',
-    'Stensul\Exceptions\Handler'
+    Illuminate\Contracts\Debug\ExceptionHandler::class,
+    Stensul\Exceptions\Handler::class
 );
 
 $app->singleton(
-    'Illuminate\Foundation\Bootstrap\ConfigureLogging',
-    'Stensul\Bootstrap\ConfigureLogging'
+    Illuminate\Foundation\Bootstrap\ConfigureLogging::class,
+    Stensul\Bootstrap\ConfigureLogging::class
 );
-
-
 
 /*
 |--------------------------------------------------------------------------

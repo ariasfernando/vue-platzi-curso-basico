@@ -3,14 +3,14 @@
 namespace Stensul\Http\Controllers;
 
 use Auth;
-use Illuminate\Foundation\Bus\DispatchesCommands;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Stensul\Providers\HelperServiceProvider as Helper;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
 abstract class Controller extends BaseController
 {
-    use DispatchesCommands, ValidatesRequests;
+    use DispatchesJobs, ValidatesRequests;
 
     /**
      * Render View.

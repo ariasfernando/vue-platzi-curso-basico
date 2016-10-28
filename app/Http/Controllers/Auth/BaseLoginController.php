@@ -8,41 +8,33 @@ use Activity;
 use Validator;
 use Stensul\Models\User;
 use Stensul\Models\Role;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\Registrar;
 use Stensul\Http\Requests\LoginRequest;
 use Stensul\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-class BaseAuthController extends Controller
+class BaseLoginController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | Registration & Login Controller
+    | Login Controller
     |--------------------------------------------------------------------------
     |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
+    | This controller handles the authentication of existing users.
+    | By default, this controller uses a simple trait to add these behaviors.
     |
     */
 
     protected $redirect_to = '/';
 
-    use AuthenticatesAndRegistersUsers;
+    use AuthenticatesUsers;
 
     /**
      * Construct.
      *
-     * @param Guard     $auth
-     * @param Registrar $registrar
      */
-    public function __construct(Guard $auth, Registrar $registrar)
+    public function __construct()
     {
-        $this->auth = $auth;
-        $this->registrar = $registrar;
-
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
@@ -78,17 +70,17 @@ class BaseAuthController extends Controller
      * Try to login.
      *
      * @param LoginRequest $request
-     * @param Guard        $auth
-     *
      * @return \Illuminate\Http\$this
      */
-    public function postLogin(LoginRequest $request, Guard $auth)
+    public function postLogin(LoginRequest $request)
     {
         $email = strtolower($request->input('email'));
         $password = $request->input('password');
         $remember = $request->input('remember');
-
         if (User::where('email', '=', $email)->exists()) {
+
+            $auth = $this::guard();
+
             if ($auth->validate(['email' => $email, 'password' => $password])) {
                 $roles_array = array_column(Role::all(['name'])->toArray(), 'name');
                 $user_roles = User::where('email', '=', $email)->firstOrFail()->roles;
@@ -97,6 +89,7 @@ class BaseAuthController extends Controller
                     if ($auth->attempt(['email' => $email, 'password' => $password], $remember)
                         || $auth->viaRemember()
                     ) {
+
                         Activity::log('User Logged in');
                     }
                 } else {
@@ -109,7 +102,6 @@ class BaseAuthController extends Controller
         } else {
             $error = Activity::log('User login fail [ERROR_EMAIL]');
         }
-
         if (isset($error)) {
             return redirect()->back()->with(array("message" => "ERROR_DEFAULT"));
         } else {
@@ -139,49 +131,4 @@ class BaseAuthController extends Controller
         return \Redirect::to($this->redirect_to);
     }
 
-    /**
-     * Show register view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function getRegister()
-    {
-        $is_registration = env('USER_REGISTRATION', true);
-
-        if (!$is_registration) {
-            return redirect(env('APP_BASE_URL', '/'));
-        } else {
-            $roles = array_column(Role::all(['name'])->toArray(), 'name');
-            return view('base.auth.register')->with('roles', $roles);
-        }
-    }
-
-    /**
-     * Show register view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function postRegister(Request $request)
-    {
-
-        $is_registration = env('USER_REGISTRATION', true);
-
-        if (!$is_registration) {
-            return redirect(env('APP_BASE_URL', '/'));
-        } else {
-            $validator = $this->registrar->validator($request->all());
-
-            if ($validator->fails()) {
-                $this->throwValidationException(
-                    $request,
-                    $validator
-                );
-            }
-
-            $request->merge(array("password" => bcrypt($request->get("password"))));
-            User::create($request->all());
-            return \Redirect::to("auth/login")->with("message", "SUCCESS_REGISTERED");
-
-        }
-    }
 }

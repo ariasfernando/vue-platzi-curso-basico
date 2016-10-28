@@ -26,6 +26,7 @@ class PasswordController extends Controller
      */
     public function __construct(Guard $auth, PasswordBroker $passwords)
     {
+
         $this->auth = $auth;
         $this->passwords = $passwords;
         $this->subject = env('MAIL_FORGOT_SUBJECT', 'stensul Password Reset Link');

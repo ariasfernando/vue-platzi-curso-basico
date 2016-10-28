@@ -6,6 +6,7 @@ use Auth;
 use Activity;
 use Stensul\Models\Upload;
 use GuzzleHttp\Client as Client;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class Responsys implements ApiConnector
 {
@@ -108,9 +109,9 @@ class Responsys implements ApiConnector
                             'Campaign uploaded to Responsys',
                             [
                                 'properties' => [
-                                    'campaign_id' => new \MongoId($campaign_id),
+                                    'campaign_id' => new ObjectID($campaign_id),
                                     'filename' => $filename,
-                                    'user_id' => new \MongoId(Auth::id())
+                                    'user_id' => new ObjectID(Auth::id())
                                 ]
                             ]
                         );
@@ -118,11 +119,11 @@ class Responsys implements ApiConnector
                         Upload::create(
                             [
                                 'api' => 'responsys',
-                                'campaign_id' => new \MongoId($campaign_id),
+                                'campaign_id' => new ObjectID($campaign_id),
                                 'original_filename' => $original_filename,
                                 'filename' => $filename,
                                 'path' => $path,
-                                'user_id' => new \MongoId(Auth::id())
+                                'user_id' => new ObjectID(Auth::id())
                             ]
                         );
 

@@ -1,24 +1,28 @@
 {
   "private": true,
+  "scripts": {
+    "prod": "gulp --production",
+    "dev": "gulp watch"
+  },
   "devDependencies": {
-    "gulp-livereload": "3.8.0",
-    "gulp-sync": "^0.1.4",
-    "elixir-jshint": "^1.1.2"
+    "gulp": "^3.9.1",
+    "jquery": "^3.1.0",
+    "laravel-elixir": "^6.0.0-9"
+  },
+  "name": "enterprise-base",
+  "description": "[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework) [![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework) [![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework) [![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework) [![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)",
+  "version": "2.0.0",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "tests"
   },
   "dependencies": {
-    "gulp": "3.8.11",
-    "gulp-autoprefixer": "2.1.0",
-    "gulp-if": "1.2.5",
-    "gulp-minify-css": "1.1.1",
-    "gulp-notify": "2.2.0",
-    "gulp-phpunit": "0.8.1",
-    "gulp-ruby-sass": "1.0.1",
-    "gulp-uglify": "1.2.0",
-    "gulp-util": "3.0.4",
-    "laravel-elixir": "2.1.1",
-    "run-sequence": "1.1.0",
-    "stackup": "1.0.1",
-    "underscore": "1.8.3",
-    "yargs": "3.9.0"
-  }
+    "elixir-jshint": "^1.2.3",
+    "gulp-notify": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-sync": "^0.1.4",
+    "laravel-elixir": "^6.0.0-11"
+  },
+  "author": "",
+  "license": "Propietary"
 }

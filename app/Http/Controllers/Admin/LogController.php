@@ -6,7 +6,8 @@ use Auth;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\Log;
-use Stensul\Http\Controllers\Auth\AdminAuthController as AdminAuth;
+use MongoDB\BSON\ObjectID as ObjectID;
+use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
 
 class LogController extends Controller
 {
@@ -24,7 +25,7 @@ class LogController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('admin');
+        $this->middleware('AdminAuthenticate');
     }
 
     /**
@@ -42,9 +43,15 @@ class LogController extends Controller
         $search_operator = 'like';
         $search_query = (count($request->all()))? $request->all() : [];
 
-        if (strpos($search_type, '_id') !== false && \MongoId::isValid(trim($request->input("q")))) {
-            $search_text = new \MongoId(trim($request->input("q")));
-            $search_operator = '=';
+        if (strpos($search_type, '_id') !== false) {
+            try
+            {
+                $search_text = new ObjectID(trim($request->input("q")));
+                $search_operator = '=';
+            }
+            catch(\MongoDB\Driver\Exception\InvalidArgumentException $exception)
+            {
+            }
         }
 
         $search_fields = [

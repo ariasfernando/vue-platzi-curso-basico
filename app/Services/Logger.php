@@ -4,6 +4,8 @@ namespace Stensul\Services;
 
 use Auth;
 use Log as FileLog;
+use MongoDB\BSON\ObjectID as ObjectID;
+
 use Stensul\Models\Log as DBLog;
 
 class Logger
@@ -24,7 +26,7 @@ class Logger
             $route = explode('@', last(explode('\\', \Route::currentRouteAction())));
             $user_agent = (isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : 'not-found';
             $user_ip = (isset($_SERVER['REMOTE_ADDR'])) ? \Request::getClientIp(true) : 'not-found';
-            $user_data = (Auth::check()) ? ['user_id' => new \MongoId(Auth::id())] : ['user_id' => 'not-found'];
+            $user_data = (Auth::check()) ? ['user_id' => new ObjectID(Auth::id())] : ['user_id' => 'not-found'];
             $properties = (isset($params['properties']) && is_array($params) && is_array($params['properties']))
                 ? array_merge($user_data, $params['properties'])
                 : $user_data;

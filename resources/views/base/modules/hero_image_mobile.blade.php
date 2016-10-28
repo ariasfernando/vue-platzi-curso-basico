@@ -27,7 +27,7 @@
 
 <tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>'>
     <td align="center" style="vertical-align:middle;">
-        <table style="width:100%!important;" 
+        <table style="width:100%!important;"
                width="100%"
                cellpadding="0"
                cellspacing="0"
@@ -59,7 +59,7 @@
                 >
                     <a href='{{ isset($image['destination_url'])? $image['destination_url'] : '#' }}'
                        data-master-image-editor="heroMobile">
-                        {!! Html::image( url() . $image_source_desktop ,
+                        {!! Html::image( url('/') . $image_source_desktop ,
                             ( isset($image['alt']) )? $image['alt']:'',
                             array(
                                 'title' => ( isset($image['alt']) )? $image['alt']:'',
@@ -70,7 +70,7 @@
                             ))
                         !!}
                         <div class="show-img-device" style="display:none;width:0;overflow:hidden;max-height:0!important;">
-                        {!! Html::image( url() . $image_source_mobile ,
+                        {!! Html::image( url('/') . $image_source_mobile ,
                             ( isset($image['alt']) )? $image['alt']:'',
                             array(
                                 'title' => ( isset($image['alt']) )? $image['alt']:'',

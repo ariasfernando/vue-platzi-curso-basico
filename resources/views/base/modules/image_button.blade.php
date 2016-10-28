@@ -7,12 +7,12 @@
 
 	// Set image
 	$imageData = [
-		'source' => isset($module_params['placeholder_image'])? url() . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image']): '',
+		'source' => isset($module_params['placeholder_image'])? url('/') . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image']): '',
 		'alt' => 'button-place-holder'
 	];
 
 	if( isset($module_params['data']['button0']['path']) && !empty($module_params['data']['button0']['path']) ){
-		$imageData['source'] = url() . "/images/campaigns". $module_params['data']['button0']['path'];
+		$imageData['source'] = url('/') . "/images/campaigns". $module_params['data']['button0']['path'];
 	}
 
 	if( isset($module_params['data']['button0']['label']) && !empty($module_params['data']['button0']['label']) ){

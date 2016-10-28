@@ -11,6 +11,7 @@ use Stensul\Http\Requests;
 use Stensul\Models\User;
 use Stensul\Models\Campaign;
 use Stensul\Models\Upload;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class ApiController extends Controller
 {
@@ -37,7 +38,7 @@ class ApiController extends Controller
     {
         $resp = [];
         $campaign_id = $request->input('campaign_id');
-        $history = Upload::where('campaign_id', '=', new \MongoId($campaign_id))
+        $history = Upload::where('campaign_id', '=', new ObjectID($campaign_id))
             ->orderBy('updated_at', 'desc')
             ->paginate(5)->toArray();
 

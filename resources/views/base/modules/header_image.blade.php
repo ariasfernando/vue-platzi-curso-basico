@@ -17,14 +17,14 @@
 		<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
 			<tr>
 				<td style="vertical-align:top;"
-					width="100%" 
-				    valign="top" 
-				    align="center" 
+					width="100%"
+				    valign="top"
+				    align="center"
 				    bgcolor="#ffffff"
 				>
 					<a href="<?php echo ( isset($image['destination_url']) )? $image['destination_url']:'#'; ?>" data-master-image-editor="header">
 						@if ( isset($image['path']) && !empty($image['path']) )
-								{!! Html::image( url() . "/images/campaigns". $image['path'],
+								{!! Html::image( url('/') . "/images/campaigns". $image['path'],
 									(isset($image['alt']))? $image['alt']: '',
 									array(
 										'title' => (isset($image['alt']))? $image['alt']: '',
@@ -37,7 +37,7 @@
 									))
 								!!}
 						@else
-							{!! Html::image( url() . $module_params['placeholder_image'],
+							{!! Html::image( url('/') . $module_params['placeholder_image'],
 								'header_image',
 								array(
 									'title' => 'header_image',
