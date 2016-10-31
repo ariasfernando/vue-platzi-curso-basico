@@ -78,7 +78,6 @@ class BaseLoginController extends Controller
         $password = $request->input('password');
         $remember = $request->input('remember');
         if (User::where('email', '=', $email)->exists()) {
-
             $auth = $this::guard();
 
             if ($auth->validate(['email' => $email, 'password' => $password])) {
@@ -89,7 +88,6 @@ class BaseLoginController extends Controller
                     if ($auth->attempt(['email' => $email, 'password' => $password], $remember)
                         || $auth->viaRemember()
                     ) {
-
                         Activity::log('User Logged in');
                     }
                 } else {
@@ -130,5 +128,4 @@ class BaseLoginController extends Controller
 
         return \Redirect::to($this->redirect_to);
     }
-
 }

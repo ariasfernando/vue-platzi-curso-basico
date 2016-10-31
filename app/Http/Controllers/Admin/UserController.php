@@ -45,13 +45,10 @@ class UserController extends Controller
         $search_query = (count($request->all()))? $request->all() : [];
 
         if (strpos($search_type, '_id') !== false) {
-            try
-            {
+            try {
                 $search_text = new ObjectID(trim($request->input("q")));
                 $search_operator = '=';
-            }
-            catch(\MongoDB\Driver\Exception\InvalidArgumentException $exception)
-            {
+            } catch (\MongoDB\Driver\Exception\InvalidArgumentException $exception) {
             }
         }
 

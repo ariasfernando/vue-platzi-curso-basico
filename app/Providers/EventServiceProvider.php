@@ -34,8 +34,7 @@ class EventServiceProvider extends ServiceProvider
             function (JobFailed $event) {
 
                 // Set job status as failed.
-                if ($event->job->getJobId() && $event->job->attempts())
-                {
+                if ($event->job->getJobId() && $event->job->attempts()) {
                     \Worker::failed($event->job->getJobId());
                     \Log::error(sprintf(
                         "Failed to process job\n\nid: %s\nAttempts: %d",

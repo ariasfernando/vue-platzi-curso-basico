@@ -21,7 +21,6 @@ use HtmlCreator as Html;
 use TextCreator as Text;
 use Statics as Assets;
 
-
 /*
 |--------------------------------------------------------------------------
 | Campaign manager service
@@ -206,7 +205,7 @@ class CampaignManager
     public static function process($campaign_id = null)
     {
 
-       $job_id = dispatch(new ProcessCampaign($campaign_id));
+        $job_id = dispatch(new ProcessCampaign($campaign_id));
 
         Worker::queue($job_id, 'process');
 

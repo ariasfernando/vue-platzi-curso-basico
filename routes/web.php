@@ -26,7 +26,7 @@ if (strlen($base_url = Config::get('app.url')) > 0) {
 
 Route::resources(Config::get('routes.resources'));
 
-Route::group(['middleware' => ['web']], function() {
+Route::group(['middleware' => ['web']], function () {
 
     foreach (Config::get('routes.web.get') as $key => $value) {
         Route::get($key, $value);
@@ -45,7 +45,7 @@ Route::group(['middleware' => ['web']], function() {
     }
 });
 
-Route::group(['middleware' => ['api']], function() {
+Route::group(['middleware' => ['api']], function () {
     foreach (Config::get('routes.api.get') as $key => $value) {
         Route::get($key, $value);
     }
