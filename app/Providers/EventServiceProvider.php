@@ -32,8 +32,6 @@ class EventServiceProvider extends ServiceProvider
         \Queue::failing(
             function (JobFailed $event) {
 
-                // @todo find out why job id is empty.
-                // @see Illuminate\Queue\Jobs\SyncJob
                 // Set job status as failed.
                 if ($event->job->getJobId() && $event->job->attempts())
                 {
