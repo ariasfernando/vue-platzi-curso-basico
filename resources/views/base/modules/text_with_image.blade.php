@@ -124,7 +124,7 @@
                                             class="st-without-event"
                                         >
                                             @if ( isset($image['path']) && !empty($image['path']) )
-                                                {!! Html::image( url() . "/images/campaigns". $image['path'],
+                                                {!! Html::image( url('/') . "/images/campaigns". $image['path'],
                                                     ( isset($image['alt']) )? $image['alt']:'',
                                                     array(
                                                         'title' => ( isset($image['alt']) )? $image['alt']:'',
@@ -136,7 +136,7 @@
                                                     ))
                                                 !!}
                                             @else
-                                                {!! Html::image( url() . $module_params['placeholder_image'],
+                                                {!! Html::image( url('/') . $module_params['placeholder_image'],
                                                     'content-module-3',
                                                     array(
                                                         'title' => 'content-module-3',

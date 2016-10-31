@@ -29,7 +29,7 @@
 				>
 					<a href="{{ isset($image['destination_url'])? $image['destination_url'] : '#' }}" data-master-image-editor="thinAd" style="max-width:<?php echo $module_params['image_size']['image0']['width']; ?>px;">
 						@if ( isset($image['path']) && !empty($image['path']) )
-							{!! Html::image( url()->full() . "/images/campaigns". $image['path'],
+							{!! Html::image( url("/images/campaigns". $image['path']),
 								( isset($image['alt']) )? $image['alt']:'',
 								array(
 									'title' => ( isset($image['alt']) )? $image['alt']:'',
@@ -39,7 +39,7 @@
 								))
 							!!}
 						@else
-							{!! Html::image( url()->full() . $module_params['placeholder_image'],
+							{!! Html::image( url($module_params['placeholder_image']),
 								'thin-ad-block',
 								array(
 									'title' => 'thin-ad-block',
