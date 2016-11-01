@@ -23,6 +23,5 @@ class AwsS3SseAes256Adapter extends AwsS3Adapter
         $config->set('ServerSideEncryption', 'AES256');
 
         return parent::upload($path, $body, $config);
-
     }
 }

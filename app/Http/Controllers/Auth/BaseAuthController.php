@@ -105,7 +105,6 @@ class BaseAuthController extends Controller
             } else {
                 $error = Activity::log('User login fail [ERROR_LOGIN]');
             }
-
         } else {
             $error = Activity::log('User login fail [ERROR_EMAIL]');
         }
@@ -122,7 +121,6 @@ class BaseAuthController extends Controller
                 return \Redirect::to($this->redirect_to);
             }
         }
-
     }
 
     /**
@@ -181,7 +179,6 @@ class BaseAuthController extends Controller
             $request->merge(array("password" => bcrypt($request->get("password"))));
             User::create($request->all());
             return \Redirect::to("auth/login")->with("message", "SUCCESS_REGISTERED");
-
         }
     }
 }

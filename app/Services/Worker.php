@@ -173,7 +173,6 @@ class Worker
                 Cache::decrement('job:'.$task.':'.$decrement);
             }
         }
-
     }
 
     /**

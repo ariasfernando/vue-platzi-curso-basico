@@ -47,6 +47,5 @@ class ConfigureLogging extends DefaultConfigureLogging
         parent::configureHandlers($app, $log);
       
         $this->configureCentralizedLogger($app, $log);
-
     }
 }

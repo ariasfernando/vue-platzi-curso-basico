@@ -64,7 +64,6 @@ class PermissionAllow extends Command
                     $role_data->save();
                     $this->info('The role ' . $name . ' was updated!');
                 }
-
             } else {
                 $this->error('Role not found.');
             }

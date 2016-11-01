@@ -90,7 +90,6 @@ class Create extends Command
             $this->error('The email and the password are required.');
             return 4;
         }
-
     }
 
     /**

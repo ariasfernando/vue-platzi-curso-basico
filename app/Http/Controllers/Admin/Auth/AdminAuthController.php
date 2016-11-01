@@ -105,7 +105,6 @@ class AdminAuthController extends Controller
         } else {
             return $this->redirectUser();
         }
-
     }
 
     /**

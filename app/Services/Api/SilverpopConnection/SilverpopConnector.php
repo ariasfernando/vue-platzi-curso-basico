@@ -72,7 +72,6 @@ class SilverpopConnector
 
         try {
             $response = $client->request("POST", $url, $options);
-
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $error = [
                 'status' => 'error_request',
@@ -120,8 +119,6 @@ class SilverpopConnector
         } else {
             return $response->getBody()->getContents();
         }
-
-
     }
     /**
      * Create a login request and retrieve a session id.
