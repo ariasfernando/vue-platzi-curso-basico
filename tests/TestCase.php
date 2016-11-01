@@ -11,6 +11,12 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
     protected $domain;
 
     /**
+     * Base url of the application, APP_URL must be set in .env file.
+     * @var string $baseUrl
+     */
+    public $baseUrl;
+
+    /**
      * Setup environment for tests.
      */
     public function setUp()
@@ -22,6 +28,7 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
         \Artisan::call('migrate:refresh');
 
         $this->domain = preg_replace(['/^http(s)?:\/\//', '/\/$/'], '', url('/'));
+        $this->baseUrl = url('/');
 
         $params = [
             'name' => 'test',
