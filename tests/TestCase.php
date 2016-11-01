@@ -2,16 +2,13 @@
 
 namespace Stensul\Tests;
 
+use Stensul\Models\User;
+
 class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
     protected $campaign;
     protected $user;
-
-    /**
-     * Base url of the application, APP_BASE_URL must be set in .env file.
-     * @var string $baseUrl
-     */
-    public $baseUrl;
+    protected $domain;
 
     /**
      * Setup environment for tests.
@@ -21,12 +18,10 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
         parent::setUp();
 
         \Config::set('database.default', 'mongodb_testing');
+        \Config::set('mail.driver', 'log');
         \Artisan::call('migrate:refresh');
-        \Mail::pretend(true);
 
-        $this->baseUrl = env('APP_BASE_URL', '');
-
-        $registrar = new \Stensul\Services\Registrar;
+        $this->domain = preg_replace(['/^http(s)?:\/\//', '/\/$/'], '', url('/'));
 
         $params = [
             'name' => 'test',
@@ -34,8 +29,7 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
             'password' => bcrypt('qwe123')
         ];
 
-        $registrar = new \Stensul\Services\Registrar;
-        $this->user = $registrar->create($params);
+        $this->user = User::create($params);
 
         /* @todo These asserts might be moved to a User test file later */
         $this->assertInstanceOf('Stensul\Models\User', $this->user);

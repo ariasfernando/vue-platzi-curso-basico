@@ -19,7 +19,7 @@ class UserTest extends TestCase
 
         $this->assertEquals(
             'https://www.gravatar.com/avatar/842b97c042d7c814ff9bf029a3cc6f92?'
-            . 'd=http%3A%2F%2Femailcreatorlocal.com%2Fimages%2F_common%2Fdefault_avatar.jpg'
+            . 'd=http%3A%2F%2F'. $this->domain .'%2Fimages%2F_common%2Fdefault_avatar.jpg'
             . '&d=identicon&r=pg&s=30',
             $url
         );
