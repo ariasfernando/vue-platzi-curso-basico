@@ -41,8 +41,6 @@ class CampaignManagerTest extends TestCase
 
         // Try deleting a non existant campaign.
         $response = CampaignManager::delete('fake_campaign_id');
-        file_put_contents('/tmp/debug', print_r($response, true));
-
 
         $this->assertArrayHasKey('error', $response);
 
@@ -81,6 +79,7 @@ class CampaignManagerTest extends TestCase
     {
 
         $response = CampaignManager::text($this->campaign->id);
+        // var_dump($this->campaign);
         $this->assertNotEmpty($response);
     }
 }
