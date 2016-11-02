@@ -56,7 +56,7 @@
 															)
 														!!}
 												@else
-													{!! Html::image( url()->full() . $module_params['placeholder_image'],
+													{!! Html::image( url('/') . $module_params['placeholder_image'],
 																 'side-by-side-content-blocks',
 																	array(
 																		'title' => 'side-by-side-content-blocks',
@@ -127,7 +127,7 @@
 														)
 													!!}
 												@else
-													{!! Html::image( url()->full() . $module_params['placeholder_image'],
+													{!! Html::image( url('/') . $module_params['placeholder_image'],
 														'content-block-more-ad-uni',
 															array(
 																'title' => 'content-block-more-ad-uni',

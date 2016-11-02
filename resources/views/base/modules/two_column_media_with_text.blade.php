@@ -56,7 +56,7 @@
 															)
 														!!}
 												@else
-													{!! Html::image( url()->full() . $module_params['placeholder_image'],
+													{!! Html::image( url('/') . $module_params['placeholder_image'],
 																 'side-by-side-content-blocks',
 																	array(
 																		'title' => 'side-by-side-content-blocks',
@@ -149,7 +149,7 @@
 										<td valign="top">
 											<a href='{{ isset($image1['destination_url']) ? $image1['destination_url'] : '#' }}' data-master-image-editor="standard">
 												@if ( isset($image1['path']) && !empty($image1['path']) )
-													{!! Html::image(  url()->full() . "/images/campaigns". $image1['path'],
+													{!! Html::image(  url('/') . "/images/campaigns". $image1['path'],
 														( isset($image1['alt']) )? $image1['alt']:'',
 															array(
 																'title' => ( isset($image1['alt']) )? $image1['alt']:'',
@@ -161,7 +161,7 @@
 														)
 													!!}
 												@else
-													{!! Html::image( url()->full() . $module_params['placeholder_image'],
+													{!! Html::image( url('/') . $module_params['placeholder_image'],
 														'content-block-more-ad-uni',
 															array(
 																'title' => 'content-block-more-ad-uni',
