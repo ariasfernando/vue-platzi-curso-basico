@@ -1,4 +1,3 @@
-<?php //dd($logs) ?>
 @foreach ($logs as $log)
 	<tr data-log="{{ $log->id }}">
 		<td title="{{ $log->id }}">{{ $log->id }}</td>
