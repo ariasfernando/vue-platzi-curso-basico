@@ -2,6 +2,7 @@
 
 namespace Stensul\Services;
 
+use Locale;
 use Stensul\Services\TextConverter;
 
 class EmailTextCreator
@@ -43,13 +44,40 @@ class EmailTextCreator
                     break;
 
                 default:
-                    $plain_text .= trim($this->defaultHtml2TextConverter($module));
+            	    // Initialize locale and module settings
+                    Locale::init($this->campaign['locale'], ["name" => $module['type'],"app_name" => $module['file_parent']]);
+
+    		        $path = $this->getModulesPath($module['file_parent']);
+                    if (\view::exists($path . '.text.' . $module['type'])) {
+                        $plain_text .= $this->getTxtByTpl($module);
+                    } else {
+                        $plain_text .= trim($this->defaultHtml2TextConverter($module));
+                    }
                     $plain_text .= self::$module_break;
                     break;
             }
         }
         $plain_text = $this->replaceTags($plain_text);
         return $plain_text;
+    }
+
+    /**
+     * Return a view path according to campaign_format
+     *
+     * @param  string $file_parent
+     * @return string or false
+     */
+    public function getModulesPath($file_parent)
+    {
+        $path = false;
+        if (\Config::get('view.campaign_format') == 'libraries') {
+            $path = $file_parent . '.';
+            $path .= strpos($file_parent, 'base') === false ? $this->campaign['library'] . '.' : '';
+            $path .= 'modules';
+        } else {
+            $path = $file_parent . '.modules';
+        }
+        return $path;
     }
 
     /**
@@ -87,7 +115,7 @@ class EmailTextCreator
         $params = [
             'campaign_data' => $this->campaign
         ];
-        $modulePath = $module['file_parent'] . '.modules.' . $module['type'];
+        $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['type'];
         $moduleHtml = \View::make($modulePath)
             ->with('params', $params)
             ->with('module', $module)
@@ -107,5 +135,25 @@ class EmailTextCreator
         $htmlToText = new TextConverter($html, array('do_links' => 'inline'));
 
         return $htmlToText->getText();
+    }
+
+    /**
+     * Get txt module version.
+     *
+     * @param array $module module data
+     * @return string
+     */
+    protected function getTxtByTpl($module)
+    {
+        $params = [
+            'campaign_data' => $this->campaign
+        ];
+        $modulePath = $this->getModulesPath($module['file_parent']) . '.text.' . $module['type'];
+        $moduleText = \View::make($modulePath)
+            ->with('module', $module)
+            ->with('params', $params)
+            ->render();
+
+        return $moduleText;
     }
 }

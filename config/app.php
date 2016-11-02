@@ -212,6 +212,7 @@ $default = [
         Stensul\Providers\ApiServiceProvider::class,
         Folklore\Image\ImageServiceProvider::class,
         Fideloper\Proxy\TrustedProxyServiceProvider::class,
+        Stensul\Providers\LocaleServiceProvider::class,
     ],
 
     /*
@@ -274,7 +275,8 @@ $default = [
         'Imagine'     => Folklore\Image\Facades\Image::class,
         'Api'         => Stensul\Providers\ApiServiceProvider::class,
         'Authenticate' => Stensul\Http\Middleware\Authenticate::class,
-        'AdminAuthenticate' => Stensul\Http\Middleware\AdminAuthenticate::class
+        'AdminAuthenticate' => Stensul\Http\Middleware\AdminAuthenticate::class,
+        'Locale'      => Stensul\Providers\LocaleServiceProvider::class
     ],
 
 ];
