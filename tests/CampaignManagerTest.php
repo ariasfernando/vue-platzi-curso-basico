@@ -79,7 +79,6 @@ class CampaignManagerTest extends TestCase
     {
 
         $response = CampaignManager::text($this->campaign->id);
-        // var_dump($this->campaign);
         $this->assertNotEmpty($response);
     }
 }
