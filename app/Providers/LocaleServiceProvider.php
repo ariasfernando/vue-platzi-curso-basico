@@ -63,8 +63,7 @@ class LocaleServiceProvider extends ServiceProvider
             && isset($module['name'])
             && isset($module['app_name'])
             && file_exists($module_translations_path = $base_translation_path
-                . $module['app_name'] . '/modules/' . $module['name'] . "/" . self::$locale . '.php')) {
-       
+                . $module['app_name'] . '/modules/' . $module['name'] . '/' . self::$locale . '.php')) {
             $module_texts = require($module_translations_path);
             self::$language_texts = array_merge(self::$language_texts, $module_texts);
         }
@@ -107,10 +106,10 @@ class LocaleServiceProvider extends ServiceProvider
         
         $image_path = self::COMMON_IMG_PATH;
         
-        if (file_exists(public_path() . $image_path . self::$locale  . "/" . $image)) {
-            $image_path .= self::$locale  . "/" . $image;
+        if (file_exists(public_path() . $image_path . self::$locale  . '/' . $image)) {
+            $image_path .= self::$locale  . '/' . $image;
         } else {
-            $image_path .= "/en_us/" . $image;
+            $image_path .= '/en_us/' . $image;
         }
 
         return $image_path;
@@ -128,8 +127,8 @@ class LocaleServiceProvider extends ServiceProvider
        
         $css_path = self::COMMON_CSS_PATH;
        
-        if (file_exists(public_path() . $css_path . self::$locale  . "/" . $css)) {
-            $css_path .= self::$locale  . "/" . $css;
+        if (file_exists(public_path() . $css_path . self::$locale  . '/' . $css)) {
+            $css_path .= self::$locale  . '/' . $css;
         } else {
             $css_path .= $css;
         }

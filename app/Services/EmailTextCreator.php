@@ -48,7 +48,7 @@ class EmailTextCreator
                     StensulLocale::init($this->campaign['locale'], ["name" => $module['type'],"app_name" => $module['file_parent']]);
 
     		        $path = $this->getModulesPath($module['file_parent']);
-                    if (\view::exists($path . '.text.' . $module['type'])) {
+                    if (\View::exists($path . '.text.' . $module['type'])) {
                         $plain_text .= $this->getTxtByTpl($module);
                     } else {
                         $plain_text .= trim($this->defaultHtml2TextConverter($module));
