@@ -44,7 +44,7 @@
 										<td>
 											<a href="{{ isset($image0['destination_url']) ? $image0['destination_url'] : '#' }}" data-master-image-editor="standard">
 												@if ( isset($image0['path']) && !empty($image0['path']) )
-														{!! Html::image( url()->full() . "/images/campaigns". $image0['path'],
+														{!! Html::image( url("/images/campaigns". $image0['path']),
 															( isset($image0['alt']) )? $image0['alt']:'',
 																array(
 																	'title' => ( isset($image0['alt']) )? $image0['alt']:'',
@@ -149,7 +149,7 @@
 										<td valign="top">
 											<a href='{{ isset($image1['destination_url']) ? $image1['destination_url'] : '#' }}' data-master-image-editor="standard">
 												@if ( isset($image1['path']) && !empty($image1['path']) )
-													{!! Html::image(  url('/') . "/images/campaigns". $image1['path'],
+													{!! Html::image(  url("/images/campaigns". $image1['path']),
 														( isset($image1['alt']) )? $image1['alt']:'',
 															array(
 																'title' => ( isset($image1['alt']) )? $image1['alt']:'',

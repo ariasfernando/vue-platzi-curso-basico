@@ -113,7 +113,7 @@
                                         <td valign="top">
                                             <a href='{{ isset($image1['destination_url']) ? $image1['destination_url'] : '#' }}' data-open-element-config="single_shared_height" data-key="image1">
                                                 @if ( isset($image1['path']) && !empty($image1['path']) )
-                                                    {!! Html::image(  url('/') . "/images/campaigns". $image1['path'],
+                                                    {!! Html::image(  url("/images/campaigns". $image1['path']),
                                                         ( isset($image1['alt']) )? $image1['alt']:'',
                                                             array(
                                                                 'title' => ( isset($image1['alt']) )? $image1['alt']:'',
