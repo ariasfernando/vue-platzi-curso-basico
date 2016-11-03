@@ -4,6 +4,7 @@ namespace Stensul\Http\Controllers;
 
 use Auth;
 use Cache;
+use StensulLocale;
 use Activity;
 use Campaign;
 use EmailSender;
@@ -74,6 +75,9 @@ class CampaignController extends Controller
 
             return redirect('campaign/edit/'.$campaign->id);
         }
+
+        // Initialize locale
+        StensulLocale::init($params['locale']);
 
         return $this->renderView('base.campaign', array('params' => $params));
     }

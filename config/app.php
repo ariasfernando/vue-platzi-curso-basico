@@ -276,7 +276,7 @@ $default = [
         'Api'         => Stensul\Providers\ApiServiceProvider::class,
         'Authenticate' => Stensul\Http\Middleware\Authenticate::class,
         'AdminAuthenticate' => Stensul\Http\Middleware\AdminAuthenticate::class,
-        'Locale'      => Stensul\Providers\LocaleServiceProvider::class
+        'StensulLocale'      => Stensul\Providers\LocaleServiceProvider::class
     ],
 
 ];

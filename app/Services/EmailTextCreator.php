@@ -2,7 +2,7 @@
 
 namespace Stensul\Services;
 
-use Locale;
+use StensulLocale;
 use Stensul\Services\TextConverter;
 
 class EmailTextCreator
@@ -45,7 +45,7 @@ class EmailTextCreator
 
                 default:
             	    // Initialize locale and module settings
-                    Locale::init($this->campaign['locale'], ["name" => $module['type'],"app_name" => $module['file_parent']]);
+                    StensulLocale::init($this->campaign['locale'], ["name" => $module['type'],"app_name" => $module['file_parent']]);
 
     		        $path = $this->getModulesPath($module['file_parent']);
                     if (\view::exists($path . '.text.' . $module['type'])) {

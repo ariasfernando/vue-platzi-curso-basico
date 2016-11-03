@@ -3,6 +3,7 @@
 namespace Stensul\Http\Controllers;
 
 use Auth;
+use StensulLocale;
 use Storage;
 use Stensul\Models\Campaign;
 use Illuminate\Http\Request;
@@ -40,6 +41,13 @@ class TemplateController extends Controller
         $campaign_data = $request->has('campaign_id')
             ? Campaign::findOrFail($request->input('campaign_id'))
             : null;
+
+        // Initialize locale and module settings
+        $module = [
+            "name" => $request->input('name'),
+            "app_name" => $request->input('app_name')
+        ];
+        StensulLocale::init($campaign_data['locale'], $module);
 
         $options = [];
         $options['params'] = $request->all();

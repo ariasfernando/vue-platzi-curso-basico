@@ -9,7 +9,7 @@ if (!function_exists('_l')) {
      */
     function _l($string = null, $params = array())
     {
-         return Locale::getTranslation($string, $params);
+         return StensulLocale::getTranslation($string, $params);
     }
 }
 
@@ -22,7 +22,7 @@ if (!function_exists('image')) {
      */
     function image($string = null)
     {
-         return Locale::getImagesPath($string);
+         return StensulLocale::getImagesPath($string);
     }
 }
 
@@ -35,6 +35,6 @@ if (!function_exists('css')) {
      */
     function css($string = null)
     {
-         return Locale::getCssPath($string);
+         return StensulLocale::getCssPath($string);
     }
 }
