@@ -44,10 +44,10 @@ class EmailTextCreator
                     break;
 
                 default:
-            	    // Initialize locale and module settings
+                    // Initialize locale and module settings
                     StensulLocale::init($this->campaign['locale'], ["name" => $module['type'],"app_name" => $module['file_parent']]);
 
-    		        $path = $this->getModulesPath($module['file_parent']);
+                    $path = $this->getModulesPath($module['file_parent']);
                     if (\View::exists($path . '.text.' . $module['type'])) {
                         $plain_text .= $this->getTxtByTpl($module);
                     } else {
