@@ -5,7 +5,7 @@
 
 		{!! Form::hidden('permissionId', (isset($params['permission']['_id']))? $params['permission']['_id'] : 0) !!}
 
-		<!-- Input Name -->
+		{{-- Input Name --}}
 		<div class="modal-mpf-row">
 			{!! Form::label('name', 'Name') !!}
 			{!! Form::text('name', (isset($params['permission']['name']))? $params['permission']['name'] : '', array (
@@ -15,7 +15,7 @@
 			)) !!}
 		</div>
 
-		<!-- Input Description -->
+		{{-- Input Description --}}
 		<div class="modal-mpf-row">
 			{!! Form::label('description', 'Description') !!}
 			{!! Form::text('description',(isset($params['permission']['description']))? $params['permission']['description'] : '', array (
@@ -25,7 +25,7 @@
 			)) !!}
 		</div>
 
-		<!-- Input submit  -->
+		{{-- Input submit  --}}
 		<div class="modal-mpf-submit">
 			{!! Form::submit('Submit', array ( 'class' => 'btn btn-success pull-right submit-config')) !!}
 		</div>

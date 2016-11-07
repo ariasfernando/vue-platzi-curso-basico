@@ -10,8 +10,8 @@
 		<title>Email Creator</title>
 		<link href="{{  url( elixir('css/admin.css') ) }}" rel="stylesheet">
 		
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		{{-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --}}
+		{{-- WARNING: Respond.js doesn't work if you view the page via file:// --}}
 		<!--[if lt IE 9]>
 			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -28,8 +28,8 @@
 		@include('base.admin.partials.sidebar')
 
 		<div class="admin-container">
-			<!-- HEADER -->
-			<!-- CONTENT -->
+			{{-- HEADER --}}
+			{{-- CONTENT --}}
 			<div class="container-fluid">
 				<div class="row">
 					{{-- Content --}}
@@ -42,10 +42,10 @@
 			{{-- Modal Confirm --}}
 			@include('base.partials.modal_confirm')
 
-			<!-- Scripts -->
+			{{-- Scripts --}}
 			<script src="{{ url( elixir('js/library.js') ) }}"></script>
 
-			<!-- Global Application JS object -->
+			{{-- Global Application JS object --}}
 			@include('base/partials/application_script')
 
 			@section('footer-script')
