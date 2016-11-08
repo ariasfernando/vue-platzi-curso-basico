@@ -224,6 +224,16 @@ class TemplateController extends Controller
         // component name
         $component = $request->input('name');
         $parts[] = $component;
+
+        // module class
+        $class = $request->input('class');
+        $view = $request->input('view', 'module');
+
+        // Find module in [module_name]/module.blade.php
+        if ($class == 'pkg') {
+            $parts = [ $app_name, 'modules', $component, $view ];
+        }
+
         return $this->renderView(
             implode('.', $parts),
             $params

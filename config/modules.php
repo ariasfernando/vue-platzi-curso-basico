@@ -457,7 +457,8 @@ $default = [
     ],
     'view_in_browser' => [
         'type' => 'view_in_browser',
-        'file_parent' => 'base'
+        'file_parent' => 'base',
+        'class' => 'pkg'
     ],
     'text_with_image' => [
         'type' => 'text_with_image',

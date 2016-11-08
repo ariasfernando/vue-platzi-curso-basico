@@ -39,5 +39,6 @@
 @endsection
 
 @section('footer-script')
+	<script src="{{ url( elixir('js/plugins.js') ) }}"></script>
 	<script src="{{ url( elixir('js/dashboard.js') ) }}"></script>
 @stop

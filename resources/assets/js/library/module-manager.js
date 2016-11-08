@@ -6,7 +6,10 @@ var moduleManager = {
 	// The internal name of the module. Used to get the module by ajax.
 	moduleName: null,
 
-	// The internal name app of the module. Used to get the module by ajax.
+    // The internal class of the module. Used to get the module by ajax.
+    moduleClass: null,
+
+    // The internal name app of the module. Used to get the module by ajax.
     moduleAppName: null,
 
 	// viewContent is filled with the html content of the module.
@@ -47,7 +50,7 @@ var moduleManager = {
 	},
 
 	// Add module to email template.
-	addModule: function( moduleName, moduleAppName ){
+	addModule: function( moduleName, moduleAppName, moduleClass ){
         var selectedMode = $('.switch-input:checked').val();
 
 		if( moduleName ){
@@ -68,10 +71,12 @@ var moduleManager = {
 				// Reset module variables.
 				module.reset();
 
-				// Set module id
-				module.moduleName = moduleName;
-				// Set module app name
-				module.moduleAppName = moduleAppName;
+                // Set module id
+                module.moduleName = moduleName;
+                // Set module app name
+                module.moduleAppName = moduleAppName;
+                // Set module class
+                module.moduleClass = moduleClass;
 
 				// Get view content by ajax.
 				var getViewRequest = module.getModuleView();
@@ -141,6 +146,7 @@ var moduleManager = {
 		var data = {
 			app_name: _this.moduleAppName,
 			name: _this.moduleName,
+			class: _this.moduleClass,
 			library_name: Application.globals.library_name,
 			campaign_id: campaignManager.getCampaignId(),
 		};
@@ -688,23 +694,34 @@ var moduleManager = {
 			})
             // Action Config
             .on("click", '.action-config', function () {
-                var $moduleElement = $(this).parents("[data-params]")
+                var $moduleElement = $(this).parents("[data-params]");
+                var moduleParams = $moduleElement.data('params');
 
                 // Set config modal default or from data-params
-                var modalName = $moduleElement.data("params").type  + "_config";
-                if ($moduleElement.data('params').config_modal && $moduleElement.data('params').config_modal != "") {
-                    modalName = $moduleElement.data('params').config_modal;
+                var modalName = moduleParams.type + "_config";
+                if (moduleParams.config_modal && moduleParams.config_modal != "") {
+                    modalName = moduleParams.config_modal;
                 }
 
-                var appName = $moduleElement.data("params").app_name || $moduleElement.data("params").file_parent;
+                var appName = moduleParams.app_name || moduleParams.file_parent;
 
-                // configModal
-                var configModal = new modalManager({
+                var config = {
                     app_name: appName,
                     view: modalName,
                     config_modal_key: $moduleElement.data("params").type
-                });
-                configModal.modalTarget = $moduleElement;;
+                };
+
+                // Load components config
+                if ( moduleParams.class ) {
+                    config.class = moduleParams.class;
+                    config.name = moduleParams.type;
+                    config.view = 'modal'
+                }
+
+                // configModal
+                var configModal = new modalManager(config);
+                configModal.modalTarget = $moduleElement;
+
                 configModal.open();
 
                 return false;

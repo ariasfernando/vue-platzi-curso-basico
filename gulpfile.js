@@ -149,6 +149,18 @@ gulp.task( "elixir-scripts", function() {
 				assetsPath
 			)
 
+            // === Modules ===
+			.scripts(
+				["js/plugins/*.js", "js/plugins/**/*.js"],
+				jsDestinationPath + "plugins.js",
+				assetsPath
+        	)
+            .scripts(
+	            ["../views/base/modules/**/*.js", "js/library/modules-placeholder.js"],
+    	        jsDestinationPath + "modules.js",
+        	    assetsPath
+        	)
+
 			// === Dashboard page ===
 			.scripts(
 				[

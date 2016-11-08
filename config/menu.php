@@ -24,7 +24,8 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'view_in_browser',
-            'level' => 'single'
+            'level' => 'single',
+            'module_class' => 'pkg'
         ],
 
         'header_image' => [

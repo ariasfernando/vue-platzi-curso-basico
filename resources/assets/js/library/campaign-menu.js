@@ -29,8 +29,9 @@ var campaignMenu = function(customOptions){
 	this.onModuleClick = function( element ){
 		var moduleId = $(element).attr("id");
 		var moduleAppName = $(element).attr("data-app-name");
+		var moduleClass = $(element).attr("data-class");
 		if( moduleId ){
-			moduleManager.addModule( moduleId, moduleAppName );
+			moduleManager.addModule( moduleId, moduleAppName, moduleClass );
 		}
 	};
 
