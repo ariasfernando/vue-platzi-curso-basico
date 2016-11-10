@@ -184,7 +184,7 @@ $default = [
         'Illuminate\Translation\TranslationServiceProvider',
         'Illuminate\Validation\ValidationServiceProvider',
         'Illuminate\View\ViewServiceProvider',
-        'Illuminate\Html\HtmlServiceProvider',
+        Collective\Html\HtmlServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -241,8 +241,8 @@ $default = [
         'URL'         => 'Illuminate\Support\Facades\URL',
         'Validator'   => 'Illuminate\Support\Facades\Validator',
         'View'        => 'Illuminate\Support\Facades\View',
-        'Form'        => 'Illuminate\Html\FormFacade',
-        'Html'        => 'Illuminate\Html\HtmlFacade',
+        'Form'        => Collective\Html\FormFacade::class,
+        'Html'        => Collective\Html\HtmlFacade::class,
         'Activity'    => 'Stensul\Services\Logger',
         'Helper'      => 'Stensul\Providers\HelperServiceProvider',
         'Cdn'         => 'Stensul\Providers\CdnServiceProvider',
