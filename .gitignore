@@ -8,8 +8,9 @@
 /tmp/
 /public/tmp/
 /public/vendor/
-
+/bootstrap/cache/
 composer.lock
+npm-debug.log
 
 .buildpath
 .env
