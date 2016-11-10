@@ -3,9 +3,11 @@
 namespace Stensul\Http\Controllers\Auth;
 
 use Auth;
+use Cache;
 use Session;
 use Activity;
 use Validator;
+use Challenge;
 use Stensul\Models\User;
 use Stensul\Models\Role;
 use Illuminate\Http\Request;
@@ -67,10 +69,22 @@ class BaseAuthController extends Controller
     /**
      * Show login view.
      *
+     * @param Request $request
+     *
      * @return \Illuminate\View\View
      */
-    public function getLogin()
+    public function getLogin(Request $request)
     {
+        if (\Config::get('challenge.enabled')) {
+            $challenge_provider = \Config::get('challenge.default');
+            $config = \Config::get('challenge.providers.' . $challenge_provider);
+            $cache_key = $config['cache_key'] . $request->ip();
+            if (Cache::get($cache_key) >= $config['max_failed_attemtps']) {
+                return view('base.auth.login')
+                        ->with('challenge_key', $config['key'])
+                        ->with('challenge_provider', $challenge_provider);
+            }
+        }
         return view('base.auth.login');
     }
 
@@ -84,11 +98,27 @@ class BaseAuthController extends Controller
      */
     public function postLogin(LoginRequest $request, Guard $auth)
     {
+        $error = false;
+
+        if (\Config::get('challenge.enabled')) {
+            $challenge_provider = \Config::get('challenge.default');
+            $config = \Config::get('challenge.providers.' . $challenge_provider);
+            $cache_key = $config['cache_key'] . $request->ip();
+
+            if (!Cache::add($cache_key, 1, $config['max_timeout'])) {
+                Cache::increment($cache_key);
+            }
+            if (Cache::get($cache_key) > $config['max_failed_attemtps'] && !Challenge::provider()->isValid($request)) {
+                Activity::log('User login fail [ERROR_CAPTCHA]');
+                $error = true;
+            }
+        }
+
         $email = strtolower($request->input('email'));
         $password = $request->input('password');
         $remember = $request->input('remember');
 
-        if (User::where('email', '=', $email)->exists()) {
+        if (User::where('email', '=', $email)->exists() && !$error) {
             if ($auth->validate(['email' => $email, 'password' => $password])) {
                 $roles_array = array_column(Role::all(['name'])->toArray(), 'name');
                 $user_roles = User::where('email', '=', $email)->firstOrFail()->roles;
@@ -100,16 +130,19 @@ class BaseAuthController extends Controller
                         Activity::log('User Logged in');
                     }
                 } else {
-                    $error = Activity::log('User login fail [ERROR_ROLE]');
+                    Activity::log('User login fail [ERROR_ROLE]');
+                    $error = true;
                 }
             } else {
-                $error = Activity::log('User login fail [ERROR_LOGIN]');
+                Activity::log('User login fail [ERROR_LOGIN]');
+                $error = true;
             }
         } else {
-            $error = Activity::log('User login fail [ERROR_EMAIL]');
+            Activity::log('User login fail [ERROR_EMAIL]');
+            $error = true;
         }
 
-        if (isset($error)) {
+        if ($error) {
             return redirect()->back()->with(array("message" => "ERROR_DEFAULT"));
         } else {
             if (isset($user_data) && isset($user_data->force_password)

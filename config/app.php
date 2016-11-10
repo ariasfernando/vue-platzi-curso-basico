@@ -204,6 +204,7 @@ $default = [
         'Fideloper\Proxy\TrustedProxyServiceProvider',
         Laravel\Socialite\SocialiteServiceProvider::class,
         'Folklore\Image\ImageServiceProvider',
+        'Stensul\Providers\ChallengeServiceProvider',
         'Stensul\Providers\ApiServiceProvider',
     ],
 
@@ -253,6 +254,8 @@ $default = [
         'EmailSender' => 'Stensul\Services\EmailSender',
         'Socialite'   => Laravel\Socialite\Facades\Socialite::class,
         'Imagine'     => 'Folklore\Image\Facades\Image',
+        'ReCaptcha'   => 'ReCaptcha\ReCaptcha',
+        'Challenge'   => 'Stensul\Providers\ChallengeServiceProvider',
         'Api'         => 'Stensul\Providers\ApiServiceProvider',
     ],
 

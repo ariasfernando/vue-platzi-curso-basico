@@ -190,7 +190,7 @@ $default = [
             "height" => 90
         ]
      ],
-    "text_with_image" => [
+     "text_with_image" => [
         "title" => "Text with image",
         "image_crop" => "enabled",
         "image_size" => [
@@ -207,9 +207,9 @@ $default = [
             "max" => 280,
             "min" => 100
         ]
-    ],
+     ],
     // == Master image editor v2 modals ==
-    "mie_v2_default_no_crop" => [
+     "mie_v2_default_no_crop" => [
         "title" => "Hero Image - no crop",
         "app_name" => "base",
         "view" => "single_image_editor",
@@ -225,7 +225,7 @@ $default = [
         "labels" => [
             "file_upload" => "Allowed file types: png, jpg and gif."
         ]
-    ],
+     ],
      "mie_v2_single_crop" => [
         "title" => "Hero Image - single crop",
         "app_name" => "base",
@@ -241,7 +241,7 @@ $default = [
             "file_upload" => "Allowed file types: png, jpg and gif."
         ]
      ],
-    "mie_v2_library" => [
+     "mie_v2_library" => [
         "title" => "Image Library",
         "app_name" => "base",
         "view" => "single_image_editor",
@@ -257,7 +257,7 @@ $default = [
         "labels" => [
             "file_upload" => "Allowed file types: png, jpg and gif."
         ]
-    ]
+     ]
 ];
 
 return include('recursive.php');
