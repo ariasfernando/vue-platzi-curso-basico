@@ -4,7 +4,7 @@
 		<?php
 			$module_path = $app_config["modules"][ $module['type'] ]["file_parent"] . "." . $params['campaign_data']['library'] . '.modules.' . $module['type'];
 			if ( isset($module['class']) ) {
-				$module_path .= ".module";
+				$module_path .= ".template";
 			}
 		?>
 		@if ( isset($app_config["modules"][ $module['type'] ]["file_parent"]) )
