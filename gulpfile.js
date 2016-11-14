@@ -3,22 +3,41 @@
  | Define App name
  | --------------------------------------------------------------------------
  */
+
+/*
+ | --------------------------------------------------------------------------
+ | Requires
+ | --------------------------------------------------------------------------
+ */
+var elixir = require('laravel-elixir');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
 var fs = require("fs");
+var data = require('gulp-data');
+var fm = require('front-matter');
+var path = require('path');
+var gulpsync = require("gulp-sync")(gulp);
+
+/*
+ | --------------------------------------------------------------------------
+ | Define App name
+ | --------------------------------------------------------------------------
+ */
+
 var fileEnv = fs.readFileSync('.env').toString().split("\n");
 var configEnv = [];
 
-for(var i=0;i<fileEnv.length;i++){
-	if(fileEnv[i]){
-		var envArray = fileEnv[i].split("=");
-		configEnv[envArray[0]] = envArray[1];
-	}
+for (var i = 0; i < fileEnv.length; i++) {
+    if (fileEnv[i]) {
+        var envArray = fileEnv[i].split("=");
+        configEnv[envArray[0]] = envArray[1];
+    }
 }
 
 var appName = "base";
-if( configEnv.APP_NAME ){
-	appName = configEnv.APP_NAME.toLowerCase().replace("\r","");
+if (configEnv.APP_NAME) {
+    appName = configEnv.APP_NAME.toLowerCase().replace("\r", "");
 }
-
 
 /*
  | --------------------------------------------------------------------------
@@ -244,6 +263,41 @@ gulp.task("elixir-version", function() {
 	});
 });
 
+/*
+ | --------------------------------------------------------------------------
+ | Custom tasks
+ | --------------------------------------------------------------------------
+ */
+gulp.task('st-custom-tasks', function () {
+    gulp.watch(['resources/views/**/layouts/partials/*.blade.php'], ['validateFonts']);
+});
+
+gulp.task('validateFonts', function () {
+    return gulp.src('resources/views/**/layouts/partials/*.blade.php')
+        .pipe(data(function (file) {
+            // Get file content
+            var content = fm(String(file.contents));
+            var fileName = path.basename(file.path);
+
+            // Find font lines
+            var fontLinesRegex = /\/fonts\/.+/g;
+            var fontLinesMatches = content.body.match(fontLinesRegex);
+
+            var fontFamilyRegex = /\.(eot|woff|svg|ttf|woff2)(;?)/g;
+
+            if ( fontLinesMatches ) {
+                fontLinesMatches.forEach(function (match) {
+                    // Find extension
+                    var extMatch = match.match(fontFamilyRegex);
+
+                    if (!extMatch) {
+                        gutil.log(gutil.colors.red('Missing or bad extension in'), gutil.colors.cyan(fileName), gutil.colors.white.bgRed(' - ' + match));
+                    }
+                });
+            }
+        }));
+});
+
 
 /*
  | --------------------------------------------------------------------------
@@ -251,5 +305,5 @@ gulp.task("elixir-version", function() {
  | --------------------------------------------------------------------------
  */
 gulp.task("jshint", ["elixir-jshint"]);
-gulp.task("watch", gulpsync.sync(["elixir-less","elixir-scripts","elixir-copy-bower","elixir-version"]));
+gulp.task("watch", gulpsync.sync(["st-custom-tasks","elixir-less","elixir-scripts","elixir-copy-bower","elixir-version"]));
 gulp.task("default", gulpsync.sync(["elixir-less","elixir-scripts","elixir-copy-bower","elixir-version"]));
