@@ -239,6 +239,10 @@ $default = [
         'Imagine'     => 'Folklore\Image\Facades\Image',
         'Api'         => 'Stensul\Providers\ApiServiceProvider',
     ],
+    'help' => [
+        'url' => 'http://help.stensul.com',
+        'enabled' => true 
+    ],
 
 ];
 
