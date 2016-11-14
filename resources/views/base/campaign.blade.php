@@ -5,7 +5,7 @@
 	<div class="col-xs-12">
 
 		<div class="section-container-campaign">
-			<!-- columon left (menu) -->
+			<!-- column left (menu) -->
 			<aside>
 				<div class="menu-campaign">
 					@include('base.partials.campaign.configuration')
@@ -13,7 +13,7 @@
 				<div>
 			</aside>
 
-			<!-- columon right (container email) -->
+			<!-- column right (container email) -->
 			<section class="section-canvas-email section-box">
 				@include('base.partials.campaign.email_canvas')
 			</section>
