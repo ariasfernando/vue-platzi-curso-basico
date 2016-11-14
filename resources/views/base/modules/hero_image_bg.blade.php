@@ -1,10 +1,4 @@
 <?php
-    $module_params = $app_config["modules"]["hero_image_bg"];
-
-    // Module Params
-    if( !isset($module_params['data']) ){
-        $module_params['data'] = (isset($module['data']))? $module['data']:'';
-    }
 
     if( isset($module_params['data']['image0']) && !empty($module_params['data']['image0']) ){
         $image = $module_params['data']['image0'];
@@ -17,7 +11,7 @@
     }
 ?>
 
-<tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>'>
+<tr data-params='{{json_encode($module_params)}}'>
     <td align="center" style="padding-bottom:10px;" class="st-add-icon-config">
         <table width="100%" height="400" cellpadding="0" cellspacing="0">
             <tbody>
@@ -44,7 +38,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td align="center" valign="top" style="padding-top:0;padding-bottom:0;">
-                                                        @if ( isset($module_params['data']['text0']) && !empty($module_params['data']['text0']) )
+                                                        @if ( !empty($module_params['data']['text0']) )
                                                             {!! $module_params['data']['text0'] !!}
                                                         @else
                                                             <h1
@@ -70,7 +64,7 @@
                                                                             contenteditable="true"
                                                                             class="st-save-only-text st-content-editable-single-line st-button0"
                                                                             style="white-space:nowrap;display:block!important;height:35px;line-height:35px!important;font-size:18px;color:#ffffff;font-weight:600;font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};letter-spacing:.35px; text-decoration:none;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;padding-left:20px;padding-right:20px;max-width:600px;"
-                                                                            >{{ (isset($module_params['data']['text1']) && !empty($module_params['data']['text1']))? $module_params['data']['text1'] : "Primary Button" }}</a>
+                                                                            >{{ !empty($module_params['data']['text1']) ? $module_params['data']['text1'] : "Primary Button" }}</a>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>

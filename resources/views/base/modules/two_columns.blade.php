@@ -1,10 +1,4 @@
 <?php
-    $module_params = $app_config["modules"]["two_columns"];
-
-    // Module Params
-    if( !isset($module_params['data']) ){
-        $module_params['data'] = (isset($module['data']))? $module['data']:'';
-    }
 
     if( isset($module_params['data']['image0']) && !empty($module_params['data']['image0']) ){
         $image0 = $module_params['data']['image0'];
@@ -58,7 +52,7 @@
     ];
 
 ?>
-<tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>'>
+<tr data-params='{{json_encode($module_params)}}'>
     <td align="left" valign="top">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tbody>
@@ -77,7 +71,7 @@
                                                             target="_blank"
                                                             data-master-image-editor="two_columns"
                                                           >
-                                                            @if ( isset($image0['path']) && !empty($image0['path']) )
+                                                            @if ( !empty($image0['path']) )
                                                                 {!! Html::image( url('/') . "/images/campaigns". $image0['path'],
                                                                     ( isset($image0['alt']) )? $image0['alt']:'',
                                                                     array(
@@ -115,7 +109,7 @@
                                                                   contenteditable="true"
                                                                   style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size: 12px;color:#000000;font-weight:normal;line-height:18px;"
                                                                   >
-                                                                    @if ( isset($module_params['data']['text0']) && !empty($module_params['data']['text0']) )
+                                                                    @if ( !empty($module_params['data']['text0']) )
                                                                         {!! $module_params['data']['text0'] !!}
                                                                     @else
                                                                         Lorem ipsum dolor sit amet.
@@ -131,7 +125,7 @@
                                                         <div class="text-overlay">
                                                             <div class="prevent-overflow">
                                                                 <div id="text-editable" class="st-edit-text" style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }}; font-size:12px; color:#000000; line-height:18px; text-align:justify; font-weight:normal;margin:0px;padding:0px;">
-                                                                    @if ( isset($module_params['data']['text1']) && !empty($module_params['data']['text1']) )
+                                                                    @if ( !empty($module_params['data']['text1']) )
                                                                         {!! $module_params['data']['text1'] !!}
                                                                     @else
                                                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim consequat congue. Duis suscipit, lorem eget ornare vulputate, sem purus hendrerit eros, eu scelerisque arcu libero auctor nulla.
@@ -188,7 +182,7 @@
                                                             target="_blank"
                                                             data-master-image-editor="two_columns"
                                                         >
-                                                            @if ( isset($image1['path']) && !empty($image1['path']) )
+                                                            @if ( !empty($image1['path']) )
                                                                 {!! Html::image( url('/') . "/images/campaigns". $image1['path'],
                                                                     ( isset($image1['alt']) )? $image1['alt']:'',
                                                                     array(
@@ -226,7 +220,7 @@
                                                                   contenteditable="true"
                                                                   style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size: 12px;color:#000000;font-weight:normal;line-height:18px;"
                                                                   >
-                                                                    @if ( isset($module_params['data']['text2']) && !empty($module_params['data']['text2']) )
+                                                                    @if ( !empty($module_params['data']['text2']) )
                                                                         {!! $module_params['data']['text2'] !!}
                                                                     @else
                                                                         Lorem ipsum dolor sit amet.
@@ -242,7 +236,7 @@
                                                         <div class="text-overlay">
                                                             <div class="prevent-overflow">
                                                                 <div id="text-editable" class="st-edit-text" style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }}; font-size:12px; color:#000000; line-height:18px; text-align:justify; font-weight:normal;margin:0px;padding:0px;">
-                                                                    @if ( isset($module_params['data']['text3']) && !empty($module_params['data']['text3']) )
+                                                                    @if ( !empty($module_params['data']['text3']) )
                                                                         {!! $module_params['data']['text3'] !!}
                                                                     @else
                                                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim consequat congue. Duis suscipit, lorem eget ornare vulputate, sem purus hendrerit eros, eu scelerisque arcu libero auctor nulla.

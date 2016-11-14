@@ -1,6 +1,4 @@
 <?php
-    $module_params = $app_config["modules"]["text_with_image"];
-    $module_params['data'] = (isset($module['data']))? $module['data']:'';
 
     $buttonData = [
         'visibility' => isset($module_params['data']['btn_visibility']) ? $module_params['data']['btn_visibility'] : null,
@@ -30,7 +28,7 @@
     }
 ?>
 
-<tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>' class="moduleTarget">
+<tr data-params='{{json_encode($module_params)}}' class="moduleTarget">
     <td
         align="left"
         valign="top"
@@ -55,7 +53,7 @@
                                                         <div class="text-overlay">
                                                             <div class="prevent-overflow">
                                                                 <div id="text-editable" class="st-edit-text" style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }}; font-size:12px; color:#333; line-height:18px; text-align:justify; font-weight:normal;margin:0px;padding:0px;">
-                                                                    @if ( isset($module_params['data']['text0']) && !empty($module_params['data']['text0']) )
+                                                                    @if ( !empty($module_params['data']['text0']) )
                                                                         {!! $module_params['data']['text0'] !!}
                                                                     @else
                                                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim consequat congue. Duis suscipit, lorem eget ornare vulputate, sem purus hendrerit eros, eu scelerisque arcu libero auctor nulla. </br>

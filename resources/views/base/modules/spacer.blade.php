@@ -1,10 +1,4 @@
 <?php
-// Module Params
-$module_params = $app_config["modules"]["spacer"];
-
-if( !isset($module_params['data']) ){
-    $module_params['data'] = (isset($module['data']))? $module['data']:'';
-}
 
 $background_color = ( isset($module_params['background_colors']['default']) ) ? $module_params['background_colors']['default'] : '#fff';
 $background_color = ( isset($module_params['data']['background_color']) ) ? $module_params['data']['background_color'] : $background_color;
@@ -16,7 +10,7 @@ $module_params['data']['size'] = ( isset($module_params['data']['size']) ) ? $mo
 
 ?>
 
-<tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>'>
+<tr data-params='{{json_encode($module_params)}}'>
 	<td align="center" style="vertical-align:middle;" bgcolor="{{ $background_color }}" style="background-color: {{ $background_color }};" class="st-add-icon-config">
 		<table style="width:100%!important;"
 			   width="100%"

@@ -1,10 +1,10 @@
 <?php
-	if( isset($module_params['data']['image0']) && !empty($module_params['data']['image0']) ){
+	if( !empty($module_params['data']['image0']) ){
 		$image = $module_params['data']['image0'];
 	}
 ?>
 
-<tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>'>
+<tr data-params='{{json_encode($module_params)}}'>
 	<td align="center" style="vertical-align:middle;">
 		<table style="width:100%!important;"
 			   width="100%"
@@ -20,7 +20,7 @@
 				    bgcolor="#ffffff"
 				>
 					<a href='{{ isset($image['destination_url'])? $image['destination_url'] : '#' }}' data-master-image-editor="hero">
-						@if ( isset($image['path']) && !empty($image['path']) )
+						@if ( !empty($image['path']) )
 							{!! Html::image( url('/') . "/images/campaigns". $image['path'],
 								( isset($image['alt']) )? $image['alt']:'',
 								array(

@@ -1,16 +1,10 @@
 <?php
-    $module_params = $app_config["modules"]["image_plus_text"];
-
-    // Module Params
-    if( !isset($module_params['data']) ){
-        $module_params['data'] = (isset($module['data']))? $module['data']:'';
-    }
 
     if( isset($module_params['data']['image0']) && !empty($module_params['data']['image0']) ){
         $image = $module_params['data']['image0'];
     }
 ?>
-<tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>'>
+<tr data-params='{{json_encode($module_params)}}'>
     <td align="left" valign="top" class="st-add-icon-config mobile-margin">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tbody>
@@ -56,7 +50,7 @@
                                                 <tr><td height="20" align="left" valign="top"></td></tr>
                                                 <tr>
                                                     <td align="left" valign="top" style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#333333; font-weight:bold; line-height:17px; -webkit-text-size-adjust:none;" class="st-save-only-text" contenteditable="true">
-                                                        @if ( isset($module_params['data']['text0']) && !empty($module_params['data']['text0']) )
+                                                        @if ( !empty($module_params['data']['text0']) )
                                                             {!! $module_params['data']['text0'] !!}
                                                         @else
                                                             Nulligni dolorio.
@@ -65,7 +59,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td align="left" valign="top" style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#333333; font-weight:normal; line-height:17px; -webkit-text-size-adjust:none; padding-right:28px;" class="st-save-only-text" contenteditable="true">
-                                                        @if ( isset($module_params['data']['text1']) && !empty($module_params['data']['text1']) )
+                                                        @if ( !empty($module_params['data']['text1']) )
                                                             {!! $module_params['data']['text1'] !!}
                                                         @else
                                                             Arum is modis as aute lit volupta usndunt labo.&nbsp;Vid earum acidignatur quid ut exceue qui&nbsp;doleste.
@@ -77,7 +71,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td align="left" valign="top" style="font-family:Arial, Helvetica, sans-serif; font-size:11px; color:#333333; font-weight:normal; line-height:15px; -webkit-text-size-adjust:none; padding-right:28px;" class="st-save-only-text" contenteditable="true">
-                                                        @if ( isset($module_params['data']['text2']) && !empty($module_params['data']['text2']) )
+                                                        @if ( !empty($module_params['data']['text2']) )
                                                             {!! $module_params['data']['text2'] !!}
                                                         @else
                                                             Arum is modis as aute lit&nbsp;volupta.
@@ -98,7 +92,7 @@
                                                                 style="color:#0066CC; line-height:17px; text-decoration:underline; font-weight:normal;"
                                                                 class="st-save-only-text st-inline-block"
                                                                 contenteditable="true">
-                                                                @if ( isset($module_params['data']['text3']) && !empty($module_params['data']['text3']) )
+                                                                @if ( !empty($module_params['data']['text3']) )
                                                                     {!! $module_params['data']['text3'] !!}
                                                                 @else
                                                                     Primary text link

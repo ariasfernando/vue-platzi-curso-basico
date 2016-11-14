@@ -1,10 +1,4 @@
 <?php
-	$module_params = $app_config["modules"]["three_column_media_with_text"];
-
-	// Module Params
-	if( !isset($module_params['data']) ){
-		$module_params['data'] = (isset($module['data']))? $module['data']:'';
-	}
 
 	if( isset($module_params['data']['image0']) && !empty($module_params['data']['image0']) ){
 		$image0 = $module_params['data']['image0'];
@@ -19,7 +13,7 @@
 	}
 ?>
 
-<tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>'>
+<tr data-params='{{json_encode($module_params)}}'>
 	<td valign="top">
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="width:100%!important;">
 			<tr>
@@ -47,7 +41,7 @@
 									<tr>
 										<td>
 											<a href="{{ isset($image0['destination_url']) ? $image0['destination_url'] : '#' }}" data-master-image-editor="standard">
-												@if ( isset($image0['path']) && !empty($image0['path']) )
+												@if ( !empty($image0['path']) )
 														{!! Html::image( url("/images/campaigns". $image0['path']),
 															( isset($image0['alt']) )? $image0['alt']:'',
 																array(
@@ -82,7 +76,7 @@
 
 									<tr>
 										<td height="14">
-											@if ( isset($module_params['data']['text0']) && !empty($module_params['data']['text0']) )
+											@if ( !empty($module_params['data']['text0']) )
 												{!! $module_params['data']['text0'] !!}
 											@else
 												<p style="max-width:210px;width:210px;font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};text-align:left;font-size:14px;line-height:14px;color:#6402ce;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;"
@@ -99,7 +93,7 @@
 
 									<tr>
 										<td height="48">
-											@if ( isset($module_params['data']['text1']) && !empty($module_params['data']['text1']) )
+											@if ( !empty($module_params['data']['text1']) )
 												{!! $module_params['data']['text1'] !!}
 											@else
 													<a  style="max-width:210px;width:210px;font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size:20px;text-align:left;line-height:24px;color:#424242;text-decoration:none;margin-top:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;display:block;"
@@ -152,7 +146,7 @@
 									<tr>
 										<td valign="top">
 											<a href='{{ isset($image1['destination_url']) ? $image1['destination_url'] : '#' }}' data-master-image-editor="standard">
-												@if ( isset($image1['path']) && !empty($image1['path']) )
+												@if ( !empty($image1['path']) )
 													{!! Html::image(  url("/images/campaigns". $image1['path']),
 														( isset($image1['alt']) )? $image1['alt']:'',
 															array(
@@ -187,7 +181,7 @@
 
 									<tr>
 										<td height="14">
-											@if ( isset($module_params['data']['text2']) && !empty($module_params['data']['text2']) )
+											@if ( !empty($module_params['data']['text2']) )
 												{!! $module_params['data']['text2'] !!}
 											@else
 												<p style="max-width:210px;width:210px;font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size:14px;text-align:left;line-height:14px;color:#6402ce;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;"
@@ -204,7 +198,7 @@
 
 									<tr>
 										<td height="48">
-											@if ( isset($module_params['data']['text3']) && !empty($module_params['data']['text3']) )
+											@if ( !empty($module_params['data']['text3']) )
 												{!! $module_params['data']['text3'] !!}
 											@else
 												<a  style="max-width:210px;width:210px;font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size:20px;line-height:24px;color:#424242;text-decoration:none;margin-top:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;display:block;"
@@ -257,7 +251,7 @@
 									<tr>
 										<td valign="top">
 											<a href='{{ isset($image2['destination_url']) ? $image2['destination_url'] : '#' }}' data-master-image-editor="standard">
-												@if ( isset($image2['path']) && !empty($image2['path']) )
+												@if ( !empty($image2['path']) )
 													{!! Html::image(  url("/images/campaigns". $image2['path']),
 														( isset($image2['alt']) )? $image2['alt']:'',
 															array(
@@ -292,7 +286,7 @@
 
 									<tr>
 										<td height="14">
-											@if ( isset($module_params['data']['text4']) && !empty($module_params['data']['text4']) )
+											@if ( !empty($module_params['data']['text4']) )
 												{!! $module_params['data']['text4'] !!}
 											@else
 												<p style="max-width:210px;width:210px;font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size:14px;text-align:left;line-height:14px;color:#6402ce;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;"
@@ -309,7 +303,7 @@
 
 									<tr>
 										<td height="48">
-											@if ( isset($module_params['data']['text5']) && !empty($module_params['data']['text5']) )
+											@if ( !empty($module_params['data']['text5']) )
 												{!! $module_params['data']['text5'] !!}
 											@else
 												<a  style="max-width:210px;width:210px;font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size:20px;line-height:24px;color:#424242;text-decoration:none;margin-top:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;display:block;"
