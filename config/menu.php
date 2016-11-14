@@ -71,6 +71,7 @@ $default = [
             'title' => 'Image Editor v2',
             'action' => 'expand',
             'level' => 'level-1',
+            'module_id' => 'hero_v2_group',
             'sub_menu' => [
                 'hero_image_v2_no_crop' => [
                     'title' => 'Hero Image - no crop',

@@ -4,6 +4,8 @@ $overrideFile = (env('APP_NAME', false))
     ? str_replace(basename(__FILE__), ucwords(strtolower(env('APP_NAME'))) . '/' . basename(__FILE__), __FILE__)
     : false;
 
+$menu = require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'menu.php';
+
 $default = [
     'image_button' => [
         'type' => 'image_button',
@@ -455,11 +457,6 @@ $default = [
             ]
         ]
     ],
-    'view_in_browser' => [
-        'type' => 'view_in_browser',
-        'file_parent' => 'base',
-        'class' => 'pkg'
-    ],
     'text_with_image' => [
         'type' => 'text_with_image',
         'file_parent' => 'base',
@@ -509,5 +506,20 @@ $default = [
         ]
     ]
 ];
+
+// Load new module config.
+foreach ($menu as $library => $modules) {
+    foreach ($modules as $module_config) {
+        if (!isset($module_config['module_class']) || $module_config['module_class'] !== 'pkg') {
+            continue;
+        }
+
+        if ($config = file_get_contents($app->basePath() . '/resources/views/' . strtolower(env('APP_NAME'))
+            . '/modules/' . $module_config['module_id'] . '/config.json')) {
+            $default[$module_config['module_id']] = json_decode($config, true);
+        }
+
+    }
+}
 
 return require 'recursive.php';

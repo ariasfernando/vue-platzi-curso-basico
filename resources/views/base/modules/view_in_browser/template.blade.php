@@ -1,6 +1,6 @@
 
 {{-- View in Browser: Start --}}
-<tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>'>
+<tr data-params='{{json_encode($module_params)}}'>
 	<td align="center" style="vertical-align:middle;">
 		<table width="100%" cellpadding="0" cellspacing="0" border="0">
 			<tr>
@@ -14,7 +14,7 @@
 					   >	
 						<tr>
 							<td width="50%" align="left" contenteditable class="st-save-only-text">
-								@if ( isset($module_params['data']['text0']) && !empty($module_params['data']['text0']) )
+								@if ( !empty($module_params['data']['text0']) )
 									{!! $module_params['data']['text0'] !!}
 								@else
 									<p style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size:11px;color:#999999;line-height:normal;margin:0px;padding:0px;">

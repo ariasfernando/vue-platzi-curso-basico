@@ -153,6 +153,26 @@ class HelperServiceProvider extends ServiceProvider
     }
 
     /**
+     * Validate and Render View.
+     *
+     * @param string $view
+     * @param bool   $force
+     * @param array  $params
+     *
+     * @return string view path
+     */
+    public static function getRenderedView($view, $force = true, $params = [])
+    {
+        $view_path = self::validateView($view, $force);
+        $view = \View::make($view_path);
+        foreach ($params as $name => $param) {
+            $view->with($name, $param);
+        }
+
+        return $view->render();
+    }
+
+    /**
      *
      * get api driver by libraries
      *

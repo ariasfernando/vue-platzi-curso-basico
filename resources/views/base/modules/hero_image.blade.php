@@ -1,11 +1,4 @@
 <?php
-	$module_params = $app_config["modules"]["hero_image"];
-
-	// Module Params
-	if( !isset($module_params['data']) ){
-		$module_params['data'] = (isset($module['data']))? $module['data']:'';
-	}
-
 	if( isset($module_params['data']['image0']) && !empty($module_params['data']['image0']) ){
 		$image = $module_params['data']['image0'];
 	}

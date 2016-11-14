@@ -9,7 +9,8 @@
 		?>
 		@if ( isset($app_config["modules"][ $module['type'] ]["file_parent"]) )
 			{{ StensulLocale::init($params['campaign_data']['locale'], ["name" => $module['type'],"app_name" => $app_config["modules"][ $module['type'] ]["file_parent"]]) }}
-			@include(Helper::validateView($module_path))
+			{!! Helper::getRenderedView($module_path, null, ['params' => $params,
+				'module_params' => $module]) !!}
 		@endif
 	@endforeach
 @endif
