@@ -51,7 +51,7 @@ function jsAppFilePath (file) {
         return 'js/' + appName + '/' + file;
     } catch (e) {
         return 'js/base/' + file;
-		}
+    }
 }
 
 /*
@@ -243,7 +243,8 @@ gulp.task( "elixir-scripts", function() {
  */
 gulp.task("elixir-less", function() {
 	elixir(function(mix) {
-		mix.less( appName + "/*.less");
+		mix.less( appName + "/base.less");
+		mix.less( appName + "/admin.less");
 	});
 });
 
@@ -306,4 +307,4 @@ gulp.task('validateFonts', function () {
  */
 gulp.task("jshint", ["elixir-jshint"]);
 gulp.task("watch", gulpsync.sync(["st-custom-tasks","elixir-less","elixir-scripts","elixir-copy-bower","elixir-version"]));
-gulp.task("default", gulpsync.sync(["elixir-less","elixir-scripts","elixir-copy-bower","elixir-version"]));
+gulp.task("default", gulpsync.sync(["validateFonts","elixir-less","elixir-scripts","elixir-copy-bower","elixir-version"]));
