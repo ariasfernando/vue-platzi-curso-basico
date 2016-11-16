@@ -472,4 +472,26 @@ class CampaignManager
 
         return $response;
     }
+
+    /**
+     * Create custom image merge.
+     *
+     * @param string $campaign_id
+     * @param string $gif
+     * @param string $layer
+     *
+     * @return array Path or error
+     */
+    public static function customImageMerge($options = [])
+    {
+        $response = [];
+
+        if (isset($options["campaign_id"])) {
+            $campaign = Campaign::findOrFail($options["campaign_id"]);
+            $assets = new Assets($campaign);
+            $response = $assets->customMerge($options);
+        }
+
+        return $response;
+    }
 }

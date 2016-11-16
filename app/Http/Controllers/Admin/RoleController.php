@@ -23,7 +23,7 @@ class RoleController extends Controller
     /**
      * Create a new controller instance.
      */
-    public function __construct(Request $request)
+    public function __construct()
     {
         $this->middleware('admin');
     }
@@ -61,6 +61,11 @@ class RoleController extends Controller
         );
     }
 
+    /**
+     * Get model data
+     *
+     * @return array
+     */
     private function getModelData()
     {
         $libraries_data = array_keys(\Config::get("view.libraries"));
@@ -110,10 +115,10 @@ class RoleController extends Controller
         $role_data = Role::findOrFail($request->input("roleId"))->toArray();
         $modelData = $this->getModelData();
         $params = [
-        "title" => "Edit Role",
-        "permissions" => $modelData["permissions"],
-        "libraries" => $modelData["libraries"],
-        "role" => $role_data
+            "title" => "Edit Role",
+            "permissions" => $modelData["permissions"],
+            "libraries" => $modelData["libraries"],
+            "role" => $role_data
         ];
 
         return $this->renderView('base.admin.modals.role_form', array('params' => $params));
@@ -130,7 +135,7 @@ class RoleController extends Controller
         $role_data->description = $request->input("description");
         $role_data->permissions = (is_null($request->input("permissions")))? [] : $request->input("permissions");
         $role_data->libraries = (is_null($request->input("libraries"))
-        || $request->input("libraries") == "default" )? [] : $request->input("libraries");
+            || $request->input("libraries") == "default" ) ? [] : $request->input("libraries");
 
         $role_data->save();
         return array("message"=> "SUCCESS");

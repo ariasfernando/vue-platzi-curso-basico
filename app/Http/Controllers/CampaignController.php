@@ -47,7 +47,11 @@ class CampaignController extends Controller
                 $params = Campaign::find($campaign_id);
 
                 if ($params) {
-                    $params['menu_list'] = \Config::get('menu.default');
+                    $library = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
+                        ? $params['campaign_data']['library']
+                        : "default";
+
+                    $params['menu_list'] = \Config::get('menu.'.$library);
                 } else {
                     return redirect(env('APP_BASE_URL', '/'))->with('campaign_not_found', $campaign_id);
                 }
@@ -252,7 +256,11 @@ class CampaignController extends Controller
      */
     public function postGifLayer(Request $request)
     {
-        return Campaign::gifLayer($request->input('campaign_id'), $request->input('gif_image'), $request->input('layer_image'));
+        return Campaign::gifLayer(
+            $request->input('campaign_id'),
+            $request->input('gif_image'),
+            $request->input('layer_image')
+        );
     }
 
     /**
@@ -265,5 +273,17 @@ class CampaignController extends Controller
     public function postEmailSentHistory(Request $request)
     {
         return Campaign::getEmailSentHistory($request->input('campaign_id'));
+    }
+
+    /**
+     *  Create image with custom layers and return local file path.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array Path or error
+     */
+    public function postCustomImageMerge(Request $request)
+    {
+        return Campaign::customImageMerge($request->all());
     }
 }

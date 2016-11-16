@@ -168,28 +168,36 @@ class StaticProcessor
 
         try {
             if (!filter_var($blob, FILTER_VALIDATE_URL)) {
-                list($type, $blob) = explode(';', $blob);
-                list(, $blob) = explode(',', $blob);
-                list(, $extension) = explode('/', $type);
-                $blob = base64_decode($blob);
-                $image = Imagine::load($blob);
+                if ((strpos($blob, ';base64') !== false)) {
+                    list($type, $blob) = explode(';', $blob);
+                    list(, $blob) = explode(',', $blob);
+                    list(, $extension) = explode('/', $type);
+                    $blob = base64_decode($blob);
+                    $image = Imagine::load($blob);
+                } else {
+                    $storage = Storage::disk('local:campaigns');
+                    $image = (strpos($blob, public_path()) === false)?
+                        Imagine::load($storage->get($blob)) :
+                        Imagine::open($blob);
+                    $extension = pathinfo($blob)["extension"];
+                }
             } else {
                 $image = Imagine::open($blob);
                 $extension = pathinfo($blob)["extension"];
             }
-        } catch (Imagine\Exception\Exception $e) {
-            Log::warning(
-                sprintf(
-                    "[%s] image open %s failed.",
-                    $this->getCampaign()->id,
-                    $blob
-                )
+        } catch (\Exception $e) {
+            $error_msg =sprintf(
+                "[%s] image open %s failed.",
+                $this->getCampaign()->id,
+                $blob
             );
-            return ["error" => "URL_DENY"];
+            Log::warning($error_msg);
+            throw new \Exception($error_msg);
         }
 
         switch ($extension) {
-            case (\Config::get("image.force_conversion_jpg", false) || in_array($extension, ['jpg', 'jpeg', 'pjpeg', 'pjpg'])):
+            case (\Config::get("image.force_conversion_jpg", false)
+                || in_array($extension, ['jpg', 'jpeg', 'pjpeg', 'pjpg'])):
                 $options = [ 'jpeg_quality' => 100 ];
                 $extension = 'jpg';
                 break;
@@ -354,6 +362,88 @@ class StaticProcessor
         }
 
         if ($success) {
+            $response['path'] = $file_path;
+        } else {
+            $response['error'] = 'CANVAS_UPLOAD_ERROR';
+        }
+
+        return $response;
+    }
+
+    /**
+     * Create a custom merge from a background image and layers
+     *
+     * @param string $gif
+     * @param string $layer
+     * @return array Path or error.
+     */
+    public function customMerge($options)
+    {
+        $background_path = (isset($options['background_path']))? $options['background_path'] : null;
+        $layers = (isset($options['layers']))? $options['layers'] : [];
+        $parent_scope = $this;
+
+        if (!is_null($background_path)) {
+            list($background_image, $background_extension, $background_options) = $this->getImageObject($background_path);
+            $layersConstructor = function ($layers, &$image) use ($parent_scope) {
+                foreach ($layers as $layer) {
+                    $layer_path = (isset($layer['path'])) ? $layer['path'] : null;
+                    $layer_top = (isset($layer['top'])) ? $layer['top'] : 0;
+                    $layer_left = (isset($layer['left'])) ? $layer['left'] : 0;
+                    $layer_width = (isset($layer['width'])) ? $layer['width'] : null;
+
+                    if (!is_null($layer_path)) {
+                        if ((strpos($layer_path, ';base64') === false) &&
+                            (strpos($layer_path, public_path()) === false)) {
+                            $layer_path = public_path() . $layer_path;
+                        }
+                        list($layer_image,,) = $parent_scope->getImageObject($layer_path);
+
+                        if (!is_null($layer_width)) {
+                            $old_width = $layer_image->getSize()->getWidth();
+                            $old_height = $layer_image->getSize()->getHeight();
+                            $size = new Imagine\Image\Box($layer_width, (($layer_width * $old_height) / $old_width));
+                            $position = new Imagine\Image\Point($layer_left, $layer_top);
+                            $image->paste($layer_image->resize($size), $position);
+                        } else {
+                            $position = new Imagine\Image\Point($layer_left, $layer_top);
+                            $image->paste($layer_image, $position);
+                        }
+                    }
+                }
+            };
+
+            if ($background_extension == "gif") {
+                $background_image->layers()->coalesce();
+
+                foreach ($background_image->layers() as $frame) {
+                    $layersConstructor($layers, $frame);
+                }
+            } else {
+                $layersConstructor($layers, $background_image);
+            }
+
+            $storage = Storage::disk('local:campaigns');
+            $file_path = $this->getImagePath($background_extension);
+
+            try {
+                $success = $storage->put($file_path, $background_image->get($background_extension, $background_options));
+            } catch (Exception $e) {
+                Log::warning(
+                    sprintf(
+                        "[%s] image storage for file %s failed. Attempting one more time",
+                        $this->getCampaign()->id,
+                        $file_path
+                    )
+                );
+
+                usleep(50000);
+                $success = $storage->put($file_path, $background_image->get($background_extension, $background_options));
+            }
+
+        }
+
+        if (isset($success)) {
             $response['path'] = $file_path;
         } else {
             $response['error'] = 'CANVAS_UPLOAD_ERROR';

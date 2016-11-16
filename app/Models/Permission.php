@@ -44,6 +44,10 @@ class Permission extends Eloquent
         parent::__construct($attributes);
     }
 
+    /**
+     * Return all roles for the current permission.
+     * @return array
+     */
     public function inRoles()
     {
 

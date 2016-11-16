@@ -12,6 +12,10 @@ class ExactTarget implements ApiConnector
 
     private $client;
 
+    /**
+     * Constructor
+     * @param ExactTargetConnector $exactTargetConnector
+     */
     public function __construct(ExactTargetConnector $exactTargetConnector)
     {
         $this->client = $exactTargetConnector;

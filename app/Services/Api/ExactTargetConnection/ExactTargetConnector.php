@@ -56,8 +56,12 @@ class ExactTargetConnector
      * @param ET_DataExtension_Column $fuelDeColumn
      * @param ET_DataExtension $fuelDext
      */
-    function __construct(Client $client, ET_DataExtension_Row $fuelDe, ET_DataExtension_Column $fuelDeColumn, ET_DataExtension $fuelDext)
-    {
+    public function __construct(
+        Client $client,
+        ET_DataExtension_Row $fuelDe,
+        ET_DataExtension_Column $fuelDeColumn,
+        ET_DataExtension $fuelDext
+    ) {
         $this->config = \Config::get("api.exact_target.credentials", []);
         $this->getTokenUri = $this->config["authPath"];
         $this->client = $client;
@@ -146,8 +150,8 @@ class ExactTargetConnector
         $this->fuelDe->authStub = $this->fuel;
         $this->fuelDe->Name = $deName;
 
-        foreach ($deColumns as $k => $v) {
-            $this->fuelDe->props[] = $v->Name;
+        foreach ($deColumns as $value) {
+            $this->fuelDe->props[] = $value->Name;
         }
 
         if ($primaryKey !== '' && $keyName !== '') {
@@ -217,7 +221,7 @@ class ExactTargetConnector
         $email->authStub = $this->fuel;
         $email->props = array(
             'CustomerKey'=> $campaign->id,
-            'Name'=>$campaign->campaign_name,
+            'Name'=>(isset($request['campaign_name']))? $request['campaign_name'] : $campaign->campaign_name,
             'HTMLBody' => $campaign->body_html,
             'TextBody' => $campaign->plain_text,
             'CharacterSet' => 'UTF-8',
@@ -291,7 +295,7 @@ class ExactTargetConnector
         $email->authStub = $this->fuel;
         $email->props = array(
             'ID'=> $id,
-            'Name'=>$campaign->campaign_name,
+            'Name'=>(isset($request['campaign_name']))? $request['campaign_name'] : $campaign->campaign_name,
             'HTMLBody' => $campaign->body_html,
             'TextBody' => $campaign->plain_text,
             'PreHeader' => (isset($request['preheader']))? $request['preheader'] : '',

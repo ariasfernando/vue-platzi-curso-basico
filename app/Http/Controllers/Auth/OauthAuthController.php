@@ -27,6 +27,7 @@ class OauthAuthController extends Controller
     */
 
     protected $redirect_to = '/';
+    protected $config;
     protected $auth;
 
     /**
@@ -36,6 +37,7 @@ class OauthAuthController extends Controller
      */
     public function __construct(Guard $auth)
     {
+        $this->config = \Config::get("auth");
         $this->auth = $auth;
     }
 
@@ -55,7 +57,9 @@ class OauthAuthController extends Controller
      */
     public function getOauthLogin()
     {
-        return Socialite::driver(env('OAUTH_CLIENT', 'google'))->redirect();
+        return Socialite::driver($this->config['oauth_driver'])
+            ->scopes($this->config['oauth_scopes'])
+            ->redirect();
     }
 
     /**
@@ -66,7 +70,7 @@ class OauthAuthController extends Controller
     public function getSession(Request $request)
     {
         if (is_null($request->input('error'))) {
-            $user = Socialite::driver(env('OAUTH_CLIENT', 'google'))->user();
+            $user = Socialite::driver($this->config['oauth_driver'])->user();
             $email = strtolower($user->getEmail());
 
             if (User::where('email', '=', $email)->exists()) {

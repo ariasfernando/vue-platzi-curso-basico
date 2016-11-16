@@ -50,7 +50,7 @@ Application.utils = {
 				$errorBox
 					// Remove current type class
 					.find(".alert").removeClass(function (index, css) {
-					    return (css.match (/(^|\s)alert-\S+/g) || []).join(' ');
+						return (css.match (/(^|\s)alert-\S+/g) || []).join(' ');
 					})
 					// Add new alert type class
 					.addClass("alert-" + type);
@@ -201,8 +201,8 @@ Application.utils = {
 				file: "Please, select a file."
 			},
 			email: "Please, enter a valid email address.",
-            compareTo: "The field not match.",
-            minLength: "The field minimum size is [min].",
+			compareTo: "The field not match.",
+			minLength: "The field minimum size is [min].",
 			url: "Please, enter a valid url.",
 			invalidFileType: "Please, upload a valid file.",
 			invalidFileSize: "The file exceeds the size limit."
@@ -251,20 +251,20 @@ Application.utils = {
 
 			return this.validateUrlFormat( field.value );
 		},
-        validateCompareField: function( field, comparedField ){
+		validateCompareField: function( field, comparedField ){
 
-            if( field.value == comparedField.val() ){
-                return true;
-            }
+			if( field.value == comparedField.val() ){
+				return true;
+			}
 
-            return false;
-        },
+			return false;
+		},
 		validateUrlFormat: function( value ){
 			if( !value ){
 				return true;
 			}
 
-			var re = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i;
+			var re = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[^\s]*)?$/i;
 			if( !re.test( value ) && !Application.utils.isAmpScript(value) ){
 				return false;
 			}
@@ -307,99 +307,112 @@ Application.utils = {
 		setError: function( field, message ){
 			$(field).addClass("error").after('<label class="error">'+message+'</label>');
 		},
+		validateField: function( field ){
+			var errors = false;
+			var validate = this;
+
+			// We use this variable to set the error message and add the error class.
+			var validationResult = {
+				success: null,
+				message: ""
+			};
+
+			validate.initField( field );
+
+			var $field = $(field);
+			// Get validation params.
+			var validationParams = $field.data("validation");
+			// REQUIRED FIELD: If is a required field
+			if( validationParams.required && validationParams.required === true || validationParams.required === "true"){
+				// Set the result of the validation
+				validationResult.success = validate.validateRequiredField( field );
+
+				// If isn't successful, set the error messages.
+				if( !validationResult.success ){
+					switch( field.type ){
+						case "file":
+							validationResult.message = validate.messages.required.file;
+							break;
+						default:
+							validationResult.message = validate.messages.required.default;
+					}
+					errors = true;
+				}
+			}
+
+			// EMAIL FORMAT: check valid email.
+			if( validationParams.email && validationResult.success != false ){
+				// Set the result of the validation
+				validationResult.success = validate.validateEmailFormat( field );
+
+				// If isn't successful, set the error messages.
+				if( !validationResult.success ){
+					validationResult.message = validate.messages.email;
+					errors = true;
+				}
+			}
+
+			// COMPARE FIELDS: check if have the same value.
+			if( validationParams.compareTo && validationResult.success != false ){
+				// Set the result of the validation
+				validationResult.success = validate.validateCompareField( field, $(form).find('input[name="'+validationParams.compareTo+'"]')  );
+
+				// If isn't successful, set the error messages.
+				if( !validationResult.success ){
+					validationResult.message = validate.messages.compareTo;
+					errors = true;
+				}
+			}
+
+			// MIN LENGTH: check the filed min length.
+			if( validationParams.minLength && validationResult.success != false ){
+				// Set the result of the validation
+				validationResult.success = (field.value.length >= validationParams.minLength );
+
+				// If isn't successful, set the error messages.
+				if( !validationResult.success ){
+					validationResult.message = validate.messages.minLength.replace("[min]", validationParams.minLength);
+					errors = true;
+				}
+			}
+
+			// URL FORMAT: check valid url.
+			if( validationParams.url && validationResult.success != false ){
+				// Set the result of the validation
+				validationResult.success = validate.validateUrlField( field );
+
+				// If isn't successful, set the error messages.
+				if( !validationResult.success ){
+					validationResult.message = validate.messages.url;
+					errors = true;
+				}
+			}
+
+			if( errors ){
+				validationParams.success = false;
+				validate.setError( field, validationResult.message);
+			}
+
+			return validationResult;
+		},
 		// Generic form validation.
 		validateForm: function( form ){
 			if( !form )
 				return false;
 
 			var validate = this;
-			// Errors: set true if an error
-			var errors = false;
+
 			// Get all inputs of the form.
 			var inputs = $(form).find("*[data-validation]");
+			var errors = false;
 
 			// Check each input.
 			$.each( inputs, function( key, field ){
-				validate.initField( field );
-
-				// We use this variable to set the error message and add the error class.
-				var validationResult = {
-					success: null,
-					message: ""
-				};
-
-				var $field = $(field);
-				// Get validation params.
-				var validationParams = $field.data("validation");
-				// REQUIRED FIELD: If is a required field
-				if( validationParams.required && validationParams.required === true || validationParams.required === "true"){
-					// Set the result of the validation
-					validationResult.success = validate.validateRequiredField( field );
-
-					// If isn't successful, set the error messages.
-					if( !validationResult.success ){
-						switch( field.type ){
-							case "file":
-								validationResult.message = validate.messages.required.file;
-								break;
-							default:
-								validationResult.message = validate.messages.required.default;
-						}
-						errors = true;
-					}
-				}
-
-				// EMAIL FORMAT: check valid email.
-				if( validationParams.email && validationResult.success != false ){
-					// Set the result of the validation
-					validationResult.success = validate.validateEmailFormat( field );
-
-					// If isn't successful, set the error messages.
-					if( !validationResult.success ){
-						validationResult.message = validate.messages.email;
-						errors = true;
-					}
-				}
-
-                // COMPARE FIELDS: check if have the same value.
-                if( validationParams.compareTo && validationResult.success != false ){
-                    // Set the result of the validation
-                    validationResult.success = validate.validateCompareField( field, $(form).find('input[name="'+validationParams.compareTo+'"]')  );
-
-                    // If isn't successful, set the error messages.
-                    if( !validationResult.success ){
-                        validationResult.message = validate.messages.compareTo;
-                        errors = true;
-                    }
-                }
-
-                // MIN LENGTH: check the filed min length.
-                if( validationParams.minLength && validationResult.success != false ){
-                    // Set the result of the validation
-                    validationResult.success = (field.value.length >= validationParams.minLength );
-
-                    // If isn't successful, set the error messages.
-                    if( !validationResult.success ){
-                        validationResult.message = validate.messages.minLength.replace("[min]", validationParams.minLength);
-                        errors = true;
-                    }
-                }
-
-				// URL FORMAT: check valid url.
-				if( validationParams.url && validationResult.success != false ){
-					// Set the result of the validation
-					validationResult.success = validate.validateUrlField( field );
-
-					// If isn't successful, set the error messages.
-					if( !validationResult.success ){
-						validationResult.message = validate.messages.url;
-						errors = true;
-					}
-				}
-
+				var validationResult = validate.validateField( field );
 				// If the validation isn't successful, add an error class in the input and append a label with the message after the field.
+
 				if( validationResult.success == false ){
-					validate.setError( field, validationResult.message);
+					errors = true;
 				}
 
 			});
@@ -499,7 +512,7 @@ Application.utils = {
 		return str;
 	},
 
-    changeBuildingMode: function( selected ) {
+	changeBuildingMode: function(selected) {
         	
     	var $canvas = Application.utils.getCanvas();
 		var arrayMqClass = ['display-mobile', 'show-img-device','hidden-device','element-block-center','mobile-margin','full-width'];	
@@ -507,11 +520,11 @@ Application.utils = {
 		$canvas.trigger('changeBuildingMode', [ selected ] );
         
     	$.each( arrayMqClass, function( key, name ){
-   			if ( selected == 'mobile') {
+		if ( selected == 'mobile') {
         		$('.' + name).addClass('st-js-' + name);
-    		}else{
+		} else {
         		$('.' + name).removeClass('st-js-' + name);
-    		}
+		}
     	});	
 
     },

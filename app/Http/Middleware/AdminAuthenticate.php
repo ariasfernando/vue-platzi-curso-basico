@@ -49,6 +49,11 @@ class AdminAuthenticate
         return $next($request);
     }
 
+    /**
+     * Reject
+     * @param boolean $isAjax
+     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Contracts\Routing\ResponseFactory
+     */
     private function reject($isAjax)
     {
         if ($isAjax) {

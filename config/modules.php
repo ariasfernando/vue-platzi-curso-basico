@@ -32,6 +32,12 @@ $default = [
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-320x240.png'
     ],
+    'two_column_media_shared_height' => [
+        'type' => 'two_column_media_shared_height',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-320x240.png',
+        'validate_image_height' => true
+    ],
     'hero_image' => [
         'type' => 'hero_image',
         'file_parent' => 'base',
@@ -93,6 +99,31 @@ $default = [
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png',
         'library_name' => 'test'
+    ],
+    'hero_image_v2_no_crop' => [
+        'type' => 'hero_image_v2_no_crop',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png'
+    ],
+    'hero_image_v2_single_crop' => [
+        'type' => 'hero_image_v2_single_crop',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png'
+    ],
+    'hero_image_v2_height_proportional' => [
+        'type' => 'hero_image_v2_height_proportional',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png'
+    ],
+    'mie_v2_default_adjustable_height' => [
+        'type' => 'mie_v2_default_adjustable_height',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png'
+    ],
+    'hero_image_mie_v2_library' => [
+        'type' => 'hero_image_mie_v2_library',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
     'three_column_media_with_text' => [
         'type' => 'three_column_media_with_text',
@@ -427,6 +458,54 @@ $default = [
     'view_in_browser' => [
         'type' => 'view_in_browser',
         'file_parent' => 'base'
+    ],
+    'text_with_image' => [
+        'type' => 'text_with_image',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-175x131.png',
+        'button' => [
+            'background_colors' => [
+                'default' => '#FFFFFF',
+                'list' => [
+                    'White' => '#FFFFFF',
+                    '@hex' => '%%=v(@hex)=%%'
+                ]
+            ],
+            'font_colors' => [
+                'default' => '#000000',
+                'list' => [
+                    'Black' => '#000000',
+                    'White' => '#FFFFFF',
+                    '@hex' => '%%=v(@hex)=%%'
+                ]
+            ]
+        ],
+        'initialized' => false,
+        'plugins' => [
+            'tinymce' => [
+                'formats' => [
+                    'underline' => [
+                        'inline' => 'u',
+                        'exact' => true
+                    ]
+                ],
+                'selector' => '.st-edit-text',
+                'fixed_toolbar_container' => '.text-overlay .text-overlay-toolbox',
+                'toolbar' => 'bold italic underline link fontsizeselect',
+                'plugins' => 'paste advlist autolink lists stlinkextended',
+                'fontsize_formats' => '14px 16px 22px',
+                'forced_root_block' => false,
+                'inline' => true,
+                'target_list' => false,
+                'link_validate_url' => true,
+                'link_title' => false,
+                'link_text_to_display' => false,
+                'paste_as_text' => true,
+                'menubar' => false,
+                'relative_urls' => false,
+                'remove_script_host' => false
+            ]
+        ]
     ]
 ];
 

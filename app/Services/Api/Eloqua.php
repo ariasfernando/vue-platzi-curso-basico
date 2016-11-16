@@ -167,8 +167,12 @@ class Eloqua implements ApiConnector
                 $this->flushed_cache = true;
                 return $this->call($options);
             } else {
-                $error_message = (isset($error['data']['error_description']))? $error['data']['error_description'] : $error['status'];
-                Activity::log('Error Eloqua ['.$error['status'].']', array('properties' => ['message' => $error_message]));
+                $error_message = (isset($error['data']['error_description']))
+                    ? $error['data']['error_description'] : $error['status'];
+                Activity::log(
+                    'Error Eloqua ['.$error['status'].']',
+                    array('properties' => ['message' => $error_message])
+                );
                 throw new \Exception($error_message);
             }
         } else {
@@ -259,7 +263,9 @@ class Eloqua implements ApiConnector
     public function uploadEmail($campaign = null, $request = null)
     {
         if (!is_null($campaign)) {
-            $name = (is_null($request) || !isset($request['filename']))? $campaign->campaign_name : $request['filename'];
+            $name = (is_null($request) || !isset($request['filename']))
+                ? $campaign->campaign_name : $request['filename'];
+
             $versioning_name = Upload::versioningFilename($name);
             $eloqua_config = $this->eloqua_config;
 

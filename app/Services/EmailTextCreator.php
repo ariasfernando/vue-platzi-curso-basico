@@ -31,12 +31,22 @@ class EmailTextCreator
     {
         $plain_text = (isset($this->campaign['title'])) ? $this->campaign['title'] . self::$line_break : '';
 
-        foreach ($modules as $module) {
-            $path = $this->getModulesPath($module['file_parent']);
-            if (\view::exists($path . '.text.' . $module['type'])) {
-                $plain_text .= $this->getTxtByTpl($module);
-            } else {
-                $plain_text .= trim($this->defaultHtml2TextConverter($module));
+        foreach ($this->campaign['modules_data'] as $module) {
+            switch ($module['type']) {
+                case 'header_image':
+                    $text_module = $this->defaultHtml2TextConverter($module);
+                    $text_module = trim(str_replace("\n\n", "\n", $text_module));
+                    $plain_text .= $text_module;
+                    $plain_text .= self::$module_break;
+                    break;
+                case 'example_module_name':
+                    // Custom module text content
+                    break;
+
+                default:
+                    $plain_text .= trim($this->defaultHtml2TextConverter($module));
+                    $plain_text .= self::$module_break;
+                    break;
             }
             $plain_text .= self::$module_break;
         }
