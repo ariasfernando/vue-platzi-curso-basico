@@ -270,10 +270,10 @@ gulp.task("elixir-version", function() {
  | --------------------------------------------------------------------------
  */
 gulp.task('st-custom-tasks', function () {
-    gulp.watch(['resources/views/**/layouts/partials/*.blade.php'], ['validateFonts']);
+    gulp.watch(['resources/views/**/layouts/partials/*.blade.php'], ['validate-fonts']);
 });
 
-gulp.task('validateFonts', function () {
+gulp.task('validate-fonts', function () {
     return gulp.src('resources/views/**/layouts/partials/*.blade.php')
         .pipe(data(function (file) {
             // Get file content
@@ -307,4 +307,4 @@ gulp.task('validateFonts', function () {
  */
 gulp.task("jshint", ["elixir-jshint"]);
 gulp.task("watch", gulpsync.sync(["st-custom-tasks","elixir-less","elixir-scripts","elixir-copy-bower","elixir-version"]));
-gulp.task("default", gulpsync.sync(["validateFonts","elixir-less","elixir-scripts","elixir-copy-bower","elixir-version"]));
+gulp.task("default", gulpsync.sync(["validate-fonts","elixir-less","elixir-scripts","elixir-copy-bower","elixir-version"]));
