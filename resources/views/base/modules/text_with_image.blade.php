@@ -10,7 +10,7 @@
     
     // Set Default Image Button.
     $buttonDataDefault = [
-        'source' => isset($module_params['placeholder_image_button'])? url() . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image_button']): '',
+        'source' => isset($module_params['placeholder_image_button'])? url(str_replace('{locale}'), $params["campaign_data"]["locale"], $module_params['placeholder_image_button']): '',
         'alt' => 'image-button'
     ];
 
