@@ -2,6 +2,7 @@
 
 namespace Stensul\Services;
 
+use Helper;
 use StensulLocale;
 use Stensul\Services\TextConverter;
 
@@ -25,11 +26,12 @@ class EmailTextCreator
     /**
      * Create text version.
      *
+     * @param array $modules Modules data
      * @return string
      */
-    public function createTextVersion()
+    public function createTextVersion($modules)
     {
-        $plain_text = '';
+        $plain_text = (isset($this->campaign['title'])) ? $this->campaign['title'] . self::$line_break : '';
 
         foreach ($this->campaign['modules_data'] as $module) {
             switch ($module['type']) {
@@ -56,8 +58,10 @@ class EmailTextCreator
                     $plain_text .= self::$module_break;
                     break;
             }
+            $plain_text .= self::$module_break;
         }
         $plain_text = $this->replaceTags($plain_text);
+
         return $plain_text;
     }
 
@@ -116,10 +120,7 @@ class EmailTextCreator
             'campaign_data' => $this->campaign
         ];
         $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['type'];
-        $moduleHtml = \View::make($modulePath)
-            ->with('params', $params)
-            ->with('module', $module)
-            ->render();
+        $moduleHtml = Helper::getRenderedView($modulePath, null, ['params' => $params,'module_params' => $module]);
 
         return $this->htmlToText($moduleHtml);
     }
@@ -130,7 +131,7 @@ class EmailTextCreator
      * @param  string $html
      * @return string
      */
-    public function htmlToText($html)
+    public static function htmlToText($html)
     {
         $htmlToText = new TextConverter($html, array('do_links' => 'inline'));
 
@@ -145,13 +146,9 @@ class EmailTextCreator
      */
     protected function getTxtByTpl($module)
     {
-        $params = [
-            'campaign_data' => $this->campaign
-        ];
         $modulePath = $this->getModulesPath($module['file_parent']) . '.text.' . $module['type'];
         $moduleText = \View::make($modulePath)
             ->with('module', $module)
-            ->with('params', $params)
             ->render();
 
         return $moduleText;
