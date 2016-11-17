@@ -1,0 +1,6 @@
+{
+	"type": "cta_button_image",
+	"file_parent": "base",
+	"class": "pkg",
+	"placeholder_image": "/_common/images/{locale}/primary-button-placeholder.png"
+}

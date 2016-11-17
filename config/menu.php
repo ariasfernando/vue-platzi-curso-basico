@@ -33,6 +33,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'header_image',
+            'module_class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -50,24 +51,109 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'hero_image_bg',
+            'level' => 'single',
+            'module_class' => 'pkg'
+        ],
+
+        'hero_image_mobile_version' => [
+            'title' => 'Hero Image (mobile version)',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'hero_image_mobile_version',
+            'module_class' => 'pkg',
             'level' => 'single'
         ],
 
-        'hero_image_mobile' => [
-            'title' => 'Full Width Image',
+        'image_with_text' => [
+            'title' => 'Image With Text',
             'action' => 'add',
             'app_name' => 'base',
-            'module_id' => 'hero_image_mobile',
+            'module_id' => 'image_with_text',
+            'module_class' => 'pkg',
             'level' => 'single'
         ],
 
-        'hero_image_bg' => [
-            'title' => 'Hero Image Background',
+        'image_with_flipped' => [
+            'title' => 'Image With Text - Flipped',
             'action' => 'add',
             'app_name' => 'base',
-            'module_id' => 'hero_image_bg',
+            'module_id' => 'image_with_text_flipped',
+            'module_class' => 'pkg',
             'level' => 'single'
         ],
+
+        'two_column_media_with_text' => [
+            'title' => 'Two Column Media With Text',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'two_column_media_with_text',
+            'module_class' => 'pkg',
+            'level' => 'single'
+        ],
+
+        'three_column_media_with_text' => [
+            'title' => 'Three Column Media With Text',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'three_column_media_with_text',
+            'module_class' => 'pkg',
+            'level' => 'single'
+        ],
+
+        'free_text' => [
+            'title' => 'Free Text',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'free_text',
+            'module_class' => 'pkg',
+            'level' => 'single'
+        ],
+
+        'cta_button_image' => [
+            'title' => 'Primary Button - Image',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'cta_button_image',
+            'module_class' => 'pkg',
+            'level' => 'single'
+        ],
+
+        'cta_button_html' => [
+            'title' => 'Primary Button - HTML',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'cta_button_html',
+            'module_class' => 'pkg',
+            'level' => 'single'
+        ],
+
+        'spacer' => [
+            'title' => 'Spacer',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'spacer',
+            'module_class' => 'pkg',
+            'level' => 'single'
+        ],
+
+        'line_separator' => [
+            'title' => 'Line Separator',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'line_separator',
+            'module_class' => 'pkg',
+            'level' => 'single'
+        ],
+
+        'footer' => [
+            'title' => 'Footer',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'footer',
+            'module_class' => 'pkg',
+            'level' => 'single'
+        ],
+
         'hero_v2_group' => [
             'title' => 'Image Editor v2',
             'action' => 'expand',
@@ -111,13 +197,6 @@ $default = [
                 ]
             ]
         ],
-        'spacer' => [
-            'title' => 'Configurable spacer',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'spacer',
-            'level' => 'single'
-        ],
 
         'thin_ad_block' => [
             'title' => 'Thin Ad Block',
@@ -135,27 +214,11 @@ $default = [
             'level' => 'single'
         ],
 
-        'two_column_media_with_text' => [
-            'title' => 'Side by Side Content Blocks',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'two_column_media',
-            'level' => 'single'
-        ],
-
         'three_column_media' => [
             'title' => '3 Column Content Blocks',
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'three_column_media',
-            'level' => 'single'
-        ],
-
-        'three_column_media_with_text' => [
-            'title' => '3 Column Blocks + TXT',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'three_column_media_with_text',
             'level' => 'single'
         ],
 
@@ -191,15 +254,6 @@ $default = [
             'level' => 'single'
         ],
 
-        'footer' => [
-            'title' => 'Footer',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'footer',
-            'level' => 'single'
-        ],
-
-        // Verizon
         'header_text' => [
             'title' => 'Header Text',
             'action' => 'add',
