@@ -40,12 +40,6 @@ $default = [
         'placeholder_image' => '/images/default/image-placeholder-320x240.png',
         'validate_image_height' => true
     ],
-    'hero_image' => [
-        'type' => 'hero_image',
-        'file_parent' => 'base',
-        'placeholder_image' => '/images/default/image-placeholder-660x400.png',
-        'library_name' => 'test'
-    ],
     'hero_image_bg' => [
         'type' => 'hero_image_bg',
         'file_parent' => 'base',

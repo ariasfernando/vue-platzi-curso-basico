@@ -41,7 +41,8 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'hero_image',
-            'level' => 'single'
+            'level' => 'single',
+            'module_class' => 'pkg'
         ],
         
         'hero_image_bg' => [

@@ -1,0 +1,7 @@
+{
+	"type": "hero_image",
+	"file_parent": "base",
+	"class": "pkg",
+	"placeholder_image": "/images/default/image-placeholder-660x400.png",
+	"library_name": "test"
+}
