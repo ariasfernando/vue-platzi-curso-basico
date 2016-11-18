@@ -258,6 +258,10 @@ $default = [
         'Challenge'   => 'Stensul\Providers\ChallengeServiceProvider',
         'Api'         => 'Stensul\Providers\ApiServiceProvider',
     ],
+    'help' => [
+        'url' => 'http://help.stensul.com',
+        'enabled' => true 
+    ],
 
 ];
 
