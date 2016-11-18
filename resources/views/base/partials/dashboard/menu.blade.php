@@ -11,14 +11,14 @@
 @else
     {{-- Languages --}}
     @if ($app_config['view']['campaign_format'] === "languages")
-        @if ( isset($app_config['locales']))
+        @if ( isset($app_config['locale']['langs']))
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
                 Create a new email<span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                @foreach ($app_config['locales'] as $key => $value)
+                @foreach ($app_config['locale']['langs'] as $key => $value)
                     <li role="presentation">
-                        <a href="{{ URL::to( action('CampaignController@getEdit') . '?' . http_build_query([ 'locale' => $key, "library" => "default" ])) }}">{{ $value }}</a>
+                        <a href="{{ URL::to( url('campaign/edit') . '?' . http_build_query([ 'locale' => $key, "library" => "default" ])) }}">{{ $value['name'] }}</a>
                     </li>
                 @endforeach
             </ul>

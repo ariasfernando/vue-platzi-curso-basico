@@ -60,7 +60,7 @@ class DashboardController extends Controller
         }
 
         $params = [
-            'locales' => \Config::get('locales'),
+            'locale' => \Config::get('locale'),
             'campaigns_edited' => $campaigns_edited,
             'campaigns_processed' => $campaigns_processed,
         ];
