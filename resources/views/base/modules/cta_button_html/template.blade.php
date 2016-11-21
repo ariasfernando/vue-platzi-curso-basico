@@ -14,4 +14,4 @@
 		</tbody></table>
 	</td>
 </tr>
-{{-- CTA Button : End --}}
+{{-- CTA Button HTML : End --}}
