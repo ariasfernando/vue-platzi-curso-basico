@@ -63,6 +63,5 @@ class Authenticate
         } else {
             return $next($request);
         }
-
     }
 }

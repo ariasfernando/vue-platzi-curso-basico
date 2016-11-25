@@ -59,7 +59,6 @@ class TemplateController extends Controller
         $options['module_params'] = $module_params;
 
         return $this->getComponent($request, 'modules', $options);
-
     }
 
     /**
@@ -120,7 +119,6 @@ class TemplateController extends Controller
         }
 
         return ["image" => $campaign_path];
-
     }
 
     /**

@@ -41,6 +41,21 @@ $default = [
     'env' => env('APP_ENV', 'production'),
 
     /*
+    | Application Version
+    |--------------------------------------------------------------------------
+    */
+
+    'version' => trim(@file_get_contents('../VERSION')),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Debug
+    |--------------------------------------------------------------------------
+    */
+
+    'debug_url' => env('DEBUG_SCRIPT_URL', 'https://stensul-storage.akamaized.net/clientside-debug/1.0.0/debug.min.js'),
+
+    /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
     |--------------------------------------------------------------------------
@@ -213,6 +228,9 @@ $default = [
         Folklore\Image\ImageServiceProvider::class,
         Fideloper\Proxy\TrustedProxyServiceProvider::class,
         Stensul\Providers\LocaleServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
+        Stensul\Providers\ChallengeServiceProvider::class,
     ],
 
     /*
@@ -276,7 +294,13 @@ $default = [
         'Api'         => Stensul\Providers\ApiServiceProvider::class,
         'Authenticate' => Stensul\Http\Middleware\Authenticate::class,
         'AdminAuthenticate' => Stensul\Http\Middleware\AdminAuthenticate::class,
-        'StensulLocale'      => Stensul\Providers\LocaleServiceProvider::class
+        'StensulLocale'      => Stensul\Providers\LocaleServiceProvider::class,
+        'ReCaptcha'   => ReCaptcha\ReCaptcha::class,
+        'Challenge'   => Stensul\Providers\ChallengeServiceProvider::class,
+    ],
+    'help' => [
+        'url' => 'http://help.stensul.com',
+        'enabled' => true
     ],
 
 ];

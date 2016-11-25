@@ -39,6 +39,5 @@ class GelfMessageFormatter extends MonologGelfMessageFormatter
         }
 
         return parent::format($record);
-
     }
 }

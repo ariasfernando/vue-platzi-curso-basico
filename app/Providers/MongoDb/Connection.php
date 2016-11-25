@@ -35,7 +35,6 @@ class Connection extends \Jenssegers\Mongodb\Connection
                     self::$maxTries
                 ));
             }
-
         } while ($currentTry <= self::$maxTries);
 
         if (isset($e)) {

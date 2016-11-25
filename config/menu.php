@@ -324,7 +324,6 @@ foreach ($array_extend as $key_style => $value_style) {
             }
         }
     }
-
 }
 
 return $array_extend;

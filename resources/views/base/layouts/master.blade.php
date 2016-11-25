@@ -22,12 +22,12 @@
 
         @include('base.partials.metrics')
 
-        <!-- HEADER -->
+        {{-- HEADER --}}
         @section('header')
             @include('base/partials/header')
         @show
 
-        <!-- CONTENT -->
+        {{-- CONTENT --}}
         <div class="container">
             {{-- Error Place holder --}}
             @section('error-placeholder')
@@ -88,10 +88,13 @@
             @include('base.partials.campaign.modal_campaign_'.$api.'_upload')
         @endforeach
 
-        <!-- Scripts -->
+        {{-- Debug --}}
+        @include('base/layouts/partials/debug')
+
+        {{-- Scripts --}}
         <script src="{{ url( elixir('js/library.js') ) }}"></script>
 
-        <!-- Global Application JS object -->
+        {{-- Global Application JS object --}}
         @include('base/partials/application_script')
 
         @section('footer-script')

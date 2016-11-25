@@ -71,8 +71,6 @@ class ExactTarget implements ApiConnector
         } else {
             throw new \Exception("Exact target error [ ".$response->message." ]");
         }
-
-
     }
 
     /**

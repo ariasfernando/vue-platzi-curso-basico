@@ -39,7 +39,6 @@ class Delete extends Command
         } else {
             $this->error('The name is required.');
         }
-
     }
 
     /**

@@ -130,7 +130,6 @@ class Responsys implements ApiConnector
                         return [
                             'status' => 'success'
                         ];
-
                     } else {
                         throw new \Exception("Unable to confirm Responsys received the file.");
                     }
