@@ -3,7 +3,7 @@
 	@foreach ( $params['campaign_data']['modules_data'] as $module )
 		<?php
 			$module_path = $app_config["modules"][ $module['type'] ]["file_parent"] . "." . $params['campaign_data']['library'] . '.modules.' . $module['type'];
-			if ( isset($module['class']) ) {
+			if ( isset($module['module_class']) ) {
 				$module_path .= ".template";
 			}
 		?>

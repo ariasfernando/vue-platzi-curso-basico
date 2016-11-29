@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
         'Stensul\Console\Commands\Task\UpdateLastModifyBy',
         'Stensul\Console\Commands\Task\GroupToRoles',
         'Stensul\Console\Commands\Task\EmailToLower',
+        'Stensul\Console\Commands\Module\Create',
     ];
 
     /**
