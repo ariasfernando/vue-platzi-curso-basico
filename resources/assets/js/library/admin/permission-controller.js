@@ -104,7 +104,7 @@ var permissionController = function( customOptions ){
 					.fail(function (error) {
 						spinner.hide();
 						options.busy = false;
-						Application.utils.alert.display("Error:", "An error occurred while trying to save the user, please try again later.", "danger");
+						Application.utils.alert.display("Error:", "An error occurred while trying to save the permission, please try again later.", "danger");
 					});
 			}
 		}
@@ -131,7 +131,7 @@ var permissionController = function( customOptions ){
 						})
 						.fail(function () {
 							spinner.hide();
-							Application.utils.alert.display("Error:", "An error occurred while trying to delete the user, please try again later.", "danger");
+							Application.utils.alert.display("Error:", "An error occurred while trying to delete the permission, please try again later.", "danger");
 						});
 				}
 			});
