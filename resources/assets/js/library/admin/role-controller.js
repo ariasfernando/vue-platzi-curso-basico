@@ -96,7 +96,6 @@ var roleController = function( customOptions ){
 							$.magnificPopup.close();
 							_this.refreshTableView( $( options.selectors.dataList ).attr("id") );
 						} else if(response.message == "ERROR_EXISTS"){
-							console.log($(options.selectors.mainView));
 							var errorField = $(options.selectors.mainView).find(".role_name");
 							errorField.focus().addClass("error");
 							errorField.parent().append('<label class="error">The role already exists.</label>');
