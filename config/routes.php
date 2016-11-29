@@ -123,6 +123,10 @@ if (env("APP_ADMIN", false)) {
             '/admin/permission/edit'   => 'Admin\PermissionController@getEdit',
             '/admin/log'               => 'Admin\LogController@getIndex',
             '/admin/log/list'          => 'Admin\LogController@getList',
+            '/admin/library'              => 'Admin\LibraryController@getIndex',
+            '/admin/library/list'         => 'Admin\LibraryController@getList',
+            '/admin/library/create'       => 'Admin\LibraryController@getCreate',
+            '/admin/library/edit'         => 'Admin\LibraryController@getEdit',
         ],
         'post' => [
             '/admin/login'             => 'Admin\Auth\AdminAuthController@postLogin',
@@ -135,6 +139,9 @@ if (env("APP_ADMIN", false)) {
             '/admin/permission/edit'   => 'Admin\PermissionController@postEdit',
             '/admin/permission/create' => 'Admin\PermissionController@postCreate',
             '/admin/permission/delete' => 'Admin\PermissionController@postDelete',
+            '/admin/library/edit'         => 'Admin\LibraryController@postEdit',
+            '/admin/library/create'       => 'Admin\LibraryController@postCreate',
+            '/admin/library/delete'       => 'Admin\LibraryController@postDelete',
         ],
     ];
     $default['web']['get'] = array_merge($adminRoutes['get'], $default['web']['get']);
