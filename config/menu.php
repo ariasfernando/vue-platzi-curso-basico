@@ -18,14 +18,22 @@ $overrideFile = (env('APP_NAME', false))
 $default = [
 
     'default' => [
-
+        'dadada' => [
+            "module_id" => "dadada",
+            "title" => "dadada",
+            "app_name" => "base",
+            "action" => "add",
+            "level" => "single",
+            "file_parent" => "base",
+            "class" => "pkg",
+        ],
         'view_in_browser' => [
             'title' => 'View in browser',
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'view_in_browser',
             'level' => 'single',
-            'module_class' => 'pkg'
+            'class' => 'pkg',
         ],
 
         'header_image' => [
@@ -33,7 +41,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'header_image',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -43,7 +51,7 @@ $default = [
             'app_name' => 'base',
             'module_id' => 'hero_image',
             'level' => 'single',
-            'module_class' => 'pkg'
+            'class' => 'pkg'
         ],
         
         'hero_image_bg' => [
@@ -52,7 +60,7 @@ $default = [
             'app_name' => 'base',
             'module_id' => 'hero_image_bg',
             'level' => 'single',
-            'module_class' => 'pkg'
+            'class' => 'pkg'
         ],
 
         'hero_image_mobile_version' => [
@@ -60,7 +68,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'hero_image_mobile_version',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -69,7 +77,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'image_with_text',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -78,7 +86,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'image_with_text_flipped',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -87,7 +95,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'two_column_media_with_text',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -96,7 +104,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'three_column_media_with_text',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -105,7 +113,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'free_text',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -114,7 +122,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'cta_button_image',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -123,7 +131,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'cta_button_html',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -132,7 +140,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'spacer',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -141,7 +149,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'line_separator',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 
@@ -150,7 +158,7 @@ $default = [
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'footer',
-            'module_class' => 'pkg',
+            'class' => 'pkg',
             'level' => 'single'
         ],
 

@@ -78,7 +78,7 @@ class Create extends Command
             'action' => 'add',
             'level' => 'single',
             'file_parent' => 'base',
-            'module_class' => 'pkg'
+            'class' => 'pkg'
         ];
 
         if (!$this->saveConfig($module_dir, $config)) {

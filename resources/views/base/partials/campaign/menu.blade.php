@@ -9,7 +9,7 @@
 				</div>
 			</div>
 		@else
-			<div class="add single" id="{{ $menu_item['module_id'] }}" data-class="{{ $menu_item['module_class'] or '' }}" data-app-name="{{ $menu_item['app_name'] }}">
+			<div class="add single" id="{{ $menu_item['module_id'] }}" data-class="{{ $menu_item['class'] or '' }}" data-app-name="{{ $menu_item['app_name'] }}">
 				<h2>{{ $menu_item['title'] }} <i class="glyphicon"></i></h2>
 			</div>
 		@endif
