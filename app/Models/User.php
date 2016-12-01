@@ -7,10 +7,12 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Illuminate\Notifications\Notifiable;
+use Stensul\Notifications\ResetPasswordNotification;
 
 class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword;
+    use Authenticatable, CanResetPassword, Notifiable;
 
     /**
      * The database table used by the model.
@@ -149,4 +151,16 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         }
         return $permissions;
     }
+
+    /**
+    * Send the password reset notification.
+    *
+    * @param  string  $token
+    * @return void
+    */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
+
 }

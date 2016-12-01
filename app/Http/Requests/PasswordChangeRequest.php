@@ -23,8 +23,8 @@ class PasswordChangeRequest extends Request
     {
         return [
             'old_password' => 'required',
-            'password' => 'required|min:6|max:16|different:old_password',
-            'password_confirmation' => 'required|min:6|max:16|same:password',
+            'password' => 'required|min:8|max:16|different:old_password',
+            'password_confirmation' => 'required|min:8|max:16|same:password',
         ];
     }
 }

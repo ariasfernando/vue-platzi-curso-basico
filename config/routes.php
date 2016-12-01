@@ -153,7 +153,7 @@ if (env('USER_LOGIN', 'default') != "oauth") {
     $passwordRoutes = [
         'get'    => [
             '/password/email'  => 'Auth\PasswordController@getEmail',
-            '/password/reset'  => 'Auth\PasswordController@getReset',
+            '/password/reset/{token}'  => 'Auth\PasswordController@getReset',
             '/password/change' => 'Auth\PasswordController@getChange',
         ],
         'post'   => [

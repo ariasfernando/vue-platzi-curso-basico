@@ -94,10 +94,6 @@ class PasswordController extends Controller
      */
     public function getReset($token = null)
     {
-        if (is_null($token)) {
-            throw new NotFoundHttpException;
-        }
-
         return view('base.auth.reset')->with('token', $token);
     }
 
@@ -117,7 +113,7 @@ class PasswordController extends Controller
             [
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|min:8',
             ]
         );
 
