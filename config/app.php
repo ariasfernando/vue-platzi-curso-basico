@@ -230,6 +230,7 @@ $default = [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Stensul\Providers\ChallengeServiceProvider::class,
+        Stensul\Providers\ModuleServiceProvider::class,
     ],
 
     /*
@@ -296,6 +297,7 @@ $default = [
         'StensulLocale'      => Stensul\Providers\LocaleServiceProvider::class,
         'ReCaptcha'   => ReCaptcha\ReCaptcha::class,
         'Challenge'   => Stensul\Providers\ChallengeServiceProvider::class,
+        'StensulModule' => Stensul\Providers\ModuleServiceProvider::class,
     ],
     'help' => [
         'url' => 'http://help.stensul.com',

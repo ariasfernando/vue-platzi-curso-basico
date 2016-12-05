@@ -98,11 +98,10 @@ class LibraryController extends Controller
      */
     public function getCreate()
     {
-
-        // @TODO Populate module list.
+        $modules = array_keys(\StensulModule::getModuleList());
         $params = [
             "title" => "Create Library",
-            "modules" => ['module 1', 'module 2', 'module 3']
+            "modules" => array_combine($modules, $modules)
         ];
 
         return $this->renderView('base.admin.modals.library_form', array('params' => $params));
@@ -116,12 +115,13 @@ class LibraryController extends Controller
     public function getEdit(Request $request)
     {
         $library_data = Library::findOrFail($request->input("libraryId"))->toArray();
+        $modules = array_keys(\StensulModule::getModuleList());
+        $modules = array_combine($modules, $modules);
 
-        // @TODO complete with modules from Db.
-        $modules = [];
         $params = [
             "title" => "Edit Library",
-            "menu_items" => $modules
+            "modules" => $modules,
+            "library" => $library_data
         ];
 
         return $this->renderView('base.admin.modals.library_form', array('params' => $params));
@@ -135,11 +135,11 @@ class LibraryController extends Controller
     public function postEdit(Request $request)
     {
         $library = Library::findOrFail($request->input("libraryId"));
-        $library->name = $request->input("name");
         $library->description = $request->input("description");
         $library->modules = (!is_null($request->input("modules")))? $request->input("modules") : [];
+        $library->save();
 
-        return (int) $library->save();
+        return array("message" => "SUCCESS");
     }
 
     /**
@@ -149,8 +149,20 @@ class LibraryController extends Controller
      */
     public function postCreate(Request $request)
     {
-        $modules = (!is_null($request->input("modules")))? $request->input("modules") : [];
+        $params = [
+            "name" => $request->input("name"),
+            "description" => $request->input("description"),
+            "modules" => $request->input("modules") ?: []
+        ];
 
+        if (Library::where('name', '=', $params["name"])->exists()) {
+            $response_message = array("message"=> "ERROR_EXISTS");
+        } else {
+            Library::create($params);
+            $response_message = array("message"=> "SUCCESS");
+        }
+
+        return $response_message;
 
     }
 
