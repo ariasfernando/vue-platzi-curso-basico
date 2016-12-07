@@ -72,7 +72,7 @@ class Create extends Command
         }
 
         $config = [
-            'type' => $module_id,
+            'module_id' => $module_id,
             'title' => $name,
             'app_name' => $app_name,
             'action' => 'add',
