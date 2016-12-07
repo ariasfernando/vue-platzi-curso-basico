@@ -5,6 +5,7 @@ namespace Stensul\Providers;
 use Auth;
 use View;
 use Illuminate\Support\ServiceProvider;
+use Stensul\Providers\ModuleServiceProvider;
 
 class ComposerServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,8 @@ class ComposerServiceProvider extends ServiceProvider
                 }
 
                 $app_config = \Config::all();
+
+                $app_config['modules'] = ModuleServiceProvider::getModuleList();
 
                 $config_array = [
                     "modules"   => $app_config['modules'],

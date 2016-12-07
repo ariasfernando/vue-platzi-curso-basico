@@ -4,6 +4,7 @@ namespace Stensul\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Stensul\Providers\ModuleServiceProvider;
 
 class Library extends Eloquent
 {
@@ -20,4 +21,23 @@ class Library extends Eloquent
      * @var array
      */
     protected $fillable = ['name', 'description', 'modules'];
+
+    /**
+     * Get the library modules
+     *
+     * @return array Modules
+     */
+    public function getModules()
+    {
+        
+        $modules = ModuleServiceProvider::getModuleList();
+        $library_modules = [];
+
+        foreach ($this->modules as $module) {
+            if (isset($modules[$module])) {
+                $library_modules[$module] = $modules[$module];
+            }
+        }
+        return $library_modules;
+    }
 }

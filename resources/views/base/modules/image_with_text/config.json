@@ -1,5 +1,9 @@
 {
-	"type": "image_with_text",
+	"title": "Image With Text",
+	"action": "add",
+	"app_name": "base",
+	"module_id": "image_with_text",
+	"level": "single",
 	"file_parent": "base",
 	"class": "pkg",
 	"placeholder_image": "/images/default/image-placeholder-200x200.png",

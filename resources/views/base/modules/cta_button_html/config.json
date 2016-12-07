@@ -1,5 +1,9 @@
 {
-	"type": "cta_button_html",
+	"title": "Primary Button - HTML",
+	"action": "add",
+	"app_name": "base",
+	"module_id": "cta_button_html",
+	"level": "single",
 	"file_parent": "base",
 	"class": "pkg"
 }

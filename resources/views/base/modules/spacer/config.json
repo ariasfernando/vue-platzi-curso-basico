@@ -1,4 +1,9 @@
 {
+	"title": "Spacer",
+	"action": "add",
+	"app_name": "base",
+	"module_id": "spacer",
+	"level": "single",
 	"type": "spacer",
 	"file_parent": "base",
 	"class": "pkg",

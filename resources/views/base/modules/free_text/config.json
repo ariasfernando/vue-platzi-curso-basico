@@ -1,5 +1,9 @@
 {
-	"type": "free_text",
+	"title": "Free Text",
+	"action": "add",
+	"app_name": "base",
+	"module_id": "free_text",
+	"level": "single",
 	"file_parent": "base",
 	"class": "pkg",
 	"initialized": false,

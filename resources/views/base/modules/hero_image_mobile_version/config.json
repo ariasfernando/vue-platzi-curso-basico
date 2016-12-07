@@ -1,5 +1,9 @@
 {
-	"type": "hero_image_mobile_version",
+	"title": "Hero Image (mobile version)",
+	"action": "add",
+	"app_name": "base",
+	"module_id": "hero_image_mobile_version",
+	"level": "single",
 	"file_parent": "base",
 	"class": "pkg",
 	"placeholder_image": "/images/default/image-placeholder-660x400.png",

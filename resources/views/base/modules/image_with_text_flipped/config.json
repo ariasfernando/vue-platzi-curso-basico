@@ -1,4 +1,9 @@
 {
+	"title": "Image With Text - Flipped",
+	"action": "add",
+	"app_name": "base",
+	"module_id": "image_with_text_flipped",
+	"level": "single",
 	"type": "image_with_text_flipped",
 	"file_parent": "base",
 	"class": "pkg",

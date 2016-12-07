@@ -1,5 +1,9 @@
 {
-	"type": "hero_image_bg",
+	"title": "Hero Image Background",
+	"action": "add",
+	"app_name": "base",
+	"module_id": "hero_image_bg",
+	"level": "single",
 	"file_parent": "base",
 	"class": "pkg",
 	"placeholder_image": "/images/default/image-placeholder-660x400.png",

@@ -2,13 +2,13 @@
 @if ( isset($params['campaign_data']) )
 	@foreach ( $params['campaign_data']['modules_data'] as $module )
 		<?php
-			$module_path = $app_config["modules"][ $module['type'] ]["file_parent"] . "." . $params['campaign_data']['library'] . '.modules.' . $module['type'];
+			$module_path = $app_config["modules"][ $module['module_id'] ]["file_parent"] . "." . $params['campaign_data']['library'] . '.modules.' . $module['module_id'];
 			if ( isset($module['class']) ) {
 				$module_path .= ".template";
 			}
 		?>
-		@if ( isset($app_config["modules"][ $module['type'] ]["file_parent"]) )
-			{{ StensulLocale::init($params['campaign_data']['locale'], ["name" => $module['type'],"app_name" => $app_config["modules"][ $module['type'] ]["file_parent"]]) }}
+		@if ( isset($app_config["modules"][ $module['module_id'] ]["file_parent"]) )
+			{{ StensulLocale::init($params['campaign_data']['locale'], ["name" => $module['module_id'],"app_name" => $app_config["modules"][ $module['module_id'] ]["file_parent"]]) }}
 			{!! Helper::getRenderedView($module_path, null, ['params' => $params,
 				'module_params' => $module]) !!}
 		@endif

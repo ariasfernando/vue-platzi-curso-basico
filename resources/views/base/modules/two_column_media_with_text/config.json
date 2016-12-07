@@ -1,4 +1,9 @@
 {
+	"title": "Two Column Media With Text",
+	"action": "add",
+	"app_name": "base",
+	"module_id": "two_column_media_with_text",
+	"level": "single",
 	"type": "two_column_media_with_text",
 	"file_parent": "base",
 	"class": "pkg",

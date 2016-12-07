@@ -1,6 +1,10 @@
 {
-	"type": "header_image",
-	"file_parent": "base",
+	"module_id": "header_image",
+	"title": "Header Image",
+	"action": "add",
+	"app_name": "base",
 	"class": "pkg",
+	"level": "single",
+	"file_parent": "base",
 	"placeholder_image": "/images/default/image-placeholder-660x98.png"
 }
