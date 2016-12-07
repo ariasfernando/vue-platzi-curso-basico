@@ -11,7 +11,7 @@
 ?>
 {{-- Spacer: Start --}}
 <tr data-params='{{json_encode($module_params)}}'>
-	<td align="center" style="vertical-align:middle;" bgcolor="{{ $background_color }}" style="background-color: {{ $background_color }};" class="st-add-icon-config">
+	<td align="center" bgcolor="{{ $background_color }}" style="vertical-align:middle;background-color: {{ $background_color }};" class="st-add-icon-config">
 		<table style="width:100%!important;" width="100%" cellpadding="0" cellspacing="0" border="0">
 			<tr>
 				<td width="100%" height="{{ $size }}" class="st-custom-spacer" style="vertical-align:middle;"></td>

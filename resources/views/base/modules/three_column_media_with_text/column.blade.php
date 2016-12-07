@@ -27,7 +27,7 @@
 
     {{-- Text : Start --}}
     <tr>
-        <td contenteditable="true" class="st-save-only-text" style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555; padding-top: 10px;" class="stack-column-center">
+        <td contenteditable="true" style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555; padding-top: 10px;" class="st-save-only-text stack-column-center">
             {{ $text }}
         </td>
     </tr>

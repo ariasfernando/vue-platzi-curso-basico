@@ -3,6 +3,7 @@
 namespace Stensul\Tests;
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Stensul\Providers\ModuleServiceProvider;
 
 class ModulesTest extends TestCase
 {
@@ -15,11 +16,9 @@ class ModulesTest extends TestCase
      */
     public function testModules()
     {
+        $url = '/template/module?app_name=base' . '&campaign_id=' . $this->campaign->id;
 
-        $url = '/template/module?app_name=base&library_name=default' .
-            '&campaign_id=' . $this->campaign->id;
-
-        $modules = \Config::get('modules');
+        $modules = \StensulModule::getModuleList();
 
         // Enable user error handling
         libxml_use_internal_errors(true);
@@ -53,7 +52,7 @@ class ModulesTest extends TestCase
             foreach ($attrs as $k => $v) {
                 if ($k == 'data-params') {
                     $moduleAttributes = json_decode($v->nodeValue);
-                    $this->assertEquals($moduleAttributes->type, $moduleId);
+                    $this->assertEquals($moduleAttributes->module_id, $moduleId);
                 }
             }
 
