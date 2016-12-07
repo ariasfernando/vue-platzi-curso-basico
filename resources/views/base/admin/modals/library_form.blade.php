@@ -38,6 +38,17 @@
 			)); !!}
 		</div>
 
+		<!-- Input config -->
+		<div class="modal-mpf-row">
+			{!! Form::label('config', 'Config') !!}
+			{!! Form::textarea('config', isset($params['library']['config'])
+				? json_encode($params['library']['config'], JSON_PRETTY_PRINT) : '', array (
+				'class' => 'library_config',
+				'id' => 'library_config',
+				'placeholder' => 'Enter config here.'
+			)) !!}
+		</div>
+
 		<!-- Input submit  -->
 		<div class="modal-mpf-submit">
 			{!! Form::submit('Submit', array ( 'class' => 'btn btn-success pull-right submit-config')) !!}

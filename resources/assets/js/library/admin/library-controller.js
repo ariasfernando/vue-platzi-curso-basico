@@ -99,6 +99,10 @@ var libraryController = function( customOptions ){
 							var errorField = $(options.selectors.mainView).find(".library_name");
 							errorField.focus().addClass("error");
 							errorField.parent().append('<label class="error">The library already exists.</label>');
+						} else if(response.message == "ERROR_CONFIG"){
+							var errorField = $(options.selectors.mainView).find(".library_config");
+							errorField.focus().addClass("error");
+							errorField.parent().append('<label class="error">The config JSON is invalid.</label>');
 						}
 					})
 					.fail(function (error) {

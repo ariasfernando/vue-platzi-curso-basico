@@ -60,6 +60,14 @@ class CampaignController extends Controller
                     foreach ($menu as $key => $value) {
                         $params['menu_list'] = $value->getModules();
                     }
+
+                    uasort($params['menu_list'], function($a, $b) {
+                        if ($a['title'] == $b['title']) {
+                            return 0;
+                        }
+                        return ($a['title'] < $b['title']) ? -1 : 1;
+                    });
+
                 } else {
                     return redirect(env('APP_BASE_URL', '/'))->with('campaign_not_found', $campaign_id);
                 }

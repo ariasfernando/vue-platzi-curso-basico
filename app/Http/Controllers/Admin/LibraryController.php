@@ -136,7 +136,16 @@ class LibraryController extends Controller
     {
         $library = Library::findOrFail($request->input("libraryId"));
         $library->description = $request->input("description");
-        $library->modules = (!is_null($request->input("modules")))? $request->input("modules") : [];
+        $library->modules = !is_null($request->input("modules")) ? $request->input("modules") : [];
+        $library->config = !empty($request->input("config")) ? json_decode($request->input("config")) : '';
+
+        if (is_null($library->config)) {
+            return array("message" => "ERROR_CONFIG");
+        }
+
+        if ($library->config === '') {
+            $library->config = null;
+        }
         $library->save();
 
         return array("message" => "SUCCESS");
