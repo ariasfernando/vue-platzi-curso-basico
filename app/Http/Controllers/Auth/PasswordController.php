@@ -4,6 +4,8 @@ namespace Stensul\Http\Controllers\Auth;
 
 use Auth;
 use Mail;
+use Activity;
+use Challenge;
 use Stensul\Http\Requests\PasswordChangeRequest;
 use Illuminate\Http\Request;
 use Stensul\Http\Controllers\Controller;
@@ -36,11 +38,17 @@ class PasswordController extends Controller
     /**
      * Get email view.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function getEmail()
+    public function getEmail(Request $request)
     {
-        return view('base.auth.password');
+        $challenge_provider = \Config::get('challenge.default');
+        $config = \Config::get('challenge.providers.' . $challenge_provider);
+
+        return view('base.auth.password')
+                ->with('challenge_key', $config['key'])
+                ->with('challenge_provider', $challenge_provider);
     }
 
     /**
@@ -51,6 +59,15 @@ class PasswordController extends Controller
      */
     public function postEmail(Request $request)
     {
+        // Challenge validation
+        $challenge_provider = \Config::get('challenge.default');
+        $config = \Config::get('challenge.providers.' . $challenge_provider);
+
+        if (!Challenge::provider()->isValid($request)) {
+            Activity::log('User login fail [ERROR_CAPTCHA]');
+            return redirect()->back()->withErrors(['status' => 'Captcha validation is required']);
+        }
+
         $this->validate($request, ['email' => 'required|email']);
 
         $data_params = $request->only('email');
@@ -77,10 +94,6 @@ class PasswordController extends Controller
      */
     public function getReset($token = null)
     {
-        if (is_null($token)) {
-            throw new NotFoundHttpException;
-        }
-
         return view('base.auth.reset')->with('token', $token);
     }
 
@@ -100,7 +113,7 @@ class PasswordController extends Controller
             [
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|min:8',
             ]
         );
 
@@ -118,7 +131,6 @@ class PasswordController extends Controller
                 $user->password = bcrypt($password);
 
                 $user->save();
-
             }
         );
 

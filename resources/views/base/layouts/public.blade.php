@@ -22,19 +22,23 @@
 
 		@include('base.partials.metrics')
 
-		<!-- HEADER -->
+		{{-- HEADER --}}
 		@section('header')
 			@include('base.partials.header')
 		@show
 
-		<!-- CONTENT -->
+		{{-- CONTENT --}}
 		<div class="container">
 			<div class="row">
 				{{-- Content --}}
 				@yield('content')
 			</div>
 		</div>
+
+		{{-- Debug --}}
+		@include('base/layouts/partials/debug')
+
 		@section('footer-script')
-        @show
+		@show
 	</body>
 </html>

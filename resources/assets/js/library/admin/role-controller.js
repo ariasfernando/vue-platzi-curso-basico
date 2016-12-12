@@ -96,15 +96,15 @@ var roleController = function( customOptions ){
 							$.magnificPopup.close();
 							_this.refreshTableView( $( options.selectors.dataList ).attr("id") );
 						} else if(response.message == "ERROR_EXISTS"){
-							var errorField = $(options.selectors.mainView).find(".user_name");
+							var errorField = $(options.selectors.mainView).find(".role_name");
 							errorField.focus().addClass("error");
-							errorField.parent().append('<label class="error">The role already exist.</label>');
+							errorField.parent().append('<label class="error">The role already exists.</label>');
 						}
 					})
 					.fail(function (error) {
 						spinner.hide();
 						options.busy = false;
-						Application.utils.alert.display("Error:", "An error occurred while trying to save the user, please try again later.", "danger");
+						Application.utils.alert.display("Error:", "An error occurred while trying to save the role, please try again later.", "danger");
 					});
 			}
 		}
@@ -131,7 +131,7 @@ var roleController = function( customOptions ){
 						})
 						.fail(function () {
 							spinner.hide();
-							Application.utils.alert.display("Error:", "An error occurred while trying to delete the user, please try again later.", "danger");
+							Application.utils.alert.display("Error:", "An error occurred while trying to delete the role, please try again later.", "danger");
 						});
 				}
 			});

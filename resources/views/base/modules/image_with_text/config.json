@@ -1,0 +1,53 @@
+{
+	"title": "Image With Text",
+	"action": "add",
+	"app_name": "base",
+	"module_id": "image_with_text",
+	"level": "single",
+	"file_parent": "base",
+	"class": "pkg",
+	"placeholder_image": "/images/default/image-placeholder-200x200.png",
+	"button": {
+		"background_colors": {
+			"default": "#222",
+			"list": {
+				"Black": "#222",
+				"@hex": "%%=v(@hex)=%%"
+			}
+		},
+		"font_colors": {
+			"default": "#FFFFFF",
+			"list": {
+				"White": "#FFFFFF",
+				"Black": "#000000",
+				"@hex": "%%=v(@hex)=%%"
+			}
+		}
+	},
+	"initialized": false,
+	"plugins": {
+		"tinymce": {
+			"formats": {
+				"underline": {
+					"inline": "u",
+					"exact": true
+				}
+			},
+			"selector": ".st-edit-text",
+			"fixed_toolbar_container": ".text-overlay .text-overlay-toolbox",
+			"toolbar": "bold italic underline link fontsizeselect",
+			"plugins": "paste advlist autolink lists stlinkextended",
+			"fontsize_formats": "14px 16px 22px",
+			"forced_root_block": false,
+			"inline": true,
+			"target_list": false,
+			"link_validate_url": true,
+			"link_title": false,
+			"link_text_to_display": false,
+			"paste_as_text": true,
+			"menubar": false,
+			"relative_urls": false,
+			"remove_script_host": false
+		}
+	}
+}

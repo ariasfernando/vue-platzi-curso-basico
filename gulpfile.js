@@ -200,6 +200,7 @@ gulp.task( "elixir-scripts", function() {
 					"js/library/admin/role-controller.js",
 					"js/library/admin/permission-controller.js",
 					"js/library/admin/log-controller.js",
+					"js/library/admin/library-controller.js",
 					jsAppFilePath("admin.js")
 				],
 				jsDestinationPath + "admin.js",

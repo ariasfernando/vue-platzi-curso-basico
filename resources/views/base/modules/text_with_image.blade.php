@@ -10,7 +10,7 @@
     
     // Set Default Image Button.
     $buttonDataDefault = [
-        'source' => isset($module_params['placeholder_image_button'])? url() . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image_button']): '',
+        'source' => isset($module_params['placeholder_image_button'])? url(str_replace('{locale}'), $params["campaign_data"]["locale"], $module_params['placeholder_image_button']): '',
         'alt' => 'image-button'
     ];
 
@@ -56,7 +56,7 @@
                                                                     @if ( !empty($module_params['data']['text0']) )
                                                                         {!! $module_params['data']['text0'] !!}
                                                                     @else
-                                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim consequat congue. Duis suscipit, lorem eget ornare vulputate, sem purus hendrerit eros, eu scelerisque arcu libero auctor nulla. </br>
+                                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim consequat congue. Duis suscipit, lorem eget ornare vulputate, sem purus hendrerit eros, eu scelerisque arcu libero auctor nulla. <br />
                                                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim consequat congue. Duis suscipit, lorem eget ornare vulputate, sem purus hendrerit eros, eu scelerisque arcu libero auctor nulla.
                                                                     @endif
                                                                 </div>

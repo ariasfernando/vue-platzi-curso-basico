@@ -18,107 +18,6 @@ $overrideFile = (env('APP_NAME', false))
 $default = [
 
     'default' => [
-
-        'view_in_browser' => [
-            'title' => 'View in browser',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'view_in_browser',
-            'level' => 'single',
-            'module_class' => 'pkg'
-        ],
-
-        'header_image' => [
-            'title' => 'Header Image',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'header_image',
-            'level' => 'single'
-        ],
-
-        'hero_image' => [
-            'title' => 'Hero Image',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'hero_image',
-            'level' => 'single',
-            'module_class' => 'pkg'
-        ],
-        
-        'hero_image_bg' => [
-            'title' => 'Hero Image Background',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'hero_image_bg',
-            'level' => 'single'
-        ],
-
-        'hero_image_mobile' => [
-            'title' => 'Full Width Image',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'hero_image_mobile',
-            'level' => 'single'
-        ],
-
-        'hero_image_bg' => [
-            'title' => 'Hero Image Background',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'hero_image_bg',
-            'level' => 'single'
-        ],
-        'hero_v2_group' => [
-            'title' => 'Image Editor v2',
-            'action' => 'expand',
-            'level' => 'level-1',
-            'module_id' => 'hero_v2_group',
-            'sub_menu' => [
-                'hero_image_v2_no_crop' => [
-                    'title' => 'Hero Image - no crop',
-                    'action' => 'add',
-                    'app_name' => 'base',
-                    'module_id' => 'hero_image_v2_no_crop',
-                    'level' => 'single'
-                ],
-                'hero_image_v2_single_crop' => [
-                    'title' => 'Hero Image - single crop',
-                    'action' => 'add',
-                    'app_name' => 'base',
-                    'module_id' => 'hero_image_v2_single_crop',
-                    'level' => 'single'
-                ],
-                'hero_image_v2_height_proportional' => [
-                    'title' => 'Adjustable Width',
-                    'action' => 'add',
-                    'app_name' => 'base',
-                    'module_id' => 'hero_image_v2_height_proportional',
-                    'level' => 'single'
-                ],
-                'mie_v2_default_adjustable_height' => [
-                    'title' => 'Adjustable Height',
-                    'action' => 'add',
-                    'app_name' => 'base',
-                    'module_id' => 'mie_v2_default_adjustable_height',
-                    'level' => 'single'
-                ],
-                'hero_image_mie_v2_library' => [
-                    'title' => 'Image Library',
-                    'action' => 'add',
-                    'app_name' => 'base',
-                    'module_id' => 'hero_image_mie_v2_library',
-                    'level' => 'single'
-                ]
-            ]
-        ],
-        'spacer' => [
-            'title' => 'Configurable spacer',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'spacer',
-            'level' => 'single'
-        ],
-
         'thin_ad_block' => [
             'title' => 'Thin Ad Block',
             'action' => 'add',
@@ -135,27 +34,11 @@ $default = [
             'level' => 'single'
         ],
 
-        'two_column_media_with_text' => [
-            'title' => 'Side by Side Content Blocks',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'two_column_media',
-            'level' => 'single'
-        ],
-
         'three_column_media' => [
             'title' => '3 Column Content Blocks',
             'action' => 'add',
             'app_name' => 'base',
             'module_id' => 'three_column_media',
-            'level' => 'single'
-        ],
-
-        'three_column_media_with_text' => [
-            'title' => '3 Column Blocks + TXT',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'three_column_media_with_text',
             'level' => 'single'
         ],
 
@@ -191,15 +74,6 @@ $default = [
             'level' => 'single'
         ],
 
-        'footer' => [
-            'title' => 'Footer',
-            'action' => 'add',
-            'app_name' => 'base',
-            'module_id' => 'footer',
-            'level' => 'single'
-        ],
-
-        // Verizon
         'header_text' => [
             'title' => 'Header Text',
             'action' => 'add',
@@ -270,7 +144,6 @@ foreach ($array_extend as $key_style => $value_style) {
             }
         }
     }
-
 }
 
 return $array_extend;

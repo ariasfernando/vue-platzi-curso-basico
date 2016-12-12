@@ -66,7 +66,6 @@ class Roles extends Command
                     $user_data->roles = $selected_array;
                     $user_data->save();
                     $this->info('The user ' . $email . ' role was updated!');
-
                 }
             } else {
                 $this->error('The email is required.');

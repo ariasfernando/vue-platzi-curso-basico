@@ -35,6 +35,11 @@ return [
             "controller" => 'Admin\PermissionController',
             "path" => "permission"
         ],
+        "libraries" => [
+            "title" => "Libraries",
+            "controller" => 'Admin\LibraryController',
+            "path" => "library"
+        ],
         "log" => [
             "title" => "Logs",
             "controller" => 'Admin\LogController',

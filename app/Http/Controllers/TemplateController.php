@@ -7,6 +7,7 @@ use StensulLocale;
 use Storage;
 use Stensul\Models\Campaign;
 use Illuminate\Http\Request;
+use Stensul\Providers\ModuleServiceProvider;
 
 class TemplateController extends Controller
 {
@@ -54,12 +55,11 @@ class TemplateController extends Controller
         $options['params']['campaign_data'] = $campaign_data;
         $options["module"] = $request->has('module_data') ? ["data" => $request->input('module_data')] : [];
 
-        $module_params = \Config::get('modules')[$request->input('name')];
+        $module_params = ModuleServiceProvider::getModule($request->input('name'));
         $module_params['data'] = '';
         $options['module_params'] = $module_params;
 
         return $this->getComponent($request, 'modules', $options);
-
     }
 
     /**
@@ -120,7 +120,6 @@ class TemplateController extends Controller
         }
 
         return ["image" => $campaign_path];
-
     }
 
     /**
@@ -230,7 +229,7 @@ class TemplateController extends Controller
         $parts[] = $component;
 
         // module class
-        $class = $request->input('class');
+        $class = !empty($params['module_params']['class']) ? $params['module_params']['class'] : $request->input('class');
         $view = $request->input('view', 'template');
 
         // Find module in [module_name]/module.blade.php

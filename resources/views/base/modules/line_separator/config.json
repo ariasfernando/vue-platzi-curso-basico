@@ -1,0 +1,10 @@
+{
+	"title": "Line Separator",
+	"action": "add",
+	"app_name": "base",
+	"module_id": "line_separator",
+	"level": "single",
+	"type": "line_separator",
+	"file_parent": "base",
+	"class": "pkg"
+}

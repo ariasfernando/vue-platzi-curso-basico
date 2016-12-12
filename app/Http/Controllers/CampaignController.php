@@ -8,6 +8,7 @@ use StensulLocale;
 use Activity;
 use Campaign;
 use EmailSender;
+use Stensul\Models\Library;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
 
@@ -54,6 +55,19 @@ class CampaignController extends Controller
                         : "default";
 
                     $params['menu_list'] = \Config::get('menu.'.$library);
+
+                    $menu = Library::where('name', $library)->get();
+                    foreach ($menu as $key => $value) {
+                        $params['menu_list'] = $value->getModules();
+                    }
+
+                    uasort($params['menu_list'], function($a, $b) {
+                        if ($a['title'] == $b['title']) {
+                            return 0;
+                        }
+                        return ($a['title'] < $b['title']) ? -1 : 1;
+                    });
+
                 } else {
                     return redirect(env('APP_BASE_URL', '/'))->with('campaign_not_found', $campaign_id);
                 }

@@ -103,7 +103,6 @@ class HelperServiceProvider extends ServiceProvider
                 } else {
                     $view_render = implode('.', $view_path);
                 }
-
             } else {
                 $view_gen_base = $base_name.".".implode('.', $view_path);
                 $view_gen_app = $app_name.".".implode('.', $view_path);
