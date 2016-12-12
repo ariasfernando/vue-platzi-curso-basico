@@ -49,7 +49,7 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
      */
     this.getModalView = function(fnSuccess, fnFail){
         var ajaxRequest = Application.utils.doAjax("/template/modal",{
-            type: "GET",
+            type: "POST",
             dataType: "html",
             data: {
                 title: options.title,

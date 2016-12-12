@@ -12,6 +12,15 @@
 			$count ++;
 		}
 	}
+
+	if( !empty($params['overlays']) ){
+		foreach ($params["overlays"] as $overlay){
+			if( !empty($overlay['control_id']) ){
+				$count ++;
+			}
+		}
+	}
+
 	if($count>1){
 		$two_col_format = true;
 	}
@@ -37,6 +46,18 @@
 
 			{{-- Image overlay control --}}
 			@include('base.modals.partials.image_editor_image_overlay_control')
+
+			@if( !empty($params['overlays']) )
+				@foreach ($params["overlays"] as $overlay)
+					@if( !empty($overlay['control_id']) )
+						@include('base.modals.partials.overlay_control', array(
+							'input_id' => $overlay['control_id'],
+							'container_id' => $overlay['control_id'].'-container',
+							'label' => $overlay['control_label']
+						))
+					@endif
+				@endforeach
+			@endif
 
 			{{-- Image width control --}}
 			@include('base.modals.partials.image_editor_width_control')
@@ -66,6 +87,46 @@
 				<div id="text-overlay" class="text-overlay">
 					<div class="prevent-overflow"><div id="text-editable" class="text-editable">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet</div></div>
 				</div>
+			@endif
+
+			{{-- Text overlay --}}
+			@if ( isset($params["overlays"]) )
+				{{-- Foreach for images --}}
+				@foreach ($params["overlays"] as $overlay)
+					@if( $overlay["type"] == "image" )
+						<img
+							id="{{ $overlay["id"] or "" }}"
+							src="{{ url() }}{{ $overlay["path"] or "" }}"
+							class="image-overlay {{ $overlay["class"] or "" }}"
+							width="{{ $overlay["width"] or "auto" }}"
+							height="{{ $overlay["height"] or "auto" }}"
+							border="0"
+							style="display:block; border:none;" />
+					@endif
+				@endforeach
+
+				{{-- Foreach for html elements --}}
+				@foreach ($params["overlays"] as $overlay)
+					@if( $overlay["type"] == "text" )
+						<dir id="{{ $overlay["id"] or "" }}" class="st-html-overlay {{ $overlay["class"] or "" }}">
+							<div
+								id="{{ $overlay["id"] or "" }}-editor"
+								contenteditable="true"
+								data-save-as="{{ $overlay["save_as"] or "" }}"
+								>{{ $overlay["default"] or "" }}</div>
+							<div class="toolbox"></div>
+						</dir>
+					@elseif( $overlay["type"] == "rich_text" )
+						<div class="rich-text-container st-html-overlay" id="{{ $overlay["id"] or "" }}">
+							<div
+								id="{{ $overlay["id"] or "text" }}-editor"
+								class="{{ $overlay["class"] or "" }}"
+								data-save-as="{{ $overlay["save_as"] or "" }}"
+								>{{ $overlay["default"] or "" }}</div>
+							<div class="toolbox rich-text-toolbox"></div>
+						</div>
+					@endif
+				@endforeach
 			@endif
 
 		</div>

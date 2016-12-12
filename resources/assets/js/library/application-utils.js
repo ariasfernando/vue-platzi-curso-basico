@@ -355,7 +355,7 @@ Application.utils = {
 			// COMPARE FIELDS: check if have the same value.
 			if( validationParams.compareTo && validationResult.success != false ){
 				// Set the result of the validation
-				validationResult.success = validate.validateCompareField( field, $(field.form).find('input[name="'+validationParams.compareTo+'"]')  );
+				validationResult.success = validate.validateCompareField( field, $(form).find('input[name="'+validationParams.compareTo+'"]')  );
 
 				// If isn't successful, set the error messages.
 				if( !validationResult.success ){
@@ -515,7 +515,7 @@ Application.utils = {
 	changeBuildingMode: function(selected) {
         	
     	var $canvas = Application.utils.getCanvas();
-		var arrayMqClass = ['display-mobile', 'show-img-device','hidden-device','element-block-center','mobile-margin','full-width'];	
+		var arrayMqClass = ['show-mobile', 'show-img-device','hidden-mobile','element-block-center','mobile-margin','full-width', 'center-on-narrow', 'stack-column'];
 
 		$canvas.trigger('changeBuildingMode', [ selected ] );
         

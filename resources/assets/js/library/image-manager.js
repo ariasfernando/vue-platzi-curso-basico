@@ -141,6 +141,49 @@ var imageManager = {
 	},
 
 	/*
+	 * == Composite image  ==
+	 * Used to merge layers.
+	 * Params:
+		-	campaign_id: current campaign id by default | campaignManager.getCampaignId()
+		-	background_path: saved background path | Example: /574c9a227f8b9a661360742e/en_us/574da65d41141-1464706653.2666.jpg
+		-	layers: [{
+				top: pixels position number,  | Example: 27
+				left: pixels position number, | Example: 10
+				path: local path or base64	  | Example: /_common/images/en_us/logo.png
+			},{
+				top: pixels position number,
+				left: pixels position number,
+				path: local path or base64
+			}]
+	 */
+
+	compositeImage: function( ajaxData, fnDone, fnFail ){
+		if( !ajaxData ){
+			return false
+		}
+
+		var dataParams = $.extend({
+			campaign_id: campaignManager.getCampaignId()
+		},ajaxData);
+
+		// Do ajax to get process status.
+		var ajaxRequest = Application.utils.doAjax("/campaign/composite-image",{ data: dataParams });
+
+		// On ajax Done
+		ajaxRequest.done(function( response ){
+			if( fnDone ){
+				fnDone( response );
+			}
+		});
+
+		ajaxRequest.fail(function(){
+			if( fnFail ){
+				fnFail();
+			}
+		});
+	},
+
+	/*
 	 * Get file name from a complete file path
 	 */
 	getNameFromPath: function( path ){
@@ -180,5 +223,44 @@ var imageManager = {
 			width: image.width,
 			height: image.height
 		}
+	},
+
+	/*
+	 * == Create Temporal Image ==
+	 * Create a temporal image, used to get the size of the image or
+	 * do something on image load.
+	 */
+	createTempImage: function( src ){
+		if(!src){
+			return false;
+		}
+
+		var tempImg = new Image();
+		tempImg.src = src;
+		return tempImg;
+	},
+
+
+	/*
+	 * == AJAX Request ==
+	 */
+	// -- Image Upload --
+	getUploadRequest: function(dataImage){
+		return Application.utils.doAjax("/campaign/upload-image",{
+			data: {
+				campaign_id: campaignManager.getCampaignId(),
+				data_image: dataImage
+			}
+		});
+	},
+	// -- Custom Image Merge --
+	customImageMerge: function(backgroundPath,layerArr){
+		return ajaxRequest = Application.utils.doAjax("/campaign/custom-image-merge",{
+			data: {
+				campaign_id: campaignManager.getCampaignId(),
+				background_path: backgroundPath,
+				layers: layerArr
+			}
+		});
 	}
 };

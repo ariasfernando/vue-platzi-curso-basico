@@ -10,7 +10,8 @@
     "magnific-popup": "~1.0.0",
     "tinymce": "~4.2.1",
     "jquery-simplecolorpicker": "~0.3.0",
-    "bootstrap-select": "1.7.5"
+    "bootstrap-select": "1.7.5",
+    "vue": "^2.0.5"
   },
   "directory": "public/js/vendor",
   "folders": [

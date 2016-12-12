@@ -44,12 +44,58 @@ Application.init = function(){
 				$(this).val( resultUrl );
 			}
 		})
-        .ready(function(){
-            $('#top-link-block').removeClass('hidden').affix({
-                // how far to scroll down before link "slides" into view
-                offset: {top:100}
+		.ready(function(){
+			$('#top-link-block').removeClass('hidden').affix({
+				// how far to scroll down before link "slides" into view
+				offset: {top:100}
+			});
+
+			/*
+			 * == Init tags entry ==
+			 */
+			if( typeof campaignManager == "object" ){
+				campaignManager.initTagEntry();
+			}
+        })
+        .on("click",".section-canvas-email .save-as-template",function(event){
+            // -- Save Campaign as template
+            var button = this;
+            $(button).addClass("ajax-loader-small").attr("disabled", "disabled");;
+
+            var confirmModal = new Application.utils.confirm({
+                message: "Remember that if you save this campaign as template, you won't be able to publish it, you will only be able to edit and clone it.",
+                onSubmit: function(){
+                    campaignManager.saveAsTemplate(
+                        function(){
+                            if( $('.save-as-draft:visible').length ){
+                                var titleColumnClass = ($('#section-canvas-title-col').attr("class").match(/(^|\s)col-lg-\S+/g) || []).join(' ').trim();
+                                var titleColumns = parseInt(titleColumnClass.replace("col-lg-",""));
+                                // Update col classes
+                                $('#section-canvas-buttons-col')
+                                    .removeClass("col-lg-7")
+                                    .addClass("col-lg-5");
+                                $('#section-canvas-title-col')
+                                    .removeClass(titleColumnClass)
+                                    .addClass("col-lg-" + String(titleColumns+2));
+                                // Hide buttons
+                                $('.save-as-draft').hide();
+                                $('.campaign-continue').hide();
+                            }
+                            // Remove spinner.
+                            $(button).removeClass("ajax-loader-small").removeAttr("disabled");
+                        },
+                        function(){
+                            $(button).removeClass("ajax-loader-small").removeAttr("disabled");
+                        }
+                    );
+                },
+                onCancel: function(){
+                    $(button).removeClass("ajax-loader-small").removeAttr("disabled");
+                }
             });
-        });
+
+            confirmModal.display();
+		});
 
 	// Set Editor Configuration for module-manager & campaign-manager.
 	Application.utils.getCanvas = function(){

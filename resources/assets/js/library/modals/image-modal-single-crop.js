@@ -75,9 +75,6 @@ ConfigModals.image_modal_single_crop = function( params ){
 
         $cropitElement = $modalContent.find(".init-cropper");
 
-        // Hide image overlay control
-        $modalContent.find("#image-overlay-config").hide();
-
         // Master image Editor Options
         var masterImageOptions = {
             imageKey: imageKey,
@@ -86,8 +83,13 @@ ConfigModals.image_modal_single_crop = function( params ){
             modalContent: $modalContent,
             $fileInputUpload: $modalContent.find("#file-image-upload")
         };
+
         if( options.enabled_plugins !== undefined ){
             masterImageOptions.plugins = options.enabled_plugins;
+        }
+
+        if( options.retina_display !== undefined ){
+            masterImageOptions.retinaDisplay = options.retina_display;
         }
 
         if( options.moduleData.data && options.moduleData.data[imageKey] ){
@@ -107,14 +109,12 @@ ConfigModals.image_modal_single_crop = function( params ){
         masterImageEditorObj.initCropit( $modalContent.find(".init-cropper"), {
             $fileInput:  $modalContent.find('input.cropit-image-input'),
             smallImage:'strech',
-            exportZoom: (options.scale_ratio)? options.scale_ratio: 1,
-            maxZoom : (options.scale_ratio)? options.scale_ratio * 2: 2,
+            exportZoom: (params.retina_display === false)? 1:2,
             onImageLoaded: function(){
                 masterImageEditorObj.removeMessage();
                 // Validate image size
                 var cropitObj = this;
-                var tempImage = new Image();
-                tempImage.src = $cropitElement.cropit("imageSrc");
+                var tempImage = imageManager.createTempImage($cropitElement.cropit("imageSrc"));
 
                 // On image load
                 $(tempImage).off("load").on("load",function(){
@@ -215,6 +215,40 @@ ConfigModals.image_modal_single_crop = function( params ){
             }
         }
 
+        /*
+         * -- Overlays --
+         */
+        if( typeof options.overlays && options.overlays.length ){
+            var $previewElement = masterImageEditorObj.getPreviewElement();
+
+            for (var i=0; i < options.overlays.length; i++) {
+                var overlay = options.overlays[i];
+                var overlayParams = $.extend({},
+                    overlay,{
+                        elementId: overlay.id,
+                        saveAs: overlay.save_as
+                    });
+
+                if( overlayParams.control_id ){
+                    overlayParams.controlId = overlay.control_id;
+                }
+
+                if( overlayParams.type == "text" || overlayParams.type == "rich_text" ){
+                    if( options.moduleData.data[imageKey] && options.moduleData.data[imageKey][overlayParams.save_as]){
+                        overlayParams.content = options.moduleData.data[imageKey][overlayParams.save_as];
+                    }else if( typeof overlayParams.default !== "undefined" ){
+                        overlayParams.content = overlayParams.default;
+                    }
+                }
+
+                if( overlayParams.type == "rich_text" && overlayParams.options ){
+                    overlayParams.options = overlayParams.options;
+                }
+
+                masterImageEditorObj.overlay.init(overlayParams);
+            }
+        }
+
         // Set click on submit button
         $modalContent.on("click", ".submit-config", function(){
             _this.onSubmit();
@@ -280,38 +314,71 @@ ConfigModals.image_modal_single_crop = function( params ){
      */
     this.saveStaticImage = function(){
         var $cropitElement = $modalContent.find(".init-cropper:visible:eq(0)");
-        var exportedSrc = masterImageEditorObj.exportCropit( $cropitElement );
 
-        //replace src and remove attr to generateCanvas.
-        masterImageEditorObj.getPreviewElement().find('img.cropit-preview-image').removeAttr('style').attr('src', exportedSrc).attr('width','100%');
-        
-        // -- Export cropit image and save --
-        var backgroundImage = $cropitElement.cropit("imageSrc");
+        // Export cropit image
+        var cropitExportImg = masterImageEditorObj.exportCropit($cropitElement);
 
-        // Export Cropit image
-        var exportedImage = masterImageEditorObj.exportCropit($cropitElement,{
-            type: 'image/png',
-            originalSize: true
-        });
-        // If background image is base64, it's a new image, so we must save the background after upload final image.
-        if( backgroundImage.indexOf(";base64,") >= 0 ){
-            // Upload Background
-            masterImageEditorObj.uploadImage( backgroundImage, function(response){
-                masterImageEditorObj.editedImageData.background_image = response.path;
-                // Upload converted canvas
-                masterImageEditorObj.uploadImage( exportedImage, function(response){
-                    masterImageEditorObj.editedImageData.path = response.path;
-                    _this.applyUpdates();
-                });
-            });
-        // Enter here when background it's a saved image.
-        }else{
-            // Upload canvas
-            masterImageEditorObj.uploadImage( exportedImage, function(response){
-                masterImageEditorObj.editedImageData.path = response.path;
-                _this.applyUpdates();
-            });
+        /*
+         * == Calculate image ratio ==
+         * Create a temporal image to get image size and use this
+         * ratio to resize overlay images
+         */
+        var tempImg = imageManager.createTempImage(cropitExportImg);
+        imageRatio = tempImg.width / params.image_size.width;
+
+        /*
+         * When imageRatio is below 1, it's because the uploaded images is
+         * smaller than placeholed size, so we set imageRatio = 1 and
+         * set cropit orginalSize=false to export image to placeholder size.
+         */
+        if( imageRatio<1 ){
+            imageRatio = 1;
         }
+
+        // Build array overlay
+        var buildOverlayArr = masterImageEditorObj.buildOverlayArr( $cropitElement, { imageRatio: imageRatio } );
+        // Then start uploads.
+        buildOverlayArr.then(
+            function( overlaysArr ){
+                // 1. Save background image.
+                var backgroundRequest = imageManager.getUploadRequest( $cropitElement.cropit("imageSrc") );
+                var cropitExportRequest = imageManager.getUploadRequest( cropitExportImg );
+                $.when( backgroundRequest, cropitExportRequest )
+                    .done(function( uploadBackgroundRequest, uploadExportedImageRequest ){
+                        // Save background image
+                        if( uploadBackgroundRequest && uploadBackgroundRequest[0].path ){
+                            masterImageEditorObj.editedImageData.background_image = uploadBackgroundRequest[0].path;
+                        }
+                        // Image merge call. Send gif and overlays.
+                        if( uploadExportedImageRequest && uploadExportedImageRequest[0].path ){
+                            // Merge if the image has overlays
+                            if( overlaysArr.length ){
+                                var customImageMerge = imageManager.customImageMerge(uploadExportedImageRequest[0].path, overlaysArr);
+                                customImageMerge
+                                    .done(function( customImageMergeResponse ){
+                                        if( customImageMergeResponse.path ){
+                                           masterImageEditorObj.editedImageData.path = customImageMergeResponse.path;
+                                           _this.applyUpdates();
+                                        }else{
+                                           // Show error if any upload fails.
+                                           masterImageEditorObj.hideImageLoading();
+                                           masterImageEditorObj.displayMessage(messages.savingError,"danger");
+                                           return false;
+                                        }
+                                    })
+                                    .fail(function(){
+                                       masterImageEditorObj.hideImageLoading();
+                                       masterImageEditorObj.displayMessage(messages.savingError,"danger");
+                                    });
+                            // if hasn't overlays, save cropit export
+                            }else{
+                                masterImageEditorObj.editedImageData.path = uploadExportedImageRequest[0].path;
+                               _this.applyUpdates();
+                            }
+                        }
+                    });
+            }
+        );
     };
 
     /*
@@ -320,6 +387,7 @@ ConfigModals.image_modal_single_crop = function( params ){
      * Used only when background image is gif or animated gif.
      */
     this.saveAnimatedGif = function(){
+
         var $image = $cropitElement.find("img.animated-gif");
 
         if(!_this.validateImageSize($image[0])){
@@ -331,24 +399,41 @@ ConfigModals.image_modal_single_crop = function( params ){
             return false;
         }
 
-        // If image source is base64 we must save the background after upload final image.
-        if( $image.attr("src").indexOf(";base64,") >= 0 ){
-            // Upload Background
-            masterImageEditorObj.uploadImage( $image.attr("src"), function(response){
-                if( !response.path  ){
-                    masterImageEditorObj.hideImageLoading();
-                    masterImageEditorObj.displayMessage(messages.savingError);
-                    return false;
-                }
-                // Generate gif
-                masterImageEditorObj.editedImageData.background_image = response.path;
-                masterImageEditorObj.editedImageData.path = response.path;
-                _this.applyUpdates();
-            });
-        // Enter here when is a saved image
-        }else{
-            _this.applyUpdates();
-        }
+        var buildOverlayArr = masterImageEditorObj.buildOverlayArr( $cropitElement );
+        buildOverlayArr.then(
+            function( overlaysArr ){
+                // 1. Save background image.
+                var backgroundRequest = imageManager.getUploadRequest($image.attr("src"));
+                backgroundRequest.done(function( response ){
+                    if( response.path ){
+                        // Save response and merge gif.
+                        masterImageEditorObj.editedImageData.background_image = response.path;
+                        var gifMergeRequest = imageManager.customImageMerge(response.path, overlaysArr);
+                        // 2. Image merge call. Send gif and overlays.
+                        gifMergeRequest.done(function( gifResponse ){
+                                if( gifResponse.path ){
+                                    masterImageEditorObj.editedImageData.path = gifResponse.path;
+                                    _this.applyUpdates();
+                                }else{
+                                    // Show error if any upload fails.
+                                    masterImageEditorObj.hideImageLoading();
+                                    masterImageEditorObj.displayMessage(messages.savingError,"danger");
+                                    return false;
+                                }
+                            })
+                            .fail(function(){
+                                masterImageEditorObj.hideImageLoading();
+                                masterImageEditorObj.displayMessage(messages.savingError,"danger");
+                            });
+                    }else{
+                        // Show error if any upload fails.
+                        masterImageEditorObj.hideImageLoading();
+                        masterImageEditorObj.displayMessage(messages.savingError,"danger");
+                        return false;
+                    }
+                });
+            }
+        );
     };
 
     /*

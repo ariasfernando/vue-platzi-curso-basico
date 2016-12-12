@@ -26,6 +26,8 @@ $default = [
             '/template/campaign-processed-rows'      => 'TemplateController@getCampaignProcessedRows',
             '/template/email-preview/{campaign_id?}' => 'TemplateController@getEmailPreview',
             '/queue/status/{process}/{job_id}'       => 'QueueController@getStatus',
+            '/dashboard'                             => 'DashboardController@index',
+            '/dashboard/campaigns/{type}'            => 'DashboardController@getCampaigns',
         ],
 
         'post' => [

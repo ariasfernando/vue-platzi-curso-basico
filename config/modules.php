@@ -27,6 +27,7 @@ $default = [
         'validate_image_height' => true
     ],
     'hero_image_v2_no_crop' => [
+        'title' => 'Hero Image No Crop',
         'module_id' => 'hero_image_v2_no_crop',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'

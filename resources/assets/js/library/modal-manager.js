@@ -2,7 +2,8 @@ function modalManager( params ){
 
     this.modalParams = $.extend({
         name: params.view,
-        library_name: Application.globals.library_name
+        library_name: Application.globals.library_name,
+        element_focus: (params.element_focus)? params.element_focus : '.modal-mpf-content-data'
     }, params);
 
     this.errorMessages = {
@@ -40,12 +41,14 @@ function modalManager( params ){
         // Open Magnifig Popup
         $.magnificPopup.open({
             type: 'ajax',
+            focus: _this.modalParams.element_focus,
             closeOnBgClick: false,
             items: {
                 src: Application.globals.baseUrl + "/template/modal"
             },
             ajax: {
                 settings: {
+                    type: "POST",
                     cache: true,
                     dataType: "html",
                     data: _this.modalParams

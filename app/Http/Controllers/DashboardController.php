@@ -4,6 +4,8 @@ namespace Stensul\Http\Controllers;
 
 use Auth;
 use Stensul\Models\Campaign;
+use Illuminate\Http\Request;
+use Stensul\Services\TagManager as Tag;
 
 class DashboardController extends Controller
 {
@@ -33,38 +35,83 @@ class DashboardController extends Controller
      */
     public function index()
     {
-
-        $user_visibility = Auth::user()->getLibraries();
-
-        if (count($user_visibility) === 0) {
-            $campaigns_edited = Campaign::where('processed', '=', 0, 'AND')
-                ->where('status', '!=', 2)
-                ->orderBy('updated_at', 'desc')->paginate(5);
-
-            $campaigns_processed = Campaign::where('processed', '=', 1, 'AND')
-                ->where('status', '!=', 2)
-                ->orderBy('updated_at', 'desc')
-                ->paginate(5);
-        } else {
-            $campaigns_edited = Campaign::where('processed', '=', 0, 'AND')
-                ->where('status', '!=', 2)
-                ->whereIn('library', $user_visibility)
-                ->orderBy('updated_at', 'desc')
-                ->paginate(5);
-
-            $campaigns_processed = Campaign::where('processed', '=', 1, 'AND')
-                ->where('status', '!=', 2)
-                ->whereIn('library', $user_visibility)
-                ->orderBy('updated_at', 'desc')
-                ->paginate(5);
-        }
-
         $params = [
-            'locales' => \Config::get('locales'),
-            'campaigns_edited' => $campaigns_edited,
-            'campaigns_processed' => $campaigns_processed,
+            'locales' => \Config::get('locales')
         ];
 
-        return $this->renderView('base.dashboard', array('params' => $params));
+        return $this->renderView('base.dashboard', ['params' => $params]);
+    }
+
+    public function getCampaigns(Request $request, $type)
+    {
+        $user_visibility = Auth::user()->getLibraries();
+
+        $campaigns = Campaign::where('status', '!=', 2);
+
+        switch ($type) {
+            case 'current':
+                $campaigns->where('processed', '=', 0, 'AND');
+                break;
+            case 'finished':
+                $campaigns->where('processed', '=', 1, 'AND');
+                break;
+        }
+
+        if (\Config::get('campaign.enable_templating')) {
+            if ($type == 'template') {
+                $campaigns->where('template', '=', true, 'AND');
+            } else {
+                $campaigns->whereIn('template', [null, false]);
+            }
+        }
+
+        if (count($user_visibility) !== 0) {
+            $campaigns->whereIn('library', $user_visibility);
+        }
+
+        // search
+        if (\Config::get('campaign.enable_search')) {
+            $search_terms = $request->input('terms', []);
+            if (count($search_terms)) {
+                $fields_to_search = \Config::get('campaign.search_settings.fields_to_search');
+                foreach ($search_terms as $search_key) {
+                    $campaigns->where(
+                        function ($query) use ($fields_to_search, $search_key) {
+                            foreach ($fields_to_search as $key => $field) {
+                                $query->orWhere($field, 'like', "%" . $search_key . "%");
+                                if (\Config::get('campaign.enable_tagging')) {
+                                    // search terms should also be reviewed as tags
+                                    $query->orWhere(function ($q) use ($search_key) {
+                                        $q->whereIn('tags', [new \MongoRegex('/'.$search_key.'/i')]);
+                                    });
+                                }
+                            }
+                        }
+                    );
+                }
+            }
+
+            // filter by tags
+            if (\Config::get('campaign.enable_tagging')) {
+                $search_tags = $request->input('tags', []);
+                if (count($search_tags)) {
+                    $campaigns->where(function ($query) use ($search_tags) {
+                        $query->where('tags', 'all', $search_tags);
+                    });
+                }
+            }
+        }
+
+        // apply sort
+        $sort = strlen($request->input('sort')) ? $request->input('sort', 'updated_at') : 'updated_at';
+        $direction = strlen($request->input('direction')) ? $request->input('direction', 'updated_at') : 'desc';
+        $campaigns->orderBy($sort, $direction);
+
+        return $campaigns->paginate(5);
+    }
+
+    public function getTags()
+    {
+        return Tag::getTagNames();
     }
 }

@@ -35,7 +35,11 @@ class Campaign extends Eloquent
         'user_id',
         'user_email',
         'email_sent_history',
+        'tags',
+        'template'
     ];
+
+    protected $appends = ['api', 'library_config'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -59,6 +63,8 @@ class Campaign extends Eloquent
         'user_id' => null,
         'user_email' => null,
         'email_sent_history' => [],
+        'tags' => [],
+        'template' => false
     );
 
     /**
@@ -178,5 +184,37 @@ class Campaign extends Eloquent
         }
 
         return $query;
+    }
+
+    /**
+     * Get a list of api drivers by library
+     *
+     * @return array
+     */
+    public function getApiAttribute()
+    {
+        $data = [];
+        $api_list = \Helper::getApiDrivers($this->attributes['library']);
+        if (count($api_list)) {
+            foreach ($api_list as $api) {
+                $data[] = [
+                    'driver' => $api,
+                    'title' => \Config::get("api.{$api}.title"),
+                    'class' => \Config::get("api.{$api}.class")
+                ];
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Get a list of campaign configuration, prioritizing library values over default values
+     */
+    public function getLibraryConfigAttribute()
+    {
+        return array_merge(
+            \Config::get('campaign'),
+            \Config::get('view.libraries.' . $this->attributes['library'])
+        );
     }
 }

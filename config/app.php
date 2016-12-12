@@ -298,6 +298,7 @@ $default = [
         'ReCaptcha'   => ReCaptcha\ReCaptcha::class,
         'Challenge'   => Stensul\Providers\ChallengeServiceProvider::class,
         'StensulModule' => Stensul\Providers\ModuleServiceProvider::class,
+        'Tag'         => Stensul\Services\TagManager::class,
     ],
     'help' => [
         'url' => 'http://help.stensul.com',
