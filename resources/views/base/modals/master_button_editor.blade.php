@@ -29,19 +29,7 @@
 
 			<div class="button-editor-display">
 				<div class="master-button">
-					<span>Primary button</span>
-					@if ( isset($params["buttonArrowImage"]) && !empty($params["buttonArrowImage"]) )
-						{!!
-							Html::image(
-							$params["buttonArrowImage"],
-							'border-left-button',
-							array(
-								'title' => 'arrow',
-								'border' => '0',
-								'width' => '9'
-							))
-						!!}
-					@endif
+					<span>Primary Button</span>
 				</div>
 			</div>
 		</div>

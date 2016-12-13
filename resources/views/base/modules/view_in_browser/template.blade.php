@@ -1,7 +1,7 @@
 
 {{-- View in Browser: Start --}}
 <tr data-params='{{json_encode($module_params)}}'>
-	<td align="center" style="vertical-align:middle;">
+	<td bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding: 5px">
 		<table width="100%" cellpadding="0" cellspacing="0" border="0">
 			<tr>
 				<td height="15" align="center" >

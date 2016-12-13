@@ -1,5 +1,9 @@
 .base-dashboard{
 
+	.row {
+		margin-bottom: 15px;
+	}
+
 	// -- Tables --
 	.table{
 		.user-thumbnail{
@@ -47,6 +51,36 @@
 				font-size: 16px;
 			}
 		}
+
+		&.loading tbody:after {
+			background-color: rgba(100, 100, 100, 0.1);
+			background-image: url( "@{image-url}spinner.gif") !important;
+			background-repeat: no-repeat !important;
+			background-position: center;
+			background-repeat: no-repeat;
+			bottom: 0;
+			content: "";
+			left: 0;
+			right: 0;
+			top: 0;
+			position: absolute;
+		}
+
+		.highlight {
+			background: #FFFFB7;
+			border-radius: 4px;
+			font-weight: bold;
+			padding: 4px 0;
+		}
+
+		.tag-highlight {
+			background: #FFFFB7;
+		}
 	}
 
+	.st-tag{
+		cursor: pointer;
+		line-height: 20px;
+		padding: 0 10px;
+	}
 }

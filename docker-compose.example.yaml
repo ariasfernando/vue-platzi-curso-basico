@@ -8,6 +8,7 @@ webdisney:
    - ../logs/:/var/log/
    - .:/home/fbridge/app/
    - ./conf.d/httpd/env.conf:/etc/httpd/conf.d/env.conf
+   - ./conf.d/php.d/newrelic.ini:/etc/php.d/newrelic.ini
 
 
 queuedisney:
@@ -17,3 +18,4 @@ queuedisney:
    - /home/fbridge/storage/disney/:/storage/
    - ../logs/:/var/log/
    - .:/home/fbridge/app/
+   - ./conf.d/php.d/newrelic.ini:/etc/php.d/newrelic.ini

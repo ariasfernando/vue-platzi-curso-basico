@@ -9,8 +9,12 @@ use Activity;
 use Campaign;
 use EmailSender;
 use Stensul\Models\Library;
+use Stensul\Services\TagManager as Tag;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CampaignController extends Controller
 {
@@ -48,6 +52,7 @@ class CampaignController extends Controller
                 return redirect(env('APP_BASE_URL', '/'))->with('campaign_lock', $campaign_id);
             } else {
                 $params = Campaign::find($campaign_id);
+                $saved_tags = Tag::all();
 
                 if ($params) {
                     $library = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
@@ -67,6 +72,8 @@ class CampaignController extends Controller
                         }
                         return ($a['title'] < $b['title']) ? -1 : 1;
                     });
+
+                    $params['tag_list'] = $saved_tags;
 
                 } else {
                     return redirect(env('APP_BASE_URL', '/'))->with('campaign_not_found', $campaign_id);
@@ -304,5 +311,48 @@ class CampaignController extends Controller
     public function postCustomImageMerge(Request $request)
     {
         return Campaign::customImageMerge($request->all());
+    }
+
+    /**
+     *  Create image with a background and layers, and return local file path.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array Path or error
+     */
+    public function postCompositeImage(Request $request)
+    {
+        return Campaign::compositeImage($request->all());
+    }
+
+    /*
+     * Delete a single tag in a Campaign.
+     *
+     * @param  Request $request
+     * @return string  Campaign id
+     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function postDeleteTag(Request $request)
+    {
+        if (Cache::has('lock:'.$request->input('campaign_id'))
+            && Cache::get('lock:'.$request->input('campaign_id')) !== Auth::id()
+        ) {
+            Activity::log(
+                'Campaign edit deny',
+                array('properties' => ['campaign_id' => new \MongoId($request->input('campaign_id'))])
+            );
+
+            return array('campaign_lock' => $request->input('campaign_id'));
+        } else {
+            if (empty($request->input('campaign_id')) || empty($request->input('tag_name'))) {
+                throw new BadRequestHttpException("You must provide 'campaing_id' and 'tag_name' paramters");
+            }
+            try {
+                return Campaign::deleteTag($request->input('campaign_id'), $request->input('tag_name'));
+            } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                throw new NotFoundHttpException('Campaign with the id ' . $request->input('campaign_id') . ' not found');
+            }
+        }
     }
 }

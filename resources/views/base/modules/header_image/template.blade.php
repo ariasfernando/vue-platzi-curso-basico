@@ -11,7 +11,7 @@
 
 {{-- Header Image: Start --}}
 <tr data-params='{{json_encode($module_params)}}'>
-	<td bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%">
+	<td class="border-color" bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%">
 		<a href="{{ $image['destination_url'] or '#' }}" data-master-image-editor="header">
 
             {!! Html::image( $image_path, isset($image['alt']) ? $image['alt'] : '', array(

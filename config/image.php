@@ -28,8 +28,15 @@ $default = array(
     |
     */
 
-    'force_conversion_jpg' => false
+    'force_conversion_jpg' => false,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Convert command path to use custom command line scripts
+    |--------------------------------------------------------------------------
+    |
+    */
+    'convert_base_path' => env('CONVERT_COMMAND_PATH', '/usr/local/bin/convert')
 );
 
 return require 'recursive.php';

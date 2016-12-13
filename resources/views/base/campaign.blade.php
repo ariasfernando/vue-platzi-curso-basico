@@ -30,6 +30,7 @@
 @endsection
 
 @section('footer-script')
+	<script src="{{ url( elixir('js/components.js') ) }}"></script>
     <script src="{{ url( elixir('js/plugins.js') ) }}"></script>
 	<script src="{{ url( elixir('js/campaign.js') ) }}"></script>
 	<script src="{{ url( elixir('js/modules.js') ) }}"></script>

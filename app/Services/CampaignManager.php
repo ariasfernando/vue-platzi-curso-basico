@@ -20,6 +20,7 @@ use Stensul\Jobs\ProcessCampaign;
 use HtmlCreator as Html;
 use TextCreator as Text;
 use Statics as Assets;
+use Tag;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,9 @@ class CampaignManager
             $campaign = Campaign::findOrFail($inputs['campaign_id']);
             $campaign_name = (isset($inputs['campaign_name'])) ? $inputs['campaign_name'] : '';
             $modules_data = (isset($inputs['modules_data'])) ? $inputs['modules_data'] : [];
+            if (!is_array($campaign->tags)) {
+                $campaign->tags = [];
+            }
 
             $campaign->campaign_name = $campaign_name;
             $campaign->modules_data = $modules_data;
@@ -62,6 +66,26 @@ class CampaignManager
 
             if (isset($inputs['plain_text'])) {
                 $campaign->plain_text = $inputs['plain_text'];
+            }
+
+            $campaign->tags = array_unique(json_decode($inputs['tags']));
+            // Add New tags to collection
+            $saved_tags = Tag::all()->keyBy('name')->all();
+
+            foreach ($campaign->tags as $tag) {
+                if (!array_key_exists($tag, $saved_tags)) {
+                    Tag::create(['name'=> $tag]);
+                }
+            }
+
+            if (isset($inputs['template'])) {
+                if ($inputs['template'] !== 'true') {
+                    abort(400, 'The only value allowed for template is true');
+                }
+                if ($inputs['template'] !== 'true' && $campaign->template === true) {
+                    abort(400, 'You are trying to save a template campaign as non template one');
+                }
+                $campaign->template = ($inputs['template'] === 'true') ? true : false;
             }
 
             $campaign->save();
@@ -174,6 +198,7 @@ class CampaignManager
         $new_campaign_attr['processed'] = 0;
         $new_campaign_attr['body_html'] = '';
         $new_campaign_attr['plain_text'] = '';
+        $new_campaign_attr['template'] = false;
         unset($new_campaign_attr['published_at']);
 
         // cdn path must be unique
@@ -468,7 +493,7 @@ class CampaignManager
      * Create custom image merge.
      *
      * @param string $campaign_id
-     * @param string $gif
+     * @param string $image
      * @param string $layer
      *
      * @return array Path or error
@@ -484,5 +509,25 @@ class CampaignManager
         }
 
         return $response;
+    }
+
+    /**
+     * Delete a Tag from a campaign.
+     *
+     * @param  string $campaign_id
+     * @param  string $tag_name
+     * @return string
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public static function deleteTag($campaign_id, $tag_name)
+    {
+        $campaign = Campaign::findOrFail($campaign_id);
+        $tags = $campaign->tags;
+        if (($key = array_search($tag_name, $tags)) !== false) {
+            unset($tags[$key]);
+        }
+        $campaign->tags = array_values($tags);
+        $campaign->save();
+        return $campaign->id;
     }
 }

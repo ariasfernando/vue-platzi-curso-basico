@@ -3,8 +3,8 @@
  */
 var moduleManager = {
 
-	// The internal name of the module. Used to get the module by ajax.
-	moduleName: null,
+    // The internal name of the module. Used to get the module by ajax.
+    moduleName: null,
 
     // The internal class of the module. Used to get the module by ajax.
     moduleClass: null,
@@ -12,64 +12,64 @@ var moduleManager = {
     // The internal name app of the module. Used to get the module by ajax.
     moduleAppName: null,
 
-	// viewContent is filled with the html content of the module.
-	viewContent: null,
+    // viewContent is filled with the html content of the module.
+    viewContent: null,
 
-	// Used to set the module events only once.
-	eventsSet: false,
+    // Used to set the module events only once.
+    eventsSet: false,
 
-	// Used to set target module.
-	modalTarget: false,
+    // Used to set target module.
+    modalTarget: false,
 
-	// Template of the action tooltip.
-	// We append this buttons into the module on mouseenter/mouseleave.
+    // Template of the action tooltip.
+    // We append this buttons into the module on mouseenter/mouseleave.
     actionsButtonsTpl: '<div class="actions-buttons-tooltip">' +
     '<a href="#" class="action-sortable"><i class="glyphicon glyphicon-resize-vertical"></i></a>' +
     '<a href="#" class="action-config"><i class="glyphicon glyphicon-cog"></i></a>' +
-							'<a href="#" class="action-duplicate"><i class="glyphicon glyphicon-duplicate"></i></a>'+
+    '<a href="#" class="action-duplicate"><i class="glyphicon glyphicon-duplicate"></i></a>' +
     '<a href="#" class="action-remove"><i class="glyphicon glyphicon-remove-sign"></i></a>' +
-						'</div>',
+    '</div>',
 
-	// The internal name of the modal. Used to get the modal by ajax.
-	modalConfigName: null,
+    // The internal name of the modal. Used to get the modal by ajax.
+    modalConfigName: null,
 
-	// Set configuration modal for images modules
-	modalConfig: {},
+    // Set configuration modal for images modules
+    modalConfig: {},
 
     init: function () {
-		// Set modules events
-		this.setModulesEvents();
-		// Init modules plugins.
-		this.initPlugins();
-	},
+        // Set modules events
+        this.setModulesEvents();
+        // Init modules plugins.
+        this.initPlugins();
+    },
 
-	// Turn all variables to null.
+    // Turn all variables to null.
     reset: function () {
-		this.moduleName = null;
-		this.content = null;
-	},
+        this.moduleName = null;
+        this.content = null;
+    },
 
-	// Add module to email template.
-	addModule: function( moduleName, moduleAppName, moduleClass ){
+    // Add module to email template.
+    addModule: function (moduleName, moduleAppName, moduleClass) {
         var selectedMode = $('.switch-input:checked').val();
 
-		if( moduleName ){
+        if (moduleName) {
 
-			var module = this;
+            var module = this;
 
-			// If module name is the same as the last module added, only draw it.
+            // If module name is the same as the last module added, only draw it.
             if (module.viewContent != null && $(module.viewContent).data("params") && moduleName == $(module.viewContent).data("params").type) {
-				// Draw module on canvas
+                // Draw module on canvas
                 module.drawOnCanvas(function () {
-					// init module plugins
-					module.initPlugins();
+                    // init module plugins
+                    module.initPlugins();
                     Application.utils.changeBuildingMode(selectedMode);
-				});
+                });
 
-			// If not the same, reset variabels, get template view and draw it.
+                // If not the same, reset variabels, get template view and draw it.
             } else {
-				// Reset module variables.
-				module.reset();
+                // Reset module variables.
+                module.reset();
 
                 // Set module id
                 module.moduleName = moduleName;
@@ -78,96 +78,96 @@ var moduleManager = {
                 // Set module class
                 module.moduleClass = moduleClass;
 
-				// Get view content by ajax.
-				var getViewRequest = module.getModuleView();
+                // Get view content by ajax.
+                var getViewRequest = module.getModuleView();
 
-				// Request Success
+                // Request Success
                 getViewRequest.done(function (html) {
-					// Set module html content
-					module.viewContent = html;
-					// Draw module on canvas
+                    // Set module html content
+                    module.viewContent = html;
+                    // Draw module on canvas
                     module.drawOnCanvas(function () {
-						// init module plugins
-						module.initPlugins();
+                        // init module plugins
+                        module.initPlugins();
                         Application.utils.changeBuildingMode(selectedMode);
-					});
-				});
+                    });
+                });
 
-				// Request Fail
+                // Request Fail
                 getViewRequest.fail(function () {
                     Application.utils.alert.display("Error:", "An error occurred while trying to get the module, please try again later.", "danger");
-				});
-			}
-		}
-	},
-	duplicateModule: function( moduleName, moduleAppName, inheritedData ){
+                });
+            }
+        }
+    },
+    duplicateModule: function (moduleName, moduleAppName, inheritedData) {
         var selectedMode = $('.switch-input:checked').val();
 
-		if( moduleName ){
+        if (moduleName) {
 
-			var module = this;
+            var module = this;
 
-			// Reset module variables.
-			module.reset();
+            // Reset module variables.
+            module.reset();
 
-			// Set module id
-			module.moduleName = moduleName;
-			// Set module app name
-			module.moduleAppName = moduleAppName;
+            // Set module id
+            module.moduleName = moduleName;
+            // Set module app name
+            module.moduleAppName = moduleAppName;
 
-			// Get view content by ajax.
-			var getViewRequest = module.getModuleView(inheritedData);
+            // Get view content by ajax.
+            var getViewRequest = module.getModuleView(inheritedData);
 
-			// Request Success
+            // Request Success
             getViewRequest.done(function (html) {
-				// Set module html content
-				module.viewContent = html;
-				// Draw module on canvas
+                // Set module html content
+                module.viewContent = html;
+                // Draw module on canvas
                 module.drawOnCanvas(function () {
-					// init module plugins
-					module.initPlugins();
+                    // init module plugins
+                    module.initPlugins();
                     Application.utils.changeBuildingMode(selectedMode);
-				});
-			});
+                });
+            });
 
-			// Request Fail
+            // Request Fail
             getViewRequest.fail(function () {
                 Application.utils.alert.display("Error:", "An error occurred while trying to get the module, please try again later.", "danger");
-			});
-		}
-	},
+            });
+        }
+    },
 
- 	// Make Ajax Request.
-	// Return the ajax object.
+    // Make Ajax Request.
+    // Return the ajax object.
     getModuleView: function (inheritedData) {
-		var _this = this;
+        var _this = this;
 
-		var url = Application.globals.baseUrl + "/template/module";
-		var data = {
-			app_name: _this.moduleAppName,
-			name: _this.moduleName,
-			class: _this.moduleClass,
-			library_name: Application.globals.library_name,
-			campaign_id: campaignManager.getCampaignId(),
-		};
-		//For cloning modules
-		if(inheritedData) {
-			data.module_data = inheritedData;
-		}
+        var url = Application.globals.baseUrl + "/template/module";
+        var data = {
+            app_name: _this.moduleAppName,
+            name: _this.moduleName,
+            class: _this.moduleClass,
+            library_name: Application.globals.library_name,
+            campaign_id: campaignManager.getCampaignId(),
+        };
+        //For cloning modules
+        if (inheritedData) {
+            data.module_data = inheritedData;
+        }
 
-		// Do request
-		return request = $.ajax({
-			cache: true,
-			dataType: "html",
-			url: url,
-			data: data
-		});
-	},
+        // Do request
+        return request = $.ajax({
+            cache: true,
+            dataType: "html",
+            url: url,
+            data: data
+        });
+    },
 
-	// Draw module in canvas template
+    // Draw module in canvas template
     drawOnCanvas: function (callback) {
-		var $canvas = Application.utils.getCanvas();
-		var $moduleContent = $(this.viewContent);
+        var $canvas = Application.utils.getCanvas();
+        var $moduleContent = $(this.viewContent);
 
         if ($canvas) {
             var bounds = $canvas.outerHeight();
@@ -183,515 +183,515 @@ var moduleManager = {
                 $moduleContent.fadeOut(200).fadeIn(200);
             }
 
-			// Animation to highlight new module
-			var timesLeft = 5;
+            // Animation to highlight new module
+            var timesLeft = 5;
             while (timesLeft) {
-				timesLeft--;
+                timesLeft--;
                 setTimeout(function () {
-					$moduleContent.animate({
-						opacity: 0.4
+                    $moduleContent.animate({
+                        opacity: 0.4
                     }, 250, function () {
-						$(this).animate({
-							opacity: 1
+                        $(this).animate({
+                            opacity: 1
                         }, function () {
-							// Update data
-							$moduleContent.find("[contenteditable]").blur();
-						});
-					});
-				}, 500);
+                            // Update data
+                            $moduleContent.find("[contenteditable]").blur();
+                        });
+                    });
+                }, 500);
 
-			}
+            }
 
 
-			// Callback
+            // Callback
             if (callback) {
-				callback();
-			}
-		}
-	},
+                callback();
+            }
+        }
+    },
 
-	// Open configuration modal
+    // Open configuration modal
     configModal: function (params) {
         if (!params.view) {
             Application.utils.alert.display("Warning:", "An error occurred while trying to open the configuration modal, missing params.", "warning");
-			return false;
-		}
+            return false;
+        }
 
-		var _this = this;
+        var _this = this;
 
-		$.magnificPopup.open({
-			type: 'ajax',
-			closeOnBgClick: false,
-			items: {
-				src: Application.globals.baseUrl + "/template/modal"
-			},
-			ajax: {
-				settings: {
-					cache: true,
-					dataType: "html",
-					data: {
-						app_name: params.appName,
-						name: params.view,
-						library_name: Application.globals.library_name
-					}
-				}
-			},
-			callbacks: {
+        $.magnificPopup.open({
+            type: 'ajax',
+            closeOnBgClick: false,
+            items: {
+                src: Application.globals.baseUrl + "/template/modal"
+            },
+            ajax: {
+                settings: {
+                    cache: true,
+                    dataType: "html",
+                    data: {
+                        app_name: params.appName,
+                        name: params.view,
+                        library_name: Application.globals.library_name
+                    }
+                }
+            },
+            callbacks: {
                 ajaxContentAdded: function () {
                     if (params.type && ConfigModals && ConfigModals[params.type]) {
-						// Get config from modals.php
+                        // Get config from modals.php
                         var modalConfig = _this.modalConfig[params.type] || {};
-						modalConfig.target = _this.modalTarget;
-						// Init configuration modal scripts
+                        modalConfig.target = _this.modalTarget;
+                        // Init configuration modal scripts
                         var configurationModalObj = ConfigModals[params.type](modalConfig);
-						configurationModalObj.init();
+                        configurationModalObj.init();
                     } else {
                         Application.utils.alert.display("Warning:", "An error occurred while trying to init the configuration modal, missing params.", "warning");
-						return false;
-					}
-				}
-			}
-		});
-	},
+                        return false;
+                    }
+                }
+            }
+        });
+    },
 
-	// Delete module from canvas.
+    // Delete module from canvas.
     deleteModule: function ($deleteModule) {
-		var $moduleDataParams = $deleteModule.data("params");
+        var $moduleDataParams = $deleteModule.data("params");
         if ($moduleDataParams.plugins) {
-			this.destroyPlugins($deleteModule);
-		}
+            this.destroyPlugins($deleteModule);
+        }
 
-		$deleteModule.remove();
-	},
+        $deleteModule.remove();
+    },
 
-/*
-	 * Init tinymce editor default.
-	 * If I have more than one tinyMce in the same module get $contentTiny. 
-	 */
-	initTinymce: function( $module, configTinymce, $contentTiny){
-		if(!$module || !configTinymce.selector){
-			return false
-		}
+    /*
+     * Init tinymce editor default.
+     * If I have more than one tinyMce in the same module get $contentTiny.
+     */
+    initTinymce: function ($module, configTinymce, $contentTiny) {
+        if (!$module || !configTinymce.selector) {
+            return false
+        }
 
-		var _this = this;
+        var _this = this;
 
-		var saveDataTimeOut = null;
-		
-		var moduleDataParams = $module.data("params");
+        var saveDataTimeOut = null;
 
-		if ($contentTiny){
-			var $moduleText = $contentTiny.find(".text-overlay");
-		}else{
-			var $moduleText = $module.find(".text-overlay");
-		}
-		
-		// Module Text options.
+        var moduleDataParams = $module.data("params");
+
+        if ($contentTiny) {
+            var $moduleText = $contentTiny.find(".text-overlay");
+        } else {
+            var $moduleText = $module.find(".text-overlay");
+        }
+
+        // Module Text options.
         if (moduleDataParams.toolbox) {
             var $toolbox = _this.drawToolbox(moduleDataParams, $moduleText);
-		}	
-			
-		// Default config
-		var defaultConfigTinymce = {
-			document_base_url: Application.globals.baseUrl + "/js/tinymce/",
-			skin_url: Application.globals.baseUrl + '/css/tinymce/lightgray',
-			setup: function (editor) {
-				var dataParams = $module.data("params");
-				if( ModuleActions && dataParams.type && ModuleActions[dataParams.type] ){
-					var actions = new ModuleActions[dataParams.type]();
-					if( actions.onTinymceInit ){
-						actions.onTinymceInit( editor );
-					}
-				}
-			}
-		}
- 	
-		// Set editor index & class name 
-		if ($contentTiny){
-			var editorNumber = $(configTinymce.selector).index($contentTiny.find( configTinymce.selector ));
-		}else{
-			var editorNumber = $(configTinymce.selector).index($module.find( configTinymce.selector ));
-		}
+        }
 
-		var editorIdPreText = "text-editable-";
+        // Default config
+        var defaultConfigTinymce = {
+            document_base_url: Application.globals.baseUrl + "/js/tinymce/",
+            skin_url: Application.globals.baseUrl + '/css/tinymce/lightgray',
+            setup: function (editor) {
+                var dataParams = $module.data("params");
+                if (ModuleActions && dataParams.type && ModuleActions[dataParams.type]) {
+                    var actions = new ModuleActions[dataParams.type]();
+                    if (actions.onTinymceInit) {
+                        actions.onTinymceInit(editor);
+                    }
+                }
+            }
+        }
 
-		// If editor id exist then find a new one.
+        // Set editor index & class name
+        if ($contentTiny) {
+            var editorNumber = $(configTinymce.selector).index($contentTiny.find(configTinymce.selector));
+        } else {
+            var editorNumber = $(configTinymce.selector).index($module.find(configTinymce.selector));
+        }
+
+        var editorIdPreText = "text-editable-";
+
+        // If editor id exist then find a new one.
         if (tinyMCE && tinyMCE.editors[editorIdPreText + editorNumber]) {
-			var numberFound = false;
+            var numberFound = false;
             for (var i = 0; i <= tinyMCE.editors.length; i++) {
                 if (!tinyMCE.editors[editorIdPreText + i] && !numberFound) {
-					editorNumber = i;
-					numberFound = true;
-				}
-			}
-		}
+                    editorNumber = i;
+                    numberFound = true;
+                }
+            }
+        }
 
-		var editorId = editorIdPreText + editorNumber;
+        var editorId = editorIdPreText + editorNumber;
 
-		// Override tinyMCE selector
-		if ($contentTiny){
-			$contentTiny.find( configTinymce.selector ).attr("id", editorId );
-		}else{
-			$module.find( configTinymce.selector ).attr("id", editorId );
-		}
-		
-		configTinymce.selector = "#" + editorId;
+        // Override tinyMCE selector
+        if ($contentTiny) {
+            $contentTiny.find(configTinymce.selector).attr("id", editorId);
+        } else {
+            $module.find(configTinymce.selector).attr("id", editorId);
+        }
 
-		// Override tinyMCE fixed toolbar container
+        configTinymce.selector = "#" + editorId;
+
+        // Override tinyMCE fixed toolbar container
         if (configTinymce.fixed_toolbar_container) {
-			var toolboxId = "text-overlay-toolbox-" + editorNumber;
-			
-			if ($contentTiny){
-				$contentTiny.find(configTinymce.fixed_toolbar_container).attr( "id", toolboxId );
-			}else{
-				$module.find(configTinymce.fixed_toolbar_container).attr( "id", toolboxId );
-			}
-			
-			configTinymce.fixed_toolbar_container = "#" + toolboxId;
-		}
+            var toolboxId = "text-overlay-toolbox-" + editorNumber;
 
-		// Extend config
+            if ($contentTiny) {
+                $contentTiny.find(configTinymce.fixed_toolbar_container).attr("id", toolboxId);
+            } else {
+                $module.find(configTinymce.fixed_toolbar_container).attr("id", toolboxId);
+            }
+
+            configTinymce.fixed_toolbar_container = "#" + toolboxId;
+        }
+
+        // Extend config
         var config = $.extend(defaultConfigTinymce, configTinymce);
 
-		// Init Tinymce.
-		tinymce.init(config);
+        // Init Tinymce.
+        tinymce.init(config);
 
-		//If I have more than one tinyMce in the same module. Reset option configTinymce.
-		if ($contentTiny){
-			configTinymce.fixed_toolbar_container = '.text-overlay .text-overlay-toolbox';
-			configTinymce.selector = '.st-edit-text';
-		}	
+        //If I have more than one tinyMce in the same module. Reset option configTinymce.
+        if ($contentTiny) {
+            configTinymce.fixed_toolbar_container = '.text-overlay .text-overlay-toolbox';
+            configTinymce.selector = '.st-edit-text';
+        }
 
-		$moduleText.find('.st-edit-text')
+        $moduleText.find('.st-edit-text')
             .on("mouseenter", function () {
-				// Check if tinymce is initialized.
+                // Check if tinymce is initialized.
                 if (tinyMCE) {
-					// Fire a focusint to make tinymce visible
+                    // Fire a focusint to make tinymce visible
                     if (tinyMCE.editors[editorIdPreText + editorNumber] && !$moduleText.find(".mce-panel").is(":visible")) {
                         tinyMCE.editors[editorIdPreText + editorNumber].fire('focusin');
-					}
-				}
-			})
-			// Save text on last key up.
+                    }
+                }
+            })
+            // Save text on last key up.
             .on("keyup", function () {
-				var editTextElement = this;
+                var editTextElement = this;
                 var index = $module.find("[contenteditable]").index(editTextElement);
-				
+
                 if (saveDataTimeOut != null)
                     clearTimeout(saveDataTimeOut);
 
                 saveDataTimeOut = setTimeout(function () {
                     _this.saveInData($(editTextElement).parents("[data-params]"), "text" + index, $(editTextElement).html());
-				}, 1000);
-			})
-			// Save text on blur
+                }, 1000);
+            })
+            // Save text on blur
             .on("blur", function () {
                 if (saveDataTimeOut != null)
                     clearTimeout(saveDataTimeOut);
 
-				var editTextElement = this;
+                var editTextElement = this;
 
                 var index = $module.find('[contenteditable]').index(editTextElement);
                 _this.saveInData($(editTextElement).parents("[data-params]"), "text" + index, $(editTextElement).html());
-			});
-	},
+            });
+    },
 
-	/*
-	 * draw toolbox to tinymce editor default.
-	 */
+    /*
+     * draw toolbox to tinymce editor default.
+     */
     drawToolbox: function (moduleDataParams, $moduleText) {
-		// Generate Toolbox
-		var	moduleTextOptionsToolbox = moduleDataParams.toolbox;
-		var $toolbox = $('<div class="toolbox"></div>');
+        // Generate Toolbox
+        var moduleTextOptionsToolbox = moduleDataParams.toolbox;
+        var $toolbox = $('<div class="toolbox"></div>');
 
         $.each(moduleTextOptionsToolbox, function (key, config) {
             $toolbox.append('<a href="#" class="' + config.class + '"><i class="glyphicon glyphicon-' + config.icon + '"></i></a>');
-		});
+        });
 
         if (moduleTextOptionsToolbox.colorPicker) {
             var $toolboxWithListColor = this.openPopoverColorPicker($moduleText, moduleTextOptionsToolbox, $toolbox, moduleDataParams);
-		}
+        }
 
-		return $toolboxWithListColor
-	},
+        return $toolboxWithListColor
+    },
 
-	/*
-	 * Init tinymce editor default.
-	 */
+    /*
+     * Init tinymce editor default.
+     */
     openPopoverColorPicker: function ($moduleText, moduleTextOptionsToolbox, $toolbox, moduleDataParams) {
-		var _this = this;
-		
-		// create color list
+        var _this = this;
+
+        // create color list
         if (moduleTextOptionsToolbox.colorPicker.colors_list) {
-			
-			var colorsList = moduleTextOptionsToolbox.colorPicker.colors_list
+
+            var colorsList = moduleTextOptionsToolbox.colorPicker.colors_list
 
             var $colorPicker = $('<div style="display:none;">' +
                 '<select name="colorpicker-option-selected" style="display:none;">' +
                 '</select>' +
-								 '</div>');
-			
+                '</div>');
+
 
             $.each(colorsList, function (color, value) {
                 $colorPicker.find('select').append($("<option>").attr('value', value).text(color));
-			});
-			
-		}
+            });
 
-		// Append toolbox
-		$moduleText.find('.text-overlay-toolbox').append($toolbox);
-		$toolbox.append($colorPicker);
-		
-	 	// Init Simplecolorpicker
+        }
+
+        // Append toolbox
+        $moduleText.find('.text-overlay-toolbox').append($toolbox);
+        $toolbox.append($colorPicker);
+
+        // Init Simplecolorpicker
         var selectColor = (moduleDataParams.color) ? moduleDataParams.color : moduleTextOptionsToolbox.colorPicker.color_default;
-		$('select[name="colorpicker-option-selected"]').simplecolorpicker();
-		$('select[name="colorpicker-option-selected"]').simplecolorpicker('selectColor', selectColor);	
+        $('select[name="colorpicker-option-selected"]').simplecolorpicker();
+        $('select[name="colorpicker-option-selected"]').simplecolorpicker('selectColor', selectColor);
 
-		
-		// Build color picker button
-	 	var $colorPickerIcon = $toolbox.find(".color-picker");
-		
-		// Set attributes for bootstrap popover and Init popover
-		$colorPickerIcon
-			.attr({
-				"role": "button",
-				"data-trigger": "manual",
-				"data-placement": "bottom"
-			})
-			.popover({
+
+        // Build color picker button
+        var $colorPickerIcon = $toolbox.find(".color-picker");
+
+        // Set attributes for bootstrap popover and Init popover
+        $colorPickerIcon
+            .attr({
+                "role": "button",
+                "data-trigger": "manual",
+                "data-placement": "bottom"
+            })
+            .popover({
                 container: 'body',
-				content: $toolbox.find('.simplecolorpicker'),
-				html: true
-			});
+                content: $toolbox.find('.simplecolorpicker'),
+                html: true
+            });
 
 
-		var popoverTo = 0;
+        var popoverTo = 0;
 
         function hidePopover() {
             popoverTo = setTimeout(function (e) {
-				$colorPickerIcon.popover('hide');
-				$moduleText.removeClass('hover');
+                $colorPickerIcon.popover('hide');
+                $moduleText.removeClass('hover');
             }, 1500);
-		}
+        }
 
         function overrideHidePopover() {
-			clearTimeout(popoverTo);
-		}
+            clearTimeout(popoverTo);
+        }
 
-		// Set icon click: Open popover and close popover.
-		$colorPickerIcon
+        // Set icon click: Open popover and close popover.
+        $colorPickerIcon
             .on("mouseenter", function () {
                 if (!$('.popover').length) {
-					$colorPickerIcon.popover("show");
-					$moduleText.addClass('hover');
-				}
+                    $colorPickerIcon.popover("show");
+                    $moduleText.addClass('hover');
+                }
 
-				return false;
-			})	
+                return false;
+            })
             .on("mouseleave", function (e) {
-				hidePopover($colorPickerIcon);
-			})	
+                hidePopover($colorPickerIcon);
+            })
             .on("click", function (e) {
-				e.preventDefault();
-			})
-			.on('shown.bs.popover', function () {
-				var idPopover = $(this).attr('aria-describedby');
+                e.preventDefault();
+            })
+            .on('shown.bs.popover', function () {
+                var idPopover = $(this).attr('aria-describedby');
                 $('#' + idPopover).on("mouseenter", function () {
-					overrideHidePopover();
-				});
-				
+                    overrideHidePopover();
+                });
+
                 $('#' + idPopover).on("mouseleave", function () {
-					hidePopover();
-					return false;
-				});
+                    hidePopover();
+                    return false;
+                });
 
                 var $module = $moduleText.parents("[data-params]");
 
                 $module.find('select[name="colorpicker-option-selected"]').on('change', function (e) {
                     var selectedColor = $(e.target).val();
-					$moduleText
+                    $moduleText
                         .css('color', selectedColor)
-						.removeClass('hover');
-					$colorPickerIcon.popover('hide');
+                        .removeClass('hover');
+                    $colorPickerIcon.popover('hide');
                     _this.saveInData($module, "color", selectedColor);
-					return false;
-				});
-			});
+                    return false;
+                });
+            });
 
-		return $toolbox;
-	},
+        return $toolbox;
+    },
 
-	// init plugin with draw on canvas
+    // init plugin with draw on canvas
     initPlugins: function () {
-		// Get all Modules
-		var $canvas = Application.utils.getCanvas();
-		var $modules = $canvas.find(" > tr[data-params]");
-		var _this = this;
-		
-		// Check if need initialize some plugin
+        // Get all Modules
+        var $canvas = Application.utils.getCanvas();
+        var $modules = $canvas.find(" > tr[data-params]");
+        var _this = this;
+
+        // Check if need initialize some plugin
         $.each($modules, function (index, module) {
-			var $module = $(module);
-			var moduleParams = $module.data("params");
-			
+            var $module = $(module);
+            var moduleParams = $module.data("params");
+
             // Init module actions
-            if( !moduleParams.initialized ){
+            if (!moduleParams.initialized) {
                 var dataParams = $module.data("params");
-                if( dataParams.type && ModuleActions && ModuleActions[dataParams.type] ){
+                if (dataParams.type && ModuleActions && ModuleActions[dataParams.type]) {
                     var actions = new ModuleActions[dataParams.type]();
-                    if( typeof actions.init == "function" ){
+                    if (typeof actions.init == "function") {
                         actions.init($module);
                     }
                 }
             }
 
             if (moduleParams.plugins && !moduleParams.initialized) {
-				
+
                 $.each(moduleParams.plugins, function (plugin, pluginConfig) {
 
-					if( plugin == "tinymce" ){
-						//If I have more than one tinyMce in the same module  
-						//generate a $contentTiny for index tinymce.
-						if($module.find( pluginConfig.selector ).length > 1){
-							var $selectorTinymce = $module.find( pluginConfig.selector );
-							$.each( $selectorTinymce, function( index, selectorTinymce ){
-								var $contentTiny = $(selectorTinymce).closest('table');
-								_this.initTinymce( $module, pluginConfig, $contentTiny );
-							});
-						}else{
-							_this.initTinymce( $module, pluginConfig );
-						}
-					}
-				});
+                    if (plugin == "tinymce") {
+                        //If I have more than one tinyMce in the same module
+                        //generate a $contentTiny for index tinymce.
+                        if ($module.find(pluginConfig.selector).length > 1) {
+                            var $selectorTinymce = $module.find(pluginConfig.selector);
+                            $.each($selectorTinymce, function (index, selectorTinymce) {
+                                var $contentTiny = $(selectorTinymce).closest('table');
+                                _this.initTinymce($module, pluginConfig, $contentTiny);
+                            });
+                        } else {
+                            _this.initTinymce($module, pluginConfig);
+                        }
+                    }
+                });
 
-				moduleParams.initialized = true;
-			}
-		});
-	},
+                moduleParams.initialized = true;
+            }
+        });
+    },
 
     destroyPlugins: function ($module) {
-		var moduleDataParams = $module.data("params");
+        var moduleDataParams = $module.data("params");
         if (moduleDataParams.plugins.tinymce) {
             $.each($module.find(".st-edit-text"), function (index, element) {
-				var editorId = $(element).attr("id");
+                var editorId = $(element).attr("id");
                 if (tinyMCE && tinyMCE.editors[editorId]) {
-					tinyMCE.editors[editorId].destroy();
-				}
-			});
-		}
-	},
+                    tinyMCE.editors[editorId].destroy();
+                }
+            });
+        }
+    },
 
-    getModuleData: function( $module, dataKey ){
-        if( !$module ){
+    getModuleData: function ($module, dataKey) {
+        if (!$module) {
             return false;
         }
 
         var data = {};
         var dataParams = $module.data("params") || $module.parents("[data-params]").data("params");
 
-        if( dataKey ){
-            if( dataParams.data[dataKey] ){
+        if (dataKey) {
+            if (dataParams.data[dataKey]) {
                 data = dataParams.data[dataKey];
             }
-        }else{
+        } else {
             data = dataParams.data;
         }
 
         return data;
     },
 
-	/*
-	 *	Save in module data.
-	 *	@param $module ( jQuery element )
-	 *	@param key (String)
-	 */
+    /*
+     *	Save in module data.
+     *	@param $module ( jQuery element )
+     *	@param key (String)
+     */
     saveInData: function ($module, key, value) {
         if (!key || !$module) {
-			return false;
-		}
+            return false;
+        }
 
 
-		// Get module params
-		var dataParams = $module.data("params");
-		dataParams.data = dataParams.data || {};
+        // Get module params
+        var dataParams = $module.data("params");
+        dataParams.data = dataParams.data || {};
 
-		// Set data.
-		dataParams.data[key] = value;
-	},
+        // Set data.
+        dataParams.data[key] = value;
+    },
 
     setModulesEvents: function () {
         if (this.eventsSet) {
-			return false;
-		}
+            return false;
+        }
 
-		var module = this;
-		var $canvas = Application.utils.getCanvas();
+        var module = this;
+        var $canvas = Application.utils.getCanvas();
 
         if (!$canvas) {
-			return false;
-		}
+            return false;
+        }
 
-		$canvas
+        $canvas
             .on("mouseenter", "> tr", function () {
-				var $row = $(this);
+                var $row = $(this);
 
-				/* -- Show action buttons -- */
-				// Remove all action iconst remove icon that it is select
-				$(".actions-buttons-tooltip").not($(this).find(".actions-buttons-tooltip")).remove();
-				// Check if the action buttons are in the module.
+                /* -- Show action buttons -- */
+                // Remove all action iconst remove icon that it is select
+                $(".actions-buttons-tooltip").not($(this).find(".actions-buttons-tooltip")).remove();
+                // Check if the action buttons are in the module.
                 if ($row.find(".actions-buttons-tooltip").length) {
-					// Stop fade out animation and show it again
-					$row.find(".actions-buttons-tooltip").stop().fadeIn("fast");
+                    // Stop fade out animation and show it again
+                    $row.find(".actions-buttons-tooltip").stop().fadeIn("fast");
                 } else {
-					// It they aren't in the module, append and show them.
+                    // It they aren't in the module, append and show them.
                     $row.find("> td").append($(module.actionsButtonsTpl).fadeIn('slow'));
-				}
+                }
 
-				// Highlight module
+                // Highlight module
                 if (!$row.find("#moduleHighlight").length && $row.height() < 5) {
                     $row.find(".actions-buttons-tooltip").css("top", "-10px");
-					var $hoverTable = $('<table id="moduleHighlight"><tr><td></td></tr></table>');
+                    var $hoverTable = $('<table id="moduleHighlight"><tr><td></td></tr></table>');
 
-					$hoverTable.css({
-						width: Application.globals.emailWidth,
-						height: $row.height()
-					});
+                    $hoverTable.css({
+                        width: Application.globals.emailWidth,
+                        height: $row.height()
+                    });
 
-					$row.find("> td")
-						.addClass("st-position-relative")
+                    $row.find("> td")
+                        .addClass("st-position-relative")
                         .append($hoverTable);
 
-					$row.find("#moduleHighlight").animate({
-						top: "-10px",
-						left: "-10px",
-						borderWidth: "10px"
-					}, 50);
-				}
-			})
+                    $row.find("#moduleHighlight").animate({
+                        top: "-10px",
+                        left: "-10px",
+                        borderWidth: "10px"
+                    }, 50);
+                }
+            })
             .on("mouseleave", "> tr", function () {
-				/* -- Hide Action buttons Tooltip -- */
+                /* -- Hide Action buttons Tooltip -- */
                 $(this).find(".actions-buttons-tooltip").fadeOut(2000, function () { //remove icon
-					// Remove actions tooltip
-					$(this).remove();
-				});
-				// Remove module highlight element
-				$(this).find("#moduleHighlight").remove();
-				$(this).find(".st-position-relative").removeClass("st-position-relative");
-			})
+                    // Remove actions tooltip
+                    $(this).remove();
+                });
+                // Remove module highlight element
+                $(this).find("#moduleHighlight").remove();
+                $(this).find(".st-position-relative").removeClass("st-position-relative");
+            })
             .on("click", ".st-without-event", function (e) {
-				// Without event click
-				e.preventDefault();
-			})
+                // Without event click
+                e.preventDefault();
+            })
             .on("click", '.action-remove', function () {
-				// Remove module 
-				var $deleteModule = $(this).closest("[data-params]"); 
-				module.deleteModule($deleteModule);
-				return false;
-			})
-			.on("click",'.action-duplicate', function(){
-				// Duplicate module 
-				var moduleToDuplicate = $(this).closest("[data-params]").data('params');
-				module.duplicateModule(moduleToDuplicate.type, moduleToDuplicate.file_parent, moduleToDuplicate.data);
-				return false;
-			})
+                // Remove module
+                var $deleteModule = $(this).closest("[data-params]");
+                module.deleteModule($deleteModule);
+                return false;
+            })
+            .on("click", '.action-duplicate', function () {
+                // Duplicate module
+                var moduleToDuplicate = $(this).closest("[data-params]").data('params');
+                module.duplicateModule(moduleToDuplicate.type, moduleToDuplicate.file_parent, moduleToDuplicate.data);
+                return false;
+            })
             // Action Config
             .on("click", '.action-config', function () {
                 var $moduleElement = $(this).parents("[data-params]");
@@ -733,137 +733,137 @@ var moduleManager = {
                 var modalConfig = {};
                 if ($(this).data("open-element-config") != "") {
                     modalConfig = module.modalConfig[$(this).data("open-element-config")];
-                }else{
+                } else {
                     return false;
                 }
 
-                if( modalConfig.config_modal_key && ConfigModals && ConfigModals[modalConfig.config_modal_key] ){
+                if (modalConfig.config_modal_key && ConfigModals && ConfigModals[modalConfig.config_modal_key]) {
                     modalConfig.target = this;
-                    var configurationModalObj = ConfigModals[ modalConfig.config_modal_key ](modalConfig);
+                    var configurationModalObj = ConfigModals[modalConfig.config_modal_key](modalConfig);
                     configurationModalObj.open();
                 }
 
                 return false;
             })
-			// Call function configModal to open modal
+            // Call function configModal to open modal
             .on("click", "[data-master-image-editor]", function () {
-				//Set target in modalTarget
-				module.modalTarget = this;
+                //Set target in modalTarget
+                module.modalTarget = this;
 
-				// Set modal config
-				var modalConfig = {};
+                // Set modal config
+                var modalConfig = {};
                 if ($(this).data("master-image-editor") != "") {
                     modalConfig = module.modalConfig[$(this).data("master-image-editor")];
-				}
-				modalConfig.campaign_id = campaignManager.getCampaignId();
+                }
+                modalConfig.campaign_id = campaignManager.getCampaignId();
 
-				// Init Modal
+                // Init Modal
                 var modalImageEditor = new masterImageEditor(modalConfig);
-				// Open Modal
-				modalImageEditor.openModal();
-				
-				return false;
-			})
-			// Open master button editor
-            .on("click", "[data-master-button-editor]", function () {
-				//Set target in modalTarget
-				module.modalTarget = this;
+                // Open Modal
+                modalImageEditor.openModal();
 
-				// Set modal config
-				var modalConfig = {};
+                return false;
+            })
+            // Open master button editor
+            .on("click", "[data-master-button-editor]", function () {
+                //Set target in modalTarget
+                module.modalTarget = this;
+
+                // Set modal config
+                var modalConfig = {};
                 if ($(this).data("master-button-editor") != "") {
                     modalConfig = module.modalConfig[$(this).data("master-button-editor")];
-				}
-				modalConfig.campaign_id = campaignManager.getCampaignId();
+                }
+                modalConfig.campaign_id = campaignManager.getCampaignId();
 
-				// Init Modal
+                // Init Modal
                 var modalButtonEditor = new masterButtonEditor(modalConfig);
-				// Open Modal
-				modalButtonEditor.openModal();
+                // Open Modal
+                modalButtonEditor.openModal();
 
-				return false;
-			})
-			// Set open library click
+                return false;
+            })
+            // Set open library click
             .on("click", "[data-image-library]", function () {
-				var targetElement = this;
-				// Data params
-				var dataParams = $(this).parents("[data-params]").data('params');
-				// get library config
-				var libraryConfig = {};
+                var targetElement = this;
+                // Data params
+                var dataParams = $(this).parents("[data-params]").data('params');
+                // get library config
+                var libraryConfig = {};
                 if ($(this).data("data-image-library") != "") {
-					libraryConfig = $(this).data("image-library");
-				}
+                    libraryConfig = $(this).data("image-library");
+                }
 
-				// Set submit
+                // Set submit
                 libraryConfig.onSubmit = function (imageData) {
                     if (dataParams.type && ModuleActions && ModuleActions[dataParams.type]) {
                         var actions = new ModuleActions[dataParams.type]({target: targetElement});
 
                         if (actions.onLibrarySubmit) {
                             actions.onLibrarySubmit(imageData);
-						}
-					}
-				};
+                        }
+                    }
+                };
 
-				// Init Library
+                // Init Library
                 var library = new imageLibrary(libraryConfig);
-				// Open Modal
-				library.open();
+                // Open Modal
+                library.open();
 
-				return false;
-			})
+                return false;
+            })
             .on("click", "[data-modal]", function () {
-				var dataParams = $(this).parents("[data-params]").data('params');
+                var dataParams = $(this).parents("[data-params]").data('params');
 
-				// Remove error if the element has it
-				$(this).removeClass("default-image-error");
+                // Remove error if the element has it
+                $(this).removeClass("default-image-error");
 
-				// Set name modal of data modal
-				var dataModal = $(this).attr('data-modal');
-				
-				//If dataModal is empty get name modal of data-param
+                // Set name modal of data modal
+                var dataModal = $(this).attr('data-modal');
+
+                //If dataModal is empty get name modal of data-param
                 if (dataModal == '') {
-					dataModal = dataParams.type;
-				}
+                    dataModal = dataParams.type;
+                }
 
-				//Call function configModal
+                //Call function configModal
                 module.configModal({view: dataModal});
 
-				//Set target in modalTarget
-				module.modalTarget = this;
+                //Set target in modalTarget
+                module.modalTarget = this;
 
-				return false;
-			})
-			// Prevent enter on content editable
+                return false;
+            })
+            // Prevent enter on content editable
             .on("keypress", ".st-content-editable-single-line[contenteditable]", function (e) {
-				return e.which != 13;
-			})
-			// Save content editable on element blur.
+                return e.which != 13;
+            })
+            // Save content editable on element blur.
             .on("blur", "[contenteditable]:not(.st-edit-text)", function () {
-				var $moduleElement = $(this).parents("[data-params]");
+                var $moduleElement = $(this).parents("[data-params]");
 
-				// Convert to Uppercase
+                // Convert to Uppercase
                 if ($(this).css("text-transform") == 'uppercase') {
                     $(this).html(($(this).html()).toUpperCase().replace(/&NBSP;/g, "&nbsp;"));
-				}
+                }
 
                 var dataKey = "text" + $moduleElement.find("[contenteditable]").index(this);
-				var dataValue = "";
+                var dataValue = "";
 
                 if ($(this).hasClass("st-save-only-text")) {
-					dataValue = $(this).html();
+                    dataValue = $(this).html();
                 } else {
-					dataValue = this.outerHTML;
-				}
+                    dataValue = this.outerHTML;
+                }
 
-				// Prevent element deletion if it is empty.
+                // Prevent element deletion if it is empty.
                 if ($(this).text() == "") {
-					$(this).empty();
-				}
+                    $(this).empty();
+                }
 
-				// Save in module data-params
+                // Save in module data-params
                 moduleManager.saveInData($moduleElement, dataKey, dataValue);
-			})
+            })
             // Truncate pasted text if truncate attr is present
             .on("keypress", "[truncate]", function (e) {
                 // Allow: backspace, delete, tab, escape, enter and .
@@ -891,42 +891,42 @@ var moduleManager = {
                 }
             })
 			// Prevents formatted html paste
-            .on('paste', '[contenteditable]', function (e) {
+            .on('paste', '[contenteditable].not(.mce-content-body)', function (e) {
 				e.preventDefault();
 				var text = (e.originalEvent || e).clipboardData.getData('text/plain') || prompt('Paste something..');
 				document.execCommand('insertText', false, text);
 
-				// Truncate pasted text if truncate attr is present
-				var $el = $(e.target);
+                // Truncate pasted text if truncate attr is present
+                var $el = $(e.target);
                 if ($el.attr('truncate')) {
-					var maxLength = $el.attr('truncate') || 120;
+                    var maxLength = $el.attr('truncate') || 120;
                     if ($el.text().trim().length >= maxLength) {
-						$el.text($el.text().trim().substring(0, maxLength));
-					}
-				}
-			});
+                        $el.text($el.text().trim().substring(0, maxLength));
+                    }
+                }
+            });
 
-		// Init sortable
-		$canvas.sortable({
+        // Init sortable
+        $canvas.sortable({
             axis: 'y',
             delay: 100,
             handle: '.action-sortable',
-			placeholder: "ui-state-highlight",
+            placeholder: "ui-state-highlight",
             start: function (event, ui) {
-				// Set the height of the dragged element to placeholder box.
+                // Set the height of the dragged element to placeholder box.
                 $(".ui-state-highlight").height($(ui.item).height() + "px");
-			}
-		});
+            }
+        });
 
-		// Set true to prevent set this events again.
-		this.eventsSet = true;
-	},
+        // Set true to prevent set this events again.
+        this.eventsSet = true;
+    },
 
-	getModuleParent: function($element){
-		if( $element.data("params") ){
-			return $element;
-		}else{
-			return $element.parents("[data-params]");
-		}
-	}
+    getModuleParent: function ($element) {
+        if ($element.data("params")) {
+            return $element;
+        } else {
+            return $element.parents("[data-params]");
+        }
+    }
 };

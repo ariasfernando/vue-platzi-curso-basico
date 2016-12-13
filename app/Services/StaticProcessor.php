@@ -311,6 +311,7 @@ class StaticProcessor
                     usleep(50000);
                     $success = $storage->put($file_path, $image->resize($size)->get($extension, $options));
                 }
+
             } else {
                 return $this->saveImage($blob);
             }
@@ -371,9 +372,9 @@ class StaticProcessor
     }
 
     /**
-     * Create a custom merge from a background image and layers
+     * Create a custom merge from a background image and layers.
      *
-     * @param string $gif
+     * @param string $image
      * @param string $layer
      * @return array Path or error.
      */
@@ -381,53 +382,54 @@ class StaticProcessor
     {
         $background_path = (isset($options['background_path']))? $options['background_path'] : null;
         $layers = (isset($options['layers']))? $options['layers'] : [];
-        $parent_scope = $this;
 
         if (!is_null($background_path)) {
             list($background_image, $background_extension, $background_options) = $this->getImageObject($background_path);
-            $layersConstructor = function ($layers, &$image) use ($parent_scope) {
-                foreach ($layers as $layer) {
-                    $layer_path = (isset($layer['path'])) ? $layer['path'] : null;
-                    $layer_top = (isset($layer['top'])) ? $layer['top'] : 0;
-                    $layer_left = (isset($layer['left'])) ? $layer['left'] : 0;
-                    $layer_width = (isset($layer['width'])) ? $layer['width'] : null;
+            $blob = $background_image->get($background_extension, $background_options);
 
-                    if (!is_null($layer_path)) {
-                        if ((strpos($layer_path, ';base64') === false) &&
-                            (strpos($layer_path, public_path()) === false)) {
-                            $layer_path = public_path() . $layer_path;
-                        }
+            foreach ($layers as $layer) {
+                $layer_path = (isset($layer['path'])) ? $layer['path'] : null;
+                $layer_top = (isset($layer['top'])) ? $layer['top'] : 0;
+                $layer_left = (isset($layer['left'])) ? $layer['left'] : 0;
+
+
+                if (!is_null($layer_path)) {
+                    if ((strpos($layer_path, ';base64') === false) &&
+                        (strpos($layer_path, public_path()) === false)) {
+                        $layer_path = public_path() . $layer_path;
+                    }
+                    if (isset($layer['width'])) {
+                        $layer_width = $layer['width'];
+                        $size = sprintf('%dx', $layer_width);
+                        $position = sprintf('+%d+%d', $layer_left, $layer_top);
+                    } else {
                         list($layer_image,,) = $parent_scope->getImageObject($layer_path);
+                        $size = sprintf('%dx', $layer_image->getSize()->getWidth());
+                        $position = sprintf('+%d+%d', $layer_left, $layer_top);
+                    }
 
-                        if (!is_null($layer_width)) {
-                            $old_width = $layer_image->getSize()->getWidth();
-                            $old_height = $layer_image->getSize()->getHeight();
-                            $size = new Imagine\Image\Box($layer_width, (($layer_width * $old_height) / $old_width));
-                            $position = new Imagine\Image\Point($layer_left, $layer_top);
-                            $image->paste($layer_image->resize($size), $position);
-                        } else {
-                            $position = new Imagine\Image\Point($layer_left, $layer_top);
-                            $image->paste($layer_image, $position);
-                        }
+                    if ($background_extension == "gif") {
+                        $blob = Imagine::compositeGif(
+                            $blob,
+                            $layer_path,
+                            $size,
+                            $position
+                        );
+                    } else {
+                        $blob = Imagine::compositeImage(
+                            $blob,
+                            $layer_path,
+                            $size.$position
+                        );
                     }
                 }
-            };
-
-            if ($background_extension == "gif") {
-                $background_image->layers()->coalesce();
-
-                foreach ($background_image->layers() as $frame) {
-                    $layersConstructor($layers, $frame);
-                }
-            } else {
-                $layersConstructor($layers, $background_image);
             }
 
             $storage = Storage::disk('local:campaigns');
             $file_path = $this->getImagePath($background_extension);
 
             try {
-                $success = $storage->put($file_path, $background_image->get($background_extension, $background_options));
+                $success = $storage->put($file_path, $blob);
             } catch (Exception $e) {
                 Log::warning(
                     sprintf(
@@ -438,8 +440,9 @@ class StaticProcessor
                 );
 
                 usleep(50000);
-                $success = $storage->put($file_path, $background_image->get($background_extension, $background_options));
+                $success = $storage->put($file_path, $blob);
             }
+
         }
 
         if (isset($success)) {
