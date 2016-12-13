@@ -6,6 +6,7 @@ use Auth;
 use Stensul\Models\Campaign;
 use Illuminate\Http\Request;
 use Stensul\Services\TagManager as Tag;
+use MongoDB\BSON\Regex as MongoRegex;
 
 class DashboardController extends Controller
 {
@@ -82,7 +83,7 @@ class DashboardController extends Controller
                                 if (\Config::get('campaign.enable_tagging')) {
                                     // search terms should also be reviewed as tags
                                     $query->orWhere(function ($q) use ($search_key) {
-                                        $q->whereIn('tags', [new \MongoRegex('/'.$search_key.'/i')]);
+                                        $q->whereIn('tags', [new MongoRegex('/'.$search_key, 'i')]);
                                     });
                                 }
                             }
