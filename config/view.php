@@ -73,9 +73,9 @@ $default = [
 
     'libraries' => [
         'default' => [
-            "template_width" => "660",
+            "template_width" => "680",
             "template_mobile_width" => "320",
-            "template_bg_color" => "#FFFFFF",
+            "template_bg_color" => "#222222",
             "font_family_css" => "font-family:Arial, Helvetica, sans-serif;font-weight:normal",
             "font_family_semi_bold_css" => "font-family:Arial, Helvetica, sans-serif;font-weight:normal",
             "font_family_bold_css" => "font-family:Arial, Helvetica, sans-serif;font-weight:normal",
