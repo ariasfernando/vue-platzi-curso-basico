@@ -29,7 +29,7 @@ class ComposerServiceProvider extends ServiceProvider
 
                 $config_array = [
                     "modules"   => $app_config['modules'],
-                    "locales"   => $app_config['locales'],
+                    "locale"    => $app_config['locale'],
                     "view"      => $app_config['view'],
                     "auth"      => $app_config['auth'],
                     "campaign"  => $app_config['campaign'],

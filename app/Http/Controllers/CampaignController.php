@@ -85,8 +85,8 @@ class CampaignController extends Controller
                 'user_email' => Auth::user()->email
                 ];
 
-            if (!is_null($request->input("locales"))) {
-                $params['locale'] = $request->input("locales");
+            if (!is_null($request->input("locale"))) {
+                $params['locale'] = $request->input("locale");
             }
             if (!is_null($request->input("library"))) {
                 $params['library'] = $request->input("library");

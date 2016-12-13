@@ -8,6 +8,13 @@
         $campaign_header_text = $library_title;
     }
 
+	// Set language name
+	if( $app_config['view']['campaign_format'] == "languages" 
+			&& isset($app_config['locale']['langs'][$params['campaign_data']['locale']]['name'])){
+		$campaign_header_text .= " (" 
+			. $app_config['locale']['langs'][$params['campaign_data']['locale']]['name'] . ")";
+	}
+
     $saveAsTemplate = (!$params['campaign_data']->processed && config('campaign.enable_templating'));
     $isTemplate = $params['campaign_data']->template;
 
