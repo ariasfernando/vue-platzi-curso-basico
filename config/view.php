@@ -49,7 +49,7 @@ $default = [
     | "default" Create mew mail simple link
     |
     */
-    "campaign_format" => "languages",
+    "campaign_format" => "libraries",
 
 
     /*

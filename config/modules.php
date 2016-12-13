@@ -104,6 +104,7 @@ $default = [
 
     // Text Inline
     'free_range_text_paragraph' => [
+        'title' => 'Free Range Text Paragraph',
         'module_id' => 'free_range_text_paragraph',
         'file_parent' => 'base',
         'initialized' => false,
@@ -149,6 +150,7 @@ $default = [
     ],
 
     'header_text' => [
+        'title' => 'Header Text',
         'module_id' => 'header_text',
         'file_parent' => 'base',
         'initialized' => false,
@@ -217,6 +219,7 @@ $default = [
     ],
 
     'custom_table' => [
+        'title' => 'Custom Table',
         'module_id' => 'custom_table',
         'file_parent' => 'base',
         'gutter_space' => 20,

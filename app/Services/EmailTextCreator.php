@@ -2,8 +2,6 @@
 
 namespace Stensul\Services;
 
-use Helper;
-use StensulLocale;
 use Stensul\Services\TextConverter;
 
 class EmailTextCreator
@@ -26,37 +24,18 @@ class EmailTextCreator
     /**
      * Create text version.
      *
-     * @param array $modules Modules data
      * @return string
      */
-    public function createTextVersion($modules)
+    public function createTextVersion()
     {
         $plain_text = (isset($this->campaign['title'])) ? $this->campaign['title'] . self::$line_break : '';
 
         foreach ($this->campaign['modules_data'] as $module) {
-            switch ($module['type']) {
-                case 'header_image':
-                    $text_module = $this->defaultHtml2TextConverter($module);
-                    $text_module = trim(str_replace("\n\n", "\n", $text_module));
-                    $plain_text .= $text_module;
-                    $plain_text .= self::$module_break;
-                    break;
-                case 'example_module_name':
-                    // Custom module text content
-                    break;
-
-                default:
-                    // Initialize locale and module settings
-                    StensulLocale::init($this->campaign['locale'], ["name" => $module['type'],"app_name" => $module['file_parent']]);
-
-                    $path = $this->getModulesPath($module['file_parent']);
-                    if (\View::exists($path . '.text.' . $module['type'])) {
-                        $plain_text .= $this->getTxtByTpl($module);
-                    } else {
-                        $plain_text .= trim($this->defaultHtml2TextConverter($module));
-                    }
-                    $plain_text .= self::$module_break;
-                    break;
+            $path = $this->getModulesPath($module['file_parent']);
+            if (\view::exists($path . '.' . $module['module_id'] . '.text')) {
+                $plain_text .= $this->getTxtByTpl($module);
+            } else {
+                $plain_text .= trim($this->defaultHtml2TextConverter($module));
             }
             $plain_text .= self::$module_break;
         }
@@ -119,10 +98,18 @@ class EmailTextCreator
         $params = [
             'campaign_data' => $this->campaign
         ];
-        $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['type'];
-        $moduleHtml = Helper::getRenderedView($modulePath, null, ['params' => $params,'module_params' => $module]);
 
-        return $this->htmlToText($moduleHtml);
+        $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['module_id'] . '.template';
+        if (!\view::exists($modulePath)) {
+            $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['module_id'];
+        }
+
+        $moduleHtml = \View::make($modulePath)
+            ->with('params', $params)
+            ->with('module_params', $module)
+            ->render();
+
+        return self::htmlToText($moduleHtml);
     }
 
     /**
@@ -146,9 +133,13 @@ class EmailTextCreator
      */
     protected function getTxtByTpl($module)
     {
-        $modulePath = $this->getModulesPath($module['file_parent']) . '.text.' . $module['type'];
+        $params = [
+            'campaign_data' => $this->campaign
+        ];
+        $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['module_id'] . '.text';
         $moduleText = \View::make($modulePath)
             ->with('module', $module)
+            ->with('params', $params)
             ->render();
 
         return $moduleText;
