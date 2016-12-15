@@ -307,12 +307,12 @@
 
     function animatePreviewToMobile() {
         var displayWidth = 320;
-        var displayHeight = 555;
+        var displayHeight = 605;
         var $iframeContainer = $("#modal-campaign-preview .preview-container .iframe-container");
 
         // Animate container to mobile height
         $("#modal-campaign-preview .preview-container").animate({
-            height: "807px"
+            height: "855px"
         });
         // Animate iframe to mobile size
         $iframeContainer.animate({
