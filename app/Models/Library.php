@@ -20,7 +20,7 @@ class Library extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'modules'];
+    protected $fillable = ['name', 'description', 'modules', 'config'];
 
     /**
      * Get the library modules
