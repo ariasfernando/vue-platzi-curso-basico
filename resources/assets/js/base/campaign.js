@@ -306,7 +306,7 @@
     }
 
     function animatePreviewToMobile() {
-        var displayWidth = 320;
+        var displayWidth = 340;
         var displayHeight = 605;
         var $iframeContainer = $("#modal-campaign-preview .preview-container .iframe-container");
 
