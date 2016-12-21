@@ -66,7 +66,7 @@ class CampaignController extends Controller
                         $params['menu_list'] = $value->getModules();
                     }
 
-                    uasort($params['menu_list'], function($a, $b) {
+                    uasort($params['menu_list'], function ($a, $b) {
                         if ($a['title'] == $b['title']) {
                             return 0;
                         }

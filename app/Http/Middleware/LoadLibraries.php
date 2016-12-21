@@ -19,7 +19,6 @@ class LoadLibraries
         $libraries = Library::all();
 
         foreach ($libraries as $library) {
-
             // Load default config.
             config(['view.libraries.' . $library->name => \Config::get("view.libraries.default", [])]);
 
