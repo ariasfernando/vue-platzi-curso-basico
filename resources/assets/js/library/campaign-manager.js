@@ -195,6 +195,12 @@ var campaignManager = {
                 errorFound = true;
             }
 
+			var errors = Application.utils.getCanvas().find(".error");
+
+			if( errors.length ){
+				errorFound = true;
+			}
+
             if( errorFound ){
                 return false;
             }

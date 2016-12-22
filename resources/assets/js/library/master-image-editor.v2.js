@@ -13,7 +13,8 @@ function masterImageEditorv2( customOptions ){
         spinnerClass: '',
         $fileInputUpload: '',
         imageData: {},
-        imagePreviewSelector: '.cropit-preview'
+        imagePreviewSelector: '.cropit-preview',
+        retinaDisplay: true
     }, customOptions);
 
     var $modalContent = options.modalContent || null;
@@ -24,6 +25,15 @@ function masterImageEditorv2( customOptions ){
     this.newImage = false;
 
     var _this = this;
+
+    /*
+     * ====== Cropit export options ======
+     */
+    var cropitExporOptions = {
+        type: 'image/jpeg',
+        quality: 1,
+        originalSize: true
+    };
 
     /*
      * ====== HELPERS ======
@@ -204,8 +214,7 @@ function masterImageEditorv2( customOptions ){
 
         _this.afterDataBuild();
 
-        $.extend( _this.imageData, _this.editedImageData );
-        return _this.imageData;
+        return $.extend({}, _this.imageData, _this.editedImageData );
     };
 
     this.saveData = function( $targetModule ){
@@ -213,8 +222,7 @@ function masterImageEditorv2( customOptions ){
             return false;
         }
 
-        $.extend( _this.imageData, _this.editedImageData );
-        var imageData = $.extend(true, {}, _this.imageData);
+        var imageData = $.extend({}, _this.imageData, _this.editedImageData );
         moduleManager.saveInData( $targetModule, options.imageKey, imageData );
     };
 
@@ -857,14 +865,46 @@ function masterImageEditorv2( customOptions ){
         }
     };
 
+    this.calculateExport = function( $cropitElement ){
+        if( options.imageSize == "undefined" || options.imageSize.width == "undefined" ){
+            return false;
+        }
+
+        var imageWidth = _this.getPreviewElement().find('img.cropit-preview-image')[0].width;
+        cropitExporOptions.originalSize = true;
+
+        /*
+         * == Cropit export Original Size ==
+         * When image is zoom over the natural size (>1)
+         * we set originalSize = false to export image to placeholder size.
+         * We export to original size when zoom is below 1, so the exported
+         * size is larger than the placeholder (better quality).
+         */
+        if( $cropitElement.cropit("zoom") > 1 ){
+            cropitExporOptions.originalSize = false;
+        }
+
+        /*
+         * == Export Zoom ==
+         * If value is 2, duplicate de size of the image.
+         * When the image is enough bigger to support retina display,
+         * we set exportZoom to duplicate the resulting image.
+         */
+        if( imageWidth >= options.imageSize.width * 2 ){
+            if( options.retinaDisplay === true ){
+                $cropitElement.cropit("exportZoom",2);
+            }
+            cropitExporOptions.originalSize = false;
+        }else{
+            $cropitElement.cropit("exportZoom",1);
+        };
+    };
+
     // Export cropit image
     this.exportCropit = function( $cropitElement, customOptions ){
-        var exportOpions = $.extend({
-            type: 'image/jpeg',
-            quality: 1,
-            originalSize: false
-        }, customOptions);
+        _this.calculateExport( $cropitElement );
 
+        var exportOpions = $.extend({}, cropitExporOptions, customOptions);
         return $cropitElement.cropit('export', exportOpions);
     };
 
@@ -956,6 +996,74 @@ function masterImageEditorv2( customOptions ){
 
         // Return the validation result.
         return Application.utils.validate.validateForm(form);
+    };
+
+    /*
+     * == Build Overlay Array ==
+     * Search elements with certain classes into preview, get top, left, width and image source, if it's an image.
+     * If it's an html element, we use html2canvas to convert html to image.
+     * (!) Admits only one convertion of html to image. So if there are multiple html elements as overlays,
+     * them should be into the same parent element and that parent must be converted in image.
+     * Is used in custom image merge call and return a promise.
+     */
+    this.buildOverlayArr = function( $cropitElement, params ){
+        var renderTextDfd;
+        var imageOverlays = [];
+
+        var options = $.extend({
+            imageRatio: 1,
+            htmlOverlaySelector: ".st-html-overlay",
+            imageOverlaySelector: ".image-overlay"
+        }, params);
+
+        var canvasRenderArr = [];
+
+        // First promise - Get html overlays to merge
+        if( $cropitElement.find(options.htmlOverlaySelector+":visible").length ){
+            $.each($cropitElement.find(options.htmlOverlaySelector+":visible"),function(index,element){
+                canvasRenderArr.push(
+                    html2canvas($(element),{
+                        scaleRatio: options.imageRatio
+                    })
+                );
+                imageOverlays.push({
+                    top: $(element).position().top * options.imageRatio,
+                    left: $(element).position().left * options.imageRatio,
+                    width: $(element).outerWidth() * options.imageRatio,
+                    path: ""
+                });
+            });
+        }else{
+            var dfd = jQuery.Deferred();
+            renderTextDfd = dfd.resolve();
+        }
+
+        // Second Promis - Get image overlays
+        var overlayBuilding = new $.Deferred();
+        Promise.all(canvasRenderArr).then(function(canvasResults){
+            if( canvasResults.length ){
+                $.each(canvasResults,function(index, canvas){
+                    if( imageOverlays.length && imageOverlays[index].path == "" ){
+                        imageOverlays[index].path = canvas.toDataURL("image/png");
+                    }
+                });
+            }
+
+            var $overlayImages = $cropitElement.find(options.imageOverlaySelector + ":visible");
+            $.each( $overlayImages, function(index, imageElement){
+                imageOverlays.push({
+                    top: $(imageElement).position().top * options.imageRatio,
+                    left: $(imageElement).position().left * options.imageRatio,
+                    width: $(imageElement).outerWidth() * options.imageRatio,
+                    path: $(imageElement).attr("src").replace(Application.globals.baseUrl,"")
+                });
+            });
+            overlayBuilding.resolve(imageOverlays);
+        }).catch(function(reason){
+            // TODO: display error
+        });
+
+        return overlayBuilding.promise();
     };
 
     /*

@@ -27,9 +27,25 @@
 		<div class="section-box">
 			<div class="section-title"><h2>Preview</h2></div>
 
+			<div class="alert alert-danger" role="alert">
+				You have reached the maximum number of lines
+			</div>
+
 			<div class="button-editor-display">
-				<div class="master-button">
-					<span>Primary Button</span>
+				<div class="master-button" data-line-limit="{{ $params['line_limit'] or 3 }}">
+					<span>Primary button</span>
+					@if ( isset($params["buttonArrowImage"]) && !empty($params["buttonArrowImage"]) )
+						{!!
+							Html::image(
+							$params["buttonArrowImage"],
+							'border-left-button',
+							array(
+								'title' => 'arrow',
+								'border' => '0',
+								'width' => '9'
+							))
+						!!}
+					@endif
 				</div>
 			</div>
 		</div>

@@ -11,6 +11,8 @@
     "tinymce": "~4.2.1",
     "jquery-simplecolorpicker": "~0.3.0",
     "bootstrap-select": "1.7.5",
+    "noty": "^2.3.8",
+    "underscore": "^1.8.3",
     "vue": "^2.0.5"
   },
   "directory": "public/js/vendor",

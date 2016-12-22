@@ -1,18 +1,18 @@
 .pagination{
 	margin: 20px 0;
 	text-align: center;
+	display: none;
 
 	a{
 		background: @pagination-bg;
-		border: solid 1px @pagination-border;
-		color: @pagination-color;
-		cursor: pointer;
-		display: none;
+		text-decoration: none;
 		font-size: 12px;
 		line-height: 12px;
-		margin: 0 2px;
+		color: @pagination-color;
 		padding: 3px 5px;
-		text-decoration: none;
+		margin: 0 2px;
+		display: none;
+		border: solid 1px @pagination-border;
 		.border-radius( 3px );
 		.transition(background-color .3s linear);
 
@@ -27,10 +27,6 @@
 			color: @pagination-active-color;
 			background: @pagination-active-bg;
 			border: solid 1px @pagination-active-border;
-		}
-
-		&.sliding {
-			cursor: default;
 		}
 
 		&.available{

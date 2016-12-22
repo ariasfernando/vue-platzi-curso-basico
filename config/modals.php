@@ -152,7 +152,8 @@ $default = [
 
     /* -- Primary Button: default -- */
     'default_button' => [
-        'title' => "Button editor"
+        'title' => "Button editor",
+        'line_limit' => 2
     ],
 
     'image_plus_text' => [
@@ -257,7 +258,109 @@ $default = [
         "labels" => [
             "file_upload" => "Allowed file types: png, jpg and gif."
         ]
-     ]
+    ],
+    "mie_v2_overlays" => [
+        "title" => "Image with overlays",
+        "app_name" => "base",
+        "view" => "single_image_editor",
+        "config_modal_key" => "image_modal_single_crop",
+        "enabled_options" => "destination_url alt_text image_upload image_crop",
+        "enabled_plugins" => "overlay",
+        "image_size" => [
+            "height" => 400,
+            "width" => 660
+        ],
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
+        ],
+        "overlays" => [
+            [
+                "type" => "image",
+                "width" => "180",
+                "id" => "stensul-logo",
+                "class" => "stensul-logo",
+                "control_id" => "image-overlay",
+                "control_label" => "Display logo",
+                "path" => "/images/stensul-logo-black.png",
+                "save_as" => "logo_overlay",
+                "reposition" => true,
+            ],[
+                "type" => "text",
+                "save_as" => "text0",
+                "id" => "overlay-text",
+                "default" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet.",
+                "class" => "stensul-text",
+                "control_id" => "text-overlay",
+                "control_label" => "Display text",
+                "reposition" => true
+            ]
+        ]
+    ],
+    "mie_v2_richtext" => [
+        "title" => "Image with rich text overlay",
+        "app_name" => "base",
+        "view" => "single_image_editor",
+        "config_modal_key" => "image_modal_single_crop",
+        "enabled_options" => "destination_url alt_text image_upload image_crop",
+        "enabled_plugins" => "overlay",
+        "image_size" => [
+            "height" => 400,
+            "width" => 660
+        ],
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
+        ],
+        "overlays" => [
+            [
+                "type" => "image",
+                "width" => "180",
+                "id" => "stensul-logo",
+                "class" => "stensul-logo",
+                "path" => "/images/stensul-logo-black.png",
+                "control_id" => "image-overlay",
+                "control_label" => "Display logo",
+                "save_as" => "logo_overlay"
+            ],[
+                "type" => "rich_text",
+                "save_as" => "text1",
+                "control_id" => "text-overlay",
+                "control_label" => "Display text",
+                "id" => "overlay-rich-text",
+                "default" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet.",
+                "class" => "stensul-rich-text",
+                "reposition" => true,
+                "options" => [
+                    'formats' => [
+                        'underline' => [
+                            'inline' => 'u',
+                            'exact' => true
+                        ]
+                    ],
+                    'fixed_toolbar_container' => '.rich-text-container .rich-text-toolbox',
+                    'toolbar' => 'bold italic underline forecolor',
+                    'plugins' => 'paste advlist autolink lists textcolor',
+                    'forced_root_block' => false,
+                    'inline' => true,
+                    'target_list' => false,
+                    'link_validate_url' => true,
+                    'link_title' => false,
+                    'link_text_to_display' => false,
+                    'paste_as_text' => true,
+                    'menubar' => false,
+                    'relative_urls' => false,
+                    'remove_script_host' => false,
+                    'textcolor_rows' => 1,
+                    'textcolor_map' => [
+                        'FFFFFF', 'White',
+                        '333333', 'Dark gray',
+                        '595A5D', 'Gray',
+                        'EC2127', 'Red',
+                        'ECEDEE', 'lightGray'
+                    ]
+                ]
+            ]
+        ]
+    ]
 ];
 
 return include('recursive.php');

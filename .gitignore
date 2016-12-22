@@ -21,3 +21,4 @@ npm-debug.log
 .idea
 .gitattributes
 .vscode
+composer.phar

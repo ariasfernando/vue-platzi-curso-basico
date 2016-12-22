@@ -95,7 +95,8 @@
                                                                         style="color:{{ $buttonData['font_color'] or $module_params['button']['font_colors']['default'] }};"
                                                                         contenteditable="true"
                                                                         truncate="50"
-                                                                        class="st-save-only-text st-content-editable-single-line">{{ $buttonData['text'] or "CTA Button" }}</span>
+                                                                        data-line-limit="2"
+                                                                        class="st-save-only-text">{{ $buttonData['text'] or "CTA Button" }}</span>
                                                             </a>
                                                             <!--[if mso]>&nbsp;<![endif]-->
                                                     </td>

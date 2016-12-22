@@ -515,7 +515,7 @@ Application.utils = {
 	changeBuildingMode: function(selected) {
         	
     	var $canvas = Application.utils.getCanvas();
-		var arrayMqClass = ['show-mobile', 'show-img-device','hidden-mobile','element-block-center','mobile-margin','full-width', 'center-on-narrow', 'stack-column'];
+		var arrayMqClass = ['display-mobile', 'show-img-device','hidden-device','element-block-center','mobile-margin','full-width'];	
 
 		$canvas.trigger('changeBuildingMode', [ selected ] );
         
@@ -542,5 +542,55 @@ Application.utils = {
 			return true;
 		}
 		return false;
+	},
+
+	notifications: function() {
+
+	    function create(params) {
+
+			var defaultParams = {
+				theme: 'stensul',
+				layout: 'topRight',
+				text: '',
+				animation: {
+					open: { height: 'toggle' },
+					close: { height: 'toggle' },
+					easing: 'swing',
+					speed: 500
+				},
+				onShow: function() {},
+				afterShow: function() {},
+				onClose: function() {},
+				afterClose: function() {},
+				onCloseClick: function() {}
+			};
+
+            var params = $.extend(defaultParams, params);
+
+            return noty(params);
+	    }
+
+        function get(id) {
+            $.noty.get(id);
+        }
+
+		function show(id) {
+			$.noty.get(id);
+		}
+
+		function close(id) {
+			$.noty.close(id);
+		}
+
+		function closeAll () {
+			$.noty.closeAll();
+		}
+
+		return {
+		    create: create,
+			show: show,
+			close: close,
+			closeAll: closeAll
+		};
 	}
-}
+};

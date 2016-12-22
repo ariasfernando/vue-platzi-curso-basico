@@ -59,6 +59,7 @@ class CampaignManager
             $campaign->processed = 0;
             $campaign->user_id = new ObjectID(Auth::id());
             $campaign->user_email = Auth::user()->email;
+            $campaign->campaign_preheader = (isset($inputs['campaign_preheader'])) ? $inputs['campaign_preheader'] : '';
 
             if (isset($inputs['body_html'])) {
                 $campaign->body_html = $inputs['body_html'];

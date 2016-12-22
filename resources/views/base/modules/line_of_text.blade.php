@@ -11,16 +11,13 @@
 	<td class="st-add-icon-config">
 		<table height="16px" bgcolor="#ffffff" width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
 			<tr>
-				<td valign="middle" align="center" height="16px" style="line-height:16px;"> 
-					@if ( !empty($module_params['data']['text0']) )
-						{!! $module_params['data']['text0'] !!}
-					@else
-						<p
-							class="st-inline-block"
-							contenteditable="true"
-							style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size:16px;line-height:18px;text-decoration:none;text-transform:uppercase;letter-spacing:1px;font-weight:bold;text-align:center;margin-top:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;color:<?php echo $module_params["plugins"]["colorPicker"]["defaultValue"]; ?>;"
-						>LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT.</p>
-					@endif
+				<td valign="middle" align="center" height="16px" style="line-height:18px;">
+					<p class="st-inline-block st-save-only-text"
+					   contenteditable="true"
+					   data-line-limit="2"
+					   style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size:16px;line-height:18px;text-decoration:none;text-transform:uppercase;letter-spacing:1px;font-weight:bold;text-align:center;margin-top:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;color:<?php echo $module_params["plugins"]["colorPicker"]["defaultValue"]; ?>;">
+					     {!! $module_params['data']['text0'] or "LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT." !!}
+					</p>
 				</td>
 			</tr>
 		</table>

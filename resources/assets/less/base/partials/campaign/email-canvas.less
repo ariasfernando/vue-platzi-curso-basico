@@ -194,7 +194,12 @@
 		}
 
 		*:focus[contenteditable] {
-			outline: dotted 1px;
+			outline: #C8C8C8 dotted 1px;
+		}
+
+		*[contenteditable].error {
+			outline: #FF0000 dotted 1px !important;
+			background: #f2dede;
 		}
 
 		/* TinyMCE Editor to text */
@@ -210,9 +215,13 @@
 
 			.text-overlay-toolbox {
 				.clearfix();
-				padding: 3px 8px 10px 8px;
-				background-color: rgba(170, 163, 185, 0.55);
-				border-radius: 3px;
+
+				.mce-tinymce-inline{
+					border-radius: 3px;
+					padding: 3px 8px;
+					background-color: rgba(170, 163, 185, 0.55);
+				}
+
 				top: -39px;
 				.toolbox {
 					position: relative;
