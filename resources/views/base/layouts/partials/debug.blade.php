@@ -9,7 +9,7 @@
                 'environment': '{{ app('env') }}',
                 'version': '{{ config('app.version') }}'
             }, {
-                'debug': {{ config('app.debug') }}
+                'debug': {{ config('app.debug') ? 'true' : 'false' }}
             });
         })(window);
     </script>
