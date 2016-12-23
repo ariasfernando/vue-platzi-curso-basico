@@ -137,14 +137,20 @@ class Campaign extends Eloquent
      *
      * @param string $property
      *
-     * @return array
+     * @return mixed Array or scalar value.
      */
     public function getLibraryConfig($property = false)
     {
-        $response = \Config::get("view.libraries.".$this->library, []);
+        $result = Library::where('name', '=', $this->library)->get();
+
+        if (!empty($result[0]['config'])) {
+            $response = $result[0]['config'];
+        } else {
+            $response = \Config::get("view.libraries." . $this->library, []);
+        }
 
         if ($property) {
-            $response = (isset($response[$property]))? $response[$property] : [];
+            $response = isset($response[$property]) ? $response[$property] : '';
         }
 
         return $response;
