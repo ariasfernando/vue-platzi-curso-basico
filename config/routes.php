@@ -20,7 +20,6 @@ $default = [
             '/campaign/html'                         => 'CampaignController@getHtml',
             '/campaign/public-path/{campaign_id?}'   => 'CampaignController@getPublicPath',
             '/template/module'                       => 'TemplateController@getModule',
-            '/template/modal'                        => 'TemplateController@getModal',
             '/template/library'                      => 'TemplateController@getLibrary',
             '/template/campaign-edited-rows'         => 'TemplateController@getCampaignEditedRows',
             '/template/campaign-processed-rows'      => 'TemplateController@getCampaignProcessedRows',
@@ -43,6 +42,7 @@ $default = [
             '/campaign/gif-layer'          => 'CampaignController@postGifLayer',
             '/campaign/email-sent-history' => 'CampaignController@postEmailSentHistory',
             '/template/move-library'       => 'TemplateController@postMoveLibrary',
+            '/template/modal'              => 'TemplateController@postModal',
 
         ],
 
