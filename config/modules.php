@@ -411,7 +411,6 @@ foreach ($menu as $library => $modules) {
             . '/modules/' . $module_config['module_id'] . '/config.json')) {
             $default[$module_config['module_id']] = json_decode($config, true);
         }
-
     }
 }
 

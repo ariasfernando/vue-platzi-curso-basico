@@ -258,8 +258,8 @@ $default = [
         "labels" => [
             "file_upload" => "Allowed file types: png, jpg and gif."
         ]
-    ],
-    "mie_v2_overlays" => [
+     ],
+     "mie_v2_overlays" => [
         "title" => "Image with overlays",
         "app_name" => "base",
         "view" => "single_image_editor",
@@ -295,8 +295,8 @@ $default = [
                 "reposition" => true
             ]
         ]
-    ],
-    "mie_v2_richtext" => [
+     ],
+     "mie_v2_richtext" => [
         "title" => "Image with rich text overlay",
         "app_name" => "base",
         "view" => "single_image_editor",
@@ -360,7 +360,7 @@ $default = [
                 ]
             ]
         ]
-    ]
+     ]
 ];
 
 return include('recursive.php');

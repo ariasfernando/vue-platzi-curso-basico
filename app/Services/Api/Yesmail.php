@@ -55,7 +55,7 @@ class Yesmail implements ApiConnector
                     ]
                 ]);
                 if (isset($resp['id'])) {
-                    Activity::log('Campaign uploaded to Yesmail',[
+                    Activity::log('Campaign uploaded to Yesmail', [
                         'properties' => [
                             'campaign_id' => new \MongoId($campaign_id),
                             'filename' => $filename,

@@ -38,7 +38,7 @@ function deploy_composer {
 
 	if [ ! -f ./composer.phar ]; then
 		echo "downloading composer..."
-		curl -o composer.phar "https://s3.amazonaws.com/fbridge-ops/composer/composer.phar" 2>/dev/null
+		curl -o composer.phar "https://s3.amazonaws.com/stensul-devops/composer/composer.phar" 2>/dev/null
 	fi
 
 	echo "updating composer..."
