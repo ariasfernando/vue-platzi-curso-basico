@@ -1,5 +1,6 @@
 <?php
 namespace Stensul\Providers\Cdn;
+
 use Akamai\Open\EdgeGrid\Client;
 
 class AkamaiAdapter implements CdnInterface
@@ -33,7 +34,7 @@ class AkamaiAdapter implements CdnInterface
                 ['json' => $params]
             );
             return true;
-        } catch(\GuzzleHttp\Exception\GuzzleException $e) {
+        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
             \Log::info('cannot flush cache, response: ' . (is_null($e->getResponse()) ? 'null' : $e->getResponse()->getBody()));
         }
     }

@@ -74,7 +74,6 @@ class CampaignController extends Controller
                     });
 
                     $params['tag_list'] = $saved_tags;
-
                 } else {
                     return redirect(env('APP_BASE_URL', '/'))->with('campaign_not_found', $campaign_id);
                 }

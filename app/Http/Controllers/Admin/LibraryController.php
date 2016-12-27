@@ -172,7 +172,6 @@ class LibraryController extends Controller
         }
 
         return $response_message;
-
     }
 
     /**
