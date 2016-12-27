@@ -261,7 +261,7 @@ gulp.task('elixir-version', function () {
         mix.version([
             'css/admin.css',
             'css/base.css',
-            'js/*'
+            'js'
         ]);
     });
 });
