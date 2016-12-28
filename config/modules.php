@@ -8,6 +8,7 @@ $menu = require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'menu.php';
 
 $default = [
     'image_button' => [
+        'title' => 'Primary Button',
         'module_id' => 'image_button',
         'file_parent' => 'base',
         'placeholder_image' => '/_common/images/{locale}/primary-button-placeholder.png'
@@ -21,43 +22,62 @@ $default = [
         'placeholder_image' => '/images/default/image-placeholder-320x240.png'
     ],
     'two_column_media_shared_height' => [
+        'title' => 'Two Columns Shared Height',
         'module_id' => 'two_column_media_shared_height',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-320x240.png',
         'validate_image_height' => true
     ],
     'hero_image_v2_no_crop' => [
-        'title' => 'Hero Image No Crop',
+        'title' => 'Hero Image - no crop',
         'module_id' => 'hero_image_v2_no_crop',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
     'hero_image_v2_single_crop' => [
+        'title' => 'Hero Image - single crop',
         'module_id' => 'hero_image_v2_single_crop',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
     'hero_image_v2_height_proportional' => [
+        'title' => 'Adjustable Width',
         'module_id' => 'hero_image_v2_height_proportional',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
     'mie_v2_default_adjustable_height' => [
+        'title' => 'Adjustable Height',
         'module_id' => 'mie_v2_default_adjustable_height',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
     'hero_image_mie_v2_library' => [
+        'title' => 'Image Library',
         'module_id' => 'hero_image_mie_v2_library',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
+    'hero_image_mie_v2_overlays' => [
+        'title' => 'Image + Overlays',
+        'app_name' => 'base',
+        'module_id' => 'hero_image_mie_v2_overlays',
+        'level' => 'single'
+    ],
+    'hero_image_mie_v2_rich_text_overlay' => [
+        'title' => 'Image + Rich text',
+        'app_name' => 'base',
+        'module_id' => 'hero_image_mie_v2_rich_text_overlay',
+        'level' => 'single'
+    ],
     'three_column_media' => [
+        'title' => '3 Column Content Blocks',
         'module_id' => 'three_column_media',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-210x240.png'
     ],
     'line_of_text' => [
+        'title' => 'Line of Text',
         'module_id' => 'line_of_text',
         'file_parent' => 'base',
         'initialized' => false,
@@ -80,6 +100,7 @@ $default = [
         ]
     ],
     'two_column_media_with_ad' => [
+        'title' => 'Content Block + Ad Unit',
         'module_id' => 'two_column_media_with_ad',
         'file_parent' => 'base',
         'placeholder_image' => [
@@ -99,6 +120,7 @@ $default = [
     ],
 
     'thin_gray_line_separator' => [
+        'title' => 'Thin Gray Line Separator',
         'file_parent' => 'base',
         'module_id' => 'thin_gray_line_separator'
     ],
@@ -186,6 +208,7 @@ $default = [
     ],
 
     'title_text' => [
+        'title' => 'Title Text',
         'module_id' => 'title_text',
         'file_parent' => 'base',
         'initialized' => false,
@@ -220,7 +243,7 @@ $default = [
     ],
 
     'custom_table' => [
-        'title' => 'Custom Table',
+        'title' => 'Table Module',
         'module_id' => 'custom_table',
         'file_parent' => 'base',
         'gutter_space' => 20,
@@ -247,6 +270,7 @@ $default = [
     ],
 
     'section_header' => [
+        'title' => 'Section Header',
         'module_id' => 'section_header',
         'file_parent' => 'base',
         'background_colors' => [
@@ -260,6 +284,7 @@ $default = [
     ],
 
     'image_plus_text' => [
+        'title' => 'Image + Text',
         'module_id' => 'image_plus_text',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-318x153.png',
@@ -272,12 +297,14 @@ $default = [
     ],
 
     'auto_image' => [
+        'title' => 'Auto Image',
         'module_id' => 'auto_image',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x98.png'
     ],
 
     'image_plus_text_flipped' => [
+        'title' => 'Image + Text',
         'module_id' => 'image_plus_text_flipped',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-318x153.png',
@@ -290,6 +317,7 @@ $default = [
     ],
 
     'header_text_with_body' => [
+        'title' => 'Header Text with Body',
         'module_id' => 'header_text_with_body',
         'file_parent' => 'base',
         'background_colors' => [
@@ -302,6 +330,7 @@ $default = [
     ],
 
     'colored_bar' => [
+        'title' => 'Colored Bar',
         'module_id' => 'colored_bar',
         'file_parent' => 'base',
         'background_colors' => [
@@ -320,6 +349,7 @@ $default = [
         ]
     ],
     'two_columns' => [
+        'title' => 'Two Columns',
         'module_id' => 'two_columns',
         'file_parent' => 'base',
         'placeholder_image_button' => '/_common/images/{locale}/primary-button-placeholder.png',
@@ -351,6 +381,7 @@ $default = [
         ]
     ],
     'text_with_image' => [
+        'title' => 'Text + CTA Button + Image',
         'module_id' => 'text_with_image',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-175x131.png',
@@ -397,6 +428,13 @@ $default = [
                 'remove_script_host' => false
             ]
         ]
+    ],
+    'double_text_editor' => [
+        'title' => 'Double tinyMCE Editor',
+        'action' => 'add',
+        'app_name' => 'base',
+        'module_id' => 'double_text_editor',
+        'level' => 'single'
     ]
 ];
 
