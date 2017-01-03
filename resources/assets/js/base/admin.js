@@ -15,6 +15,7 @@
 	var permission = new permissionController();
 	var log = new logController();
 	var library = new libraryController();
+	var module = new moduleController();
 
 	/*
 	 * Docuent Ready
@@ -25,6 +26,7 @@
 		permission.init();
 		log.init();
 		library.init();
+		module.init();
 	});
 
 })(jQuery);

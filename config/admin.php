@@ -40,6 +40,11 @@ return [
             "controller" => 'Admin\LibraryController',
             "path" => "library"
         ],
+        "modules" => [
+            "title" => "Modules",
+            "controller" => 'Admin\ModuleController',
+            "path" => "module"
+        ],
         "log" => [
             "title" => "Logs",
             "controller" => 'Admin\LogController',
