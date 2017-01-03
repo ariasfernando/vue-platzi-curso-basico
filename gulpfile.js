@@ -153,7 +153,7 @@ gulp.task('elixir-scripts', function () {
                     'js/plugins/**/*.js',
                     // -- Common scripts --
                     'js/library/helpers/*.js',
-                    'js/library/custom-plugins/html2canvas-0.5.0-modified.js', // include always after application-utils.js
+                    'js/library/custom-plugins/html2canvas-0.5.0-modified.js', // include always before application-utils.js
                     'js/library/application-globals.js',
                     'js/library/application-utils.js',
                     'js/library/application-init.js',
