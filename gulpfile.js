@@ -201,6 +201,7 @@ gulp.task('elixir-scripts', function () {
             // === Admin page ===
             .scripts(
                 [
+                    'js/library/custom-plugins/st-pagination-bar.jquery.js',
                     'js/library/admin/*.js',
                     jsAppFilePath('admin.js')
                 ],
