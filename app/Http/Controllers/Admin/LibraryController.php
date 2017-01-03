@@ -118,6 +118,18 @@ class LibraryController extends Controller
         $modules = array_keys(\StensulModule::getModuleList());
         $modules = array_combine($modules, $modules);
 
+        $library_modules = [];
+        if (count($library_data['modules'])) {
+            foreach ($library_data['modules'] as $title => $module) {
+                if (is_array($module)) { // Grouped modules
+                    $library_modules[$title] = $module;
+                } else { // Ungrouped modules
+                    $library_modules['default'][] = $module;
+                }
+            }
+        }
+
+        $library_data['modules'] = $library_modules;
         $params = [
             "title" => "Edit Library",
             "modules" => $modules,
@@ -136,8 +148,25 @@ class LibraryController extends Controller
     {
         $library = Library::findOrFail($request->input("libraryId"));
         $library->description = $request->input("description");
-        $library->modules = !is_null($request->input("modules")) ? $request->input("modules") : [];
+        $library->modules = $modules = [];
         $library->config = !empty($request->input("config")) ? json_decode($request->input("config")) : '';
+
+        foreach ($request->input() as $key => $value) {
+            if (substr($key, 0, 8) == 'modules-') {
+                if ($key === 'modules-default') {
+                    foreach ($value as $module) {
+                        $modules[] = $module;
+                    }
+                } else {
+                    $modules[substr($key, 8)] = $value;
+                }
+            } elseif (substr($key, 0, 12) == 'new-modules-') {
+                $index = substr($key, 12);
+                $modules[$request->input('group-title-' . $index)] = $value;
+            }
+        }
+
+        $library->modules = $modules;
 
         if (is_null($library->config)) {
             return array("message" => "ERROR_CONFIG");
@@ -161,8 +190,23 @@ class LibraryController extends Controller
         $params = [
             "name" => $request->input("name"),
             "description" => $request->input("description"),
-            "modules" => $request->input("modules") ?: []
+            "modules" => []
         ];
+
+        foreach ($request->input() as $key => $value) {
+            if (substr($key, 0, 8) == 'modules-') {
+                if ($key === 'modules-default') {
+                    foreach ($value as $module) {
+                        $params['modules'][] = $module;
+                    }
+                } else {
+                    $params['modules'][substr($key, 8)] = $value;
+                }
+            } elseif (substr($key, 0, 12) == 'new-modules-') {
+                $index = substr($key, 12);
+                $params['modules'][$request->input('group-title-' . $index)] = $value;
+            }
+        }
 
         if (Library::where('name', '=', $params["name"])->exists()) {
             $response_message = array("message"=> "ERROR_EXISTS");

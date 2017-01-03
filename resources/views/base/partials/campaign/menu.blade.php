@@ -1,11 +1,12 @@
 <!-- generate  -->
 @foreach ($menu_list as $item_name => $menu_item)
-	@if ($item_name != "override")
+
+	@if ($item_name !== "override")
 		@if (isset($menu_item['sub_menu']))
 			<div class="expand">
 				<h2>{{ $menu_item['title'] }} <i class="glyphicon"></i></h2>
 				<div class="{{ $menu_item['level'] }}">
-					@include('base.partials.campaign.menu', array("menu_list"=>$menu_item['sub_menu']) )
+					@include('base.partials.campaign.menu', array("menu_list" => $menu_item['sub_menu']) )
 				</div>
 			</div>
 		@else

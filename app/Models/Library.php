@@ -29,13 +29,34 @@ class Library extends Eloquent
      */
     public function getModules()
     {
-        
+
         $modules = ModuleServiceProvider::getModuleList();
         $library_modules = [];
 
-        foreach ($this->modules as $module) {
-            if (isset($modules[$module])) {
-                $library_modules[$module] = $modules[$module];
+        foreach ($this->modules as $group => $mods) {
+            // Modules are grouped.
+            if (is_array($modules) && is_array($mods)) {
+                $submenu_items = [];
+                foreach ($mods as $mod) {
+                    if (isset($modules[$mod])) {
+                        if ($group !== 'modules-default') {
+                            $submenu_items[] = $modules[$mod];
+                        } else {
+                            $library_modules[] = $modules[$mod];
+                        }
+                    }
+                }
+
+                $library_modules[] = [
+                    'title' => preg_replace(["/^modules-/", "/_/"], ['', ' '], $group),
+                    'sub_menu' => $submenu_items,
+                    'level' => 'level-1'
+                ];
+
+            } else { // Ungrouped modules.
+                if (isset($modules[$mods])) {
+                    $library_modules[] = $modules[$mods];
+                }
             }
         }
         return $library_modules;

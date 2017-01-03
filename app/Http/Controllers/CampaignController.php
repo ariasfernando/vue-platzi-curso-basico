@@ -59,7 +59,7 @@ class CampaignController extends Controller
                         ? $params['campaign_data']['library']
                         : "default";
 
-                    $params['menu_list'] = \Config::get('menu.'.$library);
+                    $params['menu_list'] = \Config::get('menu.' . $library);
 
                     $menu = Library::where('name', $library)->get();
                     foreach ($menu as $key => $value) {

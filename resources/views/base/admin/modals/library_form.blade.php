@@ -11,7 +11,8 @@
 			{!! Form::text('name', isset($params['library']['name']) ? $params['library']['name'] : '', array (
 				'class' => 'library_name',
 				'id' => 'library_name',
-				'placeholder' => 'Enter name here.'
+				'placeholder' => 'Enter name here.',
+				'data-validation' => '{"required":"true"}'
 			)) !!}
 		</div>
 
@@ -27,17 +28,66 @@
 
 		<!-- Select modules -->
 		<div class="modal-mpf-row selector">
-			{!! Form::label('modules', 'Modules') !!}
-			{!! Form::select('modules', $params['modules'], isset($params['library']['modules']) ? $params['library']['modules'] : '',array (
-				'class' => 'form-control selectpicker',
-				'id' => 'modules',
-				'name' => 'modules[]',
-				'multiple' => 'true',
-				'title' => 'Choose one or more modules ...',
-				'data-validation' => '{"required":"true"}'
-			)); !!}
-		</div>
+			<div id="modules-container">
+				<?php
+				if (!empty($params['library']['modules'])) {
+					foreach ($params['library']['modules'] as $group => $modules) {
 
+						?>
+						<div id="modules-{{$group}}">
+						<?php
+
+						if ($group === 'default') {
+							?>
+							{!! Form::label('modules-' . $group, 'Ungrouped Modules') !!}
+							<?php
+						} else {
+							?>
+							{!! Form::label('modules-' . $group, 'Module Group: ' . $group) !!}
+							<?php
+						}
+						?>
+						<div id="group-container-$group">
+							{!! Form::select('modules-' . $group, $params['modules'], $modules, array (
+								'class' => 'form-control selectpicker',
+								'id' => 'modules-' . $group,
+								'name' => 'modules-' . $group . '[]',
+								'multiple' => 'true',
+								'title' => 'Choose one or more modules ...',
+								'data-validation' => '{"required":"true"}'
+							)); !!}
+							<?php
+							if ($group === 'default') {
+								?>
+								<br /><br />
+								<?php
+							} else {
+								?>
+								<span class="glyphicon glyphicon-remove group-remove" data-module-container="modules-{{$group}}"></span><hr />
+								<?php
+							}
+							?>
+						</div>
+					</div>
+					<?php
+					}
+				} else {
+					?>
+						{!! Form::label('modules-default', 'Ungrouped Modules') !!}
+						{!! Form::select('modules-default', $params['modules'], [], array (
+							'class' => 'form-control selectpicker',
+							'id' => 'modules-default',
+							'name' => 'modules-default[]',
+							'multiple' => 'true',
+							'title' => 'Choose one or more modules ...',
+							'data-validation' => '{"required":"true"}'
+						)); !!}<br /><hr />
+						<?php
+				}
+				?>
+			</div>
+			{!! Form::button('Add Group', array ( 'class' => 'btn btn-success pull-right btn-add-group')) !!}			
+		</div>
 		<!-- Input config -->
 		<div class="modal-mpf-row">
 			{!! Form::label('config', 'Config') !!}
@@ -45,7 +95,8 @@
 				? json_encode($params['library']['config'], JSON_PRETTY_PRINT) : '', array (
 				'class' => 'library_config',
 				'id' => 'library_config',
-				'placeholder' => 'Enter config here.'
+				'placeholder' => 'Enter config here.',
+				'data-validation' => '{"required":"true"}'
 			)) !!}
 		</div>
 

@@ -14,11 +14,14 @@ var libraryController = function( customOptions ){
 			dataList: "table.data-list",
 			deleteItem: ".actions .delete",
 			pagination: ".pagination",
-			editItem:  ".actions .edit"
+			editItem:  ".actions .edit",
+			addGroupBtn: ".btn-add-group",
+			removeGroupBtn: ".group-remove"
 		}
 	}, customOptions );
 
 	var spinner = new Application.utils.spinner();
+	var groupIndex = 0;
 
 	var _this = this;
 
@@ -201,6 +204,8 @@ var libraryController = function( customOptions ){
 							_this.onSaveLibrary(this.form, "create");
 							return false;
 						});
+
+					_this.attachModuleEvents();
 				}
 			}
 		});
@@ -238,6 +243,8 @@ var libraryController = function( customOptions ){
 							return false;
 					});
 
+					_this.attachModuleEvents();
+
 					if(name_selector.val()){
 						name_selector.addClass("disabled");
 						name_selector.attr("disabled","disabled");
@@ -245,6 +252,59 @@ var libraryController = function( customOptions ){
 				}
 			}
 		});
+	};
+
+	this.attachModuleEvents = function() {
+
+		$( options.selectors.modalSelector )
+			.on("click", options.selectors.addGroupBtn, function(e){
+				e.preventDefault();
+				_this.addModuleGroup(this.form);
+		});
+
+		$( options.selectors.modalSelector )
+			.on("click", options.selectors.removeGroupBtn, function(e){
+				e.preventDefault();
+				_this.removeModuleGroup(this);
+		});
+	};
+
+	this.addModuleGroup = function(element) {
+
+		var container = $('<div id="group-container-'+ groupIndex +'"></div>');
+		var titleElement = '<input placeholder="Enter group title." name="group-title-'+ groupIndex +'" type="text" '
+			+ 'id="group-title-'+ groupIndex +'" value="" data-validation="{&quot;required&quot;:&quot;true&quot;}">';
+
+		var selectElement = $('<select id="new-modules-'+ groupIndex +'" name="new-modules-'+ groupIndex +'[]" '
+			+ 'class="form-control selectpicker" multiple="true" title="Choose one or more modules ..." '
+			+ 'data-validation="{&quot;required&quot;:&quot;true&quot;}"></select>');
+
+		var removeElement = '<span class="glyphicon glyphicon-remove group-remove" '
+			+ 'data-module-container="group-container-'+ groupIndex +'"></span><hr />';
+
+		var options = $('#modules-default > option').clone();
+
+		for (var n = 0; n < options.length; n++) {
+			$(options[n]).attr('selected', false);
+		}
+
+		selectElement.append(options);
+
+		container.append(titleElement)
+			.append('<br /><br />')
+			.append(selectElement)
+			.append(removeElement);
+
+		$('#modules-container').append(container);
+
+		$('.selectpicker').selectpicker();
+		groupIndex++;
+	};
+
+	this.removeModuleGroup = function(element) {
+
+		var container = $('#' + $(element).data('module-container'));
+		container.remove();
 	};
 
 	this.init = function(){
