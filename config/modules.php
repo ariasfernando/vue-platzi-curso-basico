@@ -8,6 +8,7 @@ $menu = require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'menu.php';
 
 $default = [
     'image_button' => [
+        'title' => 'Image Button',
         'module_id' => 'image_button',
         'file_parent' => 'base',
         'placeholder_image' => '/_common/images/{locale}/primary-button-placeholder.png'
@@ -21,6 +22,7 @@ $default = [
         'placeholder_image' => '/images/default/image-placeholder-320x240.png'
     ],
     'two_column_media_shared_height' => [
+        'title' => 'Two Columns Shared Height',
         'module_id' => 'two_column_media_shared_height',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-320x240.png',
@@ -33,31 +35,37 @@ $default = [
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
     'hero_image_v2_single_crop' => [
+        'title' => 'Hero Image V2 Single Crop',
         'module_id' => 'hero_image_v2_single_crop',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
     'hero_image_v2_height_proportional' => [
+        'title' => 'Hero Image V2 Proportional',
         'module_id' => 'hero_image_v2_height_proportional',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
     'mie_v2_default_adjustable_height' => [
+        'title' => 'mie_v2_default_adjustable_height',
         'module_id' => 'mie_v2_default_adjustable_height',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
     'hero_image_mie_v2_library' => [
+        'title' => 'hero_image_mie_v2_library',
         'module_id' => 'hero_image_mie_v2_library',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x400.png'
     ],
     'three_column_media' => [
+        'title' => 'Three Column Media',
         'module_id' => 'three_column_media',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-210x240.png'
     ],
     'line_of_text' => [
+        'title' => 'Line Of Text',
         'module_id' => 'line_of_text',
         'file_parent' => 'base',
         'initialized' => false,
@@ -80,6 +88,7 @@ $default = [
         ]
     ],
     'two_column_media_with_ad' => [
+        'title' => 'two_column_media_with_ad',
         'module_id' => 'two_column_media_with_ad',
         'file_parent' => 'base',
         'placeholder_image' => [
@@ -99,6 +108,7 @@ $default = [
     ],
 
     'thin_gray_line_separator' => [
+        'title' => 'Thin Gray Line Separator',
         'file_parent' => 'base',
         'module_id' => 'thin_gray_line_separator'
     ],
@@ -186,6 +196,7 @@ $default = [
     ],
 
     'title_text' => [
+        'title' => 'Title Text',
         'module_id' => 'title_text',
         'file_parent' => 'base',
         'initialized' => false,
@@ -247,6 +258,7 @@ $default = [
     ],
 
     'section_header' => [
+        'title' => 'Section Header',
         'module_id' => 'section_header',
         'file_parent' => 'base',
         'background_colors' => [
@@ -260,6 +272,7 @@ $default = [
     ],
 
     'image_plus_text' => [
+        'title' => 'Image Plus Text',
         'module_id' => 'image_plus_text',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-318x153.png',
@@ -272,12 +285,14 @@ $default = [
     ],
 
     'auto_image' => [
+        'title' => 'Auto Image',
         'module_id' => 'auto_image',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-660x98.png'
     ],
 
     'image_plus_text_flipped' => [
+        'title' => 'image_plus_text_flipped',
         'module_id' => 'image_plus_text_flipped',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-318x153.png',
@@ -290,6 +305,7 @@ $default = [
     ],
 
     'header_text_with_body' => [
+        'title' => 'header_text_with_body',
         'module_id' => 'header_text_with_body',
         'file_parent' => 'base',
         'background_colors' => [
@@ -302,6 +318,7 @@ $default = [
     ],
 
     'colored_bar' => [
+        'title' => 'Colored Bar',
         'module_id' => 'colored_bar',
         'file_parent' => 'base',
         'background_colors' => [
@@ -320,6 +337,7 @@ $default = [
         ]
     ],
     'two_columns' => [
+        'title' => 'Two Columns',
         'module_id' => 'two_columns',
         'file_parent' => 'base',
         'placeholder_image_button' => '/_common/images/{locale}/primary-button-placeholder.png',
@@ -351,6 +369,7 @@ $default = [
         ]
     ],
     'text_with_image' => [
+        'title' => 'Text With Image',
         'module_id' => 'text_with_image',
         'file_parent' => 'base',
         'placeholder_image' => '/images/default/image-placeholder-175x131.png',
