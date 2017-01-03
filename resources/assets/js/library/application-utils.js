@@ -217,8 +217,8 @@ Application.utils = {
 					break;
 				case "radio":
 					break;
-				default:
-					result = ( $field.val() != "");
+				default: // "select" elements are also caught here.
+					result = $field.val() ? true : false;
 			}
 
 			return result;
@@ -301,11 +301,23 @@ Application.utils = {
 		initField: function( field ){
 			if( $(field).hasClass("error") ){
 				$(field).removeClass("error");
-				$(field).next("label.error").remove();
+
+				if ($(field).hasClass('selectpicker')) {
+					$(field).next().next("label.error").remove();
+				} else {
+					$(field).next("label.error").remove();
+				}
 			}
 		},
 		setError: function( field, message ){
-			$(field).addClass("error").after('<label class="error">'+message+'</label>');
+
+			var label = '<label class="error">' + message + '</label>';
+
+			if ($(field).hasClass('selectpicker')) {
+				$(field).addClass('error').next().after(label);
+			} else {
+				$(field).addClass('error').after(label);
+			}
 		},
 		validateField: function( field ){
 			var errors = false;
