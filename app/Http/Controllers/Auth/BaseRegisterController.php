@@ -98,7 +98,6 @@ class BaseRegisterController extends Controller
             $request->merge(array("password" => bcrypt($request->get("password"))));
             User::create($request->all());
             return \Redirect::to("auth/login")->with("message", "SUCCESS_REGISTERED");
-
         }
     }
 }

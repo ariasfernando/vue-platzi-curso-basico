@@ -1,10 +1,6 @@
 /* TinyMCE Editor */
 .mce-tinymce.mce-tinymce-inline{
-	top: 3px !important;
-	float: left;
 	border: none;
-	padding: 1px 0 0;
-	display: inline-block !important;
 
 	.mce-flow-layout-item.mce-last{
 		margin: 0;
@@ -22,32 +18,19 @@
 	.mce-caret{
 		border-top-color: #fff;
 	}
+}
 
+/* Color button: Remove transparent option */
+.mce-colorbutton-grid{
+	.mce-grid-cell.mce-colorbtn-trans{
+		display: none!important;
+	}
 }
 
 /* Text Overlay */
 .text-overlay{
 
-	&:hover,
-	&.hover{
-		.text-overlay-toolbox{
-			opacity: 1;
-		}
-	}
-
-	.text-editable{
-		&:hover,
-		&.hover{
-			.text-overlay-toolbox{
-				opacity: 1;
-			}
-		}
-	}
-
 	.text-overlay-toolbox{
-		opacity: 0;
-		-webkit-transition: opacity 1s linear; /* Safari */
-    	transition: opacity 1s linear;
 		position: absolute;
 		right: 7px;
 		top: -15px;
@@ -185,7 +168,6 @@
 		}
 	}
 }
-
 .mce-colorbtn-trans{
 	display: none;
 }

@@ -110,7 +110,7 @@ var imageLibrary = function( customOptions ){
 		spinner.show();
 
 		var ajaxRequest = Application.utils.doAjax("/template/modal",{
-			type: "GET",
+			type: "POST",
 			dataType: "html",
 			data: {
 				title: options.title,

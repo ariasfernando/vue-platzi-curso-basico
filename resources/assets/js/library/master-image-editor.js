@@ -1614,6 +1614,7 @@ var masterImageEditor = function( customOptions ){
             },
             ajax: {
                 settings: {
+                    type: "POST",
                     cache: true,
                     dataType: "html",
                     async: true,

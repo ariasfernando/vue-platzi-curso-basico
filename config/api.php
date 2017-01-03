@@ -127,6 +127,21 @@ $default = [
         'folder_path' => ''
     ],
 
+    'yesmail' => [
+        'title' => 'Yesmail',
+        'class' => 'Yesmail',
+        'base_url' => 'https://api.yesmail.com/v2/',
+        'credentials' => [
+            'company' => env('YESMAIL_COMPANY', ''),
+            'user' => env('YESMAIL_USER', ''),
+            'api_key' => env('YESMAIL_API_KEY', '')
+        ],
+        'upload_email' => [
+            'type' => 'POST',
+            'url' => 'content-blocks'
+        ],
+    ],
+
 ];
 
 return include('recursive.php');

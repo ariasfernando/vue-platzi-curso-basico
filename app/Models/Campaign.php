@@ -36,7 +36,8 @@ class Campaign extends Eloquent
         'user_email',
         'email_sent_history',
         'tags',
-        'template'
+        'template',
+        'campaign_preheader'
     ];
 
     protected $appends = ['api', 'library_config'];
@@ -64,7 +65,8 @@ class Campaign extends Eloquent
         'user_email' => null,
         'email_sent_history' => [],
         'tags' => [],
-        'template' => false
+        'template' => false,
+        'campaign_preheader' => ''
     );
 
     /**
@@ -135,14 +137,20 @@ class Campaign extends Eloquent
      *
      * @param string $property
      *
-     * @return array
+     * @return mixed Array or scalar value.
      */
     public function getLibraryConfig($property = false)
     {
-        $response = \Config::get("view.libraries.".$this->library, []);
+        $result = Library::where('name', '=', $this->library)->get();
+
+        if (!empty($result[0]['config'])) {
+            $response = $result[0]['config'];
+        } else {
+            $response = \Config::get("view.libraries." . $this->library, []);
+        }
 
         if ($property) {
-            $response = (isset($response[$property]))? $response[$property] : [];
+            $response = isset($response[$property]) ? $response[$property] : '';
         }
 
         return $response;

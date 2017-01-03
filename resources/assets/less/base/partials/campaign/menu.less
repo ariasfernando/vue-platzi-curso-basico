@@ -9,10 +9,8 @@ aside{
 			border-radius: @section-border-radius;
 		}
 		// action type module
-		.expand>h2, .add{
-			cursor: pointer;
-		}
 		.expand, .add{
+			cursor: pointer;
 			border-radius: @section-border-radius;
 			background-color: @menu-container-section-background-color;
 			h2{
@@ -40,16 +38,20 @@ aside{
 				}
 			}
 		}
-        // icon expand
-        .expand{
-            margin-bottom: 20px;
-            &>h2>i{
-                .glyphicon-triangle-bottom();
-            }
-            &>h2>i.icon-open-expan{
-                .glyphicon-triangle-top();
-            }
-        }
+		// icon expand
+		.expand{
+			margin-bottom: 20px;
+			&>h2>i{
+				.glyphicon-triangle-bottom();
+			}
+			&>h2>i.icon-open-expan{
+				.glyphicon-triangle-top();
+			}
+		}
+		// icon add
+		.add i{
+			.glyphicon-plus();
+		}
 	 
 	 	// show and hidden sections
 		.level-1{
@@ -85,19 +87,6 @@ aside{
 			input[type="text"]{
 				margin-top: 5px;
 			}
-		}
-	}
-
-	.configuration-mod{
-
-		.config-box-divider{
-			border-top: 1px solid #cccccc;
-			padding: 5px 0 0;
-			margin: 10px 0 0;
-		}
-
-		#tags-box{
-			padding-top: 10px;
 		}
 	}
 

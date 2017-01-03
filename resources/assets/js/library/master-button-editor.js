@@ -4,6 +4,8 @@
  */
 
 var masterButtonEditor = function( customOptions ){
+    var lineLimit = Application.helpers.lineLimit;
+
     var $modalContent = null;
     var moduleData = {};
 
@@ -42,7 +44,26 @@ var masterButtonEditor = function( customOptions ){
         }
 
         return data;
+    };
+
+    var validateLineLimit = function() {
+
+        if ( !editorOptions.line_limit ) {
+            return true;
+        }
+
+        var button = $modalContent.find(".master-button")[0];
+        var isValid = true;
+
+        if ( Application.helpers.limitLines(button, false) ) {
+            $modalContent.find(".alert").slideUp();
+        } else {
+            $modalContent.find(".alert").slideDown();
+            isValid = false;
     }
+
+        return isValid;
+    };
 
     /*
      * This function init the editor.
@@ -119,7 +140,7 @@ var masterButtonEditor = function( customOptions ){
      * Submit edition
      */
     this.submit = function(){
-        if( Application.utils.validate.validateForm( $modalContent.find("form")[0] )){
+        if( Application.utils.validate.validateForm( $modalContent.find("form")[0] && validateLineLimit() )){
             _this.setStatus("busy");
             var dataKey = getDataKey();
             //  Check if should generate canvas.
@@ -209,6 +230,7 @@ var masterButtonEditor = function( customOptions ){
             },
             ajax: {
                 settings: {
+                    type: "POST",
                     cache: true,
                     dataType: "html",
                     async: true,

@@ -19,7 +19,9 @@
         "laravel/socialite": "^2.0",
         "folklore/image": "^0.3.16",
         "exacttarget/fuel-sdk-php": "^0.9.0",
-        "google/recaptcha": "^1.1"
+        "google/recaptcha": "^1.1",
+        "graylog2/gelf-php": "^1.4",
+        "akamai-open/edgegrid-client": "^0.6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

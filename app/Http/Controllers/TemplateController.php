@@ -69,7 +69,7 @@ class TemplateController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function getModal(Request $request)
+    public function postModal(Request $request)
     {
         return $this->getComponent($request, 'modals', [ 'params' => $request->all()]);
     }
@@ -120,6 +120,62 @@ class TemplateController extends Controller
         }
 
         return ["image" => $campaign_path];
+    }
+
+    /**
+     * Return a data table of campaigns.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\View\View
+     */
+    public function getCampaignEditedRows(Request $request)
+    {
+
+        $user_visibility = Auth::user()->getLibraries();
+
+        $data_page = $request->input('limit') ?: 5;
+        $data_order_field = ($request->input('order_field')) ?: 'updated_at';
+        $data_order_type = ($request->input('order_type')) ?: 'DESC';
+
+
+        $campaign_data = Campaign::edited($user_visibility)
+            ->orderBy($data_order_field, $data_order_type)
+            ->paginate((int) $data_page)
+            ->all();
+
+
+        return $this->renderView(
+            'base.partials.dashboard.draw_campaign_row',
+            ['campaigns' => $campaign_data]
+        );
+    }
+
+    /**
+     * Return a data table of campaigns.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\View\View
+     */
+    public function getCampaignProcessedRows(Request $request)
+    {
+
+        $user_visibility = Auth::user()->getLibraries();
+
+        $data_page = $request->input('limit') ?: 5;
+        $data_order_field = ($request->input('order_field')) ?: 'updated_at';
+        $data_order_type = ($request->input('order_type')) ?: 'DESC';
+
+        $campaign_data = Campaign::processed($user_visibility)
+            ->orderBy($data_order_field, $data_order_type)
+            ->paginate((int) $data_page)
+            ->all();
+
+        return $this->renderView(
+            'base.partials.dashboard.draw_processed_campaign_row',
+            ['campaigns' => $campaign_data]
+        );
     }
 
     /**

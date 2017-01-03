@@ -10,6 +10,12 @@
 					placeholder="Untitled Campaign"
 					data-validation='{"required":"true"}'/>
 			</div>
+			@if(Config::get('view.preheader') && (!Config::has('view.libraries.' . $params['campaign_data']->library . '.preheader') || Config::get('view.libraries.' . $params['campaign_data']->library . '.preheader')))
+				<div class="form-group">
+	                <label>Preheader:</label>
+	                <input name="campaign_preheader" type="text" maxlength="140" value="{{ $params['campaign_data']['campaign_preheader'] or '' }}" data-validation='{"required":"true"}'/>
+	            </div>
+			@endif
 			@if (config('campaign.enable_tagging'))
 				<div class="config-box-divider">
 					<input name="tag_entry" type="text" placeholder="Add Tag" maxlength="30" data-autocomplete='<?php echo htmlentities( json_encode(Tag::getTagNames()), ENT_QUOTES, 'UTF-8' ); ?>'/>

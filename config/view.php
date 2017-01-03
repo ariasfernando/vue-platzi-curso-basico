@@ -51,6 +51,12 @@ $default = [
     */
     "campaign_format" => "default",
 
+    /*
+    |--------------------------------------------------------------------------
+    | Preheader global config
+    |--------------------------------------------------------------------------
+    */
+    'preheader' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -73,9 +79,9 @@ $default = [
 
     'libraries' => [
         'default' => [
-            "template_width" => "680",
+            "template_width" => "660",
             "template_mobile_width" => "320",
-            "template_bg_color" => "#222222",
+            "template_bg_color" => "#FFFFFF",
             "font_family_css" => "font-family:Arial, Helvetica, sans-serif;font-weight:normal",
             "font_family_semi_bold_css" => "font-family:Arial, Helvetica, sans-serif;font-weight:normal",
             "font_family_bold_css" => "font-family:Arial, Helvetica, sans-serif;font-weight:normal",
@@ -83,6 +89,7 @@ $default = [
             "font_family" => "Arial, Helvetica, sans-serif",
             "building_mode_select" => true,
             "api_connection" => false,
+            "preheader" => false,
         ]
     ]
 ];
@@ -96,9 +103,6 @@ foreach ($array_extend["libraries"] as $key_style => $value_style) {
             $array_extend["libraries"][$key_style]
         );
     }
-}
-foreach ($array_extend["libraries"]["default"] as $key_style => $value_style) {
-    $array_extend[$key_style] = $array_extend["libraries"]["default"][$key_style];
 }
 
 return $array_extend;

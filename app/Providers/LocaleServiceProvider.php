@@ -67,7 +67,6 @@ class LocaleServiceProvider extends ServiceProvider
             $module_texts = require($module_translations_path);
             self::$language_texts = array_merge(self::$language_texts, $module_texts);
         }
-
     }
 
     /**

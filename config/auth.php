@@ -97,7 +97,6 @@ $default = [
         ],
     ],
 
-   // @TODO Check if this configurations are OK
     /*
     |--------------------------------------------------------------------------
     | Oauth Driver

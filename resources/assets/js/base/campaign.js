@@ -79,7 +79,7 @@
 
             // Get modal and email layout
             var $previewModal = $("#modal-campaign-preview");
-            var $emailLayout = $previewModal.find("iframe").contents().find("table.email-container");
+            var $emailLayout = $previewModal.find("iframe").contents().find("table table.wrapper-table");
 
             // Build Modal
             $emailLayout.empty().append(emailHtml);
