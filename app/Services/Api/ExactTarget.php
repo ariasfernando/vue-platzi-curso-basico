@@ -43,7 +43,7 @@ class ExactTarget implements ApiConnector
 
         if (isset($response->results)) {
             Activity::log(
-                'Campaign uploaded to Exact Target',
+                'Campaign uploaded to SFMC',
                 [
                     'properties' => [
                         'campaign_id' => new ObjectID($campaign->id),

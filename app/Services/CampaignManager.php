@@ -14,6 +14,7 @@ use Worker;
 use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\UnauthorizedException;
 use Stensul\Models\Campaign;
 use Stensul\Jobs\StoreAssetsInCdn;
 use Stensul\Jobs\ProcessCampaign;
@@ -48,17 +49,22 @@ class CampaignManager
 
         if (isset($campaign_id)) {
             $campaign = Campaign::findOrFail($inputs['campaign_id']);
+            if ($campaign->locked) {
+                throw new UnauthorizedException('The campaign is locked and you can not change it');
+            }
             $campaign_name = (isset($inputs['campaign_name'])) ? $inputs['campaign_name'] : '';
             $modules_data = (isset($inputs['modules_data'])) ? $inputs['modules_data'] : [];
             if (!is_array($campaign->tags)) {
                 $campaign->tags = [];
             }
+            $campaign_settings = (isset($inputs['campaign_settings'])) ? $inputs['campaign_settings'] : [];
 
             $campaign->campaign_name = $campaign_name;
             $campaign->modules_data = $modules_data;
             $campaign->processed = 0;
             $campaign->user_id = new ObjectID(Auth::id());
             $campaign->user_email = Auth::user()->email;
+            $campaign->campaign_settings = $campaign_settings;
             $campaign->campaign_preheader = (isset($inputs['campaign_preheader'])) ? $inputs['campaign_preheader'] : '';
 
             if (isset($inputs['body_html'])) {
@@ -200,6 +206,9 @@ class CampaignManager
         $new_campaign_attr['body_html'] = '';
         $new_campaign_attr['plain_text'] = '';
         $new_campaign_attr['template'] = false;
+        $new_campaign_attr['locked'] = false;
+        $new_campaign_attr['locked_by'] = null;
+        
         unset($new_campaign_attr['published_at']);
 
         // cdn path must be unique
@@ -530,5 +539,41 @@ class CampaignManager
         $campaign->tags = array_values($tags);
         $campaign->save();
         return $campaign->id;
+    }
+
+    /*
+     * Lock a campaign to prevent changes.
+     *
+     * @param  string $campaign_id
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @return array
+     */
+    public static function forceLock($campaign_id)
+    {
+        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign->locked = true;
+        $campaign->locked_by = Auth::user()->email;
+        $campaign->save();
+        return ['campaign_id' => $campaign->id];
+    }
+
+    /**
+     * Unlock a locked campaign;
+     *
+     * @param  string $campaign_id
+     * @throws \Illuminate\Auth\Access\UnauthorizedException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @return array
+     */
+    public static function unlockForced($campaign_id)
+    {
+        $campaign = Campaign::findOrFail($campaign_id);
+        if ($campaign->locked_by !== Auth::user()->email) {
+            throw new UnauthorizedException('Only the user that locked the campaign can unlock it');
+        }
+        $campaign->locked = false;
+        $campaign->locked_by = null;
+        $campaign->save();
+        return ['campaign_id' => $campaign->id];
     }
 }

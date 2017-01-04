@@ -10,6 +10,9 @@
                     Email successfully uploaded to {{ $app_config['api']['eloqua']['title'] }}. <a href="{{ url('/') }}" class="allow-exit">View dashboard</a>.
                 </div>
                 <div class="response-message response-message-error alert alert-danger" style="display:none;">Something went wrong. Try again later.</div>
+                <div class="response-message response-message-error-duplicated alert alert-danger" style="display:none">
+                    This name already exists and cannot be overriden.
+                </div>
                 <form name="upload-api-form" class="upload-api-form">
                     <input type="hidden" name="campaign_id" value="" class="campaign_id" />
                     <input type="hidden" name="api_driver" value="{{ $app_config['api']['eloqua']['class'] }}" class="api_driver" />

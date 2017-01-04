@@ -29,37 +29,38 @@
     }else{
         $title_cols += 2;
     }
+    $hidden_class = ($params['campaign_data']->locked) ? 'hidden' : '';
 ?>
 <!-- header canvas email -->
 <div class="section-box-header section-canvas-title">
     <div class="row">
         <div class="col-xs-3 col-md-4 col-lg-{{ $title_cols }}" id="section-canvas-title-col"><h2><?php echo $campaign_header_text; ?></h2></div>
 
-            @if ( $params['campaign_data']->getLibraryConfig('building_mode_select') )
+        @if ( $params['campaign_data']->getLibraryConfig('building_mode_select') )
             <div class="col-xs-1 col-md-1 col-lg-2">
-                <div class="switch">
-                    <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-                    <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
-                        <i class="fa fa-desktop"></i>
-                    </label>
-                    <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-                    <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
-                        <i class="glyphicon glyphicon-phone"></i>
-                    </label>
-                    <span class="switch-selection"></span>
-                </div>
-        </div>
+                    <div class="switch">
+                        <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
+                        <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
+                            <i class="fa fa-desktop"></i>
+                        </label>
+                        <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
+                        <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
+                            <i class="glyphicon glyphicon-phone"></i>
+                        </label>
+                        <span class="switch-selection"></span>
+                    </div>
+            </div>
         @endif
         <div class="col-xs-8 col-md-7 col-lg-{{ $buttons_cols }} text-right" id="section-canvas-buttons-col">
-            <button class="btn btn-default campaign-preview"><i class="glyphicon glyphicon-phone"></i>Preview</button>
+            <button class="btn btn-default campaign-preview {{$hidden_class}}"><i class="glyphicon glyphicon-phone"></i>Preview</button>
             @if (!$isTemplate)
-                <button class="btn btn-default save-as-draft">Save as Draft</button>
+                <button class="btn btn-default save-as-draft {{$hidden_class}}">Save as Draft</button>
             @endif
             @if (!$params['campaign_data']->processed && config('campaign.enable_templating'))
-                <button class="btn btn-default save-as-template">Save as Template</button>
+                <button class="btn btn-default save-as-template {{$hidden_class}}">Save as Template</button>
             @endif
             @if (!$isTemplate)
-                <a class="btn btn-continue campaign-continue" href="#">Complete<i class="glyphicon glyphicon-triangle-right"></i></a>
+                <a class="btn btn-continue campaign-continue {{$hidden_class}}" href="#">Complete<i class="glyphicon glyphicon-triangle-right"></i></a>
             @endif
         </div>
     </div>

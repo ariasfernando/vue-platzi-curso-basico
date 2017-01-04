@@ -77,7 +77,7 @@
                 this.fetchCampaigns(type);
             },
             checkTagLimit: function() {
-                return (this.config.search_settings.max_tags == 0 
+                return (this.config.search_settings.max_tags == 0
                     || parseInt(this.tags.length + this.terms.length) < this.config.search_settings.max_tags);
             },
             fetchCampaigns: function(type) {
@@ -324,6 +324,26 @@
                     value = value.replace(/###/g, '</span>');
                 }
                 return value;
+            },
+            lockCampaign: function(campaign_id, page) {
+                var data = {
+                    campaign_id: campaign_id
+                };
+                var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {data: data});
+                var vm = this;
+                lockCampaign.done(function(data) {
+                    vm.$emit('change-page', page, vm.type);
+                });
+            },
+            unlockCampaign: function(campaign_id, page) {
+                var data = {
+                    campaign_id: campaign_id
+                };
+                var unlockCampaign = Application.utils.doAjax('/campaign/unlock-forced', {data: data});
+                var vm = this;
+                unlockCampaign.done(function(data) {
+                    vm.$emit('change-page', page, vm.type);
+                });
             }
         }
     });
@@ -430,6 +450,26 @@
                     value = value.replace(/###/g, '</span>');
                 }
                 return value;
+            },
+            lockCampaign: function(campaign_id, page) {
+                var data = {
+                    campaign_id: campaign_id
+                };
+                var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {data: data});
+                var vm = this;
+                lockCampaign.done(function(data) {
+                    vm.$emit('change-page', page, vm.type);
+                });
+            },
+            unlockCampaign: function(campaign_id, page) {
+                var data = {
+                    campaign_id: campaign_id
+                };
+                var unlockCampaign = Application.utils.doAjax('/campaign/unlock-forced', {data: data});
+                var vm = this;
+                unlockCampaign.done(function(data) {
+                    vm.$emit('change-page', page, vm.type);
+                });
             }
         }
     });
@@ -539,6 +579,26 @@
                     value = value.replace(/###/g, '</span>');
                 }
                 return value;
+            },
+            lockCampaign: function(campaign_id, page) {
+                var data = {
+                    campaign_id: campaign_id
+                };
+                var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {data: data});
+                var vm = this;
+                lockCampaign.done(function(data) {
+                    vm.$emit('change-page', page, vm.type);
+                });
+            },
+            unlockCampaign: function(campaign_id, page) {
+                var data = {
+                    campaign_id: campaign_id
+                };
+                var unlockCampaign = Application.utils.doAjax('/campaign/unlock-forced', {data: data});
+                var vm = this;
+                unlockCampaign.done(function(data) {
+                    vm.$emit('change-page', page, vm.type);
+                });
             }
         }
     });

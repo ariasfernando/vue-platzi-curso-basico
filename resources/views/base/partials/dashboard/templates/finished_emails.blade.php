@@ -38,7 +38,10 @@
                         <span>@{{ campaign.updated_at }}</span>
                     </td>
                     <td :title="campaign.user_email">@{{ campaign.user_email }}</td>
-                    <td :title="campaign.campaign_name" v-html="prepareOutput(campaign.campaign_name)"></td>
+                    <td :title="campaign.campaign_name">
+                        <span v-html="prepareOutput(campaign.campaign_name)"></span>
+                        <i class="fa fa-lock text-danger" v-if="campaign.locked"></i>
+                    </td>
                     <td v-if="showTags == 1">
                         <campaign-tag
                             :highlighted="highlightTag(tag)"
@@ -51,17 +54,40 @@
                         <a href="#" class="html-code">Normal HTML</a><br>
                         <a href="#" class="plaintext" v-if="showPlaintext">Normal Plaintext</a>
                     </td>
-                    <td class="actions icons text-right" width="170">
+                    <td class="actions icons text-right" width="200">
                         <a href="#" class="public-path" title="View hosted version" target="_blank"
                             v-if="campaign.library_config.view_in_browser"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        <a
+                            href="#"
+                            class="lock-campaign"
+                            v-if="!campaign.locked"
+                            v-on:click="lockCampaign(campaign._id, campaigns.current_page)"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="Lock Campaign"
+                        >
+                            <i class="glyphicon fa fa-lock"></i>
+                        </a>
+                        <a
+                            href="#"
+                            class="unlock-campaign"
+                            v-if="campaign.locked && campaign.locked_by === Application.globals.logged_user"
+                            v-on:click="unlockCampaign(campaign._id, campaigns.current_page)"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="Unlock Campaign"
+                        >
+                            <i class="glyphicon fa fa-unlock"></i>
+                        </a>
                         <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
                         <a href="#" class="edit" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
                         <a href="#" class="btn-upload-api"
                             v-for="api in campaign.api"
+                            v-if="!campaign.locked"
                             :data-campaign-id="campaign._id"
                             :data-api-driver="api.driver"
                             :title="'Upload to ' + api.title"><i class="glyphicon glyphicon-cloud-upload"></i></a>
-                        <a href="#" title="Delete" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
+                        <a href="#" title="Delete" v-if="!campaign.locked" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
                             ><i class="glyphicon glyphicon-ban-circle"></i></a>
                     </td>
                 </tr>

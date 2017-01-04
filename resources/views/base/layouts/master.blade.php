@@ -90,7 +90,6 @@
 
         {{-- Debug --}}
         @include('base/layouts/partials/debug')
-
         {{-- Scripts --}}
         <script src="{{ url( elixir('js/library.js') ) }}"></script>
 

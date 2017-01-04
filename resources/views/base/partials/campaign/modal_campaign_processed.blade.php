@@ -17,7 +17,10 @@
                 @foreach (Helper::getApiDrivers($params['campaign_data']->library) as $api)
                     <button type="button" class="btn btn-default btn-upload-api" data-campaign-id="{{ $params['campaign_id'] }}" data-api-driver="{{ $api }}">Upload to {{ $app_config['api'][ $api ]['title'] }}</button>
                 @endforeach
-                <a href="{{ action('CampaignController@getPublicPath', $params['campaign_id']  ) }}" target="_blank" type="button" class="btn btn-default">View in browser</a>
+                @if ($params['campaign_data']['library_config']['view_in_browser'])
+                    <a href="{{ url('campaign/public-path', $params['campaign_id']) }}" target="_blank" type="button"
+                        class="btn btn-default">View in browser</a>
+                @endif
                 <button class="btn btn-default btn-back-to-dashboard" data-dismiss="modal">Go back to the dashboard</button>
             </div>
         </div>

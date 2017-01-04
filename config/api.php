@@ -43,7 +43,7 @@ $default = [
         'default_path' => '/contentlibrary/' . env('API_RESPONSYS_PATH', ''),
         'auth' => [
             'type' => 'POST',
-            'url' => '/rest/api/v1/auth/token',
+            'url' => '/rest/api/v1.1/auth/token',
             'config' => [
                 'base_uri' => 'https://login2.responsys.net'
             ],
@@ -57,16 +57,22 @@ $default = [
         ],
         'create_folder' => [
             'type' => 'POST',
-            'url' => '/rest/api/v1/clFolders'
+            'url' => '/rest/api/v1.1/clFolders'
         ],
         'list_folders' => [
             'type' => 'GET',
-            'url' => '/rest/api/v1/clFolders'
+            'url' => '/rest/api/v1.1/clFolders'
         ],
         'create_doc' => [
             'type' => 'POST',
-            'url' => '/rest/api/v1/clDocs'
-        ]
+            'url' => '/rest/api/v1.1/clDocs'
+        ],
+        'delete_doc' => [
+            'type' => 'DELETE',
+            'url' => '/rest/api/v1.1/clDocs'
+        ],
+        'libraries' => [],
+        'overwrte_file' => false
     ],
 
     'eloqua' => [
@@ -104,7 +110,7 @@ $default = [
     ],
 
     'exact_target' => [
-        'title' => 'Exact Target',
+        'title' => 'SFMC',
         'class' => 'ExactTarget',
         'folder_id' => 'default',
         'base_url' => 'https://www.exacttargetapis.com/',

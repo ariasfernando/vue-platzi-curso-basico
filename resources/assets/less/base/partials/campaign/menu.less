@@ -9,8 +9,10 @@ aside{
 			border-radius: @section-border-radius;
 		}
 		// action type module
-		.expand, .add{
+		.expand>h2, .add{
 			cursor: pointer;
+		}
+		.expand, .add{
 			border-radius: @section-border-radius;
 			background-color: @menu-container-section-background-color;
 			h2{
@@ -38,27 +40,23 @@ aside{
 				}
 			}
 		}
-		// icon expand
-		.expand{
-			margin-bottom: 20px;
-			&>h2>i{
-				.glyphicon-triangle-bottom();
-			}
-			&>h2>i.icon-open-expan{
-				.glyphicon-triangle-top();
-			}
-		}
-		// icon add
-		.add i{
-			.glyphicon-plus();
-		}
-	 
+        // icon expand
+        .expand{
+            margin-bottom: 20px;
+            &>h2>i{
+                .glyphicon-triangle-bottom();
+            }
+            &>h2>i.icon-open-expan{
+                .glyphicon-triangle-top();
+            }
+        }
+
 	 	// show and hidden sections
 		.level-1{
 			display: none;
 			padding-bottom: 10px;
 			.add, .expand{
-				margin: 10px 7px 0;	
+				margin: 10px 7px 0;
 			}
 			.expand{
 				background-color: @menu-container-sub-section-background-color;
@@ -87,6 +85,38 @@ aside{
 			input[type="text"]{
 				margin-top: 5px;
 			}
+		}
+	}
+
+	.configuration-mod{
+
+		.config-box-divider{
+			border-top: 1px solid #cccccc;
+			padding: 5px 0 0;
+			margin: 10px 0 0;
+		}
+		#tags-box{
+			padding-top: 10px;
+		}
+
+		.unlock-campaign-btn,
+		.lock-campaign-btn{
+			float: right;
+			min-width: 28px;
+			padding: 3px 6px;
+			.border-radius(20px);
+
+			&.ajax-loader-small{
+				height: 29px;
+				background-position: center center !important;
+				padding: 0 !important;
+				i{
+					display: none;
+				}
+			}
+		}
+		label.locking{
+			margin: 5px 0;
 		}
 	}
 

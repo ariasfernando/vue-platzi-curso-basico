@@ -23,8 +23,8 @@ Application.api = (function($){
 
     this.openUpload = function(elem){
         var _this = this;
-        var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).data(options.apiDriver) );
-        $campaignUploadModal.find( options.campaignId ).val( $(elem).data( options.campaignIdData ) );
+        var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).attr( 'data-' + options.apiDriver) );
+        $campaignUploadModal.find( options.campaignId ).val( $(elem).attr( 'data-' + options.campaignIdData ) );
         $campaignUploadModal.find('.response-message').hide();
         $campaignUploadModal.find('.filename').val('');
         $campaignUploadModal.find(options.dataTable).hide();
@@ -35,7 +35,7 @@ Application.api = (function($){
     };
 
     this.updateModalTable = function(elem){
-        var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).data(options.apiDriver) );
+        var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).attr( 'data-' + options.apiDriver) );
         var campaign_id = $campaignUploadModal.find( options.campaignId ).val();
         var data = { campaign_id: campaign_id };
         var getHistory = Application.utils.doAjax("/api/history", { type: "GET", data: data });
@@ -43,7 +43,7 @@ Application.api = (function($){
             var table = $campaignUploadModal.find( options.dataTable );
             if (response.length) {
                 var tableContent = '';
-                var dataInfo = $campaignUploadModal.find(options.dataTable).data('info') || 'filename';
+                var dataInfo = $campaignUploadModal.find(options.dataTable).attr('data-info') || 'filename';
 
                 for (var i = response.length - 1; i >= 0; i--) {
                     if( i == (response.length - 1)) {
@@ -75,7 +75,7 @@ Application.api = (function($){
 
     this.uploadEmail = function(elem){
         var _this = this;
-        var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).data(options.apiDriver) );
+        var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).attr( 'data-' + options.apiDriver) );
         var $uploadForm = $campaignUploadModal.find(options.uploadApiForm);
         $campaignUploadModal.find('.response-message').hide();
         if( Application.utils.validate.validateForm( $uploadForm[0] ) ){
@@ -84,12 +84,17 @@ Application.api = (function($){
             var data = $uploadForm.serialize();
             var processCampaignUpload = Application.utils.doAjax("/api/upload-email", {data: data});
             processCampaignUpload.done(function( response ){
+
                 $('.response-message-success').show();
                 _this.updateModalTable(elem);
                 $uploadForm.find('#filename').val('');
             });
-            processCampaignUpload.fail(function(){
-                $('.response-message-error').show();
+            processCampaignUpload.fail(function(error){
+                if (error.status == 409) {
+                    $('.response-message-error-duplicated').show();
+                } else {
+                    $('.response-message-error').show();
+                }
             });
             processCampaignUpload.always(function(){
                 $( elem ).parent().removeClass("spinner");

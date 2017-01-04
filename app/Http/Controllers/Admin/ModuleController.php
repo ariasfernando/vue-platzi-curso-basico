@@ -89,7 +89,7 @@ class ModuleController extends Controller
      */
     public function postEdit(Request $request)
     {
-        // TODO: edit mothod
+        // TODO: edit method
     }
 
     /**
@@ -105,7 +105,7 @@ class ModuleController extends Controller
             "module" => $request->input("module") ?: []
         ];
 
-        return \StensulModule::create($params);;
+        return \StensulModule::create($params);
 
     }
 }

@@ -37,7 +37,10 @@
                     <td class="last-modified">
                         <span>@{{ campaign.updated_at }}</span>
                     </td>
-                    <td :title="campaign.user_email">@{{ campaign.user_email }}</td>
+                    <td :title="campaign.user_email">
+                        @{{ campaign.user_email }}
+                        <i class="fa fa-lock text-danger" v-if="campaign.locked"></i>
+                    </td>
                     <td :title="campaign.campaign_name" v-html="prepareOutput(campaign.campaign_name)"></td>
                     <td v-if="showTags == 1">
                         <campaign-tag
@@ -50,7 +53,7 @@
                     <td class="actions icons text-right">
                         <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
                         <a href="#" class="edit" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                        <a href="#" title="Delete" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
+                        <a href="#" title="Delete" v-if="!campaign.locked" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
                             ><i class="glyphicon glyphicon-ban-circle"></i></a>
                     </td>
                 </tr>

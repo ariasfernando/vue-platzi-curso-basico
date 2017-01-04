@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Activity;
 use Api;
+use Config;
 use Stensul\Http\Requests;
 use Stensul\Models\User;
 use Stensul\Models\Campaign;
@@ -23,8 +24,19 @@ class ApiController extends Controller
      */
     public function postUploadEmail(Request $request)
     {
+        $filename = $request->input('filename');
         $api_client = Api::driver($request->input('api_driver'));
         $campaign_data = Campaign::findOrFail($request->input('campaign_id'));
+        if (Config::get('campaign.locking') &&
+            (!Config::has('campaign.libraries' . $campaign_data->library . '.locking') ||
+            Config::get('campaign.libraries' . $campaign_data->library . '.locking'))
+        ) {
+            $locked_name = Upload::lockedName($filename);
+            if ($locked_name) {
+                //return a conflict status code (409), when there is a duplicatd file for this api.
+                return response()->json(['error' => 'duplicated'], 409);
+            }
+        }
         return $api_client->uploadEmail($campaign_data, $request->all());
     }
 

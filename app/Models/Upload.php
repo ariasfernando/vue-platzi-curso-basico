@@ -3,6 +3,7 @@
 namespace Stensul\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Stensul\Models\Campaign;
 
 class Upload extends Eloquent
 {
@@ -64,13 +65,46 @@ class Upload extends Eloquent
     public static function versioningFilename($filename)
     {
         $filename = str_replace(['.html', '.htm'], '', $filename);
-        $previous = Upload::where('original_filename', '=', $filename)
-            ->orderBy('updated_at', 'desc')
-            ->get()->toArray();
+        $previous = self::fileExists($filename);
         if (count($previous)) {
             list($filename,) = explode('.', $filename);
             $filename.= '-v' . count($previous);
         }
         return $filename  . '.html';
+    }
+
+    /**
+     * Check if filename exists.
+     * @param  string $filename; the filename to search
+     * @return int; if the filename doesn't exist, it returns 0, in any other case it returns the amount of repetitions
+     */
+    public static function fileExists($filename)
+    {
+        $filename = str_replace(['.html', '.htm'], '', $filename);
+        $previous = Upload::where('original_filename', 'like', $filename)
+            ->orderBy('updated_at', 'desc')
+            ->get()->toArray();
+
+        return $previous;
+    }
+
+    /**
+     * Check if the name belongs to a locked campaign.
+     *
+     * @param  string $filename
+     * @return bool
+     */
+    public static function lockedName($filename)
+    {
+        $filename = str_replace(['.html', '.htm'], '', $filename);
+        $uploads = Upload::where('original_filename', $filename)
+            ->get();
+        foreach ($uploads as $upload) {
+            $campaign = Campaign::find($upload->campaign_id);
+            if ($campaign && $campaign->locked) {
+                return true;
+            }
+        }
+        return false;
     }
 }

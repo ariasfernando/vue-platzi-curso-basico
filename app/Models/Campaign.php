@@ -37,7 +37,10 @@ class Campaign extends Eloquent
         'email_sent_history',
         'tags',
         'template',
-        'campaign_preheader'
+        'campaign_preheader',
+        'locked',
+        'locked_by',
+        'campaign_settings'
     ];
 
     protected $appends = ['api', 'library_config'];
@@ -66,7 +69,10 @@ class Campaign extends Eloquent
         'email_sent_history' => [],
         'tags' => [],
         'template' => false,
-        'campaign_preheader' => ''
+        'campaign_preheader' => '',
+        'locked' => false,
+        'locked_by' => null,
+        'campaign_settings' => []
     );
 
     /**

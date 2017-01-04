@@ -324,7 +324,7 @@ class CampaignController extends Controller
         return Campaign::compositeImage($request->all());
     }
 
-    /*
+    /**
      * Delete a single tag in a Campaign.
      *
      * @param  Request $request
@@ -352,6 +352,35 @@ class CampaignController extends Controller
             } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
                 throw new NotFoundHttpException('Campaign with the id ' . $request->input('campaign_id') . ' not found');
             }
+        }
+    }
+
+    /*
+     * Lock the campaign in order to prevent that other user make changes on it.
+     *
+     * @param  \Illuminate\Http\Request $request
+     */
+    public function postForceLock(Request $request)
+    {
+            $data = Campaign::forceLock($request->input('campaign_id'));
+            return response()->json($data);
+    }
+
+    /**
+     * Unlock a campaign that was locked.
+     * @param  Request $request
+     * @return Campaign
+     */
+    public function postUnlockForced(Request $request)
+    {
+        try {
+            $data =  Campaign::unlockForced($request->input('campaign_id'));
+            return response()->json($data);
+        } catch (\Illuminate\Auth\Access\UnauthorizedException $e) {
+            return response()->json([
+                'error'   => 'Forbidden',
+                'message' => $e->getMessage()
+            ], 403);
         }
     }
 }

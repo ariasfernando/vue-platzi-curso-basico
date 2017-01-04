@@ -130,6 +130,7 @@ $default = [
         'title' => 'Free Range Text Paragraph',
         'module_id' => 'free_range_text_paragraph',
         'file_parent' => 'base',
+        'max_lines' => '4',
         'initialized' => false,
         'toolbox' => [
             'colorPicker' => [
@@ -156,10 +157,11 @@ $default = [
                 ],
                 'selector' => '.st-edit-text',
                 'fixed_toolbar_container' => '.text-overlay .text-overlay-toolbox',
-                'toolbar' => 'bold italic underline link',
-                'plugins' => 'paste advlist autolink lists stlinkextended',
+                'toolbar' => 'bold italic underline link forecolor',
+                'plugins' => 'paste advlist autolink lists stlinkextended textcolor',
                 'forced_root_block' => false,
                 'inline' => true,
+                'forced_root_block' => false,
                 'target_list' => false,
                 'link_validate_url' => true,
                 'link_title' => false,
@@ -167,7 +169,18 @@ $default = [
                 'paste_as_text' => true,
                 'menubar' => false,
                 'relative_urls' => false,
-                'remove_script_host' => false
+                'remove_script_host' => false,
+                'textcolor_rows' => 1,
+                'textcolor_map' => [
+                    '000000', 'Black',
+                    '666666', 'Gray',
+                    'FFFFFF', 'White',
+                    'EC2127', 'Red',
+                    '3c763d', 'Green',
+                    '0715c3', 'Blue',
+                    'ec971f', 'Orange'
+                ],
+                'invalid_elements' => 'img'
             ]
         ]
     ],
@@ -177,32 +190,29 @@ $default = [
         'module_id' => 'header_text',
         'file_parent' => 'base',
         'initialized' => false,
-        'toolbox' => [
-            'colorPicker' => [
-                'class' => "color-picker",
-                'icon' => "tint",
-                'color_default' => '#555555',
-                'colors_list' => [
-                    'DarkGray' => '#333333',
-                    'gray' => '#595A5D',
-                    'gray_2' => '#555555',
-                    'red' => '#EC2127',
-                    'red_2' => '#ED1C24',
-                    'lightGray' => '#ECEDEE'
-                ]
-            ]
-        ],
+        'toolbox' => [],
         'plugins' => [
             'tinymce' => [
                 'selector' => '.st-edit-text',
                 'fixed_toolbar_container' => '.text-overlay .text-overlay-toolbox',
-                'toolbar' => false,
-                'plugins' => 'paste',
+                'toolbar' => 'forecolor',
+                'plugins' => 'paste textcolor',
                 'forced_root_block' => false,
                 'inline' => true,
                 'paste_as_text' => true,
                 'menubar' => false,
-                'relative_urls' => false
+                'relative_urls' => false,
+                'textcolor_rows' => 1,
+                'textcolor_map' => [
+                    '000000', 'Black',
+                    '666666', 'Gray',
+                    'FFFFFF', 'White',
+                    'EC2127', 'Red',
+                    '3c763d', 'Green',
+                    '0715c3', 'Blue',
+                    'ec971f', 'Orange'
+                ],
+                'invalid_elements' => 'img'
             ]
         ]
     ],
@@ -212,32 +222,29 @@ $default = [
         'module_id' => 'title_text',
         'file_parent' => 'base',
         'initialized' => false,
-        'toolbox' => [
-            'colorPicker' => [
-                'class' => "color-picker",
-                'icon' => "tint",
-                'color_default' => '#EC2127',
-                'colors_list' => [
-                    'DarkGray' => '#333333',
-                    'gray' => '#595A5D',
-                    'gray_2' => '#555555',
-                    'red' => '#EC2127',
-                    'red_2' => '#ED1C24',
-                    'lightGray' => '#ECEDEE'
-                ]
-            ]
-        ],
+        'toolbox' => [],
         'plugins' => [
             'tinymce' => [
                 'selector' => '.st-edit-text',
                 'fixed_toolbar_container' => '.text-overlay .text-overlay-toolbox',
-                'toolbar' => false,
-                'plugins' => 'paste',
+                'toolbar' => 'forecolor',
+                'plugins' => 'paste textcolor',
                 'forced_root_block' => false,
                 'inline' => true,
                 'paste_as_text' => true,
                 'menubar' => false,
-                'relative_urls' => false
+                'relative_urls' => false,
+                'textcolor_rows' => 1,
+                'textcolor_map' => [
+                    '000000', 'Black',
+                    '666666', 'Gray',
+                    'FFFFFF', 'White',
+                    'EC2127', 'Red',
+                    '3c763d', 'Green',
+                    '0715c3', 'Blue',
+                    'ec971f', 'Orange'
+                ],
+                'invalid_elements' => 'img'
             ]
         ]
     ],
@@ -376,7 +383,8 @@ $default = [
                 'menubar' => false,
                 'link_validate_url' => true,
                 'relative_urls' => false,
-                'remove_script_host' => false
+                'remove_script_host' => false,
+                'invalid_elements' => 'img'
             ]
         ]
     ],
@@ -404,29 +412,30 @@ $default = [
         ],
         'initialized' => false,
         'plugins' => [
-            'tinymce' => [
-                'formats' => [
-                    'underline' => [
-                        'inline' => 'u',
-                        'exact' => true
-                    ]
-                ],
-                'selector' => '.st-edit-text',
-                'fixed_toolbar_container' => '.text-overlay .text-overlay-toolbox',
-                'toolbar' => 'bold italic underline link fontsizeselect',
-                'plugins' => 'paste advlist autolink lists stlinkextended',
-                'fontsize_formats' => '14px 16px 22px',
-                'forced_root_block' => false,
-                'inline' => true,
-                'target_list' => false,
-                'link_validate_url' => true,
-                'link_title' => false,
-                'link_text_to_display' => false,
-                'paste_as_text' => true,
-                'menubar' => false,
-                'relative_urls' => false,
-                'remove_script_host' => false
-            ]
+           'tinymce' => [
+               'formats' => [
+                   'underline' => [
+                       'inline' => 'u',
+                       'exact' => true
+                   ]
+               ],
+               'selector' => '.st-edit-text',
+               'fixed_toolbar_container' => '.text-overlay .text-overlay-toolbox',
+               'toolbar' => 'bold italic underline link fontsizeselect',
+               'plugins' => 'paste advlist autolink lists stlinkextended',
+               'fontsize_formats' => '14px 16px 22px',
+               'forced_root_block' => false,
+               'inline' => true,
+               'target_list' => false,
+               'link_validate_url' => true,
+               'link_title' => false,
+               'link_text_to_display' => false,
+               'paste_as_text' => true,
+               'menubar' => false,
+               'relative_urls' => false,
+                'remove_script_host' => false,
+                'invalid_elements' => 'img'
+           ]
         ]
     ],
     'double_text_editor' => [
@@ -434,7 +443,58 @@ $default = [
         'action' => 'add',
         'app_name' => 'base',
         'module_id' => 'double_text_editor',
-        'level' => 'single'
+        'level' => 'single',
+        'file_parent' => 'base',
+        'initialized' => false,
+        'plugins' => [
+            'tinymce' => [
+                [
+                    'formats' => [
+                        'underline' => [
+                            'inline' => 'u',
+                            'exact' => true
+                        ]
+                    ],
+                    'selector' => '.st-subtitle-text',
+                    'content_selector' => '.st-sutbitle-text-overlay',
+                    'fixed_toolbar_container' => '.st-sutbitle-text-overlay .text-overlay-toolbox',
+                    'toolbar' => 'bold italic underline link alignleft aligncenter',
+                    'plugins' => 'paste advlist autolink lists stlinkextended',
+                    'forced_root_block' => 'div',
+                    'inline' => true,
+                    'target_list' => false,
+                    'link_validate_url' => true,
+                    'link_title' => false,
+                    'link_text_to_display' => false,
+                    'paste_as_text' => true,
+                    'menubar' => false,
+                    'relative_urls' => false,
+                    'remove_script_host' => false
+                ],[
+                    'formats' => [
+                        'underline' => [
+                            'inline' => 'u',
+                            'exact' => true
+                        ]
+                    ],
+                    'selector' => '.st-title-text',
+                    'content_selector' => '.st-title-text-overlay',
+                    'fixed_toolbar_container' => '.st-title-text-overlay .text-overlay-toolbox',
+                    'toolbar' => 'alignleft aligncenter',
+                    'plugins' => 'paste advlist autolink lists stlinkextended',
+                    'forced_root_block' => 'div',
+                    'inline' => true,
+                    'target_list' => false,
+                    'link_validate_url' => true,
+                    'link_title' => false,
+                    'link_text_to_display' => false,
+                    'paste_as_text' => true,
+                    'menubar' => false,
+                    'relative_urls' => false,
+                    'remove_script_host' => false
+                ]
+            ]
+        ]
     ]
 ];
 

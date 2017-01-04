@@ -866,5 +866,44 @@ var campaignManager = {
         		fnFail();
         	}
         });
+	},
+	forceLock: function(fnDone, fnFail) {
+		var config = this.getConfiguration();
+		var data = {
+			campaign_id: config.campaign_id
+		};
+		var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {data: data});
+
+		lockCampaign.done(function(data) {
+			Application.utils.alert.display('', 'This campaign is locked now. Only you can unlock it.', 'success');
+			if(typeof fnDone === 'function') {
+				fnDone();
+			}
+		});
+		lockCampaign.fail(function(data) {
+			Application.utils.alert.display('Error:', 'An error occurred while trying to lock it, please try again later.', 'danger');
+			if (typeof fnFail === 'function') {
+				fnFail();
+			}
+		});
+	},
+	unlockForced: function(fnDone, fnFail) {
+		var config = this.getConfiguration();
+		var data = {
+			campaign_id: config.campaign_id
+		};
+		var unlockCampaign = Application.utils.doAjax('/campaign/unlock-forced', {data: data});
+		unlockCampaign.done(function(data) {
+			Application.utils.alert.display('', 'This campaign is unlocked now, and you can make changes on it', 'success');
+			if (typeof fnDone === 'function') {
+				fnDone();
+			}
+		});
+		unlockCampaign.fail(function(data) {
+			Application.utils.alert.display('Error:', 'An error occurred while trying to unlocked, please try again later.', 'danger');
+			if (typeof fnFail === 'function') {
+				fnFail();
+			}
+		});
     }
 };

@@ -885,7 +885,7 @@ var moduleManager = {
                 }
             })
 			// Prevents formatted html paste
-            .on('paste', '[contenteditable].not(.mce-content-body)', function (e) {
+            .on('paste', '[contenteditable]:not(.mce-content-body)', function (e) {
 				e.preventDefault();
 				var text = (e.originalEvent || e).clipboardData.getData('text/plain') || prompt('Paste something..');
 				document.execCommand('insertText', false, text);

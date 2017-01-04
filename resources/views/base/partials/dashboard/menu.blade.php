@@ -1,6 +1,6 @@
 {{-- Default button --}}
 @section('default_menu')
-    <a class="btn btn-default" href="{{ URL::to( action('CampaignController@getEdit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => "default" ])) }}">
+    <a class="btn btn-default" href="{{ URL::to( url('campaign/edit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => "default" ])) }}">
         Create a new email
     </a>
 @stop
@@ -42,20 +42,20 @@
                             Create a new email
                         </a>
                     @else
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
-                            Create a new email<span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            @foreach ($app_config['view']['libraries'] as $library_key => $library_value)
-                                 @if( $current_user->see($library_key) )
-                                    <li role="presentation">
-                                        <a href="{{ URL::to( action('CampaignController@getEdit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => $library_key ])) }}">
-                                            {{ $app_config['view']['libraries'][$library_key]["title"] }}
-                                        </a>
-                                    </li>
-                                 @endif
-                            @endforeach
-                        </ul>
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
+                        Create a new email<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        @foreach ($app_config['view']['libraries'] as $library_key => $library_value)
+                             @if( $current_user->see($library_key) )
+                                <li role="presentation">
+                                    <a href="{{ URL::to( url('campaign/edit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => $library_key ])) }}">
+                                        {{ $app_config['view']['libraries'][$library_key]["title"] }}
+                                    </a>
+                                </li>
+                             @endif
+                        @endforeach
+                    </ul>
                     @endif
                 @else
                     @yield('default_menu')

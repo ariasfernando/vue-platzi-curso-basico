@@ -178,18 +178,11 @@ gulp.task('elixir-scripts', function () {
                 assetsPath
             )
 
-            // === Components ===
-            .scripts(
-                ['js/library/components/*.js'],
-                jsDestinationPath + 'components.js',
-                assetsPath
-            )
-
             // === Dashboard page ===
             .scripts(
                 [
-                    'js/library/controllers/campaign-controller.js',
-                    'js/library/controllers/dashboard-controller.js',
+                    'js/library/campaign-controller.js',
+                    'js/library/dashboard-controller.js',
                     'js/library/custom-plugins/st-pagination-bar.jquery.js',
                     jsAppFilePath('dashboard-vue.js'),
                     jsAppFilePath('dashboard.js')
