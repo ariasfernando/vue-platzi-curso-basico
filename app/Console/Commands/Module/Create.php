@@ -17,7 +17,9 @@ class Create extends Command
     protected $signature = 'module:create
         {--name= : Module name (This is how it will show on the menu)}
         {--description= : Module description (Brief explanation of what this module does)}
-        {--module_id= : Must be all lowercase, replace spaces with underscores}';
+        {--module_id= : Must be all lowercase, replace spaces with underscores}
+        {--parent_module= : Id of the module we want as a template (Use "none" to use default template and config")}
+        {--config=default : Module config JSON, not really intended to use from command line}';
 
     /**
      * The console command description.
@@ -27,6 +29,11 @@ class Create extends Command
     protected $description = 'Create a new module';
 
     /**
+    * Stensul App Name
+    */
+    private $app_name;
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -34,6 +41,7 @@ class Create extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->app_name = app('config')->get('app.name');
     }
 
     /**
@@ -44,26 +52,63 @@ class Create extends Command
     public function handle()
     {
         $options = $this->options();
-        $app_name = app('config')->get('app.name');
-        $menu = \Config::get('menu');
+        $modules = \StensulModule::getModuleList();
 
-        $name = is_null($options["name"]) ?
+        $name = is_null($options['name']) ?
             $this->ask('What is the module name? (This is how it will show on the menu)')
-            : $options["name"];
+            : $options['name'];
 
-        $description = is_null($options["description"]) ?
+        $description = is_null($options['description']) ?
             $this->ask('What is the module description? (Brief explanation of what this module does)')
-            : $options["description"];
+            : $options['description'];
 
-        $module_id = is_null($options["module_id"]) ?
+        $module_id = is_null($options['module_id']) ?
             $this->anticipate(
                 'What is the module id? (Must be all lowercase, replace spaces with underscores)',
                 // Autocomplete with the normalized module name.
                 [preg_replace(['/\s+/', '/[^a-z0-9\-\_]/i'], ['_', ''], strtolower($name))]
             )
-            : $options["module_id"];
+            : $options['module_id'];
 
-        $module_dir = app()->resourcePath() . DS . 'views' . DS . $app_name . DS . 'modules' . DS . $module_id;
+        // Reserved module IDs.
+        if (in_array($module_id, ['default', 'none'])) {
+            return $this->error("Invalid module ID.");
+        }
+
+        $parent_module = is_null($options['parent_module']) ?
+            $this->anticipate(
+                'What is the module parent id? (Use "none" to use default template and config")',
+                // Autocomplete with module IDs.
+                array_keys($modules)
+            )
+            : $options['parent_module'];
+
+
+        if ($options['config'] === 'default') {
+            if ($parent_module !== 'none' && isset($modules[$parent_module])) {
+
+                $config = $modules[$parent_module];
+                $config['module_id'] = $module_id;
+                $config['title'] = $name;
+                $config['class'] = 'pkg';
+
+            } else {
+
+                $config = [
+                    'module_id' => $module_id,
+                    'title' => $name,
+                    'app_name' => $this->app_name,
+                    'action' => 'add',
+                    'level' => 'single',
+                    'file_parent' => 'base',
+                    'class' => 'pkg'
+                ];
+            }
+        } else {
+            $config = json_decode($options['config']);
+        }
+
+        $module_dir = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS . 'modules' . DS . $module_id;
 
         try {
             mkdir($module_dir, 0755, true);
@@ -71,20 +116,10 @@ class Create extends Command
             return $this->error('Error creating module dir: ' . $exception->getMessage());
         }
 
-        $config = [
-            'module_id' => $module_id,
-            'title' => $name,
-            'app_name' => $app_name,
-            'action' => 'add',
-            'level' => 'single',
-            'file_parent' => 'base',
-            'class' => 'pkg'
-        ];
-
         if (!$this->saveConfig($module_dir, $config)) {
             return $this->error("Couldn't create config file.");
         }
-        if (!$this->saveTemplate($module_dir, $module_id)) {
+        if (!$this->saveTemplate($module_dir, $module_id, $parent_module)) {
             return $this->error("Couldn't create template file.");
         }
 
@@ -96,9 +131,16 @@ class Create extends Command
         return file_put_contents($module_dir . DS . 'config.json', json_encode($config, JSON_PRETTY_PRINT));
     }
 
-    private function saveTemplate($module_dir, $module_id)
+    /**
+    * Save template for the module on disk.
+    *
+    * @param string $module_dir
+    * @param string $module_id
+    * @param string $parent_module
+    * @return bolean
+    */
+    private function saveTemplate($module_dir, $module_id, $parent_module = null)
     {
-
         $template = <<<EOF
 {{-- $module_id : Start --}}
 <tr data-params='{{json_encode(\$module_params)}}'>
@@ -124,6 +166,34 @@ class Create extends Command
 </tr>
 {{-- $module_id : End --}}
 EOF;
+
+        // Override default template if a parent module is specified.
+        if (!empty($parent_module) && $parent_module !== 'none') {
+            // @todo check if it's an old module.
+            $parent_dir = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS . 'modules' . DS . $parent_module;
+
+            $template = false;
+
+            try {
+                $template = file_get_contents($parent_dir . DS . 'template.blade.php');
+            } catch (\Exception $exception) {
+
+                try {
+                    // Try old module
+                    $template_file = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS . 'modules'
+                        . DS . $parent_module . '.blade.php';
+
+                    $template = file_get_contents($template_file);
+                } catch (\Exception $exception) {
+
+                }
+            }
+
+            if (!$template) {
+                return $this->error("Couldn't fetch parent template file.");
+            }
+        }
+
         return file_put_contents($module_dir . DS . 'template.blade.php', $template);
     }
 }
