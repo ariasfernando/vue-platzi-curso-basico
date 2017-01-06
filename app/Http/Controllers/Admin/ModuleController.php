@@ -7,6 +7,7 @@ use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
+use Stensul\Console\Commands\Module\Create;
 
 class ModuleController extends Controller
 {
@@ -100,11 +101,42 @@ class ModuleController extends Controller
     public function postCreate(Request $request)
     {
         $params = [
-            "titile" => $request->input("module_title"),
-            "description" => $request->input("module_id"),
-            "module" => $request->input("module") ?: []
+            'name' => $request->input('module_title'),
+            'module_id' => $request->input('module_id'),
+            'description' => $request->input('module_description'),
+            'config' => $request->input('module_config') ?: [],
+            'parent_module' => $request->input('parent_module')
         ];
 
-        return \StensulModule::create($params);
+        $exit_code = \StensulModule::create($params);
+
+        switch ($exit_code) {
+            case 0:
+                $message = array('message' => 'SUCCESS');
+                break;
+            case Create::ERROR_INVALID_MODULE_ID:
+                $message = array('message' => 'ERROR_INVALID_MODULE_ID');
+                break;
+            case Create::ERROR_CREATING_MODULE_DIR:
+                $message = array('message' => 'ERROR_CREATING_MODULE_DIR');
+                break;
+            case Create::ERROR_CONFIG_FILE:
+                $message = array('message' => 'ERROR_CONFIG_FILE');
+                break;
+            case Create::ERROR_TEMPLATE_FILE:
+                $message = array('message' => 'ERROR_TEMPLATE_FILE');
+                break;
+            case Create::ERROR_PARENT_TEMPLATE:
+                $message = array('message' => 'ERROR_PARENT_TEMPLATE');
+                break;
+            case Create::ERROR_DUPLICATE_MODULE_ID:
+                $message = array('message' => 'ERROR_DUPLICATE_MODULE_ID');
+                break;
+            case Create::ERROR_INVALID_JSON:
+                $message = array('message' => 'ERROR_INVALID_JSON');
+                break;
+        }
+
+        return $message;
     }
 }

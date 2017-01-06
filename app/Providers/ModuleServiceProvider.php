@@ -74,4 +74,14 @@ class ModuleServiceProvider extends ServiceProvider
 
         return json_decode(file_get_contents(self::$module_dir . DS . $module_id . DS . 'config.json'), true);
     }
+
+    /**
+    * Create new module
+    * @param array $params
+    * @return int Exit code
+    */
+    public static function create($params)
+    {
+        return \Artisan::call('module:create', $params);
+    }
 }

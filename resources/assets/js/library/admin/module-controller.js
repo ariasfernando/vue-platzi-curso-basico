@@ -36,8 +36,9 @@ var moduleController = function( customOptions ){
 	 |	@param: id of the table.
 	 */
 	this.refreshTableView = function( tableId ){
-		if( !tableId )
+		if( !tableId ) {
 			return false;
+		}
 
 		// Get table element.
 		var $table = $("#"+tableId);
@@ -78,17 +79,30 @@ var moduleController = function( customOptions ){
 						spinner.hide();
 						options.busy = false;
 
-						if (response.message == "SUCCESS") {
-							$.magnificPopup.close();
-							_this.refreshTableView( $( options.selectors.dataList ).attr("id") );
-						} else if(response.message == "ERROR_EXISTS"){
-							var errorField = $(options.selectors.mainView).find(".module_name");
-							errorField.focus().addClass("error");
-							errorField.parent().append('<label class="error">The module already exists.</label>');
-						} else if(response.message == "ERROR_CONFIG"){
-							var errorField = $(options.selectors.mainView).find(".module_config");
-							errorField.focus().addClass("error");
-							errorField.parent().append('<label class="error">The config JSON is invalid.</label>');
+						switch(response.message) {
+							case "SUCCESS":
+								$.magnificPopup.close();
+								_this.refreshTableView( $( options.selectors.dataList ).attr("id") );
+								break;
+							case "ERROR_DUPLICATE_MODULE_ID":
+								var errorField = $(options.selectors.mainView).find(".module-id");
+								errorField.focus().addClass("error");
+								errorField.parent().append('<label class="error">The module already exists.</label>');
+								break;
+							case "ERROR_INVALID_MODULE_ID":
+								var errorField = $(options.selectors.mainView).find(".module-id");
+								errorField.focus().addClass("error");
+								errorField.parent().append('<label class="error">Invalid module ID.</label>');
+								break;
+							case "ERROR_INVALID_JSON":
+								var errorField = $(options.selectors.mainView).find(".module-config");
+								errorField.focus().addClass("error");
+								errorField.parent().append('<label class="error">The config JSON is invalid.</label>');
+								break;
+							default:
+								var errorField = $(options.selectors.mainView).find(".module-title");
+								errorField.focus().addClass("error");
+								errorField.parent().append('<label class="error">Temporary error, please try again.</label>');
 						}
 					})
 					.fail(function (error) {
@@ -149,36 +163,45 @@ var moduleController = function( customOptions ){
 	};
 
 	this.refreshModuleTitle = function(element){
-		var moduleConfig = JSON.parse($(options.selectors.configArea).val());
-		var moduleTitle = $(element).val();
-		if ($(options.selectors.moduleId).val() == '') {
-			$(options.selectors.moduleId).val(moduleTitle.replace(/\s+/g, '_').toLowerCase());
+
+		try {
+			var moduleConfig = JSON.parse($(options.selectors.configArea).val());
+			var moduleTitle = $(element).val();
+			if ($(options.selectors.moduleId).val() == '') {
+				$(options.selectors.moduleId).val(moduleTitle.replace(/\s+/g, '_').toLowerCase());
+			}
+			if (typeof(moduleConfig.title) != 'undefined') {
+				moduleConfig.title = moduleTitle;
+				moduleConfig = JSON.stringify(moduleConfig, null, 2);
+				$(options.selectors.configArea).val(moduleConfig);
+			}
 		}
-		if (typeof(moduleConfig.title) != 'undefined') {
-			moduleConfig.title = moduleTitle;
-			moduleConfig = JSON.stringify(moduleConfig, null, 2);
-			$(options.selectors.configArea).val(moduleConfig);
+		catch(Exception) {
 		}
 	};
 
 	this.refreshModuleId = function(element){
-		var moduleConfig = JSON.parse($(options.selectors.configArea).val());
-		var moduleId = $(element).val();
-		if (typeof(moduleConfig.module_id) != 'undefined') {
-			moduleConfig.module_id = moduleId;
-			moduleConfig = JSON.stringify(moduleConfig, null, 2);
-			$(options.selectors.configArea).val(moduleConfig);
+
+		try {
+			var moduleConfig = JSON.parse($(options.selectors.configArea).val());
+			var moduleId = $(element).val();
+			if (typeof(moduleConfig.module_id) != 'undefined') {
+				moduleConfig.module_id = moduleId;
+				moduleConfig = JSON.stringify(moduleConfig, null, 2);
+				$(options.selectors.configArea).val(moduleConfig);
+			}
+		} catch (Exception) {
 		}
 	};
 
 	this.getModules = function(){
-					_this.doAjax("list", "GET", {})
-						.done(function ( modules ) {
-							_this.modules = modules;
-						})
-						.fail(function () {
-							Application.utils.alert.display("Error:", "An error occurred while trying to get the module list, please try again later.", "danger");
-						});
+		_this.doAjax("list", "GET", {})
+			.done(function ( modules ) {
+				_this.modules = modules;
+			})
+			.fail(function () {
+				Application.utils.alert.display("Error:", "An error occurred while trying to get the module list, please try again later.", "danger");
+			});
 	};
 
 	this.init = function(){

@@ -64,7 +64,7 @@ class Create extends Command
         
         // Calling programatically in L5.3 seems to work only with arguments.
         foreach ($options as $option => $value) {
-            if (empty($value)) {
+            if (empty($value) || ($option == 'config')) {
                 try {
                     $options[$option] = $this->argument($option);
                 } catch (\Exception $exception) {
@@ -128,7 +128,8 @@ class Create extends Command
             }
         } else {
             $config = json_decode($options['config']);
-            if ($config === false) {
+
+            if (json_last_error()) {
                 $this->error('Invalid config JSON');
                 return self::ERROR_INVALID_JSON;
             }
