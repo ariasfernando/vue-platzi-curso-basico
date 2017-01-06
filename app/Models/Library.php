@@ -52,7 +52,6 @@ class Library extends Eloquent
                     'sub_menu' => $submenu_items,
                     'level' => 'level-1'
                 ];
-
             } else { // Ungrouped modules.
                 if (isset($modules[$mods])) {
                     $library_modules[] = $modules[$mods];

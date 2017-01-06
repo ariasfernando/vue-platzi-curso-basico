@@ -115,7 +115,6 @@ class Create extends Command
                 $config['module_id'] = $module_id;
                 $config['title'] = $name;
                 $config['class'] = 'pkg';
-
             } else {
                 $config = [
                     'module_id' => $module_id,

@@ -106,6 +106,5 @@ class ModuleController extends Controller
         ];
 
         return \StensulModule::create($params);
-
     }
 }
