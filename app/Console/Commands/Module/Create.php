@@ -11,10 +11,11 @@ class Create extends Command
 
     /**
      * The name and signature of the console command.
+     * Adding optional arguments to allowed this to be called programatically (bug in Laravel?).
      *
      * @var string
      */
-    protected $signature = 'module:create
+    protected $signature = 'module:create {name?} {description?} {module_id?} {parent_module?} {config?}
         {--name= : Module name (This is how it will show on the menu)}
         {--description= : Module description (Brief explanation of what this module does)}
         {--module_id= : Must be all lowercase, replace spaces with underscores}
@@ -32,6 +33,14 @@ class Create extends Command
     * Stensul App Name
     */
     private $app_name;
+
+    const ERROR_INVALID_MODULE_ID = 1;
+    const ERROR_CREATING_MODULE_DIR = 2;
+    const ERROR_CONFIG_FILE = 3;
+    const ERROR_TEMPLATE_FILE = 4;
+    const ERROR_PARENT_TEMPLATE = 5;
+    const ERROR_DUPLICATE_MODULE_ID = 6;
+    const ERROR_INVALID_JSON = 7;
 
     /**
      * Create a new command instance.
@@ -52,6 +61,17 @@ class Create extends Command
     public function handle()
     {
         $options = $this->options();
+        
+        // Calling programatically in L5.3 seems to work only with arguments.
+        foreach ($options as $option => $value) {
+            if (empty($value)) {
+                try {
+                    $options[$option] = $this->argument($option);
+                } catch (\Exception $exception) {
+                }
+            }
+        }
+        
         $modules = \StensulModule::getModuleList();
 
         $name = is_null($options['name']) ?
@@ -71,8 +91,14 @@ class Create extends Command
             : $options['module_id'];
 
         // Reserved module IDs.
-        if (in_array($module_id, ['default', 'none'])) {
-            return $this->error("Invalid module ID.");
+        if (empty($module_id) || in_array($module_id, ['default', 'none'])) {
+            $this->error("Invalid module ID.");
+            return self::ERROR_INVALID_MODULE_ID;
+
+        } elseif (isset($modules[$module_id])) {
+            $this->error("Duplicated module ID.");
+
+            return self::ERROR_DUPLICATE_MODULE_ID;
         }
 
         $parent_module = is_null($options['parent_module']) ?
@@ -83,17 +109,14 @@ class Create extends Command
             )
             : $options['parent_module'];
 
-
         if ($options['config'] === 'default') {
             if ($parent_module !== 'none' && isset($modules[$parent_module])) {
-
                 $config = $modules[$parent_module];
                 $config['module_id'] = $module_id;
                 $config['title'] = $name;
                 $config['class'] = 'pkg';
 
             } else {
-
                 $config = [
                     'module_id' => $module_id,
                     'title' => $name,
@@ -106,6 +129,10 @@ class Create extends Command
             }
         } else {
             $config = json_decode($options['config']);
+            if ($config === false) {
+                $this->error('Invalid config JSON');
+                return self::ERROR_INVALID_JSON;
+            }
         }
 
         $module_dir = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS . 'modules' . DS . $module_id;
@@ -113,14 +140,18 @@ class Create extends Command
         try {
             mkdir($module_dir, 0755, true);
         } catch (\Exception $exception) {
-            return $this->error('Error creating module dir: ' . $exception->getMessage());
+            $this->error('Error creating module dir: ' . $exception->getMessage());
+            return self::ERROR_CREATING_MODULE_DIR;
         }
 
         if (!$this->saveConfig($module_dir, $config)) {
-            return $this->error("Couldn't create config file.");
+            $this->error("Couldn't create config file.");
+            return self::ERROR_CONFIG_FILE;
         }
+
         if (!$this->saveTemplate($module_dir, $module_id, $parent_module)) {
-            return $this->error("Couldn't create template file.");
+            $this->error("Couldn't create template file.");
+            return self::ERROR_TEMPLATE_FILE;
         }
 
         $this->info('Module created!');
@@ -177,7 +208,6 @@ EOF;
             try {
                 $template = file_get_contents($parent_dir . DS . 'template.blade.php');
             } catch (\Exception $exception) {
-
                 try {
                     // Try old module
                     $template_file = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS . 'modules'
@@ -185,12 +215,12 @@ EOF;
 
                     $template = file_get_contents($template_file);
                 } catch (\Exception $exception) {
-
                 }
             }
 
             if (!$template) {
-                return $this->error("Couldn't fetch parent template file.");
+                $this->error("Couldn't fetch parent template file.");
+                return false;
             }
         }
 
