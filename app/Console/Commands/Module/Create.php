@@ -86,14 +86,11 @@ class Create extends Command
 
         if ($options['config'] === 'default') {
             if ($parent_module !== 'none' && isset($modules[$parent_module])) {
-
                 $config = $modules[$parent_module];
                 $config['module_id'] = $module_id;
                 $config['title'] = $name;
                 $config['class'] = 'pkg';
-
             } else {
-
                 $config = [
                     'module_id' => $module_id,
                     'title' => $name,
@@ -177,7 +174,6 @@ EOF;
             try {
                 $template = file_get_contents($parent_dir . DS . 'template.blade.php');
             } catch (\Exception $exception) {
-
                 try {
                     // Try old module
                     $template_file = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS . 'modules'
@@ -185,7 +181,6 @@ EOF;
 
                     $template = file_get_contents($template_file);
                 } catch (\Exception $exception) {
-
                 }
             }
 
