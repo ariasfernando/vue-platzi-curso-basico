@@ -1,16 +1,27 @@
-queueweb:
-  image: "fanbridge/web:v1.7"
-  command: /start.sh
+web:
+  image: "fanbridge/web:v2.0"
   ports:
-   - "49155:80"
+   - "3000:80"
   volumes:
-   - ../logs/:/var/log/
-   - .:/home/stensul/app/
-
-
-queuebase:
-  image: "fanbridge/web:v1.7"
-  command: php /home/stensul/app/artisan queue:work --daemon
+   - ./storage/logs/:/var/log/
+   - .:/usr/src/app
+  links:
+    - documentstore
+    - queue
+worker:
+  image: "fanbridge/web:v2.0"
+  command: php /usr/src/app/artisan queue:work --daemon
   volumes:
-   - ../logs/:/var/log/
-   - .:/home/stensul/app/
+   - ./storage/logs/:/var/log/
+   - .:/usr/src/app
+  links:
+    - documentstore
+    - queue
+
+documentstore:
+  image: "mongo"
+  volumes:
+    - ./storage/data/:/data/db
+
+queue:
+  image: "redis"

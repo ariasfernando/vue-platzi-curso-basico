@@ -12,7 +12,6 @@
 /bootstrap/cache/
 composer.lock
 npm-debug.log
-
 .buildpath
 .env
 .project
@@ -22,3 +21,5 @@ npm-debug.log
 .gitattributes
 .vscode
 composer.phar
+/storage/data
+docker-compose.yaml
