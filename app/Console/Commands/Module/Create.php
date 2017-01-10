@@ -94,7 +94,6 @@ class Create extends Command
         if (empty($module_id) || in_array($module_id, ['default', 'none'])) {
             $this->error("Invalid module ID.");
             return self::ERROR_INVALID_MODULE_ID;
-
         } elseif (isset($modules[$module_id])) {
             $this->error("Duplicated module ID.");
 

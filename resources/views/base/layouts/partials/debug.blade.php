@@ -4,7 +4,7 @@
         (function(win) {
             stensul_stacktrace.init(win, {
                 'app': '{{ strtolower(config('app.name')) }}',
-                'url': '{{ url()->full() }}',
+                'url': '{{ url()->current() }}',
                 'user_id': '{{ auth()->check() ? auth()->user()->id : 'no-logged-user' }}',
                 'environment': '{{ app('env') }}',
                 'version': '{{ config('app.version') }}'
