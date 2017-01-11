@@ -130,7 +130,7 @@ class Responsys implements ApiConnector
                             'Campaign uploaded to Responsys',
                             [
                                 'properties' => [
-                                    'campaign_id' => new ObjectID($campaign_id),
+                                    'campaign_id' => new ObjectID($this->campaign->id),
                                     'filename' => $filename,
                                     'user_id' => new ObjectID(Auth::id())
                                 ]
@@ -140,7 +140,7 @@ class Responsys implements ApiConnector
                         Upload::create(
                             [
                                 'api' => 'responsys',
-                                'campaign_id' => new ObjectID($campaign_id),
+                                'campaign_id' => new ObjectID($this->campaign->id),
                                 'original_filename' => $original_filename,
                                 'filename' => $filename,
                                 'path' => $path,

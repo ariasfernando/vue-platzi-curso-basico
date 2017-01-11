@@ -127,6 +127,14 @@ $default = [
             'app_name' => 'base',
             'module_id' => 'two_column_media_shared_height',
             'level' => 'single'
+        ],
+
+        'double_text_editor' => [
+            'title' => 'Double tinyMCE Editor',
+            'action' => 'add',
+            'app_name' => 'base',
+            'module_id' => 'double_text_editor',
+            'level' => 'single'
         ]
     ]
 ];

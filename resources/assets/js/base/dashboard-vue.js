@@ -1,3 +1,4 @@
+
 (function($){
     /*
      * Vue
@@ -222,8 +223,7 @@
         }
     });
 
-    Vue.component('email-in-progress', {
-        template: '#email-in-progress-template',
+    var tableMixin = {
         data: function() {
             return {
                 sortKey: 'updated_at',
@@ -315,7 +315,7 @@
                 this.sortKey = sortKey;
             },
             prepareOutput: function(value) {
-                var search = this.tags.concat(this.terms);
+                var search = this.terms;
                 if (this.highlight == true) {
                     for (var i = 0; i < search.length; i++) {
                         value = value.replace(new RegExp('('+search[i]+')', 'gi'), '%%%$1###');
@@ -346,259 +346,24 @@
                 });
             }
         }
+    };
+
+    Vue.component('email-in-progress', {
+        template: '#email-in-progress-template',
+        mixins: [ tableMixin ]
     });
 
     Vue.component('templates-campaigns', {
         template: '#templates-campaigns-template',
-        data: function() {
-            return {
-                sortKey: 'updated_at',
-                reverse: false,
-                showModal: false,
-                selectedCampaignId: null
-            }
-        },
-        props: {
-            campaigns: {
-                type: Array,
-                required: true
-            },
-            canSearch: {
-                type: Boolean
-            },
-            highlight: {
-                type: Boolean,
-                default: false
-            },
-            showTags: {
-                type: Number
-            },
-            loading: {
-                type: Boolean,
-                default: false
-            },
-            templating: {
-                type: Boolean,
-                default: false
-            },
-            tags: {
-                type: Array
-            },
-            terms: {
-                type: Array
-            },
-            type: {
-                type: String,
-                required: true
-            }
-        },
-        computed: {
-            search: function() {
-                return this.tags.concat(this.terms).join('~~').toLowerCase().split('~~');
-            }
-        },
-        methods: {
-            addSearchTag: function(tag) {
-                if (this.canSearch == 1) {
-                    this.$emit('add-search-tag', tag);
-                }
-            },
-            askToDeleteCampaign: function(campaignId) {
-                this.selectedCampaignId = campaignId;
-                this.showModal = true;
-            },
-            changePage: function(page) {
-                this.$emit('change-page', page, this.type);
-            },
-            confirmDeleteCampaign: function() {
-                $.post(Application.globals.baseUrl + '/campaign/delete', {
-                    campaign_id: this.selectedCampaignId
-                }, function(campaigns) {
-                    this.selectedCampaignId = null;
-                    this.showModal = false;
-                    this.$emit('refresh-campaigns', this.type);
-                }.bind(this), 'json');
-            },
-            highlightTag: function(tag) {
-                if (this.highlight == true) {
-                    if (this.search.indexOf(tag.toLowerCase()) > -1) {
-                        return true;
-                    }
-                    for (var i = 0; i < this.search.length; i++) {
-                        if (this.search[i].length > 0) {
-                            var re = new RegExp('('+this.search[i]+')', 'gi');
-                            if (re.test(tag)) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
-            },
-            sortBy: function(sortKey) {
-                this.reverse = (this.sortKey == sortKey) ? !this.reverse : false;
-                this.$emit('apply-sort', sortKey, this.reverse == true ? 'asc' : 'desc', this.type, (this.sortKey != sortKey));
-                this.sortKey = sortKey;
-            },
-            prepareOutput: function(value) {
-                var search = this.tags.concat(this.terms);
-                if (this.highlight == true) {
-                    for (var i = 0; i < search.length; i++) {
-                        value = value.replace(new RegExp('('+search[i]+')', 'gi'), '%%%$1###');
-                    }
-                    value = value.replace(/%%%/g, '<span class="highlight">');
-                    value = value.replace(/###/g, '</span>');
-                }
-                return value;
-            },
-            lockCampaign: function(campaign_id, page) {
-                var data = {
-                    campaign_id: campaign_id
-                };
-                var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {data: data});
-                var vm = this;
-                lockCampaign.done(function(data) {
-                    vm.$emit('change-page', page, vm.type);
-                });
-            },
-            unlockCampaign: function(campaign_id, page) {
-                var data = {
-                    campaign_id: campaign_id
-                };
-                var unlockCampaign = Application.utils.doAjax('/campaign/unlock-forced', {data: data});
-                var vm = this;
-                unlockCampaign.done(function(data) {
-                    vm.$emit('change-page', page, vm.type);
-                });
-            }
-        }
+        mixins: [ tableMixin ]
     });
 
     Vue.component('finished-emails', {
         template: '#finished-emails-template',
-        data: function() {
-            return {
-                sortKey: 'updated_at',
-                reverse: false,
-                showModal: false,
-                selectedCampaignId: null
-            }
-        },
+        mixins: [ tableMixin ],
         props: {
-            campaigns: {
-                type: Array,
-                required: true
-            },
-            canSearch: {
-                type: Boolean
-            },
-            highlight: {
-                type: Boolean,
-                default: false
-            },
-            loading: {
-                type: Boolean,
-                default: false
-            },
             showPlaintext: {
                 type: Number
-            },
-            showTags: {
-                type: Number
-            },
-            templating: {
-                type: Boolean,
-                default: false
-            },
-            tags: {
-                type: Array
-            },
-            terms: {
-                type: Array
-            },
-            type: {
-                type: String,
-                required: true
-            }
-        },
-        computed: {
-            search: function() {
-                return this.tags.concat(this.terms).join('~~').toLowerCase().split('~~');
-            }
-        },
-        methods: {
-            addSearchTag: function(tag) {
-                if (this.canSearch == 1) {
-                    this.$emit('add-search-tag', tag);
-                }
-            },
-            askToDeleteCampaign: function(campaignId) {
-                this.selectedCampaignId = campaignId;
-                this.showModal = true;
-            },
-            changePage: function(page) {
-                this.$emit('change-page', page, this.type);
-            },
-            confirmDeleteCampaign: function() {
-                $.post(Application.globals.baseUrl + '/campaign/delete', {
-                    campaign_id: this.selectedCampaignId
-                }, function(campaigns) {
-                    this.selectedCampaignId = null;
-                    this.showModal = false;
-                    this.$emit('refresh-campaigns', this.type);
-                }.bind(this), 'json');
-            },
-            highlightTag: function(tag) {
-                if (this.highlight == true) {
-                    if (this.search.indexOf(tag.toLowerCase()) > -1) {
-                        return true;
-                    }
-                    for (var i = 0; i < this.search.length; i++) {
-                        if (this.search[i].length > 0) {
-                            var re = new RegExp('('+this.search[i]+')', 'gi');
-                            if (re.test(tag)) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
-            },
-            sortBy: function(sortKey) {
-                this.reverse = (this.sortKey == sortKey) ? !this.reverse : false;
-                this.$emit('apply-sort', sortKey, this.reverse == true ? 'asc' : 'desc', this.type, (this.sortKey != sortKey));
-                this.sortKey = sortKey;
-            },
-            prepareOutput: function(value) {
-                var search = this.tags.concat(this.terms);
-                if (this.highlight == true) {
-                    for (var i = 0; i < search.length; i++) {
-                        value = value.replace(new RegExp('('+search[i]+')', 'gi'), '%%%$1###');
-                    }
-                    value = value.replace(/%%%/g, '<span class="highlight">');
-                    value = value.replace(/###/g, '</span>');
-                }
-                return value;
-            },
-            lockCampaign: function(campaign_id, page) {
-                var data = {
-                    campaign_id: campaign_id
-                };
-                var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {data: data});
-                var vm = this;
-                lockCampaign.done(function(data) {
-                    vm.$emit('change-page', page, vm.type);
-                });
-            },
-            unlockCampaign: function(campaign_id, page) {
-                var data = {
-                    campaign_id: campaign_id
-                };
-                var unlockCampaign = Application.utils.doAjax('/campaign/unlock-forced', {data: data});
-                var vm = this;
-                unlockCampaign.done(function(data) {
-                    vm.$emit('change-page', page, vm.type);
-                });
             }
         }
     });

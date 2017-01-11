@@ -225,6 +225,8 @@ class CampaignController extends Controller
      */
     public function postSendPreview(Request $request)
     {
+        $params = Campaign::find($request->input('campaign_id'));
+        StensulLocale::init($params['locale']);
         if (env('EMAIL_PREVIEW_AS_ATTACHMENT', false)) {
             return EmailSender::sendPreviewAsAttachment(
                 $request->input('campaign_id'),
