@@ -26,16 +26,18 @@ class Show extends Command
      */
     public function fire()
     {
-        $users = User::all(['name', 'email', 'roles']);
+        $users = User::all(['name', 'email', 'roles', 'deleted_at']);
         $user_array = array();
 
         foreach ($users as $user) {
-            $user_array[] = [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'roles' => join(",", $user->roles)
-            ];
+            if (!$user->trashed()) {
+                $user_array[] = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'roles' => join(",", $user->roles)
+                ];
+            }
         }
 
         if (count($users) === 0) {

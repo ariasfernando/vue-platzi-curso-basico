@@ -17,11 +17,22 @@
                     <input type="hidden" name="campaign_id" value="" class="campaign_id" />
                     <input type="hidden" name="api_driver" value="{{ $app_config['api']['eloqua']['class'] }}" class="api_driver" />
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                    <input type="hidden" name="use_oauth" value="{{ $app_config['api']['eloqua']['use_oauth'] }}">
+                    <input type="hidden" name="access_token" value="{{ session('api:eloqua:token', '') }}" />
                     <div class="form-group">
                         <label for="filename">Filename (extension will be added automatically by stensul)</label>
                         <input type="text" class="form-control filename" name="filename" value=""
                             placeholder="Enter a name for your campaign" data-validation='{ "required":"true" }'/>
                     </div>
+                    @if(isset($app_config['api']['eloqua']) &&
+                        isset($app_config['api']['eloqua']['subject_input']) &&
+                        $app_config['api']['eloqua']['subject_input'])
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" class="form-control subject" name="subject" value=""
+                                placeholder="Enter the subject for your campaign" data-validation='{ "required":"true" }'/>
+                        </div>
+                    @endif
                     <div class="uploaded-data" data-info="filename">
                         <label>File upload history:</label>
                         <table class="table table-condensed">

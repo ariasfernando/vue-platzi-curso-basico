@@ -134,4 +134,15 @@ class LocaleServiceProvider extends ServiceProvider
 
         return $css_path;
     }
+
+    /**
+     * Get text direction by language.
+     *
+     * @return string direction (ltr or rtl)
+     */
+    public static function textDirection()
+    {
+        $locale_config = \Config::get('locale.langs.' . self::$locale);
+        return $locale_config['direction'];
+    }
 }

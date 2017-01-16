@@ -16,7 +16,7 @@
 	                <input name="campaign_preheader" type="text" maxlength="140" value="{{ $params['campaign_data']['campaign_preheader'] or '' }}" data-validation='{"required":"true"}'/>
 	            </div>
 			@endif
-			@if (config('campaign.enable_tagging'))
+			@if (Config::get('campaign.enable_tagging'))
 				<div class="config-box-divider">
 					<input name="tag_entry" type="text" placeholder="Add Tag" maxlength="30" data-autocomplete='<?php echo htmlentities( json_encode(Tag::getTagNames()), ENT_QUOTES, 'UTF-8' ); ?>'/>
 					<div id="tags-box" class="clearfix">

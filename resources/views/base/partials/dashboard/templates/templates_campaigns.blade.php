@@ -39,7 +39,7 @@
                     </td>
                     <td :title="campaign.user_email">
                         @{{ campaign.user_email }}
-                        <i class="fa fa-lock text-danger" v-if="campaign.locked"></i>
+                        <i class="fa fa-lock text-danger" v-if="enableLocking && campaign.locked"></i>
                     </td>
                     <td :title="campaign.campaign_name" v-html="prepareOutput(campaign.campaign_name)"></td>
                     <td v-if="showTags == 1">

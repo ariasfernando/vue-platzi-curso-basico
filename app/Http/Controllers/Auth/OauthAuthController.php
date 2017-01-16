@@ -76,12 +76,15 @@ class OauthAuthController extends Controller
             if (User::where('email', '=', $email)->exists()) {
                 $roles_array = array_column(Role::all(['name'])->toArray(), 'name');
                 $user_auth = User::where('email', '=', $email)->firstOrFail();
-
-                if (count($roles_array) != 0 && (count(array_intersect($user_auth->roles, $roles_array)) > 0)) {
-                    Auth::login($user_auth, true);
-                    Activity::log('User Logged in');
-                } else {
-                    $error = array( "message" => "ERROR_ROLE" );
+                if (!$user_auth->trashed()) {
+                    if (count($roles_array) != 0 && (count(array_intersect($user_auth->roles, $roles_array)) > 0)) {
+                        Auth::login($user_auth, true);
+                        Activity::log('User Logged in');
+                    } else {
+                        $error = array( "message" => "ERROR_ROLE" );
+                    }
+                }else{
+                    $error = Activity::log('User login fail [ERROR_USER]');
                 }
             } else {
                 $error = array( "message" => "ERROR_EMAIL" );

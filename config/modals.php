@@ -259,6 +259,40 @@ $default = [
             "file_upload" => "Allowed file types: png, jpg and gif."
         ]
      ],
+     "mie_v2_library_scraper_instagram" => [
+        "title" => "Instagram Scraper",
+        "app_name" => "base",
+        "view" => "single_image_editor",
+        "config_modal_key" => "image_modal_single_crop",
+        "scale_ratio" => 2,
+        "enabled_options" => "destination_url alt_text image_upload image_crop image_library",
+        "enabled_plugins" => "imageLibraryScraper",
+        "api_type" => "instagram",
+        "image_size" => [
+            "height" => 400,
+            "width" => 660
+        ],
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
+        ]
+     ],
+     "mie_v2_library_scraper_blog" => [
+        "title" => "Blog Scraper",
+        "app_name" => "base",
+        "view" => "single_image_editor",
+        "config_modal_key" => "image_modal_single_crop",
+        "scale_ratio" => 2,
+        "enabled_options" => "destination_url alt_text image_upload image_crop image_library",
+        "enabled_plugins" => "imageLibraryScraper",
+        "api_type" => "blog",
+        "image_size" => [
+            "height" => 400,
+            "width" => 660
+        ],
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
+        ]
+     ],
      "mie_v2_overlays" => [
         "title" => "Image with overlays",
         "app_name" => "base",

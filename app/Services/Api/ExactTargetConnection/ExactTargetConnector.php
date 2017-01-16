@@ -49,6 +49,21 @@ class ExactTargetConnector
      */
     protected $fuelDe;
 
+    protected $library_name = '';
+
+    public function setLibraryName($library_name)
+    {
+        $this->library_name = $library_name;
+        if (!empty(\Config::get('exact_target.libraries.' . $this->library_name . '.credentials', []))) {
+            $this->config = \Config::get('exact_target.libraries.'. $this->library_name . '.credentials');
+            $this->getTokenUri = $this->config['authPath'];
+            $this->clientId = $this->config['clientid'];
+            $this->clientSecret = $this->config['clientsecret'];
+            $this->fuel = new \ET_Client(false, false, $this->config);
+            $this->accessToken = $this->getToken($this->clientId, $this->clientSecret, $this->getTokenUri);
+        }
+    }
+
     /**
      * @param Client $client
      * @param ET_Client $fuel

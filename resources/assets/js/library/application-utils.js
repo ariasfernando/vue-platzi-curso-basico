@@ -10,7 +10,7 @@ Application.utils = {
 		errorBox: Application.globals.errorPlaceholder,
 		/*
 		 *	Display alerts
-		 *	Type: info(default), success, waring, danger
+		 *	Type: info(default), success, warning, danger
 		 */
 		display: function( title, message, type ){
 			if( !title && !message )
@@ -508,36 +508,283 @@ Application.utils = {
 	/*
 	 * Convert especial characters
 	 */
-	charConvert: function(str, inverse) {
+    charConvert: function(str, inverse) {
 
-		var chars = ["©","Û","®","ž","Ü","Ÿ","Ý","$","Þ","%","¡","ß","¢","à","£","á","À","¤","â","Á","¥","ã","Â","¦","ä","Ã","§","å","Ä","¨","æ","Å","©","ç","Æ","ª","è","Ç","«","é","È","¬","ê","É","­","ë","Ê","®","ì","Ë","¯","í","Ì","°","î","Í","±","ï","Î","²","ð","Ï","³","ñ","Ð","´","ò","Ñ","µ","ó","Õ","¶","ô","Ö","·","õ","Ø","¸","ö","Ù","¹","÷","Ú","º","ø","Û","»","ù","Ü","@","¼","ú","Ý","½","û","Þ","€","¾","ü","ß","¿","ý","à","‚","À","þ","á","ƒ","Á","ÿ","å","„","Â","æ","…","Ã","ç","†","Ä","è","‡","Å","é","ˆ","Æ","ê","‰","Ç","ë","Š","È","ì","‹","É","í","Œ","Ê","î","Ë","ï","Ž","Ì","ð","Í","ñ","Î","ò","‘","Ï","ó","’","Ð","ô","“","Ñ","õ","”","Ò","ö","•","Ó","ø","–","Ô","ù","—","Õ","ú","˜","Ö","û","™","×","ý","š","Ø","þ","›","Ù","ÿ","œ","Ú","&","<",">"];
-		var codes = ["&copy;","&#219;","&reg;","&#158;","&#220;","&#159;","&#221;","&#36;","&#222;","&#37;","&#161;","&#223;","&#162;","&#224;","&#163;","&#225;","&Agrave;","&#164;","&#226;","&Aacute;","&#165;","&#227;","&Acirc;","&#166;","&#228;","&Atilde;","&#167;","&#229;","&Auml;","&#168;","&#230;","&Aring;","&#169;","&#231;","&AElig;","&#170;","&#232;","&Ccedil;","&#171;","&#233;","&Egrave;","&#172;","&#234;","&Eacute;","&#173;","&#235;","&Ecirc;","&#174;","&#236;","&Euml;","&#175;","&#237;","&Igrave;","&#176;","&#238;","&Iacute;","&#177;","&#239;","&Icirc;","&#178;","&#240;","&Iuml;","&#179;","&#241;","&ETH;","&#180;","&#242;","&Ntilde;","&#181;","&#243;","&Otilde;","&#182;","&#244;","&Ouml;","&#183;","&#245;","&Oslash;","&#184;","&#246;","&Ugrave;","&#185;","&#247;","&Uacute;","&#186;","&#248;","&Ucirc;","&#187;","&#249;","&Uuml;","&#64;","&#188;","&#250;","&Yacute;","&#189;","&#251;","&THORN;","&#128;","&#190;","&#252","&szlig;","&#191;","&#253;","&agrave;","&#130;","&#192;","&#254;","&aacute;","&#131;","&#193;","&#255;","&aring;","&#132;","&#194;","&aelig;","&#133;","&#195;","&ccedil;","&#134;","&#196;","&egrave;","&#135;","&#197;","&eacute;","&#136;","&#198;","&ecirc;","&#137;","&#199;","&euml;","&#138;","&#200;","&igrave;","&#139;","&#201;","&iacute;","&#140;","&#202;","&icirc;","&#203;","&iuml;","&#142;","&#204;","&eth;","&#205;","&ntilde;","&#206;","&ograve;","&#145;","&#207;","&oacute;","&#146;","&#208;","&ocirc;","&#147;","&#209;","&otilde;","&#148;","&#210;","&ouml;","&#149;","&#211;","&oslash;","&#150;","&#212;","&ugrave;","&#151;","&#213;","&uacute;","&#152;","&#214;","&ucirc;","&#153;","&#215;","&yacute;","&#154;","&#216;","&thorn;","&#155;","&#217;","&yuml;","&#156;","&#218;","&amp;","&lt;","&gt;"];
+        var chars = {
+            "©": "&copy;",
+            "Û": "&#219;",
+            "®": "&reg;",
+            "ž": "&#158;",
+            "Ü": "&#220;",
+            "Ÿ": "&#159;",
+            "Ý": "&#221;",
+            "$": "&#36;",
+            "Þ": "&#222;",
+            "%": "&#37;",
+            "¡": "&#161;",
+            "ß": "&#223;",
+            "¢": "&#162;",
+            "à": "&#224;",
+            "£": "&#163;",
+            "á": "&#225;",
+            "À": "&Agrave;",
+            "¤": "&#164;",
+            "â": "&#226;",
+            "Á": "&Aacute;",
+            "¥": "&#165;",
+            "ã": "&#227;",
+            "Â": "&Acirc;",
+            "¦": "&#166;",
+            "ä": "&#228;",
+            "Ã": "&Atilde;",
+            "§": "&#167;",
+            "å": "&#229;",
+            "Ä": "&Auml;",
+            "¨": "&#168;",
+            "æ": "&#230;",
+            "Å": "&Aring;",
+            "©": "&#169;",
+            "ç": "&#231;",
+            "Æ": "&AElig;",
+            "ª": "&#170;",
+            "è": "&#232;",
+            "Ç": "&Ccedil;",
+            "«": "&#171;",
+            "é": "&#233;",
+            "È": "&Egrave;",
+            "¬": "&#172;",
+            "ê": "&#234;",
+            "É": "&Eacute;",
+            "­": "&#173;",
+            "ë": "&#235;",
+            "Ê": "&Ecirc;",
+            "ì": "&#236;",
+            "Ë": "&Euml;",
+            "¯": "&#175;",
+            "í": "&#237;",
+            "Ì": "&Igrave;",
+            "°": "&#176;",
+            "î": "&#238;",
+            "Í": "&Iacute;",
+            "±": "&#177;",
+            "ï": "&#239;",
+            "Î": "&Icirc;",
+            "²": "&#178;",
+            "ð": "&#240;",
+            "Ï": "&Iuml;",
+            "³": "&#179;",
+            "ñ": "&#241;",
+            "Ð": "&ETH;",
+            "´": "&#180;",
+            "ò": "&#242;",
+            "Ñ": "&Ntilde;",
+            "µ": "&#181;",
+            "ó": "&#243;",
+            "Õ": "&Otilde;",
+            "¶": "&#182;",
+            "ô": "&#244;",
+            "Ö": "&Ouml;",
+            "·": "&#183;",
+            "õ": "&#245;",
+            "Ø": "&Oslash;",
+            "¸": "&#184;",
+            "ö": "&#246;",
+            "Ù": "&Ugrave;",
+            "¹": "&#185;",
+            "÷": "&#247;",
+            "Ú": "&Uacute;",
+            "º": "&#186;",
+            "ø": "&#248;",
+            "Û": "&Ucirc;",
+            "»": "&#187;",
+            "ù": "&#249;",
+            "Ü": "&Uuml;",
+            "@": "&#64;",
+            "¼": "&#188;",
+            "ú": "&#250;",
+            "Ý": "&Yacute;",
+            "½": "&#189;",
+            "û": "&#251;",
+            "Þ": "&THORN;",
+            "€": "&#128;",
+            "¾": "&#190;",
+            "ü": "&#252",
+            "ß": "&szlig;",
+            "¿": "&#191;",
+            "ý": "&#253;",
+            "à": "&agrave;",
+            "‚": "&#130;",
+            "À": "&#192;",
+            "þ": "&#254;",
+            "á": "&aacute;",
+            "ƒ": "&#131;",
+            "Á": "&#193;",
+            "ÿ": "&#255;",
+            "å": "&aring;",
+            "„": "&#132;",
+            "Â": "&#194;",
+            "æ": "&aelig;",
+            "…": "&#133;",
+            "Ã": "&#195;",
+            "ç": "&ccedil;",
+            "†": "&#134;",
+            "Ä": "&#196;",
+            "è": "&egrave;",
+            "‡": "&#135;",
+            "Å": "&#197;",
+            "é": "&eacute;",
+            "ˆ": "&#136;",
+            "Æ": "&#198;",
+            "ê": "&ecirc;",
+            "‰": "&#137;",
+            "Ç": "&#199;",
+            "ë": "&euml;",
+            "Š": "&#138;",
+            "È": "&#200;",
+            "ì": "&igrave;",
+            "‹": "&#139;",
+            "É": "&#201;",
+            "í": "&iacute;",
+            "Œ": "&#140;",
+            "Ê": "&#202;",
+            "î": "&icirc;",
+            "Ë": "&#203;",
+            "ï": "&iuml;",
+            "Ž": "&#142;",
+            "Ì": "&#204;",
+            "ð": "&eth;",
+            "Í": "&#205;",
+            "ñ": "&ntilde;",
+            "Î": "&#206;",
+            "ò": "&ograve;",
+            "‘": "&#145;",
+            "Ï": "&#207;",
+            "ó": "&oacute;",
+            "’": "&#146;",
+            "Ð": "&#208;",
+            "ô": "&ocirc;",
+            "“": "&#147;",
+            "Ñ": "&#209;",
+            "õ": "&otilde;",
+            "”": "&#148;",
+            "Ò": "&#210;",
+            "ö": "&ouml;",
+            "•": "&#149;",
+            "Ó": "&#211;",
+            "ø": "&oslash;",
+            "–": "&#150;",
+            "Ô": "&#212;",
+            "ù": "&ugrave;",
+            "—": "&#151;",
+            "Õ": "&#213;",
+            "ú": "&uacute;",
+            "˜": "&#152;",
+            "Ö": "&#214;",
+            "û": "&ucirc;",
+            "™": "&trade;",
+            "×": "&#215;",
+            "ý": "&yacute;",
+            "š": "&#154;",
+            "Ø": "&#216;",
+            "þ": "&thorn;",
+            "›": "&#155;",
+            "Ù": "&#217;",
+            "ÿ": "&yuml;",
+            "œ": "&#156;",
+            "Ú": "&#218;",
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '£': '&pound;',
+            "℠": "&#x2120;"
+        }
 
-		for(var x=0; x<chars.length; x++){
-			if(inverse){
-				str = str.replace(new RegExp(chars[x],"g"), codes[x]);
-			}else{
-				str = str.replace(new RegExp(codes[x],"g"), chars[x]);
-			}
-		}
+        $.each(chars, function(key, value){
+            if(inverse){
+                str = str.replace(new RegExp(key,"g"), value);
+            }else{
+                str = str.replace(new RegExp(value,"g"), key);
+            }
+        });
 
-		return str;
-	},
+        return str;
+    },
 
-	changeBuildingMode: function(selected) {
-        	
-    	var $canvas = Application.utils.getCanvas();
-		var arrayMqClass = ['display-mobile', 'show-img-device','hidden-device','element-block-center','mobile-margin','full-width'];	
+    encodeHtmlEntities: function($cleanedHtml) {
+        var all = $cleanedHtml.find("p, span, div, h1, h2, h3, h4, h5, a, td")
 
-		$canvas.trigger('changeBuildingMode', [ selected ] );
-        
-    	$.each( arrayMqClass, function( key, name ){
-		if ( selected == 'mobile') {
-        		$('.' + name).addClass('st-js-' + name);
-		} else {
-        		$('.' + name).removeClass('st-js-' + name);
-		}
-    	});	
+        $.map(all, function(el, index) {
+            var textConnvert =  Application.utils.charConvertHtmlEntities($(el).html());
+            if(el.innerText.length > 0) {
+                $(el).text(textConnvert);
+            }
+        });
+
+        return $cleanedHtml;
+    },
+
+    charConvertHtmlEntities: function(str) {
+        var codesToChars = {
+            '&amp;':'&#38;',
+            '&nbsp;':'&#160;',
+            '&':'&#38;',
+            ';':'&#59;', 
+            '\\?':'&#63;',
+            '=':'&#61;',
+            ':':'&#58;',
+            '•':'&#8226;',
+            ',':'&#44;',
+            '"':'&quot;',
+            '’':'&rsquo;',
+            '‘':'&lsquo;',
+            '”':'&rdquo;',
+            '“':'&ldquo;',
+            '←':'&larr;',
+            '→':'&rarr;',
+            '↑':'&uarr;',
+            '↓':'&darr;',
+            '–':'&#8211;',
+            '—':'&#8212;',
+            '»':'&#187;',
+            '£':'&#163;',
+            '©':'&#169;',
+            '®':'&#174;',
+            '℠':'&#8480;',
+            '™':'&#8482;'
+        };
+
+        var rex = new RegExp('(<[^>]*>)|(&[a-zA-Z0-9#]+;)', "gm");
+        var re = new RegExp(Object.keys(codesToChars).join("|"),"gi");
+        var parts = str.split(rex);
+        var res = '';
+
+        for (var i = 0; i < parts.length; i++) {
+            if (typeof parts[i] !== 'undefined') {
+                if ($.inArray(parts[i].charAt(0), ['<', '&']) < 0) {
+                    parts[i] = parts[i].replace(re, function(matched) {
+                        return matched === '?' ? '&#63;' : codesToChars[matched];
+                    });
+                }
+                res = res + parts[i];
+            }
+        }
+
+        return res;
+    },
+
+    changeBuildingMode: function(selected) {
+        var $canvas = Application.utils.getCanvas();
+        var arrayMqClass = ['display-mobile', 'show-img-device','hidden-device','element-block-center','mobile-margin','full-width'];
+
+        $canvas.trigger('changeBuildingMode', [ selected ] );
+
+        $.each( arrayMqClass, function( key, name ){
+            if ( selected == 'mobile') {
+                    $('.' + name).addClass('st-js-' + name);
+            } else {
+                    $('.' + name).removeClass('st-js-' + name);
+            }
+        }); 
 
     },
 
@@ -545,64 +792,14 @@ Application.utils = {
         return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(hexVal);
     },
 
-	isAmpScript: function(string){
-		if( !Application.globals.enableAmpscript ){
-			return false;
-		}
-
-		if( string.search(/(%%=v)|(=%%)/g) >= 0 ){
-			return true;
-		}
-		return false;
-	},
-
-	notifications: function() {
-
-	    function create(params) {
-
-			var defaultParams = {
-				theme: 'stensul',
-				layout: 'topRight',
-				text: '',
-				animation: {
-					open: { height: 'toggle' },
-					close: { height: 'toggle' },
-					easing: 'swing',
-					speed: 500
-				},
-				onShow: function() {},
-				afterShow: function() {},
-				onClose: function() {},
-				afterClose: function() {},
-				onCloseClick: function() {}
-			};
-
-            var params = $.extend(defaultParams, params);
-
-            return noty(params);
-	    }
-
-        function get(id) {
-            $.noty.get(id);
+    isAmpScript: function(string){
+        if( !Application.globals.enableAmpscript ){
+            return false;
         }
 
-		function show(id) {
-			$.noty.get(id);
-		}
-
-		function close(id) {
-			$.noty.close(id);
-		}
-
-		function closeAll () {
-			$.noty.closeAll();
-		}
-
-		return {
-		    create: create,
-			show: show,
-			close: close,
-			closeAll: closeAll
-		};
-	}
-};
+        if( string.search(/(%%=v)|(=%%)/g) >= 0 ){
+            return true;
+        }
+        return false;
+    }
+}

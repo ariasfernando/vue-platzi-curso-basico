@@ -1,5 +1,4 @@
 
-(function($){
     /*
      * Vue
      */
@@ -39,7 +38,8 @@
                     current: false,
                     finished: false,
                     template: false
-                }
+                },
+                last_uploads: {}
             }
         },
         props: ['config'],
@@ -264,6 +264,10 @@
             type: {
                 type: String,
                 required: true
+            },
+            enableLocking: {
+                type: Boolean,
+                default: false
             }
         },
         computed: {
@@ -360,10 +364,27 @@
 
     Vue.component('finished-emails', {
         template: '#finished-emails-template',
+        data: function() {
+            return {
+                last_uploads: {},
+            }
+        },
         mixins: [ tableMixin ],
         props: {
             showPlaintext: {
                 type: Number
+            }
+        },
+        methods: {
+            isUploaded: function(campaign) {
+                if (campaign.uploads.length) {
+                    var campaign_date = new Date(campaign.updated_at);
+                    var upload_date = new Date(campaign.uploads[0].updated_at);
+                    if (upload_date.getTime() >= campaign_date.getTime()) {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
     });
@@ -423,8 +444,6 @@
         template: '#modal-template'
     });
 
-    var vm = new Vue({
+    var $vm = new Vue({
         el: '#dashboard'
     });
-
-})(jQuery);

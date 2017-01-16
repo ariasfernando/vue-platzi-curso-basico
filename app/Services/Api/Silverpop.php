@@ -47,6 +47,19 @@ class Silverpop implements ApiConnector
     {
 
         if (!is_null($campaign)) {
+            if($campaign->library) {
+                $library_name = $campaign->library;
+            } elseif (array_key_exists('library_name', $request)) {
+                $library_name = $request['library_name'];
+            }
+            if (isset($library_name) && !empty($this->silverpop_config['libraries'][$library_name])) {
+                $this->client = new SilverpopConnector(
+                    $this->silverpop_config['api_path'],
+                    $this->silverpop_config['libraries'][$library_name]['user_name'],
+                    $this->silverpop_config['libraries'][$library_name]['password'],
+                    $library_name
+                );
+            }
             $response = $this->client->saveMailing($campaign, $request);
 
             if (isset($response["email_id"])) {

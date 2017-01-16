@@ -12,6 +12,7 @@ class ExactTarget implements ApiConnector
 {
 
     private $client;
+    private $library_name;
 
     /**
      * Constructor
@@ -31,8 +32,15 @@ class ExactTarget implements ApiConnector
      */
     public function uploadEmail($campaign = null, $request = null)
     {
-        $check_email = $this->client->retrieveEmails($campaign->id);
+        if($campaign->library) {
+            $this->library_name = $campaign->library;
+        } elseif (array_key_exists('library_name', $request)) {
+            $this->library_name = $request['library_name'];
 
+        }
+        $this->client->setLibraryName($this->library_name);
+
+        $check_email = $this->client->retrieveEmails($campaign->id);
         if (count($check_email->results) === 0) {
             $response = $this->client->createEmail($campaign, $request);
         } else {

@@ -148,7 +148,7 @@ ConfigModals.image_modal_single_crop = function( params ){
                         // Hide loading.
                         masterImageEditorObj.hideImageLoading();
                     /*
-                     * Else init cropit previe
+                     * Else init cropit preview
                      */
                     }else{
                         // Remove animated gif
@@ -190,10 +190,10 @@ ConfigModals.image_modal_single_crop = function( params ){
 
         // Init image library.
         if( options.enabled_options.indexOf("image_library") != -1 ){
-            if(!options.library_folder){
-                Application.utils.alert.display("Warning:", "An error occurred while trying to init image library, missing folder name.", "warning");
-            }
             if(masterImageEditorObj.imageLibrary && options.library_folder){
+                if(!options.library_folder){
+                    Application.utils.alert.display("Warning:", "An error occurred while trying to init image library, missing folder name.", "warning");
+                }
                 masterImageEditorObj.imageLibrary.init({
                     folder: options.library_folder,
                     // On image library submit
@@ -213,12 +213,22 @@ ConfigModals.image_modal_single_crop = function( params ){
                     }
                 });
             }
+            if(masterImageEditorObj.imageLibraryScraper){
+                masterImageEditorObj.imageLibraryScraper.init({
+                    title: options.title || "Image Library",
+                    api_type: options.api_type,
+                    // On image library submit
+                    onSubmit: function(imageData){
+                        _this.updateImageOnModal(imageData);
+                    }
+                });
+            }
         }
 
         /*
          * -- Overlays --
          */
-        if( typeof options.overlays && options.overlays.length ){
+        if( typeof options.overlays != 'undefined' && options.overlays.length ){
             var $previewElement = masterImageEditorObj.getPreviewElement();
 
             for (var i=0; i < options.overlays.length; i++) {
@@ -434,6 +444,82 @@ ConfigModals.image_modal_single_crop = function( params ){
                 });
             }
         );
+    };
+
+    /*
+     * Update modal image from scraper
+     */
+    this.updateImageOnModal = function(imageData) {
+        if (options.api_type == 'instagram') {
+            // Set as a new image
+            masterImageEditorObj.setNewImage();
+            // Clean file input value
+            masterImageEditorObj.getFileInput().val("");
+            // Display image in cropit preview.
+            masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', imageData.src);
+            masterImageEditorObj.getModalContent().find(".cropit-preview-image").one("load",function(){
+                masterImageEditorObj.removeMessage();
+                // Reset cropit position and zoom
+                masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom',0);
+                Application.utils.validate.initField( $modalContent.find('input.cropit-image-input')[0] );
+            });
+        } else if (options.api_type == 'blog') {
+            masterImageEditorObj.showImageLoading();
+            // Set as a new image
+            masterImageEditorObj.setNewImage();
+            // Clean file input value
+            masterImageEditorObj.getFileInput().val("");
+
+            // Do upload
+            var ajaxData = {
+                campaign_id: campaignManager.getCampaignId(),
+                data_image: imageData.src
+            };
+
+            $.extend(masterImageEditorObj.imageData, imageData);
+
+            // TODO: improve this by making the uploadImage on a temporal directory
+            imageManager.uploadImage(ajaxData, function (response) {
+                // Set returned path
+                masterImageEditorObj.imageData.background_image = response.path;
+
+                // Show preview
+                if (enabledOptionsArr.indexOf("image_crop") >= 0) {
+
+                    masterImageEditorObj.getModalContent().find(".init-cropper").cropit('imageSrc', Application.globals.campaignImageUrl + response.path);
+
+                    if (enabledOptionsArr.indexOf("multi_crop") >= 0) {
+                        // Display image in mobile cropit preview.
+                        masterImageEditorObj.getModalContent().find("#image-cropper-mobile").cropit('imageSrc', Application.globals.campaignImageUrl + response.path);
+                    }
+
+                    masterImageEditorObj.getModalContent().find(".cropit-image-preview").one("load", function () {
+                        masterImageEditorObj.removeMessage();
+                        // Reset cropit position and zoom
+                        masterImageEditorObj.getModalContent().find(".init-cropper").cropit('zoom', 0);
+                        Application.utils.validate.initField(masterImageEditorObj.getModalContent().find('input.cropit-image-input')[0]);
+                    });
+
+                    // Text Overlay
+                    if ( imageData.title ) {
+                        masterImageEditorObj.getModalContent().find(".text-editable").html( imageData.title );
+                    }
+
+                    // Load destination_url from disney post
+                    if ( imageData.destination_url ) {
+                        masterImageEditorObj.getModalContent().find(".image-destination-url").val(imageData.destination_url);
+                    }
+
+                    masterImageEditorObj.hideImageLoading();
+
+                } else {
+                    _this.previewOriginalImage(Application.globals.campaignImageUrl + masterImageEditorObj.imageData.background_image);
+                }
+
+            }, function () {
+                alert("An error occurred trying to fetch the image, please check the url");
+            });
+        }
     };
 
     /*

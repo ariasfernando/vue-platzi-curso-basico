@@ -82,6 +82,12 @@ body{
     user-select: none;
 }
 
+// Rotate element
+@keyframes rotate360 {
+  to { transform: rotate(360deg); }
+}
+.infinite-rotate{ animation: 1.5s rotate360 infinite linear; }
+
 // Sortable
 table{
 	.ui-sortable-helper{

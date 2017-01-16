@@ -52,8 +52,9 @@
 
                 @if ( isset($challenge_provider) )
                     {{-- Challenge --}}
-                    @include('base.auth.partials.' . $challenge_provider)           
+                    @include('base.auth.partials.' . $challenge_provider)    
                 @endif
+
 
                 <div class="form-group submit-row">
                     <div class="text-center">

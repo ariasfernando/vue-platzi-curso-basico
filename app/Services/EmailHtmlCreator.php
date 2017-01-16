@@ -5,6 +5,7 @@ namespace Stensul\Services;
 use Cdn;
 use URL;
 use View;
+use StensulLocale;
 use Storage;
 use League\Flysystem\AdapterInterface;
 use Stensul\Services\EmailTextCreator as Text;
@@ -89,6 +90,9 @@ class EmailHtmlCreator
      */
     public function createHtmlBody()
     {
+        // Initialize locale
+        StenuslLocale::init($this->getCampaign()->locale);
+
         $this->body = $this->getEmailLayout();
 
         $this->body = $this->replaceViewInBrowserLink();

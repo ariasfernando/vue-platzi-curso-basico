@@ -71,6 +71,15 @@ class TemplateController extends Controller
      */
     public function postModal(Request $request)
     {
+        $campaign_data = $request->has('campaign_id')
+            ? Campaign::findOrFail($request->input('campaign_id'))
+            : null;
+
+        // Initialize locale
+        if (!empty($campaign_data)) {
+            StensulLocale::init($campaign_data['locale']);
+        }
+
         return $this->getComponent($request, 'modals', [ 'params' => $request->all()]);
     }
 
@@ -188,6 +197,8 @@ class TemplateController extends Controller
         $campaign_data = isset($campaign_id)
             ? Campaign::findOrFail($campaign_id)
             : null;
+
+        StensulLocale::init($campaign_data['locale']);
 
         return $this->renderView(
             'base.layouts.email',

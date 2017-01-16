@@ -139,6 +139,7 @@ var imageLibrary = function( customOptions ){
 
 	var closeModal = function(){
 		$( options.modalId ).modal('hide');
+		$('.modal-backdrop').fadeOut('slow');
 	};
 
 	var onImageClick = function( element ){

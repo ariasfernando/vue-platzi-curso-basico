@@ -8,11 +8,12 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Stensul\Notifications\ResetPasswordNotification;
 
 class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, Notifiable;
+    use Authenticatable, CanResetPassword, SoftDeletes;
 
     /**
      * The database table used by the model.
@@ -44,6 +45,13 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         'avatar_url' => '',
         'roles' => []
     );
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     /**
      * Constructor.

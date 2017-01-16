@@ -40,7 +40,8 @@
                     <td :title="campaign.user_email">@{{ campaign.user_email }}</td>
                     <td :title="campaign.campaign_name">
                         <span v-html="prepareOutput(campaign.campaign_name)"></span>
-                        <i class="fa fa-lock text-danger" v-if="campaign.locked"></i>
+                        <i class="fa fa-lock text-danger" v-if="enableLocking && campaign.locked"></i>
+                        <i class="glyphicon glyphicon-cloud-upload text-danger" v-if="isUploaded(campaign)"></i>
                     </td>
                     <td v-if="showTags == 1">
                         <campaign-tag
@@ -60,7 +61,7 @@
                         <a
                             href="#"
                             class="lock-campaign"
-                            v-if="!campaign.locked"
+                            v-if="enableLocking && !campaign.locked"
                             v-on:click="lockCampaign(campaign._id, campaigns.current_page)"
                             data-toggle="tooltip"
                             data-placement="bottom"
@@ -71,7 +72,7 @@
                         <a
                             href="#"
                             class="unlock-campaign"
-                            v-if="campaign.locked && campaign.locked_by === Application.globals.logged_user"
+                            v-if="enableLocking && campaign.locked && campaign.locked_by === Application.globals.logged_user"
                             v-on:click="unlockCampaign(campaign._id, campaigns.current_page)"
                             data-toggle="tooltip"
                             data-placement="bottom"

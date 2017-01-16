@@ -46,16 +46,17 @@ class ApiServiceProvider extends ServiceProvider
     /**
      * Driver
      * @param string $api_provider
+     * @param array  $options
      * @throws Exception
      * @return \Stensul\Services\Api\Eloqua|\Stensul\Services\Api\Responsys
      */
-    public static function driver($api_provider)
+    public static function driver($api_provider, $options = [])
     {
         $class_name = 'Stensul\\Services\\Api\\'.ucwords($api_provider);
 
         if (class_exists($class_name)) {
             try {
-                return \App::make($class_name);
+                return \App::make($class_name, ['options' => $options]);
             } catch (Exception $e) {
                 throw $e;
             }

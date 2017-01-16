@@ -157,6 +157,8 @@ Application.init = function(){
         return ( $("#campaignConfiguration").length )? $("#campaignConfiguration") : false;
     };
 
+    // Init Api
+    Application.api();
     if( Application.onInit ){
         Application.onInit();
     }

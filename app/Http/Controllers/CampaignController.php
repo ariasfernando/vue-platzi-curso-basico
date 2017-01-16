@@ -96,6 +96,11 @@ class CampaignController extends Controller
             return redirect('campaign/edit/'.$campaign->id);
         }
 
+        if (\Config::get('api.scraper.status')
+            && \Config::get('api.scraper.settings.campaign_preload')) {
+            Campaign::scraperPreloader($params['campaign_data']['library'], ['flush_cache' => true, 'only_update' => true]);
+        }
+
         // Initialize locale
         StensulLocale::init($params['locale']);
 

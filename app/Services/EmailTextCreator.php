@@ -2,6 +2,7 @@
 
 namespace Stensul\Services;
 
+use StensulLocale;
 use Stensul\Services\TextConverter;
 
 class EmailTextCreator
@@ -24,13 +25,18 @@ class EmailTextCreator
     /**
      * Create text version.
      *
+     * @param array $modules Modules data
      * @return string
      */
-    public function createTextVersion()
+    public function createTextVersion($modules)
     {
         $plain_text = (isset($this->campaign['title'])) ? $this->campaign['title'] . self::$line_break : '';
 
-        foreach ($this->campaign['modules_data'] as $module) {
+        foreach ($modules as $module) {
+
+            // Initialize locale and module settings
+            StensulLocale::init($this->campaign['locale'], ["name" => $module['module_id'],"app_name" => $module['file_parent']]);
+
             $path = $this->getModulesPath($module['file_parent']);
             if (\view::exists($path . '.' . $module['module_id'] . '.text')) {
                 $plain_text .= $this->getTxtByTpl($module);

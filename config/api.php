@@ -13,7 +13,7 @@ $default = [
     |
     */
 
-    'upload_modal' => false,
+    'upload_modal' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -79,6 +79,8 @@ $default = [
         'title' => 'Eloqua',
         'class' => 'Eloqua',
         'email_folder_name' =>  env('API_ELOQUA_FOLDER', ''),
+        'use_oauth' => false,
+        'subject_input' =>  true,
         'auth' => [
             'base_url' => 'https://login.eloqua.com',
             'type' => 'POST',
@@ -89,6 +91,17 @@ $default = [
                 'company_name'  =>  env('API_ELOQUA_COMPANY_NAME', ''),
                 'user_name'  =>  env('API_ELOQUA_USER_NAME', ''),
                 'password'   =>  env('API_ELOQUA_PASSWORD', ''),
+            ]
+        ],
+        'oauth' => [
+            'base_url' => 'https://login.eloqua.com',
+            'type' => 'GET',
+            'path' => '/auth/oauth2/authorize',
+            'credentials' => [
+                'response_type'  => 'code',
+                'client_id'  => env('API_ELOQUA_CLIENT_ID', ''),
+                'redirect_uri' => env('APP_BASE_URL').'/api/oauth',
+                'scope' => 'full'
             ]
         ],
         'user_credentials' => [
@@ -107,6 +120,7 @@ $default = [
             'type' => 'POST',
             'url' => 'assets/email'
         ],
+        'libraries' => []
     ],
 
     'exact_target' => [
@@ -121,7 +135,8 @@ $default = [
             'clientsecret' => env('API_EXACT_TARGET_CLIENT_SECRET', ''),
             'defaultwsdl' => 'https://webservice.exacttarget.com/etframework.wsdl',
             'xmlloc' => app_path().'/Services/Api/ExactTargetConnection/ExactTargetWSDL.xml',
-        ]
+        ],
+        'libraries' => [],
     ],
 
     'silverpop' => [
@@ -130,7 +145,21 @@ $default = [
         'api_path' => 'http://api.pilot.silverpop.com/XMLAPI',
         'user_name' => env('API_SILVERPOP_USERNAME', ''),
         'password' => env('API_SILVERPOP_PASSWORD', ''),
-        'folder_path' => ''
+        'folder_path' => '',
+        'libraries' => []
+    ],
+
+    'strongview' => [
+        'title' => 'Strongview',
+        'class' => 'Strongview',
+        'api_wsdl' => "/sm/services/mailing/v2?wsdl",
+        'api_host' => env('API_STRONGVIEW_HOST', ''),
+        'organization' => env('API_STRONGVIEW_ORGANIZATION', ''),
+        'sub_organization' => env('API_STRONGVIEW_SUB_ORGANIZATION', 1),
+        'user_name' => env('API_STRONGVIEW_USERNAME', ''),
+        'password' => env('API_STRONGVIEW_PASSWORD', ''),
+        'allow_self_signed_cert' => true,
+        'libraries' => []
     ],
 
     'yesmail' => [
@@ -147,6 +176,77 @@ $default = [
             'url' => 'content-blocks'
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Scraper
+    |--------------------------------------------------------------------------
+    |
+    | This place contains all the data related to the web scraper.
+    |
+    */
+
+    'scraper' => [
+
+        /*
+        | Turn on/off the scraper
+        */
+        'status' => true,
+
+        /*
+        | Scraper settings
+        */
+        'settings' => [
+            /*
+            | Turn on/off the daily command that run all the scrapers
+            */
+            'daily_preload' => false,
+
+            /*
+            | At what time the scraper preload should run each day if it is enable
+            */
+            'daily_preload_at' => '08:00',
+
+            /*
+            | Turn on/off the preload scraper on user's login
+            */
+            'login_preload' => false,
+
+            /*
+            | Turn on/off the preload scraper when a campaign is created or accesed
+            */
+            'campaign_preload' => false,
+        ],
+
+        /*
+        | Scraper sources. Group by libraries.
+        */
+        'sources' => [
+            'libraries' => [
+                'default' => [
+                    // just for testing
+                    "instagram" => [
+                        'user_name' => 'disneystyle',
+                    ],
+                    // just for testing
+                    "blog" => [
+                        'url' => 'https://style.disney.com',
+                        'process_type' => 'meta',
+                        'name' => 'style',
+                        'pagination_link' => 'https://style.disney.com/page/%s/',
+                        'pagination_count' => 1,
+                        'link_container_id' => 'tm-content',
+                        'link_class' => 'tm-article-title-text',
+                        'full_image_src' => 'og:image',
+                        'text_src' => 'twitter:title',
+                        'created_time' => 'article:published_time',
+                        'link_src' => 'og:url',
+                        'subtext_src' => 'twitter:description'
+                    ]
+                ]
+            ]
+        ]
+    ]
 
 ];
 

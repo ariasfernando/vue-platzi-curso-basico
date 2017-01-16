@@ -11,7 +11,7 @@ var globalMasterImageEditor = globalMasterImageEditor || {};
 globalMasterImageEditor.plugins = globalMasterImageEditor.plugins || {};
 
 // Tracking image function
-globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
+globalMasterImageEditor.plugins.imageLibraryScraper = function( masterImageEditor ){
 
     // Ugly hack to fix error: "Uncaught RangeError: Maximum call stack size exceeded".
     $.fn.modal.Constructor.prototype.enforceFocus = function() {};
@@ -75,8 +75,15 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
      * == Get library images ==
      * Get library images by ajax from controller.
      */
-    this.getLibraryImages = function( libraryFolderName, onSuccess ){
-        var ajaxRequest = Application.utils.doAjax("/template/library/" + libraryFolderName, { type: "GET" });
+    this.getLibraryImages = function( api_type, onSuccess ){
+        var ajaxRequest = Application.utils.doAjax("/api/images", {
+            data: {
+                api_name: 'scraper',
+                api_type: api_type,
+                library_name: Application.globals.library_name
+            },
+            type: "GET"
+        });
 
         // On ajax Done
         ajaxRequest.done(function( response ){
@@ -86,17 +93,28 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
         });
 
         ajaxRequest.fail(function(){
-            showMessage("Library not found.");
+            alert("Library not found.");
+            spinner.hide();
             return false;
         });
     };
-    this.getLibrary = function(){
-        _this.getLibraryImages( options.folder, function( response ){
-            if( response && response.images.length ){
+
+    this.getLibrary = function( onSuccess ){
+        _this.getLibraryImages( options.api_type, function( response ){
+
+            if( response && response.data.length ){
                 spinner.hide();
 
                 // Draw items
-                _this.drawImagesThumbnails( response.images );
+                _this.drawImagesThumbnails( response.data );
+
+                // Check last update
+                if ("meta" in response) {
+                    _this.checkLastUpdate( response.meta );
+                }
+
+                // Update title
+                $modalLibrary.find('.modal-title').html(options.title);
 
                 // Open Modal
                 $modalLibrary.modal({
@@ -105,10 +123,55 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
             }else{
                 spinner.hide();
                 // Show messages
-                showMessage("No images found in the library.");
+                alert("No images found in the library.");
+            }
+
+            if( onSuccess ){
+                onSuccess( response );
             }
         });
-    }
+    };
+
+    this.refreshImages = function () {
+        var $button = $modalLibrary.find(options.refreshButtonSelector);
+        $button.addClass("infinite-rotate");
+        _this.modalWorkingMode('start');
+        options.flushCache = true;
+
+        // Get images from library
+        _this.getLibrary(function() {
+            options.flushCache = false;
+            $button.removeClass("infinite-rotate");
+            _this.modalWorkingMode('stop');
+        });
+    };
+
+    this.checkLastUpdate = function(meta) {
+        if ("last_updated" in meta) {
+            $modalLibrary.find("#last-update-label").text(meta.last_updated);
+            $modalLibrary.find(".last-update").show();
+        }
+    };
+
+    /*
+     * -- Modal working mode --
+     * Start or stop working mode
+     * On start: add an overlay to disable modal elements.
+     * On stop: hide overlay.
+     */
+    this.modalWorkingMode = function( action ){
+        action = action || "start";
+
+        var $modalContent = $modalLibrary.find('.modal-content');
+
+        if( action == "start" && !$modalContent.hasClass("working-mode") ){
+            $modalContent.addClass("working-mode");
+        }else if( action == "stop" ){
+            $modalContent.removeClass("working-mode");
+        }else{
+            return false;
+        }
+    };
 
     /*
      * ==  ==
@@ -152,7 +215,8 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
      */
     this.drawImagesThumbnails = function( imagesArr ){
         if( imagesArr.length ){
-            $.each( imagesArr, function( key, imagePath ){
+            $.each( imagesArr, function( key, post ){
+                var imagePath = post.images.large;
                 // Build gallery item.
                 var item = $( options.itemContainer );
                 item.addClass( options.itemGridClass );
@@ -163,7 +227,7 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
                     item.find("a").addClass("active");
                 }
                 item.find("a").data( "image", { src: imagePath } );
-                item.find("a").css("background-image", "url("+ Application.globals.baseUrl + imagePath + ")" );
+                item.find("a").css("background-image", "url("+ imagePath + ")" );
                 // Set image click
                 item.find("a").click(function(event) {
                     event.preventDefault();
@@ -180,6 +244,7 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
      * == Clean modal content ==
      */
     this.cleanModal = function(){
+        $modalLibrary.find(".last-update").hide();
         $modalLibrary.find(".gallery-container").empty();
     };
 
@@ -191,6 +256,9 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
             // Clean modal when is closed.
             .on('hidden.bs.modal', function (e) {
               _this.cleanModal();
+            })
+            .on("click", options.refreshButtonSelector, function(){
+                _this.refreshImages();
             })
             .on("mouseenter", "."+options.itemWrapperClass, function(){
                 if( !$(this).find(".overlay").length ){
@@ -262,7 +330,7 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
                 // On success
                 function(html){
                     // Append modal view in body and set $modalLibrary
-                    $modalLibrary =  $( $.parseHTML(html) );
+                    $modalLibrary = $( $.parseHTML(html) );
                     $("body").append($modalLibrary);
                     // Set library modal events.
                     _this.setModalEvents();
@@ -290,8 +358,8 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
         options = $.extend({
             title: "Image library",
             tabTitle: "Library",
-            folder: "",
             closeOnSubmit: true,
+            api_type: "",
             modalId: "#image-library-modal",
             // Layout
             itemWrapper: '<a href="#"></a>',
@@ -300,6 +368,7 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
             itemContainerClass: "library-item",
             itemGridClass: "col-xs-4",
             itemActiveValue: "",
+            refreshButtonSelector: ".last-update a",
             // Events
             onSubmit: function( imageData ){}
         }, params );

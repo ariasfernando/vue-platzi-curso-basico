@@ -73,9 +73,15 @@ class PasswordController extends Controller
         $data_params = $request->only('email');
         $data_params["email"] = strtolower($data_params["email"]);
 
-        $response = $this->passwords->sendResetLink($data_params, function ($message) {
-            $message->subject($this->getEmailSubject());
-        });
+        $user_auth = User::where('email', '=', $data_params["email"])->first();
+
+        if (is_null($user_auth['deleted_at'])) {
+            $response = $this->passwords->sendResetLink($data_params, function ($message) {
+                $message->subject($this->getEmailSubject());
+            });     
+        }else{
+            $response = PasswordBroker::INVALID_USER;
+        }
 
         switch ($response) {
             case PasswordBroker::RESET_LINK_SENT:

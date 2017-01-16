@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         'Stensul\Console\Commands\User\Roles',
         'Stensul\Console\Commands\User\Delete',
         'Stensul\Console\Commands\User\Show',
+        'Stensul\Console\Commands\User\Restore',
         'Stensul\Console\Commands\Role\Show',
         'Stensul\Console\Commands\Role\PermissionAllow',
         'Stensul\Console\Commands\Role\PermissionDeny',
@@ -31,6 +32,7 @@ class Kernel extends ConsoleKernel
         'Stensul\Console\Commands\Task\GroupToRoles',
         'Stensul\Console\Commands\Task\EmailToLower',
         'Stensul\Console\Commands\Module\Create',
+	'Stensul\Console\Commands\Tool\Scraper',
     ];
 
     /**
@@ -40,5 +42,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        if (\Config::get('api.scraper.status') && \Config::get('api.scraper.settings.daily_preload')) {
+            $schedule->command('tool:scraper')->dailyAt(\Config::get('api.scraper.settings.daily_preload_at'));
+        }
     }
 }

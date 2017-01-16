@@ -79,10 +79,10 @@ var campaignManager = {
             this.campaignId = data.campaign_id;
         }
 
-		if(options.template){
-			data.template = options.template;
-		}
-		
+        if(options.template){
+            data.template = options.template;
+        }
+        
         // Check if have plain text
         if( this.plainText != '' && this.plainText != null ){
             data.plain_text = this.plainText;
@@ -195,11 +195,11 @@ var campaignManager = {
                 errorFound = true;
             }
 
-			var errors = Application.utils.getCanvas().find(".error");
+            var errors = Application.utils.getCanvas().find(".error");
 
-			if( errors.length ){
-				errorFound = true;
-			}
+            if( errors.length ){
+                errorFound = true;
+            }
 
             if( errorFound ){
                 return false;
@@ -406,6 +406,9 @@ var campaignManager = {
                 $( element ).removeAttr('data-contenteditable-href'); 
             });
         }
+
+        // Convert special chars to html entities ---
+        $cleanedHtml = Application.utils.encodeHtmlEntities( $cleanedHtml );
 
         return Application.utils.charConvert( $cleanedHtml.html() );
     },
@@ -769,12 +772,12 @@ var campaignManager = {
                 Application.utils.alert.display("Error:","An error occurred while trying to get the HTML, please try again later.","danger");
             }
         );
-	},
-	/*
+    },
+    /*
      * == Add a new Tag ==
      * This function add a new tag label.
      */
-	addTag: function(tagValue){
+    addTag: function(tagValue){
         // Get inputs
         var $tagEntry = $('#campaignConfiguration input[name=tag_entry]');
         var $campaignTags = $('#campaignConfiguration input[name=tags]');
@@ -790,9 +793,9 @@ var campaignManager = {
         }
         // Update tag values
         $campaignTags.val(JSON.stringify(campaignTags));
-	},
-	initTagEntry: function() {
-		var $tagEntryField = $('#campaignConfiguration input[name=tag_entry]');
+    },
+    initTagEntry: function() {
+        var $tagEntryField = $('#campaignConfiguration input[name=tag_entry]');
         if( $tagEntryField.data("autocomplete") ){
             $tagEntryField.autocomplete({
                 source: $tagEntryField.data("autocomplete"),
@@ -822,13 +825,13 @@ var campaignManager = {
                     this.value = '';
                 }
 
-				var regex = new RegExp("^[a-zA-Z0-9]+$");
-				var code = event.charCode ? event.charCode : event.which;
-				var str = String.fromCharCode(code);
-				if (!regex.test(str) && str != "-" && str != "_" && code != 8) {
-					event.preventDefault();
-					return false;
-				}
+                var regex = new RegExp("^[a-zA-Z0-9]+$");
+                var code = event.charCode ? event.charCode : event.which;
+                var str = String.fromCharCode(code);
+                if (!regex.test(str) && str != "-" && str != "_" && code != 8) {
+                    event.preventDefault();
+                    return false;
+                }
             })
             // Remove selected tag.
             .on("click",".st-tag .remove-tag",function(event){
@@ -841,13 +844,13 @@ var campaignManager = {
                 $(this).parent().remove();
             });
     },
-	saveAsTemplate: function(fnDone, fnFail){
+    saveAsTemplate: function(fnDone, fnFail){
         var saveCampaign = this.save({ template: true });
 
         if (!saveCampaign) {
-        	if( typeof fnFail == "function" ){
-        		fnFail();
-        	}
+            if( typeof fnFail == "function" ){
+                fnFail();
+            }
             return false;
         }
 
@@ -855,55 +858,55 @@ var campaignManager = {
             Application.utils.alert.display('', 'This email template was saved successfully.', 'success');
 
             if( typeof fnDone == "function" ){
-        		fnDone();
-        	}
+                fnDone();
+            }
         });
 
         saveCampaign.fail(function() {
             Application.utils.alert.display('Error:', 'An error occurred while trying to save, please try again later.', 'danger');
 
-        	if( typeof fnFail == "function" ){
-        		fnFail();
-        	}
+            if( typeof fnFail == "function" ){
+                fnFail();
+            }
         });
-	},
-	forceLock: function(fnDone, fnFail) {
-		var config = this.getConfiguration();
-		var data = {
-			campaign_id: config.campaign_id
-		};
-		var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {data: data});
+    },
+    forceLock: function(fnDone, fnFail) {
+        var config = this.getConfiguration();
+        var data = {
+            campaign_id: config.campaign_id
+        };
+        var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {data: data});
 
-		lockCampaign.done(function(data) {
-			Application.utils.alert.display('', 'This campaign is locked now. Only you can unlock it.', 'success');
-			if(typeof fnDone === 'function') {
-				fnDone();
-			}
-		});
-		lockCampaign.fail(function(data) {
-			Application.utils.alert.display('Error:', 'An error occurred while trying to lock it, please try again later.', 'danger');
-			if (typeof fnFail === 'function') {
-				fnFail();
-			}
-		});
-	},
-	unlockForced: function(fnDone, fnFail) {
-		var config = this.getConfiguration();
-		var data = {
-			campaign_id: config.campaign_id
-		};
-		var unlockCampaign = Application.utils.doAjax('/campaign/unlock-forced', {data: data});
-		unlockCampaign.done(function(data) {
-			Application.utils.alert.display('', 'This campaign is unlocked now, and you can make changes on it', 'success');
-			if (typeof fnDone === 'function') {
-				fnDone();
-			}
-		});
-		unlockCampaign.fail(function(data) {
-			Application.utils.alert.display('Error:', 'An error occurred while trying to unlocked, please try again later.', 'danger');
-			if (typeof fnFail === 'function') {
-				fnFail();
-			}
-		});
+        lockCampaign.done(function(data) {
+            Application.utils.alert.display('', 'This campaign is locked now. Only you can unlock it.', 'success');
+            if(typeof fnDone === 'function') {
+                fnDone();
+            }
+        });
+        lockCampaign.fail(function(data) {
+            Application.utils.alert.display('Error:', 'An error occurred while trying to lock it, please try again later.', 'danger');
+            if (typeof fnFail === 'function') {
+                fnFail();
+            }
+        });
+    },
+    unlockForced: function(fnDone, fnFail) {
+        var config = this.getConfiguration();
+        var data = {
+            campaign_id: config.campaign_id
+        };
+        var unlockCampaign = Application.utils.doAjax('/campaign/unlock-forced', {data: data});
+        unlockCampaign.done(function(data) {
+            Application.utils.alert.display('', 'This campaign is unlocked now, and you can make changes on it', 'success');
+            if (typeof fnDone === 'function') {
+                fnDone();
+            }
+        });
+        unlockCampaign.fail(function(data) {
+            Application.utils.alert.display('Error:', 'An error occurred while trying to unlocked, please try again later.', 'danger');
+            if (typeof fnFail === 'function') {
+                fnFail();
+            }
+        });
     }
 };

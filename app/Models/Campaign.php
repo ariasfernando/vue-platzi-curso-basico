@@ -43,7 +43,7 @@ class Campaign extends Eloquent
         'campaign_settings'
     ];
 
-    protected $appends = ['api', 'library_config'];
+    protected $appends = ['api', 'library_config', 'uploads'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -230,5 +230,12 @@ class Campaign extends Eloquent
             \Config::get('campaign'),
             \Config::get('view.libraries.' . $this->attributes['library'])
         );
+    }
+
+    public function getUploadsAttribute()
+    {
+        return Upload::where('campaign_id', $this->attributes['_id'])
+            ->orderBy('updated_at', 'desc')
+            ->get();
     }
 }

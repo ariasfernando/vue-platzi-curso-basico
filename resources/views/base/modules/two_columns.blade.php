@@ -10,7 +10,7 @@
 
     // Set image Button
     $imageData0 = [
-        'source' => isset($module_params['placeholder_image_button'])? url('/') . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image_button']): '',
+        'source' => isset($module_params['placeholder_image_button'])? url('/') . image($module_params['placeholder_image_button']) : '',
         'alt' => 'image-button-1'
     ];
 
@@ -31,7 +31,7 @@
     ];
 
     $imageData1 = [
-        'source' => isset($module_params['placeholder_image_button'])? url('/') . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image_button']): '',
+        'source' => isset($module_params['placeholder_image_button'])? url('/') . image($module_params['placeholder_image_button']) : '',
         'alt' => 'image-button-2'
     ];
 

@@ -65,4 +65,54 @@ class ApiController extends Controller
         }
         return $resp;
     }
+
+    /**
+     * Get Public Images
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return json
+     */
+    public function getImages(Request $request)
+    {
+        $options = $request->all();
+
+        $api_name = isset($options['api_name']) ? $options['api_name'] : null;
+        $api_type = isset($options['api_type']) ? $options['api_type'] : null;
+
+        $driver_name = !is_null($api_type) && $api_name == "scraper"
+            ? 'Scraper\\' . ucfirst($api_type)
+            : ucfirst($api_name);
+
+        $library_name = isset($options['library_name'])
+            ? strtolower($options['library_name'])
+            : 'default';
+
+        $config_search = is_null($api_type) || $api_type == ''
+            ? "api." . $api_name . ".sources.libraries." . $library_name
+            : "api." . $api_name . ".sources.libraries." . $library_name . "." . $api_type;
+
+        $config_libraries = \Config::get($config_search, []);
+        $options = array_merge($options, $config_libraries);
+        $api_driver = Api::driver($driver_name, $options);
+
+        if (!is_null($api_driver) && !empty($config_libraries)) {
+            return $api_response = $api_driver->getPublicImages();
+        } else {
+            throw new \Exception("Api driver or options not found");
+        }
+    }
+
+    /**
+     * Oauth call
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return Redirect or View
+     */
+    public function getOauth(Request $request)
+    {
+        $api_config = \Config::get("api");
+        $api_client = Api::driver($api_config[$api_config['api_driver']]['class']);
+        return $api_client->oauth($request);
+    }
 }

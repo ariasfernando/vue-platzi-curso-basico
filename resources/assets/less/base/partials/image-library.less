@@ -21,7 +21,7 @@
 				}
 
 				&.active {
-				  border-color: @thumbnail-border-hover;
+					border-color: @thumbnail-border-hover;
 				}
 
 				&:hover{
@@ -66,6 +66,26 @@
 		}
 	}
 
+	.last-update{
+		display: none;
+		color: #777777;
+		font-size: 11px;
+		line-height: 16px;
+		padding-top: 5px;
+		position: absolute;
+		text-align: center;
+		width: 100%;
+
+		a{
+			display: inline-block;
+			margin: 0 10px 0 5px;
+
+			&.infinite-rotate{
+				color: @link-color;
+			}
+		}
+	}
+
 	.message-container{
 		text-align: center;
 
@@ -76,5 +96,31 @@
 
 	.modal-mpf-submit{
 		padding-top: 10px;
+	}
+
+	.modal-content{
+		.modal-content-overlay{
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: none;
+			position: absolute;
+			padding: 10px;
+			background: rgba(0,0,0,0.4);
+			z-index: @zindex-modal-overlay;
+
+			.alert{
+				width: 75%;
+				margin: 0 auto;
+			}
+		}
+
+		&.working-mode{
+			position: relative;
+			.modal-content-overlay{
+				display: block;
+			}
+		}
 	}
 }

@@ -15,6 +15,7 @@ class SilverpopConnector
     protected $connection;
     protected $config;
     protected $client;
+    protected $library_name;
 
     /**
      * Constructor for SilverpopConnection class.
@@ -26,12 +27,15 @@ class SilverpopConnector
      * @return object a new SilverpopConnection object instance
      *
      */
-    public function __construct($endpoint, $username, $password)
+    public function __construct($endpoint, $username, $password, $library_name = null)
     {
         $this->endpoint = $endpoint;
         $this->username = $username;
         $this->password = $password;
-        $this->config = \Config::get("api.silverpop");
+        $this->config = \Config::get('api.silverpop');
+        if ($library_name && !empty($this->config['libraries'][$library_name])) {
+            $this->config['folder_path'] = $this->config['libraries'][$library_name]['folder_path'];
+        }
         $this->client = new Client();
         $this->login();
     }

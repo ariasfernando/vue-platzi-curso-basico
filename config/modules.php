@@ -70,6 +70,24 @@ $default = [
         'module_id' => 'hero_image_mie_v2_rich_text_overlay',
         'level' => 'single'
     ],
+    'hero_image_mie_v2_library_scraper_instagram' => [
+        'title' => 'Instagram Scraper',
+        'action' => 'add',
+        'app_name' => 'base',
+        'module_id' => 'hero_image_mie_v2_library_scraper_instagram',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png',
+        'level' => 'single'
+    ],
+    'hero_image_mie_v2_library_scraper_blog' => [
+        'title' => 'Blog Scraper',
+        'action' => 'add',
+        'app_name' => 'base',
+        'module_id' => 'hero_image_mie_v2_library_scraper_blog',
+        'file_parent' => 'base',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png',
+        'level' => 'single'
+    ],
     'three_column_media' => [
         'title' => '3 Column Content Blocks',
         'module_id' => 'three_column_media',

@@ -4,7 +4,7 @@
 
     // Set library name
     $library_title = $params['campaign_data']->getLibraryConfig('title');
-    if( isset($library_title) && !empty($library_title) ){
+    if( !empty($library_title) ){
         $campaign_header_text = $library_title;
     }
 

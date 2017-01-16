@@ -14,12 +14,12 @@
             {{-- Search --}}
             <campaign-search
                 :can-search="canSearch"
-                :enabled="config.enable_search"  
+                :enabled="config.enable_search"
                 :search="search"
                 :tags="tags"
                 :terms="terms"
                 v-on:add-search-term="addSearchTerm"
-                v-on:remove-search-tag="removeSearchTag" 
+                v-on:remove-search-tag="removeSearchTag"
                 v-on:remove-search-term="removeSearchTerm"
                 v-on:update-campaigns="updateCampaigns"
             ></campaign-search>
@@ -41,6 +41,7 @@
                 :tags="tags"
                 :terms="terms"
                 :type="'current'"
+                :enable-locking="config.locking"
                 v-on:add-search-tag="addSearchTag"
                 v-on:apply-sort="applySort"
                 v-on:change-page="changePage"
@@ -63,6 +64,7 @@
                 :tags="tags"
                 :terms="terms"
                 :type="'finished'"
+                :enable-locking="config.locking"
                 v-on:add-search-tag="addSearchTag"
                 v-on:apply-sort="applySort"
                 v-on:change-page="changePage"
@@ -84,6 +86,7 @@
                 :tags="tags"
                 :terms="terms"
                 :type="'template'"
+                :enable-locking="config.locking"
                 v-on:add-search-tag="addSearchTag"
                 v-on:apply-sort="applySort"
                 v-on:change-page="changePage"

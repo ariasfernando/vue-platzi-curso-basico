@@ -117,6 +117,7 @@ class CampaignManager
 
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->status = 2;
+            $campaign_data->deleted_at = Carbon::now();
             if ($response = $campaign_data->save()) {
                 Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
                 return array('success' => $campaign_id);
@@ -208,7 +209,7 @@ class CampaignManager
         $new_campaign_attr['template'] = false;
         $new_campaign_attr['locked'] = false;
         $new_campaign_attr['locked_by'] = null;
-        
+
         unset($new_campaign_attr['published_at']);
 
         // cdn path must be unique
@@ -369,6 +370,7 @@ class CampaignManager
     public static function publicPath($campaign_id = null)
     {
         $campaign_data = Campaign::findOrFail($campaign_id);
+
         if ($campaign_data->processed) {
             $path = $campaign_data->getCdnPath(true) . DS . 'index.html';
         } else {
@@ -522,6 +524,32 @@ class CampaignManager
     }
 
     /**
+     * Preload scraper image
+     *
+     * @param string $library
+     * @param array  $options
+     */
+    public static function scraperPreloader($library = null, $options = [])
+    {
+        if (!is_null($library)) {
+            $scraper_config = \Config::get('api.scraper', []);
+            if (isset($scraper_config['status'])
+                && $scraper_config['status']
+                && isset($scraper_config['sources']['libraries'][$library])) {
+                foreach ($scraper_config['sources']['libraries'][$library] as $scraper_type => $scraper_options) {
+                    $scraper_options = array_merge($scraper_options, $options);
+                    $driver_name = 'Scraper\\' . ucfirst($scraper_type);
+                    $scraper_driver = Api::driver($driver_name, $scraper_options);
+                    Queue::push(function ($job) use ($scraper_driver) {
+                        $scraper_driver->getPublicImages();
+                        $job->delete();
+                    });
+                }
+            }
+        }
+    }
+
+    /**
      * Delete a Tag from a campaign.
      *
      * @param  string $campaign_id
@@ -553,6 +581,7 @@ class CampaignManager
         $campaign = Campaign::findOrFail($campaign_id);
         $campaign->locked = true;
         $campaign->locked_by = Auth::user()->email;
+        $campaign->timestamps = false;
         $campaign->save();
         return ['campaign_id' => $campaign->id];
     }
@@ -573,6 +602,7 @@ class CampaignManager
         }
         $campaign->locked = false;
         $campaign->locked_by = null;
+        $campaign->timestamps = false;
         $campaign->save();
         return ['campaign_id' => $campaign->id];
     }
