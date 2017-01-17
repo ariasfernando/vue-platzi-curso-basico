@@ -68,7 +68,7 @@ var moduleController = function( customOptions ){
 		});
 	};
 
-	this.onSaveLibrary = function(form, action){
+	this.onSaveModule = function(form, action){
 		if(!options.busy){
 			if(Application.utils.validate.validateForm( form )) {
 				options.busy = true;
@@ -133,21 +133,26 @@ var moduleController = function( customOptions ){
 					$('.selectpicker').selectpicker();
 					$( options.selectors.modalSelector )
 						.on("click", ".submit-config", function(){
-							_this.onSaveLibrary(this.form, "create");
+							_this.onSaveModule(this.form, "create");
 							return false;
 						})
 						.on("change", options.selectors.parentModule, function () {
 							_this.loadConfigModule($(this).val());
-						})
-						.on("blur", options.selectors.moduleITitle, function () {
-							_this.refreshModuleTitle(this);
-						})
-						.on("blur", options.selectors.moduleId, function () {
-							_this.refreshModuleId(this);
-						});;
+						});
+						_this.attachInputsEvents();
 				}
 			}
 		});
+	};
+
+	this.attachInputsEvents = function() {
+		$( options.selectors.modalSelector )
+			.on("blur", options.selectors.moduleITitle, function () {
+				_this.refreshModuleTitle(this);
+			})
+			.on("blur", options.selectors.moduleId, function () {
+				_this.refreshModuleId(this);
+			});
 	};
 
 	this.loadConfigModule = function(moduleId){
@@ -163,35 +168,38 @@ var moduleController = function( customOptions ){
 	};
 
 	this.refreshModuleTitle = function(element){
-
+		var moduleConfig = {};
 		try {
-			var moduleConfig = JSON.parse($(options.selectors.configArea).val());
-			var moduleTitle = $(element).val();
-			if ($(options.selectors.moduleId).val() == '') {
-				$(options.selectors.moduleId).val(moduleTitle.replace(/\s+/g, '_').toLowerCase());
-			}
-			if (typeof(moduleConfig.title) != 'undefined') {
-				moduleConfig.title = moduleTitle;
-				moduleConfig = JSON.stringify(moduleConfig, null, 2);
-				$(options.selectors.configArea).val(moduleConfig);
-			}
+			moduleConfig = JSON.parse($(options.selectors.configArea).val());
 		}
 		catch(Exception) {
+		}
+		var moduleTitle = $(element).val();
+		if ($(options.selectors.moduleId).val() == '') {
+			$(options.selectors.moduleId).val(moduleTitle.replace(/\s+/g, '_').toLowerCase());
+			$(options.selectors.moduleId).blur();
+		}
+		if (typeof(moduleConfig.title) != 'undefined') {
+			moduleConfig.title = moduleTitle;
+			moduleConfig = JSON.stringify(moduleConfig, null, 2);
+			$(options.selectors.configArea).val(moduleConfig);
 		}
 	};
 
 	this.refreshModuleId = function(element){
-
+		var moduleConfig = {};
 		try {
-			var moduleConfig = JSON.parse($(options.selectors.configArea).val());
-			var moduleId = $(element).val();
-			if (typeof(moduleConfig.module_id) != 'undefined') {
-				moduleConfig.module_id = moduleId;
-				moduleConfig = JSON.stringify(moduleConfig, null, 2);
-				$(options.selectors.configArea).val(moduleConfig);
-			}
-		} catch (Exception) {
+			moduleConfig = JSON.parse($(options.selectors.configArea).val());
 		}
+		catch(Exception) {
+		}
+		var moduleId = $(element).val();
+		if (typeof(moduleConfig.module_id) != 'undefined') {
+			moduleConfig.module_id = moduleId;
+			moduleConfig = JSON.stringify(moduleConfig, null, 2);
+			$(options.selectors.configArea).val(moduleConfig);
+		}
+
 	};
 
 	this.getModules = function(){
@@ -202,6 +210,46 @@ var moduleController = function( customOptions ){
 			.fail(function () {
 				Application.utils.alert.display("Error:", "An error occurred while trying to get the module list, please try again later.", "danger");
 			});
+	};
+
+	this.showEditModule = function(element){
+
+		var parentContainer = $(element).parents("[data-module]");
+		var moduleId = parentContainer.data("module");
+
+		$.magnificPopup.open({
+			type: 'ajax',
+			closeOnBgClick: false,
+			items: {
+				src: Application.globals.baseUrl + "/admin/module/edit"
+			},
+			ajax: {
+				settings: {
+					cache: true,
+					dataType: "html",
+					data: {
+						module_id : moduleId
+					}
+				}
+			},
+			callbacks: {
+				ajaxContentAdded: function(){
+					$('.selectpicker').selectpicker();
+
+					$( options.selectors.modalSelector )
+						.on("click", ".submit-config", function(){
+							_this.onSaveModule(this.form, "edit");
+							return false;
+					});
+
+					if($(options.selectors.moduleId).val()){
+						$(options.selectors.moduleId).addClass("disabled");
+						$(options.selectors.moduleId).attr("readonly","readonly");
+					}
+					_this.attachInputsEvents();
+				}
+			}
+		});
 	};
 
 	this.init = function(){
@@ -217,12 +265,12 @@ var moduleController = function( customOptions ){
 					_this.showCreateModule();
 				});
 
-			// $(options.selectors.dataList)
-			// 	// Edit module.
-			// 	.on("click", options.selectors.editItem, function () {
-			// 		_this.showEditLibrary(this);
-			// 		return false;
-			// 	});
+			$(options.selectors.dataList)
+				// Edit module.
+				.on("click", options.selectors.editItem, function () {
+					_this.showEditModule(this);
+					return false;
+				});
 		}
 	};
 };

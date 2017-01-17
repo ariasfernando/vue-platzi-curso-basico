@@ -73,8 +73,10 @@ class ModuleController extends Controller
      */
     public function getEdit(Request $request)
     {
-        $modules = \StensulModule::getModule();
+        $module_id = $request->input('module_id');
 
+        $module_data = \StensulModule::getModule($module_id);
+        $module_data['config'] = $module_data;
         $params = [
             "title" => "Edit Module",
             "module" => $module_data
@@ -90,7 +92,17 @@ class ModuleController extends Controller
      */
     public function postEdit(Request $request)
     {
-        // TODO: edit method
+        $params = [
+            'name' => $request->input('module_title'),
+            'module_id' => $request->input('module_id'),
+            'description' => $request->input('module_description'),
+            'config' => $request->input('module_config') ?: [],
+            'parent_module' => 'none'
+        ];
+        
+        $exit_code = \StensulModule::edit($params);
+
+        return $this->getExitMessage($exit_code);
     }
 
     /**
@@ -110,33 +122,46 @@ class ModuleController extends Controller
 
         $exit_code = \StensulModule::create($params);
 
+        return $this->getExitMessage($exit_code);
+    }
+
+    /**
+     * Get message from exit code.
+     *
+     * @return string
+     */
+    public function getExitMessage($exit_code)
+    {
+        $message = '';
         switch ($exit_code) {
             case 0:
                 $message = array('message' => 'SUCCESS');
                 break;
-            case Create::ERROR_INVALID_MODULE_ID:
+            case \StensulModule::ERROR_INVALID_MODULE_ID:
                 $message = array('message' => 'ERROR_INVALID_MODULE_ID');
                 break;
-            case Create::ERROR_CREATING_MODULE_DIR:
+            case \StensulModule::ERROR_CREATING_MODULE_DIR:
                 $message = array('message' => 'ERROR_CREATING_MODULE_DIR');
                 break;
-            case Create::ERROR_CONFIG_FILE:
+            case \StensulModule::ERROR_CONFIG_FILE:
                 $message = array('message' => 'ERROR_CONFIG_FILE');
                 break;
-            case Create::ERROR_TEMPLATE_FILE:
+            case \StensulModule::ERROR_TEMPLATE_FILE:
                 $message = array('message' => 'ERROR_TEMPLATE_FILE');
                 break;
-            case Create::ERROR_PARENT_TEMPLATE:
+            case \StensulModule::ERROR_PARENT_TEMPLATE:
                 $message = array('message' => 'ERROR_PARENT_TEMPLATE');
                 break;
-            case Create::ERROR_DUPLICATE_MODULE_ID:
+            case \StensulModule::ERROR_DUPLICATE_MODULE_ID:
                 $message = array('message' => 'ERROR_DUPLICATE_MODULE_ID');
                 break;
-            case Create::ERROR_INVALID_JSON:
+            case \StensulModule::ERROR_INVALID_JSON:
                 $message = array('message' => 'ERROR_INVALID_JSON');
                 break;
+            case \StensulModule::ERROR_DELETING_TEMPLATE:
+                $message = array('message' => 'ERROR_DELETING_TEMPLATE');
+                break;
         }
-
         return $message;
     }
 }

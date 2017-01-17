@@ -6,6 +6,14 @@ use Illuminate\Support\ServiceProvider;
 
 class ModuleServiceProvider extends ServiceProvider
 {
+    const ERROR_INVALID_MODULE_ID = 1;
+    const ERROR_CREATING_MODULE_DIR = 2;
+    const ERROR_CONFIG_FILE = 3;
+    const ERROR_TEMPLATE_FILE = 4;
+    const ERROR_PARENT_TEMPLATE = 5;
+    const ERROR_DUPLICATE_MODULE_ID = 6;
+    const ERROR_INVALID_JSON = 7;
+    const ERROR_DELETING_TEMPLATE = 8;
 
     private static $app_name;
     private static $module_dir;
@@ -83,5 +91,56 @@ class ModuleServiceProvider extends ServiceProvider
     public static function create($params)
     {
         return \Artisan::call('module:create', $params);
+    }
+
+    /**
+    * Edit module
+    * @param array $params
+    * @return int Exit code
+    */
+    public static function edit($params)
+    {
+        $module_dir = self::$module_dir . DS . $params['module_id'];
+        if (!is_dir($module_dir)) {
+            try {
+                mkdir($module_dir, 0755, true);
+            } catch (\Exception $exception) {
+                return self::ERROR_CREATING_MODULE_DIR;
+            }
+        }
+        if (!self::saveConfig($module_dir, json_decode($params['config']))) {
+            return self::ERROR_CONFIG_FILE;
+        }
+
+        // Check if is an old module
+        $template_file = self::$module_dir . DS . $params['module_id'] . '.blade.php';
+
+        if (file_exists($template_file)) {
+            try {
+                $template = file_get_contents($template_file);
+                file_put_contents($module_dir . DS . 'template.blade.php', $template);
+            } catch (\Exception $exception) {
+                return self::ERROR_TEMPLATE_FILE;
+            }
+
+            // Delete old module template
+            try {
+                unlink($module_dir . '.blade.php');
+            } catch (Exception $exception) {
+                return self::ERROR_DELETING_TEMPLATE;
+            }
+        }
+
+    }
+
+    /**
+    * Save module config
+    * @param string $module_dir
+    * @param array $config
+    * @return int Exit code
+    */
+    public static function saveConfig($module_dir, $config)
+    {
+        return file_put_contents($module_dir . DS . 'config.json', json_encode($config, JSON_PRETTY_PRINT));
     }
 }

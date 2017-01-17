@@ -3,8 +3,6 @@
 
 	{!! Form::open ( array ( 'method' => 'post' ,'id' => 'admin-module-form' )) !!}
 
-		{!! Form::hidden('moduleId', (isset($params['module']['module_id']))? $params['module']['module_id'] : 0) !!}
-
 		<div class="modal-mpf-row">
 			{!! Form::label('module_title', 'Title') !!}
 			{!! Form::text('module_title', isset($params['module']['title']) ? $params['module']['title'] : '', array (
@@ -34,17 +32,17 @@
 				'data-validation' => '{"required":"true"}'
 			)) !!}
 		</div>
-
-		<div class="modal-mpf-row selector">
-			{!! Form::label('parent_module', 'Parent Module') !!}
-			{!! Form::select('parent_module', $params['modules'], isset($params['module']['modules']) ? $params['module']['modules'] : '',array (
-				'class' => 'form-control selectpicker',
-				'id' => 'parent_module',
-				'title' => 'Choose one module to duplicate',
-				'data-validation' => '{"required":"true"}'
-			)); !!}
-		</div>
-
+		@if ( isset($params['modules']) )
+			<div class="modal-mpf-row selector">
+				{!! Form::label('parent_module', 'Parent Module') !!}
+				{!! Form::select('parent_module', $params['modules'], isset($params['module']['modules']) ? $params['module']['modules'] : '',array (
+					'class' => 'form-control selectpicker',
+					'id' => 'parent_module',
+					'title' => 'Choose one module to duplicate',
+					'data-validation' => '{"required":"true"}'
+				)); !!}
+			</div>
+		@endif
 		<div class="modal-mpf-row">
 			{!! Form::label('module_config', 'Config') !!}
 			{!! Form::textarea('module_config', isset($params['module']['config'])
