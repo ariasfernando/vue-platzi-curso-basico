@@ -187,7 +187,7 @@ function masterImageEditorv2( customOptions ){
             });
         }
 
-        // 
+        //
         _this.fillInputs();
     };
 
@@ -206,7 +206,7 @@ function masterImageEditorv2( customOptions ){
      * ====== BUILD DATA ======
      */
     this.afterDataBuild = function(){};
-    
+
     this.buildData = function(){
         $.each($modalContent.find("form input[type=text]:not(.exclude-from-data)"), function( key, inputText){
             _this.editedImageData[inputText.name] = inputText.value;
@@ -372,14 +372,14 @@ function masterImageEditorv2( customOptions ){
             imagePreviewWidth = (imagePreviewHeight * imageOriginalWidth) / imageOriginalHeight;
             minZoomPreview = imagePreviewHeight / imageOriginalHeight;
         }
-        
+
         if (options.imageSize.height == 'auto'){
             imagePreviewWidth = _this.imageData.background_width || options.imageSize.width;
             imagePreviewHeight = (imagePreviewWidth * imageOriginalHeight) / imageOriginalWidth;
             minZoomPreview = imagePreviewWidth / imageOriginalWidth;
         }
 
-        // If the image upload width is greater than the width preview.    
+        // If the image upload width is greater than the width preview.
         if ( options.imageSize.width >= imageOriginalWidth ){
             $cropitElement.cropit('minZoom','fit');
             recalculatePreview( imagePreviewWidth, imagePreviewHeight, minZoomPreview , $cropitElement );
@@ -387,10 +387,10 @@ function masterImageEditorv2( customOptions ){
             //Set minZoom depending on the orientation of the image.
             if (imageOriginalHeight  >=  imageOriginalWidth ){
                 $cropitElement.cropit( 'minZoom', 'fill' );
-                recalculatePreview( imagePreviewWidth, imagePreviewHeight, minZoomPreview, $cropitElement ); 
+                recalculatePreview( imagePreviewWidth, imagePreviewHeight, minZoomPreview, $cropitElement );
             }else{
                 $cropitElement.cropit( 'minZoom', 'fit' );
-                recalculatePreview( imagePreviewWidth, imagePreviewHeight, minZoomPreview, $cropitElement ); 
+                recalculatePreview( imagePreviewWidth, imagePreviewHeight, minZoomPreview, $cropitElement );
             }
         }
     };
@@ -430,8 +430,8 @@ function masterImageEditorv2( customOptions ){
                             var imagePreviewWidth = $cropitElement.find(".cropit-preview img.cropit-preview-image")[0].width;
                             var minZoomPreview = this.value / imagePreviewHeight;
                             $cropitElement.cropit('previewSize', { width: imagePreviewWidth * minZoomPreview, height: this.value  });
-                        }    
-                        
+                        }
+
                         // Update height label text
                         if( $cropitElement.find("#adjustable-height-value").length ){
                             $cropitElement.find("#adjustable-height-value").text(Math.round(this.value));
@@ -513,12 +513,12 @@ function masterImageEditorv2( customOptions ){
                 .val(settings.currentVal)
                 .on("mousemove touchmove change",function(){
                     if( this.value != _this.getPreviewElement().width() ){
-                        
+
                         if ( params.original_options_height != 'auto' ){
                             var previewHeight = _this.getPreviewElement().height();
                             $cropitElement.cropit('previewSize', { width: this.value, height: previewHeight });
                         }else{
-                            var imagePreviewHeight = $cropitElement.find(".cropit-preview img.cropit-preview-image").height(); 
+                            var imagePreviewHeight = $cropitElement.find(".cropit-preview img.cropit-preview-image").height();
                             var imagePreviewWidth = $cropitElement.find(".cropit-preview img.cropit-preview-image").width();
                             var minZoomPreview = this.value / imagePreviewWidth;
                             $cropitElement.cropit('previewSize', { width: this.value, height: imagePreviewHeight * minZoomPreview });
@@ -810,7 +810,7 @@ function masterImageEditorv2( customOptions ){
                 _this.hideImageLoading();
                 // Show image preview box
                 $preview.parent().slideDown( function() {
-                    $preview.addClass('outline-class'); 
+                    $preview.addClass('outline-class');
                     if( _this.isNewImage() ){
                         if (options.imageSize.width == 'auto' || options.imageSize.height == 'auto'){
                             _this.initMinZoom( tempImage, $cropitElement );
