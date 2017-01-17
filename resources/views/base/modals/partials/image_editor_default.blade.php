@@ -96,7 +96,7 @@
 					@if( $overlay["type"] == "image" )
 						<img
 							id="{{ $overlay["id"] or "" }}"
-							src="{{ url() }}{{ $overlay["path"] or "" }}"
+							src="{{ url('/') }}{{ $overlay["path"] or "" }}"
 							class="image-overlay {{ $overlay["class"] or "" }}"
 							width="{{ $overlay["width"] or "auto" }}"
 							height="{{ $overlay["height"] or "auto" }}"

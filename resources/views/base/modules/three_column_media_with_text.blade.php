@@ -48,7 +48,7 @@
 										<td>
 											<a href="{{ isset($image0['destination_url']) ? $image0['destination_url'] : '#' }}" data-master-image-editor="standard">
 												@if ( isset($image0['path']) && !empty($image0['path']) )
-														{!! Html::image( url() . "/images/campaigns". $image0['path'],
+														{!! Html::image( url('/') . "/images/campaigns". $image0['path'],
 															( isset($image0['alt']) )? $image0['alt']:'',
 																array(
 																	'title' => ( isset($image0['alt']) )? $image0['alt']:'',
@@ -60,7 +60,7 @@
 															)
 														!!}
 												@else
-													{!! Html::image( url() . $module_params['placeholder_image'],
+													{!! Html::image( url('/') . $module_params['placeholder_image'],
 																 'side-by-side-content-blocks',
 																	array(
 																		'title' => 'side-by-side-content-blocks',
@@ -154,7 +154,7 @@
 										<td valign="top">
 											<a href='{{ isset($image1['destination_url']) ? $image1['destination_url'] : '#' }}' data-master-image-editor="standard">
 												@if ( isset($image1['path']) && !empty($image1['path']) )
-													{!! Html::image(  url() . "/images/campaigns". $image1['path'],
+													{!! Html::image(  url('/') . "/images/campaigns". $image1['path'],
 														( isset($image1['alt']) )? $image1['alt']:'',
 															array(
 																'title' => ( isset($image1['alt']) )? $image1['alt']:'',
@@ -166,7 +166,7 @@
 														)
 													!!}
 												@else
-													{!! Html::image( url() . $module_params['placeholder_image'],
+													{!! Html::image( url('/') . $module_params['placeholder_image'],
 														'content-block-more-ad-uni',
 															array(
 																'title' => 'content-block-more-ad-uni',
@@ -259,7 +259,7 @@
 										<td valign="top">
 											<a href='{{ isset($image2['destination_url']) ? $image2['destination_url'] : '#' }}' data-master-image-editor="standard">
 												@if ( isset($image2['path']) && !empty($image2['path']) )
-													{!! Html::image(  url() . "/images/campaigns". $image2['path'],
+													{!! Html::image(  url('/') . "/images/campaigns". $image2['path'],
 														( isset($image2['alt']) )? $image2['alt']:'',
 															array(
 																'title' => ( isset($image2['alt']) )? $image2['alt']:'',
@@ -271,7 +271,7 @@
 														)
 													!!}
 												@else
-													{!! Html::image( url() . $module_params['placeholder_image'],
+													{!! Html::image( url('/') . $module_params['placeholder_image'],
 														'content-block-more-ad-uni',
 															array(
 																'title' => 'content-block-more-ad-uni',

@@ -28,7 +28,7 @@
 				>
 					<a href='{{ isset($image['destination_url'])? $image['destination_url'] : '#' }}' data-master-image-editor="hero">
 						@if ( isset($image['path']) && !empty($image['path']) )
-							{!! Html::image( url() . "/images/campaigns". $image['path'],
+							{!! Html::image( url('/') . "/images/campaigns". $image['path'],
 								( isset($image['alt']) )? $image['alt']:'',
 								array(
 									'title' => ( isset($image['alt']) )? $image['alt']:'',
@@ -40,7 +40,7 @@
 								))
 							!!}
 						@else
-							{!! Html::image( url() . $module_params['placeholder_image'],
+							{!! Html::image( url('/') . $module_params['placeholder_image'],
 								'hero-image', 
 								array(
 									'title' => 'hero-image', 

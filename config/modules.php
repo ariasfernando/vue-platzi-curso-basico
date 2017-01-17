@@ -62,13 +62,17 @@ $default = [
         'title' => 'Image + Overlays',
         'app_name' => 'base',
         'module_id' => 'hero_image_mie_v2_overlays',
-        'level' => 'single'
+        'level' => 'single',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png',
+        'file_parent' => 'base',
     ],
     'hero_image_mie_v2_rich_text_overlay' => [
         'title' => 'Image + Rich text',
         'app_name' => 'base',
         'module_id' => 'hero_image_mie_v2_rich_text_overlay',
-        'level' => 'single'
+        'level' => 'single',
+        'placeholder_image' => '/images/default/image-placeholder-660x400.png',
+        'file_parent' => 'base',
     ],
     'hero_image_mie_v2_library_scraper_instagram' => [
         'title' => 'Instagram Scraper',

@@ -40,7 +40,7 @@
                     <a href="{{ isset($image['destination_url'])? $image['destination_url'] : '#' }}"
                         data-key="image0"
                         data-open-element-config="mie_v2_default_height_proportional">
-                        {!! Html::image( url() . $image_source ,
+                        {!! Html::image( url('/') . $image_source ,
                             ( isset($image['alt']) )? $image['alt']:'',
                             array(
                                 'title' => ( isset($image['alt']) )? $image['alt']:'',

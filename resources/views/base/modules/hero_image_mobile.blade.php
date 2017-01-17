@@ -59,7 +59,7 @@
                 >
                     <a href='{{ isset($image['destination_url'])? $image['destination_url'] : '#' }}'
                        data-master-image-editor="heroMobile">
-                        {!! Html::image( url() . $image_source_desktop ,
+                        {!! Html::image( url('/') . $image_source_desktop ,
                             ( isset($image['alt']) )? $image['alt']:'',
                             array(
                                 'title' => ( isset($image['alt']) )? $image['alt']:'',
@@ -70,7 +70,7 @@
                             ))
                         !!}
                         <div class="show-img-device" style="display:none;width:0;overflow:hidden;max-height:0!important;">
-                        {!! Html::image( url() . $image_source_mobile ,
+                        {!! Html::image( url('/') . $image_source_mobile ,
                             ( isset($image['alt']) )? $image['alt']:'',
                             array(
                                 'title' => ( isset($image['alt']) )? $image['alt']:'',
