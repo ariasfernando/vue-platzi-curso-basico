@@ -91,7 +91,7 @@ class EmailHtmlCreator
     public function createHtmlBody()
     {
         // Initialize locale
-        StenuslLocale::init($this->getCampaign()->locale);
+        StensulLocale::init($this->getCampaign()->locale);
 
         $this->body = $this->getEmailLayout();
 
