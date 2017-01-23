@@ -43,10 +43,6 @@ var moduleController = function( customOptions ){
 		// Get table element.
 		var $table = $("#"+tableId);
 
-		if( !paginationData ) {
-			return false;
-		}
-
 		// Set transparency while spinner is shown
 		$table.find("tbody").css("opacity", 0.3);
 

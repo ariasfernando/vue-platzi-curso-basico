@@ -45,9 +45,11 @@ class ModuleController extends Controller
      *
      * @return View
      */
-    public function getList(Request $request)
+    public function getList()
     {
-        return \StensulModule::getModuleList();
+        $modules = \StensulModule::getModuleList();
+
+        return $this->renderView('base.admin.partials.module_draw_row', array('modules' => $modules));
     }
 
     /**
@@ -77,6 +79,7 @@ class ModuleController extends Controller
 
         $module_data = \StensulModule::getModule($module_id);
         $module_data['config'] = $module_data;
+        $module_data['template'] = \StensulModule::getTemplate($module_id);
         $params = [
             "title" => "Edit Module",
             "module" => $module_data
@@ -97,6 +100,7 @@ class ModuleController extends Controller
             'module_id' => $request->input('module_id'),
             'description' => $request->input('module_description'),
             'config' => $request->input('module_config') ?: [],
+            'template' => $request->input('module_template') ?: '',
             'parent_module' => 'none'
         ];
         

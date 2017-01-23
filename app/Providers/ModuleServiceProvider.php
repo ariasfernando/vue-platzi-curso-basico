@@ -100,6 +100,12 @@ class ModuleServiceProvider extends ServiceProvider
     */
     public static function edit($params)
     {
+        $config = json_decode($params['config'], true);
+        $config['module_id'] = $params['module_id'];
+        $config['title'] = $params['name'];
+        $config['description'] = $params['description'];
+        $config['class'] = 'pkg';
+
         $module_dir = self::$module_dir . DS . $params['module_id'];
         if (!is_dir($module_dir)) {
             try {
@@ -108,8 +114,13 @@ class ModuleServiceProvider extends ServiceProvider
                 return self::ERROR_CREATING_MODULE_DIR;
             }
         }
-        if (!self::saveConfig($module_dir, json_decode($params['config']))) {
+        // Save module configuration
+        if (!self::saveConfig($module_dir, $config)) {
             return self::ERROR_CONFIG_FILE;
+        }
+        // Save module template
+        if (!self::saveTemplate($module_dir, $params['template'])) {
+            return self::ERROR_TEMPLATE_FILE;
         }
 
         // Check if is an old module
@@ -142,5 +153,41 @@ class ModuleServiceProvider extends ServiceProvider
     public static function saveConfig($module_dir, $config)
     {
         return file_put_contents($module_dir . DS . 'config.json', json_encode($config, JSON_PRETTY_PRINT));
+    }
+
+    /**
+    * Save module template
+    * @param string $module_dir
+    * @param array $template
+    * @return int Exit code
+    */
+    public static function saveTemplate($module_dir, $template)
+    {
+        return file_put_contents($module_dir . DS . 'template.blade.php', $template);
+    }
+
+
+    /**
+    * Get module template
+    * @param string $module_dir
+    * @return string html template
+    */
+    public static function getTemplate($module_id)
+    {
+        // Check if is an old module
+        $template_file = self::$module_dir . DS . $module_id . '.blade.php';
+
+        if (file_exists($template_file)) {
+            try {
+                $template = file_get_contents($template_file);
+            } catch (\Exception $exception) {
+            }
+        } else {
+            try {
+                $template = file_get_contents(self::$module_dir . DS . $module_id . DS . 'template.blade.php');
+            } catch (\Exception $exception) {
+            }
+        }
+        return $template;
     }
 }

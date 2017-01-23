@@ -114,6 +114,7 @@ class Create extends Command
                 $config['module_id'] = $module_id;
                 $config['title'] = $name;
                 $config['class'] = 'pkg';
+                $config['description'] = $description;
             } else {
                 $config = [
                     'module_id' => $module_id,
@@ -122,7 +123,8 @@ class Create extends Command
                     'action' => 'add',
                     'level' => 'single',
                     'file_parent' => 'base',
-                    'class' => 'pkg'
+                    'class' => 'pkg',
+                    'description' => $description
                 ];
             }
         } else {

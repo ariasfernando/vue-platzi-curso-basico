@@ -19,7 +19,7 @@
 					<h2 class="crimson italic">Modules list</h2>
 
 					<div class="table-responsive">
-						<table width="100%" border="0" cellpadding="0" cellspacing="0" id="" class="table table-bordered table-striped data-list">
+						<table width="100%" border="0" cellpadding="0" cellspacing="0" id="admin-module" class="table table-bordered table-striped data-list">
 							<thead>
 								<tr>
 									<th class="sortable">
