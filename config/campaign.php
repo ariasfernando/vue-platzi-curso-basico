@@ -55,7 +55,7 @@ $default = [
         /*
          | List the fields where the search should be done.
          */
-        'fields_to_search' => ['campaign_name']
+        'fields_to_search' => ['campaign_name', 'user_email']
     ],
 
     /*
