@@ -199,7 +199,7 @@ var moduleController = function( customOptions ){
 	};
 
 	this.getModules = function(){
-		_this.doAjax("list", "GET", {})
+		_this.doAjax("modules", "GET", {})
 			.done(function ( modules ) {
 				_this.modules = modules;
 			})

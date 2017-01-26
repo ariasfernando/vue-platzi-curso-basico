@@ -53,6 +53,16 @@ class ModuleController extends Controller
     }
 
     /**
+     * Get modules.
+     *
+     * @return array Modules data
+     */
+    public function getModules()
+    {
+        return \StensulModule::getModuleList();
+    }
+
+    /**
      * Module create view.
      *
      * @return View

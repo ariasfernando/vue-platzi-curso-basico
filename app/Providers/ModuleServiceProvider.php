@@ -72,15 +72,24 @@ class ModuleServiceProvider extends ServiceProvider
     */
     public static function getModule($module_id)
     {
+        $module = [];
+        
+        // Try pkg module
+        if (file_exists(self::$module_dir . DS . $module_id . DS . 'config.json')) {
+            try {
+                $module = json_decode(file_get_contents(self::$module_dir . DS . $module_id . DS . 'config.json'), true);
+            } catch (Exception $e) {
+            }
+        }else{
+            $modules = \Config::get('modules');
 
-        $modules = \Config::get('modules');
-
-        // Try legacy module first.
-        if (!empty($modules[$module_id])) {
-            return $modules[$module_id];
+            // Try legacy module
+            if (!empty($modules[$module_id])) {
+                $module = $modules[$module_id];
+            }
         }
 
-        return json_decode(file_get_contents(self::$module_dir . DS . $module_id . DS . 'config.json'), true);
+        return $module;
     }
 
     /**

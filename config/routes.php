@@ -133,6 +133,7 @@ if (env("APP_ADMIN", false)) {
             '/admin/module/list'         => 'Admin\ModuleController@getList',
             '/admin/module/create'       => 'Admin\ModuleController@getCreate',
             '/admin/module/edit'         => 'Admin\ModuleController@getEdit',
+            '/admin/module/modules'         => 'Admin\ModuleController@getModules',
         ],
         'post' => [
             '/admin/login'             => 'Admin\Auth\AdminAuthController@postLogin',
