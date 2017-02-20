@@ -228,7 +228,7 @@ ConfigModals.image_modal_single_crop = function( params ){
         /*
          * -- Overlays --
          */
-        if( typeof options.overlays != 'undefined' && options.overlays.length ){
+        if( 'overlays' in options && options.overlays.length ){
             var $previewElement = masterImageEditorObj.getPreviewElement();
 
             for (var i=0; i < options.overlays.length; i++) {

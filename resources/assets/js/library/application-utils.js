@@ -816,7 +816,9 @@ Application.utils = {
     },
 
     notifications: function() {
+
         function create(params) {
+
             var defaultParams = {
                 theme: 'stensul',
                 layout: 'topRight',
@@ -825,7 +827,8 @@ Application.utils = {
                     open: { height: 'toggle' },
                     close: { height: 'toggle' },
                     easing: 'swing',
-                    speed: 500
+                    speed: 500,
+                    killer: false
                 },
                 onShow: function() {},
                 afterShow: function() {},
@@ -833,26 +836,67 @@ Application.utils = {
                 afterClose: function() {},
                 onCloseClick: function() {}
             };
+
             var params = $.extend(defaultParams, params);
+
             return noty(params);
         }
+
         function get(id) {
             $.noty.get(id);
         }
+
         function show(id) {
             $.noty.get(id);
         }
+
         function close(id) {
             $.noty.close(id);
         }
+
         function closeAll () {
             $.noty.closeAll();
         }
+
         return {
             create: create,
             show: show,
             close: close,
             closeAll: closeAll
-        };
+       };
+    },
+
+    htmlSubstr: function (str, count) {
+
+        var div = document.createElement('div');
+        div.innerHTML = str;
+
+        walk(div, track);
+
+        function track(el) {
+            if (count > 0) {
+                var len = el.data.length;
+                count -= len;
+                if (count <= 0) {
+                    el.data = el.substringData(0, el.data.length + count);
+                }
+            } else {
+                el.data = '';
+            }
+        }
+
+        function walk(el, fn) {
+            var node = el.firstChild;
+            do {
+                if (node.nodeType === 3) {
+                    fn(node);
+                } else if (node.nodeType === 1 && node.childNodes && node.childNodes[0]) {
+                    walk(node, fn);
+                }
+            } while (node = node.nextSibling);
+        }
+
+        return div.innerHTML;
+
     }
 };

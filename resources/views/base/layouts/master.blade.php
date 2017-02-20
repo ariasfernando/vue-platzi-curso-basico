@@ -70,9 +70,9 @@
             </div>
 
             @if ($current_user)
-                <span id="top-link-block">
-                    <a href="#top" class="well well-sm"  onclick="$('html,body').animate({scrollTop:0},'slow');return false;">
-                        <i class="fa fa-angle-double-up" title="Back to Top"></i>
+                <span id="top-link-block" class="hidden">
+                    <a href="#top" class="well well-sm" onclick="$('html,body').animate({scrollTop:0},'slow');return false;">
+                        <i class="glyphicon glyphicon-chevron-up"></i> Back to Top
                     </a>
                 </span>
             @endif

@@ -9,7 +9,7 @@
 								@if ( !empty($module_params['data']['text0']) )
 									{!! $module_params['data']['text0'] !!}
 								@else
-									Lorem ipsum dolor sit amet
+									Lorem ipsum dolor&nbsp;sit&nbsp;amet
 								@endif
 							</p>
 						</div>

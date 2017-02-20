@@ -28,21 +28,25 @@
         if (actualLines > maxLines) {
             if (!hasError) {
                 if (showNotifications) {
-                    notifications.create({
+                    var n = notifications.create({
                         theme: 'stensul',
                         layout: 'topRight',
                         text: errorMsg,
-                        type: 'error',
-                        killer: true
+                        type: 'error'
                     }, $textElement);
                 }
 
-                $textElement.addClass('error');
+                $textElement
+                    .addClass('error')
+                    .attr('data-noty-id', n.options.id);
             }
 
             return false;
         } else {
-            $textElement.removeClass('error');
+            $textElement
+                .removeClass('error')
+                .attr('data-noty-id','');
+
             if (showNotifications) {
                 notifications.closeAll();
             }

@@ -2,7 +2,7 @@
 
 	// Set image
 	$imageData = [
-		'source' => isset($module_params['placeholder_image'])? url('/') . str_replace('{locale}', $params["campaign_data"]["locale"], $module_params['placeholder_image']): '',
+		'source' => isset($module_params['placeholder_image']) ? url('/') . image($module_params['placeholder_image']) : '',
 		'alt' => 'button-place-holder'
 	];
 

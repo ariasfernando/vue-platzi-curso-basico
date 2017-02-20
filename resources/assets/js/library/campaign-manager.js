@@ -812,10 +812,11 @@ var campaignManager = {
             // Prevent paste
             .on("paste","input[name=tag_entry]",function(event){
                 event.preventDefault();
+                return false;
             })
-            // Add a new tag
-            .on("keypress","input[name=tag_entry]",function(event){
-                if (event.which == 13) {
+            .on("keydown","input[name=tag_entry]",function(e){
+                var finalCode = e.keyCode || e.charCode || e.which;
+                if (finalCode == 13) {
                     // Prevent empty tags
                     if( this.value.trim() == "" ){
                         return false;
@@ -825,14 +826,26 @@ var campaignManager = {
                     this.value = '';
                 }
 
-                var regex = new RegExp("^[a-zA-Z0-9]+$");
-                var code = event.charCode ? event.charCode : event.which;
-                var str = String.fromCharCode(code);
-                if (!regex.test(str) && str != "-" && str != "_" && code != 8) {
-                    event.preventDefault();
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(finalCode, [46, 8, 9, 27, 110]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (finalCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (finalCode >= 35 && finalCode <= 40)){
+                    // let it happen, don't do anything
+                    return;
+                }
+
+
+                if (e.altKey || e.key == "Dead" || e.key.search(/[^a-zA-Z0-9-_]/g) != -1) {
+                    e.preventDefault();
                     return false;
                 }
             })
+            .on("drag drop","input[name=tag_entry]",function(e){
+                e.preventDefault();
+                return false;
+            })  
             // Remove selected tag.
             .on("click",".st-tag .remove-tag",function(event){
                 event.preventDefault();

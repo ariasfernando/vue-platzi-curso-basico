@@ -299,12 +299,12 @@
             },
             highlightTag: function(tag) {
                 if (this.highlight == true) {
-                    if (this.search.indexOf(tag.toLowerCase()) > -1) {
+                    if (this.tags.indexOf(tag.toLowerCase()) > -1) {
                         return true;
                     }
-                    for (var i = 0; i < this.search.length; i++) {
-                        if (this.search[i].length > 0) {
-                            var re = new RegExp('('+this.search[i]+')', 'gi');
+                    for (var i = 0; i < this.terms.length; i++) {
+                        if (this.terms[i].length > 0) {
+                            var re = new RegExp('('+this.terms[i]+')', 'gi');
                             if (re.test(tag)) {
                                 return true;
                             }

@@ -5,7 +5,7 @@
 				<td align="left" valign="top" style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }}; color:{{ isset($module_params['data']['color'])? $module_params['data']['color'] : '#555555'}}; font-size:13px; line-height:17px; padding-right:35px;">
 					<div class="text-overlay">
 						<div class="prevent-overflow">
-							<p id="text-editable" class="st-edit-text" style='line-height:17px' data-line-limit="3">
+							<p id="text-editable" class="st-edit-text" style='line-height:17px' data-line-limit="3" truncate="250">
 								@if ( !empty($module_params['data']['text0']) )
 									{!! $module_params['data']['text0'] !!}
 								@else

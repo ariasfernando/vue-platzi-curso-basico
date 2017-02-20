@@ -8,7 +8,7 @@
 var imageLibrary = function( customOptions ){
 
 	// Library configs.
-	var customOptions = customOptions || {}; 
+	var customOptions = customOptions || {};
 	var options = $.extend({
 		title: "Image library",
 		folder: "",

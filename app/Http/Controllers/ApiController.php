@@ -17,6 +17,14 @@ use MongoDB\BSON\ObjectID as ObjectID;
 class ApiController extends Controller
 {
     /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('Authenticate');
+    }
+
+    /**
      * Create a new document
      *
      * @param  \Illuminate\Http\Request $request
