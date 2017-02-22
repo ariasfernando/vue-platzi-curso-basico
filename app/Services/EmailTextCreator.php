@@ -33,7 +33,6 @@ class EmailTextCreator
         $plain_text = (isset($this->campaign['title'])) ? $this->campaign['title'] . self::$line_break : '';
 
         foreach ($modules as $module) {
-
             // Initialize locale and module settings
             StensulLocale::init($this->campaign['locale'], ["name" => $module['module_id'],"app_name" => $module['file_parent']]);
 

@@ -120,8 +120,6 @@ class Instagram extends Scraper implements ApiImageConnector
                         ]
                     ]
                 );
-
-
             }
         }
 

@@ -64,7 +64,6 @@ class Scraper
         }
 
         return (!isset($error))? $response->getBody()->getContents() : false;
-
     }
 
     /**

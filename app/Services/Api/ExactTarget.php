@@ -32,11 +32,10 @@ class ExactTarget implements ApiConnector
      */
     public function uploadEmail($campaign = null, $request = null)
     {
-        if($campaign->library) {
+        if ($campaign->library) {
             $this->library_name = $campaign->library;
         } elseif (array_key_exists('library_name', $request)) {
             $this->library_name = $request['library_name'];
-
         }
         $this->client->setLibraryName($this->library_name);
 

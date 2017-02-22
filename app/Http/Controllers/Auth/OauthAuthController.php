@@ -83,7 +83,7 @@ class OauthAuthController extends Controller
                     } else {
                         $error = array( "message" => "ERROR_ROLE" );
                     }
-                }else{
+                } else {
                     $error = Activity::log('User login fail [ERROR_USER]');
                 }
             } else {

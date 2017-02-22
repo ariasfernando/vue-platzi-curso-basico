@@ -32,7 +32,6 @@ class Strongview implements ApiConnector
             $this->strongview_config["sub_organization"],
             $this->strongview_config["allow_self_signed_cert"]
         );
-
     }
 
     /**
@@ -44,7 +43,7 @@ class Strongview implements ApiConnector
      */
     public function uploadEmail($campaign = null, $request = null)
     {
-        if($campaign->library) {
+        if ($campaign->library) {
             $library_name = $campaign->library;
         } elseif (array_key_exists('library_name', $request)) {
             $library_name = $request['library_name'];

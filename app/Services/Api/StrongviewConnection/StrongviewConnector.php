@@ -68,7 +68,6 @@ class StrongviewConnector
         $this->client =  new \SoapClient($this->endpoint, $params);
 
         $this->login();
-
     }
 
     /**
@@ -120,7 +119,6 @@ class StrongviewConnector
         );
 
         $this->client->__setSoapHeaders($securityHeader);
-
     }
 
     /**
@@ -171,7 +169,6 @@ class StrongviewConnector
                 if ($response->success != true) {
                     throw new \SoapFault($response->fault->faultCode, $response->fault->faultMessage);
                 }
-
             } catch (\SoapFault $e) {
                 Log::error('Strongview api error message: ', [$e]);
                 throw $e;

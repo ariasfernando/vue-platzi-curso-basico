@@ -80,7 +80,7 @@ class ModuleServiceProvider extends ServiceProvider
                 $module = json_decode(file_get_contents(self::$module_dir . DS . $module_id . DS . 'config.json'), true);
             } catch (Exception $e) {
             }
-        }else{
+        } else {
             $modules = \Config::get('modules');
 
             // Try legacy module
@@ -150,7 +150,6 @@ class ModuleServiceProvider extends ServiceProvider
                 return self::ERROR_DELETING_TEMPLATE;
             }
         }
-
     }
 
     /**

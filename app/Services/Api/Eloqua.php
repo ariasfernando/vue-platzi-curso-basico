@@ -414,7 +414,7 @@ class Eloqua implements ApiConnector
         if (!is_null($campaign)) {
             if ($campaign->library) {
                 $this->library_name = $campaign->library;
-            } elseif(!empty($request['library_name'])) {
+            } elseif (!empty($request['library_name'])) {
                 $this->library_name = $request['library_name'];
             }
             $name = (is_null($request) || !isset($request['filename']))

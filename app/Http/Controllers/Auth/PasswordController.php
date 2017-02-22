@@ -78,8 +78,8 @@ class PasswordController extends Controller
         if (is_null($user_auth['deleted_at'])) {
             $response = $this->passwords->sendResetLink($data_params, function ($message) {
                 $message->subject($this->getEmailSubject());
-            });     
-        }else{
+            });
+        } else {
             $response = PasswordBroker::INVALID_USER;
         }
 

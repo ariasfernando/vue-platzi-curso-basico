@@ -47,7 +47,7 @@ class Silverpop implements ApiConnector
     {
 
         if (!is_null($campaign)) {
-            if($campaign->library) {
+            if ($campaign->library) {
                 $library_name = $campaign->library;
             } elseif (array_key_exists('library_name', $request)) {
                 $library_name = $request['library_name'];
