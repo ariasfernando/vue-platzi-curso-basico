@@ -13,7 +13,7 @@ use Stensul\Notifications\ResetPasswordNotification;
 
 class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, SoftDeletes;
+    use Authenticatable, CanResetPassword, SoftDeletes, Notifiable;
 
     /**
      * The database table used by the model.

@@ -7,6 +7,7 @@ use Mail;
 use Activity;
 use Challenge;
 use Stensul\Http\Requests\PasswordChangeRequest;
+use Stensul\Models\User;
 use Illuminate\Http\Request;
 use Stensul\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
