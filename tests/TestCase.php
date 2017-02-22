@@ -11,7 +11,7 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
     protected $domain;
 
     /**
-     * Base url of the application, APP_URL must be set in .env file.
+     * Base url of the application, APP_BASE_URL must be set in .env file.
      * @var string $baseUrl
      */
     public $baseUrl;
