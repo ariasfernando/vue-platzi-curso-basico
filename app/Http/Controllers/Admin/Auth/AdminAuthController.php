@@ -119,6 +119,6 @@ class AdminAuthController extends Controller
      */
     public function index()
     {
-        return redirect($this->redirect_to);
+        return redirect(\Config::get('app.url') . $this->redirect_to);
     }
 }
