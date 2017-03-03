@@ -19,7 +19,7 @@
 		<section class="col-xs-12 section-container">
 
 			<h2 class="page-title">Register</h2>
-		
+
 			<div class="panel-body">
 				<form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/register') }}">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -42,7 +42,8 @@
 					<div class="form-group">
 						<label class="col-xs-12 col-sm-4 control-label">Password</label>
 						<div class="col-xs-12 col-sm-8">
-							<input type="password" class="form-control" name="password">
+							<input type="password" class="form-control validate-password" name="password">
+							@include('base.auth.progress_bar')
 						</div>
 					</div>
 
@@ -77,5 +78,5 @@
 @endsection
 
 @section('footer-script')
-	<script src="{{ url( elixir('js/library.js') ) }}"></script>
+	<script src="{{ cdn(elixir('js/library.js')) }}"></script>
 @stop

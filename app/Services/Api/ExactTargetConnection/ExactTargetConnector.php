@@ -247,7 +247,12 @@ class ExactTargetConnector
             'Subject' => (isset($request['subject']))? $request['subject'] : 'Stensul - '.$campaign->campaign_name,
         );
 
+        // Set folder_id as the default
         $folder_id = \Config::get("api.exact_target.folder_id", '');
+        // If exists a folder_id in the library, use it
+        if (!empty($campaign->library)) {
+            $folder_id = (int) \Config::get('view.libraries.'.$campaign->library.'.folder_id', $folder_id);
+        }
 
         if (is_int($folder_id)) {
             $email->props = array_merge($email->props, array("CategoryID" => $folder_id));
@@ -355,5 +360,15 @@ class ExactTargetConnector
             Log::error('Error retrieving ET email(retrieveEmails). Message: ' . $getRes->message);
             return false;
         }
+    }
+
+    public function getPortfolioImages($api_url)
+    {
+        $token =$this->accessToken['response']->accessToken;
+        $url = $api_url . 'guide/v1/contentItems/portfolio?$page=1&$pageSize=1000&access_token=' . $token;
+        // This is done because guzzle fails with https.
+        $url = str_replace('https://', 'http://', $url);
+        $res = $this->client->get($url);
+        return json_decode($res->getBody()->getContents());
     }
 }

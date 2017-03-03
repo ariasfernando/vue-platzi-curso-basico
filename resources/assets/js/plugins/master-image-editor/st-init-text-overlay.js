@@ -66,8 +66,8 @@
             plugins: "paste textcolor colorpicker",
             paste_as_text: true,
             relative_urls: false,
-            document_base_url: Application.globals.baseUrl + "/js/tinymce/",
-            skin_url: Application.globals.baseUrl + '/css/tinymce/lightgray/'
+            document_base_url: Application.globals.cdnHost + "/js/tinymce/",
+            skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray/'
         },tinyOptions));
 
         // Disable/Enable cropit on mouse enter and leave.

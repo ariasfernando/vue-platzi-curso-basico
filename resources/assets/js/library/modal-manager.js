@@ -28,6 +28,7 @@ function modalManager( params ){
                     // Get config from modals.php
                     var modalConfig = _this.modalParams;
                     modalConfig.target = _this.modalTarget;
+                    modalConfig.modalContent = this.content;
                     // Init configuration modal scripts
                     var configurationModalObj = ConfigModals[ _this.modalParams.config_modal_key ](modalConfig);
                     configurationModalObj.init();

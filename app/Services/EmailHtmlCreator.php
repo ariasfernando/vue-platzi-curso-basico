@@ -109,6 +109,16 @@ class EmailHtmlCreator
     }
 
     /**
+     * Get HTML body.
+     *
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->getCampaign()->body_html;
+    }
+
+    /**
      * Store HTML in CDN.
      *
      * @return string

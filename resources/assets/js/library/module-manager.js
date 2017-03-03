@@ -1,5 +1,5 @@
 /*
- *    -- MODULE MANAGER ---
+ *	-- MODULE MANAGER ---
  */
 
 var moduleManager = {
@@ -21,7 +21,7 @@ var moduleManager = {
 
     // Template of the action tooltip.
     // We append this buttons into the module on mouseenter/mouseleave.
-    actionsButtonsTpl: '<div class="actions-buttons-tooltip">' +
+    actionsButtonsTpl:  '<div class="actions-buttons-tooltip st-remove-element">' +
     '<a href="#" class="action-sortable"><i class="glyphicon glyphicon-resize-vertical"></i></a>' +
     '<a href="#" class="action-config"><i class="glyphicon glyphicon-cog"></i></a>' +
                             '<a href="#" class="action-duplicate"><i class="glyphicon glyphicon-duplicate"></i></a>'+
@@ -297,8 +297,8 @@ var moduleManager = {
 
         // Default config
         var defaultConfigTinymce = {
-            document_base_url: Application.globals.baseUrl + "/js/tinymce/",
-            skin_url: Application.globals.baseUrl + '/css/tinymce/lightgray',
+            document_base_url: Application.globals.cdnHost + "/js/tinymce/",
+            skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
             setup: function (editor) {
                 var dataParams = $module.data("params");
                 if( ModuleActions && dataParams.type && ModuleActions[dataParams.type] ){
@@ -639,6 +639,32 @@ var moduleManager = {
         dataParams.data[key] = value;
     },
 
+    actionConfig: {
+        show: function($row){
+            /* -- Show action buttons -- */
+            // Remove all action iconst remove icon that it is select
+            // $row.find(".actions-buttons-tooltip").not( $row.find(".actions-buttons-tooltip") ).remove();
+            $canvas.find("tr[data-params]").not($row).find(".actions-buttons-tooltip").hide()
+
+            // Check if the action buttons are in the module.
+            if( $row.find(".actions-buttons-tooltip").length ){
+                // Stop fade out animation and show it again
+                $.each($row.find(".actions-buttons-tooltip"),function(index,tooltip){
+                    $(tooltip).stop().fadeIn("fast");
+                });
+            }else{
+                $row.find("> td").append($(moduleManager.actionsButtonsTpl).fadeIn('slow'));
+                // It they aren't in the module, append and show them.
+                $.each($row.find("td.st-modal-config-icon"),function(index,container){
+                    $(container).append( $(moduleManager.actionsButtonsTpl).fadeIn('slow') );
+                });
+            }
+        },
+        hide: function($row){
+            $row.find(".actions-buttons-tooltip").fadeOut(2000);
+        }
+    },
+
     setModulesEvents: function () {
         if (this.eventsSet) {
             return false;
@@ -652,20 +678,11 @@ var moduleManager = {
         }
 
         $canvas
-            .on("mouseenter", "> tr", function () {
+            .on("mouseenter", "tr[data-params]", function () {
                 var $row = $(this);
 
-                /* -- Show action buttons -- */
-                // Remove all action iconst remove icon that it is select
-                $(".actions-buttons-tooltip").not($(this).find(".actions-buttons-tooltip")).remove();
-                // Check if the action buttons are in the module.
-                if ($row.find(".actions-buttons-tooltip").length) {
-                    // Stop fade out animation and show it again
-                    $row.find(".actions-buttons-tooltip").stop().fadeIn("fast");
-                } else {
-                    // It they aren't in the module, append and show them.
-                    $row.find("> td").append($(module.actionsButtonsTpl).fadeIn('slow'));
-                }
+                // Display action config
+                moduleManager.actionConfig.show($row);
 
                 // Highlight module
                 if (!$row.find("#moduleHighlight").length && $row.height() < 5) {
@@ -688,15 +705,15 @@ var moduleManager = {
                     }, 50);
                 }
             })
-            .on("mouseleave", "> tr", function () {
+            .on("mouseleave", "tr[data-params]", function () {
+                var $row = $(this);
+
                 /* -- Hide Action buttons Tooltip -- */
-                $(this).find(".actions-buttons-tooltip").fadeOut(2000, function () { //remove icon
-                    // Remove actions tooltip
-                    $(this).remove();
-                });
+                moduleManager.actionConfig.hide($row);
+
                 // Remove module highlight element
-                $(this).find("#moduleHighlight").remove();
-                $(this).find(".st-position-relative").removeClass("st-position-relative");
+                $row.find("#moduleHighlight").remove();
+                $row.find(".st-position-relative").removeClass("st-position-relative");
             })
             .on("click", ".st-without-event", function (e) {
                 // Without event click
@@ -715,13 +732,31 @@ var moduleManager = {
                 return false;
             })
             // Action Config
-            .on("click", '.action-config', function () {
+            .on("click", '.action-config', function(event) {
                 var $moduleElement = $(this).parents("[data-params]")
 
                 // Set config modal default or from data-params
                 var modalName = $moduleElement.data("params").type  + "_config";
+                var configModalKey = $moduleElement.data("params").type;
+                var configItem = 0;
+
                 if ($moduleElement.data('params').config_modal && $moduleElement.data('params').config_modal != "") {
                     modalName = $moduleElement.data('params').config_modal;
+                }
+
+                if ($moduleElement.data('params').config_modal_key && $moduleElement.data('params').config_modal_key != "") {
+                    configModalKey = $moduleElement.data('params').config_modal_key;
+                }
+
+                if( $(event.target).parents(".st-modal-config-icon").length ){
+                    configItem = $moduleElement.find(".st-modal-config-icon").index($(event.target).parents(".st-modal-config-icon"));
+
+                    if( typeof $(event.target).parents(".st-modal-config-icon").data("config-modal") !== "undefined" ){
+                        modalName = $(event.target).parents(".st-modal-config-icon").data("config-modal");
+                    }
+                    if( typeof $(event.target).parents(".st-modal-config-icon").data("config-script") !== "undefined" ){
+                        configModalKey = $(event.target).parents(".st-modal-config-icon").data("config-script");
+                    }
                 }
 
                 var appName = $moduleElement.data("params").app_name || $moduleElement.data("params").file_parent;
@@ -730,9 +765,10 @@ var moduleManager = {
                 var configModal = new modalManager({
                     app_name: appName,
                     view: modalName,
-                    config_modal_key: $moduleElement.data("params").type
+                    config_modal_key: configModalKey,
+                    config_item: configItem
                 });
-                configModal.modalTarget = $moduleElement;;
+                configModal.modalTarget = $moduleElement;
                 configModal.open();
 
                 return false;
@@ -852,7 +888,10 @@ var moduleManager = {
             .on("keyup", "[data-line-limit]", function (e) {
                 Application.helpers.limitLines(e.target);
             })
-            // Save content editable on element blur.
+            .on("focus", "[data-maxwidth]", function (e) {
+                Application.helpers.limitWidth(e.target);
+            })
+			// Save content editable on element blur.
             .on("blur", "[contenteditable]:not(.st-edit-text)", function () {
                 var $moduleElement = $(this).parents("[data-params]");
 
@@ -879,9 +918,9 @@ var moduleManager = {
                 moduleManager.saveInData($moduleElement, dataKey, dataValue);
             })
             // Truncate pasted text if truncate attr is present
-            .on("keypress", "[truncate]", function (e) {
+            .on("keydown", "[truncate]", function (e) {
                 // Allow: backspace, delete, tab, escape, enter and .
-                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
                      // Allow: Ctrl+A, Command+A
                     (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
                      // Allow: home, end, left, right, down, up
@@ -890,7 +929,26 @@ var moduleManager = {
                          return;
                 }
                 var $el = $(e.target);
-                var maxLength = $el.attr('truncate') || 120;
+                var maxLength = +$el.attr('truncate') || 120;
+                var truncated = $(e.target).text().trim();
+                if (truncated.length >= maxLength) {
+                    e.preventDefault();
+                    return;
+                }
+            })
+
+            .on("keypress", "[truncate]", function (e) {
+                var $el = $(e.target);
+                var maxLength = +$el.attr('truncate') || 120;
+                var truncated = $(e.target).text().trim();
+                if (truncated.length >= maxLength) {
+                    e.preventDefault();
+                    return;
+                }
+            })
+            .on("keyup", "[truncate]", function (e) {
+                var $el = $(e.target);
+                var maxLength = +$el.attr('truncate') || 120;
                 var truncated = $(e.target).text().trim();
                 if (truncated.length >= maxLength) {
                     e.preventDefault();

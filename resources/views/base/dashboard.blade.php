@@ -10,12 +10,13 @@
 
 	{{-- MODALS --}}
 	@include('base.partials.dashboard.modal_dashboard_code')
+	@include('base.partials.modal_campaign_preview')
 
 	{{-- VUE TEMPLATES --}}
 	@include('base.partials.dashboard.vue_templates')
 @endsection
 
 @section('footer-script')
-	<script src="{{ url( elixir('js/plugins.js') ) }}"></script>
-	<script src="{{ url( elixir('js/dashboard.js') ) }}"></script>
+	<script src="{{ cdn(elixir('js/plugins.js')) }}"></script>
+	<script src="{{ cdn(elixir('js/dashboard.js')) }}"></script>
 @stop

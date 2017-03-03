@@ -15,6 +15,7 @@
 					<p class="st-inline-block st-save-only-text"
 					   contenteditable="true"
 					   data-line-limit="2"
+					   truncate="100"
 					   style="font-family:{{ $params['campaign_data']->getLibraryConfig('font_family') }};font-size:16px;line-height:18px;text-decoration:none;text-transform:uppercase;letter-spacing:1px;font-weight:bold;text-align:center;margin-top:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;color:<?php echo $module_params["plugins"]["colorPicker"]["defaultValue"]; ?>;">
 					     {!! $module_params['data']['text0'] or "LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT." !!}
 					</p>

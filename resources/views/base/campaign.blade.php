@@ -24,13 +24,13 @@
 	{{-- MODALS --}}
 	@include('base.partials.campaign.modal_campaign_plain_text')
 	@include('base.partials.campaign.modal_campaign_processed')
-	@include('base.partials.campaign.modal_campaign_preview')
+	@include('base.partials.modal_campaign_preview')
 	@include('base.partials.campaign.modal_campaign_finished')
 
 @endsection
 
 @section('footer-script')
-    <script src="{{ url( elixir('js/plugins.js') ) }}"></script>
-	<script src="{{ url( elixir('js/campaign.js') ) }}"></script>
-	<script src="{{ url( elixir('js/modules.js') ) }}"></script>
+    <script src="{{ cdn(elixir('js/plugins.js')) }}"></script>
+	<script src="{{ cdn(elixir('js/campaign.js')) }}"></script>
+	<script src="{{ cdn(elixir('js/modules.js')) }}"></script>
 @stop

@@ -37,11 +37,11 @@
                     <td class="last-modified">
                         <span>@{{ campaign.updated_at }}</span>
                     </td>
-                    <td :title="campaign.user_email">
-                        @{{ campaign.user_email }}
+                    <td :title="campaign.user_email" v-html="prepareOutput(campaign.user_email, 'user_email')"></td>
+                    <td :title="campaign.campaign_name">
+                        <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
                         <i class="fa fa-lock text-danger" v-if="enableLocking && campaign.locked"></i>
                     </td>
-                    <td :title="campaign.campaign_name" v-html="prepareOutput(campaign.campaign_name)"></td>
                     <td v-if="showTags == 1">
                         <campaign-tag
                             :highlighted="highlightTag(tag)"

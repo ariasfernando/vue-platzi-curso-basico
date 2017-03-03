@@ -56,19 +56,19 @@
 							<thead>
 								<tr>
 									<th class="sortable">
-										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="name" data-order-field="name">
+										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="name" data-order-field="_id">
 											Log Id
 											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
-										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="libraries">
+										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="properties.user_id">
 											User Id
 											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
-										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="libraries">
+										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="campaign_id">
 											Campaign Id
 											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
 										</a>
@@ -80,25 +80,25 @@
 										</a>
 									</th>
 									<th class="sortable">
-										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="permissions">
+										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="ip">
 											User IP
 											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
-										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="permissions">
+										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="user_agent">
 											User Agent
 											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
-										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="libraries">
+										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="controller">
 											Controller/Action
 											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
-										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="libraries">
+										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="created_at">
 											Create Date
 											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
 										</a>
@@ -124,5 +124,5 @@
 @endsection
 
 @section('footer-script')
-	<script src="{{ url( elixir('js/admin.js') ) }}"></script>
+	<script src="{{ cdn(elixir('js/admin.js')) }}"></script>
 @stop

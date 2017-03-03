@@ -38,3 +38,16 @@ if (!function_exists('css')) {
          return StensulLocale::getCssPath($string);
     }
 }
+
+if (!function_exists('cdn')) {
+    /**
+     * Generate a url for the CDN.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function cdn($path = null)
+    {
+        return \config::get('view.suite_cdn_host') . $path;
+    }
+}

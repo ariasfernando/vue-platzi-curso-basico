@@ -19,10 +19,11 @@ class EmailSender
      *
      * @param string $campaign_id
      * @param string $email       Comma separated
+     * @param array  $params
      *
      * @return array Response
      */
-    public static function sendPreview($campaign_id, $email)
+    public static function sendPreview($campaign_id, $email, $params = [])
     {
         if (!strlen($email)) {
             return ['error' => 'invalid emails'];
@@ -36,15 +37,25 @@ class EmailSender
 
         $campaign_data = ModelCampaign::findOrFail($campaign_id);
 
+        $subject = isset($params['subject']) && strlen($params['subject'])
+            ? $params['subject']
+            : env('MAIL_PREVIEW_SUBJECT', 'Preview email!');
+
+        $preheader = isset($params['preheader']) && strlen($params['preheader'])
+            ? $params['preheader']
+            : false;
+
         for ($i = 0; $i < count($email_array); ++$i) {
             if ($i <= $email_send_limit) {
                 $params = array(
                     'params' => array(
                         'title' => $campaign_data->campaign_name,
                         'body_html' => $campaign_data->body_html,
-                        'campaign_data' => $campaign_data
+                        'campaign_data' => $campaign_data,
+                        'preheader_preview' => $preheader
                     ),
-                    'email' => trim($email_array[ $i ])
+                    'email' => trim($email_array[ $i ]),
+                    'subject' => $subject
                 );
 
                 $email_layout = Helper::validateView('base.layouts.email');
@@ -58,7 +69,7 @@ class EmailSender
                             env('MAIL_FROM_ADDRESS_NAME', 'Preview email')
                         )
                             ->to($params['email'])
-                            ->subject(env('MAIL_PREVIEW_SUBJECT', 'Preview email!'));
+                            ->subject($params['subject']);
                     }
                 );
 

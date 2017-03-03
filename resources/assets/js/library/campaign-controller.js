@@ -112,4 +112,14 @@ function campaignController( campaignId ){
     this.showPlaintext = function( callback ){
         this.displayModalCode( "plain-text", callback );
     }
+
+    // Show preview
+    this.showPreview = function(){
+        var previewModal = new campaignPreview({
+            campaignId: this.campaignId,
+            sendPreview: false,
+            sharePreview: true
+        });
+        previewModal.open();
+    }
 }

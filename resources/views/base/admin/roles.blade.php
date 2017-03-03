@@ -75,5 +75,5 @@
 @endsection
 
 @section('footer-script')
-	<script src="{{ url( elixir('js/admin.js') ) }}"></script>
+	<script src="{{ cdn(elixir('js/admin.js')) }}"></script>
 @stop

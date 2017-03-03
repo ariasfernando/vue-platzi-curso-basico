@@ -228,7 +228,7 @@ ConfigModals.image_modal_single_crop = function( params ){
         /*
          * -- Overlays --
          */
-        if( 'overlays' in options && options.overlays.length ){
+        if( options.overlays && options.overlays.length ){
             var $previewElement = masterImageEditorObj.getPreviewElement();
 
             for (var i=0; i < options.overlays.length; i++) {
@@ -257,6 +257,11 @@ ConfigModals.image_modal_single_crop = function( params ){
 
                 masterImageEditorObj.overlay.init(overlayParams);
             }
+        }
+
+        // Init image library.
+        if( options.enabled_options.indexOf("fetch_url") != -1 ){
+            masterImageEditorObj.fetchUrl.init();
         }
 
         // Set click on submit button
@@ -450,7 +455,7 @@ ConfigModals.image_modal_single_crop = function( params ){
      * Update modal image from scraper
      */
     this.updateImageOnModal = function(imageData) {
-        if (options.api_type == 'instagram') {
+        if (options.api_type == 'instagram' || options.api_type == 'marketingCloud') {
             // Set as a new image
             masterImageEditorObj.setNewImage();
             // Clean file input value

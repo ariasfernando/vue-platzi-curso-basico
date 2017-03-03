@@ -14,8 +14,8 @@
     @include('base.partials.dashboard.templates.dashboard')
 </template>
 
-<template id="email-in-progress-template">
-    @include('base.partials.dashboard.templates.email_in_progress')
+<template id="draft-emails-template">
+    @include('base.partials.dashboard.templates.draft_emails')
 </template>
 
 <template id="finished-emails-template">

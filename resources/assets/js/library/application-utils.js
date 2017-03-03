@@ -118,7 +118,7 @@ Application.utils = {
                 confirm.confirmOptions.onClose();
                 $confirmModal.modal("hide");
             });
-            
+
             if(!confirm.confirmOptions.noCancel){
             // Set onCancel event
                 $confirmModal.find(".btn-cancel").one( "click", function(){
@@ -194,6 +194,7 @@ Application.utils = {
      *  -- Form Validations --
      */
     validate: {
+        form: null,
         // Default Messages.
         messages: {
             required: {
@@ -367,7 +368,7 @@ Application.utils = {
             // COMPARE FIELDS: check if have the same value.
             if( validationParams.compareTo && validationResult.success != false ){
                 // Set the result of the validation
-                validationResult.success = validate.validateCompareField( field, $(form).find('input[name="'+validationParams.compareTo+'"]')  );
+                validationResult.success = validate.validateCompareField( field, $(validate.form).find('input[name="'+validationParams.compareTo+'"]') );
 
                 // If isn't successful, set the error messages.
                 if( !validationResult.success ){
@@ -413,6 +414,8 @@ Application.utils = {
                 return false;
 
             var validate = this;
+
+            validate.form = form;
 
             // Get all inputs of the form.
             var inputs = $(form).find("*[data-validation]");
@@ -728,7 +731,7 @@ Application.utils = {
             '&amp;':'&#38;',
             '&nbsp;':'&#160;',
             '&':'&#38;',
-            ';':'&#59;', 
+            ';':'&#59;',
             '\\?':'&#63;',
             '=':'&#61;',
             ':':'&#58;',
@@ -797,7 +800,7 @@ Application.utils = {
             } else {
                     $('.' + name).removeClass('st-js-' + name);
             }
-        }); 
+        });
 
     },
 
@@ -897,6 +900,23 @@ Application.utils = {
         }
 
         return div.innerHTML;
+    },
 
+    isTooDark: function(hexVal, tolerance) {
+        var tolerance = tolerance || 40;
+        var c = hexVal.substring(1); // strip #
+        var rgb = parseInt(c, 16);   // convert rrggbb to decimal
+        var r = (rgb >> 16) & 0xff;  // extract red
+        var g = (rgb >>  8) & 0xff;  // extract green
+        var b = (rgb >>  0) & 0xff;  // extract blue
+
+        var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+
+        if(luma < tolerance){
+            return true;
+        }
+
+        return false;
     }
+
 };

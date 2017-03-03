@@ -20,6 +20,12 @@
                             <span>Help Center</span>
                         </a>
                     @endif
+                    @if (config('app.home.enabled'))
+                        <a href="{{ url('/') }}" class="home">
+                            <i class="glyphicon glyphicon-home"></i>
+                            <span>Home</span>
+                        </a>
+                    @endif
                     @if (!Auth::guest())
                         <a href="{{ url('/auth/logout') }}" class="logout">
                             <i class="glyphicon glyphicon-off"></i>

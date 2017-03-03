@@ -52,7 +52,7 @@
             </div>
         @endif
         <div class="col-xs-8 col-md-7 col-lg-{{ $buttons_cols }} text-right" id="section-canvas-buttons-col">
-            <button class="btn btn-default campaign-preview {{$hidden_class}}"><i class="glyphicon glyphicon-phone"></i>Preview</button>
+            <button class="btn btn-default campaign-{{ ($app_config['view']['preview'])? "preview":"send-preview" }} {{$hidden_class}}"><i class="glyphicon glyphicon-phone"></i>Preview</button>
             @if (!$isTemplate)
                 <button class="btn btn-default save-as-draft {{$hidden_class}}">Save as Draft</button>
             @endif

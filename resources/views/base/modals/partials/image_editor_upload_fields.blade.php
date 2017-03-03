@@ -32,7 +32,7 @@
 
 {{-- Section Images Options --}}
 @if ( (isset($params["image_upload"]) && $params["image_upload"] == "enabled") || (isset($params["og_image"]) && $params["og_image"] == "enabled") )
-	<div class="tab-content">
+	<div class="tab-content" id="tab-content">
 		{{-- File Upload --}}
 		@if ( isset($params["image_upload"]) && $params["image_upload"] == "enabled" )
 			<div class="tab-pane active modal-mpf-row file-tab-section section-upload-file" role="tabpanel" id="file-upload-box">

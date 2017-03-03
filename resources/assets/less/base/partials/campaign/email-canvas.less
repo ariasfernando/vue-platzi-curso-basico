@@ -131,7 +131,7 @@
 
 		.actions-buttons-tooltip {
 			top: 0;
-			right: -60px;
+			right: -70px;
 			z-index: 20;
 			position: absolute;
 			padding: 4px 3px 1px;
@@ -150,9 +150,25 @@
 			}
 		}
 
+		.st-modal-config-icon{
+			position: relative;
+			.actions-buttons-tooltip {
+				right: 25px;
+				.action-config {
+					display: inline-block;
+				}
+				.action-sortable,
+				.action-duplicate,
+				.action-remove{
+					display: none;
+				}
+			}
+		}
+		
+
 		&.st-add-icon-config {
 			.actions-buttons-tooltip {
-				right: -88px;
+				right: -95px;
 				a.action-config {
 					display: inline-block;
 				}
@@ -309,5 +325,11 @@
 		.supporting-gray {
 			margin-top: -3px
 		}
+	}
+
+	#editable-max-width-backup {
+	  position:absolute;
+	  display:inline;
+	  visibility:hidden;
 	}
 }

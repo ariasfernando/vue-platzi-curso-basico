@@ -187,15 +187,16 @@ class TextConverter extends Html2Text
              return $display;
         }
 
-        // Ignored link types
-        if ($link[0] === '[' || ($link[0] === '$' && $link[1] === '{')) {
+         $linkArray = str_split($link);
+         // Ignored link types
+        if ($linkArray[0] === '[' || ($linkArray[0] === '$' && $linkArray[1] === '{')) {
              return "$display $link";
         }
 
         if (preg_match('!^([a-z][a-z0-9.+-]+:)!i', $link)) {
              $url = $link;
         } else {
-             $url = $this->url;
+             $url = $link;
             if (substr($link, 0, 1) != '/') {
                  $url .= '/';
             }

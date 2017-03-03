@@ -239,7 +239,17 @@ class CampaignController extends Controller
                 env('SEND_TEXT_EMAIL_ATTACHMENT', true)
             );
         } else {
-            return EmailSender::sendPreview($request->input('campaign_id'), $request->input('mail'));
+            $params = [];
+
+            if ($request->has('subject') && \Config::get('campaign.preview.edit_subject_line')) {
+                $params['subject'] = $request->input('subject');
+            }
+
+            if ($request->has('preheader') && \Config::get('campaign.preview.show_preheader')) {
+                $params['preheader'] = $request->input('preheader');
+            }
+
+            return EmailSender::sendPreview($request->input('campaign_id'), $request->input('mail'), $params);
         }
     }
 
@@ -389,5 +399,22 @@ class CampaignController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
+    }
+
+    public function getDownloadHtml(Request $request, $campaign_id)
+    {
+        return Campaign::downloadHtml($campaign_id);
+    }
+
+    /**
+     *  Update AutoSave campaign attribute
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array status
+     */
+    public function postUpdateAutoSave(Request $request)
+    {
+        return Campaign::updateAutoSave($request->input('campaign_id'), $request->input('status'));
     }
 }

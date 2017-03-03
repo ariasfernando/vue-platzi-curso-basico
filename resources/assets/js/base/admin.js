@@ -18,7 +18,7 @@
 	var module = new moduleController();
 
 	/*
-	 * Docuent Ready
+	 * Document Ready
 	 */
 	$(document).ready(function(){
 		user.init();

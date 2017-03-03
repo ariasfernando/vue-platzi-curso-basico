@@ -97,21 +97,24 @@ var userController = function( customOptions ){
 				spinner.show();
 
 				_this.doAjax(action, "POST", $(form).serializeArray())
-					.done(function (status) {
+					.done(function (data) {
 						spinner.hide();
 						options.busy = false;
 
-						if (status == 0 || status == 1 ) {
+						if (data.status == 0 || data.status == 1 ) {
 							$.magnificPopup.close();
+							if ("message" in data) {
+								Application.utils.alert.display("Success!", data.message, "success");
+							}
 							_this.refreshTableView( $( options.selectors.dataList ).attr("id") );
 						} else {
-							if (status == 3) {
+							if (data.status == 3) {
 								var errorField = $(options.selectors.mainView).find(".user_email");
 								errorField.focus().addClass("error");
-								errorField.parent().append('<label class="error">The email already exist.</label>');
+								errorField.parent().append('<label class="error">' + data.message + '</label>');
 							}
 						}
-
+						return false;
 					})
 					.fail(function (error) {
 						spinner.hide();
@@ -196,7 +199,7 @@ var userController = function( customOptions ){
 			},
 			ajax: {
 				settings: {
-					cache: true,
+					cache: false,
 					dataType: "html",
 					data: {}
 				}
@@ -215,7 +218,6 @@ var userController = function( customOptions ){
 	};
 
 	this.showEditUser = function(element){
-
 		var parentContainer = $(element).parents("[data-user]");
 		var userId = parentContainer.data("user");
 
@@ -227,7 +229,7 @@ var userController = function( customOptions ){
 			},
 			ajax: {
 				settings: {
-					cache: true,
+					cache: false,
 					dataType: "html",
 					data: {
 						userId : userId
@@ -252,7 +254,6 @@ var userController = function( customOptions ){
 							return false;
 					});
 
-
 					password_selector.val(maintainPass);
 					password_selector
 						.on("focusin", function(){
@@ -266,6 +267,7 @@ var userController = function( customOptions ){
 							}
 
 					});
+
 					if(email_selector.val()){
 						email_selector.addClass("disabled");
 						email_selector.attr("disabled","disabled");
@@ -295,6 +297,7 @@ var userController = function( customOptions ){
 			$(options.selectors.mainView)
 				.on("click", options.selectors.createBtn, function () {
 					_this.showCreateUser();
+					return false;
 				});
 			$(options.selectors.dataList)
 				// Delete user.

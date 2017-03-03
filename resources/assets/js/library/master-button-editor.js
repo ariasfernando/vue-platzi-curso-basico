@@ -110,7 +110,7 @@ var masterButtonEditor = function( customOptions ){
         }
 
         // Change button preview text
-        $modalContent.on("keyup", ".button-label", function(){
+        $modalContent.on("keyup change input", ".button-label", function(){
             if( $(this).val() == '' ){
                 $modalContent.find(".button-editor-display .master-button span").text( editorOptions.buttonDefaultLabel );
             }else{

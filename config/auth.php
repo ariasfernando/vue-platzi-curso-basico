@@ -120,6 +120,33 @@ $default = [
     'oauth_scopes' => [
         'https://www.googleapis.com/auth/plus.me',
         'https://www.googleapis.com/auth/plus.profile.emails.read',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Password policy
+    |--------------------------------------------------------------------------
+    |
+    | This option set password policy
+    |
+    */
+   
+    'password_policy' => [
+        // This option set the ability to force a password reset by a 'force_password' key
+        // inside an specific user's model
+        'allow_force_password_reset' => true,
+
+        // Users should be forced to update their password every [force_update] days.
+        // Put 0 to disable this functionality
+        'force_update' => 90,
+
+        // Default length for generated passwords
+        'default_length' => 20,
+
+        // Password requirements
+        'min_length' => 8,
+        'max_length' => 100,
+        'min_score' => 3
     ]
 
 ];

@@ -8,7 +8,7 @@ var dashboardController = function( customOptions ){
             showHtmlCampaign: ".actions .html-code",
             showPlainTextCampaign: ".actions .plaintext",
             goEdit: ".actions .edit",
-            goPublicPath: ".actions .public-path"
+            goPublicView: ".actions .public-view"
         }
     }, customOptions );
 
@@ -54,11 +54,11 @@ var dashboardController = function( customOptions ){
         }
     };
 
-    this.goPublicPath = function( element ){
+    this.goPublicView = function( element ){
         var campaignId = $(element).parents("[data-campaign]").attr("data-campaign");
-
         if( campaignId ){
-            window.open(Application.globals.baseUrl + "/campaign/public-path/" + campaignId, '_blank');
+            var campaign = new campaignController( campaignId );
+            campaign.showPreview();
         }
     };
 
@@ -126,8 +126,8 @@ var dashboardController = function( customOptions ){
                 return false;
             })
             // Go to public path campaign
-            .on("click", options.selectors.goPublicPath, function(){
-                _this.goPublicPath( this );
+            .on("click", options.selectors.goPublicView, function(){
+                _this.goPublicView( this );
                 return false;
             });
     };

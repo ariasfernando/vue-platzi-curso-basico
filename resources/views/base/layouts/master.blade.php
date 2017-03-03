@@ -1,4 +1,7 @@
-<?php $main_class = str_replace('.','-', str_replace( explode('.',$view_name)[0], "base", $view_name ) ). " " . str_replace('.','-', $view_name); ?>
+<?php
+    $main_class = explode('.', $view_name);
+    $main_class = "base-" . end($main_class) . " " . str_replace('.', '-', $view_name);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +12,11 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Email Creator</title>
 
-        <link href="{{  url( elixir('css/base.css') ) }}" rel="stylesheet">
+        <link href="{{  cdn(elixir('css/base.css')) }}" rel="stylesheet">
+
+        @section('master-head')
+            {{--  --}}
+        @show
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -20,11 +27,17 @@
     </head>
     <body class="<?php echo $main_class; ?>">
 
-        @include('base.partials.metrics')
+        @section('master-body')
+            {{--  --}}
+        @show
+
+        @section('master-metrics')
+            @include('base.partials.metrics')
+        @show
 
         {{-- HEADER --}}
         @section('header')
-            @include('base/partials/header')
+            @include('base.partials.header')
         @show
 
         {{-- CONTENT --}}
@@ -37,6 +50,9 @@
                             <div class="global-messages-placeholder text-center">
                                 <div class="alert alert-warning" role="alert">
                                     <strong>Warning!</strong> Another user is editing this campaign
+                                    @if(config('campaign.show_who_is_locking'))
+                                    [ {{ Campaign::whoIsLocking(session()->get('campaign_lock')) }} ]
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -78,23 +94,35 @@
             @endif
         </div>
 
-        {{-- Modal spinner --}}
-        @include('base/partials/modal_spinner')
-        {{-- Modal Confirm --}}
-        @include('base/partials/modal_confirm')
+        @section('master-modals')
+            {{-- Modal spinner --}}
+            @include('base.partials.modal_spinner')
+            {{-- Modal Confirm --}}
+            @include('base.partials.modal_confirm')
+        @show
 
-        {{-- Modal Upload --}}
-        @foreach (Helper::getApiDrivers() as $api)
-            @include('base.partials.campaign.modal_campaign_'.$api.'_upload')
-        @endforeach
+        @section('master-api-modals')
+            {{-- Modal Upload --}}
+            @foreach (Helper::getApiDrivers() as $api)
+                @include('base.partials.campaign.modal_campaign_'.$api.'_upload')
+            @endforeach
+        @show
+
+        @section('master-debug')
+            {{-- Debug --}}
+            @include('base.layouts.partials.debug')
+        @show
 
         {{-- Debug --}}
         @include('base/layouts/partials/debug')
-        {{-- Scripts --}}
-        <script src="{{ url( elixir('js/library.js') ) }}"></script>
 
-        {{-- Global Application JS object --}}
-        @include('base/partials/application_script')
+        {{-- Scripts --}}
+        <script src="{{ cdn(elixir('js/library.js')) }}"></script>
+
+        @section('master-application-scripts')
+            {{-- Global Application JS object --}}
+            @include('base.partials.application_script')
+        @show
 
         @section('footer-script')
 

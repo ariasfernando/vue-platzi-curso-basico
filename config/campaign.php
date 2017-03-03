@@ -48,6 +48,12 @@ $default = [
         'max_tags' => 0,
 
         /*
+         | Set if an alert message should be shown when the user reach the
+         | maximum of search terms.
+         */
+        'max_tags_alert' => false,
+
+        /*
          | Turn on/off the highlighted results by search terms.
          */
         'highlight_matches' => true,
@@ -77,6 +83,13 @@ $default = [
     'locking' => false,
 
     /*
+    |--------------------------------------------------------------------------
+    | Enable Download html
+    |--------------------------------------------------------------------------
+     */
+    'download_html' => false,
+
+    /*
     |---------------------------------------------------------------------------
     | Library level Configuration
     |---------------------------------------------------------------------------
@@ -85,8 +98,52 @@ $default = [
         'default' => [
             'locking' => true
         ]
-    ]
+    ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Send preview settings
+    |--------------------------------------------------------------------------
+    |
+    | Active different settings inside the send preview modal
+    |
+    */
+
+    'preview' => [
+
+        /*
+        | Show an input to edit the preview email subject
+        */
+        'edit_subject_line' => false,
+
+        /*
+        | Show an input to insert a preheader text to be sent in the preview email
+        */
+        'show_preheader' => false,
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Auto save
+    |--------------------------------------------------------------------------
+     */
+    'auto_save' => [
+        'enabled' => false,
+        'default_on' => false,
+        'delay' => 5 // Seconds, time to wait after any change
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Current user email who is editing the email
+    |--------------------------------------------------------------------------
+    |
+    | Show the email address who is editing the campaign in the warning message
+    |
+    */
+
+    'show_who_is_locking' => false,
 ];
 
 return require 'recursive.php';

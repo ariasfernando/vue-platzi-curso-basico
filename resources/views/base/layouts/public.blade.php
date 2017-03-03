@@ -1,4 +1,7 @@
-<?php $main_class = str_replace('.','-', str_replace( explode('.',$view_name)[0], "base", $view_name ) ). " " . str_replace('.','-', $view_name); ?>
+<?php
+    $main_class = explode('.', $view_name);
+    $main_class = "base-" . end($main_class) . " " . str_replace('.', '-', $view_name);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,8 +12,8 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title>Email Creator</title>
 
-		<link href="{{  url( elixir('css/base.css') ) }}" rel="stylesheet">
-		
+		<link href="{{  cdn(elixir('css/base.css')) }}" rel="stylesheet">
+
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>

@@ -2,6 +2,7 @@
 
 namespace Stensul\Console\Commands\User;
 
+use PasswordPolicy;
 use Stensul\Models\User;
 use Stensul\Models\Role;
 use Illuminate\Console\Command;
@@ -46,9 +47,7 @@ class Create extends Command
             $this->ask('What is the user email ?')
             : $options["email"];
 
-        $password = (is_null($options["password"]))?
-            $this->ask('What is the user password ?')
-            : $options["password"];
+        $password = PasswordPolicy::generate();
 
         if (is_null($options["roles"])) {
             if (count($roles_array) == 0) {
@@ -77,11 +76,11 @@ class Create extends Command
             'roles' => $selected_array
         ];
 
-        if ($email != "" && $password != "") {
+        if ($email != "") {
             if (!User::where('email', '=', strtolower($email))->exists()) {
                 User::create($params);
 
-                $this->info('The user '.$name.' was created!');
+                $this->info('The user <options=bold>' . $name . '</> was created! Password: <options=bold>' . $password . '</>');
             } else {
                 $this->error('The email is already registered.');
                 return 3;
@@ -113,8 +112,7 @@ class Create extends Command
             ['name', null, InputOption::VALUE_OPTIONAL, 'User name', null],
             ['lastname', null, InputOption::VALUE_OPTIONAL, 'User last name', null],
             ['email', null, InputOption::VALUE_OPTIONAL, 'User email', null],
-            ['roles', null, InputOption::VALUE_OPTIONAL, 'User roles', null],
-            ['password', null, InputOption::VALUE_OPTIONAL, 'User password', null],
+            ['roles', null, InputOption::VALUE_OPTIONAL, 'User roles', null]
         ];
     }
 }

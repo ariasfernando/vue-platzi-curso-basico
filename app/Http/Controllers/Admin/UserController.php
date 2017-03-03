@@ -143,7 +143,7 @@ class UserController extends Controller
     /**
      * User post edit.
      *
-     * @return boolean
+     * @return array
      */
     public function postEdit(Request $request)
     {
@@ -156,24 +156,27 @@ class UserController extends Controller
             $user->password = bcrypt($request->input("password"));
         }
 
-        return (int)$user->save();
+        return ['status' => (int)$user->save()];
     }
 
     /**
      * User post create.
      *
-     * @return Boolean
+     * @return array
      */
     public function postCreate(Request $request)
     {
         $roles = (!is_null($request->input("roles")))? $request->input("roles") : [];
-        return \Artisan::call('user:create', [
+        $status = \Artisan::call('user:create', [
             '--name' => $request->input("name"),
             '--lastname' => $request->input("last_name"),
             '--email' => $request->input("email"),
-            '--roles' => join(",", $roles),
-            '--password' => $request->input("password"),
+            '--roles' => join(",", $roles)
         ]);
+        return [
+            'status' => $status,
+            'message' => \Artisan::output()
+        ];
     }
 
     /**

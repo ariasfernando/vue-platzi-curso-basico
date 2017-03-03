@@ -9,7 +9,7 @@ GIT_DIFF=`git diff --name-only HEAD@{0} HEAD@{1}`
 while read srcfile
 do
 	REGEX_GULP="\.js$|\.less|resources|public|gulpfile"
-
+	echo $srcfile;
 	#Check if you need to run gulp
 	if [[ $srcfile =~ $REGEX_GULP ]]; then
 		RUN_GULP=true
@@ -51,7 +51,7 @@ function deploy_composer {
 
 function deploy_bower {
 	echo "updating bower dependencies..."
-	bower install --force
+	bower install
 }
 function deploy_npm {
 	echo "updating npm dependencies..."

@@ -10,7 +10,6 @@
             </div>
             <div class="modal-footer">
                 @if (isset($app_config["campaign"]["process_plaintext"]) && $app_config["campaign"]["process_plaintext"])
-                    <button type="button" class="btn btn-default btn-html">HTML</button>
                     <button type="button" class="btn btn-default btn-plain-text">Plaintext</button>
                 @endif
                 {{-- Modal Upload --}}

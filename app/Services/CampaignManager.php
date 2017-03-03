@@ -11,6 +11,7 @@ use Cache;
 use Queue;
 use Helper;
 use Worker;
+use Api;
 use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
@@ -209,6 +210,8 @@ class CampaignManager
         $new_campaign_attr['template'] = false;
         $new_campaign_attr['locked'] = false;
         $new_campaign_attr['locked_by'] = null;
+        $new_campaign_attr['parent_campaign_id'] = new ObjectID($campaign_id);
+        $new_campaign_attr['user_email'] = Auth::user()->email;
 
         unset($new_campaign_attr['published_at']);
 
@@ -355,9 +358,22 @@ class CampaignManager
 
         if (Auth::check()) {
             Cache::add('lock:'.$campaign_id, Auth::id(), Carbon::now()->addMinutes(1));
+            Cache::add('user_lock:'.$campaign_id, Auth::user()->email, Carbon::now()->addMinutes(1));
         }
 
         return array('locked' => $campaign_id);
+    }
+
+    /**
+     * Who is locking the campaign.
+     *
+     * @param string $campaign_id
+     *
+     * @return string
+     */
+    public static function whoIsLocking($campaign_id = null)
+    {
+        return Cache::get('user_lock:'.$campaign_id);
     }
 
     /**
@@ -605,5 +621,38 @@ class CampaignManager
         $campaign->timestamps = false;
         $campaign->save();
         return ['campaign_id' => $campaign->id];
+    }
+
+    public static function downloadHtml($campaign_id)
+    {
+        $campaign = Campaign::findOrFail($campaign_id);
+        return response()->make($campaign->body_html, 200, [
+            'Content-Type' => 'text/plain',
+            'Content-Disposition' => 'attachment; filename="' . $campaign->campaign_name . '.html"'
+        ]);
+    }
+
+    /**
+     * Update autosave campaign.
+     *
+     * @param string $campaign id
+     * @param boolean $status
+     *
+     * @return array status
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public static function updateAutoSave($campaign_id = null, $status = true)
+    {
+
+        if ($campaign_data = Campaign::find($campaign_id)) {
+            $campaign_data->auto_save = $status;
+            if ($response = $campaign_data->save()) {
+                Activity::log('Autosave campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
+                return array('success' => $campaign_id);
+            }
+        }
+
+        return array('error' => $campaign_id);
     }
 }

@@ -47,9 +47,20 @@ Application.init = function(){
             }
         })
         .on("blur","input.url-format", function(){
-            var resultUrl = Application.utils.validate.parseUrl( $(this).val() );
+            var $urlInput = $(this);
+            var resultUrl = Application.utils.validate.parseUrl( $urlInput.val() );
             if( resultUrl ){
-                $(this).val( resultUrl );
+                $urlInput.val( resultUrl );
+            }
+
+            var validationResult = Application.utils.validate.validateField( $urlInput[0] );
+
+            // If the validation isn't successful, add an error class in the input and append a label with the message after the field.
+            if( validationResult.success ){
+                var validUrlFormat = Application.utils.validate.validateUrlField( $urlInput );
+                if ( validUrlFormat.success == false ) {
+                    Application.utils.validate.setError($urlInput, Application.utils.validate.messages.url);
+                }
             }
         })
         .ready(function(){

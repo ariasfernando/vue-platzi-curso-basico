@@ -53,10 +53,12 @@ body.base-auth-login{
 			padding: 11px 20px;
 			border: 1px solid @brand-secondary;
 			background: @brand-secondary;
-			background-image: url("@{image-url}button_overlay.png");
-			background-position: center top;
-			background-repeat: repeat-x;
-			.transition(all .2s linear 0s);
+
+			background-image: -webkit-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
+			background-image: -moz-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
+			background-image: -ms-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
+			background-image: -o-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
+			background-image: linear-gradient(to top, @brand-secondary 40%, lighten(@brand-secondary, 20%));
 
 			&:link,
 			&:focus,

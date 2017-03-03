@@ -36,6 +36,13 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['last_password_change', 'deleted_at'];
+
     protected $defaults = array(
         'name' => '',
         'last_name' => '',
@@ -45,13 +52,6 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         'avatar_url' => '',
         'roles' => []
     );
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
 
     /**
      * Constructor.

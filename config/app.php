@@ -219,6 +219,7 @@ $default = [
         Stensul\Providers\EventServiceProvider::class,
         Stensul\Providers\RouteServiceProvider::class,
         Stensul\Providers\ComposerServiceProvider::class,
+        Stensul\Providers\ViewCreatorServiceProvider::class,
         Stensul\Providers\HelperServiceProvider::class,
         Stensul\Providers\MongodbServiceProvider::class,
         Illuminate\Redis\RedisServiceProvider::class,
@@ -231,6 +232,7 @@ $default = [
         Laravel\Socialite\SocialiteServiceProvider::class,
         Stensul\Providers\ChallengeServiceProvider::class,
         Stensul\Providers\ModuleServiceProvider::class,
+        Olssonm\Zxcvbn\ZxcvbnServiceProvider::class,
     ],
 
     /*
@@ -300,13 +302,17 @@ $default = [
         'ReCaptcha'   => ReCaptcha\ReCaptcha::class,
         'Challenge'   => Stensul\Providers\ChallengeServiceProvider::class,
         'StensulModule' => Stensul\Providers\ModuleServiceProvider::class,
+        'PasswordPolicy' => Stensul\Providers\PasswordPolicyServiceProvider::class,
         'Tag'         => Stensul\Services\TagManager::class,
+
     ],
     'help' => [
         'url' => 'http://help.stensul.com',
         'enabled' => true
     ],
-
+    'home' => [
+        'enabled' => true
+    ],
 ];
 
 return require 'recursive.php';

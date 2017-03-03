@@ -37,9 +37,9 @@
                     <td class="last-modified">
                         <span>@{{ campaign.updated_at }}</span>
                     </td>
-                    <td :title="campaign.user_email">@{{ campaign.user_email }}</td>
+                    <td :title="campaign.user_email" v-html="prepareOutput(campaign.user_email, 'user_email')"></td>
                     <td :title="campaign.campaign_name">
-                        <span v-html="prepareOutput(campaign.campaign_name)"></span>
+                        <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
                         <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock text-danger" v-if="enableLocking && campaign.locked"></i>
                         <i class="glyphicon glyphicon-cloud-upload text-danger" v-if="isUploaded(campaign)"></i>
                     </td>
@@ -56,8 +56,11 @@
                         <a href="#" class="plaintext" v-if="showPlaintext">Normal Plaintext</a>
                     </td>
                     <td class="actions icons text-right" width="200">
-                        <a href="#" class="public-path" title="View hosted version" target="_blank"
+                        <a href="#" class="public-view" title="Preview" target="_blank"
                             v-if="campaign.library_config.view_in_browser"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        <a :href="baseUrl + '/campaign/download-html/' + campaign._id" v-if="enableDownload">
+                            <i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i>
+                        </a>
                         <a
                             href="#"
                             class="lock-campaign"

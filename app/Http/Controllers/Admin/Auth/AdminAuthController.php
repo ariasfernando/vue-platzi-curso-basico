@@ -6,6 +6,7 @@ use Auth;
 use Session;
 use Activity;
 use Validator;
+use PasswordPolicy;
 use Stensul\Models\User;
 use Stensul\Http\Requests\LoginRequest;
 use Stensul\Http\Controllers\Controller;
@@ -49,7 +50,7 @@ class AdminAuthController extends Controller
             [
                 'name' => 'required|max:255',
                 'email' => 'required|email|max:255|unique:users',
-                'password' => 'required|confirmed|min:8',
+                'password' => PasswordPolicy::password_rule($data),
             ]
         );
     }

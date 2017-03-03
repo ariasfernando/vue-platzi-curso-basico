@@ -57,7 +57,6 @@ $default = [
         'local:campaigns' => [
             'driver' => 'local',
             'root' => public_path() . '/images/campaigns',
-            'visibility' => 'public',
         ],
 
         'local:public' => [

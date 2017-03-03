@@ -21,7 +21,10 @@
         "exacttarget/fuel-sdk-php": "^0.9.0",
         "google/recaptcha": "^1.1",
         "graylog2/gelf-php": "^1.4",
-        "akamai-open/edgegrid-client": "^0.6.0"
+        "akamai-open/edgegrid-client": "^0.6.0",
+        "stensul/php-imageproxy": "0.2",
+        "olssonm/l5-zxcvbn": "^1.0",
+        "hackzilla/password-generator": "^1.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -30,14 +33,29 @@
         "symfony/css-selector": "3.1.*",
         "symfony/dom-crawler": "3.1.*",
         "barryvdh/laravel-ide-helper": "~2.0",
-        "sabberworm/php-css-parser": "^8.1"
+        "sabberworm/php-css-parser": "^8.1",
+        "phpspec/phpspec": "~2.1"
     },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "stensul/php-imageproxy",
+                "version": "0.2",
+                "dist": {
+                    "url": "https://s3.amazonaws.com/stensul-devops/composer/packages/php-imageproxy/v0.2.zip",
+                    "type": "zip"
+                }
+             }
+         }
+    ],
     "autoload": {
         "classmap": [
             "database"
         ],
         "psr-4": {
-            "Stensul\\": "app/"
+            "Stensul\\": "app/",
+           "Stensul\\ImageProxy\\": "vendor/stensul/php-imageproxy/src/Stensul/ImageProxy"
         }
     },
     "autoload-dev": {

@@ -49,6 +49,12 @@
          */
         campaignManager.initLockPing();
 
+
+        /*
+         * -- Init Auto Save
+         */
+        initAutoSave();
+
         /*
          * -- Show warning if already finished campaign
          */
@@ -77,22 +83,19 @@
                 return false;
             }
 
-            // Get modal and email layout
-            var $previewModal = $("#modal-campaign-preview");
-            var $emailLayout = $previewModal.find("iframe").contents().find("table table.wrapper-table");
-
-            // Build Modal
-            $emailLayout.empty().append(emailHtml);
-            $previewModal.find("iframe").ready(function () {
-                $previewModal.find("iframe").height(Application.utils.getCanvas().height());
-                $previewModal.find("iframe").data("height", Application.utils.getCanvas().height());
+            var previewModal = new campaignPreview({
+                campaignId: campaignManager.getCampaignId()
             });
+            previewModal.open(emailHtml);
+        });
 
-            // Show Peview modal
-            $previewModal.modal();
-
-            var mode = $('.switch-input:checked').val();
-            $(".btn-" + mode).trigger('click');
+        // -- Display Preview --
+        $(".campaign-send-preview").click(function () {
+            var previewModal = new campaignPreview({
+                campaignId: campaignManager.getCampaignId(),
+                preview: false
+            });
+            previewModal.open();
         });
 
         // -- Save Campaign as draft
@@ -124,7 +127,12 @@
 
         // -- Start Process campaign
         $(".campaign-continue").click(function () {
-            campaignManager.startProcessCampaign();
+            var emailHtml = campaignManager.getCleanedHtml();
+            if (emailHtml) {
+                campaignManager.startProcessCampaign();
+            }else{
+                Application.utils.alert.display("", "This campaign cannot be finished from an empty email.", "warning");
+            }
             return false;
         });
 
@@ -143,209 +151,25 @@
             window.location.href = Application.globals.baseUrl + "/";
         });
 
-        // Preview Modal Events: Desktop Btn Click
-        $("#modal-campaign-preview").on('click', '.btn-desktop', function () {
-            if ($(this).parent().hasClass("active")) {
-                return false;
-            }
-            // Animate preview to desktop size
-            animatePreviewToDesktop();
-        });
-        // Preview Modal Events: Mobile Btn Click
-        $("#modal-campaign-preview").on('click', '.btn-mobile', function () {
-            if ($(this).parent().hasClass("active")) {
-                return false;
-            }
-            // Animate preview to mobile size
-            animatePreviewToMobile();
-        });
-
-        // Preview Modal Events: Mobile Btn Click
-        $("#modal-campaign-preview").on('click', '.btn-send', function () {
-            var _this = this;
-            var $sendPreviewForm = $("#send-preview-form");
-            var errorAlert = '<div class="alert alert-danger" role="alert" style="display:none;">An error occurred while trying to send the email, please try again later.</div>';
-
-            $(_this)
-                .parent()
-                .removeClass("success")
-                .removeClass("spinner");
-
-            if ($(".btn-send").find(".status-icon").length) {
-                $(".btn-send").find(".status-icon").remove();
-            }
-
-            // Validate Emails form
-            if (Application.utils.validate.validateForm($sendPreviewForm[0])) {
-                $(_this).addClass("ajax-loader-small").attr("disabled", "disabled");
-                $(_this).parent().removeClass("success").addClass("spinner");
-                // At first we must save the campaign.
-                var saveCampaign = campaignManager.save({saveHtml: true, validateForms: false});
-
-                // Hide modal if validation is invalid
-                if (!saveCampaign) {
-                    $("#modal-campaign-preview").modal("hide");
-                    return false;
-                }
-
-                // On Save Success
-                saveCampaign.done(function (campaignId) {
-                    // Add loader into button
-                    // Remove status icon if are someone there
-                    $(_this).prev("i.status-icon").remove();
-                    // Remove alerts before send
-                    $("#modal-campaign-preview .send-preview .alert").slideUp("fast", function () {
-                        $(this).remove();
-                    });
-
-                    // remove error
-                    $(_this).parent().find("[name=send-preview-to]").removeClass("error");
-                    $(_this).parent().find("label.error").remove();
-
-                    // Send Preview Email
-                    campaignManager.sendPreviewEmail(
-                        // Email
-                        $sendPreviewForm.find("input[name=send-preview-to]").val(),
-                        // Success
-                        function (response) {
-                            if (response.processed) {
-                                // Display success icon.
-                                $(_this).append('<i class="glyphicon glyphicon-ok status-icon"></i>');
-                                $(_this).parent().removeClass("spinner").addClass("success");
-                                $(_this).find('.status-icon').animate({
-                                    opacity: 1
-                                });
-                            } else {
-                                $(_this)
-                                    .parent()
-                                    .removeClass("spinner")
-                                    .find("[name=send-preview-to]")
-                                    .addClass("error")
-                                    .after('<label class="error">We couldn\'t find a valid email address.</label>');
-                            }
-                        },
-                        // Fail
-                        function () {
-                            // On error display alert
-                            $("#modal-campaign-preview .send-preview")
-                                .prepend(errorAlert)
-                                .find(".alert").slideDown();
-                        },
-                        // Always
-                        function () {
-                            // Remove loader.
-                            $(_this).removeClass("ajax-loader-small").removeAttr("disabled", "disabled");
-                        }
-                    );
-                });
-
-                // On Save Fail
-                saveCampaign.fail(function () {
-                    $("#modal-campaign-preview .send-preview")
-                        .prepend(errorAlert)
-                        .find(".alert").slideDown();
-                });
-
-            }
-            return false;
-        });
-        // Preview Modal Events: On close
-        $("#modal-campaign-preview").on('hidden.bs.modal', function () {
-            $("#modal-campaign-preview .btn-send i").remove();
-            $("#modal-campaign-preview .btn-send")
-                .removeClass("ajax-loader-small")
-                .removeAttr("disabled");
-            $("#modal-campaign-preview .btn-send").parent().removeClass("spinner success");
-        });
-        // Preview Modal Events: Before show
-        $("#modal-campaign-preview").on('show.bs.modal', function () {
-            // Remove preview height if is set.
-            $(this).find(".preview-container").removeAttr("style");
-        });
-        // Preview Modal Events: Before show
-        $("#modal-campaign-preview").on('show.bs.modal', function () {
-            // Remove preview height if is set.
-            $(this).find("iframe").contents().find("a").click(function () {
-                return false;
-            });
-        });
-
         // Campaign finished modal: Redirect to dashboard
         $("#modal-campaign-finished").on('click', '.btn-back-to-dashboard', function () {
             $(window).unbind('beforeunload');
             window.location.href = Application.globals.baseUrl + "/";
         });
+
     });
 
-    function animatePreviewToDesktop() {
-        var $iframeContainer = $("#modal-campaign-preview .preview-container .iframe-container");
-
-        // Animate mobile frame to opacity 0
-        $("#modal-campaign-preview .preview-container .mobile-frame").animate({
-            opacity: 0
-        }, "normal", function () {
-            $iframeContainer
-                .scrollTop(0)
-                .css("overflow-y", "hidden")
-                .animate({
-                    width: $iframeContainer.data("template-width"),
-                    top: "0"
-                }, function () {
-                    $.when(
-                        // Animate container to desktop size
-                        $(".iframe-container, .preview-container, .iframe-container > iframe").animate({
-                            height: $iframeContainer.find('iframe').contents().find('.email-body').height()
-                        })
-                    ).done(function () {
-                            $iframeContainer
-                                .css("height", "auto");
-                            $iframeContainer.find("iframe").width("100%");
-                        });
-                });
-        });
-    }
-
-    function animatePreviewToMobile() {
-        var displayWidth = 340;
-        var displayHeight = 605;
-        var $iframeContainer = $("#modal-campaign-preview .preview-container .iframe-container");
-
-        // Animate container to mobile height
-        $("#modal-campaign-preview .preview-container").animate({
-            height: "855px"
-        });
-        // Animate iframe to mobile size
-        $iframeContainer.animate({
-            width: displayWidth,
-            height: displayHeight,
-            top: "139px"
-        }, function () {
-            var emailHeight = $("#modal-campaign-preview .preview-container iframe").contents().find("body").height();
-            var iframeHeight = displayHeight - 1;
-
-            if (emailHeight > iframeHeight) {
-                iframeHeight = emailHeight;
+    function initAutoSave(){
+        if ($(".btn-auto-save").is(":checked")) {
+            campaignManager.autoSave('enabled');
+        }
+        // Auto save control
+        $(".btn-auto-save").click(function () {
+            if ($(this).is(":checked")) {
+                campaignManager.autoSave('enabled');
+            }else{
+                campaignManager.autoSave('disabled');
             }
-
-            $("#modal-campaign-preview .preview-container iframe").animate({
-                height: iframeHeight
-            }, function () {
-                // If the height of the email is greater than the frame height add scrollbars.
-                if (iframeHeight > displayHeight) {
-                    $iframeContainer.animate({
-                        width: displayWidth + 17
-                    }, function () {
-                        $iframeContainer.css("overflow-y", "auto");
-                    });
-                } else {
-                    $iframeContainer.css("overflow-y", "hidden");
-                }
-            });
-
-            // Animate mobile frame to opacity 1
-            $("#modal-campaign-preview .preview-container .mobile-frame").animate({
-                opacity: 1
-            });
         });
     }
 

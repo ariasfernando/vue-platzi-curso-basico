@@ -35,12 +35,14 @@ class Campaign extends Eloquent
         'user_id',
         'user_email',
         'email_sent_history',
+        'campaign_preheader',
         'tags',
         'template',
-        'campaign_preheader',
         'locked',
         'locked_by',
-        'campaign_settings'
+        'campaign_settings',
+        'auto_save',
+        'parent_campaign_id'
     ];
 
     protected $appends = ['api', 'library_config', 'uploads'];
@@ -67,12 +69,13 @@ class Campaign extends Eloquent
         'user_id' => null,
         'user_email' => null,
         'email_sent_history' => [],
+        'campaign_preheader' => '',
         'tags' => [],
         'template' => false,
-        'campaign_preheader' => '',
         'locked' => false,
         'locked_by' => null,
-        'campaign_settings' => []
+        'campaign_settings' => [],
+        'auto_save' => null
     );
 
     /**

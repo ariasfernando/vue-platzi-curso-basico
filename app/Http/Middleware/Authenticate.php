@@ -4,6 +4,7 @@ namespace Stensul\Http\Middleware;
 
 use Auth;
 use Closure;
+use PasswordPolicy;
 use Illuminate\Contracts\Auth\Guard;
 
 class Authenticate
@@ -49,11 +50,8 @@ class Authenticate
                     Auth::logout();
                     $validUser = false;
                 }
-                if (isset(Auth::user()->force_password)
-                    && Auth::user()->force_password == 1
-                    && env('USER_FORCE_PASSWORD', true)
-                    && env('USER_LOGIN', 'default') != "oauth") {
-                        return redirect()->guest('password/change');
+                if (PasswordPolicy::should_update_password(Auth::user())) {
+                    return redirect()->guest('password/change');
                 }
             }
         }

@@ -15,9 +15,12 @@
             <campaign-search
                 :can-search="canSearch"
                 :enabled="config.enable_search"
+                :limit="config.search_settings.max_tags"
+                :show-limit-message="config.search_settings.max_tags_alert"
                 :search="search"
                 :tags="tags"
                 :terms="terms"
+                v-on:add-search-tag="addSearchTag"
                 v-on:add-search-term="addSearchTerm"
                 v-on:remove-search-tag="removeSearchTag"
                 v-on:remove-search-term="removeSearchTerm"
@@ -29,24 +32,20 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <h2 class="crimson italic">Current emails in progress</h2>
-            {{-- Current Email in Progress Table --}}
-            <email-in-progress
+            <h2 class="crimson italic">Draft Emails</h2>
+            {{-- Draft Emails Table --}}
+            <draft-emails
                 :campaigns="campaigns.current"
-                :can-search="config.enable_search"
+                :config="config"
                 :loading="showLoading.current"
-                :highlight="config.search_settings.highlight_matches"
-                :templating="config.enable_templating"
-                :show-tags="config.enable_tagging"
                 :tags="tags"
                 :terms="terms"
                 :type="'current'"
-                :enable-locking="config.locking"
                 v-on:add-search-tag="addSearchTag"
                 v-on:apply-sort="applySort"
                 v-on:change-page="changePage"
                 v-on:refresh-campaigns="fetchCampaigns"
-            ></email-in-progress>
+            ></draft-emails>
         </div>
     </div>
 
@@ -56,15 +55,12 @@
             {{-- Finished Emails Table --}}
             <finished-emails
                 :campaigns="campaigns.finished"
-                :can-search="config.enable_search"
-                :highlight="config.search_settings.highlight_matches"
+                :config="config"
+                :enable-download="config.download_html"
                 :loading="showLoading.finished"
-                :show-plaintext="config.process_plaintext"
-                :show-tags="config.enable_tagging"
                 :tags="tags"
                 :terms="terms"
                 :type="'finished'"
-                :enable-locking="config.locking"
                 v-on:add-search-tag="addSearchTag"
                 v-on:apply-sort="applySort"
                 v-on:change-page="changePage"
@@ -79,14 +75,11 @@
             {{-- Templates Table --}}
             <templates-campaigns
                 :campaigns="campaigns.template"
-                :can-search="config.enable_search"
-                :highlight="config.search_settings.highlight_matches"
+                :config="config"
                 :loading="showLoading.template"
-                :show-tags="config.enable_tagging"
                 :tags="tags"
                 :terms="terms"
                 :type="'template'"
-                :enable-locking="config.locking"
                 v-on:add-search-tag="addSearchTag"
                 v-on:apply-sort="applySort"
                 v-on:change-page="changePage"

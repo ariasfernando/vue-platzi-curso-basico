@@ -6,13 +6,15 @@ use Auth;
 use Mail;
 use Activity;
 use Challenge;
-use Stensul\Http\Requests\PasswordChangeRequest;
+use Carbon\Carbon;
+use PasswordPolicy;
 use Stensul\Models\User;
 use Illuminate\Http\Request;
-use Stensul\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
+use Stensul\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Stensul\Http\Requests\PasswordChangeRequest;
 
 class PasswordController extends Controller
 {
@@ -29,7 +31,6 @@ class PasswordController extends Controller
      */
     public function __construct(Guard $auth, PasswordBroker $passwords)
     {
-
         $this->auth = $auth;
         $this->passwords = $passwords;
         $this->subject = env('MAIL_FORGOT_SUBJECT', 'stensul Password Reset Link');
@@ -44,12 +45,14 @@ class PasswordController extends Controller
      */
     public function getEmail(Request $request)
     {
-        $challenge_provider = \Config::get('challenge.default');
-        $config = \Config::get('challenge.providers.' . $challenge_provider);
-
-        return view('base.auth.password')
-                ->with('challenge_key', $config['key'])
-                ->with('challenge_provider', $challenge_provider);
+        if (\Config::get('challenge.enabled')) {
+            $challenge_provider = \Config::get('challenge.default');
+            $config = \Config::get('challenge.providers.' . $challenge_provider);
+            return view('base.auth.password')
+                    ->with('challenge_key', $config['key'])
+                    ->with('challenge_provider', $challenge_provider);
+        }
+        return view('base.auth.password');
     }
 
     /**
@@ -63,7 +66,6 @@ class PasswordController extends Controller
         // Challenge validation
         $challenge_provider = \Config::get('challenge.default');
         $config = \Config::get('challenge.providers.' . $challenge_provider);
-
         if (!Challenge::provider()->isValid($request)) {
             Activity::log('User login fail [ERROR_CAPTCHA]');
             return redirect()->back()->withErrors(['status' => 'Captcha validation is required']);
@@ -80,17 +82,9 @@ class PasswordController extends Controller
             $response = $this->passwords->sendResetLink($data_params, function ($message) {
                 $message->subject($this->getEmailSubject());
             });
-        } else {
-            $response = PasswordBroker::INVALID_USER;
         }
 
-        switch ($response) {
-            case PasswordBroker::RESET_LINK_SENT:
-                return redirect()->back()->with('status', trans($response));
-
-            case PasswordBroker::INVALID_USER:
-                return redirect()->back()->withErrors(['email' => trans($response)]);
-        }
+        return redirect()->back()->with('status', trans(PasswordBroker::RESET_LINK_SENT));
     }
 
     /**
@@ -116,17 +110,15 @@ class PasswordController extends Controller
      */
     public function postReset(Request $request)
     {
+        $request->merge(['email' => strtolower($request->get("email"))]);
 
-        $request->merge(array('email' => strtolower($request->get("email"))));
+        $user = User::whereEmail($request->get("email"))->first();
 
-        $this->validate(
-            $request,
-            [
+        $this->validate($request, [
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|confirmed|min:8',
-            ]
-        );
+            'password' => PasswordPolicy::password_rule($user)
+        ]);
 
         $credentials = $request->only(
             'email',
@@ -179,6 +171,7 @@ class PasswordController extends Controller
         if (Auth::validate(['email' => $user_data->email, 'password' => $inputs['old_password']])) {
             $user_data->password = bcrypt($inputs['password']);
             $user_data->force_password = 0;
+            $user_data->last_password_change = Carbon::now();
             $user_data->save();
             Auth::logout();
             return redirect('auth/login')->with('message', 'SUCCESS_CHANGE');

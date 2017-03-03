@@ -152,6 +152,17 @@ function masterImageEditorv2( customOptions ){
         // Reset variable
         cropitElements = [];
 
+        // Backward compatibility
+        if ( _this.imageData.original_image ) {
+            _this.imageData.background_image = _this.imageData.original_image;
+            _this.editedImageData.background_image = _this.imageData.original_image;
+        }
+
+        if ( _this.imageData.destination_url ) {
+            _this.imageData['image-destination-url'] = _this.imageData.destination_url;
+            _this.editedImageData['image-destination-url'] = _this.imageData.destination_url;
+        }
+
         // Load Plugins
         if( options.plugins ){
             var pluginsArr = options.plugins.split(" ");
@@ -419,7 +430,7 @@ function masterImageEditorv2( customOptions ){
                     step: 1
                 })
                 .val(settings.currentVal)
-                .on("mousemove touchmove change",function(){
+                .on("mousemove touchmove change",function(event){
                     if( this.value != _this.getPreviewElement().height() ){
 
                         if ( params.original_options_width != 'auto' ){
@@ -661,6 +672,14 @@ function masterImageEditorv2( customOptions ){
                                 onImageLoad(fileInput,this);
                             }
                         });
+
+                        // On image error
+                        $image.on("error",function(){
+                            _this.hideImageLoading();
+                            options.$fileInputUpload.val('');
+                            Application.utils.validate.initField(options.$fileInputUpload);
+                            Application.utils.validate.setError(options.$fileInputUpload, 'Invalid image.');
+                        });
                     };
                     FR.readAsDataURL( this.files[0] );
                 }
@@ -774,6 +793,13 @@ function masterImageEditorv2( customOptions ){
 
             onImageLoaded: function(){
                 _this.cropitOnImageLoaded( this, $cropitElement );
+            },
+
+            onImageError: function(){
+                _this.hideImageLoading();
+                options.$fileInputUpload.val('');
+                Application.utils.validate.initField(options.$fileInputUpload);
+                Application.utils.validate.setError(options.$fileInputUpload, 'Invalid image.');
             }
         },cropitOptions);
 
@@ -806,6 +832,11 @@ function masterImageEditorv2( customOptions ){
         if( cropitObj.$preview && cropitObj.$preview.not(":visible") ){
 
             $(tempImage).on("load",function(){
+                var $fileContainers = $modalContent.find(".file-tab-section");
+                // Reset all file fields
+                $.each( $fileContainers.find("input"), function( index, input){
+                    Application.utils.validate.initField( input );
+                });
                 // Remove spinner
                 _this.hideImageLoading();
                 // Show image preview box

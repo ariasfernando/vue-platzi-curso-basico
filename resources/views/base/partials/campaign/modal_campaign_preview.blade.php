@@ -18,12 +18,30 @@
 								<label class="info">Use a comma or a semicolon to separate multiple email addresses</label>
 							</div>
 						</div>
+						@if ($app_config['campaign']['preview']['edit_subject_line'])
+							<div class="form-group">
+								<label>Subject Line</label>
+								<div class="input-group">
+									<input type="text" class="form-control" name="send-preview-subject" value=""
+										placeholder="" data-validation='{ "required":"false" }'/>
+								</div>
+							</div>
+						@endif
+						@if ($app_config['campaign']['preview']['show_preheader'])
+							<div class="form-group">
+								<label>Preheader</label>
+								<div class="input-group">
+									<input type="text" class="form-control" name="send-preview-preheader" value=""
+										placeholder="" data-validation='{ "required":"false" }'/>
+								</div>
+							</div>
+						@endif
 					</form>
 				</div>
 
 				<div>
 					<ul class="nav nav-tabs" role="tablist">
-						<li role="presentation" class="active"><a href="#" class="btn-desktop" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-fullscreen"></i>Desktop</a></li>
+						<li role="presentation" class="active"><a href="#" class="btn-desktop" role="tab" data-toggle="tab"><i class="fa fa-desktop"></i>Desktop</a></li>
 						<li role="presentation"><a href="#" class="btn-mobile" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-phone"></i>Mobile</a></li>
 					</ul>
 				</div>
@@ -31,7 +49,7 @@
 				<div class="preview-body">
 					<div class="preview-container">
 						<div class="mobile-frame"></div>
-						<div class="iframe-container" data-template-width="{{ $params['campaign_data']->getLibraryConfig('template_width') }}" style="width:{{ $params['campaign_data']->getLibraryConfig('template_width') }}px;"><iframe id="email-preview-iframe" src="{{ url('/template/email-preview/' . $params['campaign_id'] ) }}" scrolling="no"></iframe></div>
+						<div class="iframe-container" data-template-width="{{ $width or $params['campaign_data']->getLibraryConfig('template_width') }}" style="width:{{ $width or $params['campaign_data']->getLibraryConfig('template_width') }}px;"><iframe id="email-preview-iframe" src="{{ $path or url('/template/email-preview/' . $params['campaign_id'] ) }}" scrolling="no"></iframe></div>
 					</div>
 				</div>
 			</div>

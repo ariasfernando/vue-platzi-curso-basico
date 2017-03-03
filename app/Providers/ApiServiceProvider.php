@@ -45,10 +45,11 @@ class ApiServiceProvider extends ServiceProvider
 
     /**
      * Driver
+     *
      * @param string $api_provider
      * @param array  $options
      * @throws Exception
-     * @return \Stensul\Services\Api\Eloqua|\Stensul\Services\Api\Responsys
+     * @return Api Service
      */
     public static function driver($api_provider, $options = [])
     {

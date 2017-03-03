@@ -46,5 +46,5 @@
 @endsection
 @include('base/partials/application_script')
 @section('footer-script')
-    <script src="{{ url( elixir('js/library.js') ) }}"></script>
+    <script src="{{ cdn(elixir('js/library.js')) }}"></script>
 @stop

@@ -43,7 +43,7 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
         $this->assertInstanceOf('Carbon\Carbon', $this->user->created_at);
         \Auth::login($this->user);
 
-        // Check succcesful login
+        // Check successful login
         $this->assertInstanceOf('Stensul\Models\User', \Auth::getUser());
 
         $params = ['user_id' => \Auth::id()];

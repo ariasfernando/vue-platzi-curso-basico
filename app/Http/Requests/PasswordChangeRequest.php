@@ -2,6 +2,9 @@
 
 namespace Stensul\Http\Requests;
 
+use Auth;
+use PasswordPolicy;
+
 class PasswordChangeRequest extends Request
 {
     /**
@@ -23,8 +26,8 @@ class PasswordChangeRequest extends Request
     {
         return [
             'old_password' => 'required',
-            'password' => 'required|min:8|max:16|different:old_password',
-            'password_confirmation' => 'required|min:8|max:16|same:password',
+            'password' => PasswordPolicy::password_rule(Auth::user()) . '|different:old_password',
+            'password_confirmation' => 'required|same:password'
         ];
     }
 }

@@ -276,6 +276,39 @@ $default = [
             "file_upload" => "Allowed file types: png, jpg and gif."
         ]
      ],
+     "mie_v2_fetch_url" => [
+        "title" => "Hero Image - Fetch Url",
+        "app_name" => "base",
+        "view" => "single_image_editor",
+        "config_modal_key" => "image_modal_single_crop",
+        "scale_ratio" => 2,
+        "enabled_options" => "destination_url alt_text image_upload image_crop fetch_url",
+        "enabled_plugins" => "fetchUrl",
+        "image_size" => [
+            "height" => 400,
+            "width" => 660
+        ],
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
+        ]
+     ],
+     "mie_v2_library_scraper_marketing_cloud" => [
+        "title" => "Marketing Cloud Scraper",
+        "app_name" => "base",
+        "view" => "single_image_editor",
+        "config_modal_key" => "image_modal_single_crop",
+        "scale_ratio" => 2,
+        "enabled_options" => "destination_url alt_text image_upload image_crop image_library",
+        "enabled_plugins" => "imageLibraryScraper",
+        "api_type" => "marketingCloud",
+        "image_size" => [
+            "height" => 400,
+            "width" => 660
+        ],
+        "labels" => [
+            "file_upload" => "Allowed file types: png, jpg and gif."
+        ]
+     ],
      "mie_v2_library_scraper_blog" => [
         "title" => "Blog Scraper",
         "app_name" => "base",
@@ -376,6 +409,7 @@ $default = [
                     'forced_root_block' => false,
                     'inline' => true,
                     'target_list' => false,
+                    'invalid_elements' => 'img',
                     'link_validate_url' => true,
                     'link_title' => false,
                     'link_text_to_display' => false,

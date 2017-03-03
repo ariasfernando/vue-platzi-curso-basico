@@ -39,6 +39,8 @@ var campaignManager = {
             "id"
         ]
     },
+    timeoutHandle: null,
+    observer: null,
 
     getCampaignId: function(){
         if( this.campaignId != null ){
@@ -82,7 +84,7 @@ var campaignManager = {
         if(options.template){
             data.template = options.template;
         }
-        
+
         // Check if have plain text
         if( this.plainText != '' && this.plainText != null ){
             data.plain_text = this.plainText;
@@ -474,18 +476,19 @@ var campaignManager = {
         });
     },
 
-    sendPreviewEmail: function( email, fnDone, fnFail, fnAlways ){
+    sendPreviewEmail: function( email, fnDone, fnFail, fnAlways, data ){
         if( !email ){
             return false;
         }
 
         var campaignId = this.getCampaignId();
+
+        data.campaign_id = campaignId;
+        data.mail = email;
+
         var sendPreviewRequest = Application.utils.doAjax("/campaign/send-preview", {
             type: "POST",
-            data:{
-                campaign_id: campaignId,
-                mail: email
-            }
+            data: data
         });
 
         sendPreviewRequest.done(function( response ){
@@ -921,5 +924,93 @@ var campaignManager = {
                 fnFail();
             }
         });
-    }
+    },
+
+    autoSave: function(status) {
+
+        var _this = this;
+        var delay = $('.btn-auto-save').val() ? $('.btn-auto-save').val() : 5;
+
+        if (status == 'enabled') {
+            _this.updateAutoSaveStatus(true);
+            var targetEmail = document.getElementById('emailCanvas');
+            var targetConfig = document.getElementById('autoSaveContent');
+            // Create an observer instance
+            _this.observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    var ignore = false;
+                    mutation.addedNodes.forEach(function(node){
+                        if (node.className == 'actions-buttons-tooltip')
+                        {
+                            ignore = true;
+                        }
+                    });
+                    mutation.removedNodes.forEach(function(node){
+                        if (node.className == 'actions-buttons-tooltip')
+                        {
+                            ignore = true;
+                        }
+                    });
+                    if (mutation.target.className == 'actions-buttons-tooltip' || (mutation.attributeName == 'id' && mutation.target.localName != 'div'))  
+                    {
+                        ignore = true;
+                    }
+
+                    if (!ignore) {
+                        if (_this.timeoutHandle) {
+                            clearTimeout(_this.timeoutHandle);
+                        }
+                        _this.timeoutHandle = setTimeout(function () {
+                            $('.config-box-divider.auto-save label').addClass('spinner');
+                            var saveCampaign = _this.save({
+                                saveHtml: true,
+                                validateForms: false,
+                                validateModules: false,
+                                doTransform: true
+                            });
+                            saveCampaign.done(function () {
+                                $('.config-box-divider.auto-save label').removeClass('spinner');
+                            });
+                            saveCampaign.fail(function () {
+                                Application.utils.alert.display("Error:", "An error occurred while trying to save, please try again later.", "danger");
+                            });
+                        }, (delay*1000));
+                    }
+                });
+            });
+
+            // Configuration of the observer:
+            var config = { attributes: true, childList: true, characterData: true, subtree: true };
+
+            // Pass in the target nodes, as well as the observer options
+            _this.observer.observe(targetEmail, config);
+            _this.observer.observe(targetConfig, config);
+
+
+        } else {
+            // Clear the last timeout
+            clearTimeout(_this.timeoutHandle);
+            // Update auto_save campaign attribute in DB
+            _this.updateAutoSaveStatus(false);
+            // Stop observing when auto-save is deactivated.
+            _this.observer.disconnect();
+        }
+    },
+
+    updateAutoSaveStatus: function(status, fnFail) {
+        var config = this.getConfiguration();
+        var data = {
+            campaign_id: config.campaign_id,
+            status: status
+        };
+        var autoSaveCampaign = Application.utils.doAjax('/campaign/update-auto-save', {data: data});
+
+        autoSaveCampaign.fail(function(data) {
+            Application.utils.alert.display('Error:', 'An error occurred while trying to update autosave status, please try again later.', 'danger');
+            if (typeof fnFail === 'function') {
+                fnFail();
+            }
+        });
+    },
+
 };

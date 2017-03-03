@@ -49,29 +49,6 @@
 			)); !!}
 		</div>
 
-		<!-- Input Password -->
-		<div class="modal-mpf-row">
-			{!! Form::label('password', 'Password') !!}
-			{!! Form::password('password', array (
-				'class' => (isset($params['user']))? "user_password edit_password" : "user_password",
-				'id' => 'user_password',
-				'placeholder' => 'Enter password here.',
-				'value' => 'pepe',
-				'data-validation' => '{"required":"true", "minLength":"8"}'
-			)) !!}
-		</div>
-
-		<!-- Input Confirm Password -->
-		<div class="modal-mpf-row">
-			{!! Form::label('repassword', 'Confirm password') !!}
-			{!! Form::password('repassword', array (
-				'class' => (isset($params['user']))? "user_repassword edit_password" : "user_repassword",
-				'id' => 'user_repassword',
-				'placeholder' => 'Confirm password here.',
-				'data-validation' => '{"required":"true", "compareTo":"password", "minLength":"8"}'
-			)) !!}
-		</div>
-
 		<!-- Input submit  -->
 		<div class="modal-mpf-submit">
 			{!! Form::submit('Submit', array ( 'class' => 'btn btn-success pull-right submit-config')) !!}

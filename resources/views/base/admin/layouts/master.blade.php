@@ -8,8 +8,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title>Email Creator</title>
-		<link href="{{  url( elixir('css/admin.css') ) }}" rel="stylesheet">
-		
+		<link href="{{ cdn(elixir('css/admin.css')) }}" rel="stylesheet">
+
 		{{-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --}}
 		{{-- WARNING: Respond.js doesn't work if you view the page via file:// --}}
 		<!--[if lt IE 9]>
@@ -31,6 +31,8 @@
 			{{-- HEADER --}}
 			{{-- CONTENT --}}
 			<div class="container-fluid">
+				{{-- ALERT CONTAINER --}}
+				@include('base.admin.partials.alert')
 				<div class="row">
 					{{-- Content --}}
 					@yield('content')
@@ -43,7 +45,7 @@
 			@include('base.partials.modal_confirm')
 
 			{{-- Scripts --}}
-			<script src="{{ url( elixir('js/library.js') ) }}"></script>
+			<script src="{{ cdn(elixir('js/library.js')) }}"></script>
 
 			{{-- Global Application JS object --}}
 			@include('base/partials/application_script')

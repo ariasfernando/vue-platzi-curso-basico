@@ -147,6 +147,8 @@ gulp.task('elixir-scripts', function () {
                     'bower/tinymce/plugins/autolink/plugin.js',
                     'bower/tinymce/plugins/link/plugin.js',
                     'bower/tinymce/plugins/advlist/plugin.js',
+                    // -- zxcvbn --
+                    'bower/zxcvbn/dist/zxcvbn.js',
                     // -- Vue --
                     'bower/vue/dist/vue.min.js',
                     // -- Extended plugins --
@@ -181,9 +183,11 @@ gulp.task('elixir-scripts', function () {
             // === Dashboard page ===
             .scripts(
                 [
+                    'js/library/custom-plugins/st-pagination-bar.jquery.js',
+                    'js/library/campaign-preview.js',
+                    'js/library/campaign-manager.js',
                     'js/library/campaign-controller.js',
                     'js/library/dashboard-controller.js',
-                    'js/library/custom-plugins/st-pagination-bar.jquery.js',
                     jsAppFilePath('dashboard-vue.js'),
                     jsAppFilePath('dashboard.js')
                 ],
@@ -207,17 +211,17 @@ gulp.task('elixir-scripts', function () {
                 [
                     // Transformers
                     'js/library/transformers.js',
-
-                    // Configuration Modals [ Deprecated ]
-                    'js/library/modals/*',
                     // Custom Plugins
                     'js/library/custom-plugins/st-pagination-bar.jquery.js',
-					'js/library/custom-plugins/st-color-picker.js',
+                    'js/library/custom-plugins/st-color-picker.js',
+                    // Configuration Modals [ Deprecated ]
+                    'js/library/modals/*',
                     // Library
                     'js/library/image-library.js',
                     'js/library/master-image-editor.js',
                     'js/library/master-image-editor.v2.js',
                     'js/library/master-button-editor.js',
+                    'js/library/campaign-preview.js',
                     'js/library/module-manager.js',
                     'js/library/modal-manager.js',
                     'js/library/campaign-manager.js',
@@ -226,6 +230,17 @@ gulp.task('elixir-scripts', function () {
                     jsAppFilePath('campaign.js')
                 ],
                 jsDestinationPath + 'campaign.js',
+                assetsPath
+            )
+            // === Campaign Preview page ===
+            .scripts(
+                [
+                    "bower/jquery/dist/jquery.min.js",
+                    "bower/jquery-ui/jquery-ui.min.js",
+                    "bower/bootstrap/dist/js/bootstrap.min.js",
+                    jsAppFilePath("preview.js")
+                ],
+                jsDestinationPath + "preview.js",
                 assetsPath
             );
         }

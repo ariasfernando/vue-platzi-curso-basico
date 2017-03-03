@@ -89,4 +89,9 @@ class ExactTarget implements ApiConnector
     {
         return $this->client->getFolders();
     }
+
+    public function getClient()
+    {
+        return $this->client;
+    }
 }
