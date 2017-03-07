@@ -187,8 +187,8 @@ class TextConverter extends Html2Text
              return $display;
         }
 
-         $linkArray = str_split($link);
-         // Ignored link types
+        $linkArray = str_split($link);
+        // Ignored link types
         if ($linkArray[0] === '[' || ($linkArray[0] === '$' && $linkArray[1] === '{')) {
              return "$display $link";
         }

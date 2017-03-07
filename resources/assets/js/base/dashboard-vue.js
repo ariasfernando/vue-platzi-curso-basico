@@ -295,7 +295,7 @@ var tableMixin = {
         },
         highlightTag: function(tag) {
             if (this.config.search_settings.highlight_matches === true) {
-                if (this.search.indexOf(tag) > -1) {
+                if (this.tags.indexOf(tag) > -1) {
                     return true;
                 }
                 for (var i = 0; i < this.terms.length; i++) {
