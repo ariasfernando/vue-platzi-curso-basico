@@ -402,7 +402,8 @@ class StaticProcessor
                         $size = sprintf('%dx', $layer_width);
                         $position = sprintf('+%d+%d', $layer_left, $layer_top);
                     } else {
-                        list($layer_image,,) = $parent_scope->getImageObject($layer_path);
+                        list($layer_image,,) = $this->getImageObject($layer_path);
+
                         $size = sprintf('%dx', $layer_image->getSize()->getWidth());
                         $position = sprintf('+%d+%d', $layer_left, $layer_top);
                     }

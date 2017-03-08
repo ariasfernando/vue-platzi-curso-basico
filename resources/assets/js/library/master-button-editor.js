@@ -140,7 +140,9 @@ var masterButtonEditor = function( customOptions ){
      * Submit edition
      */
     this.submit = function(){
-        if( Application.utils.validate.validateForm( $modalContent.find("form")[0] && validateLineLimit() )){
+
+        if( Application.utils.validate.validateForm( $modalContent.find("form")[0]) && validateLineLimit()){
+
             _this.setStatus("busy");
             var dataKey = getDataKey();
             //  Check if should generate canvas.
