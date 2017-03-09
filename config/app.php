@@ -219,7 +219,6 @@ $default = [
         Stensul\Providers\EventServiceProvider::class,
         Stensul\Providers\RouteServiceProvider::class,
         Stensul\Providers\ComposerServiceProvider::class,
-        Stensul\Providers\ViewCreatorServiceProvider::class,
         Stensul\Providers\HelperServiceProvider::class,
         Stensul\Providers\MongodbServiceProvider::class,
         Illuminate\Redis\RedisServiceProvider::class,
