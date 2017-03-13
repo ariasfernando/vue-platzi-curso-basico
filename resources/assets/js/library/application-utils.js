@@ -138,6 +138,19 @@ Application.utils = {
     },
 
     /*
+     *  -- Button Spinner --
+     */
+    buttonSpinner: function() {
+        this.show = function( elem ) {
+            $(elem).addClass("ajax-loader-small").attr("disabled","disabled");
+        }
+
+        this.hide = function( elem ) {
+            $(elem).removeClass("ajax-loader-small").removeAttr("disabled");
+        }
+    },
+
+    /*
      *  -- Modal Spinner --
      */
     spinner: function() {

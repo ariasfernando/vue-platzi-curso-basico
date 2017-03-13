@@ -1,4 +1,10 @@
 {{-- Menu constructor --}}
+<?php
+    $excluded_modules = [
+        $params['campaign_data']->getLibraryConfig('fixed_footer'),
+        $params['campaign_data']->getLibraryConfig('fixed_header')
+    ]
+?>
 @if ( isset($params['campaign_data']) )
 	@foreach ( $params['campaign_data']['modules_data'] as $module )
 		<?php

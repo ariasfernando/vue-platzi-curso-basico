@@ -72,9 +72,15 @@
         <tr>
             <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
                 <table id="emailCanvas" class="email-canvas wrapper-table" width="{{ $params['campaign_data']->getLibraryConfig('template_width') }}" cellspacing="0" cellpadding="0" border="0">
+                   <thead>
+                       @include('base.modules.header_constructor')
+                   </thead>
                     <tbody>
                         @include('base.modules.module_constructor')
                     </tbody>
+                   <tfoot>
+                        @include('base.modules.footer_constructor')
+                   </tfoot>
                 </table>
             </td>
         </tr>

@@ -78,6 +78,7 @@
         $(".campaign-preview").click(function () {
             // Get Email Html
             var emailHtml = campaignManager.getCleanedHtml();
+
             if (!emailHtml) {
                 Application.utils.alert.display("", "A preview cannot be generated from an empty email.", "warning");
                 return false;
@@ -167,7 +168,7 @@
         $(".btn-auto-save").click(function () {
             if ($(this).is(":checked")) {
                 campaignManager.autoSave('enabled');
-            }else{
+            } else {
                 campaignManager.autoSave('disabled');
             }
         });

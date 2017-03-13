@@ -107,6 +107,8 @@ $default = [
             "building_mode_select" => true,
             "api_connection" => false,
             "preheader" => false,
+            "fixed_footer" => "footer",
+            "fixed_header" => "header_image"
         ]
     ]
 ];

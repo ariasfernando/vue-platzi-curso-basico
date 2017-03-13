@@ -131,7 +131,10 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             if (!matches.length && href.length > 0) {
                 if (href.indexOf('@') > 0 && href.indexOf('//') == -1 && href.indexOf('mailto:') == -1) {
                     href = 'mailto:' + href;
-                } else if (href.indexOf('http://') == -1 && href.indexOf('https://') == -1 && href.indexOf('mailto:') == -1) {
+                } else if (href.indexOf('http://') == -1
+                    && href.indexOf('https://') == -1
+                    && href.indexOf('mailto:') == -1
+                    && editor.settings.autocomplete_http != false) {
                     href = 'http://' + href;
                 }
             }
@@ -429,10 +432,14 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
 
                     // Validate only urls
                     if (!matches.length && !validateUrl(href)) {
+                        var errorMessage = 'Entered URL is invalid or incomplete.';
+                        if (Application.utils.validate.messages.url){
+                            errorMessage = Application.utils.validate.messages.url;
+                        }
                         $('.mce-link-input .mce-textbox')
                             .css('cssText', 'border-color: red !important')
                             .focus();
-                        win.find('#href')[0].tooltip().text('Entered URL is invalid or incomplete.').show();
+                        win.find('#href')[0].tooltip().text(errorMessage).show();
                         return false;
                     }
                 }

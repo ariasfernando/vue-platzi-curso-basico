@@ -124,7 +124,7 @@ var campaignManager = {
             var errorFound = false;
 
             // Validate Modules
-            var moduleRows = Application.utils.getCanvas().find("tr[data-params]");
+            var moduleRows = $('#emailCanvas').find("tr[data-params]");
             if( moduleRows.length ){
                 $.each( moduleRows, function(index, moduleElement ){
                     var moduleData = $(moduleElement).data('params');
@@ -264,7 +264,7 @@ var campaignManager = {
 
         if( $canvas ){
             // Find each module row from canvas.
-            var rows = $canvas.find("> tr");
+            var rows = $canvas.find("tr[data-params]");
             $.each( rows, function( index, module){
                 result.push( $(module).data("params") );
             });
@@ -319,8 +319,8 @@ var campaignManager = {
         var $canvas = null;
         var $cleanedHtml = null;
         // Get Canvas
-        $canvas = Application.utils.getCanvas();
-        if( !$canvas.find("> tr").length ){
+        $canvas = ( $("#emailCanvas").length )? $("#emailCanvas") : false;
+        if( !$canvas.find("tr[data-params]").length ){
             return false;
         }
 
@@ -548,7 +548,7 @@ var campaignManager = {
 
     addTrackingParams: function(html){
         var boxCounter = 1;
-        var rows = html.find("> tr");
+        var rows = html.find("tr[data-params]");
         var dateSubmitted = $.datepicker.formatDate('yy-mm-dd', new Date());
         $.each( rows, function( index, module){
             var params = $(module).data("params");
@@ -612,7 +612,7 @@ var campaignManager = {
                         function() {
                             // Hide Spinner
                             spinner.hide();
-            // Display Error Alert
+                           // Display Error Alert
                             Application.utils.alert.display("Error:","An error occurred while processing the campaign, please try again later.","danger");
                         });
                 }else if( response.processed ){

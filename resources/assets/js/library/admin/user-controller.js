@@ -20,7 +20,7 @@ var userController = function( customOptions ){
 		}
 	}, customOptions );
 
-	var spinner = new Application.utils.spinner();
+	var buttonSpinner = new Application.utils.buttonSpinner();
 
 	var _this = this;
 
@@ -90,15 +90,16 @@ var userController = function( customOptions ){
 		}
 	};
 
-	this.onSaveUser = function(form, action){
+	this.onSaveUser = function(element, form, action){
 		if(!options.busy){
 			if(Application.utils.validate.validateForm( form )) {
 				options.busy = true;
-				spinner.show();
+				buttonSpinner.show( element );
 
 				_this.doAjax(action, "POST", $(form).serializeArray())
-					.done(function (data) {
-						spinner.hide();
+					.done(function (status) {
+						buttonSpinner.hide( element );
+
 						options.busy = false;
 
 						if (data.status == 0 || data.status == 1 ) {
@@ -117,7 +118,7 @@ var userController = function( customOptions ){
 						return false;
 					})
 					.fail(function (error) {
-						spinner.hide();
+						buttonSpinner.hide( element );
 						options.busy = false;
 						Application.utils.alert.display("Error:", "An error occurred while trying to save the user, please try again later.", "danger");
 					});
@@ -137,15 +138,15 @@ var userController = function( customOptions ){
 				// Function to execute when confirm is true.
 				onSubmit: function(){
 					// Show spinner
-					spinner.show();
+					buttonSpinner.show( element );
 
 					_this.doAjax("delete", "POST", { userId: userId })
 						.done(function () {
-							spinner.hide();
+							buttonSpinner.hide( element );
 							_this.refreshTableView( $(element).parents("table[data-pagination]").attr("id") );
 						})
 						.fail(function () {
-							spinner.hide();
+							buttonSpinner.hide( element );
 							Application.utils.alert.display("Error:", "An error occurred while trying to delete the user, please try again later.", "danger");
 						});
 				}
@@ -209,7 +210,7 @@ var userController = function( customOptions ){
 					$('.selectpicker').selectpicker();
 					$( options.selectors.modalSelector )
 						.on("click", ".submit-config", function(){
-							_this.onSaveUser(this.form, "create");
+							_this.onSaveUser(this, this.form, "create");
 							return false;
 						});
 				}
@@ -250,7 +251,7 @@ var userController = function( customOptions ){
 								password_selector.val("");
 								password_selector.removeAttr("data-validation");
 							}
-							_this.onSaveUser(this.form, "edit");
+							_this.onSaveUser(this, this.form, "edit");
 							return false;
 					});
 

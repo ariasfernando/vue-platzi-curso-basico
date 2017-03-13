@@ -164,6 +164,9 @@ Application.init = function(){
     Application.utils.getCanvas = function(){
         return ( $("#emailCanvas > tbody").length )? $("#emailCanvas > tbody") : false;
     };
+    Application.utils.getFullCanvas = function(){
+        return ( $("#emailCanvas").length )? $("#emailCanvas") : false;
+    };
     Application.utils.getConfigurationForm = function(){
         return ( $("#campaignConfiguration").length )? $("#campaignConfiguration") : false;
     };

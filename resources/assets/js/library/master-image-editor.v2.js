@@ -179,7 +179,7 @@ function masterImageEditorv2( customOptions ){
                 // Validation
                 var validationData = $(this).data("validation");
                 // Parse url format
-                if( validationData.url === "true" ){
+                if( validationData.url === "true" && $(this).hasClass('url-format')){
                     var parsedUrl = Application.utils.validate.parseUrl($(this).val());
                     if( parsedUrl ){
                         $(this).val(parsedUrl);
@@ -198,7 +198,7 @@ function masterImageEditorv2( customOptions ){
             });
         }
 
-        //
+        // 
         _this.fillInputs();
     };
 

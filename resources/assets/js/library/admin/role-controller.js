@@ -18,7 +18,7 @@ var roleController = function( customOptions ){
 		}
 	}, customOptions );
 
-	var spinner = new Application.utils.spinner();
+	var buttonSpinner = new Application.utils.buttonSpinner();
 
 	var _this = this;
 
@@ -81,15 +81,15 @@ var roleController = function( customOptions ){
 		}
 	};
 
-	this.onSaveRole = function(form, action){
+	this.onSaveRole = function(element, form, action){
 		if(!options.busy){
 			if(Application.utils.validate.validateForm( form )) {
 				options.busy = true;
-				spinner.show();
+				buttonSpinner.show( element );
 
 				_this.doAjax(action, "POST", $(form).serializeArray())
 					.done(function (response) {
-						spinner.hide();
+						buttonSpinner.hide( element );
 						options.busy = false;
 
 						if (response.message == "SUCCESS") {
@@ -102,7 +102,7 @@ var roleController = function( customOptions ){
 						}
 					})
 					.fail(function (error) {
-						spinner.hide();
+						buttonSpinner.hide( element );
 						options.busy = false;
 						Application.utils.alert.display("Error:", "An error occurred while trying to save the role, please try again later.", "danger");
 					});
@@ -122,16 +122,16 @@ var roleController = function( customOptions ){
 				// Function to execute when confirm is true.
 				onSubmit: function(){
 					// Show spinner
-					spinner.show();
+					buttonSpinner.show( element );
 
 					_this.doAjax("delete", "POST", { roleId: roleId })
 						.done(function () {
-							spinner.hide();
+							buttonSpinner.hide( element );
 							_this.refreshTableView( $(element).parents("table[data-pagination]").attr("id") );
 						})
 						.fail(function () {
-							spinner.hide();
-							Application.utils.alert.display("Error:", "An error occurred while trying to delete the role, please try again later.", "danger");
+							buttonSpinner.hide( element );
+							Application.utils.alert.display("Error:", "An error occurred while trying to delete the user, please try again later.", "danger");
 						});
 				}
 			});
@@ -194,7 +194,7 @@ var roleController = function( customOptions ){
 					$('.selectpicker').selectpicker();
 					$( options.selectors.modalSelector )
 						.on("click", ".submit-config", function(){
-							_this.onSaveRole(this.form, "create");
+							_this.onSaveRole(this, this.form, "create");
 							return false;
 						});
 				}
@@ -230,7 +230,7 @@ var roleController = function( customOptions ){
 
 					$( options.selectors.modalSelector )
 						.on("click", ".submit-config", function(){
-							_this.onSaveRole(this.form, "edit");
+							_this.onSaveRole(this, this.form, "edit");
 							return false;
 					});
 

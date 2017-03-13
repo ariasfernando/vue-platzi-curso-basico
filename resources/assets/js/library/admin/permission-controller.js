@@ -18,7 +18,7 @@ var permissionController = function( customOptions ){
 		}
 	}, customOptions );
 
-	var spinner = new Application.utils.spinner();
+	var buttonSpinner = new Application.utils.buttonSpinner();
 
 	var _this = this;
 
@@ -81,15 +81,15 @@ var permissionController = function( customOptions ){
 		}
 	};
 
-	this.onSavePermission = function(form, action){
+	this.onSavePermission = function(element, form, action){
 		if(!options.busy){
 			if(Application.utils.validate.validateForm( form )) {
 				options.busy = true;
-				spinner.show();
+				buttonSpinner.show( element );
 
 				_this.doAjax(action, "POST", $(form).serializeArray())
 					.done(function (response) {
-						spinner.hide();
+						buttonSpinner.hide( element );
 						options.busy = false;
 
 						if (response.message == "SUCCESS") {
@@ -102,7 +102,7 @@ var permissionController = function( customOptions ){
 						}
 					})
 					.fail(function (error) {
-						spinner.hide();
+						buttonSpinner.hide( element );
 						options.busy = false;
 						Application.utils.alert.display("Error:", "An error occurred while trying to save the permission, please try again later.", "danger");
 					});
@@ -122,15 +122,15 @@ var permissionController = function( customOptions ){
 				// Function to execute when confirm is true.
 				onSubmit: function(){
 					// Show spinner
-					spinner.show();
+					buttonSpinner.show( element );
 
 					_this.doAjax("delete", "POST", { permissionId: permissionId })
 						.done(function () {
-							spinner.hide();
+							buttonSpinner.hide( element );
 							_this.refreshTableView( $(element).parents("table[data-pagination]").attr("id") );
 						})
 						.fail(function () {
-							spinner.hide();
+							buttonSpinner.hide( element );
 							Application.utils.alert.display("Error:", "An error occurred while trying to delete the permission, please try again later.", "danger");
 						});
 				}
@@ -194,7 +194,7 @@ var permissionController = function( customOptions ){
 					$('.selectpicker').selectpicker();
 					$( options.selectors.modalSelector )
 						.on("click", ".submit-config", function(){
-							_this.onSavePermission(this.form, "create");
+							_this.onSavePermission(this, this.form, "create");
 							return false;
 						});
 				}
@@ -230,7 +230,7 @@ var permissionController = function( customOptions ){
 
 					$( options.selectors.modalSelector )
 						.on("click", ".submit-config", function(){
-							_this.onSavePermission(this.form, "edit");
+							_this.onSavePermission(this, this.form, "edit");
 							return false;
 					});
 

@@ -122,7 +122,32 @@
 		transition: width 300ms ease-in-out, height 300ms ease-in-out;
 	}
 	// Action buttons tooltip
-	.email-canvas > tbody > tr > td {
+	.email-canvas > thead > tr > td,
+	.email-canvas > tfoot > tr > td{
+		.actions-buttons-tooltip{
+			background-color: transparent !important;
+			a{
+				display: none;
+			}
+		}
+		&.st-add-icon-config {
+			.actions-buttons-tooltip {
+				background-color: @layout-primary !important;
+				right: -10px;
+			}
+		}
+	}
+	.email-canvas > tbody > tr > td{
+		&.st-add-icon-config {
+			.actions-buttons-tooltip {
+				right: -88px;
+			}
+		}
+	}
+
+	.email-canvas > tbody > tr > td,
+	.email-canvas > thead > tr > td,
+	.email-canvas > tfoot > tr > td {
 		position: relative;
 
 		.st-position-relative {
@@ -233,7 +258,7 @@
 				.clearfix();
 
 				.mce-tinymce-inline{
-					border-radius: 3px;
+				border-radius: 3px;
 					padding: 3px 8px;
 					background-color: rgba(170, 163, 185, 0.55);
 				}
