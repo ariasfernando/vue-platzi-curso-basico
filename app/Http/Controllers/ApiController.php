@@ -36,8 +36,8 @@ class ApiController extends Controller
         $api_client = Api::driver($request->input('api_driver'));
         $campaign_data = Campaign::findOrFail($request->input('campaign_id'));
         if (Config::get('campaign.locking') &&
-            (!Config::has('campaign.libraries' . $campaign_data->library . '.locking') ||
-            Config::get('campaign.libraries' . $campaign_data->library . '.locking'))
+            (!Config::has('campaign.libraries.' . $campaign_data->library . '.locking') ||
+            Config::get('campaign.libraries.' . $campaign_data->library . '.locking'))
         ) {
             $locked_name = Upload::lockedName($filename);
             if ($locked_name) {

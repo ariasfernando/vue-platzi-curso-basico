@@ -181,6 +181,7 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
      */
     this.cleanModal = function(){
         $modalLibrary.find(".gallery-container").empty();
+        $('.modal-backdrop').fadeOut('slow');
     };
 
     /*
@@ -191,6 +192,10 @@ globalMasterImageEditor.plugins.imageLibrary = function( masterImageEditor ){
             // Clean modal when is closed.
             .on('hidden.bs.modal', function (e) {
               _this.cleanModal();
+            })
+            .on('keyup',function(e){
+                // issue st-2260
+                e.stopPropagation();
             })
             .on("mouseenter", "."+options.itemWrapperClass, function(){
                 if( !$(this).find(".overlay").length ){

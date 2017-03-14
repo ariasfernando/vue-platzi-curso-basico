@@ -720,9 +720,21 @@ var moduleManager = {
 				e.preventDefault();
 			})
             .on("click", '.action-remove', function () {
-				// Remove module 
 				var $deleteModule = $(this).closest("[data-params]"); 
+                if( Application.globals.confirmDeleteModule ){
+                    var confirmModal = new Application.utils.confirm({
+                        // Message to display
+                        message: "Are you sure? Please click OK to remove this module from your email.",
+                        // Function to execute when confirm is true.
+                        onSubmit: function(){
+                            // Remove module
 				module.deleteModule($deleteModule);
+                        }
+                    });
+                    confirmModal.display();
+                }else{
+                    module.deleteModule($deleteModule);
+                }
 				return false;
 			})
 			.on("click",'.action-duplicate', function(){

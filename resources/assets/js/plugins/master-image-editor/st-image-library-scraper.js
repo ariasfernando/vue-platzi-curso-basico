@@ -257,6 +257,10 @@ globalMasterImageEditor.plugins.imageLibraryScraper = function( masterImageEdito
             .on('hidden.bs.modal', function (e) {
               _this.cleanModal();
             })
+            .on('keyup',function(e){
+                // issue st-2260
+                e.stopPropagation();
+            })
             .on("click", options.refreshButtonSelector, function(){
                 _this.refreshImages();
             })

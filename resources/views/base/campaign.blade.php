@@ -24,7 +24,7 @@
 	{{-- MODALS --}}
 	@include('base.partials.campaign.modal_campaign_plain_text')
 	@include('base.partials.campaign.modal_campaign_processed')
-	@include('base.partials.modal_campaign_preview')
+	@include('base.partials.campaign.modal_campaign_preview')
 	@include('base.partials.campaign.modal_campaign_finished')
 
 @endsection

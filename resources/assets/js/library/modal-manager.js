@@ -44,6 +44,7 @@ function modalManager( params ){
             type: 'ajax',
             focus: _this.modalParams.element_focus,
             closeOnBgClick: false,
+
             items: {
                 src: Application.globals.baseUrl + "/template/modal"
             },

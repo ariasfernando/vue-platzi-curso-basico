@@ -1,11 +1,11 @@
 /*
- *  -- CAMPAIGN MANAGER ---
+ *	-- CAMPAIGN MANAGER ---
  */
 var campaignManager = {
-    campaignId: null,
-    plainText: null,
-    htmlCode: null,
-    lockInterval: 30000,
+	campaignId: null,
+	plainText: null,
+	htmlCode: null,
+	lockInterval: 30000,
     cleanOptions: {
         // Array of classes to clean from final html
         classSelectors: [
@@ -42,120 +42,120 @@ var campaignManager = {
     timeoutHandle: null,
     observer: null,
 
-    getCampaignId: function(){
-        if( this.campaignId != null ){
-            return this.campaignId;
-        }
+	getCampaignId: function(){
+		if( this.campaignId != null ){
+			return this.campaignId;
+		}
 
         var campaignId = 0;
-        var $form = Application.utils.getConfigurationForm();
+		var $form = Application.utils.getConfigurationForm();
 
-        if( $form.find("input[name=campaign_id]").length ){
+		if( $form.find("input[name=campaign_id]").length ){
             campaignId = $form.find("input[name=campaign_id]").val();
-        }
+		}
 
         return campaignId;
-    },
+	},
 
-    /*
-     *  -- Do Save --
-     *  @param draft (bool) | default: true
-     *  Get data, validate configuration form, return ajax request.
-     */
-    save: function( params ){
+	/*
+	 *	-- Do Save --
+	 *	@param draft (bool) | default: true
+	 *	Get data, validate configuration form, return ajax request.
+	 */
+	save: function( params ){
 
-        var options = $.extend({
-            saveHtml: false,
-            validateModules: false,
-            validateForms: true,
-            doTransform: false
-        }, params );
+		var options = $.extend({
+			saveHtml: false,
+			validateModules: false,
+			validateForms: true,
+			doTransform: false
+		}, params );
 
-        var data = {};
+		var data = {};
 
-        // Get Campaign configuration.
-        data = this.getConfiguration();
+		// Get Campaign configuration.
+		data = this.getConfiguration();
 
-        // Store Campaign Id
-        if( data.campaign_id ){
-            this.campaignId = data.campaign_id;
-        }
+		// Store Campaign Id
+		if( data.campaign_id ){
+			this.campaignId = data.campaign_id;
+		}
 
         if(options.template){
             data.template = options.template;
         }
 
-        // Check if have plain text
-        if( this.plainText != '' && this.plainText != null ){
-            data.plain_text = this.plainText;
-        }
+		// Check if have plain text
+		if( this.plainText != '' && this.plainText != null ){
+			data.plain_text = this.plainText;
+		}
 
-        // Validate configuration form (required fields)
-        if ( options.validateForms === true ) {
-            $.each( $(".menu-campaign form"), function( index, form ){
-                if( !Application.utils.validate.validateForm( form ) ){
-                    // Show configuration module if has error an is collapsed
-                    if( $(form).is(":hidden") ){
-                        $(form).parents(".configuration-mod").find("> h2").click();
-                    }
-                }
-            });
+		// Validate configuration form (required fields)
+		if ( options.validateForms === true ) {
+			$.each( $(".menu-campaign form"), function( index, form ){
+				if( !Application.utils.validate.validateForm( form ) ){
+					// Show configuration module if has error an is collapsed
+					if( $(form).is(":hidden") ){
+						$(form).parents(".configuration-mod").find("> h2").click();
+					}
+				}
+			});
 
-            if( $(".menu-campaign .error").length ){
-                return false;
-            }
-        }
+			if( $(".menu-campaign .error").length ){
+				return false;
+			}
+		}
 
-        // Get modules data
-        data.modules_data = this.getModulesParams();
+		// Get modules data
+		data.modules_data = this.getModulesParams();
 
-        // Save html if is requested.
-        if( options.saveHtml === true ){
-            data.body_html = this.getCleanedHtml({ doTransform: options.doTransform });
-        }
+		// Save html if is requested.
+		if( options.saveHtml === true ){
+			data.body_html = this.getCleanedHtml({ doTransform: options.doTransform });
+		}
 
-        // ToDo: Validate modules data.
+		// ToDo: Validate modules data.
 
-        if( options.validateModules === true ){
-            // Remove validation classes
-            $(".st-validation-error").removeClass("st-validation-error");
-            $(".default-image-error").removeClass("default-image-error");
+		if( options.validateModules === true ){
+			// Remove validation classes
+			$(".st-validation-error").removeClass("st-validation-error");
+			$(".default-image-error").removeClass("default-image-error");
 
-            var errorFound = false;
+			var errorFound = false;
 
-            // Validate Modules
-            var moduleRows = $('#emailCanvas').find("tr[data-params]");
-            if( moduleRows.length ){
-                $.each( moduleRows, function(index, moduleElement ){
-                    var moduleData = $(moduleElement).data('params');
+			// Validate Modules
+			var moduleRows = $('#emailCanvas').find("tr[data-params]");
+			if( moduleRows.length ){
+				$.each( moduleRows, function(index, moduleElement ){
+					var moduleData = $(moduleElement).data('params');
 
-                    // Validate data params
-                    if( moduleData && moduleData.data_validation && moduleData.data_validation.length ){
-                        $.each( moduleData.data_validation, function( dataIndex, dataKey ){
-                            if( !moduleData.data[dataKey] || moduleData.data[dataKey] == "" ){
-                                $(moduleElement).addClass("st-validation-error");
-                                errorFound = true;
-                            }
-                        });
-                    }
+					// Validate data params
+					if( moduleData && moduleData.data_validation && moduleData.data_validation.length ){
+						$.each( moduleData.data_validation, function( dataIndex, dataKey ){
+							if( !moduleData.data[dataKey] || moduleData.data[dataKey] == "" ){
+								$(moduleElement).addClass("st-validation-error");
+								errorFound = true;
+							}
+						});
+					}
 
-                    // Validate image height
-                    if( moduleData && moduleData.validate_image_height && $(moduleElement).find("img").length ){
-                        var height = $(moduleElement).find("img").eq(0).height();
-                        $.each($(moduleElement).find("img"),function(index,image){
-                            if(height != $(image).height()){
-                                $(moduleElement).addClass("st-validation-error");
-                                errorFound = true;
-                            }
-                        });
-                    }
-                });
-            }
+					// Validate image height
+					if( moduleData && moduleData.validate_image_height && $(moduleElement).find("img").length ){
+						var height = $(moduleElement).find("img").eq(0).height();
+						$.each($(moduleElement).find("img"),function(index,image){
+							if(height != $(image).height()){
+								$(moduleElement).addClass("st-validation-error");
+								errorFound = true;
+							}
+						});
+					}
+				});
+			}
 
-            // Validate if all links are filled.
-            var linksToValidate = Application.utils.getCanvas().find(".st-validate-href");
+			// Validate if all links are filled.
+			var linksToValidate = Application.utils.getCanvas().find(".st-validate-href");
 
-            if( linksToValidate.length ){
+			if( linksToValidate.length ){
                 $.each( linksToValidate, function(index, element){
                     var $element = $(element);
                     var isButton = $element.hasClass('st-cta-button');
@@ -184,18 +184,18 @@ var campaignManager = {
                         errorFound = true;
                     }
                 });
-            }
+			}
 
-            // Check if all images are uploaded.
-            var nonEditedImages = Application.utils.getCanvas().find("img[src*='/default/']");
+			// Check if all images are uploaded.
+			var nonEditedImages = Application.utils.getCanvas().find("img[src*='/default/']");
 
-            if( nonEditedImages.length ){
-                $.each( nonEditedImages, function(index, img){
-                    $(img).parent().addClass("default-image-error");
-                });
+			if( nonEditedImages.length ){
+				$.each( nonEditedImages, function(index, img){
+					$(img).parent().addClass("default-image-error");
+				});
 
-                errorFound = true;
-            }
+				errorFound = true;
+			}
 
             var errors = Application.utils.getCanvas().find(".error");
 
@@ -203,219 +203,215 @@ var campaignManager = {
                 errorFound = true;
             }
 
-            if( errorFound ){
-                return false;
-            }
-        }
+			if( errorFound ){
+				return false;
+			}
+		}
 
-        // If no campaign data, default value is set
-        if (data.campaign_name == '') {
-            data.campaign_name = 'Untitled Campaign';
-        }
-        
-        // Return Ajax Request
-        return Application.utils.doAjax("/campaign/save", {data: data});
-    },
+		// If no campaign data, default value is set
+		if (data.campaign_name == '') {
+			data.campaign_name = 'Untitled Campaign';
+		}
 
-    /*
-     * Process campaign
-     */
-    process: function( fnDone, fnFail ){
-        var campaignId = this.getCampaignId();
-        var processCampaignRequest = Application.utils.doAjax("/campaign/process", {data: { campaign_id: campaignId }});
+		// Return Ajax Request
+		return Application.utils.doAjax("/campaign/save", {data: data});
+	},
 
-        processCampaignRequest.done(function( response ){
-            if( fnDone ){
-                fnDone( response );
-            }
-        });
-        processCampaignRequest.fail(function(){
-            if( fnFail ){
-                fnFail();
-            }
-        });
-    },
+	/*
+	 * Process campaign
+	 */
+	process: function( fnDone, fnFail ){
+		var campaignId = this.getCampaignId();
+		var processCampaignRequest = Application.utils.doAjax("/campaign/process", {data: { campaign_id: campaignId }});
 
-    // Get campaign configuration.
-    // Serialize form and return [obj,obj,obj...].
-    getConfiguration: function(){
-        // Get form
-        var $form = Application.utils.getConfigurationForm();
-        var result = {};
+		processCampaignRequest.done(function( response ){
+			if( fnDone ){
+				fnDone( response );
+			}
+		});
+		processCampaignRequest.fail(function(){
+			if( fnFail ){
+				fnFail();
+			}
+		});
+	},
 
-        if( $form ){
-            // Serialize Form
-            var fields = $form.serializeArray();
+	// Get campaign configuration.
+	// Serialize form and return [obj,obj,obj...].
+	getConfiguration: function(){
+		// Get form
+		var $form = Application.utils.getConfigurationForm();
+		var result = {};
 
-            // Push fields to results.
-            $.each( fields, function( index, field){
-                result[ field.name ] = field.value;
-            });
-        }
+		if( $form ){
+			// Serialize Form
+			var fields = $form.serializeArray();
 
-        return result;
-    },
+			// Push fields to results.
+			$.each( fields, function( index, field){
+				result[ field.name ] = field.value;
+			});
+		}
 
-    // Make array with params of each module in the canvas
-    getModulesParams: function(){
-        var result = [];
-        // Get canvas.
-        var $canvas = Application.utils.getCanvas();
+		return result;
+	},
 
-        if( $canvas ){
-            // Find each module row from canvas.
-            var rows = $canvas.find("tr[data-params]");
-            $.each( rows, function( index, module){
-                result.push( $(module).data("params") );
-            });
-        }
-        
-        // Return data Object
-        return result;
-    },
+	// Make array with params of each module in the canvas
+	getModulesParams: function(){
+		var result = [];
+		// Get canvas.
+		var $canvas = Application.utils.getFullCanvas();
 
-    // Transform modal content into a given string, and
-    // replace marks like [key] with module data
-    doTransform: function( $cleanedHtml ){
-        function parseTransformValue( valueStr, moduleData ){
-            var result = valueStr;
-            var matches = valueStr.match(/\[[a-z_]+\]/);
+		if( $canvas ){
+			// Find each module row from canvas.
+			var rows = $canvas.find("tr[data-params]");
+			$.each( rows, function( index, module){
+				result.push( $(module).data("params") );
+			});
+		}
+		// Return data Object
+		return result;
+	},
 
-            if(matches){
-                for( var i=0; i<matches.length; i++){
-                    result = result.replace( matches[i], moduleData[ matches[i].substring(1, matches[i].length-1) ] );
-                }
-            }
+	// Transform modal content into a given string, and
+	// replace marks like [key] with module data
+	doTransform: function( $cleanedHtml ){
+		function parseTransformValue( valueStr, moduleData ){
+			var result = valueStr;
+			var matches = valueStr.match(/\[[a-z_]+\]/);
 
-            return result;
-        }
+			if(matches){
+				for( var i=0; i<matches.length; i++){
+					result = result.replace( matches[i], moduleData[ matches[i].substring(1, matches[i].length-1) ] );
+				}
+			}
 
-        if( this.beforeTransform ){
-            $cleanedHtml = this.beforeTransform( $cleanedHtml );
-        }
+			return result;
+		}
 
-        var modules = $cleanedHtml.find("tr[data-params]");
+		if( this.beforeTransform ){
+			$cleanedHtml = this.beforeTransform( $cleanedHtml );
+		}
 
-        $.each( modules, function( index, module ){
-            var dataParams = $(module).data("params");
+		var modules = $cleanedHtml.find("tr[data-params]");
 
-            if( dataParams.transform ){
-                var transformParams = "\n" + parseTransformValue( dataParams.transform , dataParams.data ) + "\n";
+		$.each( modules, function( index, module ){
+			var dataParams = $(module).data("params");
 
-                $(module).after(transformParams);
-                $(module).remove();
-            }
-        });
+			if( dataParams.transform ){
+				var transformParams = "\n" + parseTransformValue( dataParams.transform , dataParams.data ) + "\n";
 
-        return $cleanedHtml;
-    },
+				$(module).after(transformParams);
+				$(module).remove();
+			}
+		});
 
-    getCleanedHtml: function( params ){
+		return $cleanedHtml;
+	},
 
-        var options = $.extend({
-            doTransform: true
-        }, params );
+	getCleanedHtml: function( params ){
 
-        var $canvas = null;
-        var $cleanedHtml = null;
-        // Get Canvas
-        $canvas = ( $("#emailCanvas").length )? $("#emailCanvas") : false;
-        if( !$canvas.find("tr[data-params]").length ){
-            return false;
-        }
+		var options = $.extend({
+			doTransform: true
+		}, params );
 
-        // Clone content
-        $cleanedHtml = $canvas.clone( true );
+		var $canvas = null;
+		var $cleanedHtml = null;
+		// Get Canvas
+		$canvas = ( $("#emailCanvas").length )? $("#emailCanvas") : false
+		if( !$canvas.find("tr[data-params]").length ){
+			return false;
+		}
+		// Clone content
+		$cleanedHtml = $canvas.clone( true );
 
+		// Add tracking params
+		$cleanedHtml = this.addTrackingParams($cleanedHtml);
 
-        // Add tracking params
-        $cleanedHtml = this.addTrackingParams($cleanedHtml);
+		// Apply transform
+		if( options.doTransform ){
+			$cleanedHtml = this.doTransform($cleanedHtml);
+		}
 
-        // Apply transform
-        if( options.doTransform ){
-            $cleanedHtml = this.doTransform($cleanedHtml);
-        }
+		// Set height and width on images.
+		$.each( $cleanedHtml.find("img"), function( index, image){
+			// Check if the image have height or width attribute
+			if( !$(image).attr("width") && !$(image).attr("height") ){
+				var $moduleRow = $(image).parents("tr[data-params]");
+				var dataParams = $moduleRow.data("params");
+				var imageKey = "image" + $moduleRow.find("a img").index( image );
 
-        // Set height and width on images.
-        $.each( $cleanedHtml.find("img"), function( index, image){
-            // Check if the image have height or width attribute
-            if( !$(image).attr("width") && !$(image).attr("height") ){
-                var $moduleRow = $(image).parents("tr[data-params]");
-                var dataParams = $moduleRow.data("params");
-                var imageKey = "image" + $moduleRow.find("a img").index( image );
+				// If the module have image size params.
+				if( dataParams.image_size && dataParams.image_size[imageKey] ){
+					var heightRatio = image.height / dataParams.image_size[imageKey].height;
+					var widthRatio = image.width / dataParams.image_size[imageKey].width;
 
-                // If the module have image size params.
-                if( dataParams.image_size && dataParams.image_size[imageKey] ){
-                    var heightRatio = image.height / dataParams.image_size[imageKey].height;
-                    var widthRatio = image.width / dataParams.image_size[imageKey].width;
-
-                    // If ratio is greater than 1 the image size is greater to.
-                    if( heightRatio > 1 || widthRatio > 1 ){
-                        // Set fixed height
-                        if( heightRatio >= widthRatio ){
-                            $(image).attr("height",dataParams.image_size[imageKey].height);
-                        }else{
-                            $(image).attr("width",dataParams.image_size[imageKey].width);
-                        }
-                    }
-                }
-            }
-        });
+					// If ratio is greater than 1 the image size is greater to.
+					if( heightRatio > 1 || widthRatio > 1 ){
+						// Set fixed height
+						if( heightRatio >= widthRatio ){
+							$(image).attr("height",dataParams.image_size[imageKey].height);
+						}else{
+							$(image).attr("width",dataParams.image_size[imageKey].width);
+						}
+					}
+				}
+			}
+		});
 
         // Remove attr tags function clean
         var $removeAttr = this.removeDataHtml($cleanedHtml,this.cleanOptions.attrSelectors,"attr");
         // Function removeDataHtml fail attributes
         if( $removeAttr != false ){
             $cleanedHtml = $removeAttr;
-        }
+		}
 
         // Remove class tags
         var $removeClass = this.removeDataHtml($cleanedHtml,this.cleanOptions.classSelectors,"class");
         // Function removeDataHtml fail attributes
         if( $removeClass != false ){
             $cleanedHtml = $removeClass;
-        }
-
+		}
         // Remove every element with class st-remove-element
         $cleanedHtml.find("[class^=st-remove-element]").remove();
 
-        // Remove every class starting with "st-"
+		// Remove every class starting with "st-"
         $cleanedHtml.find("[class*=' st-'], [class^='st-']").removeClass(function (index, css) {
-            return (css.match (/(^|\s)st-\S+/g) || []).join(' ');
-        });
+			return (css.match (/(^|\s)st-\S+/g) || []).join(' ');
+		});
 
-        // Remove attr class if it's empty.
-        $cleanedHtml.find("[class='']").removeAttr("class");
+		// Remove attr class if it's empty.
+		$cleanedHtml.find("[class='']").removeAttr("class");
 
-        // Remove attr style if it's empty.
-        $cleanedHtml.find("[style='']").removeAttr("style");
+		// Remove attr style if it's empty.
+		$cleanedHtml.find("[style='']").removeAttr("style");
 
-        // Remove tooltip
-        $cleanedHtml.find(".actions-buttons-tooltip").remove();
+		// Remove tooltip
+		$cleanedHtml.find(".actions-buttons-tooltip").remove();
 
-        // Remove toolbox Tinymce
-        $cleanedHtml.find(".text-overlay-toolbox").remove();
+		// Remove toolbox Tinymce
+		$cleanedHtml.find(".text-overlay-toolbox").remove();
 
-        // Convert data-contenteditable-href to href
-        if ($cleanedHtml.find('[data-contenteditable-href]').length){
-            var $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
+		// Convert data-contenteditable-href to href
+		if ($cleanedHtml.find('[data-contenteditable-href]').length){
+			var $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
 
-            $.each( $targetContenteditableHref, function( key, element ){
-                var tempDataContenteditableHref = $( element ).data('contenteditable-href');
-                // Add href
-                $( element ).attr('href',tempDataContenteditableHref);
-                // Remove data-contenteditable-href 
-                $( element ).removeAttr('data-contenteditable-href'); 
-            });
-        }
+			$.each( $targetContenteditableHref, function( key, element ){
+				var tempDataContenteditableHref = $( element ).data('contenteditable-href');
+	            // Add href
+	            $( element ).attr('href',tempDataContenteditableHref);
+	            // Remove data-contenteditable-href 
+	            $( element ).removeAttr('data-contenteditable-href'); 
+			});
+		}
 
         // Convert special chars to html entities ---
         $cleanedHtml = Application.utils.encodeHtmlEntities( $cleanedHtml );
 
-        return Application.utils.charConvert( $cleanedHtml.html() );
-    },
+		return Application.utils.charConvert( $cleanedHtml.html() );
+	},
 
-        // display plain text modal.
+	// display plain text modal.
     removeDataHtml: function( $html, list, type ){
         if( !$html ){
             return false;
@@ -439,162 +435,162 @@ var campaignManager = {
     },
 
     // display plain text modal.
-    getPlainText: function( fnDone, fnFail ){
-        var campaignId = this.getCampaignId();
-        // first get plain text
-        var getPlainTextRequest = Application.utils.doAjax("/campaign/plain-text", { type: "GET", data:{ campaign_id: campaignId }});
-        // Done callback
-        getPlainTextRequest.done(function( response ){
-            if( fnDone ){
-                fnDone( response );
-            }
-        });
-        // Fail callback
-        getPlainTextRequest.fail(function(){
-            if( fnFail ){
-                fnFail();
-            }
-        });
-    },
+	getPlainText: function( fnDone, fnFail ){
+		var campaignId = this.getCampaignId();
+		// first get plain text
+		var getPlainTextRequest = Application.utils.doAjax("/campaign/plain-text", { type: "GET", data:{ campaign_id: campaignId }});
+		// Done callback
+		getPlainTextRequest.done(function( response ){
+			if( fnDone ){
+				fnDone( response );
+			}
+		});
+		// Fail callback
+		getPlainTextRequest.fail(function(){
+			if( fnFail ){
+				fnFail();
+			}
+		});
+	},
 
-    // display plain text modal.
-    getHtmlCode: function( fnDone, fnFail ){
-        var campaignId = this.getCampaignId();
-        // first get plain text
-        var getPlainTextRequest = Application.utils.doAjax("/campaign/html", { type: "GET", data:{ campaign_id: campaignId }});
-        // Done callback
-        getPlainTextRequest.done(function( response ){
-            if( fnDone ){
-                fnDone( response );
-            }
-        });
-        // Fail callback
-        getPlainTextRequest.fail(function(){
-            if( fnFail ){
-                fnFail();
-            }
-        });
-    },
+	// display plain text modal.
+	getHtmlCode: function( fnDone, fnFail ){
+		var campaignId = this.getCampaignId();
+		// first get plain text
+		var getPlainTextRequest = Application.utils.doAjax("/campaign/html", { type: "GET", data:{ campaign_id: campaignId }});
+		// Done callback
+		getPlainTextRequest.done(function( response ){
+			if( fnDone ){
+				fnDone( response );
+			}
+		});
+		// Fail callback
+		getPlainTextRequest.fail(function(){
+			if( fnFail ){
+				fnFail();
+			}
+		});
+	},
 
-    sendPreviewEmail: function( email, fnDone, fnFail, fnAlways, data ){
-        if( !email ){
-            return false;
-        }
+    sendPreviewEmail: function( email, fnDone, fnFail, fnAlways, data = [] ){
+		if( !email ){
+			return false;
+		}
 
-        var campaignId = this.getCampaignId();
+		var campaignId = this.getCampaignId();
 
         data.campaign_id = campaignId;
         data.mail = email;
 
-        var sendPreviewRequest = Application.utils.doAjax("/campaign/send-preview", {
-            type: "POST",
+		var sendPreviewRequest = Application.utils.doAjax("/campaign/send-preview", {
+			type: "POST",
             data: data
-        });
+		});
 
-        sendPreviewRequest.done(function( response ){
-            if( fnDone ){
-                fnDone(response);
-            }
-        });
+		sendPreviewRequest.done(function( response ){
+			if( fnDone ){
+				fnDone(response);
+			}
+		});
 
-        sendPreviewRequest.fail(function(){
-            if( fnFail ){
-                fnFail();
-            }
-        });
+		sendPreviewRequest.fail(function(){
+			if( fnFail ){
+				fnFail();
+			}
+		});
 
-        sendPreviewRequest.always(function(){
-            if( fnAlways ){
-                fnAlways();
-            }
-        });
-    },
+		sendPreviewRequest.always(function(){
+			if( fnAlways ){
+				fnAlways();
+			}
+		});
+	},
 
-    initLockPing: function(){
-        campaignManager.lock();
-        setInterval("campaignManager.lock()", this.lockInterval );
-    },
+	initLockPing: function(){
+		campaignManager.lock();
+		setInterval("campaignManager.lock()", this.lockInterval );
+	},
 
-    confirmFinishedCampaignEdition: function(){
-        var $finishedModal = $("#modal-campaign-finished");
-        var processedValue = parseInt($("#campaign_process").val());
-        if(processedValue !== 0){
-            $finishedModal.modal();
-        }
-    },
+	confirmFinishedCampaignEdition: function(){
+		var $finishedModal = $("#modal-campaign-finished");
+		var processedValue = parseInt($("#campaign_process").val());
+		if(processedValue !== 0){
+			$finishedModal.modal();
+		}
+	},
 
-    lock: function(){
-        var response = Application.utils.doAjax("/campaign/lock", {
-            data:{
-                campaign_id: this.getCampaignId()
-            }
-        });
-        response.fail(function(){
-            var confirmModal = new Application.utils.confirm({
-                message: 'Connection or session lost, please go back to login',
-                confirmModalId: "modal-confirm",
-                noCancel: true,
-                onSubmit: function(){
-                    window.location.href = Application.globals.baseUrl + "/";
-                },
-                onClose: function(){
-                    window.location.href = Application.globals.baseUrl + "/";
-                }
-            });
-            confirmModal.display();
+	lock: function(){
+		var response = Application.utils.doAjax("/campaign/lock", {
+			data:{
+				campaign_id: this.getCampaignId()
+			}
+		});
+		response.fail(function(){
+			var confirmModal = new Application.utils.confirm({
+				message: 'Connection or session lost, please go back to login',
+				confirmModalId: "modal-confirm",
+				noCancel: true,
+				onSubmit: function(){
+					window.location.href = Application.globals.baseUrl + "/";
+				},
+				onClose: function(){
+					window.location.href = Application.globals.baseUrl + "/";
+				}
+			});
+			confirmModal.display();
 
-        });
-    },
+		});
+	},
 
-    addTrackingParams: function(html){
-        var boxCounter = 1;
-        var rows = html.find("tr[data-params]");
-        var dateSubmitted = $.datepicker.formatDate('yy-mm-dd', new Date());
-        $.each( rows, function( index, module){
-            var params = $(module).data("params");
-            if (typeof params.tracking != 'undefined') 
-            {
-                var boxes = $(module).find(".st-box");
-                $.each( boxes, function( index, box){
+	addTrackingParams: function(html){
+		var boxCounter = 1;
+		var rows = html.find("tr[data-params]");
+		var dateSubmitted = $.datepicker.formatDate('yy-mm-dd', new Date());
+		$.each( rows, function( index, module){
+			var params = $(module).data("params");
+			if (typeof params.tracking != 'undefined') 
+			{
+				var boxes = $(module).find(".st-box");
+				$.each( boxes, function( index, box){
 
-                    var links = $(box).find("a");
-                    $.each( links, function( index, link){
-                        if ($(link).hasClass('st-no-tracking') === false) 
-                        {
-                            var separator = link.href.indexOf('?') !== -1 ? "&" : "?";
-                            link.href = link.href + separator + params.tracking.params + params.tracking.placement + boxCounter;
-                        }
-                    });
+					var links = $(box).find("a");
+					$.each( links, function( index, link){
+						if ($(link).hasClass('st-no-tracking') === false) 
+						{
+							var separator = link.href.indexOf('?') !== -1 ? "&" : "?";
+							link.href = link.href + separator + params.tracking.params + params.tracking.placement + boxCounter;
+						}
+					});
 
-                    boxCounter ++;
-                    });
+					boxCounter ++;
+					});
 
-                var links = $(module).find("a");
-                $.each( links, function( index, link){
-                    if (link.href.indexOf("cmp") < 0 && $(link).hasClass('st-no-tracking') === false)
-                    {
-                        var separator = link.href.indexOf('?') !== -1 ? "&" : "?";
-                        link.href = link.href + separator + params.tracking.params + params.tracking.placement;
-                    }
-                });
-            }
+				var links = $(module).find("a");
+				$.each( links, function( index, link){
+					if (link.href.indexOf("cmp") < 0 && $(link).hasClass('st-no-tracking') === false)
+					{
+						var separator = link.href.indexOf('?') !== -1 ? "&" : "?";
+						link.href = link.href + separator + params.tracking.params + params.tracking.placement;
+					}
+				});
+			}
 
-            var links = $(module).find("a");
-            $.each( links, function( index, link){
-                var linkHref = $(link).attr("href");
+			var links = $(module).find("a");
+			$.each( links, function( index, link){
+				var linkHref = $(link).attr("href");
                 if( linkHref && linkHref != "" ){
-                $(link).attr("href",linkHref.replace('[DATE-SUBMITTED]',dateSubmitted));
+				$(link).attr("href",linkHref.replace('[DATE-SUBMITTED]',dateSubmitted));
                 }
-            });
+			});
 
-        });
+		});
 
-        return html;
-    },
+		return html;
+	},
 
     processHtml: function(){
-        var spinner = new Application.utils.spinner();
-        var _this = this;
+		var spinner = new Application.utils.spinner();
+		var _this = this;
 
         spinner.text("Processing campaign...");
         spinner.show();
@@ -612,7 +608,7 @@ var campaignManager = {
                         function() {
                             // Hide Spinner
                             spinner.hide();
-                           // Display Error Alert
+			// Display Error Alert
                             Application.utils.alert.display("Error:","An error occurred while processing the campaign, please try again later.","danger");
                         });
                 }else if( response.processed ){
@@ -625,7 +621,7 @@ var campaignManager = {
                 spinner.hide();
                 // Display Error Alert
                 Application.utils.alert.display("Error:","An error occurred while trying to get the data, please try again later.","danger");
-        }
+		}
         );
     },
 
@@ -636,23 +632,23 @@ var campaignManager = {
         spinner.text("Generating plain text...");
         spinner.show();
 
-                _this.getPlainText(
-                    // Done callback
-                    function(  plainText  ){
-                        _this.plainText = plainText;
-                        // Hide Spinner
-                        spinner.hide();
-                        // Show plaintext
-                        _this.showPlainTextModal( plainText );
-                    },
-                    // Fail callback
-                    function(){
-                        // Hide Spinner
-                        spinner.hide();
-                        // Display Error Alert
-                        Application.utils.alert.display("Error:","An error occurred while trying to get the data, please try again later.","danger");
-                    }
-                );
+				_this.getPlainText(
+					// Done callback
+					function(  plainText  ){
+						_this.plainText = plainText;
+						// Hide Spinner
+						spinner.hide();
+						// Show plaintext
+						_this.showPlainTextModal( plainText );
+					},
+					// Fail callback
+					function(){
+						// Hide Spinner
+						spinner.hide();
+						// Display Error Alert
+						Application.utils.alert.display("Error:","An error occurred while trying to get the data, please try again later.","danger");
+					}
+				);
     },
 
     startProcessCampaign: function(){
@@ -685,96 +681,96 @@ var campaignManager = {
                     // Process Campaign.
                     _this.processHtml();
                 }
-            }else{
-                // Hide Spinner
-                spinner.hide();
-                // Display Error Alert
-                Application.utils.alert.display("Error:","An error occurred while trying to save, please try again later.","danger");
-            }
-        });
+			}else{
+				// Hide Spinner
+				spinner.hide();
+				// Display Error Alert
+				Application.utils.alert.display("Error:","An error occurred while trying to save, please try again later.","danger");
+			}
+		});
 
-        // Save campaign fail
-        saveCampaign.fail(function(){
-            // Hide Spinner
-            spinner.hide();
-            // Display Error Alert
-            Application.utils.alert.display("Error:","An error occurred while trying to save, please try again later.","danger");
-        });
-    },
+		// Save campaign fail
+		saveCampaign.fail(function(){
+			// Hide Spinner
+			spinner.hide();
+			// Display Error Alert
+			Application.utils.alert.display("Error:","An error occurred while trying to save, please try again later.","danger");
+		});
+	},
 
-    showPlainTextModal: function( plainText ){
-        var _this = this;
-        var spinner = new Application.utils.spinner();
-        // Get plain text modal from DOM.
-        var $plainTextModal = $("#modal-plain-text");
+	showPlainTextModal: function( plainText ){
+		var _this = this;
+		var spinner = new Application.utils.spinner();
+		// Get plain text modal from DOM.
+		var $plainTextModal = $("#modal-plain-text");
 
-        if( $plainTextModal ){
-            // Append plain text in modal
-            $plainTextModal.find(".modal-body textarea").empty().append( plainText );
-            // Set submit click
-            $plainTextModal.find(".btn-submit").unbind();
-            // Set onSubmit event
+		if( $plainTextModal ){
+			// Append plain text in modal
+			$plainTextModal.find(".modal-body textarea").empty().append( plainText );
+			// Set submit click
+			$plainTextModal.find(".btn-submit").unbind();
+			// Set onSubmit event
 
-            $plainTextModal.find(".btn-submit").bind( "click", function(){
-                $plainTextModal.modal("hide");
-                // Show spinner
-                spinner.show("Saving plain text.");
+			$plainTextModal.find(".btn-submit").bind( "click", function(){
+				$plainTextModal.modal("hide");
+				// Show spinner
+				spinner.show("Saving plain text.");
 
-                // Update plain text.
-                _this.plainText = $plainTextModal.find(".modal-body textarea").val();
+				// Update plain text.
+				_this.plainText = $plainTextModal.find(".modal-body textarea").val();
 
-                // Save campaign again include plain text.
-                var saveCampaign = _this.save({
-                    saveHtml: true,
-                    doTransform: true
-                });
+				// Save campaign again include plain text.
+				var saveCampaign = _this.save({
+					saveHtml: true,
+					doTransform: true
+				});
 
-                saveCampaign.done(function( campaignId ){
-                    if( campaignId ){
-                        // Process Campaign.
+				saveCampaign.done(function( campaignId ){
+					if( campaignId ){
+						// Process Campaign.
                         _this.processHtml();
-                    }
-                });
+					}
+				});
 
-                // Save campaign fail
-                saveCampaign.fail(function(){
-                    // Hide Spinner
-                    spinner.hide();
-                    // Display Error Alert
-                    Application.utils.alert.display("Error:","An error occurred while trying to save, please try again later.","danger");
-                });
+				// Save campaign fail
+				saveCampaign.fail(function(){
+					// Hide Spinner
+					spinner.hide();
+					// Display Error Alert
+					Application.utils.alert.display("Error:","An error occurred while trying to save, please try again later.","danger");
+				});
 
-            });
-            // Show modal
-            $plainTextModal.modal();
-        }
-    },
+			});
+			// Show modal
+			$plainTextModal.modal();
+		}
+	},
 
-    showHtmlCode: function(){
-        var _this = this;
-        var spinner = new Application.utils.spinner();
+	showHtmlCode: function(){
+		var _this = this;
+		var spinner = new Application.utils.spinner();
 
-        spinner.text("Getting html code.");
-        // Get HTML code.
-        _this.getHtmlCode(
-            function( html ){
-                // Hide Spinner
-                spinner.hide();
-                // Show campaign processed modal.
-                var $campaignProcessedModal = $("#modal-campaign-processed");
-                if( $campaignProcessedModal ){
-                    _this.htmlCode = html;
-                    $campaignProcessedModal.find(".modal-body textarea").empty().text( html );
-                    $campaignProcessedModal.modal();
-                }
-            },
-            function(){
-                // Hide Spinner
-                spinner.hide();
-                // Display Error Alert
-                Application.utils.alert.display("Error:","An error occurred while trying to get the HTML, please try again later.","danger");
-            }
-        );
+		spinner.text("Getting html code.");
+		// Get HTML code.
+		_this.getHtmlCode(
+			function( html ){
+				// Hide Spinner
+				spinner.hide();
+				// Show campaign processed modal.
+				var $campaignProcessedModal = $("#modal-campaign-processed");
+				if( $campaignProcessedModal ){
+					_this.htmlCode = html;
+					$campaignProcessedModal.find(".modal-body textarea").empty().text( html );
+					$campaignProcessedModal.modal();
+				}
+			},
+			function(){
+				// Hide Spinner
+				spinner.hide();
+				// Display Error Alert
+				Application.utils.alert.display("Error:","An error occurred while trying to get the HTML, please try again later.","danger");
+			}
+		);
     },
     /*
      * == Add a new Tag ==
@@ -954,7 +950,7 @@ var campaignManager = {
                     if (mutation.target.className == 'actions-buttons-tooltip' || (mutation.attributeName == 'id' && mutation.target.localName != 'div'))  
                     {
                         ignore = true;
-                    }
+	}
 
                     if (!ignore) {
                         if (_this.timeoutHandle) {

@@ -20,7 +20,7 @@ function campaignPreview( params ){
 
     /*
      * == Get mobile Iframe Height ==
-     * Returns iframe height 
+     * Returns iframe height
      */
     this.getMobileIframeHeight = function(){
         var displayHeight = 0;
@@ -82,7 +82,7 @@ function campaignPreview( params ){
             $modal.find(".preview-body").hide();
             $modal.find(".nav-tabs").parent().hide();
         }
-        
+
         // Init Share button
         if(options.sharePreview){
             this.initShare();
@@ -153,6 +153,14 @@ function campaignPreview( params ){
                 $modal.find(".btn-send").parent().find("[name=send-preview-to]").removeClass("error");
                 $modal.find(".btn-send").parent().find("label.error").remove();
 
+                // Get extra data
+                var data = {};
+                if ($sendPreviewForm.find("input[name=send-preview-subject]").length) {
+                    data.subject = $sendPreviewForm.find("input[name=send-preview-subject]").val();
+                }
+                if ($sendPreviewForm.find("input[name=send-preview-to]").length) {
+                    data.preheader = $sendPreviewForm.find("input[name=send-preview-preheader]").val();
+                }
                 // Send Preview Email
                 campaignManager.sendPreviewEmail(
                     // Email
@@ -186,7 +194,9 @@ function campaignPreview( params ){
                     function () {
                         // Remove loader.
                         $modal.find(".btn-send").removeClass("ajax-loader-small").removeAttr("disabled", "disabled");
-                    }
+                    },
+                    // Data
+                    data
                 );
             });
         }
@@ -245,7 +255,7 @@ function campaignPreview( params ){
                 // Stop animation
                 $modal.find(":animated").stop();
                 // Animate to desktop view
-                _this.animatePreviewToDesktop(); 
+                _this.animatePreviewToDesktop();
             });
 
         // On iframe load
@@ -289,7 +299,7 @@ function campaignPreview( params ){
         // Show modal
         $modal.modal();
         // Hide Spinner
-        spinner.hide();  
+        spinner.hide();
     };
 
     /*
