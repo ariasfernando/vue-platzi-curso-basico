@@ -472,10 +472,14 @@ var campaignManager = {
 		});
 	},
 
-    sendPreviewEmail: function( email, fnDone, fnFail, fnAlways, data = [] ){
+    sendPreviewEmail: function( email, fnDone, fnFail, fnAlways, data ){
 		if( !email ){
 			return false;
 		}
+
+        if (typeof data === 'undefined') {
+           var data = {};
+        }
 
 		var campaignId = this.getCampaignId();
 

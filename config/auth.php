@@ -144,9 +144,9 @@ $default = [
         'default_length' => 20,
 
         // Password requirements
-        'min_length' => 8,
+        'min_length' => 10,
         'max_length' => 100,
-        'min_score' => 3
+        'min_score' => 2
     ]
 
 ];
