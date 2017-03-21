@@ -83,7 +83,7 @@ $default = [
     | This is the suite assets CDN host.
     |
     */
-    'suite_cdn_host' => env('SUITE_ASSETS_CDN_HOST', config('app.url')),
+    'suite_cdn_host' => env('SUITE_ASSETS_CDN_HOST', env('APP_BASE_URL')),
 
     /*
     |--------------------------------------------------------------------------
