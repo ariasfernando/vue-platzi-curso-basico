@@ -1,8 +1,10 @@
 /*
  | --------------------------------------------------------------------------
- | Define App name
+ | load .env (if exists)
  | --------------------------------------------------------------------------
  */
+
+ require('dotenv').config();
 
 /*
  | --------------------------------------------------------------------------
@@ -26,21 +28,7 @@ require('elixir-jshint');
  | --------------------------------------------------------------------------
  */
 
-var fileEnv = fs.readFileSync('.env').toString().split('\n');
-var configEnv = [];
-
-for (var i = 0; i < fileEnv.length; i++) {
-    if (fileEnv[i]) {
-        var envArray = fileEnv[i].split('=');
-        configEnv[envArray[0]] = envArray[1];
-    }
-}
-
-var appName = 'base';
-if (configEnv.APP_NAME) {
-    appName = configEnv.APP_NAME.toLowerCase().replace('\r', '');
-}
-
+var appName = process.env.APP_NAME.toLowerCase() || "base";
 
 /*
  | --------------------------------------------------------------------------

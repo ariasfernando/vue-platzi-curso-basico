@@ -35,7 +35,6 @@ class PublicController extends Controller
                 'width' => $width
             )
         );
-
     }
 
     /**
@@ -50,6 +49,5 @@ class PublicController extends Controller
         $campaign = Campaign::findOrFail($campaign_id);
         $html = new Html($campaign);
         return $html->getBody();
-
     }
 }
