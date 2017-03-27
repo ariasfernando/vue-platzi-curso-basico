@@ -659,6 +659,12 @@ var campaignManager = {
         var spinner = new Application.utils.spinner();
         var _this = this;
 
+        // Clear auto-save timeout and diconnet before
+        clearTimeout(_this.timeoutHandle);
+        if (_this.observer) { 
+            _this.observer.disconnect();
+        }
+
         // To start we must save campaign
         var saveCampaign = _this.save({
             saveHtml: true,
