@@ -11,16 +11,17 @@
  | Requires
  | --------------------------------------------------------------------------
  */
-var elixir = require('laravel-elixir');
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var fs = require('fs');
-var data = require('gulp-data');
-var fm = require('front-matter');
-var path = require('path');
-var gulpsync = require('gulp-sync')(gulp);
-var notify = require('gulp-notify');
+let elixir = require('laravel-elixir');
+let gulp = require('gulp');
+let gutil = require('gulp-util');
+let fs = require('fs');
+let data = require('gulp-data');
+let fm = require('front-matter');
+let path = require('path');
+let gulpsync = require('gulp-sync')(gulp);
+let notify = require('gulp-notify');
 require('elixir-jshint');
+require('laravel-elixir-vueify');
 
 /*
  | --------------------------------------------------------------------------
@@ -28,22 +29,22 @@ require('elixir-jshint');
  | --------------------------------------------------------------------------
  */
 
-var appName = process.env.APP_NAME.toLowerCase() || "base";
+let appName = process.env.APP_NAME.toLowerCase() || "base";
 
 /*
  | --------------------------------------------------------------------------
- | Include file from App path in case it exists, if not from Base path 
+ | Include file from App path in case it exists, if not from Base path
  | --------------------------------------------------------------------------
  */
 
-function jsAppFilePath(file) {
+let jsAppFilePath = (file) => {
     try {
         fs.accessSync('resources/assets/js/' + appName + '/' + file, fs.F_OK);
         return 'js/' + appName + '/' + file;
     } catch (e) {
         return 'js/base/' + file;
     }
-}
+};
 
 /*
  |--------------------------------------------------------------------------
@@ -70,8 +71,8 @@ if (elixir.config.babel) {
  | jsHint task
  | --------------------------------------------------------------------------
  */
-gulp.task('elixir-jshint', function () {
-    elixir(function (mix) {
+gulp.task('elixir-jshint', () => {
+    elixir((mix) => {
         mix.jshint([
             'resources/assets/js/**/*'
         ]);
@@ -85,9 +86,9 @@ gulp.task('elixir-jshint', function () {
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-copy-bower', function () {
-    var bowerPath = 'resources/assets/bower/';
+    let bowerPath = 'resources/assets/bower/';
 
-    elixir(function (mix) {
+    elixir((mix) => {
         mix
             // Bootstrap colorpicker
             .copy(bowerPath + 'bootstrapcolorpicker/dist/img/bootstrap-colorpicker', 'public/css/images/bootstrap-colorpicker')
@@ -106,11 +107,59 @@ gulp.task('elixir-copy-bower', function () {
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-scripts', function () {
-    var assetsPath = 'resources/assets/';
-    var jsDestinationPath = 'public/js/';
+    let assetsPath = 'resources/assets/';
+    let jsDestinationPath = 'public/js/';
 
-    elixir(function (mix) {
+    elixir((mix) => {
         mix
+            .browserify(
+                "js/vue/campaign.js",
+                jsDestinationPath + "campaign-components.js",
+                assetsPath
+            )
+            .browserify(
+                "js/vue/studio.js",
+                jsDestinationPath + "studio-components.js",
+                assetsPath
+            )
+            .browserify(
+                [
+                    "js/vue/dashboard.js",
+                    'js/library/custom-plugins/st-pagination-bar.jquery.js',
+                    'js/library/campaign-preview.js',
+                    'js/library/campaign-manager.js',
+                    'js/library/campaign-controller.js',
+                    'js/library/dashboard-controller.js'
+                ],
+                jsDestinationPath + "dashboard-components.js",
+                assetsPath
+            )
+            // === Compile Vendor and Application scripts to library.js ===
+            .browserify(
+                [
+                    'bower/jquery/dist/jquery.min.js',
+                    'bower/jquery-ui/jquery-ui.min.js',
+                    'bower/bootstrap/dist/js/bootstrap.min.js',
+                    'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
+                    'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
+                    // -- TinyMCE editor --
+                    'bower/tinymce/tinymce.js',
+                    'bower/tinymce/themes/modern/theme.js',
+                    'bower/tinymce/plugins/paste/plugin.js',
+                    'bower/tinymce/plugins/textcolor/plugin.js',
+                    'bower/tinymce/plugins/colorpicker/plugin.js',
+                    'bower/tinymce/plugins/lists/plugin.js',
+                    'bower/tinymce/plugins/autolink/plugin.js',
+                    'bower/tinymce/plugins/link/plugin.js',
+                    'bower/tinymce/plugins/advlist/plugin.js',
+                    // -- Common scripts --
+                    'js/library/application-globals.js',
+                    'js/library/application-utils.js'
+                ],
+                jsDestinationPath + 'library-v2.js',
+                assetsPath
+            )
+
             // === Compile Vendor and Application scripts to library.js ===
             .scripts(
                 [
@@ -158,13 +207,6 @@ gulp.task('elixir-scripts', function () {
             .scripts(
                 ['js/plugins/*.js', 'js/plugins/**/*.js'],
                 jsDestinationPath + 'plugins.js',
-                assetsPath
-            )
-
-            // === Modules ===
-            .scripts(
-                ['../views/base/modules/**/*.js', 'js/library/modules-placeholder.js'],
-                jsDestinationPath + 'modules.js',
                 assetsPath
             )
 
@@ -240,8 +282,8 @@ gulp.task('elixir-scripts', function () {
  | Compile LESS
  | --------------------------------------------------------------------------
  */
-gulp.task('elixir-less', function() {
-    elixir(function(mix) {
+gulp.task('elixir-less', () => {
+    elixir((mix) => {
         mix.less( appName + '/base.less');
         mix.less( appName + '/admin.less');
     });
@@ -253,8 +295,8 @@ gulp.task('elixir-less', function() {
  | Elixir Version
  | --------------------------------------------------------------------------
  */
-gulp.task('elixir-version', function () {
-    elixir(function (mix) {
+gulp.task('elixir-version', () => {
+    elixir((mix) => {
         mix.version([
             'css/admin.css',
             'css/base.css',
@@ -268,36 +310,35 @@ gulp.task('elixir-version', function () {
  | Custom tasks
  | --------------------------------------------------------------------------
  */
-gulp.task('st-custom-tasks', function () {
+gulp.task('st-custom-tasks', () => {
     gulp.watch(['resources/views/**/layouts/partials/*.blade.php'], ['validate-fonts']);
 });
 
-gulp.task('validate-fonts', function () {
+gulp.task('validate-fonts', () => {
     return gulp.src('resources/views/**/layouts/partials/*.blade.php')
-        .pipe(data(function (file) {
+        .pipe(data((file) => {
             // Get file content
-            var content = fm(String(file.contents));
-            var fileName = path.basename(file.path);
+            let content = fm(String(file.contents));
+            let fileName = path.basename(file.path);
 
             // Find font lines
-            var fontLinesRegex = /\/fonts\/.+/g;
-            var fontLinesMatches = content.body.match(fontLinesRegex);
+            let fontLinesRegex = /\/fonts\/.+/g;
+            let fontLinesMatches = content.body.match(fontLinesRegex);
 
-            var fontFamilyRegex = /\.(eot|woff|svg|ttf|woff2)(;?)/g;
+            let fontFamilyRegex = /\.(eot|woff|svg|ttf|woff2)(;?)/g;
 
             if ( fontLinesMatches ) {
-                fontLinesMatches.forEach(function (match) {
+                fontLinesMatches.forEach((match) => {
                     // Find extension
-                    var extMatch = match.match(fontFamilyRegex);
+                    let extMatch = match.match(fontFamilyRegex);
 
                     if (!extMatch) {
                         gutil.log(gutil.colors.red('Missing or bad extension in'), gutil.colors.cyan(fileName), gutil.colors.white.bgRed(' - ' + match));
                     }
                 });
             }
-        }));
+        }))
 });
-
 
 /*
  | --------------------------------------------------------------------------
@@ -305,5 +346,5 @@ gulp.task('validate-fonts', function () {
  | --------------------------------------------------------------------------
  */
 gulp.task('jshint', ['elixir-jshint']);
-gulp.task('watch', gulpsync.sync(['st-custom-tasks','elixir-less','elixir-scripts','elixir-copy-bower','elixir-version']));
-gulp.task('default', gulpsync.sync(['validate-fonts','elixir-less','elixir-scripts','elixir-copy-bower','elixir-version']));
+gulp.task('watch', gulpsync.sync(['st-custom-tasks', 'elixir-less', 'elixir-scripts','elixir-copy-bower','elixir-version']));
+gulp.task('default', gulpsync.sync(['validate-fonts', 'elixir-less', 'elixir-scripts','elixir-copy-bower','elixir-version']));
