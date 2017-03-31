@@ -56,7 +56,7 @@
 
                                 <td>{{ library.created_at }}</td>
                                 <td class="text-right actions icons">
-                                    <router-link :to="'/' + library._id"><i class="glyphicon glyphicon-pencil"></i></router-link>
+                                    <router-link :to="'/' + library._id" :library="library"><i class="glyphicon glyphicon-pencil"></i></router-link>
                                     <a href="#" class="delete" title="Delete" @click="deleteLibrary(library._id)"><i class="glyphicon glyphicon-ban-circle"></i></a>
                                 </td>
                             </tr>
