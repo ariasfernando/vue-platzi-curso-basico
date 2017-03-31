@@ -118,8 +118,13 @@ gulp.task('elixir-scripts', function () {
                 assetsPath
             )
             .browserify(
-                "js/vue/studio.js",
-                jsDestinationPath + "studio-components.js",
+                "js/vue/studio-library.js",
+                jsDestinationPath + "studio-library.js",
+                assetsPath
+            )
+            .browserify(
+                "js/vue/studio-module.js",
+                jsDestinationPath + "studio-module.js",
                 assetsPath
             )
             .browserify(

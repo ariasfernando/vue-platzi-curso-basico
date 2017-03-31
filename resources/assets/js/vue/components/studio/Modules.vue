@@ -1,47 +1,31 @@
 <template>
     <section class="col-xs-12 section-container">
 
-        <aside id="admin-sidebar" v-if="false">
-            Module Settings
-        </aside>
-
         <div class="row">
             <div class="col-xs-12">
                 <div class="btn btn-default btn-create">
-                    Create a new library
+                    <router-link to="/create">Create a new Module</router-link>
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-xs-12">
-                <h2 class="crimson italic">Libraries list</h2>
+                <h2 class="crimson italic">Modules list</h2>
 
                 <div class="table-responsive">
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="admin-library" class="table table-bordered table-striped sortable data-list">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="admin-module" class="table table-bordered table-striped data-list">
                         <thead>
                             <tr>
                                 <th class="sortable">
-                                    <a href="#" class="sortable-option sort-order-desc" id="name" data-order-field="name">
-                                        Name
+                                    <a href="#" class="" id="module_id" data-order-field="module_id">
+                                        _id
                                         <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
                                     </a>
                                 </th>
                                 <th class="sortable">
-                                    <a href="#" class="sortable-option sort-order-desc" id="email" data-order-field="description">
-                                        Description
-                                        <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-                                    </a>
-                                </th>
-                                <th width="150" class="sortable">
-                                    <a href="#" class="sortable-option sort-order-desc" id="created_at" data-order-field="modules">
-                                        Modules
-                                        <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-                                    </a>
-                                </th>
-                                <th width="150" class="sortable">
-                                    <a href="#" class="sortable-option sort-order-desc" id="created_at" data-order-field="created_at">
-                                        Create Date
+                                    <a href="#" class="" id="name" data-order-field="name">
+                                        Name
                                         <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
                                     </a>
                                 </th>
@@ -49,40 +33,30 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="library in libraries" :data-library="library.id">
-                                <td :title="library.name">{{ library }}</td>
-                                <td :title="library.description">{{ library.description }}</td>
-                                <td title="Modules">
-
-                                </td>
-
-                                <td>{{ library.created_at }}</td>
+                            <tr v-for="(module, id) in modules" :data-module="id">
+                                <td :title="module.title">{{ module.title }}</td>
+                                <td :title="id">{{ id }}</td>
                                 <td class="text-right actions icons">
-                                    <a href="#" class="edit" title="Edit" @click="editLibrary(library.id)"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a href="#" class="delete" title="Delete" @click="deleteLibrary(library.id)"><i class="glyphicon glyphicon-ban-circle"></i></a>
+                                    <router-link :to="'/' + id"><i class="glyphicon glyphicon-pencil"></i></router-link>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+
+
             </div>
         </div>
 
-        <aside id="admin-sidebar" class="right" v-if="false">
-            Module Settings
-        </aside>
     </section>
-
-
-
 </template>
 
 <script>
 
 
     export default {
-        name: 'Studio',
-        props: ['libraries', 'modules'],
+        name: 'Modules',
+        props: ['modules'],
         components: {
 
         },

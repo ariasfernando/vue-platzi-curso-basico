@@ -1,14 +1,10 @@
 <template>
     <section class="col-xs-12 section-container">
 
-        <aside id="admin-sidebar" v-if="false">
-            Module Settings
-        </aside>
-
         <div class="row">
             <div class="col-xs-12">
-                <div class="btn btn-default btn-create">
-                    Create a new library
+                <div class="btn btn-default">
+                    <router-link to="/create">Create a new library</router-link>
                 </div>
             </div>
         </div>
@@ -49,17 +45,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="library in libraries" :data-library="library.id">
-                                <td :title="library.name">{{ library }}</td>
+                            <tr v-for="library in libraries.data" :data-library="library._id">
+                                <td :title="library.name">{{ library.name }}</td>
                                 <td :title="library.description">{{ library.description }}</td>
                                 <td title="Modules">
-
+                                    <span v-for="module in library.modules">
+                                        {{ module }}
+                                    </span>
                                 </td>
 
                                 <td>{{ library.created_at }}</td>
                                 <td class="text-right actions icons">
-                                    <a href="#" class="edit" title="Edit" @click="editLibrary(library.id)"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a href="#" class="delete" title="Delete" @click="deleteLibrary(library.id)"><i class="glyphicon glyphicon-ban-circle"></i></a>
+                                    <router-link :to="'/' + library._id"><i class="glyphicon glyphicon-pencil"></i></router-link>
+                                    <a href="#" class="delete" title="Delete" @click="deleteLibrary(library._id)"><i class="glyphicon glyphicon-ban-circle"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -68,9 +66,6 @@
             </div>
         </div>
 
-        <aside id="admin-sidebar" class="right" v-if="false">
-            Module Settings
-        </aside>
     </section>
 
 
@@ -81,8 +76,8 @@
 
 
     export default {
-        name: 'Studio',
-        props: ['libraries', 'modules'],
+        name: 'Libraries',
+        props: ['libraries'],
         components: {
 
         },

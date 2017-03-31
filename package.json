@@ -46,6 +46,7 @@
     "vue-easy-toast": "^0.2.5",
     "vue-form": "^3.0.1",
     "vue-resource": "^1.2.1",
+    "vue-router": "^2.3.0",
     "vuex": "^2.2.1",
     "yargs": "3.9.0"
   },

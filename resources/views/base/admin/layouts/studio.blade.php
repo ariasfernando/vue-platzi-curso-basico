@@ -31,7 +31,7 @@
 			<div class="container-fluid">
 				{{-- ALERT CONTAINER --}}
 				@include('base.admin.partials.alert')
-				<div class="row">
+				<div class="row" id="studio">
 					{{-- Content --}}
 					@yield('content')
 				</div>
