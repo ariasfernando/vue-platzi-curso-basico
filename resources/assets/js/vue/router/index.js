@@ -11,10 +11,7 @@ export const studioLibraryRoutes = [
     },
     {
         path: '/:id',
-        component: Library,
-        props: {
-            library: Object
-        }
+        component: Library
     },
     {
         path: '/create',
@@ -30,10 +27,7 @@ export const studioModuleRoutes = [
     },
     {
         path: '/:id',
-        component: Module,
-        props: {
-            library: Object
-        }
+        component: Module
     },
     {
         path: '/create',

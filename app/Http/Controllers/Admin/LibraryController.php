@@ -116,7 +116,7 @@ class LibraryController extends Controller
     {
         $library_data = Library::findOrFail($request->input("libraryId"))->toArray();
         $modules = array_keys(\StensulModule::getModuleList());
-        $modules = array_combine($modules, $modules);
+        //$modules = array_combine($modules, $modules);
 
         $library_modules = [];
         if (count($library_data['modules'])) {
@@ -136,7 +136,9 @@ class LibraryController extends Controller
             "library" => $library_data
         ];
 
-        return $this->renderView('base.admin.modals.library_form', array('params' => $params));
+        return $params;
+
+        //return $this->renderView('base.admin.modals.library_form', array('params' => $params));
     }
 
     /**

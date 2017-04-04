@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="btn btn-default">
-                    <router-link to="/create">Create a new library</router-link>
+                    <router-link to="/create" class="btn-create">Create a new library</router-link>
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@
 
                                 <td>{{ library.created_at }}</td>
                                 <td class="text-right actions icons">
-                                    <router-link :to="'/' + library._id" :library="library"><i class="glyphicon glyphicon-pencil"></i></router-link>
+                                    <router-link :to="'/' + library._id"><i class="glyphicon glyphicon-pencil"></i></router-link>
                                     <a href="#" class="delete" title="Delete" @click="deleteLibrary(library._id)"><i class="glyphicon glyphicon-ban-circle"></i></a>
                                 </td>
                             </tr>
@@ -93,3 +93,9 @@
         }
     };
 </script>
+
+<style>
+    .btn-create {
+        color: #FFFFFF;
+    }
+</style>
