@@ -2,21 +2,20 @@ import _ from 'underscore'
 
 function Library (data) {
 
-    console.log(data);
-    this.id = data._id;
-    this.name = data.name;
-    this.description = data.description;
-    this.createdAt = data.created_at;
-    this.updatedAt = data.updated_at;
+    this.id = data._id || undefined;
+    this.name = data.name || "Unnamed Library";
+    this.description = data.description || "";
+    this.createdAt = data.created_at || "";
+    this.updatedAt = data.updated_at || "";
 
     this.config = {
-        templateWidth: data.config.templateWidth,
-        templateMobileWidth: data.config.templateMobileWidth,
-        templateBackgroundColor: data.config.templatebackgroundColor,
-        fontFamily: data.config.fontFamily,
-        fontSize: data.config.fontSize,
-        fontColor: data.config.fontColor,
-        lineHeight: data.config.lineHeight
+        templateWidth: data.config.templateWidth || "",
+        templateMobileWidth: data.config.templateMobileWidth || "",
+        templateBackgroundColor: data.config.templatebackgroundColor || "",
+        fontFamily: data.config.fontFamily || "",
+        fontSize: data.config.fontSize || "",
+        fontColor: data.config.fontColor || "",
+        lineHeight: data.config.lineHeight || ""
     };
 
     let groups = [];

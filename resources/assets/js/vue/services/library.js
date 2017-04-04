@@ -15,6 +15,19 @@ export default {
             .catch((error) => Promise.reject(error));
     },
 
+    newLibrary() {
+        let url = Application.globals.baseUrl + '/admin/module/modules';
+
+        return Vue.http.get(url)
+            .then( function(response) {
+                return Promise.resolve({
+                   library: new Library(),
+                   modules: response.body
+                });
+            })
+            .catch((error) => Promise.reject(error));
+    },
+
     saveLibrary(libraryId, formData) {
         let url = Application.globals.baseUrl + '/admin/library/edit';
 

@@ -4,7 +4,7 @@
         <div class="modal-mpf-content-data simple-text-config admin-library-form">
             <h1>{{ library.name }}</h1>
 
-            <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
+            <form id="edit-library" action="/admin/library/edit" method="POST" v-if="ready" @submit.prevent="saveLibrary">
 
 
                 <div class="row">
@@ -162,7 +162,8 @@
         data: function() {
             return {
                 library: {},
-                modules: {}
+                modules: {},
+                ready: false
             }
         },
         methods: {
@@ -175,6 +176,17 @@
                         .then( function (response) {
                             _this.library = response.library;
                             _this.modules = response.modules;
+                            _this.ready = true;
+                        })
+                        .catch( function (error) {
+                            //this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                        });
+                } else {
+                    libraryService.newLibrary()
+                        .then( function (response) {
+                            _this.library = response.library;
+                            _this.modules = response.modules;
+                            _this.ready = true;
                         })
                         .catch( function (error) {
                             //this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});

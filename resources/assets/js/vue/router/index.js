@@ -10,11 +10,11 @@ export const studioLibraryRoutes = [
         props: true
     },
     {
-        path: '/:id',
+        path: '/create',
         component: Library
     },
     {
-        path: '/create',
+        path: '/:id',
         component: Library
     }
 ];
