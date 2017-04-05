@@ -50,10 +50,10 @@
                 <div class="row">
                     <!-- Field background-color -->
                     <div class="col-md-6">
-                        <label for="templateBgColor">Template Background Color</label>
+                        <label for="templateBackgroundColor">Template Background Color</label>
                         <p :class="{ 'control': true }">
-                            <input v-model="library.config.templateBgColor" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('templateBgColor') }" name="templateBgColor" type="text" placeholder="#FFFFFF">
-                            <span v-show="errors.has('templateBgColor')" class="help is-danger">{{ errors.first('templateBgColor') }}</span>
+                            <input v-model="library.config.templateBackgroundColor" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('templateBackgroundColor') }" name="templateBackgroundColor" type="text" placeholder="#FFFFFF">
+                            <span v-show="errors.has('templateBackgroundColor')" class="help is-danger">{{ errors.first('templateBackgroundColor') }}</span>
                         </p>
                     </div>
                 </div>
@@ -179,31 +179,52 @@
                             _this.ready = true;
                         })
                         .catch( function (error) {
-                            //this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                            _this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
                         });
                 } else {
                     libraryService.newLibrary()
                         .then( function (response) {
+                            console.log(response);
                             _this.library = response.library;
                             _this.modules = response.modules;
                             _this.ready = true;
                         })
                         .catch( function (error) {
-                            //this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                            _this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
                         });
                 }
             },
             saveLibrary(event) {
-                let formData = new FormData(event.target);
+                let _this = this;
                 let libraryId = this.$route.params.id;
+                let formData = {
+                    libraryId: this.library.id,
+                    name: this.library.name,
+                    description: this.library.description,
+                    config: this.library.config
+                };
 
-                libraryService.saveLibrary(libraryId, formData)
-                    .then( function (response) {
-                        this.$route.go('/');
-                    })
-                    .catch( function (error) {
-                        //this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
-                    });
+                if ( libraryId ) {
+                    libraryService.saveLibrary(libraryId, formData)
+                        .then(function (response) {
+                            if ( response.message == 'SUCCESS' ) {
+                                window.location.href = "/admin/library";
+                            }
+                        })
+                        .catch(function (error) {
+                            _this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                        });
+                } else {
+                    libraryService.createLibrary(formData)
+                        .then(function (response) {
+                            if ( response.message == 'SUCCESS' ) {
+                                window.location.href = "/admin/library";
+                            }
+                        })
+                        .catch(function (error) {
+                            _this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                        });
+                }
             },
             addGroup() {
                 this.temporal = this.temporal || 1;
@@ -236,5 +257,9 @@
     .group-remove {
         float: none !important;
         margin-top: 10px;
+    }
+
+    .is-danger {
+        color: red;
     }
 </style>

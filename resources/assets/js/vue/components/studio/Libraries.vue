@@ -73,7 +73,7 @@
 </template>
 
 <script>
-
+    import libraryService from '../../services/library'
 
     export default {
         name: 'Libraries',
@@ -87,7 +87,20 @@
             }
         },
         methods: {
-
+            deleteLibrary(libraryId) {
+                let _this = this;
+                if ( confirm("Are you sure?") ) {
+                    libraryService.deleteLibrary(libraryId)
+                        .then(function (response) {
+                            if (response.deleted == libraryId) {
+                                window.location.reload();
+                            }
+                        })
+                        .catch(function (error) {
+                            _this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                        });
+                }
+            }
         },
         mounted: function () {
         }

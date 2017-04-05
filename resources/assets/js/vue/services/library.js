@@ -1,5 +1,6 @@
 import Vue from 'vue/dist/vue'
 import Library from '../models/library'
+import _ from 'underscore'
 
 export default {
     getLibrary(libraryId) {
@@ -20,9 +21,14 @@ export default {
 
         return Vue.http.get(url)
             .then( function(response) {
+                let modules = [];
+                _.each(response.body, function(module, key) {
+                    modules.push(key);
+                });
+
                 return Promise.resolve({
                    library: new Library(),
-                   modules: response.body
+                   modules: modules
                 });
             })
             .catch((error) => Promise.reject(error));
@@ -36,17 +42,21 @@ export default {
         .catch((error) => Promise.reject(error));
     },
 
-    deleteLibrary(libraryId) {
-        let url = Application.globals.baseUrl + '/admin/library/delete';
+    createLibrary(formData) {
+        let url = Application.globals.baseUrl + '/admin/library/create';
 
-        return Vue.http.post(url, {
-            data: {}
-        })
+        return Vue.http.post(url, formData)
         .then((response) => Promise.resolve(response.body))
         .catch((error) => Promise.reject(error));
     },
 
-    createLibrary() {
+    deleteLibrary(libraryId) {
+        let url = Application.globals.baseUrl + '/admin/library/delete';
 
+        return Vue.http.post(url, {
+            libraryId: libraryId
+        })
+        .then((response) => Promise.resolve(response.body))
+        .catch((error) => Promise.reject(error));
     }
 }

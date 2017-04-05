@@ -1,6 +1,6 @@
 import _ from 'underscore'
 
-function Library (data) {
+function Library (data = {}) {
 
     this.id = data._id || undefined;
     this.name = data.name || "Unnamed Library";
@@ -8,14 +8,16 @@ function Library (data) {
     this.createdAt = data.created_at || "";
     this.updatedAt = data.updated_at || "";
 
+    let config = data.config || {};
+
     this.config = {
-        templateWidth: data.config.templateWidth || "",
-        templateMobileWidth: data.config.templateMobileWidth || "",
-        templateBackgroundColor: data.config.templatebackgroundColor || "",
-        fontFamily: data.config.fontFamily || "",
-        fontSize: data.config.fontSize || "",
-        fontColor: data.config.fontColor || "",
-        lineHeight: data.config.lineHeight || ""
+        templateWidth: config.templateWidth || "",
+        templateMobileWidth: config.templateMobileWidth || "",
+        templateBackgroundColor: config.templateBackgroundColor || "",
+        fontFamily: config.fontFamily || "",
+        fontSize: config.fontSize || "",
+        fontColor: config.fontColor || "",
+        lineHeight: config.lineHeight || ""
     };
 
     let groups = [];

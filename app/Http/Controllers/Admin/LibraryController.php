@@ -151,7 +151,7 @@ class LibraryController extends Controller
         $library = Library::findOrFail($request->input("libraryId"));
         $library->description = $request->input("description");
         $library->modules = $modules = [];
-        $library->config = !empty($request->input("config")) ? json_decode($request->input("config")) : '';
+        $library->config = $request->input("config");
 
         foreach ($request->input() as $key => $value) {
             if (substr($key, 0, 8) == 'modules-') {
@@ -192,6 +192,7 @@ class LibraryController extends Controller
         $params = [
             "name" => $request->input("name"),
             "description" => $request->input("description"),
+            "config" => $request->input("config"),
             "modules" => []
         ];
 
