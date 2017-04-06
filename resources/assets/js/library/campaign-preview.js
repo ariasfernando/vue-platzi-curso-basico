@@ -169,7 +169,9 @@ function campaignPreview( params ){
                     function (response) {
                         if (response.processed) {
                             // Display success icon.
-                            $modal.find(".btn-send").append('<i class="glyphicon glyphicon-ok status-icon"></i>');
+                            if( !$modal.find(".btn-send .glyphicon-ok").length ){
+                                $modal.find(".btn-send").append('<i class="glyphicon glyphicon-ok status-icon"></i>');
+                            }
                             $modal.find(".btn-send").parent().removeClass("spinner").addClass("success");
                             $modal.find(".btn-send").find('.status-icon').animate({
                                 opacity: 1

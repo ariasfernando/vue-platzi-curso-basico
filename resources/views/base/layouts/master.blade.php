@@ -113,9 +113,6 @@
             @include('base.layouts.partials.debug')
         @show
 
-        {{-- Debug --}}
-        @include('base/layouts/partials/debug')
-
         {{-- Scripts --}}
         <script src="{{ cdn(elixir('js/library.js')) }}"></script>
 
