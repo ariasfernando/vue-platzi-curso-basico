@@ -139,7 +139,7 @@
                           class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
                   </p>
 
-                  <select :name="'modules[' + idx + '][modules]'" class="form-control" multiple>
+                  <select v-model="group.modules" :name="'modules[' + idx + '][modules]'" class="form-control" multiple>
                     <option v-for="module in modules" :value="module" :selected="group.modules.indexOf(module) >= 0">
                       {{ module }}
                     </option>
@@ -224,7 +224,8 @@
         let formData = {
           name: this.library.name,
           description: this.library.description,
-          config: this.library.config
+          config: this.library.config,
+          modules: this.library.modules
         };
 
         if (this.library.id) {

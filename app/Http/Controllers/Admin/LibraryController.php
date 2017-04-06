@@ -153,18 +153,11 @@ class LibraryController extends Controller
         $library->modules = $modules = [];
         $library->config = $request->input("config");
 
-        foreach ($request->input() as $key => $value) {
-            if (substr($key, 0, 8) == 'modules-') {
-                if ($key === 'modules-default') {
-                    foreach ($value as $module) {
-                        $modules[] = $module;
-                    }
-                } else {
-                    $modules[substr($key, 8)] = $value;
-                }
-            } elseif (substr($key, 0, 12) == 'new-modules-') {
-                $index = substr($key, 12);
-                $modules[$request->input('group-title-' . $index)] = $value;
+        foreach ($request->input('modules') as $key => $group) {
+            if (strtolower($group['name']) == 'default') {
+                $modules = $group['modules'];
+            } else {
+                $modules[$group['name']] = $group['modules'];
             }
         }
 
@@ -196,18 +189,11 @@ class LibraryController extends Controller
             "modules" => []
         ];
 
-        foreach ($request->input() as $key => $value) {
-            if (substr($key, 0, 8) == 'modules-') {
-                if ($key === 'modules-default') {
-                    foreach ($value as $module) {
-                        $params['modules'][] = $module;
-                    }
-                } else {
-                    $params['modules'][substr($key, 8)] = $value;
-                }
-            } elseif (substr($key, 0, 12) == 'new-modules-') {
-                $index = substr($key, 12);
-                $params['modules'][$request->input('group-title-' . $index)] = $value;
+        foreach ($request->input('modules') as $key => $group) {
+            if (strtolower($group['name']) == 'default') {
+                $params['modules'] = $group['modules'];
+            } else {
+                $params['modules'][$group['name']] = $group['modules'];
             }
         }
 
