@@ -34,7 +34,7 @@ export default {
             .catch((error) => Promise.reject(error));
     },
 
-    saveLibrary(libraryId, formData) {
+    saveLibrary(formData) {
         let url = Application.globals.baseUrl + '/admin/library/edit';
 
         return Vue.http.post(url, formData)

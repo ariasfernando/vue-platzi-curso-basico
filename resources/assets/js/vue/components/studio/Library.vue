@@ -156,9 +156,6 @@
 
     export default {
         name: 'Library',
-        components: {
-
-        },
         data: function() {
             return {
                 library: {},
@@ -169,60 +166,57 @@
         methods: {
             loadLibrary() {
                 let libraryId = this.$route.params.id;
-                let _this = this;
 
                 if ( libraryId ) {
                     libraryService.getLibrary(libraryId)
-                        .then( function (response) {
-                            _this.library = response.library;
-                            _this.modules = response.modules;
-                            _this.ready = true;
+                        .then( (response) => {
+                            this.library = response.library;
+                            this.modules = response.modules;
+                            this.ready = true;
                         })
-                        .catch( function (error) {
-                            _this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                        .catch( (error) => {
+                            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
                         });
                 } else {
                     libraryService.newLibrary()
-                        .then( function (response) {
-                            console.log(response);
-                            _this.library = response.library;
-                            _this.modules = response.modules;
-                            _this.ready = true;
+                        .then( (response) => {
+                            this.library = response.library;
+                            this.modules = response.modules;
+                            this.ready = true;
                         })
-                        .catch( function (error) {
-                            _this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                        .catch( (error) => {
+                            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
                         });
                 }
             },
             saveLibrary(event) {
-                let _this = this;
-                let libraryId = this.$route.params.id;
+
                 let formData = {
-                    libraryId: this.library.id,
                     name: this.library.name,
                     description: this.library.description,
                     config: this.library.config
                 };
 
-                if ( libraryId ) {
-                    libraryService.saveLibrary(libraryId, formData)
-                        .then(function (response) {
-                            if ( response.message == 'SUCCESS' ) {
+                if ( this.library.id ) {
+                    formData.libraryId = this.library.id;
+                    libraryService.saveLibrary(formData)
+                        .then( (response) => {
+                            if ( response.message === 'SUCCESS' ) {
                                 window.location.href = "/admin/library";
                             }
                         })
-                        .catch(function (error) {
-                            _this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                        .catch( (error) => {
+                            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
                         });
                 } else {
                     libraryService.createLibrary(formData)
-                        .then(function (response) {
-                            if ( response.message == 'SUCCESS' ) {
+                        .then( (response) => {
+                            if ( response.message === 'SUCCESS' ) {
                                 window.location.href = "/admin/library";
                             }
                         })
-                        .catch(function (error) {
-                            _this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                        .catch( (error) => {
+                            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
                         });
                 }
             },

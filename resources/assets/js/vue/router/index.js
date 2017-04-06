@@ -26,11 +26,11 @@ export const studioModuleRoutes = [
         props: true
     },
     {
-        path: '/:id',
+        path: '/create',
         component: Module
     },
     {
-        path: '/create',
+        path: '/:id',
         component: Module
     }
 ];

@@ -78,37 +78,26 @@
     export default {
         name: 'Libraries',
         props: ['libraries'],
-        components: {
-
-        },
-        data: function() {
-            return {
-
-            }
-        },
         methods: {
-            deleteLibrary(libraryId) {
-                let _this = this;
+            deleteLibrary (libraryId) {
                 if ( confirm("Are you sure?") ) {
                     libraryService.deleteLibrary(libraryId)
-                        .then(function (response) {
-                            if (response.deleted == libraryId) {
+                        .then((response) => {
+                            if ( response.deleted === libraryId ) {
                                 window.location.reload();
                             }
                         })
-                        .catch(function (error) {
-                            _this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                        .catch((error) => {
+                            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
                         });
                 }
             }
-        },
-        mounted: function () {
         }
     };
 </script>
 
 <style>
     .btn-create {
-        color: #FFFFFF;
+        color: #FFFFFF !important;
     }
 </style>

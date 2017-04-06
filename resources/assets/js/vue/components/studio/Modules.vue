@@ -34,10 +34,11 @@
                         </thead>
                         <tbody>
                             <tr v-for="(module, id) in modules" :data-module="id">
-                                <td :title="module.title">{{ module.title }}</td>
+                                <td :title="module.title">{{ module }}</td>
                                 <td :title="id">{{ id }}</td>
                                 <td class="text-right actions icons">
                                     <router-link :to="'/' + id"><i class="glyphicon glyphicon-pencil"></i></router-link>
+                                    <a href="#" class="delete" title="Delete" @click="deleteModule(module.id)"><i class="glyphicon glyphicon-ban-circle"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -52,23 +53,25 @@
 </template>
 
 <script>
-
+    import moduleService from '../../services/module'
 
     export default {
         name: 'Modules',
         props: ['modules'],
-        components: {
-
-        },
-        data: function() {
-            return {
-
-            }
-        },
         methods: {
-
-        },
-        mounted: function () {
+            deleteModule (moduleId) {
+                if ( confirm("Are you sure?") ) {
+                    moduleService.deleteModule(moduleId)
+                        .then( (response) => {
+                            if ( response.deleted === moduleId ) {
+                                window.location.reload();
+                            }
+                        })
+                        .catch( (error) => {
+                            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                        });
+                }
+            }
         }
     };
 </script>
