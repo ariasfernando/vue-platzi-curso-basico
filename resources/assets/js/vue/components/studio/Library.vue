@@ -186,7 +186,7 @@
 
   export default {
     name: 'Library',
-    data: function () {
+    data () {
       return {
         library: {},
         modules: {},
@@ -263,7 +263,7 @@
         this.library.modules.splice(idx, 1);
       }
     },
-    created: function () {
+    created () {
       this.loadLibrary();
     }
   };

@@ -7,7 +7,6 @@ import store from './store'
 import {studioLibraryRoutes} from './router'
 import VeeValidate from 'vee-validate';
 
-
 Vue.use(Toast);
 Vue.use(VueResource);
 Vue.use(interceptors);

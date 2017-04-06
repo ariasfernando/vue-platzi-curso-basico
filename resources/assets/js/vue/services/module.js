@@ -1,5 +1,6 @@
 import Vue from 'vue/dist/vue'
 import Module from '../models/module'
+import _ from 'underscore'
 
 export default {
   getModule(moduleId) {
@@ -15,9 +16,24 @@ export default {
       .catch((error) => Promise.reject(error));
   },
 
-  newLibrary() {
-    let Module = new Module();
-    return Promise.resolve(new Module());
+  getAllModules() {
+    let url = Application.globals.baseUrl + '/admin/module/modules';
+
+    return Vue.http.get(url)
+      .then((response) => {
+        let modules = [];
+        _.each(response.body, function(v) {
+          let module = new Module(v);
+          modules.push(module);
+        });
+        return Promise.resolve(modules)
+      })
+      .catch((error) => Promise.reject(error));
+  },
+
+  newModule() {
+    let module = new Module();
+    return Promise.resolve(module);
   },
 
   saveModule(moduleJson) {

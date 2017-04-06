@@ -1,119 +1,358 @@
 <template>
-  <section class="col-xs-12 section-container">
-
-    <div class="modal-mpf-content-data simple-text-config admin-module-form">
-      <h1>{{ $params['title'] }}</h1>
-
-      {!! Form::open ( array ( 'method' => 'post' ,'id' => 'admin-module-form' )) !!}
-
-
-      <div>
-        <ul class="nav nav-tabs" role="tablist">
-          <li class="active" role="presentation"><a href="#module-conf" class="btn-upload" role="tab" data-toggle="tab">General</a>
-          </li>
-          <li role="presentation"><a href="#module-conf-template" class="btn-upload" role="tab" data-toggle="tab">Template</a>
-          </li>
-        </ul>
+  <div class="col-xs-12 module">
+    <div class="row header">
+      <div class="col-xs-3 header-col">
+        <div class="col-xs-4 back vertical-center">
+          <i class="glyphicon glyphicon-menu-left"></i>
+          <router-link to="/">Back</router-link>
+        </div>
+        <div class="col-xs-8 section-title vertical-center">New Module</div>
       </div>
-      <div class="tab-content">
-        <div class="tab-pane active" role="tabpanel" id="module-conf">
 
-          <div class="modal-mpf-row">
-            {!! Form::label('module_title', 'Title') !!}
-            {!! Form::text('module_title', isset($params['module']['title']) ? $params['module']['title'] : '', array (
-                'class' => 'module-title',
-                'id' => 'module_title',
-                'placeholder' => 'Enter module title here.',
-                'data-validation' => '{"required":"true"}'
-            )) !!}
-
+      <div class="col-xs-6 header-col">
+        <div class="vertical-center">
+          <div class="switch">
+            <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
+            <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="changeMode('desktop')">
+              <i class="fa fa-desktop"></i>
+            </label>
+            <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
+            <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="changeMode('device')">
+              <i class="glyphicon glyphicon-phone"></i>
+            </label>
+            <span class="switch-selection"></span>
           </div>
+        </div>
+      </div>
 
-          <div class="modal-mpf-row">
-            {!! Form::label('module_id', 'Module ID') !!}
-            {!! Form::text('module_id', isset($params['module']['module_id'])? $params['module']['module_id'] : '', array (
-                'class' => 'module-id',
-                'id' => 'module_id',
-                'placeholder' => 'Enter module ID here.',
-                'data-validation' => '{"required":"true"}'
-            )) !!}
+      <div class="col-xs-3 header-col">
+        <div class="vertical-center">
+          <button class="btn btn-default" @click="preview"><i class="glyphicon glyphicon-phone"></i>Preview</button>
+          <button class="btn btn-default save-as-draft" @click="draft">Draft</button>
+          <a class="btn btn-continue" href="#" @click.prevent="publish">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
+        </div>
+      </div>
+    </div>
 
+    <div class="row">
+      <section v-if="ready" class="col-xs-12 section-container">
+
+        <!-- START: Left Bar -->
+        <aside class="col-xs-3 left-bar">
+          <div class="module-settings">
+            <h4>Module Settings</h4><hr>
+
+            <div class="fields">
+              <div class="control">
+                <input v-model="module.name" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"
+                       name="name" type="text" placeholder="Module name">
+                <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
+              </div>
+
+              <div class="control">
+                <h5>Columns</h5> <hr>
+
+                <ul class="list-inline">
+                  <li :class="module.structure.columns.length == 1 ? 'selected' : ''" @click="setColumns(1)">1</li>
+                  <li :class="module.structure.columns.length == 2 ? 'selected' : ''" @click="setColumns(2)">2</li>
+                  <li :class="module.structure.columns.length == 3 ? 'selected' : ''" @click="setColumns(3)">3</li>
+                  <li :class="module.structure.columns.length == 4 ? 'selected' : ''" @click="setColumns(4)">4</li>
+                  <li :class="module.structure.columns.length == 5 ? 'selected' : ''" @click="setColumns(5)">5</li>
+                </ul>
+              </div>
+
+            </div>
+
+            <div class="json-preview">
+              <h4>Json Preview</h4> <hr>
+
+              <pre>{{ module }}</pre>
+            </div>
           </div>
+        </aside>
+        <!-- END: Left Bar -->
 
-          <div class="modal-mpf-row">
-            {!! Form::label('module_description', 'Module description') !!}
-            {!! Form::text('module_description', isset($params['module']['module_id'])? $params['module']['module_id'] : '', array (
-                'class' => 'module-description',
-                'id' => 'module_description',
-                'placeholder' => 'Enter module description here.',
-                'data-validation' => '{"required":"true"}'
-            )) !!}
-
-          </div>
-          @if ( isset($params['modules']) )
-
-          <div class="modal-mpf-row selector">
-            {!! Form::label('parent_module', 'Parent Module') !!}
-            {!! Form::select('parent_module', $params['modules'], isset($params['module']['modules']) ? $params['module']['modules'] : '',array (
-                'class' => 'form-control selectpicker',
-                'id' => 'parent_module',
-                'title' => 'Choose one module to duplicate',
-                'data-validation' => '{"required":"true"}'
-            )); !!}
-
-          </div>
-          @endif
-
-          <div class="modal-mpf-row">
-            {!! Form::label('module_config', 'Config') !!}
-            {!! Form::textarea('module_config', isset($params['module']['config'])
-                ? json_encode($params['module']['config'], JSON_PRETTY_PRINT) : '', array (
-                'class' => 'module-config',
-                'id' => 'module_config',
-                'placeholder' => 'Enter config JSON here.',
-                'data-validation' => '{"required":"true"}'
-            )) !!}
+        <!-- START: Module Container -->
+        <div class="col-xs-6 module-container">
+          <div class="col-xs-12">
 
           </div>
         </div>
-        <div class="tab-pane" role="tabpanel" id="module-conf-template">
-          <div class="">
-            {!! Form::label('template', 'Template') !!}
-            {!! Form::textarea('module_template', isset($params['module']['template']) ? $params['module']['template'] : '', array (
-                'class' => 'module-template',
-                'id' => 'module_template',
-                'placeholder' => 'Enter template code here.',
-                'data-validation' => '{"required":"true"}'
-            )) !!}
+        <!-- END: Module Container -->
 
-          </div>
-        </div>
-        <div>
+        <!-- START: Right Bar -->
+        <aside class="col-xs-3 right-bar">
 
-          <div class="modal-mpf-submit">
-            {!! Form::submit('Submit', array ( 'class' => 'btn btn-success pull-right submit-config')) !!}
+        </aside>
+        <!-- END: Right Bar -->
 
-          </div>
-          {!! Form::close() !!}
-
-        </div>
-  </section>
-
-
+      </section>
+    </div>
+  </div>
 </template>
 
 <script>
-
+  import moduleService from '../../services/module'
 
   export default {
-    name: 'Studio',
-    props: ['libraries', 'modules'],
-    components: {},
-    data: function () {
-      return {}
+    name: 'Module',
+    data () {
+      return {
+        module: {},
+        ready: false
+      }
     },
-    methods: {},
-    mounted: function () {
+    methods: {
+      loadModule() {
+        let moduleId = this.$route.params.id;
+
+        if (moduleId) {
+          moduleService.getModule(moduleId)
+            .then((response) => {
+              this.module = response.module;
+              this.ready = true;
+            })
+            .catch((error) => {
+              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+            });
+        } else {
+          moduleService.newModule()
+            .then((response) => {
+              this.module = response;
+              this.ready = true;
+            })
+            .catch((error) => {
+              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+            });
+        }
+      },
+      setColumns(cols) {
+        let numCols = this.module.structure.columns.length;
+
+        if ( numCols === cols ) {
+          return true;
+        }
+
+        // 5 > 3
+        if ( numCols > cols ) {
+          this.module.structure.columns.splice(numCols, cols);
+        }
+
+        // 3 < 5
+        if ( numCols < cols ) {
+          console.log('asd');
+          for ( let i = numCols; i < cols; i++ ) {
+            this.module.structure.columns.push([]);
+          }
+        }
+      },
+      changeMode(mode) {
+        this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});
+      },
+      preview() {
+        this.$root.$toast('Preview event', {className: 'et-info'});
+      },
+      draft() {
+        this.$root.$toast('Draft event', {className: 'et-info'});
+      },
+      publish() {
+        this.$root.$toast('Publish event', {className: 'et-info'});
+      }
+    },
+    created () {
+      this.loadModule();
     }
   };
 </script>
+
+<style lang="less" scoped>
+  @stensul-purple: #514960;
+  @stensul-purple-light: lighten(@stensul-purple, 20%);
+  @focus: #69dac8;
+
+  @brand-primary: lighten(@stensul-purple, 35%);
+  @brand-secondary: @stensul-purple-light;
+
+  .module {
+    hr {
+      border-top: 1px solid #ccc;
+      margin: 0 0 10px 0;
+    }
+
+    .header {
+      color: #FFFFFF;
+      background-color: @stensul-purple;
+      height: 80px;
+      box-shadow: 0 8px 6px -6px #000;
+      margin-bottom: 20px;
+      padding: 15px 0;
+
+      .header-col {
+        height: 100%;
+      }
+
+      .vertical-center {
+        min-height: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      .switch {
+        position: relative;
+        height: 27px;
+        width: 100px;
+        background: #C8C8C8;
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+        margin: 0 auto;
+      }
+
+      .switch-label {
+        position: relative;
+        z-index: 2;
+        float: left;
+        width: 50px;
+        line-height: 23px;
+        font-size: 16px;
+        color: #fff;
+        text-align: center;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+        cursor: pointer;
+        margin: 0 !important;
+
+        i {
+          display: inline-block;
+          vertical-align: sub;
+        }
+      }
+
+      .switch-label:active {
+        font-weight: bold;
+      }
+
+      .switch-label-off {
+        padding-left: 2px;
+      }
+
+      .switch-label-on {
+        padding-right: 2px;
+      }
+
+      .switch-input {
+        display: none;
+      }
+
+      .switch-input:checked + .switch-label {
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+        -webkit-transition: 0.15s ease-out;
+        -moz-transition: 0.15s ease-out;
+        -o-transition: 0.15s ease-out;
+        transition: 0.15s ease-out;
+      }
+
+      .switch-input:checked + .switch-label-on ~ .switch-selection {
+        left: 50px;
+        /* Note: left: 50% doesn't transition in WebKit */
+      }
+
+      .switch-selection {
+        display: block;
+        position: absolute;
+        z-index: 1;
+        top: 2px;
+        left: 2px;
+        width: 48px;
+        height: 24px;
+        background: @brand-secondary;
+        border-radius: 3px;
+        background-image: -webkit-linear-gradient(top, @brand-primary, @brand-secondary);
+        background-image: -moz-linear-gradient(top, @brand-primary, @brand-secondary);
+        background-image: -o-linear-gradient(top, @brand-primary, @brand-secondary);
+        background-image: linear-gradient(to bottom, @brand-primary, @brand-secondary);
+        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        -webkit-transition: left 0.15s ease-out;
+        -moz-transition: left 0.15s ease-out;
+        -o-transition: left 0.15s ease-out;
+        transition: left 0.15s ease-out;
+      }
+
+      .back {
+        border-right: 1px solid #FFFFFF;
+
+        i {
+          font-size: 24px;
+          margin-right: 5px;
+        }
+
+        a {
+          color: #FFFFFF;
+        }
+      }
+
+      .section-title {
+        font-size: 18px;
+      }
+
+      .btn {
+        margin: 5px;
+      }
+    }
+
+    .section-container {
+      background-color: #FFFFFF;
+    }
+
+    .left-bar {
+      border-right: 1px solid #ccc;
+
+      .fields {
+        padding: 0 10px;
+
+        .is-danger {
+          font-size: 12px;
+          padding-top: 5px;
+        }
+
+        input:focus {
+          outline: none;
+          box-shadow: 0 0 3pt 2pt @focus;
+        }
+
+        .control {
+          margin-top: 20px
+        }
+
+        .list-inline {
+          text-align: center;
+        }
+
+        .list-inline li {
+          border: 1px solid #ccc;
+          padding: 5px 10px;
+          cursor: pointer;
+
+          &.selected {
+            border: 1px solid @focus;
+          }
+        }
+      }
+
+      .json-preview {
+        margin-top: 25px;
+      }
+    }
+
+    .right-bar {
+      border-left: 1px solid #ccc;
+    }
+
+    .module-container {
+
+    }
+  }
+
+</style>

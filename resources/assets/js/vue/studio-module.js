@@ -5,11 +5,13 @@ import Toast from 'vue-easy-toast'
 import interceptors from './interceptors'
 import store from './store'
 import {studioModuleRoutes} from './router'
+import VeeValidate from 'vee-validate';
 
 Vue.use(Toast);
 Vue.use(VueResource);
 Vue.use(interceptors);
 Vue.use(VueRouter);
+Vue.use(VeeValidate);
 
 // Pointing routes to the components they should use
 const router = new VueRouter({
@@ -21,8 +23,5 @@ const router = new VueRouter({
 
 const app = new Vue({
   router,
-  store,
-  created() {
-    console.log(this.$route)
-  }
+  store
 }).$mount('#studio');

@@ -2,9 +2,8 @@ import _ from 'underscore'
 
 function Module(data = {}) {
 
-  this.id = data.id || "";
-  this.name = data.name || "Image With Text";
-
+  this.id = data.id || data.module_id || "";
+  this.name = data.name || data.title || "";
   let style = data.style || {};
 
   this.structure = {

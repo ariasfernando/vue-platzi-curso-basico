@@ -4,7 +4,7 @@
 @section('content')
 
 	<div class="col-xs-12" id="admin-module-container">
-		<router-view :modules="{{ htmlentities( json_encode($modules), ENT_QUOTES, 'UTF-8' ) }}"></router-view>
+		<router-view></router-view>
 	</div>
 
 @endsection

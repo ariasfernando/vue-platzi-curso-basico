@@ -1,5 +1,6 @@
 import Vue from 'vue/dist/vue'
 import Library from '../models/library'
+import moduleService from './module'
 import _ from 'underscore'
 
 export default {
@@ -17,9 +18,7 @@ export default {
   },
 
   newLibrary() {
-    let url = Application.globals.baseUrl + '/admin/module/modules';
-
-    return Vue.http.get(url)
+    moduleService.getAllModules()
       .then(function (response) {
         let modules = [];
         _.each(response.body, function (module, key) {
