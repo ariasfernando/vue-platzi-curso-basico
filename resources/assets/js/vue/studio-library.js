@@ -4,7 +4,7 @@ import VueResource from 'vue-resource/dist/vue-resource'
 import Toast from 'vue-easy-toast'
 import interceptors from './interceptors'
 import store from './store'
-import { studioLibraryRoutes } from './router'
+import {studioLibraryRoutes} from './router'
 import VeeValidate from 'vee-validate';
 
 
@@ -16,13 +16,13 @@ Vue.use(VeeValidate);
 
 // Pointing routes to the components they should use
 const router = new VueRouter({
-    routes: studioLibraryRoutes,
-    mode: 'hash',
-    base: '/admin/library/',
-    saveScrollPosition: true,
+  routes: studioLibraryRoutes,
+  mode: 'hash',
+  base: '/admin/library/',
+  saveScrollPosition: true,
 });
 
 const app = new Vue({
-    router,
-    store
+  router,
+  store
 }).$mount('#studio');

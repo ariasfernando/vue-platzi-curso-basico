@@ -3,61 +3,61 @@ import store from '../store'
 import Campaign from '../models/campaign'
 
 export default {
-    getCampaign() {
-        let campaignId = Application.globals.campaignId;
-        let url = Application.globals.baseUrl + '/campaign/edit/' + campaignId + '?json';
-        let data = {
-            library_name: Application.globals.library_name,
-            campaign_id: Application.globals.campaignId
-        };
+  getCampaign() {
+    let campaignId = Application.globals.campaignId;
+    let url = Application.globals.baseUrl + '/campaign/edit/' + campaignId + '?json';
+    let data = {
+      library_name: Application.globals.library_name,
+      campaign_id: Application.globals.campaignId
+    };
 
-        return Vue.http.get(url, data)
-            .then((response) => Promise.resolve(response.body))
-            .catch((error) => Promise.reject(error));
-    },
+    return Vue.http.get(url, data)
+      .then((response) => Promise.resolve(response.body))
+      .catch((error) => Promise.reject(error));
+  },
 
-    saveCampaign() {
-        let url = Application.globals.baseUrl + '/campaign/save';
-        let editedCampaign = this.getEditedData();
+  saveCampaign() {
+    let url = Application.globals.baseUrl + '/campaign/save';
+    let editedCampaign = this.getEditedData();
 
-        return Vue.http.post(url, {
-            data: editedCampaign
-        })
-        .then((response) => Promise.resolve(response.body))
-        .catch((error) => Promise.reject(error));
-    },
+    return Vue.http.post(url, {
+      data: editedCampaign
+    })
+      .then((response) => Promise.resolve(response.body))
+      .catch((error) => Promise.reject(error));
+  },
 
-    cloneCampaign(campaignId) {
-        let url = Application.globals.baseUrl + '/campaign/clone';
-        let data = {
-            campaign_id: campaignId
-        };
+  cloneCampaign(campaignId) {
+    let url = Application.globals.baseUrl + '/campaign/clone';
+    let data = {
+      campaign_id: campaignId
+    };
 
-        return Vue.http.post(url, data)
-            .then((response) => Promise.resolve(response.body))
-            .catch((error) => Promise.reject(error));
-    },
+    return Vue.http.post(url, data)
+      .then((response) => Promise.resolve(response.body))
+      .catch((error) => Promise.reject(error));
+  },
 
-    getEditedData() {
-        let campaign = store.state.campaign;
-        let editedSettings = store.state.editedSettings;
+  getEditedData() {
+    let campaign = store.state.campaign;
+    let editedSettings = store.state.editedSettings;
 
-        // Edited modules
-        let modules = store.state.modules;
-        let editedModules = store.state.editedModules;
+    // Edited modules
+    let modules = store.state.modules;
+    let editedModules = store.state.editedModules;
 
-        for ( let edited of editedModules ) {
-            for ( let key in edited.data ) {
-                modules[edited.moduleId].columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
-            }
-        }
-
-        let dataCampaign = new Campaign({
-            campaign: campaign,
-            settings: editedSettings,
-            modules: modules
-        });
-
-        return dataCampaign;
+    for (let edited of editedModules) {
+      for (let key in edited.data) {
+        modules[edited.moduleId].columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
+      }
     }
+
+    let dataCampaign = new Campaign({
+      campaign: campaign,
+      settings: editedSettings,
+      modules: modules
+    });
+
+    return dataCampaign;
+  }
 }

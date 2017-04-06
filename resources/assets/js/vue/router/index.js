@@ -4,33 +4,33 @@ import Modules from '../components/studio/Modules.vue'
 import Module from '../components/studio/Module.vue'
 
 export const studioLibraryRoutes = [
-    {
-        path: '/',
-        component: Libraries,
-        props: true
-    },
-    {
-        path: '/create',
-        component: Library
-    },
-    {
-        path: '/:id',
-        component: Library
-    }
+  {
+    path: '/',
+    component: Libraries,
+    props: true
+  },
+  {
+    path: '/create',
+    component: Library
+  },
+  {
+    path: '/:id',
+    component: Library
+  }
 ];
 
 export const studioModuleRoutes = [
-    {
-        path: '/',
-        component: Modules,
-        props: true
-    },
-    {
-        path: '/create',
-        component: Module
-    },
-    {
-        path: '/:id',
-        component: Module
-    }
+  {
+    path: '/',
+    component: Modules,
+    props: true
+  },
+  {
+    path: '/create',
+    component: Module
+  },
+  {
+    path: '/:id',
+    component: Module
+  }
 ];

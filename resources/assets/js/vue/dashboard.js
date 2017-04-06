@@ -16,7 +16,7 @@ Vue.config.silent = true;
 import Dashboard from './components/dashboard/Dashboard.vue'
 
 window.vm = new Vue({
-    el: '#dashboard',
-    components: { Dashboard }
+  el: '#dashboard',
+  components: {Dashboard}
 });
 

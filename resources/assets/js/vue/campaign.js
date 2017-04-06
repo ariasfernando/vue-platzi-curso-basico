@@ -17,7 +17,7 @@ import Campaign from './components/campaign/Campaign.vue'
 import store from './store'
 
 window.vm = new Vue({
-    el: '#campaign',
-    store: store,
-    components: { Campaign }
+  el: '#campaign',
+  store: store,
+  components: {Campaign}
 });
