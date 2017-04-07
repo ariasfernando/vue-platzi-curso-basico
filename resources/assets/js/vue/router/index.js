@@ -1,7 +1,7 @@
 import Libraries from '../components/studio/Libraries.vue'
-import Library from '../components/studio/Library.vue'
+import EditLibrary from '../components/studio/EditLibrary.vue'
 import Modules from '../components/studio/Modules.vue'
-import Module from '../components/studio/Module.vue'
+import EditModule from '../components/studio/EditModule.vue'
 
 export const studioLibraryRoutes = [
   {
@@ -11,11 +11,11 @@ export const studioLibraryRoutes = [
   },
   {
     path: '/create',
-    component: Library
+    component: EditLibrary
   },
   {
     path: '/:id',
-    component: Library
+    component: EditLibrary
   }
 ];
 
@@ -27,10 +27,10 @@ export const studioModuleRoutes = [
   },
   {
     path: '/create',
-    component: Module
+    component: EditModule
   },
   {
     path: '/:id',
-    component: Module
+    component: EditModule
   }
 ];

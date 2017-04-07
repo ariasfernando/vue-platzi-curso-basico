@@ -185,7 +185,7 @@
   import libraryService from '../../services/library'
 
   export default {
-    name: 'Library',
+    name: 'EditLibrary',
     data () {
       return {
         library: {},

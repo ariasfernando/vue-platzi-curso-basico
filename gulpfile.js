@@ -140,13 +140,13 @@ gulp.task('elixir-scripts', function () {
                 assetsPath
             )
             // === Compile Vendor and Application scripts to library.js ===
-            .browserify(
+            .scripts(
                 [
-                    'bower/jquery/dist/jquery.min.js',
-                    'bower/jquery-ui/jquery-ui.min.js',
-                    'bower/bootstrap/dist/js/bootstrap.min.js',
-                    'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
-                    'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
+                    //'bower/jquery/dist/jquery.min.js',
+                    //'bower/jquery-ui/jquery-ui.min.js',
+                    //'bower/bootstrap/dist/js/bootstrap.min.js',
+                    //'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
+                    //'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
                     // -- TinyMCE editor --
                     'bower/tinymce/tinymce.js',
                     'bower/tinymce/themes/modern/theme.js',
@@ -158,8 +158,8 @@ gulp.task('elixir-scripts', function () {
                     'bower/tinymce/plugins/link/plugin.js',
                     'bower/tinymce/plugins/advlist/plugin.js',
                     // -- Common scripts --
-                    'js/library/application-globals.js',
-                    'js/library/application-utils.js'
+                    //'js/library/application-globals.js',
+                    //'js/library/application-utils.js'
                 ],
                 jsDestinationPath + 'library-v2.js',
                 assetsPath

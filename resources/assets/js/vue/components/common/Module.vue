@@ -1,0 +1,107 @@
+<template>
+  <table width="100%" cellspacing="0" cellpadding="0" class="module-table">
+
+    <!-- START: TH Structure -->
+    <tr v-if="module.structure.columns.length > 1">
+
+      <th class="st-col" v-for="(column, columnId) in module.structure.columns" @dragover.prevent @drop="elementDrop"
+          :class="!column.components.length ? 'empty-col' : ''" :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" :style="column.style || ''"
+          :data-col="columnId">
+
+        <table v-if="column.components.length" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr v-for="(component, componentId) in column.components">
+            <td>
+              <component :is="component.type" :component="component" :module-id="module.id" :column-id="columnId"
+                         :component-id="componentId"></component>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Empty Col -->
+        <table v-else width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td align="center" class="empty-cell" @drop="elementDrop" :data-col="columnId">Drag content here</td>
+          </tr>
+        </table>
+
+      </th>
+    </tr>
+    <!-- END: TH Structure -->
+
+    <!-- START TD Structure -->
+    <tr v-else>
+      <td class="st-col" v-for="(column, columnId) in module.structure.columns" @dragover.prevent @drop="elementDrop"
+          :class="!column.components.length ? 'empty-col' : ''" :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" :style="column.style || ''"
+          :data-col="columnId">
+
+        <table v-if="column.components.length" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr v-for="(component, componentId) in column.components">
+            <td>
+              <component :is="component.type" :component="component" :module-id="module.id" :column-id="columnId"
+                         :component-id="componentId" @set-component="setComponent"></component>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Empty Col -->
+        <table v-else width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td align="center" class="empty-cell" @drop="elementDrop" :data-col="columnId">Drag content here</td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+    <!-- END TD Structure -->
+  </table>
+</template>
+
+<script>
+
+  import TextElement from './elements/TextElement.vue'
+  import ButtonElement from './elements/ButtonElement.vue'
+  import ImageElement from './elements/ImageElement.vue'
+  import DividerElement from './elements/DividerElement.vue'
+  import { defaultElements } from '../../resources'
+
+  module.exports = {
+    name: 'Module',
+    props: ['module'],
+    components: {
+      TextElement,
+      ButtonElement,
+      ImageElement,
+      DividerElement
+    },
+    methods: {
+      elementDrop(e) {
+        let colId = e.target.getAttribute('data-col');
+        let elType = e.dataTransfer.getData('element-type');
+        let Element = new defaultElements(elType);
+
+        this.module.structure.columns[colId].components.push(Element);
+
+        let indexOf = this.module.structure.columns[colId].components.indexOf(Element);
+        this.setComponent(this.module.structure.columns[colId].components[indexOf]);
+      },
+      setComponent(component) {
+        console.log('[Module] Emit set-component');
+        this.$emit('set-component', component);
+      }
+    }
+  };
+</script>
+
+<style lang="less">
+  @focus: #69dac8;
+  @focus-light: lighten(@focus, 30%);
+
+  .empty-col {
+    background-color: @focus-light;
+  }
+
+  .empty-cell {
+    font-weight: normal;
+    color: @focus;
+  }
+</style>

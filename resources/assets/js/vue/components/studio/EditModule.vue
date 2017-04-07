@@ -61,13 +61,19 @@
                 </ul>
               </div>
 
+              <div class="control">
+                <h5>Elements</h5> <hr>
+
+                <ul class="components-list">
+                  <li class="component-item" draggable="true" data-type="text-element" @dragstart="setData"><i class="glyphicon glyphicon-font"></i>Text</li>
+                  <li class="component-item" draggable="true" data-type="image-element" @dragstart="setData"><i class="fa fa-picture-o" aria-hidden="true"></i>Image</li>
+                  <li class="component-item" draggable="true" data-type="button-element" @dragstart="setData"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>CTA</li>
+                  <li class="component-item" draggable="true" data-type="divider-element" @dragstart="setData"><i class="fa fa-minus-square-o" aria-hidden="true"></i>Divider</li>
+                </ul>
+              </div>
+
             </div>
 
-            <div class="json-preview">
-              <h4>Json Preview</h4> <hr>
-
-              <pre>{{ module }}</pre>
-            </div>
           </div>
         </aside>
         <!-- END: Left Bar -->
@@ -75,13 +81,19 @@
         <!-- START: Module Container -->
         <div class="col-xs-6 module-container">
           <div class="col-xs-12">
-
+            <module :module="module" @set-component="setCurrentComponent"></module>
           </div>
         </div>
         <!-- END: Module Container -->
 
         <!-- START: Right Bar -->
         <aside class="col-xs-3 right-bar">
+
+          <div class="module-settings" v-if="currentComponent">
+            <div class="fields">
+              <component-settings :component="currentComponent"></component-settings>
+            </div>
+          </div>
 
         </aside>
         <!-- END: Right Bar -->
@@ -93,14 +105,21 @@
 
 <script>
   import moduleService from '../../services/module'
+  import Module from '../common/Module.vue'
+  import ComponentSettings from './ComponentSettings.vue'
 
   export default {
-    name: 'Module',
+    name: 'EditModule',
     data () {
       return {
         module: {},
-        ready: false
+        ready: false,
+        currentComponent: null
       }
+    },
+    components: {
+      Module,
+      ComponentSettings
     },
     methods: {
       loadModule() {
@@ -133,18 +152,35 @@
           return true;
         }
 
-        // 5 > 3
         if ( numCols > cols ) {
-          this.module.structure.columns.splice(numCols, cols);
+          this.module.structure.columns.splice(cols - 1, numCols - cols);
         }
 
-        // 3 < 5
         if ( numCols < cols ) {
-          console.log('asd');
           for ( let i = numCols; i < cols; i++ ) {
-            this.module.structure.columns.push([]);
+            this.module.structure.columns.push({
+              "style": {
+              "verticalAlign": "middle",
+              "textAlign": "center",
+              "paddingTop": "10px",
+              "paddingLeft": "10px",
+              "paddingBottom": "10px",
+              "paddingRight": "10px"
+            },
+            "components": []
+            });
           }
         }
+      },
+      setData(e) {
+        let targetEl = e.target;
+        let elType = targetEl.getAttribute('data-type');
+
+        e.dataTransfer.setData("element-type", elType);
+      },
+      setCurrentComponent(component) {
+        console.log('[EditModule] setCurrentComponent', component);
+        this.currentComponent = component;
       },
       changeMode(mode) {
         this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});
@@ -165,7 +201,7 @@
   };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
   @stensul-purple: #514960;
   @stensul-purple-light: lighten(@stensul-purple, 20%);
   @focus: #69dac8;
@@ -341,8 +377,30 @@
         }
       }
 
+      .components-list {
+        padding: 0;
+
+        .component-item {
+          list-style-type: none;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin: 5px 0;
+          padding: 5px;
+          cursor: pointer;
+
+          i {
+            margin: 0 10px;
+          }
+        }
+      }
+
       .json-preview {
         margin-top: 25px;
+
+        pre {
+          font-size: 10px;
+          font-family: Monaco;
+        }
       }
     }
 
@@ -352,6 +410,14 @@
 
     .module-container {
 
+    }
+
+    .module-table {
+      min-height: 100px;
+    }
+
+    .module-table .st-col {
+      border: 1px dashed @focus;
     }
   }
 
