@@ -50,11 +50,14 @@
               <td :title="library.name">{{ library.name }}</td>
               <td :title="library.description">{{ library.description }}</td>
               <td title="Modules">
-                                    <span v-for="module in library.modules">
-                                        {{ module }}
-                                    </span>
+              <template v-for="(module, index) in library.modules">
+                <span class="modules-list" v-if="typeof module === 'string'">{{ module }}</span>
+                <span class="modules-list" v-if="typeof module === 'object'"><b>- {{ index }}</b></span>
+                <div v-if="typeof module === 'object'">
+                  <span class="modules-list" v-for="m in module">{{ m }}</span>
+                </div>
+              </template>
               </td>
-
               <td>{{ library.created_at }}</td>
               <td class="text-right actions icons">
                 <router-link :to="'/' + library._id"><i class="glyphicon glyphicon-pencil"></i></router-link>
@@ -100,5 +103,8 @@
 <style>
   .btn-create {
     color: #FFFFFF !important;
+  }
+  .modules-list {
+    display: block;
   }
 </style>
