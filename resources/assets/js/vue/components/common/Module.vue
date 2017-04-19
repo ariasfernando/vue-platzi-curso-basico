@@ -12,7 +12,7 @@
           <tr v-for="(component, componentId) in column.components">
             <td>
               <component :is="component.type" :component="component" :module-id="module.id" :column-id="columnId"
-                         :component-id="componentId"></component>
+                         :component-id="componentId" @set-component="setComponent"></component>
             </td>
           </tr>
         </table>
@@ -76,17 +76,22 @@
     methods: {
       elementDrop(e) {
         let colId = e.target.getAttribute('data-col');
-        let elType = e.dataTransfer.getData('element-type');
-        let Element = new defaultElements(elType);
+        let component = JSON.parse(e.dataTransfer.getData('component'));
 
-        this.module.structure.columns[colId].components.push(Element);
+        this.module.structure.columns[colId].components.push(component);
 
-        let indexOf = this.module.structure.columns[colId].components.indexOf(Element);
-        this.setComponent(this.module.structure.columns[colId].components[indexOf]);
+        let indexOf = this.module.structure.columns[colId].components.indexOf(component);
+
+        let ref = {
+          columnId: colId,
+          componentId: indexOf
+        };
+
+        this.setComponent(ref);
       },
-      setComponent(component) {
+      setComponent(ref) {
         console.log('[Module] Emit set-component');
-        this.$emit('set-component', component);
+        this.$emit('set-component', ref);
       }
     }
   };

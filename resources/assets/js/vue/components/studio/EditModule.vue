@@ -83,6 +83,11 @@
           <div class="col-xs-12">
             <module :module="module" @set-component="setCurrentComponent"></module>
           </div>
+
+          <div v-if="$route.query.debug" class="col-xs-12">
+            <br><br>
+            <pre>{{ module.structure.columns }}</pre>
+          </div>
         </div>
         <!-- END: Module Container -->
 
@@ -104,15 +109,19 @@
 </template>
 
 <script>
-  import moduleService from '../../services/module'
   import Module from '../common/Module.vue'
   import ComponentSettings from './ComponentSettings.vue'
+  import { defaultElements } from '../../resources'
 
   export default {
     name: 'EditModule',
+    computed: {
+      module() {
+        return this.$store.state.module.module
+      }
+    },
     data () {
       return {
-        module: {},
         ready: false,
         currentComponent: null
       }
@@ -123,27 +132,19 @@
     },
     methods: {
       loadModule() {
-        let moduleId = this.$route.params.id;
 
-        if (moduleId) {
-          moduleService.getModule(moduleId)
-            .then((response) => {
-              this.module = response.module;
-              this.ready = true;
-            })
-            .catch((error) => {
-              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
-            });
-        } else {
-          moduleService.newModule()
-            .then((response) => {
-              this.module = response;
-              this.ready = true;
-            })
-            .catch((error) => {
-              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
-            });
-        }
+        let data = {
+          moduleId: this.$route.params.id || undefined
+        };
+
+        this.$store.dispatch("module/getModuleData", data)
+          .then( response => {
+            this.loading = false;
+            this.ready = true;
+          }).catch( error => {
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+          });
+
       },
       setColumns(cols) {
         let numCols = this.module.structure.columns.length;
@@ -175,12 +176,13 @@
       setData(e) {
         let targetEl = e.target;
         let elType = targetEl.getAttribute('data-type');
+        let Element = new defaultElements(elType);
 
-        e.dataTransfer.setData("element-type", elType);
+        e.dataTransfer.setData("component", JSON.stringify(Element));
       },
-      setCurrentComponent(component) {
-        console.log('[EditModule] setCurrentComponent', component);
-        this.currentComponent = component;
+      setCurrentComponent(ref) {
+        this.currentComponent = this.module.structure.columns[ref.columnId].components[ref.componentId];
+        console.log(this.currentComponent);
       },
       changeMode(mode) {
         this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});

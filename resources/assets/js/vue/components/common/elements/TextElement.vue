@@ -84,7 +84,10 @@
       },
       setComponent() {
         console.log('[TextElement] Emit set-component');
-        this.$emit('set-component', this.component);
+        this.$emit('set-component', {
+          columnId: this.columnId,
+          componentId: this.componentId
+        });
       }
     }
   };

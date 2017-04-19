@@ -36,7 +36,7 @@
             <tbody v-if="ready">
             <tr v-for="(module, id) in modules" :data-module="id">
               <td :title="module.id">{{ module.id }}</td>
-              <td :title="name">{{ module.name }}</td>
+              <td :title="module.name">{{ module.name }}</td>
               <td class="text-right actions icons">
                 <router-link :to="'/' + id"><i class="glyphicon glyphicon-pencil"></i></router-link>
                 <a href="#" class="delete" title="Delete" @click="deleteModule(module.id)"><i

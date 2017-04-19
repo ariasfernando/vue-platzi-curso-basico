@@ -3,9 +3,9 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource/dist/vue-resource'
 import Toast from 'vue-easy-toast'
 import interceptors from './interceptors'
-import store from './store'
 import {studioModuleRoutes} from './router'
 import VeeValidate from 'vee-validate';
+import store from './store'
 
 Vue.use(Toast);
 Vue.use(VueResource);
