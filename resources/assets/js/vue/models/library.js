@@ -11,13 +11,18 @@ function Library(data = {}) {
   let config = data.config || {};
 
   this.config = {
-    templateWidth: config.templateWidth || "",
-    templateMobileWidth: config.templateMobileWidth || "",
-    templateBackgroundColor: config.templateBackgroundColor || "",
-    fontFamily: config.fontFamily || "",
-    fontSize: config.fontSize || "",
-    fontColor: config.fontColor || "",
-    lineHeight: config.lineHeight || ""
+    templateWidth: config.templateWidth || "660",
+    templateMobileWidth: config.templateMobileWidth || "480",
+    templateBackgroundColor: config.templateBackgroundColor || "#FFFFFF",
+    contentBackgroundColor: config.templateBackgroundColor || "#FFFFFF",
+    fontFamily: config.fontFamily || "Arial",
+    fontSize: config.fontSize || "14",
+    fontColor: config.fontColor || "#000000",
+    lineHeight: config.lineHeight || "18",
+    linkColor: config.linkColor || "#000000",
+    linkDecoration: config.linkDecoration || "underline",
+    externalCssLink: config.externalCssLink || "",
+    propietaryCss: config.propietaryCss || ""
   };
 
   let groups = [];
