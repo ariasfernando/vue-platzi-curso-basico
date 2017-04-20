@@ -1,5 +1,5 @@
 <template>
-  <section class="col-xs-12 library">
+  <div class="col-xs-12 library">
     <div class="row header">
       <div class="col-xs-10 header-col">
         <div class="col-xs-1 back vertical-center">
@@ -16,239 +16,245 @@
       </div>
     </div>
 
-    <div class="simple-text-config admin-library-form">
+    <div class="row">
+      <section v-if="ready" class="col-xs-12 section-container">
+        <div class="simple-text-config admin-library-form">
 
-      <form id="edit-library" action="/admin/library/edit" method="POST" v-if="ready" @submit.prevent="saveLibrary">
+          <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
 
-        <h4>General Settings</h4><hr>
-        <div class="row">
-          <!-- Field Name -->
-          <div class="col-md-6">
-            <label for="name">Name</label>
-            <p class="control">
-              <input v-model="library.name" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('name') }" name="name" type="text"
-                     placeholder="Enter name here.">
-              <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
-            </p>
-          </div>
+            <h4>General Settings</h4><hr>
+            <div class="row">
+              <!-- Field Name -->
+              <div class="col-md-6">
+                <label for="name">Name</label>
+                <p class="control">
+                  <input v-model="library.name" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('name') }" name="name" type="text"
+                         placeholder="Enter name here.">
+                  <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
+                </p>
+              </div>
 
-          <!-- Field Description -->
-          <div class="col-md-6">
-            <label for="description">Description</label>
-            <p class="control">
-              <input v-model="library.description" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('name') }" name="description" type="text"
-                     placeholder="Enter description here.">
-              <span v-show="errors.has('description')" class="help is-danger">{{ errors.first('description') }}</span>
-            </p>
-          </div>
-        </div>
+              <!-- Field Description -->
+              <div class="col-md-6">
+                <label for="description">Description</label>
+                <p class="control">
+                  <input v-model="library.description" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('name') }" name="description" type="text"
+                         placeholder="Enter description here.">
+                  <span v-show="errors.has('description')" class="help is-danger">{{ errors.first('description') }}</span>
+                </p>
+              </div>
+            </div>
 
-        <div class="row">
-          <!-- Field width -->
-          <div class="col-md-6">
-            <label for="templateWidth">Template width</label>
-            <p class="control">
-              <input v-model="library.config.templateWidth" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('templateWidth') }" name="templateWidth"
-                     type="text" placeholder="660">
-              <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth')
-                }}</span>
-            </p>
-          </div>
+            <div class="row">
+              <!-- Field width -->
+              <div class="col-md-6">
+                <label for="templateWidth">Template width</label>
+                <p class="control">
+                  <input v-model="library.config.templateWidth" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('templateWidth') }" name="templateWidth"
+                         type="text" placeholder="660">
+                  <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth')
+                    }}</span>
+                </p>
+              </div>
 
-          <!-- Field mobile-width -->
-          <div class="col-md-6">
-            <label for="templateMobileWidth">Template Mobile Width</label>
-            <p class="control">
-              <input v-model="library.config.templateMobileWidth" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('templateMobileWidth') }"
-                     name="templateMobileWidth" type="text" placeholder="480">
-              <span v-show="errors.has('templateMobileWidth')"
-                    class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
-            </p>
-          </div>
-        </div>
+              <!-- Field mobile-width -->
+              <div class="col-md-6">
+                <label for="templateMobileWidth">Template Mobile Width</label>
+                <p class="control">
+                  <input v-model="library.config.templateMobileWidth" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('templateMobileWidth') }"
+                         name="templateMobileWidth" type="text" placeholder="480">
+                  <span v-show="errors.has('templateMobileWidth')"
+                        class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
+                </p>
+              </div>
+            </div>
 
-        <div class="row">
-          <!-- Field background-color -->
-          <div class="col-md-6">
-            <label for="templateBackgroundColor">Template Background Color</label>
-            <p class="control">
-              <input v-model="library.config.templateBackgroundColor" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('templateBackgroundColor') }"
-                     name="templateBackgroundColor" type="text" placeholder="#FFFFFF">
-              <span v-show="errors.has('templateBackgroundColor')"
-                    class="help is-danger">{{ errors.first('templateBackgroundColor') }}</span>
-            </p>
-          </div>
+            <div class="row">
+              <!-- Field background-color -->
+              <div class="col-md-6">
+                <label for="templateBackgroundColor">Template Background Color</label>
+                <p class="control">
+                  <input v-model="library.config.templateBackgroundColor" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('templateBackgroundColor') }"
+                         name="templateBackgroundColor" type="text" placeholder="#FFFFFF">
+                  <span v-show="errors.has('templateBackgroundColor')"
+                        class="help is-danger">{{ errors.first('templateBackgroundColor') }}</span>
+                </p>
+              </div>
 
-          <!-- Field content-background-color -->
-          <div class="col-md-6">
-            <label for="contentBackgroundColor">Content Background Color</label>
-            <p class="control">
-              <input v-model="library.config.contentBackgroundColor" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('contentBackgroundColor') }"
-                     name="contentBackgroundColor" type="text" placeholder="#FFFFFF">
-              <span v-show="errors.has('contentBackgroundColor')"
-                    class="help is-danger">{{ errors.first('contentBackgroundColor') }}</span>
-            </p>
-          </div>
-        </div>
+              <!-- Field content-background-color -->
+              <div class="col-md-6">
+                <label for="contentBackgroundColor">Content Background Color</label>
+                <p class="control">
+                  <input v-model="library.config.contentBackgroundColor" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('contentBackgroundColor') }"
+                         name="contentBackgroundColor" type="text" placeholder="#FFFFFF">
+                  <span v-show="errors.has('contentBackgroundColor')"
+                        class="help is-danger">{{ errors.first('contentBackgroundColor') }}</span>
+                </p>
+              </div>
+            </div>
 
-        <div class="row">
-          <!-- Field font-family -->
-          <div class="col-md-6">
-            <label for="fontFamily">Font Family</label>
-            <p class="control">
-              <input v-model="library.config.fontFamily" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('fontFamily') }" name="fontFamily" type="text"
-                     placeholder="Arial, sans-serif">
-              <span v-show="errors.has('fontFamily')" class="help is-danger">{{ errors.first('fontFamily') }}</span>
-            </p>
-          </div>
+            <div class="row">
+              <!-- Field font-family -->
+              <div class="col-md-6">
+                <label for="fontFamily">Font Family</label>
+                <p class="control">
+                  <input v-model="library.config.fontFamily" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('fontFamily') }" name="fontFamily" type="text"
+                         placeholder="Arial, sans-serif">
+                  <span v-show="errors.has('fontFamily')" class="help is-danger">{{ errors.first('fontFamily') }}</span>
+                </p>
+              </div>
 
-          <!-- Field font-color -->
-          <div class="col-md-6">
-            <label for="fontColor">Font Color</label>
-            <p class="control">
-              <input v-model="library.config.fontColor" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('fontColor') }" name="fontColor" type="text"
-                     placeholder="#000000">
-              <span v-show="errors.has('fontColor')" class="help is-danger">{{ errors.first('fontColor') }}</span>
-            </p>
-          </div>
-        </div>
+              <!-- Field font-color -->
+              <div class="col-md-6">
+                <label for="fontColor">Font Color</label>
+                <p class="control">
+                  <input v-model="library.config.fontColor" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('fontColor') }" name="fontColor" type="text"
+                         placeholder="#000000">
+                  <span v-show="errors.has('fontColor')" class="help is-danger">{{ errors.first('fontColor') }}</span>
+                </p>
+              </div>
+            </div>
 
-        <div class="row">
-          <!-- Field font-size -->
-          <div class="col-md-6">
-            <label for="fontSize">Font Size</label>
-            <p class="control">
-              <input v-model="library.config.fontSize" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('fontSize') }" name="fontSize" type="text"
-                     placeholder="12">
-              <span v-show="errors.has('fontSize')" class="help is-danger">{{ errors.first('fontSize') }}</span>
-            </p>
-          </div>
+            <div class="row">
+              <!-- Field font-size -->
+              <div class="col-md-6">
+                <label for="fontSize">Font Size</label>
+                <p class="control">
+                  <input v-model="library.config.fontSize" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('fontSize') }" name="fontSize" type="text"
+                         placeholder="12">
+                  <span v-show="errors.has('fontSize')" class="help is-danger">{{ errors.first('fontSize') }}</span>
+                </p>
+              </div>
 
-          <!-- Field line-height -->
-          <div class="col-md-6">
-            <label for="lineHeight">Line Height</label>
-            <p class="control">
-              <input v-model="library.config.lineHeight" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('lineHeight') }" name="lineHeight" type="text"
-                     placeholder="14">
-              <span v-show="errors.has('lineHeight')" class="help is-danger">{{ errors.first('lineHeight') }}</span>
-            </p>
-          </div>
-        </div>
+              <!-- Field line-height -->
+              <div class="col-md-6">
+                <label for="lineHeight">Line Height</label>
+                <p class="control">
+                  <input v-model="library.config.lineHeight" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('lineHeight') }" name="lineHeight" type="text"
+                         placeholder="14">
+                  <span v-show="errors.has('lineHeight')" class="help is-danger">{{ errors.first('lineHeight') }}</span>
+                </p>
+              </div>
+            </div>
 
-        <div class="row">
-          <!-- Field background-color -->
-          <div class="col-md-6">
-            <label for="linkColor">Link Color</label>
-            <p class="control">
-              <input v-model="library.config.linkColor" v-validate="'required'"
-                     :class="{'input': true, 'is-danger': errors.has('linkColor') }"
-                     name="linkColor" type="text" placeholder="#FFFFFF">
-              <span v-show="errors.has('linkColor')"
-                    class="help is-danger">{{ errors.first('linkColor') }}</span>
-            </p>
-          </div>
+            <div class="row">
+              <!-- Field background-color -->
+              <div class="col-md-6">
+                <label for="linkColor">Link Color</label>
+                <p class="control">
+                  <input v-model="library.config.linkColor" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('linkColor') }"
+                         name="linkColor" type="text" placeholder="#FFFFFF">
+                  <span v-show="errors.has('linkColor')"
+                        class="help is-danger">{{ errors.first('linkColor') }}</span>
+                </p>
+              </div>
 
-          <!-- Field content-background-color -->
-          <div class="col-md-6">
-            <label for="linkDecoration">Link Decoration</label>
-            <p class="control">
-              <select v-model="library.config.linkDecoration">
-                <option>none</option>
-                <option>underline</option>
-              </select>
-            </p>
-          </div>
-        </div>
-
-        <div class="row">
-          <!-- Field background-color -->
-          <div class="col-md-12">
-            <label for="externalCssLink">External CSS Link</label>
-            <p class="control">
-              <input v-model="library.config.externalCssLink" name="linkColor" type="text" placeholder="http://www.example.com/css/styles.css">
-            </p>
-          </div>
-        </div>
-
-        <div class="row">
-          <!-- Field content-background-color -->
-          <div class="col-md-12">
-            <label for="propietaryCss">Propietary Styles</label>
-            <p class="control">
-              <textarea v-model="library.config.propietaryCss" rows="10" name="propietaryCss" type="text" placeholder=""></textarea>
-            </p>
-          </div>
-        </div>
-
-        <h4>Modules</h4>
-        <!-- Select modules -->
-        <div class="row">
-          <div class="col-md-12">
-            <br/>
-            <div id="modules-container">
-
-              <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name">
-
-                <div :id="'group-container-' + group.name">
-
-                  <label for="fontFamily">Group Name</label>
-                  <p :class="{ 'control': true }">
-                    <input v-model="group.name" v-validate="'required'"
-                           :class="{'input': true, 'is-danger': errors.has('groupName-' + idx) }"
-                           :name="'modules[' + idx + '][name]'" type="text" placeholder="Enter group name">
-                    <span v-show="errors.has('groupName-' + idx)"
-                          class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
-                  </p>
-
-                  <select v-model="group.modules" :name="'modules[' + idx + '][modules]'" class="form-control" multiple>
-                    <option v-for="module in modules" :value="module" :selected="group.modules.indexOf(module) >= 0">
-                      {{ module }}
-                    </option>
+              <!-- Field content-background-color -->
+              <div class="col-md-6">
+                <label for="linkDecoration">Link Decoration</label>
+                <p class="control">
+                  <select v-model="library.config.linkDecoration">
+                    <option>none</option>
+                    <option>underline</option>
                   </select>
+                </p>
+              </div>
+            </div>
 
-                  <div v-if="group.name === 'default'" class="sep">
-                    <br/><br/>
-                  </div>
+            <div class="row">
+              <!-- Field background-color -->
+              <div class="col-md-12">
+                <label for="externalCssLink">External CSS Link</label>
+                <p class="control">
+                  <input v-model="library.config.externalCssLink" name="linkColor" type="text" placeholder="http://www.example.com/css/styles.css">
+                </p>
+              </div>
+            </div>
 
-                  <div v-else class="group-remove-container">
-                    <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)"></span>
-                    <hr/>
+            <div class="row">
+              <!-- Field content-background-color -->
+              <div class="col-md-12">
+                <label for="propietaryCss">Propietary Styles</label>
+                <p class="control">
+                  <textarea v-model="library.config.propietaryCss" rows="10" name="propietaryCss" type="text" placeholder=""></textarea>
+                </p>
+              </div>
+            </div>
+
+            <h4>Modules</h4>
+            <!-- Select modules -->
+            <div class="row">
+              <div class="col-md-12">
+                <br/>
+                <div id="modules-container">
+
+                  <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name">
+
+                    <div :id="'group-container-' + group.name">
+
+                      <label for="fontFamily">Group Name</label>
+                      <p :class="{ 'control': true }">
+                        <input v-model="group.name" v-validate="'required'"
+                               :class="{'input': true, 'is-danger': errors.has('groupName-' + idx) }"
+                               :name="'modules[' + idx + '][name]'" type="text" placeholder="Enter group name">
+                        <span v-show="errors.has('groupName-' + idx)"
+                              class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
+                      </p>
+
+                      <select v-model="group.modules" :name="'modules[' + idx + '][modules]'" class="form-control" multiple>
+                        <option v-for="module in modules" :value="module" :selected="group.modules.indexOf(module) >= 0">
+                          {{ module }}
+                        </option>
+                      </select>
+
+                      <div v-if="group.name === 'default'" class="sep">
+                        <br/><br/>
+                      </div>
+
+                      <div v-else class="group-remove-container">
+                        <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)"></span>
+                        <hr/>
+                      </div>
+
+                    </div>
                   </div>
 
                 </div>
               </div>
-
             </div>
-          </div>
-        </div>
 
-        <div class="row">
-          <div class="col-md-12">
-            <button class="btn btn-success center-block btn-add-group" @click.prevent="addGroup">Add Group</button>
-            <br>
-          </div>
-        </div>
+            <div class="row">
+              <div class="col-md-12">
+                <button class="btn btn-success center-block btn-add-group" @click.prevent="addGroup">Add Group</button>
+                <br>
+              </div>
+            </div>
 
-        <!-- Input submit  -->
-        <div class="row">
-          <div class="col-md-12">
-            <button type="submit" class="btn btn-success pull-right submit-config hidden" :disabled="errors.any()">Submit
-            </button>
-          </div>
+            <!-- Input submit  -->
+            <div class="row">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-success pull-right submit-config hidden" :disabled="errors.any()">Submit
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-      </form>
+      </section>
     </div>
-  </section>
+
+
+  </div>
 
 </template>
 
@@ -474,13 +480,15 @@
       }
     }
 
+    .section-container {
+      background-color: #FFFFFF;
+    }
 
     .admin-library-form {
       box-sizing: border-box;
       position: relative;
       padding: 15px;
       margin: 0 auto;
-      max-width: 90%;
       background-color: #ffffff;
       border-radius: 10px;
     }

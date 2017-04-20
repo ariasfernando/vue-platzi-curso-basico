@@ -11,7 +11,7 @@
 
 @section('content')
 
-	<div class="col-xs-12" id="<?php echo $defaultDataPagination["view_name"]."-container"; ?>">
+	<div class="col-xs-12 admin-libraries-container" id="<?php echo $defaultDataPagination["view_name"]."-container"; ?>">
         <router-view :libraries="{{ htmlentities( json_encode($libraries), ENT_QUOTES, 'UTF-8' ) }}"></router-view>
 	</div>
 
