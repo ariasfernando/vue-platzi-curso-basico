@@ -39,10 +39,7 @@
               <div class="col-md-6">
                 <label for="description">Description</label>
                 <p class="control">
-                  <input v-model="library.description" v-validate="'required'"
-                         :class="{'input': true, 'is-danger': errors.has('name') }" name="description" type="text"
-                         placeholder="Enter description here.">
-                  <span v-show="errors.has('description')" class="help is-danger">{{ errors.first('description') }}</span>
+                  <input v-model="library.description" name="description" type="text" placeholder="Enter description here.">
                 </p>
               </div>
             </div>

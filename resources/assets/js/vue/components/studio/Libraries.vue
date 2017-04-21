@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" v-if="libraries.length">
       <div class="col-xs-12">
         <h2 class="crimson italic">Libraries list</h2>
 
