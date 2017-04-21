@@ -1,4 +1,4 @@
-<?php $main_class = (strpos($view_name,'login') !== false)? "base-auth-login" : "base-admin studio"; ?>
+<?php $main_class = (strpos($view_name,'login') !== false)? "base-auth-login" : "base-admin"; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +24,8 @@
 		@section('header')
 			@include('base.admin.partials.header')
 		@show
+
+    @include('base.admin.partials.sidebar')
 
 		<div class="admin-container">
 			{{-- HEADER --}}
