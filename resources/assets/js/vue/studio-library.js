@@ -5,7 +5,7 @@ import Toast from 'vue-easy-toast'
 import interceptors from './interceptors'
 import store from './store'
 import {studioLibraryRoutes} from './router'
-import VeeValidate from 'vee-validate';
+import VeeValidate from 'vee-validate'
 
 Vue.use(Toast);
 Vue.use(VueResource);

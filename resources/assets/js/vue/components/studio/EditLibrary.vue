@@ -10,7 +10,7 @@
       </div>
 
       <div class="col-xs-2 header-col">
-        <div class="vertical-center">
+        <div class="vertical-center pull-right">
           <a class="btn btn-continue" href="#" @click.prevent="saveLibrary" :disabled="errors.any()">Submit<i class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
@@ -77,25 +77,28 @@
               <!-- Field background-color -->
               <div class="col-md-6">
                 <label for="templateBackgroundColor">Template Background Color</label>
-                <p class="control">
-                  <input v-model="library.config.templateBackgroundColor" v-validate="'required'"
-                         :class="{'input': true, 'is-danger': errors.has('templateBackgroundColor') }"
-                         name="templateBackgroundColor" type="text" placeholder="#FFFFFF">
-                  <span v-show="errors.has('templateBackgroundColor')"
-                        class="help is-danger">{{ errors.first('templateBackgroundColor') }}</span>
-                </p>
+                <div class="control">
+                  <div id="templateBackgroundColor" class="input-group colorpicker-component cp">
+                      <input type="text" class="form-control" v-model="library.config.templateBackgroundColor" v-validate="'required'" name="templateBackgroundColor" :class="{'input': true, 'is-danger': errors.has('templateBackgroundColor') }" placeholder="#FFFFFF"/>
+                      <span class="input-group-addon"><i :style="'background-color:' + library.config.templateBackgroundColor"></i></span>
+                  </div>
+
+                  <span v-show="errors.has('templateBackgroundColor')" class="help is-danger">{{ errors.first('templateBackgroundColor') }}</span>
+                </div>
               </div>
 
               <!-- Field content-background-color -->
               <div class="col-md-6">
                 <label for="contentBackgroundColor">Content Background Color</label>
-                <p class="control">
-                  <input v-model="library.config.contentBackgroundColor" v-validate="'required'"
-                         :class="{'input': true, 'is-danger': errors.has('contentBackgroundColor') }"
-                         name="contentBackgroundColor" type="text" placeholder="#FFFFFF">
+                <div class="control">
+                  <div id="contentBackgroundColor" class="input-group colorpicker-component cp">
+                      <input type="text" class="form-control" v-model="library.config.contentBackgroundColor" v-validate="'required'" name="contentBackgroundColor" :class="{'input': true, 'is-danger': errors.has('contentBackgroundColor') }" placeholder="#FFFFFF"/>
+                      <span class="input-group-addon"><i :style="'background-color:' + library.config.contentBackgroundColor"></i></span>
+                  </div>
+
                   <span v-show="errors.has('contentBackgroundColor')"
                         class="help is-danger">{{ errors.first('contentBackgroundColor') }}</span>
-                </p>
+                </div>
               </div>
             </div>
 
@@ -114,12 +117,14 @@
               <!-- Field font-color -->
               <div class="col-md-6">
                 <label for="fontColor">Font Color</label>
-                <p class="control">
-                  <input v-model="library.config.fontColor" v-validate="'required'"
-                         :class="{'input': true, 'is-danger': errors.has('fontColor') }" name="fontColor" type="text"
-                         placeholder="#000000">
+                <div class="control">
+                  <div id="fontColor" class="input-group colorpicker-component cp">
+                      <input type="text" class="form-control" v-model="library.config.fontColor" v-validate="'required'" name="fontColor" :class="{'input': true, 'is-danger': errors.has('fontColor') }" placeholder="#000000"/>
+                      <span class="input-group-addon"><i :style="'background-color:' + library.config.fontColor"></i></span>
+                  </div>
+
                   <span v-show="errors.has('fontColor')" class="help is-danger">{{ errors.first('fontColor') }}</span>
-                </p>
+                </div>
               </div>
             </div>
 
@@ -148,19 +153,20 @@
             </div>
 
             <div class="row">
-              <!-- Field background-color -->
+              <!-- Field link-color -->
               <div class="col-md-6">
                 <label for="linkColor">Link Color</label>
-                <p class="control">
-                  <input v-model="library.config.linkColor" v-validate="'required'"
-                         :class="{'input': true, 'is-danger': errors.has('linkColor') }"
-                         name="linkColor" type="text" placeholder="#FFFFFF">
-                  <span v-show="errors.has('linkColor')"
-                        class="help is-danger">{{ errors.first('linkColor') }}</span>
-                </p>
+                <div class="control">
+                  <div id="linkColor" class="input-group colorpicker-component cp">
+                      <input type="text" class="form-control" v-model="library.config.linkColor" v-validate="'required'" name="linkColor" :class="{'input': true, 'is-danger': errors.has('linkColor') }" placeholder="#000000"/>
+                      <span class="input-group-addon"><i :style="'background-color:' + library.config.linkColor"></i></span>
+                  </div>
+
+                  <span v-show="errors.has('linkColor')" class="help is-danger">{{ errors.first('linkColor') }}</span>
+                </div>
               </div>
 
-              <!-- Field content-background-color -->
+              <!-- Field link-decoration -->
               <div class="col-md-6">
                 <label for="linkDecoration">Link Decoration</label>
                 <p class="control">
@@ -173,7 +179,7 @@
             </div>
 
             <div class="row">
-              <!-- Field background-color -->
+              <!-- Field external-link -->
               <div class="col-md-12">
                 <label for="externalCssLink">External CSS Link</label>
                 <p class="control">
@@ -183,7 +189,7 @@
             </div>
 
             <div class="row">
-              <!-- Field content-background-color -->
+              <!-- Field propietary styles -->
               <div class="col-md-12">
                 <label for="propietaryCss">Propietary Styles</label>
                 <p class="control">
@@ -314,17 +320,19 @@
               }
             })
             .catch((error) => {
-              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+              this.$root.$toast('Oops! There was an error', {className: 'et-warn'});
             });
         } else {
           libraryService.createLibrary(formData)
             .then((response) => {
               if (response.message === 'SUCCESS') {
                 window.location.href = "/admin/library";
+              } else if ( response.message === 'ERROR_EXISTS' ) {
+                this.$root.$toast('Library already exists', {className: 'et-warn'});
               }
             })
             .catch((error) => {
-              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+                this.$root.$toast('Oops! There was an error', {className: 'et-warn'});
             });
         }
       },
@@ -507,6 +515,13 @@
 
     .is-danger {
       color: red;
+    }
+
+    .input-group-addon i {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      vertical-align: text-top;
     }
   }
 </style>

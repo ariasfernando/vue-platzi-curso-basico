@@ -142,21 +142,22 @@ gulp.task('elixir-scripts', function () {
             // === Compile Vendor and Application scripts to library.js ===
             .scripts(
                 [
-                    //'bower/jquery/dist/jquery.min.js',
-                    //'bower/jquery-ui/jquery-ui.min.js',
+                    'bower/jquery/dist/jquery.js',
+                    'bower/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js'
                     //'bower/bootstrap/dist/js/bootstrap.min.js',
+                    //'bower/jquery-ui/jquery-ui.min.js',
                     //'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
                     //'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
                     // -- TinyMCE editor --
-                    'bower/tinymce/tinymce.js',
-                    'bower/tinymce/themes/modern/theme.js',
-                    'bower/tinymce/plugins/paste/plugin.js',
-                    'bower/tinymce/plugins/textcolor/plugin.js',
-                    'bower/tinymce/plugins/colorpicker/plugin.js',
-                    'bower/tinymce/plugins/lists/plugin.js',
-                    'bower/tinymce/plugins/autolink/plugin.js',
-                    'bower/tinymce/plugins/link/plugin.js',
-                    'bower/tinymce/plugins/advlist/plugin.js',
+                    // 'bower/tinymce/tinymce.js',
+                    // 'bower/tinymce/themes/modern/theme.js',
+                    // 'bower/tinymce/plugins/paste/plugin.js',
+                    // 'bower/tinymce/plugins/textcolor/plugin.js',
+                    // 'bower/tinymce/plugins/colorpicker/plugin.js',
+                    // 'bower/tinymce/plugins/lists/plugin.js',
+                    // 'bower/tinymce/plugins/autolink/plugin.js',
+                    // 'bower/tinymce/plugins/link/plugin.js',
+                    // 'bower/tinymce/plugins/advlist/plugin.js',
                     // -- Common scripts --
                     //'js/library/application-globals.js',
                     //'js/library/application-utils.js'
@@ -212,6 +213,13 @@ gulp.task('elixir-scripts', function () {
             .scripts(
                 ['js/plugins/*.js', 'js/plugins/**/*.js'],
                 jsDestinationPath + 'plugins.js',
+                assetsPath
+            )
+
+            // === Modules ===
+            .scripts(
+                ['../views/base/modules/**/*.js', 'js/library/modules-placeholder.js'],
+                jsDestinationPath + 'modules.js',
                 assetsPath
             )
 

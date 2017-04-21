@@ -18,5 +18,6 @@
 @endsection
 
 @section('footer-script')
+  <script src="{{ url( elixir('js/library-v2.js') ) }}"></script>
 	<script src="{{ url( elixir('js/studio-library.js') ) }}"></script>
 @stop

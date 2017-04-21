@@ -14,7 +14,8 @@
     "zxcvbn": "^4.3.0",
     "noty": "^2.3.8",
     "underscore": "^1.8.3",
-    "vue": "^2.0.5"
+    "vue": "^2.0.5",
+    "bootstrap-colorpicker": "^2.5.1"
   },
   "directory": "public/js/vendor",
   "folders": [
@@ -25,4 +26,3 @@
   "name": "enterprise-base",
   "timeout": 120000
 }
-
