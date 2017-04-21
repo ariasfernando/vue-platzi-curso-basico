@@ -92,6 +92,17 @@ class LibraryController extends Controller
     }
 
     /**
+     * Search library list.
+     *
+     * @return array
+     */
+    public function postList(Request $request)
+    {
+        $result = $this->queryConstructor($request);
+           return $result['libraries'];    
+    }
+
+    /**
      * Library create view.
      *
      * @return View

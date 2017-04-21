@@ -15,32 +15,25 @@
 
         <div class="table-responsive">
           <table width="100%" border="0" cellpadding="0" cellspacing="0" id="admin-library"
-                 class="table table-bordered table-striped sortable data-list">
+                 class="table table-bordered table-striped sortable data-list" v-bind:class="{ loading: loading }">
             <thead>
             <tr>
-              <th class="sortable">
-                <a href="#" class="sortable-option sort-order-desc" id="name" data-order-field="name">
-                  Name
-                  <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-                </a>
+              <th>
+                Name
               </th>
-              <th class="sortable">
-                <a href="#" class="sortable-option sort-order-desc" id="email" data-order-field="description">
-                  Description
-                  <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-                </a>
+              <th>
+                Description
               </th>
-              <th width="150" class="sortable">
-                <a href="#" class="sortable-option sort-order-desc" id="created_at" data-order-field="modules">
-                  Modules
-                  <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-                </a>
+              <th width="150">
+                Modules
               </th>
-              <th width="150" class="sortable">
-                <a href="#" class="sortable-option sort-order-desc" id="created_at" data-order-field="created_at">
-                  Create Date
-                  <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-                </a>
+              <th width="150">
+                <column-sort
+                field="created_at"
+                title="Create Date"
+                :sort="sortKey"
+                :reverse="reverse"
+                v-on:change-sort="sortBy"></column-sort>
               </th>
               <th width="150" class="bold">Actions</th>
             </tr>
@@ -67,6 +60,11 @@
             </tr>
             </tbody>
           </table>
+            <pagination
+            :current-page="libraries.current_page"
+            :last-page="libraries.last_page"
+            :max-pages="10"
+            v-on:change-page="changePage"></pagination>
         </div>
       </div>
     </div>
@@ -78,10 +76,29 @@
 
 <script>
   import libraryService from '../../services/library'
+  import Pagination from '../common/Pagination.vue'
+  import ColumnSort from '../common/ColumnSort.vue'
 
   export default {
     name: 'Libraries',
-    props: ['libraries'],
+    data: function () {
+      return {
+        libraries: {},
+        sortKey: 'created_at',
+        reverse: false,
+        pagination: {
+          page: 1,
+          sortBy: '',
+          direction: ''
+        },
+        loading: false
+
+      }
+    },
+    components: {
+      Pagination,
+      ColumnSort
+    }, 
     methods: {
       deleteLibrary (libraryId) {
         if (confirm("Are you sure?")) {
@@ -95,7 +112,42 @@
               this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
             });
         }
-      }
+      },
+      sortBy: function (sortKey) {
+        this.reverse = (this.sortKey == sortKey) ? !this.reverse : false;
+        this.sortKey = sortKey;
+        this.pagination.sortBy = sortKey;
+        this.pagination.direction = this.reverse == true ? 'ASC' : 'DESC';
+        if (this.sortKey != sortKey) {
+          this.pagination.page = 1;
+        }
+        this.fetchLibraries();
+      },
+      changePage (page) {
+        this.pagination.page = page;
+        this.fetchLibraries();
+      },
+      fetchLibraries () {
+        this.loading = true;
+        let data = {
+          page: this.pagination.page,
+          order_field: this.pagination.sortBy,
+          order_type: this.pagination.direction,
+        };
+
+        libraryService.fetchLibraries(data)
+          .then((response) => {
+            this.libraries = response;
+            this.ready = true;
+            this.loading = false;
+          })
+          .catch((error) => {
+            this.$root.$toast(error, {className: 'et-warn'});
+          });
+      },
+    },
+    created () {
+      this.fetchLibraries();
     }
   };
 </script>

@@ -58,5 +58,13 @@ export default {
     })
       .then((response) => Promise.resolve(response.body))
       .catch((error) => Promise.reject(error));
+  },
+
+  fetchLibraries (data) {
+    let url = Application.globals.baseUrl + '/admin/library/list';
+
+    return Vue.http.post(url,data)
+      .then((response) => Promise.resolve(response.body))
+      .catch((error) => Promise.reject(error));
   }
 }
