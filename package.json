@@ -5,10 +5,11 @@
     "dev": "gulp watch"
   },
   "devDependencies": {
-    "gulp-livereload": "3.8.0",
+    "elixir-jshint": "^1.2.3",
+    "eslint": "^3.19.0",
     "front-matter": "^2.1.0",
     "gulp-data": "^1.2.1",
-    "elixir-jshint": "^1.2.3"
+    "gulp-livereload": "3.8.0"
   },
   "name": "enterprise-base",
   "description": "[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework) [![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework) [![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework) [![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework) [![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)",
