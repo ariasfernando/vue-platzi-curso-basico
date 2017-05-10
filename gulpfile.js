@@ -20,8 +20,14 @@ let fm = require('front-matter');
 let path = require('path');
 let gulpsync = require('gulp-sync')(gulp);
 let notify = require('gulp-notify');
+
 require('elixir-jshint');
 require('laravel-elixir-vueify');
+
+let mocha = require('gulp-mocha');
+let generateSuite = require("gulp-mocha-browserify-sweet");
+let browserify = require("gulp-browserify");
+let concat = require("gulp-concat");
 
 /*
  | --------------------------------------------------------------------------
@@ -353,6 +359,17 @@ gulp.task('validate-fonts', () => {
         }))
 });
 
+gulp.task('test', function() {
+  return gulp.src('./tests/js/*.js', {read: false})
+    .pipe(generateSuite())
+    .pipe(concat('bundle.js'))
+    .pipe(gulp.dest('./tmp'))
+    .pipe(mocha({
+        compilers: 'js:babel-register'
+    }))
+    .on('error', gutil.log);
+});
+
 /*
  | --------------------------------------------------------------------------
  | Gulp Tasks
@@ -361,3 +378,6 @@ gulp.task('validate-fonts', () => {
 gulp.task('jshint', ['elixir-jshint']);
 gulp.task('watch', gulpsync.sync(['st-custom-tasks', 'elixir-less', 'elixir-scripts','elixir-copy-bower','elixir-version']));
 gulp.task('default', gulpsync.sync(['validate-fonts', 'elixir-less', 'elixir-scripts','elixir-copy-bower','elixir-version']));
+gulp.task('watch-test', function () {
+    gulp.watch(['tests/js/*.js'], ['test']);
+});

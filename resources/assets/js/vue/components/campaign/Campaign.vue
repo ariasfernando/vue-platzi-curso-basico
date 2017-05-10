@@ -47,7 +47,7 @@
       },
       loadCampaign() {
         let _this = this;
-
+        // TODO: Pass campaignId HERE
         this.$store.dispatch("getCampaignData").then(response => {
           this.loading = false;
           this.dataLoaded = true;

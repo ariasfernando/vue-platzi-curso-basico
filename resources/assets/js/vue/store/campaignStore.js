@@ -44,6 +44,7 @@ const mutations = {
 };
 
 const actions = {
+  // TODO: Pass campaignId HERE
   getCampaignData (context) {
     return campaignService.getCampaign()
       .then((response) => context.commit('loadCampaignData', response))

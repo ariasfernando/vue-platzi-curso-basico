@@ -4,14 +4,11 @@ import Campaign from '../models/campaign'
 
 export default {
   getCampaign() {
+    // TODO: Get campaignId from arguments
     let campaignId = Application.globals.campaignId;
     let url = Application.globals.baseUrl + '/campaign/edit/' + campaignId + '?json';
-    let data = {
-      library_name: Application.globals.library_name,
-      campaign_id: Application.globals.campaignId
-    };
 
-    return Vue.http.get(url, data)
+    return Vue.http.get(url)
       .then((response) => Promise.resolve(response.body))
       .catch((error) => Promise.reject(error));
   },
