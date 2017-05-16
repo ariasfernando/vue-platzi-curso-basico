@@ -17,7 +17,7 @@ $module_params['data']['size'] = ( isset($module_params['data']['size']) ) ? $mo
 ?>
 
 <tr data-params='<?php echo htmlentities( json_encode($module_params), ENT_QUOTES, 'UTF-8' ); ?>'>
-	<td align="center" style="vertical-align:middle;" bgcolor="{{ $background_color }}" style="background-color: {{ $background_color }};" class="st-add-icon-config">
+	<td align="center" style="vertical-align:middle;" bgcolor="{{ $background_color }}" style="background-color: {{ $background_color }};" class="st-add-icon-config st-spacer-hover">
 		<table style="width:100%!important;"
 			   width="100%"
 			   cellpadding="0"

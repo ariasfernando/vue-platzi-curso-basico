@@ -4,6 +4,8 @@ namespace Stensul\Console\Commands\User;
 
 use Stensul\Models\User;
 use Illuminate\Console\Command;
+use Activity;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class Restore extends Command
 {
@@ -34,6 +36,10 @@ class Restore extends Command
             } else {
                 $user_data = User::where('email', '=', $email)->firstOrFail();
                 $user_data->restore();
+                $user_data->status = "enabled";
+                $user_data->unset('deleted_at');
+                $user_data->save();
+                Activity::log('User restored', array('properties' => ['user_id' => new ObjectId($user_data->_id)]));
                 $this->info('The user '.$email.' was restored!');
             }
         } else {

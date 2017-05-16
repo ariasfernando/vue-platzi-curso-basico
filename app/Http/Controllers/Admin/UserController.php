@@ -3,6 +3,7 @@
 namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
+use Activity;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\User;
@@ -61,9 +62,9 @@ class UserController extends Controller
 
         if (!is_null($search_type) && !is_null($search_text)) {
             $users = User::where($search_type, $search_operator, $search_text)
-                ->orderBy($data_order_field, $data_order_type)->whereNull('deleted_at')->paginate((int) $data_page);
+                ->orderBy($data_order_field, $data_order_type)->where('status', '!=', 'deleted')->paginate((int) $data_page);
         } else {
-            $users = User::orderBy($data_order_field, $data_order_type)->whereNull('deleted_at')->paginate((int) $data_page);
+            $users = User::orderBy($data_order_field, $data_order_type)->where('status', '!=', 'deleted')->paginate((int) $data_page);
         }
 
         return [
@@ -187,7 +188,10 @@ class UserController extends Controller
     public function postDelete(Request $request)
     {
         $user = User::findOrFail($request->input("userId"));
+        $user->status = "deleted";
+        $user->save();
         $user->delete();
+        Activity::log('User deleted', array('properties' => ['user_id' => new ObjectId($request->input("userId"))]));
         return array("deleted" => $request->input("userId"));
     }
 }

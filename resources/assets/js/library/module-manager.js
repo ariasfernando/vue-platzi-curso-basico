@@ -55,9 +55,9 @@ var moduleManager = {
 
 			var module = this;
 
-			// If module name is the same as the last module added, only draw it.
-            if (module.viewContent != null && $(module.viewContent).data("params") && moduleName == $(module.viewContent).data("params").type) {
-				// Draw module on canvas
+            // If module name is the same as the last module added, only draw it.
+             if (module.viewContent != null && $(module.viewContent).data("params") && moduleName == $(module.viewContent).data("params").type && $(module.viewContent).data("duplicated")) {
+               // Draw module on canvas
                 module.drawOnCanvas(function () {
 					// init module plugins
 					module.initPlugins();
@@ -728,7 +728,7 @@ var moduleManager = {
                         // Function to execute when confirm is true.
                         onSubmit: function(){
                             // Remove module
-				module.deleteModule($deleteModule);
+			    module.deleteModule($deleteModule);
                         }
                     });
                     confirmModal.display();
@@ -739,7 +739,7 @@ var moduleManager = {
 			})
 			.on("click",'.action-duplicate', function(){
 				// Duplicate module 
-				var moduleToDuplicate = $(this).closest("[data-params]").data('params');
+				var moduleToDuplicate = $.extend($(this).closest("[data-params]").data('params'), {duplicated: true});
 				module.duplicateModule(moduleToDuplicate.type, moduleToDuplicate.file_parent, moduleToDuplicate.data);
 				return false;
 			})
