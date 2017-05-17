@@ -4,7 +4,9 @@ function Module(data = {}) {
 
   this.id = data.id || data.module_id || "";
   this.name = data.name || data.title || "";
+  this.class = data.class || "pkg";
   let style = data.style || {};
+
 
   this.structure = {
     style: {

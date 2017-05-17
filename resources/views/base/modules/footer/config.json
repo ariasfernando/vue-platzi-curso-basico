@@ -1,9 +1,0 @@
-{
-	"action": "add",
-	"app_name": "base",
-	"level": "single",
-	"title": "Footer",
-	"module_id": "footer",
-	"file_parent": "base",
-	"class": "pkg"
-}

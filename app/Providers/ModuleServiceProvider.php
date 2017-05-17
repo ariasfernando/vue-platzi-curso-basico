@@ -44,22 +44,22 @@ class ModuleServiceProvider extends ServiceProvider
     * Get all modules config.
     *
     * @return array
+    * TODO: Get dynamic modules from db
     */
     public static function getModuleList()
     {
+         $modules = [];
 
-         $files = \File::allFiles(self::$module_dir);
+         // Load from module folder
+        $files = \File::allFiles(self::$module_dir);
 
-         // Get legacy modules.
-         $modules = \Config::get('modules');
-
-         // Find new modules.
         foreach ($files as $file) {
             if ($file->isFile() && $file->getFilename() === 'config.json') {
                  $config = json_decode(file_get_contents($file->getPathName()), true);
                  $modules[$config['module_id']] = $config;
             }
         }
+
         ksort($modules);
         return $modules;
     }

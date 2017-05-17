@@ -1,1 +1,0 @@
-{{ strip_tags($module['data']['text0']) }}
