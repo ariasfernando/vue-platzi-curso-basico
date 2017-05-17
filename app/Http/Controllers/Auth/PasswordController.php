@@ -78,7 +78,7 @@ class PasswordController extends Controller
 
         $user_auth = User::where('email', '=', $data_params["email"])->first();
 
-        if (is_null($user_auth['deleted_at'])) {
+        if (is_null($user_auth['status']) || $user_auth['status'] != "deleted") {
             $response = $this->passwords->sendResetLink($data_params, function ($message) {
                 $message->subject($this->getEmailSubject());
             });

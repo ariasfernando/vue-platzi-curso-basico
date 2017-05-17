@@ -4,6 +4,8 @@ namespace Stensul\Console\Commands\User;
 
 use Stensul\Models\User;
 use Illuminate\Console\Command;
+use Activity;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class Delete extends Command
 {
@@ -33,7 +35,10 @@ class Delete extends Command
                 $this->error('The email does not exist.');
             } else {
                 $user_data = User::where('email', '=', $email)->firstOrFail();
+                $user_data->status = "deleted";
+                $user_data->save();
                 $user_data->delete();
+                Activity::log('User deleted', array('properties' => ['user_id' => new ObjectId($user_data->_id)]));
                 $this->info('The user '.$email.' was deleted!');
             }
         } else {
