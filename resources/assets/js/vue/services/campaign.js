@@ -1,38 +1,61 @@
-import Vue from 'vue/dist/vue'
+import Q from 'q'
+import request from '../utils/request'
+import endpoints from '../resources/endpoints'
 import store from '../store'
 import Campaign from '../models/campaign'
 
 export default {
-  getCampaign() {
-    // TODO: Get campaignId from arguments
-    let campaignId = Application.globals.campaignId;
-    let url = Application.globals.baseUrl + '/campaign/edit/' + campaignId + '?json';
+  getCampaign(campaignId) {
+    let deferred = Q.defer();
+    let endpoint = endpoints.campaign.getCampaign;
+    let params = {
+      search: { campaignId: campaignId },
+      endpoint: endpoints.campaign.getCampaign
+    };
 
-    return Vue.http.get(url)
-      .then((response) => Promise.resolve(response.body))
-      .catch((error) => Promise.reject(error));
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body)
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   },
 
   saveCampaign() {
-    let url = Application.globals.baseUrl + '/campaign/save';
+    let endpoint = endpoints.campaign.getCampaign;
     let editedCampaign = this.getEditedData();
+    let deferred = Q.defer();
 
-    return Vue.http.post(url, {
+    let params = {
+      endpoint: endpoints.campaign.getCampaign,
       data: editedCampaign
-    })
-      .then((response) => Promise.resolve(response.body))
-      .catch((error) => Promise.reject(error));
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   },
 
   cloneCampaign(campaignId) {
-    let url = Application.globals.baseUrl + '/campaign/clone';
-    let data = {
-      campaign_id: campaignId
+    let endpoint = endpoints.campaign.cloneCampaign;
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoints.campaign.cloneCampaign,
+      data: {
+        campaign_id: campaignId
+      }
     };
 
-    return Vue.http.post(url, data)
-      .then((response) => Promise.resolve(response.body))
-      .catch((error) => Promise.reject(error));
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
   },
 
   getEditedData() {

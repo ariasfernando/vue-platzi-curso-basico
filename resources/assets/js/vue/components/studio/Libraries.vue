@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="row" v-if="libraries.length">
+    <div class="row" v-if="ready && libraries.data.length">
       <div class="col-xs-12">
         <h2 class="crimson italic">Libraries list</h2>
 
@@ -78,6 +78,7 @@
   import libraryService from '../../services/library'
   import Pagination from '../common/Pagination.vue'
   import ColumnSort from '../common/ColumnSort.vue'
+  import _ from 'underscore'
 
   export default {
     name: 'Libraries',
@@ -86,6 +87,7 @@
         libraries: {},
         sortKey: 'created_at',
         reverse: false,
+        ready: false,
         pagination: {
           page: 1,
           sortBy: '',
@@ -104,9 +106,18 @@
         if (confirm("Are you sure?")) {
           libraryService.deleteLibrary(libraryId)
             .then((response) => {
-              if (response.deleted === libraryId) {
-                window.location.reload();
+              if (response.deleted !== libraryId) {
+                this.$root.$toast('There was an error trying to delete library: ' + libraryId, {className: 'et-warn'});
+                return false;
               }
+
+              _.each(this.libraries.data, (library) => {
+                if ( library._id === response.deleted ) {
+                  let i = this.libraries.data.indexOf(library);
+                  this.libraries.data.splice(i, 1);
+                  this.$root.$toast('Item deleted.', {className: 'et-info'});
+                }
+              });
             })
             .catch((error) => {
               this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
@@ -114,11 +125,11 @@
         }
       },
       sortBy: function (sortKey) {
-        this.reverse = (this.sortKey == sortKey) ? !this.reverse : false;
+        this.reverse = (this.sortKey === sortKey) ? !this.reverse : false;
         this.sortKey = sortKey;
         this.pagination.sortBy = sortKey;
-        this.pagination.direction = this.reverse == true ? 'ASC' : 'DESC';
-        if (this.sortKey != sortKey) {
+        this.pagination.direction = this.reverse === true ? 'ASC' : 'DESC';
+        if (this.sortKey !== sortKey) {
           this.pagination.page = 1;
         }
         this.fetchLibraries();

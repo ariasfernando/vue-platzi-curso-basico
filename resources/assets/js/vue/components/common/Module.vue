@@ -62,7 +62,7 @@
   import ButtonElement from './elements/ButtonElement.vue'
   import ImageElement from './elements/ImageElement.vue'
   import DividerElement from './elements/DividerElement.vue'
-  import { defaultElements } from '../../resources'
+  import { defaultElements } from '../../resources/elements'
 
   module.exports = {
     name: 'Module',

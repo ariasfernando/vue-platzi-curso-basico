@@ -299,7 +299,7 @@
             });
         }
       },
-      saveLibrary(event) {
+      saveLibrary() {
 
         let formData = {
           name: this.library.name,

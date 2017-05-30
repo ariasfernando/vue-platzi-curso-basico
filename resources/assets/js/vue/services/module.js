@@ -1,64 +1,103 @@
-import Vue from 'vue/dist/vue'
-import Module from '../models/module'
+import Q from 'q'
+import request from '../utils/request'
 import _ from 'underscore'
+import Module from '../models/module'
+import endpoints from '../resources/endpoints'
 
 export default {
   getModule(moduleId) {
-    let url = Application.globals.baseUrl + '/admin/module/edit?moduleId=' + moduleId;
+    let endpoint = endpoints.module.getModule;
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoint,
+      search: { moduleId: moduleId }
+    };
 
-    return Vue.http.get(url)
-      .then(function (response) {
-        return Promise.resolve({
-          library: new Module(response.body.module),
-          modules: response.body.modules
-        });
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve({
+        library: new Module(response.body.module),
+        modules: response.body.modules
       })
-      .catch((error) => Promise.reject(error));
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   },
 
   getAllModules() {
-    let url = Application.globals.baseUrl + '/admin/module/modules';
+    let endpoint = endpoints.module.getAllModules;
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoint
+    };
 
-    return Vue.http.get(url)
-      .then((response) => {
-        let modules = [];
-        _.each(response.body, function(v) {
-          let module = new Module(v);
-          modules.push(module);
-        });
-        return Promise.resolve(modules)
-      })
-      .catch((error) => Promise.reject(error));
+    request[endpoint.method](params).then((response) => {
+      let modules = [];
+      _.each(response.body, function(v) {
+        let module = new Module(v);
+        modules.push(module);
+      });
+
+      deferred.resolve(modules);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   },
 
   newModule() {
+    let deferred = Q.defer();
     let module = new Module();
-    return Promise.resolve(module);
+    deferred.resolve(module);
+    return deferred.promise;
   },
 
   saveModule(moduleJson) {
-    let url = Application.globals.baseUrl + '/admin/module/edit';
+    let endpoint = endpoints.module.saveModule();
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoint,
+      data: moduleJson
+    };
 
-    return Vue.http.post(url, moduleJson)
-      .then((response) => Promise.resolve(response.body))
-      .catch((error) => Promise.reject(error));
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
   },
 
   createModule(moduleJson) {
-    let url = Application.globals.baseUrl + '/admin/module/create';
+    let endpoint = endpoints.module.createModule();
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoint,
+      data: moduleJson
+    };
 
-    return Vue.http.post(url, moduleJson)
-      .then((response) => Promise.resolve(response.body))
-      .catch((error) => Promise.reject(error));
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
   },
 
   deleteModule(moduleId) {
-    let url = Application.globals.baseUrl + '/admin/module/delete';
+    let endpoint = endpoints.module.deleteModule();
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoint,
+      data: {
+        moduleId: moduleId
+      }
+    };
 
-    return Vue.http.post(url, {
-      moduleId: moduleId
-    })
-      .then((response) => Promise.resolve(response.body))
-      .catch((error) => Promise.reject(error));
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
   }
 }

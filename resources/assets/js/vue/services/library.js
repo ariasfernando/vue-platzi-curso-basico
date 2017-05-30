@@ -1,70 +1,121 @@
-import Vue from 'vue/dist/vue'
-import Library from '../models/library'
+import Q from 'q'
+import request from '../utils/request'
 import _ from 'underscore'
+import Library from '../models/library'
+import endpoints from '../resources/endpoints'
 
 export default {
   getLibrary(libraryId) {
-    let url = Application.globals.baseUrl + '/admin/library/edit?libraryId=' + libraryId;
+    let endpoint = endpoints.library.getLibrary;
+    let deferred = Q.defer();
+    let params = {
+      search: { libraryId: libraryId },
+      endpoint: endpoint
+    };
 
-    return Vue.http.get(url)
-      .then(function (response) {
-        return Promise.resolve({
-          library: new Library(response.body.library),
-          modules: response.body.modules
-        });
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve({
+        library: new Library(response.body.library),
+        modules: response.body.modules
       })
-      .catch((error) => Promise.reject(error));
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   },
 
   newLibrary() {
-    let url = Application.globals.baseUrl + '/admin/module/modules';
+    let endpoint = endpoints.library.newLibrary;
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoint
+    };
 
-    return Vue.http.get(url)
-      .then(function (response) {
-        let modules = [];
-        _.each(response.body, function (module, key) {
-          modules.push(key);
-        });
+    request[endpoint.method](params).then((response) => {
+      let modules = [];
+      _.each(response.body, function (module, key) {
+        modules.push(key);
+      });
 
-        return Promise.resolve({
-          library: new Library(),
-          modules: modules
-        });
-      })
-      .catch((error) => Promise.reject(error));
+      deferred.resolve({
+        library: new Library(),
+        modules: modules
+      });
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   },
 
   saveLibrary(formData) {
-    let url = Application.globals.baseUrl + '/admin/library/edit';
+    let endpoint = endpoints.library.saveLibrary;
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoint,
+      json: formData
+    };
 
-    return Vue.http.post(url, formData)
-      .then((response) => Promise.resolve(response.body))
-      .catch((error) => Promise.reject(error));
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body)
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   },
 
   createLibrary(formData) {
-    let url = Application.globals.baseUrl + '/admin/library/create';
+    let endpoint = endpoints.library.createLibrary;
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoint,
+      json: formData
+    };
 
-    return Vue.http.post(url, formData)
-      .then((response) => Promise.resolve(response.body))
-      .catch((error) => Promise.reject(error));
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body)
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   },
 
   deleteLibrary(libraryId) {
-    let url = Application.globals.baseUrl + '/admin/library/delete';
+    let endpoint = endpoints.library.deleteLibrary;
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoint,
+      json: {
+        libraryId: libraryId
+      }
+    };
 
-    return Vue.http.post(url, {
-      libraryId: libraryId
-    })
-      .then((response) => Promise.resolve(response.body))
-      .catch((error) => Promise.reject(error));
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body)
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   },
 
   fetchLibraries (data) {
-    let url = Application.globals.baseUrl + '/admin/library/list';
+    let endpoint = endpoints.library.fetchLibraries;
+    let deferred = Q.defer();
+    let params = {
+      endpoint: endpoint,
+      json: data
+    };
 
-    return Vue.http.post(url,data)
-      .then((response) => Promise.resolve(response.body))
-      .catch((error) => Promise.reject(error));
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body)
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   }
 }

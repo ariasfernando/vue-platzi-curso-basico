@@ -127,7 +127,6 @@ class LibraryController extends Controller
     {
         $library_data = Library::findOrFail($request->input("libraryId"))->toArray();
         $modules = array_keys(\StensulModule::getModuleList());
-        //$modules = array_combine($modules, $modules);
 
         $library_modules = [];
         if (count($library_data['modules'])) {
@@ -148,8 +147,6 @@ class LibraryController extends Controller
         ];
 
         return $params;
-
-        //return $this->renderView('base.admin.modals.library_form', array('params' => $params));
     }
 
     /**
@@ -160,6 +157,7 @@ class LibraryController extends Controller
     public function postEdit(Request $request)
     {
         $library = Library::findOrFail($request->input("libraryId"));
+        $library->name = $request->input("name");
         $library->description = $request->input("description");
         $library->modules = $modules = [];
         $library->config = $request->input("config");
@@ -181,6 +179,7 @@ class LibraryController extends Controller
         if ($library->config === '') {
             $library->config = null;
         }
+
         $library->save();
 
         return array("message" => "SUCCESS");

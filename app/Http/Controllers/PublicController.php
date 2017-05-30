@@ -50,4 +50,9 @@ class PublicController extends Controller
         $html = new Html($campaign);
         return $html->getBody();
     }
+
+    public function getMoco()
+    {
+        return "hola"
+    }
 }

@@ -111,7 +111,7 @@
 <script>
   import Module from '../common/Module.vue'
   import ComponentSettings from './ComponentSettings.vue'
-  import { defaultElements } from '../../resources'
+  import { defaultElements } from '../../resources/elements'
 
   export default {
     name: 'EditModule',

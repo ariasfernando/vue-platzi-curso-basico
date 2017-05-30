@@ -360,12 +360,16 @@ gulp.task('validate-fonts', () => {
 });
 
 gulp.task('test', function() {
+  process.env.TESTING = true;
+
+  console.log(process.env);
   return gulp.src('./tests/js/*.js', {read: false})
     .pipe(generateSuite())
     .pipe(concat('bundle.js'))
     .pipe(gulp.dest('./tmp'))
     .pipe(mocha({
-        compilers: 'js:babel-register'
+        compilers: 'js:babel-register',
+        timeout: 5000
     }))
     .on('error', gutil.log);
 });
@@ -379,5 +383,5 @@ gulp.task('jshint', ['elixir-jshint']);
 gulp.task('watch', gulpsync.sync(['st-custom-tasks', 'elixir-less', 'elixir-scripts','elixir-copy-bower','elixir-version']));
 gulp.task('default', gulpsync.sync(['validate-fonts', 'elixir-less', 'elixir-scripts','elixir-copy-bower','elixir-version']));
 gulp.task('watch-test', function () {
-    gulp.watch(['tests/js/*.js'], ['test']);
+    gulp.watch(['tests/js/*.js', 'resources/assets/js/vue/**'], ['test']);
 });
