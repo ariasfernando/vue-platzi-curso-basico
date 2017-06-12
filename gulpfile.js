@@ -1,5 +1,13 @@
 /*
  | --------------------------------------------------------------------------
+ | Disable notifier
+ | --------------------------------------------------------------------------
+ */
+
+ process.env.DISABLE_NOTIFIER = true;
+
+/*
+ | --------------------------------------------------------------------------
  | load .env (if exists)
  | --------------------------------------------------------------------------
  */
@@ -19,7 +27,6 @@ let data = require('gulp-data');
 let fm = require('front-matter');
 let path = require('path');
 let gulpsync = require('gulp-sync')(gulp);
-let notify = require('gulp-notify');
 
 require('elixir-jshint');
 require('laravel-elixir-vueify');
@@ -62,8 +69,6 @@ let jsAppFilePath = (file) => {
  | file for our application, as well as publishing vendor resources.
  |
  */
-
-process.env.DISABLE_NOTIFIER = true;
 
 elixir.config.cssOutput = 'public/css';
 elixir.config.sourcemaps = false;
