@@ -18,6 +18,7 @@ function requestResponse(method, params, options) {
   };
 
   request[method](options, function (error, response, body) {
+    // nnn
     response = response || undefined;
     let statusCode = (response && response.statusCode) ? response.statusCode : 500;
 
