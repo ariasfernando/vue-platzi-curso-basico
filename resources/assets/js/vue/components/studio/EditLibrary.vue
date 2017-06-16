@@ -19,7 +19,10 @@
     <div class="row">
       <section v-if="ready" class="col-xs-12 section-container">
         <div class="simple-text-config admin-library-form">
-
+          <div v-if="$route.query.debug" class="col-xs-12">
+            <br><br>
+            <pre>{{ library.config }}</pre>
+          </div>
           <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
 
             <h4>General Settings</h4><hr>
@@ -195,6 +198,30 @@
               </div>
             </div>
 
+            <div class="row">
+              <!-- Field Preheader -->
+              <label for="preheader" class="col-sm-4 control-label">Preheader</label>
+              <p class="control col-sm-8">
+                <toggle-button :value="library.config.preheader" :sync="true" :labels="true" @change="updateToggle('preheader')"></toggle-button>
+              </p>
+            </div>
+
+            <!-- Field Plain text -->
+            <div class="row">
+              <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
+              <p class="control col-sm-8">
+                <toggle-button :value="library.config.plainText" :sync="true" :labels="true" @change="updateToggle('plainText')"></toggle-button>
+              </p>
+            </div>
+
+            <div class="row">
+              <!-- Field ESP -->
+              <label for="preheader" class="col-sm-4 control-label">ESP</label>
+              <p class="control col-sm-8">
+                <toggle-button :value="library.config.esp" :sync="true" :labels="true" @change="updateToggle('esp')"></toggle-button>
+              </p>
+            </div>
+
             <h4>Modules</h4>
             <!-- Select modules -->
             <div class="row">
@@ -263,9 +290,13 @@
 
 <script>
   import libraryService from '../../services/library'
+  import ToggleButton from '../common/ToggleButton.vue'
 
   export default {
     name: 'EditLibrary',
+    components: {
+      ToggleButton
+    },
     data () {
       return {
         library: {},
@@ -274,6 +305,9 @@
       }
     },
     methods: {
+      updateToggle(element) {
+        this.library.config[element] = !this.library.config[element];
+      },
       loadLibrary() {
         let libraryId = this.$route.params.id;
 

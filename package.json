@@ -15,6 +15,9 @@
     "chai-as-promised": "^6.0.0",
     "elixir-jshint": "^1.2.3",
     "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
     "front-matter": "^2.1.0",
     "gulp-browserify": "^0.5.1",
     "gulp-data": "^1.2.1",
@@ -35,6 +38,7 @@
   "dependencies": {
     "browserify-fs": "^1.0.0",
     "dotenv": "^4.0.0",
+    "eslint-plugin-react": "^7.1.0",
     "fs": "0.0.1-security",
     "fs-web": "^1.0.1",
     "gulp": "^3.9.1",
