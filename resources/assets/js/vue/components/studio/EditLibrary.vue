@@ -178,6 +178,19 @@
               </div>
             </div>
 
+            <!-- Field padding -->
+            <div class="row">
+              <div class="col-md-6">
+                <label for="padding">Padding</label>
+                <div class="control">
+                  <div id="padding" class="input-group">
+                      <input type="text" class="form-control" v-model="library.config.padding" v-validate="'required'" name="padding" :class="{'input': true, 'is-danger': errors.has('padding') }" placeholder="10px"/>
+                  </div>
+                  <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
+                </div>
+              </div>
+            </div>
+
             <div class="row">
               <!-- Field external-link -->
               <div class="col-md-12">
