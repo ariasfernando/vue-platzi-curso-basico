@@ -28,14 +28,14 @@ test_vulnerabilities_composer:
 
 test_php:
   script:
-    - ci/vendor/bin/phpunit --coverage-html coverage/ --colors=never
+    - vendor/bin/phpunit --coverage-html coverage/ --colors=never
   artifacts:
     paths:
       - coverage/
 
 test_js:
   variables:
-    APP_NAME: "Base_v2"
+    APP_NAME: "Base"
   script:
     - gulp --production
 
