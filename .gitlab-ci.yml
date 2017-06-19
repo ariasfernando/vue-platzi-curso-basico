@@ -34,7 +34,7 @@ test_php:
 
 test_js:
   variables:
-    APP_NAME: "Base"
+    APP_NAME: "Base_v2"
   script:
     - bower install --allow-root
     - gulp --production
