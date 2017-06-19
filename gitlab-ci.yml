@@ -1,0 +1,51 @@
+image: "fanbridge/web:v2.0"
+
+cache:
+  paths:
+  - vendor/
+  - node_modules/
+
+before_script:
+  # js related
+  - npm install
+  # Install composer dependencies
+  - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
+  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - php -r "if (hash_file('SHA384', 'composer-setup.php') === file_get_contents('installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+  - php composer-setup.php
+  - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
+  - php composer.phar install
+  - wget http://get.sensiolabs.org/security-checker.phar
+  # Enable xdebug for code coverage
+  - yum install php70-php-pecl-xdebug.x86_64 -y
+  - ln -s /opt/remi/php70/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
+  - cp /etc/opt/remi/php70/php.d/15-xdebug.ini /etc/php.d/
+
+test_vulnerabilities_composer:
+  script:
+    - php security-checker.phar security:check composer.lock
+
+test_php:
+  script:
+    - ci/vendor/bin/phpunit --coverage-html coverage/ --colors=never
+  artifacts:
+    paths:
+      - coverage/
+
+test_js:
+  variables:
+    APP_NAME: "Base_v2"
+  script:
+    - bower install --allow-root
+    - gulp --production
+
+pages:
+  stage: deploy
+  dependencies:
+    - test_php
+  script:
+    - mv coverage/ public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
