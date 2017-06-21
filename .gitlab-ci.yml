@@ -5,8 +5,11 @@ services:
 
 cache:
   paths:
-  - vendor/
-  - node_modules/
+    - vendor/
+    - node_modules/
+    - public/
+    - composer.phar
+    - security-checker.phar
 
 bootstrap_job:
   stage: build
@@ -20,18 +23,14 @@ bootstrap_job:
     - php composer-setup.php
     - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
     - php composer.phar install
-    - wget http://get.sensiolabs.org/security-checker.phar
-    # Enable xdebug for code coverage
-    - yum install php70-php-pecl-xdebug.x86_64 -y
-    - ln -s /opt/remi/php70/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
-    - cp /etc/opt/remi/php70/php.d/15-xdebug.ini /etc/php.d/
-    - cd ci/; php ../composer.phar install; cd ..
+    - gulp --production
 
 test_vulnerabilities_composer:
   stage: test
   dependencies:
     - bootstrap_job
   script:
+    - wget http://get.sensiolabs.org/security-checker.phar
     - php security-checker.phar security:check composer.lock
 
 test_php:
@@ -39,6 +38,11 @@ test_php:
   dependencies:
     - bootstrap_job
   script:
+    # Enable xdebug for code coverage
+    - yum install php70-php-pecl-xdebug.x86_64 -y
+    - ln -s /opt/remi/php70/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
+    - cp /etc/opt/remi/php70/php.d/15-xdebug.ini /etc/php.d/
+    - cd ci/; php ../composer.phar install; cd ..
     - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
   artifacts:
     paths:
@@ -51,7 +55,7 @@ test_js:
   variables:
     APP_NAME: "Base"
   script:
-    - gulp --production
+    - gulp test
 
 pages:
   stage: deploy
