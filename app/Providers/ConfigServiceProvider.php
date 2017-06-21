@@ -15,10 +15,19 @@ class ConfigServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        config(
-            [
-            //
-            ]
-        );
+
+        $customerConfigPath = base_path() . DS . env('CUSTOMER_CONFIG_FOLDER', 'Stensul/Customer/Config/');
+        
+        if (\File::exists($customerConfigPath)) {
+            // Run through all PHP files in the customer config directory.
+            $files = \File::allFiles($customerConfigPath);            
+            foreach ($files as $file) {
+                $keyName = basename($file->getRealPath(), '.php');
+                $oldValues = config($keyName);
+                $newValues = require $file->getRealPath();
+                // Replace any matching values in the old config with the new ones.
+                config([$keyName => array_replace_recursive($oldValues, $newValues)]);
+            }
+        }
     }
 }

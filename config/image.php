@@ -1,11 +1,6 @@
 <?php
 
-$overrideFile = (env('APP_NAME', false))
-    ? str_replace(basename(__FILE__), ucwords(strtolower(env('APP_NAME'))) . '/' . basename(__FILE__), __FILE__)
-    : false;
-
-$default = array(
-
+return [
     /*
     |--------------------------------------------------------------------------
     | Image Driver
@@ -37,6 +32,4 @@ $default = array(
     |
     */
     'convert_base_path' => env('CONVERT_COMMAND_PATH', '/usr/local/bin/convert')
-);
-
-return require 'recursive.php';
+];
