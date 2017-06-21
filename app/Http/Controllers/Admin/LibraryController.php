@@ -99,7 +99,7 @@ class LibraryController extends Controller
     public function postList(Request $request)
     {
         $result = $this->queryConstructor($request);
-           return $result['libraries'];    
+        return $result['libraries'];
     }
 
     /**
