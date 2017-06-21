@@ -8,28 +8,36 @@ cache:
   - vendor/
   - node_modules/
 
-before_script:
-  # js related
-  - npm install
-  # Install composer dependencies
-  - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
-  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  - php -r "if (hash_file('SHA384', 'composer-setup.php') === file_get_contents('installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-  - php composer-setup.php
-  - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
-  - php composer.phar install
-  - wget http://get.sensiolabs.org/security-checker.phar
-  # Enable xdebug for code coverage
-  - yum install php70-php-pecl-xdebug.x86_64 -y
-  - ln -s /opt/remi/php70/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
-  - cp /etc/opt/remi/php70/php.d/15-xdebug.ini /etc/php.d/
-  - cd ci/; php ../composer.phar install; cd ..
+bootstrap_job:
+  stage: build
+  script:
+    # js related
+    - npm install
+    # Install composer dependencies
+    - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php -r "if (hash_file('SHA384', 'composer-setup.php') === file_get_contents('installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
+    - php composer.phar install
+    - wget http://get.sensiolabs.org/security-checker.phar
+    # Enable xdebug for code coverage
+    - yum install php70-php-pecl-xdebug.x86_64 -y
+    - ln -s /opt/remi/php70/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
+    - cp /etc/opt/remi/php70/php.d/15-xdebug.ini /etc/php.d/
+    - cd ci/; php ../composer.phar install; cd ..
 
 test_vulnerabilities_composer:
+  stage: test
+  dependencies:
+    - bootstrap_job
   script:
     - php security-checker.phar security:check composer.lock
 
 test_php:
+  stage: test
+  dependencies:
+    - bootstrap_job
   script:
     - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
   artifacts:
@@ -37,6 +45,9 @@ test_php:
       - coverage/
 
 test_js:
+  stage: test
+  dependencies:
+    - bootstrap_job
   variables:
     APP_NAME: "Base"
   script:
