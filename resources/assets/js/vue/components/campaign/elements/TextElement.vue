@@ -6,10 +6,9 @@
         <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
           <tr>
             <td width="100%" class="st-text-style" align="center" :style="component.style.default">
-              <tiny-mce v-if="component.editor" :id="editorId" :options="component.editor" :value="component.text"
+              <tiny-mce :id="editorId" :options="component.editor" :value="component.text"
                         data-key="text" @input="input"></tiny-mce>
-              <p v-else :data-line-limit="maxLines" :truncate="truncate" v-html="component.text" @keyup="change"
-                 @paste="change"></p>
+
             </td>
           </tr>
         </table>

@@ -1,23 +1,24 @@
-import Q from 'q'
-import request from '../utils/request'
-import _ from 'underscore'
-import Library from '../models/library'
-import endpoints from '../resources/endpoints'
+import Q from 'q';
+import _ from 'underscore';
+import request from '../utils/request';
+import Library from '../models/library';
+import endpoints from '../resources/endpoints';
 
 export default {
   getLibrary(libraryId) {
-    let endpoint = endpoints.library.getLibrary;
-    let deferred = Q.defer();
-    let params = {
-      search: { libraryId: libraryId },
-      endpoint: endpoint
+    const endpoint = endpoints.library.getLibrary;
+    const deferred = Q.defer();
+    const params = {
+      method: 'library.getLibrary',
+      search: { libraryId },
+      endpoint,
     };
 
     request[endpoint.method](params).then((response) => {
       deferred.resolve({
         library: new Library(response.body.library),
-        modules: response.body.modules
-      })
+        modules: response.body.modules,
+      });
     }).catch((err) => {
       deferred.reject(err);
     });
@@ -26,21 +27,22 @@ export default {
   },
 
   newLibrary() {
-    let endpoint = endpoints.library.newLibrary;
-    let deferred = Q.defer();
-    let params = {
-      endpoint: endpoint
+    const endpoint = endpoints.library.newLibrary;
+    const deferred = Q.defer();
+    const params = {
+      method: 'library.newLibrary',
+      endpoint,
     };
 
     request[endpoint.method](params).then((response) => {
-      let modules = [];
-      _.each(response.body, function (module, key) {
+      const modules = [];
+      _.each(response.body, (module, key) => {
         modules.push(key);
       });
 
       deferred.resolve({
         library: new Library(),
-        modules: modules
+        modules,
       });
     }).catch((err) => {
       deferred.reject(err);
@@ -50,15 +52,16 @@ export default {
   },
 
   saveLibrary(formData) {
-    let endpoint = endpoints.library.saveLibrary;
-    let deferred = Q.defer();
-    let params = {
-      endpoint: endpoint,
-      json: formData
+    const endpoint = endpoints.library.saveLibrary;
+    const deferred = Q.defer();
+    const params = {
+      method: 'library.saveLibrary',
+      endpoint,
+      json: formData,
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body)
+      deferred.resolve(response.body);
     }).catch((err) => {
       deferred.reject(err);
     });
@@ -67,15 +70,16 @@ export default {
   },
 
   createLibrary(formData) {
-    let endpoint = endpoints.library.createLibrary;
-    let deferred = Q.defer();
-    let params = {
-      endpoint: endpoint,
-      json: formData
+    const endpoint = endpoints.library.createLibrary;
+    const deferred = Q.defer();
+    const params = {
+      method: 'library.createLibrary',
+      endpoint,
+      json: formData,
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body)
+      deferred.resolve(response.body);
     }).catch((err) => {
       deferred.reject(err);
     });
@@ -84,17 +88,18 @@ export default {
   },
 
   deleteLibrary(libraryId) {
-    let endpoint = endpoints.library.deleteLibrary;
-    let deferred = Q.defer();
-    let params = {
-      endpoint: endpoint,
+    const endpoint = endpoints.library.deleteLibrary;
+    const deferred = Q.defer();
+    const params = {
+      method: 'library.deleteLibrary',
+      endpoint,
       json: {
-        libraryId: libraryId
-      }
+        libraryId,
+      },
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body)
+      deferred.resolve(response.body);
     }).catch((err) => {
       deferred.reject(err);
     });
@@ -102,20 +107,21 @@ export default {
     return deferred.promise;
   },
 
-  fetchLibraries (data) {
-    let endpoint = endpoints.library.fetchLibraries;
-    let deferred = Q.defer();
-    let params = {
-      endpoint: endpoint,
-      json: data
+  fetchLibraries(data) {
+    const endpoint = endpoints.library.fetchLibraries;
+    const deferred = Q.defer();
+    const params = {
+      path: 'library.fetchLibraries',
+      endpoint,
+      json: data,
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body)
+      deferred.resolve(response.body);
     }).catch((err) => {
       deferred.reject(err);
     });
 
     return deferred.promise;
-  }
+  },
 }

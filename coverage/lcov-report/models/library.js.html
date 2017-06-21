@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for models/library.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">All files</a> / <a href="index.html">models</a> library.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">13.33% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>2/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/48</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/2</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">13.33% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>2/15</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import _ from 'underscore'
+&nbsp;
+f</span>unction <span class="fstat-no" title="function not covered" >Library(data = {}) <span class="cstat-no" title="statement not covered" ></span>{
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  this.id = data._id || undefined;</span>
+<span class="cstat-no" title="statement not covered" >  this.name = data.name || 'Unnamed Library';</span>
+<span class="cstat-no" title="statement not covered" >  this.description = data.description || '';</span>
+<span class="cstat-no" title="statement not covered" >  this.createdAt = data.created_at || '';</span>
+<span class="cstat-no" title="statement not covered" >  this.updatedAt = data.updated_at || '';</span>
+&nbsp;
+  c</span>onst config = <span class="cstat-no" title="statement not covered" >data.config || {};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  this.config = {</span>
+    templateWidth: config.templateWidth || '660',
+    templateMobileWidth: config.templateMobileWidth || '480',
+    templateBackgroundColor: config.templateBackgroundColor || '#FFFFFF',
+    contentBackgroundColor: config.templateBackgroundColor || '#FFFFFF',
+    fontFamily: config.fontFamily || 'Arial',
+    fontSize: config.fontSize || '14',
+    fontColor: config.fontColor || '#000000',
+    lineHeight: config.lineHeight || '18',
+    linkColor: config.linkColor || '#000000',
+    linkDecoration: config.linkDecoration || 'underline',
+    externalCssLink: config.externalCssLink || '',
+    propietaryCss: config.propietaryCss || '',
+    padding: config.padding || '',
+    esp: config.esp || false,
+    plainText: config.plainText || false,
+    preheader: config.preheader || false,
+  };
+&nbsp;
+  c</span>onst groups = <span class="cstat-no" title="statement not covered" >[];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  _.each(data.modules, <span class="fstat-no" title="function not covered" >(</span>modules, group) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    groups.push({</span>
+      name: group,
+      modules,
+    });
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  this.modules = groups;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return this;</span>
+}
+&nbsp;
+module.exports = Library;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Jun 21 2017 17:19:56 GMT-0300 (ART)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

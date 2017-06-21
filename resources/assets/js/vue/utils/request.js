@@ -2,11 +2,23 @@ import Q from 'q';
 import _ from 'underscore';
 import Vue from 'vue/dist/vue';
 import VueResource from 'vue-resource/dist/vue-resource';
+import mocks from '../resources/fixtures';
 
 Vue.use(VueResource);
 
 function requestResponse(method, params, opts) {
   const deferred = Q.defer();
+  /*
+   * UT: mocked response
+   */
+  if (process.env.APP_ENV === 'test') {
+    const arr = params.path.split('.');
+    const res = {
+      body: mocks[arr[0]][arr[1]],
+    };
+    deferred.resolve(res);
+    return deferred.promise;
+  }
 
   const options = opts || {};
 
