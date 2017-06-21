@@ -28,7 +28,7 @@ test_vulnerabilities_composer:
 
 test_php:
   script:
-    - vendor/bin/phpunit --coverage-html coverage/ --colors=never
+    - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
   artifacts:
     paths:
       - coverage/
