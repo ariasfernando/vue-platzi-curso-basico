@@ -3,6 +3,9 @@ image: "fanbridge/web:v2.0"
 services:
   - mongo:latest
 
+variables:
+  APP_NAME: "Base"
+
 cache:
   paths:
     - vendor/
@@ -52,8 +55,6 @@ test_js:
   stage: test
   dependencies:
     - bootstrap_job
-  variables:
-    APP_NAME: "Base"
   script:
     - gulp test
 
