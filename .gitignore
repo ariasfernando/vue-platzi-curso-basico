@@ -26,3 +26,4 @@ docker-compose.yaml
 .coverdata
 .nyc_output
 .coverrun
+package-lock.json
