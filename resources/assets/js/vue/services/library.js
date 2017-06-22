@@ -9,7 +9,7 @@ export default {
     const endpoint = endpoints.library.getLibrary;
     const deferred = Q.defer();
     const params = {
-      method: 'library.getLibrary',
+      path: 'library.getLibrary',
       search: { libraryId },
       endpoint,
     };
@@ -30,7 +30,7 @@ export default {
     const endpoint = endpoints.library.newLibrary;
     const deferred = Q.defer();
     const params = {
-      method: 'library.newLibrary',
+      path: 'library.newLibrary',
       endpoint,
     };
 
@@ -55,7 +55,7 @@ export default {
     const endpoint = endpoints.library.saveLibrary;
     const deferred = Q.defer();
     const params = {
-      method: 'library.saveLibrary',
+      path: 'library.saveLibrary',
       endpoint,
       json: formData,
     };
@@ -73,7 +73,7 @@ export default {
     const endpoint = endpoints.library.createLibrary;
     const deferred = Q.defer();
     const params = {
-      method: 'library.createLibrary',
+      path: 'library.createLibrary',
       endpoint,
       json: formData,
     };
@@ -91,7 +91,7 @@ export default {
     const endpoint = endpoints.library.deleteLibrary;
     const deferred = Q.defer();
     const params = {
-      method: 'library.deleteLibrary',
+      path: 'library.deleteLibrary',
       endpoint,
       json: {
         libraryId,

@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">22% </span>
+        <span class="strong">34% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>11/50</span>
+        <span class='fraction'>17/50</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">10.53% </span>
+        <span class="strong">21.05% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>2/19</span>
+        <span class='fraction'>4/19</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">22% </span>
+        <span class="strong">34% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>11/50</span>
+        <span class='fraction'>17/50</span>
       </div>
     </div>
   </div>
@@ -177,24 +177,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -301,18 +301,18 @@ import request from '../utils/request';
 import Library from '../models/library';
 import endpoints from '../resources/endpoints';
 &nbsp;
-export default <span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" >{</span></span></span></span></span>
+export default <span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" >{</span></span></span></span>
   getLibrary(libraryId) {
-    c</span>onst endpoint = <span class="cstat-no" title="statement not covered" >endpoints.library.getLibrary;
-    c</span>onst deferred = <span class="cstat-no" title="statement not covered" >Q.defer();
-    c</span>onst params = <span class="cstat-no" title="statement not covered" >{
-      method: 'library.getLibrary',
+    const endpoint = endpoints.library.getLibrary;
+    const deferred = Q.defer();
+    const params = {
+      path: 'library.getLibrary',
       search: { libraryId },
       endpoint,
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    request[endpoint.method](params).then(<span class="fstat-no" title="function not covered" >(</span>response) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      deferred.resolve({</span>
+    request[endpoint.method](params).then((response) =&gt; {
+      deferred.resolve({
         library: new Library(response.body.library),
         modules: response.body.modules,
       });
@@ -320,14 +320,14 @@ export default <span class="fstat-no" title="function not covered" ><span class=
 <span class="cstat-no" title="statement not covered" >      deferred.reject(err);</span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return deferred.promise;</span>
+    return deferred.promise;
   },
 &nbsp;
   newLibrary() {
     c</span>onst endpoint = <span class="cstat-no" title="statement not covered" >endpoints.library.newLibrary;
     c</span>onst deferred = <span class="cstat-no" title="statement not covered" >Q.defer();
     c</span>onst params = <span class="cstat-no" title="statement not covered" >{
-      method: 'library.newLibrary',
+      path: 'library.newLibrary',
       endpoint,
     };
 &nbsp;
@@ -352,7 +352,7 @@ export default <span class="fstat-no" title="function not covered" ><span class=
     c</span>onst endpoint = <span class="cstat-no" title="statement not covered" >endpoints.library.saveLibrary;
     c</span>onst deferred = <span class="cstat-no" title="statement not covered" >Q.defer();
     c</span>onst params = <span class="cstat-no" title="statement not covered" >{
-      method: 'library.saveLibrary',
+      path: 'library.saveLibrary',
       endpoint,
       json: formData,
     };
@@ -370,7 +370,7 @@ export default <span class="fstat-no" title="function not covered" ><span class=
     c</span>onst endpoint = <span class="cstat-no" title="statement not covered" >endpoints.library.createLibrary;
     c</span>onst deferred = <span class="cstat-no" title="statement not covered" >Q.defer();
     c</span>onst params = <span class="cstat-no" title="statement not covered" >{
-      method: 'library.createLibrary',
+      path: 'library.createLibrary',
       endpoint,
       json: formData,
     };
@@ -388,7 +388,7 @@ export default <span class="fstat-no" title="function not covered" ><span class=
     c</span>onst endpoint = <span class="cstat-no" title="statement not covered" >endpoints.library.deleteLibrary;
     c</span>onst deferred = <span class="cstat-no" title="statement not covered" >Q.defer();
     c</span>onst params = <span class="cstat-no" title="statement not covered" >{
-      method: 'library.deleteLibrary',
+      path: 'library.deleteLibrary',
       endpoint,
       json: {
         libraryId,
@@ -427,7 +427,7 @@ export default <span class="fstat-no" title="function not covered" ><span class=
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Jun 21 2017 17:19:56 GMT-0300 (ART)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Jun 21 2017 18:07:15 GMT-0300 (ART)
 </div>
 </div>
 <script src="../prettify.js"></script>

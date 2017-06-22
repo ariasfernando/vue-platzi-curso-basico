@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">13.33% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/15</span>
+        <span class='fraction'>15/15</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">62.5% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/48</span>
+        <span class='fraction'>30/48</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/2</span>
+        <span class='fraction'>2/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">13.33% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/15</span>
+        <span class='fraction'>15/15</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -90,19 +90,17 @@
 45
 46</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -119,63 +117,65 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import _ from 'underscore'
 &nbsp;
-f</span>unction <span class="fstat-no" title="function not covered" >Library(data = {}) <span class="cstat-no" title="statement not covered" ></span>{
+function Library(data = <span class="branch-1 cbranch-no" title="branch not covered" >{}) {</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  this.id = data._id || undefined;</span>
-<span class="cstat-no" title="statement not covered" >  this.name = data.name || 'Unnamed Library';</span>
-<span class="cstat-no" title="statement not covered" >  this.description = data.description || '';</span>
-<span class="cstat-no" title="statement not covered" >  this.createdAt = data.created_at || '';</span>
-<span class="cstat-no" title="statement not covered" >  this.updatedAt = data.updated_at || '';</span>
+  t</span>his.id = data._id || <span class="branch-1 cbranch-no" title="branch not covered" >undefined;
+  t</span>his.name = data.name || <span class="branch-1 cbranch-no" title="branch not covered" >'Unnamed Library';
+  t</span>his.description = data.description || <span class="branch-1 cbranch-no" title="branch not covered" >'';
+  t</span>his.createdAt = data.created_at || <span class="branch-1 cbranch-no" title="branch not covered" >'';
+  t</span>his.updatedAt = data.updated_at || <span class="branch-1 cbranch-no" title="branch not covered" >'';
 &nbsp;
-  c</span>onst config = <span class="cstat-no" title="statement not covered" >data.config || {};
+  c</span>onst config = data.config || <span class="branch-1 cbranch-no" title="branch not covered" >{};
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  this.config = {</span>
-    templateWidth: config.templateWidth || '660',
-    templateMobileWidth: config.templateMobileWidth || '480',
-    templateBackgroundColor: config.templateBackgroundColor || '#FFFFFF',
-    contentBackgroundColor: config.templateBackgroundColor || '#FFFFFF',
-    fontFamily: config.fontFamily || 'Arial',
-    fontSize: config.fontSize || '14',
-    fontColor: config.fontColor || '#000000',
-    lineHeight: config.lineHeight || '18',
-    linkColor: config.linkColor || '#000000',
-    linkDecoration: config.linkDecoration || 'underline',
+  this.config = {
+    templateWidth: config.templateWidth || <span class="branch-1 cbranch-no" title="branch not covered" >'660',</span>
+    templateMobileWidth: config.templateMobileWidth || <span class="branch-1 cbranch-no" title="branch not covered" >'480',</span>
+    templateBackgroundColor: config.templateBackgroundColor || <span class="branch-1 cbranch-no" title="branch not covered" >'#FFFFFF',</span>
+    contentBackgroundColor: config.templateBackgroundColor || <span class="branch-1 cbranch-no" title="branch not covered" >'#FFFFFF',</span>
+    fontFamily: config.fontFamily || <span class="branch-1 cbranch-no" title="branch not covered" >'Arial',</span>
+    fontSize: config.fontSize || <span class="branch-1 cbranch-no" title="branch not covered" >'14',</span>
+    fontColor: config.fontColor || <span class="branch-1 cbranch-no" title="branch not covered" >'#000000',</span>
+    lineHeight: config.lineHeight || <span class="branch-1 cbranch-no" title="branch not covered" >'18',</span>
+    linkColor: config.linkColor || <span class="branch-1 cbranch-no" title="branch not covered" >'#000000',</span>
+    linkDecoration: config.linkDecoration || <span class="branch-1 cbranch-no" title="branch not covered" >'underline',</span>
     externalCssLink: config.externalCssLink || '',
     propietaryCss: config.propietaryCss || '',
-    padding: config.padding || '',
+    padding: config.padding || <span class="branch-1 cbranch-no" title="branch not covered" >'',</span>
     esp: config.esp || false,
     plainText: config.plainText || false,
     preheader: config.preheader || false,
   };
 &nbsp;
-  c</span>onst groups = <span class="cstat-no" title="statement not covered" >[];
+  const groups = [];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  _.each(data.modules, <span class="fstat-no" title="function not covered" >(</span>modules, group) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    groups.push({</span>
+  _.each(data.modules, (modules, group) =&gt; {
+    groups.push({
       name: group,
       modules,
     });
   });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  this.modules = groups;</span>
+  this.modules = groups;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return this;</span>
+  return this;
 }
 &nbsp;
 module.exports = Library;</pre></td></tr>
@@ -184,7 +184,7 @@ module.exports = Library;</pre></td></tr>
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Jun 21 2017 17:19:56 GMT-0300 (ART)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Jun 21 2017 18:07:15 GMT-0300 (ART)
 </div>
 </div>
 <script src="../prettify.js"></script>
