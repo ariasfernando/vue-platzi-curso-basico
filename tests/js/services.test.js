@@ -25,12 +25,12 @@ describe("== Services ==", () => {
             });
         });
 
-        describe("Get Library", () => {
-            it('Should return a library object', (done) => {
-              libraryService.getLibrary().then((result) => {
-                expect(result).to.equal(fixtures.library.getLibrary);
-              }).then(done, done);
-            });
-        });
+        // describe("Get Library", () => {
+        //     it('Should return a library object', (done) => {
+        //       libraryService.getLibrary().then((result) => {
+        //         expect(result).to.equal(fixtures.library.getLibrary);
+        //       }).then(done, done);
+        //     });
+        // });
     });
 });
