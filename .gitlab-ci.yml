@@ -59,6 +59,7 @@ test_js:
 
 pages:
   stage: deploy
+  when: always
   dependencies:
     - test_php
   script:
