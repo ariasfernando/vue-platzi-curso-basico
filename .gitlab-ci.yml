@@ -14,6 +14,11 @@ cache:
     - composer.phar
     - security-checker.phar
 
+stages:
+  - build
+  - test
+  - deploy
+
 bootstrap_job:
   stage: build
   script:
@@ -30,16 +35,12 @@ bootstrap_job:
 
 test_vulnerabilities_composer:
   stage: test
-  dependencies:
-    - bootstrap_job
   script:
     - wget http://get.sensiolabs.org/security-checker.phar
     - php security-checker.phar security:check composer.lock
 
 test_php:
   stage: test
-  dependencies:
-    - bootstrap_job
   script:
     # Enable xdebug for code coverage
     - yum install php70-php-pecl-xdebug.x86_64 -y
@@ -53,8 +54,6 @@ test_php:
 
 test_js:
   stage: test
-  dependencies:
-    - bootstrap_job
   script:
     - gulp test
 
