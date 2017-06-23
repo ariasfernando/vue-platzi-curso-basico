@@ -41,6 +41,7 @@ test_vulnerabilities_composer:
 
 test_php:
   stage: test
+  allow_failure: true
   script:
     # Enable xdebug for code coverage
     - yum install php70-php-pecl-xdebug.x86_64 -y
@@ -65,7 +66,7 @@ pages:
   when: always
   allow_failure: true
   dependencies:
-    # Add jobs that need to save some outout here.
+    # Add jobs that need to save some output here.
     - test_php
     - test_js
   script:
