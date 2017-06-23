@@ -60,6 +60,7 @@ test_js:
 pages:
   stage: deploy
   when: always
+  allow_failure: true
   dependencies:
     - test_php
   script:
