@@ -65,7 +65,7 @@ pages:
     - test_php
   script:
     - mv ci/storage/tmp/be_coverage public/
-    - mv ci/storage/tmp/fe_coverage public/
+    #- mv ci/storage/tmp/fe_coverage public/
   artifacts:
     paths:
       - public
