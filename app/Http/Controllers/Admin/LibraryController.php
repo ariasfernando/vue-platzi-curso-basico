@@ -78,7 +78,7 @@ class LibraryController extends Controller
      */
     public function getIndex(Request $request)
     {
-        return $this->renderView('base.admin.libraries', $this->queryConstructor($request));
+        return $this->renderView('admin.libraries', $this->queryConstructor($request));
     }
 
     /**
@@ -88,7 +88,7 @@ class LibraryController extends Controller
      */
     public function getList(Request $request)
     {
-        return $this->renderView('base.admin.partials.library_draw_row', $this->queryConstructor($request));
+        return $this->renderView('admin.partials.library_draw_row', $this->queryConstructor($request));
     }
 
     /**
@@ -115,7 +115,7 @@ class LibraryController extends Controller
             "modules" => array_combine($modules, $modules)
         ];
 
-        return $this->renderView('base.admin.modals.library_form', array('params' => $params));
+        return $this->renderView('admin.modals.library_form', array('params' => $params));
     }
 
     /**

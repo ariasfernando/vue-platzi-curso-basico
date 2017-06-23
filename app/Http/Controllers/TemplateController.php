@@ -145,7 +145,7 @@ class TemplateController extends Controller
         StensulLocale::init($campaign_data['locale']);
 
         return $this->renderView(
-            'base.layouts.email',
+            'layouts.email',
             ['params' => ['title' => 'preview', 'body_html' => '', 'campaign_data' => $campaign_data]]
         );
     }
@@ -189,7 +189,7 @@ class TemplateController extends Controller
 
         // Find module in [module_name]/module.blade.php
         if ($class == 'pkg') {
-            $parts = [ $app_name, 'modules', $component, $view ];
+            $parts = [ 'modules', $component, $view ];
         }
 
         return $this->renderView(

@@ -37,7 +37,7 @@ class RoleController extends Controller
     public function getIndex()
     {
         $roles_data = Role::orderBy('updated_at', 'desc')->paginate(5);
-        return $this->renderView('base.admin.roles', array('roles' => $roles_data));
+        return $this->renderView('admin.roles', array('roles' => $roles_data));
     }
 
     /**
@@ -103,7 +103,7 @@ class RoleController extends Controller
             "permissions" => $modelData["permissions"],
             "libraries" => $modelData["libraries"]
         ];
-        return $this->renderView('base.admin.modals.role_form', array('params' => $params));
+        return $this->renderView('admin.modals.role_form', array('params' => $params));
     }
 
     /**
@@ -122,7 +122,7 @@ class RoleController extends Controller
             "role" => $role_data
         ];
 
-        return $this->renderView('base.admin.modals.role_form', array('params' => $params));
+        return $this->renderView('admin.modals.role_form', array('params' => $params));
     }
 
     /**

@@ -58,7 +58,7 @@ class EmailSender
                     'subject' => $subject
                 );
 
-                $email_layout = Helper::validateView('base.layouts.email');
+                $email_layout = Helper::validateView('layouts.email');
 
                 Mail::send(
                     $email_layout,

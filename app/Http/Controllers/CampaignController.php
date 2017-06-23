@@ -104,7 +104,7 @@ class CampaignController extends Controller
         // Initialize locale
         StensulLocale::init($params['locale']);
 
-        return $this->renderView('base.campaign', array('params' => $params));
+        return $this->renderView('campaign', array('params' => $params));
     }
 
     /**

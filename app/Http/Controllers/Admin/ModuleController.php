@@ -37,7 +37,7 @@ class ModuleController extends Controller
     {
         $modules = \StensulModule::getModuleList();
 
-        return $this->renderView('base.admin.modules', array('modules' => $modules));
+        return $this->renderView('admin.modules', array('modules' => $modules));
     }
 
     /**
@@ -49,7 +49,7 @@ class ModuleController extends Controller
     {
         $modules = \StensulModule::getModuleList();
 
-        return $this->renderView('base.admin.partials.module_draw_row', array('modules' => $modules));
+        return $this->renderView('admin.partials.module_draw_row', array('modules' => $modules));
     }
 
     /**
@@ -75,7 +75,7 @@ class ModuleController extends Controller
             "modules" => array_combine($modules, $modules)
         ];
 
-        return $this->renderView('base.admin.modals.module_form', array('params' => $params));
+        return $this->renderView('admin.modals.module_form', array('params' => $params));
     }
 
     /**
@@ -95,7 +95,7 @@ class ModuleController extends Controller
             "module" => $module_data
         ];
 
-        return $this->renderView('base.admin.modals.module_form', array('params' => $params));
+        return $this->renderView('admin.modals.module_form', array('params' => $params));
     }
 
     /**

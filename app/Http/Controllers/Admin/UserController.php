@@ -81,7 +81,7 @@ class UserController extends Controller
      */
     public function getIndex(Request $request)
     {
-        return $this->renderView('base.admin.users', $this->queryConstructor($request));
+        return $this->renderView('admin.users', $this->queryConstructor($request));
     }
 
     /**
@@ -91,7 +91,7 @@ class UserController extends Controller
      */
     public function getList(Request $request)
     {
-        return $this->renderView('base.admin.partials.user_draw_row', $this->queryConstructor($request));
+        return $this->renderView('admin.partials.user_draw_row', $this->queryConstructor($request));
     }
 
     /**
@@ -114,7 +114,7 @@ class UserController extends Controller
             "roles" => $roles_array
         ];
 
-        return $this->renderView('base.admin.modals.user_form', array('params' => $params));
+        return $this->renderView('admin.modals.user_form', array('params' => $params));
     }
 
     /**
@@ -138,7 +138,7 @@ class UserController extends Controller
             "user" => $user_data
         ];
 
-        return $this->renderView('base.admin.modals.user_form', array('params' => $params));
+        return $this->renderView('admin.modals.user_form', array('params' => $params));
     }
 
     /**

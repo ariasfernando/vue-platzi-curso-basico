@@ -26,7 +26,7 @@ class ModuleServiceProvider extends ServiceProvider
     public function boot()
     {
         self::$app_name = app('config')->get('app.name');
-        self::$module_dir = app()->resourcePath() . DS . 'views' . DS . self::$app_name . DS . 'modules';
+        self::$module_dir = app()->resourcePath() . DS . 'views' . DS . 'modules';
     }
 
     /**

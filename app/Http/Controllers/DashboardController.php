@@ -40,7 +40,7 @@ class DashboardController extends Controller
             'locales' => \Config::get('locales')
         ];
 
-        return $this->renderView('base.dashboard', ['params' => $params]);
+        return $this->renderView('dashboard', ['params' => $params]);
     }
 
     public function getCampaigns(Request $request, $type)

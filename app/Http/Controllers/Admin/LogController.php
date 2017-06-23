@@ -83,7 +83,7 @@ class LogController extends Controller
      */
     public function getIndex(Request $request)
     {
-        return $this->renderView('base.admin.logs', $this->queryConstructor($request));
+        return $this->renderView('admin.logs', $this->queryConstructor($request));
     }
 
     /**
@@ -93,6 +93,6 @@ class LogController extends Controller
      */
     public function getList(Request $request)
     {
-        return $this->renderView('base.admin.partials.logs_draw_row', $this->queryConstructor($request));
+        return $this->renderView('admin.partials.logs_draw_row', $this->queryConstructor($request));
     }
 }
