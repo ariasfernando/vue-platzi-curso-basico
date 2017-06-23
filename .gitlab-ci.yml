@@ -57,19 +57,18 @@ test_js:
   script:
     - gulp test
 
-# pages:
-#   stage: deploy
-#   when: always
-#   allow_failure: true
-#   # dependencies:
-#   #   - test_php
-#   #   - test_js
-# #  script:
-#     #- rm -rf ci/storage/tmp/*
-#     #- mv ci/storage/tmp/be_coverage/ public/
-#     #- mv ci/storage/tmp/fe_coverage/ public/
-#   artifacts:
-#     paths:
-#       #- public
-#       - ci/storage/tmp/
-#     expire_in: 30 days
+pages:
+  stage: deploy
+  when: always
+  allow_failure: true
+  # dependencies:
+  #   - test_php
+  #   - test_js
+ script:
+    - mkdir -p ci/storage/report/
+    - rm -rf ci/storage/report/* 
+    - mv ci/storage/tmp/* ci/storage/report/
+  artifacts:
+    paths:
+      - ci/storage/report
+    expire_in: 30 days
