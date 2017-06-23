@@ -68,7 +68,6 @@ pages:
     - mkdir -p ci/storage/report/
     - mkdir -p ci/storage/tmp/
     - rm -rf ci/storage/report/*
-    - mv ci/storage/tmp/* ci/storage/report/
     # Move only if there's something to move to avoid errors.
     - ls ci/storage/tmp/* >/dev/null 2>&1 && mv ci/storage/tmp/* ci/storage/report/
   artifacts:
