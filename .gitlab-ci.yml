@@ -64,6 +64,7 @@ pages:
   dependencies:
     - test_php
   script:
+    - rm -rf ci/storage/tmp/*
     - mv ci/storage/tmp/be_coverage/ public/
     #- mv ci/storage/tmp/fe_coverage/ public/
   artifacts:
