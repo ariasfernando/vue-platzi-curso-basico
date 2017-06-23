@@ -64,7 +64,7 @@ pages:
   # dependencies:
   #   - test_php
   #   - test_js
- script:
+  script:
     - mkdir -p ci/storage/report/
     - rm -rf ci/storage/report/* 
     - mv ci/storage/tmp/* ci/storage/report/
