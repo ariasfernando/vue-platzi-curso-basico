@@ -63,6 +63,10 @@ pages:
   stage: deploy
   when: always
   allow_failure: true
+  dependencies:
+    # Add jobs that need to save some outout here.
+    - test_php
+    - test_js
   script:
     # Avoid errors here or the pages won't be available for download.
     - mkdir -p ci/storage/report/
