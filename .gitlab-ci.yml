@@ -69,7 +69,7 @@ pages:
     - mkdir -p ci/storage/tmp/
     - rm -rf ci/storage/report/*
     # Move only if there's something to move to avoid errors.
-    - ls ci/storage/tmp/* >/dev/null 2>&1 && mv ci/storage/tmp/* ci/storage/report/
+    - find ci/storage/tmp/ -name \* -type f -exec mv ci/storage/tmp/* ci/storage/report/ \;
   artifacts:
     paths:
       # All files under this directory will be available to download.
