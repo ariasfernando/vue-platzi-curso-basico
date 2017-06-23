@@ -50,6 +50,7 @@ test_php:
     - cd ci/; php ../composer.phar install; cd ..
     # Run phpunit with code coverage report enbled.
     - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
+    - ls ci/storage/tmp/be_coverage/
   artifacts:
     paths:
       - ci/storage/tmp/be_coverage/
@@ -74,7 +75,6 @@ pages:
     - rm -rf ci/storage/report/*
     # Move only if there's something to move to avoid errors.
     - find ci/storage/tmp/ -name \* -type f -exec mv ci/storage/tmp/* ci/storage/report/ \;
-    - touch ci/storage/report/test
   artifacts:
     paths:
       # All files under this directory will be available to download.
