@@ -48,28 +48,28 @@ test_php:
     - cp /etc/opt/remi/php70/php.d/15-xdebug.ini /etc/php.d/
     - cd ci/; php ../composer.phar install; cd ..
     - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
-  # artifacts:
-  #   paths:
-  #     - coverage/
+  artifacts:
+    paths:
+      - ci/storage/tmp/be_coverage/
 
 test_js:
   stage: test
   script:
     - gulp test
 
-pages:
-  stage: deploy
-  when: always
-  allow_failure: true
-  # dependencies:
-  #   - test_php
-  #   - test_js
-  script:
-    #- rm -rf ci/storage/tmp/*
-    #- mv ci/storage/tmp/be_coverage/ public/
-    #- mv ci/storage/tmp/fe_coverage/ public/
-  artifacts:
-    paths:
-      #- public
-      - ci/storage/tmp/
-    expire_in: 30 days
+# pages:
+#   stage: deploy
+#   when: always
+#   allow_failure: true
+#   # dependencies:
+#   #   - test_php
+#   #   - test_js
+# #  script:
+#     #- rm -rf ci/storage/tmp/*
+#     #- mv ci/storage/tmp/be_coverage/ public/
+#     #- mv ci/storage/tmp/fe_coverage/ public/
+#   artifacts:
+#     paths:
+#       #- public
+#       - ci/storage/tmp/
+#     expire_in: 30 days
