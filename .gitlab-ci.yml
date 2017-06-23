@@ -49,9 +49,9 @@ test_php:
     - cp /etc/opt/remi/php70/php.d/15-xdebug.ini /etc/php.d/
     # Install CI components.
     - cd ci/; php ../composer.phar install; cd ..
+    - touch ci/storage/tmp/be_coverage/testtt
     # Run phpunit with code coverage report enbled.
     - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
-    - ls ci/storage/tmp/be_coverage/
   artifacts:
     paths:
       - ci/storage/tmp/be_coverage/
