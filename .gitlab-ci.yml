@@ -41,7 +41,6 @@ test_vulnerabilities_composer:
 
 test_php:
   stage: test
-  allow_failure: true
   script:
     # Enable xdebug for code coverage
     - yum install php70-php-pecl-xdebug.x86_64 -y
@@ -49,11 +48,12 @@ test_php:
     - cp /etc/opt/remi/php70/php.d/15-xdebug.ini /etc/php.d/
     # Install CI components.
     - cd ci/; php ../composer.phar install; cd ..
-    - mkdir -p ci/storage/tmp/be_coverage/
-    - touch ci/storage/tmp/be_coverage/testtt
     # Run phpunit with code coverage report enbled.
     - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
   artifacts:
+    when: always
+    name: "${CI_JOB_STAGE}_${CI_COMMIT_REF_NAME}"
+    expire_in: 30 days
     paths:
       - ci/storage/tmp/be_coverage/
 
@@ -62,23 +62,23 @@ test_js:
   script:
     - gulp test
 
-pages:
-  stage: deploy
-  when: always
-  allow_failure: true
-  dependencies:
-    # Add jobs that need to save some output here.
-    - test_php
-    - test_js
-  script:
-    # Avoid errors here or the pages won't be available for download.
-    - mkdir -p ci/storage/report/
-    - mkdir -p ci/storage/tmp/
-    - rm -rf ci/storage/report/*
-    # Move only if there's something to move to avoid errors.
-    - find ci/storage/tmp/ -name \* -type f -exec mv ci/storage/tmp/* ci/storage/report/ \;
-  artifacts:
-    paths:
-      # All files under this directory will be available to download.
-      - ci/storage/report
-    expire_in: 30 days
+# pages:
+#   stage: deploy
+#   when: always
+#   allow_failure: true
+#   dependencies:
+#     # Add jobs that need to save some output here.
+#     - test_php
+#     - test_js
+#   script:
+#     # Avoid errors here or the pages won't be available for download.
+#     - mkdir -p ci/storage/report/
+#     - mkdir -p ci/storage/tmp/
+#     - rm -rf ci/storage/report/*
+#     # Move only if there's something to move to avoid errors.
+#     - find ci/storage/tmp/ -name \* -type f -exec mv ci/storage/tmp/* ci/storage/report/ \;
+#   artifacts:
+#     paths:
+#       # All files under this directory will be available to download.
+#       - ci/storage/report
+#     expire_in: 30 days
