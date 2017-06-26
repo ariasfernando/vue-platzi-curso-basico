@@ -33,6 +33,7 @@ class CampaignController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('acl.permission:edit_campaign');
     }
 
     /**
@@ -104,7 +105,22 @@ class CampaignController extends Controller
         // Initialize locale
         StensulLocale::init($params['locale']);
 
-        return $this->renderView('campaign', array('params' => $params));
+        // Default Text
+        $params['header_title'] = "Campaign Editor";
+
+        // Set library name
+        $library_title = $params['campaign_data']->getLibraryConfig('title');
+        if (!empty($library_title)) {
+            $params['header_title'] = $library_title;
+        }
+
+        // Set language name
+        $locale = $params['campaign_data']['locale'];
+        if (\Config::get('view.campaign_format') === "languages" && \Config::has('locale.langs.' . $locale . '.name')) {
+            $params['header_title'] .= " (" . \Config::get('locale.langs.' . $locale . '.name') . ")";
+        }
+
+        return $this->renderView('base.campaign', array('params' => $params));
     }
 
     /**

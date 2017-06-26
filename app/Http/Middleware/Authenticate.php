@@ -3,6 +3,7 @@
 namespace Stensul\Http\Middleware;
 
 use Auth;
+use Session;
 use Closure;
 use PasswordPolicy;
 use Illuminate\Contracts\Auth\Guard;
@@ -57,7 +58,9 @@ class Authenticate
         }
 
         if (!$validUser) {
-            return redirect()->guest('auth/login');
+            $redirect = redirect()->guest('auth/login');
+            Session::put('url.intended', config('app.url') . ($request->path() === '/' ? '' : '/' . $request->path()));
+            return $redirect;
         } else {
             return $next($request);
         }

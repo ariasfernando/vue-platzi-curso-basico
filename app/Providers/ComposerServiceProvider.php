@@ -4,6 +4,7 @@ namespace Stensul\Providers;
 
 use Auth;
 use View;
+use Stensul\Models\User;
 use Illuminate\Support\ServiceProvider;
 use Stensul\Providers\ModuleServiceProvider;
 
@@ -47,6 +48,20 @@ class ComposerServiceProvider extends ServiceProvider
                 View::share('view_name', $view->getName());
             }
         );
+
+        // Add users to use them as reviewers only when the modal is loaded
+        View::composer('*.proof.modal_proof_table', function ($view) {
+            $users = [];
+            $data = User::where('email', '!=', Auth::user()->email)->get();
+            if (count($data)) {
+                foreach ($data as $user) {
+                    if ($user->can('access_proof')) {
+                        $users[] = $user->email;
+                    }
+                }
+            }
+            $view->with('proof_users', $users);
+        });
     }
 
     /**

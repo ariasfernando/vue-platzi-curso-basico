@@ -214,6 +214,7 @@ gulp.task('elixir-scripts', function () {
                     'js/library/application-utils.js',
                     'js/library/application-init.js',
                     'js/library/application-api.js',
+                    'js/library/application-proof.js',
                     'js/library/login.js'
                 ],
                 jsDestinationPath + 'library.js',
@@ -246,6 +247,15 @@ gulp.task('elixir-scripts', function () {
                     jsAppFilePath('dashboard.js')
                 ],
                 jsDestinationPath + 'dashboard.js',
+                assetsPath
+            )
+
+            // === Proof page ===
+            .scripts(
+                [
+                    jsAppFilePath("proof.js")
+                ],
+                jsDestinationPath + "proof.js",
                 assetsPath
             )
 
