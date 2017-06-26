@@ -32,22 +32,22 @@ bootstrap_job:
     - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
     - php composer.phar install
     - gulp --production
+    # Install CI components.
+    - cd ci/; php ../composer.phar install; cd ..
 
-test_vulnerabilities_composer:
+test_composer_vulnerabilities:
   stage: test
   script:
     - wget http://get.sensiolabs.org/security-checker.phar
     - php security-checker.phar security:check composer.lock
 
-test_php:
+phpunit:
   stage: test
   script:
     # Enable xdebug for code coverage
     - yum install php70-php-pecl-xdebug.x86_64 -y
     - ln -s /opt/remi/php70/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
     - cp /etc/opt/remi/php70/php.d/15-xdebug.ini /etc/php.d/
-    # Install CI components.
-    - cd ci/; php ../composer.phar install; cd ..
     # Run phpunit with code coverage report enbled.
     - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
   artifacts:
