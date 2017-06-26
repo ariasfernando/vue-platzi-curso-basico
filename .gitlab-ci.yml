@@ -81,7 +81,7 @@ phpcs:
     name: "${CI_JOB_STAGE}_phpcs_${CI_COMMIT_REF_NAME}"
     expire_in: 30 days
     paths:
-      - ci/storage/tmp/phpcs.html
+      - ci/storage/tmp/phpcs.txt
 
 phpcpd:
   stage: test
@@ -94,7 +94,7 @@ phpcpd:
     name: "${CI_JOB_STAGE}_phpcpd_${CI_COMMIT_REF_NAME}"
     expire_in: 30 days
     paths:
-      - ci/storage/tmp/phpcpd.html
+      - ci/storage/tmp/phpcpd.txt
 
 phplint:
   stage: test
@@ -107,7 +107,7 @@ phplint:
     name: "${CI_JOB_STAGE}_phplint_${CI_COMMIT_REF_NAME}"
     expire_in: 30 days
     paths:
-      - ci/storage/tmp/phplint.html
+      - ci/storage/tmp/phplint.txt
 
 phpdoccheck:
   stage: test
@@ -120,7 +120,7 @@ phpdoccheck:
     name: "${CI_JOB_STAGE}_phpdoccheck_${CI_COMMIT_REF_NAME}"
     expire_in: 30 days
     paths:
-      - ci/storage/tmp/doccheck.html
+      - ci/storage/tmp/doccheck.txt
 
 
 test_js:
