@@ -48,11 +48,11 @@ class PasswordController extends Controller
         if (\Config::get('challenge.enabled')) {
             $challenge_provider = \Config::get('challenge.default');
             $config = \Config::get('challenge.providers.' . $challenge_provider);
-            return view('base.auth.password')
+            return view('auth.password')
                     ->with('challenge_key', $config['key'])
                     ->with('challenge_provider', $challenge_provider);
         }
-        return view('base.auth.password');
+        return view('auth.password');
     }
 
     /**
@@ -99,7 +99,7 @@ class PasswordController extends Controller
             throw new NotFoundHttpException;
         }
 
-        return view('base.auth.reset')->with('token', $token);
+        return view('auth.reset')->with('token', $token);
     }
 
     /**
@@ -155,7 +155,7 @@ class PasswordController extends Controller
      */
     public function getChange()
     {
-        return view('base.auth.change_password');
+        return view('auth.change_password');
     }
 
     /**

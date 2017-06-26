@@ -48,7 +48,7 @@ class OauthAuthController extends Controller
      */
     public function getLogin()
     {
-        return view('base.auth.oauth_login');
+        return view('auth.oauth_login');
     }
 
     /**
@@ -95,9 +95,9 @@ class OauthAuthController extends Controller
 
         if (isset($error)) {
             \Log::error($error);
-            return view('base.auth.session')->with('error', $error['message']);
+            return view('auth.session')->with('error', $error['message']);
         } else {
-            return view('base.auth.session')->with('redirect_to', env('APP_BASE_URL', $this->redirect_to));
+            return view('auth.session')->with('redirect_to', env('APP_BASE_URL', $this->redirect_to));
         }
     }
 

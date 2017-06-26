@@ -29,7 +29,7 @@ class PublicController extends Controller
         $width = \Config::get("view.libraries.default.template_width", '');
 
         return view(
-            'base.view_in_browser',
+            'view_in_browser',
             array(
                 'campaign_id' =>  $campaign_id,
                 'width' => $width

@@ -57,7 +57,7 @@ class RoleController extends Controller
             ->all();
 
         return $this->renderView(
-            'base.admin.partials.role_draw_row',
+            'admin.partials.role_draw_row',
             ['roles' => $roles]
         );
     }

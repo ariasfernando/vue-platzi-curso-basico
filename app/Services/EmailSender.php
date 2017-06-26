@@ -117,7 +117,7 @@ class EmailSender
 
         $published_at = date("m/d/y h:i", strtotime($campaign_data->published_at));
 
-        $email_layout = Helper::validateView('base.emails.preview');
+        $email_layout = Helper::validateView('emails.preview');
 
         for ($i = 0; $i < count($email_array); ++$i) {
             if ($i <= $email_send_limit) {

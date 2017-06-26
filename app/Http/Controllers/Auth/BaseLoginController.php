@@ -72,12 +72,12 @@ class BaseLoginController extends Controller
             $config = \Config::get('challenge.providers.' . $challenge_provider);
             $cache_key = $config['cache_key'] . $request->ip();
             if (Cache::get($cache_key) >= $config['max_failed_attemtps']) {
-                return view('base.auth.login')
+                return view('auth.login')
                         ->with('challenge_key', $config['key'])
                         ->with('challenge_provider', $challenge_provider);
             }
         }
-        return view('base.auth.login');
+        return view('auth.login');
     }
 
     /**

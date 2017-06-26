@@ -520,7 +520,7 @@ class Eloqua implements ApiConnector
                 return redirect()->away($url);
             }
         }
-        return view('base.auth.api_oauth')->with('data', json_encode([
+        return view('auth.api_oauth')->with('data', json_encode([
             'access_token' => $access_token
         ]));
     }

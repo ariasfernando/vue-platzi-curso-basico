@@ -55,7 +55,7 @@ class PermissionController extends Controller
             ->all();
 
         return $this->renderView(
-            'base.admin.partials.permission_draw_row',
+            'admin.partials.permission_draw_row',
             ['permissions' => $permissions]
         );
     }
