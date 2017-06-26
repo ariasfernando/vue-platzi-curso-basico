@@ -11,6 +11,7 @@ cache:
     - vendor/
     - node_modules/
     - public/
+    - ci/vendor/
     - composer.phar
     - security-checker.phar
 
