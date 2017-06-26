@@ -50,35 +50,18 @@ test_php:
     - cd ci/; php ../composer.phar install; cd ..
     # Run phpunit with code coverage report enbled.
     - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
+    # Run php mess detector
+    - ci/vendor/bin/phpmd . html ci/rulesets/md_codesize.xml,ci/rulesets/md_design.xml,ci/rulesets/md_naming.xml,unusedcode
+      --exclude vendor,database,node_modules,resources > phpmd.html
   artifacts:
     when: always
     name: "${CI_JOB_STAGE}_${CI_COMMIT_REF_NAME}"
     expire_in: 30 days
     paths:
       - ci/storage/tmp/be_coverage/
+      - ci/storage/tmp/phpmd.html
 
 test_js:
   stage: test
   script:
     - gulp test
-
-# pages:
-#   stage: deploy
-#   when: always
-#   allow_failure: true
-#   dependencies:
-#     # Add jobs that need to save some output here.
-#     - test_php
-#     - test_js
-#   script:
-#     # Avoid errors here or the pages won't be available for download.
-#     - mkdir -p ci/storage/report/
-#     - mkdir -p ci/storage/tmp/
-#     - rm -rf ci/storage/report/*
-#     # Move only if there's something to move to avoid errors.
-#     - find ci/storage/tmp/ -name \* -type f -exec mv ci/storage/tmp/* ci/storage/report/ \;
-#   artifacts:
-#     paths:
-#       # All files under this directory will be available to download.
-#       - ci/storage/report
-#     expire_in: 30 days
