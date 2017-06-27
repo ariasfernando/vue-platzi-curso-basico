@@ -155,7 +155,7 @@ gulp.task('elixir-scripts', function () {
         .browserify(
             "index.js",
             jsDestinationPath + "customer.js",
-            customerAssetsPath,
+            customerAssetsPath
         )
         // === Compile Vendor and Application scripts to library.js ===
         .scripts(
