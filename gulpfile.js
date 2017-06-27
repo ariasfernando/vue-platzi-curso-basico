@@ -152,11 +152,11 @@ gulp.task('elixir-scripts', function () {
           assetsPath
         )
         // === Customer Assets ===
-        .browserify(
-            "index.js",
-            jsDestinationPath + "customer.js",
-            customerAssetsPath
-        )
+        // .browserify(
+        //     "index.js",
+        //     jsDestinationPath + "customer.js",
+        //     customerAssetsPath
+        // )
         // === Compile Vendor and Application scripts to library.js ===
         .scripts(
           [
