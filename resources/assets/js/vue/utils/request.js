@@ -1,5 +1,5 @@
 import Q from 'q';
-import _ from 'underscore';
+import _ from 'underscore-contrib';
 import Vue from 'vue/dist/vue';
 import VueResource from 'vue-resource/dist/vue-resource';
 import mocks from '../resources/fixtures';

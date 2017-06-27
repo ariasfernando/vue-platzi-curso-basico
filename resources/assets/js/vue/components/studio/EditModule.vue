@@ -112,6 +112,7 @@
   import Module from '../common/Module.vue'
   import ComponentSettings from './ComponentSettings.vue'
   import { defaultElements } from '../../resources/elements'
+  import moduleService from '../../services/module'
 
   export default {
     name: 'EditModule',
@@ -137,8 +138,10 @@
           moduleId: this.$route.params.id || undefined
         };
 
+        // TODO: Trigger event editModule.onInit
         this.$store.dispatch("module/getModuleData", data)
           .then( response => {
+            // TODO: Trigger event editModule.onLoaded
             this.loading = false;
             this.ready = true;
           }).catch( error => {
@@ -182,7 +185,6 @@
       },
       setCurrentComponent(ref) {
         this.currentComponent = this.module.structure.columns[ref.columnId].components[ref.componentId];
-        console.log(this.currentComponent);
       },
       changeMode(mode) {
         this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});
@@ -199,6 +201,9 @@
     },
     created () {
       this.loadModule();
+    },
+    mounted () {
+      // TODO: Trigger event editModule.onMounted
     }
   };
 </script>

@@ -61,7 +61,7 @@
 
   import ToggleButton from '../common/ToggleButton.vue'
   import Plugins from '../../plugins'
-  import _ from 'underscore'
+  import _ from 'underscore-contrib'
 
   export default {
     props: ['component'],
@@ -80,11 +80,20 @@
       ToggleButton
     },
     created() {
-      // Component Type
-      let type = this.component.type.replace('-element', '');
 
-      // All Plugins
+      // Component Type
+      const type = this.component.type.replace('-element', '');
+
+      // Base plugins
       this.plugins = Plugins[type];
+
+      if ( this.$customer ) {
+        // Check for customer Plugins
+        let customerPlugins = _.getPath(this.$customer, 'studio.modules.plugins', {});
+        if (!_.isEmpty(customerPlugins)) {
+          this.plugins = _.extend(Plugins[type], customerPlugins[type]);
+        }
+      }
 
       this.component.plugins = this.component.plugins || [];
 

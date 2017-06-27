@@ -1,8 +1,11 @@
-let plugins = {
-  text: require('./text'),
-  image: require('./image'),
-  button: require('./button'),
-  divider: require('./divider')
-};
+const text = require('./text');
+const image = require('./image');
+const button = require('./button');
+const divider = require('./divider');
 
-module.exports = plugins;
+module.exports = {
+  text,
+  image,
+  button,
+  divider,
+};

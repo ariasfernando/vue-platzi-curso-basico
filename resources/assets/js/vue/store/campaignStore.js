@@ -1,4 +1,4 @@
-import _ from 'underscore'
+import _ from 'underscore-contrib'
 import campaignService from '../services/campaign'
 
 const state = {

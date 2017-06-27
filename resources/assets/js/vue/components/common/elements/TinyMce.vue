@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import _ from 'underscore'
+  import _ from 'underscore-contrib'
 
   export default {
     name: 'TinyMce',

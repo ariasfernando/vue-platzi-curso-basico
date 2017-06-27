@@ -119,6 +119,7 @@ gulp.task('elixir-copy-bower', function () {
  */
 gulp.task('elixir-scripts', function () {
     let assetsPath = 'resources/assets/';
+    let customerAssetsPath = 'customer/' + appName + '/js/';
     let jsDestinationPath = 'public/js/';
 
     elixir((mix) => {
@@ -150,6 +151,12 @@ gulp.task('elixir-scripts', function () {
                 jsDestinationPath + "dashboard-components.js",
                 assetsPath
             )
+            // === Customer Assets ===
+            // .browserify(
+            //     "index.js",
+            //     jsDestinationPath + "customer.js",
+            //     customerAssetsPath
+            // )
             // === Compile Vendor and Application scripts to library.js ===
             .scripts(
                 [
