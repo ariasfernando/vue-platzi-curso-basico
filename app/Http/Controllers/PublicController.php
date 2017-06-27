@@ -64,6 +64,6 @@ class PublicController extends Controller
             'error_message' => $request->session()->pull('error_message', 'Something went wrong. Please try again.')
         ];
 
-        return $this->renderView('base.error', ['params' => $params]);
+        return $this->renderView('error', ['params' => $params]);
     }
 }

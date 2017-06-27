@@ -72,7 +72,7 @@
                     data-campaign-id="{{ $params['campaign_id'] }}"
                 ><i class="glyphicon glyphicon-search"></i> Send for review</button>
             @endif
-            @if (!$is_template && $params['campaign_data']->can_be_processed)
+            @if (!$isTemplate && $params['campaign_data']->can_be_processed)
                 <a class="btn btn-continue campaign-continue {{$hidden_class}}" href="#">Complete<i class="glyphicon glyphicon-triangle-right"></i></a>
             @endif
         </div>

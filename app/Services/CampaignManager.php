@@ -122,7 +122,7 @@ class CampaignManager
             $campaign_data->status = 2;
             $campaign_data->deleted_at = Carbon::now();
             if ($response = $campaign_data->save()) {
-                Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new \MongoId($campaign_id)]));
+                Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectId($campaign_id)]));
                 // Check proof
                 if ($campaign_data->has_active_proof) {
                     $proof = $campaign_data->getLastProof();

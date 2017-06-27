@@ -50,8 +50,8 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'acl.permission' => 'Stensul\Http\Middleware\HasPermission',
-        'admin' => 'Stensul\Http\Middleware\AdminAuthenticate',
+        'acl.permission' => \Stensul\Http\Middleware\HasPermission::class,
+        'admin' => \Stensul\Http\Middleware\AdminAuthenticate::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \Stensul\Http\Middleware\RedirectIfAuthenticated::class,

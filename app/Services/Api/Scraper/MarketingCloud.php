@@ -11,6 +11,7 @@ use Stensul\Services\Api\Scraper;
 use Stensul\Services\Api\ApiImageConnector;
 use Stensul\Services\Api\Transformers\ImageTransformer;
 use Stensul\ImageProxy\Generator;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 /**
  * Scraper for Salesforce Marketing Cloud (formerly ExactTarget).
@@ -56,7 +57,7 @@ class MarketingCloud extends Scraper implements ApiImageConnector
                 [
                     'properties' => [
                         'url' => $this->api_url,
-                        'user_id' => new \MongoId(Auth::id())
+                        'user_id' => new ObjectId(Auth::id())
                     ]
                 ]
             );

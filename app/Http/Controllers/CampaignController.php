@@ -120,7 +120,7 @@ class CampaignController extends Controller
             $params['header_title'] .= " (" . \Config::get('locale.langs.' . $locale . '.name') . ")";
         }
 
-        return $this->renderView('base.campaign', array('params' => $params));
+        return $this->renderView('campaign', array('params' => $params));
     }
 
     /**
@@ -372,7 +372,7 @@ class CampaignController extends Controller
         ) {
             Activity::log(
                 'Campaign edit deny',
-                array('properties' => ['campaign_id' => new \MongoId($request->input('campaign_id'))])
+                array('properties' => ['campaign_id' => new ObjectId($request->input('campaign_id'))])
             );
 
             return array('campaign_lock' => $request->input('campaign_id'));

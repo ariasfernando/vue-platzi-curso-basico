@@ -2,6 +2,7 @@
 
 namespace Stensul\Models;
 
+use MongoDB\BSON\ObjectID as ObjectID;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
@@ -252,7 +253,7 @@ class Campaign extends Eloquent
      */
     public function getLastProof()
     {
-        return Proof::whereCampaignId(new \MongoId($this->_id))->orderBy('created_at', 'DESC')->first();
+        return Proof::whereCampaignId(new ObjectId($this->_id))->orderBy('created_at', 'DESC')->first();
     }
 
     /**

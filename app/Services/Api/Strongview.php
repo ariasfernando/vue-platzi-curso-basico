@@ -7,6 +7,7 @@ use Cache;
 use Activity;
 use Stensul\Models\Upload;
 use Stensul\Services\Api\StrongviewConnection\StrongviewConnector;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class Strongview implements ApiConnector
 {
@@ -71,9 +72,9 @@ class Strongview implements ApiConnector
             'Campaign uploaded to Strongview',
             [
                 'properties' => [
-                    'campaign_id' => new \MongoId($campaign->id),
+                    'campaign_id' => new ObjectId($campaign->id),
                     'name' => $filename,
-                    'user_id' => new \MongoId(Auth::id())
+                    'user_id' => new ObjectId(Auth::id())
                 ]
             ]
         );
@@ -81,10 +82,10 @@ class Strongview implements ApiConnector
         Upload::create(
             [
                 'api' => 'strongview',
-                'campaign_id' => new \MongoId($campaign->id),
+                'campaign_id' => new ObjectId($campaign->id),
                 'original_filename' => $original_file,
                 'filename' => $filename,
-                'user_id' => new \MongoId(Auth::id()),
+                'user_id' => new ObjectId(Auth::id()),
                 'subject' => (!is_null($request) || isset($request['subject']))? $request['subject'] : ''
             ]
         );

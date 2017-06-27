@@ -99,7 +99,7 @@ class ProofController extends Controller
             'token' => $token
         ];
 
-        return $this->renderView('base.proof', ['params' => $params]);
+        return $this->renderView('proof', ['params' => $params]);
     }
 
     /**

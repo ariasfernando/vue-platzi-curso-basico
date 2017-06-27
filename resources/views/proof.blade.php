@@ -1,4 +1,4 @@
-@extends('base.layouts.master')
+@extends('layouts.master')
 
 @section('content')
 
@@ -11,7 +11,7 @@
     </div>
 
     {{-- VUE TEMPLATES --}}
-    @include('base.partials.vue_templates')
+    @include('partials.vue_templates')
 
 @endsection
 

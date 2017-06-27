@@ -186,12 +186,12 @@ class EmailSender
 
         switch ($data['type']) {
             case 'new_proof':
-                $email_layout = Helper::validateView('base.emails.proof.new_proof');
+                $email_layout = Helper::validateView('emails.proof.new_proof');
                 $subject = sprintf('Review Request: %s, from %s', $data['campaign_name'], $data['requestor']);
                 $data['notification_message'] = isset($reviewer['notification_message']) ? $reviewer['notification_message'] : '';
                 break;
             case 'deleted_proof':
-                $email_layout = Helper::validateView('base.emails.proof.deleted_proof');
+                $email_layout = Helper::validateView('emails.proof.deleted_proof');
                 $subject = sprintf('The email "%s" has been deleted, and your feedback is no longer needed.', $data['campaign_name']);
                 break;
         }
@@ -229,7 +229,7 @@ class EmailSender
 
         Activity::log('Email sent to reviewer', [
             'properties' => [
-                'proof_id' => new \MongoId($data['proof_id']),
+                'proof_id' => new ObjectId($data['proof_id']),
                 'email' => $reviewer['email'],
                 'type' => $data['type']
             ]

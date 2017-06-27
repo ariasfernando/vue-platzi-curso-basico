@@ -9,6 +9,7 @@ use Stensul\Jobs\Job;
 use Stensul\Models\User;
 use Stensul\Models\Proof;
 use Stensul\Models\Campaign;
+use MongoDB\BSON\ObjectID as ObjectID;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
@@ -119,7 +120,7 @@ class SendReviewersEmail extends Job implements SelfHandling, ShouldQueue
         if ($params['send_to_all']) {
             Activity::log('Send proof notification to all reviewers.', [
                 'properties' => [
-                    'proof_id' => new \MongoId($this->proof->id)
+                    'proof_id' => new ObjectId($this->proof->id)
                 ]
             ]);
 
@@ -134,8 +135,8 @@ class SendReviewersEmail extends Job implements SelfHandling, ShouldQueue
 
                     Activity::log('Reviewer has been notified of a new proof', [
                         'properties' => [
-                            'proof_id' => new \MongoId($this->proof->id),
-                            'reviewer_id' => new \MongoId($reviewer['user_id'])
+                            'proof_id' => new ObjectId($this->proof->id),
+                            'reviewer_id' => new ObjectId($reviewer['user_id'])
                         ]
                     ]);
 
@@ -179,8 +180,8 @@ class SendReviewersEmail extends Job implements SelfHandling, ShouldQueue
 
                     Activity::log('Reviewer has been notified of a deleted campaign with a proof', [
                         'properties' => [
-                            'proof_id' => new \MongoId($this->proof->id),
-                            'reviewer_id' => new \MongoId($reviewer['user_id'])
+                            'proof_id' => new ObjectId($this->proof->id),
+                            'reviewer_id' => new ObjectId($reviewer['user_id'])
                         ]
                     ]);
 

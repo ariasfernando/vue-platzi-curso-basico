@@ -29,8 +29,12 @@ $default = [
             '/dashboard/campaigns/{type}'            => 'DashboardController@getCampaigns',
             '/public/view/{id}'                      => 'PublicController@view',
             '/public/html/{id}'                      => 'PublicController@html',
-            // @TODO add proof routes
-            '/proof'                                 => 'ProofController@getReview',
+            '/proof/campaign/{id}'                   => 'ProofController@getCampaign',
+            '/proof/review/{token}'                  => 'ProofController@getReview',
+            '/proof/data/{token}'                    => 'ProofController@getData',
+            '/proof/comments/{token}'                => 'ProofController@getComments',
+            '/proof/reviewers/{id}'                  => 'ProofController@getReviewers',
+            '/proof/users'                           => 'ProofController@getUsers',
         ],
 
         'post' => [
@@ -47,12 +51,16 @@ $default = [
             '/campaign/email-sent-history' => 'CampaignController@postEmailSentHistory',
             '/template/move-library'       => 'TemplateController@postMoveLibrary',
             '/template/modal'              => 'TemplateController@postModal',
-
+            '/proof/comment'               => 'ProofController@postComment',
+            '/proof/decision'              => 'ProofController@postDecision',
+            '/proof/create'                => 'ProofController@postCreate',
         ],
 
         'put' => [],
 
-        'delete' => [],
+        'delete' => [
+            '/proof/decision'              => 'ProofController@deleteDecision',
+        ],
     ],
     'api' => [
         'get'    => [
