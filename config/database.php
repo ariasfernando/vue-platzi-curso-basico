@@ -58,7 +58,7 @@ $default = [
         ),
         'mongodb_testing' => array(
             'driver'   => 'mongodb',
-            'host'     => env('DB_HOST', 'localhost'),
+            'host'     => env('DB_HOST', 'mongo'),
             'port'     => env('DB_PORT', 27017),
             'username' => env('DB_USERNAME', ''),
             'password' => env('DB_PASSWORD', ''),

@@ -3,7 +3,7 @@ namespace Stensul\Exceptions;
 
 use Exception;
 
-class BadParameterException extends Exceptions
+class BadParameterException extends Exception
 {
 
 }

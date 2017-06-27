@@ -93,7 +93,7 @@ class ImageProcessor extends ImageDriver
             $layer = base64_decode(end($temp));
             $tmp_file = tempnam(sys_get_temp_dir(), 'convert-');
             file_put_contents($tmp_file, $layer);
-            return "ephemeral:{$tmp_file}";
+            return $tmp_file;
         }
         return $layer;
     }
