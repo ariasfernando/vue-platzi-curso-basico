@@ -21,7 +21,7 @@ const router = new VueRouter({
   saveScrollPosition: true,
 });
 
-const app = new Vue({
+new Vue({
   router,
-  store
+  store,
 }).$mount('#studio');

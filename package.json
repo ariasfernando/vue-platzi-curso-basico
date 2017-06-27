@@ -86,10 +86,5 @@
     "test": "mocha tests/js/*.js --compilers js:babel-register",
     "test:single": "istanbul cover --root resources/assets/js/vue ./node_modules/.bin/_mocha -- -R spec tests/js/*.test.js --compilers js:babel-register",
     "cover": "nyc npm t"
-  },
-  "config": {
-    "ghooks": {
-      "pre-commit": "npm run test:single && npm run check-coverage"
-    }
   }
 }
