@@ -6,6 +6,7 @@ use Auth;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\Library;
+use Stensul\Models\Permission;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
 
@@ -194,6 +195,7 @@ class LibraryController extends Controller
     {
         $params = [
             "name" => $request->input("name"),
+            "key" => Library::standarizeKey($request->input("name")),
             "description" => $request->input("description"),
             "config" => $request->input("config"),
             "modules" => []
@@ -210,8 +212,19 @@ class LibraryController extends Controller
         if (Library::where('name', '=', $params["name"])->exists()) {
             $response_message = array("message"=> "ERROR_EXISTS");
         } else {
-            Library::create($params);
-            $response_message = array("message"=> "SUCCESS");
+            // Create permission to have access to the new library
+            $permission_params = [
+                "name" => "access_library_" . $params['key'],
+                "description" => "Access to library: " . $params['name']
+            ];
+
+            if (Permission::where('name', '=', $permission_params["name"])->exists()) {
+                $response_message = array("message"=> "ERROR_EXISTS");
+            } else {
+                Library::create($params);
+                Permission::create($permission_params);
+                $response_message = array("message"=> "SUCCESS");
+            } 
         }
 
         return $response_message;
