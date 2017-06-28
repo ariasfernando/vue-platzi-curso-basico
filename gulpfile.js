@@ -31,11 +31,6 @@ let gulpsync = require('gulp-sync')(gulp);
 require('elixir-jshint');
 require('laravel-elixir-vueify');
 
-let mocha = require('gulp-mocha');
-let generateSuite = require("gulp-mocha-browserify-sweet");
-let browserify = require("gulp-browserify");
-let concat = require("gulp-concat");
-
 /*
  | --------------------------------------------------------------------------
  | Define App name
@@ -111,6 +106,14 @@ gulp.task('elixir-copy-bower', function () {
   });
 });
 
+function fileExists(file) {
+  try {
+    fs.accessSync(file, fs.F_OK);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 /*
  | --------------------------------------------------------------------------
@@ -122,190 +125,201 @@ gulp.task('elixir-scripts', function () {
   let customerAssetsPath = 'stensul/customer/' + assetsPath + 'js/';
   let jsDestinationPath = 'public/js/';
 
-  elixir((mix) => {
-      mix
-        .browserify(
-          "js/vue/campaign.js",
-          jsDestinationPath + "campaign-components.js",
-          assetsPath
-        )
-        .browserify(
-          "js/vue/studio-library.js",
-          jsDestinationPath + "studio-library.js",
-          assetsPath
-        )
-        .browserify(
-          "js/vue/studio-module.js",
-          jsDestinationPath + "studio-module.js",
-          assetsPath
-        )
-        .browserify(
-          [
-            "js/vue/dashboard.js",
-            'js/library/custom-plugins/st-pagination-bar.jquery.js',
-            'js/library/campaign-preview.js',
-            'js/library/campaign-manager.js',
-            'js/library/campaign-controller.js',
-            'js/library/dashboard-controller.js'
-          ],
-          jsDestinationPath + "dashboard-components.js",
-          assetsPath
-        )
-        // === Customer Assets ===
-        // .browserify(
-        //     "index.js",
-        //     jsDestinationPath + "customer.js",
-        //     customerAssetsPath
-        // )
-        // === Compile Vendor and Application scripts to library.js ===
-        .scripts(
-          [
-            'bower/jquery/dist/jquery.js',
-            'bower/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js'
-            //'bower/bootstrap/dist/js/bootstrap.min.js',
-            //'bower/jquery-ui/jquery-ui.min.js',
-            //'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
-            //'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
-            // -- TinyMCE editor --
-            // 'bower/tinymce/tinymce.js',
-            // 'bower/tinymce/themes/modern/theme.js',
-            // 'bower/tinymce/plugins/paste/plugin.js',
-            // 'bower/tinymce/plugins/textcolor/plugin.js',
-            // 'bower/tinymce/plugins/colorpicker/plugin.js',
-            // 'bower/tinymce/plugins/lists/plugin.js',
-            // 'bower/tinymce/plugins/autolink/plugin.js',
-            // 'bower/tinymce/plugins/link/plugin.js',
-            // 'bower/tinymce/plugins/advlist/plugin.js',
-            // -- Common scripts --
-            //'js/library/application-globals.js',
-            //'js/library/application-utils.js'
-          ],
-          jsDestinationPath + 'library-v2.js',
-          assetsPath
-        )
+  if (fileExists(customerAssetsPath + 'main.js')) {
+    console.log('existe');
+    elixir((mix) => {
+      mix.browserify(
+          'main.js',
+          jsDestinationPath + "customer.js",
+          customerAssetsPath
+      )
+    });
+  }
 
-        // === Compile Vendor and Application scripts to library.js ===
-        .scripts(
-          [
-            'bower/underscore/underscore.js',
-            'bower/jquery/dist/jquery.min.js',
-            'bower/jquery-ui/jquery-ui.min.js',
-            'bower/bootstrap/dist/js/bootstrap.min.js',
-            'bower/magnific-popup/dist/jquery.magnific-popup.js',
-            'bower/cropit/dist/jquery.cropit.js',
-            'bower/bootstrapcolorpicker/dist/js/bootstrap-colorpicker.min.js',
-            'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
-            'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
-            // -- Jquery Simple colorpicker List --
-            'bower/jquery-simplecolorpicker/jquery.simplecolorpicker.js',
-            // -- TinyMCE editor --
-            'bower/tinymce/tinymce.js',
-            'bower/tinymce/themes/modern/theme.js',
-            'bower/tinymce/plugins/paste/plugin.js',
-            'bower/tinymce/plugins/textcolor/plugin.js',
-            'bower/tinymce/plugins/colorpicker/plugin.js',
-            'bower/tinymce/plugins/lists/plugin.js',
-            'bower/tinymce/plugins/autolink/plugin.js',
-            'bower/tinymce/plugins/link/plugin.js',
-            'bower/tinymce/plugins/advlist/plugin.js',
-            // -- zxcvbn --
-            'bower/zxcvbn/dist/zxcvbn.js',
-            // -- Vue --
-            'bower/vue/dist/vue.min.js',
-            // -- Extended plugins --
-            'js/plugins/**/*.js',
-            // -- Common scripts --
-            'js/library/helpers/*.js',
-            'js/library/custom-plugins/html2canvas-0.5.0-modified.js', // include always before application-utils.js
-            'js/library/application-globals.js',
-            'js/library/application-utils.js',
-            'js/library/application-init.js',
-            'js/library/application-api.js',
-            'js/library/login.js'
-          ],
-          jsDestinationPath + 'library.js',
-          assetsPath
-        )
-
-        // === Plugins ===
-        .scripts(
-          ['js/plugins/*.js', 'js/plugins/**/*.js'],
-          jsDestinationPath + 'plugins.js',
-          assetsPath
-        )
-
-        // === Modules ===
-        .scripts(
-          ['../views/base/modules/**/*.js', 'js/library/modules-placeholder.js'],
-          jsDestinationPath + 'modules.js',
-          assetsPath
-        )
-
-        // === Dashboard page ===
-        .scripts(
-          [
-            'js/library/custom-plugins/st-pagination-bar.jquery.js',
-            'js/library/campaign-preview.js',
-            'js/library/campaign-manager.js',
-            'js/library/campaign-controller.js',
-            'js/library/dashboard-controller.js',
-            jsAppFilePath('dashboard-vue.js'),
-            jsAppFilePath('dashboard.js')
-          ],
-          jsDestinationPath + 'dashboard.js',
-          assetsPath
-        )
-
-        // === Admin page ===
-        .scripts(
-          [
-            'js/library/custom-plugins/st-pagination-bar.jquery.js',
-            'js/library/admin/*.js',
-            jsAppFilePath('admin.js')
-          ],
-          jsDestinationPath + 'admin.js',
-          assetsPath
-        )
-
-        // === Campaign page ===
-        .scripts(
-          [
-            // Transformers
-            'js/library/transformers.js',
-            // Custom Plugins
-            'js/library/custom-plugins/st-pagination-bar.jquery.js',
-            'js/library/custom-plugins/st-color-picker.js',
-            // Configuration Modals [ Deprecated ]
-            'js/library/modals/*',
-            // Library
-            'js/library/image-library.js',
-            'js/library/master-image-editor.js',
-            'js/library/master-image-editor.v2.js',
-            'js/library/master-button-editor.js',
-            'js/library/campaign-preview.js',
-            'js/library/module-manager.js',
-            'js/library/modal-manager.js',
-            'js/library/campaign-manager.js',
-            'js/library/campaign-menu.js',
-            'js/library/image-manager.js',
-            jsAppFilePath('campaign.js')
-          ],
-          jsDestinationPath + 'campaign.js',
-          assetsPath
-        )
-        // === Campaign Preview page ===
-        .scripts(
-          [
-            "bower/jquery/dist/jquery.min.js",
-            "bower/jquery-ui/jquery-ui.min.js",
-            "bower/bootstrap/dist/js/bootstrap.min.js",
-            jsAppFilePath("preview.js")
-          ],
-          jsDestinationPath + "preview.js",
-          assetsPath
-        );
-    }
-  );
+  // elixir((mix) => {
+  //     mix
+  //       .browserify(
+  //         "js/vue/campaign.js",
+  //         jsDestinationPath + "campaign-components.js",
+  //         assetsPath
+  //       )
+  //       .browserify(
+  //         "js/vue/studio-library.js",
+  //         jsDestinationPath + "studio-library.js",
+  //         assetsPath
+  //       )
+  //       .browserify(
+  //         "js/vue/studio-module.js",
+  //         jsDestinationPath + "studio-module.js",
+  //         assetsPath
+  //       )
+  //       .browserify(
+  //         [
+  //           "js/vue/dashboard.js",
+  //           'js/library/custom-plugins/st-pagination-bar.jquery.js',
+  //           'js/library/campaign-preview.js',
+  //           'js/library/campaign-manager.js',
+  //           'js/library/campaign-controller.js',
+  //           'js/library/dashboard-controller.js'
+  //         ],
+  //         jsDestinationPath + "dashboard-components.js",
+  //         assetsPath
+  //       )
+  //       // === Customer Assets ===
+  //       .browserify(
+  //           '',
+  //           jsDestinationPath + "customer.js",
+  //           customerAssetsPath
+  //       )
+  //       // === Compile Vendor and Application scripts to library.js ===
+  //       .scripts(
+  //         [
+  //           'bower/jquery/dist/jquery.js',
+  //           'bower/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js'
+  //           //'bower/bootstrap/dist/js/bootstrap.min.js',
+  //           //'bower/jquery-ui/jquery-ui.min.js',
+  //           //'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
+  //           //'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
+  //           // -- TinyMCE editor --
+  //           // 'bower/tinymce/tinymce.js',
+  //           // 'bower/tinymce/themes/modern/theme.js',
+  //           // 'bower/tinymce/plugins/paste/plugin.js',
+  //           // 'bower/tinymce/plugins/textcolor/plugin.js',
+  //           // 'bower/tinymce/plugins/colorpicker/plugin.js',
+  //           // 'bower/tinymce/plugins/lists/plugin.js',
+  //           // 'bower/tinymce/plugins/autolink/plugin.js',
+  //           // 'bower/tinymce/plugins/link/plugin.js',
+  //           // 'bower/tinymce/plugins/advlist/plugin.js',
+  //           // -- Common scripts --
+  //           //'js/library/application-globals.js',
+  //           //'js/library/application-utils.js'
+  //         ],
+  //         jsDestinationPath + 'library-v2.js',
+  //         assetsPath
+  //       )
+  //
+  //       // === Compile Vendor and Application scripts to library.js ===
+  //       .scripts(
+  //         [
+  //           'bower/underscore/underscore.js',
+  //           'bower/jquery/dist/jquery.min.js',
+  //           'bower/jquery-ui/jquery-ui.min.js',
+  //           'bower/bootstrap/dist/js/bootstrap.min.js',
+  //           'bower/magnific-popup/dist/jquery.magnific-popup.js',
+  //           'bower/cropit/dist/jquery.cropit.js',
+  //           'bower/bootstrapcolorpicker/dist/js/bootstrap-colorpicker.min.js',
+  //           'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
+  //           'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
+  //           // -- Jquery Simple colorpicker List --
+  //           'bower/jquery-simplecolorpicker/jquery.simplecolorpicker.js',
+  //           // -- TinyMCE editor --
+  //           'bower/tinymce/tinymce.js',
+  //           'bower/tinymce/themes/modern/theme.js',
+  //           'bower/tinymce/plugins/paste/plugin.js',
+  //           'bower/tinymce/plugins/textcolor/plugin.js',
+  //           'bower/tinymce/plugins/colorpicker/plugin.js',
+  //           'bower/tinymce/plugins/lists/plugin.js',
+  //           'bower/tinymce/plugins/autolink/plugin.js',
+  //           'bower/tinymce/plugins/link/plugin.js',
+  //           'bower/tinymce/plugins/advlist/plugin.js',
+  //           // -- zxcvbn --
+  //           'bower/zxcvbn/dist/zxcvbn.js',
+  //           // -- Vue --
+  //           'bower/vue/dist/vue.min.js',
+  //           // -- Extended plugins --
+  //           'js/plugins/**/*.js',
+  //           // -- Common scripts --
+  //           'js/library/helpers/*.js',
+  //           'js/library/custom-plugins/html2canvas-0.5.0-modified.js', // include always before application-utils.js
+  //           'js/library/application-globals.js',
+  //           'js/library/application-utils.js',
+  //           'js/library/application-init.js',
+  //           'js/library/application-api.js',
+  //           'js/library/login.js'
+  //         ],
+  //         jsDestinationPath + 'library.js',
+  //         assetsPath
+  //       )
+  //
+  //       // === Plugins ===
+  //       .scripts(
+  //         ['js/plugins/*.js', 'js/plugins/**/*.js'],
+  //         jsDestinationPath + 'plugins.js',
+  //         assetsPath
+  //       )
+  //
+  //       // === Modules ===
+  //       .scripts(
+  //         ['../views/base/modules/**/*.js', 'js/library/modules-placeholder.js'],
+  //         jsDestinationPath + 'modules.js',
+  //         assetsPath
+  //       )
+  //
+  //       // === Dashboard page ===
+  //       .scripts(
+  //         [
+  //           'js/library/custom-plugins/st-pagination-bar.jquery.js',
+  //           'js/library/campaign-preview.js',
+  //           'js/library/campaign-manager.js',
+  //           'js/library/campaign-controller.js',
+  //           'js/library/dashboard-controller.js',
+  //           jsAppFilePath('dashboard-vue.js'),
+  //           jsAppFilePath('dashboard.js')
+  //         ],
+  //         jsDestinationPath + 'dashboard.js',
+  //         assetsPath
+  //       )
+  //
+  //       // === Admin page ===
+  //       .scripts(
+  //         [
+  //           'js/library/custom-plugins/st-pagination-bar.jquery.js',
+  //           'js/library/admin/*.js',
+  //           jsAppFilePath('admin.js')
+  //         ],
+  //         jsDestinationPath + 'admin.js',
+  //         assetsPath
+  //       )
+  //
+  //       // === Campaign page ===
+  //       .scripts(
+  //         [
+  //           // Transformers
+  //           'js/library/transformers.js',
+  //           // Custom Plugins
+  //           'js/library/custom-plugins/st-pagination-bar.jquery.js',
+  //           'js/library/custom-plugins/st-color-picker.js',
+  //           // Configuration Modals [ Deprecated ]
+  //           'js/library/modals/*',
+  //           // Library
+  //           'js/library/image-library.js',
+  //           'js/library/master-image-editor.js',
+  //           'js/library/master-image-editor.v2.js',
+  //           'js/library/master-button-editor.js',
+  //           'js/library/campaign-preview.js',
+  //           'js/library/module-manager.js',
+  //           'js/library/modal-manager.js',
+  //           'js/library/campaign-manager.js',
+  //           'js/library/campaign-menu.js',
+  //           'js/library/image-manager.js',
+  //           jsAppFilePath('campaign.js')
+  //         ],
+  //         jsDestinationPath + 'campaign.js',
+  //         assetsPath
+  //       )
+  //       // === Campaign Preview page ===
+  //       .scripts(
+  //         [
+  //           "bower/jquery/dist/jquery.min.js",
+  //           "bower/jquery-ui/jquery-ui.min.js",
+  //           "bower/bootstrap/dist/js/bootstrap.min.js",
+  //           jsAppFilePath("preview.js")
+  //         ],
+  //         jsDestinationPath + "preview.js",
+  //         assetsPath
+  //       );
+  //   }
+  // );
 });
 
 /*
