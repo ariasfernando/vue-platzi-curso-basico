@@ -73,7 +73,7 @@ class OauthAuthController extends Controller
             $user = Socialite::driver($this->config['oauth_driver'])->user();
             $email = strtolower($user->getEmail());
 
-            if (User::where('email', '=', $email)->exists()) {
+            if (User::where('email', '=', $email)->where('status', '!=', 'deleted')->exists()) {
                 $roles_array = array_column(Role::all(['name'])->toArray(), 'name');
                 $user_auth = User::where('email', '=', $email)->firstOrFail();
                 if (!$user_auth->trashed()) {

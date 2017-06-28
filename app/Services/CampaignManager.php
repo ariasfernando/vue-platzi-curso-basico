@@ -627,7 +627,7 @@ class CampaignManager
     {
         $campaign = Campaign::findOrFail($campaign_id);
         return response()->make($campaign->body_html, 200, [
-            'Content-Type' => 'text/plain',
+            'Content-Type' => 'text/html',
             'Content-Disposition' => 'attachment; filename="' . $campaign->campaign_name . '.html"'
         ]);
     }

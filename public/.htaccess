@@ -5,7 +5,7 @@
 
     RewriteEngine On
 
-    <FilesMatch "\.(ttf|otf|eot|woff)$">
+    <FilesMatch "\.(ttf|otf|eot|woff|woff2)$">
         <IfModule mod_headers.c>
                 Header set Access-Control-Allow-Origin "*"
         </IfModule>
