@@ -27,6 +27,11 @@ class AkamaiAdapter implements CdnInterface
             $params['objects'][] = rtrim(config('cdn.host'), '/') . $file;
         }
 
+        if (count($params['objects']) == 0) {
+            \Log::warning('no objects queued to flush');
+            return false;
+        }
+
         try {
             $response = $this->client->request(
                 'POST',

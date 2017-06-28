@@ -27,6 +27,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('Authenticate');
+        $this->middleware('acl.permission:access_dashboard');
     }
 
     /**

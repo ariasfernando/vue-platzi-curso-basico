@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Stensul\Services\Api\Scraper;
 use Stensul\Services\Api\ApiImageConnector;
 use Stensul\Services\Api\Transformers\ImageTransformer;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class Blog extends Scraper implements ApiImageConnector
 {
@@ -212,7 +213,7 @@ class Blog extends Scraper implements ApiImageConnector
                     [
                         'properties' => [
                             'url' => $this->url,
-                            'user_id' => new \MongoId(Auth::id())
+                            'user_id' => new ObjectId(Auth::id())
                         ]
                     ]
                 );
