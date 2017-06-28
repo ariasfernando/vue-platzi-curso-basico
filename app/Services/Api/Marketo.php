@@ -8,6 +8,7 @@ use Activity;
 use Carbon\Carbon;
 use Stensul\Models\Upload;
 use GuzzleHttp\Client as Client;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class Marketo implements ApiConnector
 {
@@ -69,20 +70,20 @@ class Marketo implements ApiConnector
                                     'Campaign uploaded to Marketo',
                                     [
                                         'properties' => [
-                                            'campaign_id' => new \MongoId($campaign_id),
+                                            'campaign_id' => new ObjectId($campaign_id),
                                             'filename' => $filename,
-                                            'user_id' => new \MongoId(Auth::id())
+                                            'user_id' => new ObjectId(Auth::id())
                                         ]
                                     ]
                                 );
 
                                 Upload::create([
                                     'api' => 'marketo',
-                                    'campaign_id' => new \MongoId($campaign_id),
+                                    'campaign_id' => new ObjectId($campaign_id),
                                     'original_filename' => $original_filename,
                                     'filename' => $filename,
                                     'path' => $folder['folderId']['id'],
-                                    'user_id' => new \MongoId(Auth::id())
+                                    'user_id' => new ObjectId(Auth::id())
                                 ]);
 
                                 return [

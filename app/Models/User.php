@@ -140,9 +140,9 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
     public function getLibraries()
     {
         $libraries = [];
-        foreach ($this->getRoles() as $role_data) {
-            $libraries = array_merge($libraries, $role_data->libraries);
-        }
+        // foreach ($this->getRoles() as $role_data) {
+        //     $libraries = array_merge($libraries, $role_data->libraries);
+        // }
         return $libraries;
     }
 

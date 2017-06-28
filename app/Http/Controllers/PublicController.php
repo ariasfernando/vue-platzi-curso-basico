@@ -4,6 +4,7 @@ namespace Stensul\Http\Controllers;
 
 use Config;
 use Stensul\Models\Campaign;
+use Illuminate\Http\Request;
 use Stensul\Services\EmailHtmlCreator as Html;
 
 class PublicController extends Controller
@@ -49,5 +50,20 @@ class PublicController extends Controller
         $campaign = Campaign::findOrFail($campaign_id);
         $html = new Html($campaign);
         return $html->getBody();
+    }
+
+    /**
+     * Show an error page
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
+     */
+    public function error(Request $request)
+    {
+        $params = [
+            'error_message' => $request->session()->pull('error_message', 'Something went wrong. Please try again.')
+        ];
+
+        return $this->renderView('error', ['params' => $params]);
     }
 }

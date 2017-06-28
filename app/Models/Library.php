@@ -20,7 +20,7 @@ class Library extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'modules', 'config'];
+    protected $fillable = ['name', 'key', 'description', 'modules', 'config'];
 
     /**
      * Get the library modules
@@ -59,5 +59,16 @@ class Library extends Eloquent
             }
         }
         return $library_modules;
+    }
+
+    /**
+     * Get the library key standarized
+     *
+     * @param string $name
+     * @return string Modules
+     */
+    public static function standarizeKey($name)
+    {
+        return str_replace(' ', '', strtolower($name));
     }
 }

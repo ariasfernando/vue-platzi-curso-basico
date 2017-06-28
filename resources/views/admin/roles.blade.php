@@ -48,12 +48,6 @@
 											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
 										</a>
 									</th>
-									<th width="150" class="sortable">
-										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="libraries">
-											Libraries
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-										</a>
-									</th>
 									<th  width="150" class="bold">Actions</th>
 								</tr>
 							</thead>
