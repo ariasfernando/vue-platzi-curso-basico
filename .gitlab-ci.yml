@@ -5,6 +5,7 @@ services:
 
 variables:
   APP_NAME: "Base"
+  APP_BASE_URL: "http://localhost:3000"
 
 cache:
   paths:
