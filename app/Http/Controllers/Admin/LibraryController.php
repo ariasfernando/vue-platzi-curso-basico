@@ -224,7 +224,7 @@ class LibraryController extends Controller
                 Library::create($params);
                 Permission::create($permission_params);
                 $response_message = array("message"=> "SUCCESS");
-            } 
+            }
         }
 
         return $response_message;

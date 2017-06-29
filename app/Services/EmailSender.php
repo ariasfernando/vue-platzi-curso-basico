@@ -188,11 +188,15 @@ class EmailSender
             case 'new_proof':
                 $email_layout = Helper::validateView('emails.proof.new_proof');
                 $subject = sprintf('Review Request: %s, from %s', $data['campaign_name'], $data['requestor']);
-                $data['notification_message'] = isset($reviewer['notification_message']) ? $reviewer['notification_message'] : '';
+                $data['notification_message'] =
+                    isset($reviewer['notification_message']) ? $reviewer['notification_message'] : '';
                 break;
             case 'deleted_proof':
                 $email_layout = Helper::validateView('emails.proof.deleted_proof');
-                $subject = sprintf('The email "%s" has been deleted, and your feedback is no longer needed.', $data['campaign_name']);
+                $subject = sprintf(
+                    'The email "%s" has been deleted, and your feedback is no longer needed.',
+                    $data['campaign_name']
+                );
                 break;
         }
 

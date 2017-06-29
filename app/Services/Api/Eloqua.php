@@ -72,8 +72,12 @@ class Eloqua implements ApiConnector
                     $eloqua_config['libraries'][$this->library_name]['auth']['credentials']['client_id'],
                     $eloqua_config['libraries'][$this->library_name]['auth']['credentials']['client_secret']
                 ];
-                $options['params']['json']['password'] = $eloqua_config['libraries'][$this->library_name]['auth']['credentials']['password'];
-                $options['params']['json']['username'] =  $eloqua_config['libraries'][$this->library_name]['auth']['auth']['credentials']['company_name'] . "\\"
+                $options['params']['json']['password'] =
+                    $eloqua_config['libraries'][$this->library_name]['auth']['credentials']['password'];
+
+                $options['params']['json']['username'] =
+                    $eloqua_config['libraries'][$this->library_name]['auth']['auth']['credentials']['company_name']
+                    . "\\"
                     . $eloqua_config['auth']['credentials']['user_name'];
             }
 
@@ -99,7 +103,8 @@ class Eloqua implements ApiConnector
      */
     private function getTokenByOauth($params = [], $force = false)
     {
-        if (Session::has('api:eloqua:token:expires_in') && Session::get('api:eloqua:token:expires_in') >= strtotime('now')) {
+        if (Session::has('api:eloqua:token:expires_in')
+            && Session::get('api:eloqua:token:expires_in') >= strtotime('now')) {
             $force = true;
         }
 
@@ -365,12 +370,14 @@ class Eloqua implements ApiConnector
 
             if (is_null($folderId)) {
                 if (!empty($eloqua_config['libraries'][$this->library_name]['email_folder_name'])) {
-                    return (Int)$this->createEmailFolder($eloqua_config['libraries'][$this->library_name]['email_folder_name']);
+                    return (int) $this->createEmailFolder(
+                        $eloqua_config['libraries'][$this->library_name]['email_folder_name']
+                    );
                 }
-                return (Int)$this->createEmailFolder($eloqua_config['email_folder_name']);
+                return (int) $this->createEmailFolder($eloqua_config['email_folder_name']);
             }
 
-            return (Int)$folderId;
+            return (int) $folderId;
         }
     }
 

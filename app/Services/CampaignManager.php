@@ -661,7 +661,8 @@ class CampaignManager
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->auto_save = $status;
             if ($response = $campaign_data->save()) {
-                Activity::log('Autosave campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
+                Activity::log('Autosave campaign updated', array(
+                    'properties' => ['campaign_id' => new ObjectID($campaign_id)]));
                 return array('success' => $campaign_id);
             }
         }

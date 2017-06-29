@@ -99,7 +99,11 @@ class CampaignController extends Controller
 
         if (\Config::get('api.scraper.status')
             && \Config::get('api.scraper.settings.campaign_preload')) {
-            Campaign::scraperPreloader($params['campaign_data']['library'], ['flush_cache' => true, 'only_update' => true]);
+            Campaign::scraperPreloader(
+                $params['campaign_data']['library'],
+                ['flush_cache' => true,
+                'only_update' => true]
+            );
         }
 
         // Initialize locale
@@ -383,7 +387,9 @@ class CampaignController extends Controller
             try {
                 return Campaign::deleteTag($request->input('campaign_id'), $request->input('tag_name'));
             } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-                throw new NotFoundHttpException('Campaign with the id ' . $request->input('campaign_id') . ' not found');
+                throw new NotFoundHttpException(
+                    'Campaign with the id ' . $request->input('campaign_id') . ' not found'
+                );
             }
         }
     }

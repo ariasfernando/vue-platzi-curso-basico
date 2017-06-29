@@ -30,7 +30,8 @@ class Marketo implements ApiConnector
     public function uploadEmail($campaign = null, $request = null)
     {
         if (!is_null($campaign)) {
-            $original_filename = (is_null($request) || !isset($request['filename']))? $campaign->campaign_name : $request['filename'];
+            $original_filename = (is_null($request) || !isset($request['filename']))
+                ? $campaign->campaign_name : $request['filename'];
             if (strlen($original_filename)) {
                 // get token
                 if ($this->access_token = $this->getToken()) {
@@ -91,7 +92,8 @@ class Marketo implements ApiConnector
                                 ];
                             } else {
                                 if (isset($resp['data']['errors']) && isset($resp['data']['errors']['code'])) {
-                                    $error = 'Marketo error: (' . $resp['data']['errors']['code'] . ') ' . $resp['data']['errors']['message'];
+                                    $error = 'Marketo error: (' . $resp['data']['errors']['code'] . ') '
+                                        . $resp['data']['errors']['message'];
                                     \Log::error($error);
                                 }
                                 throw new \Exception("Unable to confirm Marketo received the file.");

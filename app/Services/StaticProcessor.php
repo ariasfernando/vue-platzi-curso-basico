@@ -383,7 +383,8 @@ class StaticProcessor
         $layers = (isset($options['layers']))? $options['layers'] : [];
 
         if (!is_null($background_path)) {
-            list($background_image, $background_extension, $background_options) = $this->getImageObject($background_path);
+            list($background_image, $background_extension, $background_options) =
+                $this->getImageObject($background_path);
             $blob = $background_image->get($background_extension, $background_options);
 
             foreach ($layers as $layer) {

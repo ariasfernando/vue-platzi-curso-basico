@@ -40,7 +40,9 @@ class AkamaiAdapter implements CdnInterface
             );
             return true;
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-            \Log::info('cannot flush cache, response: ' . (is_null($e->getResponse()) ? 'null' : $e->getResponse()->getBody()));
+            \Log::info(
+                'cannot flush cache, response: ' . (is_null($e->getResponse()) ? 'null' : $e->getResponse()->getBody())
+            );
         }
     }
 }

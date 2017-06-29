@@ -1,6 +1,7 @@
 <?php
 
-$overrideFile = (env('APP_NAME', false)) ? str_replace(basename(__FILE__), ucwords(strtolower(env('APP_NAME'))).'/'.basename(__FILE__), __FILE__) : false;
+$overrideFile = env('APP_NAME', false) ? str_replace(basename(__FILE__), ucwords(strtolower(env('APP_NAME'))) . '/'
+    . basename(__FILE__), __FILE__) : false;
 
 $default = [
 

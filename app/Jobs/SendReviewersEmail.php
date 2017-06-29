@@ -68,10 +68,10 @@ class SendReviewersEmail extends Job implements SelfHandling, ShouldQueue
 
         switch ($this->type) {
             case 'new_proof':
-                $method = 'SendNewProofNotification';
+                $method = 'sendNewProofNotification';
                 break;
             case 'deleted_proof':
-                $method = 'SendDeletedProofNotification';
+                $method = 'sendDeletedProofNotification';
                 break;
             default:
                 $method = '';
@@ -160,7 +160,7 @@ class SendReviewersEmail extends Job implements SelfHandling, ShouldQueue
     /**
      * Send this notification when a campaign with an active proof was deleted
      */
-    protected function SendDeletedProofNotification()
+    protected function sendDeletedProofNotification()
     {
         $reviewers = $this->proof->reviewers;
         $requestor = User::find($this->proof->requestor);

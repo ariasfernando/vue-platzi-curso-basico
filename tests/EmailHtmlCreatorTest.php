@@ -274,12 +274,10 @@ class EmailHtmlCreatorTest extends TestCase
             foreach ($components as $value) {
                 if ($value instanceof \Sabberworm\CSS\Value\URL) {
                     $this->css_urls[] = $value->getURL()->getString();
-
                 } elseif ($value instanceof \Sabberworm\CSS\Value\RuleValueList) {
                     $this->getFontURLs($value);
                 }
             }
         }
-
     }
 }

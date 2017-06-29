@@ -62,12 +62,19 @@ class ProofController extends Controller
                 $new_proof = Proof::find($proof->campaign->proof_id);
                 if ($new_proof && $proof->id !== $new_proof->id && $new_proof->userCanAccess(Auth::id())) {
                     // Current user has access to the new proof, redirect and show message
-                    $request->session()->put('proof.review.message', 'This email has been altered since your feedback was requested. Below is the most recent content.');
+                    $request->session()->put(
+                        'proof.review.message',
+                        'This email has been altered since your feedback was requested. '
+                        . 'Below is the most recent content.'
+                    );
                     return redirect(url('proof/review', $new_proof->token));
                 }
             }
 
-            $request->session()->flash('error_message', 'This email has been deleted, and your feedback is no longer needed.');
+            $request->session()->flash(
+                'error_message',
+                'This email has been deleted, and your feedback is no longer needed.'
+            );
             return redirect(url('error'));
         }
 
@@ -444,7 +451,10 @@ class ProofController extends Controller
                 foreach ($proof->reviewers as $current_reviewer) {
                     if ($reviewer['email'] === $current_reviewer['email']) {
                         if ($reviewer['notification_message'] !== $current_reviewer['notification_message']) {
-                            // If the notification message was updated, the reviewer should receive the notification again
+                            /*
+                             * If the notification message was updated,
+                             * the reviewer should receive the notification again
+                             */
                             unset($current_reviewer['notified'], $current_reviewer['notified_at']);
                         }
                         unset($current_reviewer['notification_message']);
@@ -510,7 +520,6 @@ class ProofController extends Controller
         if ($proof && count($proof->reviewers)) {
             $reviewers = array_map(function ($v) use ($proof) {
                 $v['display_name'] = User::find($v['user_id'])->name;
-                // $v['messages'] = Comment::whereUserId((string) $v['user_id'])->whereProofId((string) $proof->id)->count();
                 if (isset($v['decision'])) {
                     if (isset($v['decision_comment'])) {
                         $v['comment'] = Comment::find($v['decision_comment'])->content;
@@ -577,7 +586,8 @@ class ProofController extends Controller
             if (!$campaign->can_be_processed) {
                 $data['alert'] = 'The required reviewers have not all approved this message.
                     Resend your request to them on this page, or
-                    <a href="#" class="proof-track-modal" data-campaign-id="' . $campaign_id . '" data-campaign-name="' . $campaign->campaign_name . '">click here</a>
+                    <a href="#" class="proof-track-modal" data-campaign-id="' . $campaign_id .
+                        '" data-campaign-name="' . $campaign->campaign_name . '">click here</a>
                     to track current approvals';
             }
 

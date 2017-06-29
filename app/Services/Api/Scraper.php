@@ -27,7 +27,9 @@ class Scraper
             $error = [
                 'status' => 'error_request',
                 'code' => $e->getResponse() ? $e->getResponse()->getStatusCode() : '',
-                'data' => $e->getResponse() ? json_decode($e->getResponse()->getBody()->getContents(), true) : $e->getMessage()
+                'data' => $e->getResponse()
+                    ? json_decode($e->getResponse()->getBody()->getContents(), true)
+                    : $e->getMessage()
             ];
         } catch (\GuzzleHttp\Exception\ClientErrorResponseException $e) {
             $error = [
