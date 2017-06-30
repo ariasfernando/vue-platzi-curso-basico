@@ -170,4 +170,75 @@ class EmailSender
 
         return $response;
     }
+
+    /**
+     * Send a proof notification email to one reviewer.
+     *
+     * @param  array $reviewer
+     * @param  array $data
+     * @return array Response
+     */
+    public static function sendReviewerEmail($reviewer, $data)
+    {
+        if (!isset($reviewer['email'])) {
+            return ['error' => 'invalid email'];
+        }
+
+        switch ($data['type']) {
+            case 'new_proof':
+                $email_layout = Helper::validateView('emails.proof.new_proof');
+                $subject = sprintf('Review Request: %s, from %s', $data['campaign_name'], $data['requestor']);
+                $data['notification_message'] =
+                    isset($reviewer['notification_message']) ? $reviewer['notification_message'] : '';
+                break;
+            case 'deleted_proof':
+                $email_layout = Helper::validateView('emails.proof.deleted_proof');
+                $subject = sprintf(
+                    'The email "%s" has been deleted, and your feedback is no longer needed.',
+                    $data['campaign_name']
+                );
+                break;
+        }
+
+        $params = [
+            'params' => $data,
+            'email' => $reviewer['email'],
+            'from_name' => \Config::get('proof.email.from_name'),
+            'from_email' => \Config::get('proof.email.from_email'),
+            'subject' => $subject
+        ];
+
+        Mail::send(
+            $email_layout,
+            $params,
+            function ($message) use ($params) {
+                $message->from(
+                    $params['from_email'],
+                    $params['from_name']
+                )
+                    ->to($params['email'])
+                    ->subject($params['subject']);
+            }
+        );
+
+        if (count(Mail::failures()) > 0) {
+            \Log::error(sprintf(
+                "Failed to send email (%s) to a reviewer %s. [proof %s]",
+                $data['type'],
+                $reviewer['email'],
+                $data['proof_id']
+            ));
+            return false;
+        }
+
+        Activity::log('Email sent to reviewer', [
+            'properties' => [
+                'proof_id' => new ObjectId($data['proof_id']),
+                'email' => $reviewer['email'],
+                'type' => $data['type']
+            ]
+        ]);
+
+        return true;
+    }
 }

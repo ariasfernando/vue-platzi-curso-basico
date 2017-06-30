@@ -16,9 +16,11 @@ use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\UnauthorizedException;
+use Stensul\Models\Proof;
 use Stensul\Models\Campaign;
 use Stensul\Jobs\StoreAssetsInCdn;
 use Stensul\Jobs\ProcessCampaign;
+use Stensul\Jobs\SendReviewersEmail;
 use HtmlCreator as Html;
 use TextCreator as Text;
 use Statics as Assets;
@@ -120,7 +122,18 @@ class CampaignManager
             $campaign_data->status = 2;
             $campaign_data->deleted_at = Carbon::now();
             if ($response = $campaign_data->save()) {
-                Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
+                Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectId($campaign_id)]));
+                // Check proof
+                if ($campaign_data->has_active_proof) {
+                    $proof = $campaign_data->getLastProof();
+                    if ($proof) {
+                        $proof->status = Proof::STATUS_DELETED;
+                        $proof->save();
+
+                        // Send emails to reviewers
+                        Bus::dispatch(new SendReviewersEmail($proof, 'deleted_proof'));
+                    }
+                }
                 return array('success' => $campaign_id);
             }
         }
@@ -556,10 +569,8 @@ class CampaignManager
                     $scraper_options = array_merge($scraper_options, $options);
                     $driver_name = 'Scraper\\' . ucfirst($scraper_type);
                     $scraper_driver = Api::driver($driver_name, $scraper_options);
-                    Queue::push(function ($job) use ($scraper_driver) {
-                        $scraper_driver->getPublicImages();
-                        $job->delete();
-                    });
+                    $job_id = dispatch(new \Stensul\Jobs\ScraperPreloader($scraper_driver));
+                    Worker::queue($job_id, 'scraper');
                 }
             }
         }
@@ -627,7 +638,7 @@ class CampaignManager
     {
         $campaign = Campaign::findOrFail($campaign_id);
         return response()->make($campaign->body_html, 200, [
-            'Content-Type' => 'text/plain',
+            'Content-Type' => 'text/html',
             'Content-Disposition' => 'attachment; filename="' . $campaign->campaign_name . '.html"'
         ]);
     }
@@ -648,7 +659,8 @@ class CampaignManager
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->auto_save = $status;
             if ($response = $campaign_data->save()) {
-                Activity::log('Autosave campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
+                Activity::log('Autosave campaign updated', array(
+                    'properties' => ['campaign_id' => new ObjectID($campaign_id)]));
                 return array('success' => $campaign_id);
             }
         }

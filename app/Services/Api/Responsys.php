@@ -93,11 +93,15 @@ class Responsys implements ApiConnector
         }
         if (!is_null($campaign)) {
             $this->campaign = $campaign;
-            $original_filename = (is_null($request) || !isset($request['filename']))? $campaign->campaign_name : $request['filename'];
+            $original_filename = (is_null($request) || !isset($request['filename']))
+                ? $campaign->campaign_name : $request['filename'];
             if (strlen($original_filename)) {
                 $this->auth = $this->call('auth');
                 if (isset($this->auth['data']['endPoint']) && isset($this->auth['data']['authToken'])) {
-                    $path = \Config::get('api.responsys.libraries.' . $this->library_name . '.default_path', \Config::get('api.responsys.default_path'));
+                    $path = \Config::get(
+                        'api.responsys.libraries.' . $this->library_name . '.default_path',
+                        \Config::get('api.responsys.default_path')
+                    );
                     $previous = Upload::fileExists($original_filename);
 
                     // Check if the user wants to overwrite the file if this exists

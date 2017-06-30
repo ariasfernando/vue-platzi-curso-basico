@@ -38,29 +38,6 @@
 			)); !!}
 		</div>
 
-		<!-- Select Libraries -->
-		<div class="modal-mpf-row selector">
-			{!! Form::label('libraries', 'Libraries') !!}
-
-			@if(count($params['libraries']) == 0)
-			   {!! Form::text('name', 'default', array (
-					'class' => 'library_disabled disabled',
-					'id' => 'user_name',
-					'disabled' => 'disabled',
-					'placeholder' => 'Enter name here.'
-				)) !!}
-			@else
-				{!! Form::select('libraries', $params['libraries'], (isset($params['role']['libraries']))? $params['role']['libraries'] : '',array (
-					'class' => 'form-control selectpicker',
-					'id' => 'libraries',
-					'name' => 'libraries[]',
-					'multiple' => 'true',
-					'title' => 'Choose one or more libraries ...',
-					'data-validation' => '{"required":"true"}'
-				)); !!}
-			@endif
-		</div>
-
 		<!-- Input submit  -->
 		<div class="modal-mpf-submit">
 			{!! Form::submit('Submit', array ( 'class' => 'btn btn-success pull-right submit-config')) !!}

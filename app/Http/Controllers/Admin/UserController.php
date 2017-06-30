@@ -62,9 +62,17 @@ class UserController extends Controller
 
         if (!is_null($search_type) && !is_null($search_text)) {
             $users = User::where($search_type, $search_operator, $search_text)
-                ->orderBy($data_order_field, $data_order_type)->where('status', '!=', 'deleted')->paginate((int) $data_page);
+                ->orderBy($data_order_field, $data_order_type)->where(
+                    'status',
+                    '!=',
+                    'deleted'
+                )->paginate((int) $data_page);
         } else {
-            $users = User::orderBy($data_order_field, $data_order_type)->where('status', '!=', 'deleted')->paginate((int) $data_page);
+            $users = User::orderBy($data_order_field, $data_order_type)->where(
+                'status',
+                '!=',
+                'deleted'
+            )->paginate((int) $data_page);
         }
 
         return [

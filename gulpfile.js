@@ -256,6 +256,15 @@ gulp.task('elixir-scripts', function () {
           assetsPath
         )
 
+        // === Proof page ===
+        .scripts(
+            [
+                jsAppFilePath("proof.js")
+            ],
+            jsDestinationPath + "proof.js",
+            assetsPath
+        )
+
         // === Admin page ===
         .scripts(
           [

@@ -19,7 +19,7 @@ class Role extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'libraries', 'permissions'];
+    protected $fillable = ['name', 'description', 'permissions'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -31,7 +31,6 @@ class Role extends Eloquent
     protected $defaults = array(
         'name' => '',
         'description' => '',
-        'libraries' => [],
         'permissions' => [],
     );
 

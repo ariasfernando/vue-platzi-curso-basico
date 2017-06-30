@@ -15,8 +15,15 @@
 			. $app_config['locale']['langs'][$params['campaign_data']['locale']]['name'] . ")";
 	}
 
+
     $saveAsTemplate = (!$params['campaign_data']->processed && config('campaign.enable_templating'));
     $isTemplate = $params['campaign_data']->template;
+
+    // Check proof
+    $show_proof = false;
+    if (config('proof.status') && Auth::user()->can('edit_proof')) {
+        $show_proof = true;
+    }
 
     // Column classes
     $title_cols = 3;
@@ -59,7 +66,13 @@
             @if (!$params['campaign_data']->processed && config('campaign.enable_templating'))
                 <button class="btn btn-default save-as-template {{$hidden_class}}">Save as Template</button>
             @endif
-            @if (!$isTemplate)
+            @if ($show_proof)
+                <button
+                    class="btn btn-default proof-open-modal"
+                    data-campaign-id="{{ $params['campaign_id'] }}"
+                ><i class="glyphicon glyphicon-search"></i> Send for review</button>
+            @endif
+            @if (!$isTemplate && $params['campaign_data']->can_be_processed)
                 <a class="btn btn-continue campaign-continue {{$hidden_class}}" href="#">Complete<i class="glyphicon glyphicon-triangle-right"></i></a>
             @endif
         </div>
