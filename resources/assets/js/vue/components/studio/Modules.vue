@@ -3,9 +3,9 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <h2 class="crimson italic">Modules list</h2>
+        <h2>Module List</h2>
         <div class="btn btn-default btn-create">
-          <router-link to="/create">Create a new Module</router-link>
+          <router-link to="/create"><i class="glyphicon glyphicon-plus-sign"></i> Create a new Module</router-link>
         </div>
       </div>
     </div>
@@ -21,19 +21,19 @@
               <th class="sortable">
                 <a href="#" class="" id="module_id" data-order-field="module_id">
                   _id
-                  <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
                 </a>
               </th>
               <th class="sortable">
                 <a href="#" class="" id="name" data-order-field="name">
                   Name
-                  <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
                 </a>
               </th>
               <th class="sortable">
                 <a href="#" class="" id="name" data-order-field="name">
                   Type
-                  <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
                 </a>
               </th>
               <th width="150" class="bold">Actions</th>
@@ -49,7 +49,7 @@
                   class="glyphicon glyphicon-pencil"></i></a>
 
                 <a href="#" class="delete" title="Delete" @click="deleteModule(module.id)"><i
-                  class="glyphicon glyphicon-ban-circle"></i></a>
+                  class="glyphicon glyphicon-trash"></i></a>
               </td>
             </tr>
             </tbody>
