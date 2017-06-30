@@ -569,10 +569,8 @@ class CampaignManager
                     $scraper_options = array_merge($scraper_options, $options);
                     $driver_name = 'Scraper\\' . ucfirst($scraper_type);
                     $scraper_driver = Api::driver($driver_name, $scraper_options);
-                    Queue::push(function ($job) use ($scraper_driver) {
-                        $scraper_driver->getPublicImages();
-                        $job->delete();
-                    });
+                    $job_id = dispatch(new \Stensul\Jobs\ScraperPreloader($scraper_driver));
+                    Worker::queue($job_id, 'scraper');
                 }
             }
         }
