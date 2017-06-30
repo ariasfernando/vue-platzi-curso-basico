@@ -89,7 +89,7 @@
 
     methods: {
       elementDrop(e) {
-        if ( e.target.className.indexOf("st-col") > -1 ) {
+        if ( e.target.className.indexOf("st-col") > -1 || e.target.className.indexOf("empty-cell") > -1 ) {
           let colId = e.target.getAttribute('data-col');
           let component = JSON.parse(e.dataTransfer.getData('component'));
 
