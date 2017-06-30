@@ -4,11 +4,17 @@
     <!-- START: TH Structure -->
     <tr v-if="module.structure.columns.length > 1">
 
-      <th class="st-col" v-for="(column, columnId) in module.structure.columns" @dragover.prevent @drop="elementDrop"
-          :class="!column.components.length ? 'empty-col' : ''" :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" :style="column.style || ''"
+      <th class="st-col" v-for="(column, columnId) in module.structure.columns" 
+          @dragover.prevent 
+          @drop="elementDrop"
+          @dragenter="dragenter"
+          @dragleave="dragleave"
+          :class="!column.components.length ? 'empty-col' : ''" 
+          :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
+          :style="column.style || ''"
           :data-col="columnId">
 
-        <table v-if="column.components.length" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <table v-if="column.components.length" width="100%" cellpadding="0" cellspacing="0" border="0" class="st-content-componetn">
           <tr v-for="(component, componentId) in column.components">
             <td>
               <component :is="component.type" :component="component" :module-id="module.id" :column-id="columnId"
@@ -30,11 +36,18 @@
 
     <!-- START TD Structure -->
     <tr v-else>
-      <td class="st-col" v-for="(column, columnId) in module.structure.columns" @dragover.prevent @drop="elementDrop"
-          :class="!column.components.length ? 'empty-col' : ''" :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" :style="column.style || ''"
-          :data-col="columnId">
+      <td class="st-col" v-for="(column, columnId) in module.structure.columns" 
+          @dragover.prevent 
+          @drop="elementDrop"
+          @dragenter="dragenter"
+          @dragleave="dragleave"
+          :class="!column.components.length ? 'empty-col' : ''" 
+          :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
+          :style="column.style || ''"
+          :data-col="columnId"
+      >
 
-        <table v-if="column.components.length" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <table v-if="column.components.length" width="100%" cellpadding="0" cellspacing="0" border="0" class="st-content-componetn">
           <tr v-for="(component, componentId) in column.components">
             <td>
               <component :is="component.type" :component="component" :module-id="module.id" :column-id="columnId"
@@ -73,21 +86,37 @@
       ImageElement,
       DividerElement
     },
+
     methods: {
       elementDrop(e) {
-        let colId = e.target.getAttribute('data-col');
-        let component = JSON.parse(e.dataTransfer.getData('component'));
+        if ( e.target.className.indexOf("st-col") > -1 ) {
+          let colId = e.target.getAttribute('data-col');
+          let component = JSON.parse(e.dataTransfer.getData('component'));
 
-        this.module.structure.columns[colId].components.push(component);
+          this.module.structure.columns[colId].components.push(component);
 
-        let indexOf = this.module.structure.columns[colId].components.indexOf(component);
+          let indexOf = this.module.structure.columns[colId].components.indexOf(component);
 
-        let ref = {
-          columnId: colId,
-          componentId: indexOf
-        };
+          let ref = {
+            columnId: colId,
+            componentId: indexOf
+          };
 
-        this.setComponent(ref);
+          this.setComponent(ref);
+      }
+
+      e.target.style.background = "";
+
+      },
+      dragenter(e){
+        if ( e.target.className === "st-col" ) {
+          e.target.style.background = "#e4f8f5";
+        }
+      },
+      dragleave(e){
+        if ( e.target.className === "st-col" ) {
+          e.target.style.background = "";
+        }
       },
       setComponent(ref) {
         console.log('[Module] Emit set-component');

@@ -65,10 +65,10 @@
                 <h5>Elements</h5> <hr>
 
                 <ul class="components-list">
-                  <li class="component-item" draggable="true" data-type="text-element" @dragstart="setData"><i class="glyphicon glyphicon-font"></i>Text</li>
-                  <li class="component-item" draggable="true" data-type="image-element" @dragstart="setData"><i class="fa fa-picture-o" aria-hidden="true"></i>Image</li>
-                  <li class="component-item" draggable="true" data-type="button-element" @dragstart="setData"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>CTA</li>
-                  <li class="component-item" draggable="true" data-type="divider-element" @dragstart="setData"><i class="fa fa-minus-square-o" aria-hidden="true"></i>Divider</li>
+                  <li class="component-item" draggable="true" data-type="text-element" @dragstart="setData" @dragend="resetStyle"><i class="glyphicon glyphicon-font"></i>Text</li>
+                  <li class="component-item" draggable="true" data-type="image-element" @dragstart="setData" @dragend="resetStyle"><i class="fa fa-picture-o" aria-hidden="true"></i>Image</li>
+                  <li class="component-item" draggable="true" data-type="button-element" @dragstart="setData" @dragend="resetStyle"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>CTA</li>
+                  <li class="component-item" draggable="true" data-type="divider-element" @dragstart="setData" @dragend="resetStyle"><i class="fa fa-minus-square-o" aria-hidden="true"></i>Divider</li>
                 </ul>
               </div>
 
@@ -182,6 +182,10 @@
         let Element = new defaultElements(elType);
 
         e.dataTransfer.setData("component", JSON.stringify(Element));
+        e.target.style.opacity = .3;
+      },
+      resetStyle(e) {
+        e.target.style.opacity = "";
       },
       setCurrentComponent(ref) {
         this.currentComponent = this.module.structure.columns[ref.columnId].components[ref.componentId];
