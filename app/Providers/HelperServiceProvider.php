@@ -182,7 +182,7 @@ class HelperServiceProvider extends ServiceProvider
     public static function getApiDrivers($library = null)
     {
         $configuration = \Config::all();
-        $user_libraries = \Auth::user()->getLibraries();
+        $user_libraries = \Auth::user() ? \Auth::user()->getLibraries() : [];
         $api_drivers = [];
 
         if (is_null($library)) {

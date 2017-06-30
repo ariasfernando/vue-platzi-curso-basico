@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Stensul\Services\Api\Scraper;
 use Stensul\Services\Api\ApiImageConnector;
 use Stensul\Services\Api\Transformers\ImageTransformer;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class Blog extends Scraper implements ApiImageConnector
 {
@@ -45,7 +46,9 @@ class Blog extends Scraper implements ApiImageConnector
         $this->pagination_link = (isset($options['pagination_link']))? $options['pagination_link'] : '';
         $this->pagination_count = (isset($options['pagination_count']))? (Int)$options['pagination_count'] : 1;
         $this->full_image_src = (isset($options['full_image_src']))? $options['full_image_src'] : null;
-        $this->small_image_src = (isset($options['small_image_src']))? $options['small_image_src'] : $this->full_image_src;
+        $this->small_image_src = (isset($options['small_image_src']))
+            ? $options['small_image_src']
+            : $this->full_image_src;
         $this->text_src = (isset($options['text_src']))? $options['text_src'] : '';
         $this->link_src = (isset($options['link_src']))? $options['link_src'] : '';
         $this->subtext_src = (isset($options['subtext_src']))? $options['subtext_src'] : '';
@@ -212,7 +215,7 @@ class Blog extends Scraper implements ApiImageConnector
                     [
                         'properties' => [
                             'url' => $this->url,
-                            'user_id' => new \MongoId(Auth::id())
+                            'user_id' => new ObjectId(Auth::id())
                         ]
                     ]
                 );

@@ -13,11 +13,13 @@ class PasswordPolicyServiceProvider extends ZxcvbnServiceProvider
 {
     /**
      * Check if a user should update their password
+     * @codingStandardsIgnoreStart  (ignore method name not in camelCase, required by Laravel)
      * @param  Stensul\Models\User $user
      * @return boolean
      */
     public static function should_update_password(User $user)
     {
+        // @codingStandardsIgnoreEnd
         $password_policy = \Config::get('auth.password_policy');
         if ($password_policy['allow_force_password_reset']
             && isset($user->force_password)
@@ -40,11 +42,13 @@ class PasswordPolicyServiceProvider extends ZxcvbnServiceProvider
 
     /**
      * Return a string with the validation rule
+     * @codingStandardsIgnoreStart (ignore method name not in camelCase, required by Laravel)
      * @param  array  $user_data User data
      * @return string
      */
     public static function password_rule($user_data)
     {
+        // @codingStandardsIgnoreEnd
         return 'required|confirmed|min:' . \Config::get('auth.password_policy.min_length')
             . '|max:' . \Config::get('auth.password_policy.max_length')
             . '|zxcvbn_min:' . \Config::get('auth.password_policy.min_score');

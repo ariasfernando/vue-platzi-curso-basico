@@ -33,6 +33,7 @@ class CampaignController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('acl.permission:edit_campaign');
     }
 
     /**
@@ -98,11 +99,30 @@ class CampaignController extends Controller
 
         if (\Config::get('api.scraper.status')
             && \Config::get('api.scraper.settings.campaign_preload')) {
-            Campaign::scraperPreloader($params['campaign_data']['library'], ['flush_cache' => true, 'only_update' => true]);
+            Campaign::scraperPreloader(
+                $params['campaign_data']['library'],
+                ['flush_cache' => true,
+                'only_update' => true]
+            );
         }
 
         // Initialize locale
         StensulLocale::init($params['locale']);
+
+        // Default Text
+        $params['header_title'] = "Campaign Editor";
+
+        // Set library name
+        $library_title = $params['campaign_data']->getLibraryConfig('title');
+        if (!empty($library_title)) {
+            $params['header_title'] = $library_title;
+        }
+
+        // Set language name
+        $locale = $params['campaign_data']['locale'];
+        if (\Config::get('view.campaign_format') === "languages" && \Config::has('locale.langs.' . $locale . '.name')) {
+            $params['header_title'] .= " (" . \Config::get('locale.langs.' . $locale . '.name') . ")";
+        }
 
         return $this->renderView('campaign', array('params' => $params));
     }
@@ -356,7 +376,7 @@ class CampaignController extends Controller
         ) {
             Activity::log(
                 'Campaign edit deny',
-                array('properties' => ['campaign_id' => new \MongoId($request->input('campaign_id'))])
+                array('properties' => ['campaign_id' => new ObjectId($request->input('campaign_id'))])
             );
 
             return array('campaign_lock' => $request->input('campaign_id'));
@@ -367,7 +387,9 @@ class CampaignController extends Controller
             try {
                 return Campaign::deleteTag($request->input('campaign_id'), $request->input('tag_name'));
             } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-                throw new NotFoundHttpException('Campaign with the id ' . $request->input('campaign_id') . ' not found');
+                throw new NotFoundHttpException(
+                    'Campaign with the id ' . $request->input('campaign_id') . ' not found'
+                );
             }
         }
     }

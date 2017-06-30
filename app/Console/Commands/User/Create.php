@@ -80,7 +80,9 @@ class Create extends Command
             if (!User::where('email', '=', strtolower($email))->exists()) {
                 User::create($params);
 
-                $this->info('The user <options=bold>' . $name . '</> was created! Password: <options=bold>' . $password . '</>');
+                $this->info(
+                    'The user <options=bold>' . $name . '</> was created! Password: <options=bold>' . $password . '</>'
+                );
             } else {
                 $this->error('The email is already registered.');
                 return 3;

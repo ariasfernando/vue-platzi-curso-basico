@@ -55,8 +55,6 @@ class ModulesTest extends TestCase
                     $this->assertEquals($moduleAttributes->module_id, $moduleId);
                 }
             }
-
         }
-
     }
 }

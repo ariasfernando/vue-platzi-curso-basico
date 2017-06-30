@@ -77,7 +77,10 @@ class ModuleServiceProvider extends ServiceProvider
         // Try pkg module
         if (file_exists(self::$module_dir . DS . $module_id . DS . 'config.json')) {
             try {
-                $module = json_decode(file_get_contents(self::$module_dir . DS . $module_id . DS . 'config.json'), true);
+                $module = json_decode(
+                    file_get_contents(self::$module_dir . DS . $module_id . DS . 'config.json'),
+                    true
+                );
             } catch (Exception $e) {
             }
         } else {

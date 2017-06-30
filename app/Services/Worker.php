@@ -2,6 +2,7 @@
 
 namespace Stensul\Services;
 
+use Log;
 use Cache;
 use Carbon\Carbon;
 use MongoDB\BSON\ObjectID as ObjectID;
@@ -64,7 +65,12 @@ class Worker
             $data['job_id'] = $job_id;
         }
 
-        $status = (isset($job_data['status'])) ? $job_data['status'] : 'not-found';
+        if (isset($job_data['status'])) {
+            $status = $job_data['status'];
+        } else {
+            \Log::error("exception: job ID $job_id not found");
+            $status = 'not-found';
+        }
 
         return array('status' => $status, 'data' => $data);
     }
@@ -79,7 +85,6 @@ class Worker
      */
     public static function write($job_id, $task, $status = 'queued', $decrement = null)
     {
-        
         $route = explode('@', last(explode('\\', \Route::currentRouteAction())));
 
         $metadata = [
@@ -94,7 +99,6 @@ class Worker
 
         if (Cache::has('job:'.$task.':'.$job_id)) {
             $metadata = Cache::get('job:'.$task.':'.$job_id);
-            Cache::forget('job:'.$task.':'.$job_id);
         }
 
         if ($status == 'queued') {
@@ -109,7 +113,7 @@ class Worker
 
         $metadata['status'] = $status;
 
-        Cache::add('job:'.$task.':'.$job_id, $metadata, Carbon::now()->addDays(1));
+        Cache::put('job:'.$task.':'.$job_id, $metadata, Carbon::now()->addDays(1));
 
         self::setQueueInfo($task, $status, $decrement);
     }

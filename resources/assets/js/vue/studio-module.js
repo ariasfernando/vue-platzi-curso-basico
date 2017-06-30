@@ -1,11 +1,11 @@
-import Vue from 'vue/dist/vue'
-import VueRouter from 'vue-router'
-import VueResource from 'vue-resource/dist/vue-resource'
-import Toast from 'vue-easy-toast'
-import interceptors from './interceptors'
-import {studioModuleRoutes} from './router'
+import Vue from 'vue/dist/vue';
+import VueRouter from 'vue-router';
+import VueResource from 'vue-resource/dist/vue-resource';
 import VeeValidate from 'vee-validate';
-import store from './store'
+import Toast from 'vue-easy-toast';
+import interceptors from './interceptors';
+import { studioModuleRoutes } from './router';
+import store from './store';
 
 Vue.use(Toast);
 Vue.use(VueResource);
@@ -21,7 +21,7 @@ const router = new VueRouter({
   saveScrollPosition: true,
 });
 
-const app = new Vue({
+new Vue({
   router,
-  store
+  store,
 }).$mount('#studio');

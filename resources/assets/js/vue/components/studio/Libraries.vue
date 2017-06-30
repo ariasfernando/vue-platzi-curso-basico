@@ -78,7 +78,7 @@
   import libraryService from '../../services/library'
   import Pagination from '../common/Pagination.vue'
   import ColumnSort from '../common/ColumnSort.vue'
-  import _ from 'underscore'
+  import _ from 'underscore-contrib'
 
   export default {
     name: 'Libraries',

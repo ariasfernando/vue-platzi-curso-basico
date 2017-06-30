@@ -33,7 +33,7 @@
     "stackup": "1.0.1",
     "stringify": "^5.1.0",
     "tinymce-vue-2": "0.0.2",
-    "underscore": "1.8.3",
+    "underscore-contrib": "^0.3.0",
     "vee-validate": "^2.0.0-beta.25",
     "vue": "^2.2.1",
     "vue-debug": "0.0.1",
@@ -62,7 +62,6 @@
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "front-matter": "^2.1.0",
-    "ghooks": "^2.0.0",
     "gulp-browserify": "^0.5.1",
     "gulp-coverage": "^0.3.38",
     "gulp-data": "^1.2.1",
@@ -86,10 +85,5 @@
     "test": "mocha tests/js/*.js --compilers js:babel-register",
     "test:single": "istanbul cover --root resources/assets/js/vue ./node_modules/.bin/_mocha -- -R spec tests/js/*.test.js --compilers js:babel-register",
     "cover": "nyc npm t"
-  },
-  "config": {
-    "ghooks": {
-      "pre-commit": "npm run test:single && npm run check-coverage"
-    }
   }
 }

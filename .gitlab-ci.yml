@@ -5,6 +5,7 @@ services:
 
 variables:
   APP_NAME: "Base"
+  APP_BASE_URL: "http://localhost:3000"
 
 cache:
   paths:
@@ -75,7 +76,8 @@ phpcs:
   stage: test
   script:
     # Run php code sniffer
-    - ci/vendor/bin/phpcs --standard=psr2 app/ config/ database/ routes/ tests/ --report=full,gitblame > ci/storage/tmp/phpcs.txt
+    - ci/vendor/bin/phpcs --standard=psr2 app/ config/ routes/ tests/ --report=full,gitblame
+      --extensions=php --runtime-set ignore_warnings_on_exit true > ci/storage/tmp/phpcs.txt
   artifacts:
     when: always
     name: "${CI_JOB_STAGE}_phpcs_${CI_COMMIT_REF_NAME}"
@@ -126,4 +128,10 @@ phpdoccheck:
 test_js:
   stage: test
   script:
-    - gulp test
+    - npm run test:single
+  artifacts:
+    when: always
+    name: "${CI_JOB_STAGE}_testjs_${CI_COMMIT_REF_NAME}"
+    expire_in: 30 days
+    paths:
+      - coverage/

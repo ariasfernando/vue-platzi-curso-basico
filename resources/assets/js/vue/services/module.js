@@ -1,6 +1,6 @@
 import Q from 'q'
 import request from '../utils/request'
-import _ from 'underscore'
+import _ from 'underscore-contrib'
 import Module from '../models/module'
 import endpoints from '../resources/endpoints'
 

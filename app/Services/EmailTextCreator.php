@@ -34,7 +34,13 @@ class EmailTextCreator
 
         foreach ($modules as $module) {
             // Initialize locale and module settings
-            StensulLocale::init($this->campaign['locale'], ["name" => $module['module_id'],"app_name" => $module['file_parent']]);
+            StensulLocale::init(
+                $this->campaign['locale'],
+                [
+                    "name" => $module['module_id'],
+                    "app_name" => $module['file_parent']
+                ]
+            );
 
             $path = $this->getModulesPath($module['file_parent']);
             if (\view::exists($path . '.' . $module['module_id'] . '.text')) {
@@ -96,7 +102,8 @@ class EmailTextCreator
             'campaign_data' => $this->campaign
         ];
 
-        $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['module_id'] . '.template';
+        $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['module_id']
+            . '.template';
         if (!\view::exists($modulePath)) {
             $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['module_id'];
         }

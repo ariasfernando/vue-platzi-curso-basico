@@ -2,6 +2,7 @@
 
 namespace Stensul\Models;
 
+use MongoDB\BSON\ObjectID as ObjectID;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
@@ -45,7 +46,7 @@ class Campaign extends Eloquent
         'parent_campaign_id'
     ];
 
-    protected $appends = ['api', 'library_config', 'uploads'];
+    protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -97,6 +98,16 @@ class Campaign extends Eloquent
     public function user()
     {
         return $this->belongsTo('Stensul\Models\User');
+    }
+
+    /**
+     * Proofs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function proofs()
+    {
+        return $this->hasMany('Stensul\Models\Proof');
     }
 
     /**
@@ -235,10 +246,87 @@ class Campaign extends Eloquent
         );
     }
 
+    /**
+     * Get last proof.
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getLastProof()
+    {
+        return Proof::whereCampaignId(new ObjectId($this->_id))->orderBy('created_at', 'DESC')->first();
+    }
+
+    /**
+     * Get the current proof for this campaign
+     *
+     * @return \Illuminate\Database\Eloquent\Model or false
+     */
+    public function getProof()
+    {
+        if (isset($this->proof_id)) {
+            return Proof::find($this->proof_id);
+        }
+
+        return false;
+    }
+
+    public function getProofTokenAttribute()
+    {
+        $proof = $this->getProof();
+
+        return ($proof) ? $proof->token : '';
+    }
+
+    /**
+     * Check if the campaign has an active proof
+     *
+     * @return boolean
+     */
+    public function getHasActiveProofAttribute()
+    {
+        $proof = $this->getProof();
+
+        return ($proof && $proof->status !== Proof::STATUS_DELETED);
+    }
+
+    /**
+     * Get uploads attribute.
+     *
+     * @return json
+     */
     public function getUploadsAttribute()
     {
         return Upload::where('campaign_id', $this->attributes['_id'])
             ->orderBy('updated_at', 'desc')
             ->get();
+    }
+
+    /**
+     * Check if the campaign could be processed or not.
+     *
+     * @return boolean
+     */
+    public function getCanBeProcessedAttribute()
+    {
+        if (config('proof.status')) {
+            $proof = $this->getProof();
+            if ($proof) {
+                if (config('proof.required_reviews')) {
+                    foreach ($proof['reviewers'] as $reviewer) {
+                        /*
+                         * If a required reviewer haven't provided a decision or reject it,
+                         * the campaign cannot be completed
+                         */
+                        if (isset($reviewer['required']) && $reviewer['required'] &&
+                            (!isset($reviewer['decision']) || $reviewer['decision'] === 'reject'
+                                || $reviewer['decision'] === 'reject-with-comments')) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }

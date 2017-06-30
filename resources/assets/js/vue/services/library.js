@@ -1,5 +1,5 @@
 import Q from 'q';
-import _ from 'underscore';
+import _ from 'underscore-contrib';
 import request from '../utils/request';
 import Library from '../models/library';
 import endpoints from '../resources/endpoints';

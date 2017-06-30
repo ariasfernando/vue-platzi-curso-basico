@@ -8,6 +8,7 @@ web:
   links:
     - documentstore
     - queue
+
 worker:
   image: "fanbridge/web:v2.0"
   command: php /usr/src/app/artisan queue:work --daemon
@@ -22,6 +23,13 @@ documentstore:
   image: "mongo"
   volumes:
     - ./storage/data/:/data/db
-
+    
 queue:
   image: "redis"
+
+rockmongo:
+  image: "webts/rockmongo"
+  ports:
+   - "8008:80" 
+  links:
+    - documentstore:db

@@ -35,8 +35,15 @@ class StrongviewConnector
      * @return object a new StrongviewConnection object instance
      *
      */
-    public function __construct($endpoint, $organization, $username, $password, $sub_organization = 1, $self_signed_cert = false)
-    {
+    public function __construct(
+        $endpoint,
+        $organization,
+        $username,
+        $password,
+        $sub_organization = 1,
+        $self_signed_cert = false
+    ) {
+    
         $this->endpoint = $endpoint;
         $this->organization = $organization;
         $this->sub_organization = $sub_organization;
@@ -133,7 +140,8 @@ class StrongviewConnector
     public function saveMailing($campaign = null, $request = null)
     {
         if (!is_null($campaign)) {
-            $original_filename = (is_null($request) || !isset($request['filename'])) ? $campaign->campaign_name : $request['filename'];
+            $original_filename = (is_null($request) || !isset($request['filename']))
+                ? $campaign->campaign_name : $request['filename'];
             $filename = Upload::versioningFilename($original_filename);
             $subject = (is_null($request) || !isset($request['subject'])) ? $filename : $request['subject'];
             $header = (is_null($request) || !isset($request['header'])) ? $filename : $request['header'];
