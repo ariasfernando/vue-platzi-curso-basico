@@ -65,10 +65,22 @@
                 <h5>Elements</h5> <hr>
 
                 <ul class="components-list">
-                  <li class="component-item" draggable="true" data-type="text-element" @dragstart="setData" @dragend="resetStyle"><i class="glyphicon glyphicon-font"></i>Text</li>
-                  <li class="component-item" draggable="true" data-type="image-element" @dragstart="setData" @dragend="resetStyle"><i class="fa fa-picture-o" aria-hidden="true"></i>Image</li>
-                  <li class="component-item" draggable="true" data-type="button-element" @dragstart="setData" @dragend="resetStyle"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>CTA</li>
-                  <li class="component-item" draggable="true" data-type="divider-element" @dragstart="setData" @dragend="resetStyle"><i class="fa fa-minus-square-o" aria-hidden="true"></i>Divider</li>
+                  <li class="component-item" draggable="true" data-type="text-element" @dragstart="setData" @dragend="resetStyle">
+                    <i class="glyphicon glyphicon-font"></i>
+                    <p>Text</p>
+                  </li>
+                  <li class="component-item" draggable="true" data-type="image-element" @dragstart="setData" @dragend="resetStyle">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                    <p>Image</p>
+                  </li>
+                  <li class="component-item" draggable="true" data-type="button-element" @dragstart="setData" @dragend="resetStyle">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    <p>CTA</p>
+                  </li>
+                  <li class="component-item" draggable="true" data-type="divider-element" @dragstart="setData" @dragend="resetStyle">
+                    <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+                    <p>Divider</p>
+                  </li>
                 </ul>
               </div>
 
@@ -390,17 +402,29 @@
 
       .components-list {
         padding: 0;
+        text-align: center;
 
         .component-item {
           list-style-type: none;
+          width: 46%;
+          font-size: 22px;
+          text-align: center;
+          background-color: #f4f4f4;
           border: 1px solid #ccc;
-          border-radius: 5px;
-          margin: 5px 0;
+          margin: 2px 0;
           padding: 5px;
           cursor: pointer;
+          display: inline-block;
+          height: 60px;
 
           i {
-            margin: 0 10px;
+            margin: 0 5px;
+          }
+
+          p{
+            font-size: 14px;
+            margin: 0px;
+            padding: 0px;
           }
         }
       }
@@ -409,7 +433,7 @@
         margin-top: 25px;
 
         pre {
-          font-size: 10px;
+          font-size: 50px;
           font-family: Monaco;
         }
       }
