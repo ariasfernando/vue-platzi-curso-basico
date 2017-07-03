@@ -304,6 +304,7 @@ class Campaign extends Eloquent
     /**
      * Check if the campaign could be processed or not.
      *
+     * @SuppressWarnings("BooleanGetMethodName")
      * @return boolean
      */
     public function getCanBeProcessedAttribute()

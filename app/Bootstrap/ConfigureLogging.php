@@ -19,6 +19,7 @@ class ConfigureLogging extends DefaultConfigureLogging
      * Only if LOG_SERVER_HOST exists. This is done to avoid to setup
      * this in dev environment.
      *
+     * @SuppressWarnings("UnusedFormalParameter")
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @param  \Illuminate\Log\Writer  $log
      * @return void
