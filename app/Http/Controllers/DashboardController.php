@@ -79,7 +79,7 @@ class DashboardController extends Controller
                 foreach ($search_terms as $search_key) {
                     $campaigns->where(
                         function ($query) use ($fields_to_search, $search_key) {
-                            foreach ($fields_to_search as $key => $field) {
+                            foreach ($fields_to_search as $field) {
                                 $query->orWhere($field, 'like', "%" . $search_key . "%");
                                 if (\Config::get('campaign.enable_tagging')) {
                                     // search terms should also be reviewed as tags

@@ -38,7 +38,7 @@ class ScraperPreloader implements ShouldQueue
         Worker::start($job_id, 'scraper');
 
         $this->scraper_driver->getPublicImages();
-        $job->delete();
+        $this->job->delete();
 
         Worker::finish($job_id, 'scraper');
 

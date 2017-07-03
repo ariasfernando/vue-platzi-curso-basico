@@ -33,15 +33,16 @@ class AkamaiAdapter implements CdnInterface
         }
 
         try {
-            $response = $this->client->request(
+            $this->client->request(
                 'POST',
                 rtrim($this->config['path'], '/') . '/' . self::AKAMAI_NETWORK,
                 ['json' => $params]
             );
             return true;
-        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+        } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
             \Log::info(
-                'cannot flush cache, response: ' . (is_null($e->getResponse()) ? 'null' : $e->getResponse()->getBody())
+                'cannot flush cache, response: '
+                . (is_null($exception->getResponse()) ? 'null' : $exception->getResponse()->getBody())
             );
         }
     }

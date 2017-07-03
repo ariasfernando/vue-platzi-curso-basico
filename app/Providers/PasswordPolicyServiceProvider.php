@@ -43,6 +43,7 @@ class PasswordPolicyServiceProvider extends ZxcvbnServiceProvider
     /**
      * Return a string with the validation rule
      * @codingStandardsIgnoreStart (ignore method name not in camelCase, required by Laravel)
+     * @SuppressWarnings("UnusedFormalParameter")
      * @param  array  $user_data User data
      * @return string
      */

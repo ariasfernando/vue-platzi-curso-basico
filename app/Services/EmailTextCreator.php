@@ -58,10 +58,9 @@ class EmailTextCreator
     /**
      * Return a view path according to campaign_format
      *
-     * @param  string $file_parent
      * @return string or false
      */
-    public function getModulesPath($file_parent)
+    public function getModulesPath()
     {
         return 'modules';
     }

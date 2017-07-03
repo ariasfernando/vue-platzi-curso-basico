@@ -121,7 +121,7 @@ class CampaignManager
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->status = 2;
             $campaign_data->deleted_at = Carbon::now();
-            if ($response = $campaign_data->save()) {
+            if ($campaign_data->save()) {
                 Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectId($campaign_id)]));
                 // Check proof
                 if ($campaign_data->has_active_proof) {
@@ -658,7 +658,7 @@ class CampaignManager
 
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->auto_save = $status;
-            if ($response = $campaign_data->save()) {
+            if ($campaign_data->save()) {
                 Activity::log('Autosave campaign updated', array(
                     'properties' => ['campaign_id' => new ObjectID($campaign_id)]));
                 return array('success' => $campaign_id);

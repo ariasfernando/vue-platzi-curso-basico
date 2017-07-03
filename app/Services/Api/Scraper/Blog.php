@@ -98,9 +98,9 @@ class Blog extends Scraper implements ApiImageConnector
                         foreach ($nodes as $link) {
                             $scraper = true;
                             if ($this->only_update) {
-                                foreach ($cached as $k => $v) {
-                                    if (isset($v['link']) && $v['link'] == $link->getAttribute('href')) {
-                                        $this->response_array[] = $v;
+                                foreach ($cached as $value) {
+                                    if (isset($value['link']) && $value['link'] == $link->getAttribute('href')) {
+                                        $this->response_array[] = $value;
                                         $scraper = false;
                                     }
                                 }

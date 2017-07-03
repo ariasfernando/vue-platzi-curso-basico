@@ -63,15 +63,15 @@ class CampaignController extends Controller
                     $params['menu_list'] = \Config::get('menu.' . $library);
 
                     $menu = Library::where('name', $library)->get();
-                    foreach ($menu as $key => $value) {
+                    foreach ($menu as $value) {
                         $params['menu_list'] = $value->getModules();
                     }
 
-                    uasort($params['menu_list'], function ($a, $b) {
-                        if ($a['title'] == $b['title']) {
+                    uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
+                        if ($menu_item_a['title'] == $menu_item_b['title']) {
                             return 0;
                         }
-                        return ($a['title'] < $b['title']) ? -1 : 1;
+                        return ($menu_item_a['title'] < $menu_item_b['title']) ? -1 : 1;
                     });
 
                     $params['tag_list'] = $saved_tags;
@@ -421,11 +421,6 @@ class CampaignController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-    }
-
-    public function getDownloadHtml(Request $request, $campaign_id)
-    {
-        return Campaign::downloadHtml($campaign_id);
     }
 
     /**

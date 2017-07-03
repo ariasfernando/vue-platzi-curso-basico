@@ -40,10 +40,9 @@ class PasswordController extends Controller
     /**
      * Get email view.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function getEmail(Request $request)
+    public function getEmail()
     {
         if (\Config::get('challenge.enabled')) {
             $challenge_provider = \Config::get('challenge.default');
@@ -64,8 +63,6 @@ class PasswordController extends Controller
     public function postEmail(Request $request)
     {
         // Challenge validation
-        $challenge_provider = \Config::get('challenge.default');
-        $config = \Config::get('challenge.providers.' . $challenge_provider);
         if (!Challenge::provider()->isValid($request)) {
             Activity::log('User login fail [ERROR_CAPTCHA]');
             return redirect()->back()->withErrors(['status' => 'Captcha validation is required']);
@@ -79,7 +76,7 @@ class PasswordController extends Controller
         $user_auth = User::where('email', '=', $data_params["email"])->first();
 
         if (is_null($user_auth['status']) || $user_auth['status'] != "deleted") {
-            $response = $this->passwords->sendResetLink($data_params, function ($message) {
+            $this->passwords->sendResetLink($data_params, function ($message) {
                 $message->subject($this->getEmailSubject());
             });
         }
