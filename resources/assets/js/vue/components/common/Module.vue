@@ -14,13 +14,23 @@
           :style="column.style || ''"
           :data-col="columnId">
 
-        <table v-if="column.components.length" width="100%" cellpadding="0" cellspacing="0" border="0" class="st-content-componetn">
-          <tr v-for="(component, componentId) in column.components">
-            <td>
-              <component :is="component.type" :component="component" :module-id="module.id" :column-id="columnId"
-                         :component-id="componentId" @set-component="setComponent"></component>
-            </td>
-          </tr>
+        <table v-if="column.components.length" 
+               width="100%" 
+               cellpadding="0" 
+               cellspacing="0" 
+               border="0" 
+               class="st-content-componetn"
+        >
+            <tr v-for="(component, componentId) in column.components">
+                <td>
+                    <component :is="component.type" 
+                         :component="component" 
+                         :module-id="module.id" 
+                         :column-id="columnId"
+                         :component-id="componentId" 
+                         @set-component="setComponent"></component>
+                </td>
+            </tr>
         </table>
 
         <!-- Empty Col -->
@@ -46,21 +56,30 @@
           :style="column.style || ''"
           :data-col="columnId"
       >
-
-        <table v-if="column.components.length" width="100%" cellpadding="0" cellspacing="0" border="0" class="st-content-componetn">
-          <tr v-for="(component, componentId) in column.components">
-            <td>
-              <component :is="component.type" :component="component" :module-id="module.id" :column-id="columnId"
-                         :component-id="componentId" @set-component="setComponent"></component>
-            </td>
-          </tr>
+        <table v-if="column.components.length" 
+               width="100%" 
+               cellpadding="0" 
+               cellspacing="0" 
+               border="0" 
+               class="st-content-componetn"
+        >
+            <tr v-for="(component, componentId) in column.components">
+                <td>
+                    <component :is="component.type" 
+                         :component="component" 
+                         :module-id="module.id" 
+                         :column-id="columnId"
+                         :component-id="componentId" 
+                         @set-component="setComponent"></component>
+                </td>
+            </tr>
         </table>
 
         <!-- Empty Col -->
         <table v-else width="100%" cellpadding="0" cellspacing="0" border="0">
-          <tr>
-            <td align="center" class="empty-cell" @drop="elementDrop" :data-col="columnId">Drag content here</td>
-          </tr>
+            <tr>
+                <td align="center" class="empty-cell" @drop="elementDrop" :data-col="columnId">Drag content here</td>
+            </tr>
         </table>
 
       </td>
