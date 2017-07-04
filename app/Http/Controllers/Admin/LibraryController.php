@@ -241,4 +241,15 @@ class LibraryController extends Controller
         $library->delete();
         return array("deleted" => $request->input("libraryId"));
     }
+
+    /**
+     * Library ESP providers.
+     *
+     * @return array
+     */
+    public function postEspProviders(Request $request)
+    {
+        $providers = config('esp');
+        return $providers;
+    }
 }

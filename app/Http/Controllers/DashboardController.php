@@ -5,6 +5,7 @@ namespace Stensul\Http\Controllers;
 use Auth;
 use Stensul\Models\Campaign;
 use Illuminate\Http\Request;
+use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Services\TagManager as Tag;
 use MongoDB\BSON\Regex as MongoRegex;
 
@@ -38,7 +39,8 @@ class DashboardController extends Controller
     public function index()
     {
         $params = [
-            'locales' => \Config::get('locales')
+            'locales' => \Config::get('locales'),
+            'libraries' => Auth::user()->getLibraries()
         ];
 
         return $this->renderView('dashboard', ['params' => $params]);
@@ -46,7 +48,9 @@ class DashboardController extends Controller
 
     public function getCampaigns(Request $request, $type)
     {
-        $user_visibility = Auth::user()->getLibraries();
+        $user_visibility = array_map(function($library) {
+            return new ObjectID($library['_id']);
+        }, Auth::user()->getLibraries());
 
         $campaigns = Campaign::where('status', '!=', 2);
 

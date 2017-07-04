@@ -242,7 +242,7 @@ class Campaign extends Eloquent
     {
         return array_merge(
             \Config::get('campaign'),
-            \Config::get('view.libraries.' . $this->attributes['library'])
+            Library::find($this->attributes['library'])->config
         );
     }
 

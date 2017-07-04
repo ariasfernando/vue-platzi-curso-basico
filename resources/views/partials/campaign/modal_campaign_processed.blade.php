@@ -13,10 +13,10 @@
                     <button type="button" class="btn btn-default btn-plain-text">Plaintext</button>
                 @endif
                 {{-- Modal Upload --}}
-                @foreach (Helper::getApiDrivers($params['campaign_data']->library) as $api)
-                    <button type="button" class="btn btn-default btn-upload-api" data-campaign-id="{{ $params['campaign_id'] }}" data-api-driver="{{ $api }}">Upload to {{ $app_config['api'][ $api ]['title'] }}</button>
-                @endforeach
-                @if ($params['campaign_data']['library_config']['view_in_browser'])
+                @if ($params['library_config']['esp'] && $params['library_config']['espProvider'])
+                    <button type="button" class="btn btn-default btn-upload-api" data-campaign-id="{{ $params['campaign_id'] }}" data-api-driver="{{ $params['library_config']['espProvider'] }}">Upload to {{ config('esp.'. $params['library_config']['espProvider'] . 'title') }} </button>
+                @endif
+                @if (isset($params['library_config']['view_in_browser']) && $params['library_config']['view_in_browser'])
                     <a href="{{ url('campaign/public-path', $params['campaign_id']) }}" target="_blank" type="button"
                         class="btn btn-default">View in browser</a>
                 @endif

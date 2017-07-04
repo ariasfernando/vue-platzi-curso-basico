@@ -10,6 +10,7 @@ module.exports = {
     createLibrary: { method: 'post', path: `${baseUrl}/admin/library/create` },
     deleteLibrary: { method: 'post', path: `${baseUrl}/admin/library/delete` },
     fetchLibraries: { method: 'post', path: `${baseUrl}/admin/library/list` },
+    espProviders: { method: 'post', path: `${baseUrl}/admin/library/esp` },
   },
   module: {
     getModule: { method: 'get', path: `${baseUrl}/admin/module/edit?moduleId=:moduleId` },

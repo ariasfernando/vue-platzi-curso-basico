@@ -230,9 +230,18 @@
             <div class="row">
               <!-- Field ESP -->
               <label for="preheader" class="col-sm-4 control-label">ESP</label>
-              <p class="control col-sm-8">
+              <p class="control col-sm-1">
                 <toggle-button :value="library.config.esp" :sync="true" :labels="true" @change="updateToggle('esp')"></toggle-button>
               </p>
+              <div v-if="library.config.esp" class="col-md-5">
+                <p class="control">
+                  <select v-model="library.config.espProvider">
+                    <option v-for="(esp, key) in this.espList" v-bind:value="key">
+                      {{ esp.title }}
+                    </option>
+                  </select>
+                </p>
+              </div>
             </div>
 
             <h4>Modules</h4>
@@ -314,6 +323,7 @@
       return {
         library: {},
         modules: {},
+        espList: {},
         ready: false
       }
     },
@@ -322,6 +332,13 @@
         this.library.config[element] = !this.library.config[element];
       },
       loadLibrary() {
+        libraryService.espProviders()
+          .then((response) => {
+            this.espList = response;
+          })
+          .catch((error) => {
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+          });
         let libraryId = this.$route.params.id;
 
         if (libraryId) {
