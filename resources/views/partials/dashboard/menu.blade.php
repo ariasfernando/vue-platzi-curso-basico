@@ -28,40 +28,27 @@
 
     {{-- Libraries --}}
     @elseif ($app_config['view']['campaign_format'] === "libraries")
-        @if ( !isset($app_config['view']['libraries']) and count($app_config['view']['libraries']) === 0 )
+        @if ( count($params['libraries']) === 0 )
             @yield('default_menu')
         @else
-           @if ( count($current_user->getLibraries()) === 0 )
-               @yield('default_menu')
-           @else
-
-                {{-- Show library by auth groups --}}
-                @if( count($app_config['view']['libraries']) > 0)
-                    @if( count($current_user->getLibraries()) === 1)
-                        <a class="btn btn-default" href="{{ URL::to( action('CampaignController@getEdit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => $current_user->getLibraries()[0] ])) }}">
-                            Create a new email
+            @if( count($params['libraries']) === 1)
+                <a class="btn btn-default" href="{{ URL::to( action('CampaignController@getEdit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => $params['libraries'][0]['_id'] ])) }}">
+                    Create a new email
+                </a>
+            @else
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
+                Create a new email<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                @foreach ($params['libraries'] as $library)
+                    <li role="presentation">
+                        <a href="{{ URL::to( url('campaign/edit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => $library['_id'] ])) }}">
+                            {{ $library['name'] }}
                         </a>
-                    @else
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
-                        Create a new email<span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                        @foreach ($app_config['view']['libraries'] as $library_key => $library_value)
-                             @if( $current_user->see($library_key) )
-                                <li role="presentation">
-                                    <a href="{{ URL::to( url('campaign/edit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => $library_key ])) }}">
-                                        {{ $app_config['view']['libraries'][$library_key]["title"] }}
-                                    </a>
-                                </li>
-                             @endif
-                        @endforeach
-                    </ul>
-                    @endif
-                @else
-                    @yield('default_menu')
-                @endif
-
-           @endif
+                    </li>
+                @endforeach
+            </ul>
+            @endif
         @endif
     @else
         @yield('default_menu')

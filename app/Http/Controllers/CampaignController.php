@@ -56,17 +56,12 @@ class CampaignController extends Controller
                 $saved_tags = Tag::all();
 
                 if ($params) {
-                    $library = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
+                    $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
                         ? $params['campaign_data']['library']
                         : "default";
-
-                    $params['menu_list'] = \Config::get('menu.' . $library);
-
-                    $menu = Library::where('name', $library)->get();
-                    foreach ($menu as $value) {
-                        $params['menu_list'] = $value->getModules();
-                    }
-
+                    $library = Library::find($library_id);
+                    $params['menu_list'] = $library->getModules();
+                    $params['library_config'] = $library->config;
                     uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
                         if ($menu_item_a['title'] == $menu_item_b['title']) {
                             return 0;
@@ -89,7 +84,7 @@ class CampaignController extends Controller
                 $params['locale'] = $request->input("locale");
             }
             if (!is_null($request->input("library"))) {
-                $params['library'] = $request->input("library");
+                $params['library'] = new ObjectID($request->input("library"));
             }
 
             $campaign = Campaign::create($params);

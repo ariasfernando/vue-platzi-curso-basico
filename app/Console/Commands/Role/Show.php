@@ -26,17 +26,15 @@ class Show extends Command
      */
     public function fire()
     {
-        $roles = Role::all(['name', 'description', 'permissions', 'libraries'])->toArray();
+        $roles = Role::all(['name', 'description', 'permissions'])->toArray();
         if (count($roles) === 0) {
             $this->error('Roles not found, use command php artisan role:create!');
         } else {
-            $roles_headers = ['Id', 'Name', 'Description', 'Libraries', 'Permissions'];
+            $roles_headers = ['Id', 'Name', 'Description', 'Permissions'];
 
             for ($i=0; $i<count($roles); $i++) {
                 $roles[$i]['permissions'] =
                     (!empty($roles[$i]['permissions'])) ? implode(",", $roles[$i]['permissions']) : "None";
-                $roles[$i]['libraries'] =
-                    (!empty($roles[$i]['libraries'])) ? implode(",", $roles[$i]['libraries']) : "None";
             }
 
             $this->table($roles_headers, $roles);

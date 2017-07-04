@@ -28,7 +28,6 @@ docker-compose.yaml
 .coverrun
 package-lock.json
 coverage
-customer
 typings.json
 typings/
 ci/vendor/

@@ -163,6 +163,7 @@ if (env("APP_ADMIN", false)) {
             '/admin/library/create'       => 'Admin\LibraryController@postCreate',
             '/admin/library/delete'       => 'Admin\LibraryController@postDelete',
             '/admin/library/list'         => 'Admin\LibraryController@postList',
+            '/admin/library/esp'         => 'Admin\LibraryController@postEspProviders',
             '/admin/module/edit'         => 'Admin\ModuleController@postEdit',
             '/admin/module/create'       => 'Admin\ModuleController@postCreate',
             '/admin/module/delete'       => 'Admin\ModuleController@postDelete',

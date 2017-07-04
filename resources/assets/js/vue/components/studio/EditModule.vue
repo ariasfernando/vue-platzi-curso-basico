@@ -28,7 +28,7 @@
       <div class="col-xs-3 header-col">
         <div class="vertical-center">
           <button class="btn btn-default" @click="preview"><i class="glyphicon glyphicon-phone"></i>Preview</button>
-          <button class="btn btn-default save-as-draft" @click="draft">Draft</button>
+          <button class="btn btn-default save-as-draft" @click.prevent="saveModule" :disabled="errors.any()">Draft</button>
           <a class="btn btn-continue" href="#" @click.prevent="publish">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
@@ -43,10 +43,10 @@
             <h4>Module Settings</h4><hr>
 
             <div class="fields">
-              <div class="control">
-                <input v-model="module.name" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"
+
+              <div class="control" :class="{'has-error': errors.has('name') }">
+                <input v-model="module.name" v-validate.initial="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"
                        name="name" type="text" placeholder="Module name">
-                <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
               </div>
 
               <div class="control">
@@ -65,10 +65,22 @@
                 <h5>Elements</h5> <hr>
 
                 <ul class="components-list">
-                  <li class="component-item" draggable="true" data-type="text-element" @dragstart="setData" @dragend="resetStyle"><i class="glyphicon glyphicon-font"></i>Text</li>
-                  <li class="component-item" draggable="true" data-type="image-element" @dragstart="setData" @dragend="resetStyle"><i class="fa fa-picture-o" aria-hidden="true"></i>Image</li>
-                  <li class="component-item" draggable="true" data-type="button-element" @dragstart="setData" @dragend="resetStyle"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>CTA</li>
-                  <li class="component-item" draggable="true" data-type="divider-element" @dragstart="setData" @dragend="resetStyle"><i class="fa fa-minus-square-o" aria-hidden="true"></i>Divider</li>
+                  <li class="component-item" draggable="true" data-type="text-element" @dragstart="setData" @dragend="resetStyle">
+                    <i class="glyphicon glyphicon-font"></i>
+                    <p>Text</p>
+                  </li>
+                  <li class="component-item" draggable="true" data-type="image-element" @dragstart="setData" @dragend="resetStyle">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                    <p>Image</p>
+                  </li>
+                  <li class="component-item" draggable="true" data-type="button-element" @dragstart="setData" @dragend="resetStyle">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    <p>CTA</p>
+                  </li>
+                  <li class="component-item" draggable="true" data-type="divider-element" @dragstart="setData" @dragend="resetStyle">
+                    <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+                    <p>Divider</p>
+                  </li>
                 </ul>
               </div>
 
@@ -105,6 +117,8 @@
 
       </section>
     </div>
+
+    <spinner></spinner>
   </div>
 </template>
 
@@ -113,6 +127,7 @@
   import ComponentSettings from './ComponentSettings.vue'
   import { defaultElements } from '../../resources/elements'
   import moduleService from '../../services/module'
+  import Spinner from '../common/Spinner.vue'
 
   export default {
     name: 'EditModule',
@@ -129,11 +144,12 @@
     },
     components: {
       Module,
-      ComponentSettings
+      ComponentSettings,
+      Spinner
     },
     methods: {
       loadModule() {
-
+        this.$store.commit("global/setLoader", true);
         let data = {
           moduleId: this.$route.params.id || undefined
         };
@@ -142,12 +158,32 @@
         this.$store.dispatch("module/getModuleData", data)
           .then( response => {
             // TODO: Trigger event editModule.onLoaded
-            this.loading = false;
             this.ready = true;
+            this.$store.commit("global/setLoader", false);
           }).catch( error => {
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
           });
+      },
+      saveModule() {
+        this.$store.commit("global/setLoader", true);
+        let data = this.module;
 
+        // TODO: Trigger event editModule.onInit
+        this.$store.dispatch("module/saveModuleData", data)
+          .then( response => {
+            // TODO: Trigger event editModule.onLoaded
+            if (!response) {
+              this.$root.$toast('Error', {className: 'et-warn'});
+              this.$store.commit("global/setLoader", false);
+              return;
+            }
+
+            this.ready = true;
+            this.$store.commit("global/setLoader", false);
+          }).catch( error => {
+            this.$store.commit("global/setLoader", false);
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+          });
       },
       setColumns(cols) {
         let numCols = this.module.structure.columns.length;
@@ -197,6 +233,7 @@
         this.$root.$toast('Preview event', {className: 'et-info'});
       },
       draft() {
+
         this.$root.$toast('Draft event', {className: 'et-info'});
       },
       publish() {
@@ -390,17 +427,29 @@
 
       .components-list {
         padding: 0;
+        text-align: center;
 
         .component-item {
           list-style-type: none;
+          width: 46%;
+          font-size: 22px;
+          text-align: center;
+          background-color: #f4f4f4;
           border: 1px solid #ccc;
-          border-radius: 5px;
-          margin: 5px 0;
+          margin: 2px 0;
           padding: 5px;
           cursor: pointer;
+          display: inline-block;
+          height: 60px;
 
           i {
-            margin: 0 10px;
+            margin: 0 5px;
+          }
+
+          p{
+            font-size: 14px;
+            margin: 0px;
+            padding: 0px;
           }
         }
       }
@@ -409,7 +458,7 @@
         margin-top: 25px;
 
         pre {
-          font-size: 10px;
+          font-size: 50px;
           font-family: Monaco;
         }
       }
@@ -429,6 +478,10 @@
 
     .module-table .st-col {
       border: 1px dashed @focus;
+    }
+
+    .is-danger {
+      border: 1px solid red !important;
     }
   }
 

@@ -31,11 +31,6 @@ let gulpsync = require('gulp-sync')(gulp);
 require('elixir-jshint');
 require('laravel-elixir-vueify');
 
-let mocha = require('gulp-mocha');
-let generateSuite = require("gulp-mocha-browserify-sweet");
-let browserify = require("gulp-browserify");
-let concat = require("gulp-concat");
-
 /*
  | --------------------------------------------------------------------------
  | Define App name
@@ -111,6 +106,14 @@ gulp.task('elixir-copy-bower', function () {
   });
 });
 
+function fileExists(file) {
+  try {
+    fs.accessSync(file, fs.F_OK);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 /*
  | --------------------------------------------------------------------------
@@ -124,6 +127,11 @@ gulp.task('elixir-scripts', function () {
 
   elixir((mix) => {
       mix
+        mix.browserify(
+          'main.js',
+          jsDestinationPath + "customer.js",
+          customerAssetsPath
+        )
         .browserify(
           "js/vue/campaign.js",
           jsDestinationPath + "campaign-components.js",
@@ -151,12 +159,6 @@ gulp.task('elixir-scripts', function () {
           jsDestinationPath + "dashboard-components.js",
           assetsPath
         )
-        // === Customer Assets ===
-        // .browserify(
-        //     "index.js",
-        //     jsDestinationPath + "customer.js",
-        //     customerAssetsPath
-        // )
         // === Compile Vendor and Application scripts to library.js ===
         .scripts(
           [
