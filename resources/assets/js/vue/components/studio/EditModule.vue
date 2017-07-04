@@ -28,7 +28,7 @@
       <div class="col-xs-3 header-col">
         <div class="vertical-center">
           <button class="btn btn-default" @click="preview"><i class="glyphicon glyphicon-phone"></i>Preview</button>
-          <button class="btn btn-default save-as-draft" @click="draft">Draft</button>
+          <button class="btn btn-default save-as-draft" @click.prevent="saveModule" :disabled="errors.any()">Draft</button>
           <a class="btn btn-continue" href="#" @click.prevent="publish">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
@@ -43,10 +43,10 @@
             <h4>Module Settings</h4><hr>
 
             <div class="fields">
-              <div class="control">
-                <input v-model="module.name" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"
+
+              <div class="control" :class="{'has-error': errors.has('name') }">
+                <input v-model="module.name" v-validate.initial="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"
                        name="name" type="text" placeholder="Module name">
-                <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
               </div>
 
               <div class="control">
@@ -117,6 +117,8 @@
 
       </section>
     </div>
+
+    <spinner></spinner>
   </div>
 </template>
 
@@ -125,6 +127,7 @@
   import ComponentSettings from './ComponentSettings.vue'
   import { defaultElements } from '../../resources/elements'
   import moduleService from '../../services/module'
+  import Spinner from '../common/Spinner.vue'
 
   export default {
     name: 'EditModule',
@@ -141,11 +144,12 @@
     },
     components: {
       Module,
-      ComponentSettings
+      ComponentSettings,
+      Spinner
     },
     methods: {
       loadModule() {
-
+        this.$store.commit("global/setLoader", true);
         let data = {
           moduleId: this.$route.params.id || undefined
         };
@@ -154,12 +158,32 @@
         this.$store.dispatch("module/getModuleData", data)
           .then( response => {
             // TODO: Trigger event editModule.onLoaded
-            this.loading = false;
             this.ready = true;
+            this.$store.commit("global/setLoader", false);
           }).catch( error => {
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
           });
+      },
+      saveModule() {
+        this.$store.commit("global/setLoader", true);
+        let data = this.module;
 
+        // TODO: Trigger event editModule.onInit
+        this.$store.dispatch("module/saveModuleData", data)
+          .then( response => {
+            // TODO: Trigger event editModule.onLoaded
+            if (!response) {
+              this.$root.$toast('Error', {className: 'et-warn'});
+              this.$store.commit("global/setLoader", false);
+              return;
+            }
+
+            this.ready = true;
+            this.$store.commit("global/setLoader", false);
+          }).catch( error => {
+            this.$store.commit("global/setLoader", false);
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+          });
       },
       setColumns(cols) {
         let numCols = this.module.structure.columns.length;
@@ -209,6 +233,7 @@
         this.$root.$toast('Preview event', {className: 'et-info'});
       },
       draft() {
+
         this.$root.$toast('Draft event', {className: 'et-info'});
       },
       publish() {
@@ -453,6 +478,10 @@
 
     .module-table .st-col {
       border: 1px dashed @focus;
+    }
+
+    .is-danger {
+      border: 1px solid red !important;
     }
   }
 
