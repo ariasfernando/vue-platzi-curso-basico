@@ -55,8 +55,7 @@
                   <input v-model="library.config.templateWidth" v-validate="'required'"
                          :class="{'input': true, 'is-danger': errors.has('templateWidth') }" name="templateWidth"
                          type="text" placeholder="660">
-                  <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth')
-                    }}</span>
+                  <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth') }}</span>
                 </p>
               </div>
 

@@ -33,7 +33,7 @@ class ModuleController extends Controller
      *
      * @return View
      */
-    public function getIndex(Request $request)
+    public function getIndex()
     {
         $modules = \StensulModule::getModuleList();
 

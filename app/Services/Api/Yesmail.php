@@ -33,7 +33,8 @@ class Yesmail implements ApiConnector
     public function uploadEmail($campaign = null, $request = null)
     {
         if (!is_null($campaign)) {
-            $original_filename = (is_null($request) || !isset($request['filename']))? $campaign->campaign_name : $request['filename'];
+            $original_filename = (is_null($request) || !isset($request['filename']))
+                ? $campaign->campaign_name : $request['filename'];
             if (strlen($original_filename)) {
                 $campaign_id = $request['campaign_id'];
                 $filename = Upload::versioningFilename($original_filename);

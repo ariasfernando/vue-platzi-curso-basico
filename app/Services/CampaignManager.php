@@ -121,7 +121,7 @@ class CampaignManager
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->status = 2;
             $campaign_data->deleted_at = Carbon::now();
-            if ($response = $campaign_data->save()) {
+            if ($campaign_data->save()) {
                 Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectId($campaign_id)]));
                 // Check proof
                 if ($campaign_data->has_active_proof) {
@@ -569,10 +569,8 @@ class CampaignManager
                     $scraper_options = array_merge($scraper_options, $options);
                     $driver_name = 'Scraper\\' . ucfirst($scraper_type);
                     $scraper_driver = Api::driver($driver_name, $scraper_options);
-                    Queue::push(function ($job) use ($scraper_driver) {
-                        $scraper_driver->getPublicImages();
-                        $job->delete();
-                    });
+                    $job_id = dispatch(new \Stensul\Jobs\ScraperPreloader($scraper_driver));
+                    Worker::queue($job_id, 'scraper');
                 }
             }
         }
@@ -640,7 +638,7 @@ class CampaignManager
     {
         $campaign = Campaign::findOrFail($campaign_id);
         return response()->make($campaign->body_html, 200, [
-            'Content-Type' => 'text/plain',
+            'Content-Type' => 'text/html',
             'Content-Disposition' => 'attachment; filename="' . $campaign->campaign_name . '.html"'
         ]);
     }
@@ -660,8 +658,9 @@ class CampaignManager
 
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->auto_save = $status;
-            if ($response = $campaign_data->save()) {
-                Activity::log('Autosave campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
+            if ($campaign_data->save()) {
+                Activity::log('Autosave campaign updated', array(
+                    'properties' => ['campaign_id' => new ObjectID($campaign_id)]));
                 return array('success' => $campaign_id);
             }
         }

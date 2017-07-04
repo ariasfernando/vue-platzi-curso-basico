@@ -43,7 +43,6 @@ class CampaignManagerTest extends TestCase
         $response = CampaignManager::delete('fake_campaign_id');
 
         $this->assertArrayHasKey('error', $response);
-
     }
 
     /**

@@ -39,9 +39,9 @@ class Scraper extends Command
     public function fire()
     {
         if (\Config::get('api.scraper.status') === true) {
-            $libraries = \Config::get('api.scraper.sources.libraries');
+            $libraries = array_keys(\Config::get('api.scraper.sources.libraries'));
             if (count($libraries)) {
-                foreach ($libraries as $library => $api) {
+                foreach ($libraries as $library) {
                     Campaign::scraperPreloader($library, ['flush_cache' => true]);
                 }
             }

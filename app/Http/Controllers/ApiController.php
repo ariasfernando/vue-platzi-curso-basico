@@ -105,7 +105,7 @@ class ApiController extends Controller
         $api_driver = Api::driver($driver_name, $options);
 
         if (!is_null($api_driver) && !empty($config_libraries)) {
-            return $api_response = $api_driver->getPublicImages();
+            return $api_driver->getPublicImages();
         } else {
             throw new \Exception("Api driver or options not found");
         }

@@ -163,7 +163,7 @@ class LibraryController extends Controller
         $library->modules = $modules = [];
         $library->config = $request->input("config");
 
-        foreach ($request->input('modules') as $key => $group) {
+        foreach ($request->input('modules') as $group) {
             if (strtolower($group['name']) == 'default') {
                 $modules = $group['modules'];
             } else {
@@ -201,7 +201,7 @@ class LibraryController extends Controller
             "modules" => []
         ];
 
-        foreach ($request->input('modules') as $key => $group) {
+        foreach ($request->input('modules') as $group) {
             if (strtolower($group['name']) == 'default') {
                 $params['modules'] = $group['modules'];
             } else {
@@ -224,7 +224,7 @@ class LibraryController extends Controller
                 Library::create($params);
                 Permission::create($permission_params);
                 $response_message = array("message"=> "SUCCESS");
-            } 
+            }
         }
 
         return $response_message;

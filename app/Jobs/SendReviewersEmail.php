@@ -12,14 +12,13 @@ use Stensul\Models\Campaign;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
  * This job is in charge of send the notification
  * emails to reviewers of a given proof.
  */
-class SendReviewersEmail extends Job implements SelfHandling, ShouldQueue
+class SendReviewersEmail extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
@@ -68,10 +67,10 @@ class SendReviewersEmail extends Job implements SelfHandling, ShouldQueue
 
         switch ($this->type) {
             case 'new_proof':
-                $method = 'SendNewProofNotification';
+                $method = 'sendNewProofNotification';
                 break;
             case 'deleted_proof':
-                $method = 'SendDeletedProofNotification';
+                $method = 'sendDeletedProofNotification';
                 break;
             default:
                 $method = '';
@@ -160,7 +159,7 @@ class SendReviewersEmail extends Job implements SelfHandling, ShouldQueue
     /**
      * Send this notification when a campaign with an active proof was deleted
      */
-    protected function SendDeletedProofNotification()
+    protected function sendDeletedProofNotification()
     {
         $reviewers = $this->proof->reviewers;
         $requestor = User::find($this->proof->requestor);

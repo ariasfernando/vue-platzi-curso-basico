@@ -50,7 +50,6 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
 
         $params = ['user_id' => \Auth::id()];
         $this->campaign = \Stensul\Services\CampaignManager::create($params);
-
     }
 
     /**

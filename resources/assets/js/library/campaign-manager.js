@@ -373,7 +373,7 @@ var campaignManager = {
             $cleanedHtml = $removeClass;
 		}
         // Remove every element with class st-remove-element
-        $cleanedHtml.find("[class^=st-remove-element]").remove();
+        $cleanedHtml.find(".st-remove-element").remove();
 
 		// Remove every class starting with "st-"
         $cleanedHtml.find("[class*=' st-'], [class^='st-']").removeClass(function (index, css) {
@@ -833,6 +833,8 @@ var campaignManager = {
                     var tagValue = this.value;
                     campaignManager.addTag(tagValue);
                     this.value = '';
+                    // Prevent campaign locking
+                    return false;
                 }
 
                 // Allow: backspace, delete, tab, escape, enter and .
@@ -957,7 +959,7 @@ var campaignManager = {
                             ignore = true;
                         }
                     });
-                    if (mutation.target.className == 'actions-buttons-tooltip' || (mutation.attributeName == 'id' && mutation.target.localName != 'div'))  
+                    if (mutation.target.className == 'actions-buttons-tooltip' || (mutation.attributeName == 'id' && mutation.target.localName != 'div') || ( !mutation.attributeName && mutation.target.localName == 'td'))
                     {
                         ignore = true;
 	}

@@ -313,9 +313,13 @@ class Campaign extends Eloquent
             if ($proof) {
                 if (config('proof.required_reviews')) {
                     foreach ($proof['reviewers'] as $reviewer) {
-                        // If a required reviewer haven't provided a decision or reject it, the campaign cannot be completed
+                        /*
+                         * If a required reviewer haven't provided a decision or reject it,
+                         * the campaign cannot be completed
+                         */
                         if (isset($reviewer['required']) && $reviewer['required'] &&
-                            (!isset($reviewer['decision']) || $reviewer['decision'] === 'reject' || $reviewer['decision'] === 'reject-with-comments')) {
+                            (!isset($reviewer['decision']) || $reviewer['decision'] === 'reject'
+                                || $reviewer['decision'] === 'reject-with-comments')) {
                             return false;
                         }
                     }

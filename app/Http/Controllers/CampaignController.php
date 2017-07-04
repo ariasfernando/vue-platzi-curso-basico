@@ -62,11 +62,11 @@ class CampaignController extends Controller
                     $library = Library::find($library_id);
                     $params['menu_list'] = $library->getModules();
                     $params['library_config'] = $library->config;
-                    uasort($params['menu_list'], function ($a, $b) {
-                        if ($a['title'] == $b['title']) {
+                    uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
+                        if ($menu_item_a['title'] == $menu_item_b['title']) {
                             return 0;
                         }
-                        return ($a['title'] < $b['title']) ? -1 : 1;
+                        return ($menu_item_a['title'] < $menu_item_b['title']) ? -1 : 1;
                     });
 
                     $params['tag_list'] = $saved_tags;
@@ -94,7 +94,11 @@ class CampaignController extends Controller
 
         if (\Config::get('api.scraper.status')
             && \Config::get('api.scraper.settings.campaign_preload')) {
-            Campaign::scraperPreloader($params['campaign_data']['library'], ['flush_cache' => true, 'only_update' => true]);
+            Campaign::scraperPreloader(
+                $params['campaign_data']['library'],
+                ['flush_cache' => true,
+                'only_update' => true]
+            );
         }
 
         // Initialize locale
@@ -378,7 +382,9 @@ class CampaignController extends Controller
             try {
                 return Campaign::deleteTag($request->input('campaign_id'), $request->input('tag_name'));
             } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-                throw new NotFoundHttpException('Campaign with the id ' . $request->input('campaign_id') . ' not found');
+                throw new NotFoundHttpException(
+                    'Campaign with the id ' . $request->input('campaign_id') . ' not found'
+                );
             }
         }
     }
@@ -410,11 +416,6 @@ class CampaignController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-    }
-
-    public function getDownloadHtml(Request $request, $campaign_id)
-    {
-        return Campaign::downloadHtml($campaign_id);
     }
 
     /**

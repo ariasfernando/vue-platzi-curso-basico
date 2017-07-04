@@ -46,7 +46,9 @@ class Blog extends Scraper implements ApiImageConnector
         $this->pagination_link = (isset($options['pagination_link']))? $options['pagination_link'] : '';
         $this->pagination_count = (isset($options['pagination_count']))? (Int)$options['pagination_count'] : 1;
         $this->full_image_src = (isset($options['full_image_src']))? $options['full_image_src'] : null;
-        $this->small_image_src = (isset($options['small_image_src']))? $options['small_image_src'] : $this->full_image_src;
+        $this->small_image_src = (isset($options['small_image_src']))
+            ? $options['small_image_src']
+            : $this->full_image_src;
         $this->text_src = (isset($options['text_src']))? $options['text_src'] : '';
         $this->link_src = (isset($options['link_src']))? $options['link_src'] : '';
         $this->subtext_src = (isset($options['subtext_src']))? $options['subtext_src'] : '';
@@ -96,9 +98,9 @@ class Blog extends Scraper implements ApiImageConnector
                         foreach ($nodes as $link) {
                             $scraper = true;
                             if ($this->only_update) {
-                                foreach ($cached as $k => $v) {
-                                    if (isset($v['link']) && $v['link'] == $link->getAttribute('href')) {
-                                        $this->response_array[] = $v;
+                                foreach ($cached as $value) {
+                                    if (isset($value['link']) && $value['link'] == $link->getAttribute('href')) {
+                                        $this->response_array[] = $value;
                                         $scraper = false;
                                     }
                                 }

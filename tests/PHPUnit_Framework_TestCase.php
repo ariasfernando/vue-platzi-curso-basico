@@ -1,7 +1,8 @@
 <?php
 
-if (!class_exists('PHPUnit_Framework_TestCase'))
-{
+// @codingStandardsIgnoreStart
+
+if (!class_exists('PHPUnit_Framework_TestCase')) {
     /**
      * Workaround for Laravel 5.3 and PHPUnit 6 namespaced classes.
      */
@@ -10,3 +11,4 @@ if (!class_exists('PHPUnit_Framework_TestCase'))
 
     }
 }
+// @codingStandardsIgnoreEnd

@@ -10,6 +10,7 @@ export const studioLibraryRoutes = [
     props: true
   },
   {
+    name:'create',
     path: '/create',
     component: EditLibrary
   },
@@ -26,6 +27,7 @@ export const studioModuleRoutes = [
     props: true
   },
   {
+    name:'create',
     path: '/create',
     component: EditModule
   },

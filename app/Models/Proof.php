@@ -2,7 +2,7 @@
 
 namespace Stensul\Models;
 
-use Jenssegers\Mongodb\Model as Eloquent;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 class Proof extends Eloquent
 {
@@ -34,7 +34,8 @@ class Proof extends Eloquent
     public function userCanAccess($user_id)
     {
         $ids = array_column($this->attributes['reviewers'], 'user_id');
-        return $user_id === $this->attributes['requestor'] || in_array($user_id, $ids) || User::find($user_id)->can('edit_proof');
+        return $user_id === $this->attributes['requestor']
+            || in_array($user_id, $ids) || User::find($user_id)->can('edit_proof');
     }
 
     /**
