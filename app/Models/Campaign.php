@@ -161,10 +161,10 @@ class Campaign extends Eloquent
      */
     public function getLibraryConfig($property = false)
     {
-        $result = Library::where('name', '=', $this->library)->get();
+        $library = Library::find($this->library);
 
-        if (!empty($result[0]['config'])) {
-            $response = $result[0]['config'];
+        if (!empty($library->config)) {
+            $response = $library->config;
         } else {
             $response = \Config::get("view.libraries." . $this->library, []);
         }
