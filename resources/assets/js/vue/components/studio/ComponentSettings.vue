@@ -59,6 +59,7 @@
 
 <script>
 
+  import Vue from 'vue/dist/vue'
   import ToggleButton from '../common/ToggleButton.vue'
   import Plugins from '../../plugins'
   import _ from 'underscore-contrib'
@@ -89,7 +90,7 @@
 
       if ( this.$customer ) {
         // Check for customer Plugins
-        let customerPlugins = _.getPath(this.$customer, 'studio.modules.plugins', {});
+        let customerPlugins = _.getPath(this.$customer, 'admin.modules.plugins', {});
         if (!_.isEmpty(customerPlugins)) {
           this.plugins = _.extend(Plugins[type], customerPlugins[type]);
         }
