@@ -2,6 +2,7 @@
 
 namespace Stensul\Providers;
 
+use Stensul\Models\Library;
 use Illuminate\Support\ServiceProvider;
 
 class HelperServiceProvider extends ServiceProvider
@@ -172,48 +173,19 @@ class HelperServiceProvider extends ServiceProvider
     }
 
     /**
-     *
      * get api driver by libraries
-     *
-     * @param string $library
      *
      * @return array
      */
-    public static function getApiDrivers($library = null)
+    public static function getApiDrivers()
     {
-        $configuration = \Config::all();
         $user_libraries = \Auth::user() ? \Auth::user()->getLibraries() : [];
         $api_drivers = [];
 
-        if (is_null($library)) {
-            if (isset($configuration["api"]["upload_modal"]) && $configuration["api"]["upload_modal"]) {
-                $api_drivers[] = $configuration["api"]["api_driver"];
-            } else {
-                if ($configuration["view"]["campaign_format"] == "libraries") {
-                    foreach ($configuration["view"]["libraries"] as $key => $libraries) {
-                        if (isset($libraries["api_connection"])
-                            && $libraries["api_connection"] !== false
-                            && $key != "default"
-                            && in_array($key, $user_libraries)) {
-                            $api_drivers[] = $libraries["api_connection"];
-                        }
-                    }
-                } else {
-                    if (isset($configuration["view"]["libraries"]["default"])
-                        && isset($configuration["view"]["libraries"]["default"]["api_connection"])
-                        && $configuration["view"]["libraries"]["default"]["api_connection"] !== false ) {
-                        $api_drivers[] = $configuration["view"]["libraries"]["default"]["api_connection"];
-                    }
-                }
-            }
-        } else {
-            if (isset($configuration["view"]["libraries"][$library])
-                && isset($configuration["view"]["libraries"][$library]["api_connection"])
-                && $configuration["view"]["libraries"][$library]["api_connection"] !== false
-                && ( in_array($library, $user_libraries) || $library == "default") ) {
-                $api_drivers[] = $configuration["view"]["libraries"][$library]["api_connection"];
-            } elseif (isset($configuration["api"]["upload_modal"]) && $configuration["api"]["upload_modal"]) {
-                $api_drivers[] = $configuration["api"]["api_driver"];
+        foreach ($user_libraries as $library) {
+            $library_config = Library::findOrFail($library['_id'])->config;
+            if (isset($library_config['esp']) && $library_config['esp'] && $library_config['espProvider']) {
+                $api_drivers[] = $library_config['espProvider'];
             }
         }
 

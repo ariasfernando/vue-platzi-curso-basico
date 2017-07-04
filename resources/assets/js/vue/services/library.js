@@ -124,4 +124,21 @@ export default {
 
     return deferred.promise;
   },
+
+  espProviders() {
+    const endpoint = endpoints.library.espProviders;
+    const deferred = Q.defer();
+    const params = {
+      path: 'library.espProviders',
+      endpoint,
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
 }

@@ -25,6 +25,7 @@ function Library(data = {}) {
     propietaryCss: config.propietaryCss || '',
     padding: config.padding || '',
     esp: config.esp || false,
+    espProvider: config.espProvider || false,
     plainText: config.plainText || false,
     preheader: config.preheader || false,
   };
