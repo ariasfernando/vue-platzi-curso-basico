@@ -162,12 +162,14 @@
             // TODO: Trigger event editModule.onLoaded
             if (!response) {
               this.$root.$toast('Error', {className: 'et-warn'});
+              this.$store.commit("global/setLoader", false);
               return;
             }
 
             this.ready = true;
             this.$store.commit("global/setLoader", false);
           }).catch( error => {
+            this.$store.commit("global/setLoader", false);
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
           });
       },
