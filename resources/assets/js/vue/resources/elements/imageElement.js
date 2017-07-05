@@ -15,16 +15,28 @@ module.exports = {
   },
   "settings": [
     {
-      "label": "Color",
-      "name": "color",
+      "label": "Default URI",
+      "name": "url",
       "type": "text",
-      "value": "#000000"
+      "value": "http://stensul.com"
     },
     {
-      "label": "Line Height",
-      "name": "lineHeight",
+      "label": "Alt",
+      "name": "alt",
       "type": "text",
-      "value": "12px"
+      "value": "Image"
+    },
+    {
+      "label": "Title",
+      "name": "title",
+      "type": "text",
+      "value": "Image"
+    },
+    {
+      "label": "Target",
+      "name": "target",
+      "type": "text",
+      "value": "_blank"
     },
     {
       "label": "Padding Top",

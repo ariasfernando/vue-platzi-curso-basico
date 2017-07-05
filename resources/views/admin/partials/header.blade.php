@@ -6,7 +6,7 @@
 				<div class="logo">
 					<a href="{{ url('/') }}">
 						<span class="brand-logo"></span>
-						<span class="by-stensul"></span>
+						<span class="by-stensul"><em>by</em> stensul</span>
 					</a>
 				</div>
 			</div>
@@ -17,7 +17,7 @@
 					@if (!Auth::guest())
 						<span>{{ Auth::user()->name }}</span>
 						<a href="{{ url('admin/logout') }}" class="logout">
-							<i class="glyphicon glyphicon-off"></i>
+							<i class="glyphicon glyphicon-log-out"></i>
 							<span>Logout</span>
 						</a>
 					@endif

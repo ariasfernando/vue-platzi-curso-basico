@@ -7,7 +7,6 @@
 
 		<!-- Input Name -->
 		<div class="modal-mpf-row">
-			{!! Form::label('name', 'Name') !!}
 			{!! Form::text('name', (isset($params['role']['name']))? $params['role']['name'] : '', array (
 				'class' => 'role_name',
 				'id' => 'role_name',
@@ -17,7 +16,6 @@
 
 		<!-- Input Description -->
 		<div class="modal-mpf-row">
-			{!! Form::label('description', 'Description') !!}
 			{!! Form::text('description',(isset($params['role']['description']))? $params['role']['description'] : '', array (
 				'class' => 'role_description',
 				'id' => 'role_description',
@@ -27,7 +25,6 @@
 
 		<!-- Select Permissions -->
 		<div class="modal-mpf-row selector">
-			{!! Form::label('permissions', 'Permissions') !!}
 			{!! Form::select('permissions', $params['permissions'], (isset($params['role']['permissions']))? $params['role']['permissions'] : '',array (
 				'class' => 'form-control selectpicker',
 				'id' => 'permissions',

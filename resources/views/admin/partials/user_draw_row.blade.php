@@ -7,7 +7,7 @@
 		<td>{{ date("m/d/Y",strtotime($user->created_at)) }}<br>{{ date("h:i a T",strtotime($user->created_at)) }}</td>
 		<td class="text-right actions icons">
 			<a href="#" class="edit" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-			<a href="#" class="delete" title="Delete"><i class="glyphicon glyphicon-ban-circle"></i></a>
+			<a href="#" class="delete" title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
 		</td>
 	</tr>
 @endforeach

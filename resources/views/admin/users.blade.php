@@ -16,15 +16,15 @@
 
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="btn btn-default btn-create">
-						Create a new user
+					<h2 class="pull-left">User List</h2>
+					<div class="btn btn-default btn-create pull-right">
+						<i class="glyphicon glyphicon-plus-sign"></i> Create a new user
 					</div>
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="col-xs-12">
-					<h2 class="crimson italic">Users list</h2>
 
 					<div class="row list-action-container">
 						<div class="col-xs-8 admin-search-box">
@@ -60,25 +60,25 @@
 									<th class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="name" data-order-field="name">
 											Name
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="email" data-order-field="email">
 											Email Name
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th width="150" class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="group">
 											User Role
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th width="150" class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="created_at">
 											Create Date
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th  width="150" class="bold">Actions</th>

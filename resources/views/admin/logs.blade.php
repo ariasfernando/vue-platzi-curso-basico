@@ -15,8 +15,12 @@
 		<section class="col-xs-12 section-container">
 			<div class="row">
 				<div class="col-xs-12">
-					<h2 class="crimson italic">Logs list</h2>
-
+					<h2 class="pull-left">Log List</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					
 					<div class="row list-action-container">
 						<div class="col-xs-8 admin-search-box">
 							{!! Form::open ( array ( 'method' => 'get' ,'id' => 'admin-log-search', 'url' => url('/').'/admin/log' )) !!}
@@ -58,49 +62,49 @@
 									<th class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="name" data-order-field="_id">
 											Log Id
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="properties.user_id">
 											User Id
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="campaign_id">
 											Campaign Id
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="email" data-order-field="description">
 											Description
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="ip">
 											User IP
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="user_agent">
 											User Agent
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="controller">
 											Controller/Action
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="created_at">
 											Create Date
-											<i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 								</tr>

@@ -13,7 +13,6 @@
         <div class="tab-pane active" role="tabpanel" id="module-conf">
 
             <div class="modal-mpf-row">
-                {!! Form::label('module_title', 'Title') !!}
                 {!! Form::text('module_title', isset($params['module']['title']) ? $params['module']['title'] : '', array (
                     'class' => 'module-title',
                     'id' => 'module_title',
@@ -23,7 +22,6 @@
             </div>
 
             <div class="modal-mpf-row">
-                {!! Form::label('module_id', 'Module ID') !!}
                 {!! Form::text('module_id', isset($params['module']['module_id'])? $params['module']['module_id'] : '', array (
                     'class' => 'module-id',
                     'id' => 'module_id',
@@ -33,7 +31,6 @@
             </div>
 
             <div class="modal-mpf-row">
-                {!! Form::label('module_description', 'Module description') !!}
                 {!! Form::text('module_description', isset($params['module']['module_id'])? $params['module']['module_id'] : '', array (
                     'class' => 'module-description',
                     'id' => 'module_description',
@@ -43,7 +40,6 @@
             </div>
             @if ( isset($params['modules']) )
                 <div class="modal-mpf-row selector">
-                    {!! Form::label('parent_module', 'Parent Module') !!}
                     {!! Form::select('parent_module', $params['modules'], isset($params['module']['modules']) ? $params['module']['modules'] : '',array (
                         'class' => 'form-control selectpicker',
                         'id' => 'parent_module',
@@ -53,7 +49,6 @@
                 </div>
             @endif
             <div class="modal-mpf-row">
-                {!! Form::label('module_config', 'Config') !!}
                 {!! Form::textarea('module_config', isset($params['module']['config'])
                     ? json_encode($params['module']['config'], JSON_PRETTY_PRINT) : '', array (
                     'class' => 'module-config',
@@ -65,7 +60,6 @@
         </div>
         <div class="tab-pane" role="tabpanel" id="module-conf-template">
             <div class="">
-                {!! Form::label('template', 'Template') !!}
                 {!! Form::textarea('module_template', isset($params['module']['template']) ? $params['module']['template'] : '', array (
                     'class' => 'module-template',
                     'id' => 'module_template',
