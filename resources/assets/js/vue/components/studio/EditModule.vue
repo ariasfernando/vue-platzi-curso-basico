@@ -477,7 +477,7 @@
     }
 
     .module-table .st-col {
-      border: 1px dashed @focus;
+      background-color: #f4f4f4;
     }
 
     .is-danger {

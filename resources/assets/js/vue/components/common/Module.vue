@@ -63,16 +63,23 @@
                border="0" 
                class="st-content-componetn"
         >
-            <tr v-for="(component, componentId) in column.components">
+            <tr>
                 <td>
-                    <component :is="component.type" 
-                         :component="component" 
-                         :module-id="module.id" 
-                         :column-id="columnId"
-                         :component-id="componentId" 
-                         @set-component="setComponent"></component>
+                    <draggable v-model="column.components" :element="'table'">
+                        <component  v-for="(component, componentId) in column.components"
+                                    :is="component.type" 
+                                    :component="component" 
+                                    :module-id="module.id" 
+                                    :column-id="columnId"
+                                    :component-id="componentId" 
+                                    :key="componentId"
+                                    class="st-component"
+                                    @set-component="setComponent"></component>
+
+                    </draggable>            
                 </td>
             </tr>
+
         </table>
 
         <!-- Empty Col -->
@@ -94,18 +101,19 @@
   import ButtonElement from './elements/ButtonElement.vue'
   import ImageElement from './elements/ImageElement.vue'
   import DividerElement from './elements/DividerElement.vue'
+  import Draggable from 'vuedraggable'
   import { defaultElements } from '../../resources/elements'
 
   module.exports = {
     name: 'Module',
-    props: ['module'],
+    props: ['module'], 
     components: {
+      Draggable,  
       TextElement,
       ButtonElement,
       ImageElement,
       DividerElement
     },
-
     methods: {
       elementDrop(e) {
         if ( e.target.className.indexOf("st-col") > -1 || e.target.className.indexOf("empty-cell") > -1 ) {
@@ -148,6 +156,13 @@
 <style lang="less">
   @focus: #69dac8;
   @focus-light: lighten(@focus, 30%);
+
+  .st-component{
+    &:hover{
+        outline: 1px dashed @focus;
+        cursor: move;
+    }
+  }
 
   .empty-col {
     background-color: @focus-light;

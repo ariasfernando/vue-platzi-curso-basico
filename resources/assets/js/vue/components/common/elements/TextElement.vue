@@ -1,21 +1,13 @@
 <template>
-  <table>
-    <tr>
-      <td>
-        <!-- TEXT ELEMENT -->
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" @click="setComponent">
-          <tr>
-            <td width="100%" class="st-text-style" align="center" :style="component.style">
-              <tiny-mce v-if="component.editor" :id="editorId" :options="component.editor" :value="component.text"
-                        data-key="text" @input="input"></tiny-mce>
-              <p v-else :data-line-limit="maxLines" :truncate="truncate" v-html="component.text" @keyup="change"
-                 @paste="change"></p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+  <!-- TEXT ELEMENT -->
+  <tr @click="setComponent">
+    <td width="100%" class="st-text-style" align="center" :style="component.style">
+      <tiny-mce v-if="component.editor" :id="editorId" :options="component.editor" :value="component.text"
+                data-key="text" @input="input"></tiny-mce>
+      <p v-else :data-line-limit="maxLines" :truncate="truncate" v-html="component.text" @keyup="change"
+         @paste="change"></p>
+    </td>
+  </tr>
   <!-- TEXT ELEMENT ENDS -->
 </template>
 
@@ -69,7 +61,7 @@
 
         this.$timeoutID = setTimeout(() => {
           let text = event.target.innerHTML.trim();
-          let key = $(event.target).data('key');
+          let key = event.target.dataset.key;
 
           let edited = {};
           edited[key] = text;

@@ -1,6 +1,5 @@
-<template id="divider-element">
+<template>
   <!-- DIVIDER ELEMENT -->
-  <table cellpadding="0" cellspacing="0" border="0" width="100%">
     <tr>
       <td :bgcolor="backgroundColor" class="st-separator" :style="component.style">
         <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -10,7 +9,6 @@
         </table>
       </td>
     </tr>
-  </table>
   <!-- DIVIDER ELEMENT ENDS -->
 </template>
 
