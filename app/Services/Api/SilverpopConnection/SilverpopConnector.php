@@ -172,7 +172,7 @@ class SilverpopConnector
      */
     protected function logout()
     {
-        $logout_response = $this->call('<Envelope><Body></Logout></Body></Envelope>');
+        $this->call('<Envelope><Body></Logout></Body></Envelope>');
     }
     /**
      * Send email template to Silverpop XMLAPI.

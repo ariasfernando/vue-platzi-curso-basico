@@ -85,9 +85,9 @@ class StrongviewConnector
     {
 
         $passwordTextType = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText";
-        $securityNamespace = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
-        $securityHeaderElementName = "Security";
-        $securityHeaderMustUnderstand = true;
+        $namespace = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
+        $headerElementName = "Security";
+        $headerMustUnderstand = true;
         $schema_v2 = "http://www.strongmail.com/services/v2/schema";
         $template = '<wsse:Security xmlns:wsse="%s" SOAP-ENV:mustUnderstand="1">
                         <wsse:UsernameToken xmlns:wsse="%s">
@@ -103,13 +103,13 @@ class StrongviewConnector
                       </wsse:Security>';
 
 
-        $securityHeaderText = sprintf(
+        $headerText = sprintf(
             $template,
-            $securityNamespace,
-            $securityNamespace,
-            $securityNamespace,
+            $namespace,
+            $namespace,
+            $namespace,
             $this->username,
-            $securityNamespace,
+            $namespace,
             $passwordTextType,
             $this->password,
             $schema_v2,
@@ -117,15 +117,15 @@ class StrongviewConnector
             $this->sub_organization
         );
 
-        $securityHeaderSoapVar = new \SoapVar($securityHeaderText, \XSD_ANYXML, null, null, null);
-        $securityHeader = new \SoapHeader(
-            $securityNamespace,
-            $securityHeaderElementName,
-            $securityHeaderSoapVar,
-            $securityHeaderMustUnderstand
+        $headerSoapVar = new \SoapVar($headerText, \XSD_ANYXML, null, null, null);
+        $header = new \SoapHeader(
+            $namespace,
+            $headerElementName,
+            $headerSoapVar,
+            $headerMustUnderstand
         );
 
-        $this->client->__setSoapHeaders($securityHeader);
+        $this->client->__setSoapHeaders($header);
     }
 
     /**

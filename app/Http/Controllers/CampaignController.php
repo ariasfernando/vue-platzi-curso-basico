@@ -56,22 +56,17 @@ class CampaignController extends Controller
                 $saved_tags = Tag::all();
 
                 if ($params) {
-                    $library = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
+                    $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
                         ? $params['campaign_data']['library']
                         : "default";
-
-                    $params['menu_list'] = \Config::get('menu.' . $library);
-
-                    $menu = Library::where('name', $library)->get();
-                    foreach ($menu as $key => $value) {
-                        $params['menu_list'] = $value->getModules();
-                    }
-
-                    uasort($params['menu_list'], function ($a, $b) {
-                        if ($a['title'] == $b['title']) {
+                    $library = Library::find($library_id);
+                    $params['menu_list'] = $library->getModules();
+                    $params['library_config'] = $library->config;
+                    uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
+                        if ($menu_item_a['title'] == $menu_item_b['title']) {
                             return 0;
                         }
-                        return ($a['title'] < $b['title']) ? -1 : 1;
+                        return ($menu_item_a['title'] < $menu_item_b['title']) ? -1 : 1;
                     });
 
                     $params['tag_list'] = $saved_tags;
@@ -89,7 +84,7 @@ class CampaignController extends Controller
                 $params['locale'] = $request->input("locale");
             }
             if (!is_null($request->input("library"))) {
-                $params['library'] = $request->input("library");
+                $params['library'] = new ObjectID($request->input("library"));
             }
 
             $campaign = Campaign::create($params);
@@ -421,11 +416,6 @@ class CampaignController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-    }
-
-    public function getDownloadHtml(Request $request, $campaign_id)
-    {
-        return Campaign::downloadHtml($campaign_id);
     }
 
     /**

@@ -130,7 +130,6 @@ class ProofController extends Controller
 
         $current_reviewer = [];
         $params['show_decision'] = true;
-        $requestor = (string) $proof->requestor;
 
         // Validate if current logged user is a reviewer
         foreach ($proof->reviewers as $reviewer) {
@@ -190,11 +189,11 @@ class ProofController extends Controller
             $data['requested_user_count'] = $proof->comments()->whereUserId($user_id)->count();
         }
 
-        $data['comments'] = array_map(function ($v) {
-            $v['display_name'] = User::find($v['user_id'])->name;
-            $v['created_at'] = Carbon::parse($v['created_at'])->format('F jS, Y | h:i A');
-            unset($v['user_id'], $v['_id'], $v['proof_id']);
-            return $v;
+        $data['comments'] = array_map(function ($comment) {
+            $comment['display_name'] = User::find($comment['user_id'])->name;
+            $comment['created_at'] = Carbon::parse($comment['created_at'])->format('F jS, Y | h:i A');
+            unset($comment['user_id'], $comment['_id'], $comment['proof_id']);
+            return $comment;
         }, $comments->get()->toArray());
 
         return [
@@ -409,8 +408,8 @@ class ProofController extends Controller
         }
 
         // Update reviewers
-        foreach ($reviewers as $k => $v) {
-            $reviewers[$k]['user_id'] = new ObjectId(User::whereEmail($v['email'])->first()->id);
+        foreach ($reviewers as $key => $value) {
+            $reviewers[$key]['user_id'] = new ObjectId(User::whereEmail($value['email'])->first()->id);
         }
 
         // Check if we have to create a new proof, or update the current one
@@ -447,7 +446,7 @@ class ProofController extends Controller
         } else {
             $proof = Proof::find($request->input('proof_id'));
 
-            foreach ($reviewers as $k => $reviewer) {
+            foreach ($reviewers as $key => $reviewer) {
                 foreach ($proof->reviewers as $current_reviewer) {
                     if ($reviewer['email'] === $current_reviewer['email']) {
                         if ($reviewer['notification_message'] !== $current_reviewer['notification_message']) {
@@ -458,7 +457,7 @@ class ProofController extends Controller
                             unset($current_reviewer['notified'], $current_reviewer['notified_at']);
                         }
                         unset($current_reviewer['notification_message']);
-                        $reviewers[$k] = array_merge($reviewers[$k], $current_reviewer);
+                        $reviewers[$key] = array_merge($reviewers[$key], $current_reviewer);
                     }
                 }
             }
@@ -508,6 +507,7 @@ class ProofController extends Controller
     /**
      * Get a list of reviewers by a given campaign id
      *
+     * @SuppressWarnings("UnusedFormalParameter")
      * @param  Request $request
      * @param  String  $campaign_id
      * @return Json
@@ -518,19 +518,19 @@ class ProofController extends Controller
         $proof = $campaign->getLastProof();
 
         if ($proof && count($proof->reviewers)) {
-            $reviewers = array_map(function ($v) use ($proof) {
-                $v['display_name'] = User::find($v['user_id'])->name;
-                if (isset($v['decision'])) {
-                    if (isset($v['decision_comment'])) {
-                        $v['comment'] = Comment::find($v['decision_comment'])->content;
+            $reviewers = array_map(function ($reviewer) use ($proof) {
+                $reviewer['display_name'] = User::find($reviewer['user_id'])->name;
+                if (isset($reviewer['decision'])) {
+                    if (isset($reviewer['decision_comment'])) {
+                        $reviewer['comment'] = Comment::find($reviewer['decision_comment'])->content;
                     }
-                    $date = $v['decision_at'];
+                    $date = $reviewer['decision_at'];
                 } else {
-                    $date = $v['notified_at'];
+                    $date = $reviewer['notified_at'];
                 }
-                $v['last_modified_date'] = date('Y-m-d H:i:s', $date->sec);
-                unset($v['user_id']);
-                return $v;
+                $reviewer['last_modified_date'] = date('Y-m-d H:i:s', $date->sec);
+                unset($reviewer['user_id']);
+                return $reviewer;
             }, $proof->reviewers);
 
             return [
@@ -545,10 +545,9 @@ class ProofController extends Controller
     /**
      * Get a list of available users to be used as reviewers.
      *
-     * @param  Request $request
      * @return Json
      */
-    public function getUsers(Request $request)
+    public function getUsers()
     {
         $users = [];
         $data = User::where('email', '!=', Auth::user()->email)->get(['email'])->toArray();
@@ -563,6 +562,7 @@ class ProofController extends Controller
     /**
      * Get campaign info.
      *
+     * @SuppressWarnings("UnusedFormalParameter")
      * @param  Request $request
      * @param  String  $campaign_id
      * @return Json

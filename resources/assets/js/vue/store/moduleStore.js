@@ -1,21 +1,25 @@
-import moduleService from '../services/module'
+import moduleService from '../services/module';
 
 const state = {
   module: {},
-  currentComponent: {}
+  currentComponent: {},
+  loading: false,
 };
 
 const getters = {
-  module (state) {
-    return state.module
+  module(state) {
+    return state.module;
   },
-  currentComponent (state) {
-    return state.currentComponent
-  }
+  currentComponent(state) {
+    return state.currentComponent;
+  },
 };
 
 const mutations = {
-  loadModuleData(state, data) {
+  setLoader(state, data) {
+    state.loading = data;
+  },
+  setModuleData(state, data) {
     state.module = data;
   },
   setCurrentComponent(state, data) {
@@ -23,33 +27,41 @@ const mutations = {
   },
   error(state, err) {
     console.log(err);
-  }
+  },
 };
 
 const actions = {
-  getModuleData (context, data) {
-
-    if ( data.moduleId ) {
+  getModuleData(context, data) {
+    if (data.moduleId) {
       return moduleService.getModule()
-        .then((response) => context.commit('loadModuleData', response))
-        .catch((error) => context.commit('error', error));
-    } else {
-      return moduleService.newModule()
-        .then((response) => context.commit('loadModuleData', response))
-        .catch((error) => context.commit('error', error));
+        .then(response => context.commit('setModuleData', response))
+        .catch(error => context.commit('error', error));
     }
-
+    return moduleService.newModule()
+      .then(response => context.commit('setModuleData', response))
+      .catch(error => context.commit('error', error));
   },
 
-  setCurrentComponent (context, data) {
-    context.commit('loadModuleData', data);
-  }
+  saveModuleData(context, data) {
+    if (data.moduleId) {
+      return moduleService.saveModule(data)
+        .then(response => context.commit('setModuleData', response))
+        .catch(error => context.commit('error', error));
+    }
+    return moduleService.createModule(data)
+      .then(response => context.commit('setModuleData', response))
+      .catch(error => context.commit('error', error));
+  },
+
+  setCurrentComponent(context, data) {
+    context.commit('setCurrentComponent', data);
+  },
 };
 
 module.exports = {
   namespaced: true,
-  state: state,
-  getters: getters,
-  mutations: mutations,
-  actions: actions
+  state,
+  getters,
+  mutations,
+  actions,
 };

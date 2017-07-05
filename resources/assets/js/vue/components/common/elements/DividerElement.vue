@@ -1,6 +1,5 @@
-<template id="divider-element">
+<template>
   <!-- DIVIDER ELEMENT -->
-  <table cellpadding="0" cellspacing="0" border="0" width="100%">
     <tr>
       <td :bgcolor="backgroundColor" class="st-separator" :style="component.style">
         <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -10,7 +9,6 @@
         </table>
       </td>
     </tr>
-  </table>
   <!-- DIVIDER ELEMENT ENDS -->
 </template>
 
@@ -23,15 +21,31 @@
       'component-id',
       'component'
     ],
+    data () {
+      return {
+        backgroundColor: '',
+        separatorHeight: '',
+        separatorWidth: ''
+      }
+    },
     created () {
       this.setupModule();
     },
     methods: {
       setupModule () {
-        this.backgroundColor = this.component.style.default.backgroundColor;
+        console.log(this);
+        this.backgroundColor = this.component.style.backgroundColor;
         this.separatorHeight = this.component.height;
         this.separatorWidth = this.component.width;
       }
     }
   };
 </script>
+
+<style lang="sass">
+  .st-separator {
+    width: 100%;
+    border: none;
+  }
+
+</style>

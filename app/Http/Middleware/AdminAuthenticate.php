@@ -39,7 +39,7 @@ class AdminAuthenticate
         $isAjax = ($request->ajax());
 
         if (Auth::check()) {
-            if (count(array_intersect(Auth::user()->roles, \Config::get("admin.roles"))) === 0) {
+            if (!Auth::user()->can('access_admin')) {
                 return $this->reject($isAjax);
             }
         } else {

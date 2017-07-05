@@ -22,12 +22,12 @@ npm-debug.log
 composer.phar
 /storage/data
 docker-compose.yaml
+docker-compose.yml
 .coverdata
 .nyc_output
 .coverrun
 package-lock.json
 coverage
-customer
 typings.json
 typings/
 ci/vendor/

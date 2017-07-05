@@ -1,17 +1,5 @@
 <template>
   <div class="component-settings" v-if="ready">
-    <h4>Available Plugins</h4><hr>
-
-    <div class="default-settings">
-      <form class="form-horizontal">
-        <div class="form-group" v-for="(p, key) in plugins">
-          <label class="col-sm-4 control-label">{{ p.name }}</label>
-          <div class="col-sm-8">
-            <toggle-button @change="togglePlugin(key)" :value="component.enabledPlugins.indexOf(key) !== -1 ? true : false" color="#82C7EB" :sync="true" :labels="true"></toggle-button>
-          </div>
-        </div>
-      </form>
-    </div>
 
     <h4>Default Settings</h4><hr>
     <div class="default-settings">
@@ -34,17 +22,17 @@
 
     <p class="sep"><br></p>
 
-    <div v-for="plugin in component.enabledPlugins" >
-      <h4>{{ plugins[plugin].name }}</h4><hr>
+    <div v-for="plugin in plugins" >
+      <h4>{{ plugin.name }}</h4><hr>
       <div class="default-settings">
         <form class="form-horizontal">
-          <div class="form-group" v-for="field in plugins[plugin].fields">
+          <div class="form-group" v-for="field in plugin.fields">
             <label class="col-sm-4 control-label" :for="field.name">{{ field.label }}</label>
             <div class="col-sm-8">
               <input v-if="field.type === 'text'" v-model="field.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }"
                      :name="field.name" type="text" :placeholder="field.label">
 
-              <span v-if="field.type == 'switch'">
+              <span v-if="field.type === 'switch'">
                 <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true"></toggle-button>
               </span>
               <span v-show="errors.has(field.name)" class="help is-danger">{{ errors.first(field.name) }}</span>
@@ -59,6 +47,7 @@
 
 <script>
 
+  import Vue from 'vue/dist/vue'
   import ToggleButton from '../common/ToggleButton.vue'
   import Plugins from '../../plugins'
   import _ from 'underscore-contrib'
@@ -80,7 +69,6 @@
       ToggleButton
     },
     created() {
-
       // Component Type
       const type = this.component.type.replace('-element', '');
 
@@ -89,19 +77,11 @@
 
       if ( this.$customer ) {
         // Check for customer Plugins
-        let customerPlugins = _.getPath(this.$customer, 'studio.modules.plugins', {});
+        let customerPlugins = _.getPath(this.$customer, 'admin.modules.plugins', {});
         if (!_.isEmpty(customerPlugins)) {
           this.plugins = _.extend(Plugins[type], customerPlugins[type]);
         }
       }
-
-      this.component.plugins = this.component.plugins || [];
-
-      _.each(this.component.enabledPlugins, (name) => {
-        if ( this.component.plugins.indexOf(this.plugins[name]) === -1 ) {
-          this.component.plugins.push(this.plugins[name]);
-        }
-      });
 
       this.ready = true;
     },

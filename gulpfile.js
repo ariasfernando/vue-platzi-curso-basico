@@ -31,11 +31,6 @@ let gulpsync = require('gulp-sync')(gulp);
 require('elixir-jshint');
 require('laravel-elixir-vueify');
 
-let mocha = require('gulp-mocha');
-let generateSuite = require("gulp-mocha-browserify-sweet");
-let browserify = require("gulp-browserify");
-let concat = require("gulp-concat");
-
 /*
  | --------------------------------------------------------------------------
  | Define App name
@@ -111,6 +106,14 @@ gulp.task('elixir-copy-bower', function () {
   });
 });
 
+function fileExists(file) {
+  try {
+    fs.accessSync(file, fs.F_OK);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 /*
  | --------------------------------------------------------------------------
@@ -124,6 +127,11 @@ gulp.task('elixir-scripts', function () {
 
   elixir((mix) => {
       mix
+        mix.browserify(
+          'main.js',
+          jsDestinationPath + "customer.js",
+          customerAssetsPath
+        )
         .browserify(
           "js/vue/campaign.js",
           jsDestinationPath + "campaign-components.js",
@@ -151,34 +159,11 @@ gulp.task('elixir-scripts', function () {
           jsDestinationPath + "dashboard-components.js",
           assetsPath
         )
-        // === Customer Assets ===
-        // .browserify(
-        //     "index.js",
-        //     jsDestinationPath + "customer.js",
-        //     customerAssetsPath
-        // )
         // === Compile Vendor and Application scripts to library.js ===
         .scripts(
           [
             'bower/jquery/dist/jquery.js',
-            'bower/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js'
-            //'bower/bootstrap/dist/js/bootstrap.min.js',
-            //'bower/jquery-ui/jquery-ui.min.js',
-            //'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
-            //'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
-            // -- TinyMCE editor --
-            // 'bower/tinymce/tinymce.js',
-            // 'bower/tinymce/themes/modern/theme.js',
-            // 'bower/tinymce/plugins/paste/plugin.js',
-            // 'bower/tinymce/plugins/textcolor/plugin.js',
-            // 'bower/tinymce/plugins/colorpicker/plugin.js',
-            // 'bower/tinymce/plugins/lists/plugin.js',
-            // 'bower/tinymce/plugins/autolink/plugin.js',
-            // 'bower/tinymce/plugins/link/plugin.js',
-            // 'bower/tinymce/plugins/advlist/plugin.js',
-            // -- Common scripts --
-            //'js/library/application-globals.js',
-            //'js/library/application-utils.js'
+            'bower/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js',
           ],
           jsDestinationPath + 'library-v2.js',
           assetsPath
@@ -228,18 +213,18 @@ gulp.task('elixir-scripts', function () {
         )
 
         // === Plugins ===
-        .scripts(
-          ['js/plugins/*.js', 'js/plugins/**/*.js'],
-          jsDestinationPath + 'plugins.js',
-          assetsPath
-        )
-
-        // === Modules ===
-        .scripts(
-          ['../views/base/modules/**/*.js', 'js/library/modules-placeholder.js'],
-          jsDestinationPath + 'modules.js',
-          assetsPath
-        )
+        // .scripts(
+        //   ['js/plugins/*.js', 'js/plugins/**/*.js'],
+        //   jsDestinationPath + 'plugins.js',
+        //   assetsPath
+        // )
+        //
+        // // === Modules ===
+        // .scripts(
+        //   ['../views/base/modules/**/*.js', 'js/library/modules-placeholder.js'],
+        //   jsDestinationPath + 'modules.js',
+        //   assetsPath
+        // )
 
         // === Dashboard page ===
         .scripts(

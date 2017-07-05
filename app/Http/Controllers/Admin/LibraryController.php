@@ -163,7 +163,7 @@ class LibraryController extends Controller
         $library->modules = $modules = [];
         $library->config = $request->input("config");
 
-        foreach ($request->input('modules') as $key => $group) {
+        foreach ($request->input('modules') as $group) {
             if (strtolower($group['name']) == 'default') {
                 $modules = $group['modules'];
             } else {
@@ -201,7 +201,7 @@ class LibraryController extends Controller
             "modules" => []
         ];
 
-        foreach ($request->input('modules') as $key => $group) {
+        foreach ($request->input('modules') as $group) {
             if (strtolower($group['name']) == 'default') {
                 $params['modules'] = $group['modules'];
             } else {
@@ -240,5 +240,16 @@ class LibraryController extends Controller
         $library = Library::findOrFail($request->input("libraryId"));
         $library->delete();
         return array("deleted" => $request->input("libraryId"));
+    }
+
+    /**
+     * Library ESP providers.
+     *
+     * @return array
+     */
+    public function postEspProviders(Request $request)
+    {
+        $providers = config('esp');
+        return $providers;
     }
 }
