@@ -1,6 +1,7 @@
 module.exports = {
   "type": "button-element",
   "defaultText": "CTA Button",
+  "text": "Lorem ipsum",
   "enabled": true,
   "style": {
     "fontSize": "12px",
