@@ -1,13 +1,16 @@
 form{
+
 	input[type="text"]{
+		font-family: 'Open Sans', Arial, serif;
 		width: 100%;
-		padding: 7px;
-		font-size: 12px;
+		padding: 8px;
+		font-size: 14px;
+		font-weight: 300;
 		color: @input-color;
-		border: 1px solid @input-border;
+		border: none;
+		background: @body-bg;
 		.box-sizing( border-box );
 		.border-radius( @input-border-radius );
-		.box-shadow( 0 3px 5px #EEEEEE inset );
 
 	}
 
@@ -67,9 +70,10 @@ form{
 		&:focus,
 		&:visited,
 		&:active{
-			border-color: @btn-success-bg;
-			background: @btn-success-bg;
-			color: @btn-default-color
+			border-color: @stensul-purple;
+			background: @stensul-purple;
+			color: @btn-default-color;
+			padding: 7px 10px;
 		}
 	}
 }

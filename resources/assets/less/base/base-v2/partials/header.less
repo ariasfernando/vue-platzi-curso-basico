@@ -2,6 +2,7 @@ header{
 	height: 56px;
 	margin-bottom: 20px;
 	#gradient > .vertical( @start-color: #20201f; @end-color: #2f3333 );
+	font-family: 'Open Sans', Arial, sans-serif;
 
 	div.logo{
 		display: table;
@@ -18,24 +19,22 @@ header{
 
 			.brand-logo{
 				height: 46px;
-				width: 46px;
-				background: url( "@{image-url}layout/@{brand-image-name}") no-repeat 0 0;
+				width: 35px;
+				background: url( "@{image-url}layout/@{brand-image-name}") no-repeat 0 6px;
+				background-size: 100%;
 			}
 
 			.by-stensul{
 				height: 20px;
 				width: 87px;
-				margin: 0 0 0 5px;
-				background: url( "@{image-url}stensul-logo.png") no-repeat 0 0;
+				margin: 15px 0 0 5px;
+				font-size: 13px;
+				font-weight: 300;
+				color: @dropdown-link-color;
 			}
 
 			&:hover{
 				text-decoration: none;
-
-				.brand-logo,
-				.by-stensul{
-					background-position: bottom;
-				}
 			}
 		}
 	}
@@ -60,12 +59,12 @@ header{
 
 			i{
 				font-size: 18px;
-				line-height: 18px;
+				line-height: 21px;
 				vertical-align: text-bottom;
 			}
 
 			span{
-				margin: 0 0 0 10px;
+				margin: 0 0 0 6px;
 				display: inline-block;
 			}
 		}

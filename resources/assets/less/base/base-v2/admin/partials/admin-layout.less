@@ -6,6 +6,13 @@
   .btn-create{
 	height: 30px;
 	line-height: 25px;
+	margin-top: 16px;
+	color: @input-color!important;
+
+	&:hover{
+		text-decoration: none;
+		color: @input-color!important;
+	}
   }
 
   .modal-mpf-row{
@@ -43,12 +50,13 @@
   input[type="text"], input[type="password"], input[type="email"]{
 	width: 100%;
 	padding: 7px;
-	font-size: 12px;
+	font-size: 14px;
+	font-weight: 300;
 	color: @input-color;
-	border: 1px solid @input-border;
+	border: none;
+	background: @body-bg;
 	.box-sizing( border-box );
 	.border-radius( @input-border-radius );
-	.box-shadow( 0 3px 5px #EEEEEE inset );
   }
 
   label.error{
@@ -72,6 +80,10 @@
 	  input[type="submit"] {
 		margin-left: 5px;
 		margin-top: 0px;
+	  }
+	  .search_field{
+	  	border: 1px solid #dddddd;
+	  	background: @dropdown-link-color;
 	  }
 	}
 	.admin-log-tail {

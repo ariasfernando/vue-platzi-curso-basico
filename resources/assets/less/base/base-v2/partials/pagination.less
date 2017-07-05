@@ -1,32 +1,33 @@
 .pagination{
 	margin: 20px 0;
 	text-align: center;
+	font-family: 'Open Sans', Arial, sans-serif;
 
 	a{
-		background: @pagination-bg;
-		border: solid 1px @pagination-border;
-		color: @pagination-color;
+		background: none;
+		border: none;
+		color: #a8a8a8;
 		cursor: pointer;
 		display: none;
-		font-size: 12px;
+		font-size: 16px;
 		line-height: 12px;
 		margin: 0 2px;
-		padding: 3px 5px;
+		padding: 3px 2px;
 		text-decoration: none;
-		.border-radius( 3px );
-		.transition(background-color .3s linear);
 
 		&:hover{
-			color: @pagination-hover-color;
-			background: @pagination-hover-bg;
-			border: solid 1px @pagination-hover-border;
+			color: @stensul-purple;
+			background: none;
+			border: none;
 		}
 
 		&.active{
+			font-size: 20px;
 			cursor: default;
-			color: @pagination-active-color;
-			background: @pagination-active-bg;
-			border: solid 1px @pagination-active-border;
+			color: @stensul-purple;
+			background: none;
+			border: none;
+			font-weight: 600;
 		}
 
 		&.sliding {
