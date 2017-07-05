@@ -38,7 +38,7 @@
       <section v-if="ready" class="col-xs-12 section-container">
 
         <!-- START: Left Bar -->
-        <aside class="col-xs-3 left-bar">
+        <aside class="col-xs-2 left-bar">
           <div class="module-settings">
             <h4>Module Settings</h4><hr>
 
@@ -91,7 +91,7 @@
         <!-- END: Left Bar -->
 
         <!-- START: Module Container -->
-        <div class="col-xs-6 module-container">
+        <div class="col-xs-7 module-container">
           <div class="col-xs-12">
             <module :module="module" @set-component="setCurrentComponent"></module>
           </div>
