@@ -6,7 +6,7 @@ module.exports = {
   "style": {
     "width": "220",
     "verticalAlign": "middle",
-    "textAlign": "left",
+    "textAlign": "center",
     "fontFamily": "sans-serif",
     "fontSize": "12px",
     "fontWeight": "normal",
