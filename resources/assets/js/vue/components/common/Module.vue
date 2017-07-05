@@ -22,19 +22,19 @@
                class="st-content-componetn"
         >
             <tr>
-                <td>
+                <td width="100%">
                     <draggable v-model="column.components" :element="'table'">
                         <component  v-for="(component, componentId) in column.components"
-                                    :is="component.type" 
-                                    :component="component" 
-                                    :module-id="module.id" 
+                                    :is="component.type"
+                                    :component="component"
+                                    :module-id="module.id"
                                     :column-id="columnId"
-                                    :component-id="componentId" 
+                                    :component-id="componentId"
                                     :key="componentId"
                                     class="st-component"
                                     @set-component="setComponent"></component>
 
-                    </draggable>            
+                    </draggable>
                 </td>
             </tr>
         </table>
@@ -70,7 +70,7 @@
                class="st-content-componetn"
         >
             <tr>
-                <td>
+                <td width="100%">
                     <draggable v-model="column.components" :element="'table'">
                         <component  v-for="(component, componentId) in column.components"
                                     :is="component.type" 

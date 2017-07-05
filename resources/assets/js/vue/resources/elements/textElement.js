@@ -49,9 +49,5 @@ module.exports = {
       "type": "text",
       "value": "10px"
     }
-  ],
-  "enabledPlugins": [
-    'textOptions'
-  ],
-  "plugins": []
+  ]
 };

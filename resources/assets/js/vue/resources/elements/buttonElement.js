@@ -4,38 +4,51 @@ module.exports = {
   "text": "Lorem ipsum",
   "enabled": true,
   "style": {
+    "width": "220",
+    "verticalAlign": "middle",
+    "textAlign": "left",
+    "fontFamily": "sans-serif",
     "fontSize": "12px",
-    "fontFamily": "Arial, sans-serif",
+    "fontWeight": "normal",
     "lineHeight": "16px",
-    "background_colors": {
-      "default": "#222",
-      "list": {
-        "Black": "#222",
-        "@hex": "%%=v(@hex)=%%"
-      }
+    "color": "#000000"
+  },
+  "settings": [
+    {
+      "label": "Color",
+      "name": "color",
+      "type": "text",
+      "value": "#000000"
     },
-    "font_colors": {
-      "default": "#FFFFFF",
-      "list": {
-        "White": "#FFFFFF",
-        "Black": "#000000",
-        "@hex": "%%=v(@hex)=%%"
-      }
+    {
+      "label": "Line Height",
+      "name": "lineHeight",
+      "type": "text",
+      "value": "12px"
+    },
+    {
+      "label": "Padding Top",
+      "name": "paddingTop",
+      "type": "text",
+      "value": "10px"
+    },
+    {
+      "label": "Padding Right",
+      "name": "paddingRight",
+      "type": "text",
+      "value": "10px"
+    },
+    {
+      "label": "Padding Bottom",
+      "name": "paddingBottom",
+      "type": "text",
+      "value": "10px"
+    },
+    {
+      "label": "Padding Right",
+      "name": "paddingRight",
+      "type": "text",
+      "value": "10px"
     }
-  },
-  "properties": {
-    "url": {
-      "placeholder": "http://www.google.com",
-      "validation": {
-        "required": true,
-        "mailto": true,
-        "autoProtocol": true,
-        "regex": "/[^a-zA-Z0-9-_]/g"
-      }
-    }
-  },
-  "directives": {
-    "truncate": 50,
-    "maxLines": 1
-  }
+  ]
 };

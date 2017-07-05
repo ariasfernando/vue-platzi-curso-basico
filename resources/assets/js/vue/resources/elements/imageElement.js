@@ -4,23 +4,51 @@ module.exports = {
   "width": "220",
   "height": "auto",
   "style": {
-    "width": "220px",
-    "height": "auto",
-    "verticalAlign": "middle"
+    "width": "220",
+    "verticalAlign": "middle",
+    "textAlign": "left",
+    "fontFamily": "sans-serif",
+    "fontSize": "12px",
+    "fontWeight": "normal",
+    "lineHeight": "16px",
+    "color": "#000000"
   },
-  "properties": {
-    "url": {
-      "placeholder": "http://www.google.com",
-      "validation": {
-        "required": true,
-        "mailto": true,
-        "autoProtocol": true,
-        "regex": "/[^a-zA-Z0-9-_]/g"
-      }
+  "settings": [
+    {
+      "label": "Color",
+      "name": "color",
+      "type": "text",
+      "value": "#000000"
+    },
+    {
+      "label": "Line Height",
+      "name": "lineHeight",
+      "type": "text",
+      "value": "12px"
+    },
+    {
+      "label": "Padding Top",
+      "name": "paddingTop",
+      "type": "text",
+      "value": "10px"
+    },
+    {
+      "label": "Padding Right",
+      "name": "paddingRight",
+      "type": "text",
+      "value": "10px"
+    },
+    {
+      "label": "Padding Bottom",
+      "name": "paddingBottom",
+      "type": "text",
+      "value": "10px"
+    },
+    {
+      "label": "Padding Right",
+      "name": "paddingRight",
+      "type": "text",
+      "value": "10px"
     }
-  },
-  "target": "_blank",
-  "directives": {
-    "elementConfig": "mie_v2_default_adjustable_height"
-  }
+  ]
 };
