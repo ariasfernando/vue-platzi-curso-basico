@@ -63,7 +63,8 @@
       created() {
         this.setupModule();
       }
-    };
+    }
+  }
 </script>
 
 <style lang="less">
