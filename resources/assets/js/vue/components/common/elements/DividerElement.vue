@@ -46,7 +46,6 @@
   .st-separator {
     width: 100%;
     border: none;
-    border-style: solid;
   }
 
 </style>

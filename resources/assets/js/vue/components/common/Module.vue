@@ -19,11 +19,11 @@
                cellpadding="0" 
                cellspacing="0" 
                border="0" 
-               class="st-content-componetn"
+               class="st-content-component"
         >
             <tr>
                 <td width="100%">
-                    <draggable v-model="column.components" :element="'table'">
+                    <draggable v-model="column.components" :element="'table'" width="100%">
                         <component  v-for="(component, componentId) in column.components"
                                     :is="component.type"
                                     :component="component"
@@ -67,11 +67,11 @@
                cellpadding="0" 
                cellspacing="0" 
                border="0" 
-               class="st-content-componetn"
+               class="st-content-component"
         >
             <tr>
                 <td width="100%">
-                    <draggable v-model="column.components" :element="'table'">
+                    <draggable v-model="column.components" :element="'table'" width="100%">
                         <component  v-for="(component, componentId) in column.components"
                                     :is="component.type" 
                                     :component="component" 
