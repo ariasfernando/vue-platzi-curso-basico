@@ -3,8 +3,8 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <h2>Module List</h2>
-        <div class="btn btn-default btn-create">
+        <h2 class="pull-left">Module List</h2>
+        <div class="btn btn-default btn-create pull-right">
           <router-link to="/create"><i class="glyphicon glyphicon-plus-sign"></i> Create a new Module</router-link>
         </div>
       </div>

@@ -3,7 +3,8 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <div class="btn btn-default">
+        <h2 class="pull-left">Libraries List</h2>
+        <div class="btn btn-default btn-create pull-right">
           <router-link to="/create" class="btn-create"><i class="glyphicon glyphicon-plus-sign"></i> Create a new library</router-link>
         </div>
       </div>
@@ -11,7 +12,6 @@
 
     <div class="row" v-if="ready && libraries.data.length">
       <div class="col-xs-12">
-        <h2>Libraries List</h2>
 
         <div class="table-responsive">
           <table width="100%" border="0" cellpadding="0" cellspacing="0" id="admin-library"
