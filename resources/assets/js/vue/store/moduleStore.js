@@ -25,6 +25,9 @@ const mutations = {
   setCurrentComponent(state, data) {
     state.currentComponent = data;
   },
+  updateElement(state, data) {
+    return;
+  },
   error(state, err) {
     console.log(err);
   },

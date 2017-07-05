@@ -2,10 +2,7 @@
   <!-- TEXT ELEMENT -->
   <tr @click="setComponent">
     <td width="100%" class="st-text-style" align="center" :style="component.style">
-      <tiny-mce v-if="component.editor" :id="editorId" :options="component.editor" :value="component.text"
-                data-key="text" @input="input"></tiny-mce>
-      <p v-else :data-line-limit="maxLines" :truncate="truncate" v-html="component.text" @keyup="change"
-         @paste="change"></p>
+      <tiny-mce :id="editorId" :options="component.editor.options" :value="component.text" data-key="text" @input="input"></tiny-mce>
     </td>
   </tr>
   <!-- TEXT ELEMENT ENDS -->
@@ -43,10 +40,15 @@
           this.truncate = this.component.directives.truncate;
         }
 
+        this.component.editor = {
+          options: {
+            toolbar: ''
+          }
+        };
 
       },
       input (text, key) {
-        this.$store.commit('updateElement', {
+        this.$store.commit('module/updateElement', {
           moduleId: this.moduleId,
           columnId: this.columnId,
           componentId: this.componentId,
@@ -66,7 +68,7 @@
           let edited = {};
           edited[key] = text;
 
-          this.$store.commit('updateElement', {
+          this.$store.commit('module/updateElement', {
             moduleId: _this.moduleId,
             columnId: _this.columnId,
             componentId: _this.componentId,

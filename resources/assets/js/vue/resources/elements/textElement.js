@@ -11,7 +11,6 @@ module.exports = {
     "lineHeight": "16px",
     "color": "#000000"
   },
-
   "settings": [
     {
       "label": "Color",
@@ -49,5 +48,5 @@ module.exports = {
       "type": "text",
       "value": "10px"
     }
-  ]
+  ],
 };

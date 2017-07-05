@@ -6,7 +6,7 @@
                 <tr>
                     <td width="100%" align="center" height="20" :style="component.style">
                         <a :href="component.destinationUrl" target="" class="st-without-event">
-                            <span contenteditable="true" @keyup="changed" @blur="changed" @paste="changed" v-html="component.text"></span>
+                            <tiny-mce :id="editorId" :options="component.editor.options" :value="component.text" data-key="text" @input="input"></tiny-mce>
                         </a>
                     </td>
                 </tr>
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+    import TinyMCE from './TinyMce.vue';
+
     export default {
         name: 'ButtonElement',
         props: [
@@ -25,28 +27,35 @@
             'component-id',
             'component'
         ],
+        components: {
+          'tiny-mce': TinyMCE
+        },
         timeoutID: null,
         methods: {
-            changed (event) {
-                let _this = this;
-                clearTimeout(this.$timeoutID);
+            input (text, key) {
+              this.$store.commit('module/updateElement', {
+                moduleId: this.moduleId,
+                columnId: this.columnId,
+                componentId: this.componentId,
+                data: {
+                  text: text
+                }
+              });
+            },
+            setupModule () {
+                this.editorId = ['editor', this.moduleId, this.columnId, this.componentId].join('-');
 
-                this.$timeoutID = setTimeout( function() {
-                    let text = event.target.innerHTML.trim();
-                    let key = event.target.dataset.key;
+                this.component.editor = {
+                  options: {
+                    toolbar: ''
+                  }
+                };
 
-                    let edited = {};
-                    edited[key] = text;
-
-                    this.$store.commit('updateElement', {
-                        moduleId: _this.moduleId,
-                        columnId: _this.columnId,
-                        componentId: _this.componentId,
-                        data: edited
-                    });
-                }, 500);
-            }
-        }
+              },
+        },
+      created() {
+          this.setupModule();
+      }
     };
 </script>
 
@@ -70,6 +79,7 @@
     }
     .st-cta td a span{ 
         color: #ffffff;
+        cursor: text;
     }
 
 </style>
