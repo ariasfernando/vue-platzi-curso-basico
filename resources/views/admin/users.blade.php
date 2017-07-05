@@ -16,7 +16,8 @@
 
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="btn btn-default btn-create">
+					<h2 class="pull-left">User List</h2>
+					<div class="btn btn-default btn-create pull-right">
 						<i class="glyphicon glyphicon-plus-sign"></i> Create a new user
 					</div>
 				</div>
@@ -24,7 +25,6 @@
 
 			<div class="row">
 				<div class="col-xs-12">
-					<h2>User List</h2>
 
 					<div class="row list-action-container">
 						<div class="col-xs-8 admin-search-box">

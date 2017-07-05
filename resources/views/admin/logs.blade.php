@@ -15,8 +15,12 @@
 		<section class="col-xs-12 section-container">
 			<div class="row">
 				<div class="col-xs-12">
-					<h2>Log List</h2>
-
+					<h2 class="pull-left">Log List</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					
 					<div class="row list-action-container">
 						<div class="col-xs-8 admin-search-box">
 							{!! Form::open ( array ( 'method' => 'get' ,'id' => 'admin-log-search', 'url' => url('/').'/admin/log' )) !!}

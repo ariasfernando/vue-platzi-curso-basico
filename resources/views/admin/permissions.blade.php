@@ -16,7 +16,8 @@
 
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="btn btn-default btn-create">
+					<h2 class="pull-left">Permission List</h2>
+					<div class="btn btn-default btn-create pull-right">
 						<i class="glyphicon glyphicon-plus-sign"></i> Create a new permission
 					</div>
 				</div>
@@ -24,7 +25,6 @@
 
 			<div class="row">
 				<div class="col-xs-12">
-					<h2>Permission List</h2>
 
 					<div class="table-responsive">
 						<table width="100%" border="0" cellpadding="0" cellspacing="0" id="<?php echo $defaultDataPagination["view_name"]; ?>" class="table table-bordered table-striped sortable data-list" data-pagination='<?php echo json_encode($defaultDataPagination); ?>'>
