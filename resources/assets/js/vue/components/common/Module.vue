@@ -165,8 +165,9 @@
 
   .st-component{
     &:hover{
-        outline: 1px dashed @focus;
+        outline: 1px solid @focus;
         cursor: move;
+        background: #ddd;
     }
   }
 
