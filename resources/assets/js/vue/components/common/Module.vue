@@ -19,16 +19,22 @@
                cellpadding="0" 
                cellspacing="0" 
                border="0" 
-               class="st-content-componetn"
+               class="st-content-component"
         >
-            <tr v-for="(component, componentId) in column.components">
-                <td>
-                    <component :is="component.type" 
-                         :component="component" 
-                         :module-id="module.id" 
-                         :column-id="columnId"
-                         :component-id="componentId" 
-                         @set-component="setComponent"></component>
+            <tr>
+                <td width="100%">
+                    <draggable v-model="column.components" :element="'table'" width="100%">
+                        <component  v-for="(component, componentId) in column.components"
+                                    :is="component.type"
+                                    :component="component"
+                                    :module-id="module.id"
+                                    :column-id="columnId"
+                                    :component-id="componentId"
+                                    :key="componentId"
+                                    class="st-component"
+                                    @set-component="setComponent"></component>
+
+                    </draggable>
                 </td>
             </tr>
         </table>
@@ -61,11 +67,11 @@
                cellpadding="0" 
                cellspacing="0" 
                border="0" 
-               class="st-content-componetn"
+               class="st-content-component"
         >
             <tr>
-                <td>
-                    <draggable v-model="column.components" :element="'table'">
+                <td width="100%">
+                    <draggable v-model="column.components" :element="'table'" width="100%">
                         <component  v-for="(component, componentId) in column.components"
                                     :is="component.type" 
                                     :component="component" 
@@ -159,8 +165,9 @@
 
   .st-component{
     &:hover{
-        outline: 1px dashed @focus;
+        outline: 1px solid @focus;
         cursor: move;
+        background: #ddd;
     }
   }
 
