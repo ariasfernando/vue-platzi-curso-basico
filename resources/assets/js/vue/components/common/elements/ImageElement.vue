@@ -2,7 +2,7 @@
   <!-- IMAGE ELEMENT -->
     <tr>
       <td align="center" :style="component.style">
-        <img :src="component.placeholder" class="st-resize st-image" :width="component.width" :height="component.height"
+        <img :src="imageUrl(component.placeholder)" class="st-resize st-image" :width="component.width" :height="component.height"
              :data-open-element-config="elementConfig" alt="" border="0">
       </td>
     </tr>
@@ -20,6 +20,13 @@
     ],
     created () {
       this.setupModule();
+    },
+    data(){
+      return {
+        imageUrl(imagePath) {
+          return window.location.protocol + '//' + window.location.host + imagePath;
+        }
+      }
     },
     methods: {
       setupModule () {
