@@ -1,6 +1,6 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-    <tr>
+    <tr @click="setComponent">
       <td :bgcolor="backgroundColor" class="st-separator" :style="component.style">
         <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
@@ -37,6 +37,13 @@
         this.backgroundColor = this.component.style.backgroundColor;
         this.separatorHeight = this.component.height;
         this.separatorWidth = this.component.width;
+      },
+      setComponent() {
+        console.log('[DividerElement] Emit set-component');
+        this.$emit('set-component', {
+          columnId: this.columnId,
+          componentId: this.componentId
+        });
       }
     }
   };

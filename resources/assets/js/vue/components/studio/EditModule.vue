@@ -272,10 +272,9 @@
     .header {
       color: #FFFFFF;
       background-color: @stensul-purple;
-      height: 80px;
+      height: 60px;
       box-shadow: 0 8px 6px -6px #000;
-      margin-bottom: 20px;
-      padding: 15px 0;
+      padding: 0;
 
       .header-col {
         height: 100%;

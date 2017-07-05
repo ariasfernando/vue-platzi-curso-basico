@@ -1,6 +1,6 @@
 <template id="button-element">
     <!-- CALL TO ACTION ELEMENT -->
-    <tr>
+    <tr @click="setComponent">
         <td align="center">
             <table width="150" border="0" class="st-cta" cellpadding="0" cellspacing="0">
                 <tr>
@@ -27,26 +27,33 @@
         ],
         timeoutID: null,
         methods: {
-            changed (event) {
-                let _this = this;
-                clearTimeout(this.$timeoutID);
+          changed (event) {
+              let _this = this;
+              clearTimeout(this.$timeoutID);
 
-                this.$timeoutID = setTimeout( function() {
-                    let text = event.target.innerHTML.trim();
-                    let key = event.target.dataset.key;
+              this.$timeoutID = setTimeout( function() {
+                  let text = event.target.innerHTML.trim();
+                  let key = event.target.dataset.key;
 
-                    let edited = {};
-                    edited[key] = text;
+                  let edited = {};
+                  edited[key] = text;
 
-                    this.$store.commit('updateElement', {
-                        moduleId: _this.moduleId,
-                        columnId: _this.columnId,
-                        componentId: _this.componentId,
-                        data: edited
-                    });
-                }, 500);
-            }
+                  this.$store.commit('updateElement', {
+                      moduleId: _this.moduleId,
+                      columnId: _this.columnId,
+                      componentId: _this.componentId,
+                      data: edited
+                  });
+              }, 500);
+          },
+          setComponent() {
+              console.log('[ButtomElement] Emit set-component');
+              this.$emit('set-component', {
+              columnId: this.columnId,
+              componentId: this.componentId
+          });
         }
+      }
     };
 </script>
 

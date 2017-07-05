@@ -1,6 +1,6 @@
 <template>
   <!-- IMAGE ELEMENT -->
-    <tr>
+    <tr @click="setComponent">
       <td align="center" :style="component.style">
         <img :src="imageUrl(component.placeholder)" class="st-resize st-image" :width="component.width" :height="component.height"
              :data-open-element-config="elementConfig" alt="" border="0">
@@ -37,6 +37,13 @@
         }
       },
       changed (event) {
+      },
+      setComponent() {
+        console.log('[ImageElement] Emit set-component');
+        this.$emit('set-component', {
+          columnId: this.columnId,
+          componentId: this.componentId
+        });
       }
     }
   };
