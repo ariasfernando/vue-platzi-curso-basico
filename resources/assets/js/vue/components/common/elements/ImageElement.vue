@@ -24,7 +24,7 @@
     data(){
       return {
         imageUrl(imagePath) {
-          return window.location.protocol + '//' +window.location.pathname.replace("/admin/module", "")+ window.location.host + imagePath;
+          return window.location.protocol + '//' + window.location.host + window.location.pathname.replace("/admin/module", "")+ imagePath;
         }
       }
     },
