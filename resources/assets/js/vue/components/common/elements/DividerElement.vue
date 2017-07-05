@@ -21,15 +21,32 @@
       'component-id',
       'component'
     ],
+    data () {
+      return {
+        backgroundColor: '',
+        separatorHeight: '',
+        separatorWidth: ''
+      }
+    },
     created () {
       this.setupModule();
     },
     methods: {
       setupModule () {
-        this.backgroundColor = this.component.style.default.backgroundColor;
+        console.log(this);
+        this.backgroundColor = this.component.style.backgroundColor;
         this.separatorHeight = this.component.height;
         this.separatorWidth = this.component.width;
       }
     }
   };
 </script>
+
+<style lang="sass">
+  .st-separator {
+    width: 100%;
+    border: none;
+    border-style: solid;
+  }
+
+</style>

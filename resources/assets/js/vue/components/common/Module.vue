@@ -22,7 +22,7 @@
                class="st-content-componetn"
         >
             <tr v-for="(component, componentId) in column.components">
-                <td>
+                <td width="100%">
                     <component :is="component.type" 
                          :component="component" 
                          :module-id="module.id" 
@@ -64,7 +64,7 @@
                class="st-content-componetn"
         >
             <tr>
-                <td>
+                <td width="100%">
                     <draggable v-model="column.components" :element="'table'">
                         <component  v-for="(component, componentId) in column.components"
                                     :is="component.type" 
