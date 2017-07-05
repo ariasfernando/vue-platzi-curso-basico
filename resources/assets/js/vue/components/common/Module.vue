@@ -21,14 +21,20 @@
                border="0" 
                class="st-content-componetn"
         >
-            <tr v-for="(component, componentId) in column.components">
+            <tr>
                 <td>
-                    <component :is="component.type" 
-                         :component="component" 
-                         :module-id="module.id" 
-                         :column-id="columnId"
-                         :component-id="componentId" 
-                         @set-component="setComponent"></component>
+                    <draggable v-model="column.components" :element="'table'">
+                        <component  v-for="(component, componentId) in column.components"
+                                    :is="component.type" 
+                                    :component="component" 
+                                    :module-id="module.id" 
+                                    :column-id="columnId"
+                                    :component-id="componentId" 
+                                    :key="componentId"
+                                    class="st-component"
+                                    @set-component="setComponent"></component>
+
+                    </draggable>            
                 </td>
             </tr>
         </table>
