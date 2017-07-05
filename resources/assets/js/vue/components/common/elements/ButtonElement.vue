@@ -29,7 +29,7 @@
 
                 this.$timeoutID = setTimeout( function() {
                     let text = event.target.innerHTML.trim();
-                    let key = $(event.target).data('key');
+                    let key = event.target.dataset.key;
 
                     let edited = {};
                     edited[key] = text;
