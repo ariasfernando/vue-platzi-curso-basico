@@ -156,9 +156,19 @@
             this.$root.$toast(error, {className: 'et-warn'});
           });
       },
+      toggleSidebar() {
+        const sidebar = document.getElementById('admin-sidebar');
+        sidebar.style.display = 'block';
+
+        const container = document.getElementsByClassName('base-admin')[0];
+        container.style.paddingLeft = '175px';
+      },
     },
     created () {
       this.fetchLibraries();
+    },
+    mounted() {
+      this.toggleSidebar();
     }
   };
 </script>

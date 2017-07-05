@@ -237,13 +237,20 @@
       },
       publish() {
         this.$root.$toast('Publish event', {className: 'et-info'});
+      },
+      toggleSidebar() {
+        const sidebar = document.getElementById('admin-sidebar');
+        sidebar.style.display = 'none';
+
+        const container = document.getElementsByClassName('base-admin')[0];
+        container.style.paddingLeft = 0;
       }
     },
     created () {
       this.loadModule();
     },
     mounted () {
-      // TODO: Trigger event editModule.onMounted
+      this.toggleSidebar();
     }
   };
 </script>
