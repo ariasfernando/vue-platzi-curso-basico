@@ -233,7 +233,6 @@
         this.$root.$toast('Preview event', {className: 'et-info'});
       },
       draft() {
-
         this.$root.$toast('Draft event', {className: 'et-info'});
       },
       publish() {
