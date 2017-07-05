@@ -6,7 +6,7 @@
         <tr>
           <td width="100%" align="center" height="20" :style="component.style">
             <a :href="component.destinationUrl" target="" class="st-without-event">
-              <tiny-mce :id="editorId" :options="component.editor.options" :value="component.text" data-key="text"
+              <tiny-mce :id="editorId" :options="component.editor" :value="component.text" data-key="text"
                         @input="input"></tiny-mce>
             </a>
           </td>
@@ -31,7 +31,11 @@
     components: {
       'tiny-mce': TinyMCE
     },
-    timeoutID: null,
+    data(){
+      return {
+        editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-')
+      }
+    },
     methods: {
       input (text, key) {
         this.$store.commit('module/updateElement', {
@@ -43,25 +47,12 @@
           }
         });
       },
-      setupModule () {
-        this.editorId = ['editor', this.moduleId, this.columnId, this.componentId].join('-');
-
-        this.component.editor = {
-          options: {
-            toolbar: ''
-          }
-        };
-
-      },
       setComponent() {
         console.log('[ButtomElement] Emit set-component');
         this.$emit('set-component', {
           columnId: this.columnId,
           componentId: this.componentId
         });
-      },
-      created() {
-        this.setupModule();
       }
     }
   }
