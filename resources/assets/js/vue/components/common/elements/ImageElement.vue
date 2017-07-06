@@ -24,7 +24,8 @@
     data(){
       return {
         imageUrl(imagePath) {
-          return window.location.protocol + '//' + window.location.host + imagePath;
+          console.log(this.$app);
+          return this.$app.baseUrl + imagePath;
         }
       }
     },
