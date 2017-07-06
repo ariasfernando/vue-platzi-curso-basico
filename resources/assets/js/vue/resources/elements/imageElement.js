@@ -1,6 +1,6 @@
 module.exports = {
   "type": "image-element",
-  "placeholder": "/images/studio/placeholder-square.jpg",
+  "placeholder": "studio/placeholder-square.jpg",
   "width": "220",
   "height": "auto",
   "style": {

@@ -24,8 +24,7 @@
     data(){
       return {
         imageUrl(imagePath) {
-          console.log(this.$app);
-          return this.$app.baseUrl + imagePath;
+          return this.$app.imageUrl + imagePath;
         }
       }
     },
