@@ -80,7 +80,6 @@ class AdminAuthController extends Controller
 
         if ($app_admin && User::where('email', '=', $email)->whereNull('deleted_at')->exists()) {
             $attempt_admin = User::where('email', '=', $email)->first()->can('access_admin');
-
         }
 
         if ($attempt_admin) {

@@ -6,8 +6,9 @@ use Auth;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
+use MongoDB\Driver\Exception\BulkWriteException;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
-use Stensul\Console\Commands\Module\Create;
+use Stensul\Models\Module;
 
 class ModuleController extends Controller
 {
@@ -99,83 +100,47 @@ class ModuleController extends Controller
     }
 
     /**
-     * Module post edit.
+     * Module post save. Inserts or update a module.
      *
-     * @return boolean
-     */
-    public function postEdit(Request $request)
-    {
-        $params = [
-            'name' => $request->input('module_title'),
-            'module_id' => $request->input('module_id'),
-            'description' => $request->input('module_description'),
-            'config' => $request->input('module_config') ?: [],
-            'template' => $request->input('module_template') ?: '',
-            'parent_module' => 'none'
-        ];
-        
-        $exit_code = \StensulModule::edit($params);
-
-        return $this->getExitMessage($exit_code);
-    }
-
-    /**
-     * Module post create.
-     *
+     * @param Request $request
      * @return Boolean
      */
-    public function postCreate(Request $request)
+    public function postSave(Request $request)
     {
         $params = [
-            'name' => $request->input('module_title'),
-            'module_id' => $request->input('module_id'),
-            'description' => $request->input('module_description'),
-            'config' => $request->input('module_config') ?: [],
-            'parent_module' => $request->input('parent_module')
+            'name' => $request->input('name'),
+            'key' => Module::standarizeKey($request->input('name')),
+            'structure' => $request->input('structure'),
+            'status' => $request->input('status', 'draft'),
         ];
 
-        $exit_code = \StensulModule::create($params);
-
-        return $this->getExitMessage($exit_code);
-    }
-
-    /**
-     * Get message from exit code.
-     *
-     * @return string
-     */
-    public function getExitMessage($exit_code)
-    {
-        $message = '';
-        switch ($exit_code) {
-            case 0:
-                $message = array('message' => 'SUCCESS');
-                break;
-            case \StensulModule::ERROR_INVALID_MODULE_ID:
-                $message = array('message' => 'ERROR_INVALID_MODULE_ID');
-                break;
-            case \StensulModule::ERROR_CREATING_MODULE_DIR:
-                $message = array('message' => 'ERROR_CREATING_MODULE_DIR');
-                break;
-            case \StensulModule::ERROR_CONFIG_FILE:
-                $message = array('message' => 'ERROR_CONFIG_FILE');
-                break;
-            case \StensulModule::ERROR_TEMPLATE_FILE:
-                $message = array('message' => 'ERROR_TEMPLATE_FILE');
-                break;
-            case \StensulModule::ERROR_PARENT_TEMPLATE:
-                $message = array('message' => 'ERROR_PARENT_TEMPLATE');
-                break;
-            case \StensulModule::ERROR_DUPLICATE_MODULE_ID:
-                $message = array('message' => 'ERROR_DUPLICATE_MODULE_ID');
-                break;
-            case \StensulModule::ERROR_INVALID_JSON:
-                $message = array('message' => 'ERROR_INVALID_JSON');
-                break;
-            case \StensulModule::ERROR_DELETING_TEMPLATE:
-                $message = array('message' => 'ERROR_DELETING_TEMPLATE');
-                break;
+        if ($request->input("moduleId")) {
+            $module = Module::findOrFail($request->input("moduleId"));
+        } else {
+            $module = new Module;
         }
-        return $message;
+
+        foreach ($params as $key => $value) {
+            $module->$key = $value;
+        }
+
+        try {
+            $module->save();
+
+            $response_message = [
+                'id' => $module->id,
+                'message' => 'SUCCESS'
+            ];
+        } catch (BulkWriteException $exception) {
+            if (preg_match("/^E11000 duplicate key/", $exception->getMessage())) {
+                $response_message = ['message' => 'ERROR_EXISTS'];
+            } else {
+                throw $exception;
+            }
+        } catch (\Exception $exception) {
+            $response_message = ['message' => 'ERROR_SAVING'];
+        }
+
+        return $response_message;
     }
 }
