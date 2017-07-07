@@ -55,10 +55,6 @@ const actions = {
       .then(response => context.commit('setModuleData', response))
       .catch(error => context.commit('error', error));
   },
-
-  setCurrentComponent(context, data) {
-    context.commit('setCurrentComponent', data);
-  },
 };
 
 module.exports = {
