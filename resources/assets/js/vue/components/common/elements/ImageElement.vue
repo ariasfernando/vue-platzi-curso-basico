@@ -46,8 +46,7 @@
       changed (event) {
       },
       setComponent() {
-        console.log('[ImageElement] Emit set-component');
-        this.$emit('set-component', {
+        this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
           componentId: this.componentId
         });

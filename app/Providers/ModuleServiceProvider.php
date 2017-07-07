@@ -3,6 +3,7 @@
 namespace Stensul\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Stensul\Models\Module;
 
 class ModuleServiceProvider extends ServiceProvider
 {
@@ -44,7 +45,6 @@ class ModuleServiceProvider extends ServiceProvider
     * Get all modules config.
     *
     * @return array
-    * TODO: Get dynamic modules from db
     */
     public static function getModuleList()
     {
@@ -58,6 +58,12 @@ class ModuleServiceProvider extends ServiceProvider
                  $config = json_decode(file_get_contents($file->getPathName()), true);
                  $modules[$config['module_id']] = $config;
             }
+        }
+
+        // Load modules form Db.
+        $modules_db = Module::all();
+        foreach ($modules_db as $module) {
+            $modules[$module->key] = $module;
         }
 
         ksort($modules);

@@ -34,14 +34,12 @@
     },
     methods: {
       setupModule () {
-        console.log(this);
         this.backgroundColor = this.component.style.backgroundColor;
         this.separatorHeight = this.component.height;
         this.separatorWidth = this.component.width;
       },
       setComponent() {
-        console.log('[DividerElement] Emit set-component');
-        this.$emit('set-component', {
+        this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
           componentId: this.componentId
         });
