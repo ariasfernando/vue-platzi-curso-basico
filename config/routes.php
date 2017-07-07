@@ -164,7 +164,7 @@ if (env("APP_ADMIN", false)) {
             '/admin/library/delete'    => 'Admin\LibraryController@postDelete',
             '/admin/library/list'      => 'Admin\LibraryController@postList',
             '/admin/library/esp'       => 'Admin\LibraryController@postEspProviders',
-            '/admin/module/save'       => 'Admin\ModuleController@saveEdit',
+            '/admin/module/save'       => 'Admin\ModuleController@postSave',
             '/admin/module/delete'     => 'Admin\ModuleController@postDelete',
         ],
     ];
