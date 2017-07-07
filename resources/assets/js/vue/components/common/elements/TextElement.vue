@@ -2,10 +2,7 @@
   <!-- TEXT ELEMENT -->
   <tr @click="setComponent">
     <td width="100%" class="st-text-style" align="center" :style="component.style">
-      <tiny-mce v-if="component.editor" :id="editorId" :options="component.editor" :value="component.text"
-                data-key="text" @input="input"></tiny-mce>
-      <p v-else :data-line-limit="maxLines" :truncate="truncate" v-html="component.text" @keyup="change"
-         @paste="change"></p>
+      <tiny-mce :id="editorId" :value="component.text" data-key="text" @input="input"></tiny-mce>
     </td>
   </tr>
   <!-- TEXT ELEMENT ENDS -->
@@ -25,6 +22,11 @@
     components: {
       'tiny-mce': TinyMCE
     },
+    data(){
+      return {
+        editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-')
+      }
+    },
     timeoutID: null,
     created () {
       this.setupModule();
@@ -33,7 +35,6 @@
       setupModule () {
         this.maxLines = null;
         this.truncate = null;
-        this.editorId = ['editor', this.moduleId, this.columnId, this.componentId].join('-');
 
         if (this.component.directives && this.component.directives.maxLines) {
           this.maxLines = this.component.directives.maxLines;
@@ -43,10 +44,9 @@
           this.truncate = this.component.directives.truncate;
         }
 
-
       },
       input (text, key) {
-        this.$store.commit('updateElement', {
+        this.$store.commit('module/updateElement', {
           moduleId: this.moduleId,
           columnId: this.columnId,
           componentId: this.componentId,
@@ -56,7 +56,6 @@
         });
       },
       change (event) {
-        let _this = this;
         clearTimeout(this.$timeoutID);
 
         this.$timeoutID = setTimeout(() => {
@@ -66,17 +65,16 @@
           let edited = {};
           edited[key] = text;
 
-          this.$store.commit('updateElement', {
-            moduleId: _this.moduleId,
-            columnId: _this.columnId,
-            componentId: _this.componentId,
+          this.$store.commit('module/updateElement', {
+            moduleId: this.moduleId,
+            columnId: this.columnId,
+            componentId: this.componentId,
             data: edited
           });
         }, 500);
       },
       setComponent() {
-        console.log('[TextElement] Emit set-component');
-        this.$emit('set-component', {
+        this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
           componentId: this.componentId
         });

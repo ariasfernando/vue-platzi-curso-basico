@@ -1,7 +1,6 @@
 <template>
   <div class="component-settings" v-if="ready">
-
-    <h4>Default Settings</h4><hr>
+    <h4>Element Settings</h4><hr>
     <div class="default-settings">
       <form class="form-horizontal">
         <div class="form-group" v-for="setting in component.settings">
@@ -10,7 +9,7 @@
             <input v-if="setting.type === 'text'" v-model="setting.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(setting.name) }"
                    :name="setting.name" type="text" :placeholder="setting.label">
 
-            <span v-if="setting.type == 'switch'">
+            <span v-if="setting.type === 'switch'">
               <toggle-button :value="setting.value" color="#82C7EB" :sync="true" :labels="true"></toggle-button>
             </span>
 
@@ -22,7 +21,7 @@
 
     <p class="sep"><br></p>
 
-    <div v-for="plugin in plugins" >
+    <div v-for="plugin in plugins">
       <h4>{{ plugin.name }}</h4><hr>
       <div class="default-settings">
         <form class="form-horizontal">
@@ -53,7 +52,9 @@
   import _ from 'underscore-contrib'
 
   export default {
-    props: ['component'],
+    components: {
+      ToggleButton
+    },
     data () {
       return {
         plugins: [],
@@ -61,43 +62,42 @@
       }
     },
     computed: {
-      enabledPlugins() {
-        return this.component.enabledPlugins || []
+      module() {
+        return this.$store.state.module.module;
+      },
+      currentComponent() {
+        return this.$store.state.module.currentComponent;
+      },
+      component() {
+        let component = {};
+
+        if (!_.isEmpty(this.currentComponent)) {
+          component = this.module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
+        }
+        return component;
       }
     },
-    components: {
-      ToggleButton
-    },
-    created() {
-      // Component Type
-      const type = this.component.type.replace('-element', '');
+    watch : {
+      component : function (value) {
+        if (!_.isEmpty(this.component)) {
+          // Component Type
+          const type = this.component.type.replace('-element', '');
 
-      // Base plugins
-      this.plugins = Plugins[type];
+          // Base plugins
+          this.plugins = Plugins[type];
 
-      if ( this.$customer ) {
-        // Check for customer Plugins
-        let customerPlugins = _.getPath(this.$customer, 'admin.modules.plugins', {});
-        if (!_.isEmpty(customerPlugins)) {
-          this.plugins = _.extend(Plugins[type], customerPlugins[type]);
+          if (this.$customer) {
+            // Check for customer Plugins
+            let customerPlugins = _.getPath(this.$customer, 'admin.modules.plugins', {});
+            if (!_.isEmpty(customerPlugins)) {
+              this.plugins = _.extend(Plugins[type], customerPlugins[type]);
+            }
+          }
+
+          this.ready = true;
         }
       }
-
-      this.ready = true;
     },
-    methods: {
-      togglePlugin(plugin) {
-        let idx = this.component.enabledPlugins.indexOf(plugin);
-
-        if ( idx !== -1 ) {
-          this.component.enabledPlugins.splice(idx, 1);
-          this.component.plugins.splice(this.component.plugins.indexOf(this.plugins[plugin]), 1);
-        } else {
-          this.component.enabledPlugins.push(plugin);
-          this.component.plugins.push(this.plugins[plugin]);
-        }
-      }
-    }
   }
 </script>
 

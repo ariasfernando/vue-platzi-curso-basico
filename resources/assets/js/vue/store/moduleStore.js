@@ -25,6 +25,9 @@ const mutations = {
   setCurrentComponent(state, data) {
     state.currentComponent = data;
   },
+  updateElement(state, data) {
+    return;
+  },
   error(state, err) {
     console.log(err);
   },
@@ -51,10 +54,6 @@ const actions = {
     return moduleService.createModule(data)
       .then(response => context.commit('setModuleData', response))
       .catch(error => context.commit('error', error));
-  },
-
-  setCurrentComponent(context, data) {
-    context.commit('setCurrentComponent', data);
   },
 };
 

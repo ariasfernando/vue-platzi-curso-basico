@@ -31,8 +31,7 @@
                                     :column-id="columnId"
                                     :component-id="componentId"
                                     :key="componentId"
-                                    class="st-component"
-                                    @set-component="setComponent"></component>
+                                    class="st-component"></component>
 
                     </draggable>
                 </td>
@@ -79,8 +78,7 @@
                                     :column-id="columnId"
                                     :component-id="componentId" 
                                     :key="componentId"
-                                    class="st-component"
-                                    @set-component="setComponent"></component>
+                                    class="st-component"></component>
 
                     </draggable>            
                 </td>
@@ -112,13 +110,17 @@
 
   module.exports = {
     name: 'Module',
-    props: ['module'], 
     components: {
       Draggable,  
       TextElement,
       ButtonElement,
       ImageElement,
       DividerElement
+    },
+    computed: {
+      module() {
+        return this.$store.state.module.module
+      }
     },
     methods: {
       elementDrop(e) {
@@ -131,8 +133,8 @@
           let indexOf = this.module.structure.columns[colId].components.indexOf(component);
 
           let ref = {
-            columnId: colId,
-            componentId: indexOf
+            columnId: +colId,
+            componentId: +indexOf
           };
 
           this.setComponent(ref);
@@ -152,8 +154,7 @@
         }
       },
       setComponent(ref) {
-        console.log('[Module] Emit set-component');
-        this.$emit('set-component', ref);
+        this.$store.commit("module/setCurrentComponent", ref);
       }
     }
   };
