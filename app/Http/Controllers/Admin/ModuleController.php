@@ -80,23 +80,14 @@ class ModuleController extends Controller
     }
 
     /**
-     * Module edit view.
+     * Module edit.
      *
-     * @return View
+     * @param Request $request
+     * @return string JSON Encoded module data.
      */
     public function getEdit(Request $request)
     {
-        $module_id = $request->input('module_id');
-
-        $module_data = \StensulModule::getModule($module_id);
-        $module_data['config'] = $module_data;
-        $module_data['template'] = \StensulModule::getTemplate($module_id);
-        $params = [
-            "title" => "Edit Module",
-            "module" => $module_data
-        ];
-
-        return $this->renderView('admin.modals.module_form', array('params' => $params));
+        return Module::findOrFail($request->input('moduleId'));
     }
 
     /**
