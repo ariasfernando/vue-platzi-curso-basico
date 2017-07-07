@@ -23,7 +23,11 @@
         >
             <tr>
                 <td width="100%">
-                    <draggable v-model="column.components" :element="'table'" width="100%">
+                    <draggable v-model="column.components" 
+                               :element="'table'" 
+                               :options="{handle:'.icon-move'}" 
+                               width="100%"
+                    >
                         <component  v-for="(component, componentId) in column.components"
                                     :is="component.type"
                                     :component="component"
@@ -71,17 +75,21 @@
         >
             <tr>
                 <td width="100%">
-                    <draggable v-model="column.components" :element="'table'" width="100%">
-                        <component  v-for="(component, componentId) in column.components"
-                                    :is="component.type" 
-                                    :component="component" 
-                                    :module-id="module.id" 
-                                    :column-id="columnId"
-                                    :component-id="componentId" 
-                                    :key="componentId"
-                                    class="st-component"
-                                    @set-component="setComponent"></component>
-
+                    <draggable v-model="column.components" 
+                               :element="'table'" 
+                               :options="{handle:'.icon-move'}" 
+                               width="100%"
+                    >
+                        <component  
+                          v-for="(component, componentId) in column.components"
+                          :is="component.type" 
+                          :component="component" 
+                          :module-id="module.id" 
+                          :column-id="columnId"
+                          :component-id="componentId" 
+                          :key="componentId"
+                          class="st-component"
+                          @set-component="setComponent"></component>
                     </draggable>            
                 </td>
             </tr>
@@ -162,12 +170,16 @@
 <style lang="less">
   @focus: #69dac8;
   @focus-light: lighten(@focus, 30%);
-
+  @hover: #ece7f5;
+  @icon-option: #56106d;
+  
   .st-component{
     &:hover{
-        outline: 1px solid @focus;
-        cursor: move;
-        background: #ddd;
+        outline: 1px solid @icon-option;
+        background-color: @hover;
+        .icon-move{
+          display: block;
+        }
     }
   }
 
