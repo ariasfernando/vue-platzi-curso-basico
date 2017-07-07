@@ -93,7 +93,7 @@
         <!-- START: Module Container -->
         <div class="col-xs-7 module-container">
           <div class="col-xs-12">
-            <module :module="module" @set-component="setCurrentComponent"></module>
+            <module></module>
           </div>
 
           <div v-if="$route.query.debug" class="col-xs-12">
@@ -108,7 +108,7 @@
 
           <div class="module-settings" v-if="currentComponent">
             <div class="fields">
-              <component-settings :component="currentComponent"></component-settings>
+              <component-settings></component-settings>
             </div>
           </div>
 
@@ -133,13 +133,15 @@
     name: 'EditModule',
     computed: {
       module() {
-        return this.$store.state.module.module
+        return this.$store.state.module.module;
+      },
+      currentComponent() {
+        return this.$store.state.module.currentComponent;
       }
     },
     data () {
       return {
-        ready: false,
-        currentComponent: null
+        ready: false
       }
     },
     components: {
@@ -222,9 +224,6 @@
       },
       resetStyle(e) {
         e.target.style.opacity = "";
-      },
-      setCurrentComponent(ref) {
-        this.currentComponent = this.module.structure.columns[ref.columnId].components[ref.componentId];
       },
       changeMode(mode) {
         this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});

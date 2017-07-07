@@ -56,7 +56,6 @@
         });
       },
       change (event) {
-        let _this = this;
         clearTimeout(this.$timeoutID);
 
         this.$timeoutID = setTimeout(() => {
@@ -67,16 +66,15 @@
           edited[key] = text;
 
           this.$store.commit('module/updateElement', {
-            moduleId: _this.moduleId,
-            columnId: _this.columnId,
-            componentId: _this.componentId,
+            moduleId: this.moduleId,
+            columnId: this.columnId,
+            componentId: this.componentId,
             data: edited
           });
         }, 500);
       },
       setComponent() {
-        console.log('[TextElement] Emit set-component');
-        this.$emit('set-component', {
+        this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
           componentId: this.componentId
         });

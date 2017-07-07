@@ -4,4 +4,3 @@ export default {
     Vue.customer = Vue.prototype.$customer = customer;
   },
 };
-
