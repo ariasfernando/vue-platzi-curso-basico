@@ -10,7 +10,7 @@
 	<section class="col-xs-12">
 
 		<div class="text-center">
-			<a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">Admin - Stensul</a>
+			<a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">Admin - stensul</a>
 		</div>
 
 		{{-- Login error message --}}
