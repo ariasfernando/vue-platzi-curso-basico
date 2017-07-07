@@ -71,9 +71,7 @@ class DashboardController extends Controller
             }
         }
 
-        if (count($user_visibility) !== 0) {
-            $campaigns->whereIn('library', $user_visibility);
-        }
+        $campaigns->whereIn('library', $user_visibility);
 
         // search
         if (\Config::get('campaign.enable_search')) {
