@@ -4,7 +4,7 @@ function Module(data = {}) {
 
   this.id = data.id || data.module_id || "";
   this.name = data.name || data.title || "";
-  this.class = data.class || "custom";
+  this.type = data.type || "custom";
   let style = data.style || {};
 
 

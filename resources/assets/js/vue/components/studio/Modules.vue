@@ -43,7 +43,7 @@
             <tr v-for="(module, id) in modules" :data-module="id">
               <td :title="module.id">{{ module.id }}</td>
               <td :title="module.name">{{ module.name }}</td>
-              <td :title="module.class">{{ module.class }}</td>
+              <td :title="module.type">{{ module.type }}</td>
               <td class="text-right actions icons">
                 <a href="#" class="edit" title="Edit" @click="editModule(module)"><i
                   class="glyphicon glyphicon-pencil"></i></a>
@@ -85,7 +85,7 @@
       },
       editModule (module) {
 
-        if ( module.class === 'custom' ) {
+        if ( module.type === 'custom' ) {
           this.$root.$toast('load form with settings', {className: 'et-warn'});
           // router.go( /moduleId/legacy? )
         } else {

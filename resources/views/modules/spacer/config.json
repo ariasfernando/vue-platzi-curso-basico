@@ -4,9 +4,8 @@
 	"app_name": "base",
 	"module_id": "spacer",
 	"level": "single",
-	"type": "spacer",
 	"file_parent": "base",
-	"class": "custom",
+	"type": "custom",
 	"sizes": {
 		"default": 18,
 		"list": {

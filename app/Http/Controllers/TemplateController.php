@@ -183,13 +183,13 @@ class TemplateController extends Controller
         $component = $request->input('name');
         $parts[] = $component;
 
-        // module class
-        $class = !empty($params['module_params']['class'])
-            ? $params['module_params']['class'] : $request->input('class');
+        // module type
+        $type = !empty($params['module_params']['type'])
+            ? $params['module_params']['type'] : $request->input('type');
         $view = $request->input('view', 'template');
 
         // Find module in [module_name]/module.blade.php
-        if ($class == 'custom') {
+        if ($type == 'custom') {
             $parts = [ 'modules', $component, $view ];
         }
 

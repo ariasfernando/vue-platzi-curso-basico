@@ -113,7 +113,7 @@ class Create extends Command
                 $config = $modules[$parent_module];
                 $config['module_id'] = $module_id;
                 $config['title'] = $name;
-                $config['class'] = 'custom';
+                $config['type'] = 'custom';
                 $config['description'] = $description;
             } else {
                 $config = [
@@ -123,7 +123,7 @@ class Create extends Command
                     'action' => 'add',
                     'level' => 'single',
                     'file_parent' => 'base',
-                    'class' => 'custom',
+                    'type' => 'custom',
                     'description' => $description
                 ];
             }
