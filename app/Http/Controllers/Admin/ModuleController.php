@@ -103,6 +103,7 @@ class ModuleController extends Controller
             'key' => Module::standarizeKey($request->input('name')),
             'structure' => $request->input('structure'),
             'status' => $request->input('status', 'draft'),
+            'class' => 'studio'
         ];
 
         if ($request->input("moduleId")) {

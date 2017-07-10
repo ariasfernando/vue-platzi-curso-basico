@@ -189,7 +189,7 @@ class TemplateController extends Controller
         $view = $request->input('view', 'template');
 
         // Find module in [module_name]/module.blade.php
-        if ($class == 'pkg') {
+        if ($class == 'custom') {
             $parts = [ 'modules', $component, $view ];
         }
 

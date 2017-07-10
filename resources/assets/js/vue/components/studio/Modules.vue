@@ -85,7 +85,7 @@
       },
       editModule (module) {
 
-        if ( module.class === 'pkg' ) {
+        if ( module.class === 'custom' ) {
           this.$root.$toast('load form with settings', {className: 'et-warn'});
           // router.go( /moduleId/legacy? )
         } else {

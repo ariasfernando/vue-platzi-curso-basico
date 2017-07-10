@@ -5,7 +5,7 @@
 	"module_id": "image_with_text",
 	"level": "single",
 	"file_parent": "base",
-	"class": "pkg",
+	"class": "custom",
 	"placeholder_image": "/images/default/image-placeholder-200x200.png",
 	"button": {
 		"background_colors": {
