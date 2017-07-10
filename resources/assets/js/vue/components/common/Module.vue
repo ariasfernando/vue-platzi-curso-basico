@@ -87,8 +87,7 @@
                           :column-id="columnId"
                           :component-id="componentId" 
                           :key="componentId"
-                          class="st-component"
-                          @set-component="setComponent"></component>
+                          class="st-component"></component>
                     </draggable>            
                 </td>
             </tr>
