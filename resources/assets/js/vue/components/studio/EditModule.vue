@@ -152,12 +152,10 @@
     methods: {
       loadModule() {
         this.$store.commit("global/setLoader", true);
-        let data = {
-          moduleId: this.$route.params.id || undefined
-        };
+        const moduleId = this.$route.params.id || undefined;
 
         // TODO: Trigger event editModule.onInit
-        this.$store.dispatch("module/getModuleData", data)
+        this.$store.dispatch("module/getModuleData", moduleId)
           .then( response => {
             // TODO: Trigger event editModule.onLoaded
             this.ready = true;
@@ -181,8 +179,8 @@
               return;
             }
 
-            this.ready = true;
             this.$store.commit("global/setLoader", false);
+            this.$router.push('/');
           }).catch( error => {
             this.$store.commit("global/setLoader", false);
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});

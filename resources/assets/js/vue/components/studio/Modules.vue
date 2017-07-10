@@ -43,12 +43,11 @@
             <tr v-for="(module, id) in modules" :data-module="id">
               <td :title="module.id">{{ module.id }}</td>
               <td :title="module.name">{{ module.name }}</td>
-              <td :title="module.class">{{ module.class }}</td>
+              <td :title="module.type">{{ module.type }}</td>
               <td class="text-right actions icons">
-                <a href="#" class="edit" title="Edit" @click="editModule(module)"><i
-                  class="glyphicon glyphicon-pencil"></i></a>
+                <router-link v-if="module.type === 'studio'" :to="'/edit/' + module.id"><i class="glyphicon glyphicon-pencil"></i></router-link>
 
-                <a href="#" class="delete" title="Delete" @click="deleteModule(module.id)"><i
+                <a v-if="module.type === 'studio'" href="#" class="delete" title="Delete" @click="deleteModule(module.id)"><i
                   class="glyphicon glyphicon-trash"></i></a>
               </td>
             </tr>
@@ -84,14 +83,7 @@
           });
       },
       editModule (module) {
-
-        if ( module.class === 'pkg' ) {
-          this.$root.$toast('load form with settings', {className: 'et-warn'});
-          // router.go( /moduleId/legacy? )
-        } else {
-          this.$root.$toast('load module builder', {className: 'et-warn'});
-          // router.go( /moduleId )
-        }
+        this.$router.push('edit/' + module.id);
       },
       deleteModule (moduleId) {
         if (confirm("Are you sure?")) {

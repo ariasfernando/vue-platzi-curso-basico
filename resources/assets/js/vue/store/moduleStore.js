@@ -40,9 +40,9 @@ const mutations = {
 };
 
 const actions = {
-  getModuleData(context, data) {
-    if (data.moduleId) {
-      return moduleService.getModule()
+  getModuleData(context, moduleId) {
+    if (moduleId) {
+      return moduleService.getModule(moduleId)
         .then(response => context.commit('setModuleData', response))
         .catch(error => context.commit('error', error));
     }
@@ -56,6 +56,7 @@ const actions = {
       .then((response) => {
         if (response.message && response.message === 'SUCCESS') {
           context.commit('saveModule', response.id);
+          return response.id;
         }
       })
       .catch(error => context.commit('error', error));

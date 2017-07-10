@@ -5,7 +5,7 @@
 	"module_id": "free_text",
 	"level": "single",
 	"file_parent": "base",
-	"class": "pkg",
+	"type": "custom",
 	"initialized": false,
 	"toolbox": {
 		"colorPicker": {
