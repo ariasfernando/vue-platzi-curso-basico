@@ -29,7 +29,7 @@
             <label class="col-sm-4 control-label" :for="field.name">{{ field.label }}</label>
             <div class="col-sm-8">
               <input v-if="field.type === 'text'" v-model="field.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }"
-                     :name="field.name" type="text" :placeholder="field.label">
+                     :name="field.name" type="text" :placeholder="field.label" :link="field.link" @change="change(field)">
 
               <span v-if="field.type === 'switch'">
                 <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true"></toggle-button>
@@ -98,6 +98,23 @@
         }
       }
     },
+    methods: {
+      change(field) {
+        let data = {};
+
+        if ( field.link ) {
+          data[field.link][field.name] = field.value;
+        } else {
+          data[field.name] = field.value;
+        }
+
+        this.$store.commit('module/updateElement', {
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          data,
+        });
+      },
+    }
   }
 </script>
 

@@ -1,3 +1,4 @@
+import _ from 'underscore-contrib';
 import moduleService from '../services/module';
 
 const state = {
@@ -26,7 +27,12 @@ const mutations = {
     state.currentComponent = data;
   },
   updateElement(state, data) {
-    return;
+    _.each(data.data, (value, field) => {
+      state.module.structure.columns[data.columnId].components[data.componentId][field] = value;
+    });
+  },
+  saveModule(state, moduleId) {
+    state.module.id = moduleId;
   },
   error(state, err) {
     console.log(err);
@@ -46,13 +52,12 @@ const actions = {
   },
 
   saveModuleData(context, data) {
-    if (data.moduleId) {
-      return moduleService.saveModule(data)
-        .then(response => context.commit('setModuleData', response))
-        .catch(error => context.commit('error', error));
-    }
-    return moduleService.createModule(data)
-      .then(response => context.commit('setModuleData', response))
+    return moduleService.saveModule(data)
+      .then((response) => {
+        if (response.message && response.message === 'SUCCESS') {
+          context.commit('saveModule', response.id);
+        }
+      })
       .catch(error => context.commit('error', error));
   },
 };

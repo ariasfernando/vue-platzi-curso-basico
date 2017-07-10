@@ -28,8 +28,8 @@
       <div class="col-xs-3 header-col">
         <div class="vertical-center">
           <button class="btn btn-default" @click="preview"><i class="glyphicon glyphicon-phone"></i>Preview</button>
-          <button class="btn btn-default save-as-draft" @click.prevent="saveModule" :disabled="errors.any()">Draft</button>
-          <a class="btn btn-continue" href="#" @click.prevent="publish">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
+          <button class="btn btn-default save-as-draft" @click.prevent="saveModule('draft')" :disabled="errors.any()">Draft</button>
+          <a class="btn btn-continue" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
     </div>
@@ -166,9 +166,10 @@
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
           });
       },
-      saveModule() {
+      saveModule(status) {
         this.$store.commit("global/setLoader", true);
         let data = this.module;
+        data.status = status;
 
         // TODO: Trigger event editModule.onInit
         this.$store.dispatch("module/saveModuleData", data)

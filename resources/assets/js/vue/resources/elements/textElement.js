@@ -13,36 +13,42 @@ module.exports = {
   },
   "settings": [
     {
+      "link": "style",
       "label": "Color",
       "name": "color",
       "type": "text",
       "value": "#000000"
     },
     {
+      "link": "style",
       "label": "Line Height",
       "name": "lineHeight",
       "type": "text",
       "value": "12px"
     },
     {
+      "link": "style",
       "label": "Padding Top",
       "name": "paddingTop",
       "type": "text",
       "value": "10px"
     },
     {
+      "link": "style",
       "label": "Padding Right",
       "name": "paddingRight",
       "type": "text",
       "value": "10px"
     },
     {
+      "link": "style",
       "label": "Padding Bottom",
       "name": "paddingBottom",
       "type": "text",
       "value": "10px"
     },
     {
+      "link": "style",
       "label": "Padding Right",
       "name": "paddingRight",
       "type": "text",
