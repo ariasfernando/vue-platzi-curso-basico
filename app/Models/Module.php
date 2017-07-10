@@ -21,7 +21,7 @@ class Module extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['name', 'key', 'structure', 'status'];
+    protected $fillable = ['name', 'key', 'structure', 'status', 'type'];
 
 
 

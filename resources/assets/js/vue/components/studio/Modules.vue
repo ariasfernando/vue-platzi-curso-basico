@@ -82,9 +82,6 @@
             this.$root.$toast(error, {className: 'et-warn'});
           });
       },
-      editModule (module) {
-        this.$router.push('edit/' + module.id);
-      },
       deleteModule (moduleId) {
         if (confirm("Are you sure?")) {
           moduleService.deleteModule(moduleId)
