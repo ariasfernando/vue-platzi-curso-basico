@@ -18,6 +18,5 @@
 @endsection
 
 @section('footer-script')
-	<script src="{{ cdn(elixir('js/plugins.js')) }}"></script>
 	<script src="{{ cdn(elixir('js/dashboard.js')) }}"></script>
 @stop
