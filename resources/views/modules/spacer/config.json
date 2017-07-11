@@ -1,8 +1,9 @@
 {
-	"title": "Spacer",
+	"name": "Spacer",
 	"action": "add",
 	"app_name": "base",
 	"module_id": "spacer",
+	"key": "spacer",
 	"level": "single",
 	"file_parent": "base",
 	"type": "custom",

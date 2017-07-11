@@ -35,16 +35,16 @@ class LibraryDeny extends Command
         }
 
         $role_data = Role::where('name', '=', $name)->firstOrFail();
-        $libraries = \Config::get("view.libraries", []);
+        $role_permissions = $role_data->permissions;
 
         $libraries_array = [];
-        $value = null;
-
-        foreach ($libraries as $key => $value) {
-            if (in_array($key, $role_data['libraries']) && $key != "default") {
-                $libraries_array[] = $key;
+        foreach ($role_data->permissions as $permission) {
+            if (substr( $permission, 0, 15 ) === "access_library_") {
+                $libraries_array[] = substr( $permission, 15, strlen($permission) );
             }
         }
+
+        $value = null;
 
         if (count($libraries_array) === 0) {
             $this->info("The role " . $name . " haven't libraries to deny !");
@@ -56,14 +56,20 @@ class LibraryDeny extends Command
             $library_choice = $this->ask('Select a library: ('.join(", ", $libraries_array).')');
 
             if (strtolower($library_choice) == "all") {
-                $role_data->libraries = [];
+                foreach ($role_permissions as $key => $permission) {
+                    if (substr( $permission, 0, 15 ) === "access_library_") {
+                        unset($role_permissions[$key]);
+                    }
+                }
             } elseif (in_array($library_choice, $libraries_array)) {
-                $role_data->libraries = array_values(array_diff($role_data->libraries, [$library_choice]));
+                if(($key = array_search("access_library_" . $library_choice, $role_permissions)) !== false) {
+                    unset($role_permissions[$key]);
+                }
             } else {
                 $this->error("The library " . $library_choice . " doesn't exist!");
                 return false;
             }
-
+            $role_data->permissions = $role_permissions;
             $role_data->save();
             $this->info('The role ' . $name . ' was updated!');
         }

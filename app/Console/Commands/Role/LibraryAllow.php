@@ -3,6 +3,7 @@
 namespace Stensul\Console\Commands\Role;
 
 use Stensul\Models\Role;
+use Stensul\Models\Library;
 use Illuminate\Console\Command;
 
 class LibraryAllow extends Command
@@ -35,19 +36,17 @@ class LibraryAllow extends Command
         }
 
         $role_data = Role::where('name', '=', $name)->firstOrFail();
-        $libraries = \Config::get("view.libraries", []);
+        $libraries = Library::all(['name','key'])->toArray();
 
         $libraries_array = [];
         $value = null;
         
-        foreach ($libraries as $key => $value) {
-            if (!in_array($key, $role_data['libraries']) && $key != "default") {
-                $libraries_array[] = $key;
-            }
+        foreach ($libraries as $library) {
+            $libraries_array[] = $library['key'];
         }
 
         if (count($libraries_array) === 0) {
-            $this->info('The role ' . $name . ' has access to all the libraries!');
+            $this->info('There are no libraries created.');
         } else {
             if (count($libraries_array) > 1) {
                 array_unshift($libraries_array, "all");
@@ -57,9 +56,10 @@ class LibraryAllow extends Command
 
             if (strtolower($library_choice) == "all") {
                 array_shift($libraries_array);
-                $role_data->libraries = array_merge($role_data->libraries, $libraries_array);
+                array_walk($libraries_array, function(&$value, $key) { $value = 'access_library_' . $value; });
+                $role_data->permissions = array_merge($role_data->permissions, $libraries_array);
             } elseif (in_array($library_choice, $libraries_array)) {
-                $role_data->libraries = array_merge($role_data->libraries, [$library_choice]);
+                $role_data->permissions = array_merge($role_data->permissions, ['access_library_' . $library_choice]);
             } else {
                 $this->error("The library " . $library_choice . " doesn't exist!");
                 return false;
