@@ -10,7 +10,7 @@
 	<section class="col-xs-12">
 
 		<div class="text-center">
-			<a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">Admin - Stensul</a>
+			<a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">Admin - stensul</a>
 		</div>
 
 		{{-- Login error message --}}
@@ -32,19 +32,16 @@
 				@endif
 
 				<div class="form-group">
-					<label>E-Mail Address</label>
 					<div>
-						<input type="email" class="form-control" name="email" value="{{ old('email') }}">
+						<input type="email" class="form-control" name="email" placeholder="E-Mail Address" value="{{ old('email') }}">
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label>Password</label>
 					<div class="row">
-						<input type="password" class="form-control" name="password">
+						<input type="password" class="form-control" placeholder="Password" name="password">
 					</div>
 				</div>
-
 
 				<div class="form-group submit-row">
 					<div class="text-center">

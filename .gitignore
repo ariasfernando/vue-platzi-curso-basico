@@ -10,7 +10,6 @@
 /public/vendor/
 /bower_components
 /bootstrap/cache/
-composer.lock
 npm-debug.log
 .buildpath
 .env
@@ -23,6 +22,7 @@ npm-debug.log
 composer.phar
 /storage/data
 docker-compose.yaml
+docker-compose.yml
 .coverdata
 .nyc_output
 .coverrun

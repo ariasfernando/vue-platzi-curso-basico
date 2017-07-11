@@ -143,44 +143,6 @@ class Marketo implements ApiConnector
     }
 
     /**
-     * Get one Marketo folder by a given name.
-     *
-     * @return array|null
-     */
-    private function getFolderByName()
-    {
-        $folder = null;
-        $folder_config = $this->marketo_config['folder_by_name'];
-        $key = 'api:marketo:folder:' . strtolower($folder_config['params']['name']);
-
-        if (Cache::has($key)) {
-            $folder = Cache::get($key);
-        } else {
-            $folder_params = [
-                'url' => $this->marketo_config['api_path']
-                    . $folder_config['url']
-                    . '?'
-                    . http_build_query($folder_config['params']),
-                'config' => [],
-                'options' => [
-                    'headers' => [
-                        'accept' => 'application/json',
-                        'Authorization' => 'Bearer ' . $this->access_token
-                    ]
-                ],
-            ];
-            $resp = $this->call('folder', $folder_params);
-
-            if (isset($resp['status']) && $resp['status'] === 'success') {
-                $folder = array_shift($resp['data']['result']);
-                Cache::add($key, $folder, Carbon::now()->addHour());
-            }
-        }
-
-        return $folder;
-    }
-
-    /**
      * Get Marketo folder data.
      *
      * @return array|null
@@ -217,36 +179,6 @@ class Marketo implements ApiConnector
                     Cache::add($key, $folder, Carbon::now()->addHour());
                 }
             }
-        }
-
-        return $folder;
-    }
-
-    /**
-     * Get Marketo list of folder.
-     *
-     * @return array|null
-     */
-    private function getFolderList()
-    {
-        $folder = null;
-        $folder_config = $this->marketo_config['list_folders'];
-
-        $folder_params = [
-            'url' => $this->marketo_config['api_path']
-                . $folder_config['url'],
-            'config' => [],
-            'options' => [
-                'headers' => [
-                    'accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->access_token
-                ]
-            ]
-        ];
-        $resp = $this->call('list_folders', $folder_params);
-
-        if (isset($resp['status']) && $resp['status'] === 'success') {
-            $folder = array_shift($resp['data']['result']);
         }
 
         return $folder;

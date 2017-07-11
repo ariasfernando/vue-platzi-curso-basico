@@ -28,8 +28,8 @@
       <div class="col-xs-3 header-col">
         <div class="vertical-center">
           <button class="btn btn-default" @click="preview"><i class="glyphicon glyphicon-phone"></i>Preview</button>
-          <button class="btn btn-default save-as-draft" @click.prevent="saveModule" :disabled="errors.any()">Draft</button>
-          <a class="btn btn-continue" href="#" @click.prevent="publish">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
+          <button class="btn btn-default save-as-draft" @click.prevent="saveModule('draft')" :disabled="errors.any()">Draft</button>
+          <a class="btn btn-continue" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@
       <section v-if="ready" class="col-xs-12 section-container">
 
         <!-- START: Left Bar -->
-        <aside class="col-xs-3 left-bar">
+        <aside class="col-xs-2 left-bar">
           <div class="module-settings">
             <h4>Module Settings</h4><hr>
 
@@ -91,9 +91,9 @@
         <!-- END: Left Bar -->
 
         <!-- START: Module Container -->
-        <div class="col-xs-6 module-container">
+        <div class="col-xs-7 module-container">
           <div class="col-xs-12">
-            <module :module="module" @set-component="setCurrentComponent"></module>
+            <module></module>
           </div>
 
           <div v-if="$route.query.debug" class="col-xs-12">
@@ -108,7 +108,7 @@
 
           <div class="module-settings" v-if="currentComponent">
             <div class="fields">
-              <component-settings :component="currentComponent"></component-settings>
+              <component-settings></component-settings>
             </div>
           </div>
 
@@ -133,13 +133,15 @@
     name: 'EditModule',
     computed: {
       module() {
-        return this.$store.state.module.module
+        return this.$store.state.module.module;
+      },
+      currentComponent() {
+        return this.$store.state.module.currentComponent;
       }
     },
     data () {
       return {
-        ready: false,
-        currentComponent: null
+        ready: false
       }
     },
     components: {
@@ -150,12 +152,10 @@
     methods: {
       loadModule() {
         this.$store.commit("global/setLoader", true);
-        let data = {
-          moduleId: this.$route.params.id || undefined
-        };
+        const moduleId = this.$route.params.id || undefined;
 
         // TODO: Trigger event editModule.onInit
-        this.$store.dispatch("module/getModuleData", data)
+        this.$store.dispatch("module/getModuleData", moduleId)
           .then( response => {
             // TODO: Trigger event editModule.onLoaded
             this.ready = true;
@@ -164,9 +164,10 @@
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
           });
       },
-      saveModule() {
+      saveModule(status) {
         this.$store.commit("global/setLoader", true);
         let data = this.module;
+        data.status = status;
 
         // TODO: Trigger event editModule.onInit
         this.$store.dispatch("module/saveModuleData", data)
@@ -178,8 +179,8 @@
               return;
             }
 
-            this.ready = true;
             this.$store.commit("global/setLoader", false);
+            this.$router.push('/');
           }).catch( error => {
             this.$store.commit("global/setLoader", false);
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
@@ -223,9 +224,6 @@
       resetStyle(e) {
         e.target.style.opacity = "";
       },
-      setCurrentComponent(ref) {
-        this.currentComponent = this.module.structure.columns[ref.columnId].components[ref.componentId];
-      },
       changeMode(mode) {
         this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});
       },
@@ -233,18 +231,24 @@
         this.$root.$toast('Preview event', {className: 'et-info'});
       },
       draft() {
-
         this.$root.$toast('Draft event', {className: 'et-info'});
       },
       publish() {
         this.$root.$toast('Publish event', {className: 'et-info'});
+      },
+      toggleSidebar() {
+        const sidebar = document.getElementById('admin-sidebar');
+        sidebar.style.display = 'none';
+
+        const container = document.getElementsByClassName('base-admin')[0];
+        container.style.paddingLeft = 0;
       }
     },
     created () {
       this.loadModule();
     },
     mounted () {
-      // TODO: Trigger event editModule.onMounted
+      this.toggleSidebar();
     }
   };
 </script>
@@ -266,10 +270,9 @@
     .header {
       color: #FFFFFF;
       background-color: @stensul-purple;
-      height: 80px;
+      height: 60px;
       box-shadow: 0 8px 6px -6px #000;
-      margin-bottom: 20px;
-      padding: 15px 0;
+      padding: 0;
 
       .header-col {
         height: 100%;
@@ -477,7 +480,7 @@
     }
 
     .module-table .st-col {
-      border: 1px dashed @focus;
+      background-color: #f4f4f4;
     }
 
     .is-danger {

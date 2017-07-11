@@ -19,16 +19,25 @@
                cellpadding="0" 
                cellspacing="0" 
                border="0" 
-               class="st-content-componetn"
+               class="st-content-component"
         >
-            <tr v-for="(component, componentId) in column.components">
-                <td>
-                    <component :is="component.type" 
-                         :component="component" 
-                         :module-id="module.id" 
-                         :column-id="columnId"
-                         :component-id="componentId" 
-                         @set-component="setComponent"></component>
+            <tr>
+                <td width="100%">
+                    <draggable v-model="column.components" 
+                               :element="'table'" 
+                               :options="{handle:'.icon-move'}" 
+                               width="100%"
+                    >
+                        <component  v-for="(component, componentId) in column.components"
+                                    :is="component.type"
+                                    :component="component"
+                                    :module-id="module.id"
+                                    :column-id="columnId"
+                                    :component-id="componentId"
+                                    :key="componentId"
+                                    class="st-component"></component>
+
+                    </draggable>
                 </td>
             </tr>
         </table>
@@ -61,18 +70,28 @@
                cellpadding="0" 
                cellspacing="0" 
                border="0" 
-               class="st-content-componetn"
+               class="st-content-component"
         >
-            <tr v-for="(component, componentId) in column.components">
-                <td>
-                    <component :is="component.type" 
-                         :component="component" 
-                         :module-id="module.id" 
-                         :column-id="columnId"
-                         :component-id="componentId" 
-                         @set-component="setComponent"></component>
+            <tr>
+                <td width="100%">
+                    <draggable v-model="column.components" 
+                               :element="'table'" 
+                               :options="{handle:'.icon-move'}" 
+                               width="100%"
+                    >
+                        <component  
+                          v-for="(component, componentId) in column.components"
+                          :is="component.type" 
+                          :component="component" 
+                          :module-id="module.id" 
+                          :column-id="columnId"
+                          :component-id="componentId" 
+                          :key="componentId"
+                          class="st-component"></component>
+                    </draggable>            
                 </td>
             </tr>
+
         </table>
 
         <!-- Empty Col -->
@@ -94,18 +113,23 @@
   import ButtonElement from './elements/ButtonElement.vue'
   import ImageElement from './elements/ImageElement.vue'
   import DividerElement from './elements/DividerElement.vue'
+  import Draggable from 'vuedraggable'
   import { defaultElements } from '../../resources/elements'
 
   module.exports = {
     name: 'Module',
-    props: ['module'],
     components: {
+      Draggable,  
       TextElement,
       ButtonElement,
       ImageElement,
       DividerElement
     },
-
+    computed: {
+      module() {
+        return this.$store.state.module.module
+      }
+    },
     methods: {
       elementDrop(e) {
         if ( e.target.className.indexOf("st-col") > -1 || e.target.className.indexOf("empty-cell") > -1 ) {
@@ -117,8 +141,8 @@
           let indexOf = this.module.structure.columns[colId].components.indexOf(component);
 
           let ref = {
-            columnId: colId,
-            componentId: indexOf
+            columnId: +colId,
+            componentId: +indexOf
           };
 
           this.setComponent(ref);
@@ -138,8 +162,7 @@
         }
       },
       setComponent(ref) {
-        console.log('[Module] Emit set-component');
-        this.$emit('set-component', ref);
+        this.$store.commit("module/setCurrentComponent", ref);
       }
     }
   };
@@ -148,6 +171,18 @@
 <style lang="less">
   @focus: #69dac8;
   @focus-light: lighten(@focus, 30%);
+  @hover: #ece7f5;
+  @icon-option: #56106d;
+  
+  .st-component{
+    &:hover{
+        outline: 1px solid @icon-option;
+        background-color: @hover;
+        .icon-move{
+          display: block;
+        }
+    }
+  }
 
   .empty-col {
     background-color: @focus-light;

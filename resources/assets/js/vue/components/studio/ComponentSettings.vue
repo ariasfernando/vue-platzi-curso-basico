@@ -1,29 +1,16 @@
 <template>
   <div class="component-settings" v-if="ready">
-    <h4>Available Plugins</h4><hr>
-
+    <h4>Element Settings</h4><hr>
     <div class="default-settings">
       <form class="form-horizontal">
-        <div class="form-group" v-for="(p, key) in plugins">
-          <label class="col-sm-4 control-label">{{ p.name }}</label>
-          <div class="col-sm-8">
-            <toggle-button @change="togglePlugin(key)" :value="component.enabledPlugins.indexOf(key) !== -1 ? true : false" color="#82C7EB" :sync="true" :labels="true"></toggle-button>
-          </div>
-        </div>
-      </form>
-    </div>
-
-    <h4>Default Settings</h4><hr>
-    <div class="default-settings">
-      <form class="form-horizontal">
-        <div class="form-group" v-for="setting in component.settings">
+        <div class="form-group" v-for="(setting, key) in component.settings">
           <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
           <div class="col-sm-8">
             <input v-if="setting.type === 'text'" v-model="setting.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                   :name="setting.name" type="text" :placeholder="setting.label">
+                   :name="setting.name" type="text" :placeholder="setting.label" @input="updateComponent">
 
-            <span v-if="setting.type == 'switch'">
-              <toggle-button :value="setting.value" color="#82C7EB" :sync="true" :labels="true"></toggle-button>
+            <span v-if="setting.type === 'switch'">
+              <toggle-button :value="setting.value" color="#82C7EB" :sync="true" :labels="true" @change="changeSetting(key, setting)"></toggle-button>
             </span>
 
             <span v-show="errors.has(setting.name)" class="help is-danger">{{ errors.first(setting.name) }}</span>
@@ -34,18 +21,18 @@
 
     <p class="sep"><br></p>
 
-    <div v-for="plugin in component.enabledPlugins" >
-      <h4>{{ plugins[plugin].name }}</h4><hr>
+    <div v-for="(plugin, key) in component.plugins">
+      <h4>{{ plugin.name }}</h4><hr>
       <div class="default-settings">
         <form class="form-horizontal">
-          <div class="form-group" v-for="field in plugins[plugin].fields">
+          <div class="form-group" v-for="field in plugin.fields">
             <label class="col-sm-4 control-label" :for="field.name">{{ field.label }}</label>
             <div class="col-sm-8">
               <input v-if="field.type === 'text'" v-model="field.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }"
-                     :name="field.name" type="text" :placeholder="field.label">
+                     :name="field.name" type="text" :placeholder="field.label" :link="field.link" @input="updateComponent">
 
-              <span v-if="field.type == 'switch'">
-                <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true"></toggle-button>
+              <span v-if="field.type === 'switch'">
+                <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true" @change="changePlugin(key, field)"></toggle-button>
               </span>
               <span v-show="errors.has(field.name)" class="help is-danger">{{ errors.first(field.name) }}</span>
             </div>
@@ -65,58 +52,70 @@
   import _ from 'underscore-contrib'
 
   export default {
-    props: ['component'],
+    components: {
+      ToggleButton
+    },
     data () {
       return {
-        plugins: [],
         ready: false
       }
     },
     computed: {
-      enabledPlugins() {
-        return this.component.enabledPlugins || []
+      module() {
+        return this.$store.state.module.module;
+      },
+      currentComponent() {
+        return this.$store.state.module.currentComponent;
+      },
+      component() {
+        let component = {};
+
+        if (!_.isEmpty(this.currentComponent)) {
+          component = this.module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
+        }
+        return component;
       }
     },
-    components: {
-      ToggleButton
-    },
-    created() {
+    watch : {
+      component : function (value) {
+        if (!_.isEmpty(this.component)) {
+          // Component Type
+          const type = this.component.type.replace('-element', '');
 
-      // Component Type
-      const type = this.component.type.replace('-element', '');
+          // Base plugins
+          this.component.plugins = Plugins[type];
 
-      // Base plugins
-      this.plugins = Plugins[type];
+          if (this.$customer) {
+            // Check for customer Plugins
+            let customerPlugins = _.getPath(this.$customer, 'admin.modules.plugins', {});
+            if (!_.isEmpty(customerPlugins)) {
+              this.component.plugins = _.extend(Plugins[type], customerPlugins[type]);
+            }
+          }
 
-      if ( this.$customer ) {
-        // Check for customer Plugins
-        let customerPlugins = _.getPath(this.$customer, 'admin.modules.plugins', {});
-        if (!_.isEmpty(customerPlugins)) {
-          this.plugins = _.extend(Plugins[type], customerPlugins[type]);
+          this.ready = true;
         }
       }
-
-      this.component.plugins = this.component.plugins || [];
-
-      _.each(this.component.enabledPlugins, (name) => {
-        if ( this.component.plugins.indexOf(this.plugins[name]) === -1 ) {
-          this.component.plugins.push(this.plugins[name]);
-        }
-      });
-
-      this.ready = true;
     },
     methods: {
-      togglePlugin(plugin) {
-        let idx = this.component.enabledPlugins.indexOf(plugin);
-
-        if ( idx !== -1 ) {
-          this.component.enabledPlugins.splice(idx, 1);
-          this.component.plugins.splice(this.component.plugins.indexOf(this.plugins[plugin]), 1);
-        } else {
-          this.component.enabledPlugins.push(plugin);
-          this.component.plugins.push(this.plugins[plugin]);
-        }
+      updateComponent() {
+        this.$store.commit('module/updateComponent', {
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          component: this.component,
+        });
+      },
+      changeSetting(key, setting) {
+        setting.value = !setting.value;
+        this.component.settings[key] = setting;
+        this.updateComponent();
+      },
+      changePlugin(key, field) {
+        const plugin = this.component.plugins[key];
+        field.value = !field.value;
+        const fieldIdx = plugin.fields.indexOf(field);
+        plugin.fields[fieldIdx] = field;
+        this.updateComponent();
       }
     }
   }

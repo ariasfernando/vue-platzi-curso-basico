@@ -1,21 +1,11 @@
 <template>
-  <table>
-    <tr>
-      <td>
-        <!-- TEXT ELEMENT -->
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" @click="setComponent">
-          <tr>
-            <td width="100%" class="st-text-style" align="center" :style="component.style">
-              <tiny-mce v-if="component.editor" :id="editorId" :options="component.editor" :value="component.text"
-                        data-key="text" @input="input"></tiny-mce>
-              <p v-else :data-line-limit="maxLines" :truncate="truncate" v-html="component.text" @keyup="change"
-                 @paste="change"></p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+  <!-- TEXT ELEMENT -->
+  <tr @click="setComponent">
+    <td width="100%" class="st-text-style st-position-relative" align="center" :style="component.style">
+      <tiny-mce :id="editorId" :value="component.text" data-key="text" @input="input"></tiny-mce>
+      <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
+    </td>
+  </tr>
   <!-- TEXT ELEMENT ENDS -->
 </template>
 
@@ -33,6 +23,11 @@
     components: {
       'tiny-mce': TinyMCE
     },
+    data(){
+      return {
+        editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-')
+      }
+    },
     timeoutID: null,
     created () {
       this.setupModule();
@@ -41,7 +36,6 @@
       setupModule () {
         this.maxLines = null;
         this.truncate = null;
-        this.editorId = ['editor', this.moduleId, this.columnId, this.componentId].join('-');
 
         if (this.component.directives && this.component.directives.maxLines) {
           this.maxLines = this.component.directives.maxLines;
@@ -51,10 +45,9 @@
           this.truncate = this.component.directives.truncate;
         }
 
-
       },
       input (text, key) {
-        this.$store.commit('updateElement', {
+        this.$store.commit('module/updateElement', {
           moduleId: this.moduleId,
           columnId: this.columnId,
           componentId: this.componentId,
@@ -64,27 +57,25 @@
         });
       },
       change (event) {
-        let _this = this;
         clearTimeout(this.$timeoutID);
 
         this.$timeoutID = setTimeout(() => {
           let text = event.target.innerHTML.trim();
-          let key = $(event.target).data('key');
+          let key = event.target.dataset.key;
 
           let edited = {};
           edited[key] = text;
 
-          this.$store.commit('updateElement', {
-            moduleId: _this.moduleId,
-            columnId: _this.columnId,
-            componentId: _this.componentId,
+          this.$store.commit('module/updateElement', {
+            moduleId: this.moduleId,
+            columnId: this.columnId,
+            componentId: this.componentId,
             data: edited
           });
         }, 500);
       },
       setComponent() {
-        console.log('[TextElement] Emit set-component');
-        this.$emit('set-component', {
+        this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
           componentId: this.componentId
         });
@@ -92,3 +83,30 @@
     }
   };
 </script>
+
+<style lang="less">
+  @icon-option: #56106d;
+
+  .st-position-relative{
+    position: relative;
+  }
+
+  .icon-move {
+    display: none;
+    cursor: move;
+    cursor: -webkit-grabbing;
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    color: #fff;
+    z-index: 5;
+    right: -15px;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    line-height: 30px;
+    background-color: @icon-option;
+    opacity: 1;
+    margin-top: -15px;
+  }
+</style>

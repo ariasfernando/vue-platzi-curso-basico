@@ -163,24 +163,16 @@ gulp.task('elixir-scripts', function () {
         .scripts(
           [
             'bower/jquery/dist/jquery.js',
-            'bower/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js'
-            //'bower/bootstrap/dist/js/bootstrap.min.js',
-            //'bower/jquery-ui/jquery-ui.min.js',
-            //'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
-            //'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
-            // -- TinyMCE editor --
-            // 'bower/tinymce/tinymce.js',
-            // 'bower/tinymce/themes/modern/theme.js',
-            // 'bower/tinymce/plugins/paste/plugin.js',
-            // 'bower/tinymce/plugins/textcolor/plugin.js',
-            // 'bower/tinymce/plugins/colorpicker/plugin.js',
-            // 'bower/tinymce/plugins/lists/plugin.js',
-            // 'bower/tinymce/plugins/autolink/plugin.js',
-            // 'bower/tinymce/plugins/link/plugin.js',
-            // 'bower/tinymce/plugins/advlist/plugin.js',
-            // -- Common scripts --
-            //'js/library/application-globals.js',
-            //'js/library/application-utils.js'
+            'bower/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js',
+            'bower/tinymce/tinymce.js',
+            'bower/tinymce/themes/modern/theme.js',
+            'bower/tinymce/plugins/paste/plugin.js',
+            'bower/tinymce/plugins/textcolor/plugin.js',
+            'bower/tinymce/plugins/colorpicker/plugin.js',
+            'bower/tinymce/plugins/lists/plugin.js',
+            'bower/tinymce/plugins/autolink/plugin.js',
+            'bower/tinymce/plugins/link/plugin.js',
+            'bower/tinymce/plugins/advlist/plugin.js'
           ],
           jsDestinationPath + 'library-v2.js',
           assetsPath
@@ -230,18 +222,18 @@ gulp.task('elixir-scripts', function () {
         )
 
         // === Plugins ===
-        .scripts(
-          ['js/plugins/*.js', 'js/plugins/**/*.js'],
-          jsDestinationPath + 'plugins.js',
-          assetsPath
-        )
-
-        // === Modules ===
-        .scripts(
-          ['../views/base/modules/**/*.js', 'js/library/modules-placeholder.js'],
-          jsDestinationPath + 'modules.js',
-          assetsPath
-        )
+        // .scripts(
+        //   ['js/plugins/*.js', 'js/plugins/**/*.js'],
+        //   jsDestinationPath + 'plugins.js',
+        //   assetsPath
+        // )
+        //
+        // // === Modules ===
+        // .scripts(
+        //   ['../views/base/modules/**/*.js', 'js/library/modules-placeholder.js'],
+        //   jsDestinationPath + 'modules.js',
+        //   assetsPath
+        // )
 
         // === Dashboard page ===
         .scripts(
@@ -325,12 +317,11 @@ gulp.task('elixir-scripts', function () {
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-less', () => {
-  elixir((mix) => {
-    mix.less(appName + '/base.less');
-    mix.less(appName + '/admin.less');
-  });
+    elixir((mix) => {
+        mix.less( appName + '/base-v2/base.less');
+        mix.less( appName + '/base-v2/admin.less');
+    });
 });
-
 
 /*
  | --------------------------------------------------------------------------

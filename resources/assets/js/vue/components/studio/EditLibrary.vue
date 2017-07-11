@@ -407,10 +407,20 @@
       },
       deleteGroup(idx) {
         this.library.modules.splice(idx, 1);
+      },
+      toggleSidebar() {
+        const sidebar = document.getElementById('admin-sidebar');
+        sidebar.style.display = 'none';
+
+        const container = document.getElementsByClassName('base-admin')[0];
+        container.style.paddingLeft = 0;
       }
     },
     created () {
       this.loadLibrary();
+    },
+    mounted () {
+      this.toggleSidebar();
     }
   };
 </script>

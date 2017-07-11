@@ -1,3 +1,4 @@
+import _ from 'underscore-contrib';
 import moduleService from '../services/module';
 
 const state = {
@@ -25,15 +26,26 @@ const mutations = {
   setCurrentComponent(state, data) {
     state.currentComponent = data;
   },
+  updateElement(state, data) {
+    _.each(data.data, (value, field) => {
+      state.module.structure.columns[data.columnId].components[data.componentId][field] = value;
+    });
+  },
+  updateComponent(state, data) {
+    state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
+  },
+  saveModule(state, moduleId) {
+    state.module.id = moduleId;
+  },
   error(state, err) {
     console.log(err);
   },
 };
 
 const actions = {
-  getModuleData(context, data) {
-    if (data.moduleId) {
-      return moduleService.getModule()
+  getModuleData(context, moduleId) {
+    if (moduleId) {
+      return moduleService.getModule(moduleId)
         .then(response => context.commit('setModuleData', response))
         .catch(error => context.commit('error', error));
     }
@@ -43,18 +55,14 @@ const actions = {
   },
 
   saveModuleData(context, data) {
-    if (data.moduleId) {
-      return moduleService.saveModule(data)
-        .then(response => context.commit('setModuleData', response))
-        .catch(error => context.commit('error', error));
-    }
-    return moduleService.createModule(data)
-      .then(response => context.commit('setModuleData', response))
+    return moduleService.saveModule(data)
+      .then((response) => {
+        if (response.message && response.message === 'SUCCESS') {
+          context.commit('saveModule', response.id);
+          return response.id;
+        }
+      })
       .catch(error => context.commit('error', error));
-  },
-
-  setCurrentComponent(context, data) {
-    context.commit('setCurrentComponent', data);
   },
 };
 

@@ -141,7 +141,7 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         $permissions = $this->getPermissions();
 
         foreach ($libraries as $library) {
-            if (in_array("access_library_" . $library['key'], $permissions)) { 
+            if (in_array("access_library_" . $library['key'], $permissions)) {
                 $user_visibility[] = $library;
             }
         }

@@ -48,7 +48,7 @@ class DashboardController extends Controller
 
     public function getCampaigns(Request $request, $type)
     {
-        $user_visibility = array_map(function($library) {
+        $user_visibility = array_map(function ($library) {
             return new ObjectID($library['_id']);
         }, Auth::user()->getLibraries());
 

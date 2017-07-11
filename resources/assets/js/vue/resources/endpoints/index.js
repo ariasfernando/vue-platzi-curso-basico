@@ -15,8 +15,7 @@ module.exports = {
   module: {
     getModule: { method: 'get', path: `${baseUrl}/admin/module/edit?moduleId=:moduleId` },
     getAllModules: { method: 'get', path: `${baseUrl}/admin/module/modules` },
-    saveModule: { method: 'post', path: `${baseUrl}/admin/module/edit` },
-    createModule: { method: 'post', path: `${baseUrl}/admin/module/create` },
+    saveModule: { method: 'post', path: `${baseUrl}/admin/module/save` },
     deleteModule: { method: 'post', path: `${baseUrl}/admin/module/delete` },
   },
   campaign: {
