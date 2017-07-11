@@ -63,10 +63,10 @@ class CampaignController extends Controller
                     $params['menu_list'] = $library->getModules();
                     $params['library_config'] = $library->config;
                     uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
-                        if ($menu_item_a['title'] == $menu_item_b['title']) {
+                        if ($menu_item_a['name'] == $menu_item_b['name']) {
                             return 0;
                         }
-                        return ($menu_item_a['title'] < $menu_item_b['title']) ? -1 : 1;
+                        return ($menu_item_a['name'] < $menu_item_b['name']) ? -1 : 1;
                     });
 
                     $params['tag_list'] = $saved_tags;

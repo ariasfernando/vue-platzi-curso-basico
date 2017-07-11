@@ -56,7 +56,11 @@ class LibraryDeny extends Command
             $library_choice = $this->ask('Select a library: ('.join(", ", $libraries_array).')');
 
             if (strtolower($library_choice) == "all") {
-                $role_permissions = [];
+                foreach ($role_permissions as $key => $permission) {
+                    if (substr( $permission, 0, 15 ) === "access_library_") {
+                        unset($role_permissions[$key]);
+                    }
+                }
             } elseif (in_array($library_choice, $libraries_array)) {
                 if(($key = array_search("access_library_" . $library_choice, $role_permissions)) !== false) {
                     unset($role_permissions[$key]);
