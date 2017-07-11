@@ -18,7 +18,7 @@
                  class="table table-bordered table-striped data-list">
             <thead>
             <tr>
-              <th class="sortable">
+              <th width="220" class="sortable">
                 <a href="#" class="" id="module_id" data-order-field="module_id">
                   _id
                   <i class="glyphicon glyphicon-menu-down pull-right"></i>
@@ -36,6 +36,12 @@
                   <i class="glyphicon glyphicon-menu-down pull-right"></i>
                 </a>
               </th>
+              <th class="sortable">
+                <a href="#" class="" id="status" data-order-field="status">
+                  Status
+                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
+                </a>
+              </th>
               <th width="150" class="bold">Actions</th>
             </tr>
             </thead>
@@ -44,6 +50,7 @@
               <td :title="module.id">{{ module.id }}</td>
               <td :title="module.name">{{ module.name }}</td>
               <td :title="module.type">{{ module.type }}</td>
+              <td :title="module.status">{{ module.status }}</td>
               <td class="text-right actions icons">
                 <router-link v-if="module.type === 'studio'" :to="'/edit/' + module.id"><i class="glyphicon glyphicon-pencil"></i></router-link>
 

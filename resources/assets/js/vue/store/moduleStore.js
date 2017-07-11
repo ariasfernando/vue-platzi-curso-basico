@@ -31,6 +31,9 @@ const mutations = {
       state.module.structure.columns[data.columnId].components[data.componentId][field] = value;
     });
   },
+  updateComponent(state, data) {
+    state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
+  },
   saveModule(state, moduleId) {
     state.module.id = moduleId;
   },

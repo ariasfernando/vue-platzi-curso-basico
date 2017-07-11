@@ -2,6 +2,7 @@ function Module(data = {}) {
   this.id = data._id || undefined;
   this.name = data.name || data.title || '';
   this.type = data.type || 'studio';
+  this.status = data.status || '';
   const style = data.style || {};
 
 
