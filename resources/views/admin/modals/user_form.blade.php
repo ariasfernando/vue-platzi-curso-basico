@@ -7,40 +7,41 @@
 
 		<!-- Input Name -->
 		<div class="modal-mpf-row">
+			<label>User First Name</label>
 			{!! Form::text('name', (isset($params['user']['name']))? $params['user']['name'] : '', array (
 				'class' => 'user_name',
-				'id' => 'user_name',
-				'placeholder' => 'Enter name here.'
+				'id' => 'user_name'
 			)) !!}
 		</div>
 
 		<!-- Input LastName -->
 		<div class="modal-mpf-row">
+			<label>User Last Name</label>
 			{!! Form::text('last_name',(isset($params['user']['last_name']))? $params['user']['last_name'] : '', array (
 				'class' => 'user_last_name',
-				'id' => 'user_last_name',
-				'placeholder' => 'Enter last name here.'
+				'id' => 'user_last_name'
 			)) !!}
 		</div>
 
 		<!-- Input Email -->
 		<div class="modal-mpf-row">
+			<label>User Email</label>
 			{!! Form::email('email',(isset($params['user']['email']))? $params['user']['email'] : '', array (
 				'class' => 'user_email',
 				'id' => 'user_email',
-				'placeholder' => 'Enter email here.',
 				'data-validation' => '{"required":"true", "email":"true"}'
 			)) !!}
 		</div>
 
 		<!-- Select Role -->
 		<div class="modal-mpf-row selector">
+			<label>Select User Role</label>
 			{!! Form::select('roles', $params['roles'], (isset($params['user']['roles']))? $params['user']['roles'] : '',array (
 				'class' => 'form-control selectpicker',
 				'id' => 'roles',
 				'name' => 'roles[]',
 				'multiple' => 'true',
-				'title' => 'Choose one or more roles ...',
+				'title' => '',
 				'data-validation' => '{"required":"true"}'
 			)); !!}
 		</div>
