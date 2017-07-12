@@ -127,9 +127,16 @@
   .btn-create {
 
     margin-bottom: 10px;
+    text-decoration: none!important;
 
-    a {
-      color: #FFFFFF;
+    a{
+      color: #666666!important;
+      text-decoration: none;
     }
+
+    &:hover a{
+      color: #ffffff!important;
+    }
+
   }
 </style>
