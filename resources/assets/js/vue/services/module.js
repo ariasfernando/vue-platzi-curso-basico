@@ -14,7 +14,8 @@ export default {
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body);
+      const module = new Module(response.body);
+      deferred.resolve(module);
     }).catch((err) => {
       deferred.reject(err);
     });
