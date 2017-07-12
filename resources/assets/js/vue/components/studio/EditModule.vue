@@ -64,26 +64,29 @@
               <div class="control">
                 <h5>Elements</h5> <hr>
 
-                <ul class="components-list">
-                  <li class="component-item" draggable="true" data-type="text-element" @dragstart="setData" @dragend="resetStyle">
+                <draggable :element="'ul'" 
+                           :options="options"
+                           width="100%"
+                           class="components-list"
+                >
+                  <li class="component-item" data-type="text-element" @dragend="resetStyle">
                     <i class="glyphicon glyphicon-font"></i>
                     <p>Text</p>
                   </li>
-                  <li class="component-item" draggable="true" data-type="image-element" @dragstart="setData" @dragend="resetStyle">
+                  <li class="component-item" data-type="image-element" @dragend="resetStyle">
                     <i class="fa fa-picture-o" aria-hidden="true"></i>
                     <p>Image</p>
                   </li>
-                  <li class="component-item" draggable="true" data-type="button-element" @dragstart="setData" @dragend="resetStyle">
+                  <li class="component-item" data-type="button-element" @dragend="resetStyle">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     <p>CTA</p>
                   </li>
-                  <li class="component-item" draggable="true" data-type="divider-element" @dragstart="setData" @dragend="resetStyle">
+                  <li class="component-item" data-type="divider-element" @dragend="resetStyle">
                     <i class="fa fa-minus-square-o" aria-hidden="true"></i>
                     <p>Divider</p>
                   </li>
-                </ul>
+                </draggable>  
               </div>
-
             </div>
 
           </div>
@@ -127,6 +130,7 @@
   import ComponentSettings from './ComponentSettings.vue'
   import { defaultElements } from '../../resources/elements'
   import moduleService from '../../services/module'
+  import Draggable from 'vuedraggable'
   import Spinner from '../common/Spinner.vue'
 
   export default {
@@ -141,12 +145,24 @@
     },
     data () {
       return {
-        ready: false
+        ready: false,
+        options: {
+          group:{ 
+            name:'componentsList',  
+            pull: 'clone', 
+            put: false, 
+          },
+          sort: false,
+          ghostClass: "ghost-component-menu",  // Class name for the drop placeholder
+          chosenClass: "chosen-component-menu",  // Class name for the chosen item
+          dragClass: "drag-component-menu"  // Class name for the dragging item
+        }
       }
     },
     components: {
       Module,
       ComponentSettings,
+      Draggable,
       Spinner
     },
     methods: {
@@ -213,14 +229,7 @@
             });
           }
         }
-      },
-      setData(e) {
-        let targetEl = e.target;
-        let elType = targetEl.getAttribute('data-type');
-        let Element = new defaultElements(elType);
 
-        e.dataTransfer.setData("component", JSON.stringify(Element));
-        e.target.style.opacity = .3;
       },
       resetStyle(e) {
         e.target.style.opacity = "";

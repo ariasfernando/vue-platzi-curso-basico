@@ -85,7 +85,7 @@
 </script>
 
 <style lang="less">
-  @icon-option: #56106d;
+  @icon-option: #9189a2;
 
   .st-position-relative{
     position: relative;
