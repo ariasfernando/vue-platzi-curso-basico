@@ -318,7 +318,7 @@ gulp.task('elixir-scripts', function () {
  */
 gulp.task('elixir-less', () => {
     elixir((mix) => {
-        mix.less( appName + '/base-v2/base.less');
+        mix.less( appName + '/base.less');
         mix.less( appName + '/base-v2/admin.less');
     });
 });
