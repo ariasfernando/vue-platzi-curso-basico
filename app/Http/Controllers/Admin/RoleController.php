@@ -118,7 +118,6 @@ class RoleController extends Controller
         $params = [
             "title" => "Edit Role",
             "permissions" => $modelData["permissions"],
-            "libraries" => $modelData["libraries"],
             "role" => $role_data
         ];
 
@@ -135,8 +134,6 @@ class RoleController extends Controller
         $role_data = Role::findOrFail($request->input("roleId"));
         $role_data->description = $request->input("description");
         $role_data->permissions = (is_null($request->input("permissions")))? [] : $request->input("permissions");
-        $role_data->libraries = (is_null($request->input("libraries"))
-            || $request->input("libraries") == "default" ) ? [] : $request->input("libraries");
 
         $role_data->save();
         return array("message"=> "SUCCESS");

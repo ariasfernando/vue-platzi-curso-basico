@@ -18,7 +18,7 @@
                  class="table table-bordered table-striped data-list">
             <thead>
             <tr>
-              <th class="sortable">
+              <th width="220" class="sortable">
                 <a href="#" class="" id="module_id" data-order-field="module_id">
                   _id
                   <i class="glyphicon glyphicon-menu-down pull-right"></i>
@@ -36,6 +36,12 @@
                   <i class="glyphicon glyphicon-menu-down pull-right"></i>
                 </a>
               </th>
+              <th class="sortable">
+                <a href="#" class="" id="status" data-order-field="status">
+                  Status
+                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
+                </a>
+              </th>
               <th width="150" class="bold">Actions</th>
             </tr>
             </thead>
@@ -43,12 +49,12 @@
             <tr v-for="(module, id) in modules" :data-module="id">
               <td :title="module.id">{{ module.id }}</td>
               <td :title="module.name">{{ module.name }}</td>
-              <td :title="module.class">{{ module.class }}</td>
+              <td :title="module.type">{{ module.type }}</td>
+              <td :title="module.status">{{ module.status }}</td>
               <td class="text-right actions icons">
-                <a href="#" class="edit" title="Edit" @click="editModule(module)"><i
-                  class="glyphicon glyphicon-pencil"></i></a>
+                <router-link v-if="module.type === 'studio'" :to="'/edit/' + module.id"><i class="glyphicon glyphicon-pencil"></i></router-link>
 
-                <a href="#" class="delete" title="Delete" @click="deleteModule(module.id)"><i
+                <a v-if="module.type === 'studio'" href="#" class="delete" title="Delete" @click="deleteModule(module.id)"><i
                   class="glyphicon glyphicon-trash"></i></a>
               </td>
             </tr>
@@ -82,16 +88,6 @@
           .catch((error) => {
             this.$root.$toast(error, {className: 'et-warn'});
           });
-      },
-      editModule (module) {
-
-        if ( module.class === 'pkg' ) {
-          this.$root.$toast('load form with settings', {className: 'et-warn'});
-          // router.go( /moduleId/legacy? )
-        } else {
-          this.$root.$toast('load module builder', {className: 'et-warn'});
-          // router.go( /moduleId )
-        }
       },
       deleteModule (moduleId) {
         if (confirm("Are you sure?")) {

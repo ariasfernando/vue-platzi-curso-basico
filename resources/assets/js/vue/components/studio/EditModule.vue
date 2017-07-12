@@ -26,10 +26,9 @@
       </div>
 
       <div class="col-xs-3 header-col">
-        <div class="vertical-center">
-          <button class="btn btn-default" @click="preview"><i class="glyphicon glyphicon-phone"></i>Preview</button>
-          <button class="btn btn-default save-as-draft" @click.prevent="saveModule" :disabled="errors.any()">Draft</button>
-          <a class="btn btn-continue" href="#" @click.prevent="publish">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
+        <div class="vertical-center pull-right">
+          <a class="btn btn-continue" href="#" @click.prevent="saveModule('draft')" :disabled="errors.any()">Save as draft<i class="glyphicon glyphicon-triangle-right"></i></a>
+          <a class="btn btn-continue" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
     </div>
@@ -64,26 +63,29 @@
               <div class="control">
                 <h5>Elements</h5> <hr>
 
-                <ul class="components-list">
-                  <li class="component-item" draggable="true" data-type="text-element" @dragstart="setData" @dragend="resetStyle">
+                <draggable :element="'ul'" 
+                           :options="options"
+                           width="100%"
+                           class="components-list"
+                >
+                  <li class="component-item" data-type="text-element" @dragend="resetStyle">
                     <i class="glyphicon glyphicon-font"></i>
                     <p>Text</p>
                   </li>
-                  <li class="component-item" draggable="true" data-type="image-element" @dragstart="setData" @dragend="resetStyle">
+                  <li class="component-item" data-type="image-element" @dragend="resetStyle">
                     <i class="fa fa-picture-o" aria-hidden="true"></i>
                     <p>Image</p>
                   </li>
-                  <li class="component-item" draggable="true" data-type="button-element" @dragstart="setData" @dragend="resetStyle">
+                  <li class="component-item" data-type="button-element" @dragend="resetStyle">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     <p>CTA</p>
                   </li>
-                  <li class="component-item" draggable="true" data-type="divider-element" @dragstart="setData" @dragend="resetStyle">
+                  <li class="component-item" data-type="divider-element" @dragend="resetStyle">
                     <i class="fa fa-minus-square-o" aria-hidden="true"></i>
                     <p>Divider</p>
                   </li>
-                </ul>
+                </draggable>  
               </div>
-
             </div>
 
           </div>
@@ -127,6 +129,7 @@
   import ComponentSettings from './ComponentSettings.vue'
   import { defaultElements } from '../../resources/elements'
   import moduleService from '../../services/module'
+  import Draggable from 'vuedraggable'
   import Spinner from '../common/Spinner.vue'
 
   export default {
@@ -141,23 +144,33 @@
     },
     data () {
       return {
-        ready: false
+        ready: false,
+        options: {
+          group:{ 
+            name:'componentsList',  
+            pull: 'clone', 
+            put: false, 
+          },
+          sort: false,
+          ghostClass: "ghost-component-menu",  // Class name for the drop placeholder
+          chosenClass: "chosen-component-menu",  // Class name for the chosen item
+          dragClass: "drag-component-menu"  // Class name for the dragging item
+        }
       }
     },
     components: {
       Module,
       ComponentSettings,
+      Draggable,
       Spinner
     },
     methods: {
       loadModule() {
         this.$store.commit("global/setLoader", true);
-        let data = {
-          moduleId: this.$route.params.id || undefined
-        };
+        const moduleId = this.$route.params.id || undefined;
 
         // TODO: Trigger event editModule.onInit
-        this.$store.dispatch("module/getModuleData", data)
+        this.$store.dispatch("module/getModuleData", moduleId)
           .then( response => {
             // TODO: Trigger event editModule.onLoaded
             this.ready = true;
@@ -166,9 +179,10 @@
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
           });
       },
-      saveModule() {
+      saveModule(status) {
         this.$store.commit("global/setLoader", true);
         let data = this.module;
+        data.status = status;
 
         // TODO: Trigger event editModule.onInit
         this.$store.dispatch("module/saveModuleData", data)
@@ -180,8 +194,8 @@
               return;
             }
 
-            this.ready = true;
             this.$store.commit("global/setLoader", false);
+            this.$router.push('/');
           }).catch( error => {
             this.$store.commit("global/setLoader", false);
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
@@ -213,14 +227,7 @@
             });
           }
         }
-      },
-      setData(e) {
-        let targetEl = e.target;
-        let elType = targetEl.getAttribute('data-type');
-        let Element = new defaultElements(elType);
 
-        e.dataTransfer.setData("component", JSON.stringify(Element));
-        e.target.style.opacity = .3;
       },
       resetStyle(e) {
         e.target.style.opacity = "";

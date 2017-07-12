@@ -1,12 +1,12 @@
 {
-	"title": "Spacer",
+	"name": "Spacer",
 	"action": "add",
 	"app_name": "base",
 	"module_id": "spacer",
+	"key": "spacer",
 	"level": "single",
-	"type": "spacer",
 	"file_parent": "base",
-	"class": "pkg",
+	"type": "custom",
 	"sizes": {
 		"default": 18,
 		"list": {

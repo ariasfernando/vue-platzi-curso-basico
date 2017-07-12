@@ -39,24 +39,28 @@ module.exports = {
       "value": "_blank"
     },
     {
+      "link": "style",
       "label": "Padding Top",
       "name": "paddingTop",
       "type": "text",
       "value": "10px"
     },
     {
+      "link": "style",
       "label": "Padding Right",
       "name": "paddingRight",
       "type": "text",
       "value": "10px"
     },
     {
+      "link": "style",
       "label": "Padding Bottom",
       "name": "paddingBottom",
       "type": "text",
       "value": "10px"
     },
     {
+      "link": "style",
       "label": "Padding Right",
       "name": "paddingRight",
       "type": "text",

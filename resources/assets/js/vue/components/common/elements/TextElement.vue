@@ -1,8 +1,9 @@
 <template>
   <!-- TEXT ELEMENT -->
   <tr @click="setComponent">
-    <td width="100%" class="st-text-style" align="center" :style="component.style">
+    <td width="100%" class="st-text-style st-position-relative" align="center" :style="component.style">
       <tiny-mce :id="editorId" :value="component.text" data-key="text" @input="input"></tiny-mce>
+      <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
     </td>
   </tr>
   <!-- TEXT ELEMENT ENDS -->
@@ -82,3 +83,30 @@
     }
   };
 </script>
+
+<style lang="less">
+  @icon-option: #9189a2;
+
+  .st-position-relative{
+    position: relative;
+  }
+
+  .icon-move {
+    display: none;
+    cursor: move;
+    cursor: -webkit-grabbing;
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    color: #fff;
+    z-index: 5;
+    right: -15px;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    line-height: 30px;
+    background-color: @icon-option;
+    opacity: 1;
+    margin-top: -15px;
+  }
+</style>

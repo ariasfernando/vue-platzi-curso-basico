@@ -4,10 +4,11 @@ namespace Stensul\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
-use Stensul\Providers\ModuleServiceProvider;
 
 class Module extends Eloquent
 {
+    use SoftDeletes;
+
     /**
      * The database table used by the model.
      *
@@ -20,7 +21,7 @@ class Module extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['name', 'key', 'structure', 'status'];
+    protected $fillable = ['name', 'key', 'structure', 'status', 'type'];
 
 
 

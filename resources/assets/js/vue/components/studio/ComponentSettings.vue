@@ -3,14 +3,14 @@
     <h4>Element Settings</h4><hr>
     <div class="default-settings">
       <form class="form-horizontal">
-        <div class="form-group" v-for="setting in component.settings">
+        <div class="form-group" v-for="(setting, key) in component.settings">
           <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
           <div class="col-sm-8">
             <input v-if="setting.type === 'text'" v-model="setting.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                   :name="setting.name" type="text" :placeholder="setting.label">
+                   :name="setting.name" type="text" :placeholder="setting.label" @input="updateComponent">
 
             <span v-if="setting.type === 'switch'">
-              <toggle-button :value="setting.value" color="#82C7EB" :sync="true" :labels="true"></toggle-button>
+              <toggle-button :value="setting.value" color="#82C7EB" :sync="true" :labels="true" @change="changeSetting(key, setting)"></toggle-button>
             </span>
 
             <span v-show="errors.has(setting.name)" class="help is-danger">{{ errors.first(setting.name) }}</span>
@@ -21,7 +21,7 @@
 
     <p class="sep"><br></p>
 
-    <div v-for="plugin in plugins">
+    <div v-for="(plugin, key) in component.plugins">
       <h4>{{ plugin.name }}</h4><hr>
       <div class="default-settings">
         <form class="form-horizontal">
@@ -29,10 +29,10 @@
             <label class="col-sm-4 control-label" :for="field.name">{{ field.label }}</label>
             <div class="col-sm-8">
               <input v-if="field.type === 'text'" v-model="field.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }"
-                     :name="field.name" type="text" :placeholder="field.label">
+                     :name="field.name" type="text" :placeholder="field.label" :link="field.link" @input="updateComponent">
 
               <span v-if="field.type === 'switch'">
-                <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true"></toggle-button>
+                <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true" @change="changePlugin(key, field)"></toggle-button>
               </span>
               <span v-show="errors.has(field.name)" class="help is-danger">{{ errors.first(field.name) }}</span>
             </div>
@@ -57,7 +57,6 @@
     },
     data () {
       return {
-        plugins: [],
         ready: false
       }
     },
@@ -84,13 +83,13 @@
           const type = this.component.type.replace('-element', '');
 
           // Base plugins
-          this.plugins = Plugins[type];
+          this.component.plugins = Plugins[type];
 
           if (this.$customer) {
             // Check for customer Plugins
             let customerPlugins = _.getPath(this.$customer, 'admin.modules.plugins', {});
             if (!_.isEmpty(customerPlugins)) {
-              this.plugins = _.extend(Plugins[type], customerPlugins[type]);
+              this.component.plugins = _.extend(Plugins[type], customerPlugins[type]);
             }
           }
 
@@ -98,6 +97,27 @@
         }
       }
     },
+    methods: {
+      updateComponent() {
+        this.$store.commit('module/updateComponent', {
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          component: this.component,
+        });
+      },
+      changeSetting(key, setting) {
+        setting.value = !setting.value;
+        this.component.settings[key] = setting;
+        this.updateComponent();
+      },
+      changePlugin(key, field) {
+        const plugin = this.component.plugins[key];
+        field.value = !field.value;
+        const fieldIdx = plugin.fields.indexOf(field);
+        plugin.fields[fieldIdx] = field;
+        this.updateComponent();
+      }
+    }
   }
 </script>
 

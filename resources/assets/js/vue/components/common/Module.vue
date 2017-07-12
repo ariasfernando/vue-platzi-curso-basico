@@ -5,10 +5,6 @@
     <tr v-if="module.structure.columns.length > 1">
 
       <th class="st-col" v-for="(column, columnId) in module.structure.columns" 
-          @dragover.prevent 
-          @drop="elementDrop"
-          @dragenter="dragenter"
-          @dragleave="dragleave"
           :class="!column.components.length ? 'empty-col' : ''" 
           :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
           :style="column.style || ''"
@@ -21,29 +17,51 @@
                border="0" 
                class="st-content-component"
         >
-            <tr>
-                <td width="100%">
-                    <draggable v-model="column.components" :element="'table'" width="100%">
-                        <component  v-for="(component, componentId) in column.components"
-                                    :is="component.type"
-                                    :component="component"
-                                    :module-id="module.id"
-                                    :column-id="columnId"
-                                    :component-id="componentId"
-                                    :key="componentId"
-                                    class="st-component"></component>
-
-                    </draggable>
-                </td>
-            </tr>
+          <tr>
+            <td width="100%">
+              <draggable v-model="column.components" 
+                         @add="onAdd"
+                         :element="'table'" 
+                         :options="options" 
+                         :data-col="columnId"
+                         cellpadding="0" 
+                         cellspacing="0" 
+                         border="0"
+                         width="100%"
+              >
+                <component v-for="(component, componentId) in column.components"
+                           :is="component.type" 
+                           :component="component" 
+                           :module-id="module.id" 
+                           :column-id="columnId"
+                           :component-id="componentId" 
+                           :key="componentId"
+                           class="st-component"></component>
+              </draggable>            
+            </td>
         </table>
 
         <!-- Empty Col -->
-        <table v-else width="100%" cellpadding="0" cellspacing="0" border="0">
-          <tr>
-            <td align="center" class="empty-cell" @drop="elementDrop" :data-col="columnId">Drag content here</td>
-          </tr>
-        </table>
+        <div v-else >
+          <draggable 
+                     @add="onAdd"
+                     :element="'div'" 
+                     :options="options" 
+                     :data-col="columnId"
+                     cellpadding="0" 
+                     cellspacing="0" 
+                     border="0"
+                     width="100%"
+                     class="empty-table"
+          >
+            <div style="display:table-row;"> 
+              <div align="center" 
+                  class="empty-cell"
+                  height="80" 
+                  :data-col="columnId">Drag content here</div>
+            </div>
+          </draggable>
+        </div>
 
       </th>
     </tr>
@@ -52,10 +70,6 @@
     <!-- START TD Structure -->
     <tr v-else>
       <td class="st-col" v-for="(column, columnId) in module.structure.columns" 
-          @dragover.prevent 
-          @drop="elementDrop"
-          @dragenter="dragenter"
-          @dragleave="dragleave"
           :class="!column.components.length ? 'empty-col' : ''" 
           :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
           :style="column.style || ''"
@@ -68,37 +82,59 @@
                border="0" 
                class="st-content-component"
         >
-            <tr>
-                <td width="100%">
-                    <draggable v-model="column.components" :element="'table'" width="100%">
-                        <component  v-for="(component, componentId) in column.components"
-                                    :is="component.type" 
-                                    :component="component" 
-                                    :module-id="module.id" 
-                                    :column-id="columnId"
-                                    :component-id="componentId" 
-                                    :key="componentId"
-                                    class="st-component"></component>
-
-                    </draggable>            
-                </td>
-            </tr>
-
+          <tr>
+            <td width="100%">
+              <draggable v-model="column.components" 
+                         @add="onAdd"
+                         :element="'table'" 
+                         :options="options" 
+                         :data-col="columnId"
+                         cellpadding="0" 
+                         cellspacing="0" 
+                         border="0"
+                         width="100%"
+              >
+                <component v-for="(component, componentId) in column.components"
+                           :is="component.type" 
+                           :component="component" 
+                           :module-id="module.id" 
+                           :column-id="columnId"
+                           :component-id="componentId" 
+                           :key="componentId"
+                           class="st-component"></component>
+              </draggable>            
+            </td>
+          </tr>
         </table>
 
         <!-- Empty Col -->
-        <table v-else width="100%" cellpadding="0" cellspacing="0" border="0">
-            <tr>
-                <td align="center" class="empty-cell" @drop="elementDrop" :data-col="columnId">Drag content here</td>
-            </tr>
-        </table>
+        <div v-else >
+          <draggable 
+                     @add="onAdd"
+                     :element="'div'" 
+                     :options="options" 
+                     :data-col="columnId"
+                     cellpadding="0" 
+                     cellspacing="0" 
+                     border="0"
+                     width="100%"
+                     class="empty-table"
+          >
+            <div style="display:table-row;"> 
+              <div align="center" 
+                  class="empty-cell"
+                  height="80" 
+                  :data-col="columnId">Drag content here</div>
+            </div>
+          </draggable>
+        </div>
 
       </td>
     </tr>
     <!-- END TD Structure -->
   </table>
 </template>
-
+    
 <script>
 
   import TextElement from './elements/TextElement.vue'
@@ -117,41 +153,43 @@
       ImageElement,
       DividerElement
     },
+    data () {
+      return {
+        options: {
+          group:{ 
+            name:'componentsBox',  
+            put: 'componentsList'
+          },
+          handle:'.icon-move',
+          ghostClass: "ghost-component",  // Class name for the drop placeholder
+          chosenClass: "chosen-component",  // Class name for the chosen item
+          dragClass: "drag-component"  // Class name for the dragging item
+        }
+      }
+    },
     computed: {
       module() {
         return this.$store.state.module.module
       }
     },
     methods: {
-      elementDrop(e) {
-        if ( e.target.className.indexOf("st-col") > -1 || e.target.className.indexOf("empty-cell") > -1 ) {
-          let colId = e.target.getAttribute('data-col');
-          let component = JSON.parse(e.dataTransfer.getData('component'));
+      onAdd(e){
+        let elType = e.clone.getAttribute('data-type');
+        let colId = e.to.getAttribute('data-col');
+        let Element = new defaultElements(elType);
+        let cloneItem = e.item;
+        let indexOf = this.module.structure.columns[colId].components.indexOf(Element);
+        let ref = {
+          columnId: +colId,
+          componentId: +indexOf
+        };
 
-          this.module.structure.columns[colId].components.push(component);
+        e.clone.style.opacity = "1";
+        cloneItem.parentNode.removeChild(cloneItem);
+        this.module.structure.columns[colId].components.splice(e.newIndex, 0, Element);
 
-          let indexOf = this.module.structure.columns[colId].components.indexOf(component);
 
-          let ref = {
-            columnId: +colId,
-            componentId: +indexOf
-          };
-
-          this.setComponent(ref);
-      }
-
-      e.target.style.background = "";
-
-      },
-      dragenter(e){
-        if ( e.target.className === "st-col" ) {
-          e.target.style.background = "#e4f8f5";
-        }
-      },
-      dragleave(e){
-        if ( e.target.className === "st-col" ) {
-          e.target.style.background = "";
-        }
+        this.setComponent(ref);
       },
       setComponent(ref) {
         this.$store.commit("module/setCurrentComponent", ref);
@@ -161,14 +199,22 @@
 </script>
 
 <style lang="less">
-  @focus: #69dac8;
+  @focus: #9189a2;
   @focus-light: lighten(@focus, 30%);
+  @hover: #e6e3ea;
+  @icon-option: #9189a2;
 
+  .st-content-component{
+    outline: 1px dashed @icon-option;
+  }
+  
   .st-component{
     &:hover{
-        outline: 1px solid @focus;
-        cursor: move;
-        background: #ddd;
+        border: 1px solid @icon-option;
+        background-color: @hover;
+        .icon-move{
+          display: block;
+        }
     }
   }
 
@@ -176,8 +222,65 @@
     background-color: @focus-light;
   }
 
-  .empty-cell {
+  td.empty-cell{
     font-weight: normal;
     color: @focus;
+  }
+
+  table.empty-table{
+    outline: 1px dashed @icon-option;
+    background-color: @hover;
+  }
+
+  div.empty-cell {
+    font-weight: normal;
+    color: @focus;
+    display: table-cell;
+    height: 80px;
+    width: 100%;
+    vertical-align: middle;
+  }
+
+  div.empty-table {
+    outline: 1px dashed @icon-option;
+    background-color: @hover;
+    display: table;
+    width: 100%;
+  }
+
+  li.ghost-component-menu{
+    outline: 2px dashed @icon-option;
+    color:@focus;
+    background-color: @hover;
+    height: 10px;
+    display: table-row;
+    list-style-type: none;
+    font-size: 13px;
+    z-index: 300;
+    opacity: 1!important;
+    &:before{
+      content: "Drag content here";
+    }
+    i{
+      display: none;
+    }
+    p{
+      display: none;
+    }
+
+  }
+
+  tr.ghost-component{
+    outline: 2px dashed @icon-option;
+    color:@focus;
+    background-color: @hover;
+    height: 10px;
+    &:before{
+      content: "Drag content here";
+    }
+    td{
+      display: none;
+    }
+
   }
 </style>
