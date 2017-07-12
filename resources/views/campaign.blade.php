@@ -31,7 +31,5 @@
 @endsection
 
 @section('footer-script')
-    <script src="{{ cdn(elixir('js/plugins.js')) }}"></script>
 	<script src="{{ cdn(elixir('js/campaign.js')) }}"></script>
-	<script src="{{ cdn(elixir('js/modules.js')) }}"></script>
 @stop
