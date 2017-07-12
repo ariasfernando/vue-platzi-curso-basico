@@ -26,10 +26,9 @@
       </div>
 
       <div class="col-xs-3 header-col">
-        <div class="vertical-center">
-          <button class="btn btn-default" @click="preview"><i class="glyphicon glyphicon-phone"></i>Preview</button>
-          <button class="btn btn-default save-as-draft" @click.prevent="saveModule" :disabled="errors.any()">Draft</button>
-          <a class="btn btn-continue" href="#" @click.prevent="publish">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
+        <div class="vertical-center pull-right">
+          <a class="btn btn-continue" href="#" @click.prevent="saveModule('draft')" :disabled="errors.any()">Save as draft<i class="glyphicon glyphicon-triangle-right"></i></a>
+          <a class="btn btn-continue" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
     </div>
@@ -168,12 +167,10 @@
     methods: {
       loadModule() {
         this.$store.commit("global/setLoader", true);
-        let data = {
-          moduleId: this.$route.params.id || undefined
-        };
+        const moduleId = this.$route.params.id || undefined;
 
         // TODO: Trigger event editModule.onInit
-        this.$store.dispatch("module/getModuleData", data)
+        this.$store.dispatch("module/getModuleData", moduleId)
           .then( response => {
             // TODO: Trigger event editModule.onLoaded
             this.ready = true;
@@ -182,9 +179,10 @@
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
           });
       },
-      saveModule() {
+      saveModule(status) {
         this.$store.commit("global/setLoader", true);
         let data = this.module;
+        data.status = status;
 
         // TODO: Trigger event editModule.onInit
         this.$store.dispatch("module/saveModuleData", data)
@@ -196,8 +194,8 @@
               return;
             }
 
-            this.ready = true;
             this.$store.commit("global/setLoader", false);
+            this.$router.push('/');
           }).catch( error => {
             this.$store.commit("global/setLoader", false);
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});

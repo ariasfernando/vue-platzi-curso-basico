@@ -80,7 +80,7 @@ class ModuleServiceProvider extends ServiceProvider
     {
         $module = [];
         
-        // Try pkg module
+        // Try custom module
         if (file_exists(self::$module_dir . DS . $module_id . DS . 'config.json')) {
             try {
                 $module = json_decode(
@@ -110,79 +110,6 @@ class ModuleServiceProvider extends ServiceProvider
     {
         return \Artisan::call('module:create', $params);
     }
-
-    /**
-    * Edit module
-    * @param array $params
-    * @return int Exit code
-    */
-    public static function edit($params)
-    {
-        $config = json_decode($params['config'], true);
-        $config['module_id'] = $params['module_id'];
-        $config['title'] = $params['name'];
-        $config['description'] = $params['description'];
-        $config['class'] = 'pkg';
-
-        $module_dir = self::$module_dir . DS . $params['module_id'];
-        if (!is_dir($module_dir)) {
-            try {
-                mkdir($module_dir, 0755, true);
-            } catch (\Exception $exception) {
-                return self::ERROR_CREATING_MODULE_DIR;
-            }
-        }
-        // Save module configuration
-        if (!self::saveConfig($module_dir, $config)) {
-            return self::ERROR_CONFIG_FILE;
-        }
-        // Save module template
-        if (!self::saveTemplate($module_dir, $params['template'])) {
-            return self::ERROR_TEMPLATE_FILE;
-        }
-
-        // Check if is an old module
-        $template_file = self::$module_dir . DS . $params['module_id'] . '.blade.php';
-
-        if (file_exists($template_file)) {
-            try {
-                $template = file_get_contents($template_file);
-                file_put_contents($module_dir . DS . 'template.blade.php', $template);
-            } catch (\Exception $exception) {
-                return self::ERROR_TEMPLATE_FILE;
-            }
-
-            // Delete old module template
-            try {
-                unlink($module_dir . '.blade.php');
-            } catch (Exception $exception) {
-                return self::ERROR_DELETING_TEMPLATE;
-            }
-        }
-    }
-
-    /**
-    * Save module config
-    * @param string $module_dir
-    * @param array $config
-    * @return int Exit code
-    */
-    public static function saveConfig($module_dir, $config)
-    {
-        return file_put_contents($module_dir . DS . 'config.json', json_encode($config, JSON_PRETTY_PRINT));
-    }
-
-    /**
-    * Save module template
-    * @param string $module_dir
-    * @param array $template
-    * @return int Exit code
-    */
-    public static function saveTemplate($module_dir, $template)
-    {
-        return file_put_contents($module_dir . DS . 'template.blade.php', $template);
-    }
-
 
     /**
     * Get module template

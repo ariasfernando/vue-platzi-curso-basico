@@ -1,11 +1,12 @@
 {
-	"title": "Free Text",
+	"name": "Free Text",
 	"action": "add",
 	"app_name": "base",
 	"module_id": "free_text",
+	"key": "free_text",
 	"level": "single",
 	"file_parent": "base",
-	"class": "pkg",
+	"type": "custom",
 	"initialized": false,
 	"toolbox": {
 		"colorPicker": {
