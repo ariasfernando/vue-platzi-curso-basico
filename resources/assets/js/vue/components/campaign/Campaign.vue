@@ -4,15 +4,17 @@
     <!-- column left (menu) -->
     <aside>
       <div class="menu-campaign">
-        <campaign-configuration v-if="dataLoaded"></campaign-configuration>
-        <campaign-menu v-if="dataLoaded"></campaign-menu>
+        <campaign-configuration v-if="ready"></campaign-configuration>
+        <campaign-menu v-if="ready"></campaign-menu>
       </div>
     </aside>
 
     <!-- column right (container email) -->
     <section class="section-canvas-email section-box">
-      <email-canvas v-if="dataLoaded" @save-campaign="saveCampaign"></email-canvas>
+      <email-canvas v-if="ready" @save-campaign="saveCampaign"></email-canvas>
     </section>
+
+    <spinner></spinner>
 
   </div>
 </template>
@@ -21,42 +23,51 @@
   import CampaignConfiguration from './CampaignConfiguration.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import EmailCanvas from './EmailCanvas.vue'
+  import Spinner from '../common/Spinner.vue'
 
   export default {
     name: 'Campaign',
+    props: ['campaignId'],
     components: {
       CampaignConfiguration,
       CampaignMenu,
-      EmailCanvas
+      EmailCanvas,
+      Spinner
     },
     data: function () {
       return {
-        dataLoaded: false,
-        loading: true
+        ready: false,
+      }
+    },
+    computed: {
+      campaign() {
+        return this.$store.campaign.campaign;
+      },
+      library() {
+        return this.$store.campaign.library;
       }
     },
     methods: {
       saveCampaign() {
-        this.loading = true;
-        this.$store.dispatch("saveCampaign").then(response => {
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/saveCampaign").then(response => {
           this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
-          this.loadCampaign();
         }, error => {
+          this.$store.commit("global/setLoader", false);
           this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
         });
       },
       loadCampaign() {
-        let _this = this;
-        // TODO: Pass campaignId HERE
-        this.$store.dispatch("getCampaignData").then(response => {
-          this.loading = false;
-          this.dataLoaded = true;
+        this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
+          this.$store.commit("global/setLoader", false);
+          this.ready = true;
         }, error => {
+          this.$store.commit("global/setLoader", false);
           this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
         });
       }
     },
-    mounted: function () {
+    created: function () {
       this.loadCampaign();
     }
   };

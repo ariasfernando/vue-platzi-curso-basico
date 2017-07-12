@@ -114,7 +114,9 @@
         @show
 
         {{-- Scripts --}}
-        <script src="{{ cdn(elixir('js/library.js')) }}"></script>
+        <!-- script src="{{ cdn(elixir('js/library.js')) }}"></script -->
+        <script src="{{ cdn(elixir('js/library-v2.js')) }}"></script>
+        <script src="{{ cdn(elixir('js/customer.js')) }}"></script>
 
         @section('master-application-scripts')
             {{-- Global Application JS object --}}
