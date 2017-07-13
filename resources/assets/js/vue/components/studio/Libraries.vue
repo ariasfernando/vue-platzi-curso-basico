@@ -175,10 +175,10 @@
 
 <style>
   .btn-create {
-    color: #FFFFFF!important;
+    color: #514960!important;
   }
   .btn-create:hover a{
-    color: #FFFFFF!important;
+    color: #514960!important;
   }
   .modules-list {
     display: block;

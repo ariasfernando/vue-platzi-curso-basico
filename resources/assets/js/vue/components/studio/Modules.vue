@@ -121,10 +121,11 @@
     a{
       color: #666666!important;
       text-decoration: none;
+      border: none!important;
     }
 
     &:hover a{
-      color: #ffffff!important;
+      color: #514960!important;
     }
 
   }
