@@ -41,6 +41,7 @@
             .glyphicon{
                 color: #cccccc;
                 margin-right: 4px;
+                transition: all 0.3s linear;
             }
 
             ul{
@@ -62,18 +63,22 @@
     }
 
     a {
+        color: #999999;
+        transition: all 0.3s linear;
+        text-decoration: none;
 
         span {
             padding: 20px;
         }
 
-        &:link,
         &:focus,
-        &:active,
-        &:visited,
         &:hover {
-            color: @input-color;
+            color: #555555;
             text-decoration: none;
+
+            .glyphicon{
+                color: #555555;
+            }
         }
     }
 }
