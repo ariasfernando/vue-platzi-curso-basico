@@ -21,7 +21,7 @@ Vue.use(VeeValidate);
 const router = new VueRouter({
   routes: studioModuleRoutes,
   mode: 'hash',
-  base: '/admin/module/',
+  base: '${baseUrl}/admin/module/',
   saveScrollPosition: true,
 });
 
