@@ -34,9 +34,6 @@ function requestResponse(method, params, opts) {
       if (statusCode !== 200) {
         deferred.reject('Error');
       } else {
-        if (_.isString(response.body)) {
-          response.body = JSON.parse(response.body);
-        }
         deferred.resolve(response);
       }
     })

@@ -22,6 +22,10 @@
 </template>
 
 <script>
+
+  import moduleService from '../../services/module';
+
+
   export default {
     name: 'CampaignMenu',
     data () {
@@ -35,8 +39,24 @@
       }
     },
     methods: {
-      addModule (moduleData) {
-        this.$store.commit('campaign/addModule', moduleData);
+      addModule (module) {
+        this.$store.commit("global/setLoader", true);
+
+        const campaignId = this.$store.state.campaign.campaign.campaign_id;
+
+        if (module.type === 'custom') {
+          moduleService.getCustomModule(module.key, campaignId)
+            .then( response => {
+              module.template = response;
+              this.$store.commit('campaign/addModule', module);
+              this.$store.commit("global/setLoader", false);
+            }).catch( error => {
+              this.$root.$toast('Error loading custom module', {className: 'et-warn'});
+            });
+        } else {
+          this.$store.commit('campaign/addModule', module);
+          this.$store.commit("global/setLoader", false);
+        }
       },
       expand (item) {
         let index = this.expanded.indexOf(item._id);
