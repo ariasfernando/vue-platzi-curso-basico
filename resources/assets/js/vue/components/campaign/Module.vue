@@ -1,7 +1,7 @@
 <template>
     <table width="100%" cellspacing="0" cellpadding="0">
-        <tr v-if="module.columns.length > 1">
-            <th class="st-col" v-for="(column, columnId) in module.columns" :width="column.style.default.width" :style="column.style.default">
+        <tr v-if="module.structure.columns.length > 1">
+            <th class="st-col" v-for="(column, columnId) in module.structure.columns" :width="column.style.width" :style="column.style">
                 <table width="100%" cellpadding="0" cellspacing="0" border="0">
                     <tr v-for="(component, componentId) in column.components">
                         <td>
@@ -12,7 +12,7 @@
             </th>
         </tr>
         <tr v-else>
-            <td v-for="(column, columnId) in module.columns" :width="column.style.default.width" :style="column.style.default">
+            <td v-for="(column, columnId) in module.structure.columns" :width="column.style.width" :style="column.style">
                 <table width="100%" cellpadding="0" cellspacing="0" border="0">
                     <tr v-for="(component, componentId) in column.components">
                         <td>
@@ -27,19 +27,25 @@
 
 <script>
 
-    import TextElement from './elements/TextElement.vue'
-    import ButtonElement from './elements/ButtonElement.vue'
-    import ImageElement from './elements/ImageElement.vue'
-    import SeparatorElement from './elements/SeparatorElement.vue'
+    import TextElement from '../common/elements/TextElement.vue'
+    import ButtonElement from '../common/elements/ButtonElement.vue'
+    import ImageElement from '../common/elements/ImageElement.vue'
+    import DividerElement from '../common/elements/DividerElement.vue'
 
     module.exports = {
         name: 'Module',
-        props: ['moduleId', 'module'],
+        props: ['moduleId'],
+        computed: {
+          module() {
+            const idx = this.moduleId;
+            return this.$store.state.campaign.modules[idx];
+          }
+        },
         components: {
             TextElement,
             ButtonElement,
             ImageElement,
-            SeparatorElement
+            DividerElement
         }
     };
 </script>

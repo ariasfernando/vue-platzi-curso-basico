@@ -35,7 +35,6 @@
     name: 'CampaignConfiguration',
     data () {
       return {
-        params: {},
         enablePreheader: false,
         enableTagging: false,
         form: {
@@ -45,9 +44,12 @@
         }
       }
     },
+    computed: {
+      params() {
+        return this.$store.state.campaign.campaign;
+      }
+    },
     created () {
-      this.params = this.$store.state.campaign;
-
       this.enablePreheader = this.params.campaign_data.library_config.preheader;
       this.enableTagging = this.params.campaign_data.library_config.enable_tagging;
 
@@ -57,7 +59,7 @@
     },
     methods: {
       saveSettings() {
-        this.$store.commit('saveSettings', this.form);
+        this.$store.commit('campaign/saveSettings', this.form);
       }
     }
   }
