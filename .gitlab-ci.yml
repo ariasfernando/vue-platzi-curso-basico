@@ -122,7 +122,6 @@ phpdoccheck:
     paths:
       - ci/storage/tmp/doccheck.txt
 
-
 test_js:
   stage: test
   script:
@@ -133,3 +132,16 @@ test_js:
     expire_in: 30 days
     paths:
       - coverage/
+
+eslint:
+  stage: test
+  script:
+    # Run eslint
+    - ./node_modules/eslint/bin/eslint.js resources/assets/js/ resources/views/modules/
+      -o ci/storage/tmp/eslint.html --no-color -f html
+  artifacts:
+    when: always
+    name: "${CI_JOB_STAGE}_eslint_${CI_COMMIT_REF_NAME}"
+    expire_in: 30 days
+    paths:
+      - ci/storage/tmp/eslint.html
