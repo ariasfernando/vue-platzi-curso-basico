@@ -16,6 +16,7 @@
 @endsection
 
 @section('footer-script')
+    <script src="{{ cdn(elixir('js/library.js')) }}"></script>
     <script src="{{ url( elixir('js/proof.js') ) }}"></script>
     <script src="{{ url( elixir('js/vue-components.js') ) }}"></script>
 @stop

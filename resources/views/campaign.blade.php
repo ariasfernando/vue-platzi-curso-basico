@@ -2,34 +2,19 @@
 
 @section('content')
 
-	<div class="col-xs-12">
-
-		<div class="section-container-campaign">
-			<!-- column left (menu) -->
-			<aside>
-				<div class="menu-campaign">
-					@include('partials.campaign.configuration')
-					@include('partials.campaign.menu', array('menu_list' => $params['menu_list']))
-				<div>
-			</aside>
-
-			<!-- column right (container email) -->
-			<section class="section-canvas-email section-box">
-				@include('partials.campaign.email_canvas')
-			</section>
-		</div>
-
-	</div>
-
+	<div class="col-xs-12" id="campaign">
+	    <campaign campaign-id="{{ $params['campaign_id'] }}"></campaign>
+    </div>
 	{{-- MODALS --}}
 	@include('partials.campaign.modal_campaign_plain_text')
 	@include('partials.campaign.modal_campaign_processed')
 	@include('partials.campaign.modal_campaign_preview')
 	@include('partials.campaign.modal_campaign_finished')
-	@include('partials.proof.modal_proof')
 
 @endsection
 
 @section('footer-script')
-	<script src="{{ cdn(elixir('js/campaign.js')) }}"></script>
+    <script src="{{ cdn(elixir('js/library-v2.js')) }}"></script>
+    <script src="{{ cdn(elixir('js/custom-modules.js')) }}"></script>
+	<script src="{{ cdn( elixir('js/campaign-components.js') ) }}"></script>
 @stop

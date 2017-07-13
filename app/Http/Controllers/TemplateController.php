@@ -45,8 +45,7 @@ class TemplateController extends Controller
 
         // Initialize locale and module settings
         $module = [
-            "name" => $request->input('name'),
-            "app_name" => $request->input('app_name')
+            "key" => $request->input('key')
         ];
         StensulLocale::init($campaign_data['locale'], $module);
 
@@ -55,7 +54,7 @@ class TemplateController extends Controller
         $options['params']['campaign_data'] = $campaign_data;
         $options["module"] = $request->has('module_data') ? ["data" => $request->input('module_data')] : [];
 
-        $module_params = ModuleServiceProvider::getModule($request->input('name'));
+        $module_params = ModuleServiceProvider::getModule($request->input('key'));
         $module_params['data'] = '';
         $options['module_params'] = $module_params;
 
@@ -162,36 +161,10 @@ class TemplateController extends Controller
      */
     protected function getComponent(Request $request, $type, array $params)
     {
-
-        $parts = [];
-
-        // app_name
-        $app_name = strtolower($request->input('app_name', 'base'));
-        $parts[] = $app_name;
-
-
-        // push library_name if exists
-        $library_name = $request->input('library_name', '');
-        (strlen($library_name) && $app_name !== 'base')
-            ? $parts[] = $library_name
-            : null;
-
-        // type is always required
-        $parts[] = $type;
-
         // component name
-        $component = $request->input('name');
-        $parts[] = $component;
-
-        // module type
-        $type = !empty($params['module_params']['type'])
-            ? $params['module_params']['type'] : $request->input('type');
+        $component = $request->input('key');
         $view = $request->input('view', 'template');
-
-        // Find module in [module_name]/module.blade.php
-        if ($type == 'custom') {
-            $parts = [ 'modules', $component, $view ];
-        }
+        $parts = [ 'modules', $component, $view ];
 
         return $this->renderView(
             implode('.', $parts),

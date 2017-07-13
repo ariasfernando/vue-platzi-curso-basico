@@ -228,12 +228,13 @@ gulp.task('elixir-scripts', function () {
         //   assetsPath
         // )
         //
-        // // === Modules ===
-        // .scripts(
-        //   ['../views/base/modules/**/*.js', 'js/library/modules-placeholder.js'],
-        //   jsDestinationPath + 'modules.js',
-        //   assetsPath
-        // )
+
+        // === Custom Modules ===
+        .scripts(
+          ['../views/modules/**/*.js', 'js/library/modules-placeholder.js'],
+          jsDestinationPath + 'custom-modules.js',
+          assetsPath
+        )
 
         // === Dashboard page ===
         .scripts(
