@@ -4,6 +4,7 @@ namespace Stensul\Http\Controllers;
 
 use Config;
 use Stensul\Models\Campaign;
+use Illuminate\Http\Request;
 use Stensul\Services\EmailHtmlCreator as Html;
 
 class PublicController extends Controller
@@ -29,7 +30,7 @@ class PublicController extends Controller
         $width = \Config::get("view.libraries.default.template_width", '');
 
         return view(
-            'base.view_in_browser',
+            'view_in_browser',
             array(
                 'campaign_id' =>  $campaign_id,
                 'width' => $width
@@ -51,8 +52,18 @@ class PublicController extends Controller
         return $html->getBody();
     }
 
-    public function getMoco()
+    /**
+     * Show an error page
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
+     */
+    public function error(Request $request)
     {
-        return "hola"
+        $params = [
+            'error_message' => $request->session()->pull('error_message', 'Something went wrong. Please try again.')
+        ];
+
+        return $this->renderView('error', ['params' => $params]);
     }
 }

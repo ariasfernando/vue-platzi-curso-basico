@@ -27,15 +27,23 @@ class AkamaiAdapter implements CdnInterface
             $params['objects'][] = rtrim(config('cdn.host'), '/') . $file;
         }
 
+        if (count($params['objects']) == 0) {
+            \Log::warning('no objects queued to flush');
+            return false;
+        }
+
         try {
-            $response = $this->client->request(
+            $this->client->request(
                 'POST',
                 rtrim($this->config['path'], '/') . '/' . self::AKAMAI_NETWORK,
                 ['json' => $params]
             );
             return true;
-        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-            \Log::info('cannot flush cache, response: ' . (is_null($e->getResponse()) ? 'null' : $e->getResponse()->getBody()));
+        } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
+            \Log::info(
+                'cannot flush cache, response: '
+                . (is_null($exception->getResponse()) ? 'null' : $exception->getResponse()->getBody())
+            );
         }
     }
 }

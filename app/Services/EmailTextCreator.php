@@ -34,7 +34,13 @@ class EmailTextCreator
 
         foreach ($modules as $module) {
             // Initialize locale and module settings
-            StensulLocale::init($this->campaign['locale'], ["name" => $module['module_id'],"app_name" => $module['file_parent']]);
+            StensulLocale::init(
+                $this->campaign['locale'],
+                [
+                    "name" => $module['module_id'],
+                    "app_name" => $module['file_parent']
+                ]
+            );
 
             $path = $this->getModulesPath($module['file_parent']);
             if (\view::exists($path . '.' . $module['module_id'] . '.text')) {
@@ -52,20 +58,11 @@ class EmailTextCreator
     /**
      * Return a view path according to campaign_format
      *
-     * @param  string $file_parent
      * @return string or false
      */
-    public function getModulesPath($file_parent)
+    public function getModulesPath()
     {
-        $path = false;
-        if (\Config::get('view.campaign_format') == 'libraries') {
-            $path = $file_parent . '.';
-            $path .= strpos($file_parent, 'base') === false ? $this->campaign['library'] . '.' : '';
-            $path .= 'modules';
-        } else {
-            $path = $file_parent . '.modules';
-        }
-        return $path;
+        return 'modules';
     }
 
     /**
@@ -104,7 +101,8 @@ class EmailTextCreator
             'campaign_data' => $this->campaign
         ];
 
-        $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['module_id'] . '.template';
+        $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['module_id']
+            . '.template';
         if (!\view::exists($modulePath)) {
             $modulePath = $this->getModulesPath($module['file_parent']) . '.' . $module['module_id'];
         }

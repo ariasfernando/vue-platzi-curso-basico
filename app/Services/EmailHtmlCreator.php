@@ -23,7 +23,7 @@ class EmailHtmlCreator
 
     public static $HTML_FILENAME = 'index.html';
     public static $VIEW_IN_BROWSER_TAG = '[VIEW_IN_BROWSER_LINK]';
-    public static $EMAIL_LAYOUT = 'base.layouts.email';
+    public static $EMAIL_LAYOUT = 'layouts.email';
 
     /**
      * Create an HTML template.

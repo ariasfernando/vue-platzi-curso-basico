@@ -33,6 +33,7 @@ class CampaignController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('acl.permission:edit_campaign');
     }
 
     /**
@@ -55,22 +56,17 @@ class CampaignController extends Controller
                 $saved_tags = Tag::all();
 
                 if ($params) {
-                    $library = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
+                    $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
                         ? $params['campaign_data']['library']
                         : "default";
-
-                    $params['menu_list'] = \Config::get('menu.' . $library);
-
-                    $menu = Library::where('name', $library)->get();
-                    foreach ($menu as $key => $value) {
-                        $params['menu_list'] = $value->getModules();
-                    }
-
-                    uasort($params['menu_list'], function ($a, $b) {
-                        if ($a['title'] == $b['title']) {
+                    $library = Library::find($library_id);
+                    $params['menu_list'] = $library->getModules();
+                    $params['library_config'] = $library->config;
+                    uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
+                        if ($menu_item_a['name'] == $menu_item_b['name']) {
                             return 0;
                         }
-                        return ($a['title'] < $b['title']) ? -1 : 1;
+                        return ($menu_item_a['name'] < $menu_item_b['name']) ? -1 : 1;
                     });
 
                     $params['tag_list'] = $saved_tags;
@@ -88,7 +84,7 @@ class CampaignController extends Controller
                 $params['locale'] = $request->input("locale");
             }
             if (!is_null($request->input("library"))) {
-                $params['library'] = $request->input("library");
+                $params['library'] = new ObjectID($request->input("library"));
             }
 
             $campaign = Campaign::create($params);
@@ -98,13 +94,38 @@ class CampaignController extends Controller
 
         if (\Config::get('api.scraper.status')
             && \Config::get('api.scraper.settings.campaign_preload')) {
-            Campaign::scraperPreloader($params['campaign_data']['library'], ['flush_cache' => true, 'only_update' => true]);
+            Campaign::scraperPreloader(
+                $params['campaign_data']['library'],
+                ['flush_cache' => true,
+                'only_update' => true]
+            );
         }
 
         // Initialize locale
         StensulLocale::init($params['locale']);
 
-        return $this->renderView('base.campaign', array('params' => $params));
+        // Default Text
+        $params['header_title'] = "Campaign Editor";
+
+        // Set library name
+        $library_title = $params['campaign_data']->getLibraryConfig('title');
+        if (!empty($library_title)) {
+            $params['header_title'] = $library_title;
+        }
+
+        // Set language name
+        $locale = $params['campaign_data']['locale'];
+        if (\Config::get('view.campaign_format') === "languages" && \Config::has('locale.langs.' . $locale . '.name')) {
+            $params['header_title'] .= " (" . \Config::get('locale.langs.' . $locale . '.name') . ")";
+        }
+
+        $json_response = !is_null($request->input("json")) ? true : false;
+
+        if ( $json_response ) {
+            return array('campaign' => $params);
+        } else {
+            return $this->renderView('campaign', array('params' => $params));
+        }
     }
 
     /**
@@ -356,7 +377,7 @@ class CampaignController extends Controller
         ) {
             Activity::log(
                 'Campaign edit deny',
-                array('properties' => ['campaign_id' => new \MongoId($request->input('campaign_id'))])
+                array('properties' => ['campaign_id' => new ObjectId($request->input('campaign_id'))])
             );
 
             return array('campaign_lock' => $request->input('campaign_id'));
@@ -367,7 +388,9 @@ class CampaignController extends Controller
             try {
                 return Campaign::deleteTag($request->input('campaign_id'), $request->input('tag_name'));
             } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-                throw new NotFoundHttpException('Campaign with the id ' . $request->input('campaign_id') . ' not found');
+                throw new NotFoundHttpException(
+                    'Campaign with the id ' . $request->input('campaign_id') . ' not found'
+                );
             }
         }
     }
@@ -399,11 +422,6 @@ class CampaignController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-    }
-
-    public function getDownloadHtml(Request $request, $campaign_id)
-    {
-        return Campaign::downloadHtml($campaign_id);
     }
 
     /**

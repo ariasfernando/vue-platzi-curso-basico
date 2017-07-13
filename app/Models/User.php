@@ -89,11 +89,8 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
     public function can($permissions)
     {
         $user_permissions = $this->getPermissions();
-        $user_library = $this->getLibraries();
         $asked_permissions = (is_array($permissions))? $permissions : [$permissions];
-
-        return ((count(array_intersect($asked_permissions, $user_permissions)) > 0)
-            || (count(array_intersect($asked_permissions, $user_library)) > 0));
+        return (count(array_intersect($asked_permissions, $user_permissions)) > 0);
     }
 
     /**
@@ -139,11 +136,16 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
      */
     public function getLibraries()
     {
-        $libraries = [];
-        foreach ($this->getRoles() as $role_data) {
-            $libraries = array_merge($libraries, $role_data->libraries);
+        $user_visibility = [];
+        $libraries = Library::all(['name','key'])->toArray();
+        $permissions = $this->getPermissions();
+
+        foreach ($libraries as $library) {
+            if (in_array("access_library_" . $library['key'], $permissions)) {
+                $user_visibility[] = $library;
+            }
         }
-        return $libraries;
+        return $user_visibility;
     }
 
     /**

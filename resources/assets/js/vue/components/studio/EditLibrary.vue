@@ -19,7 +19,10 @@
     <div class="row">
       <section v-if="ready" class="col-xs-12 section-container">
         <div class="simple-text-config admin-library-form">
-
+          <div v-if="$route.query.debug" class="col-xs-12">
+            <br><br>
+            <pre>{{ library.config }}</pre>
+          </div>
           <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
 
             <h4>General Settings</h4><hr>
@@ -52,8 +55,7 @@
                   <input v-model="library.config.templateWidth" v-validate="'required'"
                          :class="{'input': true, 'is-danger': errors.has('templateWidth') }" name="templateWidth"
                          type="text" placeholder="660">
-                  <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth')
-                    }}</span>
+                  <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth') }}</span>
                 </p>
               </div>
 
@@ -175,6 +177,19 @@
               </div>
             </div>
 
+            <!-- Field padding -->
+            <div class="row">
+              <div class="col-md-6">
+                <label for="padding">Padding</label>
+                <div class="control">
+                  <div id="padding" class="input-group">
+                      <input type="text" class="form-control" v-model="library.config.padding" v-validate="'required'" name="padding" :class="{'input': true, 'is-danger': errors.has('padding') }" placeholder="10px"/>
+                  </div>
+                  <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
+                </div>
+              </div>
+            </div>
+
             <div class="row">
               <!-- Field external-link -->
               <div class="col-md-12">
@@ -191,6 +206,39 @@
                 <label for="propietaryCss">Propietary Styles</label>
                 <p class="control">
                   <textarea v-model="library.config.propietaryCss" rows="10" name="propietaryCss" type="text" placeholder=""></textarea>
+                </p>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Field Preheader -->
+              <label for="preheader" class="col-sm-4 control-label">Preheader</label>
+              <p class="control col-sm-8">
+                <toggle-button :value="library.config.preheader" :sync="true" :labels="true" @change="updateToggle('preheader')"></toggle-button>
+              </p>
+            </div>
+
+            <!-- Field Plain text -->
+            <div class="row">
+              <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
+              <p class="control col-sm-8">
+                <toggle-button :value="library.config.plainText" :sync="true" :labels="true" @change="updateToggle('plainText')"></toggle-button>
+              </p>
+            </div>
+
+            <div class="row">
+              <!-- Field ESP -->
+              <label for="preheader" class="col-sm-4 control-label">ESP</label>
+              <p class="control col-sm-1">
+                <toggle-button :value="library.config.esp" :sync="true" :labels="true" @change="updateToggle('esp')"></toggle-button>
+              </p>
+              <div v-if="library.config.esp" class="col-md-5">
+                <p class="control">
+                  <select v-model="library.config.espProvider">
+                    <option v-for="(esp, key) in this.espList" v-bind:value="key">
+                      {{ esp.title }}
+                    </option>
+                  </select>
                 </p>
               </div>
             </div>
@@ -263,18 +311,33 @@
 
 <script>
   import libraryService from '../../services/library'
+  import ToggleButton from '../common/ToggleButton.vue'
 
   export default {
     name: 'EditLibrary',
+    components: {
+      ToggleButton
+    },
     data () {
       return {
         library: {},
         modules: {},
+        espList: {},
         ready: false
       }
     },
     methods: {
+      updateToggle(element) {
+        this.library.config[element] = !this.library.config[element];
+      },
       loadLibrary() {
+        libraryService.espProviders()
+          .then((response) => {
+            this.espList = response;
+          })
+          .catch((error) => {
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+          });
         let libraryId = this.$route.params.id;
 
         if (libraryId) {
@@ -344,10 +407,20 @@
       },
       deleteGroup(idx) {
         this.library.modules.splice(idx, 1);
+      },
+      toggleSidebar() {
+        const sidebar = document.getElementById('admin-sidebar');
+        sidebar.style.display = 'none';
+
+        const container = document.getElementsByClassName('base-admin')[0];
+        container.style.paddingLeft = 0;
       }
     },
     created () {
       this.loadLibrary();
+    },
+    mounted () {
+      this.toggleSidebar();
     }
   };
 </script>

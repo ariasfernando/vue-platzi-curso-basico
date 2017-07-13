@@ -1,0 +1,135 @@
+aside{
+	width: 25%;
+	vertical-align: top;
+	display:table-cell;
+	.menu-campaign{
+		// single module
+		.single{
+			margin-bottom: 20px;
+			border-radius: @section-border-radius;
+		}
+		// action type module
+		.expand>h2, .add{
+			cursor: pointer;
+		}
+		.expand, .add{
+			border-radius: @section-border-radius;
+			background-color: @menu-container-section-background-color;
+			h2{
+				font-size: 16px;
+				border-radius: @section-border-radius;
+				.box-sizing(border-box);
+				background-color: @menu-section-background-color;
+				padding: 10px 15px;
+				color: @menu-campaign-font-color;
+				margin: 0;
+				position: relative;
+
+				i{
+					top: 50%;
+					right: 8px;
+					font-size: 12px;
+					margin: -6px 0 0;
+					position: absolute;
+
+					@media screen and (min-width: @screen-md-min) {
+						right: 10px;
+						font-size: 16px;
+						margin: -8px 0 0;
+					}
+				}
+			}
+		}
+        // icon expand
+        .expand{
+            margin-bottom: 20px;
+            &>h2>i{
+                .glyphicon-triangle-bottom();
+            }
+            &>h2>i.icon-open-expan{
+                .glyphicon-triangle-top();
+            }
+        }
+
+	 	// show and hidden sections
+		.level-1{
+			display: none;
+			padding-bottom: 10px;
+			.add, .expand{
+				margin: 10px 7px 0;
+			}
+			.expand{
+				background-color: @menu-container-sub-section-background-color;
+			}
+			&.open-section-campaign{
+				display: block;
+				.level-2{
+					display: none;
+					padding-bottom: 10px;
+					&.open-section-campaign{
+						display: block;
+					}
+				}
+			}
+		}
+	}
+
+	// Configuration module
+	.expand.configuration-mod{
+		&>h2{
+			background-color: @brand-secondary;
+		}
+		form{
+			padding: 10px;
+
+			input[type="text"]{
+				margin-top: 5px;
+			}
+		}
+	}
+
+	.btn-auto-save{
+		top: -2px;
+		position: relative;
+	}
+
+	.spinner{
+		background-image: url("../../images/ajax-loader.gif") !important;
+		background-repeat: no-repeat !important;
+		background-position: 95% center !important;
+		padding-right: 30px !important;
+	}
+
+	.configuration-mod{
+
+		.config-box-divider{
+			border-top: 1px solid #cccccc;
+			padding: 5px 0 0;
+			margin: 10px 0 0;
+		}
+		#tags-box{
+			padding-top: 10px;
+		}
+
+		.unlock-campaign-btn,
+		.lock-campaign-btn{
+			float: right;
+			min-width: 28px;
+			padding: 3px 6px;
+			.border-radius(20px);
+
+			&.ajax-loader-small{
+				height: 29px;
+				background-position: center center !important;
+				padding: 0 !important;
+				i{
+					display: none;
+				}
+			}
+		}
+		label.locking{
+			margin: 5px 0;
+		}
+	}
+
+}

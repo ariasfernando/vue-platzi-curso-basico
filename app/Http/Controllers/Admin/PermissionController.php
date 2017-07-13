@@ -36,7 +36,7 @@ class PermissionController extends Controller
     public function getIndex()
     {
         $permissions = Permission::orderBy('updated_at', 'desc')->paginate(5);
-        return $this->renderView('base.admin.permissions', array('permissions' => $permissions));
+        return $this->renderView('admin.permissions', array('permissions' => $permissions));
     }
 
     /**
@@ -55,7 +55,7 @@ class PermissionController extends Controller
             ->all();
 
         return $this->renderView(
-            'base.admin.partials.permission_draw_row',
+            'admin.partials.permission_draw_row',
             ['permissions' => $permissions]
         );
     }
@@ -71,7 +71,7 @@ class PermissionController extends Controller
             "title" => "Create Permission"
         ];
 
-        return $this->renderView('base.admin.modals.permission_form', array('params' => $params));
+        return $this->renderView('admin.modals.permission_form', array('params' => $params));
     }
 
     /**
@@ -88,7 +88,7 @@ class PermissionController extends Controller
             "permission" => $permission_data
         ];
 
-        return $this->renderView('base.admin.modals.permission_form', array('params' => $params));
+        return $this->renderView('admin.modals.permission_form', array('params' => $params));
     }
 
     /**

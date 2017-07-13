@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import _ from 'underscore'
+  import _ from 'underscore-contrib'
 
   export default {
     name: 'TinyMce',
@@ -37,6 +37,8 @@
           skin: 'lightgray',
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
           inline: true,
+          menubar: false,
+          toolbar: '',
           init_instance_callback: (editor) => {
             editor.on('KeyUp', (e) => {
               this.$emit('input', editor.getContent());
@@ -56,3 +58,9 @@
     }
   }
 </script>
+
+<style lang="sass">
+  .st-edit-text {
+    cursor: text;
+  }
+</style>

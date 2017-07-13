@@ -1,59 +1,58 @@
-import _ from 'underscore'
-import campaignService from '../services/campaign'
+import _ from 'underscore-contrib';
+import campaignService from '../services/campaign';
 
 const state = {
   campaign: {},
   modules: [],
   editedModules: [],
-  editedSettings: {}
+  editedSettings: {},
 };
 
 const getters = {
-  getModules (state) {
+  getModules(state) {
     return state.modules;
-  }
+  },
 };
 
 const mutations = {
-  loadCampaignData (state, campaignData) {
+  loadCampaignData(state, campaignData) {
     state.campaign = campaignData;
     state.modules = campaignData.campaign_data.modules_data;
   },
-  addModule (state, moduleData) {
+  addModule(state, moduleData) {
     state.modules.push(moduleData);
   },
-  updateElement (state, edited) {
-    let matches = _.where(state.editedModules, {
+  updateElement(state, edited) {
+    const matches = _.where(state.editedModules, {
       moduleId: edited.moduleId,
       columnId: edited.columnId,
-      componentId: edited.componentId
+      componentId: edited.componentId,
     });
 
     if (matches.length) {
-      matches[0].data = _.extend(matches[0].data, edited.data)
+      matches[0].data = _.extend(matches[0].data, edited.data);
     } else {
       state.editedModules.push(edited);
     }
   },
-  saveSettings (state, settings) {
+  saveSettings(state, settings) {
     state.editedSettings = settings;
   },
-  error (err) {
+  error(err) {
     console.error(err);
-  }
+  },
 };
 
 const actions = {
-  // TODO: Pass campaignId HERE
-  getCampaignData (context) {
-    return campaignService.getCampaign()
-      .then((response) => context.commit('loadCampaignData', response))
-      .catch((error) => context.commit('error', error));
+  getCampaignData(context, campaignId) {
+    return campaignService.getCampaign(campaignId)
+      .then(response => context.commit('loadCampaignData', response.campaign))
+      .catch(error => context.commit('error', error));
   },
-  saveCampaign (context) {
+  saveCampaign(context) {
     return campaignService.saveCampaign()
-      .then((response) => response)
-      .catch((error) => context.commit('error', error));
+      .then(response => response)
+      .catch(error => context.commit('error', error));
   }
 };
 

@@ -8,6 +8,7 @@ use Activity;
 use Carbon\Carbon;
 use Stensul\Models\Upload;
 use GuzzleHttp\Client as Client;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class Marketo implements ApiConnector
 {
@@ -29,7 +30,8 @@ class Marketo implements ApiConnector
     public function uploadEmail($campaign = null, $request = null)
     {
         if (!is_null($campaign)) {
-            $original_filename = (is_null($request) || !isset($request['filename']))? $campaign->campaign_name : $request['filename'];
+            $original_filename = (is_null($request) || !isset($request['filename']))
+                ? $campaign->campaign_name : $request['filename'];
             if (strlen($original_filename)) {
                 // get token
                 if ($this->access_token = $this->getToken()) {
@@ -69,20 +71,20 @@ class Marketo implements ApiConnector
                                     'Campaign uploaded to Marketo',
                                     [
                                         'properties' => [
-                                            'campaign_id' => new \MongoId($campaign_id),
+                                            'campaign_id' => new ObjectId($campaign_id),
                                             'filename' => $filename,
-                                            'user_id' => new \MongoId(Auth::id())
+                                            'user_id' => new ObjectId(Auth::id())
                                         ]
                                     ]
                                 );
 
                                 Upload::create([
                                     'api' => 'marketo',
-                                    'campaign_id' => new \MongoId($campaign_id),
+                                    'campaign_id' => new ObjectId($campaign_id),
                                     'original_filename' => $original_filename,
                                     'filename' => $filename,
                                     'path' => $folder['folderId']['id'],
-                                    'user_id' => new \MongoId(Auth::id())
+                                    'user_id' => new ObjectId(Auth::id())
                                 ]);
 
                                 return [
@@ -90,7 +92,8 @@ class Marketo implements ApiConnector
                                 ];
                             } else {
                                 if (isset($resp['data']['errors']) && isset($resp['data']['errors']['code'])) {
-                                    $error = 'Marketo error: (' . $resp['data']['errors']['code'] . ') ' . $resp['data']['errors']['message'];
+                                    $error = 'Marketo error: (' . $resp['data']['errors']['code'] . ') '
+                                        . $resp['data']['errors']['message'];
                                     \Log::error($error);
                                 }
                                 throw new \Exception("Unable to confirm Marketo received the file.");
@@ -140,44 +143,6 @@ class Marketo implements ApiConnector
     }
 
     /**
-     * Get one Marketo folder by a given name.
-     *
-     * @return array|null
-     */
-    private function getFolderByName()
-    {
-        $folder = null;
-        $folder_config = $this->marketo_config['folder_by_name'];
-        $key = 'api:marketo:folder:' . strtolower($folder_config['params']['name']);
-
-        if (Cache::has($key)) {
-            $folder = Cache::get($key);
-        } else {
-            $folder_params = [
-                'url' => $this->marketo_config['api_path']
-                    . $folder_config['url']
-                    . '?'
-                    . http_build_query($folder_config['params']),
-                'config' => [],
-                'options' => [
-                    'headers' => [
-                        'accept' => 'application/json',
-                        'Authorization' => 'Bearer ' . $this->access_token
-                    ]
-                ],
-            ];
-            $resp = $this->call('folder', $folder_params);
-
-            if (isset($resp['status']) && $resp['status'] === 'success') {
-                $folder = array_shift($resp['data']['result']);
-                Cache::add($key, $folder, Carbon::now()->addHour());
-            }
-        }
-
-        return $folder;
-    }
-
-    /**
      * Get Marketo folder data.
      *
      * @return array|null
@@ -214,36 +179,6 @@ class Marketo implements ApiConnector
                     Cache::add($key, $folder, Carbon::now()->addHour());
                 }
             }
-        }
-
-        return $folder;
-    }
-
-    /**
-     * Get Marketo list of folder.
-     *
-     * @return array|null
-     */
-    private function getFolderList()
-    {
-        $folder = null;
-        $folder_config = $this->marketo_config['list_folders'];
-
-        $folder_params = [
-            'url' => $this->marketo_config['api_path']
-                . $folder_config['url'],
-            'config' => [],
-            'options' => [
-                'headers' => [
-                    'accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->access_token
-                ]
-            ]
-        ];
-        $resp = $this->call('list_folders', $folder_params);
-
-        if (isset($resp['status']) && $resp['status'] === 'success') {
-            $folder = array_shift($resp['data']['result']);
         }
 
         return $folder;

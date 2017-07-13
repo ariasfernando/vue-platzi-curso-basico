@@ -26,10 +26,9 @@
       </div>
 
       <div class="col-xs-3 header-col">
-        <div class="vertical-center">
-          <button class="btn btn-default" @click="preview"><i class="glyphicon glyphicon-phone"></i>Preview</button>
-          <button class="btn btn-default save-as-draft" @click="draft">Draft</button>
-          <a class="btn btn-continue" href="#" @click.prevent="publish">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
+        <div class="vertical-center pull-right">
+          <a class="btn btn-continue" href="#" @click.prevent="saveModule('draft')" :disabled="errors.any()">Save as draft<i class="glyphicon glyphicon-triangle-right"></i></a>
+          <a class="btn btn-continue" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
     </div>
@@ -38,15 +37,15 @@
       <section v-if="ready" class="col-xs-12 section-container">
 
         <!-- START: Left Bar -->
-        <aside class="col-xs-3 left-bar">
+        <aside class="col-xs-2 left-bar">
           <div class="module-settings">
             <h4>Module Settings</h4><hr>
 
             <div class="fields">
-              <div class="control">
-                <input v-model="module.name" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"
+
+              <div class="control" :class="{'has-error': errors.has('name') }">
+                <input v-model="module.name" v-validate.initial="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"
                        name="name" type="text" placeholder="Module name">
-                <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
               </div>
 
               <div class="control">
@@ -64,14 +63,29 @@
               <div class="control">
                 <h5>Elements</h5> <hr>
 
-                <ul class="components-list">
-                  <li class="component-item" draggable="true" data-type="text-element" @dragstart="setData"><i class="glyphicon glyphicon-font"></i>Text</li>
-                  <li class="component-item" draggable="true" data-type="image-element" @dragstart="setData"><i class="fa fa-picture-o" aria-hidden="true"></i>Image</li>
-                  <li class="component-item" draggable="true" data-type="button-element" @dragstart="setData"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>CTA</li>
-                  <li class="component-item" draggable="true" data-type="divider-element" @dragstart="setData"><i class="fa fa-minus-square-o" aria-hidden="true"></i>Divider</li>
-                </ul>
+                <draggable :element="'ul'" 
+                           :options="options"
+                           width="100%"
+                           class="components-list"
+                >
+                  <li class="component-item" data-type="text-element" @dragend="resetStyle">
+                    <i class="glyphicon glyphicon-font"></i>
+                    <p>Text</p>
+                  </li>
+                  <li class="component-item" data-type="image-element" @dragend="resetStyle">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                    <p>Image</p>
+                  </li>
+                  <li class="component-item" data-type="button-element" @dragend="resetStyle">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    <p>CTA</p>
+                  </li>
+                  <li class="component-item" data-type="divider-element" @dragend="resetStyle">
+                    <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+                    <p>Divider</p>
+                  </li>
+                </draggable>  
               </div>
-
             </div>
 
           </div>
@@ -79,9 +93,9 @@
         <!-- END: Left Bar -->
 
         <!-- START: Module Container -->
-        <div class="col-xs-6 module-container">
+        <div class="col-xs-7 module-container">
           <div class="col-xs-12">
-            <module :module="module" @set-component="setCurrentComponent"></module>
+            <module></module>
           </div>
 
           <div v-if="$route.query.debug" class="col-xs-12">
@@ -96,7 +110,7 @@
 
           <div class="module-settings" v-if="currentComponent">
             <div class="fields">
-              <component-settings :component="currentComponent"></component-settings>
+              <component-settings></component-settings>
             </div>
           </div>
 
@@ -105,6 +119,8 @@
 
       </section>
     </div>
+
+    <spinner></spinner>
   </div>
 </template>
 
@@ -112,39 +128,78 @@
   import Module from '../common/Module.vue'
   import ComponentSettings from './ComponentSettings.vue'
   import { defaultElements } from '../../resources/elements'
+  import moduleService from '../../services/module'
+  import Draggable from 'vuedraggable'
+  import Spinner from '../common/Spinner.vue'
 
   export default {
     name: 'EditModule',
     computed: {
       module() {
-        return this.$store.state.module.module
+        return this.$store.state.module.module;
+      },
+      currentComponent() {
+        return this.$store.state.module.currentComponent;
       }
     },
     data () {
       return {
         ready: false,
-        currentComponent: null
+        options: {
+          group:{ 
+            name:'componentsList',  
+            pull: 'clone', 
+            put: false, 
+          },
+          sort: false,
+          ghostClass: "ghost-component-menu",  // Class name for the drop placeholder
+          chosenClass: "chosen-component-menu",  // Class name for the chosen item
+          dragClass: "drag-component-menu"  // Class name for the dragging item
+        }
       }
     },
     components: {
       Module,
-      ComponentSettings
+      ComponentSettings,
+      Draggable,
+      Spinner
     },
     methods: {
       loadModule() {
+        this.$store.commit("global/setLoader", true);
+        const moduleId = this.$route.params.id || undefined;
 
-        let data = {
-          moduleId: this.$route.params.id || undefined
-        };
-
-        this.$store.dispatch("module/getModuleData", data)
+        // TODO: Trigger event editModule.onInit
+        this.$store.dispatch("module/getModuleData", moduleId)
           .then( response => {
-            this.loading = false;
+            // TODO: Trigger event editModule.onLoaded
             this.ready = true;
+            this.$store.commit("global/setLoader", false);
           }).catch( error => {
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
           });
+      },
+      saveModule(status) {
+        this.$store.commit("global/setLoader", true);
+        let data = this.module;
+        data.status = status;
 
+        // TODO: Trigger event editModule.onInit
+        this.$store.dispatch("module/saveModuleData", data)
+          .then( response => {
+            // TODO: Trigger event editModule.onLoaded
+            if (!response) {
+              this.$root.$toast('Error', {className: 'et-warn'});
+              this.$store.commit("global/setLoader", false);
+              return;
+            }
+
+            this.$store.commit("global/setLoader", false);
+            this.$router.push('/');
+          }).catch( error => {
+            this.$store.commit("global/setLoader", false);
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+          });
       },
       setColumns(cols) {
         let numCols = this.module.structure.columns.length;
@@ -172,17 +227,10 @@
             });
           }
         }
-      },
-      setData(e) {
-        let targetEl = e.target;
-        let elType = targetEl.getAttribute('data-type');
-        let Element = new defaultElements(elType);
 
-        e.dataTransfer.setData("component", JSON.stringify(Element));
       },
-      setCurrentComponent(ref) {
-        this.currentComponent = this.module.structure.columns[ref.columnId].components[ref.componentId];
-        console.log(this.currentComponent);
+      resetStyle(e) {
+        e.target.style.opacity = "";
       },
       changeMode(mode) {
         this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});
@@ -195,10 +243,20 @@
       },
       publish() {
         this.$root.$toast('Publish event', {className: 'et-info'});
+      },
+      toggleSidebar() {
+        const sidebar = document.getElementById('admin-sidebar');
+        sidebar.style.display = 'none';
+
+        const container = document.getElementsByClassName('base-admin')[0];
+        container.style.paddingLeft = 0;
       }
     },
     created () {
       this.loadModule();
+    },
+    mounted () {
+      this.toggleSidebar();
     }
   };
 </script>
@@ -220,10 +278,9 @@
     .header {
       color: #FFFFFF;
       background-color: @stensul-purple;
-      height: 80px;
+      height: 60px;
       box-shadow: 0 8px 6px -6px #000;
-      margin-bottom: 20px;
-      padding: 15px 0;
+      padding: 0;
 
       .header-col {
         height: 100%;
@@ -381,17 +438,29 @@
 
       .components-list {
         padding: 0;
+        text-align: center;
 
         .component-item {
           list-style-type: none;
+          width: 46%;
+          font-size: 22px;
+          text-align: center;
+          background-color: #f4f4f4;
           border: 1px solid #ccc;
-          border-radius: 5px;
-          margin: 5px 0;
+          margin: 2px 0;
           padding: 5px;
           cursor: pointer;
+          display: inline-block;
+          height: 60px;
 
           i {
-            margin: 0 10px;
+            margin: 0 5px;
+          }
+
+          p{
+            font-size: 14px;
+            margin: 0px;
+            padding: 0px;
           }
         }
       }
@@ -400,7 +469,7 @@
         margin-top: 25px;
 
         pre {
-          font-size: 10px;
+          font-size: 50px;
           font-family: Monaco;
         }
       }
@@ -419,7 +488,11 @@
     }
 
     .module-table .st-col {
-      border: 1px dashed @focus;
+      background-color: #f4f4f4;
+    }
+
+    .is-danger {
+      border: 1px solid red !important;
     }
   }
 

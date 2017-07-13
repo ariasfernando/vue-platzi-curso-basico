@@ -113,7 +113,7 @@ class Create extends Command
                 $config = $modules[$parent_module];
                 $config['module_id'] = $module_id;
                 $config['title'] = $name;
-                $config['class'] = 'pkg';
+                $config['type'] = 'custom';
                 $config['description'] = $description;
             } else {
                 $config = [
@@ -123,7 +123,7 @@ class Create extends Command
                     'action' => 'add',
                     'level' => 'single',
                     'file_parent' => 'base',
-                    'class' => 'pkg',
+                    'type' => 'custom',
                     'description' => $description
                 ];
             }
@@ -180,13 +180,16 @@ class Create extends Command
         <table cellspacing="0" cellpadding="0" border="0" width="100%">
             <tbody><tr>
                 <td style="padding: 40px; font-family: {{ \$params['campaign_data']->getLibraryConfig('font_family') }};
-                    font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: {{ \$module_params['data']['color'] or "#555555" }};">
+                    font-size: 15px; mso-height-rule: exactly; line-height: 20px;
+                    color: {{ \$module_params['data']['color'] or "#555555" }};">
                     <div class="text-overlay">
                         <div class="prevent-overflow">
                             <p id="text-editable" class="st-edit-text">
-                                {!! \$module_params['data']['text0'] or "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Vestibulum tempus, lacus et vehicula congue, felis diam rhoncus enim, a scelerisque sapien
-                                nulla non tortor. Mauris aliquet accumsan lorem, eget blandit diam pretium at." !!}
+                                {!! \$module_params['data']['text0'] or "Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit.
+                                Vestibulum tempus, lacus et vehicula congue, felis diam rhoncus enim, a scelerisque
+                                sapien nulla non tortor. Mauris aliquet accumsan lorem,
+                                eget blandit diam pretium at." !!}
                             </p>
                         </div>
                         <div class="text-overlay-toolbox"></div>
@@ -202,7 +205,8 @@ EOF;
         // Override default template if a parent module is specified.
         if (!empty($parent_module) && $parent_module !== 'none') {
             // @todo check if it's an old module.
-            $parent_dir = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS . 'modules' . DS . $parent_module;
+            $parent_dir = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS
+                . 'modules' . DS . $parent_module;
 
             $template = false;
 

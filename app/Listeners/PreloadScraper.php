@@ -24,10 +24,8 @@ class PreloadScraper
     /**
      * Handle the event.
      *
-     * @param  Events  $event
-     * @return void
      */
-    public function handle(UserLoggedIn $event)
+    public function handle()
     {
         if (\Config::get('api.scraper.status') === true
             && \Config::get('api.scraper.settings.login_preload')) {

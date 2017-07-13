@@ -20,7 +20,7 @@ class Library extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'modules', 'config'];
+    protected $fillable = ['name', 'key', 'description', 'modules', 'config'];
 
     /**
      * Get the library modules
@@ -48,7 +48,7 @@ class Library extends Eloquent
                 }
 
                 $library_modules[] = [
-                    'title' => preg_replace(["/^modules-/", "/_/"], ['', ' '], $group),
+                    'name' => preg_replace(["/^modules-/", "/_/"], ['', ' '], $group),
                     'sub_menu' => $submenu_items,
                     'level' => 'level-1'
                 ];
@@ -59,5 +59,16 @@ class Library extends Eloquent
             }
         }
         return $library_modules;
+    }
+
+    /**
+     * Get the library key standarized
+     *
+     * @param string $name
+     * @return string Modules
+     */
+    public static function standarizeKey($name)
+    {
+        return str_replace(' ', '', strtolower($name));
     }
 }

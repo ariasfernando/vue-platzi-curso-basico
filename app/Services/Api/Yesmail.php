@@ -6,6 +6,7 @@ use Auth;
 use Activity;
 use Stensul\Models\Upload;
 use GuzzleHttp\Client as Client;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class Yesmail implements ApiConnector
 {
@@ -32,7 +33,8 @@ class Yesmail implements ApiConnector
     public function uploadEmail($campaign = null, $request = null)
     {
         if (!is_null($campaign)) {
-            $original_filename = (is_null($request) || !isset($request['filename']))? $campaign->campaign_name : $request['filename'];
+            $original_filename = (is_null($request) || !isset($request['filename']))
+                ? $campaign->campaign_name : $request['filename'];
             if (strlen($original_filename)) {
                 $campaign_id = $request['campaign_id'];
                 $filename = Upload::versioningFilename($original_filename);
@@ -57,19 +59,19 @@ class Yesmail implements ApiConnector
                 if (isset($resp['id'])) {
                     Activity::log('Campaign uploaded to Yesmail', [
                         'properties' => [
-                            'campaign_id' => new \MongoId($campaign_id),
+                            'campaign_id' => new ObjectId($campaign_id),
                             'filename' => $filename,
-                            'user_id' => new \MongoId(Auth::id())
+                            'user_id' => new ObjectId(Auth::id())
                         ]
                     ]);
 
                     Upload::create([
                         'api' => 'yesmail',
-                        'campaign_id' => new \MongoId($campaign_id),
+                        'campaign_id' => new ObjectId($campaign_id),
                         'original_filename' => $original_filename,
                         'filename' => $filename,
                         'path' => $path,
-                        'user_id' => new \MongoId(Auth::id())
+                        'user_id' => new ObjectId(Auth::id())
                     ]);
 
                     return [

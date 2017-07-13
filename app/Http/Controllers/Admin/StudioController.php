@@ -81,7 +81,7 @@ class StudioController extends Controller
     {
         $modules = \StensulModule::getModuleList();
 
-        return $this->renderView('base.admin.studio', array(
+        return $this->renderView('admin.studio', array(
             'modules' => $modules,
             'libraries' => $this->queryConstructor($request)
         ));
@@ -96,7 +96,7 @@ class StudioController extends Controller
     {
         $modules = \StensulModule::getModuleList();
 
-        return $this->renderView('base.admin.partials.module_draw_row', array('modules' => $modules));
+        return $this->renderView('admin.partials.module_draw_row', array('modules' => $modules));
     }
 
     /**
@@ -122,7 +122,7 @@ class StudioController extends Controller
             "modules" => array_combine($modules, $modules)
         ];
 
-        return $this->renderView('base.admin.modals.module_form', array('params' => $params));
+        return $this->renderView('admin.modals.module_form', array('params' => $params));
     }
 
     /**
@@ -142,7 +142,7 @@ class StudioController extends Controller
             "module" => $module_data
         ];
 
-        return $this->renderView('base.admin.modals.module_form', array('params' => $params));
+        return $this->renderView('admin.modals.module_form', array('params' => $params));
     }
 
     /**

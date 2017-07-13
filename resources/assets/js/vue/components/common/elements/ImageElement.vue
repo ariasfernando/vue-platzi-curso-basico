@@ -1,13 +1,18 @@
 <template>
   <!-- IMAGE ELEMENT -->
-  <table width="100%" cellspacing="0" cellpadding="0" border="0">
-    <tr>
-      <td width="100%" align="center" :style="component.style">
-        <img :src="component.placeholder" class="st-resize st-image" :width="component.width" :height="component.height"
-             :data-open-element-config="elementConfig" alt="" border="0">
+    <tr @click="setComponent">
+      <td align="center" :style="component.style" class="st-position-relative">
+        <img class="st-resize st-image"
+             :src="imageUrl(component.placeholder)" 
+             :width="component.width" 
+             :height="component.height"
+             :data-open-element-config="elementConfig" 
+             alt="" 
+             border="0"
+        >
+      <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
       </td>
     </tr>
-  </table>
   <!-- IMAGE ELEMENT ENDS -->
 </template>
 
@@ -23,6 +28,13 @@
     created () {
       this.setupModule();
     },
+    data(){
+      return {
+        imageUrl(imagePath) {
+          return this.$app.imageUrl + imagePath;
+        }
+      }
+    },
     methods: {
       setupModule () {
         this.elementConfig = null;
@@ -32,7 +44,40 @@
         }
       },
       changed (event) {
+      },
+      setComponent() {
+        this.$store.commit("module/setCurrentComponent", {
+          columnId: this.columnId,
+          componentId: this.componentId
+        });
       }
     }
   };
 </script>
+
+<style lang="less">
+  @icon-option: #9189a2;
+
+  .st-position-relative{
+    position: relative;
+  }
+
+  .icon-move {
+    display: none;
+    cursor: move;
+    cursor: -webkit-grabbing;
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    color: #fff;
+    z-index: 5;
+    right: -15px;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    line-height: 30px;
+    background-color: @icon-option;
+    opacity: 1;
+    margin-top: -15px;
+  }
+</style>

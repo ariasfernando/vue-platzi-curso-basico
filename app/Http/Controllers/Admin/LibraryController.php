@@ -6,6 +6,7 @@ use Auth;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\Library;
+use Stensul\Models\Permission;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
 
@@ -78,7 +79,7 @@ class LibraryController extends Controller
      */
     public function getIndex(Request $request)
     {
-        return $this->renderView('base.admin.libraries', $this->queryConstructor($request));
+        return $this->renderView('admin.libraries', $this->queryConstructor($request));
     }
 
     /**
@@ -88,7 +89,7 @@ class LibraryController extends Controller
      */
     public function getList(Request $request)
     {
-        return $this->renderView('base.admin.partials.library_draw_row', $this->queryConstructor($request));
+        return $this->renderView('admin.partials.library_draw_row', $this->queryConstructor($request));
     }
 
     /**
@@ -99,7 +100,7 @@ class LibraryController extends Controller
     public function postList(Request $request)
     {
         $result = $this->queryConstructor($request);
-           return $result['libraries'];    
+        return $result['libraries'];
     }
 
     /**
@@ -115,7 +116,7 @@ class LibraryController extends Controller
             "modules" => array_combine($modules, $modules)
         ];
 
-        return $this->renderView('base.admin.modals.library_form', array('params' => $params));
+        return $this->renderView('admin.modals.library_form', array('params' => $params));
     }
 
     /**
@@ -162,7 +163,7 @@ class LibraryController extends Controller
         $library->modules = $modules = [];
         $library->config = $request->input("config");
 
-        foreach ($request->input('modules') as $key => $group) {
+        foreach ($request->input('modules') as $group) {
             if (strtolower($group['name']) == 'default') {
                 $modules = $group['modules'];
             } else {
@@ -194,12 +195,13 @@ class LibraryController extends Controller
     {
         $params = [
             "name" => $request->input("name"),
+            "key" => Library::standarizeKey($request->input("name")),
             "description" => $request->input("description"),
             "config" => $request->input("config"),
             "modules" => []
         ];
 
-        foreach ($request->input('modules') as $key => $group) {
+        foreach ($request->input('modules') as $group) {
             if (strtolower($group['name']) == 'default') {
                 $params['modules'] = $group['modules'];
             } else {
@@ -210,8 +212,19 @@ class LibraryController extends Controller
         if (Library::where('name', '=', $params["name"])->exists()) {
             $response_message = array("message"=> "ERROR_EXISTS");
         } else {
-            Library::create($params);
-            $response_message = array("message"=> "SUCCESS");
+            // Create permission to have access to the new library
+            $permission_params = [
+                "name" => "access_library_" . $params['key'],
+                "description" => "Access to library: " . $params['name']
+            ];
+
+            if (Permission::where('name', '=', $permission_params["name"])->exists()) {
+                $response_message = array("message"=> "ERROR_EXISTS");
+            } else {
+                Library::create($params);
+                Permission::create($permission_params);
+                $response_message = array("message"=> "SUCCESS");
+            }
         }
 
         return $response_message;
@@ -227,5 +240,16 @@ class LibraryController extends Controller
         $library = Library::findOrFail($request->input("libraryId"));
         $library->delete();
         return array("deleted" => $request->input("libraryId"));
+    }
+
+    /**
+     * Library ESP providers.
+     *
+     * @return array
+     */
+    public function postEspProviders(Request $request)
+    {
+        $providers = config('esp');
+        return $providers;
     }
 }

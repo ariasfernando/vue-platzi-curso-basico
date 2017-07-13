@@ -523,7 +523,7 @@ $default = [
 // Load new module config.
 foreach ($menu as $library => $modules) {
     foreach ($modules as $module_config) {
-        if (!isset($module_config['class']) || $module_config['class'] !== 'pkg') {
+        if (!isset($module_config['class']) || $module_config['class'] !== 'custom') {
             continue;
         }
 

@@ -1,20 +1,21 @@
-import Q from 'q'
-import request from '../utils/request'
-import endpoints from '../resources/endpoints'
-import store from '../store'
-import Campaign from '../models/campaign'
+import Q from 'q';
+import _ from 'underscore-contrib';
+import request from '../utils/request';
+import endpoints from '../resources/endpoints';
+import store from '../store';
+import Campaign from '../models/campaign';
 
 export default {
   getCampaign(campaignId) {
-    let deferred = Q.defer();
-    let endpoint = endpoints.campaign.getCampaign;
-    let params = {
-      search: { campaignId: campaignId },
-      endpoint: endpoints.campaign.getCampaign
+    const deferred = Q.defer();
+    const endpoint = endpoints.campaign.getCampaign;
+    const params = {
+      search: { campaignId },
+      endpoint: endpoints.campaign.getCampaign,
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body)
+      deferred.resolve(response.body);
     }).catch((err) => {
       deferred.reject(err);
     });
@@ -23,13 +24,13 @@ export default {
   },
 
   saveCampaign() {
-    let endpoint = endpoints.campaign.getCampaign;
-    let editedCampaign = this.getEditedData();
-    let deferred = Q.defer();
+    const endpoint = endpoints.campaign.getCampaign;
+    const editedCampaign = this.getEditedData();
+    const deferred = Q.defer();
 
-    let params = {
+    const params = {
       endpoint: endpoints.campaign.getCampaign,
-      data: editedCampaign
+      data: editedCampaign,
     };
 
     request[endpoint.method](params).then((response) => {
@@ -42,13 +43,13 @@ export default {
   },
 
   cloneCampaign(campaignId) {
-    let endpoint = endpoints.campaign.cloneCampaign;
-    let deferred = Q.defer();
-    let params = {
+    const endpoint = endpoints.campaign.cloneCampaign;
+    const deferred = Q.defer();
+    const params = {
       endpoint: endpoints.campaign.cloneCampaign,
       data: {
-        campaign_id: campaignId
-      }
+        campaign_id: campaignId,
+      },
     };
 
     request[endpoint.method](params).then((response) => {
@@ -59,25 +60,25 @@ export default {
   },
 
   getEditedData() {
-    let campaign = store.state.campaign;
-    let editedSettings = store.state.editedSettings;
+    const campaign = store.state.campaign;
+    const editedSettings = store.state.editedSettings;
 
     // Edited modules
-    let modules = store.state.modules;
-    let editedModules = store.state.editedModules;
+    const modules = store.state.modules;
+    const editedModules = store.state.editedModules;
 
-    for (let edited of editedModules) {
-      for (let key in edited.data) {
+    for (const edited of editedModules) {
+      for (const key in edited.data) {
         modules[edited.moduleId].columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
       }
     }
 
-    let dataCampaign = new Campaign({
-      campaign: campaign,
+    const dataCampaign = new Campaign({
+      campaign,
       settings: editedSettings,
-      modules: modules
+      modules,
     });
 
     return dataCampaign;
-  }
-}
+  },
+};

@@ -3,10 +3,10 @@
     <div class="section-box-header section-canvas-title">
       <div class="row">
         <div :class="'col-xs-3 col-md-4 col-lg-' + titleCols" id="section-canvas-title-col">
-          <h2>{{ params.campaign_data.library_config.title || 'Campaign Editor' }}</h2>
+          <h2>{{ campaign.campaign_data.library_config.title || 'Campaign Editor' }}</h2>
         </div>
 
-        <div class="col-xs-1 col-md-1 col-lg-2" v-if="params.campaign_data.library_config.building_mode_select">
+        <div class="col-xs-1 col-md-1 col-lg-2" v-if="campaign.campaign_data.library_config.building_mode_select">
           <div class="switch">
             <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
             <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
@@ -25,15 +25,15 @@
             class="glyphicon glyphicon-phone"></i>Preview
           </button>
 
-          <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!params.template"
+          <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template"
                   @click="saveCampaign">Save as Draft
           </button>
 
           <button class="btn btn-default save-as-template" :class="hiddenClass()"
-                  v-if="!params.processed && params.campaign_data.library_config.enable_templating">Save as Template
+                  v-if="!campaign.processed && campaign.campaign_data.library_config.enable_templating">Save as Template
           </button>
 
-          <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!params.template" href="#">Complete<i
+          <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" href="#">Complete<i
             class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
@@ -45,12 +45,16 @@
         <tr>
           <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
             <table id="emailCanvas" class="email-canvas wrapper-table"
-                   :width="params.campaign_data.library_config.template_width" cellspacing="0" cellpadding="0"
+                   :width="campaign.campaign_data.library_config.template_width" cellspacing="0" cellpadding="0"
                    border="0">
               <tbody>
               <tr v-for="(module, moduleId) in modules" :data-params="JSON.stringify(module)">
-                <td :style="module.style.default" :class="[module.columns.length > 1 ? 'st-wrapper-content' : '']">
+                <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
                   <module :module-id="moduleId" :module="module"></module>
+                </td>
+
+                <td v-else>
+                  <custom-module :module-id="moduleId" :module="module"></custom-module>
                 </td>
               </tr>
               </tbody>
@@ -73,28 +77,30 @@
 
 <script>
   import Module from './Module.vue';
+  import CustomModule from './CustomModule.vue';
 
   export default {
     name: 'EmailCanvas',
     components: {
-      Module
+      Module,
+      CustomModule
     },
     computed: {
       modules () {
-        return this.$store.state.modules;
+        return this.$store.state.campaign.modules;
       },
-      params () {
-        return this.$store.state.campaign;
+      campaign () {
+        return this.$store.state.campaign.campaign;
       }
     },
     data () {
       return {
         title  () {
-          let libraryTitle = this.params.campaign_data.library_config.title || 'Campaign Editor';
+          let libraryTitle = this.campaign.campaign_data.library_config.title || 'Campaign Editor';
 
           // Set language name
-          if (this.params.campaign_format == "languages" && this.params.locale.langs[this.params.locale.name]) {
-            libraryTitle += "(" + this.params.locale.langs[this.params.locale.name] + ")";
+          if (this.campaign.campaign_format === "languages" && this.campaign.locale.langs[this.campaign.locale.name]) {
+            libraryTitle += "(" + this.campaign.locale.langs[this.campaign.locale.name] + ")";
           }
 
           return libraryTitle;
@@ -102,7 +108,7 @@
         titleCols: 3,
         buttonsCols: 5,
         hiddenClass () {
-          return this.params.locked ? 'hidden' : '';
+          return this.campaign.locked ? 'hidden' : '';
         }
       }
     },
@@ -112,10 +118,10 @@
       }
     },
     created () {
-      let saveAsTemplate = (!this.params.processed && this.params.campaign_data.library_config.enable_templating);
-      let isTemplate = this.params.template;
+      let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.enable_templating);
+      let isTemplate = this.campaign.template;
 
-      if (!this.params.campaign_data.library_config.building_mode_select) {
+      if (!this.campaign.campaign_data.library_config.building_mode_select) {
         this.titleCols += 2;
       }
 

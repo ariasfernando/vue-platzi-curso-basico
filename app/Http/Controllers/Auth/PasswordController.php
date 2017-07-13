@@ -40,19 +40,18 @@ class PasswordController extends Controller
     /**
      * Get email view.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function getEmail(Request $request)
+    public function getEmail()
     {
         if (\Config::get('challenge.enabled')) {
             $challenge_provider = \Config::get('challenge.default');
             $config = \Config::get('challenge.providers.' . $challenge_provider);
-            return view('base.auth.password')
+            return view('auth.password')
                     ->with('challenge_key', $config['key'])
                     ->with('challenge_provider', $challenge_provider);
         }
-        return view('base.auth.password');
+        return view('auth.password');
     }
 
     /**
@@ -64,8 +63,6 @@ class PasswordController extends Controller
     public function postEmail(Request $request)
     {
         // Challenge validation
-        $challenge_provider = \Config::get('challenge.default');
-        $config = \Config::get('challenge.providers.' . $challenge_provider);
         if (!Challenge::provider()->isValid($request)) {
             Activity::log('User login fail [ERROR_CAPTCHA]');
             return redirect()->back()->withErrors(['status' => 'Captcha validation is required']);
@@ -79,7 +76,7 @@ class PasswordController extends Controller
         $user_auth = User::where('email', '=', $data_params["email"])->first();
 
         if (is_null($user_auth['status']) || $user_auth['status'] != "deleted") {
-            $response = $this->passwords->sendResetLink($data_params, function ($message) {
+            $this->passwords->sendResetLink($data_params, function ($message) {
                 $message->subject($this->getEmailSubject());
             });
         }
@@ -99,7 +96,7 @@ class PasswordController extends Controller
             throw new NotFoundHttpException;
         }
 
-        return view('base.auth.reset')->with('token', $token);
+        return view('auth.reset')->with('token', $token);
     }
 
     /**
@@ -155,7 +152,7 @@ class PasswordController extends Controller
      */
     public function getChange()
     {
-        return view('base.auth.change_password');
+        return view('auth.change_password');
     }
 
     /**

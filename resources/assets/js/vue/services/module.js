@@ -1,23 +1,41 @@
-import Q from 'q'
-import request from '../utils/request'
-import _ from 'underscore'
-import Module from '../models/module'
-import endpoints from '../resources/endpoints'
+import Q from 'q';
+import _ from 'underscore-contrib';
+import request from '../utils/request';
+import Module from '../models/module';
+import endpoints from '../resources/endpoints';
 
 export default {
   getModule(moduleId) {
-    let endpoint = endpoints.module.getModule;
-    let deferred = Q.defer();
-    let params = {
-      endpoint: endpoint,
-      search: { moduleId: moduleId }
+    const endpoint = endpoints.module.getModule;
+    const deferred = Q.defer();
+    const params = {
+      endpoint,
+      search: { moduleId },
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve({
-        library: new Module(response.body.module),
-        modules: response.body.modules
-      })
+      const module = new Module(response.body);
+      deferred.resolve(module);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+
+  getCustomModule(moduleKey, campaignId) {
+    const endpoint = endpoints.module.getCustomModule;
+    const deferred = Q.defer();
+    const params = {
+      endpoint,
+      search: {
+        moduleKey,
+        campaignId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
     }).catch((err) => {
       deferred.reject(err);
     });
@@ -26,16 +44,16 @@ export default {
   },
 
   getAllModules() {
-    let endpoint = endpoints.module.getAllModules;
-    let deferred = Q.defer();
-    let params = {
-      endpoint: endpoint
+    const endpoint = endpoints.module.getAllModules;
+    const deferred = Q.defer();
+    const params = {
+      endpoint,
     };
 
     request[endpoint.method](params).then((response) => {
-      let modules = [];
-      _.each(response.body, function(v) {
-        let module = new Module(v);
+      const modules = [];
+      _.each(response.body, (v) => {
+        const module = new Module(v);
         modules.push(module);
       });
 
@@ -48,50 +66,62 @@ export default {
   },
 
   newModule() {
-    let deferred = Q.defer();
-    let module = new Module();
+    const deferred = Q.defer();
+    const module = new Module();
     deferred.resolve(module);
     return deferred.promise;
   },
 
   saveModule(moduleJson) {
-    let endpoint = endpoints.module.saveModule();
-    let deferred = Q.defer();
-    let params = {
-      endpoint: endpoint,
-      data: moduleJson
+    const endpoint = endpoints.module.saveModule;
+    const deferred = Q.defer();
+    const params = {
+      endpoint,
+      json: moduleJson,
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body);
+      if (response.body.message !== 'SUCCESS') {
+        deferred.reject(response.body.message);
+      } else {
+        deferred.resolve(response.body);
+      }
     }).catch((err) => {
       deferred.reject(err);
     });
+
+    return deferred.promise;
   },
 
   createModule(moduleJson) {
-    let endpoint = endpoints.module.createModule();
-    let deferred = Q.defer();
-    let params = {
-      endpoint: endpoint,
-      data: moduleJson
+    const endpoint = endpoints.module.createModule;
+    const deferred = Q.defer();
+    const params = {
+      endpoint,
+      json: moduleJson,
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body);
+      if (response.body.message !== 'SUCCESS') {
+        deferred.reject(response.body.message);
+      } else {
+        deferred.resolve(response.body);
+      }
     }).catch((err) => {
       deferred.reject(err);
     });
+
+    return deferred.promise;
   },
 
   deleteModule(moduleId) {
-    let endpoint = endpoints.module.deleteModule();
-    let deferred = Q.defer();
-    let params = {
-      endpoint: endpoint,
+    const endpoint = endpoints.module.deleteModule;
+    const deferred = Q.defer();
+    const params = {
+      endpoint,
       data: {
-        moduleId: moduleId
-      }
+        moduleId,
+      },
     };
 
     request[endpoint.method](params).then((response) => {
@@ -99,5 +129,7 @@ export default {
     }).catch((err) => {
       deferred.reject(err);
     });
-  }
-}
+
+    return deferred.promise;
+  },
+};

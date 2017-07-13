@@ -69,7 +69,7 @@ class BaseRegisterController extends Controller
             return redirect(env('APP_BASE_URL', '/'));
         } else {
             $roles = array_column(Role::all(['name'])->toArray(), 'name');
-            return view('base.auth.register')->with('roles', $roles);
+            return view('auth.register')->with('roles', $roles);
         }
     }
 

@@ -1,35 +1,45 @@
-import Q from 'q'
-import request from 'request'
-import _ from 'underscore'
+import Q from 'q';
+import _ from 'underscore-contrib';
+import Vue from 'vue/dist/vue';
+import VueResource from 'vue-resource/dist/vue-resource';
+import mocks from '../resources/fixtures';
 
-function requestResponse(method, params, options) {
-  let deferred = Q.defer();
+Vue.use(VueResource);
 
-  options = options || {};
+function requestResponse(method, params, opts) {
+  const deferred = Q.defer();
+  /*
+   * UT: mocked response
+   */
+  if (process.env.APP_ENV === 'test') {
+    const arr = params.path.split('.');
+    const res = {
+      body: mocks[arr[0]][arr[1]],
+    };
+    deferred.resolve(res);
+    return deferred.promise;
+  }
+
+  const options = opts || {};
 
   options.url = exports.getPath(params.endpoint.path, params.search);
   options.data = params.data || undefined;
   options.formData = params.formData || undefined;
   options.json = params.json || undefined;
 
-  let xCsrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content') || '';
-  options.headers = {
-    'X-CSRF-TOKEN': xCsrfToken
-  };
+  Vue.http[method](options.url, options.json)
+    .then((response) => {
+      const statusCode = (response && response.status) ? response.status : 500;
 
-  request[method](options, function (error, response, body) {
-    response = response || undefined;
-    let statusCode = (response && response.statusCode) ? response.statusCode : 500;
-
-    if (statusCode !== 200) {
-      deferred.reject(error);
-    } else {
-      if ( _.isString(response.body) ) {
-        response.body = JSON.parse(response.body);
+      if (statusCode !== 200) {
+        deferred.reject('Error');
+      } else {
+        deferred.resolve(response);
       }
-      deferred.resolve(response);
-    }
-  });
+    })
+    .catch((error) => {
+      deferred.reject(error);
+    });
 
   return deferred.promise;
 }

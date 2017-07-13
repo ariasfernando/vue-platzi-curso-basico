@@ -97,7 +97,7 @@ var userController = function( customOptions ){
 				buttonSpinner.show( element );
 
 				_this.doAjax(action, "POST", $(form).serializeArray())
-					.done(function (status) {
+					.done(function (data) {
 						buttonSpinner.hide( element );
 
 						options.busy = false;

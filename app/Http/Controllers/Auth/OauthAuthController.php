@@ -48,7 +48,7 @@ class OauthAuthController extends Controller
      */
     public function getLogin()
     {
-        return view('base.auth.oauth_login');
+        return view('auth.oauth_login');
     }
 
     /**
@@ -73,7 +73,7 @@ class OauthAuthController extends Controller
             $user = Socialite::driver($this->config['oauth_driver'])->user();
             $email = strtolower($user->getEmail());
 
-            if (User::where('email', '=', $email)->exists()) {
+            if (User::where('email', '=', $email)->where('status', '!=', 'deleted')->exists()) {
                 $roles_array = array_column(Role::all(['name'])->toArray(), 'name');
                 $user_auth = User::where('email', '=', $email)->firstOrFail();
                 if (!$user_auth->trashed()) {
@@ -95,9 +95,9 @@ class OauthAuthController extends Controller
 
         if (isset($error)) {
             \Log::error($error);
-            return view('base.auth.session')->with('error', $error['message']);
+            return view('auth.session')->with('error', $error['message']);
         } else {
-            return view('base.auth.session')->with('redirect_to', env('APP_BASE_URL', $this->redirect_to));
+            return view('auth.session')->with('redirect_to', env('APP_BASE_URL', $this->redirect_to));
         }
     }
 

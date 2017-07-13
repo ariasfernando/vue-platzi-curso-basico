@@ -37,7 +37,7 @@ class RoleController extends Controller
     public function getIndex()
     {
         $roles_data = Role::orderBy('updated_at', 'desc')->paginate(5);
-        return $this->renderView('base.admin.roles', array('roles' => $roles_data));
+        return $this->renderView('admin.roles', array('roles' => $roles_data));
     }
 
     /**
@@ -57,7 +57,7 @@ class RoleController extends Controller
             ->all();
 
         return $this->renderView(
-            'base.admin.partials.role_draw_row',
+            'admin.partials.role_draw_row',
             ['roles' => $roles]
         );
     }
@@ -103,7 +103,7 @@ class RoleController extends Controller
             "permissions" => $modelData["permissions"],
             "libraries" => $modelData["libraries"]
         ];
-        return $this->renderView('base.admin.modals.role_form', array('params' => $params));
+        return $this->renderView('admin.modals.role_form', array('params' => $params));
     }
 
     /**
@@ -118,11 +118,10 @@ class RoleController extends Controller
         $params = [
             "title" => "Edit Role",
             "permissions" => $modelData["permissions"],
-            "libraries" => $modelData["libraries"],
             "role" => $role_data
         ];
 
-        return $this->renderView('base.admin.modals.role_form', array('params' => $params));
+        return $this->renderView('admin.modals.role_form', array('params' => $params));
     }
 
     /**
@@ -135,8 +134,6 @@ class RoleController extends Controller
         $role_data = Role::findOrFail($request->input("roleId"));
         $role_data->description = $request->input("description");
         $role_data->permissions = (is_null($request->input("permissions")))? [] : $request->input("permissions");
-        $role_data->libraries = (is_null($request->input("libraries"))
-            || $request->input("libraries") == "default" ) ? [] : $request->input("libraries");
 
         $role_data->save();
         return array("message"=> "SUCCESS");

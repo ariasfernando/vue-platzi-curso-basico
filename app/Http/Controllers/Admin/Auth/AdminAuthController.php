@@ -62,7 +62,7 @@ class AdminAuthController extends Controller
      */
     public function getLogin()
     {
-        return view('base.admin.auth.login');
+        return view('admin.auth.login');
     }
 
     /**
@@ -79,8 +79,7 @@ class AdminAuthController extends Controller
         $attempt_admin = false;
 
         if ($app_admin && User::where('email', '=', $email)->whereNull('deleted_at')->exists()) {
-            $attempt_admin = ( count(array_intersect(User::where('email', '=', $email)
-                ->first()->roles, \Config::get("admin.roles"))) > 0 );
+            $attempt_admin = User::where('email', '=', $email)->first()->can('access_admin');
         }
 
         if ($attempt_admin) {

@@ -1,23 +1,21 @@
-import Vue from 'vue/dist/vue'
+import Vue from 'vue/dist/vue';
+import VueResource from 'vue-resource/dist/vue-resource';
+import VeeValidate from 'vee-validate';
+import Toast from 'vue-easy-toast';
+import interceptors from './interceptors';
+import Config from './config';
+import store from './store';
+import Campaign from './components/campaign/Campaign.vue';
 
-import VueResource from 'vue-resource/dist/vue-resource'
+Vue.use(Config);
 Vue.use(VueResource);
-
-// Notifications component (https://github.com/noru/vue-easy-toast)
-import Toast from 'vue-easy-toast'
+Vue.use(VeeValidate);
 Vue.use(Toast);
-
-import interceptors from './interceptors'
 Vue.use(interceptors);
 
-Vue.config.debug = false;
-Vue.config.silent = true;
-
-import Campaign from './components/campaign/Campaign.vue'
-import store from './store'
-
-window.vm = new Vue({
-  el: '#campaign',
-  store: store,
-  components: {Campaign}
-});
+const app = new Vue({
+  store,
+  components: {
+    Campaign,
+  },
+}).$mount('#campaign');

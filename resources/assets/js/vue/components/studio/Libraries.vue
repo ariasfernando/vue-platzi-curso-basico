@@ -3,15 +3,15 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <div class="btn btn-default">
-          <router-link to="/create" class="btn-create">Create a new library</router-link>
+        <h2 class="pull-left">Libraries List</h2>
+        <div class="btn btn-default btn-create pull-right">
+          <router-link to="/create" class="btn-create"><i class="glyphicon glyphicon-plus-sign"></i> Create a new library</router-link>
         </div>
       </div>
     </div>
 
     <div class="row" v-if="ready && libraries.data.length">
       <div class="col-xs-12">
-        <h2 class="crimson italic">Libraries list</h2>
 
         <div class="table-responsive">
           <table width="100%" border="0" cellpadding="0" cellspacing="0" id="admin-library"
@@ -55,7 +55,7 @@
               <td class="text-right actions icons">
                 <router-link :to="'/' + library._id"><i class="glyphicon glyphicon-pencil"></i></router-link>
                 <a href="#" class="delete" title="Delete" @click="deleteLibrary(library._id)"><i
-                  class="glyphicon glyphicon-ban-circle"></i></a>
+                  class="glyphicon glyphicon-trash"></i></a>
               </td>
             </tr>
             </tbody>
@@ -78,7 +78,7 @@
   import libraryService from '../../services/library'
   import Pagination from '../common/Pagination.vue'
   import ColumnSort from '../common/ColumnSort.vue'
-  import _ from 'underscore'
+  import _ from 'underscore-contrib'
 
   export default {
     name: 'Libraries',
@@ -156,16 +156,29 @@
             this.$root.$toast(error, {className: 'et-warn'});
           });
       },
+      toggleSidebar() {
+        const sidebar = document.getElementById('admin-sidebar');
+        sidebar.style.display = 'block';
+
+        const container = document.getElementsByClassName('base-admin')[0];
+        container.style.paddingLeft = '175px';
+      },
     },
     created () {
       this.fetchLibraries();
+    },
+    mounted() {
+      this.toggleSidebar();
     }
   };
 </script>
 
 <style>
   .btn-create {
-    color: #FFFFFF !important;
+    color: #FFFFFF!important;
+  }
+  .btn-create:hover a{
+    color: #FFFFFF!important;
   }
   .modules-list {
     display: block;

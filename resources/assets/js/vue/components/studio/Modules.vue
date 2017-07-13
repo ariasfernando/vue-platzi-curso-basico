@@ -3,9 +3,9 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <h2 class="crimson italic">Modules list</h2>
-        <div class="btn btn-default btn-create">
-          <router-link to="/create">Create a new Module</router-link>
+        <h2 class="pull-left">Module List</h2>
+        <div class="btn btn-default btn-create pull-right">
+          <router-link to="/create"><i class="glyphicon glyphicon-plus-sign"></i> Create a new Module</router-link>
         </div>
       </div>
     </div>
@@ -19,21 +19,21 @@
             <thead>
             <tr>
               <th class="sortable">
-                <a href="#" class="" id="module_id" data-order-field="module_id">
-                  _id
-                  <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-                </a>
-              </th>
-              <th class="sortable">
                 <a href="#" class="" id="name" data-order-field="name">
                   Name
-                  <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
                 </a>
               </th>
               <th class="sortable">
                 <a href="#" class="" id="name" data-order-field="name">
                   Type
-                  <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
+                </a>
+              </th>
+              <th class="sortable">
+                <a href="#" class="" id="status" data-order-field="status">
+                  Status
+                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
                 </a>
               </th>
               <th width="150" class="bold">Actions</th>
@@ -41,15 +41,14 @@
             </thead>
             <tbody v-if="ready">
             <tr v-for="(module, id) in modules" :data-module="id">
-              <td :title="module.id">{{ module.id }}</td>
               <td :title="module.name">{{ module.name }}</td>
-              <td :title="module.class">{{ module.class }}</td>
+              <td :title="module.type">{{ module.type }}</td>
+              <td :title="module.status">{{ module.status }}</td>
               <td class="text-right actions icons">
-                <a href="#" class="edit" title="Edit" @click="editModule(module)"><i
-                  class="glyphicon glyphicon-pencil"></i></a>
+                <router-link v-if="module.type === 'studio'" :to="'/edit/' + module.moduleId"><i class="glyphicon glyphicon-pencil"></i></router-link>
 
-                <a href="#" class="delete" title="Delete" @click="deleteModule(module.id)"><i
-                  class="glyphicon glyphicon-ban-circle"></i></a>
+                <a v-if="module.type === 'studio'" href="#" class="delete" title="Delete" @click="deleteModule(module.moduleId)"><i
+                  class="glyphicon glyphicon-trash"></i></a>
               </td>
             </tr>
             </tbody>
@@ -58,7 +57,6 @@
 
       </div>
     </div>
-
   </section>
 </template>
 
@@ -84,16 +82,6 @@
             this.$root.$toast(error, {className: 'et-warn'});
           });
       },
-      editModule (module) {
-
-        if ( module.class === 'pkg' ) {
-          this.$root.$toast('load form with settings', {className: 'et-warn'});
-          // router.go( /moduleId/legacy? )
-        } else {
-          this.$root.$toast('load module builder', {className: 'et-warn'});
-          // router.go( /moduleId )
-        }
-      },
       deleteModule (moduleId) {
         if (confirm("Are you sure?")) {
           moduleService.deleteModule(moduleId)
@@ -106,10 +94,20 @@
               this.$root.$toast(error, {className: 'et-warn'});
             });
         }
-      }
+      },
+      toggleSidebar() {
+        const sidebar = document.getElementById('admin-sidebar');
+        sidebar.style.display = 'block';
+
+        const container = document.getElementsByClassName('base-admin')[0];
+        container.style.paddingLeft = '175px';
+      },
     },
     created () {
       this.loadModules();
+    },
+    mounted() {
+      this.toggleSidebar();
     }
   };
 </script>
@@ -118,9 +116,16 @@
   .btn-create {
 
     margin-bottom: 10px;
+    text-decoration: none!important;
 
-    a {
-      color: #FFFFFF;
+    a{
+      color: #666666!important;
+      text-decoration: none;
     }
+
+    &:hover a{
+      color: #ffffff!important;
+    }
+
   }
 </style>

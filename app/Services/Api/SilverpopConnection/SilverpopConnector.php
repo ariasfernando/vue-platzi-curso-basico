@@ -117,7 +117,8 @@ class SilverpopConnector
         }
 
         if (isset($error)) {
-            $error_message = (isset($error['data']['error_description']))? $error['data']['error_description'] : $error['status'];
+            $error_message = (isset($error['data']['error_description']))
+                ? $error['data']['error_description'] : $error['status'];
             Activity::log('Error Eloqua ['.$error['status'].']', array('properties' => ['message' => $error_message]));
             throw new \Exception($error_message);
         } else {
@@ -171,7 +172,7 @@ class SilverpopConnector
      */
     protected function logout()
     {
-        $logout_response = $this->call('<Envelope><Body></Logout></Body></Envelope>');
+        $this->call('<Envelope><Body></Logout></Body></Envelope>');
     }
     /**
      * Send email template to Silverpop XMLAPI.
@@ -184,7 +185,8 @@ class SilverpopConnector
      */
     public function saveMailing($campaign = null, $request = null)
     {
-        $original_filename = (is_null($request) || !isset($request['filename']))? $campaign->campaign_name : $request['filename'];
+        $original_filename = (is_null($request) || !isset($request['filename']))
+            ? $campaign->campaign_name : $request['filename'];
         $filename = Upload::versioningFilename($original_filename);
         $subject = (is_null($request) || !isset($request['subject']))? $filename : $request['subject'];
         $folder_path = $this->config['folder_path'];

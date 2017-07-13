@@ -62,9 +62,17 @@ class UserController extends Controller
 
         if (!is_null($search_type) && !is_null($search_text)) {
             $users = User::where($search_type, $search_operator, $search_text)
-                ->orderBy($data_order_field, $data_order_type)->where('status', '!=', 'deleted')->paginate((int) $data_page);
+                ->orderBy($data_order_field, $data_order_type)->where(
+                    'status',
+                    '!=',
+                    'deleted'
+                )->paginate((int) $data_page);
         } else {
-            $users = User::orderBy($data_order_field, $data_order_type)->where('status', '!=', 'deleted')->paginate((int) $data_page);
+            $users = User::orderBy($data_order_field, $data_order_type)->where(
+                'status',
+                '!=',
+                'deleted'
+            )->paginate((int) $data_page);
         }
 
         return [
@@ -81,7 +89,7 @@ class UserController extends Controller
      */
     public function getIndex(Request $request)
     {
-        return $this->renderView('base.admin.users', $this->queryConstructor($request));
+        return $this->renderView('admin.users', $this->queryConstructor($request));
     }
 
     /**
@@ -91,7 +99,7 @@ class UserController extends Controller
      */
     public function getList(Request $request)
     {
-        return $this->renderView('base.admin.partials.user_draw_row', $this->queryConstructor($request));
+        return $this->renderView('admin.partials.user_draw_row', $this->queryConstructor($request));
     }
 
     /**
@@ -114,7 +122,7 @@ class UserController extends Controller
             "roles" => $roles_array
         ];
 
-        return $this->renderView('base.admin.modals.user_form', array('params' => $params));
+        return $this->renderView('admin.modals.user_form', array('params' => $params));
     }
 
     /**
@@ -138,7 +146,7 @@ class UserController extends Controller
             "user" => $user_data
         ];
 
-        return $this->renderView('base.admin.modals.user_form', array('params' => $params));
+        return $this->renderView('admin.modals.user_form', array('params' => $params));
     }
 
     /**

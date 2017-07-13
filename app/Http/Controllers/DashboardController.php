@@ -5,6 +5,7 @@ namespace Stensul\Http\Controllers;
 use Auth;
 use Stensul\Models\Campaign;
 use Illuminate\Http\Request;
+use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Services\TagManager as Tag;
 use MongoDB\BSON\Regex as MongoRegex;
 
@@ -27,6 +28,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('Authenticate');
+        $this->middleware('acl.permission:access_dashboard');
     }
 
     /**
@@ -37,15 +39,18 @@ class DashboardController extends Controller
     public function index()
     {
         $params = [
-            'locales' => \Config::get('locales')
+            'locales' => \Config::get('locales'),
+            'libraries' => Auth::user()->getLibraries()
         ];
 
-        return $this->renderView('base.dashboard', ['params' => $params]);
+        return $this->renderView('dashboard', ['params' => $params]);
     }
 
     public function getCampaigns(Request $request, $type)
     {
-        $user_visibility = Auth::user()->getLibraries();
+        $user_visibility = array_map(function ($library) {
+            return new ObjectID($library['_id']);
+        }, Auth::user()->getLibraries());
 
         $campaigns = Campaign::where('status', '!=', 2);
 
@@ -66,9 +71,7 @@ class DashboardController extends Controller
             }
         }
 
-        if (count($user_visibility) !== 0) {
-            $campaigns->whereIn('library', $user_visibility);
-        }
+        $campaigns->whereIn('library', $user_visibility);
 
         // search
         if (\Config::get('campaign.enable_search')) {
@@ -78,7 +81,7 @@ class DashboardController extends Controller
                 foreach ($search_terms as $search_key) {
                     $campaigns->where(
                         function ($query) use ($fields_to_search, $search_key) {
-                            foreach ($fields_to_search as $key => $field) {
+                            foreach ($fields_to_search as $field) {
                                 $query->orWhere($field, 'like', "%" . $search_key . "%");
                                 if (\Config::get('campaign.enable_tagging')) {
                                     // search terms should also be reviewed as tags

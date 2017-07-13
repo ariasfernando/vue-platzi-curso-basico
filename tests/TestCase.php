@@ -4,6 +4,8 @@ namespace Stensul\Tests;
 
 use Stensul\Models\User;
 
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'PHPUnit_Framework_TestCase.php';
+
 class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
     protected $campaign;
@@ -48,7 +50,6 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
 
         $params = ['user_id' => \Auth::id()];
         $this->campaign = \Stensul\Services\CampaignManager::create($params);
-
     }
 
     /**
