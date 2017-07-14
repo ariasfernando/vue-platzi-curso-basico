@@ -17,6 +17,22 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<h2 class="pull-left">User List</h2>
+					<div class="admin-search-box pull-right">
+						{!! Form::open ( array ( 'method' => 'get' ,'id' => 'admin-user-search', 'url' => url('/') .'/admin/user' )) !!}
+
+							{!! Form::text('q', (count($search_query))? $search_query['q'] : '', array (
+								'class' => 'search_field',
+								'id' => 'search_field'
+							)) !!}
+
+							{!! Form::submit('&#xe003;', array ( 'class' => 'btn btn-success pull-right submit-config')) !!}
+
+						{!! Form::close() !!}
+
+						<button class="btn btn-success" id="admin-clear-btn">
+							<i class="glyphicon glyphicon-remove-sign"></i>
+						</button>
+					</div>
 					<div class="btn btn-default btn-create pull-right">
 						<i class="glyphicon glyphicon-plus-sign"></i> Create a new user
 					</div>
@@ -25,28 +41,6 @@
 
 			<div class="row">
 				<div class="col-xs-12">
-
-					<div class="row list-action-container">
-						<div class="col-xs-8 admin-search-box">
-							{!! Form::open ( array ( 'method' => 'get' ,'id' => 'admin-user-search', 'url' => url('/') .'/admin/user' )) !!}
-
-								{!! Form::select('type', $search_fields, (count($search_query))? $search_query['type'] : '',array (
-									'class' => 'form-control',
-									'id' => 'search_type'
-								)); !!}
-
-								{!! Form::text('q', (count($search_query))? $search_query['q'] : '', array (
-									'class' => 'search_field',
-									'id' => 'search_field'
-								)) !!}
-
-								{!! Form::submit('Search', array ( 'class' => 'btn btn-success pull-right submit-config')) !!}
-
-							{!! Form::close() !!}
-
-							<button class="btn btn-success" id="admin-clear-btn">Clear</button>
-						</div>
-					</div>
 
 					<div class="table-responsive">
 						<table width="100%" border="0" cellpadding="0" cellspacing="0" id="<?php echo $defaultDataPagination["view_name"]; ?>" class="table table-bordered table-striped sortable data-list" data-pagination='<?php echo json_encode($defaultDataPagination); ?>'>
