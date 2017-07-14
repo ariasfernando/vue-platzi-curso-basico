@@ -1,6 +1,8 @@
 <template id="button-element">
   <!-- CALL TO ACTION ELEMENT -->
-  <tr @click="setComponent">
+  <tr @click="setComponent"
+      data-type="button-element"
+  >
     <td align="center" class="st-position-relative">
       <table width="150" border="0" class="st-cta" cellpadding="0" cellspacing="0">
         <tr>

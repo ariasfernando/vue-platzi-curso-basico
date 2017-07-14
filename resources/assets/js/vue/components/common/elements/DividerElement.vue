@@ -1,6 +1,8 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-    <tr @click="setComponent">
+    <tr @click="setComponent"
+        data-type="divider-element"
+    >
       <td :bgcolor="backgroundColor" class="st-separator st-position-relative" :style="component.style">
         <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>

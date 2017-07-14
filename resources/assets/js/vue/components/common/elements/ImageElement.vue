@@ -1,6 +1,8 @@
 <template>
   <!-- IMAGE ELEMENT -->
-    <tr @click="setComponent">
+    <tr @click="setComponent"
+        data-type="image-element"
+    >
       <td align="center" :style="component.style" class="st-position-relative">
         <img class="st-resize st-image"
              :src="imageUrl(component.placeholder)" 

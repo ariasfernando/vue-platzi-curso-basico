@@ -158,7 +158,7 @@
         options: {
           group:{ 
             name:'componentsBox',  
-            put: 'componentsList'
+            put:['componentsList', "componentsBox"]
           },
           handle:'.icon-move',
           ghostClass: "ghost-component",  // Class name for the drop placeholder
@@ -178,16 +178,17 @@
         let colId = e.to.getAttribute('data-col');
         let Element = new defaultElements(elType);
         let cloneItem = e.item;
-        let indexOf = this.module.structure.columns[colId].components.indexOf(Element);
         let ref = {
           columnId: +colId,
-          componentId: +indexOf
+          componentId: +e.newIndex
         };
 
-        e.clone.style.opacity = "1";
-        cloneItem.parentNode.removeChild(cloneItem);
+        if (e.clone.getAttribute('class') === 'component-item'){
+          e.clone.style.opacity = "1";
+          cloneItem.parentNode.removeChild(cloneItem);
+        }
+        
         this.module.structure.columns[colId].components.splice(e.newIndex, 0, Element);
-
 
         this.setComponent(ref);
       },
