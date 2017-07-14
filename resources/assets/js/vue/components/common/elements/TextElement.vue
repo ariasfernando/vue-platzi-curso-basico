@@ -1,6 +1,8 @@
 <template>
   <!-- TEXT ELEMENT -->
-  <tr @click="setComponent">
+  <tr @click="setComponent" 
+      data-type="text-element"
+  >
     <td width="100%" class="st-text-style st-position-relative" align="center" :style="component.style">
       <tiny-mce :id="editorId" :value="component.text" data-key="text" @input="input"></tiny-mce>
       <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
