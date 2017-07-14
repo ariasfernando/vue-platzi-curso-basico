@@ -19,10 +19,10 @@
           <input name="tag_entry" type="text" placeholder="Add Tag" maxlength="30"
                  :data-autocomplete='params.tag_list'/>
           <div id="tags-box" class="clearfix">
-                        <span class="st-tag" v-for="tag in params.tag_list">
-                            {{ tag }}
-                            <span class="remove-tag" :data-tag="tag"><i class="fa fa-times"></i></span>
-                        </span>
+            <span class="st-tag" v-for="tag in params.tags">
+                {{ tag }}
+                <span class="remove-tag" :data-tag="tag"><i class="fa fa-times"></i></span>
+            </span>
           </div>
         </div>
       </form>
