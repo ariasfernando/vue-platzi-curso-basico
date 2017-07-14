@@ -4,7 +4,7 @@
       data-type="text-element"
   >
     <td width="100%" class="st-text-style st-position-relative" align="center" :style="component.style">
-      <tiny-mce :id="editorId" :value="component.text" data-key="text" @input="input"></tiny-mce>
+      <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
       <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
     </td>
   </tr>
@@ -36,6 +36,7 @@
     },
     methods: {
       setupModule () {
+
         this.maxLines = null;
         this.truncate = null;
 
@@ -47,34 +48,6 @@
           this.truncate = this.component.directives.truncate;
         }
 
-      },
-      input (text, key) {
-        this.$store.commit('module/updateElement', {
-          moduleId: this.moduleId,
-          columnId: this.columnId,
-          componentId: this.componentId,
-          data: {
-            text: text
-          }
-        });
-      },
-      change (event) {
-        clearTimeout(this.$timeoutID);
-
-        this.$timeoutID = setTimeout(() => {
-          let text = event.target.innerHTML.trim();
-          let key = event.target.dataset.key;
-
-          let edited = {};
-          edited[key] = text;
-
-          this.$store.commit('module/updateElement', {
-            moduleId: this.moduleId,
-            columnId: this.columnId,
-            componentId: this.componentId,
-            data: edited
-          });
-        }, 500);
       },
       setComponent() {
         this.$store.commit("module/setCurrentComponent", {

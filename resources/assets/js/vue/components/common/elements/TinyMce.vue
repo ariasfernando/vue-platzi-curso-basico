@@ -40,12 +40,18 @@
           menubar: false,
           toolbar: '',
           init_instance_callback: (editor) => {
-            editor.on('KeyUp', (e) => {
-              this.$emit('input', editor.getContent());
-            });
 
-            editor.on('Change', (e) => {
-              this.$emit('input', editor.getContent());
+            editor.on('Blur', (e) => {
+              const parts = this.id.split('-');
+
+              this.$store.commit('module/updateElement', {
+                moduleId: parts[1],
+                columnId: parts[2],
+                componentId: parts[3],
+                data: {
+                  text: editor.getContent()
+                }
+              });
             });
           }
         }, params);
