@@ -2,8 +2,69 @@ body.base-login,
 body.base-auth-oauth_login,
 body.base-auth-challenge-recaptcha_login,
 body.base-auth-login{
-	background: #2F2F2F;
+	background: @stensul-purple;
 	padding-top: 80px;
+
+	.beta-login{
+		background: #3e384a;
+		padding: 40px;
+		font-family: 'Open Sans', Arial, sans-serif;
+
+		a{
+			font-size: 50px;
+		}
+
+		input{
+			width: 100%;
+			padding: 8px 12px;
+			font-size: 18px;
+			border-radius: 2px;
+			color: @input-color;
+			font-weight: 300;
+			height: auto;
+			text-align: left;
+		}
+
+		button{
+			width: 100%;
+			padding: 10px 12px;
+			font-size: 18px;
+			border-radius: 2px;
+			color: @dropdown-link-color;
+			font-weight: 600;
+			height: auto;
+			background: @stensul-purple;
+			border: none;
+			transition: all 0.2s linear;
+
+			&:hover{
+				padding: 10px 12px;
+				border: none
+			}
+		}
+
+		h4{
+			margin-top: 0px;
+			font-weight: 300;
+			border-bottom: 1px solid @stensul-purple;
+			padding-bottom: 20px;
+			margin-bottom: 20px;
+			margin-top: -5px;
+			font-size: 20px;
+		}
+
+		.submit-row{
+			margin-top: 15px;
+		}
+
+		.alert-danger{
+			border-radius: 2px;
+			font-weight: 300;
+			color: @dropdown-link-color;
+			background: @beta-error;
+			border: none;
+		}
+	}
 
 	.stensul-logo{
 		color: #FFFFFF;

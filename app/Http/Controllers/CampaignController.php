@@ -119,7 +119,13 @@ class CampaignController extends Controller
             $params['header_title'] .= " (" . \Config::get('locale.langs.' . $locale . '.name') . ")";
         }
 
-        return $this->renderView('campaign', array('params' => $params));
+        $json_response = !is_null($request->input("json")) ? true : false;
+
+        if ( $json_response ) {
+            return array('campaign' => $params);
+        } else {
+            return $this->renderView('campaign', array('params' => $params));
+        }
     }
 
     /**

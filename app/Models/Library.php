@@ -48,7 +48,7 @@ class Library extends Eloquent
                 }
 
                 $library_modules[] = [
-                    'title' => preg_replace(["/^modules-/", "/_/"], ['', ' '], $group),
+                    'name' => preg_replace(["/^modules-/", "/_/"], ['', ' '], $group),
                     'sub_menu' => $submenu_items,
                     'level' => 'level-1'
                 ];

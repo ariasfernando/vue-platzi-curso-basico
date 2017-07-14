@@ -14,6 +14,27 @@ export default {
     };
 
     request[endpoint.method](params).then((response) => {
+      const module = new Module(response.body);
+      deferred.resolve(module);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+
+  getCustomModule(moduleKey, campaignId) {
+    const endpoint = endpoints.module.getCustomModule;
+    const deferred = Q.defer();
+    const params = {
+      endpoint,
+      search: {
+        moduleKey,
+        campaignId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
       deferred.resolve(response.body);
     }).catch((err) => {
       deferred.reject(err);

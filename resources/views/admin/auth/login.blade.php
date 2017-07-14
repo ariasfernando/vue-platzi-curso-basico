@@ -7,10 +7,14 @@
 
 {{-- Login content --}}
 @section('content')
-	<section class="col-xs-12">
+	<section class="col-md-4"></section>
+	<section class="col-md-4 beta-login">
 
 		<div class="text-center">
-			<a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">Admin - stensul</a>
+			<a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">stensul</a>
+			<h4>
+				Administration Panel
+			</h4>
 		</div>
 
 		{{-- Login error message --}}
@@ -32,15 +36,11 @@
 				@endif
 
 				<div class="form-group">
-					<div>
-						<input type="email" class="form-control" name="email" placeholder="E-Mail Address" value="{{ old('email') }}">
-					</div>
+					<input type="email" class="form-control" name="email" placeholder="E-Mail Address" value="{{ old('email') }}">
 				</div>
 
 				<div class="form-group">
-					<div class="row">
-						<input type="password" class="form-control" placeholder="Password" name="password">
-					</div>
+					<input type="password" class="form-control" placeholder="Password" name="password">
 				</div>
 
 				<div class="form-group submit-row">
@@ -49,7 +49,7 @@
 					</div>
 				</div>
 			</form>
-
 		</div>
 	</section>
+	<section class="col-md-4"></section>
 @endsection

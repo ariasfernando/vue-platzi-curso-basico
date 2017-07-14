@@ -53,7 +53,6 @@ const actions = {
       .then(response => context.commit('setModuleData', response))
       .catch(error => context.commit('error', error));
   },
-
   saveModuleData(context, data) {
     return moduleService.saveModule(data)
       .then((response) => {

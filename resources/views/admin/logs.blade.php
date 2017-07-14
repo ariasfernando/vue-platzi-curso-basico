@@ -89,7 +89,7 @@
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
-									<th class="sortable">
+									<th class="sortable col-200">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="user_agent">
 											User Agent
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>

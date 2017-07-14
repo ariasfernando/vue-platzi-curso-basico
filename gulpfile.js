@@ -228,12 +228,13 @@ gulp.task('elixir-scripts', function () {
         //   assetsPath
         // )
         //
-        // // === Modules ===
-        // .scripts(
-        //   ['../views/base/modules/**/*.js', 'js/library/modules-placeholder.js'],
-        //   jsDestinationPath + 'modules.js',
-        //   assetsPath
-        // )
+
+        // === Custom Modules ===
+        .scripts(
+          ['../views/modules/**/*.js', 'js/library/modules-placeholder.js'],
+          jsDestinationPath + 'custom-modules.js',
+          assetsPath
+        )
 
         // === Dashboard page ===
         .scripts(
@@ -318,7 +319,7 @@ gulp.task('elixir-scripts', function () {
  */
 gulp.task('elixir-less', () => {
     elixir((mix) => {
-        mix.less( appName + '/base-v2/base.less');
+        mix.less( appName + '/base.less');
         mix.less( appName + '/base-v2/admin.less');
     });
 });

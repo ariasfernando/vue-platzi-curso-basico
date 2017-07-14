@@ -7,30 +7,30 @@
 
 		<!-- Input Name -->
 		<div class="modal-mpf-row">
+			<label>Name</label>
 			{!! Form::text('name', (isset($params['role']['name']))? $params['role']['name'] : '', array (
 				'class' => 'role_name',
-				'id' => 'role_name',
-				'placeholder' => 'Enter name here.'
+				'id' => 'role_name'
 			)) !!}
 		</div>
 
 		<!-- Input Description -->
 		<div class="modal-mpf-row">
+			<label>Description</label>
 			{!! Form::text('description',(isset($params['role']['description']))? $params['role']['description'] : '', array (
 				'class' => 'role_description',
-				'id' => 'role_description',
-				'placeholder' => 'Enter description here.'
+				'id' => 'role_description'
 			)) !!}
 		</div>
 
 		<!-- Select Permissions -->
 		<div class="modal-mpf-row selector">
+			<label>Select Permission</label>
 			{!! Form::select('permissions', $params['permissions'], (isset($params['role']['permissions']))? $params['role']['permissions'] : '',array (
 				'class' => 'form-control selectpicker',
 				'id' => 'permissions',
 				'name' => 'permissions[]',
 				'multiple' => 'true',
-				'title' => 'Choose one or more permissions ...',
 				'data-validation' => '{"required":"true"}'
 			)); !!}
 		</div>

@@ -19,7 +19,7 @@ Vue.use(VeeValidate);
 const router = new VueRouter({
   routes: studioLibraryRoutes,
   mode: 'hash',
-  base: '/admin/library/',
+  base: '${baseUrl}/admin/library/',
   saveScrollPosition: true,
 });
 

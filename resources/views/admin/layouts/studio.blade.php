@@ -52,9 +52,6 @@
         @include('partials/application_script')
 
         <script src="{{ cdn(elixir('js/library-v2.js')) }}"></script>
-
-        <!--script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script-->
-
         <script src="{{ cdn(elixir('js/customer.js')) }}"></script>
         @section('footer-script')
 
