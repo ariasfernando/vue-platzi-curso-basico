@@ -46,9 +46,10 @@
 						<table width="100%" border="0" cellpadding="0" cellspacing="0" id="<?php echo $defaultDataPagination["view_name"]; ?>" class="table table-bordered table-striped sortable data-list" data-pagination='<?php echo json_encode($defaultDataPagination); ?>'>
 							<thead>
 								<tr>
-									<th class="sortable">
-										<a href="#" class="" id="userId" >
-											User Id
+									<th width="150" class="sortable">
+										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="created_at">
+											Create Date
+											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
 									<th class="sortable">
@@ -66,12 +67,6 @@
 									<th width="150" class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="group">
 											User Role
-											<i class="glyphicon glyphicon-menu-down pull-right"></i>
-										</a>
-									</th>
-									<th width="150" class="sortable">
-										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="created_at">
-											Create Date
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
