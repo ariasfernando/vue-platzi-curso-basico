@@ -2,7 +2,7 @@
   <div>
     <div v-for="item in items">
       <div v-if="item.sub_menu" class="expand" @click="expand(item)">
-        <h2>{{ item.name }} - Expanded : {{ item.expanded }} <i class="glyphicon"></i></h2>
+        <h2>{{ item.name }}<i class="glyphicon"></i></h2>
         <div :class="item.level" :style="{ display: expanded.indexOf(item._id) ? 'block' : 'none' }">
           <div v-for="subitem in item.sub_menu">
             <div class="add single">
