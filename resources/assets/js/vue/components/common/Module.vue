@@ -176,27 +176,27 @@
       onAdd(e){
         let elType = e.clone.getAttribute('data-type');
         let colId = e.to.getAttribute('data-col');
-        let Element = _.clone(this.$store.state.module.defaultElements[elType]);
         let cloneItem = e.item;
-        let ref = {
-          columnId: +colId,
-          componentId: +e.newIndex
-        };
 
         if (this.module.structure.columns[colId].components.length === 0) {
           e.newIndex = 0;
         }
+
+        let ref = {
+          columnId: +colId,
+          componentId: +e.newIndex
+        };
 
         if (e.clone.getAttribute('class') === 'component-item'){
           e.clone.style.opacity = "1";
           cloneItem.parentNode.removeChild(cloneItem);
         }
 
-        if (this.module.structure.columns[colId].components.length === 0) {
-          e.newIndex = 0;
-        }
-
-        this.module.structure.columns[colId].components.splice(e.newIndex, 0, Element);
+        this.$store.commit("module/addComponent", {
+          index: e.newIndex,
+          type: elType,
+          colId
+        });
 
         this.setComponent(ref);
       },

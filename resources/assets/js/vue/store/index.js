@@ -9,6 +9,7 @@ import moduleStore from './moduleStore';
 import campaignStore from './campaignStore';
 
 const store = new Vuex.Store({
+  strict: true,
   modules: {
     global: globalStore,
     library: libraryStore,

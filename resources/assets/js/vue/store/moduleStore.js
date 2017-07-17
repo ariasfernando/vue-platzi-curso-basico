@@ -1,12 +1,11 @@
-import _ from 'underscore-contrib';
+import _ from 'lodash';
 import moduleService from '../services/module';
 import defaultElements from '../resources/elements';
 
 const state = {
   module: {},
   currentComponent: {},
-  loading: false,
-  defaultElements,
+  loading: false
 };
 
 const getters = {
@@ -33,11 +32,21 @@ const mutations = {
       state.module.structure.columns[data.columnId].components[data.componentId][field] = value;
     });
   },
-  updateComponent(state, data) {
+  saveComponent(state, data) {
     state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
   },
   saveModule(state, moduleId) {
     state.module.id = moduleId;
+  },
+  addColumn(state) {
+    state.module.structure.columns.push(_.cloneDeep(defaultElements.column));
+  },
+  removeColumns(state, data) {
+    state.module.structure.columns.splice(data.index, data.number);
+  },
+  addComponent(state, data) {
+    let el = _.cloneDeep(defaultElements[data.type]);
+    state.module.structure.columns[data.colId].components.splice(data.index, 0, el);
   },
   error(state, err) {
     console.log(err);

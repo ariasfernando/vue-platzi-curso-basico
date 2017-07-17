@@ -30,6 +30,7 @@
     "gulp-util": "3.0.4",
     "jquery": "^3.2.1",
     "laravel-elixir": "^4.2.1",
+    "lodash": "^4.17.4",
     "path-ends-with": "^1.1.0",
     "q": "^1.5.0",
     "readdir": "0.0.13",

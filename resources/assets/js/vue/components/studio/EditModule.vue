@@ -208,22 +208,15 @@
         }
 
         if ( numCols > cols ) {
-          this.module.structure.columns.splice(cols - 1, numCols - cols);
+          this.$store.commit("module/removeColumns", {
+            index: cols -1,
+            number: numCols - cols
+          });
         }
 
         if ( numCols < cols ) {
           for ( let i = numCols; i < cols; i++ ) {
-            this.module.structure.columns.push({
-              "style": {
-              "verticalAlign": "middle",
-              "textAlign": "center",
-              "paddingTop": "10px",
-              "paddingLeft": "10px",
-              "paddingBottom": "10px",
-              "paddingRight": "10px"
-            },
-            "components": []
-            });
+            this.$store.commit("module/addColumn");
           }
         }
 
