@@ -142,11 +142,12 @@
   import ImageElement from './elements/ImageElement.vue'
   import DividerElement from './elements/DividerElement.vue'
   import Draggable from 'vuedraggable'
+  import _ from 'underscore'
 
   module.exports = {
     name: 'Module',
     components: {
-      Draggable,  
+      Draggable,
       TextElement,
       ButtonElement,
       ImageElement,
@@ -155,8 +156,8 @@
     data () {
       return {
         options: {
-          group:{ 
-            name:'componentsBox',  
+          group:{
+            name:'componentsBox',
             put:['componentsList', "componentsBox"]
           },
           handle:'.icon-move',
@@ -168,52 +169,38 @@
     },
     computed: {
       module() {
-        return this.$store.state.module.module;
-      },
-      defaultElements(){
-        return this.$store.state.module.defaultElements;
+        return this.$store.state.module.module
       }
     },
     methods: {
       onAdd(e){
-        let colId = e.to.getAttribute('data-col');
         let elType = e.clone.getAttribute('data-type');
-        this.setDefaultElement(elType);
-        this.module.structure.columns[colId].components.splice(e.newIndex, 0, this.defaultElements);
-
-        if (e.clone.getAttribute('class') === 'component-item'){
-          e.item.parentNode.removeChild(e.item);
-        }else{
-          this.module.structure.columns[colId].components.splice(e.newIndex + 1, 1);
-        }
-        
+        let colId = e.to.getAttribute('data-col');
+        let Element = _.clone(this.$store.state.module.defaultElements[elType]);
+        let cloneItem = e.item;
         let ref = {
           columnId: +colId,
           componentId: +e.newIndex
         };
 
+        if (e.clone.getAttribute('class') === 'component-item'){
+          e.clone.style.opacity = "1";
+          cloneItem.parentNode.removeChild(cloneItem);
+        }
+
+        if (this.module.structure.columns[colId].components.length === 0) {
+          e.newIndex = 0;
+        }
+
+        this.module.structure.columns[colId].components.splice(e.newIndex, 0, Element);
+
         this.setComponent(ref);
       },
       setComponent(ref) {
         this.$store.commit("module/setCurrentComponent", ref);
-      },
-      setDefaultElement(data) {
-        this.$store.commit("module/setDefaultElement", data);
       }
     }
   };
-</script>
-  
-<script>
-  $(document).ready(function(){
-    var $trigger = $('.beta-accordion-trigger');
-
-    $trigger.click(function(e){
-      e.preventDefault();
-      $(this).siblings('ul.beta-menu-dropdown').slideToggle();
-      $(this).siblings('.glyphicon-menu-down').toggleClass('glyphicon-menu-up');
-    });
-  });
 </script>
 
 <style lang="less">
