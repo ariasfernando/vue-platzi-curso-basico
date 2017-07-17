@@ -183,6 +183,10 @@
           componentId: +e.newIndex
         };
 
+        if (this.module.structure.columns[colId].components.length === 0) {
+          e.newIndex = 0;
+        }
+
         if (e.clone.getAttribute('class') === 'component-item'){
           e.clone.style.opacity = "1";
           cloneItem.parentNode.removeChild(cloneItem);
