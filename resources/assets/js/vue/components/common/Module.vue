@@ -142,7 +142,6 @@
   import ImageElement from './elements/ImageElement.vue'
   import DividerElement from './elements/DividerElement.vue'
   import Draggable from 'vuedraggable'
-  import { defaultElements } from '../../resources/elements'
 
   module.exports = {
     name: 'Module',
@@ -169,31 +168,37 @@
     },
     computed: {
       module() {
-        return this.$store.state.module.module
+        return this.$store.state.module.module;
+      },
+      defaultElements(){
+        return this.$store.state.module.defaultElements;
       }
     },
     methods: {
       onAdd(e){
-        let elType = e.clone.getAttribute('data-type');
         let colId = e.to.getAttribute('data-col');
-        let Element = new defaultElements(elType);
-        let cloneItem = e.item;
+        let elType = e.clone.getAttribute('data-type');
+        this.setDefaultElement(elType);
+        this.module.structure.columns[colId].components.splice(e.newIndex, 0, this.defaultElements);
+
+        if (e.clone.getAttribute('class') === 'component-item'){
+          e.item.parentNode.removeChild(e.item);
+        }else{
+          this.module.structure.columns[colId].components.splice(e.newIndex + 1, 1);
+        }
+        
         let ref = {
           columnId: +colId,
           componentId: +e.newIndex
         };
 
-        if (e.clone.getAttribute('class') === 'component-item'){
-          e.clone.style.opacity = "1";
-          cloneItem.parentNode.removeChild(cloneItem);
-        }
-        
-        this.module.structure.columns[colId].components.splice(e.newIndex, 0, Element);
-
         this.setComponent(ref);
       },
       setComponent(ref) {
         this.$store.commit("module/setCurrentComponent", ref);
+      },
+      setDefaultElement(data) {
+        this.$store.commit("module/setDefaultElement", data);
       }
     }
   };

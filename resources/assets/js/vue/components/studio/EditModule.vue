@@ -127,7 +127,6 @@
 <script>
   import Module from '../common/Module.vue'
   import ComponentSettings from './ComponentSettings.vue'
-  import { defaultElements } from '../../resources/elements'
   import moduleService from '../../services/module'
   import Draggable from 'vuedraggable'
   import Spinner from '../common/Spinner.vue'

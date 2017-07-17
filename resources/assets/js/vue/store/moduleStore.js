@@ -1,9 +1,11 @@
 import _ from 'underscore-contrib';
 import moduleService from '../services/module';
+import { defaultElements } from '../resources/elements'
 
 const state = {
   module: {},
   currentComponent: {},
+  defaultElements:{},
   loading: false,
 };
 
@@ -14,9 +16,15 @@ const getters = {
   currentComponent(state) {
     return state.currentComponent;
   },
+  defaultElements(state){
+    return state.defaultElements;
+  },
 };
 
 const mutations = {
+  setDefaultElement(state, data) {
+    state.defaultElements = new defaultElements(data);
+  },
   setLoader(state, data) {
     state.loading = data;
   },
