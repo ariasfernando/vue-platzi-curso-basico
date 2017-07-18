@@ -158,4 +158,4 @@ stylelint:
     name: "${CI_JOB_STAGE}_stylelint_${CI_COMMIT_REF_NAME}"
     expire_in: 30 days
     paths:
-      - ci/storage/tmp/stylelint.html
+      - ci/storage/tmp/stylelint.txt
