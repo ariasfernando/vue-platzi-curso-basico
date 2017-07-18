@@ -1,247 +1,412 @@
 <template>
-  <div class="col-xs-12 module">
+  <div class="col-xs-12 library">
     <div class="row header">
-      <div class="col-xs-3 header-col">
-        <div class="col-xs-4 back vertical-center">
+      <div class="col-xs-10 header-col">
+        <div class="col-xs-1 back vertical-center">
           <i class="glyphicon glyphicon-menu-left"></i>
           <router-link to="/">Back</router-link>
         </div>
-        <div class="col-xs-8 section-title vertical-center">New Module</div>
+        <div class="col-xs-11 section-title vertical-center">{{ library.id ? 'Edit' : 'New' }} Library</div>
       </div>
 
-      <div class="col-xs-6 header-col">
-        <div class="vertical-center">
-          <div class="switch">
-            <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-            <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="changeMode('desktop')">
-              <i class="fa fa-desktop"></i>
-            </label>
-            <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-            <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="changeMode('device')">
-              <i class="glyphicon glyphicon-phone"></i>
-            </label>
-            <span class="switch-selection"></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xs-3 header-col">
+      <div class="col-xs-2 header-col">
         <div class="vertical-center pull-right">
-          <a class="btn btn-continue" href="#" @click.prevent="saveModule('draft')" :disabled="errors.any()">Save as draft<i class="glyphicon glyphicon-triangle-right"></i></a>
-          <a class="btn btn-continue" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
+          <a class="btn btn-continue" href="#" @click.prevent="saveLibrary" :disabled="errors.any()">Submit<i class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
     </div>
 
     <div class="row">
       <section v-if="ready" class="col-xs-12 section-container">
-
-        <!-- START: Left Bar -->
-        <aside class="col-xs-2 left-bar">
-          <div class="module-settings">
-            <h4>Module Settings</h4><hr>
-
-            <div class="fields">
-
-              <div class="control" :class="{'has-error': errors.has('name') }">
-                <input v-model="module.name" v-validate.initial="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"
-                       name="name" type="text" placeholder="Module name">
-              </div>
-
-              <div class="control">
-                <h5>Columns</h5> <hr>
-
-                <ul class="list-inline">
-                  <li :class="module.structure.columns.length == 1 ? 'selected' : ''" @click="setColumns(1)">1</li>
-                  <li :class="module.structure.columns.length == 2 ? 'selected' : ''" @click="setColumns(2)">2</li>
-                  <li :class="module.structure.columns.length == 3 ? 'selected' : ''" @click="setColumns(3)">3</li>
-                  <li :class="module.structure.columns.length == 4 ? 'selected' : ''" @click="setColumns(4)">4</li>
-                  <li :class="module.structure.columns.length == 5 ? 'selected' : ''" @click="setColumns(5)">5</li>
-                </ul>
-              </div>
-
-              <div class="control">
-                <h5>Elements</h5> <hr>
-
-                <draggable :element="'ul'"
-                           :options="options"
-                           width="100%"
-                           class="components-list"
-                >
-                  <li class="component-item" data-type="text-element" @dragend="resetStyle">
-                    <i class="glyphicon glyphicon-font"></i>
-                    <p>Text</p>
-                  </li>
-                  <li class="component-item" data-type="image-element" @dragend="resetStyle">
-                    <i class="fa fa-picture-o" aria-hidden="true"></i>
-                    <p>Image</p>
-                  </li>
-                  <li class="component-item" data-type="button-element" @dragend="resetStyle">
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                    <p>CTA</p>
-                  </li>
-                  <li class="component-item" data-type="divider-element" @dragend="resetStyle">
-                    <i class="fa fa-minus-square-o" aria-hidden="true"></i>
-                    <p>Divider</p>
-                  </li>
-                </draggable>
-              </div>
-            </div>
-
-          </div>
-        </aside>
-        <!-- END: Left Bar -->
-
-        <!-- START: Module Container -->
-        <div class="col-xs-7 module-container">
-          <div class="col-xs-12">
-            <module></module>
-          </div>
-
+        <div class="simple-text-config admin-library-form">
           <div v-if="$route.query.debug" class="col-xs-12">
             <br><br>
-            <pre>{{ module.structure.columns }}</pre>
+            <pre>{{ library.config }}</pre>
           </div>
-        </div>
-        <!-- END: Module Container -->
+          <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
 
-        <!-- START: Right Bar -->
-        <aside class="col-xs-3 right-bar">
+            <h4>General Settings</h4><hr>
+            <div class="row">
+              <!-- Field Name -->
+              <div class="col-md-6">
+                <label for="name">Name</label>
+                <p class="control">
+                  <input v-model="library.name" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('name') }" name="name" type="text"
+                         placeholder="Enter name here.">
+                  <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
+                </p>
+              </div>
 
-          <div class="module-settings" v-if="currentComponent">
-            <div class="fields">
-              <component-settings></component-settings>
+              <!-- Field Description -->
+              <div class="col-md-6">
+                <label for="description">Description</label>
+                <p class="control">
+                  <input v-model="library.description" name="description" type="text" placeholder="Enter description here.">
+                </p>
+              </div>
             </div>
-          </div>
 
-        </aside>
-        <!-- END: Right Bar -->
+            <div class="row">
+              <!-- Field width -->
+              <div class="col-md-6">
+                <label for="templateWidth">Template width</label>
+                <p class="control">
+                  <input v-model="library.config.templateWidth" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('templateWidth') }" name="templateWidth"
+                         type="text" placeholder="660">
+                  <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth') }}</span>
+                </p>
+              </div>
 
+              <!-- Field mobile-width -->
+              <div class="col-md-6">
+                <label for="templateMobileWidth">Template Mobile Width</label>
+                <p class="control">
+                  <input v-model="library.config.templateMobileWidth" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('templateMobileWidth') }"
+                         name="templateMobileWidth" type="text" placeholder="480">
+                  <span v-show="errors.has('templateMobileWidth')"
+                        class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
+                </p>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Field background-color -->
+              <div class="col-md-6">
+                <label for="templateBackgroundColor">Template Background Color</label>
+                <div class="control">
+                  <div id="templateBackgroundColor" class="input-group colorpicker-component cp">
+                      <input type="text" class="form-control" v-model="library.config.templateBackgroundColor" v-validate="'required'" name="templateBackgroundColor" :class="{'input': true, 'is-danger': errors.has('templateBackgroundColor') }" placeholder="#FFFFFF"/>
+                      <span class="input-group-addon"><i :style="'background-color:' + library.config.templateBackgroundColor"></i></span>
+                  </div>
+
+                  <span v-show="errors.has('templateBackgroundColor')" class="help is-danger">{{ errors.first('templateBackgroundColor') }}</span>
+                </div>
+              </div>
+
+              <!-- Field content-background-color -->
+              <div class="col-md-6">
+                <label for="contentBackgroundColor">Content Background Color</label>
+                <div class="control">
+                  <div id="contentBackgroundColor" class="input-group colorpicker-component cp">
+                      <input type="text" class="form-control" v-model="library.config.contentBackgroundColor" v-validate="'required'" name="contentBackgroundColor" :class="{'input': true, 'is-danger': errors.has('contentBackgroundColor') }" placeholder="#FFFFFF"/>
+                      <span class="input-group-addon"><i :style="'background-color:' + library.config.contentBackgroundColor"></i></span>
+                  </div>
+
+                  <span v-show="errors.has('contentBackgroundColor')"
+                        class="help is-danger">{{ errors.first('contentBackgroundColor') }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Field font-family -->
+              <div class="col-md-6">
+                <label for="fontFamily">Font Family</label>
+                <p class="control">
+                  <input v-model="library.config.fontFamily" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('fontFamily') }" name="fontFamily" type="text"
+                         placeholder="Arial, sans-serif">
+                  <span v-show="errors.has('fontFamily')" class="help is-danger">{{ errors.first('fontFamily') }}</span>
+                </p>
+              </div>
+
+              <!-- Field font-color -->
+              <div class="col-md-6">
+                <label for="fontColor">Font Color</label>
+                <div class="control">
+                  <div id="fontColor" class="input-group colorpicker-component cp">
+                      <input type="text" class="form-control" v-model="library.config.fontColor" v-validate="'required'" name="fontColor" :class="{'input': true, 'is-danger': errors.has('fontColor') }" placeholder="#000000"/>
+                      <span class="input-group-addon"><i :style="'background-color:' + library.config.fontColor"></i></span>
+                  </div>
+
+                  <span v-show="errors.has('fontColor')" class="help is-danger">{{ errors.first('fontColor') }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Field font-size -->
+              <div class="col-md-6">
+                <label for="fontSize">Font Size</label>
+                <p class="control">
+                  <input v-model="library.config.fontSize" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('fontSize') }" name="fontSize" type="text"
+                         placeholder="12">
+                  <span v-show="errors.has('fontSize')" class="help is-danger">{{ errors.first('fontSize') }}</span>
+                </p>
+              </div>
+
+              <!-- Field line-height -->
+              <div class="col-md-6">
+                <label for="lineHeight">Line Height</label>
+                <p class="control">
+                  <input v-model="library.config.lineHeight" v-validate="'required'"
+                         :class="{'input': true, 'is-danger': errors.has('lineHeight') }" name="lineHeight" type="text"
+                         placeholder="14">
+                  <span v-show="errors.has('lineHeight')" class="help is-danger">{{ errors.first('lineHeight') }}</span>
+                </p>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Field link-color -->
+              <div class="col-md-6">
+                <label for="linkColor">Link Color</label>
+                <div class="control">
+                  <div id="linkColor" class="input-group colorpicker-component cp">
+                      <input type="text" class="form-control" v-model="library.config.linkColor" v-validate="'required'" name="linkColor" :class="{'input': true, 'is-danger': errors.has('linkColor') }" placeholder="#000000"/>
+                      <span class="input-group-addon"><i :style="'background-color:' + library.config.linkColor"></i></span>
+                  </div>
+
+                  <span v-show="errors.has('linkColor')" class="help is-danger">{{ errors.first('linkColor') }}</span>
+                </div>
+              </div>
+
+              <!-- Field link-decoration -->
+              <div class="col-md-6">
+                <label for="linkDecoration">Link Decoration</label>
+                <p class="control">
+                  <select v-model="library.config.linkDecoration">
+                    <option>none</option>
+                    <option>underline</option>
+                  </select>
+                </p>
+              </div>
+            </div>
+
+            <!-- Field padding -->
+            <div class="row">
+              <div class="col-md-6">
+                <label for="padding">Padding</label>
+                <div class="control">
+                  <div id="padding" class="input-group">
+                      <input type="text" class="form-control" v-model="library.config.padding" v-validate="'required'" name="padding" :class="{'input': true, 'is-danger': errors.has('padding') }" placeholder="10px"/>
+                  </div>
+                  <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Field external-link -->
+              <div class="col-md-12">
+                <label for="externalCssLink">External CSS Link</label>
+                <p class="control">
+                  <input v-model="library.config.externalCssLink" name="linkColor" type="text" placeholder="http://www.example.com/css/styles.css">
+                </p>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Field propietary styles -->
+              <div class="col-md-12">
+                <label for="propietaryCss">Propietary Styles</label>
+                <p class="control">
+                  <textarea v-model="library.config.propietaryCss" rows="10" name="propietaryCss" type="text" placeholder=""></textarea>
+                </p>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Field Preheader -->
+              <label for="preheader" class="col-sm-4 control-label">Preheader</label>
+              <p class="control col-sm-8">
+                <toggle-button :value="library.config.preheader" :sync="true" :labels="true" @change="updateToggle('preheader')"></toggle-button>
+              </p>
+            </div>
+
+            <!-- Field Plain text -->
+            <div class="row">
+              <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
+              <p class="control col-sm-8">
+                <toggle-button :value="library.config.plainText" :sync="true" :labels="true" @change="updateToggle('plainText')"></toggle-button>
+              </p>
+            </div>
+
+            <div class="row">
+              <!-- Field ESP -->
+              <label for="preheader" class="col-sm-4 control-label">ESP</label>
+              <p class="control col-sm-1">
+                <toggle-button :value="library.config.esp" :sync="true" :labels="true" @change="updateToggle('esp')"></toggle-button>
+              </p>
+              <div v-if="library.config.esp" class="col-md-5">
+                <p class="control">
+                  <select v-model="library.config.espProvider">
+                    <option v-for="(esp, key) in this.espList" v-bind:value="key">
+                      {{ esp.title }}
+                    </option>
+                  </select>
+                </p>
+              </div>
+            </div>
+
+            <h4>Modules</h4>
+            <!-- Select modules -->
+            <div class="row">
+              <div class="col-md-12">
+                <br/>
+                <div id="modules-container">
+
+                  <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name">
+
+                    <div :id="'group-container-' + group.name">
+
+                      <label for="fontFamily">Group Name</label>
+                      <p :class="{ 'control': true }">
+                        <input v-model="group.name" v-validate="'required'"
+                               :class="{'input': true, 'is-danger': errors.has('groupName-' + idx) }"
+                               :name="'modules[' + idx + '][name]'" type="text" placeholder="Enter group name">
+                        <span v-show="errors.has('groupName-' + idx)"
+                              class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
+                      </p>
+
+                      <select v-model="group.modules" :name="'modules[' + idx + '][modules]'" class="form-control" multiple>
+                        <option v-for="module in modules" :value="module" :selected="group.modules.indexOf(module) >= 0">
+                          {{ module }}
+                        </option>
+                      </select>
+
+                      <div v-if="group.name === 'default'" class="sep">
+                        <br/><br/>
+                      </div>
+
+                      <div v-else class="group-remove-container">
+                        <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)"></span>
+                        <hr/>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <button class="btn btn-success center-block btn-add-group" @click.prevent="addGroup">Add Group</button>
+                <br>
+              </div>
+            </div>
+
+            <!-- Input submit  -->
+            <div class="row">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-success pull-right submit-config hidden" :disabled="errors.any()">Submit
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </section>
     </div>
 
-    <spinner></spinner>
+
   </div>
+
 </template>
 
 <script>
-  import Module from '../common/Module.vue'
-  import ComponentSettings from './ComponentSettings.vue'
-  import moduleService from '../../services/module'
-  import Draggable from 'vuedraggable'
-  import Spinner from '../common/Spinner.vue'
+  import libraryService from '../../services/library'
+  import ToggleButton from '../common/ToggleButton.vue'
 
   export default {
-    name: 'EditModule',
-    computed: {
-      module() {
-        return this.$store.state.module.module;
-      },
-      currentComponent() {
-        return this.$store.state.module.currentComponent;
-      }
+    name: 'EditLibrary',
+    components: {
+      ToggleButton
     },
     data () {
       return {
-        ready: false,
-        options: {
-          group:{
-            name:'componentsList',
-            pull: 'clone',
-            put: false,
-          },
-          sort: false,
-          ghostClass: "ghost-component-menu",  // Class name for the drop placeholder
-          chosenClass: "chosen-component-menu",  // Class name for the chosen item
-          dragClass: "drag-component-menu"  // Class name for the dragging item
-        }
+        library: {},
+        modules: {},
+        espList: {},
+        ready: false
       }
     },
-    components: {
-      Module,
-      ComponentSettings,
-      Draggable,
-      Spinner
-    },
     methods: {
-      loadModule() {
-        this.$store.commit("global/setLoader", true);
-        const moduleId = this.$route.params.id || undefined;
-
-        // TODO: Trigger event editModule.onInit
-        this.$store.dispatch("module/getModuleData", moduleId)
-          .then( response => {
-            // TODO: Trigger event editModule.onLoaded
-            this.ready = true;
-            this.$store.commit("global/setLoader", false);
-          }).catch( error => {
+      updateToggle(element) {
+        this.library.config[element] = !this.library.config[element];
+      },
+      loadLibrary() {
+        libraryService.espProviders()
+          .then((response) => {
+            this.espList = response;
+          })
+          .catch((error) => {
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
           });
-      },
-      saveModule(status) {
-        this.$store.commit("global/setLoader", true);
-        let data = this.module;
-        data.status = status;
+        let libraryId = this.$route.params.id;
 
-        // TODO: Trigger event editModule.onInit
-        this.$store.dispatch("module/saveModuleData", data)
-          .then( response => {
-            // TODO: Trigger event editModule.onLoaded
-            if (!response) {
-              this.$root.$toast('Error', {className: 'et-warn'});
-              this.$store.commit("global/setLoader", false);
-              return;
-            }
-
-            this.$store.commit("global/setLoader", false);
-            this.$router.push('/');
-          }).catch( error => {
-            this.$store.commit("global/setLoader", false);
-            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
-          });
-      },
-      setColumns(cols) {
-        let numCols = this.module.structure.columns.length;
-
-        if ( numCols === cols ) {
-          return true;
-        }
-
-        if ( numCols > cols ) {
-          this.module.structure.columns.splice(cols - 1, numCols - cols);
-        }
-
-        if ( numCols < cols ) {
-          for ( let i = numCols; i < cols; i++ ) {
-            this.module.structure.columns.push({
-              "style": {
-              "verticalAlign": "middle",
-              "textAlign": "center",
-              "paddingTop": "10px",
-              "paddingLeft": "10px",
-              "paddingBottom": "10px",
-              "paddingRight": "10px"
-            },
-            "components": []
+        if (libraryId) {
+          libraryService.getLibrary(libraryId)
+            .then((response) => {
+              this.library = response.library;
+              this.modules = response.modules;
+              this.ready = true;
+            })
+            .catch((error) => {
+              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
             });
-          }
+        } else {
+          libraryService.newLibrary()
+            .then((response) => {
+              this.library = response.library;
+              this.modules = response.modules;
+              this.ready = true;
+            })
+            .catch((error) => {
+              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-warn'});
+            });
         }
+      },
+      saveLibrary() {
 
+        let formData = {
+          name: this.library.name,
+          description: this.library.description,
+          config: this.library.config,
+          modules: this.library.modules
+        };
+
+        if (this.library.id) {
+          formData.libraryId = this.library.id;
+          libraryService.saveLibrary(formData)
+            .then((response) => {
+              if (response.message === 'SUCCESS') {
+                window.location.href = this.$app.baseUrl + "/admin/library";
+              }
+            })
+            .catch((error) => {
+              this.$root.$toast('Oops! There was an error', {className: 'et-warn'});
+            });
+        } else {
+          libraryService.createLibrary(formData)
+            .then((response) => {
+              if (response.message === 'SUCCESS') {
+                window.location.href = this.$app.baseUrl + "/admin/library";
+              } else if ( response.message === 'ERROR_EXISTS' ) {
+                this.$root.$toast('Library already exists', {className: 'et-warn'});
+              }
+            })
+            .catch((error) => {
+                this.$root.$toast('Oops! There was an error', {className: 'et-warn'});
+            });
+        }
       },
-      resetStyle(e) {
-        e.target.style.opacity = "";
+      addGroup() {
+        this.temporal = this.temporal || 1;
+        let tmpName = 'Unnamed Group ' + this.temporal++;
+
+        this.library.modules.push({
+          name: tmpName,
+          modules: []
+        });
       },
-      changeMode(mode) {
-        this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});
-      },
-      preview() {
-        this.$root.$toast('Preview event', {className: 'et-info'});
-      },
-      draft() {
-        this.$root.$toast('Draft event', {className: 'et-info'});
-      },
-      publish() {
-        this.$root.$toast('Publish event', {className: 'et-info'});
+      deleteGroup(idx) {
+        this.library.modules.splice(idx, 1);
       },
       toggleSidebar() {
         const sidebar = document.getElementById('admin-sidebar');
@@ -252,7 +417,7 @@
       }
     },
     created () {
-      this.loadModule();
+      this.loadLibrary();
     },
     mounted () {
       this.toggleSidebar();
@@ -268,18 +433,15 @@
   @brand-primary: lighten(@stensul-purple, 35%);
   @brand-secondary: @stensul-purple-light;
 
-  .module {
-    hr {
-      border-top: 1px solid #ccc;
-      margin: 0 0 10px 0;
-    }
+  .library {
 
     .header {
       color: #FFFFFF;
       background-color: @stensul-purple;
-      height: 60px;
+      height: 80px;
       box-shadow: 0 8px 6px -6px #000;
-      padding: 0;
+      margin-bottom: 20px;
+      padding: 15px 0;
 
       .header-col {
         height: 100%;
@@ -400,99 +562,36 @@
       background-color: #FFFFFF;
     }
 
-    .left-bar {
-      border-right: 1px solid #ccc;
-
-      .fields {
-        padding: 0 10px;
-
-        .is-danger {
-          font-size: 12px;
-          padding-top: 5px;
-        }
-
-        input:focus {
-          outline: none;
-          box-shadow: 0 0 3pt 2pt @focus;
-        }
-
-        .control {
-          margin-top: 20px
-        }
-
-        .list-inline {
-          text-align: center;
-        }
-
-        .list-inline li {
-          border: 1px solid #ccc;
-          padding: 5px 10px;
-          cursor: pointer;
-
-          &.selected {
-            border: 1px solid @focus;
-          }
-        }
-      }
-
-      .components-list {
-        padding: 0;
-        text-align: center;
-
-        .component-item {
-          list-style-type: none;
-          width: 46%;
-          font-size: 22px;
-          text-align: center;
-          background-color: #f4f4f4;
-          border: 1px solid #ccc;
-          margin: 2px 0;
-          padding: 5px;
-          cursor: pointer;
-          display: inline-block;
-          height: 60px;
-
-          i {
-            margin: 0 5px;
-          }
-
-          p{
-            font-size: 14px;
-            margin: 0px;
-            padding: 0px;
-          }
-        }
-      }
-
-      .json-preview {
-        margin-top: 25px;
-
-        pre {
-          font-size: 50px;
-          font-family: Monaco;
-        }
-      }
+    .admin-library-form {
+      box-sizing: border-box;
+      position: relative;
+      padding: 15px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 10px;
+    }
+    select[multiple] {
+      height: 100px !important;
     }
 
-    .right-bar {
-      border-left: 1px solid #ccc;
+    .group-remove-container {
+      text-align: right;
     }
 
-    .module-container {
-
-    }
-
-    .module-table {
-      min-height: 100px;
-    }
-
-    .module-table .st-col {
-      background-color: #f4f4f4;
+    .group-remove {
+      float: none !important;
+      margin-top: 10px;
     }
 
     .is-danger {
-      border: 1px solid red !important;
+      color: red;
+    }
+
+    .input-group-addon i {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      vertical-align: text-top;
     }
   }
-
 </style>
