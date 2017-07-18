@@ -48,6 +48,9 @@ const mutations = {
     let el = _.cloneDeep(defaultElements[data.type]);
     state.module.structure.columns[data.colId].components.splice(data.index, 0, el);
   },
+  removeComponents(state, data) {
+    state.module.structure.columns[data.colId].components.splice(data.index, data.number);
+  },
   error(state, err) {
     console.log(err);
   },

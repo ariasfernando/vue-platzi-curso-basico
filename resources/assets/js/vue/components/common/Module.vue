@@ -182,21 +182,27 @@
           e.newIndex = 0;
         }
 
-        let ref = {
-          columnId: +colId,
-          componentId: +e.newIndex
-        };
-
-        if (e.clone.getAttribute('class') === 'component-item'){
-          e.clone.style.opacity = "1";
-          cloneItem.parentNode.removeChild(cloneItem);
-        }
-
         this.$store.commit("module/addComponent", {
           index: e.newIndex,
           type: elType,
           colId
         });
+
+        if (e.clone.getAttribute('class') === 'component-item') {
+          e.clone.style.opacity = "1";
+          cloneItem.parentNode.removeChild(cloneItem);
+        } else {
+          this.$store.commit("module/removeComponents", {
+            index: e.newIndex + 1,
+            number: 1,
+            colId
+          });
+        }
+
+        let ref = {
+          columnId: +colId,
+          componentId: +e.newIndex
+        };
 
         this.setComponent(ref);
       },
