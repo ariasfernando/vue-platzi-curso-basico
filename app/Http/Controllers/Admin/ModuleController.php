@@ -94,7 +94,7 @@ class ModuleController extends Controller
      * Module post save. Inserts or update a module.
      *
      * @param Request $request
-     * @return Boolean
+     * @return array [id => moduleId, message => ERROR|SUCCESS]
      */
     public function postSave(Request $request)
     {
@@ -135,4 +135,20 @@ class ModuleController extends Controller
 
         return $response_message;
     }
+
+    /**
+     * Module post delete. Delete a module.
+     *
+     * @param Request $request
+     * @return array [deleted => moduleId]
+     */
+    public function postDelete(Request $request)
+    {
+
+        $module = Module::findOrFail($request->input("moduleId"));
+        $module->delete();
+
+        return ["deleted" => $request->input("moduleId")];
+    }
+
 }
