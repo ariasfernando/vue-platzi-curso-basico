@@ -119,13 +119,17 @@ export default {
     const deferred = Q.defer();
     const params = {
       endpoint,
-      data: {
+      json: {
         moduleId,
       },
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body);
+      if (response.body.message !== 'SUCCESS') {
+        deferred.reject(response.body.message);
+      } else {
+        deferred.resolve(response.body);
+      }
     }).catch((err) => {
       deferred.reject(err);
     });

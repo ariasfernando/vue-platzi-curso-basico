@@ -47,7 +47,7 @@
               <td class="text-right actions icons">
                 <router-link v-if="module.type === 'studio'" :to="'/edit/' + module.moduleId"><i class="glyphicon glyphicon-pencil"></i></router-link>
 
-                <a v-if="module.type === 'studio'" href="#" class="delete" title="Delete" @click="deleteModule(module.moduleId)"><i
+                <a v-if="module.type === 'studio'" href="#" class="delete" title="Delete" @click="deleteModule(module)"><i
                   class="glyphicon glyphicon-trash"></i></a>
               </td>
             </tr>
@@ -82,16 +82,16 @@
             this.$root.$toast(error, {className: 'et-warn'});
           });
       },
-      deleteModule (moduleId) {
+      deleteModule (module) {
+        const moduleIdx = this.modules.indexOf(module);
+
         if (confirm("Are you sure?")) {
-          moduleService.deleteModule(moduleId)
+          moduleService.deleteModule(module.moduleId)
             .then((response) => {
-              if (response.deleted === moduleId) {
-                window.location.reload();
-              }
+              this.modules.splice(moduleIdx, 1);
             })
             .catch((error) => {
-              this.$root.$toast(error, {className: 'et-warn'});
+              this.$root.$toast(error.message, {className: 'et-warn'});
             });
         }
       },
