@@ -151,8 +151,8 @@ stylelint:
   stage: test
   script:
     # Run stylelint
-    - ./node_modules/stylelint/bin/stylelint.js resources/assets/less/**/*.less
-      -o ci/storage/tmp/stylelint.html --no-color -f verbose
+    - ./node_modules/stylelint/bin/stylelint.js resources/assets/less/**/*.less > ci/storage/tmp/stylelint.txt
+      --no-color -f verbose
   artifacts:
     when: always
     name: "${CI_JOB_STAGE}_stylelint_${CI_COMMIT_REF_NAME}"
