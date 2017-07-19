@@ -9,6 +9,7 @@ use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\Driver\Exception\BulkWriteException;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
 use Stensul\Models\Module;
+use Stensul\Models\Library;
 
 class ModuleController extends Controller
 {
@@ -137,7 +138,9 @@ class ModuleController extends Controller
     }
 
     /**
-     * Module post delete. Delete a module.
+     * Module post delete.
+     *
+     * Delete a module and remove it from libraries that use it.
      *
      * @param Request $request
      * @return array [deleted => moduleId]
@@ -148,6 +151,13 @@ class ModuleController extends Controller
         $module = Module::findOrFail($request->input("moduleId"));
         $module->delete();
 
+        $libraries = Library::all();
+        if (count($libraries)) {
+            foreach ($libraries as $library) {
+                $library->removeModule($module->key);
+                $library->save();
+            }
+        }
         return ["deleted" => $request->input("moduleId")];
     }
 }
