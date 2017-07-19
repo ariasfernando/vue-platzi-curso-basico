@@ -39,8 +39,8 @@ class LibraryDeny extends Command
 
         $libraries_array = [];
         foreach ($role_data->permissions as $permission) {
-            if (substr( $permission, 0, 15 ) === "access_library_") {
-                $libraries_array[] = substr( $permission, 15, strlen($permission) );
+            if (substr($permission, 0, 15) === "access_library_") {
+                $libraries_array[] = substr($permission, 15, strlen($permission));
             }
         }
 
@@ -57,12 +57,12 @@ class LibraryDeny extends Command
 
             if (strtolower($library_choice) == "all") {
                 foreach ($role_permissions as $key => $permission) {
-                    if (substr( $permission, 0, 15 ) === "access_library_") {
+                    if (substr($permission, 0, 15) === "access_library_") {
                         unset($role_permissions[$key]);
                     }
                 }
             } elseif (in_array($library_choice, $libraries_array)) {
-                if(($key = array_search("access_library_" . $library_choice, $role_permissions)) !== false) {
+                if (($key = array_search("access_library_" . $library_choice, $role_permissions)) !== false) {
                     unset($role_permissions[$key]);
                 }
             } else {

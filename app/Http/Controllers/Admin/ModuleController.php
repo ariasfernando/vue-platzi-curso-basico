@@ -150,5 +150,4 @@ class ModuleController extends Controller
 
         return ["deleted" => $request->input("moduleId")];
     }
-
 }
