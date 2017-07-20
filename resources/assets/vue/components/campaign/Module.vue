@@ -27,10 +27,10 @@
 
 <script>
 
-    import TextElement from '../common/elements/TextElement.vue'
-    import ButtonElement from '../common/elements/ButtonElement.vue'
-    import ImageElement from '../common/elements/ImageElement.vue'
-    import DividerElement from '../common/elements/DividerElement.vue'
+    import TextElement from '../admin/elements/TextElement.vue'
+    import ButtonElement from '../admin/elements/ButtonElement.vue'
+    import ImageElement from '../admin/elements/ImageElement.vue'
+    import DividerElement from '../admin/elements/DividerElement.vue'
 
     module.exports = {
         name: 'Module',

@@ -121,7 +121,7 @@
 </template>
 
 <script>
-  import Module from '../common/Module.vue'
+  import Module from './Module.vue'
   import ComponentSettings from './ComponentSettings.vue'
   import moduleService from '../../services/module'
   import Draggable from 'vuedraggable'
