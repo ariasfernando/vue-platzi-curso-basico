@@ -29,7 +29,7 @@
     {{-- Libraries --}}
     @elseif ($app_config['view']['campaign_format'] === "libraries")
         @if ( count($params['libraries']) === 0 )
-            There is not library to create a new email
+            There is no library to create a new email
         @else
             @if( count($params['libraries']) === 1)
                 <a class="btn btn-default" href="{{ URL::to( action('CampaignController@getEdit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => $params['libraries'][0]['_id'] ])) }}">

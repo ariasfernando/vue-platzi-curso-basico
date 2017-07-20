@@ -58,7 +58,7 @@
 				@endif
 			</div>
             @if ( config('campaign.auto_save.enabled') === true)
-				<div class="config-box-divider auto-save">
+                <div class="config-box-divider auto-save {{($params['campaign_data']['locked']) ? 'hidden' : ''}}">
 					<input type="checkbox" class="btn-auto-save" name="auto_save"
 							value="{{$app_config['campaign']['auto_save']['delay']}}"
 							{{ ($params['campaign_data']['auto_save'] === 'true' || ( $params['campaign_data']['auto_save'] === null && config('campaign.auto_save.default_on') === true)) ? 'checked="checked"' : '' }}>

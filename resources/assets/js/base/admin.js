@@ -14,8 +14,6 @@
 	var role = new roleController();
 	var permission = new permissionController();
 	var log = new logController();
-	var library = new libraryController();
-	var module = new moduleController();
 
 	/*
 	 * Document Ready
@@ -25,9 +23,6 @@
 		role.init();
 		permission.init();
 		log.init();
-		library.init();
-		module.init();
 	});
 
 })(jQuery);
-
