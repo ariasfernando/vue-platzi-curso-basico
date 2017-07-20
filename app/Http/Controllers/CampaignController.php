@@ -121,7 +121,7 @@ class CampaignController extends Controller
 
         $json_response = !is_null($request->input("json")) ? true : false;
 
-        if ( $json_response ) {
+        if ($json_response) {
             return array('campaign' => $params);
         } else {
             return $this->renderView('campaign', array('params' => $params));

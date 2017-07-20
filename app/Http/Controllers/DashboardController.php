@@ -71,7 +71,9 @@ class DashboardController extends Controller
             }
         }
 
-        $campaigns->whereIn('library', $user_visibility);
+        if (count($user_visibility) !== 0) {
+            $campaigns->whereIn('library', $user_visibility);
+        }
 
         // search
         if (\Config::get('campaign.enable_search')) {
@@ -86,7 +88,7 @@ class DashboardController extends Controller
                                 if (\Config::get('campaign.enable_tagging')) {
                                     // search terms should also be reviewed as tags
                                     $query->orWhere(function ($q) use ($search_key) {
-                                        $q->whereIn('tags', [new MongoRegex('/'.$search_key, 'i')]);
+                                        $q->whereIn('tags', [new MongoRegex('/^'.$search_key.'$/i')]);
                                     });
                                 }
                             }
@@ -99,9 +101,11 @@ class DashboardController extends Controller
             if (\Config::get('campaign.enable_tagging')) {
                 $search_tags = $request->input('tags', []);
                 if (count($search_tags)) {
-                    $campaigns->where(function ($query) use ($search_tags) {
-                        $query->where('tags', 'all', $search_tags);
-                    });
+                    foreach ($search_tags as $search_key) {
+                        $campaigns->where(function ($query) use ($search_key) {
+                            $query->whereIn('tags', [new MongoRegex('/^'.$search_key.'$/i')]);
+                        });
+                    };
                 }
             }
         }

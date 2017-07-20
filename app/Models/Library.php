@@ -62,6 +62,36 @@ class Library extends Eloquent
     }
 
     /**
+     * Remove a module from the library menu.
+     * Call save() after using this method to persist the changes.
+     *
+     * @param string $module_key
+     */
+    public function removeModule($module_key)
+    {
+
+        $modules_to_keep = [];
+
+        // Recreate the modules array without the removed module.
+        foreach ($this->modules as $group => $mods) {
+            // Grouped modules.
+            if (is_array($mods)) {
+                foreach ($mods as $mod) {
+                    if ($mod !== $module_key) {
+                        $modules_to_keep[$group][] = $mod;
+                    }
+                }
+            } else { // Ungrouped modules.
+                if ($mods !== $module_key) {
+                    $modules_to_keep[] = $mods;
+                }
+            }
+        }
+
+        $this->modules = $modules_to_keep;
+    }
+
+    /**
      * Get the library key standarized
      *
      * @param string $name

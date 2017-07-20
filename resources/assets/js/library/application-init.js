@@ -46,6 +46,12 @@ Application.init = function(){
                 }
             }
         })
+        .on("keypress", "#campaignConfiguration [name!=tag_entry]", function(e) {
+            if(e.which == 13) {
+                e.preventDefault();
+                return false;
+            }
+        })
         .on("blur","input.url-format", function(){
             var $urlInput = $(this);
             var resultUrl = Application.utils.validate.parseUrl( $urlInput.val() );
@@ -132,6 +138,8 @@ Application.init = function(){
                 $('.save-as-template').addClass('hidden');
                 $('.campaign-continue').addClass('hidden');
                 $('.campaign-preview').addClass('hidden');
+                campaignManager.autoSave('disabled');
+                $('.auto-save').addClass('hidden');
                 $('#locking label span').text('Unlock');
             },
             function() {
@@ -152,6 +160,10 @@ Application.init = function(){
                 $('.save-as-template').removeClass('hidden');
                 $('.campaign-continue').removeClass('hidden');
                 $('.campaign-preview').removeClass('hidden');
+                $('.auto-save').removeClass('hidden');
+                if ($('.btn-auto-save').is(':checked')) {
+                    campaignManager.autoSave('enabled');
+                }
                 $('#locking label span').text('Lock');
             },
             function(event) {
