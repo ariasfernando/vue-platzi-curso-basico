@@ -97,7 +97,6 @@
             }
 
             this.ready = true;
-
           }
         },
         deep: true

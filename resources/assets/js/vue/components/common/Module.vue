@@ -5,7 +5,6 @@
     <tr v-if="module.structure.columns.length > 1">
 
       <th class="st-col" v-for="(column, columnId) in module.structure.columns" 
-          :class="!column.components.length ? 'empty-col' : ''" 
           :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
           :style="column.style || ''"
           :data-col="columnId">
@@ -42,26 +41,28 @@
         </table>
 
         <!-- Empty Col -->
-        <div v-else >
-          <draggable 
-                     @add="onAdd"
-                     :element="'div'" 
-                     :options="options" 
-                     :data-col="columnId"
-                     cellpadding="0" 
-                     cellspacing="0" 
-                     border="0"
-                     width="100%"
-                     class="empty-table"
-          >
-            <div style="display:table-row;"> 
-              <div align="center" 
-                  class="empty-cell"
-                  height="80" 
-                  :data-col="columnId">Drag content here</div>
-            </div>
-          </draggable>
-        </div>
+        <table v-else
+               width="100%" 
+               cellpadding="0" 
+               cellspacing="0" 
+               border="0" 
+        >
+          <tr>
+            <td>
+              <draggable @add="onAdd"
+                         :element="'table'" 
+                         :options="options" 
+                         :data-col="columnId"
+                         cellpadding="0" 
+                         cellspacing="0" 
+                         border="0"
+                         width="100%"
+                         class="empty-table"
+              >
+              </draggable>
+            </td>
+          </tr>
+        </table>
 
       </th>
     </tr>
@@ -70,7 +71,6 @@
     <!-- START TD Structure -->
     <tr v-else>
       <td class="st-col" v-for="(column, columnId) in module.structure.columns" 
-          :class="!column.components.length ? 'empty-col' : ''" 
           :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
           :style="column.style || ''"
           :data-col="columnId"
@@ -108,26 +108,28 @@
         </table>
 
         <!-- Empty Col -->
-        <div v-else >
-          <draggable 
-                     @add="onAdd"
-                     :element="'div'" 
-                     :options="options" 
-                     :data-col="columnId"
-                     cellpadding="0" 
-                     cellspacing="0" 
-                     border="0"
-                     width="100%"
-                     class="empty-table"
-          >
-            <div style="display:table-row;"> 
-              <div align="center" 
-                  class="empty-cell"
-                  height="80" 
-                  :data-col="columnId">Drag content here</div>
-            </div>
-          </draggable>
-        </div>
+        <table v-else
+               width="100%" 
+               cellpadding="0" 
+               cellspacing="0" 
+               border="0" 
+        >
+          <tr>
+            <td>
+              <draggable @add="onAdd"
+                         :element="'table'" 
+                         :options="options" 
+                         :data-col="columnId"
+                         cellpadding="0" 
+                         cellspacing="0" 
+                         border="0"
+                         width="100%"
+                         class="empty-table"
+              >
+              </draggable>
+            </td>
+          </tr>
+        </table>
 
       </td>
     </tr>
@@ -221,49 +223,72 @@
 
   .st-content-component{
     outline: 1px dashed @icon-option;
-  }
-  
-  .st-component{
-    &:hover{
-        border: 1px solid @icon-option;
-        background-color: @hover;
-        .icon-move{
-          display: block;
-        }
+    
+    .st-component{
+      &:hover{
+          border: 1px solid @icon-option;
+          background-color: @hover;
+          .icon-move{
+            display: block;
+          }
+      }
+    }
+
+    tr.ghost-component{
+      outline: 2px dashed @icon-option;
+      color:@focus;
+      background-color: @hover;
+      height: 10px;
+      
+      &:before{
+        content: "Drag content here";
+      }
+      
+      td{
+        display: none;
+      }
+    }
+
+    li.ghost-component-menu{
+      &:extend(.placeholder-component);
+      
+      &:before{
+        content: "Drag content here";
+      }
+      
+      i, p{
+        display: none;
+      }
     }
   }
 
-  .empty-col {
-    background-color: @focus-light;
-  }
-
-  td.empty-cell{
-    font-weight: normal;
-    color: @focus;
-  }
-
-  table.empty-table{
+  .empty-table {
     outline: 1px dashed @icon-option;
     background-color: @hover;
-  }
-
-  div.empty-cell {
-    font-weight: normal;
-    color: @focus;
-    display: table-cell;
     height: 80px;
     width: 100%;
-    vertical-align: middle;
+    
+    &:before{
+      content: "Drag content here";
+      font-weight: bold;
+      color:@focus;
+      position: relative;
+      top: 28px;
+    }
+
+    li.ghost-component-menu{
+      &:extend(.placeholder-component);
+      &:before{
+        content: "Drag content here";
+      }
+      
+      i, p{
+        display: none;
+      } 
+    }
   }
 
-  div.empty-table {
-    outline: 1px dashed @icon-option;
-    background-color: @hover;
-    display: table;
-    width: 100%;
-  }
-
-  li.ghost-component-menu{
+  .placeholder-component{
     outline: 2px dashed @icon-option;
     color:@focus;
     background-color: @hover;
@@ -273,29 +298,5 @@
     font-size: 13px;
     z-index: 300;
     opacity: 1!important;
-    &:before{
-      content: "Drag content here";
-    }
-    i{
-      display: none;
-    }
-    p{
-      display: none;
-    }
-
-  }
-
-  tr.ghost-component{
-    outline: 2px dashed @icon-option;
-    color:@focus;
-    background-color: @hover;
-    height: 10px;
-    &:before{
-      content: "Drag content here";
-    }
-    td{
-      display: none;
-    }
-
   }
 </style>

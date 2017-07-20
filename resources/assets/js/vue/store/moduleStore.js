@@ -33,7 +33,15 @@ const mutations = {
     });
   },
   saveComponent(state, data) {
-    state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
+    let newObjetStyle = {};
+    
+    _.each(data.component.settings, (option, index) => {
+      newObjetStyle[option.name] = option.value;
+    });
+    
+   data.component.style =  _.extend(data.component.style, newObjetStyle);
+
+   state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
   },
   saveModule(state, moduleId) {
     state.module.id = moduleId;

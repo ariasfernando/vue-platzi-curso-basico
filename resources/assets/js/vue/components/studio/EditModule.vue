@@ -52,11 +52,11 @@
                 <h5>Columns</h5> <hr>
 
                 <ul class="list-inline">
-                  <li :class="module.structure.columns.length == 1 ? 'selected' : ''" @click="setColumns(1)">1</li>
-                  <li :class="module.structure.columns.length == 2 ? 'selected' : ''" @click="setColumns(2)">2</li>
-                  <li :class="module.structure.columns.length == 3 ? 'selected' : ''" @click="setColumns(3)">3</li>
-                  <li :class="module.structure.columns.length == 4 ? 'selected' : ''" @click="setColumns(4)">4</li>
-                  <li :class="module.structure.columns.length == 5 ? 'selected' : ''" @click="setColumns(5)">5</li>
+                  <li v-for="n in 5" 
+                      :class="module.structure.columns.length == n ? 'selected' : ''" 
+                      @click="setColumns(n)">
+                      {{n}}
+                  </li>
                 </ul>
               </div>
 
@@ -68,19 +68,19 @@
                            width="100%"
                            class="components-list"
                 >
-                  <li class="component-item" data-type="text-element" @dragend="resetStyle">
+                  <li class="component-item" data-type="text-element">
                     <i class="glyphicon glyphicon-font"></i>
                     <p>Text</p>
                   </li>
-                  <li class="component-item" data-type="image-element" @dragend="resetStyle">
+                  <li class="component-item" data-type="image-element">
                     <i class="fa fa-picture-o" aria-hidden="true"></i>
                     <p>Image</p>
                   </li>
-                  <li class="component-item" data-type="button-element" @dragend="resetStyle">
+                  <li class="component-item" data-type="button-element">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     <p>CTA</p>
                   </li>
-                  <li class="component-item" data-type="divider-element" @dragend="resetStyle">
+                  <li class="component-item" data-type="divider-element">
                     <i class="fa fa-minus-square-o" aria-hidden="true"></i>
                     <p>Divider</p>
                   </li>
@@ -220,9 +220,6 @@
           }
         }
 
-      },
-      resetStyle(e) {
-        e.target.style.opacity = "";
       },
       changeMode(mode) {
         this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});
