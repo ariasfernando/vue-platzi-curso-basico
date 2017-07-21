@@ -94,7 +94,7 @@
         });
 
         this.$store.commit('module/setChangeSettingComponent',{
-          component: this.component,
+          style: this.component.style,
         }); 
         
       },

@@ -34,15 +34,19 @@
     computed: {
       styleComponent() {
         return this.$store.state.module.changeSettingComponent;
+      },
+      currentComponent() {
+        return this.$store.state.module.currentComponent;
       }
     },
     watch : {
       styleComponent() {
-          if (!_.isEmpty(this.styleComponent)) {
-            this.component.style = this.styleComponent;
-          }
-        },
-      },
+        if (!_.isEmpty(this.styleComponent) && 
+          this.currentComponent.columnId == this.columnId && 
+          this.currentComponent.componentId == this.componentId ) {
+          this.component.style = this.styleComponent;
+        }
+      }
     },
     timeoutID: null,
     methods: {
@@ -51,6 +55,10 @@
           columnId: this.columnId,
           componentId: this.componentId
         });
+
+        this.$store.commit('module/setChangeSettingComponent',{
+          style: this.component.style,
+        }); 
       }
     }
   };

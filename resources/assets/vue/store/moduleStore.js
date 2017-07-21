@@ -36,11 +36,7 @@ const mutations = {
   setChangeSettingComponent(state, data){
     let newObjetStyle = {};
     
-    _.each(data.component.settings, (option, index) => {
-      newObjetStyle[option.name] = option.value;
-    });
-    
-    state.changeSettingComponent =  _.extend(data.component.style, newObjetStyle);
+    state.changeSettingComponent =  _.extend(data.style, newObjetStyle);
   },
   setCurrentComponent(state, data) {
     state.currentComponent = data;
