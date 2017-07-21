@@ -19,6 +19,8 @@
 </template>
 
 <script>
+  import _ from 'underscore';
+  
   export default {
     name: 'ImageElement',
     props: [

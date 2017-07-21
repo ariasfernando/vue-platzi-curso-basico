@@ -1,4 +1,4 @@
-<template id="button-element">
+<template>
   <!-- CALL TO ACTION ELEMENT -->
   <tr @click="setComponent"
       data-type="button-element"
@@ -25,6 +25,7 @@
 
 <script>
   import TinyMCE from './TinyMce.vue';
+  import _ from 'underscore';
 
   export default {
     name: 'ButtonElement',

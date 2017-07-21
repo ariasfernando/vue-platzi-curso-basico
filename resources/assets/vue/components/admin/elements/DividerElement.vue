@@ -3,10 +3,10 @@
     <tr @click="setComponent"
         data-type="divider-element"
     >
-      <td :bgcolor="backgroundColor" class="st-separator st-position-relative" :style="component.style">
+      <td class="st-separator st-position-relative" :style="component.style">
         <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td :width="separatorWidth" :height="separatorHeight"></td>
+            <td :style="component.style"></td>
           </tr>
         </table>
         <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+  import _ from 'underscore';
+  
   export default {
     name: 'DividerElement',
     props: [
@@ -24,16 +26,6 @@
       'component-id',
       'component'
     ],
-    data () {
-      return {
-        backgroundColor: '',
-        separatorHeight: '',
-        separatorWidth: ''
-      }
-    },
-    created () {
-      this.setupModule();
-    },
     computed: {
       styleComponent() {
         return this.$store.state.module.changeSettingComponent;
@@ -51,17 +43,17 @@
         }
       }
     },
+    timeoutID: null,
     methods: {
-      setupModule () {
-        this.backgroundColor = this.component.style.backgroundColor;
-        this.separatorHeight = this.component.height;
-        this.separatorWidth = this.component.width;
-      },
       setComponent() {
         this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
           componentId: this.componentId
         });
+
+        this.$store.commit('module/setChangeSettingComponent',{
+          style: this.component.style,
+        }); 
       }
     }
   };

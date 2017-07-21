@@ -4,14 +4,17 @@ module.exports = {
   "width": "220",
   "height": "auto",
   "style": {
-    "width": "220",
     "verticalAlign": "middle",
-    "textAlign": "center",
-    "fontFamily": "sans-serif",
-    "fontSize": "12px",
-    "fontWeight": "normal",
-    "lineHeight": "16px",
-    "color": "#000000"
+    "paddingTop":"0px",
+    "paddingBottom":"0px",
+    "paddingRight":"0px",
+    "paddingLeft":"0px"
+  },
+  "attribute" :{
+      "href": "http://stensul.com",
+      "alt": "Image",
+      "title": "Umage",
+      "widht":"220"
   },
   "settings": [
     {

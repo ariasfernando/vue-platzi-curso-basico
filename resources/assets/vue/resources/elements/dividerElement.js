@@ -1,20 +1,17 @@
 module.exports = {
   "type": "divider-element",
-  "width": "100%",
-  "height": "5",
   "style": {
     "backgroundColor": "#FFFFFF",
     "width": "100%",
-    "fontSize": "5px",
-    "lineHeight": "5px"
+    "height": "5px"
   },
   "settings": [
     {
       "link": "style",
-      "label": "Color",
-      "name": "color",
+      "label": "Background Color",
+      "name": "backgroundColor",
       "type": "text",
-      "value": "#000000"
+      "value": "#FFFFFF"
     },
     {
       "link": "style",
@@ -25,31 +22,10 @@ module.exports = {
     },
     {
       "link": "style",
-      "label": "Padding Top",
-      "name": "paddingTop",
+      "label": "Width",
+      "name": "width",
       "type": "text",
-      "value": "10px"
-    },
-    {
-      "link": "style",
-      "label": "Padding Left",
-      "name": "paddingLeft",
-      "type": "text",
-      "value": "10px"
-    },
-    {
-      "link": "style",
-      "label": "Padding Bottom",
-      "name": "paddingBottom",
-      "type": "text",
-      "value": "10px"
-    },
-    {
-      "link": "style",
-      "label": "Padding Right",
-      "name": "paddingRight",
-      "type": "text",
-      "value": "10px"
+      "value": "100%"
     }
   ]
 };
