@@ -3,12 +3,14 @@
 namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
+use Activity;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\Role;
 use Stensul\Models\Permission;
 use Stensul\Http\Controllers\Auth\AdminAuthController as AdminAuth;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class RoleController extends Controller
 {
@@ -171,8 +173,14 @@ class RoleController extends Controller
      */
     public function postDelete(Request $request)
     {
-        $user = Role::findOrFail($request->input("roleId"));
-        $user->delete();
+        $role = Role::findOrFail($request->input("roleId"));
+        $role->delete();
+
+        Activity::log(
+            'Role deleted',
+            array('properties' => ['role_id' => new ObjectID($role->id)])
+        );
+
         return array("deleted" => $request->input("roleId"));
     }
 }
