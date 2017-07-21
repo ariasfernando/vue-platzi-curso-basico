@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f91322a1b8d04b542f44cd5352727577",
+    "content-hash": "5bc3109aa4b635e1a0d90415c7b2cce1",
     "packages": [
         {
             "name": "akamai-open/edgegrid-auth",
