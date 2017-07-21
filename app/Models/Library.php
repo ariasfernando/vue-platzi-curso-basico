@@ -8,6 +8,9 @@ use Stensul\Providers\ModuleServiceProvider;
 
 class Library extends Eloquent
 {
+
+    use SoftDeletes;
+
     /**
      * The database table used by the model.
      *
@@ -89,16 +92,5 @@ class Library extends Eloquent
         }
 
         $this->modules = $modules_to_keep;
-    }
-
-    /**
-     * Get the library key standarized
-     *
-     * @param string $name
-     * @return string Modules
-     */
-    public static function standarizeKey($name)
-    {
-        return str_replace(' ', '', strtolower($name));
     }
 }

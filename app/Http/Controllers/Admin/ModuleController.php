@@ -10,6 +10,7 @@ use MongoDB\Driver\Exception\BulkWriteException;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
 use Stensul\Models\Module;
 use Stensul\Models\Library;
+use Stensul\Services\ModelKeyManager;
 
 class ModuleController extends Controller
 {
@@ -101,7 +102,6 @@ class ModuleController extends Controller
     {
         $params = [
             'name' => $request->input('name'),
-            'key' => Module::standarizeKey($request->input('name')),
             'structure' => $request->input('structure'),
             'status' => $request->input('status', 'draft'),
             'type' => 'studio'
@@ -111,6 +111,7 @@ class ModuleController extends Controller
             $module = Module::findOrFail($request->input("moduleId"));
         } else {
             $module = new Module;
+            $module->key = ModelKeyManager::getStandardKey($module, $request->input('name'));
         }
 
         foreach ($params as $key => $value) {
