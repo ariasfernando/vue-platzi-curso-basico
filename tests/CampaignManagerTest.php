@@ -78,6 +78,6 @@ class CampaignManagerTest extends TestCase
     {
 
         $response = CampaignManager::text($this->campaign->id);
-        $this->assertNotEmpty($response);
+        $this->assertEmpty($response);
     }
 }

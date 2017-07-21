@@ -5,6 +5,7 @@ namespace Stensul\Console\Commands\User;
 use Stensul\Models\User;
 use Stensul\Models\Role;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
 
 class Roles extends Command
 {
@@ -28,11 +29,12 @@ class Roles extends Command
     public function fire()
     {
         $roles = Role::all();
+        $options = $this->option();
 
         if (count($roles) === 0) {
             $this->error('Roles not found, use command php artisan role:create!');
         } else {
-            $email = $this->ask('What is the user email ?');
+            $email = (is_null($options["email"]))? $this->ask('What is the user email ?') : $options["email"];   
 
             if ($email != "") {
                 if (!User::where('email', '=', $email)->exists()) {
@@ -46,8 +48,9 @@ class Roles extends Command
                         $roles_array[] = $role['name'];
                     }
 
-                    $roles = $this->ask('What is the user role ? (none, '
-                        . join(", ", $roles_array).')', join(",", $user_data->roles));
+                    $roles = (is_null($options["roles"]))
+                            ? $this->ask('What is the user role ? (none, ' . join(", ", $roles_array).')', join(",", $user_data->roles))
+                            : $options["roles"];
 
                     $selected_array = [];
 
@@ -90,6 +93,9 @@ class Roles extends Command
      */
     protected function getOptions()
     {
-        return [];
+        return [
+            ['email', null, InputOption::VALUE_OPTIONAL, 'User email', null],
+            ['roles', null, InputOption::VALUE_OPTIONAL, 'User roles', null]
+        ];
     }
 }
