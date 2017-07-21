@@ -3,8 +3,8 @@
   <tr @click="setComponent" 
       data-type="text-element"
   >
-    <td width="100%" class="st-text-style st-position-relative" align="center" :style="styleComponent.style">
-      <tiny-mce :id="editorId" :value="styleComponent.text" data-key="text"></tiny-mce>
+    <td width="100%" class="st-text-style st-position-relative" align="center" :style="component.style">
+      <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
       <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
     </td>
   </tr>
@@ -13,6 +13,7 @@
 
 <script>
   import TinyMCE from './TinyMce.vue';
+  import _ from 'underscore';
 
   export default {
     name: 'TextElement',
@@ -31,29 +32,7 @@
       }
     },
     timeoutID: null,
-    computed: {
-      styleComponent() {
-        return this.$store.state.module.module.structure.columns[this.columnId].components[this.componentId];
-      }
-    },
-    created () {
-      this.setupModule();
-    },
     methods: {
-      setupModule () {
-
-        this.maxLines = null;
-        this.truncate = null;
-
-        if (this.component.directives && this.component.directives.maxLines) {
-          this.maxLines = this.component.directives.maxLines;
-        }
-
-        if (this.component.directives && this.component.directives.truncate) {
-          this.truncate = this.component.directives.truncate;
-        }
-
-      },
       setComponent() {
         this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
