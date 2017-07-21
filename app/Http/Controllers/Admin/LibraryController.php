@@ -240,6 +240,9 @@ class LibraryController extends Controller
     {
         $library = Library::findOrFail($request->input("libraryId"));
         $library->delete();
+
+        Permission::where('name', '=', 'access_library_' . $library->key)->delete();
+
         return array("deleted" => $request->input("libraryId"));
     }
 
