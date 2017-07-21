@@ -5,6 +5,7 @@ namespace Stensul\Console\Commands\Role;
 use Stensul\Models\Role;
 use Stensul\Models\Permission;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
 
 class PermissionAllow extends Command
 {
@@ -28,7 +29,8 @@ class PermissionAllow extends Command
     public function fire()
     {
 
-        $name = $this->ask('What is the role name ?');
+        $options = $this->option();
+        $name = (is_null($options["role"]))? $this->ask('What is the role name ?') : $options["role"];
 
         if ($name != "") {
             if (Role::where('name', '=', $name)->exists()) {
@@ -49,7 +51,9 @@ class PermissionAllow extends Command
                         array_unshift($permissions_array, "all");
                     }
 
-                    $permission_choice = $this->ask('Select a permission: ('.join(", ", $permissions_array).')');
+                    $permission_choice = (is_null($options["permission"]))
+                        ? $this->ask('Select a permission: ('.join(", ", $permissions_array).')')
+                        : $options["permission"];
 
                     if (strtolower($permission_choice) == "all") {
                         array_shift($permissions_array);
@@ -89,6 +93,9 @@ class PermissionAllow extends Command
      */
     protected function getOptions()
     {
-        return [];
+        return [
+            ['role', null, InputOption::VALUE_OPTIONAL, 'Role name', null],
+            ['permission', null, InputOption::VALUE_OPTIONAL, 'Permission', null]
+        ];
     }
 }

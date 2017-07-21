@@ -4,6 +4,7 @@ namespace Stensul\Console\Commands\Permission;
 
 use Stensul\Models\Permission;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
 
 class Create extends Command
 {
@@ -27,8 +28,10 @@ class Create extends Command
     public function fire()
     {
 
-        $name = $this->ask('What is the permission name ?');
-        $description = $this->ask('What is the permission description ?');
+        $options = $this->option();
+
+        $name = (is_null($options["name"]))? $this->ask('What is the permission name ?') : $options["name"];
+        $description = (is_null($options["description"]))? $this->ask('What is the permission description ?') : $options["description"];
 
         $params = [
             'name' => $name,
@@ -64,6 +67,9 @@ class Create extends Command
      */
     protected function getOptions()
     {
-        return [];
+        return [
+            ['name', null, InputOption::VALUE_OPTIONAL, 'Permission name', null],
+            ['description', null, InputOption::VALUE_OPTIONAL, 'Permission description', null]
+        ];
     }
 }
