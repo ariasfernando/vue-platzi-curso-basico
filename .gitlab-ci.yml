@@ -31,6 +31,7 @@ before_script:
   - php composer-setup.php
   - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
   - php composer.phar install
+  - bower install --allow-root
   - gulp --production
   # Install CI components.
   - cd ci/; php ../composer.phar install; cd ..
@@ -145,3 +146,16 @@ eslint:
     expire_in: 30 days
     paths:
       - ci/storage/tmp/eslint.html
+
+stylelint:
+  stage: test
+  script:
+    # Run stylelint
+    - ./node_modules/stylelint/bin/stylelint.js resources/assets/less/**/*.less > ci/storage/tmp/stylelint.txt
+      --no-color -f verbose
+  artifacts:
+    when: always
+    name: "${CI_JOB_STAGE}_stylelint_${CI_COMMIT_REF_NAME}"
+    expire_in: 30 days
+    paths:
+      - ci/storage/tmp/stylelint.txt

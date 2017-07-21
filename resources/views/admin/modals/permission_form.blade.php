@@ -7,7 +7,7 @@
 
 		{{-- Input Name --}}
 		<div class="modal-mpf-row">
-			<label>Permission Name</label>
+			<label>Name</label>
 			{!! Form::text('name', (isset($params['permission']['name']))? $params['permission']['name'] : '', array (
 				'class' => 'permission_name',
 				'id' => 'permission_name'
@@ -16,7 +16,7 @@
 
 		{{-- Input Description --}}
 		<div class="modal-mpf-row">
-			<label>Permission Description</label>
+			<label>Description</label>
 			{!! Form::text('description',(isset($params['permission']['description']))? $params['permission']['description'] : '', array (
 				'class' => 'permission_description',
 				'id' => 'permission_description'

@@ -41,14 +41,24 @@
             .glyphicon{
                 color: #cccccc;
                 margin-right: 4px;
+                transition: all 0.3s linear;
             }
 
             ul{
                 margin-top: 0px;
                 border-top: 1px solid #f0f0f0;
+                display: none;
+
+                li{
+                    background: #f8f8f8;
+                }
 
                 li:last-child{
                     border-bottom: none;
+                }
+
+                a{
+                    padding-left: 15px;
                 }
             }
         }
@@ -62,18 +72,22 @@
     }
 
     a {
+        color: #999999;
+        transition: all 0.3s linear;
+        text-decoration: none;
 
         span {
             padding: 20px;
         }
 
-        &:link,
         &:focus,
-        &:active,
-        &:visited,
         &:hover {
-            color: @input-color;
+            color: #555555;
             text-decoration: none;
+
+            .glyphicon{
+                color: #555555;
+            }
         }
     }
 }

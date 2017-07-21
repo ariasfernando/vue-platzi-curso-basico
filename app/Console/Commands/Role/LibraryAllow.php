@@ -56,7 +56,9 @@ class LibraryAllow extends Command
 
             if (strtolower($library_choice) == "all") {
                 array_shift($libraries_array);
-                array_walk($libraries_array, function(&$value, $key) { $value = 'access_library_' . $value; });
+                array_walk($libraries_array, function (&$value, $key) {
+                    $value = 'access_library_' . $value;
+                });
                 $role_data->permissions = array_merge($role_data->permissions, $libraries_array);
             } elseif (in_array($library_choice, $libraries_array)) {
                 $role_data->permissions = array_merge($role_data->permissions, ['access_library_' . $library_choice]);

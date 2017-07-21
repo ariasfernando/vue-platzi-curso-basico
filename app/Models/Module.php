@@ -22,17 +22,4 @@ class Module extends Eloquent
      * @var array
      */
     protected $fillable = ['name', 'key', 'structure', 'status', 'type'];
-
-
-
-    /**
-     * Get the module key standarized
-     *
-     * @param string $name
-     * @return string Module key
-     */
-    public static function standarizeKey($name)
-    {
-        return str_replace(' ', '', strtolower($name));
-    }
 }
