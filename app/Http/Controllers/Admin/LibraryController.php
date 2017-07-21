@@ -9,6 +9,7 @@ use Stensul\Models\Library;
 use Stensul\Models\Permission;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
+use Stensul\Services\ModelKeyManager;
 
 class LibraryController extends Controller
 {
@@ -195,7 +196,7 @@ class LibraryController extends Controller
     {
         $params = [
             "name" => $request->input("name"),
-            "key" => Library::standarizeKey($request->input("name")),
+            "key" => ModelKeyManager::getStandardKey(new Library, $request->input('name')),
             "description" => $request->input("description"),
             "config" => $request->input("config"),
             "modules" => []
@@ -209,7 +210,7 @@ class LibraryController extends Controller
             }
         }
 
-        if (Library::where('name', '=', $params["name"])->exists()) {
+        if (Library::where('name', '=', $params['key'])->exists()) {
             $response_message = array("message"=> "ERROR_EXISTS");
         } else {
             // Create permission to have access to the new library
@@ -239,6 +240,9 @@ class LibraryController extends Controller
     {
         $library = Library::findOrFail($request->input("libraryId"));
         $library->delete();
+
+        Permission::where('name', '=', 'access_library_' . $library->key)->delete();
+
         return array("deleted" => $request->input("libraryId"));
     }
 

@@ -7,7 +7,7 @@
           <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
           <div class="col-sm-8">
             <input v-if="setting.type === 'text'" v-model="setting.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                   :name="setting.name" type="text" :placeholder="setting.label" @input="saveComponent">
+                   :name="setting.name" type="text" :placeholder="setting.label" @change="saveComponent">
 
             <span v-if="setting.type === 'switch'">
               <toggle-button :value="setting.value" color="#82C7EB" :sync="true" :labels="true" @change="changeSetting(key, setting)"></toggle-button>
@@ -29,7 +29,7 @@
             <label class="col-sm-4 control-label" :for="field.name">{{ field.label }}</label>
             <div class="col-sm-8">
               <input v-if="field.type === 'text'" v-model="field.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }"
-                     :name="field.name" type="text" :placeholder="field.label" :link="field.link" @input="saveComponent">
+                     :name="field.name" type="text" :placeholder="field.label" :link="field.link" @change="saveComponent">
 
               <span v-if="field.type === 'switch'">
                 <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true" @change="changePlugin(key, field)"></toggle-button>
@@ -80,6 +80,13 @@
     },
     methods: {
       saveComponent() {
+
+        _.each(this.component.settings, (option, index) => {
+          if (option.link === 'style') {
+            this.component.style[option.name] = option.value;
+          }
+        });
+
         this.$store.commit('module/saveComponent', {
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,

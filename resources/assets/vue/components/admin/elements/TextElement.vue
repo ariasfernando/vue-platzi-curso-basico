@@ -28,7 +28,11 @@
     },
     data(){
       return {
+<<<<<<< HEAD
         editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-'),
+=======
+        editorId: ['editor', this.columnId, this.componentId].join('-')
+>>>>>>> v2.0.0-beta
       }
     },
     computed: {
