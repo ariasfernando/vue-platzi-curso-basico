@@ -107,7 +107,7 @@ var campaignManager = {
 		}
 
 		// Get modules data
-		data.modules_data = this.getModulesParams();
+        data.modules_data = this.getModulesParamsData();
 
 		// Save html if is requested.
 		if( options.saveHtml === true ){
@@ -272,6 +272,28 @@ var campaignManager = {
 		// Return data Object
 		return result;
 	},
+
+    // Make array with params of each module in the canvas, 
+	// Only with the data ,file_parent and the type of name.
+    getModulesParamsData: function(){
+        var result = [];
+        // Get canvas.
+        var $canvas = Application.utils.getCanvas();
+
+        if( $canvas ){
+            // Find each module row from canvas.
+            var rows = $canvas.find("> tr");
+            $.each( rows, function( index, module){
+                result.push({data:$(module).data("params").data, 
+                             type:$(module).data("params").type,
+                             file_parent:$(module).data("params").file_parent,
+                           });
+            });
+        }
+
+        // Return data Object
+        return result;
+    },
 
 	// Transform modal content into a given string, and
 	// replace marks like [key] with module data
@@ -552,7 +574,7 @@ var campaignManager = {
 		var dateSubmitted = $.datepicker.formatDate('yy-mm-dd', new Date());
 		$.each( rows, function( index, module){
 			var params = $(module).data("params");
-			if (typeof params.tracking != 'undefined') 
+            if (typeof params.tracking !== 'undefined')
 			{
 				var boxes = $(module).find(".st-box");
 				$.each( boxes, function( index, box){
@@ -847,8 +869,10 @@ var campaignManager = {
                     return;
                 }
 
-
-                if (e.altKey || e.key == "Dead" || e.key.search(/[^a-zA-Z0-9-_]/g) != -1) {
+                var regex = new RegExp("^[a-zA-Z0-9]+$");
+                var code = e.charCode ? e.charCode : e.which;
+                var str = String.fromCharCode(code);
+                if (!regex.test(str) && str != "-" && str != "_" && code != 8) {
                     e.preventDefault();
                     return false;
                 }
@@ -872,7 +896,7 @@ var campaignManager = {
         var saveCampaign = this.save({ template: true });
 
         if (!saveCampaign) {
-            if( typeof fnFail == "function" ){
+            if( typeof fnFail === "function" ){
                 fnFail();
             }
             return false;
@@ -881,7 +905,7 @@ var campaignManager = {
         saveCampaign.done(function() {
             Application.utils.alert.display('', 'This email template was saved successfully.', 'success');
 
-            if( typeof fnDone == "function" ){
+            if( typeof fnDone === "function" ){
                 fnDone();
             }
         });
@@ -889,7 +913,7 @@ var campaignManager = {
         saveCampaign.fail(function() {
             Application.utils.alert.display('Error:', 'An error occurred while trying to save, please try again later.', 'danger');
 
-            if( typeof fnFail == "function" ){
+            if( typeof fnFail === "function" ){
                 fnFail();
             }
         });
@@ -933,14 +957,15 @@ var campaignManager = {
             }
         });
     },
-
-    autoSave: function(status) {
+    autoSave: function(status, notUpdateStatus) {
 
         var _this = this;
         var delay = $('.btn-auto-save').val() ? $('.btn-auto-save').val() : 5;
 
-        if (status == 'enabled') {
+        if (status === 'enabled') {
+            if(!notUpdateStatus){
             _this.updateAutoSaveStatus(true);
+            }
             var targetEmail = document.getElementById('emailCanvas');
             var targetConfig = document.getElementById('autoSaveContent');
             // Create an observer instance
@@ -959,17 +984,31 @@ var campaignManager = {
                             ignore = true;
                         }
                     });
-                    if (mutation.target.className == 'actions-buttons-tooltip' || (mutation.attributeName == 'id' && mutation.target.localName != 'div') || ( !mutation.attributeName && mutation.target.localName == 'td'))
+                    if( mutation.target.className &&
+                        ( mutation.target.className.indexOf('mce') > -1
+                        || mutation.target.className.indexOf('toolbox') > -1)){
+                        ignore = true;
+                    }
+                    if( mutation.target && mutation.target.id && mutation.target.id.indexOf('open') > -1){
+                        ignore = true;
+                    }
+                    if( ( mutation.target.className &&  mutation.target.className.indexOf('actions-buttons-tooltip') > -1)
+                        || (mutation.attributeName == 'id' && mutation.target.localName != 'div')
+                        || ( !mutation.attributeName && mutation.target.localName == 'td'))
                     {
                         ignore = true;
 	}
-
+                    if( mutation.target && $(mutation.target).length && $(mutation.target).parent().hasClass('auto-save')) {
+                        ignore = true;
+                    }
                     if (!ignore) {
                         if (_this.timeoutHandle) {
                             clearTimeout(_this.timeoutHandle);
                         }
                         _this.timeoutHandle = setTimeout(function () {
                             $('.config-box-divider.auto-save label').addClass('spinner');
+                            //Remove focus from all input to save appropriately
+                            $(':focus').blur();
                             var saveCampaign = _this.save({
                                 saveHtml: true,
                                 validateForms: false,
@@ -999,12 +1038,15 @@ var campaignManager = {
             // Clear the last timeout
             clearTimeout(_this.timeoutHandle);
             // Update auto_save campaign attribute in DB
+            if(!notUpdateStatus){
             _this.updateAutoSaveStatus(false);
+            }
             // Stop observing when auto-save is deactivated.
-            _this.observer.disconnect();
+            if(typeof _this.observer !== "null"){
+                _this.observer.disconnect();
+            }
         }
     },
-
     updateAutoSaveStatus: function(status, fnFail) {
         var config = this.getConfiguration();
         var data = {
@@ -1020,5 +1062,4 @@ var campaignManager = {
             }
         });
     },
-
 };

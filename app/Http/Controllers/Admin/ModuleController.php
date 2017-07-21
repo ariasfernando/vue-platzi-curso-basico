@@ -9,6 +9,8 @@ use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\Driver\Exception\BulkWriteException;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
 use Stensul\Models\Module;
+use Stensul\Models\Library;
+use Stensul\Services\ModelKeyManager;
 
 class ModuleController extends Controller
 {
@@ -94,13 +96,12 @@ class ModuleController extends Controller
      * Module post save. Inserts or update a module.
      *
      * @param Request $request
-     * @return Boolean
+     * @return array [id => moduleId, message => ERROR|SUCCESS]
      */
     public function postSave(Request $request)
     {
         $params = [
             'name' => $request->input('name'),
-            'key' => Module::standarizeKey($request->input('name')),
             'structure' => $request->input('structure'),
             'status' => $request->input('status', 'draft'),
             'type' => 'studio'
@@ -110,6 +111,7 @@ class ModuleController extends Controller
             $module = Module::findOrFail($request->input("moduleId"));
         } else {
             $module = new Module;
+            $module->key = ModelKeyManager::getStandardKey($module, $request->input('name'));
         }
 
         foreach ($params as $key => $value) {
@@ -134,5 +136,29 @@ class ModuleController extends Controller
         }
 
         return $response_message;
+    }
+
+    /**
+     * Module post delete.
+     *
+     * Delete a module and remove it from libraries that use it.
+     *
+     * @param Request $request
+     * @return array [deleted => moduleId]
+     */
+    public function postDelete(Request $request)
+    {
+
+        $module = Module::findOrFail($request->input("moduleId"));
+        $module->delete();
+
+        $libraries = Library::all();
+        if (count($libraries)) {
+            foreach ($libraries as $library) {
+                $library->removeModule($module->key);
+                $library->save();
+            }
+        }
+        return ["deleted" => $request->input("moduleId")];
     }
 }

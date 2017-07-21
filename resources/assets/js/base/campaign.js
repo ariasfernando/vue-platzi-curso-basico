@@ -3,6 +3,9 @@
     /*
      | Init application globals and utils
      */
+    Application.onInit = function() {
+        Application.api();
+    }
     if (Application && Application.init) {
         Application.init();
     }
@@ -61,7 +64,7 @@
         campaignManager.confirmFinishedCampaignEdition();
 
         $(".switch-input").change(function (e) {
-
+            campaignManager.autoSave('disabled', true);
             var selected = $('.switch-input:checked').val();
 
             // Trigger global event
@@ -72,6 +75,8 @@
 
             // TODO: Can you enlighten me?
             Application.utils.changeBuildingMode(selected);
+            campaignManager.autoSave('enabled', true);
+
         });
 
         // -- Display Preview --
