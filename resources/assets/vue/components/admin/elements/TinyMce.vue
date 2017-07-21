@@ -25,7 +25,6 @@
       options: {
         default: ''
       },
-
     },
     mounted () {
       this.initTinyMCE(this.options);
@@ -46,9 +45,8 @@
               const parts = this.id.split('-');
 
               this.$store.commit('module/updateElement', {
-                moduleId: parts[1],
-                columnId: parts[2],
-                componentId: parts[3],
+                columnId: parts[1],
+                componentId: parts[2],
                 data: {
                   text: editor.getContent()
                 }

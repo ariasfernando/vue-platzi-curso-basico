@@ -28,7 +28,7 @@
     },
     data(){
       return {
-        editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-')
+        editorId: ['editor', this.columnId, this.componentId].join('-')
       }
     },
     timeoutID: null,
