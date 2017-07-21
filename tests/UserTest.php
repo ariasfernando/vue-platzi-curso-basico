@@ -4,6 +4,7 @@ namespace Stensul\Tests;
 
 use Stensul\Models\User;
 use Stensul\Models\Library;
+use Stensul\Services\ModelKeyManager;
 
 class UserTest extends TestCase
 {
@@ -50,10 +51,10 @@ class UserTest extends TestCase
     {
 
         // Create new library
-        $Library_name = "Library Test";
+        $library_name = "Library Test";
         $library_params = [
-            "name" => $Library_name,
-            "key" => Library::standarizeKey($Library_name),
+            "name" => $library_name,
+            "key" => ModelKeyManager::getStandardKey(new Library,$library_name),
             "description" => "Library for UT",
             "config" => [],
             "modules" => []
@@ -65,7 +66,7 @@ class UserTest extends TestCase
         // \Config::set('view.libraries', $libraries);
 
         // // Check we're not seeing the dummy lib.
-        $this->assertNotTrue($this->user->can('access_library_' . Library::standarizeKey($Library_name)));
+        $this->assertNotTrue($this->user->can('access_library_' . $library_params['key']));
 
         // Test that there are no libraries in the array.
         $this->assertCount(0, $this->user->getLibraries());
@@ -79,14 +80,14 @@ class UserTest extends TestCase
         $this->assertEquals($exit_code, 0);
 
         // Allow the new role to see the dummy library.
-        $exit_code = \Artisan::call('role:library:allow', ['--role' => 'role1', '--library' => Library::standarizeKey($Library_name)]);
+        $exit_code = \Artisan::call('role:library:allow', ['--role' => 'role1', '--library' => $library_params['key']]);
         $this->assertEquals($exit_code, 0);
 
         // Update the user model object from DB.
         $this->user = User::where('_id', '=', $this->user->id)->firstOrFail();
 
         // Test again, we should see the library now.
-        $this->assertTrue($this->user->can('access_library_' . Library::standarizeKey($Library_name)));
+        $this->assertTrue($this->user->can('access_library_' . $library_params['key']));
 
         // Create a new permission.
         $exit_code = \Artisan::call(
