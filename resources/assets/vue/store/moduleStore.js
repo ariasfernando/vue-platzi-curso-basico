@@ -5,6 +5,7 @@ import defaultElements from '../resources/elements';
 const state = {
   module: {},
   currentComponent: {},
+  changeSettingComponent:{},
   loading: false
 };
 
@@ -14,6 +15,9 @@ const getters = {
   },
   currentComponent(state) {
     return state.currentComponent;
+  },
+  changeSettingComponent(state) {
+    return state.changeSettingComponent;
   },
 };
 
@@ -29,6 +33,15 @@ const mutations = {
       state.module[field] = value;
     })
   },
+  setChangeSettingComponent(state, data){
+    let newObjetStyle = {};
+    
+    _.each(data.component.settings, (option, index) => {
+      newObjetStyle[option.name] = option.value;
+    });
+    
+    state.changeSettingComponent =  _.extend(data.component.style, newObjetStyle);
+  },
   setCurrentComponent(state, data) {
     state.currentComponent = data;
   },
@@ -38,14 +51,6 @@ const mutations = {
     });
   },
   saveComponent(state, data) {
-    let newObjetStyle = {};
-    
-    _.each(data.component.settings, (option, index) => {
-      newObjetStyle[option.name] = option.value;
-    });
-    
-   data.component.style =  _.extend(data.component.style, newObjetStyle);
-
    state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
   },
   saveModule(state, moduleId) {

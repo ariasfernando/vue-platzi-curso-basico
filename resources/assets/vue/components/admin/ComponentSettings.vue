@@ -85,6 +85,11 @@
           componentId: this.currentComponent.componentId,
           component: this.component,
         });
+
+        this.$store.commit('module/setChangeSettingComponent',{
+          component: this.component,
+        }); 
+        
       },
       changeSetting(key, setting) {
         setting.value = !setting.value;

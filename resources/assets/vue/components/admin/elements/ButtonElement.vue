@@ -42,6 +42,18 @@
         editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-')
       }
     },
+    computed: {
+      styleComponent() {
+        return this.$store.state.module.changeSettingComponent;
+      }
+    },
+    watch : {
+      styleComponent() {
+        if (!_.isEmpty(this.styleComponent)) {
+          this.component.style = this.styleComponent;
+        }
+      },
+    },
     methods: {
       input (text, key) {
         this.$store.commit('module/updateElement', {

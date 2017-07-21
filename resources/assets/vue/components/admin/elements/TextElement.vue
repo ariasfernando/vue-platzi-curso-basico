@@ -28,8 +28,23 @@
     },
     data(){
       return {
-        editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-')
+        editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-'),
       }
+    },
+    computed: {
+      styleComponent() {
+        return this.$store.state.module.changeSettingComponent;
+      },
+      currentComponent() {
+        return this.$store.state.module.currentComponent;
+      },
+    },
+    watch : {
+      styleComponent() {
+        if ( (this.currentComponent.columnId == this.columnId ) && (this.currentComponent.componentId == this.moduleId ) ) {
+          this.component.style = this.styleComponent;
+        }
+      },
     },
     timeoutID: null,
     methods: {

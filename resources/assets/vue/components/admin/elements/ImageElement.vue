@@ -37,6 +37,18 @@
         }
       }
     },
+    computed: {
+      styleComponent() {
+        return this.$store.state.module.changeSettingComponent;
+      }
+    },
+    watch : {
+      styleComponent() {
+        if (!_.isEmpty(this.styleComponent)) {
+          this.component.style = this.styleComponent;
+        }
+      },
+    },
     methods: {
       setupModule () {
         this.elementConfig = null;

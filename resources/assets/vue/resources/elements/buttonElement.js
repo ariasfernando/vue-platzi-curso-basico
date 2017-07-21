@@ -37,8 +37,8 @@ module.exports = {
     },
     {
       "link": "style",
-      "label": "Padding Right",
-      "name": "paddingRight",
+      "label": "Padding Left",
+      "name": "paddingLeft",
       "type": "text",
       "value": "10px"
     },
