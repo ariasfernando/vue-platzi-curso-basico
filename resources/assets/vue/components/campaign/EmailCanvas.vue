@@ -21,9 +21,6 @@
         </div>
 
         <div :class="'col-xs-8 col-md-7 col-lg-' + buttonsCols + ' text-right'" id="section-canvas-buttons-col">
-          <button class="btn btn-default campaign-preview" :class="hiddenClass()"><i
-            class="glyphicon glyphicon-phone"></i>Preview
-          </button>
 
           <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template"
                   @click="saveCampaign">Save as Draft
@@ -62,15 +59,6 @@
           </td>
         </tr>
       </table>
-    </div>
-
-    <div class="section-box-header-bottom section-canvas-title hidden">
-      <div class="row">
-        <div class="col-xs-12 text-right">
-          <a class="btn btn-default save-as-draft" href="#">Save as Draft</a>
-          <a class="btn btn-default campaign-continue" href="#">Complete</a>
-        </div>
-      </div>
     </div>
   </div>
 </template>

@@ -11,7 +11,7 @@
 
     <!-- column right (container email) -->
     <section class="section-canvas-email section-box">
-      <email-canvas v-if="ready" @save-campaign="saveCampaign"></email-canvas>
+      <email-canvas v-if="ready"></email-canvas>
     </section>
 
     <spinner></spinner>
@@ -68,6 +68,7 @@
       }
     },
     created: function () {
+      this.$store.commit("global/setLoader", true);
       this.loadCampaign();
     }
   };
