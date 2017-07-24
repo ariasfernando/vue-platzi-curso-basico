@@ -7,8 +7,6 @@
         $('#modal-campaign-preview').css('display','block');
         $('#modal-campaign-preview').removeClass('fade');
         $('.modal-body').css('padding-top','10px');
-        $('.send-preview').hide();
-        $('.modal-header').hide();
 
         // Preview Modal Events: Desktop Btn Click
         $("#modal-campaign-preview").on('click', '.btn-desktop', function () {

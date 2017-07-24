@@ -3,11 +3,13 @@
 namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
+use Activity;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\Role;
 use Stensul\Models\Permission;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
+use MongoDB\BSON\ObjectID as ObjectID;
 
 class PermissionController extends Controller
 {
@@ -102,7 +104,7 @@ class PermissionController extends Controller
         $permission->description = $request->input("description");
         $permission->save();
 
-        return array("message"=> "SUCCESS");
+        return array("message" => "SUCCESS");
     }
 
     /**
@@ -136,6 +138,12 @@ class PermissionController extends Controller
     {
         $permission = Permission::findOrFail($request->input("permissionId"));
         $permission->delete();
+
+        Activity::log(
+            'Permission deleted',
+            array('properties' => ['permission_id' => new ObjectID($permission->id)])
+        );
+
         return array("deleted" => $request->input("permissionId"));
     }
 }

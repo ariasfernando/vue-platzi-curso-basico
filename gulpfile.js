@@ -129,27 +129,27 @@ gulp.task('elixir-scripts', function () {
       mix
         mix.browserify(
           'main.js',
-          jsDestinationPath + "customer.js",
+          jsDestinationPath + 'customer.js',
           customerAssetsPath
         )
         .browserify(
-          "js/vue/campaign.js",
-          jsDestinationPath + "campaign-components.js",
+          'vue/campaign.js',
+          jsDestinationPath + 'campaign-components.js',
           assetsPath
         )
         .browserify(
-          "js/vue/studio-library.js",
-          jsDestinationPath + "studio-library.js",
+          'vue/studio-library.js',
+          jsDestinationPath + 'studio-library.js',
           assetsPath
         )
         .browserify(
-          "js/vue/studio-module.js",
-          jsDestinationPath + "studio-module.js",
+          'vue/studio-module.js',
+          jsDestinationPath + 'studio-module.js',
           assetsPath
         )
         .browserify(
           [
-            "js/vue/dashboard.js",
+            'vue/dashboard.js',
             'js/library/custom-plugins/st-pagination-bar.jquery.js',
             'js/library/campaign-preview.js',
             'js/library/campaign-manager.js',

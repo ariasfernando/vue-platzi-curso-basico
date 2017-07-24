@@ -2,16 +2,20 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             
+            @if(isset($params))
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4>Preview</h4>
             </div>
+            @endif
 
             <div class="modal-body">
                 {{-- Send Preview --}}
+                @if(isset($params))
                 <div class="send-preview">
                     <form name="send-preview-form" id="send-preview-form">
                         <div class="form-group">
+                            <p class="alert alert-info upload-warning">Warning! The preview email is not (ready/suitable) for production. Click Complete to publish your campaign and access the HTML code.</p>
                             <label>Email address</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="send-preview-to" value="" placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
@@ -21,7 +25,7 @@
                         </div>
                     </form>
                 </div>
-
+                @endif
                 {{-- Share --}}
                 <div class="share-preview">
                     <form class="form-inline">

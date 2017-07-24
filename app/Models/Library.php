@@ -8,6 +8,9 @@ use Stensul\Providers\ModuleServiceProvider;
 
 class Library extends Eloquent
 {
+
+    use SoftDeletes;
+
     /**
      * The database table used by the model.
      *
@@ -62,13 +65,32 @@ class Library extends Eloquent
     }
 
     /**
-     * Get the library key standarized
+     * Remove a module from the library menu.
+     * Call save() after using this method to persist the changes.
      *
-     * @param string $name
-     * @return string Modules
+     * @param string $module_key
      */
-    public static function standarizeKey($name)
+    public function removeModule($module_key)
     {
-        return str_replace(' ', '', strtolower($name));
+
+        $modules_to_keep = [];
+
+        // Recreate the modules array without the removed module.
+        foreach ($this->modules as $group => $mods) {
+            // Grouped modules.
+            if (is_array($mods)) {
+                foreach ($mods as $mod) {
+                    if ($mod !== $module_key) {
+                        $modules_to_keep[$group][] = $mod;
+                    }
+                }
+            } else { // Ungrouped modules.
+                if ($mods !== $module_key) {
+                    $modules_to_keep[] = $mods;
+                }
+            }
+        }
+
+        $this->modules = $modules_to_keep;
     }
 }

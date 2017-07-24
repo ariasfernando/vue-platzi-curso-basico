@@ -236,14 +236,15 @@ class Campaign extends Eloquent
     }
 
     /**
-     * Get a list of campaign configuration, prioritizing library values over default values
+     * Get a list of library configuration
      */
     public function getLibraryConfigAttribute()
-    {
-        return array_merge(
-            \Config::get('campaign'),
-            Library::find($this->attributes['library'])->config
-        );
+    {   
+        $libraryConfig = [];
+        if (Library::find($this->attributes['library'])) {
+            $libraryConfig = Library::find($this->attributes['library'])->config;
+        }
+        return $libraryConfig;
     }
 
     /**

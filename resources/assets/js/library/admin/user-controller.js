@@ -20,8 +20,6 @@ var userController = function( customOptions ){
 		}
 	}, customOptions );
 
-	var buttonSpinner = new Application.utils.buttonSpinner();
-
 	var _this = this;
 
 	this.doAjax = function(action, method , data){
@@ -94,11 +92,9 @@ var userController = function( customOptions ){
 		if(!options.busy){
 			if(Application.utils.validate.validateForm( form )) {
 				options.busy = true;
-				buttonSpinner.show( element );
 
 				_this.doAjax(action, "POST", $(form).serializeArray())
 					.done(function (data) {
-						buttonSpinner.hide( element );
 
 						options.busy = false;
 
@@ -118,7 +114,6 @@ var userController = function( customOptions ){
 						return false;
 					})
 					.fail(function (error) {
-						buttonSpinner.hide( element );
 						options.busy = false;
 						Application.utils.alert.display("Error:", "An error occurred while trying to save the user, please try again later.", "danger");
 					});
@@ -137,16 +132,11 @@ var userController = function( customOptions ){
 				message: options.messages.confirmDelete,
 				// Function to execute when confirm is true.
 				onSubmit: function(){
-					// Show spinner
-					buttonSpinner.show( element );
-
 					_this.doAjax("delete", "POST", { userId: userId })
 						.done(function () {
-							buttonSpinner.hide( element );
 							_this.refreshTableView( $(element).parents("table[data-pagination]").attr("id") );
 						})
 						.fail(function () {
-							buttonSpinner.hide( element );
 							Application.utils.alert.display("Error:", "An error occurred while trying to delete the user, please try again later.", "danger");
 						});
 				}

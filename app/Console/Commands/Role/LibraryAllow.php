@@ -5,6 +5,8 @@ namespace Stensul\Console\Commands\Role;
 use Stensul\Models\Role;
 use Stensul\Models\Library;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
+
 
 class LibraryAllow extends Command
 {
@@ -28,7 +30,8 @@ class LibraryAllow extends Command
     public function fire()
     {
 
-        $name = $this->ask('What is the role name ?');
+        $options = $this->option();
+        $name = (is_null($options["role"]))? $this->ask('What is the role name ?') : $options["role"];
 
         if (!Role::where('name', '=', $name)->exists()) {
             $this->error('Role not found.');
@@ -52,11 +55,15 @@ class LibraryAllow extends Command
                 array_unshift($libraries_array, "all");
             }
 
-            $library_choice = $this->ask('Select a library: ('.join(", ", $libraries_array).')');
+            $library_choice = (is_null($options["library"]))
+                    ? $this->ask('Select a library: ('.join(", ", $libraries_array).')')
+                    : $options["library"];
 
             if (strtolower($library_choice) == "all") {
                 array_shift($libraries_array);
-                array_walk($libraries_array, function(&$value, $key) { $value = 'access_library_' . $value; });
+                array_walk($libraries_array, function (&$value, $key) {
+                    $value = 'access_library_' . $value;
+                });
                 $role_data->permissions = array_merge($role_data->permissions, $libraries_array);
             } elseif (in_array($library_choice, $libraries_array)) {
                 $role_data->permissions = array_merge($role_data->permissions, ['access_library_' . $library_choice]);
@@ -87,6 +94,9 @@ class LibraryAllow extends Command
      */
     protected function getOptions()
     {
-        return [];
+        return [
+            ['role', null, InputOption::VALUE_OPTIONAL, 'Role name', null],
+            ['library', null, InputOption::VALUE_OPTIONAL, 'Library', null]
+        ];
     }
 }

@@ -17,6 +17,7 @@ class Eloqua implements ApiConnector
     private $eloqua_config;
     private $api_version = "2.0";
     private $flushed_cache = false;
+    private $access_token = null;
     private $library_name = '';
 
     /**
@@ -32,18 +33,24 @@ class Eloqua implements ApiConnector
     /**
      * Get eloqua token.
      *
-     * @return String access_token
+     * @param  Array   $params
+     * @param  Boolean $force
+     * @return String  access_token
      */
-    private function getToken()
+    private function getToken($params = [], $force = false)
     {
+        if (!is_null($this->access_token)) {
+            return $this->access_token;
+        }
+
         $eloqua_config = $this->eloqua_config;
 
         if ($eloqua_config['use_oauth']) {
             return $this->getTokenByOauth();
         }
-        if (Cache::has('api:eloqua:' . $this->library_name . ':token')) {
+        if (!$force || Cache::has('api:eloqua:' . $this->library_name . ':token')) {
             $eloqua_token = Cache::get('api:eloqua:' . $this->library_name . ':token');
-        } elseif (Cache::has('api:eloqua:token')) {
+        } elseif (!$force || Cache::has('api:eloqua:token')) {
             $eloqua_token = Cache::get('api:eloqua:token');
         } else {
             $options = [
@@ -81,13 +88,15 @@ class Eloqua implements ApiConnector
                     . $eloqua_config['auth']['credentials']['user_name'];
             }
 
+            $options['params'] = array_merge($options['params'], $params);
+
             $response = $this->call($options);
             $credentials = $response;
             $eloqua_token = $credentials['access_token'];
             if (array_key_exists($this->library_name, $this->eloqua_config['libraries'])) {
-                Cache::add('api:eloqua:' . $this->library_name . ':token', Carbon::now()->addHours(1));
+                Cache::add('api:eloqua:' . $this->library_name . ':token', Carbon::now()->addHours(1)->toDateTimeString());
             } else {
-                Cache::add('api:eloqua:token', $eloqua_token, Carbon::now()->addHours(1));
+                Cache::add('api:eloqua:token', $eloqua_token, Carbon::now()->addHours(1)->toDateTimeString());
             }
         }
 
@@ -195,9 +204,9 @@ class Eloqua implements ApiConnector
             $response = $this->call($options);
             $base_url = str_replace("{version}", $this->api_version, $response['urls']['apis']['rest']['standard']);
             if (array_key_exists($this->library_name, $this->eloqua_config['libraries'])) {
-                Cache::add('api:eloqua:' . $this->library_name . ':url', Carbon::now()->addHours(1));
+                Cache::add('api:eloqua:' . $this->library_name . ':url', Carbon::now()->addHours(1)->toDateTimeString());
             } else {
-                Cache::add('api:eloqua:url', $base_url, Carbon::now()->addHours(1));
+                Cache::add('api:eloqua:url', $base_url, Carbon::now()->addHours(1)->toDateTimeString());
             }
         }
 
@@ -223,11 +232,10 @@ class Eloqua implements ApiConnector
                 'path' => $eloqua_config['user_credentials']['url'],
                 'base_url' => $eloqua_config['auth']['base_url']
             ];
-
             $response = $this->call($options);
             $base_url = str_replace("{version}", $this->api_version, $response['urls']['apis']['rest']['standard']);
             Session::put('api:eloqua:url', $base_url);
-            Session::put('api:eloqua:url:expires_in', Carbon::now()->addHours(1));
+            Session::put('api:eloqua:url:expires_in', Carbon::now()->addHours(1)->toDateTimeString());
         }
 
         return $base_url;
@@ -323,6 +331,8 @@ class Eloqua implements ApiConnector
                         'message' => $error_message
                     ]
                 ]);
+
+                \Log::error(json_encode($error));
 
                 throw new \Exception($error_message);
             }
@@ -439,6 +449,10 @@ class Eloqua implements ApiConnector
 
             $eloqua_config = $this->eloqua_config;
 
+            if (isset($request['access_token'])) {
+                $this->access_token = $request['access_token'];
+            }
+
             $options = [
                 'type' => $eloqua_config['upload_email']['type'],
                 'path' => $eloqua_config['upload_email']['url'],
@@ -521,6 +535,7 @@ class Eloqua implements ApiConnector
                         'redirect_uri' => $eloqua_config['oauth']['credentials']['redirect_uri']
                     ]
                 ], true);
+                $request->session()->put('api:eloqua:token', $access_token);
             } else {
                 $url = $eloqua_config['oauth']['base_url'] . $eloqua_config['oauth']['path'];
                 $url.= '?' . http_build_query($eloqua_config['oauth']['credentials']);
