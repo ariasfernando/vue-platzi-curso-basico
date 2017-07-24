@@ -3,6 +3,7 @@
 namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
+use Activity;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
@@ -159,6 +160,12 @@ class ModuleController extends Controller
                 $library->save();
             }
         }
+
+        Activity::log(
+            'Module deleted',
+            array('properties' => ['module_id' => new ObjectID($module->id)])
+        );
+
         return ["deleted" => $request->input("moduleId")];
     }
 }
