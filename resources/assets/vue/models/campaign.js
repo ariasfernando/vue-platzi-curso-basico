@@ -1,6 +1,5 @@
 function Campaign(data) {
-  this.campaign_name = data.settings.campaignName || data.campaign.title;
-
+  this.campaign_name = data.settings.campaignName || data.campaign.campaign_name;
   this.campaign_preheader = data.settings.campaignPreheader || data.campaign.campaign_data.campaign_preheader;
   this.preheader_visible = data.settings.campaignPreheaderVisible || false;
   this.tags = data.settings.tags || [];

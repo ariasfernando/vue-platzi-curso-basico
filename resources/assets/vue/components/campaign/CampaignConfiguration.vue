@@ -5,14 +5,14 @@
       <form>
         <!-- Configuration Inputs -->
         <div>
-          <label>Campaign Name:</label>
-          <input type="text" v-model="form.campaignName" @change="saveSettings"/>
+          <label>Campaign Title:</label>
+          <input type="text" name="campaignName" :value="form.campaignName" @blur="saveSettings"/>
         </div>
 
 
         <div class="form-group" v-if="enablePreheader">
           <label>Preheader:</label>
-          <input type="text" maxlength="140" v-model="form.campaignPreheader" @change="saveSettings"/>
+          <input type="text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
         </div>
 
         <div class="config-box-divider" v-if="enableTagging">
@@ -31,6 +31,8 @@
 </template>
 
 <script>
+  import _ from 'lodash'
+
   export default {
     name: 'CampaignConfiguration',
     data () {
@@ -41,25 +43,27 @@
           campaignName: 'Untitled Campaign',
           campaignPreheader: '',
           campaignProcess: false
-        }
+        },
+        params: {},
       }
     },
-    computed: {
-      params() {
-        return this.$store.state.campaign.campaign;
-      }
-    },
+
     created () {
+      this.params = _.cloneDeep(this.$store.state.campaign.campaign);
+
       this.enablePreheader = this.params.campaign_data.library_config.preheader;
       this.enableTagging = this.params.campaign_data.library_config.enable_tagging;
 
-      this.form.campaignName = this.params.title;
+      this.form.campaignName = this.params.campaign_name;
       this.form.campaignPreheader = this.params.campaign_data.campaign_preheader;
       this.form.campaignProcess = this.params.campaign_data.processed;
     },
     methods: {
-      saveSettings() {
-        this.$store.commit('campaign/saveSettings', this.form);
+      saveSettings(e) {
+        this.$store.commit('campaign/saveSetting', {
+          name: e.target.name,
+          value: e.target.value
+        });
       }
     }
   }

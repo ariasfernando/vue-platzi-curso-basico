@@ -33,17 +33,18 @@
         toolbar: ''
       }
     },
-    timeoutID: null,
     created () {
       this.setupModule();
     },
     methods: {
       setupModule() {
-        _.each(this.component.plugins.richEditor.fields, (option) => {
-          if (option.value === true) {
-            this.toolbar += ' ' + option.name;
-          }
-        });
+        if (this.component.plugins && this.component.plugins.richEditor) {
+          _.each(this.component.plugins.richEditor.fields, (option) => {
+            if (option.value === true) {
+              this.toolbar += ' ' + option.name;
+            }
+          });
+        }
       }
     }
   };

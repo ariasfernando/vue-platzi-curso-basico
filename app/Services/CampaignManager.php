@@ -78,13 +78,15 @@ class CampaignManager
                 $campaign->plain_text = $inputs['plain_text'];
             }
 
-            $campaign->tags = array_unique(json_decode($inputs['tags']));
-            // Add New tags to collection
-            $saved_tags = Tag::all()->keyBy('name')->all();
+            if (!empty($inputs['tags'])) {
+                $campaign->tags = array_unique(json_decode($inputs['tags']));
+                // Add New tags to collection
+                $saved_tags = Tag::all()->keyBy('name')->all();
 
-            foreach ($campaign->tags as $tag) {
-                if (!array_key_exists($tag, $saved_tags)) {
-                    Tag::create(['name'=> $tag]);
+                foreach ($campaign->tags as $tag) {
+                    if (!array_key_exists($tag, $saved_tags)) {
+                        Tag::create(['name'=> $tag]);
+                    }
                 }
             }
 
@@ -158,7 +160,7 @@ class CampaignManager
 
         if (!is_null($campaign_data)) {
             $response = [
-                'title' => $campaign_data->campaign_name,
+                'campaign_name' => $campaign_data->campaign_name,
                 'locale' => $campaign_data->locale,
                 'campaign_id' => $campaign_id,
                 'campaign_data' => $campaign_data,

@@ -22,21 +22,19 @@ const mutations = {
   addModule(state, moduleData) {
     state.modules.push(moduleData);
   },
-  updateElement(state, edited) {
+  addEditedModule(state, edited) {
+    state.editedModules.push(edited);
+  },
+  updateEditedModule(state, edited) {
     const matches = _.where(state.editedModules, {
       moduleId: edited.moduleId,
       columnId: edited.columnId,
       componentId: edited.componentId,
     });
-
-    if (matches.length) {
-      matches[0].data = _.extend(matches[0].data, edited.data);
-    } else {
-      state.editedModules.push(edited);
-    }
+    matches[0].data = _.extend(matches[0].data, edited.data);
   },
-  saveSettings(state, settings) {
-    state.editedSettings = settings;
+  saveSetting(state, setting) {
+    state.editedSettings[setting.name] = setting.value;
   },
   error(err) {
     console.error(err);
@@ -49,11 +47,24 @@ const actions = {
       .then(response => context.commit('loadCampaignData', response.campaign))
       .catch(error => context.commit('error', error));
   },
-  saveCampaign(context) {
-    return campaignService.saveCampaign()
+  saveCampaign(context, campaign) {
+    return campaignService.saveCampaign(campaign)
       .then(response => response)
       .catch(error => context.commit('error', error));
-  }
+  },
+  updateElement(context, edited) {
+    const matches = _.where(state.editedModules, {
+      moduleId: edited.moduleId,
+      columnId: edited.columnId,
+      componentId: edited.componentId,
+    });
+
+    if (matches.length) {
+      context.commit('updateEditedModule', edited);
+    } else {
+      context.commit('addEditedModule', edited);
+    }
+  },
 };
 
 module.exports = {
