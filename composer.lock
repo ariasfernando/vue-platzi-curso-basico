@@ -119,7 +119,6 @@
         },
         {
             "name": "aws/aws-sdk-php",
-<<<<<<< Updated upstream
             "version": "3.31.8",
             "source": {
                 "type": "git",
@@ -130,18 +129,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9829a8183016df800110148b467179d67c434f90",
                 "reference": "9829a8183016df800110148b467179d67c434f90",
-=======
-            "version": "3.30.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "2208af5a13082a0e5c1b7a8f4f7336a7e8805966"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2208af5a13082a0e5c1b7a8f4f7336a7e8805966",
-                "reference": "2208af5a13082a0e5c1b7a8f4f7336a7e8805966",
->>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -208,11 +195,7 @@
                 "s3",
                 "sdk"
             ],
-<<<<<<< Updated upstream
             "time": "2017-07-20T22:22:05+00:00"
-=======
-            "time": "2017-06-27 22:53:36"
->>>>>>> Stashed changes
         },
         {
             "name": "bjeavons/zxcvbn-php",
@@ -502,11 +485,7 @@
                 "proxy",
                 "trusted proxy"
             ],
-<<<<<<< Updated upstream
             "time": "2017-06-15T17:19:42+00:00"
-=======
-            "time": "2017-05-31 12:50:41"
->>>>>>> Stashed changes
         },
         {
             "name": "folklore/image",
@@ -572,11 +551,7 @@
                 "thumbnail",
                 "watermark"
             ],
-<<<<<<< Updated upstream
             "time": "2017-06-27T15:13:34+00:00"
-=======
-            "time": "2017-06-27 15:13:34"
->>>>>>> Stashed changes
         },
         {
             "name": "google/recaptcha",
@@ -677,11 +652,7 @@
                 }
             ],
             "description": "A php implementation to send log-messages to a GELF compatible backend like Graylog2.",
-<<<<<<< Updated upstream
             "time": "2017-06-24T10:38:25+00:00"
-=======
-            "time": "2017-06-24 10:38:25"
->>>>>>> Stashed changes
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -746,11 +717,7 @@
                 "rest",
                 "web service"
             ],
-<<<<<<< Updated upstream
             "time": "2017-06-22T18:50:49+00:00"
-=======
-            "time": "2017-06-22 18:50:49"
->>>>>>> Stashed changes
         },
         {
             "name": "guzzlehttp/promises",
@@ -907,11 +874,7 @@
                 }
             ],
             "description": "Password Generator Library",
-<<<<<<< Updated upstream
             "time": "2017-07-15T09:55:13+00:00"
-=======
-            "time": "2016-07-24 15:43:52"
->>>>>>> Stashed changes
         },
         {
             "name": "html2text/html2text",
@@ -1628,11 +1591,7 @@
                 }
             ],
             "description": "Flysystem adapter for the AWS S3 SDK v3.x",
-<<<<<<< Updated upstream
             "time": "2017-06-30T06:29:25+00:00"
-=======
-            "time": "2017-06-08 13:37:03"
->>>>>>> Stashed changes
         },
         {
             "name": "league/oauth1-client",
@@ -2069,11 +2028,7 @@
                 "parser",
                 "php"
             ],
-<<<<<<< Updated upstream
             "time": "2017-06-28T20:53:48+00:00"
-=======
-            "time": "2017-03-05 18:23:57"
->>>>>>> Stashed changes
         },
         {
             "name": "olssonm/l5-zxcvbn",
@@ -2331,7 +2286,6 @@
         },
         {
             "name": "psy/psysh",
-<<<<<<< Updated upstream
             "version": "v0.8.9",
             "source": {
                 "type": "git",
@@ -2342,18 +2296,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/bobthecow/psysh/zipball/58a31cc4404c8f632d8c557bc72056af2d3a83db",
                 "reference": "58a31cc4404c8f632d8c557bc72056af2d3a83db",
-=======
-            "version": "v0.8.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "fe65c30cbc55c71e61ba3a38b5a581149be31b8e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/fe65c30cbc55c71e61ba3a38b5a581149be31b8e",
-                "reference": "fe65c30cbc55c71e61ba3a38b5a581149be31b8e",
->>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -2413,11 +2355,7 @@
                 "interactive",
                 "shell"
             ],
-<<<<<<< Updated upstream
             "time": "2017-07-06T14:53:52+00:00"
-=======
-            "time": "2017-06-24 06:16:19"
->>>>>>> Stashed changes
         },
         {
             "name": "ramsey/uuid",
@@ -2793,11 +2731,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-<<<<<<< Updated upstream
             "time": "2017-06-09T14:53:08+00:00"
-=======
-            "time": "2017-06-04 18:15:29"
->>>>>>> Stashed changes
         },
         {
             "name": "symfony/finder",
@@ -3524,11 +3458,7 @@
                 "phpstorm",
                 "sublime"
             ],
-<<<<<<< Updated upstream
             "time": "2017-06-16T14:08:59+00:00"
-=======
-            "time": "2017-06-16 14:08:59"
->>>>>>> Stashed changes
         },
         {
             "name": "barryvdh/reflection-docblock",
@@ -4032,11 +3962,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-<<<<<<< Updated upstream
             "time": "2017-07-15T11:38:20+00:00"
-=======
-            "time": "2016-09-30 07:12:33"
->>>>>>> Stashed changes
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -4083,11 +4009,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-<<<<<<< Updated upstream
             "time": "2017-07-14T14:27:02+00:00"
-=======
-            "time": "2016-11-25 06:54:22"
->>>>>>> Stashed changes
         },
         {
             "name": "phpspec/php-diff",
@@ -4596,11 +4518,7 @@
                 "testing",
                 "xunit"
             ],
-<<<<<<< Updated upstream
             "time": "2017-07-03T15:54:24+00:00"
-=======
-            "time": "2017-06-13 14:07:07"
->>>>>>> Stashed changes
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -4659,11 +4577,7 @@
                 "mock",
                 "xunit"
             ],
-<<<<<<< Updated upstream
             "time": "2017-06-30T08:15:21+00:00"
-=======
-            "time": "2017-03-03 06:30:20"
->>>>>>> Stashed changes
         },
         {
             "name": "sabberworm/php-css-parser",
@@ -4918,11 +4832,7 @@
                 "environment",
                 "hhvm"
             ],
-<<<<<<< Updated upstream
             "time": "2017-07-01T08:51:00+00:00"
-=======
-            "time": "2017-06-20 16:25:05"
->>>>>>> Stashed changes
         },
         {
             "name": "sebastian/exporter",
@@ -5490,11 +5400,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-<<<<<<< Updated upstream
             "time": "2017-06-15T12:58:50+00:00"
-=======
-            "time": "2017-06-02 22:05:06"
->>>>>>> Stashed changes
         },
         {
             "name": "theseer/tokenizer",
