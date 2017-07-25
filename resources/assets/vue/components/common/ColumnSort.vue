@@ -11,8 +11,8 @@
     computed: {
       sortClass: function () {
         return {
-          'glyphicon-menu-down': this.sort === this.field,
-          'glyphicon-menu-up': this.sort === this.field ? this.reverse : false
+          'glyphicon glyphicon-menu-down': this.sort === this.field,
+          'glyphicon glyphicon-menu-up': this.sort === this.field ? this.reverse : false
         }
       }
     },
