@@ -150,16 +150,23 @@ var logController = function( customOptions ){
 				})
 				.on("change", options.selectors.adminSwitch, function () {
 					if($(options.selectors.adminSwitch).is(':checked')){
+						document.cookie = 'log_auto_refresh=1';
 						_this.listInterval = setInterval( function(){
 							_this.refreshTableView( $( options.selectors.dataList ).attr("id") );
 						}, 4000);
 					}else{
+						document.cookie = 'log_auto_refresh=0';
 						clearInterval(_this.listInterval);
 					}
 				});
 			// Init table sort
 			if (options.tableSort === true) {
 				this.activeTableSort();
+			}
+
+			// Set initial switch status
+			if (document.cookie.indexOf('log_auto_refresh=1') > -1) {
+				$(options.selectors.adminSwitch).click();
 			}
 		}
 	};

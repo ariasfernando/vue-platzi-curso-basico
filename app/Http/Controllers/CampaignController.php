@@ -402,8 +402,16 @@ class CampaignController extends Controller
      */
     public function postForceLock(Request $request)
     {
-            $data = Campaign::forceLock($request->input('campaign_id'));
-            return response()->json($data);
+        $campaign_id = $request->input('campaign_id');
+        if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:'. $campaign_id) !== Auth::id()) {
+            Activity::log(
+                'Campaign edit deny',
+                ['properties' => ['campaign_id' => new ObjectId($campaign_id)]]
+            );
+            return response(Cache::get('user_lock:'. $campaign_id), 409);
+        }
+        $data = Campaign::forceLock($campaign_id);
+        return response()->json($data);
     }
 
     /**

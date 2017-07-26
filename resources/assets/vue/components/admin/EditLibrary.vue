@@ -228,7 +228,7 @@
 
             <div class="row">
               <!-- Field ESP -->
-              <label for="preheader" class="col-sm-4 control-label">ESP</label>
+              <label for="esp" class="col-sm-4 control-label">ESP</label>
               <p class="control col-sm-1">
                 <toggle-button :value="library.config.esp" :sync="true" :labels="true" @change="updateToggle('esp')"></toggle-button>
               </p>
@@ -241,6 +241,14 @@
                   </select>
                 </p>
               </div>
+            </div>
+
+            <div class="row">
+              <!-- Field Tagging -->
+              <label for="tagging" class="col-sm-4 control-label">Tags</label>
+              <p class="control col-sm-1">
+                <toggle-button :value="library.config.tagging" :sync="true" :labels="true" @change="updateToggle('tagging')"></toggle-button>
+              </p>
             </div>
 
             <h4>Modules</h4>

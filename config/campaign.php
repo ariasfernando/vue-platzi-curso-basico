@@ -97,13 +97,21 @@ $default = [
     'confirm_delete_module' => false,
 
     /*
+    |--------------------------------------------------------------------------
+    | Show/hide Created By campaign field in Dashboard - global Config
+    |--------------------------------------------------------------------------
+     */
+    'created_by_dashboard' => true,
+
+    /*
     |---------------------------------------------------------------------------
     | Library level Configuration
     |---------------------------------------------------------------------------
      */
     'libraries' => [
         'default' => [
-            'locking' => true
+            'locking' => true,
+            'locking_templates' => true
         ]
     ],
 

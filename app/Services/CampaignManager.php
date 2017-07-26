@@ -182,7 +182,9 @@ class CampaignManager
         if (!isset($data['cdn_path']) || !strlen($data['cdn_path'])) {
             $data['cdn_path'] = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 10);
         }
-        $data['user_id'] = new ObjectID(Auth::id());
+        $data['user_id'] = new ObjectId(Auth::id());
+        $data['created_email'] = Auth::user()->email;
+        $data['created_by'] = new ObjectId(Auth::id());
 
         $campaign = Campaign::create($data);
 

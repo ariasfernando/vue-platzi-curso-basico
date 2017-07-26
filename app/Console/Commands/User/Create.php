@@ -85,6 +85,9 @@ class Create extends Command
                 );
             } else {
                 $this->error('The email is already registered.');
+                if (User::where('email', '=', strtolower($email))->first()->status === 'deleted') {
+                    return 5;
+                }
                 return 3;
             }
         } else {
