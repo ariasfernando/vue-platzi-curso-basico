@@ -2,7 +2,6 @@ module.exports = {
   "type": "divider-element",
   "style": {
     "backgroundColor": "#FFFFFF",
-    "width": "100%",
     "height": "5px"
   },
   "settings": [
@@ -19,13 +18,6 @@ module.exports = {
       "name": "height",
       "type": "text",
       "value": "5px"
-    },
-    {
-      "link": "style",
-      "label": "Width",
-      "name": "width",
-      "type": "text",
-      "value": "100%"
     }
   ]
 };

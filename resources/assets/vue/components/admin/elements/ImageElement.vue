@@ -3,16 +3,25 @@
     <tr @click="setComponent"
         data-type="image-element"
     >
-      <td align="center" :style="component.style" class="st-position-relative">
-        <img class="st-resize st-image"
-             :src="imageUrl(component.placeholder)" 
-             :width="component.width" 
-             :height="component.height"
-             :data-open-element-config="elementConfig" 
-             alt="" 
-             border="0"
+      <td align="center" 
+          :style="component.style" 
+          class="st-position-relative"
+      >
+        <a @click.prevent
+           :href="component.attribute.href" 
+           :alt="component.attribute.alt"
+           :title="component.attribute.title"
+           :target="component.attribute.target"
         >
-      <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
+          <img class="st-resize st-image"
+               :src="imageUrl(component.attribute.placeholder)" 
+               :width="component.attribute.width" 
+               :height="component.attribute.height"
+               :data-open-element-config="elementConfig" 
+               border="0"
+          >
+        </a>
+        <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
       </td>
     </tr>
   <!-- IMAGE ELEMENT ENDS -->
@@ -41,20 +50,25 @@
     },
     computed: {
       styleComponent() {
-        return this.$store.state.module.changeSettingComponent;
+        return this.$store.getters["module/changeSettingComponent"];
       },
       currentComponent() {
-        return this.$store.state.module.currentComponent;
+        return this.$store.getters["module/currentComponent"];
       }
     },
     watch : {
-      styleComponent() {
-        if (!_.isEmpty(this.styleComponent) && 
-          this.currentComponent.columnId == this.columnId && 
-          this.currentComponent.componentId == this.componentId ) {
-          this.component.style = this.styleComponent;
-        }
-      }
+      styleComponent: {
+        handler: function() {
+          if (!_.isEmpty(this.styleComponent) && 
+            this.currentComponent.columnId == this.columnId && 
+            this.currentComponent.componentId == this.componentId ) 
+          {
+            this.component.style = this.styleComponent.style;
+            this.component.attribute = this.styleComponent.attribute;
+          }
+        },
+        deep: true  
+      },
     },
     methods: {
       setupModule () {
@@ -64,20 +78,25 @@
           this.elementConfig = this.component.directives.elementConfig;
         }
       },
-      changed (event) {
-      },
+
       setComponent() {
         this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
           componentId: this.componentId
         });
+
+        this.$store.commit('module/setChangeSettingComponent',{
+          style: this.component.style || {},
+          attribute: this.component.attribute || {}
+        });
       }
+      
     }
   };
 </script>
 
 <style lang="less">
-  @icon-option: #9189a2;
+  @icon-option: #69dac8;
 
   .st-position-relative{
     position: relative;

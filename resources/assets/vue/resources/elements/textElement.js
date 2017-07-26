@@ -14,6 +14,7 @@ module.exports = {
     "paddingLeft":"0px",
     "color": "#000000"
   },
+  "attribute": {},
   "settings": [
     {
       "link": "style",
@@ -21,6 +22,13 @@ module.exports = {
       "name": "color",
       "type": "text",
       "value": "#000000"
+    },
+    {
+      "link": "style",
+      "label": "Font Size",
+      "name": "fontSize",
+      "type": "text",
+      "value": "12px"
     },
     {
       "link": "style",

@@ -5,7 +5,10 @@ import defaultElements from '../resources/elements';
 const state = {
   module: {},
   currentComponent: {},
-  changeSettingComponent:{},
+  changeSettingComponent:{
+    style: {},
+    attribute: {}
+  },
   loading: false
 };
 
@@ -34,9 +37,8 @@ const mutations = {
     })
   },
   setChangeSettingComponent(state, data){
-    let newObjetStyle = {};
-    
-    state.changeSettingComponent =  _.extend(data.style, newObjetStyle);
+    state.changeSettingComponent.style = data.style;
+    state.changeSettingComponent.attribute = data.attribute;
   },
   setCurrentComponent(state, data) {
     state.currentComponent = data;

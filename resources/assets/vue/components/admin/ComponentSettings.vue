@@ -80,21 +80,24 @@
     },
     methods: {
       saveComponent() {
-
         _.each(this.component.settings, (option, index) => {
           if (option.link === 'style') {
             this.component.style[option.name] = option.value;
+          }
+          if (option.link === 'attribute') {
+            this.component.attribute[option.name] = option.value;
           }
         });
 
         this.$store.commit('module/saveComponent', {
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          component: this.component,
+          component: this.component
         });
 
         this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style,
+          style: this.component.style || {},
+          attribute: this.component.attribute || {}
         }); 
         
       },
