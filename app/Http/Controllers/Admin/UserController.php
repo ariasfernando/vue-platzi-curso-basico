@@ -33,6 +33,7 @@ class UserController extends Controller
     /**
      * Build the query to search.
      *
+     * @param Request $request
      * @return array
      */
     protected function queryConstructor($request)
@@ -89,6 +90,7 @@ class UserController extends Controller
     /**
      * Show the user admin view.
      *
+     * @param Request $request
      * @return View
      */
     public function getIndex(Request $request)
@@ -99,6 +101,7 @@ class UserController extends Controller
     /**
      * Search user list.
      *
+     * @param Request $request
      * @return View
      */
     public function getList(Request $request)
@@ -132,6 +135,7 @@ class UserController extends Controller
     /**
      * User edit view.
      *
+     * @param Request $request
      * @return View
      */
     public function getEdit(Request $request)
@@ -156,6 +160,7 @@ class UserController extends Controller
     /**
      * User post edit.
      *
+     * @param Request $request
      * @return array
      */
     public function postEdit(Request $request)
@@ -175,6 +180,7 @@ class UserController extends Controller
     /**
      * User post create.
      *
+     * @param Request $request
      * @return array
      */
     public function postCreate(Request $request)
@@ -195,6 +201,7 @@ class UserController extends Controller
     /**
      * User post delete.
      *
+     * @param Request $request
      * @return array
      */
     public function postDelete(Request $request)
@@ -205,5 +212,20 @@ class UserController extends Controller
         $user->delete();
         Activity::log('User deleted', array('properties' => ['user_id' => new ObjectId($request->input("userId"))]));
         return array("deleted" => $request->input("userId"));
+    }
+
+    /**
+     * Restore a user.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function postRestore(Request $request)
+    {
+        $user = User::whereEmail($request->input("email"))->first();
+        $user->unset('status');
+        $user->restore();
+        Activity::log('User restored', array('properties' => ['user_id' => new ObjectId($user->_id)]));
+        return ['restored' => $user->id];
     }
 }

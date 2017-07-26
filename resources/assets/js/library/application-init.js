@@ -104,8 +104,8 @@ Application.init = function(){
                                     .addClass("col-lg-" + String(titleColumns+2));
                                 // Hide buttons
                                 $('.save-as-draft').hide();
+                                $('.locking_type').text('Template');
                                 $('.campaign-continue').hide();
-                                $('#locking').remove();
                             }
                             // Remove spinner.
                             $(button).removeClass("ajax-loader-small").removeAttr("disabled");
@@ -185,6 +185,11 @@ Application.init = function(){
 
     // Init Api
     Application.api();
+    // Init Locking
+    if( typeof campaignManager === 'object' && campaignManager.lockingManager ){
+        campaignManager.lockingManager.init();
+    }
+
     if( Application.onInit ){
         Application.onInit();
     }

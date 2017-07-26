@@ -21,12 +21,9 @@
         </div>
 
         <div :class="'col-xs-8 col-md-7 col-lg-' + buttonsCols + ' text-right'" id="section-canvas-buttons-col">
-          <button class="btn btn-default campaign-preview" :class="hiddenClass()"><i
-            class="glyphicon glyphicon-phone"></i>Preview
-          </button>
 
           <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template"
-                  @click="saveCampaign">Save as Draft
+                  @click="save">Save as Draft
           </button>
 
           <button class="btn btn-default save-as-template" :class="hiddenClass()"
@@ -34,7 +31,7 @@
           </button>
 
           <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" href="#">Complete<i
-            class="glyphicon glyphicon-triangle-right"></i></a>
+            class="glyphicon glyphicon-triangle-right" @click="complete"></i></a>
         </div>
       </div>
     </div>
@@ -62,15 +59,6 @@
           </td>
         </tr>
       </table>
-    </div>
-
-    <div class="section-box-header-bottom section-canvas-title hidden">
-      <div class="row">
-        <div class="col-xs-12 text-right">
-          <a class="btn btn-default save-as-draft" href="#">Save as Draft</a>
-          <a class="btn btn-default campaign-continue" href="#">Complete</a>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -113,8 +101,29 @@
       }
     },
     methods: {
-      saveCampaign() {
-        this.$emit('save-campaign');
+      save() {
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/saveCampaign", this.campaign).then(response => {
+          if (response === this.campaign.campaign_id) {
+            this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
+          } else {
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+          }
+          this.$store.commit("global/setLoader", false);
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+        });
+      },
+      complete() {
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/completeCampaign").then(response => {
+          this.$root.push('/');
+          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+        });
       }
     },
     created () {

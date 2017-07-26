@@ -32,7 +32,8 @@ class Kernel extends ConsoleKernel
         'Stensul\Console\Commands\Task\GroupToRoles',
         'Stensul\Console\Commands\Task\EmailToLower',
         'Stensul\Console\Commands\Module\Create',
-    'Stensul\Console\Commands\Tool\Scraper',
+        'Stensul\Console\Commands\Task\CreatedBy',
+        'Stensul\Console\Commands\Tool\Scraper',
     ];
 
     /**

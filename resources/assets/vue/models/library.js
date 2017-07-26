@@ -28,6 +28,7 @@ function Library(data = {}) {
     espProvider: config.espProvider || false,
     plainText: config.plainText || false,
     preheader: config.preheader || false,
+    tagging: config.tagging || false,
   };
 
   const groups = [];
