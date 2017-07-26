@@ -47,9 +47,9 @@ const actions = {
       .then(response => context.commit('loadCampaignData', response.campaign))
       .catch(error => context.commit('error', error));
   },
-  saveCampaign(context, campaign) {
-    return campaignService.saveCampaign(campaign)
-      .then(response => response)
+  saveCampaign(context, data) {
+    return campaignService.saveCampaign(data)
+      .then(res => context.dispatch('getCampaignData', res.campaignId))
       .catch(error => context.commit('error', error));
   },
   updateElement(context, edited) {

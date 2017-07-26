@@ -23,18 +23,29 @@ export default {
     return deferred.promise;
   },
 
-  saveCampaign() {
+  saveCampaign(data) {
     const endpoint = endpoints.campaign.saveCampaign;
     const editedCampaign = this.getEditedData();
     const deferred = Q.defer();
 
+    editedCampaign.campaign.bodyHtml = data.bodyHtml;
+
+    const dataCampaign = new Campaign({
+      settings: editedCampaign.settings,
+      campaign: editedCampaign.campaign,
+      modules: editedCampaign.modules,
+    });
+
     const params = {
       endpoint: endpoints.campaign.saveCampaign,
-      json: editedCampaign,
+      json: dataCampaign,
     };
 
     request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body);
+      deferred.resolve({
+        campaignId: response.body,
+        campaign: dataCampaign,
+      });
     }).catch((err) => {
       deferred.reject(err);
     });
@@ -74,12 +85,10 @@ export default {
       }
     }
 
-    const dataCampaign = new Campaign({
+    return {
       campaign,
       settings: editedSettings,
       modules,
-    });
-
-    return dataCampaign;
+    };
   },
 };

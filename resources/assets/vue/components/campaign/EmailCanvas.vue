@@ -102,13 +102,13 @@
     },
     methods: {
       save() {
+        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
         this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/saveCampaign", this.campaign).then(response => {
-          if (response === this.campaign.campaign_id) {
-            this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
-          } else {
-            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
-          }
+        this.$store.dispatch("campaign/saveCampaign", {
+          campaign: this.campaign,
+          bodyHtml
+        }).then(response => {
+          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
