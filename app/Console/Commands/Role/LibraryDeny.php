@@ -44,8 +44,6 @@ class LibraryDeny extends Command
             }
         }
 
-        $value = null;
-
         if (count($libraries_array) === 0) {
             $this->info("The role " . $name . " haven't libraries to deny !");
         } else {

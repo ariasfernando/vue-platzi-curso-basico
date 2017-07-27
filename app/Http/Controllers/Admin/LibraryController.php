@@ -257,7 +257,7 @@ class LibraryController extends Controller
      *
      * @return array
      */
-    public function postEspProviders(Request $request)
+    public function postEspProviders()
     {
         $providers = config('esp');
         return $providers;

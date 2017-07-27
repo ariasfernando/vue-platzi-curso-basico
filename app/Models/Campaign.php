@@ -285,6 +285,7 @@ class Campaign extends Eloquent
     /**
      * Check if the campaign has an active proof
      *
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @return boolean
      */
     public function getHasActiveProofAttribute()
