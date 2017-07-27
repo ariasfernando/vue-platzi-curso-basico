@@ -237,10 +237,10 @@
 </script>
 
 <style lang="less">
-  @focus: #9189a2;
+  @focus: #69dac8;
   @focus-light: lighten(@focus, 30%);
-  @hover: #e6e3ea;
-  @icon-option: #9189a2;
+  @hover: @focus-light;
+  @icon-option: #69dac8;
 
   .st-content-component{
     outline: 1px dashed @icon-option;

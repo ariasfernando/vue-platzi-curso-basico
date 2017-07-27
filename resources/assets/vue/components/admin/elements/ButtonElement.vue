@@ -1,13 +1,29 @@
-<template id="button-element">
+<template>
   <!-- CALL TO ACTION ELEMENT -->
   <tr @click="setComponent"
       data-type="button-element"
   >
-    <td align="center" class="st-position-relative">
-      <table width="150" border="0" class="st-cta" cellpadding="0" cellspacing="0">
+    <td :align="component.attribute.align" 
+        class="st-position-relative"
+    >
+      <table :width="component.attribute.width" 
+             :height="component.attribute.height" 
+             :bgcolor="component.attribute.bgcolor"
+             border="0" 
+             cellpadding="0" 
+             cellspacing="0"
+      >
         <tr>
-          <td width="100%" align="center" height="20" :style="component.style">
-            <a :href="component.destinationUrl" target="" class="st-without-event">
+          <td width="100%" 
+              align="center" 
+              :bgcolor="component.attribute.bgcolor"
+              :height="component.attribute.height"
+          >
+            <a @click.prevent
+               :href="component.attribute.href" 
+               :target="component.attribute.target" 
+               :style="component.style"  
+            >
               <tiny-mce :id="editorId" 
                         :options="component.editor" 
                         :value="component.text" 
@@ -25,6 +41,7 @@
 
 <script>
   import TinyMCE from './TinyMce.vue';
+  import _ from 'underscore';
 
   export default {
     name: 'ButtonElement',
@@ -39,13 +56,34 @@
     },
     data(){
       return {
-        editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-')
+        editorId: ['editor', this.columnId, this.componentId].join('-')
       }
+    },
+    computed: {
+      styleComponent() {
+        return this.$store.getters["module/changeSettingComponent"];
+      },
+      currentComponent() {
+        return this.$store.getters["module/currentComponent"];
+      }
+    },
+    watch : {
+      styleComponent: {
+        handler: function() {
+          if (!_.isEmpty(this.styleComponent) && 
+            this.currentComponent.columnId == this.columnId && 
+            this.currentComponent.componentId == this.componentId ) 
+          {
+            this.component.style = this.styleComponent.style;
+            this.component.attribute = this.styleComponent.attribute;
+          }
+        },
+        deep: true  
+      },
     },
     methods: {
       input (text, key) {
         this.$store.commit('module/updateElement', {
-          moduleId: this.moduleId,
           columnId: this.columnId,
           componentId: this.componentId,
           data: {
@@ -53,10 +91,16 @@
           }
         });
       },
+
       setComponent() {
         this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
           componentId: this.componentId
+        });
+
+        this.$store.commit('module/setChangeSettingComponent',{
+          style: this.component.style || {},
+          attribute: this.component.attribute || {}
         });
       }
     }
@@ -64,7 +108,7 @@
 </script>
 
 <style lang="less">
-  @icon-option: #9189a2;
+  @icon-option: #69dac8;
 
   .st-position-relative{
     position: relative;
@@ -89,23 +133,11 @@
   }
 
   .st-cta {
-    background: #514960;
-    height: 40px;
-    width: 150px;
-    border: none;
-    padding: 0px;
     td {
       vertical-align: middle;
       a {
-        color: #ffffff;
-        font-size: 16px;
         text-decoration: none;
         display: block;
-        padding-top: 8px;
-        span {
-          color: #ffffff;
-          cursor: text;
-        }
       }
     }
   }

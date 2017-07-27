@@ -34,9 +34,13 @@
   		right: 0px;
   		top: 7px;
   		z-index: 2;
+  		outline: 0;
 
-  		&:hover{
-  			color: #666666;
+  		&:hover,
+  		&:active{
+  			color: #999999;
+  			background: none;
+  			outline: 0;
   		}
   	}
 
@@ -265,4 +269,7 @@ header{
   nav span{
   	display: none;
   }
+}
+button.dropdown-toggle{
+	outline: 0!important;
 }

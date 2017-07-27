@@ -10,7 +10,7 @@ class ModelKeyManagerTest extends TestCase
 {
     /**
      * Test models key.
-     * 
+     *
      * @covers Stensul\Services\ModelKeyManager::getStandardKey()
      *
      */
@@ -37,12 +37,11 @@ class ModelKeyManagerTest extends TestCase
         try {
             // Should fail because we can't find available keys to use.
             $key = ModelKeyManager::getStandardKey($module, 'test_key', 3);
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->assertInstanceOf(ModelKeyManagerException::class, $exception);
         }
 
         $key = ModelKeyManager::getStandardKey($module, 'test_key', 10);
         $this->assertRegexp('/^test_key_[0-9]+$/', $key);
-
     }
 }

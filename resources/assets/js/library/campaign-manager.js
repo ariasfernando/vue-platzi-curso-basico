@@ -344,6 +344,11 @@ var campaignManager = {
 		if( !$canvas.find("tr[data-params]").length ){
 			return false;
 		}
+
+		if ( campaignManager.beforeCleanedHtml ) {
+			$canvas = campaignManager.beforeCleanedHtml($canvas);
+		}
+
 		// Clone content
 		$cleanedHtml = $canvas.clone( true );
 
@@ -427,6 +432,10 @@ var campaignManager = {
 			});
 		}
 
+		if ( campaignManager.beforeFinish ) {
+			$cleanedHtml = campaignManager.beforeFinish($cleanedHtml);
+		}
+
         // Convert special chars to html entities ---
         $cleanedHtml = Application.utils.encodeHtmlEntities( $cleanedHtml );
 
@@ -504,13 +513,12 @@ var campaignManager = {
         }
 
 		var campaignId = this.getCampaignId();
-
-        data.campaign_id = campaignId;
-        data.mail = email;
-
 		var sendPreviewRequest = Application.utils.doAjax("/campaign/send-preview", {
 			type: "POST",
-            data: data
+            data:{
+                campaign_id: campaignId,
+                mail: email
+            }
 		});
 
 		sendPreviewRequest.done(function( response ){
@@ -570,7 +578,7 @@ var campaignManager = {
 
 	addTrackingParams: function(html){
 		var boxCounter = 1;
-		var rows = html.find("tr[data-params]");
+        var rows = html.find("> tr");
 		var dateSubmitted = $.datepicker.formatDate('yy-mm-dd', new Date());
 		$.each( rows, function( index, module){
 			var params = $(module).data("params");
@@ -681,7 +689,7 @@ var campaignManager = {
         var spinner = new Application.utils.spinner();
         var _this = this;
 
-        // Clear auto-save timeout and diconnet before
+        // Clear auto-save timeout and disconnect before
         clearTimeout(_this.timeoutHandle);
         if (_this.observer) { 
             _this.observer.disconnect();
@@ -699,6 +707,9 @@ var campaignManager = {
             // Display Error Alert
             Application.utils.alert.display("",Application.globals.campaignValidationError,"danger");
             return false;
+        }else {
+            // Show spinner to notify user and prevent multiple requests via save campaign again
+            spinner.show();
         }
         // Save campaign Request: On success
         saveCampaign.done(function( campaignId ){
@@ -918,45 +929,6 @@ var campaignManager = {
             }
         });
     },
-    forceLock: function(fnDone, fnFail) {
-        var config = this.getConfiguration();
-        var data = {
-            campaign_id: config.campaign_id
-        };
-        var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {data: data});
-
-        lockCampaign.done(function(data) {
-            Application.utils.alert.display('', 'This campaign is locked now. Only you can unlock it.', 'success');
-            if(typeof fnDone === 'function') {
-                fnDone();
-            }
-        });
-        lockCampaign.fail(function(data) {
-            Application.utils.alert.display('Error:', 'An error occurred while trying to lock it, please try again later.', 'danger');
-            if (typeof fnFail === 'function') {
-                fnFail();
-            }
-        });
-    },
-    unlockForced: function(fnDone, fnFail) {
-        var config = this.getConfiguration();
-        var data = {
-            campaign_id: config.campaign_id
-        };
-        var unlockCampaign = Application.utils.doAjax('/campaign/unlock-forced', {data: data});
-        unlockCampaign.done(function(data) {
-            Application.utils.alert.display('', 'This campaign is unlocked now, and you can make changes on it', 'success');
-            if (typeof fnDone === 'function') {
-                fnDone();
-            }
-        });
-        unlockCampaign.fail(function(data) {
-            Application.utils.alert.display('Error:', 'An error occurred while trying to unlocked, please try again later.', 'danger');
-            if (typeof fnFail === 'function') {
-                fnFail();
-            }
-        });
-    },
     autoSave: function(status, notUpdateStatus) {
 
         var _this = this;
@@ -997,7 +969,7 @@ var campaignManager = {
                         || ( !mutation.attributeName && mutation.target.localName == 'td'))
                     {
                         ignore = true;
-	}
+	                }
                     if( mutation.target && $(mutation.target).length && $(mutation.target).parent().hasClass('auto-save')) {
                         ignore = true;
                     }
@@ -1039,10 +1011,10 @@ var campaignManager = {
             clearTimeout(_this.timeoutHandle);
             // Update auto_save campaign attribute in DB
             if(!notUpdateStatus){
-            _this.updateAutoSaveStatus(false);
+                _this.updateAutoSaveStatus(false);
             }
             // Stop observing when auto-save is deactivated.
-            if(typeof _this.observer !== "null"){
+            if( _this.observer !== null){
                 _this.observer.disconnect();
             }
         }

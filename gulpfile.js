@@ -46,11 +46,11 @@ let appName = process.env.APP_NAME.toLowerCase() || "base";
  */
 
 let jsAppFilePath = (file) => {
-  try {
-    fs.accessSync('resources/assets/js/' + appName + '/' + file, fs.F_OK);
-    return 'js/' + appName + '/' + file;
-  } catch (e) {
-    return 'js/base/' + file;
+    if (fs.existsSync('resources/assets/js/' + appName + '/' + file)) {
+        return 'js/' + appName + '/' + file;
+    }
+    else {
+        return 'js/base/' + file;
   }
 };
 
@@ -292,6 +292,7 @@ gulp.task('elixir-scripts', function () {
             'js/library/campaign-manager.js',
             'js/library/campaign-menu.js',
             'js/library/image-manager.js',
+            'js/library/locking-manager.js',
             jsAppFilePath('campaign.js')
           ],
           jsDestinationPath + 'campaign.js',

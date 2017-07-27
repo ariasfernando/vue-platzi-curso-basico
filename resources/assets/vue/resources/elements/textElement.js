@@ -8,8 +8,13 @@ module.exports = {
     "fontSize": "12px",
     "fontWeight": "normal",
     "lineHeight": "16px",
+    "paddingTop":"0px",
+    "paddingBottom":"0px",
+    "paddingRight":"0px",
+    "paddingLeft":"0px",
     "color": "#000000"
   },
+  "attribute": {},
   "settings": [
     {
       "link": "style",
@@ -17,6 +22,13 @@ module.exports = {
       "name": "color",
       "type": "text",
       "value": "#000000"
+    },
+    {
+      "link": "style",
+      "label": "Font Size",
+      "name": "fontSize",
+      "type": "text",
+      "value": "12px"
     },
     {
       "link": "style",
@@ -34,8 +46,8 @@ module.exports = {
     },
     {
       "link": "style",
-      "label": "Padding Right",
-      "name": "paddingRight",
+      "label": "Padding Left",
+      "name": "paddingLeft",
       "type": "text",
       "value": "10px"
     },

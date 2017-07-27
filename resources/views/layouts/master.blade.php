@@ -1,6 +1,10 @@
 <?php
     $main_class = explode('.', $view_name);
     $main_class = "base-" . end($main_class) . " " . str_replace('.', '-', $view_name);
+    $lock_error_hidden_class = 'hidden';
+    if (session()->has('campaign_lock')) {
+        $lock_error_hidden_class = '';
+    }
 ?>
 
 <!DOCTYPE html>

@@ -52,7 +52,7 @@
       this.params = _.cloneDeep(this.$store.state.campaign.campaign);
 
       this.enablePreheader = this.params.campaign_data.library_config.preheader;
-      this.enableTagging = this.params.campaign_data.library_config.enable_tagging;
+      this.enableTagging = this.params.campaign_data.library_config.tagging;
 
       this.form.campaignName = this.params.campaign_name;
       this.form.campaignPreheader = this.params.campaign_data.campaign_preheader;

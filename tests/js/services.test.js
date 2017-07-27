@@ -1,7 +1,5 @@
-import libraryService from '../../resources/assets/js/vue/services/library';
-import campaignService from '../../resources/assets/js/vue/services/campaign';
-import moduleService from '../../resources/assets/js/vue/services/module';
-import fixtures from '../../resources/assets/js/vue/resources/fixtures';
+import libraryService from '../../resources/assets/vue/services/library';
+import fixtures from '../../resources/assets/vue/resources/fixtures';
 
 require('dotenv').config();
 

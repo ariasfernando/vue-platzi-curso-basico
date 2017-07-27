@@ -3,10 +3,10 @@
     <tr @click="setComponent"
         data-type="divider-element"
     >
-      <td :bgcolor="backgroundColor" class="st-separator st-position-relative" :style="component.style">
+      <td class="st-separator st-position-relative" :style="component.style">
         <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td :width="separatorWidth" :height="separatorHeight"></td>
+            <td :style="component.style"></td>
           </tr>
         </table>
         <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+  import _ from 'underscore';
+  
   export default {
     name: 'DividerElement',
     props: [
@@ -24,26 +26,39 @@
       'component-id',
       'component'
     ],
-    data () {
-      return {
-        backgroundColor: '',
-        separatorHeight: '',
-        separatorWidth: ''
+    computed: {
+      styleComponent() {
+        return this.$store.getters["module/changeSettingComponent"];
+      },
+      currentComponent() {
+        return this.$store.getters["module/currentComponent"];
       }
     },
-    created () {
-      this.setupModule();
-    },
-    methods: {
-      setupModule () {
-        this.backgroundColor = this.component.style.backgroundColor;
-        this.separatorHeight = this.component.height;
-        this.separatorWidth = this.component.width;
+    watch : {
+      styleComponent: {
+        handler: function() {
+          if (!_.isEmpty(this.styleComponent) && 
+            this.currentComponent.columnId == this.columnId && 
+            this.currentComponent.componentId == this.componentId ) 
+          {
+            this.component.style = this.styleComponent.style;
+            this.component.attribute = this.styleComponent.attribute;
+          }
+        },
+        deep: true  
       },
+    },
+    timeoutID: null,
+    methods: {
       setComponent() {
         this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
           componentId: this.componentId
+        });
+
+        this.$store.commit('module/setChangeSettingComponent',{
+          style: this.component.style || {},
+          attribute: this.component.attribute || {}
         });
       }
     }
@@ -51,7 +66,7 @@
 </script>
 
 <style lang="less">
-  @icon-option: #9189a2;
+  @icon-option: #69dac8;
 
   .st-separator {
     width: 100%;

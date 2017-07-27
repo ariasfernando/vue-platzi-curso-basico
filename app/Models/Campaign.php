@@ -35,6 +35,8 @@ class Campaign extends Eloquent
         'cdn_path',
         'user_id',
         'user_email',
+        'created_by',
+        'created_email',
         'email_sent_history',
         'campaign_preheader',
         'tags',
@@ -69,6 +71,8 @@ class Campaign extends Eloquent
         'cdn_path' => null,
         'user_id' => null,
         'user_email' => null,
+        'created_by' => null,
+        'created_email' => null,
         'email_sent_history' => [],
         'campaign_preheader' => '',
         'tags' => [],
@@ -239,7 +243,7 @@ class Campaign extends Eloquent
      * Get a list of library configuration
      */
     public function getLibraryConfigAttribute()
-    {   
+    {
         $libraryConfig = [];
         if (Library::find($this->attributes['library'])) {
             $libraryConfig = Library::find($this->attributes['library'])->config;

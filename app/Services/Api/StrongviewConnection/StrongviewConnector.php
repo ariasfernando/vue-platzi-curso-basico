@@ -84,7 +84,8 @@ class StrongviewConnector
     protected function login()
     {
 
-        $passwordTextType = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText";
+        $passwordTextType
+            = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText";
         $namespace = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
         $headerElementName = "Security";
         $headerMustUnderstand = true;

@@ -350,12 +350,29 @@
 
 Vue.component('draft-emails', {
     template: '#draft-emails-template',
-        mixins: [ tableMixin ]
+        mixins: [ tableMixin ],
+        props: {
+            showCreatedBy: {
+                type: Boolean,
+                default: false
+            }
+        }
     });
 
     Vue.component('templates-campaigns', {
         template: '#templates-campaigns-template',
-        mixins: [ tableMixin ]
+        mixins: [ tableMixin ],
+        computed: {
+            enableTemplateLocking: function() {
+                return this.config.locking_templates;
+            }
+        },
+        props: {
+            showCreatedBy: {
+                type: Boolean,
+                default: false
+            }
+        }
     });
 
     Vue.component('finished-emails', {
@@ -371,6 +388,10 @@ Vue.component('draft-emails', {
                 type: Number
         },
         enableDownload: {
+            type: Boolean,
+            default: false
+        },
+        showCreatedBy: {
             type: Boolean,
             default: false
         }

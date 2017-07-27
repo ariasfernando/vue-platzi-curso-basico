@@ -31,6 +31,28 @@
         editorId: ['editor', this.columnId, this.componentId].join('-')
       }
     },
+    computed: {
+      styleComponent() {
+        return this.$store.getters["module/changeSettingComponent"];
+      },
+      currentComponent() {
+        return this.$store.getters["module/currentComponent"];
+      }
+    },
+    watch : {
+      styleComponent: {
+        handler: function() {
+          if (!_.isEmpty(this.styleComponent) && 
+            this.currentComponent.columnId == this.columnId && 
+            this.currentComponent.componentId == this.componentId ) 
+          {
+            this.component.style = this.styleComponent.style;
+            this.component.attribute = this.styleComponent.attribute;
+          }
+        },
+        deep: true  
+      },
+    },
     timeoutID: null,
     methods: {
       setComponent() {
@@ -38,16 +60,28 @@
           columnId: this.columnId,
           componentId: this.componentId
         });
+
+        this.$store.commit('module/setChangeSettingComponent',{
+          style: this.component.style || {},
+          attribute: this.component.attribute || {}
+        });
       }
     }
   };
 </script>
 
 <style lang="less">
-  @icon-option: #9189a2;
+  @icon-option: #69dac8;
 
   .st-position-relative{
     position: relative;
+  }
+
+  .st-edit-text{
+    p{
+      margin: 0;
+      padding: 0;
+    }
   }
 
   .icon-move {
