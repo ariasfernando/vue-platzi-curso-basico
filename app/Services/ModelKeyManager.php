@@ -27,7 +27,7 @@ class ModelKeyManager
         $max_tries = 50;
 
         for ($n = 0; $n < $max_tries; $n++) {
-            if ($existing = $model::withTrashed()->where('key', $key)->first()) {
+            if ($model::withTrashed()->where('key', $key)->first()) {
                 $key = $original_key . '_' . mt_rand(1, $suffix_max);
             } else {
                 return $key;
