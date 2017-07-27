@@ -49,7 +49,10 @@ class Roles extends Command
                     }
 
                     $roles = (is_null($options["roles"]))
-                            ? $this->ask('What is the user role ? (none, ' . join(", ", $roles_array).')', join(",", $user_data->roles))
+                            ? $this->ask(
+                                'What is the user role ? (none, ' . join(", ", $roles_array).')',
+                                join(",", $user_data->roles)
+                            )
                             : $options["roles"];
 
                     $selected_array = [];

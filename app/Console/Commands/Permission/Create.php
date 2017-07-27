@@ -30,8 +30,9 @@ class Create extends Command
 
         $options = $this->option();
 
-        $name = (is_null($options["name"]))? $this->ask('What is the permission name ?') : $options["name"];
-        $description = (is_null($options["description"]))? $this->ask('What is the permission description ?') : $options["description"];
+        $name = is_null($options["name"]) ? $this->ask('What is the permission name ?') : $options["name"];
+        $description = is_null($options["description"])
+            ? $this->ask('What is the permission description ?') : $options["description"];
 
         $params = [
             'name' => $name,
