@@ -243,7 +243,7 @@ class Campaign extends Eloquent
      * Get a list of library configuration
      */
     public function getLibraryConfigAttribute()
-    {   
+    {
         $libraryConfig = [];
         if (Library::find($this->attributes['library'])) {
             $libraryConfig = Library::find($this->attributes['library'])->config;

@@ -39,14 +39,14 @@ class CreatedBy extends Command
         $campaigns = Campaign::where('created_by', 'exists', false)->get();
         $logs = Log::where('description', 'Campaign created')->get();
 
-        foreach ($campaigns as $campaign ) {
+        foreach ($campaigns as $campaign) {
             $campaign_id = $campaign->_id;
-            foreach ($logs as $log ) {
+            foreach ($logs as $log) {
                 $properties = $log->properties;
-                if($properties['campaign_id'] == $campaign_id){
+                if ($properties['campaign_id'] == $campaign_id) {
                     $campaign->created_by = $properties['user_id'];
                     $user = User::find((string)$properties['user_id']);
-                    if($user){
+                    if ($user) {
                         $campaign->created_email = $user->email;
                     }
                     $campaign->timestamps = false;
@@ -56,7 +56,6 @@ class CreatedBy extends Command
         };
 
         $this->info('Created By and Created Email was updated in all campaings!');
-
     }
 
     /**

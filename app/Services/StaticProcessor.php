@@ -481,7 +481,7 @@ class StaticProcessor
         if (count($settings)) {
             $width = $image->getSize()->getWidth();
             $height = $image->getSize()->getHeight();
-            if($settings['extension'] == 'gif' || $settings['extension'] == 'png'){
+            if ($settings['extension'] == 'gif' || $settings['extension'] == 'png') {
                 $data['repage'] = "";
                 $data['background'] = "none";
             }

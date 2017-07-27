@@ -7,7 +7,6 @@ use Stensul\Models\Library;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
-
 class LibraryAllow extends Command
 {
     /**
