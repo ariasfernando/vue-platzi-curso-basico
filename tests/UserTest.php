@@ -54,7 +54,7 @@ class UserTest extends TestCase
         $library_name = "Library Test";
         $library_params = [
             "name" => $library_name,
-            "key" => ModelKeyManager::getStandardKey(new Library,$library_name),
+            "key" => ModelKeyManager::getStandardKey(new Library, $library_name),
             "description" => "Library for UT",
             "config" => [],
             "modules" => []
@@ -111,6 +111,5 @@ class UserTest extends TestCase
         $this->assertNotTrue($this->user->can('invalid_permission'));
         $this->assertTrue($this->user->can(array('invalid_permission', 'permission1')));
         $this->assertNotTrue($this->user->can(array('invalid_permission', 'invalid_permission2')));
-
     }
 }

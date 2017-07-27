@@ -31,7 +31,8 @@ class ImageProcessor extends ImageDriver
                 $gravity = ' -gravity South ';
             }
         }
-        $command = \Config::get('image.convert_base_path') . sprintf(" +dither - -coalesce null: \( %s -resize %s ".$gravity." -set page %s \)"
+        $command = \Config::get('image.convert_base_path') . sprintf(" +dither - -coalesce null: \( %s -resize %s "
+            . $gravity . " -set page %s \)"
             . " -layers composite -layers optimize -", $layer, $size, $position);
 
         $process = new Process($command, null, null, $blob);

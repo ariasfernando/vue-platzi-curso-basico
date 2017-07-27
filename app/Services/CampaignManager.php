@@ -55,12 +55,12 @@ class CampaignManager
             if ($campaign->locked) {
                 throw new UnauthorizedException('The campaign is locked and you can not change it');
             }
-            $campaign_name = (isset($inputs['campaign_name'])) ? $inputs['campaign_name'] : '';
-            $modules_data = (isset($inputs['modules_data'])) ? $inputs['modules_data'] : [];
+            $campaign_name = $inputs['campaign_name'] ?? '';
+            $modules_data = $inputs['modules_data'] ?? [];
             if (!is_array($campaign->tags)) {
                 $campaign->tags = [];
             }
-            $campaign_settings = (isset($inputs['campaign_settings'])) ? $inputs['campaign_settings'] : [];
+            $campaign_settings = $inputs['campaign_settings'] ?? [];
 
             $campaign->campaign_name = $campaign_name;
             $campaign->modules_data = $modules_data;
@@ -68,7 +68,7 @@ class CampaignManager
             $campaign->user_id = new ObjectID(Auth::id());
             $campaign->user_email = Auth::user()->email;
             $campaign->campaign_settings = $campaign_settings;
-            $campaign->campaign_preheader = (isset($inputs['campaign_preheader'])) ? $inputs['campaign_preheader'] : '';
+            $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
 
             if (isset($inputs['body_html'])) {
                 $campaign->body_html = $inputs['body_html'];
@@ -220,7 +220,7 @@ class CampaignManager
             }
         }
 
-        $new_campaign_attr['campaign_name'] = 'Copy of '.$new_campaign_attr['campaign_name'];
+        $new_campaign_attr['campaign_name'] = 'Copy of ' . $new_campaign_attr['campaign_name'];
         $new_campaign_attr['processed'] = 0;
         $new_campaign_attr['body_html'] = '';
         $new_campaign_attr['plain_text'] = '';
@@ -374,8 +374,8 @@ class CampaignManager
     {
 
         if (Auth::check()) {
-            Cache::add('lock:'.$campaign_id, Auth::id(), Carbon::now()->addMinutes(1));
-            Cache::add('user_lock:'.$campaign_id, Auth::user()->email, Carbon::now()->addMinutes(1));
+            Cache::add('lock:' . $campaign_id, Auth::id(), Carbon::now()->addMinutes(1));
+            Cache::add('user_lock:' . $campaign_id, Auth::user()->email, Carbon::now()->addMinutes(1));
         }
 
         return array('locked' => $campaign_id);
@@ -390,7 +390,7 @@ class CampaignManager
      */
     public static function whoIsLocking($campaign_id = null)
     {
-        return Cache::get('user_lock:'.$campaign_id);
+        return Cache::get('user_lock:' . $campaign_id);
     }
 
     /**
@@ -407,7 +407,7 @@ class CampaignManager
         if ($campaign_data->processed) {
             $path = $campaign_data->getCdnPath(true) . DS . 'index.html';
         } else {
-            $path = action('CampaignController@getHtml').'?campaign_id=' . $campaign_id;
+            $path = action('CampaignController@getHtml') . '?campaign_id=' . $campaign_id;
         }
 
         return $path;
@@ -425,31 +425,31 @@ class CampaignManager
     {
         $campaign = Campaign::findOrFail($campaign_id);
 
-        if (filter_var($path, FILTER_VALIDATE_URL)) {
-            $page_content = @file_get_contents($path);
+        if (!filter_var($path, FILTER_VALIDATE_URL)) {
+            return ['error' => 'NO_VALID_URL'];
+        }
 
-            if ($page_content !== false) {
-                $dom_obj = new \DOMDocument();
-                @$dom_obj->loadHTML($page_content);
-                $meta_val = null;
+        $page_content = @file_get_contents($path);
 
-                foreach ($dom_obj->getElementsByTagName('meta') as $meta) {
-                    if ($meta->getAttribute('property') == 'og:image') {
-                        $meta_val = $meta->getAttribute('content');
-                    }
-                }
+        if ($page_content === false) {
+            return ['error' => 'NO_EXISTS_URL'];
+        }
 
-                if ($meta_val && filter_var($meta_val, FILTER_VALIDATE_URL)) {
-                    $assets = new Assets($campaign);
-                    $response = $assets->saveImage($meta_val);
-                } else {
-                    $response['error'] = 'NO_OG_URL';
-                }
-            } else {
-                $response['error'] = 'NO_EXISTS_URL';
+        $dom_obj = new \DOMDocument();
+        @$dom_obj->loadHTML($page_content);
+        $meta_val = null;
+
+        foreach ($dom_obj->getElementsByTagName('meta') as $meta) {
+            if ($meta->getAttribute('property') == 'og:image') {
+                $meta_val = $meta->getAttribute('content');
             }
+        }
+
+        if ($meta_val && filter_var($meta_val, FILTER_VALIDATE_URL)) {
+            $assets = new Assets($campaign);
+            $response = $assets->saveImage($meta_val);
         } else {
-            $response['error'] = 'NO_VALID_URL';
+            $response['error'] = 'NO_OG_URL';
         }
 
         return $response;

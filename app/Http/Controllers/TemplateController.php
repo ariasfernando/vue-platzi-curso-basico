@@ -164,7 +164,7 @@ class TemplateController extends Controller
         // component name
         $component = $request->input('key');
         $view = $request->input('view', 'template');
-        $parts = [ 'modules', $component, $view ];
+        $parts = [ $type, $component, $view ];
 
         return $this->renderView(
             implode('.', $parts),

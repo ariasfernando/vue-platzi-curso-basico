@@ -94,7 +94,10 @@ class Eloqua implements ApiConnector
             $credentials = $response;
             $eloqua_token = $credentials['access_token'];
             if (array_key_exists($this->library_name, $this->eloqua_config['libraries'])) {
-                Cache::add('api:eloqua:' . $this->library_name . ':token', Carbon::now()->addHours(1)->toDateTimeString());
+                Cache::add(
+                    'api:eloqua:' . $this->library_name . ':token',
+                    Carbon::now()->addHours(1)->toDateTimeString()
+                );
             } else {
                 Cache::add('api:eloqua:token', $eloqua_token, Carbon::now()->addHours(1)->toDateTimeString());
             }
@@ -204,7 +207,10 @@ class Eloqua implements ApiConnector
             $response = $this->call($options);
             $base_url = str_replace("{version}", $this->api_version, $response['urls']['apis']['rest']['standard']);
             if (array_key_exists($this->library_name, $this->eloqua_config['libraries'])) {
-                Cache::add('api:eloqua:' . $this->library_name . ':url', Carbon::now()->addHours(1)->toDateTimeString());
+                Cache::add(
+                    'api:eloqua:' . $this->library_name . ':url',
+                    Carbon::now()->addHours(1)->toDateTimeString()
+                );
             } else {
                 Cache::add('api:eloqua:url', $base_url, Carbon::now()->addHours(1)->toDateTimeString());
             }

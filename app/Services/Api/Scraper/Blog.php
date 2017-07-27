@@ -40,25 +40,23 @@ class Blog extends Scraper implements ApiImageConnector
      */
     public function __construct($options = [])
     {
-        $this->url = (isset($options['url']))? $options['url'] : null;
-        $this->link_container_id = (isset($options['link_container_id']))? $options['link_container_id'] : '';
-        $this->link_class = (isset($options['link_class']))? $options['link_class'] : '';
-        $this->pagination_link = (isset($options['pagination_link']))? $options['pagination_link'] : '';
-        $this->pagination_count = (isset($options['pagination_count']))? (Int)$options['pagination_count'] : 1;
-        $this->full_image_src = (isset($options['full_image_src']))? $options['full_image_src'] : null;
-        $this->small_image_src = (isset($options['small_image_src']))
-            ? $options['small_image_src']
-            : $this->full_image_src;
-        $this->text_src = (isset($options['text_src']))? $options['text_src'] : '';
-        $this->link_src = (isset($options['link_src']))? $options['link_src'] : '';
-        $this->subtext_src = (isset($options['subtext_src']))? $options['subtext_src'] : '';
-        $this->created_time = (isset($options['created_time']))? $options['created_time'] : '';
-        $this->process_type = (isset($options['process_type']))? $options['process_type'] : 'meta';
-        $this->scraper_name = (isset($options['name']))? $options['name'] : 'scraper-blog';
-        $this->flush_cache = (isset($options["flush_cache"]));
-        $this->only_update = (isset($options["only_update"]))? (boolean)$options["only_update"] : false;
-        $this->current_page = (isset($options["page"]))? (int)$options["page"] : 1;
-        $this->limit = (isset($options["limit"]))? (int)$options["limit"] : 0;
+        $this->url                  = $options['url'] ?? null;
+        $this->link_container_id    = $options['link_container_id'] ?? '';
+        $this->link_class           = $options['link_class'] ?? '';
+        $this->pagination_link      = $options['pagination_link'] ?? '';
+        $this->pagination_count     = (int) ($options['pagination_count'] ?? 1);
+        $this->full_image_src       = $options['full_image_src'] ?? null;
+        $this->small_image_src      = $options['small_image_src'] ?? $this->full_image_src;
+        $this->text_src             = $options['text_src'] ?? '';
+        $this->link_src             = $options['link_src'] ?? '';
+        $this->subtext_src          = $options['subtext_src'] ?? '';
+        $this->created_time         = $options['created_time'] ?? '';
+        $this->scraper_name         = $options['name'] ?? 'scraper-blog';
+        $this->process_type         = $options['process_type'] ?? 'meta';
+        $this->flush_cache          = isset($options['flush_cache']);
+        $this->only_update          = (boolean) ($options['only_update'] ?? false);
+        $this->current_page         = (int) ($options['page'] ?? 1);
+        $this->limit                = (int) ($options['limit'] ?? 0);
     }
 
     /**
@@ -70,7 +68,7 @@ class Blog extends Scraper implements ApiImageConnector
      */
     protected function scraperFromMeta($url = null)
     {
-        $source = (!is_null($url))? $url : ((!is_null($this->pagination_link))? $this->pagination_link : $this->url);
+        $source = $url ?? ($this->pagination_link ?? $this->url);
 
         if ((!is_null($url) || !is_null($this->url)) &&
             filter_var($source, FILTER_VALIDATE_URL) &&
@@ -167,16 +165,16 @@ class Blog extends Scraper implements ApiImageConnector
                 $transformer->image_small = $item['images']['small'];
                 $transformer->image_large = $item['images']['large'];
             } else {
-                $transformer->image_small = (isset($item['image_small']))? $item['image_small'] : '';
-                $transformer->image_large = (isset($item['image_large']))? $item['image_large'] : '';
+                $transformer->image_small = $item['image_small'] ?? '';
+                $transformer->image_large = $item['image_large'] ?? '';
             }
-            $transformer->text = (isset($item['text']))? $item['text'] : '';
-            $transformer->sub_text = (isset($item['sub_text']))? $item['sub_text'] : '';
-            $transformer->created_time = (isset($item['created_time']) && is_numeric($item['created_time']))?
+            $transformer->text = $item['text'] ?? '';
+            $transformer->sub_text = $item['sub_text'] ?? '';
+            $transformer->created_time = (isset($item['created_time']) && is_numeric($item['created_time'])) ?
                 $this->formattedDate($item['created_time']) : $this->formattedDate(strtotime($item['created_time']));
-            $transformer->link = (isset($item['link']))? $item['link'] : '';
-            $transformer->likes = (isset($item['likes']))? $item['likes'] : 0;
-            $transformer->source = (!is_null($this->scraper_name))? $this->scraper_name : $this->url;
+            $transformer->link = $item['link'] ?? '';
+            $transformer->likes = $item['likes'] ?? 0;
+            $transformer->source = !is_null($this->scraper_name) ? $this->scraper_name : $this->url;
 
             $data_processed[] =  $transformer->transform();
             unset($transformer);
@@ -224,7 +222,7 @@ class Blog extends Scraper implements ApiImageConnector
 
         $meta_global = array_pop($response_array);
         $total =  count($response_array);
-        $total_pages = ($this->limit > 0)? (int)ceil($total / $this->limit) : 1;
+        $total_pages = ($this->limit > 0) ? (int) ceil($total / $this->limit) : 1;
 
         return [
             'meta' => [
@@ -232,8 +230,7 @@ class Blog extends Scraper implements ApiImageConnector
                 'current_page'     => $this->current_page,
                 'total_pages'      => $total_pages,
                 'limit'            => $this->limit,
-                'last_updated'     => (isset($meta_global['last_updated']))?
-                    $meta_global['last_updated'] : time()
+                'last_updated'     => $meta_global['last_updated'] ?? time()
             ],
             'data' => $this->paginationConstructor($response_array, $this->current_page, $this->limit)
         ];

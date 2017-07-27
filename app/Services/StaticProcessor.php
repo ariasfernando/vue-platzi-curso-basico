@@ -379,8 +379,8 @@ class StaticProcessor
      */
     public function customMerge($options)
     {
-        $background_path = (isset($options['background_path']))? $options['background_path'] : null;
-        $layers = (isset($options['layers']))? $options['layers'] : [];
+        $background_path = $options['background_path'] ?? null;
+        $layers = $options['layers'] ?? [];
 
         if (!is_null($background_path)) {
             list($background_image, $background_extension, $background_options) =
@@ -394,9 +394,9 @@ class StaticProcessor
             }
 
             foreach ($layers as $layer) {
-                $layer_path = (isset($layer['path'])) ? $layer['path'] : null;
-                $layer_top = (isset($layer['top'])) ? $layer['top'] : 0;
-                $layer_left = (isset($layer['left'])) ? $layer['left'] : 0;
+                $layer_path = $layer['path'] ?? null;
+                $layer_top = $layer['top'] ?? 0;
+                $layer_left = $layer['left'] ?? 0;
 
                 if (!is_null($layer_path)) {
                     if ((strpos($layer_path, ';base64') === false) &&
@@ -454,10 +454,9 @@ class StaticProcessor
             }
         }
 
+        $response['error'] = 'CANVAS_UPLOAD_ERROR';
         if (isset($success)) {
             $response['path'] = $file_path;
-        } else {
-            $response['error'] = 'CANVAS_UPLOAD_ERROR';
         }
 
         return $response;
