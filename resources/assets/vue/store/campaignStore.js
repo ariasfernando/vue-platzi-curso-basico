@@ -40,6 +40,9 @@ const mutations = {
   toggleModal(state, modalName) {
     state[modalName] = !state[modalName];
   },
+  removeModule(state, moduleId) {
+    state.modules.splice(moduleId, 1);
+  },
   error(err) {
     console.error(err);
   },
