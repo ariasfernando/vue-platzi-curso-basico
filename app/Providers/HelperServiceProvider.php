@@ -44,6 +44,17 @@ class HelperServiceProvider extends ServiceProvider
     }
 
     /**
+     * Check if an array is associative.
+     *
+     * @param  Array $arr
+     * @return boolean
+     */
+    public static function isAssoc(array $arr)
+    {
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
+    /**
      *
      * Array merge recursive
      *
@@ -54,13 +65,25 @@ class HelperServiceProvider extends ServiceProvider
     public static function arrayMergeRecursiveDistinct(array &$array1, array &$array2)
     {
         $merged = $array1;
-
+        /*
+        This is for non associative arrays where we need to concat values,
+        not override it.
+        */
+        if (!self::isAssoc($array1) && !isAssoc($array2)) {
+            foreach ($array2 as $value) {
+                if (!in_array($value, $merged)) {
+                    $merged[] = $value;
+                }
+            }
+            return $merged;
+        }
+        // If both are associative array override the keys.
         foreach ($array2 as $key => &$value) {
             if (isset($value['override']) && $value['override']) {
                 $merged[$key] = $value;
             } else {
-                if (is_array($value) && isset($merged [$key]) && is_array($merged [$key])) {
-                    $merged [$key] = self::arrayMergeRecursiveDistinct($merged [$key], $value);
+                if (is_array($value) && isset($merged [$key]) && is_array($merged[$key])) {
+                    $merged [$key] = self::arrayMergeRecursiveDistinct($merged[$key], $value);
                 } else {
                     $merged [$key] = $value;
                 }

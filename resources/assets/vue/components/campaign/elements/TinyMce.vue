@@ -41,18 +41,18 @@
           toolbar: this.toolbar,
           init_instance_callback: (editor) => {
 
-//            editor.on('Blur', (e) => {
-//              const parts = this.id.split('-');
-//
-//              this.$store.commit('module/updateElement', {
-//                moduleId: parts[1],
-//                columnId: parts[2],
-//                componentId: parts[3],
-//                data: {
-//                  text: editor.getContent()
-//                }
-//              });
-//            });
+            editor.on('Blur', (e) => {
+              const parts = this.id.split('-');
+
+              this.$store.dispatch('campaign/updateElement', {
+                moduleId: parts[1],
+                columnId: parts[2],
+                componentId: parts[3],
+                data: {
+                  text: editor.getContent()
+                }
+              });
+            });
           }
         };
 

@@ -24,7 +24,6 @@
             <pre>{{ library.config }}</pre>
           </div>
           <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
-
             <tabs>
                 <tab name="General Settings" :selected="true">
                     <div class="row">
@@ -81,7 +80,7 @@
                         <label for="templateBackgroundColor">Template Background Color</label>
                         <div class="control">
                           <div id="templateBackgroundColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.templateBackgroundColor" v-validate="'required'" name="templateBackgroundColor" :class="{'input': true, 'is-danger': errors.has('templateBackgroundColor') }" placeholder="#FFFFFF"/>
+                              <input type="text" class="form-control" v-model="library.config.templateBackgroundColor" v-validate="'required'" name="templateBackgroundColor" :class="{'input': true, 'is-danger': errors.has('templateBackgroundColor') }" placeholder="#FFFFFF"/>
                               <span class="input-group-addon"><i :style="'background-color:' + library.config.templateBackgroundColor"></i></span>
                           </div>
 
@@ -94,7 +93,7 @@
                         <label for="contentBackgroundColor">Content Background Color</label>
                         <div class="control">
                           <div id="contentBackgroundColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.contentBackgroundColor" v-validate="'required'" name="contentBackgroundColor" :class="{'input': true, 'is-danger': errors.has('contentBackgroundColor') }" placeholder="#FFFFFF"/>
+                              <input type="text" class="form-control" v-model="library.config.contentBackgroundColor" v-validate="'required'" name="contentBackgroundColor" :class="{'input': true, 'is-danger': errors.has('contentBackgroundColor') }" placeholder="#FFFFFF"/>
                               <span class="input-group-addon"><i :style="'background-color:' + library.config.contentBackgroundColor"></i></span>
                           </div>
 
@@ -119,7 +118,7 @@
                         <label for="fontColor">Font Color</label>
                         <div class="control">
                           <div id="fontColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.fontColor" v-validate="'required'" name="fontColor" :class="{'input': true, 'is-danger': errors.has('fontColor') }" placeholder="#000000"/>
+                              <input type="text" class="form-control" v-model="library.config.fontColor" v-validate="'required'" name="fontColor" :class="{'input': true, 'is-danger': errors.has('fontColor') }" placeholder="#000000"/>
                               <span class="input-group-addon"><i :style="'background-color:' + library.config.fontColor"></i></span>
                           </div>
 
@@ -157,7 +156,7 @@
                         <label for="linkColor">Link Color</label>
                         <div class="control">
                           <div id="linkColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.linkColor" v-validate="'required'" name="linkColor" :class="{'input': true, 'is-danger': errors.has('linkColor') }" placeholder="#000000"/>
+                              <input type="text" class="form-control" v-model="library.config.linkColor" v-validate="'required'" name="linkColor" :class="{'input': true, 'is-danger': errors.has('linkColor') }" placeholder="#000000"/>
                               <span class="input-group-addon"><i :style="'background-color:' + library.config.linkColor"></i></span>
                           </div>
 
@@ -182,7 +181,7 @@
                       <div class="col-md-3">
                         <label for="padding">Padding</label>
                         <p class="control">
-                          <input type="text" class="" v-model="library.config.padding" v-validate="'required'" name="padding" :class="{'input': true, 'is-danger': errors.has('padding') }" placeholder="10px"/>
+                          <input type="text" class="form-control" v-model="library.config.padding" v-validate="'required'" name="padding" :class="{'input': true, 'is-danger': errors.has('padding') }" placeholder="10px"/>
                           <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
                         </p>
                       </div>
@@ -222,8 +221,8 @@
                       </p>
                     </div>
 
+                    <!-- Field ESP -->
                     <div class="row">
-                      <!-- Field ESP -->
                       <label for="preheader" class="col-sm-4 control-label">ESP</label>
                       <p class="control col-sm-1">
                         <toggle-button :value="library.config.esp" :sync="true" :labels="true" @change="updateToggle('esp')"></toggle-button>
@@ -237,6 +236,14 @@
                           </select>
                         </p>
                       </div>
+                    </div>
+
+                    <!-- Field Tagging -->
+                    <div class="row">
+                      <label for="tagging" class="col-sm-4 control-label">Tags</label>
+                      <p class="control col-sm-1">
+                        <toggle-button :value="library.config.tagging" :sync="true" :labels="true" @change="updateToggle('tagging')"></toggle-button>
+                      </p>
                     </div>
                 </tab>
 

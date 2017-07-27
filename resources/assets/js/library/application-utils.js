@@ -13,11 +13,13 @@ Application.utils = {
          *  Type: info(default), success, warning, danger
          */
         display: function( title, message, type ){
-            if( !title && !message )
+            if( !title && !message ) {
                 return false
+            }
 
-            if( Application.utils.alert.timeOut != null )
+            if (Application.utils.alert.timeOut != null) {
                 clearTimeout( Application.utils.alert.timeOut );
+            }
 
             var $errorBox = $( this.errorBox );
 
@@ -104,7 +106,7 @@ Application.utils = {
 
             // Set text
             $confirmModal.find(".modal-body").text( confirm.confirmOptions.message );
-            $confirmModal.find(".btn-submit").text( confirm.confirmOptions.labels.submit );
+            $confirmModal.find(".btn-submit").text( confirm.confirmOptions.labels.submitBtn );
             $confirmModal.find(".btn-cancel").text( confirm.confirmOptions.labels.cancelBtn );
 
             // Set onSubmit event
@@ -470,6 +472,11 @@ Application.utils = {
                 return false;
             }
 
+            // if undefined means this if the first run
+            if (typeof run === 'undefined') {
+                run = 1;
+            }
+
             // Do ajax to get process status.
             var ajaxRequest = Application.utils.doAjax("/queue/status/process/" + jobId, { type: "GET" });
 
@@ -479,13 +486,21 @@ Application.utils = {
                 if ( response.status == "started" || response.status == "queued" ){
                     // Check again in 1 second.
                     setTimeout(function(){
-                        Application.utils.processQueue.getJobStatus(jobId, callback, failCallback);
+                        Application.utils.processQueue.getJobStatus(jobId, callback, failCallback, 1);
                     }, 1000);
 
                 } else if (response.status == "finished") {
                     callback();
                 } else {
-                    failCallback();
+
+                    if (run <= 3) {
+                        // Check again in run * 700
+                        setTimeout(function(){
+                            Application.utils.processQueue.getJobStatus(jobId, callback, failCallback, ++run);
+                        }, run * 700);
+                    } else {
+                        failCallback();
+                    }
                 }
             });
 

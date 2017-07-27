@@ -11,7 +11,7 @@
 
     <!-- column right (container email) -->
     <section class="section-canvas-email section-box">
-      <email-canvas v-if="ready" @save-campaign="saveCampaign"></email-canvas>
+      <email-canvas v-if="ready"></email-canvas>
     </section>
 
     <spinner></spinner>
@@ -48,15 +48,6 @@
       }
     },
     methods: {
-      saveCampaign() {
-        this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/saveCampaign").then(response => {
-          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
-        });
-      },
       loadCampaign() {
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
@@ -68,6 +59,7 @@
       }
     },
     created: function () {
+      this.$store.commit("global/setLoader", true);
       this.loadCampaign();
     }
   };

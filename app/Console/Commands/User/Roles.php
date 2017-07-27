@@ -34,7 +34,7 @@ class Roles extends Command
         if (count($roles) === 0) {
             $this->error('Roles not found, use command php artisan role:create!');
         } else {
-            $email = (is_null($options["email"]))? $this->ask('What is the user email ?') : $options["email"];   
+            $email = (is_null($options["email"]))? $this->ask('What is the user email ?') : $options["email"];
 
             if ($email != "") {
                 if (!User::where('email', '=', $email)->exists()) {

@@ -1,9 +1,11 @@
 <template>
   <div class="spinner-wrapper">
-    <div class="spinner" v-if="loading">
-      <div class="double-bounce1"></div>
-      <div class="double-bounce2"></div>
-    </div>
+    <transition>
+      <div class="spinner" v-if="loading">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -20,11 +22,11 @@ export default {
 
 <style lang="scss" scoped>
   .spinner-wrapper {
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    right: 0;
-    bottom: 10px;
+    width: 45px;
+    height: 45px;
+    position: fixed;
+    right: 15px;
+    top: 70px;
   }
   .spinner {
     width: 40px;
