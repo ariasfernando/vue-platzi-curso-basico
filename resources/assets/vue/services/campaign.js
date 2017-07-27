@@ -53,6 +53,17 @@ export default {
     return deferred.promise;
   },
 
+  completeCampaign(data) {
+    const deferred = Q.defer();
+    let promises = [this.saveCampaign, this.processCampaign];
+
+    Q.all(promises, (saveRes, processRes) => {
+      deferred.resolve();
+    });
+
+    return deferred.promise;
+  },
+
   cloneCampaign(campaignId) {
     const endpoint = endpoints.campaign.cloneCampaign;
     const deferred = Q.defer();

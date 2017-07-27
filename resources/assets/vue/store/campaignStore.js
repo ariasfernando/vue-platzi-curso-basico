@@ -6,6 +6,7 @@ const state = {
   modules: [],
   editedModules: [],
   editedSettings: {},
+  modalComplete: false,
 };
 
 const getters = {
@@ -36,6 +37,9 @@ const mutations = {
   saveSetting(state, setting) {
     state.editedSettings[setting.name] = setting.value;
   },
+  toggleModal(state, modalName) {
+    state[modalName] = !state[modalName];
+  },
   error(err) {
     console.error(err);
   },
@@ -49,6 +53,11 @@ const actions = {
   },
   saveCampaign(context, data) {
     return campaignService.saveCampaign(data)
+      .then(res => context.dispatch('getCampaignData', res.campaignId))
+      .catch(error => context.commit('error', error));
+  },
+  completeCampaign(context, data) {
+    return campaignService.completeCampaign(data)
       .then(res => context.dispatch('getCampaignData', res.campaignId))
       .catch(error => context.commit('error', error));
   },
