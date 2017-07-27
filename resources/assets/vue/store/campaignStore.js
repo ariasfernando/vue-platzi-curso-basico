@@ -58,7 +58,7 @@ const actions = {
   },
   completeCampaign(context, data) {
     return campaignService.completeCampaign(data)
-      .then(res => context.dispatch('getCampaignData', res.campaignId))
+      .then(campaignId => context.dispatch('getCampaignData', campaignId))
       .catch(error => context.commit('error', error));
   },
   updateElement(context, edited) {

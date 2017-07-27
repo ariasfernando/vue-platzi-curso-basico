@@ -22,15 +22,15 @@ export default {
 
 <style lang="scss" scoped>
   .spinner-wrapper {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     position: fixed;
     right: 15px;
     top: 70px;
   }
   .spinner {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
   }
 
   .double-bounce1, .double-bounce2 {
