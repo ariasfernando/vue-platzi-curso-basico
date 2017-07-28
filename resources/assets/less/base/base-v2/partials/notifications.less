@@ -1,0 +1,32 @@
+.global-messages-placeholder{
+	position: absolute;
+	top: -5px;
+	z-index: 1050;
+	right: 30px;
+
+	.alert{
+		border-radius: 2px;
+		border: none;
+		padding-right: 50px;
+		box-shadow: 0px 0px 3px #aaaaaa;
+		font-size: 13px;
+		font-family: 'Open Sans', Arial, sans-serif;
+		font-weight: 300;
+	}
+
+	.alert-success{
+		background: @stensul-notification;
+		color: @input-color;
+	}
+
+	.alert-danger{
+		background: @stensul-notification-error;
+		color: @stensul-white;
+	}
+
+	button.close{
+		right: 15px;
+		top: 15px;
+		position: absolute;
+	}
+}

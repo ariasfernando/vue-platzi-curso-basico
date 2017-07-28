@@ -14,6 +14,9 @@
       <email-canvas v-if="ready"></email-canvas>
     </section>
 
+    <!-- Modals -->
+    <modal-complete></modal-complete>
+
     <spinner></spinner>
 
   </div>
@@ -23,6 +26,7 @@
   import CampaignConfiguration from './CampaignConfiguration.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import EmailCanvas from './EmailCanvas.vue'
+  import ModalComplete from './modals/ModalComplete.vue'
   import Spinner from '../common/Spinner.vue'
 
   export default {
@@ -32,6 +36,7 @@
       CampaignConfiguration,
       CampaignMenu,
       EmailCanvas,
+      ModalComplete,
       Spinner
     },
     data: function () {
@@ -64,3 +69,7 @@
     }
   };
 </script>
+
+<style lang="less">
+  @import '../../less/campaign';
+</style>

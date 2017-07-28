@@ -30,8 +30,8 @@
                   v-if="!campaign.processed && campaign.campaign_data.library_config.enable_templating">Save as Template
           </button>
 
-          <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" href="#">Complete<i
-            class="glyphicon glyphicon-triangle-right" @click="complete"></i></a>
+          <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" @click="complete">Complete<i
+            class="glyphicon glyphicon-triangle-right"></i></a>
         </div>
       </div>
     </div>
@@ -102,13 +102,13 @@
     },
     methods: {
       save() {
+        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
         this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/saveCampaign", this.campaign).then(response => {
-          if (response === this.campaign.campaign_id) {
-            this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
-          } else {
-            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
-          }
+        this.$store.dispatch("campaign/saveCampaign", {
+          campaign: this.campaign,
+          bodyHtml
+        }).then(response => {
+          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
@@ -116,10 +116,15 @@
         });
       },
       complete() {
+        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
         this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/completeCampaign").then(response => {
-          this.$root.push('/');
+        this.$store.dispatch("campaign/completeCampaign", {
+          campaign: this.campaign,
+          bodyHtml
+        }).then(response => {
           this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
+          this.$store.commit("global/setLoader", false);
+          this.$store.commit("campaign/toggleModal", 'modalComplete');
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});

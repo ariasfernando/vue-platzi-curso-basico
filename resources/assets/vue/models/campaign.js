@@ -6,6 +6,7 @@ function Campaign(data) {
   this.campaign_id = data.campaign.campaign_id;
   this.campaign_process = data.settings.campaignProcess || false;
   this.modules_data = data.modules;
+  this.body_html = data.campaign.bodyHtml;
 
   return this;
 }

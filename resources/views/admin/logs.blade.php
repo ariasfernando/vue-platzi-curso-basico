@@ -56,13 +56,13 @@
 						<table width="100%" border="0" cellpadding="0" cellspacing="0" id="<?php echo $defaultDataPagination["view_name"]; ?>" class="table table-bordered table-striped sortable data-list" data-pagination='<?php echo json_encode($defaultDataPagination); ?>'>
 							<thead>
 								<tr>
-									<th class="sortable">
+									<th class="sortable col-200">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="name" data-order-field="_id">
 											Log Id
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
-									<th class="sortable">
+									<th class="sortable col-200">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="properties.user_id">
 											User Id
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>
@@ -80,7 +80,7 @@
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
-									<th class="sortable">
+									<th class="sortable col-100">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="ip">
 											User IP
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>
@@ -92,7 +92,7 @@
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
-									<th class="sortable">
+									<th class="sortable col-200">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="created_at" data-order-field="controller">
 											Controller/Action
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>

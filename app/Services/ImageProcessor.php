@@ -24,14 +24,15 @@ class ImageProcessor extends ImageDriver
         $layer = self::prepareLayer($layer);
         $gravity = '';
         if (!empty($params['gravity'])) {
-            if($params['gravity'] == "NorthEast"){
+            if ($params['gravity'] == "NorthEast") {
                 $gravity = ' -gravity East ';
             }
-            if($params['gravity'] == "SouthWest"){
+            if ($params['gravity'] == "SouthWest") {
                 $gravity = ' -gravity South ';
             }
         }
-        $command = \Config::get('image.convert_base_path') . sprintf(" +dither - -coalesce null: \( %s -resize %s ".$gravity." -set page %s \)"
+        $command = \Config::get('image.convert_base_path') . sprintf(" +dither - -coalesce null: \( %s -resize %s "
+            . $gravity . " -set page %s \)"
             . " -layers composite -layers optimize -", $layer, $size, $position);
 
         $process = new Process($command, null, null, $blob);
@@ -86,9 +87,9 @@ class ImageProcessor extends ImageDriver
 
         if (count($options)) {
             foreach ($options as $k => $v) {
-                if($k == "repage"){
+                if ($k == "repage") {
                     $convert_params .= " +{$k} {$v}";
-                }else{
+                } else {
                     $convert_params .= " -{$k} {$v}";
                 }
             }
