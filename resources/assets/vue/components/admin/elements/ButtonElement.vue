@@ -1,6 +1,6 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
-  <tr @click="setComponent"
+  <tr @click.prevent="setComponent"
       data-type="button-element"
   >
     <td :align="component.attribute.align" 
@@ -31,6 +31,7 @@
                         @input="input"></tiny-mce>
             </a>
             <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div>   
+            <div class="icon-remove st-remove" @click="removeComponent" ><i class="glyphicon glyphicon-remove-sign st-remove"></i></div>   
           </td>
         </tr>
       </table>
@@ -92,15 +93,30 @@
         });
       },
 
-      setComponent() {
-        this.$store.commit("module/setCurrentComponent", {
-          columnId: this.columnId,
-          componentId: this.componentId
+      setComponent(e) {
+        if (!$(e.target).hasClass("st-remove")){
+          this.$store.commit("module/setCurrentComponent", {
+            columnId: this.columnId,
+            componentId: this.componentId
+          });
+
+          this.$store.commit('module/setChangeSettingComponent',{
+            style: this.component.style || {},
+            attribute: this.component.attribute || {}
+          });
+        }  
+      },
+
+      removeComponent(){
+        this.$store.commit("module/removeComponents", {
+          index: this.componentId,
+          number: 1,
+          colId: this.columnId
         });
 
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style || {},
-          attribute: this.component.attribute || {}
+        this.$store.commit("module/setCurrentComponent", {
+          columnId: this.columnId,
+          componentId: (this.componentId === 0 )? this.componentId  :this.componentId - 1
         });
       }
     }
@@ -130,6 +146,26 @@
     line-height: 30px;
     background-color: @icon-option;
     opacity: 1;
+  }
+
+  .icon-remove {
+    display: none;
+    cursor: move;
+    cursor: -webkit-grabbing;
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    color: #fff;
+    z-index: 5;
+    left: -15px;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    line-height: 30px;
+    background-color: @icon-option;
+    opacity: 1;
+    margin-top: -15px;
+    font-size: 14px!important;
   }
 
   .st-cta {
