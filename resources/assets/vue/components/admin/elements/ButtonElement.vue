@@ -116,7 +116,7 @@
 
         this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
-          componentId: (this.componentId === 0 )? this.componentId  :this.componentId - 1
+          componentId: this.componentId - 1
         });
       }
     }
@@ -150,22 +150,21 @@
 
   .icon-remove {
     display: none;
-    cursor: move;
-    cursor: -webkit-grabbing;
+    width: 21px;
+    height: 21px;
+    line-height: 21px;
+    font-size: 21px!important;
+    cursor: pointer;
     position: absolute;
-    top: 50%;
     text-align: center;
-    color: #fff;
-    z-index: 5;
-    left: -15px;
-    height: 30px;
-    width: 30px;
+    color: @icon-option;
+    background-color: #e4f8f5;
     border-radius: 100%;
-    line-height: 30px;
-    background-color: @icon-option;
+    z-index: 5;
+    top: 0%;
     opacity: 1;
-    margin-top: -15px;
-    font-size: 14px!important;
+    left: -10px;
+    margin-top: -10px;
   }
 
   .st-cta {
