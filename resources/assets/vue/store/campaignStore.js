@@ -7,6 +7,7 @@ const state = {
   editedModules: [],
   editedSettings: {},
   modalComplete: false,
+  modalPreview: false,
 };
 
 const getters = {
@@ -73,6 +74,11 @@ const actions = {
     } else {
       context.commit('addEditedModule', edited);
     }
+  },
+  sendPreview(context, data) {
+    return campaignService.sendPreview(data)
+      .then(res => context.dispatch('getCampaignData', res.campaignId))
+      .catch(error => context.commit('error', error));
   },
 };
 

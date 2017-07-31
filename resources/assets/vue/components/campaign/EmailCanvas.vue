@@ -21,6 +21,10 @@
         </div>
 
         <div :class="'col-xs-8 col-md-7 col-lg-' + buttonsCols + ' text-right'" id="section-canvas-buttons-col">
+          
+          <button class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview"><i
+            class="glyphicon glyphicon-phone"></i>Preview
+          </button>
 
           <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template"
                   @click="save">Save as Draft
@@ -129,6 +133,21 @@
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
         });
+      },
+      preview() {
+          const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
+          this.$store.commit("global/setLoader", true);
+          this.$store.dispatch("campaign/saveCampaign", {
+            campaign: this.campaign,
+            bodyHtml
+          }).then(response => {
+            this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
+            this.$store.commit("global/setLoader", false);
+            this.$store.commit("campaign/toggleModal", 'modalPreview');
+          }, error => {
+            this.$store.commit("global/setLoader", false);
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+          });
       }
     },
     created () {
