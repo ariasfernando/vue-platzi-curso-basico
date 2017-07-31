@@ -7,11 +7,19 @@ const state = {
   editedModules: [],
   editedSettings: {},
   modalComplete: false,
+  buildingMode: 'desktop',
 };
 
 const getters = {
   getModules(state) {
     return state.modules;
+  },
+  templateWidth(state) {
+    if (state.buildingMode === 'desktop') {
+      return state.campaign.library_config.templateWidth;
+    } else {
+      return state.campaign.library_config.templateMobileWidth;
+    }
   },
 };
 
@@ -19,6 +27,9 @@ const mutations = {
   loadCampaignData(state, campaignData) {
     state.campaign = campaignData;
     state.modules = campaignData.campaign_data.modules_data;
+  },
+  changeBuildingMode(state, buildingMode) {
+    state.buildingMode = buildingMode;
   },
   addModule(state, moduleData) {
     state.modules.push(moduleData);

@@ -8,7 +8,7 @@
         <tr>
           <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
             <table id="emailCanvas" class="email-canvas wrapper-table"
-                   :width="campaign.campaign_data.library_config.template_width" cellspacing="0" cellpadding="0"
+                   :width="templateWidth" cellspacing="0" cellpadding="0"
                    border="0">
 
                 <tr v-for="(module, moduleId) in dragList" class="st-module-wrapper">
@@ -62,6 +62,9 @@
       },
       campaign () {
         return this.$store.state.campaign.campaign;
+      },
+      templateWidth () {
+        return this.$store.getters['campaign/templateWidth'];
       }
     },
     data () {

@@ -1,17 +1,17 @@
 <template>
   <div class="section-box-header section-canvas-title">
     <div class="row">
-      <div :class="'col-xs-3 col-md-4 col-lg-' + titleCols" id="section-canvas-title-col">
+      <div class="col-xs-3 col-md-4 col-lg-5" id="section-canvas-title-col">
         <h2>{{ campaign.campaign_data.library_config.title || 'Campaign Editor' }}</h2>
       </div>
 
-      <div class="col-xs-1 col-md-1 col-lg-2" v-if="campaign.campaign_data.library_config.building_mode_select">
+      <div class="col-xs-1 col-md-1 col-lg-2">
         <div class="switch">
-          <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
+          <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" @click="switchMode('desktop')" checked>
           <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
             <i class="fa fa-desktop"></i>
           </label>
-          <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
+          <input type="radio" class="switch-input" name="view" value="mobile" id="mobile" @click="switchMode('mobile')">
           <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
             <i class="glyphicon glyphicon-phone"></i>
           </label>
@@ -19,23 +19,21 @@
         </div>
       </div>
 
-      <div :class="'col-xs-8 col-md-7 col-lg-' + buttonsCols + ' text-right'" id="section-canvas-buttons-col">
+      <div class="col-xs-8 col-md-7 col-lg-5 text-right" id="section-canvas-buttons-col">
 
-        <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template"
-                @click="save">Save as Draft
-
-
+        <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template" @click="save">
+          Save as Draft
         </button>
 
-        <button class="btn btn-default save-as-template" :class="hiddenClass()"
-                v-if="!campaign.processed && campaign.campaign_data.library_config.enable_templating">Save as Template
-
-
+        <button class="btn btn-default save-as-template"
+                :class="hiddenClass()" v-if="!campaign.processed && campaign.campaign_data.library_config.enable_templating">
+          Save as Template
         </button>
 
-        <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template"
-           @click="complete">Complete<i
-          class="glyphicon glyphicon-triangle-right"></i></a>
+        <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" @click="complete">
+          Complete
+          <i class="glyphicon glyphicon-triangle-right"></i>
+        </a>
       </div>
     </div>
   </div>
@@ -70,6 +68,9 @@
       }
     },
     methods: {
+      switchMode(mode) {
+        this.$store.commit("campaign/changeBuildingMode", mode);
+      },
       save() {
         this.$store.commit("global/setLoader", true);
         this._save().then(response => {
