@@ -1,11 +1,12 @@
 <template>
   <!-- TEXT ELEMENT -->
-  <tr @click="setComponent" 
+  <tr @click.prevent="setComponent" 
       data-type="text-element"
   >
     <td width="100%" class="st-text-style st-position-relative" align="center" :style="component.style">
       <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
       <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
+      <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-remove-sign st-remove"></i></div> 
     </td>
   </tr>
   <!-- TEXT ELEMENT ENDS -->
@@ -55,15 +56,31 @@
     },
     timeoutID: null,
     methods: {
-      setComponent() {
-        this.$store.commit("module/setCurrentComponent", {
-          columnId: this.columnId,
-          componentId: this.componentId
+      setComponent(e) {
+        if (!$(e.target).hasClass("st-remove")){
+          this.$store.commit("module/setCurrentComponent", {
+            columnId: this.columnId,
+            componentId: this.componentId
+          });
+
+          this.$store.commit('module/setChangeSettingComponent',{
+            style: this.component.style || {},
+            attribute: this.component.attribute || {}
+          });
+        }  
+      },
+
+      removeComponent(){
+
+        this.$store.commit("module/removeComponents", {
+          index: this.componentId,
+          number: 1,
+          colId: this.columnId
         });
 
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style || {},
-          attribute: this.component.attribute || {}
+        this.$store.commit("module/setCurrentComponent", {
+          columnId: this.columnId,
+          componentId: this.componentId - 1
         });
       }
     }
@@ -101,5 +118,24 @@
     background-color: @icon-option;
     opacity: 1;
     margin-top: -15px;
+  }
+
+  .icon-remove {
+    display: none;
+    width: 21px;
+    height: 21px;
+    line-height: 21px;
+    font-size: 21px!important;
+    cursor: pointer;
+    position: absolute;
+    text-align: center;
+    color: @icon-option;
+    background-color: #e4f8f5;
+    border-radius: 100%;
+    z-index: 5;
+    top: 0%;
+    opacity: 1;
+    left: -10px;
+    margin-top: -10px;
   }
 </style>
