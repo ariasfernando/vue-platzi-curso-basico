@@ -113,7 +113,7 @@
                     </td>
                 </tr>
                 <tr v-if="campaigns.data == 0">
-                    <td :colspan="showTags ? 6 : 5">
+                    <td :colspan="showTags ? 7 : 6">
                         There are no emails to show in this list
                     </td>
                 </tr>
