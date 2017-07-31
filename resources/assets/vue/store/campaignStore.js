@@ -1,4 +1,5 @@
-import _ from 'underscore-contrib';
+import _ from 'lodash';
+import uc from 'underscore-contrib';
 import campaignService from '../services/campaign';
 
 const state = {
@@ -34,11 +35,15 @@ const mutations = {
   addModule(state, moduleData) {
     state.modules.push(moduleData);
   },
+  cloneModule(state, moduleId) {
+    const clone = _.cloneDeep(state.modules[moduleId]);
+    state.modules.push(clone);
+  },
   addEditedModule(state, edited) {
     state.editedModules.push(edited);
   },
   updateEditedModule(state, edited) {
-    const matches = _.where(state.editedModules, {
+    const matches = uc.where(state.editedModules, {
       moduleId: edited.moduleId,
       columnId: edited.columnId,
       componentId: edited.componentId,

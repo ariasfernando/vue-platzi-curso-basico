@@ -14,14 +14,12 @@
                 <tr v-for="(module, moduleId) in dragList" class="st-module-wrapper">
                   <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
                     <module :module-id="moduleId" :module="module"></module>
-                    <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div>
-                    <div class="icon-remove" @click="remove(moduleId)"><i class="glyphicon glyphicon-remove"></i></div>
+                    <module-toolbar :module-id="moduleId"></module-toolbar>
                   </td>
 
                   <td v-else>
                     <custom-module :module-id="moduleId" :module="module"></custom-module>
-                    <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div>
-                    <div class="icon-remove" @click="remove(moduleId)"><i class="glyphicon glyphicon-remove"></i></div>
+                    <module-toolbar :module-id="moduleId"></module-toolbar>
                   </td>
                 </tr>
 
@@ -38,6 +36,7 @@
   import Module from './Module.vue';
   import CustomModule from './CustomModule.vue';
   import EmailActions from './EmailActions.vue';
+  import ModuleToolbar from './partials/ModuleToolbar.vue';
 
   export default {
     name: 'EmailCanvas',
@@ -45,7 +44,8 @@
       Module,
       CustomModule,
       Draggable,
-      'email-actions': EmailActions
+      'email-actions': EmailActions,
+      'module-toolbar': ModuleToolbar
     },
     computed: {
       dragList: {
@@ -151,63 +151,6 @@
 </script>
 
 <style lang="less">
-  @icon-option: #69dac8;
-  @focus: #69dac8;
-  @focus-light: lighten(@focus, 30%);
-  @hover: @focus-light;
-
-  .st-module-wrapper {
-    &:hover {
-      border: 1px solid @icon-option;
-      background-color: @hover;
-      .icon-move {
-        display: block;
-      }
-      .icon-remove {
-        display: block;
-      }
-    }
-  }
-
-  .st-position-relative {
-    position: relative;
-  }
-
-  .icon-move {
-    display: none;
-    cursor: move;
-    cursor: -webkit-grabbing;
-    position: absolute;
-    top: 20%;
-    text-align: center;
-    color: #fff;
-    z-index: 5;
-    right: -15px;
-    height: 30px;
-    width: 30px;
-    border-radius: 100%;
-    line-height: 30px;
-    background-color: @icon-option;
-    opacity: 1;
-  }
-
-  .icon-remove {
-    display: none;
-    cursor: pointer;
-    position: absolute;
-    top: 20%;
-    text-align: center;
-    color: #fff;
-    z-index: 5;
-    right: -45px;
-    height: 30px;
-    width: 30px;
-    border-radius: 100%;
-    line-height: 30px;
-    background-color: @icon-option;
-    opacity: 1;
-  }
-
   .st-email-body {
     width: 100% !important;
     -webkit-text-size-adjust: 100%;
