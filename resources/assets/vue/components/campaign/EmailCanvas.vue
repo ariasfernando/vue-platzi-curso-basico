@@ -1,40 +1,6 @@
 <template>
   <div>
-    <div class="section-box-header section-canvas-title">
-      <div class="row">
-        <div :class="'col-xs-3 col-md-4 col-lg-' + titleCols" id="section-canvas-title-col">
-          <h2>{{ campaign.campaign_data.library_config.title || 'Campaign Editor' }}</h2>
-        </div>
-
-        <div class="col-xs-1 col-md-1 col-lg-2" v-if="campaign.campaign_data.library_config.building_mode_select">
-          <div class="switch">
-            <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-            <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
-              <i class="fa fa-desktop"></i>
-            </label>
-            <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-            <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
-              <i class="glyphicon glyphicon-phone"></i>
-            </label>
-            <span class="switch-selection"></span>
-          </div>
-        </div>
-
-        <div :class="'col-xs-8 col-md-7 col-lg-' + buttonsCols + ' text-right'" id="section-canvas-buttons-col">
-
-          <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template"
-                  @click="save">Save as Draft
-          </button>
-
-          <button class="btn btn-default save-as-template" :class="hiddenClass()"
-                  v-if="!campaign.processed && campaign.campaign_data.library_config.enable_templating">Save as Template
-          </button>
-
-          <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" @click="complete">Complete<i
-            class="glyphicon glyphicon-triangle-right"></i></a>
-        </div>
-      </div>
-    </div>
+    <email-actions></email-actions>
 
     <!-- content canvas email -->
     <div class="section-box-content section-canvas-container">
@@ -44,7 +10,7 @@
             <table id="emailCanvas" class="email-canvas wrapper-table"
                    :width="campaign.campaign_data.library_config.template_width" cellspacing="0" cellpadding="0"
                    border="0">
-              <draggable v-model="dragList" :options="options" :element="'tbody'">
+
                 <tr v-for="(module, moduleId) in dragList" class="st-module-wrapper">
                   <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
                     <module :module-id="moduleId" :module="module"></module>
@@ -58,7 +24,7 @@
                     <div class="icon-remove" @click="remove(moduleId)"><i class="glyphicon glyphicon-remove"></i></div>
                   </td>
                 </tr>
-              </draggable>
+
             </table>
           </td>
         </tr>
@@ -71,13 +37,15 @@
   import Draggable from 'vuedraggable'
   import Module from './Module.vue';
   import CustomModule from './CustomModule.vue';
+  import EmailActions from './EmailActions.vue';
 
   export default {
     name: 'EmailCanvas',
     components: {
       Module,
       CustomModule,
-      Draggable
+      Draggable,
+      'email-actions': EmailActions
     },
     computed: {
       dragList: {
