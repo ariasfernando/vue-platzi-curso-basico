@@ -1,44 +1,6 @@
 <template>
   <div>
-    <div class="section-box-header section-canvas-title">
-      <div class="row">
-        <div :class="'col-xs-3 col-md-4 col-lg-' + titleCols" id="section-canvas-title-col">
-          <h2>{{ campaign.campaign_data.library_config.title || 'Campaign Editor' }}</h2>
-        </div>
-
-        <div class="col-xs-1 col-md-1 col-lg-2" v-if="campaign.campaign_data.library_config.building_mode_select">
-          <div class="switch">
-            <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-            <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
-              <i class="fa fa-desktop"></i>
-            </label>
-            <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-            <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
-              <i class="glyphicon glyphicon-phone"></i>
-            </label>
-            <span class="switch-selection"></span>
-          </div>
-        </div>
-
-        <div :class="'col-xs-8 col-md-7 col-lg-' + buttonsCols + ' text-right'" id="section-canvas-buttons-col">
-          
-          <button class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview"><i
-            class="glyphicon glyphicon-phone"></i>Preview
-          </button>
-
-          <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template"
-                  @click="save">Save as Draft
-          </button>
-
-          <button class="btn btn-default save-as-template" :class="hiddenClass()"
-                  v-if="!campaign.processed && campaign.campaign_data.library_config.enable_templating">Save as Template
-          </button>
-
-          <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" @click="complete">Complete<i
-            class="glyphicon glyphicon-triangle-right"></i></a>
-        </div>
-      </div>
-    </div>
+    <email-actions></email-actions>
 
     <!-- content canvas email -->
     <div class="section-box-content section-canvas-container">
@@ -46,19 +8,21 @@
         <tr>
           <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
             <table id="emailCanvas" class="email-canvas wrapper-table"
-                   :width="campaign.campaign_data.library_config.template_width" cellspacing="0" cellpadding="0"
+                   :width="templateWidth" cellspacing="0" cellpadding="0"
                    border="0">
-              <tbody>
-              <tr v-for="(module, moduleId) in modules" :data-params="JSON.stringify(module)">
-                <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
-                  <module :module-id="moduleId" :module="module"></module>
-                </td>
 
-                <td v-else>
-                  <custom-module :module-id="moduleId" :module="module"></custom-module>
-                </td>
-              </tr>
-              </tbody>
+                <tr v-for="(module, moduleId) in dragList" class="st-module-wrapper">
+                  <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
+                    <module :module-id="moduleId" :module="module"></module>
+                    <module-toolbar :module-id="moduleId"></module-toolbar>
+                  </td>
+
+                  <td v-else>
+                    <custom-module :module-id="moduleId" :module="module"></custom-module>
+                    <module-toolbar :module-id="moduleId"></module-toolbar>
+                  </td>
+                </tr>
+
             </table>
           </td>
         </tr>
@@ -68,25 +32,53 @@
 </template>
 
 <script>
+  import Draggable from 'vuedraggable'
   import Module from './Module.vue';
   import CustomModule from './CustomModule.vue';
+  import EmailActions from './EmailActions.vue';
+  import ModuleToolbar from './partials/ModuleToolbar.vue';
 
   export default {
     name: 'EmailCanvas',
     components: {
       Module,
-      CustomModule
+      CustomModule,
+      Draggable,
+      'email-actions': EmailActions,
+      'module-toolbar': ModuleToolbar
     },
     computed: {
+      dragList: {
+        get() {
+          return this.$store.state.campaign.modules;
+        },
+        set(value) {
+          console.log(value);
+          //this.$store.commit('updateList', value)
+        }
+      },
       modules () {
         return this.$store.state.campaign.modules;
       },
       campaign () {
         return this.$store.state.campaign.campaign;
+      },
+      templateWidth () {
+        return this.$store.getters['campaign/templateWidth'];
       }
     },
     data () {
       return {
+        options: {
+          group: {
+            name: 'componentsBox',
+            put: ['componentsList', "componentsBox"]
+          },
+          handle: '.icon-move',
+          ghostClass: "ghost-component",
+          chosenClass: "chosen-component",
+          dragClass: "drag-component"
+        },
         title  () {
           let libraryTitle = this.campaign.campaign_data.library_config.title || 'Campaign Editor';
 
@@ -105,6 +97,12 @@
       }
     },
     methods: {
+      onAdd(e){
+
+      },
+      remove(moduleId) {
+        this.$store.commit("campaign/removeModule", moduleId);
+      },
       save() {
         const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
         this.$store.commit("global/setLoader", true);
@@ -133,21 +131,6 @@
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
         });
-      },
-      preview() {
-          const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
-          this.$store.commit("global/setLoader", true);
-          this.$store.dispatch("campaign/saveCampaign", {
-            campaign: this.campaign,
-            bodyHtml
-          }).then(response => {
-            this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
-            this.$store.commit("global/setLoader", false);
-            this.$store.commit("campaign/toggleModal", 'modalPreview');
-          }, error => {
-            this.$store.commit("global/setLoader", false);
-            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
-          });
       }
     },
     created () {
@@ -167,7 +150,7 @@
   };
 </script>
 
-<style>
+<style lang="less">
   .st-email-body {
     width: 100% !important;
     -webkit-text-size-adjust: 100%;

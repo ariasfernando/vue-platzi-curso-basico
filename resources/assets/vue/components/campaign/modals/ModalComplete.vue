@@ -29,7 +29,7 @@
                 <a :href="viewInBrowserUrl" target="_blank" type="button" class="btn btn-default">View in browser</a>
               </div>
 
-              <a href="/" class="btn btn-default btn-back-to-dashboard" data-dismiss="modal">Go back to the dashboard</a>
+              <a :href="$app.baseUrl" class="btn btn-default btn-back-to-dashboard" data-dismiss="modal">Go back to the dashboard</a>
             </slot>
           </div>
         </div>

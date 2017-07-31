@@ -1,4 +1,5 @@
-import _ from 'underscore-contrib';
+import _ from 'lodash';
+import uc from 'underscore-contrib';
 import campaignService from '../services/campaign';
 
 const state = {
@@ -8,11 +9,19 @@ const state = {
   editedSettings: {},
   modalComplete: false,
   modalPreview: false,
+  buildingMode: 'desktop',
 };
 
 const getters = {
   getModules(state) {
     return state.modules;
+  },
+  templateWidth(state) {
+    if (state.buildingMode === 'desktop') {
+      return state.campaign.library_config.templateWidth;
+    } else {
+      return state.campaign.library_config.templateMobileWidth;
+    }
   },
 };
 
@@ -21,14 +30,21 @@ const mutations = {
     state.campaign = campaignData;
     state.modules = campaignData.campaign_data.modules_data;
   },
+  changeBuildingMode(state, buildingMode) {
+    state.buildingMode = buildingMode;
+  },
   addModule(state, moduleData) {
     state.modules.push(moduleData);
+  },
+  cloneModule(state, moduleId) {
+    const clone = _.cloneDeep(state.modules[moduleId]);
+    state.modules.push(clone);
   },
   addEditedModule(state, edited) {
     state.editedModules.push(edited);
   },
   updateEditedModule(state, edited) {
-    const matches = _.where(state.editedModules, {
+    const matches = uc.where(state.editedModules, {
       moduleId: edited.moduleId,
       columnId: edited.columnId,
       componentId: edited.componentId,
@@ -40,6 +56,9 @@ const mutations = {
   },
   toggleModal(state, modalName) {
     state[modalName] = !state[modalName];
+  },
+  removeModule(state, moduleId) {
+    state.modules.splice(moduleId, 1);
   },
   error(err) {
     console.error(err);

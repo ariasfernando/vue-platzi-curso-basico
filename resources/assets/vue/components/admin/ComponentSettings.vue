@@ -70,7 +70,7 @@
       currentComponent: {
         handler: function() {
           let module = this.$store.state.module.module;
-          if (!_.isEmpty(this.currentComponent)) {
+          if (!_.isEmpty(this.currentComponent) &&  (this.currentComponent.componentId >= 0) ) {
             this.component = _.cloneDeep(module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId]);
             this.ready = true;
           }

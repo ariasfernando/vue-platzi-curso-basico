@@ -43,8 +43,7 @@
 
         <!-- Empty Col -->
         <div v-else >
-          <draggable 
-                     @add="onAdd"
+          <draggable @add="onAdd"
                      :element="'div'" 
                      :options="options" 
                      :data-col="columnId"
@@ -204,6 +203,11 @@
           colId
         });
 
+        this.$store.commit('module/setChangeSettingComponent',{
+          style: this.module.structure.columns[colId].components[e.newIndex].style || {},
+          attribute: this.module.structure.columns[colId].components[e.newIndex].attribute || {}
+        });
+
         // Init plugins
         _.each(el.plugins, (plugin) => {
           if (plugin.init && _.isFunction(plugin.init)) {
@@ -250,7 +254,7 @@
     &:hover{
         border: 1px solid @icon-option;
         background-color: @hover;
-        .icon-move{
+        .icon-move, .icon-remove{
           display: block;
         }
     }
