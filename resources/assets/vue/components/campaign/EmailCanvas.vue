@@ -44,17 +44,21 @@
             <table id="emailCanvas" class="email-canvas wrapper-table"
                    :width="campaign.campaign_data.library_config.template_width" cellspacing="0" cellpadding="0"
                    border="0">
-              <tbody>
-              <tr v-for="(module, moduleId) in modules" :data-params="JSON.stringify(module)">
-                <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
-                  <module :module-id="moduleId" :module="module"></module>
-                </td>
+              <draggable v-model="dragList" :options="options" :element="'tbody'">
+                <tr v-for="(module, moduleId) in dragList" class="st-module-wrapper">
+                  <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
+                    <module :module-id="moduleId" :module="module"></module>
+                    <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div>
+                    <div class="icon-remove" @click="remove(moduleId)"><i class="glyphicon glyphicon-remove"></i></div>
+                  </td>
 
-                <td v-else>
-                  <custom-module :module-id="moduleId" :module="module"></custom-module>
-                </td>
-              </tr>
-              </tbody>
+                  <td v-else>
+                    <custom-module :module-id="moduleId" :module="module"></custom-module>
+                    <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div>
+                    <div class="icon-remove" @click="remove(moduleId)"><i class="glyphicon glyphicon-remove"></i></div>
+                  </td>
+                </tr>
+              </draggable>
             </table>
           </td>
         </tr>
@@ -64,6 +68,7 @@
 </template>
 
 <script>
+  import Draggable from 'vuedraggable'
   import Module from './Module.vue';
   import CustomModule from './CustomModule.vue';
 
@@ -71,9 +76,19 @@
     name: 'EmailCanvas',
     components: {
       Module,
-      CustomModule
+      CustomModule,
+      Draggable
     },
     computed: {
+      dragList: {
+        get() {
+          return this.$store.state.campaign.modules;
+        },
+        set(value) {
+          console.log(value);
+          //this.$store.commit('updateList', value)
+        }
+      },
       modules () {
         return this.$store.state.campaign.modules;
       },
@@ -83,6 +98,16 @@
     },
     data () {
       return {
+        options: {
+          group: {
+            name: 'componentsBox',
+            put: ['componentsList', "componentsBox"]
+          },
+          handle: '.icon-move',
+          ghostClass: "ghost-component",
+          chosenClass: "chosen-component",
+          dragClass: "drag-component"
+        },
         title  () {
           let libraryTitle = this.campaign.campaign_data.library_config.title || 'Campaign Editor';
 
@@ -101,6 +126,12 @@
       }
     },
     methods: {
+      onAdd(e){
+
+      },
+      remove(moduleId) {
+        this.$store.commit("campaign/removeModule", moduleId);
+      },
       save() {
         const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
         this.$store.commit("global/setLoader", true);
@@ -148,7 +179,64 @@
   };
 </script>
 
-<style>
+<style lang="less">
+  @icon-option: #69dac8;
+  @focus: #69dac8;
+  @focus-light: lighten(@focus, 30%);
+  @hover: @focus-light;
+
+  .st-module-wrapper {
+    &:hover {
+      border: 1px solid @icon-option;
+      background-color: @hover;
+      .icon-move {
+        display: block;
+      }
+      .icon-remove {
+        display: block;
+      }
+    }
+  }
+
+  .st-position-relative {
+    position: relative;
+  }
+
+  .icon-move {
+    display: none;
+    cursor: move;
+    cursor: -webkit-grabbing;
+    position: absolute;
+    top: 20%;
+    text-align: center;
+    color: #fff;
+    z-index: 5;
+    right: -15px;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    line-height: 30px;
+    background-color: @icon-option;
+    opacity: 1;
+  }
+
+  .icon-remove {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    top: 20%;
+    text-align: center;
+    color: #fff;
+    z-index: 5;
+    right: -45px;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    line-height: 30px;
+    background-color: @icon-option;
+    opacity: 1;
+  }
+
   .st-email-body {
     width: 100% !important;
     -webkit-text-size-adjust: 100%;
