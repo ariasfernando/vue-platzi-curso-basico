@@ -7,29 +7,21 @@
       <table cellpadding="0" cellspacing="0" width="100%">
         <tr>
           <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
-            <draggable id="emailCanvas" 
-                       class="email-canvas wrapper-table"
-                       cellspacing="0" 
-                       cellpadding="0"
-                       border="0"
-                       v-model="dragList" 
-                       :width="templateWidth" 
-                       :options="options" 
-           >
-            <table>
-              <tr v-for="(module, moduleId) in dragList" class="st-module-wrapper">
-                <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
-                  <module :module-id="moduleId" :key="moduleId" :module="module"></module>
-                  <module-toolbar :module-id="moduleId"></module-toolbar>
-                </td>
-
-                <td v-else>
-                  <custom-module :module-id="moduleId" :module="module"></custom-module>
-                  <module-toolbar :module-id="moduleId"></module-toolbar>
-                </td>
-              </tr>
-            </table>
-            </draggable>  
+              <draggable id="emailCanvas" 
+                         class="email-canvas wrapper-table"
+                         cellspacing="0" 
+                         cellpadding="0"
+                         border="0"
+                         v-model="dragList" 
+                         :width="templateWidth" 
+                         :options="options"
+                         :element="'table'"
+             >
+              
+                  <module v-for="(module, moduleId) in dragList"
+                                 :key="moduleId" 
+                                 :module-id="moduleId"></module>
+              </draggable>  
           </td>
         </tr>
       </table>
@@ -38,20 +30,16 @@
 </template>
 
 <script>
-  import Draggable from 'vuedraggable'
+  import Draggable from 'vuedraggable';
   import Module from './Module.vue';
-  import CustomModule from './CustomModule.vue';
   import EmailActions from './EmailActions.vue';
-  import ModuleToolbar from './partials/ModuleToolbar.vue';
 
   export default {
     name: 'EmailCanvas',
     components: {
       Module,
-      CustomModule,
       Draggable,
       'email-actions': EmailActions,
-      'module-toolbar': ModuleToolbar
     },
     computed: {
       dragList: {
@@ -59,8 +47,7 @@
           return this.$store.state.campaign.modules;
         },
         set(value) {
-          console.log(value);
-          //this.$store.commit('updateList', value)
+          this.$store.commit('campaign/updateEmailCanvas', value);
         }
       },
       modules () {
@@ -79,8 +66,6 @@
           group: {
             name: 'componentsEmailCanvas'
           },
-          handle: '.icon-move',
-          draggable:'.st-module-wrapper',
           ghostClass: "ghost-component",
           chosenClass: "chosen-component",
           dragClass: "drag-component"

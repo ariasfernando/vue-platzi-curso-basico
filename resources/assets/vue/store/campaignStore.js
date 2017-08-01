@@ -34,6 +34,9 @@ const mutations = {
     state.campaign = campaignData;
     state.modules = campaignData.campaign_data.modules_data;
   },
+  updateEmailCanvas(state, modules_data) {
+    state.modules = modules_data;
+  },
   changeBuildingMode(state, buildingMode) {
     state.buildingMode = buildingMode;
   },
