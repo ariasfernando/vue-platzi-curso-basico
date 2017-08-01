@@ -1,14 +1,16 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-  <tr @click="setComponent" data-type="divider-element">
-    <td :bgcolor="backgroundColor" class="st-separator st-position-relative" :style="component.style">
-      <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td :width="separatorWidth" :height="separatorHeight"></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
+    <tr data-type="divider-element">
+      <td class="st-separator st-position-relative" :style="component.style">
+        <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td :style="component.style"></td>
+          </tr>
+        </table>
+        <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
+        <div class="icon-remove st-remove"  @click="removeComponent"><i class="glyphicon glyphicon-remove-sign st-remove"></i></div>
+      </td>
+    </tr>
   <!-- DIVIDER ELEMENT ENDS -->
 </template>
 

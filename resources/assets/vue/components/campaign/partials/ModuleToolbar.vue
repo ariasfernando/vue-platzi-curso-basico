@@ -31,22 +31,28 @@
     &:hover {
       border: 1px solid @icon-option;
       background-color: @hover;
-      .icon-move, .icon-remove, .icon-clone {
-        display: block;
+      .icon-move, .icon-remove, 
+      .icon-clone {
+        display: inline-block;
       }
     }
   }
 
   .st-position-relative {
     position: relative;
+    height: 30px;
   }
 
   .module-toolbar {
+    position: absolute;
+    background-color: @icon-option;
+    height: 30px; 
+    right: 35px;
     div {
       cursor: pointer;
       display: none;
-      position: absolute;
-      top: 20%;
+      position: relative;
+      top:0%;
       text-align: center;
       color: #fff;
       z-index: 5;
@@ -57,16 +63,9 @@
       background-color: @icon-option;
       opacity: 1;
     }
-    .icon-clone {
-      right: -20px;
-    }
     .icon-move {
       cursor: move;
       cursor: -webkit-grabbing;
-      right: -45px;
-    }
-    .icon-remove {
-      right: -70px;
     }
   }
 </style>

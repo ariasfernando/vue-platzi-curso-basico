@@ -7,13 +7,19 @@
       <table cellpadding="0" cellspacing="0" width="100%">
         <tr>
           <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
-            <table id="emailCanvas" class="email-canvas wrapper-table"
-                   :width="templateWidth" cellspacing="0" cellpadding="0"
-                   border="0">
-
-              <draggable v-model="dragList" :options="options" :element="'tr'">
+            <draggable id="emailCanvas" 
+                       class="email-canvas wrapper-table"
+                       cellspacing="0" 
+                       cellpadding="0"
+                       border="0"
+                       v-model="dragList" 
+                       :width="templateWidth" 
+                       :options="options" 
+           >
+            <table>
+              <tr v-for="(module, moduleId) in dragList" class="st-module-wrapper">
                 <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
-                  <module :module-id="moduleId" :module="module"></module>
+                  <module :module-id="moduleId" :key="moduleId" :module="module"></module>
                   <module-toolbar :module-id="moduleId"></module-toolbar>
                 </td>
 
@@ -21,8 +27,9 @@
                   <custom-module :module-id="moduleId" :module="module"></custom-module>
                   <module-toolbar :module-id="moduleId"></module-toolbar>
                 </td>
-              </draggable>
+              </tr>
             </table>
+            </draggable>  
           </td>
         </tr>
       </table>
@@ -70,10 +77,10 @@
       return {
         options: {
           group: {
-            name: 'componentsBox',
-            put: ['componentsList', "componentsBox"]
+            name: 'componentsEmailCanvas'
           },
           handle: '.icon-move',
+          draggable:'.st-module-wrapper',
           ghostClass: "ghost-component",
           chosenClass: "chosen-component",
           dragClass: "drag-component"
