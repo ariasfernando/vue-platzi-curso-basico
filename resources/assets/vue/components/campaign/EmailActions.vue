@@ -74,7 +74,7 @@
       save() {
         this.$store.commit("global/setLoader", true);
         this._save().then(response => {
-          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
+          this.$root.$toast('Email saved', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
@@ -97,7 +97,7 @@
             campaign: this.campaign,
             bodyHtml
           }).then(response => {
-            this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
+            this.$root.$toast('Email saved', {className: 'et-info'});
             this.$store.commit("global/setLoader", false);
             this.$store.commit("campaign/toggleModal", 'modalComplete');
           }, error => {
@@ -110,7 +110,7 @@
       autoSave() {
         setInterval(() => {
           this._save().then(response => {
-            this.$root.$toast('Saved.', {className: 'et-info'});
+            this.$root.$toast('All changes were automatically saved', {className: 'et-info'});
             this.$store.commit("global/setLoader", false);
           }, error => {
             this.$store.commit("global/setLoader", false);

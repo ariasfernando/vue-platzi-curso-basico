@@ -7,11 +7,11 @@
       <table cellpadding="0" cellspacing="0" width="100%">
         <tr>
           <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
-            <table id="emailCanvas" class="email-canvas wrapper-table"
+            <draggable v-model="dragList" id="emailCanvas" class="email-canvas wrapper-table"
                    :width="templateWidth" cellspacing="0" cellpadding="0"
-                   border="0">
+                   border="0" :element="'table'" :options="options">
 
-              <draggable v-model="dragList" :options="options" :element="'tr'">
+              <tr v-for="(module, moduleId) in dragList" class="st-module-wrapper">
                 <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
                   <module :module-id="moduleId" :module="module"></module>
                   <module-toolbar :module-id="moduleId"></module-toolbar>
@@ -21,8 +21,8 @@
                   <custom-module :module-id="moduleId" :module="module"></custom-module>
                   <module-toolbar :module-id="moduleId"></module-toolbar>
                 </td>
-              </draggable>
-            </table>
+              </tr>
+            </draggable>
           </td>
         </tr>
       </table>
