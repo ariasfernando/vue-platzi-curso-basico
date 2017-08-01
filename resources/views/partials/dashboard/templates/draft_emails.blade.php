@@ -78,9 +78,9 @@
                     </td>
                     <td class="text-right actions icons">
                         <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
-                        <a 
-                            href="#" 
-                            class="edit" 
+                        <a
+                            href="#"
+                            class="edit"
                             title="Edit"
                             v-if="!campaign.locked || campaign.locked_by === Application.globals.logged_user"
                         >
@@ -94,6 +94,7 @@
                             data-toggle="tooltip"
                             data-placement="bottom"
                             title="Lock Campaign"
+                            @click.prevent
                         >
                             <i class="glyphicon fa fa-lock"></i>
                         </a>
@@ -105,6 +106,7 @@
                             data-toggle="tooltip"
                             data-placement="bottom"
                             title="Unlock Campaign"
+                            @click.prevent
                         >
                             <i class="glyphicon fa fa-unlock"></i>
                         </a>

@@ -75,6 +75,7 @@
                             data-toggle="tooltip"
                             data-placement="bottom"
                             title="Lock Campaign"
+                            @click.prevent
                         >
                             <i class="glyphicon fa fa-lock"></i>
                         </a>
@@ -86,6 +87,7 @@
                             data-toggle="tooltip"
                             data-placement="bottom"
                             title="Unlock Campaign"
+                            @click.prevent
                         >
                             <i class="glyphicon fa fa-unlock"></i>
                         </a>
