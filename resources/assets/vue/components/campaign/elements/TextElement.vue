@@ -1,14 +1,10 @@
 <template>
-
   <!-- TEXT ELEMENT -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
-    <tr>
-      <td width="100%" class="st-text-style" align="center" :style="component.style">
-        <tiny-mce :id="editorId" :toolbar="toolbar" :value="component.text" data-key="text"></tiny-mce>
-      </td>
-    </tr>
-  </table>
-
+  <tr data-type="text-element">
+    <td width="100%" class="st-text-style st-position-relative" align="center" :style="component.style">
+      <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
+    </td>
+  </tr>
   <!-- TEXT ELEMENT ENDS -->
 </template>
 

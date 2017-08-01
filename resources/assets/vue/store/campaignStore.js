@@ -8,6 +8,7 @@ const state = {
   editedModules: [],
   editedSettings: {},
   modalComplete: false,
+  modalPreview: false,
   buildingMode: 'desktop',
 };
 
@@ -16,11 +17,15 @@ const getters = {
     return state.modules;
   },
   templateWidth(state) {
-    if (state.buildingMode === 'desktop') {
-      return state.campaign.library_config.templateWidth;
-    } else {
-      return state.campaign.library_config.templateMobileWidth;
+    const templateWidth = 600;
+    const templateMobileWidth = 480;
+    if (_.isEmpty(state.campaign)) {
+      return state.buildingMode === 'desktop' ? templateWidth : templateMobileWidth;
     }
+    if (state.buildingMode === 'mobile') {
+      return state.campaign.library_config.templateMobileWidth || templateMobileWidth;
+    }
+    return state.campaign.library_config.templateWidth || templateWidth;
   },
 };
 
@@ -92,6 +97,11 @@ const actions = {
     } else {
       context.commit('addEditedModule', edited);
     }
+  },
+  sendPreview(context, data) {
+    return campaignService.sendPreview(data)
+      .then(res => context.dispatch('getCampaignData', res.campaignId))
+      .catch(error => context.commit('error', error));
   },
 };
 

@@ -1,13 +1,28 @@
 <template>
   <!-- IMAGE ELEMENT -->
-  <table width="100%" cellspacing="0" cellpadding="0" border="0">
-    <tr>
-      <td width="100%" align="left" :style="component.style.default">
-        <img :src="component.placeholder" class="st-resize st-image" :width="component.width" :height="component.height"
-             :data-open-element-config="elementConfig" alt="" border="0">
+    <tr data-type="image-element"s>
+      <td align="center" 
+          :style="component.style" 
+          class="st-position-relative"
+      >
+        <a @click.prevent
+           :href="component.attribute.href" 
+           :alt="component.attribute.alt"
+           :title="component.attribute.title"
+           :target="component.attribute.target"
+        >
+          <img class="st-resize st-image"
+               :src="imageUrl(component.attribute.placeholder)" 
+               :width="component.attribute.width" 
+               :height="component.attribute.height"
+               :data-open-element-config="elementConfig" 
+               border="0"
+          >
+        </a>
+        <div class="icon-move st-move"><i class="glyphicon glyphicon-move st-move"></i></div> 
+        <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-remove-sign st-remove"></i></div> 
       </td>
     </tr>
-  </table>
   <!-- IMAGE ELEMENT ENDS -->
 </template>
 

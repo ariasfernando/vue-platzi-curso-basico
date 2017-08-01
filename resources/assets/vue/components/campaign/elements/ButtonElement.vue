@@ -1,39 +1,40 @@
-<template id="button-element">
+<template>
   <!-- CALL TO ACTION ELEMENT -->
-  <table width="150" border="0" class="st-cta" cellpadding="0" cellspacing="0">
-    <tr data-type="button-element">
-      <td :align="component.attribute.align"
-          class="st-position-relative"
+  <tr data-type="button-element">
+    <td :align="component.attribute.align" 
+        class="st-position-relative"
+    >
+      <table :width="component.attribute.width" 
+             :height="component.attribute.height" 
+             :bgcolor="component.attribute.bgcolor"
+             border="0" 
+             cellpadding="0" 
+             cellspacing="0"
       >
-        <table :width="component.attribute.width"
-               :height="component.attribute.height"
-               :bgcolor="component.attribute.bgcolor"
-               border="0"
-               cellpadding="0"
-               cellspacing="0"
-        >
-          <tr>
-            <td width="100%"
-                align="center"
-                :bgcolor="component.attribute.bgcolor"
-                :height="component.attribute.height"
+        <tr>
+          <td width="100%" 
+              align="center" 
+              :bgcolor="component.attribute.bgcolor"
+              :height="component.attribute.height"
+          >
+            <a @click.prevent
+               :href="component.attribute.href" 
+               :target="component.attribute.target" 
+               :style="component.style"  
             >
-              <a @click.prevent
-                 :href="component.attribute.href"
-                 :target="component.attribute.target"
-                 :style="component.style"
-              >
-                <tiny-mce :id="editorId"
-                          :options="component.editor"
-                          :value="component.text"
-                          data-key="text"></tiny-mce>
-              </a>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+              <tiny-mce :id="editorId" 
+                        :options="component.editor" 
+                        :value="component.text" 
+                        data-key="text"
+                        @input="input"></tiny-mce>
+            </a>
+            <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div>   
+            <div class="icon-remove st-remove" @click="removeComponent" ><i class="glyphicon glyphicon-remove-sign st-remove"></i></div>   
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
   <!-- CALL TO ACTION ELEMENT ENDS -->
 </template>
 
