@@ -162,7 +162,7 @@ class SendReviewersEmail extends Job implements ShouldQueue
     protected function sendDeletedProofNotification()
     {
         $reviewers = $this->proof->reviewers;
-        $campaign = Campaign::find($this->proof->campaign_id);
+        $campaign = Campaign::withTrashed()->find($this->proof->campaign_id);
 
         $params = [
             'proof_id' => $this->proof->id,

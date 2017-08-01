@@ -30,6 +30,11 @@
           Save as Template
         </button>
 
+        <button
+            class="btn btn-default proof-open-modal"
+            v-bind:data-campaign-id="campaign.campaign_id"
+        ><i class="glyphicon glyphicon-search"></i> Send for review</button>
+
         <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" @click="complete">
           Complete
           <i class="glyphicon glyphicon-triangle-right"></i>
