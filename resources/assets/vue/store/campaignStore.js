@@ -16,11 +16,15 @@ const getters = {
     return state.modules;
   },
   templateWidth(state) {
-    if (state.buildingMode === 'desktop') {
-      return state.campaign.library_config.templateWidth;
-    } else {
-      return state.campaign.library_config.templateMobileWidth;
+    const templateWidth = 600;
+    const templateMobileWidth = 480;
+    if (_.isEmpty(state.campaign)) {
+      return state.buildingMode === 'desktop' ? templateWidth : templateMobileWidth;
     }
+    if (state.buildingMode === 'mobile') {
+      return state.campaign.library_config.templateMobileWidth || templateMobileWidth;
+    }
+    return state.campaign.library_config.templateWidth || templateWidth;
   },
 };
 
