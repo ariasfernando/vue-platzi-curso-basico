@@ -395,10 +395,11 @@ class CampaignController extends Controller
         }
     }
 
-    /*
+    /**
      * Lock the campaign in order to prevent that other user make changes on it.
      *
      * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function postForceLock(Request $request)
     {

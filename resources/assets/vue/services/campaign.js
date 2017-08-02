@@ -144,4 +144,24 @@ export default {
       modules,
     };
   },
+
+  sendPreview(data) {
+    const deferred = Q.defer();
+    const endpoint = endpoints.campaign.sendPreview;
+    const params = {
+      json: {
+        campaign_id: data.campaignId,
+        mail: data.emailAddress,
+      },
+      endpoint: endpoints.campaign.sendPreview,
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
 };

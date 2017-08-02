@@ -148,6 +148,11 @@ gulp.task('elixir-scripts', function () {
           assetsPath
         )
         .browserify(
+          'vue/proof.js',
+          jsDestinationPath + "vue-components.js",
+          assetsPath
+        )
+        .browserify(
           [
             'vue/dashboard.js',
             'js/library/custom-plugins/st-pagination-bar.jquery.js',
@@ -253,10 +258,8 @@ gulp.task('elixir-scripts', function () {
 
         // === Proof page ===
         .scripts(
-            [
-                jsAppFilePath("proof.js")
-            ],
-            jsDestinationPath + "proof.js",
+            jsAppFilePath('proof.js'),
+            jsDestinationPath + 'proof.js',
             assetsPath
         )
 

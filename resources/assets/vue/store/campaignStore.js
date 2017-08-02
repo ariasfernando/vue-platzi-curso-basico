@@ -9,6 +9,7 @@ const state = {
   editedModules: [],
   editedSettings: {},
   modalComplete: false,
+  modalPreview: false,
   buildingMode: 'desktop',
 };
 
@@ -33,6 +34,9 @@ const mutations = {
   loadCampaignData(state, campaignData) {
     state.campaign = campaignData;
     state.modules = campaignData.campaign_data.modules_data;
+  },
+  updateEmailCanvas(state, modules_data) {
+    state.modules = modules_data;
   },
   changeBuildingMode(state, buildingMode) {
     state.buildingMode = buildingMode;
@@ -116,6 +120,11 @@ const actions = {
     } else {
       context.commit('addEditedModule', edited);
     }
+  },
+  sendPreview(context, data) {
+    return campaignService.sendPreview(data)
+      .then(res => context.dispatch('getCampaignData', res.campaignId))
+      .catch(error => context.commit('error', error));
   },
 };
 

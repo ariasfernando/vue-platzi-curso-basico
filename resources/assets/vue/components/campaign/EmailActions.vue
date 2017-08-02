@@ -21,6 +21,11 @@
 
       <div class="col-xs-8 col-md-7 col-lg-5 text-right" id="section-canvas-buttons-col">
 
+
+        <button class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview">
+          Preview
+        </button>
+
         <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template" @click="save">
           Save as Draft
         </button>
@@ -29,6 +34,11 @@
                 :class="hiddenClass()" v-if="!campaign.processed && campaign.campaign_data.library_config.enable_templating">
           Save as Template
         </button>
+
+        <button
+            class="btn btn-default proof-open-modal"
+            v-bind:data-campaign-id="campaign.campaign_id"
+        ><i class="glyphicon glyphicon-search"></i> Send for review</button>
 
         <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" @click="complete">
           Complete
@@ -144,7 +154,17 @@
             this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
           });
         }, 20000);
-      }
+      },
+      preview() {
+        this.$store.commit("global/setLoader", true);
+        this._save().then(response => {
+          this.$store.commit("global/setLoader", false);
+          this.$store.commit("campaign/toggleModal", 'modalPreview');
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+        });
+      },
     },
     created () {
       this.autoSave();
