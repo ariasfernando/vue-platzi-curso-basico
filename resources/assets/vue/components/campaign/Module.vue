@@ -11,7 +11,7 @@
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
     >
 
-      <table width="100%" cellspacing="0" cellpadding="0" class="st-module-wrapper">
+      <table width="100%" cellspacing="0" cellpadding="0">
         <tr v-if="module.structure.columns.length > 1">
           <th class="st-col" v-for="(column, columnId) in module.structure.columns" :width="column.style.width"
               :style="column.style">
