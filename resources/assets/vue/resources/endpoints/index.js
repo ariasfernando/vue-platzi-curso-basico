@@ -24,5 +24,6 @@ module.exports = {
     processCampaign: { method: 'post', path: `${baseUrl}/campaign/process` },
     saveCampaign: { method: 'post', path: `${baseUrl}/campaign/save` },
     cloneCampaign: { method: 'post', path: `${baseUrl}/campaign/clone` },
+    processStatus: { method: 'get', path: `${baseUrl}/queue/status/process/:processId` },
   },
 };

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import uc from 'underscore-contrib';
+import Q from 'q';
 import campaignService from '../services/campaign';
 
 const state = {
@@ -63,6 +64,9 @@ const mutations = {
   removeModule(state, moduleId) {
     state.modules.splice(moduleId, 1);
   },
+  setProcessStatus(state, processed = true) {
+    state.campaign.campaign_data.processed = processed;
+  },
   error(err) {
     console.error(err);
   },
@@ -75,14 +79,30 @@ const actions = {
       .catch(error => context.commit('error', error));
   },
   saveCampaign(context, data) {
-    return campaignService.saveCampaign(data)
-      .then(res => context.dispatch('getCampaignData', res.campaignId))
-      .catch(error => context.commit('error', error));
+    const deferred = Q.defer();
+    campaignService.saveCampaign(data)
+      .then(res => {
+        context.dispatch('getCampaignData', res.campaignId);
+        deferred.resolve(res.campaignId);
+      })
+      .catch(error => {
+        context.commit('error', error);
+        deferred.reject(error);
+      });
+    return deferred.promise;
   },
-  completeCampaign(context, data) {
-    return campaignService.completeCampaign(data)
-      .then(campaignId => context.dispatch('getCampaignData', campaignId))
-      .catch(error => context.commit('error', error));
+  completeCampaign(context, campaign) {
+    const deferred = Q.defer();
+    campaignService.completeCampaign(campaign)
+      .then(response => {
+        context.dispatch('getCampaignData', response.campaignId);
+        deferred.resolve(response);
+      })
+      .catch(error => {
+        context.commit('error', error);
+        deferred.reject(error);
+      });
+    return deferred.promise;
   },
   updateElement(context, edited) {
     const matches = _.where(state.editedModules, {
