@@ -71,15 +71,36 @@ export default {
 
     return deferred.promise;
   },
-
-  completeCampaign(data) {
+  checkProcessStatus(processId) {
+    const endpoint = endpoints.campaign.processStatus;
     const deferred = Q.defer();
-    let promises = [this.saveCampaign(data), this.processCampaign(data.campaign.campaign_id)];
 
-    Q.all(promises).then(results => {
-      if ( results[1].processed ) {
-        deferred.resolve(results[1].processed);
-      }
+    const params = {
+      endpoint,
+      json: {
+        processId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+  completeCampaign(campaign) {
+    const deferred = Q.defer();
+
+    this.processCampaign(campaign.campaign_id).then((response) => {
+      deferred.resolve({
+        campaignId: campaign.campaign_id,
+        processed: response.processed || undefined,
+        jobId: response.job || undefined,
+      });
+    }).catch((error) => {
+      deferred.reject(error);
     });
 
     return deferred.promise;

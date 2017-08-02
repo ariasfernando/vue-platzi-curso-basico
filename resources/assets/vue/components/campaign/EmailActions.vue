@@ -51,6 +51,8 @@
 
 <script>
 
+  import campaignService from '../../services/campaign';
+
   export default {
     name: 'EmailActions',
     computed: {
@@ -84,49 +86,74 @@
       save() {
         this.$store.commit("global/setLoader", true);
         this._save().then(response => {
-          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
+          this.$root.$toast('Email saved', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
         });
       },
-      _save() {
-        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
+      _save(bodyHtml = undefined) {
         return this.$store.dispatch("campaign/saveCampaign", {
           campaign: this.campaign,
           bodyHtml
         });
       },
+      checkProcessStatus(processId) {
+        return campaignService.checkProcessStatus(processId);
+      },
       complete() {
-        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
+        // Show Loader
         this.$store.commit("global/setLoader", true);
 
-        this._save().then(response => {
-          this.$store.dispatch("campaign/completeCampaign", {
-            campaign: this.campaign,
-            bodyHtml
-          }).then(response => {
-            this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
-            this.$store.commit("global/setLoader", false);
-            this.$store.commit("campaign/toggleModal", 'modalComplete');
+        // Obtain current html
+        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
+
+        // Save Request
+        this._save(bodyHtml).then(() => {
+          // Process Campaign
+          this.$store.dispatch("campaign/completeCampaign", this.campaign)
+            .then(completeResponse => {
+
+              // Set processed
+              if (completeResponse.processed) {
+                this.$store.commit('campaign/setProcessStatus');
+                // Hide Loader
+                this.$store.commit("global/setLoader", false);
+                // Show complete after campaign is completely processed
+                this.$store.commit("campaign/toggleModal", 'modalComplete');
+              }
+
+              // Poll server with job id
+              if (completeResponse.job) {
+                this.checkProcessStatus(completeResponse.job).then((response) => {
+                  if (response.status !== 'processed') {
+                    setTimeout(() => {
+                      this.checkProcessStatus(processId);
+                    }, 3000)
+                  } else {
+                    // Set campaign as processed
+                    this.$store.commit('campaign/setProcessStatus');
+                    // Show complete after campaign is completely processed
+                    this.$store.commit("campaign/toggleModal", 'modalComplete');
+                  }
+                });
+              }
           }, error => {
             this.$store.commit("global/setLoader", false);
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
           });
         });
-
       },
       autoSave() {
         setInterval(() => {
           this._save().then(response => {
-            this.$root.$toast('Saved.', {className: 'et-info'});
             this.$store.commit("global/setLoader", false);
           }, error => {
             this.$store.commit("global/setLoader", false);
-            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+            this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
           });
-        }, 10000);
+        }, 20000);
       },
       preview() {
         this.$store.commit("global/setLoader", true);

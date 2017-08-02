@@ -10,7 +10,14 @@ import Campaign from './components/campaign/Campaign.vue';
 Vue.use(Config);
 Vue.use(VueResource);
 Vue.use(VeeValidate);
-Vue.use(Toast);
+Vue.use(Toast, {
+  horizontalPosition: 'center',
+  verticalPosition: 'bottom',
+  parent: 'body',
+  transition: 'fade',
+  duration: 5000,
+});
+
 Vue.use(interceptors);
 
 const app = new Vue({

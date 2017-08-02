@@ -7,21 +7,21 @@
       <table cellpadding="0" cellspacing="0" width="100%">
         <tr>
           <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
-              <draggable id="emailCanvas" 
+              <draggable id="emailCanvas"
                          class="email-canvas wrapper-table"
-                         cellspacing="0" 
+                         cellspacing="0"
                          cellpadding="0"
                          border="0"
-                         v-model="dragList" 
-                         :width="templateWidth" 
+                         v-model="dragList"
+                         :width="templateWidth"
                          :options="options"
                          :element="'table'"
              >
-              
+
                   <module v-for="(module, moduleId) in dragList"
-                                 :key="moduleId" 
+                                 :key="moduleId"
                                  :module-id="moduleId"></module>
-              </draggable>  
+              </draggable>
           </td>
         </tr>
       </table>
