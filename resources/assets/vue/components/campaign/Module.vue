@@ -1,16 +1,16 @@
 <template >
   <tr v-if="module.type === 'custom'" class="st-module-wrapper">  
-    <td>
+    <td class="st-toolbar-content">
       <div v-html="module.template"></div>
       <module-toolbar :module-id="moduleId"></module-toolbar>
     </td>
   </tr>  
 
   <tr v-else class="st-module-wrapper">
-    <td :style="module.structure.style" 
+    <td class="st-toolbar-content"
+        :style="module.structure.style" 
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
     >
-
       <table width="100%" cellspacing="0" cellpadding="0">
         <tr v-if="module.structure.columns.length > 1">
           <th class="st-col" v-for="(column, columnId) in module.structure.columns" :width="column.style.width"
@@ -20,7 +20,6 @@
                 <td>
                     <component :is="component.type" :component="component" :module-id="moduleId" :column-id="columnId"
                                :component-id="componentId"></component>
-                    <module-toolbar :module-id="moduleId"></module-toolbar>
                 </td>
               </tr>
             </table>
@@ -33,14 +32,13 @@
                 <td>
                     <component :is="component.type" :component="component" :module-id="moduleId" :column-id="columnId"
                                :component-id="componentId"></component>
-                    <module-toolbar :module-id="moduleId"></module-toolbar>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
       </table>
-
+      <module-toolbar :module-id="moduleId"></module-toolbar>
     </td>
   </tr>  
 </template>
