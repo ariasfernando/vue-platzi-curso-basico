@@ -35,8 +35,7 @@
           Save as Template
         </button>
 
-        <button
-            class="btn btn-default proof-open-modal"
+        <button class="btn btn-default proof-open-modal" v-if="this.$app.proofConfig.status"
             v-bind:data-campaign-id="campaign.campaign_id"
         ><i class="glyphicon glyphicon-search"></i> Send for review</button>
 

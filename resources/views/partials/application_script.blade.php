@@ -12,4 +12,5 @@
 	Application.globals.emailMobileWidth = "<?php echo (isset($params['campaign_data']))? $params['campaign_data']->getLibraryConfig('template_mobile_width') : '320'; ?>";
     Application.globals.processPlainText = ("{{ $app_config["campaign"]["process_plaintext"]  }}")? true : false;
 	Application.globals.logged_user = "{{ (Auth::user()) ? Auth::user()->email : ''}}";
+	Application.globals.proofConfig = {!! json_encode(Config::get('proof')) !!};
 </script>
