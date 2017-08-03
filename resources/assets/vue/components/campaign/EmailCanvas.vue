@@ -16,6 +16,7 @@
                          :width="templateWidth"
                          :options="options"
                          :element="'table'"
+                         @sort="onSort"
              >
 
                   <module v-for="(module, moduleId) in dragList"
@@ -49,9 +50,6 @@
         set(value) {
           this.$store.commit('campaign/updateEmailCanvas', value);
         }
-      },
-      modules () {
-        return this.$store.state.campaign.modules;
       },
       campaign () {
         return this.$store.state.campaign.campaign;
@@ -88,8 +86,14 @@
       }
     },
     methods: {
-      onAdd(e){
-
+      onSort(e){
+        const newIndex = e.newIndex
+        const oldIndex = e.oldIndex
+        
+        this.$store.commit('campaign/sortEditedModule', {
+          newIndex: newIndex,
+          oldIndex: oldIndex
+        });
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);

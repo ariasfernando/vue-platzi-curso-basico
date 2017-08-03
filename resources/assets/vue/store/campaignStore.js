@@ -59,6 +59,19 @@ const mutations = {
     });
     matches[0].data = _.extend(matches[0].data, edited.data);
   },
+  sortEditedModule(state, sort) {
+    const matchTo = uc.where(state.editedModules, {
+      moduleId: sort.newIndex.toString(),
+    });
+    const matchFrom = uc.where(state.editedModules, {
+      moduleId: sort.oldIndex.toString(),
+    });
+
+    if (matchTo.length || matchFrom.length){
+      _.extend(matchTo[0], { moduleId: sort.oldIndex.toString() });
+      _.extend(matchFrom[0], { moduleId: sort.newIndex.toString() });
+    }
+  },
   saveSetting(state, setting) {
     state.editedSettings[setting.name] = setting.value;
   },

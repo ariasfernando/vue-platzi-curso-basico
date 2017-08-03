@@ -27,10 +27,31 @@
   @focus-light: lighten(@focus, 30%);
   @hover: @focus-light;
 
+  tr.ghost-component{
+    text-align: center;
+    outline: 2px dashed @icon-option;
+    color:@focus;
+    background-color: @hover;
+    height: 10px;
+    display: table-row;
+    list-style-type: none;
+    font-size: 13px;
+    z-index: 300;
+    opacity: 1!important;
+    &:before{
+      content: "Drag content here";
+    }
+    *{
+      display: none;
+    }
+
+  }
+
   .st-module-wrapper {
-    &:hover {
-      border: 1px solid @icon-option;
-      background-color: @hover;
+    &:hover > * {
+      outline: 1px solid @icon-option;
+      background-color: @hover!important;
+      z-index: 800;
       .icon-move, .icon-remove, 
       .icon-clone {
         display: inline-block;
