@@ -10,6 +10,7 @@ const state = {
   editedSettings: {},
   modalComplete: false,
   modalPreview: false,
+  modalProof: false,
   buildingMode: 'desktop',
 };
 

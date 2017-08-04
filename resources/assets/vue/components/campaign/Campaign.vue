@@ -17,6 +17,7 @@
     <!-- Modals -->
     <modal-complete></modal-complete>
     <modal-preview></modal-preview>
+    <modal-proof></modal-proof>
 
     <spinner></spinner>
 
@@ -26,7 +27,8 @@
 <script>
   import CampaignConfiguration from './CampaignConfiguration.vue'
   import ModalComplete from './modals/ModalComplete.vue'
-  import ModalPreview from './modals/ModalPreview.vue'  
+  import ModalPreview from './modals/ModalPreview.vue'
+  import ModalProof from './modals/ModalProof.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import EmailCanvas from './EmailCanvas.vue'
   import Spinner from '../common/Spinner.vue'
@@ -40,6 +42,7 @@
       EmailCanvas,
       ModalComplete,
       ModalPreview,
+      ModalProof,
       Spinner
     },
     data: function () {

@@ -36,7 +36,7 @@
         </button>
 
         <button class="btn btn-default proof-open-modal" v-if="this.$app.proofConfig.status"
-            v-bind:data-campaign-id="campaign.campaign_id"
+            v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
         ><i class="glyphicon glyphicon-search"></i> Send for review</button>
 
         <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" @click="complete">
@@ -159,6 +159,16 @@
         this._save().then(response => {
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalPreview');
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+        });
+      },
+      proof() {
+        this.$store.commit("global/setLoader", true);
+        this._save().then(response => {
+          this.$store.commit("global/setLoader", false);
+          this.$store.commit("campaign/toggleModal", 'modalProof');
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
