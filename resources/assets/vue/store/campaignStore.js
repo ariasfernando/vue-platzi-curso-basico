@@ -109,7 +109,7 @@ const actions = {
     return deferred.promise;
   },
   updateElement(context, edited) {
-    const matches = _.where(state.editedModules, {
+    const matches = uc.where(state.editedModules, {
       moduleId: edited.moduleId,
       columnId: edited.columnId,
       componentId: edited.componentId,
