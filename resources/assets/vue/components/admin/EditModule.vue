@@ -38,53 +38,79 @@
 
         <!-- START: Left Bar -->
         <aside class="col-xs-2 left-bar">
-          <div class="module-settings">
-            <h4>Module Settings</h4><hr>
-
             <div class="fields">
+              <!-- START: General Settings -->
+              <b-btn block v-b-toggle.general-settings class="module-settings-item">
+                <i class="fa fa-cogs pull-left"></i>
+                <p class="pull-left">General Settings</p>
+                <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
+              </b-btn>
+             
+              <b-collapse id="general-settings">
+                <b-card class="control" 
+                        :class="{'has-error': errors.has('name') }">
+                  <input :value="module.name" 
+                         :class="{'input': true, 'is-danger': errors.has('name') }"
+                         class="module-name"
+                         v-validate.initial="'required'" 
+                         name="name" 
+                         type="text" 
+                         placeholder="Module name" 
+                         @input="updateName">
+                </b-card>
+              </b-collapse>
+              <!-- END: General Settings -->
+              <!-- START: Module Settings -->
+              <b-btn block v-b-toggle.module-setting class="module-settings-item">
+                <i class="fa fa-cogs pull-left"></i>
+                <p class="pull-left">Module Settings</p>
+                <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
+              </b-btn>
+              
+              <b-collapse id="module-setting">
+                <b-card class="control">
+                  <p>Columns</p> 
+                  <ul class="list-inline">
+                    <li v-for="n in maxCols" :class="module.structure.columns.length === n ? 'selected' : ''" @click="setColumns(n)">{{ n }}</li>
+                  </ul>
+                </b-card>
+              </b-collapse>
+              <!-- END: Module Settings -->
+              <!-- START: Elements -->
+              <b-btn block v-b-toggle.element class="module-settings-item">
+                <i class="fa fa-th-large pull-left" variant=""></i>
+                <p class="pull-left">Elements</p>
+                <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
+              </b-btn>
 
-              <div class="control" :class="{'has-error': errors.has('name') }">
-                <input :value="module.name" v-validate.initial="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"
-                       name="name" type="text" placeholder="Module name" @input="updateName">
-              </div>
-
-              <div class="control">
-                <h5>Columns</h5> <hr>
-
-                <ul class="list-inline">
-                  <li v-for="n in maxCols" :class="module.structure.columns.length === n ? 'selected' : ''" @click="setColumns(n)">{{ n }}</li>
-                </ul>
-              </div>
-
-              <div class="control">
-                <h5>Elements</h5> <hr>
-
-                <draggable :element="'ul'" 
-                           :options="options"
-                           width="100%"
-                           class="components-list"
-                >
-                  <li class="component-item" data-type="text-element">
-                    <i class="glyphicon glyphicon-font"></i>
-                    <p>Text</p>
-                  </li>
-                  <li class="component-item" data-type="image-element">
-                    <i class="fa fa-picture-o" aria-hidden="true"></i>
-                    <p>Image</p>
-                  </li>
-                  <li class="component-item" data-type="button-element">
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                    <p>CTA</p>
-                  </li>
-                  <li class="component-item" data-type="divider-element">
-                    <i class="fa fa-minus-square-o" aria-hidden="true"></i>
-                    <p>Divider</p>
-                  </li>
-                </draggable>  
-              </div>
+              <b-collapse id="element">
+                <b-card class="control">
+                  <draggable :element="'ul'" 
+                             :options="options"
+                             width="100%"
+                             class="components-list"
+                  >
+                    <li class="component-item" data-type="text-element">
+                      <i class="glyphicon glyphicon-font"></i>
+                      <p>Text</p>
+                    </li>
+                    <li class="component-item" data-type="image-element">
+                      <i class="fa fa-picture-o" aria-hidden="true"></i>
+                      <p>Image</p>
+                    </li>
+                    <li class="component-item" data-type="button-element">
+                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                      <p>CTA</p>
+                    </li>
+                    <li class="component-item" data-type="divider-element">
+                      <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+                      <p>Divider</p>
+                    </li>
+                  </draggable>  
+                </b-card>
+              </b-collapse>
+              <!-- END: Elements -->
             </div>
-
-          </div>
         </aside>
         <!-- END: Left Bar -->
 
@@ -121,12 +147,13 @@
 </template>
 
 <script>
-  import Module from './Module.vue'
-  import ComponentSettings from './ComponentSettings.vue'
-  import moduleService from '../../services/module'
-  import Draggable from 'vuedraggable'
-  import Spinner from '../common/Spinner.vue'
-  import _ from 'lodash'
+  import Module from './Module.vue';
+  import ComponentSettings from './ComponentSettings.vue';
+  import moduleService from '../../services/module';
+  import Draggable from 'vuedraggable';
+  import BootstrapVue from 'bootstrap-vue';
+  import Spinner from '../common/Spinner.vue';
+  import _ from 'lodash';
 
   export default {
     name: 'EditModule',
@@ -159,6 +186,7 @@
       Module,
       ComponentSettings,
       Draggable,
+      BootstrapVue,
       Spinner
     },
     methods: {
@@ -385,18 +413,41 @@
     }
 
     .section-container {
-      background-color: #FFFFFF;
+      background-color: #F0F0F0;
+      padding: 0;
     }
 
     .left-bar {
-      border-right: 1px solid #ccc;
+      background-color: #FFFFFF;
+      padding: 0;
+      color: #666666;
 
       .fields {
-        padding: 0 10px;
-
-        .is-danger {
-          font-size: 12px;
-          padding-top: 5px;
+        button.module-settings-item{
+          line-height: 13px;
+          box-shadow: none;
+          border-bottom: 1px solid #F0F0F0;
+          border-top: 0;
+          border-left: 0;
+          border-right: 0;
+          padding: 11px 9px 12px 11px; 
+          &:hover, &:visited,
+          &:focus, &:active{
+            color: #666666;
+            outline: none;
+          }
+          p{
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+          } 
+        }
+        
+        #general-settings{
+          input.module-name{
+            font-size: 12px;
+            padding: 7px;
+          }
         }
 
         input:focus {
@@ -405,22 +456,20 @@
         }
 
         .control {
-          margin-top: 20px
+          padding: 15px 10px 15px 12px;
         }
 
-        .list-inline {
-          text-align: center;
-        }
+        .list-inline{
+          li {
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            cursor: pointer;
 
-        .list-inline li {
-          border: 1px solid #ccc;
-          padding: 5px 10px;
-          cursor: pointer;
-
-          &.selected {
-            border: 1px solid @focus;
+            &.selected {
+              border: 1px solid @focus;
+            }
           }
-        }
+        } 
       }
 
       .components-list {
@@ -428,23 +477,17 @@
         text-align: center;
 
         .component-item {
+          cursor: pointer;
           list-style-type: none;
-          width: 46%;
-          font-size: 22px;
-          text-align: center;
+          font-size: 14px;
           background-color: #f4f4f4;
           border: 1px solid #ccc;
-          margin: 2px 0;
           padding: 5px;
-          cursor: pointer;
-          display: inline-block;
-          height: 60px;
-
           i {
             margin: 0 5px;
           }
-
           p{
+            display: inline-block;
             font-size: 14px;
             margin: 0px;
             padding: 0px;
@@ -462,20 +505,12 @@
       }
     }
 
-    .right-bar {
-      border-left: 1px solid #ccc;
-    }
-
-    .module-container {
-
-    }
-
     .module-table {
       min-height: 100px;
     }
 
-    .module-table .st-col {
-      background-color: #f4f4f4;
+    .module-table .st-col, .right-bar {
+      background-color: #FFFFFF;
     }
 
     .is-danger {
