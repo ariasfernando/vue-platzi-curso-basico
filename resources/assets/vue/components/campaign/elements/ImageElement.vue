@@ -19,8 +19,6 @@
                border="0"
           >
         </a>
-        <div class="icon-move st-move"><i class="glyphicon glyphicon-move st-move"></i></div> 
-        <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-remove-sign st-remove"></i></div> 
       </td>
     </tr>
   <!-- IMAGE ELEMENT ENDS -->
@@ -37,6 +35,13 @@
     ],
     created () {
       this.setupModule();
+    },
+    data(){
+      return {
+        imageUrl(imagePath) {
+          return this.$app.imageUrl + imagePath;
+        }
+      }
     },
     methods: {
       setupModule () {

@@ -10,7 +10,13 @@ import store from './store';
 import BootstrapVue from 'bootstrap-vue';
 
 Vue.use(Config);
-Vue.use(Toast);
+Vue.use(Toast, {
+  horizontalPosition: 'center',
+  verticalPosition: 'bottom',
+  parent: 'body',
+  transition: 'fade',
+  duration: 5000,
+});
 Vue.use(VueResource);
 Vue.use(interceptors);
 Vue.use(VueRouter);
