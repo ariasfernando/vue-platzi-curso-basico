@@ -3,7 +3,7 @@
   <tr data-type="text-element">
     <td width="100%" class="st-text-style st-position-relative" align="center" :style="component.style">
       <p v-if="this.fixed">{{ component.text }}</p>
-      <tiny-mce v-else :id="editorId" :value="component.text" data-key="text"></tiny-mce>
+      <tiny-mce v-else :id="editorId" :toolbar="toolbar" :value="component.text" data-key="text"></tiny-mce>
     </td>
   </tr>
   <!-- TEXT ELEMENT ENDS -->

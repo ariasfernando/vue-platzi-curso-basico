@@ -23,7 +23,7 @@
                :style="component.style"  
             >
               <p v-if="this.fixed">{{ component.text }}</p>
-              <tiny-mce v-else :id="editorId" :options="toolbar" :value="component.text" data-key="text"></tiny-mce>
+              <tiny-mce v-else :id="editorId" :toolbar="toolbar" :value="component.text" data-key="text"></tiny-mce>
             </a>
           </td>
         </tr>

@@ -19,19 +19,11 @@
               :bgcolor="component.attribute.bgcolor"
               :height="component.attribute.height"
           >
-            <a @click.prevent
-               :href="component.attribute.href" 
-               :target="component.attribute.target" 
-               :style="component.style"  
-            >
-              <tiny-mce :id="editorId" 
-                        :options="component.editor" 
-                        :value="component.text" 
-                        data-key="text"
-                        @input="input"></tiny-mce>
+            <a @click.prevent :href="component.attribute.href" :target="component.attribute.target" :style="component.style">
+              <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
             </a>
-            <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div>   
-            <div class="icon-remove st-remove" @click="removeComponent" ><i class="glyphicon glyphicon-remove-sign st-remove"></i></div>   
+            <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div>
+            <div class="icon-remove st-remove" @click="removeComponent" ><i class="glyphicon glyphicon-remove-sign st-remove"></i></div>
           </td>
         </tr>
       </table>

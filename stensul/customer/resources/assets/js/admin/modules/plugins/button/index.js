@@ -1,3 +1,5 @@
-let button = {};
+const richEditor = require('../common/richEditor');
 
-module.exports = button;
+module.exports = {
+  richEditor,
+};
