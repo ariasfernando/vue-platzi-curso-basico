@@ -32,33 +32,27 @@ const plugin = {
       type: 'switch',
       value: true,
     },
-    {
-      label: 'Link',
-      name: 'link',
-      type: 'switch',
-      value: true,
-    },
   ],
   init: (v) => {
     console.log('[Init Plugin] Rich Editor');
     const $wrapper = $('.plugin-rich-editor');
-    const $fixedInput = $('.field-fixed input');
+    const $fixedField = $('.field-fixed .vue-js-switch');
 
     // Load data
-    if ($fixedInput.prop('checked')) {
-      $wrapper.find('input').removeAttr('disabled').parent().css('cursor', 'pointer');
-    } else {
+    if ($fixedField.is('.toggled')) {
       $wrapper.find('input').attr('disabled', true).parent().css('cursor', 'not-allowed');
-      $fixedInput.removeAttr('disabled').parent().css('cursor', 'pointer');
+      $fixedField.find('input').removeAttr('disabled').parent().css('cursor', 'pointer');
+    } else {
+      $wrapper.find('input').removeAttr('disabled').parent().css('cursor', 'pointer');
     }
 
     // Handle changes
-    $fixedInput.change((e) => {
-      if ($fixedInput.prop('checked')) {
-        $wrapper.find('input').removeAttr('disabled').parent().css('cursor', 'pointer');
-      } else {
+    $fixedField.find('input').change((e) => {
+      if ($fixedField.is('.toggled')) {
         $wrapper.find('input').attr('disabled', true).parent().css('cursor', 'not-allowed');
-        $fixedInput.removeAttr('disabled').parent().css('cursor', 'pointer');
+        $fixedField.find('input').removeAttr('disabled').parent().css('cursor', 'pointer');
+      } else {
+        $wrapper.find('input').removeAttr('disabled').parent().css('cursor', 'pointer');
       }
     });
   },

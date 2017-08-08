@@ -243,7 +243,6 @@
               plugins[name] = plugin;
             });
 
-
             if (this.$customer) {
               // Check for customer Plugins
               const customerPlugins = uc.getPath(this.$customer, 'admin.modules.plugins', {});
@@ -252,10 +251,12 @@
               });
             }
 
+            // Merge default plugins with module data
             _.each(component.plugins, (plugin, name) => {
               _.extend(plugins[name].fields, plugin.fields);
             });
 
+            // Add init function to current module
             this.$store.commit('module/attachPlugins', {
               colId,
               componentId,
