@@ -1,23 +1,23 @@
 module.exports = {
-  "type": "divider-element",
-  "style": {
-    "backgroundColor": "#FFFFFF",
-    "height": "5px"
+  type: 'divider-element',
+  style: {
+    backgroundColor: '#FFFFFF',
+    height: '5px',
   },
-  "settings": [
+  settings: [
     {
-      "link": "style",
-      "label": "Background Color",
-      "name": "backgroundColor",
-      "type": "text",
-      "value": "#FFFFFF"
+      link: 'style',
+      label: 'Background Color',
+      name: 'backgroundColor',
+      type: 'text',
+      value: '#FFFFFF',
     },
     {
-      "link": "style",
-      "label": "Height",
-      "name": "height",
-      "type": "text",
-      "value": "5px"
-    }
-  ]
+      link: 'style',
+      label: 'Height',
+      name: 'height',
+      type: 'text',
+      value: '5px',
+    },
+  ],
 };

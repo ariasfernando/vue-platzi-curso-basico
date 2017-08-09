@@ -22,14 +22,9 @@
                :target="component.attribute.target" 
                :style="component.style"  
             >
-              <tiny-mce :id="editorId" 
-                        :options="component.editor" 
-                        :value="component.text" 
-                        data-key="text"
-                        @input="input"></tiny-mce>
+              <p v-if="this.fixed">{{ component.text }}</p>
+              <tiny-mce v-else :id="editorId" :toolbar="toolbar" :value="component.text" data-key="text"></tiny-mce>
             </a>
-            <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div>   
-            <div class="icon-remove st-remove" @click="removeComponent" ><i class="glyphicon glyphicon-remove-sign st-remove"></i></div>   
           </td>
         </tr>
       </table>
@@ -57,7 +52,8 @@
     data(){
       return {
         editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-'),
-        toolbar: ''
+        toolbar: '',
+        fixed: false
       }
     },
     created () {
@@ -69,6 +65,10 @@
           _.each(this.component.plugins.richEditor.fields, (option) => {
             if (option.value === true) {
               this.toolbar += ' ' + option.name;
+            }
+
+            if (option.name === 'fixed') {
+              this.fixed = option.value;
             }
           });
         }

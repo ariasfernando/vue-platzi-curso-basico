@@ -63,6 +63,9 @@ const mutations = {
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);
   },
+  attachPlugins(state, data) {
+    state.module.structure.columns[data.colId].components[data.componentId].plugins = data.plugins;
+  },
   removeComponents(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);
   },

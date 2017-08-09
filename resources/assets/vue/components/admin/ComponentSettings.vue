@@ -3,7 +3,7 @@
     <h4>Element Settings</h4><hr>
     <div class="default-settings">
       <form class="form-horizontal">
-        <div class="form-group" v-for="(setting, key) in component.settings">
+        <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings">
           <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
           <div class="col-sm-8">
             <input v-if="setting.type === 'text'" v-model="setting.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(setting.name) }"
@@ -21,11 +21,11 @@
 
     <p class="sep"><br></p>
 
-    <div v-for="(plugin, key) in component.plugins">
+    <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.id">
       <h4>{{ plugin.name }}</h4><hr>
       <div class="default-settings">
         <form class="form-horizontal">
-          <div class="form-group" v-for="field in plugin.fields">
+          <div class="form-group" :class="'field-' + field.name" v-for="field in plugin.fields">
             <label class="col-sm-4 control-label" :for="field.name">{{ field.label }}</label>
             <div class="col-sm-8">
               <input v-if="field.type === 'text'" v-model="field.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }"
@@ -50,6 +50,8 @@
   import ToggleButton from '../common/ToggleButton.vue'
   import _ from 'lodash'
   import uc from 'underscore-contrib'
+  import defaultElements from '../../resources/elements'
+  import Plugins from '../../plugins/admin'
 
   export default {
     components: {
@@ -63,22 +65,34 @@
     },
     computed: {
       currentComponent() {
-        return this.$store.state.module.currentComponent;
+        return this.$store.getters["module/currentComponent"];
       }
     },
     watch : {
       currentComponent: {
         handler: function() {
-          let module = this.$store.state.module.module;
+          let module = this.$store.getters["module/module"];
           if (!_.isEmpty(this.currentComponent) &&  (this.currentComponent.componentId >= 0) ) {
             this.component = _.cloneDeep(module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId]);
             this.ready = true;
+
+            setTimeout(() => {
+              this.initPlugins();
+            }, 100);
+
           }
         },
         deep: true
       },
     },
     methods: {
+      initPlugins() {
+        _.each(this.component.plugins, (plugin) => {
+          if (plugin.init && _.isFunction(plugin.init)) {
+            plugin.init(this);
+          }
+        });
+      },
       saveComponent() {
         _.each(this.component.settings, (option, index) => {
           if (option.link === 'style') {

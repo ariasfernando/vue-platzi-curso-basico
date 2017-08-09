@@ -7,8 +7,6 @@
             <td :style="component.style"></td>
           </tr>
         </table>
-        <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
-        <div class="icon-remove st-remove"  @click="removeComponent"><i class="glyphicon glyphicon-remove-sign st-remove"></i></div>
       </td>
     </tr>
   <!-- DIVIDER ELEMENT ENDS -->

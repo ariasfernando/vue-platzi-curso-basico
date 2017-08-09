@@ -1,5 +1,6 @@
 
 let plugin = {
+  id: 'text-options',
   name: 'Text Options',
   fields: [
     {

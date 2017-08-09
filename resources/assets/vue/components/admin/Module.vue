@@ -174,6 +174,9 @@
         return this.$store.state.module.module
       }
     },
+    mounted() {
+      this.initPlugins();
+    },
     methods: {
       onAdd(e){
         let elType = e.clone.getAttribute('data-type');
@@ -208,13 +211,6 @@
           attribute: this.module.structure.columns[colId].components[e.newIndex].attribute || {}
         });
 
-        // Init plugins
-        _.each(el.plugins, (plugin) => {
-          if (plugin.init && _.isFunction(plugin.init)) {
-            plugin.init(this);
-          }
-        });
-
         if (e.clone.getAttribute('class') === 'component-item') {
           e.clone.style.opacity = "1";
           cloneItem.parentNode.removeChild(cloneItem);
@@ -235,6 +231,40 @@
       },
       setComponent(ref) {
         this.$store.commit("module/setCurrentComponent", ref);
+      },
+      initPlugins() {
+        _.each(this.module.structure.columns, (column, colId) => {
+          _.each(column.components, (component, componentId) => {
+
+            // Base plugins
+            let plugins = {};
+
+            _.each(Plugins[component.type.replace('-element', '')], (plugin, name) => {
+              plugins[name] = plugin;
+            });
+
+            if (this.$customer) {
+              // Check for customer Plugins
+              const customerPlugins = uc.getPath(this.$customer, 'admin.modules.plugins', {});
+              _.each(customerPlugins[component.type.replace('-element', '')], (plugin, name) => {
+                plugins[name] = plugin;
+              });
+            }
+
+            // Merge default plugins with module data
+            _.each(component.plugins, (plugin, name) => {
+              _.extend(plugins[name].fields, plugin.fields);
+            });
+
+            // Add init function to current module
+            this.$store.commit('module/attachPlugins', {
+              colId,
+              componentId,
+              plugins,
+            });
+
+          });
+        });
       }
     }
   };
