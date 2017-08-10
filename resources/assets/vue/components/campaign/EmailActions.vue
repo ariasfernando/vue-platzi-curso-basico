@@ -36,7 +36,7 @@
         </button>
 
         <button class="btn btn-default proof-open-modal" v-if="this.$app.proofConfig.status"
-            v-bind:data-campaign-id="campaign.campaign_id"
+            v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
         >Send for review</button>
 
         <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" @click="complete">
