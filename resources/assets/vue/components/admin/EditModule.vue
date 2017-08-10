@@ -46,7 +46,7 @@
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
              
-              <b-collapse id="general-settings">
+              <b-collapse id="general-settings" accordion="module-setting-accordion">
                 <b-card class="control" 
                         :class="{'has-error': errors.has('name') }">
                   <input :value="module.name" 
@@ -67,7 +67,7 @@
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
               
-              <b-collapse id="module-setting">
+              <b-collapse id="module-setting" accordion="module-setting-accordion">
                 <b-card class="control">
                   <p>Columns</p> 
                   <ul class="list-inline">
@@ -83,7 +83,7 @@
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
 
-              <b-collapse id="element">
+              <b-collapse id="element" accordion="module-setting-accordion">
                 <b-card class="control">
                   <draggable :element="'ul'" 
                              :options="options"
@@ -91,7 +91,7 @@
                              class="components-list"
                   >
                     <li class="component-item" data-type="text-element">
-                      <i class="glyphicon glyphicon-font"></i>
+                      <i class="fa fa-align-justify"></i>
                       <p>Text</p>
                     </li>
                     <li class="component-item" data-type="image-element">
@@ -99,11 +99,11 @@
                       <p>Image</p>
                     </li>
                     <li class="component-item" data-type="button-element">
-                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                      <i class="fa fa-square" aria-hidden="true"></i>
                       <p>CTA</p>
                     </li>
                     <li class="component-item" data-type="divider-element">
-                      <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+                      <i class="fa fa-minus-square" aria-hidden="true"></i>
                       <p>Divider</p>
                     </li>
                   </draggable>  
@@ -423,6 +423,9 @@
       color: #666666;
 
       .fields {
+        .fa.pull-left{
+          margin-right: 12px; 
+        }
         button.module-settings-item{
           line-height: 13px;
           box-shadow: none;
@@ -440,7 +443,13 @@
             font-size: 14px;
             margin: 0;
             padding: 0;
-          } 
+          }
+          i.pull-right{
+            color:#CCCCCC;
+          }
+          &[aria-expanded="true"]{
+            background-color: #F0F0F0;
+          }
         }
         
         #general-settings{
@@ -456,13 +465,17 @@
         }
 
         .control {
+          border-bottom: 1px solid #f0f0f0;
           padding: 15px 10px 15px 12px;
         }
 
         .list-inline{
+          padding: 0;
+          margin:0;
+
           li {
             border: 1px solid #ccc;
-            padding: 5px 10px;
+            padding: 2px 24px;
             cursor: pointer;
 
             &.selected {
@@ -474,15 +487,21 @@
 
       .components-list {
         padding: 0;
-        text-align: center;
+        margin: 0;
 
-        .component-item {
+        .component-item{
           cursor: pointer;
           list-style-type: none;
           font-size: 14px;
           background-color: #f4f4f4;
-          border: 1px solid #ccc;
+          border-top: 1px solid #ccc;
+          border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;
+          border-bottom: 0;
           padding: 5px;
+          &:last-of-type{
+            border: 1px solid #ccc;
+          }
           i {
             margin: 0 5px;
           }
