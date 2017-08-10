@@ -8,14 +8,21 @@ const state = {
   modules: [],
   editedModules: [],
   editedSettings: {},
+  currentComponent: {},
   modalComplete: false,
   modalPreview: false,
   buildingMode: 'desktop',
 };
 
 const getters = {
-  getModules(state) {
+  modules(state) {
     return state.modules;
+  },
+  campaign(state) {
+    return state.campaign;
+  },
+  currentComponent(state) {
+    return state.currentComponent;
   },
   templateWidth(state) {
     const templateWidth = 600;
@@ -83,6 +90,10 @@ const mutations = {
   },
   setProcessStatus(state, processed = true) {
     state.campaign.campaign_data.processed = processed;
+  },
+  setCurrentComponent(state, data) {
+    console.log('asd');
+    state.currentComponent = data;
   },
   error(err) {
     console.error(err);

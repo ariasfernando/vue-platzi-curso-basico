@@ -1,6 +1,6 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-    <tr data-type="divider-element">
+    <tr data-type="divider-element" @click.prevent="setComponent">
       <td class="st-separator st-position-relative" :style="component.style">
         <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
@@ -37,12 +37,15 @@
         this.separatorHeight = this.component.height;
         this.separatorWidth = this.component.width;
       },
-      setComponent() {
-        this.$store.commit("module/setCurrentComponent", {
-          columnId: this.columnId,
-          componentId: this.componentId
-        });
-      }
+      setComponent(e) {
+        if (!$(e.target).hasClass("st-remove")){
+          this.$store.commit("campaign/setCurrentComponent", {
+            moduleId: this.moduleId,
+            columnId: this.columnId,
+            componentId: this.componentId
+          });
+        }
+      },
     }
   };
 </script>

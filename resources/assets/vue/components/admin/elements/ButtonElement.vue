@@ -64,8 +64,8 @@
       styleComponent: {
         handler: function() {
           if (!_.isEmpty(this.styleComponent) && 
-            this.currentComponent.columnId == this.columnId && 
-            this.currentComponent.componentId == this.componentId ) 
+            this.currentComponent.columnId === this.columnId &&
+            this.currentComponent.componentId === this.componentId )
           {
             this.component.style = this.styleComponent.style;
             this.component.attribute = this.styleComponent.attribute;
