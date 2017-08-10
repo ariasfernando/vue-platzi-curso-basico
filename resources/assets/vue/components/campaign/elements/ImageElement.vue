@@ -1,6 +1,6 @@
 <template>
   <!-- IMAGE ELEMENT -->
-    <tr data-type="image-element"s>
+    <tr data-type="image-element" @click.prevent="setComponent">
       <td align="center" 
           :style="component.style" 
           class="st-position-relative"
@@ -51,8 +51,15 @@
           this.elementConfig = this.component.directives.elementConfig;
         }
       },
-      changed (event) {
-      }
+      setComponent(e) {
+        if (!$(e.target).hasClass("st-remove")){
+          this.$store.commit("campaign/setCurrentComponent", {
+            moduleId: this.moduleId,
+            columnId: this.columnId,
+            componentId: this.componentId
+          });
+        }
+      },
     }
   };
 </script>

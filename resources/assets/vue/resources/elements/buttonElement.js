@@ -118,4 +118,5 @@ module.exports = {
       value: '10px',
     },
   ],
+  userData: ['paddingRight, width']
 };

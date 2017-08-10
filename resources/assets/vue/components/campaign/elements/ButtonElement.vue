@@ -1,6 +1,6 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
-  <tr data-type="button-element">
+  <tr data-type="button-element" @click.prevent="setComponent">
     <td :align="component.attribute.align" 
         class="st-position-relative"
     >
@@ -72,7 +72,16 @@
             }
           });
         }
-      }
+      },
+      setComponent(e) {
+        if (!$(e.target).hasClass("st-remove")){
+          this.$store.commit("campaign/setCurrentComponent", {
+            moduleId: this.moduleId,
+            columnId: this.columnId,
+            componentId: this.componentId
+          });
+        }
+      },
     }
   };
 </script>

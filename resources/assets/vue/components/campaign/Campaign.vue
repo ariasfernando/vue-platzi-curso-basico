@@ -14,6 +14,10 @@
       <email-canvas v-if="ready"></email-canvas>
     </section>
 
+    <aside class="component-settings-wrapper">
+      <component-settings v-if="currentComponent"></component-settings>
+    </aside>
+
     <!-- Modals -->
     <modal-complete></modal-complete>
     <modal-preview></modal-preview>
@@ -31,6 +35,7 @@
   import ModalProof from './modals/ModalProof.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import EmailCanvas from './EmailCanvas.vue'
+  import ComponentSettings from './ComponentSettings.vue'
   import Spinner from '../common/Spinner.vue'
 
   export default {
@@ -40,6 +45,7 @@
       CampaignConfiguration,
       CampaignMenu,
       EmailCanvas,
+      ComponentSettings,
       ModalComplete,
       ModalPreview,
       ModalProof,
@@ -52,10 +58,10 @@
     },
     computed: {
       campaign() {
-        return this.$store.campaign.campaign;
+        return this.$store.getters["campaign/campaign"];
       },
-      library() {
-        return this.$store.campaign.library;
+      currentComponent() {
+        return this.$store.getters["campaign/currentComponent"];
       }
     },
     methods: {
@@ -78,4 +84,19 @@
 
 <style lang="less">
   @import '../../less/campaign';
+
+  .component-settings-wrapper {
+    padding-left: 20px;
+
+    .component-settings {
+      background: #FFFFFF;
+      border-radius: 5px;
+      padding: 0 15px;
+      border: 1px solid transparent;
+    }
+  }
+
+  aside {
+    width: 20%;
+  }
 </style>
