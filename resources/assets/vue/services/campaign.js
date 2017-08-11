@@ -23,20 +23,63 @@ export default {
     return deferred.promise;
   },
 
-  saveCampaign() {
+  saveCampaign(data) {
     const endpoint = endpoints.campaign.saveCampaign;
     const editedCampaign = this.getEditedData();
     const deferred = Q.defer();
 
+    editedCampaign.campaign.bodyHtml = data.bodyHtml;
+
+    const dataCampaign = new Campaign({
+      settings: editedCampaign.settings,
+      campaign: editedCampaign.campaign,
+      modules: editedCampaign.modules,
+    });
+
     const params = {
       endpoint: endpoints.campaign.saveCampaign,
-      json: editedCampaign,
+      json: dataCampaign,
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve({
+        campaignId: response.body,
+        campaign: dataCampaign,
+      });
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+  processCampaign(campaignId) {
+    const endpoint = endpoints.campaign.processCampaign;
+    const deferred = Q.defer();
+
+    const params = {
+      endpoint,
+      json: {
+        campaign_id: campaignId,
+      },
     };
 
     request[endpoint.method](params).then((response) => {
       deferred.resolve(response.body);
     }).catch((err) => {
       deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+
+  completeCampaign(data) {
+    const deferred = Q.defer();
+    let promises = [this.saveCampaign(data), this.processCampaign(data.campaign.campaign_id)];
+
+    Q.all(promises).then(results => {
+      if ( results[1].processed ) {
+        deferred.resolve(results[1].processed);
+      }
     });
 
     return deferred.promise;
@@ -74,12 +117,10 @@ export default {
       }
     }
 
-    const dataCampaign = new Campaign({
+    return {
       campaign,
       settings: editedSettings,
       modules,
-    });
-
-    return dataCampaign;
+    };
   },
 };
