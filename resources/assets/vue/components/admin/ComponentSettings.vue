@@ -1,16 +1,16 @@
 <template>
   <div class="component-settings" v-if="ready">
-    <h4>Element Settings</h4><hr>
+    <h4>Element Settings</h4>
     <div class="default-settings">
       <form class="form-horizontal">
         <div class="form-group" v-for="(setting, key) in component.settings">
-          <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
-          <div class="col-sm-8">
+          <label class="col-sm-7 pull-left control-label" :for="setting.name">{{ setting.label }}</label>
+          <div class="col-sm-5 pull-right">
             <input v-if="setting.type === 'text'" v-model="setting.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(setting.name) }"
                    :name="setting.name" type="text" :placeholder="setting.label" @change="saveComponent">
 
             <span v-if="setting.type === 'switch'">
-              <toggle-button :value="setting.value" color="#82C7EB" :sync="true" :labels="true" @change="changeSetting(key, setting)"></toggle-button>
+              <toggle-button :value="setting.value" color="#78DCD6" :sync="true" :labels="true" @change="changeSetting(key, setting)"></toggle-button>
             </span>
 
             <span v-show="errors.has(setting.name)" class="help is-danger">{{ errors.first(setting.name) }}</span>
@@ -19,20 +19,18 @@
       </form>
     </div>
 
-    <p class="sep"><br></p>
-
     <div v-for="(plugin, key) in component.plugins">
-      <h4>{{ plugin.name }}</h4><hr>
+      <h4>{{ plugin.name }}</h4>
       <div class="default-settings">
         <form class="form-horizontal">
           <div class="form-group" v-for="field in plugin.fields">
-            <label class="col-sm-4 control-label" :for="field.name">{{ field.label }}</label>
-            <div class="col-sm-8">
+            <label class="col-sm-7 pull-left control-label" :for="field.name">{{ field.label }}</label>
+            <div class="col-sm-5 pull-right">
               <input v-if="field.type === 'text'" v-model="field.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }"
                      :name="field.name" type="text" :placeholder="field.label" :link="field.link" @change="saveComponent">
 
               <span v-if="field.type === 'switch'">
-                <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true" @change="changePlugin(key, field)"></toggle-button>
+                <toggle-button :value="field.value" color="#78DCD6" :sync="true" :labels="true" @change="changePlugin(key, field)"></toggle-button>
               </span>
               <span v-show="errors.has(field.name)" class="help is-danger">{{ errors.first(field.name) }}</span>
             </div>

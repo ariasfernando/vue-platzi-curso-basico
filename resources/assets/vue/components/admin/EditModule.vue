@@ -2,7 +2,7 @@
   <div class="col-xs-12 module">
     <div class="row header">
       <div class="col-xs-3 header-col">
-        <div class="col-xs-4 back vertical-center">
+        <div class="beta-btn-secondary pull-left">
           <i class="glyphicon glyphicon-menu-left"></i>
           <router-link to="/">Back</router-link>
         </div>
@@ -10,7 +10,7 @@
       </div>
 
       <div class="col-xs-6 header-col">
-        <div class="vertical-center">
+        <div class="section-title vertical-center">
           <div class="switch">
             <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
             <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="changeMode('desktop')">
@@ -27,19 +27,19 @@
 
       <div class="col-xs-3 header-col">
         <div class="vertical-center pull-right">
-          <a class="btn btn-continue" href="#" @click.prevent="saveModule('draft')" :disabled="errors.any()">Save as draft<i class="glyphicon glyphicon-triangle-right"></i></a>
-          <a class="btn btn-continue" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-triangle-right"></i></a>
+          <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" @click.prevent="saveModule('draft')" :disabled="errors.any()">Save as draft<i class="glyphicon glyphicon-menu-right"></i></a>
+          <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-menu-right"></i></a>
         </div>
       </div>
     </div>
 
     <div class="row">
-      <section v-if="ready" class="col-xs-12 section-container">
+      <section v-if="ready" class="col-xs-12 section-container" id="edit-container">
 
         <!-- START: Left Bar -->
         <aside class="col-xs-2 left-bar">
           <div class="module-settings">
-            <h4>Module Settings</h4><hr>
+            <h4>Module Settings</h4>
 
             <div class="fields">
 
@@ -49,7 +49,7 @@
               </div>
 
               <div class="control">
-                <h5>Columns</h5> <hr>
+                <h5>Columns</h5>
 
                 <ul class="list-inline">
                   <li v-for="n in maxCols" :class="module.structure.columns.length === n ? 'selected' : ''" @click="setColumns(n)">{{ n }}</li>
@@ -57,7 +57,7 @@
               </div>
 
               <div class="control">
-                <h5>Elements</h5> <hr>
+                <h5>Elements</h5>
 
                 <draggable :element="'ul'" 
                            :options="options"
@@ -65,7 +65,7 @@
                            class="components-list"
                 >
                   <li class="component-item" data-type="text-element">
-                    <i class="glyphicon glyphicon-font"></i>
+                    <i class="glyphicon glyphicon-menu-hamburger"></i>
                     <p>Text</p>
                   </li>
                   <li class="component-item" data-type="image-element">
@@ -89,8 +89,8 @@
         <!-- END: Left Bar -->
 
         <!-- START: Module Container -->
-        <div class="col-xs-7 module-container">
-          <div class="col-xs-12">
+        <div class="col-xs-8 module-container">
+          <div class="col-xs-12 nopadding">
             <module></module>
           </div>
 
@@ -237,6 +237,12 @@
 
         const container = document.getElementsByClassName('base-admin')[0];
         container.style.paddingLeft = 0;
+
+        var modMargin = document.getElementById('admin-module-container');
+        modMargin.className -= ('col-xs-12');
+
+        const contMargin = document.getElementById('edit-container');
+        contMargin.style.paddingLeft = 0;
       }
     },
     created () {
@@ -250,24 +256,69 @@
 
 <style lang="less">
   @stensul-purple: #514960;
+  @stensul-white: #FFFFFF;
   @stensul-purple-light: lighten(@stensul-purple, 20%);
-  @focus: #69dac8;
+  @focus: #78DCD6;
 
   @brand-primary: lighten(@stensul-purple, 35%);
   @brand-secondary: @stensul-purple-light;
 
+  #studio{
+    .section-container{
+      font-family: 'Open Sans', Arial, serif;
+    }
+
+  }
+
   .module {
-    hr {
-      border-top: 1px solid #ccc;
-      margin: 0 0 10px 0;
+    margin-top: -15px;
+
+    .m-l-button{
+      margin-left: 7px!important;
+    }
+
+    .module-settings {
+
+      h4{
+        font-size: 14px;
+        text-transform: uppercase;
+        color: #666666;
+        font-weight: normal;
+        padding: 14px 10px;
+        border-bottom: 1px solid #D4D4D4;
+        margin: 0px -10px;
+      }
+
+      h5{
+        font-size: 12px;
+        text-transform: uppercase; 
+        color: #666666;
+        font-weight: 300;
+        padding: 5px 0px 0px 0px;
+      }
+
+    }
+
+    .component-settings{
+
+      h4{
+        font-size: 14px;
+        text-transform: uppercase;
+        color: #666666;
+        font-weight: normal;
+        padding: 14px 10px;
+        border-bottom: 1px solid #D4D4D4;
+        margin: 0px -10px 15px -10px;
+      }
+
     }
 
     .header {
-      color: #FFFFFF;
-      background-color: @stensul-purple;
-      height: 60px;
-      box-shadow: 0 8px 6px -6px #000;
-      padding: 0;
+      color: @stensul-purple;
+      background-color: #FFFFFF;
+      height: 50px;
+      padding: 15px 0;
+      border-bottom: 1px solid #DDDDDD;
 
       .header-col {
         height: 100%;
@@ -377,19 +428,62 @@
 
       .section-title {
         font-size: 18px;
+        font-family: 'Open Sans', Arial, sans-serif;
+        font-weight: 300;
+        margin-top: -1px;
+      }
+    }
+
+    .beta-btn-primary{
+      margin-top: -8px;
+      background: @stensul-purple;
+      border: none;
+
+      &:hover{
+        border: none;
+      }
+    }
+
+    .beta-btn-secondary{
+      font-size: 14px;
+      font-weight: 400;
+      color: #666666;
+      padding: 7px 10px;
+      border: 1px solid #666666;
+      background: @stensul-white;
+      border: 1px solid #dddddd;
+      transition: all 0.3s linear;
+      margin: 0px;
+      margin-top: -8px;
+      border-radius: 2px;
+      cursor: pointer;
+
+      a{
+        color: #666666;
+
+        &:hover{
+          text-decoration: none;
+        }
       }
 
-      .btn {
-        margin: 5px;
+      &:hover{
+        background: @stensul-white;
+        color: #666666;
+        border: 1px solid @stensul-purple;
       }
     }
 
     .section-container {
       background-color: #FFFFFF;
+      padding-top: 0px;
+      display:table;
     }
 
     .left-bar {
-      border-right: 1px solid #ccc;
+      width: 210px;
+      display: table-cell;
+      float: none;
+      padding: 10px;
 
       .fields {
         padding: 0 10px;
@@ -405,7 +499,7 @@
         }
 
         .control {
-          margin-top: 20px
+          margin-top: 15px
         }
 
         .list-inline {
@@ -432,22 +526,29 @@
           width: 46%;
           font-size: 22px;
           text-align: center;
-          background-color: #f4f4f4;
-          border: 1px solid #ccc;
-          margin: 2px 0;
-          padding: 5px;
+          background-color: #F4F4F4;
+          border: 1px solid #D8D8D8;
+          margin: 1px 0px;
+          padding: 20px;
           cursor: pointer;
           display: inline-block;
-          height: 60px;
+
+          &:nth-child(even){
+            margin-left: 0px;
+          }
 
           i {
             margin: 0 5px;
+            color: #514960;
+            font-size: 20px;
           }
 
           p{
-            font-size: 14px;
+            font-size: 12px;
             margin: 0px;
             padding: 0px;
+            font-weight: 400px;
+            color: #666666;
           }
         }
       }
@@ -463,11 +564,44 @@
     }
 
     .right-bar {
-      border-left: 1px solid #ccc;
+      width: 210px;
+      display: table-cell;
+      float: none;
+      padding: 10px;
+
+      .form-group{
+        margin-bottom: 10px;
+      }
+
+      input[type=text]{
+        height: 22px;
+        background: #F4F4F4;
+        border-radius: 2px;
+        border: none;
+        float: right;
+        font-size: 12px;
+        font-weight: 300;
+        width: 50px;
+      }
+
+      label{
+        text-align: left;
+        color: #666666;
+        padding-top: 2px;
+      }
+
+      .vue-js-switch{
+        float: right;
+        padding-top: 0px;
+        margin: 0px;
+      }
     }
 
     .module-container {
-
+      padding: 20px;
+      background: #F0F0F0;
+      display: table-cell;
+      float: none;
     }
 
     .module-table {
@@ -475,12 +609,16 @@
     }
 
     .module-table .st-col {
-      background-color: #f4f4f4;
+      background-color: @stensul-white;
     }
 
     .is-danger {
       border: 1px solid red !important;
     }
+  }
+
+  .nopadding{
+    padding: 0px;
   }
 
 </style>
