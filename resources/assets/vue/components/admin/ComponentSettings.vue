@@ -25,15 +25,23 @@
       <h4>{{ plugin.name }}</h4><hr>
       <div class="default-settings">
         <form class="form-horizontal">
-          <div class="form-group" :class="'field-' + field.name" v-for="field in plugin.fields">
+          <div v-for="field in plugin.studio.fields" class="form-group" :class="'field-' + field.name">
             <label class="col-sm-4 control-label" :for="field.name">{{ field.label }}</label>
             <div class="col-sm-8">
-              <input v-if="field.type === 'text'" v-model="field.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }"
-                     :name="field.name" type="text" :placeholder="field.label" :link="field.link" @change="saveComponent">
 
+              <!-- Switch Inpput -->
               <span v-if="field.type === 'switch'">
                 <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true" @change="changePlugin(key, field)"></toggle-button>
               </span>
+
+              <!-- Text Inpput -->
+              <input v-if="field.type === 'text'" type="text" :name="field.name" :placeholder="field.label" v-model="field.value" :link="field.link"
+                     v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }" @change="saveComponent">
+
+              <!-- Color Inpput -->
+              <input v-if="field.type === 'color'" type="color" :name="field.name" :placeholder="field.label" v-model="field.value" :link="field.link"
+                     v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }" @change="saveComponent">
+
               <span v-show="errors.has(field.name)" class="help is-danger">{{ errors.first(field.name) }}</span>
             </div>
           </div>
@@ -51,7 +59,6 @@
   import _ from 'lodash'
   import uc from 'underscore-contrib'
   import defaultElements from '../../resources/elements'
-  import Plugins from '../../plugins/admin'
 
   export default {
     components: {
@@ -88,8 +95,8 @@
     methods: {
       initPlugins() {
         _.each(this.component.plugins, (plugin) => {
-          if (plugin.init && _.isFunction(plugin.init)) {
-            plugin.init(this);
+          if (plugin.studio.init && _.isFunction(plugin.studio.init)) {
+            plugin.studio.init(this);
           }
         });
       },
@@ -123,8 +130,8 @@
       changePlugin(key, field) {
         const plugin = this.component.plugins[key];
         field.value = !field.value;
-        const fieldIdx = plugin.fields.indexOf(field);
-        this.component.plugins[key].fields[fieldIdx] = field;
+        const fieldIdx = plugin.studio.fields.indexOf(field);
+        this.component.plugins[key].studio.fields[fieldIdx] = field;
         this.saveComponent();
       }
     }

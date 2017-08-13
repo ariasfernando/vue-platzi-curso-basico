@@ -1,7 +1,7 @@
+const modulePlugins = require('./plugins/modules');
+
 window.customer = {
-  admin: {
-    modules: {
-      plugins: require('./admin/modules/plugins'),
-    },
+  plugins: {
+    modules: modulePlugins,
   },
 };

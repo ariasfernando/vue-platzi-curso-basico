@@ -65,23 +65,21 @@
   }
 
   .module-toolbar {
-    position: absolute;
+    position: relative;
     background-color: @icon-option;
+    border: 1px solid @icon-option;
+    float: right;
     height: 30px; 
-    right: 35px;
+    right: -100px;
     div {
       cursor: pointer;
       display: none;
-      position: relative;
-      top:0%;
       text-align: center;
       color: #fff;
       z-index: 5;
       height: 30px;
       width: 30px;
-      border-radius: 100%;
       line-height: 30px;
-      background-color: @icon-option;
       opacity: 1;
     }
     .icon-move {

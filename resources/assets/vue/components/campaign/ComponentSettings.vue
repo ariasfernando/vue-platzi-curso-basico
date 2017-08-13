@@ -1,19 +1,37 @@
 <template>
   <div class="component-settings section-box" v-if="ready">
+
     <h4>Element Settings</h4><hr>
     <div class="default-settings">
       <form class="form-horizontal">
-        <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings">
-          <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
-          <div class="col-sm-8">
-            <input v-if="setting.type === 'text'" v-model="setting.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                   :name="setting.name" type="text" :placeholder="setting.label" @change="saveComponent">
+        <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.id">
+          <div v-if="plugin.campaign && plugin.campaign.fields">
+            <div class="default-settings">
+              <form class="form-horizontal">
+                <div v-for="(field, fieldName) in plugin.campaign.fields" class="form-group" :class="'field-' + fieldName">
+                  <label class="col-sm-4 control-label" :for="fieldName">{{ field.label }}</label>
+                  <div class="col-sm-8">
 
-            <span v-if="setting.type === 'switch'">
-              <toggle-button :value="setting.value" color="#82C7EB" :sync="true" :labels="true" @change="changeSetting(key, setting)"></toggle-button>
-            </span>
+                    <!-- Switch Inpput -->
+                    <span v-if="field.type === 'switch'">
+                      <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true" @change="changePlugin(key, field)"></toggle-button>
+                    </span>
 
-            <span v-show="errors.has(setting.name)" class="help is-danger">{{ errors.first(setting.name) }}</span>
+                    <!-- Text Inpput -->
+                    <input v-if="field.type === 'text'" type="text" :name="fieldName" :placeholder="field.label" :value="field.value" :data-plugin="plugin.id"
+                           v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(fieldName) }" @change="savePlugin">
+
+                    <!-- Color Inpput -->
+                    <input v-if="field.type === 'color'" type="color" :name="fieldName" :placeholder="field.label" :value="field.value" :data-plugin="plugin.id"
+                           v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(fieldName) }" @change="savePlugin">
+
+                    <!-- Error Message -->
+                    <span v-show="errors.has(fieldName)" class="help is-danger">{{ errors.first(fieldName) }}</span>
+
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </form>
@@ -27,7 +45,7 @@
   import _ from 'lodash'
   import uc from 'underscore-contrib'
   import defaultElements from '../../resources/elements'
-  import Plugins from '../../plugins/admin'
+  import Plugins from '../../plugins/modules'
 
   export default {
     components: {
@@ -36,6 +54,7 @@
     data () {
       return {
         ready: false,
+        pluginReady: false,
         component: {}
       }
     },
@@ -63,45 +82,41 @@
     methods: {
       initPlugins() {
         _.each(this.component.plugins, (plugin) => {
-          if (plugin.init && _.isFunction(plugin.init)) {
-            plugin.init(this);
+          if (plugin.campaign && plugin.campaign.init && _.isFunction(plugin.campaign.init)) {
+            plugin.campaign.init(this);
           }
         });
       },
-      saveComponent() {
-        _.each(this.component.settings, (option, index) => {
-          if (option.link === 'style') {
-            this.component.style[option.name] = option.value;
-          }
-          if (option.link === 'attribute') {
-            this.component.attribute[option.name] = option.value;
-          }
-        });
+      savePlugin(e) {
+        const pluginName = e.target.dataset.plugin;
+        const field = e.target.name;
+        const value = e.target.value;
+        let plugin = this.component.plugins[pluginName].campaign;
 
-        this.$store.commit('module/saveComponent', {
+        // TODO: Avoid changing component values directly
+        plugin.fields[field].value = value;
+
+        if (plugin.fields[field].attribute) {
+          this.component.attribute[plugin.fields[field].attribute] = value;
+        }
+        if (plugin.fields[field].style) {
+          this.component.style[plugin.fields[field].style] = value;
+        }
+        this.saveComponent();
+      },
+      saveComponent() {
+        this.$store.commit('campaign/saveComponent', {
+          moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
           component: this.component
         });
-
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style || {},
-          attribute: this.component.attribute || {}
-        }); 
-        
       },
       changeSetting(key, setting) {
         setting.value = !setting.value;
         this.component.settings[key] = setting;
         this.saveComponent();
       },
-      changePlugin(key, field) {
-        const plugin = this.component.plugins[key];
-        field.value = !field.value;
-        const fieldIdx = plugin.fields.indexOf(field);
-        this.component.plugins[key].fields[fieldIdx] = field;
-        this.saveComponent();
-      }
     }
   }
 </script>

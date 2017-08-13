@@ -92,8 +92,13 @@ const mutations = {
     state.campaign.campaign_data.processed = processed;
   },
   setCurrentComponent(state, data) {
-    console.log('asd');
     state.currentComponent = data;
+  },
+  saveComponent(state, data) {
+    const moduleId = data.moduleId;
+    const columnId = data.columnId;
+    const componentId = data.componentId;
+    state.modules[moduleId].structure.columns[columnId].components[componentId] = data.component;
   },
   error(err) {
     console.error(err);
