@@ -5,6 +5,7 @@
   >
     <td :align="component.attribute.align" 
         class="st-position-relative"
+        width="100%"
     >
       <table :width="component.attribute.width" 
              :height="component.attribute.height" 
