@@ -3,26 +3,32 @@
     <tr @click.prevent="setComponent"
         data-type="image-element"
     >
-      <td align="center" 
+      <td width="100%" 
+          align="center" 
           :style="component.style" 
           class="st-position-relative"
       >
-        <a @click.prevent
-           :href="component.attribute.href" 
-           :alt="component.attribute.alt"
-           :title="component.attribute.title"
-           :target="component.attribute.target"
-        >
-          <img class="st-resize st-image"
-               :src="imageUrl(component.attribute.placeholder)" 
-               :width="component.attribute.width" 
-               :height="component.attribute.height"
-               :data-open-element-config="elementConfig" 
-               border="0"
-          >
-        </a>
-        <div class="icon-move st-move"><i class="glyphicon glyphicon-move st-move"></i></div> 
-        <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-remove-sign st-remove"></i></div> 
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td width="100%" align="left">
+              <a @click.prevent
+                 :href="component.attribute.href" 
+                 :alt="component.attribute.alt"
+                 :title="component.attribute.title"
+                 :target="component.attribute.target"
+              >
+                <img class="st-resize st-image"
+                     :src="imageUrl(component.attribute.placeholder)" 
+                     :width="component.attribute.width" 
+                     :height="component.attribute.height"
+                     :data-open-element-config="elementConfig" 
+                     border="0"
+                >
+              </a>
+              <div class="icon-move st-move"><i class="glyphicon glyphicon-move st-move"></i></div> 
+              <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-remove-sign st-remove"></i></div> 
+            </td>
+          </tr>    
       </td>
     </tr>
   <!-- IMAGE ELEMENT ENDS -->
