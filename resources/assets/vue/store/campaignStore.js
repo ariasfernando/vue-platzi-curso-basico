@@ -12,6 +12,7 @@ const state = {
   modalComplete: false,
   modalPreview: false,
   buildingMode: 'desktop',
+  dirty: false,
 };
 
 const getters = {
@@ -35,6 +36,9 @@ const getters = {
     }
     return state.campaign.library_config.templateWidth || templateWidth;
   },
+  dirty(state) {
+    return state.dirty;
+  },
 };
 
 const mutations = {
@@ -47,6 +51,9 @@ const mutations = {
   },
   changeBuildingMode(state, buildingMode) {
     state.buildingMode = buildingMode;
+  },
+  setDirty(stte, dirty) {
+    state.dirty = dirty;
   },
   addModule(state, moduleData) {
     state.modules.push(moduleData);
@@ -108,7 +115,10 @@ const mutations = {
 const actions = {
   getCampaignData(context, campaignId) {
     return campaignService.getCampaign(campaignId)
-      .then(response => context.commit('loadCampaignData', response.campaign))
+      .then((response) => {
+        context.commit('loadCampaignData', response.campaign);
+        context.commit('setDirty', false);
+      })
       .catch(error => context.commit('error', error));
   },
   saveCampaign(context, data) {
@@ -143,6 +153,8 @@ const actions = {
       columnId: edited.columnId,
       componentId: edited.componentId,
     });
+
+    context.commit('setDirty', true);
 
     if (matches.length) {
       context.commit('updateEditedModule', edited);
