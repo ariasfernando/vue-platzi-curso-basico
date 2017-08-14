@@ -13,11 +13,11 @@
         <div class="section-title vertical-center">
           <div class="switch">
             <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-            <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="changeMode('desktop')">
+            <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="buildingMode = 'desktop'">
               <i class="fa fa-desktop"></i>
             </label>
             <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-            <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="changeMode('device')">
+            <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="buildingMode = 'mobile'">
               <i class="glyphicon glyphicon-phone"></i>
             </label>
             <span class="switch-selection"></span>
@@ -166,7 +166,7 @@
         <!-- END: Left Bar -->
         <!-- START: Module Container -->
         <div class="col-xs-8 module-container">
-          <div class="col-xs-12 nopadding">
+          <div class="module-wrapper" :class="buildingMode + '-mode'">
             <module></module>
           </div>
           <div v-if="$route.query.debug" class="col-xs-12">
@@ -213,6 +213,7 @@
     data () {
       return {
         ready: false,
+        buildingMode: 'desktop',
         maxCols: 5,
         tabIndex: null,
         options: {
@@ -322,9 +323,6 @@
         }
 
       },
-      changeMode(mode) {
-        this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});
-      },
       toggleSidebar() {
         const sidebar = document.getElementById('admin-sidebar');
         sidebar.style.display = 'none';
@@ -371,6 +369,17 @@
 
   .module {
     margin-top: -15px;
+
+    .module-wrapper {
+      margin: 0 auto;
+
+      &.desktop-mode {
+        width: 720px;
+      }
+      &.mobile-mode {
+        width: 480px;
+      }
+    }
 
     .m-l-button{
       margin-left: 7px!important;
