@@ -54,6 +54,9 @@ const mutations = {
   saveModuleSetting(state, data) {
    state.module.structure.style = data.style;
   },
+  saveModuleStyle(state, data) {
+   state.module.structure.style[data.property] = data.value;
+  },
   saveModule(state, moduleId) {
     state.module.id = moduleId;
   },

@@ -64,7 +64,7 @@
                              v-validate="'required'" 
                              type="text"
                              :value="styleValue"
-                             @input="saveModuleStyle()">
+                             @change="saveModuleStyle">
                       <span v-show="errors.has(key)" class="help is-danger">{{ errors.first(key) }}</span>
                     </div>
                   </div>
@@ -256,12 +256,12 @@
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
           });
       },
-      saveModuleStyle() {
-        this.$store.commit('module/saveModuleSetting',{
-          style: this.module.structure.style
+      saveModuleStyle(e) {
+        this.$store.commit('module/saveModuleStyle',{
+          property: e.target.name,
+          value: e.target.value,
         }); 
-
-      },  
+      },
       saveModule(status) {
         this.$store.commit("global/setLoader", true);
         this.setModuleField({ status });
