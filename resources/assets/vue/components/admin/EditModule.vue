@@ -35,44 +35,94 @@
 
     <div class="row">
       <section v-if="ready" class="col-xs-12 section-container">
-
         <!-- START: Left Bar -->
         <aside class="col-xs-2 left-bar">
             <div class="fields">
               <!-- START: General Settings -->
-              <b-btn block v-b-toggle.general-settings class="module-settings-item">
-                <i class="fa fa-cogs pull-left"></i>
-                <p class="pull-left">General Settings</p>
-                <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
-              </b-btn>
-             
-              <b-collapse id="general-settings" accordion="module-setting-accordion">
-                <b-card class="control" 
-                        :class="{'has-error': errors.has('name') }">
-                  <input :value="module.name" 
-                         :class="{'input': true, 'is-danger': errors.has('name') }"
-                         class="module-name"
-                         v-validate.initial="'required'" 
-                         name="name" 
-                         type="text" 
-                         placeholder="Module name" 
-                         @input="updateName">
-                </b-card>
-              </b-collapse>
-              <!-- END: General Settings -->
-              <!-- START: Module Settings -->
-              <b-btn block v-b-toggle.module-setting class="module-settings-item">
+              <b-btn block v-b-toggle.module-settings-left class="module-settings-item">
                 <i class="fa fa-cogs pull-left"></i>
                 <p class="pull-left">Module Settings</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
+             
+              <b-collapse id="module-settings-left" visible accordion="module-settings-accordion">
+                <b-card class="control" >
+                  <div class="row module-name" :class="{'has-error': errors.has('name') }">
+                    <input :value="module.name" 
+                           :class="{'input': true, 'is-danger': errors.has('name') }"
+                           v-validate.initial="'required'" 
+                           name="name" 
+                           type="text" 
+                           placeholder="Module name" 
+                           @input="updateName">
+                  </div>
+                  <div class="row" :class="'field-' + key" v-for="( styleValue, key, index) in module.structure.style">
+                    <label class="col-sm-8 control-label" :for="key">{{ key }}</label>
+                    <div class="col-sm-4">
+                      <input v-model="module.structure.style[key]" 
+                             :class="{'input': true, 'is-danger': errors.has(key) }"
+                             :name="key" 
+                             v-validate="'required'" 
+                             type="text" 
+                             @input="saveModuleStyle()">
+                      <span v-show="errors.has(key)" class="help is-danger">{{ errors.first(key) }}</span>
+                    </div>
+                  </div>
+                </b-card>
+              </b-collapse>
+              <!-- END: General Settings -->
+              <!-- START: Module Settings -->
+              <b-btn block v-b-toggle.column-settings class="module-settings-item">
+                <i class="fa fa-cogs pull-left"></i>
+                <p class="pull-left">Column Settings</p>
+                <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
+              </b-btn>
               
-              <b-collapse id="module-setting" accordion="module-setting-accordion">
-                <b-card class="control">
-                  <p>Columns</p> 
-                  <ul class="list-inline">
-                    <li v-for="n in maxCols" :class="module.structure.columns.length === n ? 'selected' : ''" @click="setColumns(n)">{{ n }}</li>
-                  </ul>
+              <b-collapse id="column-settings" accordion="module-settings-accordion">
+                <b-card class="control container-fluid" no-block>
+                  <div class="row">
+                    <label class="col-sm-4 control-label" for="set-column">Columns</label> 
+                    <div class="col-sm-8">
+                      <input class="input-number pull-right"
+                             name="column-number" 
+                             type="number"
+                             :value="tabIndex == null? 0 : tabIndex+1" 
+                             min="1"
+                             :max="maxCols"
+                             @input="setColumns"
+                      >
+                    </div> 
+                  </div>
+                  <b-tabs card ref="tabs" v-model="tabIndex">
+                    <!-- Render Tabs -->
+
+                    <b-tab :title="`${key+1}`" 
+                           :button-id="`column-${key}`" 
+                           :key="key"
+                           v-for="(column, key) in module.structure.columns" 
+                    >
+                      <div class="row" :class="'field-' + setting.name" v-for="(setting, keySettings ) in column.settings">
+                        <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
+                        <div class="col-sm-8">
+                          <input v-if="setting.type === 'text'"
+                                 v-model="setting.value" 
+                                 v-validate="'required'" 
+                                 type="text" 
+                                 :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                                 :name="setting.name" 
+                                 :placeholder="setting.label"
+                                 @change="saveColumnSettings(key)">
+                          <span v-show="errors.has(setting.name)" class="help is-danger">{{ errors.first(setting.name) }}</span>
+                        </div>
+                      </div>
+                      <!-- Tab Contents {{column}} -->
+                    </b-tab>
+                    <div slot="empty" class="text-center text-muted">
+                      There are no column
+                      <br> Add a new column using the number input.
+                    </div>
+
+                  </b-tabs>
                 </b-card>
               </b-collapse>
               <!-- END: Module Settings -->
@@ -83,7 +133,7 @@
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
 
-              <b-collapse id="element" accordion="module-setting-accordion">
+              <b-collapse id="element" accordion="module-settings-accordion">
                 <b-card class="control">
                   <draggable :element="'ul'" 
                              :options="options"
@@ -113,32 +163,26 @@
             </div>
         </aside>
         <!-- END: Left Bar -->
-
         <!-- START: Module Container -->
         <div class="col-xs-7 module-container">
           <div class="col-xs-12">
             <module></module>
           </div>
-
           <div v-if="$route.query.debug" class="col-xs-12">
             <br><br>
             <pre>{{ module.structure.columns }}</pre>
           </div>
         </div>
         <!-- END: Module Container -->
-
         <!-- START: Right Bar -->
         <aside class="col-xs-3 right-bar">
-
           <div class="module-settings" v-if="currentComponent">
             <div class="fields">
               <component-settings></component-settings>
             </div>
           </div>
-
         </aside>
         <!-- END: Right Bar -->
-
       </section>
     </div>
 
@@ -169,6 +213,7 @@
       return {
         ready: false,
         maxCols: 5,
+        tabIndex: null,
         options: {
           group:{
             name:'componentsList',  
@@ -210,6 +255,12 @@
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
           });
       },
+      saveModuleStyle() {
+        this.$store.commit('module/saveModuleSetting',{
+          style: this.module.structure.style
+        }); 
+
+      },  
       saveModule(status) {
         this.$store.commit("global/setLoader", true);
         this.setModuleField({ status });
@@ -236,7 +287,16 @@
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
           });
       },
-      setColumns(cols) {
+      saveColumnSettings(key) {
+        _.each(this.module.structure.columns[key].settings, (option, index) => {
+          if (option.link === 'style') {
+            this.module.structure.columns[key].style[option.name] = option.value;
+          }
+        });
+        
+      },
+      setColumns(event) {
+        let cols = event.target.value;
         let numCols = this.module.structure.columns.length;
 
         if ( numCols === cols ) {
@@ -252,9 +312,14 @@
 
         if ( numCols < cols ) {
           for ( let i = numCols; i < cols; i++ ) {
-            this.$store.commit("module/addColumn");
+            this.$store.commit("module/addColumn" );
           }
         }
+
+        if ( event.target.value > 0 && event.target.value <= this.maxCols ){
+          this.$refs.tabs.setTab( event.target.value - 1 );
+        }
+
       },
       changeMode(mode) {
         this.$root.$toast('Mode has been changed to ' + mode, {className: 'et-info'});
@@ -280,9 +345,14 @@
   @stensul-purple: #514960;
   @stensul-purple-light: lighten(@stensul-purple, 20%);
   @focus: #69dac8;
+  @focus-light: lighten(@focus, 30%);
 
   @brand-primary: lighten(@stensul-purple, 35%);
   @brand-secondary: @stensul-purple-light;
+
+  .fade.show {
+      opacity: 1;
+  }
 
   .module {
     hr {
@@ -444,7 +514,7 @@
             margin: 0;
             padding: 0;
           }
-          i.pull-right{
+          i{
             color:#CCCCCC;
           }
           &[aria-expanded="true"]{
@@ -452,10 +522,59 @@
           }
         }
         
-        #general-settings{
-          input.module-name{
-            font-size: 12px;
-            padding: 7px;
+        #module-settings-left{
+          .module-name{
+            text-align: center;  
+            input{
+              font-size: 12px;
+              padding: 7px;
+              margin-bottom: 10px;
+              width: 90%;
+            }
+          }  
+        }
+
+        #module-settings-left,
+        #column-settings{
+          input{
+            text-align: center;
+            border-radius: 7px;
+            background: #f0f0f0;
+            border: 0px;
+            padding: 2px 5px;
+            font-size: 10px;
+            color: #666666;
+            
+          }
+
+          .card-header{
+            padding-bottom: 20px;
+            ul{
+              border-bottom: 1px solid #F0F0F0;
+              .nav-item{
+                border-top: 1px solid #F0F0F0;
+                border-left: 1px solid #F0F0F0;
+                &:last-of-type{
+                  border-right: 1px solid #F0F0F0;
+                }
+                .nav-link{
+                  margin-right:0;
+                  padding: 4px 20px;
+                  border: 0;
+                  border-radius:0;
+                  color: #666666;
+                  &.active{
+                    border-bottom: 2px solid @focus;
+                  }
+                  &:focus{
+                    background-color: transparent;
+                  }
+                  &:hover{
+                    background-color:@focus-light;
+                  }
+                } 
+              }
+            }
           }
         }
 

@@ -8,7 +8,7 @@ const state = {
   changeSettingComponent:{
     style: {},
     attribute: {}
-  },
+  }, 
   loading: false
 };
 
@@ -50,6 +50,9 @@ const mutations = {
   },
   saveComponent(state, data) {
    state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
+  },
+  saveModuleSetting(state, data) {
+   state.module.structure.style = data.style;
   },
   saveModule(state, moduleId) {
     state.module.id = moduleId;
