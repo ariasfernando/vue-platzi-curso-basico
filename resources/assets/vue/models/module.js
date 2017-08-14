@@ -3,7 +3,7 @@ function Module(data = {}) {
   this.name = data.name || data.title || '';
   this.type = data.type || 'studio';
   this.status = data.status || '';
-  const style = data.style || {};
+  const style = data.structure.style || {};
   this.structure = {
     style: {
       width: style.width || '660',
