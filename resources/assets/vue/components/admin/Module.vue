@@ -144,7 +144,7 @@
   import ImageElement from './elements/ImageElement.vue'
   import DividerElement from './elements/DividerElement.vue'
   import defaultElements from '../../resources/elements'
-  import Plugins from '../../plugins/admin'
+  import Plugins from '../../plugins/modules'
 
   module.exports = {
     name: 'Module',
@@ -194,7 +194,7 @@
 
         if (this.$customer) {
           // Check for customer Plugins
-          const customerPlugins = uc.getPath(this.$customer, 'admin.modules.plugins', {});
+          const customerPlugins = uc.getPath(this.$customer, 'plugins.modules', {});
           if (!_.isEmpty(customerPlugins)) {
             el.plugins = _.extend(el.plugins, _.cloneDeep(customerPlugins[elType.replace('-element', '')]));
           }
@@ -245,7 +245,7 @@
 
             if (this.$customer) {
               // Check for customer Plugins
-              const customerPlugins = uc.getPath(this.$customer, 'admin.modules.plugins', {});
+              const customerPlugins = uc.getPath(this.$customer, 'plugins.modules', {});
               _.each(customerPlugins[component.type.replace('-element', '')], (plugin, name) => {
                 plugins[name] = plugin;
               });
@@ -253,7 +253,7 @@
 
             // Merge default plugins with module data
             _.each(component.plugins, (plugin, name) => {
-              _.extend(plugins[name].fields, plugin.fields);
+              _.extend(plugins[name].studio.fields, plugin.studio.fields);
             });
 
             // Add init function to current module
