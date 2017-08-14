@@ -56,15 +56,15 @@
                            placeholder="Module name" 
                            @input="updateName">
                   </div>
-                  <div class="row" :class="'field-' + key" v-for="( styleValue, key, index) in module.structure.style">
+                  <div class="row" :class="'field-' + key" v-for="(styleValue, key) in module.structure.style">
                     <label class="col-sm-8 control-label" :for="key">{{ key }}</label>
                     <div class="col-sm-4">
-                      <input v-model="module.structure.style[key]" 
-                             :class="{'input': true, 'is-danger': errors.has(key) }"
-                             :name="key" 
+                      <input :class="{'input': true, 'is-danger': errors.has(key) }"
+                             :name="key"
                              v-validate="'required'" 
-                             type="text" 
-                             @input="saveModuleStyle()">
+                             type="text"
+                             :value="styleValue"
+                             @change="saveModuleStyle">
                       <span v-show="errors.has(key)" class="help is-danger">{{ errors.first(key) }}</span>
                     </div>
                   </div>
@@ -86,7 +86,7 @@
                       <input class="input-number pull-right"
                              name="column-number" 
                              type="number"
-                             :value="tabIndex == null? 0 : tabIndex+1" 
+                             :value="tabIndex === null ? 0 : tabIndex+1"
                              min="1"
                              :max="maxCols"
                              @input="setColumns"
@@ -204,10 +204,10 @@
     name: 'EditModule',
     computed: {
       module() {
-        return this.$store.state.module.module;
+        return this.$store.getters["module/module"];
       },
       currentComponent() {
-        return this.$store.state.module.currentComponent;
+        return this.$store.getters["module/currentComponent"];
       }
     },
     data () {
@@ -256,12 +256,12 @@
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
           });
       },
-      saveModuleStyle() {
-        this.$store.commit('module/saveModuleSetting',{
-          style: this.module.structure.style
+      saveModuleStyle(e) {
+        this.$store.commit('module/saveModuleStyle',{
+          property: e.target.name,
+          value: e.target.value,
         }); 
-
-      },  
+      },
       saveModule(status) {
         this.$store.commit("global/setLoader", true);
         this.setModuleField({ status });
@@ -332,11 +332,11 @@
         const container = document.getElementsByClassName('base-admin')[0];
         container.style.paddingLeft = 0;
 
-        var modMargin = document.getElementById('admin-module-container');
-        modMargin.className -= ('col-xs-12');
-
-        const contMargin = document.getElementById('edit-container');
-        contMargin.style.paddingLeft = 0;
+//        var modMargin = document.getElementById('admin-module-container');
+//        modMargin.className -= ('col-xs-12');
+//
+//        const contMargin = document.getElementById('edit-container');
+//        contMargin.style.paddingLeft = 0;
       }
     },
     created () {
