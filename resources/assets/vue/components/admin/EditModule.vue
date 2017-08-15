@@ -55,16 +55,40 @@
                            placeholder="Module name" 
                            @input="updateName">
                   </div>
-                  <div class="row" :class="'field-' + key" v-for="(styleValue, key) in module.structure.style">
-                    <label class="col-sm-8 control-label" :for="key">{{ key }}</label>
-                    <div class="col-sm-4">
-                      <input :class="{'input': true, 'is-danger': errors.has(key) }"
-                             :name="key"
-                             v-validate="'required'" 
-                             type="text"
-                             :value="styleValue"
-                             @change="saveModuleStyle">
-                      <span v-show="errors.has(key)" class="help is-danger">{{ errors.first(key) }}</span>
+                  <div class="row" 
+                       :class="'field-' + generalSetting.name"
+                       v-for="(generalSetting, keyGeneral) in module.structure.settings">
+
+                    <div v-if="!generalSetting.group" >
+                      <label class="col-sm-8 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
+                      <div class="col-sm-4">
+                        <input :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
+                               :name="generalSetting.name"
+                               :value="generalSetting.value"
+                               :type="generalSetting.type"
+                               :placeholder="generalSetting.label"
+                               v-validate="'required'" 
+                               @change="saveModuleStyle">
+                        <span v-show="errors.has(generalSetting.name)" 
+                              class="help is-danger">{{ errors.first(generalSetting.name) }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div v-else>
+                      <label class="col-sm-4 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
+                      <div class="col-sm-3 pull-left row no-gutters input-group-setting" v-for="(generalSettingGroup, keyGeneral) in generalSetting.group" >
+                        <input :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
+                               :name="generalSettingGroup.name"
+                               :value="generalSettingGroup.value"
+                               :type="generalSettingGroup.type"
+                               :placeholder="generalSettingGroup.label"
+                               v-validate="'required'" 
+                               @change="saveModuleStyle">
+                        <span v-show="errors.has(generalSettingGroup.name)" 
+                              class="help is-danger">{{ errors.first(generalSettingGroup.name) }}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </b-card>
@@ -254,12 +278,6 @@
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
           });
       },
-      saveModuleStyle(e) {
-        this.$store.commit('module/saveModuleStyle',{
-          property: e.target.name,
-          value: e.target.value,
-        }); 
-      },
       saveModule(status) {
         this.$store.commit("global/setLoader", true);
         this.setModuleField({ status });
@@ -293,6 +311,12 @@
           }
         });
         
+      },
+      saveModuleStyle(e) {
+         this.$store.commit('module/saveModuleStyle',{
+          property: e.target.name,
+          value: e.target.value,
+        });
       },
       setColumns(event) {
         let cols = event.target.value;
@@ -607,6 +631,9 @@
         }
         
         #module-settings-left{
+          .input-group-setting{
+            margin-right: -12px !important;
+          }
           .module-name{
             text-align: center;  
             input{
