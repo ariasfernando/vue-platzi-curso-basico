@@ -122,7 +122,7 @@
         return this.$store.state.campaign.modalProof;
       },
       campaign () {
-        return this.$store.state.campaign.campaign;
+        return this.$store.getters["campaign/campaign"];
       }
     },
     methods: {
