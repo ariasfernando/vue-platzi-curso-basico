@@ -19,8 +19,6 @@
       </form>
     </div>
 
-    <p class="sep"><br></p>
-
     <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.id">
       <h4>{{ plugin.name }}</h4>
       <div class="default-settings">

@@ -321,6 +321,9 @@
 
       },
       toggleSidebar() {
+        var modOpen = document.getElementById('admin-module-container');
+        modOpen.className -= ('col-xs-12');
+
         const sidebar = document.getElementById('admin-sidebar');
         sidebar.style.display = 'none';
 
@@ -573,7 +576,8 @@
     .section-container {
       background-color: #FFFFFF;
       padding-top: 0px;
-      display:table;
+      display: table;
+      table-layout: fixed;
     }
 
     .left-bar {
@@ -589,6 +593,8 @@
         color: #666666;
         padding-top: 2px;
         font-weight: 300;
+        font-size: 13px;
+        margin-bottom: 0px;
       }
 
       .fields {
@@ -596,9 +602,14 @@
           display: none!important;
         }
 
+        .card-block .row{
+          margin-bottom: 10px;
+        }
+
         .fa.pull-left{
           margin-right: 12px; 
         }
+
         button.module-settings-item{
           line-height: 13px;
           box-shadow: none;
@@ -628,8 +639,8 @@
           .module-name{
             text-align: center;  
             input{
-              font-size: 12px;
-              padding: 7px;
+              font-size: 14px;
+              padding: 15px 7px;
               margin-bottom: 10px;
               width: 90%;
             }
@@ -691,6 +702,10 @@
           border-bottom: 1px solid #f0f0f0;
           padding: 15px 10px 15px 12px;
           display: table;
+
+          .module-name{
+            padding-bottom: 7px;
+          }
         }
 
         .list-inline{
