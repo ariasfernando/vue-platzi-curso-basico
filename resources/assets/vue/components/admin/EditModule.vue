@@ -100,8 +100,8 @@
                            v-for="(column, key) in module.structure.columns" 
                     >
                       <div class="row" :class="'field-' + setting.name" v-for="(setting, keySettings ) in column.settings">
-                        <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
-                        <div class="col-sm-8">
+                        <label class="col-sm-8 control-label" :for="setting.name">{{ setting.label }}</label>
+                        <div class="col-sm-4">
                           <input v-if="setting.type === 'text'"
                                  v-model="setting.value" 
                                  v-validate="'required'" 
