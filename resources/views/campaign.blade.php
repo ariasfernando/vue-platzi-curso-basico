@@ -10,11 +10,12 @@
 	@include('partials.campaign.modal_campaign_processed')
 	@include('partials.campaign.modal_campaign_preview')
 	@include('partials.campaign.modal_campaign_finished')
+	@include('partials.proof.modal_proof')
 
 @endsection
 
 @section('footer-script')
     <script src="{{ cdn(elixir('js/library-v2.js')) }}"></script>
     <script src="{{ cdn(elixir('js/custom-modules.js')) }}"></script>
-	<script src="{{ cdn( elixir('js/campaign-components.js') ) }}"></script>
+    <script src="{{ cdn( elixir('js/campaign-components.js') ) }}"></script>
 @stop

@@ -199,7 +199,8 @@ var userController = function( customOptions ){
 				ajaxContentAdded: function(){
 					$('.selectpicker').selectpicker();
 					$( options.selectors.modalSelector )
-						.on("click", ".submit-config", function(){
+						.on("click", ".submit-config", function(e){
+							e.preventDefault();
 							_this.onSaveUser(this, this.form, "create");
 							return false;
 						});
@@ -236,7 +237,8 @@ var userController = function( customOptions ){
 					$('.selectpicker').selectpicker();
 
 					$( options.selectors.modalSelector )
-						.on("click", ".submit-config", function(){
+						.on("click", ".submit-config", function(e){
+							e.preventDefault();
 							if($(options.selectors.modalSelector).find(".user_email").val() === maintainPass) {
 								password_selector.val("");
 								password_selector.removeAttr("data-validation");

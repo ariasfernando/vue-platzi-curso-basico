@@ -145,7 +145,7 @@ class TemplateController extends Controller
 
         return $this->renderView(
             'layouts.email',
-            ['params' => ['title' => 'preview', 'body_html' => '', 'campaign_data' => $campaign_data]]
+            ['params' => ['title' => 'preview', 'body_html' => $campaign_data->body_html, 'campaign_data' => $campaign_data]]
         );
     }
 
@@ -164,7 +164,7 @@ class TemplateController extends Controller
         // component name
         $component = $request->input('key');
         $view = $request->input('view', 'template');
-        $parts = [ 'modules', $component, $view ];
+        $parts = [ $type, $component, $view ];
 
         return $this->renderView(
             implode('.', $parts),

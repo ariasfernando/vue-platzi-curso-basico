@@ -11,8 +11,16 @@
 
     <!-- column right (container email) -->
     <section class="section-canvas-email section-box">
-      <email-canvas v-if="ready" @save-campaign="saveCampaign"></email-canvas>
+      <email-canvas v-if="ready"></email-canvas>
     </section>
+
+    <aside class="component-settings-wrapper">
+      <component-settings v-if="currentComponent"></component-settings>
+    </aside>
+
+    <!-- Modals -->
+    <modal-complete></modal-complete>
+    <modal-preview></modal-preview>
 
     <spinner></spinner>
 
@@ -21,8 +29,11 @@
 
 <script>
   import CampaignConfiguration from './CampaignConfiguration.vue'
+  import ModalComplete from './modals/ModalComplete.vue'
+  import ModalPreview from './modals/ModalPreview.vue'  
   import CampaignMenu from './CampaignMenu.vue'
   import EmailCanvas from './EmailCanvas.vue'
+  import ComponentSettings from './ComponentSettings.vue'
   import Spinner from '../common/Spinner.vue'
 
   export default {
@@ -32,6 +43,9 @@
       CampaignConfiguration,
       CampaignMenu,
       EmailCanvas,
+      ComponentSettings,
+      ModalComplete,
+      ModalPreview,
       Spinner
     },
     data: function () {
@@ -41,22 +55,13 @@
     },
     computed: {
       campaign() {
-        return this.$store.campaign.campaign;
+        return this.$store.getters["campaign/campaign"];
       },
-      library() {
-        return this.$store.campaign.library;
+      currentComponent() {
+        return this.$store.getters["campaign/currentComponent"];
       }
     },
     methods: {
-      saveCampaign() {
-        this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/saveCampaign").then(response => {
-          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
-        });
-      },
       loadCampaign() {
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
@@ -68,7 +73,27 @@
       }
     },
     created: function () {
+      this.$store.commit("global/setLoader", true);
       this.loadCampaign();
     }
   };
 </script>
+
+<style lang="less">
+  @import '../../less/campaign';
+
+  .component-settings-wrapper {
+    padding-left: 20px;
+
+    .component-settings {
+      background: #FFFFFF;
+      border-radius: 5px;
+      padding: 0 15px;
+      border: 1px solid transparent;
+    }
+  }
+
+  aside {
+    width: 20%;
+  }
+</style>

@@ -5,6 +5,10 @@ import defaultElements from '../resources/elements';
 const state = {
   module: {},
   currentComponent: {},
+  changeSettingComponent:{
+    style: {},
+    attribute: {}
+  }, 
   loading: false
 };
 
@@ -14,6 +18,9 @@ const getters = {
   },
   currentComponent(state) {
     return state.currentComponent;
+  },
+  changeSettingComponent(state) {
+    return state.changeSettingComponent;
   },
 };
 
@@ -29,6 +36,10 @@ const mutations = {
       state.module[field] = value;
     })
   },
+  setChangeSettingComponent(state, data){
+    state.changeSettingComponent.style = data.style;
+    state.changeSettingComponent.attribute = data.attribute;
+  },
   setCurrentComponent(state, data) {
     state.currentComponent = data;
   },
@@ -38,15 +49,13 @@ const mutations = {
     });
   },
   saveComponent(state, data) {
-    let newObjetStyle = {};
-    
-    _.each(data.component.settings, (option, index) => {
-      newObjetStyle[option.name] = option.value;
-    });
-    
-   data.component.style =  _.extend(data.component.style, newObjetStyle);
-
    state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
+  },
+  saveModuleSetting(state, data) {
+   state.module.structure.style = data.style;
+  },
+  saveModuleStyle(state, data) {
+   state.module.structure.style[data.property] = data.value;
   },
   saveModule(state, moduleId) {
     state.module.id = moduleId;
@@ -59,6 +68,9 @@ const mutations = {
   },
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);
+  },
+  attachPlugins(state, data) {
+    state.module.structure.columns[data.colId].components[data.componentId].plugins = data.plugins;
   },
   removeComponents(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);

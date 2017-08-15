@@ -1,100 +1,73 @@
 <template>
   <div>
-    <div class="section-box-header section-canvas-title">
-      <div class="row">
-        <div :class="'col-xs-3 col-md-4 col-lg-' + titleCols" id="section-canvas-title-col">
-          <h2>{{ campaign.campaign_data.library_config.title || 'Campaign Editor' }}</h2>
-        </div>
-
-        <div class="col-xs-1 col-md-1 col-lg-2" v-if="campaign.campaign_data.library_config.building_mode_select">
-          <div class="switch">
-            <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-            <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
-              <i class="fa fa-desktop"></i>
-            </label>
-            <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-            <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
-              <i class="glyphicon glyphicon-phone"></i>
-            </label>
-            <span class="switch-selection"></span>
-          </div>
-        </div>
-
-        <div :class="'col-xs-8 col-md-7 col-lg-' + buttonsCols + ' text-right'" id="section-canvas-buttons-col">
-          <button class="btn btn-default campaign-preview" :class="hiddenClass()"><i
-            class="glyphicon glyphicon-phone"></i>Preview
-          </button>
-
-          <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template"
-                  @click="saveCampaign">Save as Draft
-          </button>
-
-          <button class="btn btn-default save-as-template" :class="hiddenClass()"
-                  v-if="!campaign.processed && campaign.campaign_data.library_config.enable_templating">Save as Template
-          </button>
-
-          <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" href="#">Complete<i
-            class="glyphicon glyphicon-triangle-right"></i></a>
-        </div>
-      </div>
-    </div>
+    <email-actions></email-actions>
 
     <!-- content canvas email -->
     <div class="section-box-content section-canvas-container">
       <table cellpadding="0" cellspacing="0" width="100%">
         <tr>
           <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
-            <table id="emailCanvas" class="email-canvas wrapper-table"
-                   :width="campaign.campaign_data.library_config.template_width" cellspacing="0" cellpadding="0"
-                   border="0">
-              <tbody>
-              <tr v-for="(module, moduleId) in modules" :data-params="JSON.stringify(module)">
-                <td v-if="module.type === 'studio'" :style="module.structure.style" :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
-                  <module :module-id="moduleId" :module="module"></module>
-                </td>
+              <draggable id="emailCanvas"
+                         class="email-canvas wrapper-table"
+                         cellspacing="0"
+                         cellpadding="0"
+                         border="0"
+                         v-model="dragList"
+                         :width="templateWidth"
+                         :options="options"
+                         :element="'table'"
+                         @sort="onSort"
+             >
 
-                <td v-else>
-                  <custom-module :module-id="moduleId" :module="module"></custom-module>
-                </td>
-              </tr>
-              </tbody>
-            </table>
+                  <module v-for="(module, moduleId) in dragList"
+                                 :key="moduleId"
+                                 :module-id="moduleId"></module>
+              </draggable>
           </td>
         </tr>
       </table>
-    </div>
-
-    <div class="section-box-header-bottom section-canvas-title hidden">
-      <div class="row">
-        <div class="col-xs-12 text-right">
-          <a class="btn btn-default save-as-draft" href="#">Save as Draft</a>
-          <a class="btn btn-default campaign-continue" href="#">Complete</a>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import Draggable from 'vuedraggable';
   import Module from './Module.vue';
-  import CustomModule from './CustomModule.vue';
+  import EmailActions from './EmailActions.vue';
 
   export default {
     name: 'EmailCanvas',
     components: {
       Module,
-      CustomModule
+      Draggable,
+      'email-actions': EmailActions,
     },
     computed: {
-      modules () {
-        return this.$store.state.campaign.modules;
+      dragList: {
+        get() {
+          return this.$store.state.campaign.modules;
+        },
+        set(value) {
+          this.$store.commit('campaign/updateEmailCanvas', value);
+        }
       },
       campaign () {
         return this.$store.state.campaign.campaign;
+      },
+      templateWidth () {
+        return this.$store.getters['campaign/templateWidth'];
       }
     },
     data () {
       return {
+        options: {
+          group: {
+            name: 'componentsEmailCanvas'
+          },
+          ghostClass: "ghost-component",
+          chosenClass: "chosen-component",
+          dragClass: "drag-component"
+        },
         title  () {
           let libraryTitle = this.campaign.campaign_data.library_config.title || 'Campaign Editor';
 
@@ -113,8 +86,46 @@
       }
     },
     methods: {
-      saveCampaign() {
-        this.$emit('save-campaign');
+      onSort(e){
+        const newIndex = e.newIndex
+        const oldIndex = e.oldIndex
+        
+        this.$store.commit('campaign/sortEditedModule', {
+          newIndex: newIndex,
+          oldIndex: oldIndex
+        });
+      },
+      remove(moduleId) {
+        this.$store.commit("campaign/removeModule", moduleId);
+      },
+      save() {
+        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/saveCampaign", {
+          campaign: this.campaign,
+          bodyHtml
+        }).then(response => {
+          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
+          this.$store.commit("global/setLoader", false);
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+        });
+      },
+      complete() {
+        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/completeCampaign", {
+          campaign: this.campaign,
+          bodyHtml
+        }).then(response => {
+          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
+          this.$store.commit("global/setLoader", false);
+          this.$store.commit("campaign/toggleModal", 'modalComplete');
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+        });
       }
     },
     created () {
@@ -134,13 +145,18 @@
   };
 </script>
 
-<style>
+<style lang="less">
+  .applelinks {
+    color:#FFFFFF !important; 
+    text-decoration: none !important; 
+  } 
+
   .st-email-body {
     width: 100% !important;
     -webkit-text-size-adjust: 100%;
     margin: 0 !important;
     padding: 0px;
-    background-color: #d1c27f;
+    background-color: #000000;
   }
 
   #outlook a {
@@ -165,6 +181,10 @@
   .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
     line-height: 100%
   }
+
+  span.st-preheader{ 
+    display: none!important;
+  }  
 
   .st-wrapper {
     width: 600px;
@@ -460,12 +480,13 @@
     }
 
     .st-wrapper-content {
-      padding: 0 15px !important;
+      padding: 0!important;
     }
 
     .st-col {
       display: block !important;
-      width: 100% !important
+      width: 100% !important;
+      padding: 0px !important;
     }
 
     .st-col-3side {
@@ -483,6 +504,7 @@
     .st-resize {
       width: 100% !important;
       display: block !important;
+      height: auto !important;
     }
 
     .st-col-sociall {

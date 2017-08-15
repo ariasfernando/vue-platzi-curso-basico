@@ -5,5 +5,5 @@ use Exception;
 
 class ModelKeyManagerException extends Exception
 {
-    protected $message = 'Maximum amount of iterations reached. Couldn\'t genereate a random key.';
+    protected $message = 'Maximum amount of iterations reached. Couldn\'t generate a random key.';
 }

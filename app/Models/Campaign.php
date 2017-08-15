@@ -35,6 +35,8 @@ class Campaign extends Eloquent
         'cdn_path',
         'user_id',
         'user_email',
+        'created_by',
+        'created_email',
         'email_sent_history',
         'campaign_preheader',
         'tags',
@@ -69,6 +71,8 @@ class Campaign extends Eloquent
         'cdn_path' => null,
         'user_id' => null,
         'user_email' => null,
+        'created_by' => null,
+        'created_email' => null,
         'email_sent_history' => [],
         'campaign_preheader' => '',
         'tags' => [],
@@ -236,14 +240,15 @@ class Campaign extends Eloquent
     }
 
     /**
-     * Get a list of campaign configuration, prioritizing library values over default values
+     * Get a list of library configuration
      */
     public function getLibraryConfigAttribute()
     {
-        return array_merge(
-            \Config::get('campaign'),
-            Library::find($this->attributes['library'])->config
-        );
+        $libraryConfig = [];
+        if (Library::find($this->attributes['library'])) {
+            $libraryConfig = Library::find($this->attributes['library'])->config;
+        }
+        return $libraryConfig;
     }
 
     /**
@@ -280,6 +285,7 @@ class Campaign extends Eloquent
     /**
      * Check if the campaign has an active proof
      *
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @return boolean
      */
     public function getHasActiveProofAttribute()

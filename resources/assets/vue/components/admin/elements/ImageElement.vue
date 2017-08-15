@@ -1,24 +1,42 @@
 <template>
   <!-- IMAGE ELEMENT -->
-    <tr @click="setComponent"
+    <tr @click.prevent="setComponent"
         data-type="image-element"
     >
-      <td align="center" :style="component.style" class="st-position-relative">
-        <img class="st-resize st-image"
-             :src="imageUrl(component.placeholder)" 
-             :width="component.width" 
-             :height="component.height"
-             :data-open-element-config="elementConfig" 
-             alt="" 
-             border="0"
-        >
-      <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
+      <td width="100%" 
+          align="center" 
+          :style="component.style" 
+          class="st-position-relative"
+      >
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td width="100%" align="left">
+              <a @click.prevent
+                 :href="component.attribute.href" 
+                 :alt="component.attribute.alt"
+                 :title="component.attribute.title"
+                 :target="component.attribute.target"
+              >
+                <img class="st-resize st-image"
+                     :src="imageUrl(component.attribute.placeholder)" 
+                     :width="component.attribute.width" 
+                     :height="component.attribute.height"
+                     :data-open-element-config="elementConfig" 
+                     border="0"
+                >
+              </a>
+              <div class="icon-move st-move"><i class="glyphicon glyphicon-move st-move"></i></div> 
+              <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-remove-sign st-remove"></i></div> 
+            </td>
+          </tr>    
       </td>
     </tr>
   <!-- IMAGE ELEMENT ENDS -->
 </template>
 
 <script>
+  import _ from 'underscore';
+  
   export default {
     name: 'ImageElement',
     props: [
@@ -37,6 +55,28 @@
         }
       }
     },
+    computed: {
+      styleComponent() {
+        return this.$store.getters["module/changeSettingComponent"];
+      },
+      currentComponent() {
+        return this.$store.getters["module/currentComponent"];
+      }
+    },
+    watch : {
+      styleComponent: {
+        handler: function() {
+          if (!_.isEmpty(this.styleComponent) && 
+            this.currentComponent.columnId == this.columnId && 
+            this.currentComponent.componentId == this.componentId ) 
+          {
+            this.component.style = this.styleComponent.style;
+            this.component.attribute = this.styleComponent.attribute;
+          }
+        },
+        deep: true  
+      },
+    },
     methods: {
       setupModule () {
         this.elementConfig = null;
@@ -45,20 +85,40 @@
           this.elementConfig = this.component.directives.elementConfig;
         }
       },
-      changed (event) {
+
+      setComponent(e) {
+        if (!$(e.target).hasClass("st-remove")){
+          this.$store.commit("module/setCurrentComponent", {
+            columnId: this.columnId,
+            componentId: this.componentId
+          });
+
+          this.$store.commit('module/setChangeSettingComponent',{
+            style: this.component.style || {},
+            attribute: this.component.attribute || {}
+          });
+        }
       },
-      setComponent() {
+
+      removeComponent(){
+        this.$store.commit("module/removeComponents", {
+          index: this.componentId,
+          number: 1,
+          colId: this.columnId
+        });
+
         this.$store.commit("module/setCurrentComponent", {
           columnId: this.columnId,
-          componentId: this.componentId
+          componentId: this.componentId - 1
         });
       }
+      
     }
   };
 </script>
 
 <style lang="less">
-  @icon-option: #9189a2;
+  @icon-option: #69dac8;
 
   .st-position-relative{
     position: relative;
@@ -81,5 +141,24 @@
     background-color: @icon-option;
     opacity: 1;
     margin-top: -15px;
+  }
+
+  .icon-remove {
+    display: none;
+    width: 21px;
+    height: 21px;
+    line-height: 21px;
+    font-size: 21px!important;
+    cursor: pointer;
+    position: absolute;
+    text-align: center;
+    color: @icon-option;
+    background-color: #e4f8f5;
+    border-radius: 100%;
+    z-index: 5;
+    top: 0%;
+    opacity: 1;
+    left: -10px;
+    margin-top: -10px;
   }
 </style>

@@ -1,17 +1,21 @@
 <header>
     <div class="container">
         <div class="row">
-            <!-- Logo -->
+            {{-- Logo --}}
             <div class="col-xs-8 col-md-6">
                 <div class="logo">
-                    <a href="{{ url('/') }}">
+                    @if (!Auth::check() || Auth::user()->can('access_dashboard'))
+                        <a href="{{ url('/') }}">
+                    @else
+                        <a>
+                    @endif
                         <span class="brand-logo"></span>
                         <span class="by-stensul"></span>
                     </a>
                 </div>
             </div>
 
-            <!-- Navigation -->
+            {{-- Navigation --}}
             <div class="col-xs-4 col-md-6">
                 <nav>
                     @if (config('app.help.enabled'))
@@ -20,7 +24,7 @@
                             <span>Help Center</span>
                         </a>
                     @endif
-                    @if (config('app.home.enabled'))
+                    @if (config('app.home.enabled') && (!Auth::check() || Auth::user()->can('access_dashboard')))
                         <a href="{{ url('/') }}" class="home">
                             <i class="glyphicon glyphicon-home"></i>
                             <span>Home</span>

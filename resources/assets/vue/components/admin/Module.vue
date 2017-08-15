@@ -1,111 +1,129 @@
 <template>
-  <table width="100%" cellspacing="0" cellpadding="0" class="module-table">
-
-    <!-- START: TH Structure -->
+  <table :width="module.structure.style.width || '100%'"
+         :bgcolor="module.structure.style.backgroundColor || '#FFFFFF'" 
+         :style="module.structure.style"
+         cellspacing="0" 
+         cellpadding="0" 
+         border="0" 
+         align="center"
+  >
+    <!-- START: 2 COLUMNS -->
     <tr v-if="module.structure.columns.length > 1">
-
-      <th class="st-col" v-for="(column, columnId) in module.structure.columns" 
-          :class="!column.components.length ? 'empty-col' : ''" 
-          :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
-          :style="column.style || ''"
-          :data-col="columnId">
-
-        <table v-if="column.components.length" 
-               width="100%" 
-               cellpadding="0" 
+      <td width="100%">
+        <table :width="module.structure.style.width || '100%'" 
+               class="st-wrapper" 
                cellspacing="0" 
+               cellpadding="0" 
                border="0" 
-               class="st-content-component"
+               align="center"
         >
           <tr>
             <td width="100%">
-              <draggable v-model="column.components" 
-                         @add="onAdd"
-                         :element="'table'" 
-                         :options="options" 
-                         :data-col="columnId"
-                         cellpadding="0" 
-                         cellspacing="0" 
-                         border="0"
-                         width="100%"
-              >
-                <component v-for="(component, componentId) in column.components"
-                           :is="component.type" 
-                           :component="component" 
-                           :module-id="module.id" 
-                           :column-id="columnId"
-                           :component-id="componentId" 
-                           :key="componentId"
-                           class="st-component"></component>
-              </draggable>            
-            </td>
-        </table>
 
-        <!-- Empty Col -->
-        <div v-else >
-          <draggable 
-                     @add="onAdd"
-                     :element="'div'" 
-                     :options="options" 
+              <table v-for="(column, columnId) in module.structure.columns"
+                     v-if="column.components.length" 
+                     align="left"
+                     :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'"
+                     :style="column.style || ''" 
                      :data-col="columnId"
+                     :class="!column.components.length ? 'empty-col' : ''"
                      cellpadding="0" 
                      cellspacing="0" 
-                     border="0"
-                     width="100%"
-                     class="empty-table"
-          >
-            <div style="display:table-row;"> 
-              <div align="center" 
-                  class="empty-cell"
-                  height="80" 
-                  :data-col="columnId">Drag content here</div>
-            </div>
-          </draggable>
-        </div>
+                     border="0" 
+                     class="st-content-component st-col"
+              >
+                <tr>
+                  <td width="100%">
+                    <draggable v-model="column.components" 
+                               @add="onAdd"
+                               :element="'table'" 
+                               :options="options" 
+                               :data-col="columnId"
+                               cellpadding="0" 
+                               cellspacing="0" 
+                               border="0"
+                               width="100%"
+                    >
+                      <component v-for="(component, componentId) in column.components"
+                                 :is="component.type" 
+                                 :component="component" 
+                                 :module-id="module.id" 
+                                 :column-id="columnId"
+                                 :component-id="componentId" 
+                                 :key="componentId"
+                                 class="st-component"></component>
+                    </draggable>            
+                  </td>
+                </tr>  
+              </table>
 
-      </th>
+              <!-- Empty Col -->
+              <table v-else 
+                    align="left"
+                    :style="column.style || ''"
+                    :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'"
+              >
+                <tr>
+                  <td>
+                    <draggable @add="onAdd"
+                               :element="'div'" 
+                               :options="options" 
+                               :data-col="columnId"
+                               cellpadding="0" 
+                               cellspacing="0" 
+                               border="0"
+                               width="100%"
+                               class="empty-table"
+                    >
+                      <div style="display:table-row;"> 
+                        <div align="center" 
+                            class="empty-cell"
+                            height="80" 
+                            :data-col="columnId">Drag content here</div>
+                      </div>
+                    </draggable>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+        </table>  
+
+      </td>
     </tr>
-    <!-- END: TH Structure -->
+    <!-- END: 2 COLUMNS -->
 
-    <!-- START TD Structure -->
+    <!-- START 1 COLUMNS -->
     <tr v-else>
-      <td class="st-col" v-for="(column, columnId) in module.structure.columns" 
+      <td class="st-col" 
+          v-for="(column, columnId) in module.structure.columns" 
           :class="!column.components.length ? 'empty-col' : ''" 
           :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
           :style="column.style || ''"
           :data-col="columnId"
       >
-        <table v-if="column.components.length" 
-               width="100%" 
-               cellpadding="0" 
-               cellspacing="0" 
-               border="0" 
-               class="st-content-component"
+        <draggable v-if="column.components.length" 
+                   v-model="column.components" 
+                   class="st-content-component"
+                   @add="onAdd"
+                   :element="'table'" 
+                   :options="options" 
+                   :data-col="columnId"
+                   cellpadding="0" 
+                   cellspacing="0" 
+                   border="0"
+                   width="100%"
         >
-          <tr>
-            <td width="100%">
-              <draggable v-model="column.components" 
-                         @add="onAdd"
-                         :element="'table'" 
-                         :options="options" 
-                         :data-col="columnId"
-                         cellpadding="0" 
-                         cellspacing="0" 
-                         border="0"
-                         width="100%"
-              >
-                <component v-for="(component, componentId) in column.components"
-                           :is="component.type" 
-                           :component="component" 
-                           :module-id="module.id" 
-                           :column-id="columnId"
-                           :component-id="componentId" 
-                           :key="componentId"
-                           class="st-component"></component>
-              </draggable>            
-            </td>
-          </tr>
-        </table>
+          <component v-for="(component, componentId) in column.components"
+                     :is="component.type" 
+                     :component="component" 
+                     :module-id="module.id" 
+                     :column-id="columnId"
+                     :component-id="componentId" 
+                     :key="componentId"
+                     class="st-component"></component>
+        </draggable>  
 
         <!-- Empty Col -->
         <div v-else >
@@ -131,7 +149,7 @@
 
       </td>
     </tr>
-    <!-- END TD Structure -->
+    <!-- END 1 COLUMNS -->
   </table>
 </template>
     
@@ -145,7 +163,7 @@
   import ImageElement from './elements/ImageElement.vue'
   import DividerElement from './elements/DividerElement.vue'
   import defaultElements from '../../resources/elements'
-  import Plugins from '../../plugins/admin'
+  import Plugins from '../../plugins/modules'
 
   module.exports = {
     name: 'Module',
@@ -175,6 +193,9 @@
         return this.$store.state.module.module
       }
     },
+    mounted() {
+      this.initPlugins();
+    },
     methods: {
       onAdd(e){
         let elType = e.clone.getAttribute('data-type');
@@ -192,7 +213,7 @@
 
         if (this.$customer) {
           // Check for customer Plugins
-          const customerPlugins = uc.getPath(this.$customer, 'admin.modules.plugins', {});
+          const customerPlugins = uc.getPath(this.$customer, 'plugins.modules', {});
           if (!_.isEmpty(customerPlugins)) {
             el.plugins = _.extend(el.plugins, _.cloneDeep(customerPlugins[elType.replace('-element', '')]));
           }
@@ -204,11 +225,9 @@
           colId
         });
 
-        // Init plugins
-        _.each(el.plugins, (plugin) => {
-          if (plugin.init && _.isFunction(plugin.init)) {
-            plugin.init(this);
-          }
+        this.$store.commit('module/setChangeSettingComponent',{
+          style: this.module.structure.columns[colId].components[e.newIndex].style || {},
+          attribute: this.module.structure.columns[colId].components[e.newIndex].attribute || {}
         });
 
         if (e.clone.getAttribute('class') === 'component-item') {
@@ -231,16 +250,50 @@
       },
       setComponent(ref) {
         this.$store.commit("module/setCurrentComponent", ref);
+      },
+      initPlugins() {
+        _.each(this.module.structure.columns, (column, colId) => {
+          _.each(column.components, (component, componentId) => {
+
+            // Base plugins
+            let plugins = {};
+
+            _.each(Plugins[component.type.replace('-element', '')], (plugin, name) => {
+              plugins[name] = plugin;
+            });
+
+            if (this.$customer) {
+              // Check for customer Plugins
+              const customerPlugins = uc.getPath(this.$customer, 'plugins.modules', {});
+              _.each(customerPlugins[component.type.replace('-element', '')], (plugin, name) => {
+                plugins[name] = plugin;
+              });
+            }
+
+            // Merge default plugins with module data
+            _.each(component.plugins, (plugin, name) => {
+              _.extend(plugins[name].studio.fields, plugin.studio.fields);
+            });
+
+            // Add init function to current module
+            this.$store.commit('module/attachPlugins', {
+              colId,
+              componentId,
+              plugins,
+            });
+
+          });
+        });
       }
     }
   };
 </script>
 
 <style lang="less">
-  @focus: #9189a2;
+  @focus: #69dac8;
   @focus-light: lighten(@focus, 30%);
-  @hover: #e6e3ea;
-  @icon-option: #9189a2;
+  @hover: @focus-light;
+  @icon-option: #69dac8;
 
   .st-content-component{
     outline: 1px dashed @icon-option;
@@ -250,7 +303,7 @@
     &:hover{
         border: 1px solid @icon-option;
         background-color: @hover;
-        .icon-move{
+        .icon-move, .icon-remove{
           display: block;
         }
     }
@@ -258,6 +311,10 @@
 
   .empty-col {
     background-color: @focus-light;
+  }
+
+  .alignRight{
+    float: left;
   }
 
   td.empty-cell{

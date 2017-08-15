@@ -4,7 +4,7 @@
 		@if (isset($log->properties["user_id"]))
 			<td title="{{ $log->properties["user_id"] }}">
 				@if ( isset($log->properties["user_id"]) )
-					<a href="{{ url('admin/user')  . '?' . http_build_query([ 'type' => '_id', "q" => $log->properties["user_id"] ]) }}" target="_self">
+					<a href="{{ url('admin/user')  . '?' . http_build_query([ 'type' => '_id', "q" => (String) $log->properties["user_id"] ]) }}" target="_self">
 						{{ ( isset($log->properties["user_id"]))? $log->properties["user_id"] : "" }}
 					</a>
 				@endif

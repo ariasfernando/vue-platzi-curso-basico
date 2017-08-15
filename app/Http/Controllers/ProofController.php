@@ -352,7 +352,7 @@ class ProofController extends Controller
                 // Remove decision data from this reviewer
                 $decision = $reviewer['decision'];
                 $decision_at = $reviewer['decision_at'];
-                $decision_comment = $reviewer['decision_comment'];
+                $decision_comment = $reviewer['decision_comment'] ?? '';
                 unset($reviewer['decision'], $reviewer['decision_at'], $reviewer['decision_comment']);
                 $updated = true;
             }
@@ -524,11 +524,11 @@ class ProofController extends Controller
                     if (isset($reviewer['decision_comment'])) {
                         $reviewer['comment'] = Comment::find($reviewer['decision_comment'])->content;
                     }
-                    $date = $reviewer['decision_at'];
+                    $date = date('Y-m-d H:i:s', $reviewer['decision_at']->sec);
                 } else {
-                    $date = $reviewer['notified_at'];
+                    $date = isset($reviewer['notified_at']) ? date('Y-m-d H:i:s', $reviewer['notified_at']->sec) : $proof->created_at->format('Y-m-d H:i:s');
                 }
-                $reviewer['last_modified_date'] = date('Y-m-d H:i:s', $date->sec);
+                $reviewer['last_modified_date'] = $date;
                 unset($reviewer['user_id']);
                 return $reviewer;
             }, $proof->reviewers);
@@ -539,7 +539,7 @@ class ProofController extends Controller
             ];
         }
 
-        abort(204, 'No content.');
+        return \Response::make("", 204);
     }
 
     /**
@@ -597,6 +597,6 @@ class ProofController extends Controller
             ];
         }
 
-        return abort(204, 'No content.');
+        return \Response::make("", 204);
     }
 }

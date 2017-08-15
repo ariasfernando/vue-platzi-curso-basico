@@ -78,7 +78,7 @@ class AdminAuthController extends Controller
         $app_admin = env('APP_ADMIN', false);
         $attempt_admin = false;
 
-        if ($app_admin && User::where('email', '=', $email)->whereNull('deleted_at')->exists()) {
+        if ($app_admin && User::where('email', '=', $email)->where('status', '!=', 'deleted')->exists()) {
             $attempt_admin = User::where('email', '=', $email)->first()->can('access_admin');
         }
 

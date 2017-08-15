@@ -724,7 +724,7 @@ var moduleManager = {
                 if( Application.globals.confirmDeleteModule ){
                     var confirmModal = new Application.utils.confirm({
                         // Message to display
-                        message: "Are you sure? Please click OK to remove this module from your email.",
+                        message: "Are you sure you want to remove this module from your email?",
                         // Function to execute when confirm is true.
                         onSubmit: function(){
                             // Remove module

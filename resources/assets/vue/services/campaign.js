@@ -1,5 +1,5 @@
 import Q from 'q';
-import _ from 'underscore-contrib';
+import _ from 'lodash';
 import request from '../utils/request';
 import endpoints from '../resources/endpoints';
 import store from '../store';
@@ -23,20 +23,84 @@ export default {
     return deferred.promise;
   },
 
-  saveCampaign() {
-    const endpoint = endpoints.campaign.getCampaign;
+  saveCampaign(data) {
+    const endpoint = endpoints.campaign.saveCampaign;
     const editedCampaign = this.getEditedData();
     const deferred = Q.defer();
 
+    editedCampaign.campaign.bodyHtml = data.bodyHtml;
+
+    const dataCampaign = new Campaign({
+      settings: editedCampaign.settings,
+      campaign: editedCampaign.campaign,
+      modules: editedCampaign.modules,
+    });
+
     const params = {
-      endpoint: endpoints.campaign.getCampaign,
-      data: editedCampaign,
+      endpoint: endpoints.campaign.saveCampaign,
+      json: dataCampaign,
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve({
+        campaignId: response.body,
+        campaign: dataCampaign,
+      });
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+  processCampaign(campaignId) {
+    const endpoint = endpoints.campaign.processCampaign;
+    const deferred = Q.defer();
+
+    const params = {
+      endpoint,
+      json: {
+        campaign_id: campaignId,
+      },
     };
 
     request[endpoint.method](params).then((response) => {
       deferred.resolve(response.body);
     }).catch((err) => {
       deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+  checkProcessStatus(processId) {
+    const endpoint = endpoints.campaign.processStatus;
+    const deferred = Q.defer();
+
+    const params = {
+      endpoint,
+      json: {
+        processId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+  completeCampaign(campaign) {
+    const deferred = Q.defer();
+
+    this.processCampaign(campaign.campaign_id).then((response) => {
+      deferred.resolve({
+        campaignId: campaign.campaign_id,
+        processed: response.processed || undefined,
+        jobId: response.job || undefined,
+      });
+    }).catch((error) => {
+      deferred.reject(error);
     });
 
     return deferred.promise;
@@ -60,25 +124,44 @@ export default {
   },
 
   getEditedData() {
-    const campaign = store.state.campaign;
-    const editedSettings = store.state.editedSettings;
+    const campaignStore = store.state.campaign;
+    const campaign = campaignStore.campaign;
+    const editedSettings = campaignStore.editedSettings;
 
     // Edited modules
-    const modules = store.state.modules;
-    const editedModules = store.state.editedModules;
+    const modules = _.cloneDeep(campaignStore.modules);
+    const editedModules = campaignStore.editedModules;
 
     for (const edited of editedModules) {
       for (const key in edited.data) {
-        modules[edited.moduleId].columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
+        modules[edited.moduleId].structure.columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
       }
     }
 
-    const dataCampaign = new Campaign({
+    return {
       campaign,
       settings: editedSettings,
       modules,
+    };
+  },
+
+  sendPreview(data) {
+    const deferred = Q.defer();
+    const endpoint = endpoints.campaign.sendPreview;
+    const params = {
+      json: {
+        campaign_id: data.campaignId,
+        mail: data.emailAddress,
+      },
+      endpoint: endpoints.campaign.sendPreview,
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
     });
 
-    return dataCampaign;
+    return deferred.promise;
   },
 };

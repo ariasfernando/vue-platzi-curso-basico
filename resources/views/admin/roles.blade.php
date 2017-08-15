@@ -42,7 +42,7 @@
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>
 										</a>
 									</th>
-									<th width="150" class="sortable">
+									<th width="350" class="sortable">
 										<a href="#" class="sortable-option sort-order-<?php echo strtolower($defaultDataPagination['order_type']); ?>" id="group" data-order-field="permissions">
 											Permissions
 											<i class="glyphicon glyphicon-menu-down pull-right"></i>

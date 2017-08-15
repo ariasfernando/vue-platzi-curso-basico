@@ -4,10 +4,26 @@
             v-bind:class="{ loading: loading }">
             <thead>
                 <tr>
-                    <th width="150">
+                    <th width="110" v-if="showCreatedBy">
                         <column-sort
                             field="created_at"
                             title="Date Started"
+                            :sort="sortKey"
+                            :reverse="reverse"
+                            v-on:change-sort="sortBy"></column-sort>
+                    </th>
+                    <th width="150" v-else="showCreatedBy">
+                        <column-sort
+                            field="created_at"
+                            title="Date Started"
+                            :sort="sortKey"
+                            :reverse="reverse"
+                            v-on:change-sort="sortBy"></column-sort>
+                    </th>
+                    <th width="150" v-if="showCreatedBy">
+                        <column-sort
+                            field="created_email"
+                            title="Created by"
                             :sort="sortKey"
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
@@ -43,6 +59,7 @@
             <tbody>
                 <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
                     <td>@{{ campaign.created_at }}</td>
+                    <td :title="campaign.created_email" v-if="showCreatedBy">@{{ campaign.created_email }}</td>
                     <td class="last-modified">
                         <span>@{{ campaign.updated_at }}</span>
                     </td>
@@ -61,15 +78,23 @@
                     </td>
                     <td class="text-right actions icons">
                         <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
-                        <a href="#" class="edit" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                        <a
+                            href="#"
+                            class="edit"
+                            title="Edit"
+                            v-if="!campaign.locked || campaign.locked_by === Application.globals.logged_user"
+                        >
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </a>
                         <a
                             href="#"
                             class="lock-campaign"
                             v-if="enableLocking && !campaign.locked"
-                            v-on:click="lockCampaign(campaign._id, campaigns.current_page)"
+                            v-on:click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                             data-toggle="tooltip"
                             data-placement="bottom"
                             title="Lock Campaign"
+                            @click.prevent
                         >
                             <i class="glyphicon fa fa-lock"></i>
                         </a>
@@ -77,10 +102,11 @@
                             href="#"
                             class="unlock-campaign"
                             v-if="enableLocking && campaign.locked && campaign.locked_by === Application.globals.logged_user"
-                            v-on:click="unlockCampaign(campaign._id, campaigns.current_page)"
+                            v-on:click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                             data-toggle="tooltip"
                             data-placement="bottom"
                             title="Unlock Campaign"
+                            @click.prevent
                         >
                             <i class="glyphicon fa fa-unlock"></i>
                         </a>
@@ -89,7 +115,7 @@
                     </td>
                 </tr>
                 <tr v-if="campaigns.data == 0">
-                    <td :colspan="showTags ? 6 : 5">
+                    <td :colspan="showTags ? 7 : 6">
                         There are no emails to show in this list
                     </td>
                 </tr>

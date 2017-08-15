@@ -379,19 +379,24 @@ class StaticProcessor
      */
     public function customMerge($options)
     {
-        $background_path = (isset($options['background_path']))? $options['background_path'] : null;
-        $layers = (isset($options['layers']))? $options['layers'] : [];
+        $background_path = $options['background_path'] ?? null;
+        $layers = $options['layers'] ?? [];
 
         if (!is_null($background_path)) {
             list($background_image, $background_extension, $background_options) =
                 $this->getImageObject($background_path);
             $blob = $background_image->get($background_extension, $background_options);
 
-            foreach ($layers as $layer) {
-                $layer_path = (isset($layer['path'])) ? $layer['path'] : null;
-                $layer_top = (isset($layer['top'])) ? $layer['top'] : 0;
-                $layer_left = (isset($layer['left'])) ? $layer['left'] : 0;
+            if (isset($options['background']) && count($options['background'])) {
+                $options['background']['extension'] = $background_extension;
+                $settings = $this->convertSettings($background_image, $options['background']);
+                $blob = Imagine::convert($blob, $settings);
+            }
 
+            foreach ($layers as $layer) {
+                $layer_path = $layer['path'] ?? null;
+                $layer_top = $layer['top'] ?? 0;
+                $layer_left = $layer['left'] ?? 0;
 
                 if (!is_null($layer_path)) {
                     if ((strpos($layer_path, ';base64') === false) &&
@@ -401,26 +406,30 @@ class StaticProcessor
                     if (isset($layer['width'])) {
                         $layer_width = $layer['width'];
                         $size = sprintf('%dx', $layer_width);
-                        $position = sprintf('+%d+%d', $layer_left, $layer_top);
                     } else {
                         list($layer_image,,) = $this->getImageObject($layer_path);
-
                         $size = sprintf('%dx', $layer_image->getSize()->getWidth());
-                        $position = sprintf('+%d+%d', $layer_left, $layer_top);
                     }
 
+                    $position = sprintf('+%d+%d', $layer_left, $layer_top);
+                    $params = [];
+                    if (isset($layer['gravity'])) {
+                        $params['gravity'] = $layer['gravity'];
+                    }
                     if ($background_extension == "gif") {
                         $blob = Imagine::compositeGif(
                             $blob,
                             $layer_path,
                             $size,
-                            $position
+                            $position,
+                            $params
                         );
                     } else {
                         $blob = Imagine::compositeImage(
                             $blob,
                             $layer_path,
-                            $size.$position
+                            $size.$position,
+                            $params
                         );
                     }
                 }
@@ -445,12 +454,57 @@ class StaticProcessor
             }
         }
 
+        $response['error'] = 'CANVAS_UPLOAD_ERROR';
         if (isset($success)) {
             $response['path'] = $file_path;
-        } else {
-            $response['error'] = 'CANVAS_UPLOAD_ERROR';
         }
 
         return $response;
+    }
+
+    /**
+     * Prepare any ImageMagick setting.
+     *
+     * E.g: offsetx and offsety are used to add space around the image,
+     * and should be translated as an 'extent' command which depends
+     * on the image size.
+     *
+     * @param  object $image
+     * @param  array  $settings
+     * @return array
+     */
+    public function convertSettings($image, $settings)
+    {
+        $data = [];
+
+        if (count($settings)) {
+            $width = $image->getSize()->getWidth();
+            $height = $image->getSize()->getHeight();
+            if ($settings['extension'] == 'gif' || $settings['extension'] == 'png') {
+                $data['repage'] = "";
+                $data['background'] = "none";
+            }
+            unset($settings['extension']);
+            foreach ($settings as $command => $value) {
+                switch ($command) {
+                    // Extents an image width in a given amount of pixels.
+                    // Use gravity to choose left (East) or right (West)
+                    case 'offsetx':
+                        $data['extent'] = ($width + $value) . 'x' . $height;
+                        break;
+                    // Extents an image height in a given amount of pixels
+                    // Use gravity to choose top (South) or bottom (North)
+                    case 'offsety':
+                        $data['extent'] = $width . 'x' . ($height + $value);
+                        break;
+                    // Any other command is used as it was received
+                    default:
+                        $data[$command] = $value;
+                        break;
+                }
+            }
+        }
+
+        return $data;
     }
 }

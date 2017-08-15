@@ -31,8 +31,8 @@ class Delete extends Command
         $email = $this->ask('What is the user email ?');
 
         if ($email != "") {
-            if (!User::where('email', '=', $email)->exists()) {
-                $this->error('The email does not exist.');
+            if (!User::where('email', '=', $email)->where('status', '!=', 'deleted')->exists()) {
+                $this->error('This user does not exist.');
             } else {
                 $user_data = User::where('email', '=', $email)->firstOrFail();
                 $user_data->status = "deleted";

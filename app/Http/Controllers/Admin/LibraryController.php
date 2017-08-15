@@ -3,6 +3,7 @@
 namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
+use Activity;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\Library;
@@ -240,6 +241,14 @@ class LibraryController extends Controller
     {
         $library = Library::findOrFail($request->input("libraryId"));
         $library->delete();
+
+        Permission::where('name', '=', 'access_library_' . $library->key)->delete();
+
+        Activity::log(
+            'Library and permissions deleted',
+            array('properties' => ['library_id' => new ObjectID($library->id)])
+        );
+
         return array("deleted" => $request->input("libraryId"));
     }
 
@@ -248,7 +257,7 @@ class LibraryController extends Controller
      *
      * @return array
      */
-    public function postEspProviders(Request $request)
+    public function postEspProviders()
     {
         $providers = config('esp');
         return $providers;
