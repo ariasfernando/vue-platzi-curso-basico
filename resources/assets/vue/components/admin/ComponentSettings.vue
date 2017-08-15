@@ -1,6 +1,6 @@
 <template>
   <div class="component-settings" v-if="ready">
-    <h4>Element Settings</h4>
+    <h4>STYLES</h4>
     <div class="default-settings">
       <form class="form-horizontal">
         <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings">

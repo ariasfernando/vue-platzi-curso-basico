@@ -326,6 +326,9 @@
 
         const container = document.getElementsByClassName('base-admin')[0];
         container.style.paddingLeft = 0;
+        
+        var sideToggled = document.getElementById('edit-container');
+        sideToggled.classList.toggle('sidebar-closed');
       }
     },
     created () {
@@ -356,6 +359,10 @@
     .section-container{
       font-family: 'Open Sans', Arial, serif;
     }
+  }
+
+  #edit-container{
+    padding: 0px;
   }
 
   .module {
@@ -404,7 +411,7 @@
         font-size: 14px;
         text-transform: uppercase;
         color: #666666;
-        font-weight: normal;
+        font-weight: 300;
         padding: 14px 10px;
         border-bottom: 1px solid #D4D4D4;
         margin: 0px -10px 15px -10px;
@@ -485,7 +492,6 @@
 
       .switch-input:checked + .switch-label-on ~ .switch-selection {
         left: 50px;
-        /* Note: left: 50% doesn't transition in WebKit */
       }
 
       .switch-selection {
@@ -494,9 +500,9 @@
         z-index: 1;
         top: 2px;
         left: 2px;
-        width: 48px;
+        width: 46px;
         height: 23px;
-        border-radius: 3px;
+        border-radius: 2px;
         background: @stensul-purple;
         -webkit-transition: left 0.15s ease-out;
         -moz-transition: left 0.15s ease-out;
@@ -578,6 +584,13 @@
       padding: 10px;
       background-color: #FFFFFF;
 
+      label{
+        text-align: left;
+        color: #666666;
+        padding-top: 2px;
+        font-weight: 300;
+      }
+
       .fields {
         .fa.pull-left{
           margin-right: 12px; 
@@ -625,8 +638,9 @@
             border-radius: 2px;
             background: #f0f0f0;
             border: 0px;
-            padding: 2px 5px;
-            font-size: 10px;
+            padding: 7px;
+            height: 22px;
+            font-size: 11px;
             color: #666666;
             
           }
@@ -643,9 +657,10 @@
                 }
                 .nav-link{
                   margin-right:0;
-                  padding: 4px 20px;
+                  padding: 4px 12px;
                   border: 0;
                   border-radius:0;
+                  font-weight: 300;
                   color: #666666;
                   &.active{
                     border-bottom: 2px solid @focus;
@@ -664,7 +679,7 @@
 
         input:focus {
           outline: none;
-          box-shadow: 0 0 3pt 2pt @focus;
+          background: #e4e4e4;
         }
 
         .control {
@@ -751,7 +766,7 @@
         border-radius: 2px;
         border: none;
         float: right;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 300;
         width: 50px;
       }
@@ -760,6 +775,7 @@
         text-align: left;
         color: #666666;
         padding-top: 2px;
+        font-weight: 300;
       }
 
       .vue-js-switch{
