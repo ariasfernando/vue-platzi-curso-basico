@@ -13,4 +13,5 @@
     Application.globals.processPlainText = ("{{ $app_config["campaign"]["process_plaintext"]  }}")? true : false;
 	Application.globals.logged_user = "{{ (Auth::user()) ? Auth::user()->email : ''}}";
 	Application.globals.proofConfig = {!! json_encode(Config::get('proof')) !!};
+	Application.globals.csrfToken = "{{ csrf_token() }}";
 </script>
