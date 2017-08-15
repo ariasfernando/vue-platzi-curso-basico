@@ -391,7 +391,7 @@
         color: #666666;
         font-weight: 300;
         padding: 14px 10px;
-        border-bottom: 1px solid #D4D4D4;
+        border-bottom: 1px solid #F0F0F0;
         margin: 0px -10px;
       }
 
@@ -581,7 +581,7 @@
       color: #666666;
       display: table-cell;
       float: none;
-      padding: 10px;
+      padding: 0px;
       background-color: #FFFFFF;
 
       label{
@@ -592,6 +592,10 @@
       }
 
       .fields {
+        span.is-danger{
+          display: none!important;
+        }
+
         .fa.pull-left{
           margin-right: 12px; 
         }
@@ -602,7 +606,8 @@
           border-top: 0;
           border-left: 0;
           border-right: 0;
-          padding: 11px 9px 12px 11px; 
+          padding: 21px 10px 14px 10px; 
+
           &:hover, &:visited,
           &:focus, &:active{
             color: #666666;
