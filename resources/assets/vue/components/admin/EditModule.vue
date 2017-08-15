@@ -40,8 +40,7 @@
             <div class="fields">
               <!-- START: General Settings -->
               <b-btn block v-b-toggle.module-settings-left class="module-settings-item">
-                <i class="fa fa-cogs pull-left"></i>
-                <p class="pull-left">Module Settings</p>
+                <p class="pull-left">GENERAL SETTINGS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
              
@@ -73,8 +72,7 @@
               <!-- END: General Settings -->
               <!-- START: Module Settings -->
               <b-btn block v-b-toggle.column-settings class="module-settings-item">
-                <i class="fa fa-cogs pull-left"></i>
-                <p class="pull-left">Column Settings</p>
+                <p class="pull-left">COLUMN SETTINGS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
               
@@ -128,8 +126,7 @@
               <!-- END: Module Settings -->
               <!-- START: Elements -->
               <b-btn block v-b-toggle.element class="module-settings-item">
-                <i class="fa fa-th-large pull-left" variant=""></i>
-                <p class="pull-left">Elements</p>
+                <p class="pull-left">ELEMENTS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
 
@@ -446,6 +443,7 @@
         border-radius: 3px;
         margin: 0 auto;
         border: 1px solid #DFDFDF;
+        margin-top: -3px;
       }
 
       .switch-label {
@@ -707,14 +705,11 @@
           list-style-type: none;
           font-size: 14px;
           background-color: #f4f4f4;
-          border-top: 1px solid #ccc;
-          border-right: 1px solid #ccc;
-          border-left: 1px solid #ccc;
-          border-bottom: 0;
-          padding: 5px;
-          &:last-of-type{
-            border: 1px solid #ccc;
-          }
+          border: 1px solid #d8d8d8;
+          padding: 20px;
+          width: 50%;
+          float: left;
+          text-align: center;
 
           i {
             margin: 0 5px;
@@ -723,11 +718,14 @@
           }
           p{
             display: inline-block;
-            font-size: 14px;
+            font-size: 12px;
             margin: 0px;
             padding: 0px;
             font-weight: 400px;
             color: #666666;
+            width: 100%;
+            font-weight: 300;
+            text-align: center;
           }
         }
       }
