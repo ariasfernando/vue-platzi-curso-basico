@@ -29,6 +29,7 @@ $default = [
             '/dashboard/campaigns/{type}'            => 'DashboardController@getCampaigns',
             '/public/view/{id}'                      => 'PublicController@view',
             '/public/html/{id}'                      => 'PublicController@html',
+            '/config/{key}'                          => 'ConfigController@getGet',
             '/proof/campaign/{id}'                   => 'ProofController@getCampaign',
             '/proof/review/{token}'                  => 'ProofController@getReview',
             '/proof/data/{token}'                    => 'ProofController@getData',
