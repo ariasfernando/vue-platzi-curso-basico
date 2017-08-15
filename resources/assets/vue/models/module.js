@@ -1,5 +1,4 @@
 function Module(data = {}) {
-  console.log(data);
   this.moduleId = data._id || undefined;
   this.name = data.name || data.title || '';
   this.type = data.type || 'studio';

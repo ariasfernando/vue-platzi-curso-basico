@@ -1,110 +1,129 @@
 <template>
-  <table width="100%" cellspacing="0" cellpadding="0" class="module-table">
-
-    <!-- START: TH Structure -->
+  <table :width="module.structure.style.width || '100%'"
+         :bgcolor="module.structure.style.backgroundColor || '#FFFFFF'" 
+         :style="module.structure.style"
+         cellspacing="0" 
+         cellpadding="0" 
+         border="0" 
+         align="center"
+  >
+    <!-- START: 2 COLUMNS -->
     <tr v-if="module.structure.columns.length > 1">
-
-      <th class="st-col" v-for="(column, columnId) in module.structure.columns" 
-          :class="!column.components.length ? 'empty-col' : ''" 
-          :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
-          :style="column.style || ''"
-          :data-col="columnId">
-
-        <table v-if="column.components.length" 
-               width="100%" 
-               cellpadding="0" 
+      <td width="100%">
+        <table :width="module.structure.style.width || '100%'" 
+               class="st-wrapper" 
                cellspacing="0" 
+               cellpadding="0" 
                border="0" 
-               class="st-content-component"
+               align="center"
         >
           <tr>
             <td width="100%">
-              <draggable v-model="column.components" 
-                         @add="onAdd"
-                         :element="'table'" 
-                         :options="options" 
-                         :data-col="columnId"
-                         cellpadding="0" 
-                         cellspacing="0" 
-                         border="0"
-                         width="100%"
-              >
-                <component v-for="(component, componentId) in column.components"
-                           :is="component.type" 
-                           :component="component" 
-                           :module-id="module.id" 
-                           :column-id="columnId"
-                           :component-id="componentId" 
-                           :key="componentId"
-                           class="st-component"></component>
-              </draggable>            
-            </td>
-        </table>
 
-        <!-- Empty Col -->
-        <div v-else >
-          <draggable @add="onAdd"
-                     :element="'div'" 
-                     :options="options" 
+              <table v-for="(column, columnId) in module.structure.columns"
+                     v-if="column.components.length" 
+                     align="left"
+                     :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'"
+                     :style="column.style || ''" 
                      :data-col="columnId"
+                     :class="!column.components.length ? 'empty-col' : ''"
                      cellpadding="0" 
                      cellspacing="0" 
-                     border="0"
-                     width="100%"
-                     class="empty-table"
-          >
-            <div style="display:table-row;"> 
-              <div align="center" 
-                  class="empty-cell"
-                  height="80" 
-                  :data-col="columnId">Drag content here</div>
-            </div>
-          </draggable>
-        </div>
+                     border="0" 
+                     class="st-content-component st-col"
+              >
+                <tr>
+                  <td width="100%">
+                    <draggable v-model="column.components" 
+                               @add="onAdd"
+                               :element="'table'" 
+                               :options="options" 
+                               :data-col="columnId"
+                               cellpadding="0" 
+                               cellspacing="0" 
+                               border="0"
+                               width="100%"
+                    >
+                      <component v-for="(component, componentId) in column.components"
+                                 :is="component.type" 
+                                 :component="component" 
+                                 :module-id="module.id" 
+                                 :column-id="columnId"
+                                 :component-id="componentId" 
+                                 :key="componentId"
+                                 class="st-component"></component>
+                    </draggable>            
+                  </td>
+                </tr>  
+              </table>
 
-      </th>
+              <!-- Empty Col -->
+              <table v-else 
+                    align="left"
+                    :style="column.style || ''"
+                    :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'"
+              >
+                <tr>
+                  <td>
+                    <draggable @add="onAdd"
+                               :element="'div'" 
+                               :options="options" 
+                               :data-col="columnId"
+                               cellpadding="0" 
+                               cellspacing="0" 
+                               border="0"
+                               width="100%"
+                               class="empty-table"
+                    >
+                      <div style="display:table-row;"> 
+                        <div align="center" 
+                            class="empty-cell"
+                            height="80" 
+                            :data-col="columnId">Drag content here</div>
+                      </div>
+                    </draggable>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+        </table>  
+
+      </td>
     </tr>
-    <!-- END: TH Structure -->
+    <!-- END: 2 COLUMNS -->
 
-    <!-- START TD Structure -->
+    <!-- START 1 COLUMNS -->
     <tr v-else>
-      <td class="st-col" v-for="(column, columnId) in module.structure.columns" 
+      <td class="st-col" 
+          v-for="(column, columnId) in module.structure.columns" 
           :class="!column.components.length ? 'empty-col' : ''" 
           :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
           :style="column.style || ''"
           :data-col="columnId"
       >
-        <table v-if="column.components.length" 
-               width="100%" 
-               cellpadding="0" 
-               cellspacing="0" 
-               border="0" 
-               class="st-content-component"
+        <draggable v-if="column.components.length" 
+                   v-model="column.components" 
+                   class="st-content-component"
+                   @add="onAdd"
+                   :element="'table'" 
+                   :options="options" 
+                   :data-col="columnId"
+                   cellpadding="0" 
+                   cellspacing="0" 
+                   border="0"
+                   width="100%"
         >
-          <tr>
-            <td width="100%">
-              <draggable v-model="column.components" 
-                         @add="onAdd"
-                         :element="'table'" 
-                         :options="options" 
-                         :data-col="columnId"
-                         cellpadding="0" 
-                         cellspacing="0" 
-                         border="0"
-                         width="100%"
-              >
-                <component v-for="(component, componentId) in column.components"
-                           :is="component.type" 
-                           :component="component" 
-                           :module-id="module.id" 
-                           :column-id="columnId"
-                           :component-id="componentId" 
-                           :key="componentId"
-                           class="st-component"></component>
-              </draggable>            
-            </td>
-          </tr>
-        </table>
+          <component v-for="(component, componentId) in column.components"
+                     :is="component.type" 
+                     :component="component" 
+                     :module-id="module.id" 
+                     :column-id="columnId"
+                     :component-id="componentId" 
+                     :key="componentId"
+                     class="st-component"></component>
+        </draggable>  
 
         <!-- Empty Col -->
         <div v-else >
@@ -130,7 +149,7 @@
 
       </td>
     </tr>
-    <!-- END TD Structure -->
+    <!-- END 1 COLUMNS -->
   </table>
 </template>
     
@@ -292,6 +311,10 @@
 
   .empty-col {
     background-color: @focus-light;
+  }
+
+  .alignRight{
+    float: left;
   }
 
   td.empty-cell{
