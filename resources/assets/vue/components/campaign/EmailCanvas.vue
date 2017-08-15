@@ -146,12 +146,17 @@
 </script>
 
 <style lang="less">
+  .applelinks {
+    color:#FFFFFF !important; 
+    text-decoration: none !important; 
+  } 
+
   .st-email-body {
     width: 100% !important;
     -webkit-text-size-adjust: 100%;
     margin: 0 !important;
     padding: 0px;
-    background-color: #d1c27f;
+    background-color: #000000;
   }
 
   #outlook a {
@@ -176,6 +181,10 @@
   .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
     line-height: 100%
   }
+
+  span.st-preheader{ 
+    display: none!important;
+  }  
 
   .st-wrapper {
     width: 600px;
@@ -471,12 +480,13 @@
     }
 
     .st-wrapper-content {
-      padding: 0 15px !important;
+      padding: 0!important;
     }
 
     .st-col {
       display: block !important;
-      width: 100% !important
+      width: 100% !important;
+      padding: 0px !important;
     }
 
     .st-col-3side {
@@ -494,6 +504,7 @@
     .st-resize {
       width: 100% !important;
       display: block !important;
+      height: auto !important;
     }
 
     .st-col-sociall {

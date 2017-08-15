@@ -40,8 +40,7 @@
             <div class="fields">
               <!-- START: General Settings -->
               <b-btn block v-b-toggle.module-settings-left class="module-settings-item">
-                <i class="fa fa-cogs pull-left"></i>
-                <p class="pull-left">Module Settings</p>
+                <p class="pull-left">GENERAL SETTINGS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
              
@@ -73,8 +72,7 @@
               <!-- END: General Settings -->
               <!-- START: Module Settings -->
               <b-btn block v-b-toggle.column-settings class="module-settings-item">
-                <i class="fa fa-cogs pull-left"></i>
-                <p class="pull-left">Column Settings</p>
+                <p class="pull-left">COLUMN SETTINGS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
               
@@ -128,8 +126,7 @@
               <!-- END: Module Settings -->
               <!-- START: Elements -->
               <b-btn block v-b-toggle.element class="module-settings-item">
-                <i class="fa fa-th-large pull-left" variant=""></i>
-                <p class="pull-left">Elements</p>
+                <p class="pull-left">ELEMENTS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
 
@@ -329,12 +326,6 @@
 
         const container = document.getElementsByClassName('base-admin')[0];
         container.style.paddingLeft = 0;
-
-//        var modMargin = document.getElementById('admin-module-container');
-//        modMargin.className -= ('col-xs-12');
-//
-//        const contMargin = document.getElementById('edit-container');
-//        contMargin.style.paddingLeft = 0;
       }
     },
     created () {
@@ -391,7 +382,7 @@
         font-size: 14px;
         text-transform: uppercase;
         color: #666666;
-        font-weight: normal;
+        font-weight: 300;
         padding: 14px 10px;
         border-bottom: 1px solid #D4D4D4;
         margin: 0px -10px;
@@ -440,25 +431,24 @@
 
       .switch {
         position: relative;
-        height: 27px;
+        height: 29px;
         width: 100px;
-        background: #C8C8C8;
+        background: @stensul-white;
         border-radius: 3px;
-        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
         margin: 0 auto;
+        border: 1px solid #DFDFDF;
+        margin-top: -3px;
       }
 
       .switch-label {
         position: relative;
         z-index: 2;
         float: left;
-        width: 50px;
-        line-height: 23px;
+        width: 49px;
+        line-height: 21px;
         font-size: 16px;
-        color: #fff;
+        color: @stensul-purple;
         text-align: center;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
         cursor: pointer;
         margin: 0 !important;
 
@@ -487,7 +477,6 @@
       .switch-input:checked + .switch-label {
         font-weight: bold;
         color: #fff;
-        text-shadow: 0 1px rgba(255, 255, 255, 0.25);
         -webkit-transition: 0.15s ease-out;
         -moz-transition: 0.15s ease-out;
         -o-transition: 0.15s ease-out;
@@ -506,15 +495,9 @@
         top: 2px;
         left: 2px;
         width: 48px;
-        height: 24px;
-        background: @brand-secondary;
+        height: 23px;
         border-radius: 3px;
-        background-image: -webkit-linear-gradient(top, @brand-primary, @brand-secondary);
-        background-image: -moz-linear-gradient(top, @brand-primary, @brand-secondary);
-        background-image: -o-linear-gradient(top, @brand-primary, @brand-secondary);
-        background-image: linear-gradient(to bottom, @brand-primary, @brand-secondary);
-        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        background: @stensul-purple;
         -webkit-transition: left 0.15s ease-out;
         -moz-transition: left 0.15s ease-out;
         -o-transition: left 0.15s ease-out;
@@ -616,12 +599,10 @@
             font-size: 14px;
             margin: 0;
             padding: 0;
+            font-weight: 300;
           }
           i{
             color:#CCCCCC;
-          }
-          &[aria-expanded="true"]{
-            background-color: #F0F0F0;
           }
         }
         
@@ -640,8 +621,8 @@
         #module-settings-left,
         #column-settings{
           input{
-            text-align: center;
-            border-radius: 7px;
+            text-align: left;
+            border-radius: 2px;
             background: #f0f0f0;
             border: 0px;
             padding: 2px 5px;
@@ -689,6 +670,7 @@
         .control {
           border-bottom: 1px solid #f0f0f0;
           padding: 15px 10px 15px 12px;
+          display: table;
         }
 
         .list-inline{
@@ -716,14 +698,13 @@
           list-style-type: none;
           font-size: 14px;
           background-color: #f4f4f4;
-          border-top: 1px solid #ccc;
-          border-right: 1px solid #ccc;
-          border-left: 1px solid #ccc;
-          border-bottom: 0;
-          padding: 5px;
-          &:last-of-type{
-            border: 1px solid #ccc;
-          }
+          border: 1px solid #d8d8d8;
+          padding: 20px;
+          width: 49%;
+          margin-right: 2px;
+          margin-bottom: 2px;
+          float: left;
+          text-align: center;
 
           i {
             margin: 0 5px;
@@ -732,11 +713,14 @@
           }
           p{
             display: inline-block;
-            font-size: 14px;
+            font-size: 12px;
             margin: 0px;
             padding: 0px;
             font-weight: 400px;
             color: #666666;
+            width: 100%;
+            font-weight: 300;
+            text-align: center;
           }
         }
       }
