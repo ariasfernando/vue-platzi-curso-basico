@@ -17,7 +17,7 @@
               :style="column.style">
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr v-for="(component, componentId) in column.components">
-                <td>
+                <td width="100%" align="center">
                     <component :is="component.type" :component="component" :module-id="moduleId" :column-id="columnId"
                                :component-id="componentId"></component>
                 </td>
@@ -29,7 +29,7 @@
           <td v-for="(column, columnId) in module.structure.columns" :width="column.style.width" :style="column.style">
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr v-for="(component, componentId) in column.components">
-                <td>
+                <td width="100%" align="center">
                     <component :is="component.type" :component="component" :module-id="moduleId" :column-id="columnId"
                                :component-id="componentId"></component>
                 </td>
@@ -55,9 +55,11 @@
     name: 'Module',
     props: ['moduleId'],
     computed: {
+      modules() {
+        return this.$store.getters["campaign/modules"];
+      },
       module() {
-        const idx = this.moduleId;
-        return this.$store.state.campaign.modules[idx];
+        return this.modules[this.moduleId];
       }
     },
     methods: {

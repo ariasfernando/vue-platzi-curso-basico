@@ -56,7 +56,10 @@
     name: 'EmailActions',
     computed: {
       campaign () {
-        return this.$store.state.campaign.campaign;
+        return this.$store.getters["campaign/campaign"];
+      },
+      dirty() {
+        return this.$store.getters["campaign/dirty"];
       }
     },
     data () {
@@ -146,12 +149,14 @@
       },
       autoSave() {
         setInterval(() => {
-          this._save().then(response => {
-            this.$store.commit("global/setLoader", false);
-          }, error => {
-            this.$store.commit("global/setLoader", false);
-            this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
-          });
+          if (this.dirty) {
+            this._save().then(response => {
+              this.$store.commit("global/setLoader", false);
+            }, error => {
+              this.$store.commit("global/setLoader", false);
+              this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
+            });
+          }
         }, 20000);
       },
       preview() {
