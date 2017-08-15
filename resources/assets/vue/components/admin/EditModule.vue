@@ -326,12 +326,6 @@
 
         const container = document.getElementsByClassName('base-admin')[0];
         container.style.paddingLeft = 0;
-
-//        var modMargin = document.getElementById('admin-module-container');
-//        modMargin.className -= ('col-xs-12');
-//
-//        const contMargin = document.getElementById('edit-container');
-//        contMargin.style.paddingLeft = 0;
       }
     },
     created () {
@@ -388,7 +382,7 @@
         font-size: 14px;
         text-transform: uppercase;
         color: #666666;
-        font-weight: normal;
+        font-weight: 300;
         padding: 14px 10px;
         border-bottom: 1px solid #D4D4D4;
         margin: 0px -10px;
@@ -605,12 +599,10 @@
             font-size: 14px;
             margin: 0;
             padding: 0;
+            font-weight: 300;
           }
           i{
             color:#CCCCCC;
-          }
-          &[aria-expanded="true"]{
-            background-color: #F0F0F0;
           }
         }
         
@@ -678,6 +670,7 @@
         .control {
           border-bottom: 1px solid #f0f0f0;
           padding: 15px 10px 15px 12px;
+          display: table;
         }
 
         .list-inline{
@@ -707,7 +700,9 @@
           background-color: #f4f4f4;
           border: 1px solid #d8d8d8;
           padding: 20px;
-          width: 50%;
+          width: 49%;
+          margin-right: 2px;
+          margin-bottom: 2px;
           float: left;
           text-align: center;
 
