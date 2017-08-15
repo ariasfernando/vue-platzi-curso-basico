@@ -103,8 +103,8 @@
               <b-collapse id="column-settings" accordion="module-settings-accordion">
                 <b-card class="control container-fluid" no-block>
                   <div class="row">
-                    <label class="col-sm-4 control-label" for="set-column">Columns</label> 
-                    <div class="col-sm-8">
+                    <label class="col-sm-8 control-label" for="set-column">Columns</label> 
+                    <div class="col-sm-4">
                       <input class="input-number pull-right"
                              name="column-number" 
                              type="number"
@@ -124,8 +124,8 @@
                            v-for="(column, key) in module.structure.columns" 
                     >
                       <div class="row" :class="'field-' + setting.name" v-for="(setting, keySettings ) in column.settings">
-                        <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
-                        <div class="col-sm-8">
+                        <label class="col-sm-8 control-label" :for="setting.name">{{ setting.label }}</label>
+                        <div class="col-sm-4">
                           <input v-if="setting.type === 'text'"
                                  v-model="setting.value" 
                                  v-validate="'required'" 
@@ -345,11 +345,17 @@
 
       },
       toggleSidebar() {
+        var modOpen = document.getElementById('admin-module-container');
+        modOpen.className -= ('col-xs-12');
+
         const sidebar = document.getElementById('admin-sidebar');
         sidebar.style.display = 'none';
 
         const container = document.getElementsByClassName('base-admin')[0];
         container.style.paddingLeft = 0;
+        
+        var sideToggled = document.getElementById('edit-container');
+        sideToggled.classList.toggle('sidebar-closed');
       }
     },
     created () {
@@ -382,6 +388,10 @@
     }
   }
 
+  #edit-container{
+    padding: 0px;
+  }
+
   .module {
     margin-top: -15px;
 
@@ -408,7 +418,7 @@
         color: #666666;
         font-weight: 300;
         padding: 14px 10px;
-        border-bottom: 1px solid #D4D4D4;
+        border-bottom: 1px solid #F0F0F0;
         margin: 0px -10px;
       }
 
@@ -428,7 +438,7 @@
         font-size: 14px;
         text-transform: uppercase;
         color: #666666;
-        font-weight: normal;
+        font-weight: 300;
         padding: 14px 10px;
         border-bottom: 1px solid #D4D4D4;
         margin: 0px -10px 15px -10px;
@@ -509,7 +519,6 @@
 
       .switch-input:checked + .switch-label-on ~ .switch-selection {
         left: 50px;
-        /* Note: left: 50% doesn't transition in WebKit */
       }
 
       .switch-selection {
@@ -518,9 +527,9 @@
         z-index: 1;
         top: 2px;
         left: 2px;
-        width: 48px;
+        width: 46px;
         height: 23px;
-        border-radius: 3px;
+        border-radius: 2px;
         background: @stensul-purple;
         -webkit-transition: left 0.15s ease-out;
         -moz-transition: left 0.15s ease-out;
@@ -591,7 +600,8 @@
     .section-container {
       background-color: #FFFFFF;
       padding-top: 0px;
-      display:table;
+      display: table;
+      table-layout: fixed;
     }
 
     .left-bar {
@@ -599,13 +609,31 @@
       color: #666666;
       display: table-cell;
       float: none;
-      padding: 10px;
+      padding: 0px;
       background-color: #FFFFFF;
 
+      label{
+        text-align: left;
+        color: #666666;
+        padding-top: 2px;
+        font-weight: 300;
+        font-size: 13px;
+        margin-bottom: 0px;
+      }
+
       .fields {
+        span.is-danger{
+          display: none!important;
+        }
+
+        .card-block .row{
+          margin-bottom: 10px;
+        }
+
         .fa.pull-left{
           margin-right: 12px; 
         }
+
         button.module-settings-item{
           line-height: 13px;
           box-shadow: none;
@@ -613,7 +641,8 @@
           border-top: 0;
           border-left: 0;
           border-right: 0;
-          padding: 11px 9px 12px 11px; 
+          padding: 21px 10px 14px 10px; 
+
           &:hover, &:visited,
           &:focus, &:active{
             color: #666666;
@@ -637,8 +666,8 @@
           .module-name{
             text-align: center;  
             input{
-              font-size: 12px;
-              padding: 7px;
+              font-size: 14px;
+              padding: 15px 7px;
               margin-bottom: 10px;
               width: 90%;
             }
@@ -652,8 +681,9 @@
             border-radius: 2px;
             background: #f0f0f0;
             border: 0px;
-            padding: 2px 5px;
-            font-size: 10px;
+            padding: 7px;
+            height: 22px;
+            font-size: 11px;
             color: #666666;
             
           }
@@ -670,9 +700,10 @@
                 }
                 .nav-link{
                   margin-right:0;
-                  padding: 4px 20px;
+                  padding: 4px 12px;
                   border: 0;
                   border-radius:0;
+                  font-weight: 300;
                   color: #666666;
                   &.active{
                     border-bottom: 2px solid @focus;
@@ -691,13 +722,17 @@
 
         input:focus {
           outline: none;
-          box-shadow: 0 0 3pt 2pt @focus;
+          background: #e4e4e4;
         }
 
         .control {
           border-bottom: 1px solid #f0f0f0;
           padding: 15px 10px 15px 12px;
           display: table;
+
+          .module-name{
+            padding-bottom: 7px;
+          }
         }
 
         .list-inline{
@@ -778,7 +813,7 @@
         border-radius: 2px;
         border: none;
         float: right;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 300;
         width: 50px;
       }
@@ -787,6 +822,7 @@
         text-align: left;
         color: #666666;
         padding-top: 2px;
+        font-weight: 300;
       }
 
       .vue-js-switch{
