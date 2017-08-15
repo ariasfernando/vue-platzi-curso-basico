@@ -11,6 +11,7 @@ const state = {
   currentComponent: {},
   modalComplete: false,
   modalPreview: false,
+  modalProof: false,
   buildingMode: 'desktop',
   dirty: false,
 };
