@@ -79,8 +79,8 @@
               <b-collapse id="column-settings" accordion="module-settings-accordion">
                 <b-card class="control container-fluid" no-block>
                   <div class="row">
-                    <label class="col-sm-4 control-label" for="set-column">Columns</label> 
-                    <div class="col-sm-8">
+                    <label class="col-sm-8 control-label" for="set-column">Columns</label> 
+                    <div class="col-sm-4">
                       <input class="input-number pull-right"
                              name="column-number" 
                              type="number"
