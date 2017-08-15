@@ -440,25 +440,23 @@
 
       .switch {
         position: relative;
-        height: 27px;
+        height: 29px;
         width: 100px;
-        background: #C8C8C8;
+        background: @stensul-white;
         border-radius: 3px;
-        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
         margin: 0 auto;
+        border: 1px solid #DFDFDF;
       }
 
       .switch-label {
         position: relative;
         z-index: 2;
         float: left;
-        width: 50px;
-        line-height: 23px;
+        width: 49px;
+        line-height: 21px;
         font-size: 16px;
-        color: #fff;
+        color: @stensul-purple;
         text-align: center;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
         cursor: pointer;
         margin: 0 !important;
 
@@ -487,7 +485,6 @@
       .switch-input:checked + .switch-label {
         font-weight: bold;
         color: #fff;
-        text-shadow: 0 1px rgba(255, 255, 255, 0.25);
         -webkit-transition: 0.15s ease-out;
         -moz-transition: 0.15s ease-out;
         -o-transition: 0.15s ease-out;
@@ -506,15 +503,9 @@
         top: 2px;
         left: 2px;
         width: 48px;
-        height: 24px;
-        background: @brand-secondary;
+        height: 23px;
         border-radius: 3px;
-        background-image: -webkit-linear-gradient(top, @brand-primary, @brand-secondary);
-        background-image: -moz-linear-gradient(top, @brand-primary, @brand-secondary);
-        background-image: -o-linear-gradient(top, @brand-primary, @brand-secondary);
-        background-image: linear-gradient(to bottom, @brand-primary, @brand-secondary);
-        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        background: @stensul-purple;
         -webkit-transition: left 0.15s ease-out;
         -moz-transition: left 0.15s ease-out;
         -o-transition: left 0.15s ease-out;
@@ -640,8 +631,8 @@
         #module-settings-left,
         #column-settings{
           input{
-            text-align: center;
-            border-radius: 7px;
+            text-align: left;
+            border-radius: 2px;
             background: #f0f0f0;
             border: 0px;
             padding: 2px 5px;
