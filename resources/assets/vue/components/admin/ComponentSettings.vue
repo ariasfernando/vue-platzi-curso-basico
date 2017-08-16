@@ -10,7 +10,7 @@
                    :name="setting.name" type="text" :placeholder="setting.label" @change="saveComponent">
 
             <span v-if="setting.type === 'select'">
-              <b-form-select v-model="selected" :options="setting.value" class="mb-3">
+              <b-form-select v-model="selected" :options="setting.value" class="mb-3" @change="saveComponent">
               </b-form-select>
             </span>
 
