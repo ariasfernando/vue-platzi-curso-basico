@@ -74,7 +74,7 @@
 
                     <div v-if="!generalSetting.group" >
                       <label class="col-sm-8 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
-                      <div class="col-sm-4" class="position-relative content-colorpicker">
+                      <div class="col-sm-4 position-relative content-colorpicker">
                         <input v-if="generalSetting.type === 'text'"
                                :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
                                :name="generalSetting.name"
@@ -287,7 +287,15 @@
         this.setModuleField({ name: e.target.value });
       },
       triggerInputColor(e){  
-        console.log('sketch');
+        const elementSketch = this.$refs.sketch[0].$el;
+        const backgroundElelment = $(elementSketch).closest('.content-colorpicker').find('[name=backgroundColor]')[0];
+        
+        this.saveModuleStyle({
+          target:{
+            name :backgroundElelment.name,
+            value :backgroundElelment.value
+          }
+        })
       },  
       setModuleField(data) {
         this.$store.commit("module/setModuleFields", data);
