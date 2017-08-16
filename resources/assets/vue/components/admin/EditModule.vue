@@ -412,11 +412,11 @@
     .module-settings {
 
       h4{
-        font-size: 14px;
+        font-size: 13px;
         text-transform: uppercase;
         color: #666666;
         font-weight: 300;
-        padding: 14px 10px;
+        padding: 10px 10px;
         border-bottom: 1px solid #F0F0F0;
         margin: 0px -10px;
       }
@@ -657,7 +657,7 @@
             outline: none;
           }
           p{
-            font-size: 14px;
+            font-size: 13px;
             margin: 0;
             padding: 0;
             font-weight: 300;
@@ -699,23 +699,34 @@
 
           .card-header{
             padding-bottom: 20px;
+
             ul{
-              border-bottom: 1px solid #F0F0F0;
+              margin-left: -10px;
+              margin-right: -10px;
+              border-bottom: 1px solid #DDDDDD;
+
               .nav-item{
-                border-top: 1px solid #F0F0F0;
-                border-left: 1px solid #F0F0F0;
+                border-top: 1px solid #DDDDDD;
+                border-left: 1px solid #DDDDDD;
+                margin-bottom: -2px;
+
+                &:first-child{
+                  margin-left: 10px;
+                }
+
                 &:last-of-type{
-                  border-right: 1px solid #F0F0F0;
+                  border-right: 1px solid #DDDDDD;
                 }
                 .nav-link{
                   margin-right:0;
-                  padding: 4px 12px;
+                  padding: 4px 7px;
                   border: 0;
                   border-radius:0;
                   font-weight: 300;
                   color: #666666;
                   &.active{
                     border-bottom: 2px solid @focus;
+                    background: @focus-light;
                   }
                   &:focus{
                     background-color: transparent;
