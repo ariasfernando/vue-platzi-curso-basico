@@ -649,7 +649,7 @@
           border-top: 0;
           border-left: 0;
           border-right: 0;
-          padding: 15px 10px 8px 10px; 
+          padding: 15px 10px 13px 10px; 
 
           &:hover, &:visited,
           &:focus, &:active{
@@ -664,6 +664,7 @@
           }
           i{
             color:#CCCCCC;
+            line-height: 12px;
           }
         }
         
@@ -853,6 +854,10 @@
         font-size: 11px;
         font-weight: 300;
         width: 50px;
+      }
+
+      input[name="href"]{
+        width: 115px;
       }
 
       label{

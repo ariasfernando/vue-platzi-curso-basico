@@ -19,7 +19,7 @@ module.exports = {
   settings: [
     {
       link: 'attribute',
-      label: 'Default URI',
+      label: 'Default URL',
       name: 'href',
       type: 'text',
       value: 'http://stensul.com',
@@ -47,7 +47,7 @@ module.exports = {
     },
     {
       link: 'attribute',
-      label: 'width',
+      label: 'Width',
       name: 'width',
       type: 'text',
       value: '220',
