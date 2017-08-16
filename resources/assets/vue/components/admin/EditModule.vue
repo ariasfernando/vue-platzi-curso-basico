@@ -705,6 +705,8 @@
         }
         
         #module-settings-left{
+
+
           .input-group-setting{
             margin-right: -12px !important;
           }
@@ -719,8 +721,18 @@
           }  
         }
 
+        #element{
+          background: #FBFBFB;
+          border-top: 1px solid #cccccc;
+          margin-top: -1px;
+        }
+
         #module-settings-left,
         #column-settings{
+          border-top: 1px solid #cccccc;
+          margin-top: -1px;
+          background: #FBFBFB;
+
           input{
             text-align: left;
             border-radius: 2px;
