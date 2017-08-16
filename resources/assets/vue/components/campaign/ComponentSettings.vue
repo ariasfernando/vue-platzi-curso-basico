@@ -2,7 +2,7 @@
   <div class="component-settings section-box" v-if="ready && !empty">
     <h4>{{ title }}</h4>
     <div class="plugins">
-      <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.name">
+      <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
         <component :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
@@ -81,5 +81,9 @@
 <style lang="less">
   .vue-js-switch {
     margin-top: 4px
+  }
+
+  .plugin-wrapper {
+    margin-bottom: 10px;
   }
 </style>

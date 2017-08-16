@@ -16,13 +16,23 @@
     computed: {
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
+      },
+      component() {
+        if (!_.isEmpty(this.currentComponent)) {
+          const moduleId = this.currentComponent.moduleId;
+          const columnId = this.currentComponent.columnId;
+          const componentId = this.currentComponent.componentId;
+
+          this.colors.hex = this.component.attribute.bgcolor;
+          return this.$store.campaign.modules[moduleId].structure.columns[columnId].components[componentId];
+        }
       }
     },
     data() {
       return {
         defaultColors: this.plugin.config.defaultColors,
         colors: {
-          hex: this.plugin.data.backgroundColor || this.plugin.config.defaultValue,
+          hex: this.plugin.config.defaultValue,
         }
       }
     },
@@ -33,14 +43,10 @@
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          data: {
-            backgroundColor: value.hex,
-          },
           attribute: 'bgcolor',
           attributeValue: value.hex,
         };
 
-        this.$store.commit('campaign/savePlugin', payload);
         this.$store.commit('campaign/saveComponentAttribute', payload);
       }
     },

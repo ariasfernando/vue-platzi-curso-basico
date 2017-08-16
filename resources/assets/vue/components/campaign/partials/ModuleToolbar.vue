@@ -65,10 +65,10 @@
   }
 
   .module-toolbar {
-    position: relative;
+    position: absolute;
     background-color: @icon-option;
-    float: right;
-    height: 30px; 
+    height: 30px;
+    bottom: 0;
     right: -100px;
     div {
       cursor: pointer;

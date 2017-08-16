@@ -1,13 +1,13 @@
 <template >
   <tr v-if="module.type === 'custom'" class="st-module-wrapper">  
-    <td class="st-toolbar-content">
+    <td class="st-toolbar-content st-position-relative">
       <div v-html="module.template"></div>
       <module-toolbar :module-id="moduleId"></module-toolbar>
     </td>
   </tr>  
 
   <tr v-else class="st-module-wrapper">
-    <td class="st-toolbar-content"
+    <td class="st-toolbar-content st-position-relative"
         :style="module.structure.style" 
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
     >
