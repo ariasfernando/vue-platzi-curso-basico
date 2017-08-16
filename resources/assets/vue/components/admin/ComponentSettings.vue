@@ -21,30 +21,10 @@
 
     <p class="sep"><br></p>
 
-    <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.id">
-      <h4>{{ plugin.name }}</h4>
-      <div class="default-settings">
-        <form class="form-horizontal">
-          <div v-for="field in plugin.studio.fields" class="form-group" :class="'field-' + field.name">
-            <label class="col-sm-7 control-label" :for="field.name">{{ field.label }}</label>
-            <div class="col-sm-5">
-              <!-- Switch Inpput -->
-              <span v-if="field.type === 'switch'">
-                <toggle-button :value="field.value" color="#78DCD6" :sync="true" :labels="true" @change="changePlugin(key, field)"></toggle-button>
-              </span>
-
-              <!-- Text Inpput -->
-              <input v-if="field.type === 'text'" type="text" :name="field.name" :placeholder="field.label" v-model="field.value" :link="field.link"
-                     v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }" @change="saveComponent">
-
-              <!-- Color Inpput -->
-              <input v-if="field.type === 'color'" type="color" :name="field.name" :placeholder="field.label" v-model="field.value" :link="field.link"
-                     v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(field.name) }" @change="saveComponent">
-
-              <span v-show="errors.has(field.name)" class="help is-danger">{{ errors.first(field.name) }}</span>
-            </div>
-          </div>
-        </form>
+    <h4>Plugins</h4>
+    <div class="plugins">
+      <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.name">
+        <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
 
@@ -54,15 +34,11 @@
 <script>
 
   import Vue from 'vue/dist/vue'
-  import ToggleButton from '../common/ToggleButton.vue'
   import _ from 'lodash'
   import uc from 'underscore-contrib'
   import defaultElements from '../../resources/elements'
 
   export default {
-    components: {
-      ToggleButton
-    },
     data () {
       return {
         ready: false,
@@ -81,24 +57,12 @@
           if (!_.isEmpty(this.currentComponent) &&  (this.currentComponent.componentId >= 0) ) {
             this.component = _.cloneDeep(module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId]);
             this.ready = true;
-
-            setTimeout(() => {
-              this.initPlugins();
-            }, 100);
-
           }
         },
         deep: true
       },
     },
     methods: {
-      initPlugins() {
-        _.each(this.component.plugins, (plugin) => {
-          if (plugin.studio.init && _.isFunction(plugin.studio.init)) {
-            plugin.studio.init(this);
-          }
-        });
-      },
       saveComponent() {
         _.each(this.component.settings, (option, index) => {
           if (option.link === 'style') {

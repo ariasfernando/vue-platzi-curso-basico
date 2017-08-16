@@ -1,10 +1,13 @@
+import _ from 'lodash';
+
 function Module(data = {}) {
   this.moduleId = data._id || undefined;
   this.name = data.name || data.title || '';
   this.type = data.type || 'studio';
   this.status = data.status || '';
   const style = (data.structure && data.structure.style) ? data.structure.style : {};
-  const settings = (data.settstructureings && data.structure.settings) ? data.structure.settings : [];
+  const settings = (data.structure && data.structure.settings) ? data.structure.settings : [];
+
   this.structure = {
     style: {
       width: style.width || '660',
@@ -67,6 +70,8 @@ function Module(data = {}) {
 
     columns: data.structure && data.structure.columns ? data.structure.columns : [],
   };
+
+  _.extend(this.structure.settings, settings);
 
   return this;
 }
