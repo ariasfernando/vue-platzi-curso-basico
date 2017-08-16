@@ -1,7 +1,5 @@
-const modulePlugins = require('./plugins/modules');
+const plugins = require('./plugins');
 
 window.customer = {
-  plugins: {
-    modules: modulePlugins,
-  },
+  plugins,
 };

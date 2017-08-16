@@ -207,17 +207,16 @@
         }
 
         let el = _.cloneDeep(defaultElements[elType]);
+        let plugins = {};
 
-        // Base plugins
-        el.plugins = _.cloneDeep(Plugins[elType.replace('-element', '')]);
-
-        if (this.$customer) {
-          // Check for customer Plugins
-          const customerPlugins = uc.getPath(this.$customer, 'plugins.modules', {});
-          if (!_.isEmpty(customerPlugins)) {
-            el.plugins = _.extend(el.plugins, _.cloneDeep(customerPlugins[elType.replace('-element', '')]));
+        console.log('onAdd');
+        _.each(this.$app.modulePlugins, (plugin, name) => {
+          if (plugin.target.indexOf(elType.replace('-element', '')) !== -1) {
+            plugins[name] = plugin;
           }
-        }
+        });
+
+        el.plugins = plugins;
 
         this.$store.commit("module/addComponent", {
           el,
@@ -255,24 +254,19 @@
         _.each(this.module.structure.columns, (column, colId) => {
           _.each(column.components, (component, componentId) => {
 
-            // Base plugins
+            const componentType = component.type.replace('-element', '');
             let plugins = {};
 
-            _.each(Plugins[component.type.replace('-element', '')], (plugin, name) => {
-              plugins[name] = plugin;
-            });
-
-            if (this.$customer) {
-              // Check for customer Plugins
-              const customerPlugins = uc.getPath(this.$customer, 'plugins.modules', {});
-              _.each(customerPlugins[component.type.replace('-element', '')], (plugin, name) => {
+            _.each(this.$app.modulePlugins, (plugin, name) => {
+              console.log('initPlugins');
+              if (plugin.target.indexOf(componentType) !== -1) {
                 plugins[name] = plugin;
-              });
-            }
+              }
+            });
 
             // Merge default plugins with module data
             _.each(component.plugins, (plugin, name) => {
-              _.extend(plugins[name].studio.fields, plugin.studio.fields);
+              _.extend(plugins[name].data, plugin.data);
             });
 
             // Add init function to current module

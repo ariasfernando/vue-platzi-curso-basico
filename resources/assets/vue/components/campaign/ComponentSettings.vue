@@ -1,60 +1,25 @@
 <template>
-  <div class="component-settings section-box" v-if="ready">
-
-    <h4>Element Settings</h4><hr>
-    <div class="default-settings">
-      <form class="form-horizontal">
-        <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.id">
-          <div v-if="plugin.campaign && plugin.campaign.fields">
-            <div class="default-settings">
-              <form class="form-horizontal">
-                <div v-for="(field, fieldName) in plugin.campaign.fields" class="form-group" :class="'field-' + fieldName">
-                  <label class="col-sm-4 control-label" :for="fieldName">{{ field.label }}</label>
-                  <div class="col-sm-8">
-
-                    <!-- Switch Inpput -->
-                    <span v-if="field.type === 'switch'">
-                      <toggle-button :value="field.value" color="#82C7EB" :sync="true" :labels="true" @change="changePlugin(key, field)"></toggle-button>
-                    </span>
-
-                    <!-- Text Inpput -->
-                    <input v-if="field.type === 'text'" type="text" :name="fieldName" :placeholder="field.label" :value="field.value" :data-plugin="plugin.id"
-                           v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(fieldName) }" @change="savePlugin">
-
-                    <!-- Color Inpput -->
-                    <input v-if="field.type === 'color'" type="color" :name="fieldName" :placeholder="field.label" :value="field.value" :data-plugin="plugin.id"
-                           v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(fieldName) }" @change="savePlugin">
-
-                    <!-- Error Message -->
-                    <span v-show="errors.has(fieldName)" class="help is-danger">{{ errors.first(fieldName) }}</span>
-
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </form>
+  <div class="component-settings section-box" v-if="ready && !empty">
+    <h4>{{ title }}</h4>
+    <div class="plugins">
+      <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
+        <component :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-
-  import ToggleButton from '../common/ToggleButton.vue'
   import _ from 'lodash'
   import uc from 'underscore-contrib'
   import defaultElements from '../../resources/elements'
-  import Plugins from '../../plugins/modules'
 
   export default {
-    components: {
-      ToggleButton
-    },
     data () {
       return {
+        title: '',
         ready: false,
-        pluginReady: false,
+        empty: true,
         component: {}
       }
     },
@@ -64,29 +29,21 @@
       }
     },
     watch : {
+      // Reload component that will be shown
       currentComponent: {
         handler: function() {
           let modules = this.$store.getters["campaign/modules"];
           if (!_.isEmpty(this.currentComponent)) {
             this.component = modules[this.currentComponent.moduleId].structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
+            this.title = _.capitalize(this.component.type.replace('-element', '')) + ' settings';
+            this.empty = _.isEmpty(this.component.plugins);
             this.ready = true;
-
-            setTimeout(() => {
-              this.initPlugins();
-            }, 100);
           }
         },
         deep: true
       },
     },
     methods: {
-      initPlugins() {
-        _.each(this.component.plugins, (plugin) => {
-          if (plugin.campaign && plugin.campaign.init && _.isFunction(plugin.campaign.init)) {
-            plugin.campaign.init(this);
-          }
-        });
-      },
       savePlugin(e) {
         const pluginName = e.target.dataset.plugin;
         const field = e.target.name;
@@ -124,5 +81,9 @@
 <style lang="less">
   .vue-js-switch {
     margin-top: 4px
+  }
+
+  .plugin-wrapper {
+    margin-bottom: 10px;
   }
 </style>

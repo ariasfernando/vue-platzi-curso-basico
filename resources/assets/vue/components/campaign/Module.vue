@@ -1,13 +1,13 @@
 <template >
   <tr v-if="module.type === 'custom'" class="st-module-wrapper">  
-    <td class="st-toolbar-content">
+    <td class="st-toolbar-content st-position-relative">
       <div v-html="module.template"></div>
       <module-toolbar :module-id="moduleId"></module-toolbar>
     </td>
   </tr>  
 
   <tr v-else class="st-module-wrapper">
-    <td class="st-toolbar-content"
+    <td class="st-toolbar-content st-position-relative"
         :style="module.structure.style" 
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
     >
@@ -17,7 +17,7 @@
               :style="column.style">
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr v-for="(component, componentId) in column.components">
-                <td width="100%" align="center">
+                <td width="100%" :align="component.attribute.align || 'center'">
                     <component :is="component.type" :component="component" :module-id="moduleId" :column-id="columnId"
                                :component-id="componentId"></component>
                 </td>
@@ -29,7 +29,7 @@
           <td v-for="(column, columnId) in module.structure.columns" :width="column.style.width" :style="column.style">
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr v-for="(component, componentId) in column.components">
-                <td width="100%" align="center">
+                <td width="100%" :align="component.attribute.align || 'center'">
                     <component :is="component.type" :component="component" :module-id="moduleId" :column-id="columnId"
                                :component-id="componentId"></component>
                 </td>

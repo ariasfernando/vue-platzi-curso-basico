@@ -19,9 +19,9 @@
     </aside>
 
     <!-- Modals -->
-    <modal-complete></modal-complete>
-    <modal-preview></modal-preview>
-    <modal-proof></modal-proof>
+    <modal-complete v-if="ready"></modal-complete>
+    <modal-preview v-if="ready"></modal-preview>
+    <modal-proof v-if="ready"></modal-proof>
 
     <spinner></spinner>
 

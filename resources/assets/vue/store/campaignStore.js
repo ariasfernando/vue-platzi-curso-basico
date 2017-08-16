@@ -108,6 +108,14 @@ const mutations = {
     const componentId = data.componentId;
     state.modules[moduleId].structure.columns[columnId].components[componentId] = data.component;
   },
+  savePlugin(state, data) {
+    let pluginData = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data;
+    _.merge(pluginData, data.data);
+  },
+  saveComponentAttribute(state, data) {
+    let attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
+    attributes[data.attribute] = data.attributeValue;
+  },
   error(err) {
     console.error(err);
   },
