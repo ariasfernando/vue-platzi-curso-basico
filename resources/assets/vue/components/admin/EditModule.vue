@@ -434,11 +434,11 @@
     .component-settings{
 
       h4{
-        font-size: 14px;
+        font-size: 13px;
         text-transform: uppercase;
         color: #666666;
         font-weight: 300;
-        padding: 14px 10px;
+        padding: 10px 10px;
         border-bottom: 1px solid #D4D4D4;
         margin: 0px -10px 15px -10px;
       }
