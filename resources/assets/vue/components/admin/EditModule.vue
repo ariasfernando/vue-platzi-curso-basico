@@ -58,14 +58,19 @@
                   <div class="row">
                     <label class="col-sm-8 control-label" for="set-column">Columns</label> 
                     <div class="col-sm-4">
-                      <input class="input-number pull-right"
+                      <!-- <input class="input-number pull-right"
                              name="column-number" 
                              type="number"
                              :value="tabIndex === null ? 0 : tabIndex+1"
                              min="1"
                              :max="maxCols"
                              @input="setColumns"
-                      >
+                      > -->
+
+                      <div>
+                        <b-form-select v-model="selected" :options="optionsSelected" class="mb-3" @input="setColumns">
+                        </b-form-select>
+                      </div> 
                     </div> 
                   </div>
                   <div class="row" 
@@ -247,6 +252,18 @@
     },
     data () {
       return {
+        selected: '0',
+        optionsSelected: [
+          { value: '0', text: '0' },
+          { value: '1', text: '1' },
+          { value: '2', text: '2' },
+          { value: '3', text: '3' },
+          { value: '4', text: '4' },
+          { value: '5', text: '5' },
+          { value: '6', text: '6' },
+          { value: '7', text: '7' },
+          { value: '8', text: '8' }
+        ],
         ready: false,
         buildingMode: 'desktop',
         maxCols: 5,
@@ -354,8 +371,8 @@
           value: e.target.value,
         });
       },
-      setColumns(event) {
-        let cols = event.target.value;
+      setColumns(value) {
+        let cols = value;
         let numCols = this.module.structure.columns.length;
 
         if ( numCols === cols ) {
@@ -375,8 +392,8 @@
           }
         }
 
-        if ( event.target.value > 0 && event.target.value <= this.maxCols ){
-          this.$refs.tabs.setTab( event.target.value - 1 );
+        if ( value > 0 && value <= this.maxCols ){
+          this.$refs.tabs.setTab( value - 1 );
         }
 
       },
