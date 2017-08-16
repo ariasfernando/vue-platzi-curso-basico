@@ -1,11 +1,6 @@
 <?php
 
-$overrideFile = (env('APP_NAME', false))
-    ? str_replace(basename(__FILE__), ucwords(strtolower(env('APP_NAME'))) . '/' . basename(__FILE__), __FILE__)
-    : false;
-
-$default = array(
-
+return [
     /*
     |--------------------------------------------------------------------------
     | Filename & Format
@@ -90,6 +85,4 @@ $default = array(
         '\Illuminate\Contracts\Auth\Authenticatable' => config('auth.model', 'App\User'),
     )
 
-);
-
-return require 'recursive.php';
+];

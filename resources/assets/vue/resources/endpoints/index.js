@@ -27,4 +27,7 @@ module.exports = {
     processStatus: { method: 'get', path: `${baseUrl}/queue/status/process/:processId` },
     sendPreview: { method: 'post', path: `${baseUrl}/campaign/send-preview` },
   },
+  config: {
+    getConfig: { method: 'get', path: `${baseUrl}/config/:key` },
+  },
 };
