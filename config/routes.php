@@ -54,15 +54,15 @@ $default = [
             '/campaign/email-sent-history' => 'CampaignController@postEmailSentHistory',
             '/template/move-library'       => 'TemplateController@postMoveLibrary',
             '/template/modal'              => 'TemplateController@postModal',
-            '/proof/comment'               => 'ProofController@postComment',
-            '/proof/decision'              => 'ProofController@postDecision',
+            '/proof/comment/{token}'       => 'ProofController@postComment',
+            '/proof/decision/{token}'      => 'ProofController@postDecision',
             '/proof/create'                => 'ProofController@postCreate',
         ],
 
         'put' => [],
 
         'delete' => [
-            '/proof/decision'              => 'ProofController@deleteDecision',
+            '/proof/decision/{token}'              => 'ProofController@deleteDecision',
         ],
     ],
     'api' => [

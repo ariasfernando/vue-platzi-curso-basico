@@ -22,7 +22,7 @@ class ConfigServiceProvider extends ServiceProvider
         
         if (\File::exists($customerConfigPath)) {
             // Run through all PHP files in the customer config directory.
-            $files = \File::allFiles($customerConfigPath);            
+            $files = \File::allFiles($customerConfigPath);
             foreach ($files as $file) {
                 $keyName = basename($file->getRealPath(), '.php');
                 $oldValues = config($keyName);

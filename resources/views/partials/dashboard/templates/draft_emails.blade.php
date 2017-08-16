@@ -67,6 +67,14 @@
                     <td :title="campaign.campaign_name">
                         <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
                         <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock text-danger" v-if="enableLocking && campaign.locked"></i>
+                        <a :data-campaign-id="campaign._id"
+                            :data-campaign-name="campaign.campaign_name"
+                            class="proof-track-modal pull-right right-icon"
+                            href="#"
+                            title="Track active proof"
+
+
+                        ><i class="fa fa-sticky-note-o"></i></a>
                     </td>
                     <td v-if="showTags == 1">
                         <campaign-tag
@@ -77,7 +85,28 @@
                         ></campaign-tag>
                     </td>
                     <td class="text-right actions icons">
+                      <a href="#"
+                        :data-proof-token="campaign.proof_token"
+                        class="btn btn-xs proof"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Open proof review"
+
+
+                        ><i class="glyphicon glyphicon-blackboard"></i></a>
+
                         <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
+
+                        <a :data-campaign-id="campaign._id"
+                            class="btn btn-xs proof-open-modal"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            href="#"
+                            title="Send for review"
+
+
+                            ><i class="glyphicon glyphicon-search"></i></a>
+
                         <a
                             href="#"
                             class="edit"
