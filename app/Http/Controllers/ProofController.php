@@ -83,7 +83,7 @@ class ProofController extends Controller
         foreach ($proof->reviewers as $reviewer) {
             if ($reviewer['email'] === Auth::user()->email) {
                 if (!isset($reviewer['opened_at'])) {
-                    $reviewer['opened_at'] = new \MongoDate(strtotime(date('c')));
+                    $reviewer['opened_at'] = Carbon::now();
                     Activity::log('Reviewer opened a proof', [
                         'properties' => [
                             'proof_id' => new ObjectId($proof->id),
@@ -103,7 +103,8 @@ class ProofController extends Controller
 
         $params = [
             'header_title' => $proof->campaign->campaign_name,
-            'token' => $token
+            'token' => $token,
+            'libraries' => Auth::user()->getLibraries()
         ];
 
         return $this->renderView('proof', ['params' => $params]);
@@ -272,7 +273,7 @@ class ProofController extends Controller
         foreach ($proof->reviewers as $reviewer) {
             if ($reviewer['email'] === Auth::user()->email) {
                 $reviewer['decision'] = $decision;
-                $reviewer['decision_at'] = new \MongoDate(strtotime(date('c')));
+                $reviewer['decision_at'] = Carbon::now();
                 if ($request->has('comment')) {
                     // Store the decision comments
                     $comment = Comment::create([

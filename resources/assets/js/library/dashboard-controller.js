@@ -8,6 +8,7 @@ var dashboardController = function( customOptions ){
             showHtmlCampaign: ".actions .html-code",
             showPlainTextCampaign: ".actions .plaintext",
             goEdit: ".actions .edit",
+            goProof: ".actions .proof",
             goPublicView: ".actions .public-view"
         }
     }, customOptions );
@@ -51,6 +52,15 @@ var dashboardController = function( customOptions ){
 
         if( campaignId ){
             window.location.href = Application.globals.baseUrl + "/campaign/edit/" + campaignId;
+        }
+    };
+
+    this.goProof = function( element ){
+        var token = $(element).attr("data-proof-token");
+
+        if( token ){
+            var win = window.open(Application.globals.baseUrl + "/proof/review/" + token, '_blank');
+            win.focus();
         }
     };
 
@@ -123,6 +133,11 @@ var dashboardController = function( customOptions ){
             // Go to edit campaign
             .on("click", options.selectors.goEdit, function(){
                 _this.goEdit( this );
+                return false;
+            })
+            // Go to proof
+            .on("click", options.selectors.goProof, function(){
+                _this.goProof( this );
                 return false;
             })
             // Go to public path campaign
