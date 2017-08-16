@@ -605,7 +605,7 @@
     }
 
     .left-bar {
-      width: 210px;
+      width: 190px;
       color: #666666;
       display: table-cell;
       float: none;
@@ -762,7 +762,7 @@
           background-color: #f4f4f4;
           border: 1px solid #d8d8d8;
           padding: 20px;
-          width: 49%;
+          width: 48%;
           margin-right: 2px;
           margin-bottom: 2px;
           float: left;
@@ -798,10 +798,11 @@
     }
 
     .right-bar {
-      width: 210px;
+      width: 190px;
       display: table-cell;
       float: none;
       padding: 10px;
+      overflow: hidden;
 
       .form-group{
         margin-bottom: 10px;
