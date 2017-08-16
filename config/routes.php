@@ -29,6 +29,7 @@ $default = [
             '/dashboard/campaigns/{type}'            => 'DashboardController@getCampaigns',
             '/public/view/{id}'                      => 'PublicController@view',
             '/public/html/{id}'                      => 'PublicController@html',
+            '/config/{key}'                          => 'ConfigController@getGet',
             '/proof/campaign/{id}'                   => 'ProofController@getCampaign',
             '/proof/review/{token}'                  => 'ProofController@getReview',
             '/proof/data/{token}'                    => 'ProofController@getData',
@@ -149,6 +150,7 @@ if (env("APP_ADMIN", false)) {
             '/admin/module/create'     => 'Admin\ModuleController@getCreate',
             '/admin/module/edit'       => 'Admin\ModuleController@getEdit',
             '/admin/module/modules'    => 'Admin\ModuleController@getModules',
+            '/admin/setting'           => 'Admin\SettingController@getIndex',
         ],
         'post' => [
             '/admin/login'             => 'Admin\Auth\AdminAuthController@postLogin',
@@ -168,6 +170,7 @@ if (env("APP_ADMIN", false)) {
             '/admin/library/esp'       => 'Admin\LibraryController@postEspProviders',
             '/admin/module/save'       => 'Admin\ModuleController@postSave',
             '/admin/module/delete'     => 'Admin\ModuleController@postDelete',
+            '/admin/setting/edit'      => 'Admin\SettingController@postEdit',
         ],
     ];
     $default['web']['get'] = array_merge($adminRoutes['get'], $default['web']['get']);

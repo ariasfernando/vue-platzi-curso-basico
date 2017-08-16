@@ -34,6 +34,9 @@ class Kernel extends ConsoleKernel
         'Stensul\Console\Commands\Module\Create',
         'Stensul\Console\Commands\Task\CreatedBy',
         'Stensul\Console\Commands\Tool\Scraper',
+        'Stensul\Console\Commands\Setting\Show',
+        'Stensul\Console\Commands\Setting\Create',
+        'Stensul\Console\Commands\Setting\Delete',
     ];
 
     /**

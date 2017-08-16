@@ -1,10 +1,6 @@
 <?php
 
-$overrideFile = (env('APP_NAME', false))
-    ? str_replace(basename(__FILE__), ucwords(strtolower(env('APP_NAME'))) . '/' . basename(__FILE__), __FILE__)
-    : false;
-
-$default = [
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -160,5 +156,3 @@ $default = [
 
     'show_who_is_locking' => false,
 ];
-
-return require 'recursive.php';

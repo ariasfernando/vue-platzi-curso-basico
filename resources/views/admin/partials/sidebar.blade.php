@@ -32,6 +32,13 @@
 			</ul>
 		</li>
 		<li>
+			<a href="{{ url('admin/setting') }}">
+				<span>
+					<i class="glyphicon glyphicon-list-alt"></i> Global Settings
+				</span>
+			</a>
+		</li>
+		<li>
 			<a href="" class="beta-accordion-trigger">
 				<span>
 					<i class="glyphicon glyphicon-th-large"></i> Studio
