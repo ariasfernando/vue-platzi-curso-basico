@@ -14,7 +14,10 @@
           <label>Preheader:</label>
           <input type="text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
         </div>
-
+        <div class="config-box-divider" v-if="enableAutoSave">
+          <input type="checkbox" class="btn-auto-save" name="autoSave" v-model="form.autoSave" @blur="saveSettings">
+          <label>Auto Save</label>
+        </div>
         <div class="config-box-divider" v-if="enableTagging">
           <input name="tag_entry" type="text" placeholder="Add Tag" maxlength="30"
                  :data-autocomplete='params.tag_list'/>
@@ -32,6 +35,7 @@
 
 <script>
   import _ from 'lodash'
+  import configService from '../../services/config'
 
   export default {
     name: 'CampaignConfiguration',
@@ -39,10 +43,12 @@
       return {
         enablePreheader: false,
         enableTagging: false,
+        enableAutoSave: false,
         form: {
           campaignName: 'Untitled Campaign',
           campaignPreheader: '',
-          campaignProcess: false
+          campaignProcess: false,
+          autoSave: false
         },
         params: {},
       }
@@ -57,6 +63,8 @@
       this.form.campaignName = this.params.campaign_name;
       this.form.campaignPreheader = this.params.campaign_data.campaign_preheader;
       this.form.campaignProcess = this.params.campaign_data.processed;
+
+      this.loadConfig();
     },
     methods: {
       saveSettings(e) {
@@ -64,7 +72,17 @@
           name: e.target.name,
           value: e.target.value
         });
-      }
+      },
+      loadConfig() {
+        configService.getConfig('global_settings.auto_save')
+          .then((response) => {
+            console.log(response);
+            this.enableAutoSave = response === '1' ? true : false;
+          })
+          .catch((error) => {
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+          });
+      },
     }
   }
 </script>
