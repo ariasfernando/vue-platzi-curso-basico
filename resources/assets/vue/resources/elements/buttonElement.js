@@ -49,14 +49,14 @@ module.exports = {
     },
     {
       link: 'attribute',
-      label: 'Bgcolor',
+      label: 'Background Color',
       name: 'bgcolor',
       type: 'text',
       value: '#514960',
     },
     {
       link: 'attribute',
-      label: 'Default URI',
+      label: 'Default URL',
       name: 'href',
       type: 'text',
       value: 'http://stensul.com',
@@ -74,13 +74,6 @@ module.exports = {
       name: 'color',
       type: 'text',
       value: '#FFFFFF',
-    },
-    {
-      link: 'style',
-      label: 'Font Size',
-      name: 'fontSize',
-      type: 'text',
-      value: '12px',
     },
     {
       link: 'style',

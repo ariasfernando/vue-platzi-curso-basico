@@ -26,7 +26,7 @@
                 >
               </a>
               <div class="icon-move st-move"><i class="glyphicon glyphicon-move st-move"></i></div> 
-              <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-remove-sign st-remove"></i></div> 
+              <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-trash st-remove"></i></div> 
             </td>
           </tr>    
       </td>
@@ -129,36 +129,38 @@
     cursor: move;
     cursor: -webkit-grabbing;
     position: absolute;
-    top: 50%;
+    top: 0%;
     text-align: center;
     color: #fff;
     z-index: 5;
-    right: -15px;
-    height: 30px;
-    width: 30px;
+    right: -11px;
+    height: 22px;
+    width: 22px;
     border-radius: 100%;
-    line-height: 30px;
+    line-height: 25px;
     background-color: @icon-option;
     opacity: 1;
-    margin-top: -15px;
+    margin-top: -11px;
   }
 
   .icon-remove {
     display: none;
-    width: 21px;
-    height: 21px;
-    line-height: 21px;
-    font-size: 21px!important;
+    width: 22px;
+    height: 22px;
+    line-height: 14px;
+    font-size: 11px!important;
     cursor: pointer;
     position: absolute;
     text-align: center;
-    color: @icon-option;
-    background-color: #e4f8f5;
+    color: #ffffff;
+    background-color: @icon-option;
     border-radius: 100%;
     z-index: 5;
-    top: 0%;
+    top: 100%;
     opacity: 1;
-    left: -10px;
-    margin-top: -10px;
+    left: 100%;
+    margin-top: -11px;
+    margin-left: -11px;
+    padding-top: 5px;
   }
 </style>

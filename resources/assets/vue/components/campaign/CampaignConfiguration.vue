@@ -15,7 +15,7 @@
           <input type="text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
         </div>
         <div class="config-box-divider" v-if="enableAutoSave">
-          <input type="checkbox" class="btn-auto-save" name="autoSave" v-model="form.autoSave" @blur="saveSettings">
+          <input type="checkbox" class="btn-auto-save" name="autoSave" v-model="form.autoSave" @change="saveSettings">
           <label>Auto Save</label>
         </div>
         <div class="config-box-divider" v-if="enableTagging">
@@ -63,21 +63,27 @@
       this.form.campaignName = this.params.campaign_name;
       this.form.campaignPreheader = this.params.campaign_data.campaign_preheader;
       this.form.campaignProcess = this.params.campaign_data.processed;
+      this.form.autoSave = this.params.campaign_data.auto_save;
 
       this.loadConfig();
     },
     methods: {
       saveSettings(e) {
+        let value = e.target.value;
+
+        if (e.target.type === 'checkbox') {
+          value = e.target.value === 'on';
+        }
+
         this.$store.commit('campaign/saveSetting', {
           name: e.target.name,
-          value: e.target.value
+          value
         });
       },
       loadConfig() {
         configService.getConfig('global_settings.auto_save')
           .then((response) => {
-            console.log(response);
-            this.enableAutoSave = response === '1' ? true : false;
+            this.enableAutoSave = response === '1';
           })
           .catch((error) => {
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});

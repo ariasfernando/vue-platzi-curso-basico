@@ -153,9 +153,8 @@
                       </div>
                       <!-- Tab Contents {{column}} -->
                     </b-tab>
-                    <div slot="empty" class="text-center text-muted">
-                      There are no column
-                      <br> Add a new column using the number input.
+                    <div slot="empty" class="text-center text-muted text-no-columns">
+                      Please add a new column to start adding elements.
                     </div>
 
                   </b-tabs>
@@ -449,11 +448,11 @@
     .module-settings {
 
       h4{
-        font-size: 14px;
+        font-size: 13px;
         text-transform: uppercase;
         color: #666666;
         font-weight: 300;
-        padding: 14px 10px;
+        padding: 10px 10px;
         border-bottom: 1px solid #F0F0F0;
         margin: 0px -10px;
       }
@@ -657,6 +656,15 @@
         margin-bottom: 0px;
       }
 
+      .text-no-columns{
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+      .tabs{
+        margin-top: 15px;
+      }
+
       .fields {
         span.is-danger{
           display: none!important;
@@ -677,7 +685,7 @@
           border-top: 0;
           border-left: 0;
           border-right: 0;
-          padding: 21px 10px 14px 10px; 
+          padding: 15px 10px 13px 10px; 
 
           &:hover, &:visited,
           &:focus, &:active{
@@ -685,13 +693,14 @@
             outline: none;
           }
           p{
-            font-size: 14px;
+            font-size: 13px;
             margin: 0;
             padding: 0;
             font-weight: 300;
           }
           i{
             color:#CCCCCC;
+            line-height: 12px;
           }
         }
         
@@ -726,23 +735,34 @@
 
           .card-header{
             padding-bottom: 20px;
+
             ul{
-              border-bottom: 1px solid #F0F0F0;
+              margin-left: -10px;
+              margin-right: -10px;
+              border-bottom: 1px solid #DDDDDD;
+
               .nav-item{
-                border-top: 1px solid #F0F0F0;
-                border-left: 1px solid #F0F0F0;
+                border-top: 1px solid #DDDDDD;
+                border-left: 1px solid #DDDDDD;
+                margin-bottom: -2px;
+
+                &:first-child{
+                  margin-left: 10px;
+                }
+
                 &:last-of-type{
-                  border-right: 1px solid #F0F0F0;
+                  border-right: 1px solid #DDDDDD;
                 }
                 .nav-link{
                   margin-right:0;
-                  padding: 4px 12px;
+                  padding: 4px 7px;
                   border: 0;
                   border-radius:0;
                   font-weight: 300;
                   color: #666666;
                   &.active{
                     border-bottom: 2px solid @focus;
+                    background: @focus-light;
                   }
                   &:focus{
                     background-color: transparent;
@@ -769,6 +789,25 @@
           .module-name{
             padding-bottom: 7px;
           }
+
+          .row.field-undefined .col-sm-3{
+            width: 61px;
+          }
+
+          input[name="paddingTop"],
+          input[name="paddingLeft"],
+          input[name="paddingBottom"],
+          input[name="paddingRight"]{
+            width: 32px;
+          }
+
+          .field-paddingTop input,
+          .field-paddingLeft input,
+          .field-paddingBottom input,
+          .field-paddingRight input{
+            width: 100%;
+          }
+
         }
 
         .list-inline{
@@ -797,17 +836,18 @@
           font-size: 14px;
           background-color: #f4f4f4;
           border: 1px solid #d8d8d8;
-          padding: 20px;
-          width: 48%;
-          margin-right: 2px;
-          margin-bottom: 2px;
+          padding: 20px 20px 14px 20px;
+          width: 47%;
+          margin-right: 4px;
+          margin-bottom: 4px;
           float: left;
           text-align: center;
+          transition: all 0.3s linear;
 
           i {
             margin: 0 5px;
             color: #514960;
-            font-size: 20px;
+            font-size: 28px;
           }
           p{
             display: inline-block;
@@ -819,6 +859,14 @@
             width: 100%;
             font-weight: 300;
             text-align: center;
+          }
+
+          &:hover{
+            border: 1px solid #888888;
+
+            p{
+              color: #333333;
+            }
           }
         }
       }
@@ -853,6 +901,10 @@
         font-size: 11px;
         font-weight: 300;
         width: 50px;
+      }
+
+      input[name="href"]{
+        width: 115px;
       }
 
       label{

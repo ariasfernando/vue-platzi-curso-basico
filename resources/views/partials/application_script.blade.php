@@ -14,4 +14,5 @@
 	Application.globals.logged_user = "{{ (Auth::user()) ? Auth::user()->email : ''}}";
 	Application.globals.proofConfig = {!! json_encode(Config::get('proof')) !!};
 	Application.globals.csrfToken = "{{ csrf_token() }}";
+	Application.globals.permissions = {!! json_encode(Auth::user()->getPermissions()) !!};
 </script>
