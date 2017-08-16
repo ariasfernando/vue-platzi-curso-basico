@@ -25,13 +25,6 @@ module.exports = {
     },
     {
       link: 'style',
-      label: 'Font Size',
-      name: 'fontSize',
-      type: 'text',
-      value: '12px',
-    },
-    {
-      link: 'style',
       label: 'Line Height',
       name: 'lineHeight',
       type: 'text',
