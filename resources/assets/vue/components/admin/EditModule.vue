@@ -139,9 +139,8 @@
                       </div>
                       <!-- Tab Contents {{column}} -->
                     </b-tab>
-                    <div slot="empty" class="text-center text-muted">
-                      There are no column
-                      <br> Add a new column using the number input.
+                    <div slot="empty" class="text-center text-muted text-no-columns">
+                      Please add a new column to start adding elements.
                     </div>
 
                   </b-tabs>
@@ -621,6 +620,11 @@
         margin-bottom: 0px;
       }
 
+      .text-no-columns{
+        font-size: 13px;
+        font-weight: 300;
+      }
+
       .tabs{
         margin-top: 15px;
       }
@@ -747,6 +751,13 @@
           input[name="paddingBottom"],
           input[name="paddingRight"]{
             width: 32px;
+          }
+
+          .field-paddingTop input,
+          .field-paddingLeft input,
+          .field-paddingBottom input,
+          .field-paddingRight input{
+            width: 100%;
           }
 
         }
