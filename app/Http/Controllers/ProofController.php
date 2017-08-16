@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Stensul\Jobs\SendReviewersEmail;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use MongoDB\BSON\ObjectID as ObjectID;
+use MongoDB\BSON\UTCDateTime;
 
 class ProofController extends Controller
 {
@@ -83,7 +84,7 @@ class ProofController extends Controller
         foreach ($proof->reviewers as $reviewer) {
             if ($reviewer['email'] === Auth::user()->email) {
                 if (!isset($reviewer['opened_at'])) {
-                    $reviewer['opened_at'] = Carbon::now();
+                    $reviewer['opened_at'] = new UTCDateTime;
                     Activity::log('Reviewer opened a proof', [
                         'properties' => [
                             'proof_id' => new ObjectId($proof->id),
@@ -273,7 +274,7 @@ class ProofController extends Controller
         foreach ($proof->reviewers as $reviewer) {
             if ($reviewer['email'] === Auth::user()->email) {
                 $reviewer['decision'] = $decision;
-                $reviewer['decision_at'] = Carbon::now();
+                $reviewer['decision_at'] = new UTCDateTime;
                 if ($request->has('comment')) {
                     // Store the decision comments
                     $comment = Comment::create([
@@ -525,9 +526,11 @@ class ProofController extends Controller
                     if (isset($reviewer['decision_comment'])) {
                         $reviewer['comment'] = Comment::find($reviewer['decision_comment'])->content;
                     }
-                    $date = date('Y-m-d H:i:s', $reviewer['decision_at']->sec);
+                    $date = $reviewer['decision_at']->toDateTime()->format('Y-m-d H:i:s');
                 } else {
-                    $date = isset($reviewer['notified_at']) ? date('Y-m-d H:i:s', $reviewer['notified_at']->sec) : $proof->created_at->format('Y-m-d H:i:s');
+                    $date = isset($reviewer['notified_at'])
+                        ? $reviewer['notified_at']->toDateTime()->format('Y-m-d H:i:s')
+                        : $proof->created_at->format('Y-m-d H:i:s');
                 }
                 $reviewer['last_modified_date'] = $date;
                 unset($reviewer['user_id']);
