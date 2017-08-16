@@ -67,7 +67,6 @@
   .module-toolbar {
     position: relative;
     background-color: @icon-option;
-    border: 1px solid @icon-option;
     float: right;
     height: 30px; 
     right: -100px;
