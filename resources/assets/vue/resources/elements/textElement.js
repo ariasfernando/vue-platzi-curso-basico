@@ -24,6 +24,13 @@ module.exports = {
       value: '#000000',
     },
     {
+      link: 'attribute',
+      label: 'Alignment',
+      name: 'align',
+      type: 'select',
+      value: ['Center', 'Right', 'Left'],
+    },
+    {
       link: 'style',
       label: 'Line Height',
       name: 'lineHeight',

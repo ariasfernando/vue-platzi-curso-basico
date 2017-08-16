@@ -42,10 +42,10 @@ module.exports = {
     },
     {
       link: 'attribute',
-      label: 'Align',
+      label: 'Alignment',
       name: 'align',
-      type: 'text',
-      value: 'center',
+      type: 'select',
+      value: ['Center', 'Right', 'Left'],
     },
     {
       link: 'attribute',
@@ -65,8 +65,8 @@ module.exports = {
       link: 'attribute',
       label: 'Target',
       name: 'target',
-      type: 'text',
-      value: '_blank',
+      type: 'select',
+      value: ['', '_blank', '_self', '_top'],
     },
     {
       link: 'style',

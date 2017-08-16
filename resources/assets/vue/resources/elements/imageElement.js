@@ -42,8 +42,8 @@ module.exports = {
       link: 'attribute',
       label: 'Target',
       name: 'target',
-      type: 'text',
-      value: '_blank',
+      type: 'select',
+      value: ['', '_blank', '_self', '_top'],
     },
     {
       link: 'attribute',
