@@ -621,6 +621,10 @@
         margin-bottom: 0px;
       }
 
+      .tabs{
+        margin-top: 15px;
+      }
+
       .fields {
         span.is-danger{
           display: none!important;
@@ -733,6 +737,7 @@
           .module-name{
             padding-bottom: 7px;
           }
+
         }
 
         .list-inline{

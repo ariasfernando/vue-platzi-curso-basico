@@ -4,8 +4,8 @@
 
     <span class="v-switch-core" :style="toggled && coreStyle">
       <template v-if="labels">
-        <span class="v-switch-label v-left" v-if="toggled">on</span>
-        <span class="v-switch-label v-right" v-else>off</span>
+        <span class="v-switch-label v-left" v-if="toggled"></span>
+        <span class="v-switch-label v-right" v-else></span>
       </template>
     </span>
 
@@ -26,7 +26,7 @@ export default {
     },
     color: {
       type: String,
-      default: '#75C791'
+      default: '#78DCD6'
     },
     labels: {
       type: Boolean,
@@ -104,30 +104,27 @@ export default {
     margin: 0;
     display: inline-block;
     position: relative;
-    border: 1px solid #bfcbd9;
+    border: 1px solid #ececec;
     outline: 0;
     border-radius: 12px;
     box-sizing: border-box;
-    background: #bfcbd9;
+    background: #ececec;
     transition: border-color .3s,background-color .3s;
-
-    width: 46px;
-    height: 22px;
+    width: 34px;
+    height: 19px;
 
     &:before {
       display: block;
       content: '';
       overflow: hidden;
-
-      transform: translate(2px, 2px);
-
-      top: 0;
+      transform: translate(1px, 2px);
+      top: -1px;
       left: 0;
       position: absolute;
       border-radius: 100%;
       transition: transform .3s;
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
       z-index: 20;
       background-color: #fff;
     }
@@ -136,7 +133,7 @@ export default {
   &.toggled {
     .v-switch-core {
       &:before {
-        transform: translate(26px, 2px);
+        transform: translate(16px, 2px);
       }
     }
   }
