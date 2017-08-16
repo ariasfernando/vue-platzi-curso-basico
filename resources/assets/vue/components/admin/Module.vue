@@ -284,10 +284,10 @@
 </script>
 
 <style lang="less">
-  @focus: #69dac8;
+  @focus: #78DCD6;
   @focus-light: lighten(@focus, 30%);
   @hover: @focus-light;
-  @icon-option: #69dac8;
+  @icon-option: #78DCD6;
 
   .st-content-component{
     outline: 1px dashed @icon-option;
@@ -295,7 +295,6 @@
   
   .st-component{
     &:hover{
-        border: 1px solid @icon-option;
         background-color: @hover;
         .icon-move, .icon-remove{
           display: block;

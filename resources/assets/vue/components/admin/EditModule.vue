@@ -649,7 +649,7 @@
           border-top: 0;
           border-left: 0;
           border-right: 0;
-          padding: 21px 10px 14px 10px; 
+          padding: 15px 10px 8px 10px; 
 
           &:hover, &:visited,
           &:focus, &:active{
@@ -788,17 +788,18 @@
           font-size: 14px;
           background-color: #f4f4f4;
           border: 1px solid #d8d8d8;
-          padding: 20px;
-          width: 48%;
-          margin-right: 2px;
-          margin-bottom: 2px;
+          padding: 20px 20px 14px 20px;
+          width: 47%;
+          margin-right: 4px;
+          margin-bottom: 4px;
           float: left;
           text-align: center;
+          transition: all 0.3s linear;
 
           i {
             margin: 0 5px;
             color: #514960;
-            font-size: 20px;
+            font-size: 28px;
           }
           p{
             display: inline-block;
@@ -810,6 +811,14 @@
             width: 100%;
             font-weight: 300;
             text-align: center;
+          }
+
+          &:hover{
+            border: 1px solid #888888;
+
+            p{
+              color: #333333;
+            }
           }
         }
       }

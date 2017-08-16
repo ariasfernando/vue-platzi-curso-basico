@@ -19,7 +19,7 @@
       </form>
     </div>
 
-    <h4>Plugins</h4>
+    <h4>FUNCTIONALITIES</h4>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.name">
         <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
