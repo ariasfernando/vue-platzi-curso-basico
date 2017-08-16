@@ -22,18 +22,21 @@
       }
     },
     methods: {
-      change() {
+      change(e) {
         const payload = {
           plugin: this.name,
-          moduleId: this.moduleId,
-          columnId: this.columnId,
-          componentId: this.componentId,
+          moduleId: this.currentComponent.moduleId,
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
           data: {
-            alignment: this.value,
-          }
+            alignment: e.target.value,
+          },
+          attribute: 'align',
+          attributeValue: e.target.value,
         };
 
-        this.$store.commit('campaign/changePlugin', payload);
+        this.$store.commit('campaign/savePlugin', payload);
+        this.$store.commit('campaign/saveComponentAttribute', payload);
       }
     }
   }

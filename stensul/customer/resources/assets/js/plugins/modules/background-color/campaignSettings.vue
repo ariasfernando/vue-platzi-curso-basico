@@ -29,16 +29,19 @@
     methods: {
       updateValue(value) {
         const payload = {
-          plugin: 'alignment',
-          moduleId: this.moduleId,
-          columnId: this.columnId,
-          componentId: this.componentId,
+          plugin: this.name,
+          moduleId: this.currentComponent.moduleId,
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
           data: {
             backgroundColor: value.hex,
-          }
+          },
+          attribute: 'bgcolor',
+          attributeValue: value.hex,
         };
 
-        this.$store.commit('campaign/changePlugin', payload);
+        this.$store.commit('campaign/savePlugin', payload);
+        this.$store.commit('campaign/saveComponentAttribute', payload);
       }
     },
     mounted() {
