@@ -55,34 +55,61 @@
                            placeholder="Module name" 
                            @input="updateName">
                   </div>
+                  <div class="row">
+                    <label class="col-sm-8 control-label" for="set-column">Columns</label> 
+                    <div class="col-sm-4">
+                      <input class="input-number pull-right"
+                             name="column-number" 
+                             type="number"
+                             :value="tabIndex === null ? 0 : tabIndex+1"
+                             min="1"
+                             :max="maxCols"
+                             @input="setColumns"
+                      >
+                    </div> 
+                  </div>
                   <div class="row" 
                        :class="'field-' + generalSetting.name"
                        v-for="(generalSetting, keyGeneral) in module.structure.settings">
 
                     <div v-if="!generalSetting.group" >
                       <label class="col-sm-8 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
-                      <div class="col-sm-4">
-                        <input :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
+                      <div class="col-sm-4" class="position-relative content-colorpicker">
+                        <input v-if="generalSetting.type === 'text'"
+                               :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
                                :name="generalSetting.name"
-                               :value="generalSetting.value"
-                               :type="generalSetting.type"
                                :placeholder="generalSetting.label"
+                               v-model="generalSetting.value"
+                               type="text"
                                v-validate="'required'" 
                                @change="saveModuleStyle">
                         <span v-show="errors.has(generalSetting.name)" 
                               class="help is-danger">{{ errors.first(generalSetting.name) }}
                         </span>
+                        <input v-if="generalSetting.type === 'color'"
+                               :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
+                               :name="generalSetting.name"
+                               :placeholder="generalSetting.label"
+                               :value="colors.hex"
+                               type="text"
+                               v-validate="'required'" 
+                               @change="saveModuleStyle">
+                        <span v-if="generalSetting.type === 'color'" v-show="errors.has(generalSetting.name)" 
+                              class="help is-danger">{{ errors.first(generalSetting.name) }}
+                        </span>
+                        <sketch-picker class="sketch-picker" v-if="generalSetting.type === 'color'" ref="sketch" v-model="colors" @input="triggerInputColor"></sketch-picker>
                       </div>
                     </div>
 
                     <div v-else>
                       <label class="col-sm-4 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
                       <div class="col-sm-3 pull-left row no-gutters input-group-setting" v-for="(generalSettingGroup, keyGeneral) in generalSetting.group" >
-                        <input :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
+                        <input v-if="generalSetting.type === 'text'"
+                               :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
                                :name="generalSettingGroup.name"
-                               :value="generalSettingGroup.value"
-                               :type="generalSettingGroup.type"
+                               v-model="generalSettingGroup.value"
                                :placeholder="generalSettingGroup.label"
+                               type="text"
                                v-validate="'required'" 
                                @change="saveModuleStyle">
                         <span v-show="errors.has(generalSettingGroup.name)" 
@@ -102,19 +129,6 @@
               
               <b-collapse id="column-settings" accordion="module-settings-accordion">
                 <b-card class="control container-fluid" no-block>
-                  <div class="row">
-                    <label class="col-sm-8 control-label" for="set-column">Columns</label> 
-                    <div class="col-sm-4">
-                      <input class="input-number pull-right"
-                             name="column-number" 
-                             type="number"
-                             :value="tabIndex === null ? 0 : tabIndex+1"
-                             min="1"
-                             :max="maxCols"
-                             @input="setColumns"
-                      >
-                    </div> 
-                  </div>
                   <b-tabs card ref="tabs" v-model="tabIndex">
                     <!-- Render Tabs -->
 
@@ -214,6 +228,7 @@
 
 <script>
   import Module from './Module.vue';
+  import { Sketch } from 'vue-color'
   import ComponentSettings from './ComponentSettings.vue';
   import moduleService from '../../services/module';
   import Draggable from 'vuedraggable';
@@ -247,7 +262,8 @@
           ghostClass: "ghost-component-menu",  // Class name for the drop placeholder
           chosenClass: "chosen-component-menu",  // Class name for the chosen item
           dragClass: "drag-component-menu"  // Class name for the dragging item
-        }
+        },
+        colors: {hex: '#FFFFFF'}
       }
     },
     components: {
@@ -255,12 +271,25 @@
       ComponentSettings,
       Draggable,
       BootstrapVue,
+      'sketch-picker': Sketch, 
       Spinner
+    },
+    watch:{
+      ready(value){
+        if (value === true){
+          setTimeout(()=>{
+            this.toggleSidebar();
+          }, 100);
+        }
+      },
     },
     methods: {
       updateName(e) {
         this.setModuleField({ name: e.target.value });
       },
+      triggerInputColor(e){  
+        console.log('sketch');
+      },  
       setModuleField(data) {
         this.$store.commit("module/setModuleFields", data);
       },
@@ -356,13 +385,11 @@
         
         var sideToggled = document.getElementById('edit-container');
         sideToggled.classList.toggle('sidebar-closed');
+          
       }
     },
     created () {
       this.loadModule();
-    },
-    mounted () {
-      this.toggleSidebar();
     }
   };
 </script>
@@ -381,6 +408,15 @@
   .fade.show {
     opacity: 1;
   }    
+
+  .position-relative{
+    position: relative;
+  }
+
+  .sketch-picker{
+    position: absolute!important;
+    z-index: 300;
+  }
 
   #studio{
     .section-container{
