@@ -621,6 +621,10 @@
         margin-bottom: 0px;
       }
 
+      .tabs{
+        margin-top: 15px;
+      }
+
       .fields {
         span.is-danger{
           display: none!important;
@@ -733,6 +737,18 @@
           .module-name{
             padding-bottom: 7px;
           }
+
+          .row.field-undefined .col-sm-3{
+            width: 61px;
+          }
+
+          input[name="paddingTop"],
+          input[name="paddingLeft"],
+          input[name="paddingBottom"],
+          input[name="paddingRight"]{
+            width: 32px;
+          }
+
         }
 
         .list-inline{
