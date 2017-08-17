@@ -708,6 +708,16 @@
        }
       }
 
+      select{
+          height: 22px;
+          font-size: 11px;
+          color: #666666;
+          border: none;
+          background: #f4f4f4;
+          box-shadow: none;
+          font-weight: 300;
+      }
+
       label{
         text-align: left;
         color: #666666;
@@ -795,7 +805,7 @@
           input{
             text-align: left;
             border-radius: 2px;
-            background: #f0f0f0;
+            background: #f4f4f4;
             border: 0px;
             padding: 7px;
             height: 22px;
@@ -961,6 +971,18 @@
 
       .form-group{
         margin-bottom: 10px;
+      }
+
+      select{
+          height: 22px;
+          font-size: 11px;
+          color: #666666;
+          border: none;
+          background: #f4f4f4;
+          box-shadow: none;
+          font-weight: 300;
+          width: 50px;
+          float: right;
       }
 
       input[type=text]{
