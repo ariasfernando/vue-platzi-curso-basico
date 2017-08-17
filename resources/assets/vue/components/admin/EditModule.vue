@@ -94,8 +94,13 @@
                         <span v-if="generalSetting.type === 'color'" v-show="errors.has(generalSetting.name)" 
                               class="help is-danger">{{ errors.first(generalSetting.name) }}
                         </span>
-                        <div class="icon-remove st-remove-sketch" @click="hideketch" style="display:none;">
-                          <i class="glyphicon glyphicon-remove"></i></div>
+                        <div class="icon-remove st-remove-sketch" 
+                             @click="hideketch" 
+                             v-if="generalSetting.type === 'color'" 
+                             style="display:none;"
+                        >
+                          <i class="glyphicon glyphicon-remove"></i>
+                        </div>
                         <sketch-picker style="display:none;" 
                                        class="sketch-picker" 
                                        v-if="generalSetting.type === 'color'" 
@@ -108,7 +113,7 @@
                     <div v-else>
                       <label class="col-sm-4 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
                       <div class="col-sm-3 pull-left row no-gutters input-group-setting" v-for="(generalSettingGroup, keyGeneral) in generalSetting.group" >
-                        <input v-if="generalSetting.type === 'text'"
+                        <input v-if="generalSettingGroup.type === 'text'"
                                :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
                                :name="generalSettingGroup.name"
                                v-model="generalSettingGroup.value"
