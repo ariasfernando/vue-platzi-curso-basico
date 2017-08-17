@@ -87,9 +87,6 @@
                               class="help is-danger">{{ errors.first(generalSetting.name) }}
                         </span>
                         <!-- Input color -->
-                        <span v-if="generalSetting.type === 'color'" class="color-square">
-                          <div :class="input-color-select" :style="{'background-color': bgc}"></div>
-                        </span>
                         <input v-if="generalSetting.type === 'color'"
                                class="sketchbackground"                        
                                :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
@@ -296,9 +293,6 @@
   export default {
     name: 'EditModule',
     computed: {
-      bgc () {
-        return this.colors.hex
-      },
       module() {
         return this.$store.getters["module/module"];
       },
