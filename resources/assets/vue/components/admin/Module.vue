@@ -291,6 +291,7 @@
 
   .st-content-component{
     outline: 1px dashed @icon-option;
+    border: none!important;
   }
   
   .st-component{
@@ -300,6 +301,10 @@
           display: block;
         }
     }
+  }
+
+  .st-col{
+    border: none!important;
   }
 
   .empty-col {
