@@ -193,9 +193,6 @@
         return this.$store.state.module.module
       }
     },
-    mounted() {
-      this.initPlugins();
-    },
     methods: {
       onAdd(e){
         let elType = e.clone.getAttribute('data-type');
@@ -209,7 +206,6 @@
         let el = _.cloneDeep(defaultElements[elType]);
         let plugins = {};
 
-        console.log('onAdd');
         _.each(this.$app.modulePlugins, (plugin, name) => {
           if (plugin.target.indexOf(elType.replace('-element', '')) !== -1) {
             plugins[name] = plugin;
@@ -250,35 +246,6 @@
       setComponent(ref) {
         this.$store.commit("module/setCurrentComponent", ref);
       },
-      initPlugins() {
-        _.each(this.module.structure.columns, (column, colId) => {
-          _.each(column.components, (component, componentId) => {
-
-            const componentType = component.type.replace('-element', '');
-            let plugins = {};
-
-            _.each(this.$app.modulePlugins, (plugin, name) => {
-              console.log('initPlugins');
-              if (plugin.target.indexOf(componentType) !== -1) {
-                plugins[name] = plugin;
-              }
-            });
-
-            // Merge default plugins with module data
-            _.each(component.plugins, (plugin, name) => {
-              _.extend(plugins[name].data, plugin.data);
-            });
-
-            // Add init function to current module
-            this.$store.commit('module/attachPlugins', {
-              colId,
-              componentId,
-              plugins,
-            });
-
-          });
-        });
-      }
     }
   };
 </script>

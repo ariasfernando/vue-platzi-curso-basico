@@ -1,5 +1,6 @@
 <template>
   <div :class="'plugin-' + plugin.name">
+
     <form class="form-horizontal">
       <div class="form-group">
         <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
@@ -9,16 +10,8 @@
           </span>
         </div>
       </div>
-
-      <div class="form-group">
-        <label class="col-sm-7 control-label">Default Url</label>
-        <div class="col-sm-5">
-          <span>
-            <input type="text" :value="href" @change="change">
-          </span>
-        </div>
-      </div>
     </form>
+
   </div>
 </template>
 
@@ -32,8 +25,7 @@
     },
     data() {
       return {
-        enabled: this.plugin.data.enabled || false,
-        href: this.plugin.data.href || this.plugin.config.defaultUrl
+        enabled: this.plugin.enabled || false
       }
     },
     methods: {
@@ -42,24 +34,11 @@
           plugin: this.name,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          data: {
-            enabled: e.value,
-          }
+          enabled: e.value,
         };
 
-        this.$store.commit('module/savePlugin', payload);
+        this.$store.commit('module/togglePlugin', payload);
       },
-      change(e) {
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          attribute: 'href',
-          attributeValue: e.target.value,
-        };
-
-        this.$store.commit('module/saveComponentAttribute', payload);
-      }
     }
   }
 </script>

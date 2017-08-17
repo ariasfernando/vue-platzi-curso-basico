@@ -3,7 +3,7 @@
     <h4>{{ title }}</h4>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+        <component v-if="plugin.enabled" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
   </div>
@@ -36,7 +36,13 @@
           if (!_.isEmpty(this.currentComponent)) {
             this.component = modules[this.currentComponent.moduleId].structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
             this.title = _.capitalize(this.component.type.replace('-element', '')) + ' settings';
-            this.empty = _.isEmpty(this.component.plugins);
+
+            _.each(this.component.plugins, (plugin) => {
+              if (plugin.enabled) {
+                this.empty = false;
+              }
+            });
+
             this.ready = true;
           }
         },

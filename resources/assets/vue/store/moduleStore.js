@@ -34,7 +34,7 @@ const mutations = {
   setModuleFields(state, data) {
     _.each(data, (value, field) => {
       state.module[field] = value;
-    })
+    });
   },
   setChangeSettingComponent(state, data){
     state.changeSettingComponent.style = data.style;
@@ -78,6 +78,9 @@ const mutations = {
   savePlugin(state, data) {
     let pluginData = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data;
     _.merge(pluginData, data.data);
+  },
+  togglePlugin(state, data) {
+    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].enabled = data.enabled;
   },
   saveComponentAttribute(state, data) {
     let attributes = state.module.structure.columns[data.columnId].components[data.componentId].attribute;

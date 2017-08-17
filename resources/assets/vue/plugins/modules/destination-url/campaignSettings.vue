@@ -1,9 +1,17 @@
 <template>
   <div>
-    <label>{{ plugin.title }}</label>
     <div>
       <span>
-        <input name="destination-url" type="text" :value="href" @change="change">
+        <label>Destination Url</label>
+        <input name="href" type="text" :value="href" @change="change">
+      </span>
+      <span>
+        <label>Target</label>
+        <select name="target" @change="change">
+          <option value="_blank" :selected="target">_blank</option>
+          <option value="_self" :selected="target">_self</option>
+          <option value="_top" :selected="target">_top</option>
+        </select>
       </span>
     </div>
 
@@ -27,7 +35,10 @@
         return this.$store.state.campaign.modules[moduleId].structure.columns[columnId].components[componentId];
       },
       href() {
-        return this.component.attribute.href || this.plugin.config.defaultUrl;
+        return this.component.attribute.href;
+      },
+      target() {
+        return this.component.attribute.target;
       }
     },
     methods: {
@@ -37,12 +48,12 @@
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          attribute: 'href',
+          attribute: e.target.name,
           attributeValue: e.target.value,
         };
 
         this.$store.commit('campaign/saveComponentAttribute', payload);
-      }
+      },
     },
   }
 </script>

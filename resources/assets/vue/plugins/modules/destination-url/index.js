@@ -9,8 +9,7 @@ module.exports = {
   target: ['button', 'image'],
   studioSettings,
   campaignSettings,
-  config: {
-    defaultUri: 'http://www.stensul.com',
-  },
+  config: {},
   data: {},
+  enabled: false,
 };

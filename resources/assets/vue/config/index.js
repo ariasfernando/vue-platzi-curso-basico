@@ -15,9 +15,13 @@ export default {
     Application.globals.modulePlugins = {};
 
     _.each(plugins.modules, (component, name) => {
-      Application.globals.modulePlugins[name] = component;
       Vue.component(`studio-${component.name}`, component.studioSettings);
       Vue.component(`campaign-${component.name}`, component.campaignSettings);
+
+      delete component.studioSettings;
+      delete component.campaignSettings;
+
+      Application.globals.modulePlugins[name] = component;
     });
 
     Vue.app = Vue.prototype.$app = Application.globals;
