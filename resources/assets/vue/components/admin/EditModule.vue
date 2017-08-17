@@ -691,6 +691,23 @@
       padding: 0px;
       background-color: #FFFFFF;
 
+      button[aria-expanded="false"]{
+       opacity: 0.5;
+       transition: all 0.3s linear;
+
+       &:hover{
+        opacity: 1;
+       }
+      }
+
+      button[aria-expanded="true"]{
+       opacity: 1;
+
+       p{
+        font-weight: 600!important;
+       }
+      }
+
       label{
         text-align: left;
         color: #666666;
@@ -766,16 +783,14 @@
         }
 
         #element{
-          background: #FBFBFB;
-          border-top: 1px solid #cccccc;
+          border-top: 1px solid #FFFFFF;
           margin-top: -1px;
         }
 
         #module-settings-left,
         #column-settings{
-          border-top: 1px solid #cccccc;
+          border-top: 1px solid #FFFFFF;
           margin-top: -1px;
-          background: #FBFBFB;
 
           input{
             text-align: left;
@@ -968,6 +983,7 @@
         color: #666666;
         padding-top: 2px;
         font-weight: 300;
+        padding-right: 0px;
       }
 
       .vue-js-switch{
