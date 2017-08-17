@@ -12,9 +12,12 @@ function Module(data = {}) {
     style: {
       backgroundColor: style.backgroundColor || '#FFFFFF',
       paddingTop: style.paddingTop || 0,
-      paddingBottom: style.paddingBottom || 0,
       paddingLeft: style.paddingLeft || 0,
+      paddingBottom: style.paddingBottom || 0,
       paddingRight: style.paddingRight || 0,
+      borderWidth: style.borderWidth || '0px',
+      borderStyle: style.borderStyle ||'none',
+      borderColor: style.borderColor ||'#000000',
     },
     settings: [
       {
@@ -37,8 +40,8 @@ function Module(data = {}) {
           },
           {
             link: 'style',
-            label: 'Padding Left',
-            name: 'paddingLeft',
+            label: 'Padding Right',
+            name: 'paddingRight',
             type: 'text',
             value: '0px',
           },
@@ -51,10 +54,37 @@ function Module(data = {}) {
           },
           {
             link: 'style',
-            label: 'Padding Right',
-            name: 'paddingRight',
+            label: 'Padding Left',
+            name: 'paddingLeft',
             type: 'text',
             value: '0px',
+          },
+        ],
+      },
+      {
+        link: 'style',
+        label: 'Border',
+        group: [
+          {
+            link: 'style',
+            label: 'border-width',
+            name: 'borderWidth',
+            type: 'text',
+            value: '0px',
+          },
+          {
+            link: 'style',
+            label: 'Border Style',
+            name: 'borderStyle',
+            type: 'select',
+            value: 'solid',
+          },
+          {
+            link: 'style',
+            label: 'Border Color',
+            name: 'borderColor',
+            type: 'color',
+            value: '#000000',
           },
         ],
       }, 

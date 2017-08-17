@@ -59,7 +59,10 @@
                     <label class="col-sm-8 control-label" for="set-column">Columns</label> 
                     <div class="col-sm-4">
                       <div>
-                        <b-form-select v-model="selected" :options="optionsSelected" class="mb-3" @input="setColumns">
+                        <b-form-select 
+                          v-model="selectedBackgroundColor" 
+                          :options="optionsSelected"  
+                          @input="setColumns">
                         </b-form-select>
                       </div> 
                     </div> 
@@ -71,6 +74,7 @@
                     <div v-if="!generalSetting.group" >
                       <label class="col-sm-8 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
                       <div class="col-sm-4 position-relative content-colorpicker">
+                      <!-- Input Text -->
                         <input v-if="generalSetting.type === 'text'"
                                :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
                                :name="generalSetting.name"
@@ -82,11 +86,13 @@
                         <span v-show="errors.has(generalSetting.name)" 
                               class="help is-danger">{{ errors.first(generalSetting.name) }}
                         </span>
+                        <!-- Input color -->
                         <input v-if="generalSetting.type === 'color'"
+                               class="sketchbackground"                        
                                :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
                                :name="generalSetting.name"
                                :placeholder="generalSetting.label"
-                               :value="colors.hex"
+                               :value="colorsBackground.hex"
                                type="text"
                                v-validate="'required'" 
                                @click.prevent="showSketch"
@@ -104,15 +110,16 @@
                         <sketch-picker style="display:none;" 
                                        class="sketch-picker" 
                                        v-if="generalSetting.type === 'color'" 
-                                       ref="sketch" 
-                                       v-model="colors" 
-                                       @input="triggerInputColor"></sketch-picker>
+                                       ref="sketchbackground" 
+                                       v-model="colorsBackground" 
+                                       @input="triggerInputColor('sketchbackground')"></sketch-picker>
                       </div>
                     </div>
 
                     <div v-else>
                       <label class="col-sm-4 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
-                      <div class="col-sm-3 pull-left row no-gutters input-group-setting" v-for="(generalSettingGroup, keyGeneral) in generalSetting.group" >
+                      <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" v-for="(generalSettingGroup, keyGeneral) in generalSetting.group" >
+                       <!-- Input text -->
                         <input v-if="generalSettingGroup.type === 'text'"
                                :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
                                :name="generalSettingGroup.name"
@@ -124,6 +131,45 @@
                         <span v-show="errors.has(generalSettingGroup.name)" 
                               class="help is-danger">{{ errors.first(generalSettingGroup.name) }}
                         </span>
+
+                        <div>
+
+                        <b-form-select 
+                            v-if="generalSettingGroup.type === 'select'"
+                            v-model="selectedBorderStyle" 
+                            :name="generalSettingGroup.name"
+                            :options="optionsSelectedBorderStyle" 
+                            @change.native="saveModuleStyle">
+                        </b-form-select>
+                      </div> 
+
+                        <!-- Input color -->
+                        <input v-if="generalSettingGroup.type === 'color'"
+                               class="sketchborder"
+                               :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
+                               :name="generalSettingGroup.name"
+                               :placeholder="generalSettingGroup.label"
+                               :value="colorsBorder.hex"
+                               type="text"
+                               v-validate="'required'" 
+                               @click.prevent="showSketch"
+                               @change="saveModuleStyle">
+                        <span v-if="generalSettingGroup.type === 'color'" v-show="errors.has(generalSettingGroup.name)" 
+                              class="help is-danger">{{ errors.first(generalSettingGroup.name) }}
+                        </span>
+                        <div class="icon-remove st-remove-sketch" 
+                             @click="hideketch" 
+                             v-if="generalSettingGroup.type === 'color'" 
+                             style="display:none;"
+                        >
+                          <i class="glyphicon glyphicon-remove"></i>
+                        </div>
+                        <sketch-picker style="display:none;" 
+                                       class="sketch-picker" 
+                                       v-if="generalSettingGroup.type === 'color'" 
+                                       ref="sketchborder" 
+                                       v-model="colorsBorder" 
+                                       @input="triggerInputColor('sketchborder')"></sketch-picker>
                       </div>
                     </div>
                   </div>
@@ -256,9 +302,22 @@
     },
     data () {
       return {
-        selected: '0',
+        selectedBackgroundColor: '1',
+        selectedBorderStyle: 'solid',
+
+        optionsSelectedBorderStyle: [
+          { value: 'solid', text: 'solid' },
+          { value: 'inherit', text: 'inherit' },
+          { value: 'initial', text: 'initial' },
+          { value: 'outset', text: 'outset' },
+          { value: 'inset', text: 'inset' },
+          { value: 'double', text: 'double' },
+          { value: 'dashed', text: 'dashed' },
+          { value: 'dotted', text: 'dotted' },
+          { value: 'hidden', text: 'hidden' },
+          { value: 'none', text: 'none' },
+        ],
         optionsSelected: [
-          { value: '0', text: '0' },
           { value: '1', text: '1' },
           { value: '2', text: '2' },
           { value: '3', text: '3' },
@@ -266,11 +325,11 @@
           { value: '5', text: '5' },
           { value: '6', text: '6' },
           { value: '7', text: '7' },
-          { value: '8', text: '8' }
+          { value: '8', text: '8' },
         ],
         ready: false,
         buildingMode: 'desktop',
-        maxCols: 5,
+        maxCols: 8,
         tabIndex: null,
         options: {
           group:{
@@ -283,7 +342,8 @@
           chosenClass: "chosen-component-menu",  // Class name for the chosen item
           dragClass: "drag-component-menu"  // Class name for the dragging item
         },
-        colors: {hex: '#FFFFFF'}
+        colorsBackground: {hex: '#FFFFFF'},
+        colorsBorder: {hex: '#FFFFFF'},
       }
     },
     components: {
@@ -299,6 +359,7 @@
         if (value === true){
           setTimeout(()=>{
             this.toggleSidebar();
+            this.loadColumn();
           }, 100);
         }
       },
@@ -317,19 +378,25 @@
         $(removeElement).closest('.content-colorpicker').find('.sketch-picker').hide();
         $(removeElement).closest('.content-colorpicker').find('.st-remove-sketch').hide();
       },
-      triggerInputColor(){  
-        const elementSketch = this.$refs.sketch[0].$el;
-        const backgroundElelment = $(elementSketch).closest('.content-colorpicker').find('[name=backgroundColor]')[0];
-        $(elementSketch)
+      triggerInputColor(typeSketch){  
+        const elementSketch = this.$refs[typeSketch][0].$el;
+        const targetColor = $(elementSketch).closest('.content-colorpicker').find('.'+ typeSketch )[0];
         this.saveModuleStyle({
           target:{
-            name :backgroundElelment.name,
-            value :backgroundElelment.value
+            name :targetColor.name,
+            value :targetColor.value
           }
         })
       },  
       setModuleField(data) {
         this.$store.commit("module/setModuleFields", data);
+      },
+      loadColumn(){
+        let numCols = this.module.structure.columns.length;
+
+        if (numCols === 0 ){
+         this.$store.commit("module/addColumn" );
+        }
       },
       loadModule() {
         this.$store.commit("global/setLoader", true);
@@ -706,6 +773,9 @@
        p{
         font-weight: 600!important;
        }
+       i{
+          transform: rotate(180deg);
+        }
       }
 
       select{
@@ -907,6 +977,17 @@
         } 
       }
 
+      .content-colorpicker{
+        .icon-remove{
+          color: #999999;
+          background: #FFFFFF;
+          border: 1px solid #CCCCCC;
+          margin-top: -20px;
+          margin-left: -20px;
+          padding-top: 4px;
+        }
+      }
+
       .components-list {
         padding: 0;
         margin: 0;
@@ -966,11 +1047,20 @@
       width: 190px;
       display: table-cell;
       float: none;
-      padding: 10px;
+      padding: 0px;
       overflow: hidden;
 
       .form-group{
         margin-bottom: 10px;
+      }
+
+      .card{
+        padding: 15px 10px 15px 12px;
+        border-bottom: 1px solid #f0f0f0;
+        border-top: 1px solid #FFFFFF;
+        margin-top: -1px;
+        display: table;
+        width: 100%;
       }
 
       select{
@@ -1037,6 +1127,17 @@
 
   .nopadding{
     padding: 0px;
+  }
+
+  .color-square{
+    div{
+      border: 1px solid #f4f4f4;
+      height: 22px;
+      width: 22px;
+      position: absolute;
+      margin-left: -20px;
+      border-radius: 2px 0px 0px 2px;
+    }
   }
 
 </style>
