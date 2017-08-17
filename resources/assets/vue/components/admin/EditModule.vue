@@ -784,7 +784,7 @@
           width: 28%;
         }
         .row:nth-child(3){
-          width: 33%;
+          width: 38%;
         }
         .row:nth-child(4){
           width: 33%;
