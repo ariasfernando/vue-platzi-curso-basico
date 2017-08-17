@@ -14,4 +14,5 @@ module.exports = {
     defaultValue: '#ffffff',
   },
   data: {},
+  enabled: false,
 };

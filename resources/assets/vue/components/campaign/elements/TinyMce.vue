@@ -16,9 +16,6 @@
         type: String,
         default: ''
       },
-      toolbar: {
-        default: ''
-      },
       menubar: {
         default: ''
       },
@@ -28,6 +25,11 @@
     },
     mounted () {
       this.initTinyMCE();
+    },
+    computed: {
+      toolbar() {
+        return this.$store.getters["campaign/editorToolbar"];
+      },
     },
     methods: {
       initTinyMCE () {

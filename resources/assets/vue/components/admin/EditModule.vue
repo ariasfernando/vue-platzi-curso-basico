@@ -2,9 +2,9 @@
   <div class="col-xs-12 module">
     <div class="row header">
       <div class="col-xs-3 header-col">
-        <div class="beta-btn-secondary pull-left">
+        <div class="beta-btn-secondary pull-left" @click="$router.push('/')">
           <i class="glyphicon glyphicon-menu-left"></i>
-          <router-link to="/">Back</router-link>
+            <a href="#" >Back</a>
         </div>
         <div class="col-xs-8 section-title vertical-center">New Module</div>
       </div>
@@ -778,6 +778,20 @@
         }
       }
 
+      .field-border{
+
+        .row:nth-child(2){
+          width: 28%;
+        }
+        .row:nth-child(3){
+          width: 38%;
+        }
+        .row:nth-child(4){
+          width: 33%;
+        }
+
+      }
+
       select{
           height: 22px;
           font-size: 11px;
@@ -813,6 +827,10 @@
 
         .card-block .row{
           margin-bottom: 10px;
+
+          .row{
+            margin-bottom: 0px;
+          }
         }
 
         .fa.pull-left{

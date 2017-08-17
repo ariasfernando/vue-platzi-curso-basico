@@ -13,6 +13,7 @@ const state = {
   modalPreview: false,
   modalProof: false,
   buildingMode: 'desktop',
+  editorToolbar: '',
   dirty: false,
 };
 
@@ -36,6 +37,9 @@ const getters = {
       return state.campaign.library_config.templateMobileWidth || templateMobileWidth;
     }
     return state.campaign.library_config.templateWidth || templateWidth;
+  },
+  editorToolbar(state) {
+    return state.editorToolbar;
   },
   dirty(state) {
     return state.dirty;
@@ -115,6 +119,9 @@ const mutations = {
   saveComponentAttribute(state, data) {
     let attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
     attributes[data.attribute] = data.attributeValue;
+  },
+  setEditorOptions(state, toolbar) {
+    state.editorToolbar = toolbar;
   },
   error(err) {
     console.error(err);

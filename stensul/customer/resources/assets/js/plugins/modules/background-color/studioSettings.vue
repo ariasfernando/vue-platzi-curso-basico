@@ -23,7 +23,7 @@
     },
     data() {
       return {
-        enabled: this.plugin.data.enabled || false,
+        enabled: this.plugin.enabled || false,
       }
     },
     methods: {
@@ -32,12 +32,10 @@
           plugin: this.name,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          data: {
-            enabled: e.value,
-          }
+          enabled: e.value,
         };
 
-        this.$store.commit('module/savePlugin', payload);
+        this.$store.commit('module/togglePlugin', payload);
       }
     }
   }
