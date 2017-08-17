@@ -82,6 +82,10 @@
                         <span v-show="errors.has(generalSetting.name)" 
                               class="help is-danger">{{ errors.first(generalSetting.name) }}
                         </span>
+
+                        <span v-if="generalSetting.type === 'color'" class="color-square">
+                          <div :class="input-color-select" :style="{'background-color': bgc}"></div>
+                        </span>
                         <input v-if="generalSetting.type === 'color'"
                                :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
                                :name="generalSetting.name"
@@ -247,6 +251,9 @@
   export default {
     name: 'EditModule',
     computed: {
+      bgc () {
+        return this.colors.hex
+      },
       module() {
         return this.$store.getters["module/module"];
       },
@@ -907,6 +914,17 @@
         } 
       }
 
+      .content-colorpicker{
+        .icon-remove{
+          color: #999999;
+          background: #FFFFFF;
+          border: 1px solid #CCCCCC;
+          margin-top: -20px;
+          margin-left: -20px;
+          padding-top: 4px;
+        }
+      }
+
       .components-list {
         padding: 0;
         margin: 0;
@@ -1046,6 +1064,17 @@
 
   .nopadding{
     padding: 0px;
+  }
+
+  .color-square{
+    div{
+      border: 1px solid #f4f4f4;
+      height: 22px;
+      width: 22px;
+      position: absolute;
+      margin-left: -20px;
+      border-radius: 2px 0px 0px 2px;
+    }
   }
 
 </style>
