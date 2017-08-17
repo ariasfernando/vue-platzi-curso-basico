@@ -86,8 +86,10 @@
                         <span v-show="errors.has(generalSetting.name)" 
                               class="help is-danger">{{ errors.first(generalSetting.name) }}
                         </span>
-                        
                         <!-- Input color -->
+                        <span v-if="generalSetting.type === 'color'" class="color-square">
+                          <div :class="input-color-select" :style="{'background-color': bgc}"></div>
+                        </span>
                         <input v-if="generalSetting.type === 'color'"
                                class="sketchbackground"                        
                                :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
@@ -294,6 +296,9 @@
   export default {
     name: 'EditModule',
     computed: {
+      bgc () {
+        return this.colors.hex
+      },
       module() {
         return this.$store.getters["module/module"];
       },
@@ -774,6 +779,19 @@
        p{
         font-weight: 600!important;
        }
+       i{
+          transform: rotate(180deg);
+        }
+      }
+
+      select{
+          height: 22px;
+          font-size: 11px;
+          color: #666666;
+          border: none;
+          background: #f4f4f4;
+          box-shadow: none;
+          font-weight: 300;
       }
 
       label{
@@ -863,7 +881,7 @@
           input{
             text-align: left;
             border-radius: 2px;
-            background: #f0f0f0;
+            background: #f4f4f4;
             border: 0px;
             padding: 7px;
             height: 22px;
@@ -965,6 +983,17 @@
         } 
       }
 
+      .content-colorpicker{
+        .icon-remove{
+          color: #999999;
+          background: #FFFFFF;
+          border: 1px solid #CCCCCC;
+          margin-top: -20px;
+          margin-left: -20px;
+          padding-top: 4px;
+        }
+      }
+
       .components-list {
         padding: 0;
         margin: 0;
@@ -1024,11 +1053,32 @@
       width: 190px;
       display: table-cell;
       float: none;
-      padding: 10px;
+      padding: 0px;
       overflow: hidden;
 
       .form-group{
         margin-bottom: 10px;
+      }
+
+      .card{
+        padding: 15px 10px 15px 12px;
+        border-bottom: 1px solid #f0f0f0;
+        border-top: 1px solid #FFFFFF;
+        margin-top: -1px;
+        display: table;
+        width: 100%;
+      }
+
+      select{
+          height: 22px;
+          font-size: 11px;
+          color: #666666;
+          border: none;
+          background: #f4f4f4;
+          box-shadow: none;
+          font-weight: 300;
+          width: 50px;
+          float: right;
       }
 
       input[type=text]{
@@ -1083,6 +1133,17 @@
 
   .nopadding{
     padding: 0px;
+  }
+
+  .color-square{
+    div{
+      border: 1px solid #f4f4f4;
+      height: 22px;
+      width: 22px;
+      position: absolute;
+      margin-left: -20px;
+      border-radius: 2px 0px 0px 2px;
+    }
   }
 
 </style>
