@@ -18,34 +18,6 @@ module.exports = {
   settings: [
     {
       link: 'style',
-      label: 'Margin Top',
-      name: 'marginTop',
-      type: 'text',
-      value: '0px',
-    },
-    {
-      link: 'style',
-      label: 'Margin Left',
-      name: 'marginLeft',
-      type: 'text',
-      value: '0px',
-    },
-    {
-      link: 'style',
-      label: 'Margin Bottom',
-      name: 'marginBottom',
-      type: 'text',
-      value: '0px',
-    },
-    {
-      link: 'style',
-      label: 'Margin Right',
-      name: 'margingRight',
-      type: 'text',
-      value: '0px',
-    },
-    {
-      link: 'style',
       label: 'Padding Top',
       name: 'paddingTop',
       type: 'text',

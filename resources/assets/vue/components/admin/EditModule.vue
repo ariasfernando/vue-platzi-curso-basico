@@ -55,34 +55,70 @@
                            placeholder="Module name" 
                            @input="updateName">
                   </div>
+                  <div class="row">
+                    <label class="col-sm-8 control-label" for="set-column">Columns</label> 
+                    <div class="col-sm-4">
+                      <div>
+                        <b-form-select v-model="selected" :options="optionsSelected" class="mb-3" @input="setColumns">
+                        </b-form-select>
+                      </div> 
+                    </div> 
+                  </div>
                   <div class="row" 
                        :class="'field-' + generalSetting.name"
                        v-for="(generalSetting, keyGeneral) in module.structure.settings">
 
                     <div v-if="!generalSetting.group" >
                       <label class="col-sm-8 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
-                      <div class="col-sm-4">
-                        <input :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
+                      <div class="col-sm-4 position-relative content-colorpicker">
+                        <input v-if="generalSetting.type === 'text'"
+                               :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
                                :name="generalSetting.name"
-                               :value="generalSetting.value"
-                               :type="generalSetting.type"
                                :placeholder="generalSetting.label"
+                               v-model="generalSetting.value"
+                               type="text"
                                v-validate="'required'" 
                                @change="saveModuleStyle">
                         <span v-show="errors.has(generalSetting.name)" 
                               class="help is-danger">{{ errors.first(generalSetting.name) }}
                         </span>
+                        <input v-if="generalSetting.type === 'color'"
+                               :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
+                               :name="generalSetting.name"
+                               :placeholder="generalSetting.label"
+                               :value="colors.hex"
+                               type="text"
+                               v-validate="'required'" 
+                               @click.prevent="showSketch"
+                               @change="saveModuleStyle">
+                        <span v-if="generalSetting.type === 'color'" v-show="errors.has(generalSetting.name)" 
+                              class="help is-danger">{{ errors.first(generalSetting.name) }}
+                        </span>
+                        <div class="icon-remove st-remove-sketch" 
+                             @click="hideketch" 
+                             v-if="generalSetting.type === 'color'" 
+                             style="display:none;"
+                        >
+                          <i class="glyphicon glyphicon-remove"></i>
+                        </div>
+                        <sketch-picker style="display:none;" 
+                                       class="sketch-picker" 
+                                       v-if="generalSetting.type === 'color'" 
+                                       ref="sketch" 
+                                       v-model="colors" 
+                                       @input="triggerInputColor"></sketch-picker>
                       </div>
                     </div>
 
                     <div v-else>
                       <label class="col-sm-4 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
                       <div class="col-sm-3 pull-left row no-gutters input-group-setting" v-for="(generalSettingGroup, keyGeneral) in generalSetting.group" >
-                        <input :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
+                        <input v-if="generalSettingGroup.type === 'text'"
+                               :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
                                :name="generalSettingGroup.name"
-                               :value="generalSettingGroup.value"
-                               :type="generalSettingGroup.type"
+                               v-model="generalSettingGroup.value"
                                :placeholder="generalSettingGroup.label"
+                               type="text"
                                v-validate="'required'" 
                                @change="saveModuleStyle">
                         <span v-show="errors.has(generalSettingGroup.name)" 
@@ -102,19 +138,6 @@
               
               <b-collapse id="column-settings" accordion="module-settings-accordion">
                 <b-card class="control container-fluid" no-block>
-                  <div class="row">
-                    <label class="col-sm-8 control-label" for="set-column">Columns</label> 
-                    <div class="col-sm-4">
-                      <input class="input-number pull-right"
-                             name="column-number" 
-                             type="number"
-                             :value="tabIndex === null ? 0 : tabIndex+1"
-                             min="1"
-                             :max="maxCols"
-                             @input="setColumns"
-                      >
-                    </div> 
-                  </div>
                   <b-tabs card ref="tabs" v-model="tabIndex">
                     <!-- Render Tabs -->
 
@@ -213,6 +236,7 @@
 
 <script>
   import Module from './Module.vue';
+  import { Sketch } from 'vue-color'
   import ComponentSettings from './ComponentSettings.vue';
   import moduleService from '../../services/module';
   import Draggable from 'vuedraggable';
@@ -232,6 +256,18 @@
     },
     data () {
       return {
+        selected: '0',
+        optionsSelected: [
+          { value: '0', text: '0' },
+          { value: '1', text: '1' },
+          { value: '2', text: '2' },
+          { value: '3', text: '3' },
+          { value: '4', text: '4' },
+          { value: '5', text: '5' },
+          { value: '6', text: '6' },
+          { value: '7', text: '7' },
+          { value: '8', text: '8' }
+        ],
         ready: false,
         buildingMode: 'desktop',
         maxCols: 5,
@@ -246,7 +282,8 @@
           ghostClass: "ghost-component-menu",  // Class name for the drop placeholder
           chosenClass: "chosen-component-menu",  // Class name for the chosen item
           dragClass: "drag-component-menu"  // Class name for the dragging item
-        }
+        },
+        colors: {hex: '#FFFFFF'}
       }
     },
     components: {
@@ -254,12 +291,43 @@
       ComponentSettings,
       Draggable,
       BootstrapVue,
+      'sketch-picker': Sketch, 
       Spinner
+    },
+    watch:{
+      ready(value){
+        if (value === true){
+          setTimeout(()=>{
+            this.toggleSidebar();
+          }, 100);
+        }
+      },
     },
     methods: {
       updateName(e) {
         this.setModuleField({ name: e.target.value });
       },
+      showSketch(e){
+        const inputElement = e.toElement;
+        $(inputElement).closest('.content-colorpicker').find('.sketch-picker').show();
+        $(inputElement).closest('.content-colorpicker').find('.st-remove-sketch').show();
+      },
+      hideketch(e){
+        const removeElement = e.toElement;
+        $(removeElement).closest('.content-colorpicker').find('.sketch-picker').hide();
+        $(removeElement).closest('.content-colorpicker').find('.st-remove-sketch').hide();
+      },
+      triggerInputColor(){  
+        const elementSketch = this.$refs.sketch[0].$el;
+        const backgroundElelment = $(elementSketch).closest('.content-colorpicker').find('[name=backgroundColor]')[0];
+        $(elementSketch)
+        this.saveModuleStyle({
+          target:{
+            name :backgroundElelment.name,
+            value :backgroundElelment.value
+          }
+        })
+      },  
       setModuleField(data) {
         this.$store.commit("module/setModuleFields", data);
       },
@@ -317,8 +385,8 @@
           value: e.target.value,
         });
       },
-      setColumns(event) {
-        let cols = event.target.value;
+      setColumns(value) {
+        let cols = value;
         let numCols = this.module.structure.columns.length;
 
         if ( numCols === cols ) {
@@ -338,8 +406,8 @@
           }
         }
 
-        if ( event.target.value > 0 && event.target.value <= this.maxCols ){
-          this.$refs.tabs.setTab( event.target.value - 1 );
+        if ( value > 0 && value <= this.maxCols ){
+          this.$refs.tabs.setTab( value - 1 );
         }
 
       },
@@ -355,13 +423,11 @@
         
         var sideToggled = document.getElementById('edit-container');
         sideToggled.classList.toggle('sidebar-closed');
+          
       }
     },
     created () {
       this.loadModule();
-    },
-    mounted () {
-      this.toggleSidebar();
     }
   };
 </script>
@@ -380,6 +446,20 @@
   .fade.show {
     opacity: 1;
   }    
+
+  .position-relative{
+    position: relative;
+  }
+
+  .sketch-picker{
+    position: absolute!important;
+    z-index: 300;
+  }
+  .st-remove-sketch{
+    top:30px!important;
+    left:25px!important;
+    z-index:500!important;
+  }
 
   #studio{
     .section-container{
@@ -412,11 +492,11 @@
     .module-settings {
 
       h4{
-        font-size: 14px;
+        font-size: 13px;
         text-transform: uppercase;
         color: #666666;
         font-weight: 300;
-        padding: 14px 10px;
+        padding: 10px 10px;
         border-bottom: 1px solid #F0F0F0;
         margin: 0px -10px;
       }
@@ -434,11 +514,11 @@
     .component-settings{
 
       h4{
-        font-size: 14px;
+        font-size: 13px;
         text-transform: uppercase;
         color: #666666;
         font-weight: 300;
-        padding: 14px 10px;
+        padding: 10px 10px;
         border-bottom: 1px solid #D4D4D4;
         margin: 0px -10px 15px -10px;
       }
@@ -611,6 +691,23 @@
       padding: 0px;
       background-color: #FFFFFF;
 
+      button[aria-expanded="false"]{
+       opacity: 0.5;
+       transition: all 0.3s linear;
+
+       &:hover{
+        opacity: 1;
+       }
+      }
+
+      button[aria-expanded="true"]{
+       opacity: 1;
+
+       p{
+        font-weight: 600!important;
+       }
+      }
+
       label{
         text-align: left;
         color: #666666;
@@ -649,7 +746,7 @@
           border-top: 0;
           border-left: 0;
           border-right: 0;
-          padding: 21px 10px 14px 10px; 
+          padding: 15px 10px 13px 10px; 
 
           &:hover, &:visited,
           &:focus, &:active{
@@ -657,17 +754,20 @@
             outline: none;
           }
           p{
-            font-size: 14px;
+            font-size: 13px;
             margin: 0;
             padding: 0;
             font-weight: 300;
           }
           i{
             color:#CCCCCC;
+            line-height: 12px;
           }
         }
         
         #module-settings-left{
+
+
           .input-group-setting{
             margin-right: -12px !important;
           }
@@ -682,8 +782,16 @@
           }  
         }
 
+        #element{
+          border-top: 1px solid #FFFFFF;
+          margin-top: -1px;
+        }
+
         #module-settings-left,
         #column-settings{
+          border-top: 1px solid #FFFFFF;
+          margin-top: -1px;
+
           input{
             text-align: left;
             border-radius: 2px;
@@ -698,23 +806,34 @@
 
           .card-header{
             padding-bottom: 20px;
+
             ul{
-              border-bottom: 1px solid #F0F0F0;
+              margin-left: -10px;
+              margin-right: -10px;
+              border-bottom: 1px solid #DDDDDD;
+
               .nav-item{
-                border-top: 1px solid #F0F0F0;
-                border-left: 1px solid #F0F0F0;
+                border-top: 1px solid #DDDDDD;
+                border-left: 1px solid #DDDDDD;
+                margin-bottom: -2px;
+
+                &:first-child{
+                  margin-left: 10px;
+                }
+
                 &:last-of-type{
-                  border-right: 1px solid #F0F0F0;
+                  border-right: 1px solid #DDDDDD;
                 }
                 .nav-link{
                   margin-right:0;
-                  padding: 4px 12px;
+                  padding: 4px 7px;
                   border: 0;
                   border-radius:0;
                   font-weight: 300;
                   color: #666666;
                   &.active{
                     border-bottom: 2px solid @focus;
+                    background: @focus-light;
                   }
                   &:focus{
                     background-color: transparent;
@@ -788,17 +907,18 @@
           font-size: 14px;
           background-color: #f4f4f4;
           border: 1px solid #d8d8d8;
-          padding: 20px;
-          width: 48%;
-          margin-right: 2px;
-          margin-bottom: 2px;
+          padding: 20px 20px 14px 20px;
+          width: 47%;
+          margin-right: 4px;
+          margin-bottom: 4px;
           float: left;
           text-align: center;
+          transition: all 0.3s linear;
 
           i {
             margin: 0 5px;
             color: #514960;
-            font-size: 20px;
+            font-size: 28px;
           }
           p{
             display: inline-block;
@@ -810,6 +930,14 @@
             width: 100%;
             font-weight: 300;
             text-align: center;
+          }
+
+          &:hover{
+            border: 1px solid #888888;
+
+            p{
+              color: #333333;
+            }
           }
         }
       }
@@ -846,11 +974,16 @@
         width: 50px;
       }
 
+      input[name="href"]{
+        width: 115px;
+      }
+
       label{
         text-align: left;
         color: #666666;
         padding-top: 2px;
         font-weight: 300;
+        padding-right: 0px;
       }
 
       .vue-js-switch{

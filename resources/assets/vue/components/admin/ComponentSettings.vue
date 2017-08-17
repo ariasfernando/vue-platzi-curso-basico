@@ -9,6 +9,11 @@
             <input v-if="setting.type === 'text'" v-model="setting.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(setting.name) }"
                    :name="setting.name" type="text" :placeholder="setting.label" @change="saveComponent">
 
+            <span v-if="setting.type === 'select'">
+              <b-form-select v-model="selected" :options="setting.value" class="mb-3" @change="saveComponent">
+              </b-form-select>
+            </span>
+
             <span v-if="setting.type === 'switch'">
               <toggle-button :value="setting.value" color="#78DCD6" :sync="true" :labels="true" @change="changeSetting(key, setting)"></toggle-button>
             </span>
@@ -19,9 +24,7 @@
       </form>
     </div>
 
-    <p class="sep"><br></p>
-
-    <h4>Plugins</h4>
+    <h4>FUNCTIONALITIES</h4>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
         <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
@@ -37,6 +40,7 @@
   import _ from 'lodash'
   import uc from 'underscore-contrib'
   import defaultElements from '../../resources/elements'
+  import BootstrapVue from 'bootstrap-vue'
 
   export default {
     data () {

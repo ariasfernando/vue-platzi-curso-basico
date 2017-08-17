@@ -24,11 +24,11 @@ module.exports = {
       value: '#000000',
     },
     {
-      link: 'style',
-      label: 'Font Size',
-      name: 'fontSize',
-      type: 'text',
-      value: '12px',
+      link: 'attribute',
+      label: 'Alignment',
+      name: 'align',
+      type: 'select',
+      value: ['Center', 'Right', 'Left'],
     },
     {
       link: 'style',

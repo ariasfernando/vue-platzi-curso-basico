@@ -250,7 +250,9 @@ gulp.task('elixir-scripts', function () {
             'js/library/campaign-controller.js',
             'js/library/dashboard-controller.js',
             jsAppFilePath('dashboard-vue.js'),
-            jsAppFilePath('dashboard.js')
+            jsAppFilePath('dashboard.js'),
+            // @TODO turn the rest of the modals into Vue components like ModalProof.vue
+            'js/library/application-proof.js',
           ],
           jsDestinationPath + 'dashboard.js',
           assetsPath

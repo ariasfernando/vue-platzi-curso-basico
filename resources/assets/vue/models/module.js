@@ -10,26 +10,18 @@ function Module(data = {}) {
 
   this.structure = {
     style: {
-      width: style.width || '660',
       backgroundColor: style.backgroundColor || '#FFFFFF',
       paddingTop: style.paddingTop || 0,
-      paddingBottom: style.padingTop || 0,
+      paddingBottom: style.paddingBottom || 0,
       paddingLeft: style.paddingLeft || 0,
-      paddingRight: style.paddingLeft || 0,
+      paddingRight: style.paddingRight || 0,
     },
     settings: [
       {
-        link: 'style',
-        label: 'Width',
-        name: 'width',
-        type: 'text',
-        value: '660',
-      },
-      {
-        link: 'style',
+        link: 'color',
         label: 'Background Color',
         name: 'backgroundColor',
-        type: 'text',
+        type: 'color',
         value: '#FFFFFF',
       },
       {
