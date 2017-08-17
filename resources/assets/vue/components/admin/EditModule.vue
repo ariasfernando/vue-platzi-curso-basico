@@ -343,7 +343,7 @@
           dragClass: "drag-component-menu"  // Class name for the dragging item
         },
         colorsBackground: {hex: '#FFFFFF'},
-        colorsBorder: {hex: '#FFFFFF'},
+        colorsBorder: {hex: '#000000'},
       }
     },
     components: {
@@ -784,7 +784,7 @@
           width: 28%;
         }
         .row:nth-child(3){
-          width: 33%;
+          width: 38%;
         }
         .row:nth-child(4){
           width: 33%;
