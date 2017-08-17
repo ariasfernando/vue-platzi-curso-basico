@@ -343,7 +343,7 @@
           dragClass: "drag-component-menu"  // Class name for the dragging item
         },
         colorsBackground: {hex: '#FFFFFF'},
-        colorsBorder: {hex: '#FFFFFF'},
+        colorsBorder: {hex: '#000000'},
       }
     },
     components: {
