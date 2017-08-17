@@ -14,4 +14,5 @@ module.exports = {
     defaultValue: 'center',
   },
   data: {},
+  enabled: false,
 };

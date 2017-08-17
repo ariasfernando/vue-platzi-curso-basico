@@ -111,13 +111,6 @@
         this.component.settings[key] = setting;
         this.saveComponent();
       },
-      changePlugin(key, field) {
-        const plugin = this.component.plugins[key];
-        field.value = !field.value;
-        const fieldIdx = plugin.studio.fields.indexOf(field);
-        this.component.plugins[key].studio.fields[fieldIdx] = field;
-        this.saveComponent();
-      }
     }
   }
 </script>
