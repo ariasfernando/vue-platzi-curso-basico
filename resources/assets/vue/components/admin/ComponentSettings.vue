@@ -7,7 +7,7 @@
       <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
     </b-btn>
 
-    <b-collapse id="style" accordion="module-settings-accordion-right">
+    <b-collapse id="style" visible accordion="module-settings-accordion-right">
       <b-card class="default-settings">
         <form class="form-horizontal">
           <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings">
@@ -128,8 +128,13 @@
   }
 
   .plugin-wrapper {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #f4f4f4;
     margin-bottom: 15px;
+
+    b{
+      font-weight: 300;
+      color: #333333;
+    }
   }
 
   button.module-settings-item-right{
@@ -156,7 +161,23 @@
     }
     i{
       color:#CCCCCC;
-      line-height: 12px;
+      line-height: 12px!important;
+    }
+  }
+  button[aria-expanded="false"]{
+    opacity: 0.5;
+    transition: all 0.3s linear;
+
+    &:hover{
+      opacity: 1;
+    }
+  }
+
+  button[aria-expanded="true"]{
+    opacity: 1;
+
+    p{
+      font-weight: 600!important;
     }
   }
 </style>

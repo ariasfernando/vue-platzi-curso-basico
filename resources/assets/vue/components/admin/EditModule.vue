@@ -966,11 +966,20 @@
       width: 190px;
       display: table-cell;
       float: none;
-      padding: 10px;
+      padding: 0px;
       overflow: hidden;
 
       .form-group{
         margin-bottom: 10px;
+      }
+
+      .card{
+        padding: 15px 10px 15px 12px;
+        border-bottom: 1px solid #f0f0f0;
+        border-top: 1px solid #FFFFFF;
+        margin-top: -1px;
+        display: table;
+        width: 100%;
       }
 
       select{
