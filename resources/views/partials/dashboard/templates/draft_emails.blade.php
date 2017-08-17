@@ -72,8 +72,7 @@
                             class="proof-track-modal pull-right right-icon"
                             href="#"
                             title="Track active proof"
-
-
+                            v-if="proof.allow && proof.status && campaign.has_active_proof"
                         ><i class="fa fa-sticky-note-o"></i></a>
                     </td>
                     <td v-if="showTags == 1">
@@ -91,8 +90,7 @@
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Open proof review"
-
-
+                        v-if="proof.allow && proof.status && campaign.has_active_proof"
                         ><i class="glyphicon glyphicon-blackboard"></i></a>
 
                         <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
@@ -103,8 +101,7 @@
                             data-placement="top"
                             href="#"
                             title="Send for review"
-
-
+                            v-if="proof.allow && proof.status"
                             ><i class="glyphicon glyphicon-search"></i></a>
 
                         <a
