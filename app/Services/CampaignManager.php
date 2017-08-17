@@ -282,8 +282,7 @@ class CampaignManager
         $campaign = Campaign::findOrFail($campaign_id);
 
         if ($campaign->processed == 0) {
-            $text = new Text($campaign);
-            $response = $text->createTextVersion($campaign['modules_data']);
+            $response = Text::htmlToText($campaign->body_html);
             Activity::log(
                 'Campaign plain text created',
                 array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
