@@ -179,5 +179,8 @@
     p{
       font-weight: 600!important;
     }
+    i{
+      transform: rotate(180deg);
+    }
   }
 </style>
