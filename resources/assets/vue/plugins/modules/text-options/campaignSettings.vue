@@ -20,7 +20,7 @@
       const options = _.filter(this.plugin.data.options, 'value');
       let toolbar = [];
 
-      if (toolbar.length) {
+      if (options.length) {
         _.each(options, (option) => {
           toolbar.push(option.key)
         });
@@ -42,12 +42,10 @@
         init_instance_callback: (editor) => {
 
           editor.on('Blur', (e) => {
-            const parts = this.id.split('-');
-
             this.$store.dispatch('campaign/updateElement', {
-              moduleId: parts[1],
-              columnId: parts[2],
-              componentId: parts[3],
+              moduleId: this.currentComponent.moduleId,
+              columnId: this.currentComponent.columnId,
+              componentId: this.currentComponent.componentId,
               data: {
                 text: editor.getContent()
               }
