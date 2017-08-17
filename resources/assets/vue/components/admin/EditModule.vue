@@ -778,6 +778,20 @@
         }
       }
 
+      .field-border{
+
+        .row:nth-child(2){
+          width: 28%;
+        }
+        .row:nth-child(3){
+          width: 33%;
+        }
+        .row:nth-child(4){
+          width: 33%;
+        }
+
+      }
+
       select{
           height: 22px;
           font-size: 11px;
@@ -813,6 +827,10 @@
 
         .card-block .row{
           margin-bottom: 10px;
+
+          .row{
+            margin-bottom: 0px;
+          }
         }
 
         .fa.pull-left{

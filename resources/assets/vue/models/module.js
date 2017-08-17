@@ -64,6 +64,7 @@ function Module(data = {}) {
       {
         link: 'style',
         label: 'Border',
+        name: 'border',
         group: [
           {
             link: 'style',
