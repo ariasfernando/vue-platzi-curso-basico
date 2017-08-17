@@ -58,15 +58,6 @@
                   <div class="row">
                     <label class="col-sm-8 control-label" for="set-column">Columns</label> 
                     <div class="col-sm-4">
-                      <!-- <input class="input-number pull-right"
-                             name="column-number" 
-                             type="number"
-                             :value="tabIndex === null ? 0 : tabIndex+1"
-                             min="1"
-                             :max="maxCols"
-                             @input="setColumns"
-                      > -->
-
                       <div>
                         <b-form-select v-model="selected" :options="optionsSelected" class="mb-3" @input="setColumns">
                         </b-form-select>
@@ -98,11 +89,19 @@
                                :value="colors.hex"
                                type="text"
                                v-validate="'required'" 
+                               @click.prevent="showSketch"
                                @change="saveModuleStyle">
                         <span v-if="generalSetting.type === 'color'" v-show="errors.has(generalSetting.name)" 
                               class="help is-danger">{{ errors.first(generalSetting.name) }}
                         </span>
-                        <sketch-picker class="sketch-picker" v-if="generalSetting.type === 'color'" ref="sketch" v-model="colors" @input="triggerInputColor"></sketch-picker>
+                        <div class="icon-remove st-remove-sketch" @click="hideketch" style="display:none;">
+                          <i class="glyphicon glyphicon-remove"></i></div>
+                        <sketch-picker style="display:none;" 
+                                       class="sketch-picker" 
+                                       v-if="generalSetting.type === 'color'" 
+                                       ref="sketch" 
+                                       v-model="colors" 
+                                       @input="triggerInputColor"></sketch-picker>
                       </div>
                     </div>
 
@@ -303,10 +302,20 @@
       updateName(e) {
         this.setModuleField({ name: e.target.value });
       },
-      triggerInputColor(e){  
+      showSketch(e){
+        const inputElement = e.toElement;
+        $(inputElement).closest('.content-colorpicker').find('.sketch-picker').show();
+        $(inputElement).closest('.content-colorpicker').find('.st-remove-sketch').show();
+      },
+      hideketch(e){
+        const removeElement = e.toElement;
+        $(removeElement).closest('.content-colorpicker').find('.sketch-picker').hide();
+        $(removeElement).closest('.content-colorpicker').find('.st-remove-sketch').hide();
+      },
+      triggerInputColor(){  
         const elementSketch = this.$refs.sketch[0].$el;
         const backgroundElelment = $(elementSketch).closest('.content-colorpicker').find('[name=backgroundColor]')[0];
-        
+        $(elementSketch)
         this.saveModuleStyle({
           target:{
             name :backgroundElelment.name,
@@ -440,6 +449,11 @@
   .sketch-picker{
     position: absolute!important;
     z-index: 300;
+  }
+  .st-remove-sketch{
+    top:30px!important;
+    left:25px!important;
+    z-index:500!important;
   }
 
   #studio{
