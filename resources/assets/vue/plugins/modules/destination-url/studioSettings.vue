@@ -9,6 +9,15 @@
           </span>
         </div>
       </div>
+
+      <div class="form-group">
+        <label class="col-sm-7 control-label">Default Url</label>
+        <div class="col-sm-5">
+          <span>
+            <input type="text" :value="href" @change="change">
+          </span>
+        </div>
+      </div>
     </form>
   </div>
 </template>
@@ -24,6 +33,7 @@
     data() {
       return {
         enabled: this.plugin.data.enabled || false,
+        href: this.plugin.data.href || this.plugin.config.defaultUrl
       }
     },
     methods: {
@@ -38,6 +48,17 @@
         };
 
         this.$store.commit('module/savePlugin', payload);
+      },
+      change(e) {
+        const payload = {
+          plugin: this.name,
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          attribute: 'href',
+          attributeValue: e.target.value,
+        };
+
+        this.$store.commit('module/saveComponentAttribute', payload);
       }
     }
   }

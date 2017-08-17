@@ -1,9 +1,12 @@
 <template>
   <div>
-    <label>{{ plugin.title }}</label><br>
-    <select title="alignment" name="alignment" :value="value" @change="change">
-      <option v-for="option in options" :value="option" :selected="option === value">{{ option }}</option>
-    </select>
+    <label>{{ plugin.title }}</label>
+    <div>
+      <span>
+        <input name="destination-url" type="text" :value="href" @change="change">
+      </span>
+    </div>
+
   </div>
 </template>
 
@@ -23,13 +26,8 @@
 
         return this.$store.state.campaign.modules[moduleId].structure.columns[columnId].components[componentId];
       },
-      value() {
-        return this.component.attribute.align;
-      }
-    },
-    data() {
-      return {
-        options: this.plugin.config.options
+      href() {
+        return this.component.attribute.href || this.plugin.config.defaultUrl;
       }
     },
     methods: {
@@ -39,7 +37,7 @@
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          attribute: 'align',
+          attribute: 'href',
           attributeValue: e.target.value,
         };
 

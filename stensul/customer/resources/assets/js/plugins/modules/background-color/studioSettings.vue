@@ -2,7 +2,7 @@
   <div :class="'plugin-' + plugin.name">
     <form class="form-horizontal">
       <div class="form-group">
-        <label class="col-sm-7 control-label">{{ plugin.title }}</label>
+        <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
         <div class="col-sm-5">
           <span>
             <toggle-button :value="enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>

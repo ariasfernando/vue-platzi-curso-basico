@@ -23,7 +23,7 @@
 
     <h4>Plugins</h4>
     <div class="plugins">
-      <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.name">
+      <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
         <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
@@ -104,5 +104,10 @@
 <style lang="less">
   .vue-js-switch {
     margin-top: 4px
+  }
+
+  .plugin-wrapper {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 15px;
   }
 </style>

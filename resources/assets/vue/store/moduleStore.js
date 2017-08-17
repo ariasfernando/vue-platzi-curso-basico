@@ -79,6 +79,10 @@ const mutations = {
     let pluginData = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data;
     _.merge(pluginData, data.data);
   },
+  saveComponentAttribute(state, data) {
+    let attributes = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
+    attributes[data.attribute] = data.attributeValue;
+  },
   error(state, err) {
     console.log(err);
   },
