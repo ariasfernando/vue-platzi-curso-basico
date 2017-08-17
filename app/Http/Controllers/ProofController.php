@@ -460,6 +460,12 @@ class ProofController extends Controller
                         }
                         unset($current_reviewer['notification_message']);
                         $reviewers[$key] = array_merge($reviewers[$key], $current_reviewer);
+                        
+                        if (isset($reviewer['required']) && $reviewer['required'] == 1) {
+                            $reviewers[$key]['required'] = 1;
+                        } else {
+                            $reviewers[$key]['required'] = 0;
+                        }
                     }
                 }
             }
