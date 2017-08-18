@@ -230,7 +230,7 @@
                                    :class="{'input': true, 'is-danger': errors.has(columnSetting.name) }"
                                    :name="columnSetting.name"
                                    :placeholder="columnSetting.label"
-                                   :value="colorsBackground.hex"
+                                   v-model="columnSetting.value.hex"
                                    type="text"
                                    v-validate="'required'" 
                                    @click.prevent="showSketch"
@@ -249,8 +249,8 @@
                                            class="sketch-picker" 
                                            v-if="columnSetting.type === 'color'" 
                                            ref="sketchbackground" 
-                                           v-model="colorsBackground" 
-                                           @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false, 'colorsBackground' )"></sketch-picker>
+                                           v-model="columnSetting.value" 
+                                           @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false )"></sketch-picker>
                           </div>
                         </div>
 
@@ -288,7 +288,7 @@
                                    :class="{'input': true, 'is-danger': errors.has(columnSettingGroup.name) }"
                                    :name="columnSettingGroup.name"
                                    :placeholder="columnSettingGroup.label"
-                                   :value="colorsBorder.hex"
+                                   v-model="columnSettingGroup.value.hex"
                                    type="text"
                                    v-validate="'required'" 
                                    @click.prevent="showSketch"
@@ -307,8 +307,8 @@
                                            class="sketch-picker" 
                                            v-if="columnSettingGroup.type === 'color'" 
                                            ref="sketchborder" 
-                                           v-model="colorsBorder" 
-                                           @input="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true, 'colorsBorder' )"></sketch-picker>
+                                           v-model="columnSettingGroup.value" 
+                                           @input="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true  )"></sketch-picker>
                           </div>
                         </div>
                       </div>  
@@ -563,19 +563,18 @@
         });
       },
       // TODO Update date used mutation.
-      updateColumnSettings( key , name, link , isGroup, style ){
+      updateColumnSettings( key , name, link , isGroup ){
         _.each(this.module.structure.columns[key].settings, (option, index) => {
           
             if ( isGroup ){
-              _.each(option.group, (optionGroup, indexGroup) => {
+               _.each(option.group, (optionGroup, indexGroup) => {
                 if (optionGroup.name === name) {
-                    this.module.structure.columns[key][link][optionGroup.name] = optionGroup.value = this[style].hex;
+                    this.module.structure.columns[key][link][name] = optionGroup.value.hex;
                 }   
               });
             }else{
               if (option.name === name) {
-                  console.log(this.module.structure.columns[key][link][option.name],this[style].hex )
-                this.module.structure.columns[key][link][option.name] = option.value = this[style].hex;
+                this.module.structure.columns[key][link][name] = option.value.hex;
               }
             }
           
