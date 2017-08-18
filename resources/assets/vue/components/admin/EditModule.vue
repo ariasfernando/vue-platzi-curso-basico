@@ -119,6 +119,7 @@
                     <div v-else>
                       <label class="col-sm-4 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
                       <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" v-for="(generalSettingGroup, keyGeneral) in generalSetting.group" >
+                       
                        <!-- Input text -->
                         <input v-if="generalSettingGroup.type === 'text'"
                                :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
@@ -131,17 +132,17 @@
                         <span v-show="errors.has(generalSettingGroup.name)" 
                               class="help is-danger">{{ errors.first(generalSettingGroup.name) }}
                         </span>
-
+                        
+                        <!-- Input select -->
                         <div>
-
-                        <b-form-select 
-                            v-if="generalSettingGroup.type === 'select'"
-                            v-model="selectedBorderStyle" 
-                            :name="generalSettingGroup.name"
-                            :options="optionsSelectedBorderStyle" 
-                            @change.native="saveModuleStyle">
-                        </b-form-select>
-                      </div> 
+                          <b-form-select 
+                              v-if="generalSettingGroup.type === 'select'"
+                              v-model="selectedBorderStyle" 
+                              :name="generalSettingGroup.name"
+                              :options="optionsSelectedBorderStyle" 
+                              @change.native="saveModuleStyle">
+                          </b-form-select>
+                        </div> 
 
                         <!-- Input color -->
                         <input v-if="generalSettingGroup.type === 'color'"
@@ -192,7 +193,7 @@
                            :key="key"
                            v-for="(column, key) in module.structure.columns" 
                     >
-                      <div class="row" :class="'field-' + setting.name" v-for="(setting, keySettings ) in column.settings">
+                      <!-- <div class="row" :class="'field-' + setting.name" v-for="(setting, keySettings ) in column.settings">
                         <label class="col-sm-8 control-label" :for="setting.name">{{ setting.label }}</label>
                         <div class="col-sm-4">
                           <input v-if="setting.type === 'text'"
@@ -205,13 +206,114 @@
                                  @change="saveColumnSettings(key)">
                           <span v-show="errors.has(setting.name)" class="help is-danger">{{ errors.first(setting.name) }}</span>
                         </div>
-                      </div>
-                      <!-- Tab Contents {{column}} -->
-                    </b-tab>
-                    <div slot="empty" class="text-center text-muted text-no-columns">
-                      Please add a new column to start adding elements.
-                    </div>
+                      </div> -->
 
+                      <div class="row" :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings">
+                        <div v-if="!columnSetting.group" >
+                          <label class="col-sm-8 control-label" :for="columnSetting.name">{{ columnSetting.label }}</label>
+                          <div class="col-sm-4 position-relative content-colorpicker">
+                          <!-- Input Text -->
+                            <input v-if="columnSetting.type === 'text'"
+                                   :class="{'input': true, 'is-danger': errors.has(columnSetting.name) }"
+                                   :name="columnSetting.name"
+                                   :placeholder="columnSetting.label"
+                                   v-model="columnSetting.value"
+                                   type="text"
+                                   v-validate="'required'" 
+                                   @change="saveColumnSettings(key)">
+                            <span v-show="errors.has(columnSetting.name)" 
+                                  class="help is-danger">{{ errors.first(columnSetting.name) }}
+                            </span>
+                            <!-- Input color -->
+                            <input v-if="columnSetting.type === 'color'"
+                                   class="sketchbackground"                        
+                                   :class="{'input': true, 'is-danger': errors.has(columnSetting.name) }"
+                                   :name="columnSetting.name"
+                                   :placeholder="columnSetting.label"
+                                   v-model="columnSetting.value.hex"
+                                   type="text"
+                                   v-validate="'required'" 
+                                   @click.prevent="showSketch"
+                                   @change="saveColumnSettings(key)">
+                            <span v-if="columnSetting.type === 'color'" v-show="errors.has(columnSetting.name)" 
+                                  class="help is-danger">{{ errors.first(columnSetting.name) }}
+                            </span>
+                            <div class="icon-remove st-remove-sketch" 
+                                 @click="hideketch" 
+                                 v-if="columnSetting.type === 'color'" 
+                                 style="display:none;"
+                            >
+                              <i class="glyphicon glyphicon-remove"></i>
+                            </div>
+                            <sketch-picker style="display:none;" 
+                                           class="sketch-picker" 
+                                           v-if="columnSetting.type === 'color'" 
+                                           ref="sketchbackground" 
+                                           v-model="columnSetting.value" 
+                                           @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false )"></sketch-picker>
+                          </div>
+                        </div>
+
+                        <div v-else>
+                          <label class="col-sm-4 control-label" :for="columnSetting.name">{{ columnSetting.label }}</label>
+                          <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" v-for="(columnSettingGroup, keySettings) in columnSetting.group" >
+                           
+                           <!-- Input text -->
+                            <input v-if="columnSettingGroup.type === 'text'"
+                                   :class="{'input': true, 'is-danger': errors.has(columnSettingGroup.name) }"
+                                   :name="columnSettingGroup.name"
+                                   v-model="columnSettingGroup.value"
+                                   :placeholder="columnSettingGroup.label"
+                                   type="text"
+                                   v-validate="'required'" 
+                                   @change="saveColumnSettings(key)">
+                            <span v-show="errors.has(columnSettingGroup.name)" 
+                                  class="help is-danger">{{ errors.first(columnSettingGroup.name) }}
+                            </span>
+                            
+                            <!-- Input select -->
+                            <div>
+                              <b-form-select 
+                                  v-if="columnSettingGroup.type === 'select'"
+                                  v-model="columnSettingGroup.value" 
+                                  :name="columnSettingGroup.name"
+                                  :options="optionsSelectedBorderStyle" 
+                                  @change.native="saveColumnSettings(key)">
+                              </b-form-select>
+                            </div> 
+
+                            <!-- Input color -->
+                            <input v-if="columnSettingGroup.type === 'color'"
+                                   class="sketchborder"
+                                   :class="{'input': true, 'is-danger': errors.has(columnSettingGroup.name) }"
+                                   :name="columnSettingGroup.name"
+                                   :placeholder="columnSettingGroup.label"
+                                   v-model="columnSettingGroup.value.hex"
+                                   type="text"
+                                   v-validate="'required'" 
+                                   @click.prevent="showSketch"
+                                   @change="saveColumnSettings(key)">
+                            <span v-if="columnSettingGroup.type === 'color'" v-show="errors.has(columnSettingGroup.name)" 
+                                  class="help is-danger">{{ errors.first(columnSettingGroup.name) }}
+                            </span>
+                            <div class="icon-remove st-remove-sketch" 
+                                 @click="hideketch" 
+                                 v-if="columnSettingGroup.type === 'color'" 
+                                 style="display:none;"
+                            >
+                              <i class="glyphicon glyphicon-remove"></i>
+                            </div>
+                            <sketch-picker style="display:none;" 
+                                           class="sketch-picker" 
+                                           v-if="columnSettingGroup.type === 'color'" 
+                                           ref="sketchborder" 
+                                           v-model="columnSettingGroup.value" 
+                                           @input="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true  )"></sketch-picker>
+                          </div>
+                        </div>
+                      </div>  
+
+                    </b-tab>
                   </b-tabs>
                 </b-card>
               </b-collapse>
@@ -441,10 +543,42 @@
       saveColumnSettings(key) {
         _.each(this.module.structure.columns[key].settings, (option, index) => {
           if (option.link === 'style') {
-            this.module.structure.columns[key].style[option.name] = option.value;
+            if ( option.group && option.group.length > 0 ){
+              _.each(option.group, (optionGroup, indexGroup) => {
+                this.module.structure.columns[key].style[optionGroup.name] = optionGroup.value;
+              }); 
+            }else{
+              this.module.structure.columns[key].style[option.name] = option.value;
+            }
+          }
+          if (option.link === 'attribute') {
+            if (option.group && option.group.length > 0 ){
+              _.each(option.group, (optionGroup, indexGroup) => {
+                this.module.structure.columns[key].attribute[optionGroup.name] = optionGroup.value;
+              }); 
+            }else{
+              this.module.structure.columns[key].attribute[option.name] = option.value;
+            }
           }
         });
-        
+      },
+      // TODO Update date used mutation.
+      updateColumnSettings( key , name, link , isGroup ){
+        _.each(this.module.structure.columns[key].settings, (option, index) => {
+          
+            if ( isGroup ){
+               _.each(option.group, (optionGroup, indexGroup) => {
+                if (optionGroup.name === name) {
+                    this.module.structure.columns[key][link][name] = optionGroup.value.hex;
+                }   
+              });
+            }else{
+              if (option.name === name) {
+                this.module.structure.columns[key][link][name] = option.value.hex;
+              }
+            }
+          
+        });
       },
       saveModuleStyle(e) {
          this.$store.commit('module/saveModuleStyle',{
@@ -865,7 +999,6 @@
         
         #module-settings-left{
 
-
           .input-group-setting{
             margin-right: -12px !important;
           }
@@ -878,6 +1011,12 @@
               width: 90%;
             }
           }  
+        }
+
+        #column-settings{
+          .input-group-setting{
+            margin-right: -12px !important;
+          }
         }
 
         #element{
