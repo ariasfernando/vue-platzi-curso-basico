@@ -126,7 +126,7 @@ class SendReviewersEmail extends Job implements ShouldQueue
 
             $this->proof->unset('send_to_all');
         }
-        dump($reviewers);
+
         array_walk($reviewers, function (&$reviewer) use ($params) {
             if ($params['send_to_all'] || !isset($reviewer['notified']) || !$reviewer['notified']) {
 
