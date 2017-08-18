@@ -21,7 +21,7 @@ function Module(data = {}) {
     },
     settings: [
       {
-        link: 'color',
+        link: 'style',
         label: 'Background Color',
         name: 'backgroundColor',
         type: 'color',

@@ -11,10 +11,19 @@ module.exports = {
     borderStyle:'solid',
     backgroundColor:'#FFFFFF'
   },
-
+  attribute: {
+    width: '100%',
+  },
   settings: [
       {
-        link: 'color',
+        link: 'attribute',
+        label: 'Width',
+        name: 'width',
+        type: 'text',
+        value: '100%',
+      },
+      {
+        link: 'style',
         label: 'Background Color',
         name: 'backgroundColor',
         type: 'color',
