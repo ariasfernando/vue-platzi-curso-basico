@@ -27,7 +27,7 @@ module.exports = {
         label: 'Background Color',
         name: 'backgroundColor',
         type: 'color',
-        value: '#FFFFFF',
+        value: {hex: '#FFFFFF'},
       },
       {
         link: 'style',
@@ -87,7 +87,7 @@ module.exports = {
             label: 'Border Color',
             name: 'borderColor',
             type: 'color',
-            value: '#000000',
+            value: {hex: '#000000'},
           },
         ],
       }, 

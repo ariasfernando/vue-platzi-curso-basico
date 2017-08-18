@@ -40,7 +40,7 @@
             <div class="fields">
               <!-- START: General Settings -->
               <b-btn block v-b-toggle.module-settings-left class="module-settings-item">
-                <p class="pull-left">GENERAL SETTINGS</p>
+                <p class="pull-left"><i class="glyphicon glyphicon-cog"></i> GENERAL SETTINGS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
              
@@ -179,7 +179,7 @@
               <!-- END: General Settings -->
               <!-- START: Module Settings -->
               <b-btn block v-b-toggle.column-settings class="module-settings-item">
-                <p class="pull-left">COLUMN SETTINGS</p>
+                <p class="pull-left"><i class="glyphicon glyphicon-pause"></i> COLUMN SETTINGS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
               
@@ -230,7 +230,7 @@
                                    :class="{'input': true, 'is-danger': errors.has(columnSetting.name) }"
                                    :name="columnSetting.name"
                                    :placeholder="columnSetting.label"
-                                   :value="colorsBackground.hex"
+                                   v-model="columnSetting.value.hex"
                                    type="text"
                                    v-validate="'required'" 
                                    @click.prevent="showSketch"
@@ -249,8 +249,8 @@
                                            class="sketch-picker" 
                                            v-if="columnSetting.type === 'color'" 
                                            ref="sketchbackground" 
-                                           v-model="colorsBackground" 
-                                           @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false, 'colorsBackground' )"></sketch-picker>
+                                           v-model="columnSetting.value" 
+                                           @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false )"></sketch-picker>
                           </div>
                         </div>
 
@@ -288,7 +288,7 @@
                                    :class="{'input': true, 'is-danger': errors.has(columnSettingGroup.name) }"
                                    :name="columnSettingGroup.name"
                                    :placeholder="columnSettingGroup.label"
-                                   :value="colorsBorder.hex"
+                                   v-model="columnSettingGroup.value.hex"
                                    type="text"
                                    v-validate="'required'" 
                                    @click.prevent="showSketch"
@@ -307,8 +307,8 @@
                                            class="sketch-picker" 
                                            v-if="columnSettingGroup.type === 'color'" 
                                            ref="sketchborder" 
-                                           v-model="colorsBorder" 
-                                           @input="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true, 'colorsBorder' )"></sketch-picker>
+                                           v-model="columnSettingGroup.value" 
+                                           @input="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true  )"></sketch-picker>
                           </div>
                         </div>
                       </div>  
@@ -320,7 +320,7 @@
               <!-- END: Module Settings -->
               <!-- START: Elements -->
               <b-btn block v-b-toggle.element class="module-settings-item">
-                <p class="pull-left">ELEMENTS</p>
+                <p class="pull-left"><i class="glyphicon glyphicon-th-large"></i> ELEMENTS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
 
@@ -563,19 +563,18 @@
         });
       },
       // TODO Update date used mutation.
-      updateColumnSettings( key , name, link , isGroup, style ){
+      updateColumnSettings( key , name, link , isGroup ){
         _.each(this.module.structure.columns[key].settings, (option, index) => {
           
             if ( isGroup ){
-              _.each(option.group, (optionGroup, indexGroup) => {
+               _.each(option.group, (optionGroup, indexGroup) => {
                 if (optionGroup.name === name) {
-                    this.module.structure.columns[key][link][optionGroup.name] = optionGroup.value = this[style].hex;
+                    this.module.structure.columns[key][link][name] = optionGroup.value.hex;
                 }   
               });
             }else{
               if (option.name === name) {
-                  console.log(this.module.structure.columns[key][link][option.name],this[style].hex )
-                this.module.structure.columns[key][link][option.name] = option.value = this[style].hex;
+                this.module.structure.columns[key][link][name] = option.value.hex;
               }
             }
           
@@ -886,7 +885,7 @@
     }
 
     .left-bar {
-      width: 190px;
+      width: 230px;
       color: #666666;
       display: table-cell;
       float: none;
@@ -900,6 +899,14 @@
        &:hover{
         opacity: 1;
        }
+      }
+
+      li.ghost-component-menu{
+        outline: 1px dashed @focus;
+        
+        &:before{
+          content: '';
+        }
       }
 
       button[aria-expanded="true"]{
@@ -919,7 +926,7 @@
           width: 28%;
         }
         .row:nth-child(3){
-          width: 38%;
+          width: 33%;
         }
         .row:nth-child(4){
           width: 33%;
@@ -991,6 +998,13 @@
             margin: 0;
             padding: 0;
             font-weight: 300;
+
+            i{
+              color: #666666;
+              vertical-align: baseline;
+              transform: rotate(0deg);
+              margin-right: 2px;
+            }
           }
           i{
             color:#CCCCCC;
@@ -999,7 +1013,6 @@
         }
         
         #module-settings-left{
-
 
           .input-group-setting{
             margin-right: -12px !important;
@@ -1013,6 +1026,12 @@
               width: 90%;
             }
           }  
+        }
+
+        #column-settings{
+          .input-group-setting{
+            margin-right: -12px !important;
+          }
         }
 
         #element{
@@ -1095,7 +1114,11 @@
           }
 
           .row.field-undefined .col-sm-3{
-            width: 61px;
+            width: 67px;
+
+            input{
+              width: 100%;
+            }
           }
 
           input[name="paddingTop"],
@@ -1197,7 +1220,7 @@
     }
 
     .right-bar {
-      width: 190px;
+      width: 230px;
       display: table-cell;
       float: none;
       padding: 0px;

@@ -69,7 +69,7 @@
     background-color: @icon-option;
     height: 30px;
     bottom: 0;
-    right: -100px;
+    right: -98px;
     div {
       cursor: pointer;
       display: none;

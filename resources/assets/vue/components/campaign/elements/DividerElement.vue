@@ -1,10 +1,17 @@
 <template>
   <!-- DIVIDER ELEMENT -->
     <tr data-type="divider-element" @click.prevent="setComponent">
-      <td class="st-separator st-position-relative" :style="component.style">
-        <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
+      <td class="st-separator st-position-relative" :style="component.style" :align="component.attribute.align">
+        <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0"
+              :width="component.attribute.width"
+              :height="component.attribute.height"
+              :bgcolor="component.attribute.bgcolor">
           <tr>
-            <td :style="component.style"></td>
+            <td :style="component.style"
+                :bgcolor="component.attribute.bgcolor"
+                :height="component.attribute.height">
+              <div :style="component.style"></div>
+            </td>
           </tr>
         </table>
       </td>

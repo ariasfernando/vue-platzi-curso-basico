@@ -37,6 +37,8 @@
             this.component = modules[this.currentComponent.moduleId].structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
             this.title = _.capitalize(this.component.type.replace('-element', '')) + ' settings';
 
+            console.log(this.component.plugins);
+
             _.each(this.component.plugins, (plugin) => {
               if (plugin.enabled) {
                 this.empty = false;
@@ -50,23 +52,6 @@
       },
     },
     methods: {
-      savePlugin(e) {
-        const pluginName = e.target.dataset.plugin;
-        const field = e.target.name;
-        const value = e.target.value;
-        let plugin = this.component.plugins[pluginName].campaign;
-
-        // TODO: Avoid changing component values directly
-        plugin.fields[field].value = value;
-
-        if (plugin.fields[field].attribute) {
-          this.component.attribute[plugin.fields[field].attribute] = value;
-        }
-        if (plugin.fields[field].style) {
-          this.component.style[plugin.fields[field].style] = value;
-        }
-        this.saveComponent();
-      },
       saveComponent() {
         this.$store.commit('campaign/saveComponent', {
           moduleId: this.currentComponent.moduleId,
