@@ -901,6 +901,14 @@
        }
       }
 
+      li.ghost-component-menu{
+        outline: 1px dashed @focus;
+        
+        &:before{
+          content: '';
+        }
+      }
+
       button[aria-expanded="true"]{
        opacity: 1;
 
