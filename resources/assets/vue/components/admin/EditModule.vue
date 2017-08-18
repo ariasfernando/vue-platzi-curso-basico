@@ -999,7 +999,6 @@
         
         #module-settings-left{
 
-
           .input-group-setting{
             margin-right: -12px !important;
           }
@@ -1012,6 +1011,12 @@
               width: 90%;
             }
           }  
+        }
+
+        #column-settings{
+          .input-group-setting{
+            margin-right: -12px !important;
+          }
         }
 
         #element{
