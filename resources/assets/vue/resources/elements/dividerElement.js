@@ -9,8 +9,8 @@ module.exports = {
       link: 'style',
       label: 'Background Color',
       name: 'backgroundColor',
-      type: 'text',
-      value: '#FFFFFF',
+      type: 'color',
+      value: {hex: '#000000'},
     },
     {
       link: 'style',
