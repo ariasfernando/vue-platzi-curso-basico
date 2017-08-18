@@ -40,7 +40,7 @@
             <div class="fields">
               <!-- START: General Settings -->
               <b-btn block v-b-toggle.module-settings-left class="module-settings-item">
-                <p class="pull-left">GENERAL SETTINGS</p>
+                <p class="pull-left"><i class="glyphicon glyphicon-cog"></i> GENERAL SETTINGS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
              
@@ -179,7 +179,7 @@
               <!-- END: General Settings -->
               <!-- START: Module Settings -->
               <b-btn block v-b-toggle.column-settings class="module-settings-item">
-                <p class="pull-left">COLUMN SETTINGS</p>
+                <p class="pull-left"><i class="glyphicon glyphicon-pause"></i> COLUMN SETTINGS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
               
@@ -320,7 +320,7 @@
               <!-- END: Module Settings -->
               <!-- START: Elements -->
               <b-btn block v-b-toggle.element class="module-settings-item">
-                <p class="pull-left">ELEMENTS</p>
+                <p class="pull-left"><i class="glyphicon glyphicon-th-large"></i> ELEMENTS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
 
@@ -885,7 +885,7 @@
     }
 
     .left-bar {
-      width: 190px;
+      width: 230px;
       color: #666666;
       display: table-cell;
       float: none;
@@ -926,7 +926,7 @@
           width: 28%;
         }
         .row:nth-child(3){
-          width: 38%;
+          width: 33%;
         }
         .row:nth-child(4){
           width: 33%;
@@ -998,6 +998,13 @@
             margin: 0;
             padding: 0;
             font-weight: 300;
+
+            i{
+              color: #666666;
+              vertical-align: baseline;
+              transform: rotate(0deg);
+              margin-right: 2px;
+            }
           }
           i{
             color:#CCCCCC;
@@ -1107,7 +1114,11 @@
           }
 
           .row.field-undefined .col-sm-3{
-            width: 61px;
+            width: 67px;
+
+            input{
+              width: 100%;
+            }
           }
 
           input[name="paddingTop"],
@@ -1209,7 +1220,7 @@
     }
 
     .right-bar {
-      width: 190px;
+      width: 230px;
       display: table-cell;
       float: none;
       padding: 0px;

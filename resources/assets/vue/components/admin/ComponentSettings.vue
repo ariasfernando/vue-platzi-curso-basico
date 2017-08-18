@@ -3,7 +3,7 @@
     
     <!-- START: Style -->
     <b-btn block v-b-toggle.style class="module-settings-item-right">
-      <p class="pull-left">STYLES</p>
+      <p class="pull-left"><i class="glyphicon glyphicon-pencil"></i> STYLES</p>
       <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
     </b-btn>
 
@@ -35,7 +35,7 @@
 
     <!-- START: Funcionalities -->
     <b-btn block v-b-toggle.funcionalities class="module-settings-item-right">
-      <p class="pull-left">FUNCTIONALITIES</p>
+      <p class="pull-left"><i class="glyphicon glyphicon-tasks"></i> FUNCTIONALITIES</p>
       <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
     </b-btn>
 
@@ -151,6 +151,13 @@
       margin: 0;
       padding: 0;
       font-weight: 300;
+
+      i{
+        color: #666666;
+        vertical-align: baseline!important;
+        transform: rotate(0deg);
+        margin-right: 2px;
+      }
     }
     i{
       color:#CCCCCC;
