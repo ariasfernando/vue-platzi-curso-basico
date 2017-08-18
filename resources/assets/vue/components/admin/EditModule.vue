@@ -901,6 +901,12 @@
        }
       }
 
+      li.ghost-component-menu{
+        &:before{
+          content: '';
+        }
+      }
+
       button[aria-expanded="true"]{
        opacity: 1;
 
