@@ -19,5 +19,17 @@ module.exports = {
       type: 'text',
       value: '5px',
     },
+    {
+      link: 'style',
+      label: 'Width',
+      name: 'width',
+      type: 'text',
+      value: '100%',
+    },
   ],
+  attribute: {
+    align: 'center',
+    bgcolor: '#FFFFFF',
+    width: '100%',
+  },
 };

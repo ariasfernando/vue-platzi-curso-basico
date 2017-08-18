@@ -17,8 +17,9 @@
               :bgcolor="component.attribute.bgcolor"
               :height="component.attribute.height"
           >
-            <a @click.prevent
-               :href="component.attribute.href" 
+            <a
+               class="st-unlink"
+
                :target="component.attribute.target" 
                :style="component.style"  
             >
@@ -61,3 +62,9 @@
     }
   };
 </script>
+
+<style>
+  .st-unlink {
+    cursor: default;
+  }
+</style>
