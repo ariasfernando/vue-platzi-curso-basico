@@ -902,6 +902,8 @@
       }
 
       li.ghost-component-menu{
+        outline: 1px dashed @focus;
+        
         &:before{
           content: '';
         }
