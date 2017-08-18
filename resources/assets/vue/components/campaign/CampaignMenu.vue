@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div v-for="(item, key) in items">
-      <div v-if="item.sub_menu" class="expand" @click="expand(key)">
+    <div v-for="item in items">
+      <div v-if="item.sub_menu" class="expand" @click="expand(item.name)">
         <h2>{{ item.name }}<i class="glyphicon"></i></h2>
-        <div :class="item.level" :style="{ display: expanded.indexOf(key) !== -1 ? 'block' : 'none' }">
+
+        <div :class="item.level" :style="{ display: expanded.indexOf(item.name) !== -1 ? 'block' : 'none' }">
+
           <div v-for="subitem in item.sub_menu">
             <div class="add single">
               <h2 @click="addModule(subitem)">{{ subitem.name }} <i
@@ -24,7 +26,7 @@
 <script>
 
   import moduleService from '../../services/module';
-
+  import _ from 'lodash';
 
   export default {
     name: 'CampaignMenu',
@@ -36,7 +38,14 @@
     computed: {
       items () {
         return this.$store.state.campaign.campaign.menu_list;
-      }
+      },
+    },
+    created() {
+      _.each(this.items, (item) => {
+        if (item.sub_menu) {
+          this.expanded[item.name] = false;
+        }
+      });
     },
     methods: {
       addModule (module) {
@@ -58,14 +67,14 @@
           this.$store.commit("global/setLoader", false);
         }
       },
-      expand (key) {
-        let index = this.expanded.indexOf(key);
-        if ( index !== -1 ) {
-          this.expanded.splice(key, 1);
+      expand (item) {
+        const index = this.expanded.indexOf(item);
+        if (index !== -1) {
+          this.expanded.splice(index, 1);
         } else {
-          this.expanded.push(key);
+          this.expanded.push(item);
         }
-      }
+      },
     }
   };
 </script>
