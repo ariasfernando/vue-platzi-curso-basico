@@ -23,7 +23,7 @@
               <table v-for="(column, columnId) in module.structure.columns"
                      v-if="column.components.length" 
                      align="left"
-                     :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'"
+                     :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
                      :style="column.style || ''" 
                      :data-col="columnId"
                      :class="!column.components.length ? 'empty-col' : ''"
@@ -61,7 +61,7 @@
               <table v-else 
                     align="left"
                     :style="column.style || ''"
-                    :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'"
+                    :width="column.style && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
               >
                 <tr>
                   <td>
@@ -99,7 +99,7 @@
       <td class="st-col" 
           v-for="(column, columnId) in module.structure.columns" 
           :class="!column.components.length ? 'empty-col' : ''" 
-          :width="column.style && column.style.width ? column.style.width : 100/module.structure.columns.length + '%'" 
+          :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
           :style="column.style || ''"
           :data-col="columnId"
       >

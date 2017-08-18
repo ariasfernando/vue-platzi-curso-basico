@@ -250,7 +250,7 @@
                                            v-if="columnSetting.type === 'color'" 
                                            ref="sketchbackground" 
                                            v-model="colorsBackground" 
-                                           @input="triggerInputColor('sketchbackground')"></sketch-picker>
+                                           @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false, 'colorsBackground' )"></sketch-picker>
                           </div>
                         </div>
 
@@ -275,7 +275,7 @@
                             <div>
                               <b-form-select 
                                   v-if="columnSettingGroup.type === 'select'"
-                                  v-model="selectedBorderStyle" 
+                                  v-model="columnSettingGroup.value" 
                                   :name="columnSettingGroup.name"
                                   :options="optionsSelectedBorderStyle" 
                                   @change.native="saveColumnSettings(key)">
@@ -308,7 +308,7 @@
                                            v-if="columnSettingGroup.type === 'color'" 
                                            ref="sketchborder" 
                                            v-model="colorsBorder" 
-                                           @input="triggerInputColor('sketchborder')"></sketch-picker>
+                                           @input="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true, 'colorsBorder' )"></sketch-picker>
                           </div>
                         </div>
                       </div>  
@@ -543,10 +543,43 @@
       saveColumnSettings(key) {
         _.each(this.module.structure.columns[key].settings, (option, index) => {
           if (option.link === 'style') {
-            this.module.structure.columns[key].style[option.name] = option.value;
+            if ( option.group && option.group.length > 0 ){
+              _.each(option.group, (optionGroup, indexGroup) => {
+                this.module.structure.columns[key].style[optionGroup.name] = optionGroup.value;
+              }); 
+            }else{
+              this.module.structure.columns[key].style[option.name] = option.value;
+            }
+          }
+          if (option.link === 'attribute') {
+            if (option.group && option.group.length > 0 ){
+              _.each(option.group, (optionGroup, indexGroup) => {
+                this.module.structure.columns[key].attribute[optionGroup.name] = optionGroup.value;
+              }); 
+            }else{
+              this.module.structure.columns[key].attribute[option.name] = option.value;
+            }
           }
         });
-        
+      },
+      // TODO Update date used mutation.
+      updateColumnSettings( key , name, link , isGroup, style ){
+        _.each(this.module.structure.columns[key].settings, (option, index) => {
+          
+            if ( isGroup ){
+              _.each(option.group, (optionGroup, indexGroup) => {
+                if (optionGroup.name === name) {
+                    this.module.structure.columns[key][link][optionGroup.name] = optionGroup.value = this[style].hex;
+                }   
+              });
+            }else{
+              if (option.name === name) {
+                  console.log(this.module.structure.columns[key][link][option.name],this[style].hex )
+                this.module.structure.columns[key][link][option.name] = option.value = this[style].hex;
+              }
+            }
+          
+        });
       },
       saveModuleStyle(e) {
          this.$store.commit('module/saveModuleStyle',{
