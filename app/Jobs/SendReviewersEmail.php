@@ -10,6 +10,7 @@ use Stensul\Models\User;
 use Stensul\Models\Proof;
 use Stensul\Models\Campaign;
 use MongoDB\BSON\ObjectID as ObjectID;
+use MongoDB\BSON\UTCDateTime;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -128,9 +129,10 @@ class SendReviewersEmail extends Job implements ShouldQueue
 
         array_walk($reviewers, function (&$reviewer) use ($params) {
             if ($params['send_to_all'] || !isset($reviewer['notified']) || !$reviewer['notified']) {
+
                 if (EmailSender::sendReviewerEmail($reviewer, $params)) {
                     $reviewer['notified'] = true;
-                    $reviewer['notified_at'] = new \MongoDate(strtotime(date('c')));
+                    $reviewer['notified_at'] = new UTCDateTime;
 
                     Activity::log('Reviewer has been notified of a new proof', [
                         'properties' => [
@@ -174,7 +176,7 @@ class SendReviewersEmail extends Job implements ShouldQueue
             if (!isset($reviewer['proof_deleted']) || !$reviewer['proof_deleted']) {
                 if (EmailSender::sendReviewerEmail($reviewer, $params)) {
                     $reviewer['proof_deleted'] = true;
-                    $reviewer['proof_deleted_at'] = new \MongoDate(strtotime(date('c')));
+                    $reviewer['proof_deleted_at'] = new UTCDateTime;
 
                     Activity::log('Reviewer has been notified of a deleted campaign with a proof', [
                         'properties' => [

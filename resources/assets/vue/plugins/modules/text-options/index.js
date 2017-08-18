@@ -60,6 +60,41 @@ module.exports = {
         key: 'alignright',
         value: false,
       },
+      superscript: {
+        label: 'Superscript',
+        key: 'superscript',
+        value: false,
+      },
+      fontselect: {
+        label: 'Font',
+        key: 'fontselect',
+        value: false,
+      },
+      fontsizeselect: {
+        label: 'Font size',
+        key: 'fontsizeselect',
+        value: false,
+      },
+      bullist: {
+        label: 'Bullet list',
+        key: 'bullist',
+        value: false,
+      },
+      forecolor: {
+        label: 'Font color',
+        key: 'forecolor',
+        value: false,
+      },
+      backcolor: {
+        label: 'Background color',
+        key: 'backcolor',
+        value: false,
+      },
+      image: {
+        label: 'Image',
+        key: 'image',
+        value: false,
+      },
     },
   },
   enabled: false,
