@@ -493,7 +493,7 @@ class ProofController extends Controller
             $proof->campaign->save();
 
             // Send emails to reviewers
-            $this->dispatch(new SendReviewersEmail($proof, 'new_proof'));
+            dispatch(new SendReviewersEmail($proof, 'new_proof'));
 
             return [
                 'status' => 'success',
