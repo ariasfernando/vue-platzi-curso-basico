@@ -3,39 +3,131 @@
     
     <!-- START: Style -->
     <b-btn block v-b-toggle.style class="module-settings-item-right">
-      <p class="pull-left">STYLES</p>
+      <p class="pull-left"><i class="glyphicon glyphicon-pencil"></i> STYLES</p>
       <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
     </b-btn>
 
     <b-collapse id="style" visible accordion="module-settings-accordion-right">
       <b-card class="default-settings">
+        
         <form class="form-horizontal">
           <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings">
-            <label class="col-sm-7 pull-left control-label" :for="setting.name">{{ setting.label }}</label>
-            <div class="col-sm-5 pull-right">
-              <input v-if="setting.type === 'text'" v-model="setting.value" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                     :name="setting.name" type="text" :placeholder="setting.label" @change="saveComponent">
+            <div v-if="!setting.group" >
+              <label class="col-sm-8 control-label" :for="setting.name">{{ setting.label }}</label>
+              <div class="col-sm-4 position-relative content-colorpicker">
+                <!-- Input Text -->
+                <input v-if="setting.type === 'text'"
+                       v-validate="'required'" 
+                       v-model="setting.value"
+                       :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                       :name="setting.name"
+                       :placeholder="setting.label"
+                       type="text"
+                       @change="saveComponent">
+                
+                <!-- Input select -->
+                <span v-if="setting.type === 'select'">
+                  <b-form-select v-model="setting.value" :name="setting.name" :options="setting.options" @change.native="saveComponent">
+                  </b-form-select>
+                </span>
+               
+                <!-- Input color -->
+                <input v-if="setting.type === 'color'"
+                       v-validate="'required'" 
+                       v-model="setting.value.hex"
+                       type="text"
+                       class="sketchbackground"                        
+                       :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                       :name="setting.name"
+                       :placeholder="setting.label"
+                       @click.prevent="showSketch"
+                       @change="saveComponent">
+                <div v-if="setting.type === 'color'"
+                     class="icon-remove st-remove-sketch" 
+                     @click="hideketch"  
+                     style="display:none;"
+                >
+                  <i class="glyphicon glyphicon-remove"></i>
+                </div>
+                <sketch-picker v-if="setting.type === 'color'" 
+                               v-model="setting.value" 
+                               style="display:none;" 
+                               class="sketch-picker" 
+                               ref="sketchbackground" 
+                               @click.native="updateColumnSettings(setting.name, setting.link, false )"></sketch-picker>
+                
+                <!-- Span General Error -->
+                <span v-show="errors.has(setting.name)" 
+                      class="help is-danger">{{ errors.first(setting.name) }}
+                </span>  
+              </div>
+            </div>
 
-              <span v-if="setting.type === 'select'">
-                <b-form-select v-model="setting.value" :name="setting.name" :options="setting.value" @change="saveComponent">
-                </b-form-select>
-              </span>
-
-              <span v-if="setting.type === 'switch'">
-                <toggle-button :value="setting.value" color="#78DCD6" :sync="true" :labels="true" @change="changeSetting(key, setting)"></toggle-button>
-              </span>
-
-              <span v-show="errors.has(setting.name)" class="help is-danger">{{ errors.first(setting.name) }}</span>
+            <div v-else>
+              <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
+              <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" 
+                  v-for="(settingGroup, keyGroup) in setting.group" >
+               
+                <!-- Input Text -->
+                <input v-if="settingGroup.type === 'text'"
+                       :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
+                       :name="settingGroup.name"
+                       :placeholder="settingGroup.label"
+                       v-model="settingGroup.value"
+                       type="text"
+                       v-validate="'required'" 
+                       @change="saveComponent">
+               
+                <!-- Input select -->
+                <span v-if="setting.type === 'select'">
+                  <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponent">
+                  </b-form-select>
+                </span>
+                
+                <!-- Input color -->
+                <input v-if="settingGroup.type === 'color'"
+                       v-model="settingGroup.value.hex"
+                       v-validate="'required'" 
+                       type="text"
+                       class="sketchbackground"                        
+                       :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
+                       :name="settingGroup.name"
+                       :placeholder="settingGroup.label"
+                       @click.prevent="showSketch"
+                       @change="saveComponent">
+                <div v-if="settingGroup.type === 'color'"
+                     class="icon-remove st-remove-sketch" 
+                     @click="hideketch"  
+                     style="display:none;"
+                >
+                  <i class="glyphicon glyphicon-remove"></i>
+                </div>
+                <sketch-picker v-if="settingGroup.type === 'color'" 
+                               v-model="colorsBackground" 
+                               style="display:none;" 
+                               class="sketch-picker" 
+                               ref="sketchbackground" 
+                               @click.native="updateColumnSettings(settingGroup.name, settingGroup.link, true )"></sketch-picker>
+                
+                <!-- Span General Error -->
+                <span v-show="errors.has(settingGroup.name)" 
+                      class="help is-danger">{{ errors.first(settingGroup.name) }}
+                </span> 
+               
+              </div>
             </div>
           </div>
         </form>
+
+
+
       </b-card>
     </b-collapse>
     <!-- END: Style -->
 
     <!-- START: Funcionalities -->
     <b-btn block v-b-toggle.funcionalities class="module-settings-item-right">
-      <p class="pull-left">FUNCTIONALITIES</p>
+      <p class="pull-left"><i class="glyphicon glyphicon-tasks"></i> FUNCTIONALITIES</p>
       <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
     </b-btn>
 
@@ -53,11 +145,12 @@
 
 <script>
 
-  import Vue from 'vue/dist/vue'
-  import _ from 'lodash'
-  import uc from 'underscore-contrib'
-  import defaultElements from '../../resources/elements'
-  import BootstrapVue from 'bootstrap-vue'
+  import Vue from 'vue/dist/vue';
+  import _ from 'lodash';
+  import uc from 'underscore-contrib';
+  import defaultElements from '../../resources/elements';
+  import BootstrapVue from 'bootstrap-vue';
+  import { Sketch } from 'vue-color';
 
   export default {
     data () {
@@ -65,6 +158,10 @@
         ready: false,
         component: {}
       }
+    },
+    components: {
+      BootstrapVue,
+      'sketch-picker': Sketch,
     },
     computed: {
       currentComponent() {
@@ -84,13 +181,35 @@
       },
     },
     methods: {
+      showSketch(e){
+        const inputElement = e.toElement;
+        $(inputElement).closest('.content-colorpicker').find('.sketch-picker').show();
+        $(inputElement).closest('.content-colorpicker').find('.st-remove-sketch').show();
+      },
+      hideketch(e){
+        const removeElement = e.toElement;
+        $(removeElement).closest('.content-colorpicker').find('.sketch-picker').hide();
+        $(removeElement).closest('.content-colorpicker').find('.st-remove-sketch').hide();
+      },
       saveComponent() {
         _.each(this.component.settings, (option, index) => {
           if (option.link === 'style') {
-            this.component.style[option.name] = option.value;
+            if ( option.group && option.group.length > 0 ){
+              _.each(option.group, (optionGroup, indexGroup) => {
+                this.component.style[optionGroup.name] = optionGroup.value;
+              }); 
+            }else{
+              this.component.style[option.name] = option.value;
+            }
           }
           if (option.link === 'attribute') {
-            this.component.attribute[option.name] = option.value;
+            if (option.group && option.group.length > 0 ){
+              _.each(option.group, (optionGroup, indexGroup) => {
+                this.component.attribute[optionGroup.name] = optionGroup.value;
+              }); 
+            }else{
+              this.component.attribute[option.name] = option.value;
+            }
           }
         });
 
@@ -105,6 +224,33 @@
           attribute: this.component.attribute || {}
         }); 
         
+      },
+      // TODO Update date used mutation.
+      updateColumnSettings( name, link , isGroup ){
+        _.each(this.component.settings, (option, index) => {
+            if ( isGroup ){
+               _.each(option.group, (optionGroup, indexGroup) => {
+                if (optionGroup.name === name) {
+                    this.component[link][name] = optionGroup.value.hex;
+                }   
+              });
+            }else{
+              if (option.name === name) {
+                this.component[link][name] = option.value.hex;
+              }
+            }
+        });
+
+        this.$store.commit('module/saveComponent', {
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          component: this.component
+        });
+
+        this.$store.commit('module/setChangeSettingComponent',{
+          style: this.component.style || {},
+          attribute: this.component.attribute || {}
+        });
       },
       changeSetting(key, setting) {
         setting.value = !setting.value;
@@ -151,6 +297,13 @@
       margin: 0;
       padding: 0;
       font-weight: 300;
+
+      i{
+        color: #666666;
+        vertical-align: baseline!important;
+        transform: rotate(0deg);
+        margin-right: 2px;
+      }
     }
     i{
       color:#CCCCCC;

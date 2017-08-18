@@ -6,7 +6,7 @@ module.exports = {
     paddingLeft: '0px',
     paddingBottom: '0px',
     paddingRight: '0px',
-    borderWidth:'1px',
+    borderWidth:'0px',
     borderColor:'#000000',
     borderStyle:'solid',
     backgroundColor:'#FFFFFF'
@@ -32,6 +32,7 @@ module.exports = {
       {
         link: 'style',
         label: 'Padding',
+        name: 'padding',
         group: [
           {
             link: 'style',

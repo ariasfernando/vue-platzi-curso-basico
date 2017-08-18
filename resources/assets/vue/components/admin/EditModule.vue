@@ -40,7 +40,7 @@
             <div class="fields">
               <!-- START: General Settings -->
               <b-btn block v-b-toggle.module-settings-left class="module-settings-item">
-                <p class="pull-left">GENERAL SETTINGS</p>
+                <p class="pull-left"><i class="glyphicon glyphicon-cog"></i> GENERAL SETTINGS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
              
@@ -179,7 +179,7 @@
               <!-- END: General Settings -->
               <!-- START: Module Settings -->
               <b-btn block v-b-toggle.column-settings class="module-settings-item">
-                <p class="pull-left">COLUMN SETTINGS</p>
+                <p class="pull-left"><i class="glyphicon glyphicon-pause"></i> COLUMN SETTINGS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
               
@@ -193,26 +193,12 @@
                            :key="key"
                            v-for="(column, key) in module.structure.columns" 
                     >
-                      <!-- <div class="row" :class="'field-' + setting.name" v-for="(setting, keySettings ) in column.settings">
-                        <label class="col-sm-8 control-label" :for="setting.name">{{ setting.label }}</label>
-                        <div class="col-sm-4">
-                          <input v-if="setting.type === 'text'"
-                                 v-model="setting.value" 
-                                 v-validate="'required'" 
-                                 type="text" 
-                                 :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                                 :name="setting.name" 
-                                 :placeholder="setting.label"
-                                 @change="saveColumnSettings(key)">
-                          <span v-show="errors.has(setting.name)" class="help is-danger">{{ errors.first(setting.name) }}</span>
-                        </div>
-                      </div> -->
-
                       <div class="row" :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings">
                         <div v-if="!columnSetting.group" >
                           <label class="col-sm-8 control-label" :for="columnSetting.name">{{ columnSetting.label }}</label>
                           <div class="col-sm-4 position-relative content-colorpicker">
-                          <!-- Input Text -->
+                            
+                            <!-- Input Text -->
                             <input v-if="columnSetting.type === 'text'"
                                    :class="{'input': true, 'is-danger': errors.has(columnSetting.name) }"
                                    :name="columnSetting.name"
@@ -221,9 +207,7 @@
                                    type="text"
                                    v-validate="'required'" 
                                    @change="saveColumnSettings(key)">
-                            <span v-show="errors.has(columnSetting.name)" 
-                                  class="help is-danger">{{ errors.first(columnSetting.name) }}
-                            </span>
+                            
                             <!-- Input color -->
                             <input v-if="columnSetting.type === 'color'"
                                    class="sketchbackground"                        
@@ -235,9 +219,6 @@
                                    v-validate="'required'" 
                                    @click.prevent="showSketch"
                                    @change="saveColumnSettings(key)">
-                            <span v-if="columnSetting.type === 'color'" v-show="errors.has(columnSetting.name)" 
-                                  class="help is-danger">{{ errors.first(columnSetting.name) }}
-                            </span>
                             <div class="icon-remove st-remove-sketch" 
                                  @click="hideketch" 
                                  v-if="columnSetting.type === 'color'" 
@@ -245,12 +226,17 @@
                             >
                               <i class="glyphicon glyphicon-remove"></i>
                             </div>
-                            <sketch-picker style="display:none;" 
+                            <sketch-picker v-if="columnSetting.type === 'color'"
+                                           style="display:none;" 
                                            class="sketch-picker" 
-                                           v-if="columnSetting.type === 'color'" 
                                            ref="sketchbackground" 
                                            v-model="columnSetting.value" 
                                            @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false )"></sketch-picker>
+
+                            <!-- Span General Error -->
+                            <span v-show="errors.has(columnSetting.name)" 
+                                  class="help is-danger">{{ errors.first(columnSetting.name) }}
+                            </span>      
                           </div>
                         </div>
 
@@ -267,10 +253,6 @@
                                    type="text"
                                    v-validate="'required'" 
                                    @change="saveColumnSettings(key)">
-                            <span v-show="errors.has(columnSettingGroup.name)" 
-                                  class="help is-danger">{{ errors.first(columnSettingGroup.name) }}
-                            </span>
-                            
                             <!-- Input select -->
                             <div>
                               <b-form-select 
@@ -293,22 +275,23 @@
                                    v-validate="'required'" 
                                    @click.prevent="showSketch"
                                    @change="saveColumnSettings(key)">
-                            <span v-if="columnSettingGroup.type === 'color'" v-show="errors.has(columnSettingGroup.name)" 
-                                  class="help is-danger">{{ errors.first(columnSettingGroup.name) }}
-                            </span>
-                            <div class="icon-remove st-remove-sketch" 
-                                 @click="hideketch" 
-                                 v-if="columnSettingGroup.type === 'color'" 
+                            <div v-if="columnSettingGroup.type === 'color'"
+                                 class="icon-remove st-remove-sketch" 
+                                 @click="hideketch"  
                                  style="display:none;"
                             >
                               <i class="glyphicon glyphicon-remove"></i>
                             </div>
-                            <sketch-picker style="display:none;" 
+                            <sketch-picker v-if="columnSettingGroup.type === 'color'" 
+                                           style="display:none;" 
                                            class="sketch-picker" 
-                                           v-if="columnSettingGroup.type === 'color'" 
                                            ref="sketchborder" 
                                            v-model="columnSettingGroup.value" 
-                                           @input="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true  )"></sketch-picker>
+                                           @click.native="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true  )"></sketch-picker>
+                            <!-- Span General Error -->
+                            <span v-show="errors.has(columnSettingGroup.name)" 
+                                  class="help is-danger">{{ errors.first(columnSettingGroup.name) }}
+                            </span>
                           </div>
                         </div>
                       </div>  
@@ -320,7 +303,7 @@
               <!-- END: Module Settings -->
               <!-- START: Elements -->
               <b-btn block v-b-toggle.element class="module-settings-item">
-                <p class="pull-left">ELEMENTS</p>
+                <p class="pull-left"><i class="glyphicon glyphicon-th-large"></i> ELEMENTS</p>
                 <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
               </b-btn>
 
@@ -454,7 +437,7 @@
       Draggable,
       BootstrapVue,
       'sketch-picker': Sketch, 
-      Spinner
+      Spinner,
     },
     watch:{
       ready(value){
@@ -652,10 +635,6 @@
     position: relative;
   }
 
-  .sketch-picker{
-    position: absolute!important;
-    z-index: 300;
-  }
   .st-remove-sketch{
     top:30px!important;
     left:25px!important;
@@ -885,7 +864,7 @@
     }
 
     .left-bar {
-      width: 190px;
+      width: 230px;
       color: #666666;
       display: table-cell;
       float: none;
@@ -899,6 +878,14 @@
        &:hover{
         opacity: 1;
        }
+      }
+
+      li.ghost-component-menu{
+        outline: 1px dashed @focus;
+        
+        &:before{
+          content: '';
+        }
       }
 
       button[aria-expanded="true"]{
@@ -918,7 +905,7 @@
           width: 28%;
         }
         .row:nth-child(3){
-          width: 38%;
+          width: 33%;
         }
         .row:nth-child(4){
           width: 33%;
@@ -990,6 +977,13 @@
             margin: 0;
             padding: 0;
             font-weight: 300;
+
+            i{
+              color: #666666;
+              vertical-align: baseline;
+              transform: rotate(0deg);
+              margin-right: 2px;
+            }
           }
           i{
             color:#CCCCCC;
@@ -998,7 +992,6 @@
         }
         
         #module-settings-left{
-
           .input-group-setting{
             margin-right: -12px !important;
           }
@@ -1099,7 +1092,11 @@
           }
 
           .row.field-undefined .col-sm-3{
-            width: 61px;
+            width: 67px;
+
+            input{
+              width: 100%;
+            }
           }
 
           input[name="paddingTop"],
@@ -1135,6 +1132,10 @@
       }
 
       .content-colorpicker{
+        .sketch-picker{
+          position: absolute!important;
+          z-index: 300;
+        }
         .icon-remove{
           color: #999999;
           background: #FFFFFF;
@@ -1201,11 +1202,10 @@
     }
 
     .right-bar {
-      width: 190px;
+      width: 230px;
       display: table-cell;
       float: none;
       padding: 0px;
-      overflow: hidden;
 
       .form-group{
         margin-bottom: 10px;
@@ -1260,6 +1260,22 @@
         padding-top: 0px;
         margin: 0px;
       }
+
+      .content-colorpicker{
+        .sketch-picker{
+          position: absolute!important;
+          z-index: 300;
+          right: 100%;
+        }
+        .icon-remove{
+          color: #999999;
+          background: #FFFFFF;
+          border: 1px solid #CCCCCC;
+          margin-top: -40px;
+          margin-left: -35px;
+          padding-top: 4px;
+        }
+      }
     }
 
     .module-container {
@@ -1280,6 +1296,7 @@
     .is-danger {
       border: 1px solid red !important;
     }
+
   }
 
   .nopadding{

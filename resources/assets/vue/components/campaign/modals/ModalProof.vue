@@ -59,7 +59,7 @@
                         <div class="input-group">
                           <label data-toggle="tooltip" data-placement="top"
                             title="Existing comments, approvals, and rejections will be archived.">
-                            <input type="checkbox" value="1" name="create_new_proof"> Start proof from scratch
+                            <input type="checkbox" value="1" name="create_new_proof" v-model="startProof"> Start proof from scratch
                           </label>
                         </div>
                         <div class="input-group">
@@ -179,6 +179,20 @@
 
         return this.users;
       },
+      fetchReviewers () {
+
+        $.getJSON('/proof/reviewers/' + this.campaign.campaign_data._id, {}, function(response) {
+
+          if (response && response.status === 'success') {
+              for (index in response.data) {
+                this.addReviewer(response.data[index].email, response.data[index]);
+              }
+          }
+        }.bind(this));
+
+        return this.reviewers;
+      },
+
       /**
        * Add a reviewer in the table
        *
@@ -198,7 +212,6 @@
         var check = $table.find('tr > td:contains(' + email + ')').length;
 
         if (!check) {
-            var i = $table.find('tr:last').data('row') + 1 || 0;
 
             // Set default params
             params = $.extend({
@@ -299,13 +312,19 @@
     },
     created () {
       this.fetchUsers();
+      this.fetchReviewers();
+
+      if (this.campaign.campaign_data.proof_id) {
+        this.startProof = false;
+      }
     },
     data: function() {
       return {
         users: [],
         reviewers: [],
         currentReviewer: {},
-        currentNotificationMessage: ''
+        currentNotificationMessage: '',
+        startProof: true
       }
     },
   };
