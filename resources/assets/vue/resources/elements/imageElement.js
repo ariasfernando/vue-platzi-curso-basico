@@ -1,6 +1,7 @@
 module.exports = {
   type: 'image-element',
   style: {
+    align: 'center',
     verticalAlign: 'middle',
     paddingTop: '0px',
     paddingBottom: '0px',
@@ -12,6 +13,7 @@ module.exports = {
     href: 'http://stensul.com',
     alt: 'Image',
     title: 'Image',
+    align: 'center',
     height: 'auto',
     target: '_blank',
     width: '220',
@@ -56,6 +58,25 @@ module.exports = {
       name: 'width',
       type: 'text',
       value: '220',
+    },
+    {
+      link: 'attribute',
+      label: 'Height',
+      name: 'height',
+      type: 'text',
+      value: 'auto',
+    },
+    {
+      link: 'attribute',
+      label: 'Align',
+      name: 'align',
+      type: 'select',
+      value: 'center',
+      options:[
+        { value: 'left', text: 'left' },
+        { value: 'center', text: 'center' },
+        { value: 'right', text: 'right' },
+      ],
     },
     {
       link: 'style',

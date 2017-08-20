@@ -15,15 +15,28 @@
 
 <script>
   export default {
-    props: ['name', 'plugin'],
+    props: ['name'],
     computed: {
       currentComponent() {
         return this.$store.getters["module/currentComponent"];
+      },
+      module() {
+        return this.$store.getters["module/module"];
+      },
+      plugin() {
+        const module = this.module,
+              columnId = this.currentComponent.columnId,
+              componentId = this.currentComponent.componentId;
+
+        const plugin = module.structure.columns[columnId].components[componentId].plugins[this.name];
+        this.enabled = plugin.enabled;
+
+        return plugin;
       }
     },
     data() {
       return {
-        enabled: this.plugin.enabled || false,
+        enabled: false,
       }
     },
     methods: {

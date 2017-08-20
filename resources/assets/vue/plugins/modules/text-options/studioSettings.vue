@@ -5,11 +5,12 @@
         <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
+            <toggle-button :value="plugin.enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
           </span>
         </div>
       </div>
-      <div class="form-group" v-for="(option, name) in options">
+
+      <div v-if="plugin.enabled" class="form-group" v-for="(option, name) in plugin.data.options">
         <label class="col-sm-7 control-label" :data-name="name"><b>{{ option.label }}</b></label>
         <div class="col-sm-5">
           <span>
@@ -27,16 +28,30 @@
   import _ from 'lodash';
 
   export default {
-    props: ['name', 'plugin'],
+    props: ['name'],
     computed: {
       currentComponent() {
         return this.$store.getters["module/currentComponent"];
       },
+      module() {
+        return this.$store.getters["module/module"];
+      },
+      plugin() {
+        const module = this.module,
+              columnId = this.currentComponent.columnId,
+              componentId = this.currentComponent.componentId;
+
+        const plugin = module.structure.columns[columnId].components[componentId].plugins[this.name];
+        this.enabled = plugin.enabled;
+        this.options = plugin.data.options;
+
+        return plugin;
+      }
     },
     data() {
       return {
-        options: this.plugin.data.options,
-        enabled: this.plugin.enabled,
+        enabled: false,
+        options: {},
       }
     },
     methods: {

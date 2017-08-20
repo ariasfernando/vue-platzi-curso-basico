@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-for="item in items">
-      <div v-if="item.sub_menu" class="expand" @click="expand(item.name)">
-        <h2>{{ item.name }}<i class="glyphicon"></i></h2>
+      <div v-if="item.sub_menu" class="expand">
+        <h2 @click="expand(item.name)">{{ item.name }}<i class="glyphicon"></i></h2>
 
         <div :class="item.level" :style="{ display: expanded.indexOf(item.name) !== -1 ? 'block' : 'none' }">
 
