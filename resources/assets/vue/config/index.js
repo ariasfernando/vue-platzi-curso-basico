@@ -13,10 +13,19 @@ export default {
     });
 
     Application.globals.modulePlugins = {};
+    let globalComponents = [];
 
     _.each(plugins.modules, (component, name) => {
-      Vue.component(`studio-${component.name}`, component.studioSettings);
-      Vue.component(`campaign-${component.name}`, component.campaignSettings);
+
+      if (component.studioSettings) {
+        Vue.component(`studio-${component.name}`, component.studioSettings);
+        globalComponents.push(`studio-${component.name}`);
+      }
+
+      if (component.campaignSettings) {
+        Vue.component(`campaign-${component.name}`, component.campaignSettings);
+        globalComponents.push(`campaign-${component.name}`);
+      }
 
       delete component.studioSettings;
       delete component.campaignSettings;
@@ -26,5 +35,6 @@ export default {
 
     Vue.app = Vue.prototype.$app = Application.globals;
     Vue.customer = Vue.prototype.$customer = customer;
+    Vue.globalComponents = Vue.prototype.$globalComponents = globalComponents;
   },
 };

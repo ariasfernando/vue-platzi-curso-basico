@@ -2,7 +2,6 @@ module.exports = {
   type: 'image-element',
   style: {
     align: 'center',
-    verticalAlign: 'middle',
     paddingTop: '0px',
     paddingBottom: '0px',
     paddingRight: '0px',
@@ -14,6 +13,7 @@ module.exports = {
     alt: 'Image',
     title: 'Image',
     align: 'center',
+    valign: 'middle',
     height: 'auto',
     target: '_blank',
     width: '220',
@@ -76,6 +76,18 @@ module.exports = {
         { value: 'left', text: 'left' },
         { value: 'center', text: 'center' },
         { value: 'right', text: 'right' },
+      ],
+    },
+    {
+      link: 'attribute',
+      label: 'Vertical align',
+      name: 'valign',
+      type: 'select',
+      value: 'middle',
+      options:[
+        { value: 'top', text: 'top' },
+        { value: 'middle', text: 'middle' },
+        { value: 'bottom', text: 'bottom' },
       ],
     },
     {
