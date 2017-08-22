@@ -27,6 +27,7 @@
 
       <div class="col-xs-3 header-col">
         <div class="vertical-center pull-right">
+          <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" @click.prevent="toggleRaw">Raw</a>
           <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" @click.prevent="saveModule('draft')" :disabled="errors.any()">Save as draft<i class="glyphicon glyphicon-menu-right"></i></a>
           <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-menu-right"></i></a>
         </div>
@@ -340,12 +341,11 @@
         <!-- END: Left Bar -->
         <!-- START: Module Container -->
         <div class="col-xs-8 module-container">
-          <div class="module-wrapper" :class="buildingMode + '-mode'">
-            <module></module>
+          <div v-if="showRaw" class="module-wrapper">
+            <textarea v-html="module" @change="updateRawModule" rows="30" style="width: 100%"></textarea>
           </div>
-          <div v-if="$route.query.debug" class="col-xs-12">
-            <br><br>
-            <pre>{{ module.structure.columns }}</pre>
+          <div v-else class="module-wrapper" :class="buildingMode + '-mode'">
+            <module></module>
           </div>
         </div>
         <!-- END: Module Container -->
@@ -387,6 +387,7 @@
     },
     data () {
       return {
+        showRaw: false,
         selectedBackgroundColor: '1',
         selectedBorderStyle: 'solid',
 
@@ -450,6 +451,12 @@
       },
     },
     methods: {
+      toggleRaw() {
+        this.showRaw = !this.showRaw;
+      },
+      updateRawModule(e) {
+        this.$store.commit("module/setModuleData", JSON.parse(e.target.value));
+      },
       updateName(e) {
         this.setModuleField({ name: e.target.value });
       },
