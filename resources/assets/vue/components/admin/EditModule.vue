@@ -585,7 +585,7 @@
         }
 
         if ( numCols > cols ) {
-          this.$store.commit("module/removeColumns", {
+          this.$store.dispatch("module/removeColumns", {
             index: cols -1,
             number: numCols - cols
           });
@@ -593,7 +593,7 @@
 
         if ( numCols < cols ) {
           for ( let i = numCols; i < cols; i++ ) {
-            this.$store.commit("module/addColumn" );
+            this.$store.dispatch("module/addColumn");
           }
         }
 
