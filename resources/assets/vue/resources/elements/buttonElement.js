@@ -57,7 +57,7 @@ module.exports = {
       label: 'Background Color',
       name: 'bgcolor',
       type: 'color',
-      value: {hex: '#514960'},
+      value: { hex: '#514960' },
     },
     {
       link: 'attribute',

@@ -2,7 +2,6 @@ module.exports = {
   type: 'text-element',
   text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.',
   style: {
-    verticalAlign: 'middle',
     textAlign: 'left',
     fontFamily: 'sans-serif',
     fontSize: '12px',
@@ -15,7 +14,8 @@ module.exports = {
     color: '#000000',
   },
   attribute: {
-    align:'left',
+    valign: 'middle',
+    align: 'left',
   },
   settings: [
     {
@@ -23,7 +23,7 @@ module.exports = {
       label: 'Color',
       name: 'color',
       type: 'color',
-      value: {hex: '#000000'},
+      value: { hex: '#000000' },
     },
     {
       link: 'style',

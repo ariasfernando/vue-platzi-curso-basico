@@ -1,9 +1,8 @@
 <template>
-  <div class="component-settings section-box" v-if="ready && !empty">
-    <h4>{{ title }}</h4>
+  <div class="component-settings section-box" v-if="ready">
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component v-if="plugin.enabled" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+        <component v-if="plugin.enabled && $globalComponents.indexOf('campaign-' + plugin.name) !== -1" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
   </div>
@@ -17,9 +16,7 @@
   export default {
     data () {
       return {
-        title: '',
         ready: false,
-        empty: true,
         component: {}
       }
     },
@@ -29,22 +26,11 @@
       }
     },
     watch : {
-      // Reload component that will be shown
       currentComponent: {
         handler: function() {
           let modules = this.$store.getters["campaign/modules"];
           if (!_.isEmpty(this.currentComponent)) {
             this.component = modules[this.currentComponent.moduleId].structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
-            this.title = _.capitalize(this.component.type.replace('-element', '')) + ' settings';
-
-            console.log(this.component.plugins);
-
-            _.each(this.component.plugins, (plugin) => {
-              if (plugin.enabled) {
-                this.empty = false;
-              }
-            });
-
             this.ready = true;
           }
         },

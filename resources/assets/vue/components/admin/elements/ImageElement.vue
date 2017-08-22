@@ -4,13 +4,13 @@
         data-type="image-element"
     >
       <td width="100%" 
-          align="center" 
+          align="center"
           :style="component.style" 
           class="st-position-relative"
       >
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
           <tr>
-            <td width="100%" align="left">
+            <td width="100%" :align="component.attribute.align" :valign="component.attribute.valign">
               <a @click.prevent
                  :href="component.attribute.href" 
                  :alt="component.attribute.alt"
@@ -28,7 +28,8 @@
               <div class="icon-move st-move"><i class="glyphicon glyphicon-move st-move"></i></div> 
               <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-trash st-remove"></i></div> 
             </td>
-          </tr>    
+          </tr>
+        </table>
       </td>
     </tr>
   <!-- IMAGE ELEMENT ENDS -->

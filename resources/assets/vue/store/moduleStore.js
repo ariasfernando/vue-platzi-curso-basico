@@ -7,9 +7,9 @@ const state = {
   currentComponent: {},
   changeSettingComponent:{
     style: {},
-    attribute: {}
+    attribute: {},
   }, 
-  loading: false
+  loading: false,
 };
 
 const getters = {

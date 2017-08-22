@@ -1,8 +1,8 @@
 <template>
   <!-- IMAGE ELEMENT -->
     <tr data-type="image-element" @click.prevent="setComponent">
-      <td align="center" 
-          :style="component.style" 
+      <td align="center"
+          :style="component.style"
           class="st-position-relative"
       >
         <a @click.prevent
