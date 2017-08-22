@@ -87,6 +87,7 @@
 <style lang="sass">
     .proof-comments-container {
         width: 100%;
+        padding-left: 35px;
 
         .proof-comment {
             background: #eaebec;
