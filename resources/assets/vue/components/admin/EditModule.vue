@@ -84,37 +84,30 @@
                                type="text"
                                v-validate="'required'" 
                                @change="saveModuleStyle">
-                        <span v-show="errors.has(generalSetting.name)" 
-                              class="help is-danger">{{ errors.first(generalSetting.name) }}
-                        </span>
                         <!-- Input color -->
                         <input v-if="generalSetting.type === 'color'"
-                               class="sketchbackground"                        
+                               v-validate="'required'" 
+                               type="text"
                                :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
                                :name="generalSetting.name"
                                :placeholder="generalSetting.label"
                                :value="colorsBackground.hex"
-                               type="text"
-                               v-validate="'required'" 
-                               @click.prevent="showSketch"
+                               @click.prevent="toggleSketch"
                                @change="saveModuleStyle">
-                        <span v-if="generalSetting.type === 'color'" v-show="errors.has(generalSetting.name)" 
-                              class="help is-danger">{{ errors.first(generalSetting.name) }}
-                        </span>
-                        <div class="icon-remove st-remove-sketch" 
-                             @click="hideketch" 
-                             v-if="generalSetting.type === 'color'" 
-                             style="display:none;"
-                        >
+                        <div v-if="generalSetting.type === 'color'"
+                             class="icon-remove st-remove-sketch" 
+                             @click.prevent="toggleSketch">
                           <i class="glyphicon glyphicon-remove"></i>
                         </div>
-                        <sketch-picker style="display:none;" 
-                                       class="sketch-picker" 
-                                       v-if="generalSetting.type === 'color'" 
-                                       ref="sketchbackground" 
+                        <sketch-picker v-if="generalSetting.type === 'color'"
                                        v-model="colorsBackground" 
-                                       @input="triggerInputColor('sketchbackground')"></sketch-picker>
+                                       class="sketch-picker"  
+                                       @click.native="triggerInputColor(colorsBackground.hex, generalSetting.name)"></sketch-picker>
                       </div>
+                      <!-- Span General Error -->
+                      <span v-show="errors.has(generalSetting.name)" 
+                              class="help is-danger">{{ errors.first(generalSetting.name) }}
+                        </span>
                     </div>
 
                     <div v-else>
@@ -123,16 +116,13 @@
                        
                        <!-- Input text -->
                         <input v-if="generalSettingGroup.type === 'text'"
+                               v-model="generalSettingGroup.value"
+                               v-validate="'required'" 
+                               type="text"
                                :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
                                :name="generalSettingGroup.name"
-                               v-model="generalSettingGroup.value"
                                :placeholder="generalSettingGroup.label"
-                               type="text"
-                               v-validate="'required'" 
                                @change="saveModuleStyle">
-                        <span v-show="errors.has(generalSettingGroup.name)" 
-                              class="help is-danger">{{ errors.first(generalSettingGroup.name) }}
-                        </span>
                         
                         <!-- Input select -->
                         <div>
@@ -147,31 +137,28 @@
 
                         <!-- Input color -->
                         <input v-if="generalSettingGroup.type === 'color'"
-                               class="sketchborder"
+                               v-validate="'required'" 
+                               type="text"
                                :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
                                :name="generalSettingGroup.name"
                                :placeholder="generalSettingGroup.label"
                                :value="colorsBorder.hex"
-                               type="text"
-                               v-validate="'required'" 
-                               @click.prevent="showSketch"
+                               @click.prevent="toggleSketch"
                                @change="saveModuleStyle">
-                        <span v-if="generalSettingGroup.type === 'color'" v-show="errors.has(generalSettingGroup.name)" 
-                              class="help is-danger">{{ errors.first(generalSettingGroup.name) }}
-                        </span>
-                        <div class="icon-remove st-remove-sketch" 
-                             @click="hideketch" 
-                             v-if="generalSettingGroup.type === 'color'" 
-                             style="display:none;"
-                        >
+                             
+                        <div v-if="generalSettingGroup.type === 'color'" 
+                             class="icon-remove st-remove-sketch" 
+                             @click.prevent="toggleSketch" >
                           <i class="glyphicon glyphicon-remove"></i>
                         </div>
-                        <sketch-picker style="display:none;" 
-                                       class="sketch-picker" 
-                                       v-if="generalSettingGroup.type === 'color'" 
-                                       ref="sketchborder" 
+                        <sketch-picker v-if="generalSettingGroup.type === 'color'" 
                                        v-model="colorsBorder" 
-                                       @input="triggerInputColor('sketchborder')"></sketch-picker>
+                                       class="sketch-picker" 
+                                       @click.native="triggerInputColor(colorsBorder.hex, generalSettingGroup.name)"></sketch-picker>
+                        <!-- Span General Error -->
+                        <span v-show="errors.has(generalSettingGroup.name)" 
+                              class="help is-danger">{{ errors.first(generalSettingGroup.name) }}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -201,37 +188,33 @@
                             
                             <!-- Input Text -->
                             <input v-if="columnSetting.type === 'text'"
+                                   v-model="columnSetting.value"
+                                   v-validate="'required'" 
                                    :class="{'input': true, 'is-danger': errors.has(columnSetting.name) }"
                                    :name="columnSetting.name"
                                    :placeholder="columnSetting.label"
-                                   v-model="columnSetting.value"
                                    type="text"
-                                   v-validate="'required'" 
                                    @change="saveColumnSettings(key)">
                             
                             <!-- Input color -->
                             <input v-if="columnSetting.type === 'color'"
+                                   v-model="columnSetting.value.hex"
+                                   v-validate="'required'" 
                                    class="sketchbackground"                        
                                    :class="{'input': true, 'is-danger': errors.has(columnSetting.name) }"
                                    :name="columnSetting.name"
                                    :placeholder="columnSetting.label"
-                                   v-model="columnSetting.value.hex"
                                    type="text"
-                                   v-validate="'required'" 
-                                   @click.prevent="showSketch"
+                                   @click.prevent="toggleSketch"
                                    @change="saveColumnSettings(key)">
-                            <div class="icon-remove st-remove-sketch" 
-                                 @click="hideketch" 
-                                 v-if="columnSetting.type === 'color'" 
-                                 style="display:none;"
-                            >
+                            <div v-if="columnSetting.type === 'color'" 
+                                 class="icon-remove st-remove-sketch"
+                                 @click.prevent="toggleSketch">
                               <i class="glyphicon glyphicon-remove"></i>
                             </div>
                             <sketch-picker v-if="columnSetting.type === 'color'"
-                                           style="display:none;" 
-                                           class="sketch-picker" 
-                                           ref="sketchbackground" 
                                            v-model="columnSetting.value" 
+                                           class="sketch-picker" 
                                            @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false )"></sketch-picker>
 
                             <!-- Span General Error -->
@@ -267,27 +250,23 @@
 
                             <!-- Input color -->
                             <input v-if="columnSettingGroup.type === 'color'"
+                                   v-model="columnSettingGroup.value.hex"
+                                   v-validate="'required'" 
                                    class="sketchborder"
                                    :class="{'input': true, 'is-danger': errors.has(columnSettingGroup.name) }"
                                    :name="columnSettingGroup.name"
                                    :placeholder="columnSettingGroup.label"
-                                   v-model="columnSettingGroup.value.hex"
                                    type="text"
-                                   v-validate="'required'" 
-                                   @click.prevent="showSketch"
+                                   @click.prevent="toggleSketch"
                                    @change="saveColumnSettings(key)">
                             <div v-if="columnSettingGroup.type === 'color'"
                                  class="icon-remove st-remove-sketch" 
-                                 @click="hideketch"  
-                                 style="display:none;"
-                            >
+                                 @click.prevent="toggleSketch">
                               <i class="glyphicon glyphicon-remove"></i>
                             </div>
                             <sketch-picker v-if="columnSettingGroup.type === 'color'" 
-                                           style="display:none;" 
-                                           class="sketch-picker" 
-                                           ref="sketchborder" 
                                            v-model="columnSettingGroup.value" 
+                                           class="sketch-picker" 
                                            @click.native="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true  )"></sketch-picker>
                             <!-- Span General Error -->
                             <span v-show="errors.has(columnSettingGroup.name)" 
@@ -460,25 +439,17 @@
       updateName(e) {
         this.setModuleField({ name: e.target.value });
       },
-      showSketch(e){
+      toggleSketch(e){
         const inputElement = e.toElement;
-        $(inputElement).closest('.content-colorpicker').find('.sketch-picker').show();
-        $(inputElement).closest('.content-colorpicker').find('.st-remove-sketch').show();
+        $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
       },
-      hideketch(e){
-        const removeElement = e.toElement;
-        $(removeElement).closest('.content-colorpicker').find('.sketch-picker').hide();
-        $(removeElement).closest('.content-colorpicker').find('.st-remove-sketch').hide();
-      },
-      triggerInputColor(typeSketch){  
-        const elementSketch = this.$refs[typeSketch][0].$el;
-        const targetColor = $(elementSketch).closest('.content-colorpicker').find('.'+ typeSketch )[0];
+      triggerInputColor(valueColor, typeName){
         this.saveModuleStyle({
           target:{
-            name :targetColor.name,
-            value :targetColor.value
+            name :typeName,
+            value : valueColor
           }
-        })
+        });
       },  
       setModuleField(data) {
         this.$store.commit("module/setModuleFields", data);
@@ -640,6 +611,9 @@
 
   .position-relative{
     position: relative;
+  }
+  .st-show-element{
+    display: block!important;
   }
 
   .st-remove-sketch{
@@ -1140,6 +1114,7 @@
 
       .content-colorpicker{
         .sketch-picker{
+          display: none;
           position: absolute!important;
           z-index: 300;
         }
@@ -1270,6 +1245,7 @@
 
       .content-colorpicker{
         .sketch-picker{
+          display: none;
           position: absolute!important;
           z-index: 300;
           right: 100%;
