@@ -5,7 +5,7 @@ import defaultElements from '../resources/elements';
 const state = {
   module: {},
   currentComponent: {},
-  changeSettingComponent:{
+  changeSettingComponent: {
     style: {},
     attribute: {},
   }, 
@@ -36,7 +36,7 @@ const mutations = {
       state.module[field] = value;
     });
   },
-  setChangeSettingComponent(state, data){
+  setChangeSettingComponent(state, data) {
     state.changeSettingComponent.style = data.style;
     state.changeSettingComponent.attribute = data.attribute;
   },
@@ -49,22 +49,30 @@ const mutations = {
     });
   },
   saveComponent(state, data) {
-   state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
+    state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
   },
   saveModuleSetting(state, data) {
-   state.module.structure.style = data.style;
+    state.module.structure.style = data.style;
   },
   saveModuleStyle(state, data) {
-   state.module.structure.style[data.property] = data.value;
+    state.module.structure.style[data.property] = data.value;
   },
   saveModule(state, moduleId) {
     state.module.id = moduleId;
   },
-  addColumn(state) {
+  addColumn(state, column) {
     state.module.structure.columns.push(_.cloneDeep(defaultElements.column));
   },
   removeColumns(state, data) {
     state.module.structure.columns.splice(data.index, data.number);
+  },
+  setColumnWidth(state, data) {
+    const column = state.module.structure.columns[data.colId];
+    // Set attribute
+    column.attribute.width = `${data.width}%`;
+    // Find and set setting
+    const key = _.findKey(column.settings, { name: 'width' });
+    column.settings[key].value = `${data.width}%`;
   },
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);
@@ -76,14 +84,14 @@ const mutations = {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);
   },
   savePlugin(state, data) {
-    let pluginData = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data;
+    const pluginData = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data;
     _.merge(pluginData, data.data);
   },
   togglePlugin(state, data) {
     state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].enabled = data.enabled;
   },
   saveComponentAttribute(state, data) {
-    let attributes = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
+    const attributes = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
     attributes[data.attribute] = data.attributeValue;
   },
   error(state, err) {
@@ -92,6 +100,15 @@ const mutations = {
 };
 
 const actions = {
+  normalizeColumns(context, columns) {
+    const width = 100 / columns.length;
+    _.each(columns, (column, colId) => {
+      context.commit('setColumnWidth', {
+        colId,
+        width,
+      });
+    });
+  },
   getModuleData(context, moduleId) {
     if (moduleId) {
       return moduleService.getModule(moduleId)

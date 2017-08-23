@@ -556,7 +556,7 @@
         }
 
         if ( numCols > cols ) {
-          this.$store.dispatch("module/removeColumns", {
+          this.$store.commit("module/removeColumns", {
             index: cols -1,
             number: numCols - cols
           });
@@ -564,9 +564,11 @@
 
         if ( numCols < cols ) {
           for ( let i = numCols; i < cols; i++ ) {
-            this.$store.dispatch("module/addColumn");
+            this.$store.commit("module/addColumn");
           }
         }
+
+        this.$store.dispatch("module/normalizeColumns", this.module.structure.columns);
 
         if ( value > 0 && value <= this.maxCols ){
           this.$refs.tabs.setTab( value - 1 );
@@ -574,7 +576,7 @@
 
       },
       toggleSidebar() {
-        var modOpen = document.getElementById('admin-module-container');
+        const modOpen = document.getElementById('admin-module-container');
         modOpen.className -= ('col-xs-12');
 
         const sidebar = document.getElementById('admin-sidebar');
@@ -583,7 +585,7 @@
         const container = document.getElementsByClassName('base-admin')[0];
         container.style.paddingLeft = 0;
         
-        var sideToggled = document.getElementById('edit-container');
+        const sideToggled = document.getElementById('edit-container');
         sideToggled.classList.toggle('sidebar-closed');
           
       }

@@ -57,7 +57,7 @@ const mutations = {
   changeBuildingMode(state, buildingMode) {
     state.buildingMode = buildingMode;
   },
-  setDirty(stte, dirty) {
+  setDirty(state, dirty) {
     state.dirty = dirty;
   },
   addModule(state, moduleData) {
@@ -99,6 +99,12 @@ const mutations = {
   },
   removeModule(state, moduleId) {
     state.modules.splice(moduleId, 1);
+  },
+  removeEditedModule(state, moduleId) {
+    state.editedModules.splice(moduleId, 1);
+  },
+  removeEditedSettings(state, index) {
+    state.editedSettings.splice(index, 1);
   },
   setProcessStatus(state, processed = true) {
     state.campaign.campaign_data.processed = processed;
@@ -182,6 +188,19 @@ const actions = {
     return campaignService.sendPreview(data)
       .then(res => context.dispatch('getCampaignData', res.campaignId))
       .catch(error => context.commit('error', error));
+  },
+  removeModule(context, moduleId) {
+    const editedModuleKeys = _.findKey(context.state.editedModules, { moduleId });
+    if (editedModuleKeys) {
+      context.commit('removeEditedModule', editedModuleKeys);
+    }
+
+    const editedSettingsKeys = _.findKey(context.state.editedSettings, { moduleId });
+    if (editedSettingsKeys) {
+      context.commit('removeEditedSettings', editedSettingsKeys);
+    }
+
+    context.commit('removeModule', moduleId);
   },
 };
 

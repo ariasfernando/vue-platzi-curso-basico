@@ -15,7 +15,7 @@
         this.$store.commit("campaign/cloneModule", this.moduleId);
       },
       remove() {
-        this.$store.commit("campaign/removeModule", this.moduleId);
+        this.$store.dispatch("campaign/removeModule", this.moduleId);
       },
     },
   };
