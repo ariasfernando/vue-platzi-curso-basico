@@ -40,20 +40,17 @@
                        :class="{'input': true, 'is-danger': errors.has(setting.name) }"
                        :name="setting.name"
                        :placeholder="setting.label"
-                       @click.prevent="showSketch"
+                       @click.prevent="toggleSketch"
                        @change="saveComponent">
                 <div v-if="setting.type === 'color'"
                      class="icon-remove st-remove-sketch" 
-                     @click="hideketch"  
-                     style="display:none;"
+                     @click.prevent="toggleSketch"  
                 >
                   <i class="glyphicon glyphicon-remove"></i>
                 </div>
                 <sketch-picker v-if="setting.type === 'color'" 
                                v-model="setting.value" 
-                               style="display:none;" 
                                class="sketch-picker" 
-                               ref="sketchbackground" 
                                @click.native="updateColumnSettings(setting.name, setting.link, false )"></sketch-picker>
                 
                 <!-- Span General Error -->
@@ -93,20 +90,17 @@
                        :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
                        :name="settingGroup.name"
                        :placeholder="settingGroup.label"
-                       @click.prevent="showSketch"
+                       @click.prevent="toggleSketch"
                        @change="saveComponent">
                 <div v-if="settingGroup.type === 'color'"
                      class="icon-remove st-remove-sketch" 
-                     @click="hideketch"  
-                     style="display:none;"
+                     @click.prevent="toggleSketch"  
                 >
                   <i class="glyphicon glyphicon-remove"></i>
                 </div>
                 <sketch-picker v-if="settingGroup.type === 'color'" 
                                v-model="colorsBackground" 
-                               style="display:none;" 
                                class="sketch-picker" 
-                               ref="sketchbackground" 
                                @click.native="updateColumnSettings(settingGroup.name, settingGroup.link, true )"></sketch-picker>
                 
                 <!-- Span General Error -->
@@ -118,9 +112,6 @@
             </div>
           </div>
         </form>
-
-
-
       </b-card>
     </b-collapse>
     <!-- END: Style -->
@@ -181,15 +172,9 @@
       },
     },
     methods: {
-      showSketch(e){
+      toggleSketch(e){
         const inputElement = e.toElement;
-        $(inputElement).closest('.content-colorpicker').find('.sketch-picker').show();
-        $(inputElement).closest('.content-colorpicker').find('.st-remove-sketch').show();
-      },
-      hideketch(e){
-        const removeElement = e.toElement;
-        $(removeElement).closest('.content-colorpicker').find('.sketch-picker').hide();
-        $(removeElement).closest('.content-colorpicker').find('.st-remove-sketch').hide();
+        $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
       },
       saveComponent() {
         _.each(this.component.settings, (option, index) => {
