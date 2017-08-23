@@ -494,8 +494,8 @@
             this.$store.commit("global/setLoader", false);
             if (this.module.status === 'publish') {
               this.$router.push('/');
-            } else if (this.module.status === 'draft' && data.id) {
-              this.$router.push('/edit/' + data.id);
+            } else if (this.module.status === 'draft' && data.moduleId) {
+              this.$router.push('/edit/' + data.moduleId);
             }
             this.$root.$toast('Module Saved', {className: 'et-success'});
           }).catch( error => {
