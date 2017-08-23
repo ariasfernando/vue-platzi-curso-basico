@@ -168,7 +168,9 @@ gulp.task('elixir-scripts', function () {
         .scripts(
           [
             'bower/jquery/dist/jquery.js',
+            'bower/bootstrap/dist/js/bootstrap.min.js',
             'bower/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js',
+            'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
             'bower/tinymce/tinymce.js',
             'bower/tinymce/themes/modern/theme.js',
             'bower/tinymce/plugins/image/plugin.js',

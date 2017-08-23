@@ -318,6 +318,11 @@
         this.startProof = false;
       }
     },
+    updated () {
+      if ($('.proof-users-picker').length) {
+          $('.proof-users-picker').selectpicker();
+      }
+    },
     data: function() {
       return {
         users: [],
