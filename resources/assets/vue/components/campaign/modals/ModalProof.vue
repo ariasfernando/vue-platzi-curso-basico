@@ -42,7 +42,7 @@
                                   <input type="checkbox" :name="'reviewers[' + key + '][required]'"
                                     :checked="reviewer.checked"
                                     :value="reviewer.requiredValue"
-                                    :disabled="reviewer.requiredDisable">
+                                    :disabled="reviewer.requiredDisable || false">
                                 </td>
                                 <td>
                                   <input type="hidden" :name="'reviewers[' + key + '][notification_message]'"
@@ -221,7 +221,7 @@
 
             var requiredChecked = params.required ? 'checked="checked"' : '';
             var requiredValue = 1;
-            var requiredDisable = '';
+            var requiredDisable = false;
             var notification_message = params.notification_message || '';
 
             if ("require_unabled" in params) {
