@@ -6,14 +6,24 @@
 
           <div class="modal-header">
             <slot name="header">
-              <h4>Normal HTML</h4>
+              <h4>Processed Campaign</h4>
             </slot>
           </div>
 
           <div class="modal-body">
-            <slot name="body">
-              <textarea>{{ campaign.campaign_data.body_html }}</textarea>
-            </slot>
+
+            <b-tabs >
+              <b-tab title="Normal HTML" active style="opacity: 1 !important;">
+                <slot name="body">
+                  <textarea v-html="campaign.campaign_data.body_html"></textarea>
+                </slot>
+              </b-tab>
+              <b-tab title="Plain Text" style="opacity: 1 !important;">
+                <slot name="text">
+                  <textarea v-html="campaign.campaign_data.body_html"></textarea>
+                </slot>
+              </b-tab>
+            </b-tabs>
           </div>
 
           <div class="modal-footer">
@@ -39,13 +49,19 @@
 </template>
 
 <script>
+  import Vue from 'vue/dist/vue';
+  import BootstrapVue from 'bootstrap-vue';
+
   export default {
+    components: {
+      BootstrapVue,
+    },
     computed: {
       modalComplete () {
         return this.$store.state.campaign.modalComplete;
       },
       campaign () {
-        return this.$store.state.campaign.campaign;
+        return this.$store.getters['campaign/campaign'];
       }
     },
     methods: {
@@ -72,4 +88,7 @@
       font-family: monospace, serif;
     }
   }
+  .fade.show {
+    opacity: 1;
+  }  
 </style>
