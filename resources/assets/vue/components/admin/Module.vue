@@ -122,6 +122,7 @@
                      :column-id="columnId"
                      :component-id="componentId" 
                      :key="componentId"
+                     :data-component="component"
                      class="st-component"></component>
         </draggable>  
 
@@ -195,6 +196,7 @@
     },
     methods: {
       onAdd(e){
+        console.log(e);
         let elType = e.clone.getAttribute('data-type');
         let colId = e.to.getAttribute('data-col');
         let cloneItem = e.item;

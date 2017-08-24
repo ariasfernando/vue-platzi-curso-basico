@@ -25,15 +25,19 @@ export default {
 
   saveCampaign(data) {
     const endpoint = endpoints.campaign.saveCampaign;
-    const editedCampaign = this.getEditedData();
+
+    const campaignStore = store.state.campaign;
+    const campaign = campaignStore.campaign;
+    const settings = campaignStore.editedSettings;
+    const modules = campaignStore.modules;
     const deferred = Q.defer();
 
-    editedCampaign.campaign.bodyHtml = data.bodyHtml;
+    campaign.bodyHtml = data.bodyHtml;
 
     const dataCampaign = new Campaign({
-      settings: editedCampaign.settings,
-      campaign: editedCampaign.campaign,
-      modules: editedCampaign.modules,
+      settings,
+      campaign,
+      modules,
     });
 
     const params = {
@@ -129,19 +133,18 @@ export default {
     const editedSettings = campaignStore.editedSettings;
 
     // Edited modules
-    const modules = _.cloneDeep(campaignStore.modules);
-    const editedModules = campaignStore.editedModules;
-
-    for (const edited of editedModules) {
-      for (const key in edited.data) {
-        modules[edited.moduleId].structure.columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
-      }
-    }
+    // const modules = _.cloneDeep(campaignStore.modules);
+    // const editedModules = campaignStore.editedModules;
+    //
+    // for (const edited of editedModules) {
+    //   for (const key in edited.data) {
+    //     modules[edited.moduleId].structure.columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
+    //   }
+    // }
 
     return {
       campaign,
       settings: editedSettings,
-      modules,
     };
   },
 
