@@ -127,11 +127,13 @@
               }
 
               // Poll server with job id
-              if (completeResponse.job) {
-                this.checkProcessStatus(completeResponse.job).then((response) => {
-                  if (response.status !== 'processed') {
+              if (completeResponse.jobId) {
+                this.checkProcessStatus(completeResponse.jobId).then((response) => {
+
+                  if (response.processed === undefined) {
+
                     setTimeout(() => {
-                      this.checkProcessStatus(processId);
+                      this.checkProcessStatus(response.jobId);
                     }, 3000)
                   } else {
                     // Set campaign as processed
