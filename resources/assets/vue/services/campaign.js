@@ -82,8 +82,8 @@ export default {
     const params = {
       endpoint,
       json: {
-        job_id: processId
-      }
+        processId,
+      },
     };
 
     request[endpoint.method](params).then((response) => {
