@@ -128,21 +128,19 @@
 
               // Poll server with job id
               if (completeResponse.jobId) {
-                this.checkProcessStatus(completeResponse.jobId).then((response) => {
-
-                  if (response.processed === undefined) {
-
-                    setTimeout(() => {
-                      this.checkProcessStatus(response.jobId);
-                    }, 3000)
-                  } else {
-                    // Set campaign as processed
-                    this.$store.commit('campaign/setProcessStatus');
-                    // Show complete after campaign is completely processed
-                    this.$store.commit("campaign/toggleModal", 'modalComplete');
-                  }
-                });
-              }
+                let processInterval = setInterval(() => {
+                  this.checkProcessStatus(completeResponse.jobId).then((response) => {
+                    if (response.status === 'finished') {
+                      clearInterval(processInterval);
+                      this.$store.commit("global/setLoader", false);
+                      // Set campaign as processed
+                      this.$store.commit('campaign/setProcessStatus');
+                      // Show complete after campaign is completely processed
+                      this.$store.commit("campaign/toggleModal", 'modalComplete');
+                    }
+                  });
+                }, 2000);
+            }
           }, error => {
             this.$store.commit("global/setLoader", false);
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
