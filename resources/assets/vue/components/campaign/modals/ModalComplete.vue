@@ -12,18 +12,16 @@
 
           <div class="modal-body">
 
-            <b-tabs >
-              <b-tab title="Normal HTML" active style="opacity: 1 !important;">
-                <slot name="body">
+            <slot name="body">
+              <b-tabs>
+                <b-tab title="Normal HTML">
                   <textarea v-html="campaign.campaign_data.body_html"></textarea>
-                </slot>
-              </b-tab>
-              <b-tab title="Plain Text" style="opacity: 1 !important;">
-                <slot name="text">
-                  <textarea v-html="campaign.campaign_data.body_html"></textarea>
-                </slot>
-              </b-tab>
-            </b-tabs>
+                </b-tab>
+                <b-tab title="Plain Text">
+                  <textarea v-html="campaign.campaign_data.plain_text"></textarea>
+                </b-tab>
+              </b-tabs>
+            </slot>
           </div>
 
           <div class="modal-footer">
@@ -67,7 +65,7 @@
     methods: {
       data () {
         return {
-          viewInBrowser: this.$app.baseUrl + 'campaign/public-path/' + this.campaign.campaign_id
+          viewInBrowser: this.$app.baseUrl + 'campaign/public-path/' + this.campaign.campaign_id,
         }
       }
     },
@@ -88,7 +86,8 @@
       font-family: monospace, serif;
     }
   }
-  .fade.show {
-    opacity: 1;
-  }  
+  .show {
+    display: block !important;
+    opacity: 1 !important;
+  }
 </style>

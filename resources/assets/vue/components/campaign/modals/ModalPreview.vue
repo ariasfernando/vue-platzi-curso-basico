@@ -17,17 +17,17 @@
                     <label>Email address</label>
                     <div class="input-group">
                       <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
-                      </br>
+                      <br>
                       <button type="button" class="btn btn-default btn-send" @click="send">Send</button>
                       <label class="info">Use a comma or a semicolon to separate multiple email addresses</label>
                     </div>
                   </div>
-                </div>
-              </form>
-              <div class="preview-body">
-                <div class="preview-container">
-                  <div class="mobile-frame"></div>
-                  <div class="iframe-container" :data-template-width="this.campaign.campaign_data.library_config.templateWidth"><iframe id="email-preview-iframe" style="width: 660px;" :src="previewUrl" scrolling="no"></iframe></div>
+                </form>
+                <div class="preview-body">
+                  <div class="preview-container">
+                    <div class="mobile-frame"></div>
+                    <div class="iframe-container" :data-template-width="this.campaign.campaign_data.library_config.templateWidth"><iframe id="email-preview-iframe" style="width: 660px;" :src="previewUrl" scrolling="no"></iframe></div>
+                  </div>
                 </div>
               </div>
             </slot>
