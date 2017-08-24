@@ -1,7 +1,7 @@
 <template>
   <div class="section-box-header section-canvas-title">
     <div class="row">
-      <div class="col-xs-3 col-md-4 col-lg-4" id="section-canvas-title-col">
+      <div class="col-xs-3 col-md-4 col-lg-3" id="section-canvas-title-col">
         <h2>{{ campaign.campaign_data.library_config.title || 'Campaign Editor' }}</h2>
       </div>
 
@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <div class="col-xs-8 col-md-7 col-lg-6 text-right" id="section-canvas-buttons-col">
+      <div class="col-xs-8 col-md-7 col-lg-7 text-right" id="section-canvas-buttons-col">
 
 
         <button class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview">
