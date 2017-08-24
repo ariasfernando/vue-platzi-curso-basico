@@ -26,7 +26,11 @@ class HasPermission
         if ($request->ajax()) {
             return response('Unauthorized.', 401);
         } else {
-            $request->session()->flash('error_message', 'Your user isn\'t authorized to access this page. If you feel this is an error, please reach out to your account team.');
+            $request->session()->flash(
+                'error_message',
+                'Your user isn\'t authorized to access this page. If you feel this is an error, '
+                . 'please reach out to your account team.'
+            );
             return redirect(url('error'));
         }
     }

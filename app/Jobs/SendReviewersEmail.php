@@ -129,7 +129,6 @@ class SendReviewersEmail extends Job implements ShouldQueue
 
         array_walk($reviewers, function (&$reviewer) use ($params) {
             if ($params['send_to_all'] || !isset($reviewer['notified']) || !$reviewer['notified']) {
-
                 if (EmailSender::sendReviewerEmail($reviewer, $params)) {
                     $reviewer['notified'] = true;
                     $reviewer['notified_at'] = new UTCDateTime;
