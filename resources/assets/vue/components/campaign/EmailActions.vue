@@ -120,6 +120,11 @@
               // Set processed
               if (completeResponse.processed) {
                 this.$store.commit('campaign/setProcessStatus');
+
+                // Process plain text version
+                if (this.campaign.library_config.plainText) {
+                  this.plainText(this.campaign.campaign_id);
+                }
                 // Hide Loader
                 this.$store.commit("global/setLoader", false);
                 // Show complete after campaign is completely processed
@@ -178,6 +183,15 @@
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
         });
+      },
+      plainText(campaignId) {
+        campaignService.processPlainText(campaignId)
+          .then((response) => {
+          this.$store.commit("campaign/setPlainText", response);
+            })
+          .catch((error) => {
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+          });
       },
     },
     created () {

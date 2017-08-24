@@ -164,4 +164,22 @@ export default {
 
     return deferred.promise;
   },
+
+  processPlainText(campaignId) {
+    const deferred = Q.defer();
+    const endpoint = endpoints.campaign.processPlainText;
+    const params = {
+      endpoint,
+      search: { campaignId },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+
 };
