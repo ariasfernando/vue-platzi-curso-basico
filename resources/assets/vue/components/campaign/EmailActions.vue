@@ -1,7 +1,7 @@
 <template>
   <div class="section-box-header section-canvas-title">
     <div class="row">
-      <div class="col-xs-3 col-md-4 col-lg-4" id="section-canvas-title-col">
+      <div class="col-xs-3 col-md-4 col-lg-3" id="section-canvas-title-col">
         <h2>{{ campaign.campaign_data.library_config.title || 'Campaign Editor' }}</h2>
       </div>
 
@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <div class="col-xs-8 col-md-7 col-lg-6 text-right" id="section-canvas-buttons-col">
+      <div class="col-xs-8 col-md-7 col-lg-7 text-right" id="section-canvas-buttons-col">
 
 
         <button class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview">
@@ -132,20 +132,20 @@
               }
 
               // Poll server with job id
-              if (completeResponse.job) {
-                this.checkProcessStatus(completeResponse.job).then((response) => {
-                  if (response.status !== 'processed') {
-                    setTimeout(() => {
-                      this.checkProcessStatus(processId);
-                    }, 3000)
-                  } else {
-                    // Set campaign as processed
-                    this.$store.commit('campaign/setProcessStatus');
-                    // Show complete after campaign is completely processed
-                    this.$store.commit("campaign/toggleModal", 'modalComplete');
-                  }
-                });
-              }
+              if (completeResponse.jobId) {
+                let processInterval = setInterval(() => {
+                  this.checkProcessStatus(completeResponse.jobId).then((response) => {
+                    if (response.status === 'finished') {
+                      clearInterval(processInterval);
+                      this.$store.commit("global/setLoader", false);
+                      // Set campaign as processed
+                      this.$store.commit('campaign/setProcessStatus');
+                      // Show complete after campaign is completely processed
+                      this.$store.commit("campaign/toggleModal", 'modalComplete');
+                    }
+                  });
+                }, 2000);
+            }
           }, error => {
             this.$store.commit("global/setLoader", false);
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});

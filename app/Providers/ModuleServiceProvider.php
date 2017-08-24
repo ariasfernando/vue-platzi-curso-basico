@@ -44,9 +44,10 @@ class ModuleServiceProvider extends ServiceProvider
     /**
     * Get all modules config.
     *
+    * @param string $status Module status
     * @return array
     */
-    public static function getModuleList()
+    public static function getModuleList($status = null)
     {
          $modules = [];
 
@@ -61,7 +62,17 @@ class ModuleServiceProvider extends ServiceProvider
         }
 
         // Load modules form Db.
-        $modules_db = Module::all();
+        switch ($status) {
+            case 'publish':
+                $modules_db = Module::published()->get();
+                break;
+            case 'draft':
+                $modules_db = Module::draft()->get();
+                break;
+            default:
+                $modules_db = Module::all();
+        }
+
         foreach ($modules_db as $module) {
             $modules[$module->key] = $module;
         }

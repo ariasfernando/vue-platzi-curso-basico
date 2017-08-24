@@ -67,28 +67,9 @@ const mutations = {
     const clone = _.cloneDeep(state.modules[moduleId]);
     state.modules.push(clone);
   },
-  addEditedModule(state, edited) {
-    state.editedModules.push(edited);
-  },
-  updateEditedModule(state, edited) {
-    const matches = uc.where(state.editedModules, {
-      moduleId: edited.moduleId,
-      columnId: edited.columnId,
-      componentId: edited.componentId,
-    });
-    matches[0].data = _.extend(matches[0].data, edited.data);
-  },
-  sortEditedModule(state, sort) {
-    const matchTo = uc.where(state.editedModules, {
-      moduleId: sort.newIndex.toString(),
-    });
-    const matchFrom = uc.where(state.editedModules, {
-      moduleId: sort.oldIndex.toString(),
-    });
-
-    if (matchTo.length || matchFrom.length){
-      _.extend(matchTo[0], { moduleId: sort.oldIndex.toString() });
-      _.extend(matchFrom[0], { moduleId: sort.newIndex.toString() });
+  updateComponentData(state, edited) {
+    for (const key in edited.data) {
+      state.modules[edited.moduleId].structure.columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
     }
   },
   saveSetting(state, setting) {
@@ -99,12 +80,6 @@ const mutations = {
   },
   removeModule(state, moduleId) {
     state.modules.splice(moduleId, 1);
-  },
-  removeEditedModule(state, moduleId) {
-    state.editedModules.splice(moduleId, 1);
-  },
-  removeEditedSettings(state, index) {
-    state.editedSettings.splice(index, 1);
   },
   setProcessStatus(state, processed = true) {
     state.campaign.campaign_data.processed = processed;
@@ -173,19 +148,8 @@ const actions = {
     return deferred.promise;
   },
   updateElement(context, edited) {
-    const matches = uc.where(state.editedModules, {
-      moduleId: edited.moduleId,
-      columnId: edited.columnId,
-      componentId: edited.componentId,
-    });
-
     context.commit('setDirty', true);
-
-    if (matches.length) {
-      context.commit('updateEditedModule', edited);
-    } else {
-      context.commit('addEditedModule', edited);
-    }
+    context.commit('updateComponentData', edited);
   },
   sendPreview(context, data) {
     return campaignService.sendPreview(data)
@@ -193,24 +157,14 @@ const actions = {
       .catch(error => context.commit('error', error));
   },
   removeModule(context, moduleId) {
-    const editedModuleKeys = _.findKey(context.state.editedModules, { moduleId });
-    if (editedModuleKeys) {
-      context.commit('removeEditedModule', editedModuleKeys);
-    }
-
-    const editedSettingsKeys = _.findKey(context.state.editedSettings, { moduleId });
-    if (editedSettingsKeys) {
-      context.commit('removeEditedSettings', editedSettingsKeys);
-    }
-
     context.commit('removeModule', moduleId);
   },
 };
 
 module.exports = {
   namespaced: true,
-  state: state,
-  getters: getters,
-  mutations: mutations,
-  actions: actions
+  state,
+  getters,
+  mutations,
+  actions,
 };

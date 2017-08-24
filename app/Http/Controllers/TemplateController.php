@@ -145,7 +145,11 @@ class TemplateController extends Controller
 
         return $this->renderView(
             'layouts.email',
-            ['params' => ['title' => 'preview', 'body_html' => $campaign_data->body_html, 'campaign_data' => $campaign_data]]
+            ['params' => [
+                'title' => 'preview',
+                'body_html' => $campaign_data->body_html,
+                'campaign_data' => $campaign_data]
+            ]
         );
     }
 

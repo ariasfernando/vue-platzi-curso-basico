@@ -58,7 +58,7 @@ const mutations = {
     state.module.structure.style[data.property] = data.value;
   },
   saveModule(state, moduleId) {
-    state.module.id = moduleId;
+    state.module.moduleId = moduleId;
   },
   addColumn(state, column) {
     state.module.structure.columns.push(_.cloneDeep(defaultElements.column));
