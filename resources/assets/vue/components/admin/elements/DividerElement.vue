@@ -1,6 +1,7 @@
 <template>
   <!-- DIVIDER ELEMENT -->
     <tr @click.prevent="setComponent"
+        :data-component="JSON.stringify(component)"
         data-type="divider-element"
     >
       <td class="st-separator st-position-relative" :style="component.style">

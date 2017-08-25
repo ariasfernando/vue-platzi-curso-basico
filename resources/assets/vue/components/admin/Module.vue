@@ -191,23 +191,42 @@
     },
     computed: {
       module() {
-        return this.$store.state.module.module
-      }
+        return this.$store.getters["module/module"];
+      },
     },
     methods: {
       onAdd(e){
-        console.log(e);
-        let elType = e.clone.getAttribute('data-type');
         let colId = e.to.getAttribute('data-col');
+        let elType = e.clone.getAttribute('data-type');
         let cloneItem = e.item;
+        let el = _.cloneDeep(defaultElements[elType]);
+        let plugins = {};
+        let ref = {
+          columnId: +colId,
+          componentId: +e.newIndex
+        };
+
+        if ( !(e.from.getAttribute('class') === 'components-list')){
+          if (this.module.structure.columns[colId].components.length === 0) {
+            el = e.clone.getAttribute('data-component');
+            this.$store.commit("module/addComponent", {
+              el,
+              index: e.newIndex,
+              colId
+            });
+          }
+
+          this.$store.commit('module/setChangeSettingComponent',{
+            style: this.module.structure.columns[colId].components[e.newIndex].style || {},
+            attribute: this.module.structure.columns[colId].components[e.newIndex].attribute || {}
+          });
+
+          return false; 
+        }
 
         if (this.module.structure.columns[colId].components.length === 0) {
           e.newIndex = 0;
         }
-
-        let el = _.cloneDeep(defaultElements[elType]);
-        let plugins = {};
-
         _.each(this.$app.modulePlugins, (plugin, name) => {
           if (plugin.target.indexOf(elType.replace('-element', '')) !== -1) {
             plugins[name] = plugin;
@@ -230,18 +249,7 @@
         if (e.clone.getAttribute('class') === 'component-item') {
           e.clone.style.opacity = "1";
           cloneItem.parentNode.removeChild(cloneItem);
-        } else {
-          this.$store.commit("module/removeComponents", {
-            index: e.newIndex + 1,
-            number: 1,
-            colId
-          });
-        }
-
-        let ref = {
-          columnId: +colId,
-          componentId: +e.newIndex
-        };
+        } 
 
         this.setComponent(ref);
       },

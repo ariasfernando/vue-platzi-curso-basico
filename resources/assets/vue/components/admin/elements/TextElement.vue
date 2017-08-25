@@ -1,7 +1,7 @@
 <template>
   <!-- TEXT ELEMENT -->
   <tr @click.prevent="setComponent"
-      :data-component="JSON.stringify(component)"
+      :data-component="component"
       data-type="text-element"
   >
     <td width="100%">
