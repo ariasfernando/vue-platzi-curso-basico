@@ -38,7 +38,12 @@
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
           inline: true,
           menubar: false,
-          toolbar: '',
+          toolbar: 'undo redo | alignleft aligncenter alignright | bold italic underline | link | forecolor',
+          plugins: 'paste advlist autolink lists textcolor link',
+          link_validate_url: true,
+          link_title: false,
+          link_text_to_display: false,
+          paste_as_text: true,
           init_instance_callback: (editor) => {
 
             editor.on('Blur', (e) => {
