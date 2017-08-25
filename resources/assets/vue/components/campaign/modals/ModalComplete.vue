@@ -6,13 +6,21 @@
 
           <div class="modal-header">
             <slot name="header">
-              <h4>Normal HTML</h4>
+              <h4>Processed Campaign</h4>
             </slot>
           </div>
 
           <div class="modal-body">
+
             <slot name="body">
-              <textarea>{{ campaign.campaign_data.body_html }}</textarea>
+              <b-tabs>
+                <b-tab title="Normal HTML">
+                  <textarea v-html="campaign.campaign_data.body_html"></textarea>
+                </b-tab>
+                <b-tab title="Plain Text">
+                  <textarea v-html="campaign.campaign_data.plain_text"></textarea>
+                </b-tab>
+              </b-tabs>
             </slot>
           </div>
 
@@ -39,19 +47,25 @@
 </template>
 
 <script>
+  import Vue from 'vue/dist/vue';
+  import BootstrapVue from 'bootstrap-vue';
+
   export default {
+    components: {
+      BootstrapVue,
+    },
     computed: {
       modalComplete () {
         return this.$store.state.campaign.modalComplete;
       },
       campaign () {
-        return this.$store.state.campaign.campaign;
+        return this.$store.getters['campaign/campaign'];
       }
     },
     methods: {
       data () {
         return {
-          viewInBrowser: this.$app.baseUrl + 'campaign/public-path/' + this.campaign.campaign_id
+          viewInBrowser: this.$app.baseUrl + 'campaign/public-path/' + this.campaign.campaign_id,
         }
       }
     },
@@ -71,5 +85,9 @@
       border: 1px solid #ccc;
       font-family: monospace, serif;
     }
+  }
+  .show {
+    display: block !important;
+    opacity: 1 !important;
   }
 </style>

@@ -281,7 +281,7 @@ class CampaignManager
     {
         $campaign = Campaign::findOrFail($campaign_id);
 
-        if ($campaign->processed == 0) {
+        if ($campaign->processed == 0 || $campaign->plain_text == '') {
             $response = Text::htmlToText($campaign->body_html);
             Activity::log(
                 'Campaign plain text created',

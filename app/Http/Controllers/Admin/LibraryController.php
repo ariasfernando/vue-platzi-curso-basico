@@ -129,7 +129,7 @@ class LibraryController extends Controller
     public function getEdit(Request $request)
     {
         $library_data = Library::findOrFail($request->input("libraryId"))->toArray();
-        $modules = array_keys(\StensulModule::getModuleList());
+        $modules = array_keys(\StensulModule::getModuleList('publish'));
 
         $library_modules = [];
         if (count($library_data['modules'])) {
