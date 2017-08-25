@@ -87,6 +87,14 @@
                         <toggle-button :value="library.config.tagging" :sync="true" :labels="true" @change="updateToggle('tagging')"></toggle-button>
                       </p>
                     </div>
+
+                    <!-- Field Templating -->
+                    <div class="row">
+                      <label for="templating" class="col-sm-4 control-label">Enable templating</label>
+                      <p class="control col-sm-1">
+                        <toggle-button :value="library.config.templating" :sync="true" :labels="true" @change="updateToggle('templating')"></toggle-button>
+                      </p>
+                    </div>
                 </tab>
 
                 <tab name="Template">

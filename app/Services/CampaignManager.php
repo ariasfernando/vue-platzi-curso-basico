@@ -91,13 +91,14 @@ class CampaignManager
             }
 
             if (isset($inputs['template'])) {
-                if ($inputs['template'] !== 'true') {
-                    abort(400, 'The only value allowed for template is true');
+                $campaign->template = false;
+                if ($inputs['template'] === true) {
+                    $campaign->template = true;
                 }
-                if ($inputs['template'] !== 'true' && $campaign->template === true) {
+
+                if ($inputs['template'] !== true && $campaign->template === true) {
                     abort(400, 'You are trying to save a template campaign as non template one');
                 }
-                $campaign->template = ($inputs['template'] === 'true') ? true : false;
             }
 
             $campaign->save();

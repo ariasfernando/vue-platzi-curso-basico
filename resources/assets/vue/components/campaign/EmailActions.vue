@@ -26,12 +26,12 @@
           Preview
         </button>
 
-        <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template" @click="save">
+        <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
           Save as Draft
         </button>
 
-        <button class="btn btn-default save-as-template"
-                :class="hiddenClass()" v-if="!campaign.processed && campaign.campaign_data.library_config.enable_templating">
+        <button class="btn btn-default save-as-template" @click="template()"
+                :class="hiddenClass()" v-if="!campaign.processed && campaign.campaign_data.library_config.templating">
           Save as Template
         </button>
 
@@ -39,7 +39,7 @@
             v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
         >Send for review</button>
 
-        <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" @click="complete">
+        <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete">
           Complete
           <i class="glyphicon glyphicon-triangle-right"></i>
         </a>
@@ -100,6 +100,10 @@
           campaign: this.campaign,
           bodyHtml
         });
+      },
+      template() {
+        this.$store.commit("campaign/setTemplating", true);
+        this.save();
       },
       checkProcessStatus(processId) {
         return campaignService.checkProcessStatus(processId);
@@ -197,8 +201,8 @@
     created () {
       this.autoSave();
 
-      let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.enable_templating);
-      let isTemplate = this.campaign.template;
+      let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
+      let isTemplate = this.campaign.campaign_data.template;
 
       if (!this.campaign.campaign_data.library_config.building_mode_select) {
         this.titleCols += 2;
