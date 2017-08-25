@@ -1,6 +1,7 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
   <tr @click.prevent="setComponent"
+      :data-component="JSON.stringify(component)"
       data-type="button-element"
   >
     <td :align="component.attribute.align" 

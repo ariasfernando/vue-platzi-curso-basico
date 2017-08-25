@@ -1,6 +1,7 @@
 <template>
   <!-- IMAGE ELEMENT -->
     <tr @click.prevent="setComponent"
+        :data-component="JSON.stringify(component)"
         data-type="image-element"
     >
       <td width="100%" 
