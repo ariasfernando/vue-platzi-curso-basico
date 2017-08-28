@@ -13,6 +13,18 @@ class ConfigController extends Controller
     |
     */
 
+    private static $whitelist = [
+        'admin',
+        'global_settings',
+        'campaign',
+        'locale',
+        'menu',
+        'modals',
+        'modules',
+        'proof',
+        'view'
+    ];
+
     /**
      * Create a new controller instance.
      */
@@ -28,8 +40,12 @@ class ConfigController extends Controller
      *
      * @return config value
      */
-    public function getGet($key = null)
+    public function getGet($key)
     {
-        return config($key);
+        if (preg_match("/^global_settings\./", $key) || in_array($key, self::$whitelist)) {
+            return config($key);
+        }
+
+        abort(404);
     }
 }
