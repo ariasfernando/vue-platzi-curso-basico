@@ -89,7 +89,7 @@
                     </div>
 
                     <!-- Field Templating -->
-                    <div class="row">
+                    <div class="row" v-if="campaignConfig.enable_templating">
                       <label for="templating" class="col-sm-4 control-label">Enable templating</label>
                       <p class="control col-sm-1">
                         <toggle-button :value="library.config.templating" :sync="true" :labels="true" @change="updateToggle('templating')"></toggle-button>
@@ -317,14 +317,12 @@
         </div>
       </section>
     </div>
-
-
   </div>
-
 </template>
 
 <script>
   import libraryService from '../../services/library'
+  import configService from '../../services/config'
   import ToggleButton from '../common/ToggleButton.vue'
   import Tabs from '../common/Tabs.vue'
   import Tab from '../common/Tab.vue'
@@ -341,7 +339,8 @@
         library: {},
         modules: {},
         espList: {},
-        ready: false
+        ready: false,
+        campaignConfig: {}
       }
     },
     methods: {
@@ -439,6 +438,7 @@
     },
     created () {
       this.loadLibrary();
+      configService.getConfig('campaign').then((response) => this.campaignConfig = response);
     },
     mounted () {
       this.toggleSidebar();

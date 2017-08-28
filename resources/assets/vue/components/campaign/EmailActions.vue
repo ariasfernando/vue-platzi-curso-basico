@@ -34,7 +34,8 @@
           and templating is enabled on the tool.
         -->
         <b-btn v-b-modal.confirm-modal class="btn btn-default save-as-template"
-          v-if="!campaign.campaign_data.template && !campaign.processed && campaign.campaign_data.library_config.templating">
+          v-if="campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
+            && campaign.campaign_data.library_config.templating">
           Save as Template
         </b-btn>
 
@@ -56,7 +57,8 @@
         </a>
       </div>
     </div>
-    <b-modal id="confirm-modal"
+    <b-modal v-if="campaignConfig.enable_templating"
+      id="confirm-modal"
       ref="confirmModal"
       title="Save as Template"
       ok-title="Accept"
@@ -71,6 +73,7 @@
 <script>
 
   import campaignService from '../../services/campaign';
+  import configService from '../../services/config'
 
   export default {
     name: 'EmailActions',
@@ -98,7 +101,8 @@
         buttonsCols: 5,
         hiddenClass () {
           return this.campaign.locked ? 'hidden' : '';
-        }
+        },
+        campaignConfig: {}
       }
     },
     methods: {
@@ -225,7 +229,7 @@
     },
     created () {
       this.autoSave();
-
+      configService.getConfig('campaign').then((response) => this.campaignConfig = response);
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;
 
