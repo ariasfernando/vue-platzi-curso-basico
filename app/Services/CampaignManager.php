@@ -69,6 +69,7 @@ class CampaignManager
             $campaign->user_email = Auth::user()->email;
             $campaign->campaign_settings = $campaign_settings;
             $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
+            $campaign->auto_save = isset($inputs['auto_save']) && $inputs['auto_save'] ? true : false;
 
             if (isset($inputs['body_html'])) {
                 $campaign->body_html = $inputs['body_html'];

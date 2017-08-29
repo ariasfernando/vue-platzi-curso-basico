@@ -72,7 +72,7 @@
         let value = e.target.value;
 
         if (e.target.type === 'checkbox') {
-          value = e.target.value === 'on';
+          value = e.target.checked;
         }
 
         this.$store.commit('campaign/saveSetting', {
