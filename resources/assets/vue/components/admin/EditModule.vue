@@ -468,6 +468,14 @@
         // TODO: Trigger event editModule.onInit
         this.$store.dispatch("module/getModuleData", moduleId)
           .then( response => {
+
+            if (this.$route.path.match(/^\/clone\//)) {
+              let cloned = Object.assign({}, this.module);
+              cloned.moduleId = undefined;
+              cloned.name = undefined;
+              this.$store.commit("module/setModuleData", cloned);
+            }
+
             // TODO: Trigger event editModule.onLoaded
             this.ready = true;
             this.$store.commit("global/setLoader", false);

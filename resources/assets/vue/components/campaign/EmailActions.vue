@@ -21,7 +21,6 @@
 
       <div class="col-xs-8 col-md-7 col-lg-7 text-right" id="section-canvas-buttons-col">
 
-
         <button class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview">
           Preview
         </button>
@@ -30,12 +29,25 @@
           Save as Draft
         </button>
 
-        <button class="btn btn-default save-as-template" @click="template()"
-                :class="hiddenClass()" v-if="!campaign.processed && campaign.campaign_data.library_config.templating">
+        <!--
+          Show if it's not already a template, if it's not a processed campaign
+          and templating is enabled on the tool.
+        -->
+        <b-btn v-b-modal.confirm-modal class="btn btn-default save-as-template"
+          v-if="campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
+            && campaign.campaign_data.library_config.templating">
           Save as Template
+        </b-btn>
+
+        <!--
+          Show if it's already a template, skip confirmation modal.
+        -->
+        <button class="btn btn-default save-as-template" @click="template()"
+          :class="hiddenClass()" v-if="campaign.campaign_data.template">
+          Save Template
         </button>
 
-        <button class="btn btn-default proof-open-modal" v-if="this.$app.proofConfig.status"
+        <button class="btn btn-default proof-open-modal" v-if="!campaign.campaign_data.template && this.$app.proofConfig.status"
             v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
         >Send for review</button>
 
@@ -45,12 +57,23 @@
         </a>
       </div>
     </div>
+    <b-modal v-if="campaignConfig.enable_templating"
+      id="confirm-modal"
+      ref="confirmModal"
+      title="Save as Template"
+      ok-title="Accept"
+      close-title="Cancel"
+      @ok="confirmSave">
+      Remember that if you save this campaign as template, you won't be able to publish it,
+      you will only be able to edit and clone it.
+    </b-modal>
   </div>
 </template>
 
 <script>
 
   import campaignService from '../../services/campaign';
+  import configService from '../../services/config'
 
   export default {
     name: 'EmailActions',
@@ -78,7 +101,8 @@
         buttonsCols: 5,
         hiddenClass () {
           return this.campaign.locked ? 'hidden' : '';
-        }
+        },
+        campaignConfig: {}
       }
     },
     methods: {
@@ -104,6 +128,11 @@
       template() {
         this.$store.commit("campaign/setTemplating", true);
         this.save();
+      },
+      confirmSave(e) {
+        e.cancel();
+        this.template();
+        this.$refs.confirmModal.hide()
       },
       checkProcessStatus(processId) {
         return campaignService.checkProcessStatus(processId);
@@ -200,7 +229,7 @@
     },
     created () {
       this.autoSave();
-
+      configService.getConfig('campaign').then((response) => this.campaignConfig = response);
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;
 
