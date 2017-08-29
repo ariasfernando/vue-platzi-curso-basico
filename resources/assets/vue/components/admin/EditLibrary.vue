@@ -47,7 +47,7 @@
                       </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" v-if="campaignConfig.preview.show_preheader">
                       <!-- Field Preheader -->
                       <label for="preheader" class="col-sm-4 control-label">Preheader</label>
                       <p class="control col-sm-8">
@@ -56,7 +56,7 @@
                     </div>
 
                     <!-- Field Plain text -->
-                    <div class="row">
+                    <div class="row" v-if="campaignConfig.process_plaintext">
                       <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
                       <p class="control col-sm-8">
                         <toggle-button :value="library.config.plainText" :sync="true" :labels="true" @change="updateToggle('plainText')"></toggle-button>
@@ -81,7 +81,7 @@
                     </div>
 
                     <!-- Field Tagging -->
-                    <div class="row">
+                    <div class="row" v-if="campaignConfig.enable_tagging">
                       <label for="tagging" class="col-sm-4 control-label">Tags</label>
                       <p class="control col-sm-1">
                         <toggle-button :value="library.config.tagging" :sync="true" :labels="true" @change="updateToggle('tagging')"></toggle-button>
@@ -437,8 +437,10 @@
       }
     },
     created () {
-      this.loadLibrary();
-      configService.getConfig('campaign').then((response) => this.campaignConfig = response);
+      configService.getConfig('campaign').then((response) => {
+        this.campaignConfig = response;
+        this.loadLibrary();
+      });
     },
     mounted () {
       this.toggleSidebar();
