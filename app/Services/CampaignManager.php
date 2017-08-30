@@ -79,8 +79,9 @@ class CampaignManager
                 $campaign->plain_text = $inputs['plain_text'];
             }
 
+            $campaign->tags = [];
             if (!empty($inputs['tags'])) {
-                $campaign->tags = array_unique(json_decode($inputs['tags']));
+                $campaign->tags = array_unique($inputs['tags']);
                 // Add New tags to collection
                 $saved_tags = Tag::all()->keyBy('name')->all();
 
