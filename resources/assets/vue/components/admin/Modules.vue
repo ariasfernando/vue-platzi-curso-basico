@@ -45,6 +45,7 @@
               <td :title="module.type">{{ module.type }}</td>
               <td :title="module.status">{{ module.status }}</td>
               <td class="text-right actions icons">
+                <router-link v-if="module.type === 'studio'" :to="'/clone/' + module.moduleId"><i class="glyphicon glyphicon-duplicate"></i></router-link>
                 <router-link v-if="module.type === 'studio'" :to="'/edit/' + module.moduleId"><i class="glyphicon glyphicon-pencil"></i></router-link>
 
                 <a v-if="module.type === 'studio'" href="#" class="delete" title="Delete" @click="deleteModule(module)"><i

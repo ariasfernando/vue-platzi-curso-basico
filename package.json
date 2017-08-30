@@ -50,6 +50,7 @@
     "vue-debug": "0.0.1",
     "vue-easy-toast": "^0.2.5",
     "vue-form-2": "^0.1.92",
+    "vue-input-tag": "0.0.16",
     "vue-resource": "^1.2.1",
     "vue-router": "^2.3.0",
     "vue-switches": "^1.1.3",

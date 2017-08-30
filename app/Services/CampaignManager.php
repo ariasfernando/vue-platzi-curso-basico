@@ -69,6 +69,7 @@ class CampaignManager
             $campaign->user_email = Auth::user()->email;
             $campaign->campaign_settings = $campaign_settings;
             $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
+            $campaign->auto_save = isset($inputs['auto_save']) && $inputs['auto_save'] ? true : false;
 
             if (isset($inputs['body_html'])) {
                 $campaign->body_html = $inputs['body_html'];
@@ -78,8 +79,9 @@ class CampaignManager
                 $campaign->plain_text = $inputs['plain_text'];
             }
 
+            $campaign->tags = [];
             if (!empty($inputs['tags'])) {
-                $campaign->tags = array_unique(json_decode($inputs['tags']));
+                $campaign->tags = array_unique($inputs['tags']);
                 // Add New tags to collection
                 $saved_tags = Tag::all()->keyBy('name')->all();
 
@@ -91,13 +93,14 @@ class CampaignManager
             }
 
             if (isset($inputs['template'])) {
-                if ($inputs['template'] !== 'true') {
-                    abort(400, 'The only value allowed for template is true');
+                $campaign->template = false;
+                if ($inputs['template'] === true) {
+                    $campaign->template = true;
                 }
-                if ($inputs['template'] !== 'true' && $campaign->template === true) {
+
+                if ($inputs['template'] !== true && $campaign->template === true) {
                     abort(400, 'You are trying to save a template campaign as non template one');
                 }
-                $campaign->template = ($inputs['template'] === 'true') ? true : false;
             }
 
             $campaign->save();

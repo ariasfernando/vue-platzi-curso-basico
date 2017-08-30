@@ -33,6 +33,7 @@ export default {
     const deferred = Q.defer();
 
     campaign.bodyHtml = data.bodyHtml;
+    campaign.template = data.template;
 
     const dataCampaign = new Campaign({
       settings,

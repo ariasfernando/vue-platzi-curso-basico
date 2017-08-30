@@ -17,8 +17,8 @@
                 <b-tab title="Normal HTML">
                   <textarea v-html="campaign.campaign_data.body_html"></textarea>
                 </b-tab>
-                <b-tab title="Plain Text">
-                  <textarea v-html="campaign.campaign_data.plain_text"></textarea>
+                <b-tab title="Plain Text" v-if="campaign.library_config.plainText">
+                  <textarea v-html="plainText"></textarea>
                 </b-tab>
               </b-tabs>
             </slot>
@@ -34,7 +34,7 @@
               </div>
 
               <div v-if="campaign.library_config.view_in_browser">
-                <a :href="viewInBrowserUrl" target="_blank" type="button" class="btn btn-default">View in browser</a>
+                <a :href="viewInBrowser" target="_blank" type="button" class="btn btn-default">View in browser</a>
               </div>
 
               <a :href="$app.baseUrl" class="btn btn-default btn-back-to-dashboard" data-dismiss="modal">Go back to the dashboard</a>
@@ -49,6 +49,7 @@
 <script>
   import Vue from 'vue/dist/vue';
   import BootstrapVue from 'bootstrap-vue';
+  import campaignService from '../../../services/campaign'
 
   export default {
     components: {
@@ -66,11 +67,23 @@
       data () {
         return {
           viewInBrowser: this.$app.baseUrl + 'campaign/public-path/' + this.campaign.campaign_id,
+          plainText: '',
         }
-      }
+      },
+      getPlainText() {
+        campaignService.processPlainText(this.campaign.campaign_id)
+          .then((response) => {
+            this.plainText = response;
+          })
+          .catch((error) => {
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+          });
+      },
     },
     created () {
-
+      if (this.campaign.library_config.plainText) {
+        this.getPlainText();
+      }
     }
   };
 </script>

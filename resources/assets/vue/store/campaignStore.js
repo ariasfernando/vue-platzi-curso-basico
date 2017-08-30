@@ -104,8 +104,8 @@ const mutations = {
   setEditorOptions(state, toolbar) {
     state.editorToolbar = toolbar;
   },
-  setPlainText(state, plainText) {
-    state.campaign.campaign_data.plain_text = plainText;
+  setTemplating(state, templating) {
+    state.campaign.campaign_data.template = templating;
   },
   error(err) {
     console.error(err);

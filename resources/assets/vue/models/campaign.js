@@ -7,7 +7,8 @@ function Campaign(data) {
   this.campaign_process = data.settings.campaignProcess || false;
   this.modules_data = data.modules;
   this.body_html = data.campaign.bodyHtml;
-  this.auto_save = data.settings.autoSave || data.campaign.campaign_data.auto_save;
+  this.auto_save = data.settings.autoSave;
+  this.template = data.campaign.campaign_data.template;
 
   return this;
 }

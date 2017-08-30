@@ -27,6 +27,7 @@ module.exports = {
       plainText: false,
       preheader: false,
       tagging: false,
+      templating: false
     },
     modules: {
       All: [
