@@ -164,7 +164,7 @@
         handler: function() {
           let module = this.$store.getters["module/module"];
           if (!_.isEmpty(this.currentComponent) &&  (this.currentComponent.componentId >= 0) ) {
-            this.component = _.cloneDeep(module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId]);
+            this.component = module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
             this.ready = true;
           }
         },
@@ -177,10 +177,10 @@
         $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
       },
       saveComponent() {
-        _.each(this.component.settings, (option, index) => {
+        _.each(this.component.settings, (option) => {
           if (option.link === 'style') {
             if ( option.group && option.group.length > 0 ){
-              _.each(option.group, (optionGroup, indexGroup) => {
+              _.each(option.group, (optionGroup) => {
                 this.component.style[optionGroup.name] = optionGroup.value;
               }); 
             }else{
@@ -189,19 +189,13 @@
           }
           if (option.link === 'attribute') {
             if (option.group && option.group.length > 0 ){
-              _.each(option.group, (optionGroup, indexGroup) => {
+              _.each(option.group, (optionGroup) => {
                 this.component.attribute[optionGroup.name] = optionGroup.value;
               }); 
             }else{
               this.component.attribute[option.name] = option.value;
             }
           }
-        });
-
-        this.$store.commit('module/saveComponent', {
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          component: this.component
         });
 
         this.$store.commit('module/setChangeSettingComponent',{
@@ -224,12 +218,6 @@
                 this.component[link][name] = option.value.hex;
               }
             }
-        });
-
-        this.$store.commit('module/saveComponent', {
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          component: this.component
         });
 
         this.$store.commit('module/setChangeSettingComponent',{

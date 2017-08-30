@@ -66,6 +66,10 @@ const mutations = {
   removeColumns(state, data) {
     state.module.structure.columns.splice(data.index, data.number);
   },
+  sortColumn(state, data) {
+    const components = state.module.structure.columns[data.colId].components;
+    components.splice(data.newIndex, 0, components.splice(data.oldIndex, 1)[0]);
+  },
   setColumnWidth(state, data) {
     const column = state.module.structure.columns[data.colId];
     // Set attribute
@@ -100,6 +104,10 @@ const mutations = {
 };
 
 const actions = {
+  sortColumn(context, data) {
+    context.commit('sortColumn', data);
+    return context.state.module;
+  },
   normalizeColumns(context, columns) {
     const width = 100 / columns.length;
     _.each(columns, (column, colId) => {
