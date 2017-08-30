@@ -88,7 +88,7 @@ class DashboardController extends Controller
                                 if (\Config::get('campaign.enable_tagging')) {
                                     // search terms should also be reviewed as tags
                                     $query->orWhere(function ($q) use ($search_key) {
-                                        $q->whereIn('tags', [new MongoRegex('/^'.$search_key.'$/i')]);
+                                        $q->whereIn('tags', [new MongoRegex('^' . $search_key . '$', 'i')]);
                                     });
                                 }
                             }
@@ -103,7 +103,7 @@ class DashboardController extends Controller
                 if (count($search_tags)) {
                     foreach ($search_tags as $search_key) {
                         $campaigns->where(function ($query) use ($search_key) {
-                            $query->whereIn('tags', [new MongoRegex('/^'.$search_key.'$/i')]);
+                            $query->whereIn('tags', [new MongoRegex('^' . $search_key . '$', 'i')]);
                         });
                     };
                 }
