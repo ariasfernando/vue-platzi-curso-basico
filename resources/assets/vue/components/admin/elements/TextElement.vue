@@ -1,7 +1,8 @@
 <template>
   <!-- TEXT ELEMENT -->
   <tr @click.prevent="setComponent"
-      :data-component="component"
+      :data-component="JSON.stringify(component)"
+      :data-column="columnId"
       data-type="text-element"
   >
     <td width="100%">
@@ -36,7 +37,8 @@
     },
     data(){
       return {
-        editorId: ['editor', this.columnId, this.componentId].join('-')
+        editorId: ['editor', this.columnId, this.componentId].join('-'),
+        dirty: false
       }
     },
     computed: {
@@ -50,9 +52,9 @@
     watch : {
       styleComponent: {
         handler: function() {
-          if (!_.isEmpty(this.styleComponent) && 
-            this.currentComponent.columnId == this.columnId && 
-            this.currentComponent.componentId == this.componentId ) 
+          if (!_.isEmpty(this.styleComponent) &&
+            this.currentComponent.columnId === this.columnId &&
+            this.currentComponent.componentId === this.componentId )
           {
             this.component.style = this.styleComponent.style;
             this.component.attribute = this.styleComponent.attribute;

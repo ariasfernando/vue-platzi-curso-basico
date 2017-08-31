@@ -21,7 +21,7 @@ module.exports = {
     width: '150',
     height: '40',
     align: 'center',
-    bgcolor: '#514960',
+    bgcolor: { hex: '#514960' },
     href: 'http://stensul.com',
     target: '_blank',
   },
@@ -83,7 +83,7 @@ module.exports = {
       label: 'Color',
       name: 'color',
       type: 'color',
-      value: {hex: '#000000'},
+      value: { hex: '#000000' },
     },
     {
       link: 'style',

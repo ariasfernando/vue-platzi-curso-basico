@@ -10,7 +10,7 @@
     >
       <table :width="component.attribute.width" 
              :height="component.attribute.height" 
-             :bgcolor="component.attribute.bgcolor"
+             :bgcolor="component.attribute.bgcolor.hex"
              border="0" 
              cellpadding="0" 
              cellspacing="0"
@@ -18,7 +18,7 @@
         <tr>
           <td width="100%" 
               align="center" 
-              :bgcolor="component.attribute.bgcolor"
+              :bgcolor="component.attribute.bgcolor.hex"
               :height="component.attribute.height"
           >
             <a @click.prevent :href="component.attribute.href" :target="component.attribute.target" :style="component.style">

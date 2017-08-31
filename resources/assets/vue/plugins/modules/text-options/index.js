@@ -9,10 +9,6 @@ module.exports = {
   target: ['button', 'text'],
   studioSettings,
   campaignSettings,
-  config: {
-    availableOptions: ['undo', 'redo', 'bold', 'italic', 'underline', 'strikethrough', 'alignleft', 'aligncenter', 'alignright'],
-    defaultToolbar: 'undo redo bold italic underline strikethrough alignleft aligncenter alignright',
-  },
   data: {
     options: {
       undo: {
@@ -90,9 +86,9 @@ module.exports = {
         key: 'backcolor',
         value: false,
       },
-      image: {
-        label: 'Image',
-        key: 'image',
+      link: {
+        label: 'Link',
+        key: 'link',
         value: false,
       },
     },
