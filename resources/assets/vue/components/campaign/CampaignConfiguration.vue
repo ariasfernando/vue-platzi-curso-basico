@@ -20,6 +20,35 @@
         <div class="config-box-divider" v-if="enableTagging">
           <input-tag :on-change="tagChange" :tags="form.tags" validate="text" placeholder="Add Tag"></input-tag>
         </div>
+
+        <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="params.campaign_data.locked ? 'locked' : 'unlocked'">
+          <label class="locking">
+            <span>{{params.campaign_data.locked ? 'Unlock' : 'Lock'}}</span>
+            <span class="locking_type">
+              {{params.campaign_data.template ? 'Template' : 'Campaign'}}
+            </span>
+          </label>
+          <button
+            class="lock-campaign-btn btn btn-default"
+            :class="params.campaign_data.locked ? 'hidden' : ''"
+            data-toogle="tooltip"
+            data-placement="botom"
+            title="Campaign is unlocked"
+          >
+            <i class="fa fa-unlock" aria-hidden="true"></i>
+          </button>
+          <button
+            class="unlock-campaign-btn btn btn-default"
+            :class="params.campaign_data.locked ? '' : 'hidden'"
+            :disabled="this.$app.logged_user !== params.campaign_data.locked_by"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Campaign is locked"
+          >
+            <i class="fa fa-lock" aria-hidden="true"></i>
+          </button>
+        </div>
+
       </form>
     </div>
   </div>
@@ -40,6 +69,7 @@
         enablePreheader: false,
         enableTagging: false,
         enableAutoSave: false,
+        enableLocking: false,
         form: {
           campaignName: 'Untitled Campaign',
           campaignPreheader: '',
@@ -53,10 +83,8 @@
 
     created () {
       this.params = _.cloneDeep(this.$store.state.campaign.campaign);
-
       this.enablePreheader = this.params.campaign_data.library_config.preheader;
       this.enableTagging = this.params.campaign_data.library_config.tagging;
-
       this.form.campaignName = this.params.campaign_name;
       this.form.campaignPreheader = this.params.campaign_data.campaign_preheader;
       this.form.campaignProcess = this.params.campaign_data.processed;
@@ -86,6 +114,13 @@
           .catch((error) => {
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
           });
+          configService.getConfig('campaign')
+            .then((response) => {
+              this.enableLocking = response.locking === true;
+            })
+            .catch((error) => {
+              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+            });
       },
       tagChange(tags) {
         this.$store.commit('campaign/saveSetting', {

@@ -1,13 +1,13 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-  <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr @click.prevent="setComponent"
         data-type="divider-element"
     >
       <td class="st-separator st-position-relative" :style="component.style">
         <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td :style="component.style"></td>
+            <td :height="component.style.height" :style="component.style">&nbsp;</td>
           </tr>
         </table>
       </td>
