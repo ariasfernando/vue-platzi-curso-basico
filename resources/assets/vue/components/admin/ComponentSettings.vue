@@ -219,7 +219,11 @@
                 if (name === 'color') {
                   this.component[link][name] = option.value.hex;
                 } else {
-                  this.component[link][name] = option.value;
+                  if (name === 'backgroundColor' && link === 'style') {
+                    this.component[link][name] = option.value.hex;
+                  } else {
+                    this.component[link][name] = option.value;
+                  }
                 }
 
               }
