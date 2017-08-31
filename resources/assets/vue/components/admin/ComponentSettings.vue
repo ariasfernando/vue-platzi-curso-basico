@@ -206,6 +206,7 @@
       },
       // TODO Update date used mutation.
       updateColumnSettings( name, link , isGroup ){
+        console.log(name, link, isGroup);
         _.each(this.component.settings, (option, index) => {
             if ( isGroup ){
                _.each(option.group, (optionGroup, indexGroup) => {
@@ -215,7 +216,12 @@
               });
             }else{
               if (option.name === name) {
-                this.component[link][name] = option.value.hex;
+                if (name === 'color') {
+                  this.component[link][name] = option.value.hex;
+                } else {
+                  this.component[link][name] = option.value;
+                }
+
               }
             }
         });
