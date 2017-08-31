@@ -281,7 +281,7 @@
   
   .st-component{
     &:hover{
-        background-color: @hover;
+        opacity: 0.75;
         .icon-move, .icon-remove{
           display: block;
         }
