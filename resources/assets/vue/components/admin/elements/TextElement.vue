@@ -8,7 +8,11 @@
     <td width="100%">
       <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
         <tr>
-          <td width="100%" class="st-text-style st-position-relative" :align="component.attribute.align" :style="component.style">
+          <td width="100%" 
+              class="st-text-style st-position-relative" 
+              :align="component.attribute.align" 
+              :style="component.style"
+          >
             <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
             <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
             <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-trash st-remove"></i></div> 
