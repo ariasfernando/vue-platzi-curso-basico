@@ -27,6 +27,8 @@ module.exports = {
     processStatus: { method: 'get', path: `${baseUrl}/queue/status/process/:processId` },
     sendPreview: { method: 'post', path: `${baseUrl}/campaign/send-preview` },
     processPlainText: { method: 'get', path: `${baseUrl}/campaign/plain-text?campaign_id=:campaignId` },
+    lockCampaign: { method: 'post', path: `${baseUrl}/campaign/force-lock` },
+    unlockCampaign: { method: 'post', path: `${baseUrl}/campaign/unlock-forced` },
   },
   config: {
     getConfig: { method: 'get', path: `${baseUrl}/config/:key` },

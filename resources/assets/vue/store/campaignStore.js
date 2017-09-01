@@ -44,6 +44,12 @@ const getters = {
   dirty(state) {
     return state.dirty;
   },
+  locked(state) {
+    if (!_.isEmpty(state.campaign)) {
+      return state.campaign.campaign_data.locked;
+    }
+    return false;
+  },
 };
 
 const mutations = {
@@ -145,6 +151,32 @@ const actions = {
         context.commit('error', error);
         deferred.reject(error);
       });
+    return deferred.promise;
+  },
+  lockCampaign(context, campaignId) {
+    const deferred = Q.defer();
+
+    campaignService.lockCampaign(campaignId)
+      .then(res => {
+        context.dispatch('getCampaignData', res.campaign_id);
+      })
+      .catch(error => {
+        context.commit('error', error);
+        deferred.reject(error);
+      });
+    return deferred.promise;
+  },
+  unlockCampaign(context, campaignId) {
+    const deferred = Q.defer();
+
+    campaignService.unlockCampaign(campaignId)
+    .then(res => {
+      context.dispatch('getCampaignData', res.campaign_id);
+    })
+    .catch(error => {
+      context.commit('error', error);
+      deferred.reject(error);
+    });
     return deferred.promise;
   },
   updateElement(context, edited) {

@@ -76,6 +76,45 @@ export default {
 
     return deferred.promise;
   },
+  lockCampaign(campaignId) {
+    const endpoint = endpoints.campaign.lockCampaign;
+    const deferred = Q.defer();
+
+    const params = {
+      endpoint,
+      json: {
+        campaign_id: campaignId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+  unlockCampaign(campaignId) {
+    const endpoint = endpoints.campaign.unlockCampaign;
+    const deferred = Q.defer();
+
+    const params = {
+      endpoint,
+      json: {
+        campaign_id: campaignId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+
   checkProcessStatus(processId) {
     const endpoint = endpoints.campaign.processStatus;
     const deferred = Q.defer();
