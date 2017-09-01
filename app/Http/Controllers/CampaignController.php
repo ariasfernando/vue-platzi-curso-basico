@@ -425,7 +425,7 @@ class CampaignController extends Controller
         try {
             $data =  Campaign::unlockForced($request->input('campaign_id'));
             return response()->json($data);
-        } catch (\Illuminate\Auth\Access\UnauthorizedException $e) {
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
             return response()->json([
                 'error'   => 'Forbidden',
                 'message' => $e->getMessage()
