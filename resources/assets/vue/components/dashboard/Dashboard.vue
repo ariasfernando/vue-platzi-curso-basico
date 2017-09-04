@@ -34,7 +34,7 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <h2 class="crimson italic">Draft Emails</h2>
+        <h2>Draft Emails</h2>
         <!-- Draft Emails Table -->
         <draft-emails
           :campaigns="campaigns.current"
@@ -53,7 +53,7 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <h2 class="crimson italic">Finished emails</h2>
+        <h2>Finished emails</h2>
         <!-- Finished Emails Table -->
         <finished-emails
           :campaigns="campaigns.finished"
@@ -73,7 +73,7 @@
 
     <div class="row" v-if="config.enable_templating">
       <div class="col-xs-12">
-        <h2 class="crimson italic">Templates</h2>
+        <h2>Templates</h2>
         <!-- Templates Table -->
         <templates-campaigns
           :campaigns="campaigns.template"
@@ -98,6 +98,8 @@
   import DraftEmails from './DraftEmails.vue'
   import FinishedEmails from './FinishedEmails.vue'
   import TemplatesCampaigns from './TemplatesCampaigns.vue'
+  import Tabs from '../common/Tabs.vue'
+  import Tab from '../common/Tab.vue'
 
   export default {
     props: ['config', 'tagNames', 'appSettings', 'userLibraries'],
@@ -106,7 +108,9 @@
       CampaignSearch,
       DraftEmails,
       FinishedEmails,
-      TemplatesCampaigns
+      TemplatesCampaigns,
+      Tabs,
+      Tab
     },
     created () {
       this.updateCampaigns();

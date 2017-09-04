@@ -7,7 +7,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Email Preview</title>
 
-        <link href="{{  url( elixir('css/base.css') ) }}" rel="stylesheet">
+        <link href="{{  url( elixir('css/tool.css') ) }}" rel="stylesheet">
     </head>
     <body>
 

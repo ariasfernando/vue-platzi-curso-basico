@@ -7,10 +7,14 @@
 
 {{-- Login content --}}
 @section('content')
-    <section class="col-xs-12">
+    <section class="col-md-4"></section>
+    <section class="col-md-4 beta-login">
 
         <div class="text-center">
             <a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">stensul</a>
+            <h4>
+                Email Creator
+            </h4>
         </div>
 
         {{-- Login error message --}}
@@ -34,14 +38,12 @@
                 </div>
             </form>
 
-
-            <div class="login-footer"></div>
-
             <div>
                 <p>For access or more information, please email {{$app_config["app_mail_address"]}}</p>
             </div>
         </div>
     </section>
+    <section class="col-md-4"></section>
 <!-- Scripts -->
 @endsection
 @include('partials/application_script')

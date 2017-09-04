@@ -7,7 +7,8 @@
 
 {{-- Login content --}}
 @section('content')
-	<section class="col-xs-12">
+	<section class="col-md-4"></section>
+	<section class="col-md-4 beta-login">
 
 		<div class="text-center">
 			<form class="form-horizontal">
@@ -33,4 +34,5 @@
 			</form>
 		</div>
 	</section>
+	<section class="col-md-4"></section>
 @endsection

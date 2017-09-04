@@ -13,8 +13,8 @@
                     </slot>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" v-on:click.stop.prevent="$emit('accept')">Accept</button>
-                    <button type="button" class="btn btn-primary" v-on:click.stop.prevent="$emit('close')">Cancel</button>
+                    <button type="button" class="btn btn-default beta-btn-primary" v-on:click.stop.prevent="$emit('accept')">Accept</button>
+                    <button type="button" class="btn btn-primary beta-btn-secondary" v-on:click.stop.prevent="$emit('close')">Cancel</button>
                 </div>
             </div>
         </div>

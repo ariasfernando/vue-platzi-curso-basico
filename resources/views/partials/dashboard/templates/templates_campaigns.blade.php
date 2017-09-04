@@ -94,7 +94,7 @@
                         <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
                         <a href="#" class="edit" title="Edit" v-if="!campaign.locked || campaign.locked_by === Application.globals.logged_user"><i class="glyphicon glyphicon-pencil"></i></a>
                         <a href="#" title="Delete" v-if="!campaign.locked" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
-                            ><i class="glyphicon glyphicon-ban-circle"></i></a>
+                            ><i class="glyphicon glyphicon-trash"></i></a>
                     </td>
                 </tr>
                 <tr v-if="campaigns.data == 0">
@@ -112,7 +112,7 @@
             v-on:change-page="changePage"
         ></pagination>
 
-        <modal v-if="showModal" v-on:close="showModal = false" v-on:accept="confirmDeleteCampaign">
+        <modal v-if="showModal" v-on:close="showModal = false" v-on:accept="confirmDeleteCampaign" class="delete-modal">
             <div slot="body">
                 <p>Are you sure you want to delete this email?</p>
             </div>
