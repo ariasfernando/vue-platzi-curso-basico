@@ -157,8 +157,9 @@ const actions = {
     const deferred = Q.defer();
 
     campaignService.lockCampaign(campaignId)
-      .then(res => {
-        context.dispatch('getCampaignData', res.campaign_id);
+      .then(response => {
+        context.dispatch('getCampaignData', response.campaign_id);
+        deferred.resolve(response);
       })
       .catch(error => {
         context.commit('error', error);
@@ -170,8 +171,9 @@ const actions = {
     const deferred = Q.defer();
 
     campaignService.unlockCampaign(campaignId)
-    .then(res => {
-      context.dispatch('getCampaignData', res.campaign_id);
+    .then(response => {
+      context.dispatch('getCampaignData', response.campaign_id);
+      deferred.resolve(response);
     })
     .catch(error => {
       context.commit('error', error);
