@@ -7,6 +7,7 @@ use URL;
 use View;
 use StensulLocale;
 use Storage;
+use Stensul\Models\Library;
 use League\Flysystem\AdapterInterface;
 use Stensul\Services\EmailTextCreator as Text;
 use Stensul\Providers\HelperServiceProvider as Helper;
@@ -68,7 +69,8 @@ class EmailHtmlCreator
     public function getEmailLayout()
     {
         $email_layout = Helper::validateView(self::$EMAIL_LAYOUT);
-        
+        $library = Library::find($this->getCampaign()->library);
+
         return \View::make(
             $email_layout
         )
@@ -77,7 +79,8 @@ class EmailHtmlCreator
                     [
                         'title' => $this->getCampaign()->campaign_name,
                         'body_html' => $this->getCampaign()->body_html,
-                        'campaign_data' => $this->getCampaign()
+                        'campaign_data' => $this->getCampaign(),
+                        'library_config' => $library->config,
                     ]
                 )
                 ->render();
