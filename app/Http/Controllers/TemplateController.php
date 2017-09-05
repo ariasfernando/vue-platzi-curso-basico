@@ -5,6 +5,7 @@ namespace Stensul\Http\Controllers;
 use Auth;
 use StensulLocale;
 use Storage;
+use Stensul\Models\Library;
 use Stensul\Models\Campaign;
 use Illuminate\Http\Request;
 use Stensul\Providers\ModuleServiceProvider;
@@ -140,6 +141,7 @@ class TemplateController extends Controller
         $campaign_data = isset($campaign_id)
             ? Campaign::findOrFail($campaign_id)
             : null;
+        $library = Library::find($campaign_data->library);
 
         StensulLocale::init($campaign_data['locale']);
 
@@ -148,7 +150,8 @@ class TemplateController extends Controller
             ['params' => [
                 'title' => 'preview',
                 'body_html' => $campaign_data->body_html,
-                'campaign_data' => $campaign_data]
+                'campaign_data' => $campaign_data],
+                'library_config' => $library->config,
             ]
         );
     }
