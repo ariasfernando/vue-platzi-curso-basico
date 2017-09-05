@@ -6,6 +6,7 @@
 			position: absolute;
 		    left: 10px;
 		    top: 6px;
+		    z-index: 2;
 		}
 		.tag:first {
 			margin-left: 0px;
@@ -43,12 +44,24 @@
 		}
 		button{
 		    background: none;
-		    color: #666666;
+		    color: @stensul-gray;
 		    padding: 0px;
 		    border: none;
 		}
 		.search-error {
 			color: red;
+		}
+		#search-clear-btn{
+			position: absolute;
+		    background: none;
+		    border: none;
+		    right: 0px;
+		    top: 7px;
+		    z-index: 2;
+		    outline: 0;
+		    color: @stensul-gray;
+		    font-size: 14px!important;
+		    z-index: 2;
 		}
 	}
 }
