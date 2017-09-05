@@ -149,7 +149,7 @@
         this.$store.commit("global/setLoader", true);
 
         // Obtain current html
-        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
+        const bodyHtml = campaignCleaner.clean('.section-canvas-container');
 
         // Save Request
         this._save(bodyHtml).then(() => {
