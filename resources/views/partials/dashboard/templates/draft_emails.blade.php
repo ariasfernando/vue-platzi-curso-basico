@@ -137,7 +137,7 @@
                             <i class="glyphicon fa fa-unlock"></i>
                         </a>
                         <a href="#" title="Delete" v-if="!enableLocking || !campaign.locked" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
-                            ><i class="glyphicon glyphicon-ban-circle"></i></a>
+                            ><i class="glyphicon glyphicon-trash"></i></a>
                     </td>
                 </tr>
                 <tr v-if="campaigns.data == 0">
