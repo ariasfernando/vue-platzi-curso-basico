@@ -4,6 +4,7 @@ namespace Stensul\Services;
 
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Models\Campaign as ModelCampaign;
+use Stensul\Models\Library;
 use Stensul\Models\User;
 use Activity;
 use Campaign;
@@ -44,6 +45,8 @@ class EmailSender
         $preheader = isset($params['preheader']) && strlen($params['preheader'])
             ? $params['preheader']
             : false;
+        
+        $library = Library::find($campaign_data->library);
 
         for ($i = 0; $i < count($email_array); ++$i) {
             if ($i <= $email_send_limit) {
@@ -52,7 +55,8 @@ class EmailSender
                         'title' => $campaign_data->campaign_name,
                         'body_html' => $campaign_data->body_html,
                         'campaign_data' => $campaign_data,
-                        'preheader_preview' => $preheader
+                        'preheader_preview' => $preheader,
+                        'library_config' => $library->config,
                     ),
                     'email' => trim($email_array[ $i ]),
                     'subject' => $subject

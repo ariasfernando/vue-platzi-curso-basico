@@ -141,7 +141,7 @@
       lockCampaign() {
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch("campaign/lockCampaign", this.params.campaign_id).then(response => {
-          this.$root.$toast('This campaign is unlocked now, and you can make changes on it', {className: 'et-info'});
+          this.$root.$toast('This campaign is locked now. Only you can unlock it.', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
@@ -152,7 +152,7 @@
       unlockCampaign() {
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch("campaign/unlockCampaign", this.params.campaign_id).then(response => {
-          this.$root.$toast('This campaign is locked now. Only you can unlock it.', {className: 'et-info'});
+          this.$root.$toast('This campaign is unlocked now, and you can make changes on it', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);

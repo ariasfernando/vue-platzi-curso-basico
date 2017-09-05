@@ -187,7 +187,6 @@ const actions = {
   },
   sendPreview(context, data) {
     return campaignService.sendPreview(data)
-      .then(res => context.dispatch('getCampaignData', res.campaignId))
       .catch(error => context.commit('error', error));
   },
   removeModule(context, moduleId) {
