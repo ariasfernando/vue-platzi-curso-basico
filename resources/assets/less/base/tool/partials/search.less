@@ -1,5 +1,12 @@
 #dashboard {
 	#search {
+		position: relative;
+
+		.input-group-btn{
+			position: absolute;
+		    left: 10px;
+		    top: 6px;
+		}
 		.tag:first {
 			margin-left: 0px;
 		}
@@ -26,7 +33,19 @@
 			}
 		}
 		.search-key {
-			height: 35px;
+			padding: 6px 12px 6px 30px;
+  			width: 300px;
+  			border-radius: 2px;
+  			border: 1px solid @stensul-gray-secondary;
+  			font-size: 14px;
+  			font-weight: 300;
+  			box-shadow: none;
+		}
+		button{
+		    background: none;
+		    color: #666666;
+		    padding: 0px;
+		    border: none;
 		}
 		.search-error {
 			color: red;

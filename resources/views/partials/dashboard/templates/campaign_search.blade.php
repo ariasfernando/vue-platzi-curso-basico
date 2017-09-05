@@ -1,4 +1,4 @@
-<div id="search" v-if="enabled == 1">
+<div id="search" class="pull-right" v-if="enabled == 1">
     <div class="input-group">
         <input type="text" class="form-control search-key" placeholder="Search"
             maxlength="30"
