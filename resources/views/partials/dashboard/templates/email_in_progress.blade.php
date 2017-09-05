@@ -37,7 +37,7 @@
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
                     <th v-if="showTags == 1">Tags</th>
-                    <th width="150" class="bold">Actions</th>
+                    <th width="180" class="bold">Actions</th>
                 </tr>
             </thead>
             <tbody>

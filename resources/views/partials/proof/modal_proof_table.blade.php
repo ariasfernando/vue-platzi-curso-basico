@@ -1,10 +1,10 @@
 <div class="modal-body">
+	<h4>Who would you like to send this email to for review?</h4>
 	<div class="send-proof">
 		<form name="send-proof-form" id="send-proof-form" action="">
 			<input type="hidden" name="campaign_id" value="">
 			<input type="hidden" name="proof_id" value="">
 			<div class="form-group">
-				<label>Name</label>
 				<div class="input-group">
 					{!!
 						Form::select('proof_users', $proof_users, null, [
@@ -13,7 +13,7 @@
 						])
 					!!}
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-reviewer-add">Add</button>
+						<button type="button" class="btn btn-default btn-reviewer-add beta-btn-primary">Add</button>
 					</span>
 				</div>
 			</div>
