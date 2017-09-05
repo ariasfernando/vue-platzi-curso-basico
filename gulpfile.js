@@ -330,7 +330,7 @@ gulp.task('elixir-scripts', function () {
  */
 gulp.task('elixir-less', () => {
     elixir((mix) => {
-        mix.less( appName + '/base.less');
+        mix.less( appName + '/tool/tool.less');
         mix.less( appName + '/base-v2/admin.less');
     });
 });
@@ -344,7 +344,7 @@ gulp.task('elixir-version', () => {
   elixir((mix) => {
     mix.version([
       'css/admin.css',
-      'css/base.css',
+      'css/tool.css',
       'js'
     ]);
   });
