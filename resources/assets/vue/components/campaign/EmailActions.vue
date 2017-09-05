@@ -1,7 +1,7 @@
 <template>
   <div class="section-box-header section-canvas-title">
     <div class="row">
-      <div class="col-xs-3 col-md-4 col-lg-4" id="section-canvas-title-col">
+      <div class="col-xs-3 col-md-4 col-lg-3" id="section-canvas-title-col">
         <h2>{{ campaign.campaign_data.library_config.title || 'Campaign Editor' }}</h2>
       </div>
 
@@ -19,38 +19,65 @@
         </div>
       </div>
 
-      <div class="col-xs-8 col-md-7 col-lg-6 text-right" id="section-canvas-buttons-col">
+      <div class="col-xs-8 col-md-7 col-lg-7 text-right" id="section-canvas-buttons-col">
 
-
-        <button class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview">
+        <button v-show="!locked" class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview">
           Preview
         </button>
 
-        <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.template" @click="save">
+        <button v-show="!locked" class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
           Save as Draft
         </button>
 
-        <button class="btn btn-default save-as-template"
-                :class="hiddenClass()" v-if="!campaign.processed && campaign.campaign_data.library_config.enable_templating">
+        <!--
+          Show if it's not already a template, if it's not a processed campaign
+          and templating is enabled on the tool.
+        -->
+        <b-btn v-b-modal.confirm-modal class="btn btn-default save-as-template"
+          v-show="!locked"
+          v-if="campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
+            && campaign.campaign_data.library_config.templating">
           Save as Template
+        </b-btn>
+
+        <!--
+          Show if it's already a template, skip confirmation modal.
+        -->
+        <button class="btn btn-default save-as-template" @click="template()"
+          :class="hiddenClass()" v-if="campaign.campaign_data.template"
+          v-show="!locked">
+          Save Template
         </button>
 
-        <button class="btn btn-default proof-open-modal" v-if="this.$app.proofConfig.status"
+        <button class="btn btn-default proof-open-modal" v-if="!campaign.campaign_data.template && this.$app.proofConfig.status"
             v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
+            v-show="!locked"
         >Send for review</button>
 
-        <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.template" @click="complete">
+        <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete"
+          v-show="!locked">
           Complete
           <i class="glyphicon glyphicon-triangle-right"></i>
         </a>
       </div>
     </div>
+    <b-modal v-if="campaignConfig.enable_templating"
+      id="confirm-modal"
+      ref="confirmModal"
+      title="Save as Template"
+      ok-title="Accept"
+      close-title="Cancel"
+      @ok="confirmSave">
+      Remember that if you save this campaign as template, you won't be able to publish it,
+      you will only be able to edit and clone it.
+    </b-modal>
   </div>
 </template>
 
 <script>
 
   import campaignService from '../../services/campaign';
+  import configService from '../../services/config'
 
   export default {
     name: 'EmailActions',
@@ -60,6 +87,9 @@
       },
       dirty() {
         return this.$store.getters["campaign/dirty"];
+      },
+      locked() {
+        return this.$store.getters["campaign/campaign"].campaign_data.locked
       }
     },
     data () {
@@ -78,7 +108,8 @@
         buttonsCols: 5,
         hiddenClass () {
           return this.campaign.locked ? 'hidden' : '';
-        }
+        },
+        campaignConfig: {}
       }
     },
     methods: {
@@ -100,6 +131,15 @@
           campaign: this.campaign,
           bodyHtml
         });
+      },
+      template() {
+        this.$store.commit("campaign/setTemplating", true);
+        this.save();
+      },
+      confirmSave(e) {
+        e.cancel();
+        this.template();
+        this.$refs.confirmModal.hide()
       },
       checkProcessStatus(processId) {
         return campaignService.checkProcessStatus(processId);
@@ -127,20 +167,20 @@
               }
 
               // Poll server with job id
-              if (completeResponse.job) {
-                this.checkProcessStatus(completeResponse.job).then((response) => {
-                  if (response.status !== 'processed') {
-                    setTimeout(() => {
-                      this.checkProcessStatus(processId);
-                    }, 3000)
-                  } else {
-                    // Set campaign as processed
-                    this.$store.commit('campaign/setProcessStatus');
-                    // Show complete after campaign is completely processed
-                    this.$store.commit("campaign/toggleModal", 'modalComplete');
-                  }
-                });
-              }
+              if (completeResponse.jobId) {
+                let processInterval = setInterval(() => {
+                  this.checkProcessStatus(completeResponse.jobId).then((response) => {
+                    if (response.status === 'finished') {
+                      clearInterval(processInterval);
+                      this.$store.commit("global/setLoader", false);
+                      // Set campaign as processed
+                      this.$store.commit('campaign/setProcessStatus');
+                      // Show complete after campaign is completely processed
+                      this.$store.commit("campaign/toggleModal", 'modalComplete');
+                    }
+                  });
+                }, 2000);
+            }
           }, error => {
             this.$store.commit("global/setLoader", false);
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
@@ -182,9 +222,9 @@
     },
     created () {
       this.autoSave();
-
-      let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.enable_templating);
-      let isTemplate = this.campaign.template;
+      configService.getConfig('campaign').then((response) => this.campaignConfig = response);
+      let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
+      let isTemplate = this.campaign.campaign_data.template;
 
       if (!this.campaign.campaign_data.library_config.building_mode_select) {
         this.titleCols += 2;

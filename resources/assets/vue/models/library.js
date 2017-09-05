@@ -29,6 +29,7 @@ function Library(data = {}) {
     plainText: config.plainText || false,
     preheader: config.preheader || false,
     tagging: config.tagging || false,
+    templating: config.templating || false,
   };
 
   const groups = [];

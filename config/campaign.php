@@ -7,7 +7,7 @@ return [
     | Process Plain Text
     |--------------------------------------------------------------------------
     |
-    | Active the plain text generator when the campaign were processed
+    | Enable the plain text generator when the campaign is processed
     |
     */
 
@@ -76,7 +76,7 @@ return [
     | Enable Locking camapaign - global Config
     |--------------------------------------------------------------------------
      */
-    'locking' => false,
+    'locking' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -130,7 +130,7 @@ return [
         /*
         | Show an input to insert a preheader text to be sent in the preview email
         */
-        'show_preheader' => false,
+        'show_preheader' => true,
 
     ],
 

@@ -6,6 +6,7 @@ import interceptors from './interceptors';
 import Config from './config';
 import store from './store';
 import Campaign from './components/campaign/Campaign.vue';
+import BootstrapVue from 'bootstrap-vue';
 
 Vue.use(Config);
 Vue.use(VueResource);
@@ -17,6 +18,7 @@ Vue.use(Toast, {
   transition: 'fade',
   duration: 5000,
 });
+Vue.use(BootstrapVue);
 
 Vue.use(interceptors);
 

@@ -45,7 +45,7 @@
     computed: {
       dragList: {
         get() {
-          return this.$store.state.campaign.modules;
+          return this.$store.getters['campaign/modules'];
         },
         set(value) {
           this.$store.commit('campaign/updateEmailCanvas', value);
@@ -64,6 +64,7 @@
           group: {
             name: 'componentsEmailCanvas'
           },
+          handle:'.icon-move',
           ghostClass: "ghost-component",
           chosenClass: "chosen-component",
           dragClass: "drag-component"
@@ -87,13 +88,7 @@
     },
     methods: {
       onSort(e){
-        const newIndex = e.newIndex
-        const oldIndex = e.oldIndex
-        
-        this.$store.commit('campaign/sortEditedModule', {
-          newIndex: newIndex,
-          oldIndex: oldIndex
-        });
+        this.$store.commit("campaign/setDirty", true);
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);

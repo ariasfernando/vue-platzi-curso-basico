@@ -108,7 +108,7 @@
                             href="#"
                             class="edit"
                             title="Edit"
-                            v-if="!campaign.locked || campaign.locked_by === Application.globals.logged_user"
+                            v-if="!enableLocking || (!campaign.locked || campaign.locked_by === Application.globals.logged_user)"
                         >
                             <i class="glyphicon glyphicon-pencil"></i>
                         </a>
@@ -136,8 +136,8 @@
                         >
                             <i class="glyphicon fa fa-unlock"></i>
                         </a>
-                        <a href="#" title="Delete" v-if="!campaign.locked" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
-                            ><i class="glyphicon glyphicon-trash"></i></a>
+                        <a href="#" title="Delete" v-if="!enableLocking || !campaign.locked" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
+                            ><i class="glyphicon glyphicon-ban-circle"></i></a>
                     </td>
                 </tr>
                 <tr v-if="campaigns.data == 0">

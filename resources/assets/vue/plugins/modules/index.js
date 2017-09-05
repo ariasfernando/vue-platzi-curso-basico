@@ -3,6 +3,7 @@ const verticalAlignment = require('./vertical-alignment');
 const destinationUrl = require('./destination-url');
 const textOptions = require('./text-options');
 const backgroundColor = require('./background-color');
+const uploadImage = require('./upload-image');
 
 module.exports = {
   alignment,
@@ -10,4 +11,5 @@ module.exports = {
   textOptions,
   backgroundColor,
   verticalAlignment,
+  uploadImage,
 };

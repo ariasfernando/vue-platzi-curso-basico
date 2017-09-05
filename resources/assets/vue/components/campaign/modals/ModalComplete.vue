@@ -6,13 +6,21 @@
 
           <div class="modal-header">
             <slot name="header">
-              <h4>Normal HTML</h4>
+              <h4>Processed Campaign</h4>
             </slot>
           </div>
 
           <div class="modal-body">
+
             <slot name="body">
-              <textarea>{{ campaign.campaign_data.body_html }}</textarea>
+              <b-tabs>
+                <b-tab title="Normal HTML">
+                  <textarea v-html="campaign.campaign_data.body_html"></textarea>
+                </b-tab>
+                <b-tab title="Plain Text" v-if="campaign.library_config.plainText">
+                  <textarea v-html="plainText"></textarea>
+                </b-tab>
+              </b-tabs>
             </slot>
           </div>
 
@@ -26,7 +34,7 @@
               </div>
 
               <div v-if="campaign.library_config.view_in_browser">
-                <a :href="viewInBrowserUrl" target="_blank" type="button" class="btn btn-default">View in browser</a>
+                <a :href="viewInBrowser" target="_blank" type="button" class="btn btn-default">View in browser</a>
               </div>
 
               <a :href="$app.baseUrl" class="btn btn-default btn-back-to-dashboard" data-dismiss="modal">Go back to the dashboard</a>
@@ -39,24 +47,43 @@
 </template>
 
 <script>
+  import Vue from 'vue/dist/vue';
+  import BootstrapVue from 'bootstrap-vue';
+  import campaignService from '../../../services/campaign'
+
   export default {
+    components: {
+      BootstrapVue,
+    },
     computed: {
       modalComplete () {
         return this.$store.state.campaign.modalComplete;
       },
       campaign () {
-        return this.$store.state.campaign.campaign;
+        return this.$store.getters['campaign/campaign'];
       }
     },
     methods: {
       data () {
         return {
-          viewInBrowser: this.$app.baseUrl + 'campaign/public-path/' + this.campaign.campaign_id
+          viewInBrowser: this.$app.baseUrl + 'campaign/public-path/' + this.campaign.campaign_id,
+          plainText: '',
         }
-      }
+      },
+      getPlainText() {
+        campaignService.processPlainText(this.campaign.campaign_id)
+          .then((response) => {
+            this.plainText = response;
+          })
+          .catch((error) => {
+            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+          });
+      },
     },
     created () {
-
+      if (this.campaign.library_config.plainText) {
+        this.getPlainText();
+      }
     }
   };
 </script>
@@ -67,9 +94,13 @@
 
     textarea {
       width: 100%;
-      height: 500px;
+      height: 330px;
       border: 1px solid #ccc;
       font-family: monospace, serif;
     }
+  }
+  .show {
+    display: block !important;
+    opacity: 1 !important;
   }
 </style>

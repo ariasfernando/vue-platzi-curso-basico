@@ -35,4 +35,8 @@ export const studioModuleRoutes = [
     path: '/edit/:id',
     component: EditModule,
   },
+  {
+    path: '/clone/:id',
+    component: EditModule,
+  },
 ];

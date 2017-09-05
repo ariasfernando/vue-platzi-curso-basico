@@ -12,31 +12,41 @@
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
     >
       <table width="100%" cellspacing="0" cellpadding="0">
+        <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
-          <th class="st-col" v-for="(column, columnId) in module.structure.columns" :width="column.style.width"
-              :style="column.style">
-            <table width="100%" cellpadding="0" cellspacing="0" border="0">
-              <tr v-for="(component, componentId) in column.components">
-                <td width="100%" :align="component.attribute.align || 'center'">
-                    <component :is="component.type" :component="component" :module-id="moduleId" :column-id="columnId"
+          <td width="100%">
+            <table class="st-col"
+                   align="left"
+                   v-for="(column, columnId) in module.structure.columns"
+                   :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+                   :style="column.style"
+            >
+                <tr v-for="(component, componentId) in column.components">
+                  <td width="100%" 
+                      :align="component.attribute.align || 'center'"
+                  >
+                    <component :is="component.type" 
+                               :component="component" 
+                               :module-id="moduleId" 
+                               :column-id="columnId"
                                :component-id="componentId"></component>
-                </td>
-              </tr>
-            </table>
-          </th>
-        </tr>
-        <tr v-else>
-          <td v-for="(column, columnId) in module.structure.columns" :width="column.style.width" :style="column.style">
-            <table width="100%" cellpadding="0" cellspacing="0" border="0">
-              <tr v-for="(component, componentId) in column.components">
-                <td width="100%" :align="component.attribute.align || 'center'">
-                    <component :is="component.type" :component="component" :module-id="moduleId" :column-id="columnId"
-                               :component-id="componentId"></component>
-                </td>
-              </tr>
+                  </td>
+                </tr>
             </table>
           </td>
         </tr>
+        <!--2 COLUMNS -->
+        <!--1 COLUMN -->
+        <tr v-else v-for="(component, componentId) in module.structure.columns[0].components">
+          <td width="100%" :align="component.attribute.align || 'center'">
+              <component :is="component.type" 
+                         :component="component" 
+                         :module-id="moduleId" 
+                         :column-id="0"
+                         :component-id="componentId"></component>
+          </td>
+        </tr>
+        <!--1 COLUMN -->
       </table>
       <module-toolbar :module-id="moduleId"></module-toolbar>
     </td>

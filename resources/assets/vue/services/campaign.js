@@ -25,15 +25,20 @@ export default {
 
   saveCampaign(data) {
     const endpoint = endpoints.campaign.saveCampaign;
-    const editedCampaign = this.getEditedData();
+
+    const campaignStore = store.state.campaign;
+    const campaign = campaignStore.campaign;
+    const settings = campaignStore.editedSettings;
+    const modules = campaignStore.modules;
     const deferred = Q.defer();
 
-    editedCampaign.campaign.bodyHtml = data.bodyHtml;
+    campaign.bodyHtml = data.bodyHtml;
+    campaign.template = data.template;
 
     const dataCampaign = new Campaign({
-      settings: editedCampaign.settings,
-      campaign: editedCampaign.campaign,
-      modules: editedCampaign.modules,
+      settings,
+      campaign,
+      modules,
     });
 
     const params = {
@@ -71,13 +76,52 @@ export default {
 
     return deferred.promise;
   },
+  lockCampaign(campaignId) {
+    const endpoint = endpoints.campaign.lockCampaign;
+    const deferred = Q.defer();
+
+    const params = {
+      endpoint,
+      json: {
+        campaign_id: campaignId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+  unlockCampaign(campaignId) {
+    const endpoint = endpoints.campaign.unlockCampaign;
+    const deferred = Q.defer();
+
+    const params = {
+      endpoint,
+      json: {
+        campaign_id: campaignId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+
   checkProcessStatus(processId) {
     const endpoint = endpoints.campaign.processStatus;
     const deferred = Q.defer();
 
     const params = {
       endpoint,
-      json: {
+      search: {
         processId,
       },
     };
@@ -129,19 +173,18 @@ export default {
     const editedSettings = campaignStore.editedSettings;
 
     // Edited modules
-    const modules = _.cloneDeep(campaignStore.modules);
-    const editedModules = campaignStore.editedModules;
-
-    for (const edited of editedModules) {
-      for (const key in edited.data) {
-        modules[edited.moduleId].structure.columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
-      }
-    }
+    // const modules = _.cloneDeep(campaignStore.modules);
+    // const editedModules = campaignStore.editedModules;
+    //
+    // for (const edited of editedModules) {
+    //   for (const key in edited.data) {
+    //     modules[edited.moduleId].structure.columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
+    //   }
+    // }
 
     return {
       campaign,
       settings: editedSettings,
-      modules,
     };
   },
 
@@ -164,4 +207,22 @@ export default {
 
     return deferred.promise;
   },
+
+  processPlainText(campaignId) {
+    const deferred = Q.defer();
+    const endpoint = endpoints.campaign.processPlainText;
+    const params = {
+      endpoint,
+      search: { campaignId },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+
 };

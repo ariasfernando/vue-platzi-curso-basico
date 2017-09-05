@@ -1,12 +1,15 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
-  <tr data-type="button-element" @click.prevent="setComponent">
+  <tr @click.prevent="setComponent"
+      data-type="button-element"
+  >
     <td :align="component.attribute.align" 
         class="st-position-relative"
+        width="100%"
     >
       <table :width="component.attribute.width" 
              :height="component.attribute.height" 
-             :bgcolor="component.attribute.bgcolor"
+             :bgcolor="component.attribute.bgcolor.hex"
              border="0" 
              cellpadding="0" 
              cellspacing="0"
@@ -14,16 +17,11 @@
         <tr>
           <td width="100%" 
               align="center" 
-              :bgcolor="component.attribute.bgcolor"
+              :bgcolor="component.attribute.bgcolor.hex"
               :height="component.attribute.height"
           >
-            <a
-               class="st-unlink"
-
-               :target="component.attribute.target" 
-               :style="component.style"  
-            >
-              <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
+            <a @click.prevent :href="component.attribute.href" :target="component.attribute.target" :style="component.style">
+             <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
             </a>
           </td>
         </tr>

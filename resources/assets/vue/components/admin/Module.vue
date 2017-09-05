@@ -34,9 +34,9 @@
               >
                 <tr>
                   <td width="100%">
-                    <draggable v-model="column.components" 
+                    <draggable v-model="column.components"
                                @add="onAdd"
-                               :element="'table'" 
+                               :element="'table'"
                                :options="options" 
                                :data-col="columnId"
                                cellpadding="0" 
@@ -52,7 +52,7 @@
                                  :component-id="componentId" 
                                  :key="componentId"
                                  class="st-component"></component>
-                    </draggable>            
+                    </draggable>
                   </td>
                 </tr>  
               </table>
@@ -97,17 +97,16 @@
     <!-- START 1 COLUMNS -->
     <tr v-else>
       <td class="st-col" 
-          v-for="(column, columnId) in module.structure.columns" 
+          v-for="(column, columnId) in module.structure.columns"
           :class="!column.components.length ? 'empty-col' : ''" 
           :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
           :style="column.style || ''"
           :data-col="columnId"
       >
         <draggable v-if="column.components.length" 
-                   v-model="column.components" 
                    class="st-content-component"
                    @add="onAdd"
-                   :element="'table'" 
+                   :element="'table'"
                    :options="options" 
                    :data-col="columnId"
                    cellpadding="0" 
@@ -122,6 +121,7 @@
                      :column-id="columnId"
                      :component-id="componentId" 
                      :key="componentId"
+                     :data-component="component"
                      class="st-component"></component>
         </draggable>  
 
@@ -156,6 +156,7 @@
 <script>
 
   import Draggable from 'vuedraggable'
+  import clone from 'clone'
   import _ from 'lodash'
   import uc from 'underscore-contrib'
   import TextElement from './elements/TextElement.vue'
@@ -190,21 +191,46 @@
     },
     computed: {
       module() {
-        return this.$store.state.module.module
-      }
+        return this.$store.getters["module/module"];
+      },
     },
     methods: {
+      onSort(e) {
+        console.log('onSort');
+
+        const colId = e.clone.getAttribute('data-column');
+        this.$store.commit("module/sortColumn", {
+          newIndex: e.newIndex,
+          oldIndex: e.oldIndex,
+          colId
+        });
+
+      },
       onAdd(e){
-        let elType = e.clone.getAttribute('data-type');
+        console.log('onAdd');
         let colId = e.to.getAttribute('data-col');
+        let elType = e.clone.getAttribute('data-type');
         let cloneItem = e.item;
-
-        if (this.module.structure.columns[colId].components.length === 0) {
-          e.newIndex = 0;
-        }
-
-        let el = _.cloneDeep(defaultElements[elType]);
+        let el = clone(defaultElements[elType]);
         let plugins = {};
+        const componentId = this.module.structure.columns[colId].components.length;
+
+        if ( !(e.from.getAttribute('class') === 'components-list')){
+          if (this.module.structure.columns[colId].components.length === 0) {
+            el = JSON.parse(e.clone.getAttribute('data-component'));
+            this.$store.commit("module/addComponent", {
+              el,
+              index: componentId,
+              colId
+            });
+          }
+
+          this.$store.commit('module/setChangeSettingComponent',{
+            style: this.module.structure.columns[colId].components[componentId].style || {},
+            attribute: this.module.structure.columns[colId].components[componentId].attribute || {}
+          });
+          return false;
+        }
 
         _.each(this.$app.modulePlugins, (plugin, name) => {
           if (plugin.target.indexOf(elType.replace('-element', '')) !== -1) {
@@ -216,32 +242,24 @@
 
         this.$store.commit("module/addComponent", {
           el,
-          index: e.newIndex,
+          index: componentId,
           colId
         });
 
         this.$store.commit('module/setChangeSettingComponent',{
-          style: this.module.structure.columns[colId].components[e.newIndex].style || {},
-          attribute: this.module.structure.columns[colId].components[e.newIndex].attribute || {}
+          style: this.module.structure.columns[colId].components[componentId].style || {},
+          attribute: this.module.structure.columns[colId].components[componentId].attribute || {}
         });
 
         if (e.clone.getAttribute('class') === 'component-item') {
           e.clone.style.opacity = "1";
           cloneItem.parentNode.removeChild(cloneItem);
-        } else {
-          this.$store.commit("module/removeComponents", {
-            index: e.newIndex + 1,
-            number: 1,
-            colId
-          });
         }
 
-        let ref = {
+        this.setComponent({
           columnId: +colId,
-          componentId: +e.newIndex
-        };
-
-        this.setComponent(ref);
+          componentId,
+        });
       },
       setComponent(ref) {
         this.$store.commit("module/setCurrentComponent", ref);
@@ -263,7 +281,7 @@
   
   .st-component{
     &:hover{
-        background-color: @hover;
+        opacity: 0.75;
         .icon-move, .icon-remove{
           display: block;
         }

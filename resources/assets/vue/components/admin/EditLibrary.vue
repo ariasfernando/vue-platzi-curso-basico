@@ -47,7 +47,7 @@
                       </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" v-if="campaignConfig.preview.show_preheader">
                       <!-- Field Preheader -->
                       <label for="preheader" class="col-sm-4 control-label">Preheader</label>
                       <p class="control col-sm-8">
@@ -56,7 +56,7 @@
                     </div>
 
                     <!-- Field Plain text -->
-                    <div class="row">
+                    <div class="row" v-if="campaignConfig.process_plaintext">
                       <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
                       <p class="control col-sm-8">
                         <toggle-button :value="library.config.plainText" :sync="true" :labels="true" @change="updateToggle('plainText')"></toggle-button>
@@ -81,10 +81,18 @@
                     </div>
 
                     <!-- Field Tagging -->
-                    <div class="row">
+                    <div class="row" v-if="campaignConfig.enable_tagging">
                       <label for="tagging" class="col-sm-4 control-label">Tags</label>
                       <p class="control col-sm-1">
                         <toggle-button :value="library.config.tagging" :sync="true" :labels="true" @change="updateToggle('tagging')"></toggle-button>
+                      </p>
+                    </div>
+
+                    <!-- Field Templating -->
+                    <div class="row" v-if="campaignConfig.enable_templating">
+                      <label for="templating" class="col-sm-4 control-label">Enable templating</label>
+                      <p class="control col-sm-1">
+                        <toggle-button :value="library.config.templating" :sync="true" :labels="true" @change="updateToggle('templating')"></toggle-button>
                       </p>
                     </div>
                 </tab>
@@ -309,14 +317,12 @@
         </div>
       </section>
     </div>
-
-
   </div>
-
 </template>
 
 <script>
   import libraryService from '../../services/library'
+  import configService from '../../services/config'
   import ToggleButton from '../common/ToggleButton.vue'
   import Tabs from '../common/Tabs.vue'
   import Tab from '../common/Tab.vue'
@@ -333,7 +339,8 @@
         library: {},
         modules: {},
         espList: {},
-        ready: false
+        ready: false,
+        campaignConfig: {}
       }
     },
     methods: {
@@ -430,7 +437,10 @@
       }
     },
     created () {
-      this.loadLibrary();
+      configService.getConfig('campaign').then((response) => {
+        this.campaignConfig = response;
+        this.loadLibrary();
+      });
     },
     mounted () {
       this.toggleSidebar();

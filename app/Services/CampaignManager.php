@@ -15,7 +15,7 @@ use Api;
 use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
-use Illuminate\Auth\Access\UnauthorizedException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Stensul\Models\Proof;
 use Stensul\Models\Campaign;
 use Stensul\Jobs\StoreAssetsInCdn;
@@ -45,6 +45,7 @@ class CampaignManager
      * @return string campaign id
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public static function save($inputs)
     {
@@ -53,7 +54,7 @@ class CampaignManager
         if (isset($campaign_id)) {
             $campaign = Campaign::findOrFail($inputs['campaign_id']);
             if ($campaign->locked) {
-                throw new UnauthorizedException('The campaign is locked and you can not change it');
+                throw new AuthorizationException('The campaign is locked and you can not change it');
             }
             $campaign_name = $inputs['campaign_name'] ?? '';
             $modules_data = $inputs['modules_data'] ?? [];
@@ -69,6 +70,7 @@ class CampaignManager
             $campaign->user_email = Auth::user()->email;
             $campaign->campaign_settings = $campaign_settings;
             $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
+            $campaign->auto_save = isset($inputs['auto_save']) && $inputs['auto_save'] ? true : false;
 
             if (isset($inputs['body_html'])) {
                 $campaign->body_html = $inputs['body_html'];
@@ -78,8 +80,9 @@ class CampaignManager
                 $campaign->plain_text = $inputs['plain_text'];
             }
 
+            $campaign->tags = [];
             if (!empty($inputs['tags'])) {
-                $campaign->tags = array_unique(json_decode($inputs['tags']));
+                $campaign->tags = array_unique($inputs['tags']);
                 // Add New tags to collection
                 $saved_tags = Tag::all()->keyBy('name')->all();
 
@@ -91,13 +94,14 @@ class CampaignManager
             }
 
             if (isset($inputs['template'])) {
-                if ($inputs['template'] !== 'true') {
-                    abort(400, 'The only value allowed for template is true');
+                $campaign->template = false;
+                if ($inputs['template'] === true) {
+                    $campaign->template = true;
                 }
-                if ($inputs['template'] !== 'true' && $campaign->template === true) {
+
+                if ($inputs['template'] !== true && $campaign->template === true) {
                     abort(400, 'You are trying to save a template campaign as non template one');
                 }
-                $campaign->template = ($inputs['template'] === 'true') ? true : false;
             }
 
             $campaign->save();
@@ -281,7 +285,7 @@ class CampaignManager
     {
         $campaign = Campaign::findOrFail($campaign_id);
 
-        if ($campaign->processed == 0) {
+        if ($campaign->processed == 0 || $campaign->plain_text == '') {
             $response = Text::htmlToText($campaign->body_html);
             Activity::log(
                 'Campaign plain text created',
@@ -620,7 +624,7 @@ class CampaignManager
      * Unlock a locked campaign;
      *
      * @param  string $campaign_id
-     * @throws \Illuminate\Auth\Access\UnauthorizedException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @return array
      */
@@ -628,7 +632,7 @@ class CampaignManager
     {
         $campaign = Campaign::findOrFail($campaign_id);
         if ($campaign->locked_by !== Auth::user()->email) {
-            throw new UnauthorizedException('Only the user that locked the campaign can unlock it');
+            throw new AuthorizationException('Only the user that locked the campaign can unlock it');
         }
         $campaign->locked = false;
         $campaign->locked_by = null;

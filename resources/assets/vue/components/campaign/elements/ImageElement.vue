@@ -1,24 +1,33 @@
 <template>
   <!-- IMAGE ELEMENT -->
-    <tr data-type="image-element" @click.prevent="setComponent">
-      <td align="center"
-          :style="component.style"
+    <tr @click.prevent="setComponent"
+        data-type="image-element"
+    >
+      <td width="100%" 
+          align="center"
+          :style="component.style" 
           class="st-position-relative"
       >
-        <a @click.prevent
-           :href="component.attribute.href" 
-           :alt="component.attribute.alt"
-           :title="component.attribute.title"
-           :target="component.attribute.target"
-        >
-          <img class="st-resize st-image"
-               :src="imageUrl(component.attribute.placeholder)" 
-               :width="component.attribute.width" 
-               :height="component.attribute.height"
-               :data-open-element-config="elementConfig" 
-               border="0"
-          >
-        </a>
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td width="100%" :align="component.attribute.align" :valign="component.attribute.valign">
+              <a @click.prevent
+                 :href="component.attribute.href" 
+                 :alt="component.attribute.alt"
+                 :title="component.attribute.title"
+                 :target="component.attribute.target"
+              >
+                <img class="st-resize st-image"
+                     :src="imageUrl(component.attribute.placeholder)" 
+                     :width="component.attribute.width" 
+                     :height="component.attribute.height"
+                     :data-open-element-config="elementConfig" 
+                     border="0"
+                >
+              </a>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>
   <!-- IMAGE ELEMENT ENDS -->
@@ -39,7 +48,11 @@
     data(){
       return {
         imageUrl(imagePath) {
-          return this.$app.imageUrl + imagePath;
+          if (imagePath.indexOf('placeholder') > -1){
+            return this.$app.imageUrl + imagePath;
+          }else{
+            return imagePath;
+          }
         }
       }
     },

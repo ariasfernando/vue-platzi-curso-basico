@@ -58,13 +58,17 @@ const mutations = {
     state.module.structure.style[data.property] = data.value;
   },
   saveModule(state, moduleId) {
-    state.module.id = moduleId;
+    state.module.moduleId = moduleId;
   },
   addColumn(state, column) {
     state.module.structure.columns.push(_.cloneDeep(defaultElements.column));
   },
   removeColumns(state, data) {
     state.module.structure.columns.splice(data.index, data.number);
+  },
+  sortColumn(state, data) {
+    const components = state.module.structure.columns[data.colId].components;
+    components.splice(data.newIndex, 0, components.splice(data.oldIndex, 1)[0]);
   },
   setColumnWidth(state, data) {
     const column = state.module.structure.columns[data.colId];
@@ -100,6 +104,10 @@ const mutations = {
 };
 
 const actions = {
+  sortColumn(context, data) {
+    context.commit('sortColumn', data);
+    return context.state.module;
+  },
   normalizeColumns(context, columns) {
     const width = 100 / columns.length;
     _.each(columns, (column, colId) => {

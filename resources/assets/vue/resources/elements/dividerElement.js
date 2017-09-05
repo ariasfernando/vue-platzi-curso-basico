@@ -29,7 +29,7 @@ module.exports = {
   ],
   attribute: {
     align: 'center',
-    bgcolor: '#FFFFFF',
+    bgcolor: { hex: '#FFFFFF' },
     width: '100%',
   },
 };

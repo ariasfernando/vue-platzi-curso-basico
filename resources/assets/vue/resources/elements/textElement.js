@@ -49,7 +49,7 @@ module.exports = {
       label: 'Line Height',
       name: 'lineHeight',
       type: 'text',
-      value: '12px',
+      value: '16px',
     },
     {
       link: 'style',

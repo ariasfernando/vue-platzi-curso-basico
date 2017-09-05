@@ -96,6 +96,9 @@
             width: 100% !important;
         }
 	}
+    @if(isset($params['library_config']['propietaryCss']))
+        {{ $params['library_config']['propietaryCss'] }}
+    @endif
 </style>
 
 <!--[if mso]>

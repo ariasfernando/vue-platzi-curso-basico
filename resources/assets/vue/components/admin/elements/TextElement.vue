@@ -1,12 +1,18 @@
 <template>
   <!-- TEXT ELEMENT -->
-  <tr @click.prevent="setComponent" 
+  <tr @click.prevent="setComponent"
+      :data-component="JSON.stringify(component)"
+      :data-column="columnId"
       data-type="text-element"
   >
     <td width="100%">
       <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
         <tr>
-          <td width="100%" class="st-text-style st-position-relative" :align="component.attribute.align" :style="component.style">
+          <td width="100%" 
+              class="st-text-style st-position-relative" 
+              :align="component.attribute.align" 
+              :style="component.style"
+          >
             <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
             <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
             <div class="icon-remove st-remove" @click="removeComponent"><i class="glyphicon glyphicon-trash st-remove"></i></div> 
@@ -35,7 +41,8 @@
     },
     data(){
       return {
-        editorId: ['editor', this.columnId, this.componentId].join('-')
+        editorId: ['editor', this.columnId, this.componentId].join('-'),
+        dirty: false
       }
     },
     computed: {
@@ -49,9 +56,9 @@
     watch : {
       styleComponent: {
         handler: function() {
-          if (!_.isEmpty(this.styleComponent) && 
-            this.currentComponent.columnId == this.columnId && 
-            this.currentComponent.componentId == this.componentId ) 
+          if (!_.isEmpty(this.styleComponent) &&
+            this.currentComponent.columnId === this.columnId &&
+            this.currentComponent.componentId === this.componentId )
           {
             this.component.style = this.styleComponent.style;
             this.component.attribute = this.styleComponent.attribute;
