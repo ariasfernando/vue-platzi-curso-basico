@@ -31,8 +31,7 @@ class ImageProcessor extends ImageDriver
                 $gravity = ' -gravity South ';
             }
         }
-        $command = \Config::get('image.convert_base_path') . sprintf(" +dither - -coalesce null: \( %s -resize %s "
-            . $gravity . " -set page %s \)"
+        $command = \Config::get('image.convert_base_path') . sprintf(" +dither - -coalesce null: \( %s -resize %s ".$gravity." -set page %s \)"
             . " -layers composite -layers optimize -", $layer, $size, $position);
 
         $process = new Process($command, null, null, $blob);
@@ -68,7 +67,7 @@ class ImageProcessor extends ImageDriver
 
         if (!$process->isSuccessful()) {
             \Log::error($process->getErrorOutput());
-            throw new ImagineException("Error optimizing image");
+            throw new ImagineException("Error optimazing image");
         }
 
         return $process->getOutput();
@@ -87,10 +86,14 @@ class ImageProcessor extends ImageDriver
 
         if (count($options)) {
             foreach ($options as $k => $v) {
-                if ($k == "repage") {
-                    $convert_params .= " +{$k} {$v}";
+                if (strlen($v) > 0) {
+                    if ($k == "repage") {
+                        $convert_params .= " +{$k} {$v}";
+                    } else {
+                        $convert_params .= " -{$k} {$v}";
+                    }
                 } else {
-                    $convert_params .= " -{$k} {$v}";
+                    $convert_params .= " -{$k}";
                 }
             }
         }
@@ -140,7 +143,7 @@ class ImageProcessor extends ImageDriver
             $layer = base64_decode(end($temp));
             $tmp_file = tempnam(sys_get_temp_dir(), 'convert-');
             file_put_contents($tmp_file, $layer);
-            return $tmp_file;
+            return "ephemeral:{$tmp_file}";
         }
         return $layer;
     }
