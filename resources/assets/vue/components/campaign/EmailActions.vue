@@ -211,7 +211,8 @@
       },
       proof() {
         this.$store.commit("global/setLoader", true);
-        this._save().then(response => {
+        const bodyHtml = campaignCleaner.clean('.section-canvas-container');
+        this._save(bodyHtml).then(response => {
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalProof');
         }, error => {
