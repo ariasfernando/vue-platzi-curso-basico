@@ -1,0 +1,57 @@
+#admin-sidebar {
+    position: fixed;
+    top: 0px;
+    width: 175px;
+    height: 100%;
+    background-color: #2D3030;
+    left: 0;
+
+    &.right {
+        right: 0;
+        left: auto;
+    }
+
+    ul {
+        color: #fff;
+        list-style: none;
+        margin: 0;
+        margin-top: 55px;
+        padding: 0;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        text-transform: uppercase;
+        font-size: 12px;
+
+        li {
+            width: 100%;
+            line-height: 3.8em;
+            border-bottom: 1px solid @table-header-font-color;
+            cursor: pointer;
+        }
+        li:hover {
+            background-color: @table-header-font-color;
+        }
+        .active {
+            background-color: @table-header-font-color;
+        }
+    }
+
+    a {
+
+        span {
+            padding: 20px;
+        }
+
+        &:link,
+        &:focus,
+        &:active,
+        &:visited,
+        &:hover {
+            color: #fbfbfb;
+            text-decoration: none;
+        }
+    }
+}

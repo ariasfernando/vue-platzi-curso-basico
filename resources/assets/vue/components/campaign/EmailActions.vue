@@ -21,11 +21,11 @@
 
       <div class="col-xs-8 col-md-7 col-lg-7 text-right" id="section-canvas-buttons-col">
 
-        <button class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview">
+        <button v-show="!locked" class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview">
           Preview
         </button>
 
-        <button class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
+        <button v-show="!locked" class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
           Save as Draft
         </button>
 
@@ -34,6 +34,7 @@
           and templating is enabled on the tool.
         -->
         <b-btn v-b-modal.confirm-modal class="btn btn-default save-as-template"
+          v-show="!locked"
           v-if="campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
             && campaign.campaign_data.library_config.templating">
           Save as Template
@@ -43,15 +44,18 @@
           Show if it's already a template, skip confirmation modal.
         -->
         <button class="btn btn-default save-as-template" @click="template()"
-          :class="hiddenClass()" v-if="campaign.campaign_data.template">
+          :class="hiddenClass()" v-if="campaign.campaign_data.template"
+          v-show="!locked">
           Save Template
         </button>
 
         <button class="btn btn-default proof-open-modal" v-if="!campaign.campaign_data.template && this.$app.proofConfig.status"
             v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
+            v-show="!locked"
         >Send for review</button>
 
-        <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete">
+        <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete"
+          v-show="!locked">
           Complete
           <i class="glyphicon glyphicon-triangle-right"></i>
         </a>
@@ -83,6 +87,9 @@
       },
       dirty() {
         return this.$store.getters["campaign/dirty"];
+      },
+      locked() {
+        return this.$store.getters["campaign/campaign"].campaign_data.locked
       }
     },
     data () {
@@ -142,7 +149,7 @@
         this.$store.commit("global/setLoader", true);
 
         // Obtain current html
-        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
+        const bodyHtml = campaignCleaner.clean('.section-canvas-container');
 
         // Save Request
         this._save(bodyHtml).then(() => {

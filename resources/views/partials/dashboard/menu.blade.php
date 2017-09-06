@@ -1,7 +1,7 @@
 {{-- Default button --}}
 @section('default_menu')
-    <a class="btn btn-default" href="{{ URL::to( url('campaign/edit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => "default" ])) }}">
-        Create a new email
+    <a class="btn btn-default btn-create" href="{{ URL::to( url('campaign/edit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => "default" ])) }}">
+        <i class="glyphicon glyphicon-plus-sign"></i> Create a new email
     </a>
 @stop
 
@@ -12,8 +12,8 @@
     {{-- Languages --}}
     @if ($app_config['view']['campaign_format'] === "languages")
         @if ( isset($app_config['locale']['langs']))
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
-                Create a new email<span class="caret"></span>
+            <button class="btn btn-default dropdown-toggle beta-btn-secondary" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
+                <i class="glyphicon glyphicon-plus-sign"></i>  Create a new email<span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                 @foreach ($app_config['locale']['langs'] as $key => $value)
@@ -32,11 +32,11 @@
             There is no library to create a new email
         @else
             @if( count($params['libraries']) === 1)
-                <a class="btn btn-default" href="{{ URL::to( action('CampaignController@getEdit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => $params['libraries'][0]['_id'] ])) }}">
-                    Create a new email
+                <a class="btn btn-default btn-create" href="{{ URL::to( action('CampaignController@getEdit') . '?' . http_build_query([ 'locale' => 'en_us', "library" => $params['libraries'][0]['_id'] ])) }}">
+                    <i class="glyphicon glyphicon-plus-sign"></i>  Create a new email
                 </a>
             @else
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-default dropdown-toggle beta-btn-secondary" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
                 Create a new email<span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">

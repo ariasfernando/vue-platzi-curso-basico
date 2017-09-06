@@ -16,7 +16,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Email Creator</title>
 
-        <link href="{{  cdn(elixir('css/base.css')) }}" rel="stylesheet">
+        <link href="{{  cdn(elixir('css/tool.css')) }}" rel="stylesheet">
 
         @section('master-head')
             {{--  --}}

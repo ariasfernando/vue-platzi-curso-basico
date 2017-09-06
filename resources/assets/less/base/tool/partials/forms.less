@@ -1,0 +1,81 @@
+form{
+	input[type="text"]{
+		width: 100%;
+		padding: 7px;
+		font-size: 12px;
+		color: @input-color;
+		border: 1px solid @input-border;
+		.box-sizing( border-box );
+		.border-radius( @input-border-radius );
+		.box-shadow( 0 3px 5px #EEEEEE inset );
+
+	}
+
+    .disabled{
+      background-color: #ebebeb;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+	input.error,
+	select.error{
+		border: 1px solid @brand-danger !important;
+	}
+
+	.bootstrap-select{
+		&.error {
+			border: 1px solid @brand-danger !important;
+		}
+	}
+
+	input[type="checkbox"]{
+		vertical-align: text-bottom;
+	}
+
+	input[type="file"]{
+		width: 100%;
+
+		&.error{
+			border: 1px solid @brand-danger !important;;
+		}
+	}
+
+	textarea{
+		width: 100%;
+		padding: 7px;
+		font-size: 12px;
+		color: @input-color;
+		border: 1px solid @input-border;
+		.box-sizing( border-box );
+		.border-radius( @input-border-radius );
+		.box-shadow( 0 3px 5px #EEEEEE inset );
+	}
+
+	label{
+		font-size: 13px;
+		margin: 0 0 5px;
+
+		&.error{
+			font-size: 11px;
+			color: @brand-danger !important;;
+		}
+
+		&.info{
+			font-size: 11px;
+			color: @brand-info;
+		}
+	}
+	.btn{
+		&.btn-success,
+		&:hover,
+		&:focus,
+		&:visited,
+		&:active{
+			border-color: @btn-success-bg;
+			background: @btn-success-bg;
+			color: @btn-default-color
+		}
+	}
+}

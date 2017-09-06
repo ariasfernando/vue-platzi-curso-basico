@@ -64,6 +64,7 @@
           group: {
             name: 'componentsEmailCanvas'
           },
+          handle:'.icon-move',
           ghostClass: "ghost-component",
           chosenClass: "chosen-component",
           dragClass: "drag-component"

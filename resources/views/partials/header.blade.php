@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             {{-- Logo --}}
-            <div class="col-xs-8 col-md-6">
+            <div class="col-xs-8 col-md-6 logoContainer">
                 <div class="logo">
                     @if (!Auth::check() || Auth::user()->can('access_dashboard'))
                         <a href="{{ url('/') }}">
@@ -10,13 +10,13 @@
                         <a>
                     @endif
                         <span class="brand-logo"></span>
-                        <span class="by-stensul"></span>
+                        <span class="by-stensul"><em>by</em> stensul</span>
                     </a>
                 </div>
             </div>
 
             {{-- Navigation --}}
-            <div class="col-xs-4 col-md-6">
+            <div class="col-xs-4 col-md-6 logButton">
                 <nav>
                     @if (config('app.help.enabled'))
                         <a href="{{ url(config('app.help.url')) }}" class="help" target="_blank">
@@ -32,7 +32,7 @@
                     @endif
                     @if (!Auth::guest())
                         <a href="{{ url('/auth/logout') }}" class="logout">
-                            <i class="glyphicon glyphicon-off"></i>
+                            <i class="glyphicon glyphicon-log-out"></i>
                             <span>Logout</span>
                         </a>
                     @endif

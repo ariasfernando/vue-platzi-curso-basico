@@ -94,7 +94,7 @@
 
     textarea {
       width: 100%;
-      height: 500px;
+      height: 330px;
       border: 1px solid #ccc;
       font-family: monospace, serif;
     }

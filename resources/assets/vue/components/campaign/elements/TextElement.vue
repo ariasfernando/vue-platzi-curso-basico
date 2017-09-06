@@ -1,8 +1,20 @@
 <template>
   <!-- TEXT ELEMENT -->
-  <tr data-type="text-element" @click.prevent="setComponent">
-    <td width="100%" class="st-text-style st-position-relative" align="center" :style="component.style">
-      <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
+  <tr @click.prevent="setComponent"
+      data-type="text-element"
+  >
+    <td width="100%">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
+        <tr>
+          <td width="100%" 
+              class="st-text-style st-position-relative" 
+              :align="component.attribute.align" 
+              :style="component.style"
+          >
+            <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
+          </td>
+        </tr> 
+      </table>     
     </td>
   </tr>
   <!-- TEXT ELEMENT ENDS -->

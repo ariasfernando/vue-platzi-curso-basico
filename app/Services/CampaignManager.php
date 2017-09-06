@@ -15,7 +15,7 @@ use Api;
 use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
-use Illuminate\Auth\Access\UnauthorizedException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Stensul\Models\Proof;
 use Stensul\Models\Campaign;
 use Stensul\Jobs\StoreAssetsInCdn;
@@ -45,6 +45,7 @@ class CampaignManager
      * @return string campaign id
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public static function save($inputs)
     {
@@ -53,7 +54,7 @@ class CampaignManager
         if (isset($campaign_id)) {
             $campaign = Campaign::findOrFail($inputs['campaign_id']);
             if ($campaign->locked) {
-                throw new UnauthorizedException('The campaign is locked and you can not change it');
+                throw new AuthorizationException('The campaign is locked and you can not change it');
             }
             $campaign_name = $inputs['campaign_name'] ?? '';
             $modules_data = $inputs['modules_data'] ?? [];
@@ -623,7 +624,7 @@ class CampaignManager
      * Unlock a locked campaign;
      *
      * @param  string $campaign_id
-     * @throws \Illuminate\Auth\Access\UnauthorizedException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @return array
      */
@@ -631,7 +632,7 @@ class CampaignManager
     {
         $campaign = Campaign::findOrFail($campaign_id);
         if ($campaign->locked_by !== Auth::user()->email) {
-            throw new UnauthorizedException('Only the user that locked the campaign can unlock it');
+            throw new AuthorizationException('Only the user that locked the campaign can unlock it');
         }
         $campaign->locked = false;
         $campaign->locked_by = null;

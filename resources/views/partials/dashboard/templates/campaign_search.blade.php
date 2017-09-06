@@ -1,4 +1,4 @@
-<div id="search" v-if="enabled == 1">
+<div id="search" class="pull-right" v-if="enabled == 1">
     <div class="input-group">
         <input type="text" class="form-control search-key" placeholder="Search"
             maxlength="30"
@@ -11,6 +11,9 @@
             <button class="btn btn-default search" type="button" v-on:click.stop.prevent="addSearchTerm"
                 ><i class="glyphicon glyphicon-search"></i></button>
         </span>
+        <button class="btn btn-success" id="search-clear-btn">
+            <i class="glyphicon glyphicon-remove-sign"></i>
+        </button>
     </div>
     <small class="search-error" v-if="!canSearch && showLimitMessage">There's a limit of @{{ limit }} search terms.</small>
     <div class="btn-group">

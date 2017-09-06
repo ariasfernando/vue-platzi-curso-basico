@@ -48,6 +48,12 @@ const getters = {
   dirty(state) {
     return state.dirty;
   },
+  locked(state) {
+    if (!_.isEmpty(state.campaign)) {
+      return state.campaign.campaign_data.locked;
+    }
+    return false;
+  },
 };
 
 const mutations = {
@@ -158,13 +164,40 @@ const actions = {
       });
     return deferred.promise;
   },
+  lockCampaign(context, campaignId) {
+    const deferred = Q.defer();
+
+    campaignService.lockCampaign(campaignId)
+      .then(response => {
+        context.dispatch('getCampaignData', response.campaign_id);
+        deferred.resolve(response);
+      })
+      .catch(error => {
+        context.commit('error', error);
+        deferred.reject(error);
+      });
+    return deferred.promise;
+  },
+  unlockCampaign(context, campaignId) {
+    const deferred = Q.defer();
+
+    campaignService.unlockCampaign(campaignId)
+    .then(response => {
+      context.dispatch('getCampaignData', response.campaign_id);
+      deferred.resolve(response);
+    })
+    .catch(error => {
+      context.commit('error', error);
+      deferred.reject(error);
+    });
+    return deferred.promise;
+  },
   updateElement(context, edited) {
     context.commit('setDirty', true);
     context.commit('updateComponentData', edited);
   },
   sendPreview(context, data) {
     return campaignService.sendPreview(data)
-      .then(res => context.dispatch('getCampaignData', res.campaignId))
       .catch(error => context.commit('error', error));
   },
   removeModule(context, moduleId) {

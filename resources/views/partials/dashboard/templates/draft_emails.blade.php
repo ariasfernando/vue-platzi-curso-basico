@@ -53,7 +53,7 @@
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
                     <th v-if="showTags == 1">Tags</th>
-                    <th width="150" class="bold">Actions</th>
+                    <th width="180" class="bold">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,11 +69,11 @@
                         <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock text-danger" v-if="enableLocking && campaign.locked"></i>
                         <a :data-campaign-id="campaign._id"
                             :data-campaign-name="campaign.campaign_name"
-                            class="proof-track-modal pull-right right-icon"
+                            class="proof-track-modal pull-left right-icon"
                             href="#"
                             title="Track active proof"
                             v-if="proof.allow && proof.status && campaign.has_active_proof"
-                        ><i class="fa fa-sticky-note-o"></i></a>
+                        ><i class="fa fa-sticky-note"></i></a>
                     </td>
                     <td v-if="showTags == 1">
                         <campaign-tag
@@ -86,7 +86,7 @@
                     <td class="text-right actions icons">
                       <a href="#"
                         :data-proof-token="campaign.proof_token"
-                        class="btn btn-xs proof"
+                        class="proof"
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Open proof review"
@@ -96,7 +96,7 @@
                         <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
 
                         <a :data-campaign-id="campaign._id"
-                            class="btn btn-xs proof-open-modal"
+                            class="proof-open-modal"
                             data-toggle="tooltip"
                             data-placement="top"
                             href="#"
@@ -137,7 +137,7 @@
                             <i class="glyphicon fa fa-unlock"></i>
                         </a>
                         <a href="#" title="Delete" v-if="!enableLocking || !campaign.locked" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
-                            ><i class="glyphicon glyphicon-ban-circle"></i></a>
+                            ><i class="glyphicon glyphicon-trash"></i></a>
                     </td>
                 </tr>
                 <tr v-if="campaigns.data == 0">
@@ -155,7 +155,7 @@
             v-on:change-page="changePage"
         ></pagination>
 
-        <modal v-if="showModal" v-on:close="showModal = false" v-on:accept="confirmDeleteCampaign">
+        <modal v-if="showModal" v-on:close="showModal = false" v-on:accept="confirmDeleteCampaign" class="delete-modal">
             <div slot="body">
                 <p>Are you sure you want to delete this email?</p>
             </div>

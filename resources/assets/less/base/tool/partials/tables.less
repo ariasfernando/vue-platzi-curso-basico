@@ -1,0 +1,108 @@
+table{
+	background: transparent;	
+}
+.table{
+	background: @dropdown-link-color;
+	.border-radius( 5px );
+	font-family: 'Open Sans', Arial, serif;
+
+	th, th a{
+		color: @dropdown-link-color;
+	}
+
+	th a, th a:hover{
+		text-decoration: none;
+	}
+
+	thead tr th.sortable{
+		a{
+			width: 100%;
+
+			i{
+				margin: 8px 0 0;
+			}
+		}
+	}
+
+	thead tr th,
+	tfoot tr th,
+	tbody tr td{
+		font-size: 13px;
+		line-height: 18px;
+		font-weight: 300;
+		vertical-align: middle;
+		border: none;
+		border-bottom: 1px solid #f0f0f0;
+		color: @input-color;
+		padding: 8px 10px;
+	}
+
+	thead tr{
+		background: @table-header-bg;
+
+		th{
+			height: 40px;
+			padding-top: 0;
+			padding-bottom: 0;
+			background: @stensul-purple;
+			border: none;
+			color: @dropdown-link-color;
+
+			.glyphicon{
+				font-size: 8px;
+			}
+		}
+		th.col-200{
+			width: 200px;
+		}
+		th.col-100{
+			width: 100px;
+		}
+	}
+
+	a.sortable-option{
+		i{
+			.opacity(0.5);
+			top: -2px;
+		}
+
+		&.sort-order-asc,
+		&.sort-order-desc{
+			i{
+				.opacity(1);
+			}
+		}
+
+		&.sort-order-asc{
+			i{
+				.glyphicon-menu-up();
+			}
+		}
+		&.sort-order-desc{
+			i{
+				.glyphicon-menu-down();
+			}
+		}
+	}
+
+	td.actions a{
+		color: @input-color;
+		float: left;
+	}
+
+	a.proof-track-modal{
+		margin-right: 3px;
+		color: @input-color;
+
+		&:hover{
+			color: @input-color;
+		}
+	}
+}
+#reviewers-table{
+	a{
+		margin: 0px 0px 0px 10px;
+		color: @stensul-gray;
+		font-size: 13px;
+	}
+}

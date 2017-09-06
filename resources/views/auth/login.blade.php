@@ -7,10 +7,14 @@
 
 {{-- Login content --}}
 @section('content')
-    <section class="col-xs-12">
+    <section class="col-md-4"></section>
+    <section class="col-md-4 beta-login">
 
         <div class="text-center">
             <a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">stensul</a>
+            <h4>
+                Email Creator
+            </h4>
         </div>
 
         {{-- Login error message --}}
@@ -36,17 +40,11 @@
                 @endif
 
                 <div class="form-group">
-                    <label>Email Address</label>
-                    <div>
-                        <input type="email" class="form-control" name="email" value="{{ old('email') }}">
-                    </div>
+                    <input type="email" class="form-control" placeholder="Email Address" name="email" value="{{ old('email') }}">
                 </div>
 
                 <div class="form-group">
-                    <label>Password</label>
-                    <div class="row">
-                        <input type="password" class="form-control" name="password">
-                    </div>
+                    <input type="password" placeholder="Password" class="form-control" name="password">
                     <div class="sublink"><a href="{{ url('/password/email') }}">Forgot password?</a></div>
                 </div>
 
@@ -60,19 +58,16 @@
                     <div class="text-center">
                         <button type="submit" class="btn">Login</button>
                         @if ( env('USER_REGISTRATION', true) )
-                            <span class="spacer"> &nbsp; </span>
-                            <a href="register">Register</a>
+                            <a href="register" class="register">Don't have a user? Register here.</a>
                         @endif
                     </div>
                 </div>
             </form>
-
-
-            <div class="login-footer"></div>
 
             <div>
                 <p>For access or more information, please email {{$app_config["app_mail_address"]}}</p>
             </div>
         </div>
     </section>
+    <section class="col-md-4"></section>
 @endsection
