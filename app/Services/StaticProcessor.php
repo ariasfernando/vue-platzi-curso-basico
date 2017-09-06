@@ -187,10 +187,9 @@ class StaticProcessor
             }
         } catch (\Exception $e) {
             $error_msg =sprintf(
-                "[%s] image open %s failed.\nError: %s",
+                "[%s] image open %s failed.",
                 $this->getCampaign()->id,
-                $blob,
-                $e->getMessage()
+                $blob
             );
             Log::warning($error_msg);
             throw new \Exception($error_msg);
@@ -379,12 +378,11 @@ class StaticProcessor
      */
     public function customMerge($options)
     {
-        $background_path = $options['background_path'] ?? null;
-        $layers = $options['layers'] ?? [];
+        $background_path = (isset($options['background_path']))? $options['background_path'] : null;
+        $layers = (isset($options['layers']))? $options['layers'] : [];
 
         if (!is_null($background_path)) {
-            list($background_image, $background_extension, $background_options) =
-                $this->getImageObject($background_path);
+            list($background_image, $background_extension, $background_options) = $this->getImageObject($background_path);
             $blob = $background_image->get($background_extension, $background_options);
 
             if (isset($options['background']) && count($options['background'])) {
@@ -394,9 +392,9 @@ class StaticProcessor
             }
 
             foreach ($layers as $layer) {
-                $layer_path = $layer['path'] ?? null;
-                $layer_top = $layer['top'] ?? 0;
-                $layer_left = $layer['left'] ?? 0;
+                $layer_path = (isset($layer['path'])) ? $layer['path'] : null;
+                $layer_top = (isset($layer['top'])) ? $layer['top'] : 0;
+                $layer_left = (isset($layer['left'])) ? $layer['left'] : 0;
 
                 if (!is_null($layer_path)) {
                     if ((strpos($layer_path, ';base64') === false) &&
@@ -454,9 +452,10 @@ class StaticProcessor
             }
         }
 
-        $response['error'] = 'CANVAS_UPLOAD_ERROR';
         if (isset($success)) {
             $response['path'] = $file_path;
+        } else {
+            $response['error'] = 'CANVAS_UPLOAD_ERROR';
         }
 
         return $response;
@@ -480,10 +479,14 @@ class StaticProcessor
         if (count($settings)) {
             $width = $image->getSize()->getWidth();
             $height = $image->getSize()->getHeight();
-            if ($settings['extension'] == 'gif' || $settings['extension'] == 'png') {
-                $data['repage'] = "";
-                $data['background'] = "none";
+            if (isset($settings['offsetx']) || isset($settings['offsety'])) {
+                // Only apply this when we need to extend a gif or png image
+                if ($settings['extension'] === 'gif' || $settings['extension'] === 'png') {
+                    $data['repage'] = '';
+                    $data['background'] = 'none';
+                }
             }
+            $extension = $settings['extension'];
             unset($settings['extension']);
             foreach ($settings as $command => $value) {
                 switch ($command) {
@@ -496,6 +499,17 @@ class StaticProcessor
                     // Use gravity to choose top (South) or bottom (North)
                     case 'offsety':
                         $data['extent'] = $width . 'x' . ($height + $value);
+                        break;
+                    // Resize an image.
+                    // Set width to make the resize in a proportional way.
+                    // Or set resize to specify an exact XXXxYYY.
+                    case 'resize':
+                    case 'width':
+                        if ($extension === 'gif') {
+                            // If we want to resize a gif, we should set -coalesce before
+                            $data['coalesce'] = '';
+                        }
+                        $data['resize'] = $value;
                         break;
                     // Any other command is used as it was received
                     default:
