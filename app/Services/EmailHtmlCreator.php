@@ -80,7 +80,7 @@ class EmailHtmlCreator
                         'title' => $this->getCampaign()->campaign_name,
                         'body_html' => $this->getCampaign()->body_html,
                         'campaign_data' => $this->getCampaign(),
-                        'library_config' => $library->config,
+                        'library_config' => is_object($library) ? $library->config : [],
                     ]
                 )
                 ->render();
