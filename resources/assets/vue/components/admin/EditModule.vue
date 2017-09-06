@@ -91,7 +91,7 @@
         let numCols = this.module.structure.columns.length;
 
         if (numCols === 0 ){
-         this.$store.commit("module/addColumn" );
+         this.$store.dispatch("module/addColumn");
         }
       },
       loadModule() {

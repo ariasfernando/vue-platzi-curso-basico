@@ -1,4 +1,6 @@
+import Vue from 'vue/dist/vue';
 import _ from 'lodash';
+import clone from 'clone';
 import moduleService from '../services/module';
 import defaultElements from '../resources/elements';
 
@@ -8,7 +10,7 @@ const state = {
   changeSettingComponent: {
     style: {},
     attribute: {},
-  }, 
+  },
   loading: false,
 };
 
@@ -61,7 +63,7 @@ const mutations = {
     state.module.moduleId = moduleId;
   },
   addColumn(state, column) {
-    state.module.structure.columns.push(_.cloneDeep(defaultElements.column));
+    state.module.structure.columns.push(column);
   },
   removeColumns(state, data) {
     state.module.structure.columns.splice(data.index, data.number);
@@ -92,7 +94,11 @@ const mutations = {
     _.merge(pluginData, data.data);
   },
   togglePlugin(state, data) {
-    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].enabled = data.enabled;
+    if (data.componentId >= 0) {
+      state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].enabled = data.enabled;
+    } else {
+      state.module.structure.columns[data.columnId].plugins[data.plugin].enabled = data.enabled;
+    }
   },
   saveComponentAttribute(state, data) {
     const attributes = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
@@ -104,6 +110,19 @@ const mutations = {
 };
 
 const actions = {
+  addColumn(context) {
+    const column = clone(defaultElements.column);
+    const colPlugins = {};
+    _.each(Vue.app.modulePlugins, (plugin, name) => {
+      if (plugin.target.indexOf('column') !== -1) {
+        colPlugins[name] = plugin;
+      }
+    });
+
+    column.plugins = colPlugins;
+
+    context.commit('addColumn', column);
+  },
   sortColumn(context, data) {
     context.commit('sortColumn', data);
     return context.state.module;

@@ -52,6 +52,7 @@
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
           inline: true,
           menubar: false,
+
           toolbar: toolbar,
           init_instance_callback: (editor) => {
 

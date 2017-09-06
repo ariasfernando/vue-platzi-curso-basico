@@ -206,7 +206,6 @@
       },
       // TODO Update date used mutation.
       updateColumnSettings( name, link , isGroup ){
-        console.log(name, link, isGroup);
         _.each(this.component.settings, (option, index) => {
             if ( isGroup ){
                _.each(option.group, (optionGroup, indexGroup) => {

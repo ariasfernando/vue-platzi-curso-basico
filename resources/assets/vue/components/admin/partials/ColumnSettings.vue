@@ -15,6 +15,7 @@
                  :key="key"
                  v-for="(column, key) in module.structure.columns"
           >
+            <!-- Column Settings -->
             <div class="row" :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings">
               <div v-if="!columnSetting.group" >
                 <label class="col-sm-8 control-label" :for="columnSetting.name">{{ columnSetting.label }}</label>
@@ -109,6 +110,13 @@
                 </div>
               </div>
             </div>
+            <!-- /Column Settings -->
+
+            <!-- Column Plugins -->
+            <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
+              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="key"></component>
+            </div>
+            <!-- /Column Plugins -->
 
           </b-tab>
         </b-tabs>

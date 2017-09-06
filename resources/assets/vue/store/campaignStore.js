@@ -8,6 +8,7 @@ const state = {
   modules: [],
   editedModules: [],
   editedSettings: {},
+  currentModuleId: undefined,
   currentComponent: {},
   modalComplete: false,
   modalPreview: false,
@@ -26,6 +27,9 @@ const getters = {
   },
   currentComponent(state) {
     return state.currentComponent;
+  },
+  currentModule(state) {
+    return state.currentModuleId;
   },
   templateWidth(state) {
     const templateWidth = 600;
@@ -94,15 +98,22 @@ const mutations = {
     state.modules[moduleId].structure.columns[columnId].components[componentId] = data.component;
   },
   savePlugin(state, data) {
-    let pluginData = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data;
+    const pluginData = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data;
     _.merge(pluginData, data.data);
   },
   saveComponentAttribute(state, data) {
-    let attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
+    const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
+    attributes[data.attribute] = data.attributeValue;
+  },
+  saveColumnAttribute(state, data) {
+    const attributes = state.modules[data.moduleId].structure.columns[data.columnId].attribute;
     attributes[data.attribute] = data.attributeValue;
   },
   setEditorOptions(state, toolbar) {
     state.editorToolbar = toolbar;
+  },
+  setCurrentModule(state, moduleId) {
+    state.currentModuleId = moduleId;
   },
   setTemplating(state, templating) {
     state.campaign.campaign_data.template = templating;

@@ -2,16 +2,16 @@ const studioSettings = require('./studioSettings.vue');
 const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
-  name: 'vertical-alignment',
-  title: 'Vertical alignment',
+  name: 'column-background-color',
+  title: 'Background color',
   version: '0.0.1',
   author: 'emiliano@stensul.com',
   target: ['column'],
   studioSettings,
   campaignSettings,
   config: {
-    options: ['top', 'middle', 'bottom'],
-    defaultValue: 'middle',
+    defaultColors: ['#ffffff','#323c44','#cd263a','#8d8d8d','#9e00ff','#0000ff','#00da00','#dada00','#ff8d00','#ff00de','#a65628','#848484'],
+    defaultValue: '#ffffff',
   },
   data: {},
   enabled: false,

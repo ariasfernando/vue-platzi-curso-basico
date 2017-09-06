@@ -1,6 +1,7 @@
 <template>
   <div class="module-toolbar">
     <div class="icon-move"><i class="fa fa-arrows"></i></div>
+    <div class="icon-config" @click="config"><i class="fa fa-cogs"></i></div>
     <div class="icon-clone" @click="clone"><i class="fa fa-clone"></i></div>
     <div class="icon-remove" @click="remove"><i class="fa fa-trash-o"></i></div>
   </div>
@@ -11,6 +12,9 @@
     name: 'ModuleToolbar',
     props: ['moduleId'],
     methods: {
+      config(){
+        this.$store.commit("campaign/setCurrentModule", this.moduleId);
+      },
       clone(){
         this.$store.commit("campaign/cloneModule", this.moduleId);
       },
@@ -53,7 +57,7 @@
       background-color: @hover!important;
       z-index: 800;
       .icon-move, .icon-remove, 
-      .icon-clone {
+      .icon-clone, .icon-config {
         display: inline-block;
       }
     }

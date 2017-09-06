@@ -14,7 +14,7 @@
       <table width="100%" cellspacing="0" cellpadding="0">
         <tr v-if="module.structure.columns.length > 1">
           <th class="st-col" v-for="(column, columnId) in module.structure.columns" :width="column.style.width"
-              :style="column.style">
+              :style="column.style" :valign="column.attribute.valign">
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr v-for="(component, componentId) in column.components">
                 <td width="100%" :align="component.attribute.align || 'center'">
@@ -26,7 +26,8 @@
           </th>
         </tr>
         <tr v-else>
-          <td v-for="(column, columnId) in module.structure.columns" :width="column.style.width" :style="column.style">
+          <td v-for="(column, columnId) in module.structure.columns" :width="column.style.width"
+              :style="column.style" :valign="column.attribute.valign">
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr v-for="(component, componentId) in column.components">
                 <td width="100%" :align="component.attribute.align || 'center'">

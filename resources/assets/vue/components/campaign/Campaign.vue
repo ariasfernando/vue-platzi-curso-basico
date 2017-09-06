@@ -15,6 +15,7 @@
     </section>
 
     <aside class="component-settings-wrapper">
+      <column-settings v-if="currentComponent"></column-settings>
       <component-settings v-if="currentComponent"></component-settings>
     </aside>
 
@@ -36,6 +37,7 @@
   import CampaignMenu from './CampaignMenu.vue'
   import EmailCanvas from './EmailCanvas.vue'
   import ComponentSettings from './ComponentSettings.vue'
+  import ColumnSettings from './ColumnSettings.vue'
   import Spinner from '../common/Spinner.vue'
 
   export default {
@@ -46,6 +48,7 @@
       CampaignMenu,
       EmailCanvas,
       ComponentSettings,
+      ColumnSettings,
       ModalComplete,
       ModalPreview,
       ModalProof,

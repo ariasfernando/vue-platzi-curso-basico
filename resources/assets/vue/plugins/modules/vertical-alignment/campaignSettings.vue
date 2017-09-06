@@ -11,20 +11,16 @@
   import _ from 'lodash';
 
   export default {
-    props: ['name', 'plugin'],
+    props: ['name', 'plugin', 'moduleId', 'columnId'],
     computed: {
-      currentComponent() {
-        return this.$store.getters["campaign/currentComponent"];
+      modules() {
+        return this.$store.getters["campaign/modules"];
       },
-      component() {
-        const moduleId = this.currentComponent.moduleId;
-        const columnId = this.currentComponent.columnId;
-        const componentId = this.currentComponent.componentId;
-
-        return this.$store.state.campaign.modules[moduleId].structure.columns[columnId].components[componentId];
+      column() {
+        return this.modules[this.moduleId].structure.columns[this.columnId];
       },
       value() {
-        return this.component.attribute.valign;
+        return this.column.attribute.valign;
       }
     },
     data() {
@@ -36,14 +32,13 @@
       change(e) {
         const payload = {
           plugin: this.name,
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
+          moduleId: this.moduleId,
+          columnId: this.columnId,
           attribute: 'valign',
           attributeValue: e.target.value,
         };
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.$store.commit('campaign/saveColumnAttribute', payload);
       }
     },
   }

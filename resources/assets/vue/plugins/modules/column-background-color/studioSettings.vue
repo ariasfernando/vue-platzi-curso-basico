@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  export default {
+export default {
     props: ['name', 'columnId'],
     computed: {
       module() {

@@ -122,6 +122,20 @@
             </div>
           </div>
         </div>
+
+        <div class="row">
+          <label class="col-sm-8 control-label" for="set-column">Columns</label>
+
+          <div class="col-sm-4">
+            <div>
+              <!-- Column Plugins -->
+              <div v-for="(plugin, moduleKey) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
+                <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin"></component>
+              </div>
+              <!-- /Column Plugins -->
+            </div>
+          </div>
+        </div>
       </b-card>
     </b-collapse>
   </div>
@@ -216,7 +230,7 @@
 
         if ( numCols < cols ) {
           for ( let i = numCols; i < cols; i++ ) {
-            this.$store.commit("module/addColumn");
+            this.$store.dispatch("module/addColumn");
           }
         }
 
