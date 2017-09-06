@@ -22,6 +22,10 @@ class ModelKeyManager
      */
     public static function getStandardKey($model, $name, $suffix_max = 999999)
     {
+        if (empty($name)) {
+            $name = 'untitled';
+        }
+
         $key = preg_replace(['/[^a-z0-9 _]/i', '/\s+/'], ['', '_'], strtolower($name));
         $original_key = trim($key, '_');
         $max_tries = 50;
