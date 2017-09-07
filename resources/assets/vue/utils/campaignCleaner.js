@@ -1,7 +1,7 @@
 /*
 * -- CAMPAIGN CLEANER ---
 */
-const campaignCleaner = {
+export default {
   cleanOptions: {
     // Array of classes to clean from final html
     classSelectors: [
@@ -130,7 +130,7 @@ const campaignCleaner = {
     const all = $cleanedHtml.find('p, span, div, h1, h2, h3, h4, h5, a, td');
     
     $.map(all, (el, index) => {
-      const textConnvert = campaignCleaner.charConvertHtmlEntities($(el).html());
+      const textConnvert = this.charConvertHtmlEntities($(el).html());
       if (el.innerText.length > 0) {
         $(el).text(textConnvert);
       }

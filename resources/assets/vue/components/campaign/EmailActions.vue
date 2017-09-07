@@ -76,7 +76,8 @@
 <script>
 
   import campaignService from '../../services/campaign';
-  import configService from '../../services/config'
+  import configService from '../../services/config';
+  import campaignCleaner from '../../utils/campaignCleaner';
 
   export default {
     name: 'EmailActions',
