@@ -1,5 +1,5 @@
 <template>
-    <button class="btn btn-default"
+    <button class="btn btn-default beta-btn-secondary"
         :class="buttonClasses"
         :disabled="loadingDecision.length > 0"
         v-if="selectedDecision.length === 0 || selectedDecision === decision"

@@ -14,7 +14,7 @@
                 v-model="newComment"
             ></textarea>
             <button
-                class="btn btn-default pull-right"
+                class="btn btn-default beta-btn-primary pull-right"
                 :class="{'ajax-loader-small': !canSubmit}"
                 :disabled="!canSubmit"
                 v-on:click="submitComment()"
@@ -90,15 +90,16 @@
         padding-left: 35px;
 
         .proof-comment {
-            background: #eaebec;
-            border-radius: 5px;
+            background: #ffffff;
+            border-radius: 2px;
             color: #666666;
             margin-bottom: 10px;
-            padding: 20px;
+            padding: 10px;
+
             h4 {
-                color: #333333;
-                font-size: 16px;
-                font-weight: bold;
+                color: #666666;
+                font-size: 17px;
+                font-weight: 300;
                 margin-top: 0px;
             }
             p {
@@ -107,35 +108,62 @@
                 font-style: italic;
             }
             .proof-comment-date {
-                border-top: 1px solid #aaaaaa;
-                color: #aaaaaa;
+                border-top: 1px solid #dddddd;
+                color: #bbbbbb;
                 font-size: 12px;
                 margin: 0;
                 text-align: right;
-                padding: 10px 0 0 0;
+                padding: 8px 0 0 0;
             }
         }
 
         .approve-with-comments {
-            background: #daeadd;
+            background: #7BAF73;
+
+            h4{
+                color: #ffffff;
+            }
+
+            p{
+                color: #ffffff;
+            }
+
+            .proof-comment-date {
+                border-top: 1px solid #ffffff;
+                color: #ffffff;
+            }
         }
 
         .reject-with-comments {
-            background: #fcded9;
+            background: #CE5F5F;
+
+            h4{
+                color: #ffffff;
+            }
+
+            p{
+                color: #ffffff;
+            }
+
+            .proof-comment-date {
+                border-top: 1px solid #ffffff;
+                color: #ffffff;
+            }
         }
 
         .proof-new-comment {
             textarea {
-                border-radius: 5px;
+                border-radius: 2px;
                 font-size: 14px;
                 margin-bottom: 10px;
-                padding: 15px;
+                padding: 10px;
                 resize: none;
+                border: 1px solid #e4e4e4;
             }
         }
 
         .proof-new-comment-error {
-            color: red;
+            color: #CE5F5F;
             padding: 10px;
         }
     }

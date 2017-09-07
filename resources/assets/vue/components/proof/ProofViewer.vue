@@ -1,6 +1,31 @@
 <template id="proof-viewer">
     <div class="proof-viewer-container">
 
+        <div class="proof-top-bar">
+            <div class="col-xs-6">
+                <div class="switch pull-right">
+                    <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
+                    <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
+                        <i class="fa fa-desktop"></i>
+                    </label>
+                       <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
+                       <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
+                        <i class="glyphicon glyphicon-phone"></i>
+                    </label>
+                     <span class="switch-selection"></span>
+                  </div>
+             </div>
+             <div class="col-xs-6 text-right" id="section-canvas-buttons-col">
+                 <proof-decision
+                     :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
+                     :token="token"
+                     v-if="showDecision ? true : false"
+                     v-on:update-alert="updateAlert"
+                    v-on:decision="decisionMade()"
+                ></proof-decision>
+            </div>
+        </div>
+
         <alert
             :title="alert.title"
             :message="alert.message"
@@ -11,33 +36,6 @@
 
         <div class="section-container-campaign">
             <section class="section-canvas-email section-box">
-                <div class="section-box-header section-canvas-title">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <div class="switch">
-                                <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-                                <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
-                                    <i class="fa fa-desktop"></i>
-                                </label>
-                                <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-                                <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
-                                    <i class="glyphicon glyphicon-phone"></i>
-                                </label>
-                                <span class="switch-selection"></span>
-                            </div>
-                        </div>
-                        <div class="col-xs-10 text-right" id="section-canvas-buttons-col">
-                            <proof-decision
-                                :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
-                                :token="token"
-                                v-if="showDecision ? true : false"
-                                v-on:update-alert="updateAlert"
-                                v-on:decision="decisionMade()"
-                            ></proof-decision>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="section-box-content section-canvas-container">
                     <table cellpadding="0" cellspacing="0" width="100%">
                         <tr v-if="campaign.length === 0">
