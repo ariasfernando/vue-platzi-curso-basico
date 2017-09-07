@@ -125,46 +125,38 @@
         this.$store.commit("campaign/toggleModal", 'modalProof');
       },
       send () {
-        let bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
         this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/saveCampaign", {
-          campaign: this.campaign,
-          bodyHtml
-        }).then(response => {
-          this.$store.commit("global/setLoader", false);
 
-          let data = $(document.getElementById('send-proof-form')).serialize();
+        let data = $(document.getElementById('send-proof-form')).serialize();
 
-          let jqXHR = $.ajax('/proof/create', {
-            method: 'post',
-            data: data
-          });
-
-          let _this = this;
-
-          jqXHR.done(function(response){
-            var $container = $('.modal-container').find('.send-proof');
-
-            if (response.status === 'success') {
-              // If the campaign can't be completed, hide the Continue button
-              if ("can_be_completed" in response.data) {
-                if (response.data.can_be_completed) {
-                  $('.campaign-continue').show();
-                } else {
-                  $('.campaign-continue').hide();
-                }
-              }
-              _this.close();
-              _this.$root.$toast(
-                'Success! ' + response.message,
-                {className: 'et-success'}
-              );
-            } else {
-              _this.showMessage($container, 'danger', response.message);
-            }
-          });
-
+        let jqXHR = $.ajax('/proof/create', {
+          method: 'post',
+          data: data
         });
+
+        jqXHR.done((response) => {
+          this.$store.commit("global/setLoader", false);
+          var $container = $('.modal-container').find('.send-proof');
+
+          if (response.status === 'success') {
+            // If the campaign can't be completed, hide the Continue button
+            if ("can_be_completed" in response.data) {
+              if (response.data.can_be_completed) {
+                $('.campaign-continue').show();
+              } else {
+                $('.campaign-continue').hide();
+              }
+            }
+            this.close();
+            this.$root.$toast(
+              'Success! ' + response.message,
+              {className: 'et-success'}
+            );
+          } else {
+            this.showMessage($container, 'danger', response.message);
+          }
+        });
+
       },
       fetchUsers () {
 

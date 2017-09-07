@@ -172,16 +172,6 @@ export default {
     const campaign = campaignStore.campaign;
     const editedSettings = campaignStore.editedSettings;
 
-    // Edited modules
-    // const modules = _.cloneDeep(campaignStore.modules);
-    // const editedModules = campaignStore.editedModules;
-    //
-    // for (const edited of editedModules) {
-    //   for (const key in edited.data) {
-    //     modules[edited.moduleId].structure.columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
-    //   }
-    // }
-
     return {
       campaign,
       settings: editedSettings,
