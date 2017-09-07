@@ -123,8 +123,8 @@
           </div>
         </div>
 
-        <div class="row">
-          <label class="col-sm-8 control-label" for="set-column">Columns</label>
+        <div class="row" v-if="module.plugins && Object.keys(module.plugins).length !== 0">
+          <label class="col-sm-8 control-label" for="set-column">Plugins</label>
 
           <div class="col-sm-4">
             <div>
