@@ -128,7 +128,6 @@
         
         const sideToggled = document.getElementById('edit-container');
         sideToggled.classList.toggle('sidebar-closed');
-          
       }
     },
     created () {

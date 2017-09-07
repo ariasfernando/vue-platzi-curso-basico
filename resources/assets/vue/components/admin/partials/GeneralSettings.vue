@@ -237,7 +237,7 @@
         this.$store.dispatch("module/normalizeColumns", this.module.structure.columns);
 
         if ( value > 0 && value <= this.maxCols ){
-          this.$refs.tabs.setTab( value - 1 );
+          this.$store.commit("module/setActiveColumn", value - 1);
         }
 
       },

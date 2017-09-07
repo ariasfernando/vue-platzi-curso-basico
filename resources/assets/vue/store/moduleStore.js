@@ -7,6 +7,7 @@ import defaultElements from '../resources/elements';
 const state = {
   module: {},
   currentComponent: {},
+  activeColumn: 0,
   changeSettingComponent: {
     style: {},
     attribute: {},
@@ -23,6 +24,9 @@ const getters = {
   },
   changeSettingComponent(state) {
     return state.changeSettingComponent;
+  },
+  activeColumn(state) {
+    return state.activeColumn;
   },
 };
 
@@ -104,6 +108,9 @@ const mutations = {
     const attributes = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
     attributes[data.attribute] = data.attributeValue;
   },
+  setActiveColumn(state, columnId) {
+    state.activeColumn = columnId;
+  },
   error(state, err) {
     console.log(err);
   },
@@ -115,7 +122,7 @@ const actions = {
     const colPlugins = {};
     _.each(Vue.app.modulePlugins, (plugin, name) => {
       if (plugin.target.indexOf('column') !== -1) {
-        colPlugins[name] = plugin;
+        colPlugins[name] = clone(plugin);
       }
     });
 

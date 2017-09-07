@@ -54,6 +54,18 @@ module.exports = {
     },
     {
       link: 'attribute',
+      label: 'Vertical Align',
+      name: 'valign',
+      type: 'select',
+      value: 'middle',
+      options: [
+        { value: 'top', text: 'Top' },
+        { value: 'middle', text: 'Middle' },
+        { value: 'bottom', text: 'Bottom' },
+      ],
+    },
+    {
+      link: 'attribute',
       label: 'Background Color',
       name: 'bgcolor',
       type: 'color',

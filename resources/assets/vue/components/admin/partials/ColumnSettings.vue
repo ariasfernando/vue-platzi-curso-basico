@@ -175,6 +175,16 @@
       module() {
         return this.$store.getters["module/module"];
       },
+      activeColumn() {
+        return this.$store.getters["module/activeColumn"];
+      }
+    },
+    watch : {
+      activeColumn(val) {
+        setTimeout(() => {
+          this.$refs.tabs.setTab(val);
+        }, 100);
+      },
     },
     data () {
       return {
