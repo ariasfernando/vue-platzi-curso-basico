@@ -1,6 +1,5 @@
 .section-canvas-email {
 	display: table-cell;
-	padding-left: 20px;
 	vertical-align: top;
 
 	.section-canvas-title {
@@ -12,9 +11,10 @@
 		}
 
 		.btn {
-			padding: 4px 8px;
+			padding: 7px 10px;
 			margin-right: 2px;
-			font-size: 12px;
+			font-size: 14px;
+			font-weight: 400;
 
 			.glyphicon {
 				line-height: 15px;
@@ -22,89 +22,83 @@
 		}
 
 		.switch {
-			position: relative;
-			height: 27px;
-			width: 100px;
-			background: #C8C8C8;
-			border-radius: 3px;
-			-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-			box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-			margin: 0 auto;
-		}
+	        position: relative;
+	        height: 29px;
+	        width: 100px;
+	        background: @stensul-white;
+	        border-radius: 3px;
+	        margin: 0 auto;
+	        border: 1px solid #DFDFDF;
+	        margin-top: 4px;
+	    }
 
-		.switch-label {
-			position: relative;
-			z-index: 2;
-			float: left;
-			width: 50px;
-			line-height: 23px;
-			font-size: 16px;
-			color: #fff;
-			text-align: center;
-			text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
-			cursor: pointer;
-			margin: 0 !important;
+	    .switch-label {
+	        position: relative;
+	        z-index: 2;
+	        float: left;
+	        width: 49px;
+	        line-height: 21px;
+	        font-size: 16px;
+	        color: @stensul-purple;
+	        text-align: center;
+	        cursor: pointer;
+	        margin: 0 !important;
 
-			i {
-				display: inline-block;
-				vertical-align: sub;
-			}
-		}
-		.switch-label:active {
-			font-weight: bold;
-		}
+	        i {
+	        	display: inline-block;
+	        	vertical-align: sub;
+	        }
+	    }
 
-		.switch-label-off {
-			padding-left: 2px;
-		}
+	    .switch-label:active {
+	        font-weight: bold;
+	    }
 
-		.switch-label-on {
-			padding-right: 2px;
-		}
+	    .switch-label-off {
+	        padding-left: 2px;
+	    }
 
-		.switch-input {
-			display: none;
-		}
-		.switch-input:checked + .switch-label {
-			font-weight: bold;
-			color: #fff;
-			text-shadow: 0 1px rgba(255, 255, 255, 0.25);
-			-webkit-transition: 0.15s ease-out;
-			-moz-transition: 0.15s ease-out;
-			-o-transition: 0.15s ease-out;
-			transition: 0.15s ease-out;
-		}
-		.switch-input:checked + .switch-label-on ~ .switch-selection {
-			left: 50px;
-			/* Note: left: 50% doesn't transition in WebKit */
-		}
+	    .switch-label-on {
+	        padding-right: 2px;
+	    }
 
-		.switch-selection {
-			display: block;
-			position: absolute;
-			z-index: 1;
-			top: 2px;
-			left: 2px;
-			width: 48px;
-			height: 24px;
-			background: @brand-secondary;
-			border-radius: 3px;
-			background-image: -webkit-linear-gradient(top, @brand-primary, @brand-secondary);
-			background-image: -moz-linear-gradient(top, @brand-primary, @brand-secondary);
-			background-image: -o-linear-gradient(top, @brand-primary, @brand-secondary);
-			background-image: linear-gradient(to bottom, @brand-primary, @brand-secondary);
-			-webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-			box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-			-webkit-transition: left 0.15s ease-out;
-			-moz-transition: left 0.15s ease-out;
-			-o-transition: left 0.15s ease-out;
-			transition: left 0.15s ease-out;
-		}
+	    .switch-input {
+	        display: none;
+	    }
+
+	    .switch-input:checked + .switch-label {
+	        font-weight: bold;
+	        color: #fff;
+	        -webkit-transition: 0.15s ease-out;
+	        -moz-transition: 0.15s ease-out;
+	        -o-transition: 0.15s ease-out;
+	        transition: 0.15s ease-out;
+	    }
+
+	    .switch-input:checked + .switch-label-on ~ .switch-selection {
+	        left: 50px;
+	    }
+
+	    .switch-selection {
+	        display: block;
+	        position: absolute;
+	        z-index: 1;
+	        top: 2px;
+	        left: 2px;
+	        width: 46px;
+	        height: 23px;
+	        border-radius: 2px;
+	        background: @stensul-purple;
+	        -webkit-transition: left 0.15s ease-out;
+	        -moz-transition: left 0.15s ease-out;
+	        -o-transition: left 0.15s ease-out;
+	        transition: left 0.15s ease-out;
+	    }
 	}
 	.section-canvas-container {
 		.box-sizing(border-box);
 		min-width: 650px;
-		background-color: #EBEBEB;
+		background-color: #F4F4F4;
 	}
 
 	.st-validation-error {

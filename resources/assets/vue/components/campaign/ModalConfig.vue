@@ -38,10 +38,10 @@
     .modal-container {
         width: 400px;
         height: 100%;
-        padding: 20px 30px;
+        padding: 15px;
         background-color: #fff;
-        border-radius: 2px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+        border-radius: 0px;
+        box-shadow: none;
         transition: all .3s ease;
         font-family: Arial, sans-serif;
         position: absolute;

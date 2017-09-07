@@ -1,17 +1,15 @@
 <template>
   <div class="expand configuration-mod">
-    <h2>Campaign Configuration<i class="glyphicon icon-open-expan"></i></h2>
+    <h2><i class="glyphicon glyphicon-cog"></i> Settings <i class="glyphicon glyphicon-menu-down"></i></h2>
     <div class="level-1 open-section-campaign">
       <form>
         <!-- Configuration Inputs -->
         <div>
-          <label>Campaign Title:</label>
-          <input type="text" name="campaignName" :value="form.campaignName" @blur="saveSettings"/>
+          <input type="text" placeholder="Campaign Name" name="campaignName" :value="form.campaignName" @blur="saveSettings"/>
         </div>
 
         <div class="form-group" v-if="enablePreheader">
-          <label>Preheader:</label>
-          <input type="text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
+          <input type="text" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
         </div>
         <div class="config-box-divider" v-if="enableAutoSave">
           <input type="checkbox" class="btn-auto-save" id="autoSave" name="autoSave" v-model="form.autoSave" @change="saveSettings">
@@ -167,6 +165,8 @@
 .menu-campaign {
   .vue-input-tag-wrapper {
     border: 0;
+    background: none;
+    padding: 0px;
   }
   .input-tag {
     background-color: #CBCBCB !important;
