@@ -3,24 +3,19 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="modal-header">
-            <slot name="header">
-              <h4>Who would you like to send this email to for review?</h4>
-            </slot>
-          </div>
           <slot name="body">
+              <h4>Who would you like to send this email to for review?</h4>
               <div class="send-proof">
                   <form name="send-proof-form" id="send-proof-form" action="/proof/create" @submit.prevent="send">
                       <input type="hidden" name="campaign_id" id="campaign_id" :value="campaign.campaign_id">
                       <input type="hidden" name="proof_id" id="proof_id" :value="campaign.campaign_data.proof_id">
                       <div class="form-group">
-                          <label>Name</label>
                           <div class="input-group">
                               <select name="proof_users" id="proof_users" data-live-search="true" class="proof-users-picker form-control">
                                 <option v-bind:key="user.id" v-for="user in users" :value="user">{{user}}</option>
                               </select>
                               <span class="input-group-btn">
-                                  <button type="button" class="btn btn-default btn-reviewer-add" @click="addReviewer">Add</button>
+                                  <button type="button" class="btn btn-default btn-reviewer-add beta-btn-primary" @click="addReviewer">Add</button>
                               </span>
                           </div>
                       </div>
@@ -86,8 +81,8 @@
                         </div>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-cancel" @click="discardNotificationMessage">Cancel</button>
-                        <button class="btn btn-default" id="btn-proof-message" @click="saveNotificationMessage">Add message</button>
+                        <button type="button" class="btn btn-primary btn-cancel beta-btn-secondary" @click="discardNotificationMessage">Cancel</button>
+                        <button class="btn btn-default beta-btn-primary" id="btn-proof-message" @click="saveNotificationMessage">Add message</button>
                       </div>
                     </div>
                   </div>
@@ -95,8 +90,8 @@
           </slot>
           <div class="modal-footer">
             <slot name="footer">
-              <button type="button" class="btn btn-default" @click="close">Close</button>
-              <button class="btn btn-default" id="btn-send-proof" @click="send">Submit</button>
+              <button type="button" class="btn btn-default beta-btn-secondary" @click="close">Close</button>
+              <button class="btn btn-default beta-btn-primary" id="btn-send-proof" @click="send">Submit</button>
             </slot>
           </div>
         </div>

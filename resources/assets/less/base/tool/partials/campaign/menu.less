@@ -1,7 +1,10 @@
 aside{
-	width: 25%;
+	width: 210px!important;
 	vertical-align: top;
 	display:table-cell;
+	background: @stensul-white;
+	font-family: 'Open Sans', Arial, sans-serif; 
+
 	.menu-campaign{
 		// single module
 		.single{
@@ -14,16 +17,18 @@ aside{
 		}
 		.expand, .add{
 			border-radius: @section-border-radius;
-			background-color: @menu-container-section-background-color;
+			background-color: @stensul-white;
 			h2{
-				font-size: 16px;
-				border-radius: @section-border-radius;
+				font-size: 13px;
+				text-transform: uppercase;
+				font-weight: 300;
+				color: @stensul-gray;
 				.box-sizing(border-box);
-				background-color: @menu-section-background-color;
-				padding: 10px 15px;
-				color: @menu-campaign-font-color;
+				background-color: @stensul-white;
+				padding: 15px 10px 13px 10px;
 				margin: 0;
 				position: relative;
+				border-bottom: 1px solid #F4F4F4;
 
 				i{
 					top: 50%;
@@ -34,29 +39,44 @@ aside{
 
 					@media screen and (min-width: @screen-md-min) {
 						right: 10px;
-						font-size: 16px;
-						margin: -8px 0 0;
+						font-size: 12px;
+						margin: -4px 0 0;
+						color: #CCCCCC;
 					}
+				}
+			}
+
+			.level-1{
+				h2{
+					text-transform: capitalize;
 				}
 			}
 		}
         // icon expand
         .expand{
-            margin-bottom: 20px;
+
             &>h2>i{
-                .glyphicon-triangle-bottom();
+                .glyphicon-menu-down();
             }
             &>h2>i.icon-open-expan{
-                .glyphicon-triangle-top();
+                .glyphicon-menu-up();
             }
         }
 
 	 	// show and hidden sections
 		.level-1{
 			display: none;
-			padding-bottom: 10px;
+			padding-bottom: 0px;
+			background: #f8f8f8;
+
 			.add, .expand{
-				margin: 10px 7px 0;
+				margin: 0px;
+				background: none;
+
+				h2{
+					background: none;
+					border-bottom: 1px solid #eeeeee;
+				}
 			}
 			.expand{
 				background-color: @menu-container-sub-section-background-color;
@@ -77,13 +97,22 @@ aside{
 	// Configuration module
 	.expand.configuration-mod{
 		&>h2{
-			background-color: @brand-secondary;
+			background-color: @stensul-white;
+			padding: 19px 10px 17px 10px;
 		}
 		form{
 			padding: 10px;
 
 			input[type="text"]{
 				margin-top: 5px;
+				box-shadow: none;
+				border: none;
+				font-weight: 300;
+				color: @stensul-gray;
+				font-size: 13px;
+				background: @stensul-white;
+				width: 100%;
+				padding: 7px;
 			}
 		}
 	}
@@ -103,7 +132,7 @@ aside{
 	.configuration-mod{
 
 		.config-box-divider{
-			border-top: 1px solid #cccccc;
+			border-top: 1px solid #e4e4e4;
 			padding: 5px 0 0;
 			margin: 10px 0 0;
 		}
@@ -114,9 +143,23 @@ aside{
 		.unlock-campaign-btn,
 		.lock-campaign-btn{
 			float: right;
-			min-width: 28px;
-			padding: 3px 6px;
-			.border-radius(20px);
+			min-width: 24px;
+			padding: 5px 5px;
+			.border-radius(50%);
+			background: @stensul-purple!important;
+			border: none;
+		    width: 24px;
+		    height: 24px;
+		    margin-top: 3px;
+		    line-height: 14px;
+
+			i{
+				font-size: 12px;
+			}
+
+			&:hover{
+				background: @stensul-purple!important;
+			}
 
 			&.ajax-loader-small{
 				height: 29px;
@@ -129,6 +172,9 @@ aside{
 		}
 		label.locking{
 			margin: 5px 0;
+			font-weight: 300;
+			font-size: 12px;
+			color: @stensul-gray;
 		}
 	}
 

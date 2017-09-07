@@ -4,15 +4,10 @@
       <div class="modal-wrapper">
         <div class="modal-container">
 
-          <div class="modal-header">
-            <slot name="header">
-              <h4>Processed Campaign</h4>
-            </slot>
-          </div>
-
           <div class="modal-body">
 
             <slot name="body">
+              <h4>Processed Campaign</h4>
               <b-tabs>
                 <b-tab title="Normal HTML">
                   <textarea v-html="campaign.campaign_data.body_html"></textarea>
@@ -29,15 +24,15 @@
               <button v-if="campaign.process_plaintext" type="button" class="btn btn-default btn-plain-text">Plaintext</button>
 
               <div v-if="campaign.library_config.esp && campaign.library_config.espProvider"
-                   type="button" class="btn btn-default btn-upload-api" :data-campaign-id="campaign.campaign_id"
+                   type="button" class="btn btn-default btn-upload-api beta-btn-secondary" :data-campaign-id="campaign.campaign_id"
                    :data-api-driver="campaign.library_config.espProvider" v-html="campaign.library_config.espProvider">
               </div>
 
               <div v-if="campaign.library_config.view_in_browser">
-                <a :href="viewInBrowser" target="_blank" type="button" class="btn btn-default">View in browser</a>
+                <a :href="viewInBrowser" target="_blank" type="button" class="btn btn-default beta-btn-secondary">View in browser</a>
               </div>
 
-              <a :href="$app.baseUrl" class="btn btn-default btn-back-to-dashboard" data-dismiss="modal">Go back to the dashboard</a>
+              <a :href="$app.baseUrl" class="btn btn-default btn-back-to-dashboard beta-btn-primary" data-dismiss="modal">Go back to the dashboard</a>
             </slot>
           </div>
         </div>

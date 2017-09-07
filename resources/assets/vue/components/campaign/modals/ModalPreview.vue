@@ -3,24 +3,21 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-
-          <div class="modal-header">
-            <slot name="header">
-              <h4>Preview</h4>
-            </slot>
-          </div>
             <slot name="body">
+              <h4>Preview</h4>
               <div class="send-preview">
                 <form name="send-preview-form" id="send-preview-form">
                   <div class="form-group">
-                    <p class="alert alert-info upload-warning">Please note this preview email is not suitable for deployment. In order to access the production-ready HTML, please click Complete to publish your campaign.</p>
-                    <label>Email address</label>
+                    <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview email is not suitable for deployment. In order to access the production-ready HTML, please click Complete to publish your campaign.</p>
                     <div class="input-group">
-                      <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
-                      <br>
-                      <button type="button" class="btn btn-default btn-send" @click="send">Send</button>
-                      <label class="info">Use a comma or a semicolon to separate multiple email addresses</label>
+                      <span class="btn-group">
+                        <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
+                      </span>
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send</button>
+                      </span>
                     </div>
+                    <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
                   </div>
                 </form>
                 <div class="preview-body">
@@ -34,7 +31,7 @@
           <div class="modal-footer">
             <slot name="footer">
 
-              <button type="button" class="btn btn-default" @click="close">Close</button>
+              <button type="button" class="btn btn-default beta-btn-secondary" @click="close">Close</button>
 
             </slot>
           </div>
@@ -91,6 +88,36 @@
       height: 500px;
       border: 1px solid #ccc;
       font-family: monospace, serif;
+    }
+
+    #send-preview-to{
+      font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #666666;
+      box-shadow: none;
+      border-radius: 2px;
+      height: 36px;
+
+      &:focus{
+       border: 1px solid #DDDDDD;
+      }
+    }
+
+    p.info{
+     font-weight: 300;
+     color: #999999;
+     font-size: 11px;
+     margin-top: 5px;
+    }
+
+    .preview-body{
+      margin-bottom: 15px;
+      margin-top: 5px;
+
+      .iframe-container{
+        text-align: center;
+      }
     }
   }
 </style>

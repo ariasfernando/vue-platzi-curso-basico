@@ -154,9 +154,10 @@
 	}
 }
 
-.modal{
+.modal,
+.modal-mask{
     background: rgba(0,0,0,0.7);
-    font-family: 'Open Sans', Arial, sans-serif;
+    font-family: 'Open Sans', Arial, sans-serif!important;
 	
     h4{
     	font-size: 20px;
@@ -181,4 +182,58 @@
 		padding: 15px 0px 0px 0px;
 		border-top: 1px solid #dddddd;
 	}
+}
+
+#confirm-modal{
+	background: rgba(0, 0, 0, 0.8);
+
+	.modal-dialog{
+		top: 50px;
+	}
+
+	.modal-header{
+		display: none;
+	}
+
+	.modal-body{
+		font-weight: 300;
+		color: @stensul-gray;
+	}
+
+	.btn-secondary{
+		font-size: 14px;
+		font-weight: 400;
+		color: @input-color;
+		padding: 7px 10px;
+		border: none;
+		background: @btn-default-color;
+		border: 1px solid #dddddd;
+		transition: all 0.3s linear;
+
+		&:hover{
+			background: @btn-default-color!important;
+			color: @stensul-gray!important;
+			border: 1px solid @stensul-purple!important;
+		}
+	}
+
+	.btn-primary{
+		font-size: 14px;
+		font-weight: 400;
+		background: @stensul-purple;
+		padding: 7px 10px;
+		border: none;
+		color: @btn-default-color;
+		border: 1px solid  @stensul-purple;
+		transition: all 0.3s linear;
+
+		&:hover{
+			background: @stensul-purple!important;
+			color: @btn-default-color;
+		}
+	}
+}
+
+.modal-backdrop{
+	background: none;
 }

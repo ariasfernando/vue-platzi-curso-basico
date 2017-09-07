@@ -2,7 +2,6 @@
   <div class="section-box-header section-canvas-title">
     <div class="row">
       <div class="col-xs-3 col-md-4 col-lg-3" id="section-canvas-title-col">
-        <h2>{{ campaign.campaign_data.library_config.title || 'Campaign Editor' }}</h2>
       </div>
 
       <div class="col-xs-1 col-md-1 col-lg-2">
@@ -21,11 +20,11 @@
 
       <div class="col-xs-8 col-md-7 col-lg-7 text-right" id="section-canvas-buttons-col">
 
-        <button v-show="!locked" class="btn btn-default campaign-preview" :class="hiddenClass()" @click="preview">
+        <button v-show="!locked" class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
           Preview
         </button>
 
-        <button v-show="!locked" class="btn btn-default save-as-draft" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
+        <button v-show="!locked" class="btn btn-default save-as-draft beta-btn-secondary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
           Save as Draft
         </button>
 
@@ -33,7 +32,7 @@
           Show if it's not already a template, if it's not a processed campaign
           and templating is enabled on the tool.
         -->
-        <b-btn v-b-modal.confirm-modal class="btn btn-default save-as-template"
+        <b-btn v-b-modal.confirm-modal class="btn btn-default save-as-template beta-btn-secondary"
           v-show="!locked"
           v-if="campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
             && campaign.campaign_data.library_config.templating">
@@ -43,18 +42,18 @@
         <!--
           Show if it's already a template, skip confirmation modal.
         -->
-        <button class="btn btn-default save-as-template" @click="template()"
+        <button class="btn btn-default save-as-template beta-btn-secondary" @click="template()"
           :class="hiddenClass()" v-if="campaign.campaign_data.template"
           v-show="!locked">
           Save Template
         </button>
 
-        <button class="btn btn-default proof-open-modal" v-if="!campaign.campaign_data.template && this.$app.proofConfig.status"
+        <button class="btn btn-default proof-open-modal beta-btn-secondary" v-if="!campaign.campaign_data.template && this.$app.proofConfig.status"
             v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
             v-show="!locked"
-        >Send for review</button>
+        >Send for Review</button>
 
-        <a class="btn btn-continue campaign-continue" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete"
+        <a class="btn campaign-continue beta-btn-primary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete"
           v-show="!locked">
           Complete
           <i class="glyphicon glyphicon-triangle-right"></i>
@@ -63,11 +62,11 @@
     </div>
     <b-modal v-if="campaignConfig.enable_templating"
       id="confirm-modal"
-      ref="confirmModal"
-      title="Save as Template"
+      ref="confirmModal" 
       ok-title="Accept"
       close-title="Cancel"
       @ok="confirmSave">
+      <h4>Save as Template</h4>
       Remember that if you save this campaign as template, you won't be able to publish it,
       you will only be able to edit and clone it.
     </b-modal>
@@ -118,7 +117,8 @@
       },
       save() {
         this.$store.commit("global/setLoader", true);
-        this._save().then(response => {
+        const bodyHtml = campaignCleaner.clean('.section-canvas-container');
+        this._save(bodyHtml).then(response => {
           this.$root.$toast('Email saved', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
@@ -201,7 +201,8 @@
       },
       preview() {
         this.$store.commit("global/setLoader", true);
-        this._save().then(response => {
+        const bodyHtml = campaignCleaner.clean('.section-canvas-container');
+        this._save(bodyHtml).then(response => {
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalPreview');
         }, error => {

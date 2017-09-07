@@ -65,7 +65,7 @@
             </form>
 
             <div>
-                <p>For access or more information, please email {{$app_config["app_mail_address"]}}</p>
+                <p class="app-email">For access or more information, please email {{$app_config["app_mail_address"]}}</p>
             </div>
         </div>
     </section>

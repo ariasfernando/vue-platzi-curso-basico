@@ -2,7 +2,7 @@
 
 @section('content')
 
-	<div class="col-xs-12" id="campaign">
+	<div id="campaign">
 	    <campaign campaign-id="{{ $params['campaign_id'] }}"></campaign>
     </div>
 	{{-- MODALS --}}
