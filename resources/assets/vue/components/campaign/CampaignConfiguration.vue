@@ -5,11 +5,11 @@
       <form>
         <!-- Configuration Inputs -->
         <div>
-          <input type="text" placeholder="Campaign Name" name="campaignName" :value="form.campaignName" @blur="saveSettings"/>
+          <input type="text" placeholder="Campaign Name" name="campaignName" :value="campaign.campaign_name" @blur="saveSettings"/>
         </div>
 
         <div class="form-group" v-if="enablePreheader">
-          <input type="text" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
+          <input type="text" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
         </div>
         <div class="config-box-divider" v-if="enableAutoSave">
           <input type="checkbox" class="btn-auto-save" id="autoSave" name="autoSave" v-model="form.autoSave" @change="autoSaveChange">
@@ -19,11 +19,11 @@
           <input-tag :on-change="tagChange" :tags="form.tags" validate="text" placeholder="Add Tag"></input-tag>
         </div>
 
-        <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="params.campaign_data.locked ? 'locked' : 'unlocked'">
+        <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
           <label class="locking">
             <span>{{locked ? 'Unlock' : 'Lock'}}</span>
             <span class="locking_type">
-              {{params.campaign_data.template ? 'Template' : 'Campaign'}}
+              {{campaign.template ? 'Template' : 'Campaign'}}
             </span>
           </label>
           <button
@@ -71,13 +71,10 @@
         enableAutoSave: false,
         enableLocking: false,
         form: {
-          campaignName: 'Untitled Campaign',
-          campaignPreheader: '',
           campaignProcess: false,
           autoSave: false,
           tags: []
         },
-        params: {},
       }
     },
     computed: {
@@ -86,18 +83,17 @@
       },
       lockedBy() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked_by;
-      }
+      },
+      campaign() {
+        return this.$store.getters["campaign/campaign"].campaign_data;
+      },
     },
 
     created () {
-      this.params = _.cloneDeep(this.$store.state.campaign.campaign);
-      this.enablePreheader = this.params.campaign_data.library_config.preheader;
-      this.enableTagging = this.params.campaign_data.library_config.tagging;
-      this.form.campaignName = this.params.campaign_name;
-      this.form.campaignPreheader = this.params.campaign_data.campaign_preheader;
-      this.form.campaignProcess = this.params.campaign_data.processed;
-      this.form.autoSave = this.params.campaign_data.auto_save;
-      this.form.tags = this.params.campaign_data.tags;
+      this.enablePreheader = this.campaign.library_config.preheader;
+      this.enableTagging = this.campaign.library_config.tagging;
+      this.form.autoSave = this.campaign.auto_save;
+      this.form.tags = _.cloneDeep(this.campaign.tags);
 
       this.loadConfig();
     },
@@ -160,7 +156,7 @@
       },
       lockCampaign() {
         this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/lockCampaign", this.params.campaign_id).then(response => {
+        this.$store.dispatch("campaign/lockCampaign", this.campaign._id).then(response => {
           this.$root.$toast('This campaign is locked now. Only you can unlock it.', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
@@ -171,7 +167,7 @@
       },
       unlockCampaign() {
         this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/unlockCampaign", this.params.campaign_id).then(response => {
+        this.$store.dispatch("campaign/unlockCampaign", this.campaign._id).then(response => {
           this.$root.$toast('This campaign is unlocked now, and you can make changes on it', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
