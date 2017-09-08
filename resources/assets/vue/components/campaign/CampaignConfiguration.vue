@@ -12,7 +12,7 @@
           <input type="text" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
         </div>
         <div class="config-box-divider" v-if="enableAutoSave">
-          <input type="checkbox" class="btn-auto-save" id="autoSave" name="autoSave" v-model="form.autoSave" @change="saveSettings">
+          <input type="checkbox" class="btn-auto-save" id="autoSave" name="autoSave" v-model="form.autoSave" @change="autoSaveChange">
           <label for="autoSave">Auto Save</label>
         </div>
         <div class="config-box-divider" v-if="enableTagging">
@@ -134,6 +134,28 @@
         this.$store.commit('campaign/saveSetting', {
           name: 'tags',
           value: tags
+        });
+      },
+      autoSaveChange() {
+        this.$store.commit('campaign/saveSetting', {
+          name: 'autoSave',
+          value: this.form.autoSave
+        });
+        this.save();
+      },
+      save() {
+        this.$store.commit("global/setLoader", true);
+        this._save().then(response => {
+          this.$root.$toast('Settings saved', {className: 'et-info'});
+          this.$store.commit("global/setLoader", false);
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+        });
+      },
+      _save(bodyHtml = undefined) {
+        return this.$store.dispatch("campaign/saveCampaign", {
+          campaign: this.campaign
         });
       },
       lockCampaign() {
