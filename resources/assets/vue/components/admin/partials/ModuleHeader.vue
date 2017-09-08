@@ -81,7 +81,7 @@
             this.$root.$toast('Module Saved', {className: 'et-success'});
           }).catch( error => {
             this.$store.commit("global/setLoader", false);
-            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
       },
     }

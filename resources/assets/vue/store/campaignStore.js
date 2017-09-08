@@ -60,6 +60,7 @@ const mutations = {
   loadCampaignData(state, campaignData) {
     state.campaign = campaignData;
     state.modules = campaignData.campaign_data.modules_data;
+    state.editedSettings.autoSave = campaignData.campaign_data.auto_save;
   },
   updateEmailCanvas(state, modules_data) {
     state.modules = modules_data;

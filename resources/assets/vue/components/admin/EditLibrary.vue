@@ -353,7 +353,7 @@
             this.espList = response;
           })
           .catch((error) => {
-            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
         let libraryId = this.$route.params.id;
 
@@ -365,7 +365,7 @@
               this.ready = true;
             })
             .catch((error) => {
-              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
             });
         } else {
           libraryService.newLibrary()
@@ -375,7 +375,7 @@
               this.ready = true;
             })
             .catch((error) => {
-              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
             });
         }
       },
