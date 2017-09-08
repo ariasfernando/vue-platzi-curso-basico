@@ -94,14 +94,35 @@
     .component-settings {
       background: #FFFFFF;
       border-radius: 5px;
-      padding: 0 15px;
       border: 1px solid transparent;
       height: 100%;
       display: table;
       width: 100%;
-      padding: 20px;
+      padding: 0px;
+
+      h2{
+        color: #555555;
+        font-weight: 300;
+        font-size: 13px;
+        padding: 15px 10px 13px 10px;
+        border-bottom: 1px solid #F0F0F0;
+        margin-top: 0px;
+      }
+
+      .plugins{
+        padding: 10px;
+      }
 
       .plugin-wrapper{
+        display: table;
+        width: 100%;
+
+        div {
+          span{
+            display: block;
+            width: 100%;
+          }
+        }
 
         label{
           text-align: left;
@@ -110,9 +131,50 @@
           font-weight: 300;
           font-size: 13px;
           margin-bottom: 0px;
-          float: left;
         }
 
+        input[type=text]{
+          height: 22px;
+          background: #F4F4F4;
+          border-radius: 2px;
+          border: none;
+          float: right;
+          font-size: 11px;
+          font-weight: 300;
+          width: 120px;
+        }
+
+        select{
+          height: 22px;
+          font-size: 11px;
+          color: #666666;
+          border: none;
+          background: #f4f4f4;
+          box-shadow: none;
+          font-weight: 300;
+          width: 75px;
+          float: right;
+        }
+
+      }
+
+      .plugin-destination-url{
+        span{
+
+          &:last-child{
+            margin-top: 10px;
+          }
+        }
+      }
+
+      .plugin-upload-image{
+        input{
+          width: 100%
+        }
+
+        label{
+          margin-bottom: 7px;
+        }
       }
     }
   }
