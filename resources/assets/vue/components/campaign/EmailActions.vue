@@ -124,7 +124,7 @@
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       _save(bodyHtml = undefined) {
@@ -184,7 +184,7 @@
             }
           }, error => {
             this.$store.commit("global/setLoader", false);
-            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
         });
       },
@@ -208,7 +208,7 @@
           this.$store.commit("campaign/toggleModal", 'modalPreview');
         }, error => {
           this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       proof() {
@@ -219,7 +219,7 @@
           this.$store.commit("campaign/toggleModal", 'modalProof');
         }, error => {
           this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
     },

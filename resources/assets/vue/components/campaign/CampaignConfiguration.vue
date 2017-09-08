@@ -117,14 +117,14 @@
             this.enablePreheader = response.enable_preheader === '1';
           })
           .catch((error) => {
-            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
           configService.getConfig('campaign')
             .then((response) => {
               this.enableLocking = response.locking === true;
             })
             .catch((error) => {
-              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
             });
       },
       tagChange(tags) {
@@ -147,7 +147,7 @@
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       _save(bodyHtml = undefined) {
@@ -162,7 +162,7 @@
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again',
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
             {className: 'et-error'});
         });
       },
@@ -173,7 +173,7 @@
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again',
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
             {className: 'et-error'});
         });
       }
