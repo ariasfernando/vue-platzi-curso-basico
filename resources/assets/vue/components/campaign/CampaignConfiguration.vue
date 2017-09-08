@@ -5,25 +5,25 @@
       <form>
         <!-- Configuration Inputs -->
         <div>
-          <input type="text" placeholder="Campaign Name" name="campaignName" :value="form.campaignName" @blur="saveSettings"/>
+          <input type="text" placeholder="Campaign Name" name="campaignName" :value="campaign.campaign_name" @blur="saveSettings"/>
         </div>
 
         <div class="form-group" v-if="enablePreheader">
-          <input type="text" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
+          <input type="text" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
         </div>
         <div class="config-box-divider" v-if="enableAutoSave">
-          <input type="checkbox" class="btn-auto-save" id="autoSave" name="autoSave" v-model="form.autoSave" @change="saveSettings">
+          <input type="checkbox" class="btn-auto-save" id="autoSave" name="autoSave" v-model="form.autoSave" @change="autoSaveChange">
           <label for="autoSave">Auto Save</label>
         </div>
         <div class="config-box-divider" v-if="enableTagging">
           <input-tag :on-change="tagChange" :tags="form.tags" validate="text" placeholder="Add Tag"></input-tag>
         </div>
 
-        <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="params.campaign_data.locked ? 'locked' : 'unlocked'">
+        <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
           <label class="locking">
             <span>{{locked ? 'Unlock' : 'Lock'}}</span>
             <span class="locking_type">
-              {{params.campaign_data.template ? 'Template' : 'Campaign'}}
+              {{campaign.template ? 'Template' : 'Campaign'}}
             </span>
           </label>
           <button
@@ -71,13 +71,10 @@
         enableAutoSave: false,
         enableLocking: false,
         form: {
-          campaignName: 'Untitled Campaign',
-          campaignPreheader: '',
           campaignProcess: false,
           autoSave: false,
           tags: []
         },
-        params: {},
       }
     },
     computed: {
@@ -86,18 +83,17 @@
       },
       lockedBy() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked_by;
-      }
+      },
+      campaign() {
+        return this.$store.getters["campaign/campaign"].campaign_data;
+      },
     },
 
     created () {
-      this.params = _.cloneDeep(this.$store.state.campaign.campaign);
-      this.enablePreheader = this.params.campaign_data.library_config.preheader;
-      this.enableTagging = this.params.campaign_data.library_config.tagging;
-      this.form.campaignName = this.params.campaign_name;
-      this.form.campaignPreheader = this.params.campaign_data.campaign_preheader;
-      this.form.campaignProcess = this.params.campaign_data.processed;
-      this.form.autoSave = this.params.campaign_data.auto_save;
-      this.form.tags = this.params.campaign_data.tags;
+      this.enablePreheader = this.campaign.library_config.preheader;
+      this.enableTagging = this.campaign.library_config.tagging;
+      this.form.autoSave = this.campaign.auto_save;
+      this.form.tags = _.cloneDeep(this.campaign.tags);
 
       this.loadConfig();
     },
@@ -115,19 +111,20 @@
         });
       },
       loadConfig() {
-        configService.getConfig('global_settings.auto_save')
+        configService.getConfig('global_settings')
           .then((response) => {
-            this.enableAutoSave = response === '1';
+            this.enableAutoSave = response.auto_save === '1';
+            this.enablePreheader = response.enable_preheader === '1';
           })
           .catch((error) => {
-            this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
           configService.getConfig('campaign')
             .then((response) => {
               this.enableLocking = response.locking === true;
             })
             .catch((error) => {
-              this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
+              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
             });
       },
       tagChange(tags) {
@@ -136,25 +133,47 @@
           value: tags
         });
       },
+      autoSaveChange() {
+        this.$store.commit('campaign/saveSetting', {
+          name: 'autoSave',
+          value: this.form.autoSave
+        });
+        this.save();
+      },
+      save() {
+        this.$store.commit("global/setLoader", true);
+        this._save().then(response => {
+          this.$root.$toast('Settings saved', {className: 'et-info'});
+          this.$store.commit("global/setLoader", false);
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+        });
+      },
+      _save(bodyHtml = undefined) {
+        return this.$store.dispatch("campaign/saveCampaign", {
+          campaign: this.campaign
+        });
+      },
       lockCampaign() {
         this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/lockCampaign", this.params.campaign_id).then(response => {
+        this.$store.dispatch("campaign/lockCampaign", this.campaign._id).then(response => {
           this.$root.$toast('This campaign is locked now. Only you can unlock it.', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again',
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
             {className: 'et-error'});
         });
       },
       unlockCampaign() {
         this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/unlockCampaign", this.params.campaign_id).then(response => {
+        this.$store.dispatch("campaign/unlockCampaign", this.campaign._id).then(response => {
           this.$root.$toast('This campaign is unlocked now, and you can make changes on it', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again',
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
             {className: 'et-error'});
         });
       }
