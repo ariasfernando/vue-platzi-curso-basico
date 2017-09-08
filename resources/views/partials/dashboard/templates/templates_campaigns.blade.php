@@ -20,7 +20,7 @@
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
-                    <th width="150" v-if="showCreatedBy">
+                    <th width="200" v-if="showCreatedBy">
                         <column-sort
                             field="created_email"
                             title="Created by"
@@ -28,7 +28,7 @@
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
-                    <th width="150">
+                    <th width="200">
                         <column-sort
                             field="user_email"
                             title="Last Modified by"

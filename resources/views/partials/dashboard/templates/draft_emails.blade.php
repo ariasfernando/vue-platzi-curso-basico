@@ -20,7 +20,7 @@
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
-                    <th width="150" v-if="showCreatedBy">
+                    <th width="200" v-if="showCreatedBy">
                         <column-sort
                             field="created_email"
                             title="Created by"
@@ -28,18 +28,10 @@
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
-                    <th width="150">
+                    <th width="200">
                         <column-sort
                             field="updated_at"
                             title="Last Modified"
-                            :sort="sortKey"
-                            :reverse="reverse"
-                            v-on:change-sort="sortBy"></column-sort>
-                    </th>
-                    <th width="150">
-                        <column-sort
-                            field="user_email"
-                            title="Last Modified by"
                             :sort="sortKey"
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
@@ -61,9 +53,8 @@
                     <td>@{{ campaign.created_at }}</td>
                     <td :title="campaign.created_email" v-if="showCreatedBy">@{{ campaign.created_email }}</td>
                     <td class="last-modified">
-                        <span>@{{ campaign.updated_at }}</span>
+                        <span>@{{ campaign.updated_at }}</span><br><span>by @{{ campaign.user_email }}</span>
                     </td>
-                    <td :title="campaign.user_email" v-html="prepareOutput(campaign.user_email, 'user_email')"></td>
                     <td :title="campaign.campaign_name">
                         <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
                         <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock pull-left campaign-locking" v-if="enableLocking && campaign.locked"></i>
