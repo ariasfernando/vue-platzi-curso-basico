@@ -100,6 +100,20 @@
       display: table;
       width: 100%;
       padding: 20px;
+
+      .plugin-wrapper{
+
+        label{
+          text-align: left;
+          color: #666666;
+          padding-top: 2px;
+          font-weight: 300;
+          font-size: 13px;
+          margin-bottom: 0px;
+          float: left;
+        }
+
+      }
     }
   }
 
