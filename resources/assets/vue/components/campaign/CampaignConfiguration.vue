@@ -111,9 +111,10 @@
         });
       },
       loadConfig() {
-        configService.getConfig('global_settings.auto_save')
+        configService.getConfig('global_settings')
           .then((response) => {
-            this.enableAutoSave = response === '1';
+            this.enableAutoSave = response.auto_save === '1';
+            this.enablePreheader = response.enable_preheader === '1';
           })
           .catch((error) => {
             this.$root.$toast('Got nothing from server. Prompt user to check internet connection and try again', {className: 'et-error'});
