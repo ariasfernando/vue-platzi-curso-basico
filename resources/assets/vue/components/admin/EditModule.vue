@@ -172,6 +172,7 @@
 
   #edit-container{
     padding: 0px;
+    min-height: 780px;
   }
 
   .module {
