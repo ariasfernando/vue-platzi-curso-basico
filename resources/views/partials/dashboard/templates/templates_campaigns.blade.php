@@ -39,7 +39,7 @@
                     <th>
                         <column-sort
                             field="campaign_name"
-                            title="Email Name"
+                            title="Campaign Name"
                             :sort="sortKey"
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
