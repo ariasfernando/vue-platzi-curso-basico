@@ -1,75 +1,77 @@
 <template>
-  <div class="section-box-header section-canvas-title">
-    <div class="row">
-      <div class="col-xs-3 col-md-4 col-lg-3" id="section-canvas-title-col">
-      </div>
+  <div class="beta-subheader">
+    <div class="section-box-header section-canvas-title">
+      <div class="row">
+        <div class="col-xs-3 col-md-4 col-lg-3" id="section-canvas-title-col">
+        </div>
 
-      <div class="col-xs-1 col-md-1 col-lg-2">
-        <div class="switch">
-          <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" @click="switchMode('desktop')" checked>
-          <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
-            <i class="fa fa-desktop"></i>
-          </label>
-          <input type="radio" class="switch-input" name="view" value="mobile" id="mobile" @click="switchMode('mobile')">
-          <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
-            <i class="glyphicon glyphicon-phone"></i>
-          </label>
-          <span class="switch-selection"></span>
+        <div class="col-xs-1 col-md-1 col-lg-2">
+          <div class="switch">
+            <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" @click="switchMode('desktop')" checked>
+            <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
+              <i class="fa fa-desktop"></i>
+            </label>
+            <input type="radio" class="switch-input" name="view" value="mobile" id="mobile" @click="switchMode('mobile')">
+            <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
+              <i class="glyphicon glyphicon-phone"></i>
+            </label>
+            <span class="switch-selection"></span>
+          </div>
+        </div>
+
+        <div class="col-xs-8 col-md-7 col-lg-7 text-right" id="section-canvas-buttons-col">
+
+          <button v-show="!locked" class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
+            Preview
+          </button>
+
+          <button v-show="!locked" class="btn btn-default save-as-draft beta-btn-secondary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
+            Save as Draft
+          </button>
+
+          <!--
+            Show if it's not already a template, if it's not a processed campaign
+            and templating is enabled on the tool.
+          -->
+          <b-btn v-b-modal.confirm-modal class="btn btn-default save-as-template beta-btn-secondary"
+            v-show="!locked"
+            v-if="campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
+              && campaign.campaign_data.library_config.templating">
+            Save as Template
+          </b-btn>
+
+          <!--
+            Show if it's already a template, skip confirmation modal.
+          -->
+          <button class="btn btn-default save-as-template beta-btn-secondary" @click="template()"
+            :class="hiddenClass()" v-if="campaign.campaign_data.template"
+            v-show="!locked">
+            Save Template
+          </button>
+
+          <button class="btn btn-default proof-open-modal beta-btn-secondary" v-if="!campaign.campaign_data.template && this.$app.proofConfig.status"
+              v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
+              v-show="!locked"
+          >Send for Review</button>
+
+          <a class="btn campaign-continue beta-btn-primary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete"
+            v-show="!locked">
+            Complete
+            <i class="glyphicon glyphicon-triangle-right"></i>
+          </a>
         </div>
       </div>
-
-      <div class="col-xs-8 col-md-7 col-lg-7 text-right" id="section-canvas-buttons-col">
-
-        <button v-show="!locked" class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
-          Preview
-        </button>
-
-        <button v-show="!locked" class="btn btn-default save-as-draft beta-btn-secondary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
-          Save as Draft
-        </button>
-
-        <!--
-          Show if it's not already a template, if it's not a processed campaign
-          and templating is enabled on the tool.
-        -->
-        <b-btn v-b-modal.confirm-modal class="btn btn-default save-as-template beta-btn-secondary"
-          v-show="!locked"
-          v-if="campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
-            && campaign.campaign_data.library_config.templating">
-          Save as Template
-        </b-btn>
-
-        <!--
-          Show if it's already a template, skip confirmation modal.
-        -->
-        <button class="btn btn-default save-as-template beta-btn-secondary" @click="template()"
-          :class="hiddenClass()" v-if="campaign.campaign_data.template"
-          v-show="!locked">
-          Save Template
-        </button>
-
-        <button class="btn btn-default proof-open-modal beta-btn-secondary" v-if="!campaign.campaign_data.template && this.$app.proofConfig.status"
-            v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
-            v-show="!locked"
-        >Send for Review</button>
-
-        <a class="btn campaign-continue beta-btn-primary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete"
-          v-show="!locked">
-          Complete
-          <i class="glyphicon glyphicon-triangle-right"></i>
-        </a>
-      </div>
+      <b-modal v-if="campaignConfig.enable_templating"
+        id="confirm-modal"
+        ref="confirmModal" 
+        ok-title="Accept"
+        close-title="Cancel"
+        @ok="confirmSave">
+        <h4>Save as Template</h4>
+        Remember that if you save this campaign as template, you won't be able to publish it,
+        you will only be able to edit and clone it.
+      </b-modal>
     </div>
-    <b-modal v-if="campaignConfig.enable_templating"
-      id="confirm-modal"
-      ref="confirmModal" 
-      ok-title="Accept"
-      close-title="Cancel"
-      @ok="confirmSave">
-      <h4>Save as Template</h4>
-      Remember that if you save this campaign as template, you won't be able to publish it,
-      you will only be able to edit and clone it.
-    </b-modal>
   </div>
 </template>
 

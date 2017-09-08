@@ -89,13 +89,17 @@
   @import '../../less/campaign';
 
   .component-settings-wrapper {
-    padding-left: 20px;
+    background: none;
 
     .component-settings {
       background: #FFFFFF;
       border-radius: 5px;
       padding: 0 15px;
       border: 1px solid transparent;
+      height: 100%;
+      display: table;
+      width: 100%;
+      padding: 20px;
     }
   }
 
