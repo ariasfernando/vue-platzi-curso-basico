@@ -143,22 +143,25 @@ aside{
 		.unlock-campaign-btn,
 		.lock-campaign-btn{
 			float: right;
-			min-width: 24px;
-			padding: 5px 5px;
-			.border-radius(50%);
-			background: @stensul-purple!important;
+			background: none!important;
+			color: @stensul-purple!important;
 			border: none;
 		    width: 24px;
-		    height: 24px;
+		    height: 20px;
 		    margin-top: 3px;
 		    line-height: 14px;
+		    outline: 0;
 
 			i{
 				font-size: 12px;
 			}
 
+			&:focus{
+				outline: 0;
+			}
+
 			&:hover{
-				background: @stensul-purple!important;
+				background: none!important;
 			}
 
 			&.ajax-loader-small{
