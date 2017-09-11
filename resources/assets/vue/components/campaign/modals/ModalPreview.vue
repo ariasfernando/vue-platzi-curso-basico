@@ -6,7 +6,7 @@
             <slot name="body">
               <h4>Preview</h4>
               <div class="send-preview">
-                <form name="send-preview-form" id="send-preview-form">
+                <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent>
                   <div class="form-group">
                     <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview email is not suitable for deployment. In order to access the production-ready HTML, please click Complete to publish your campaign.</p>
                     <div class="input-group">
