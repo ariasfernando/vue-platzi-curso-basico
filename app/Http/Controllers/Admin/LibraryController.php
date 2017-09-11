@@ -165,9 +165,10 @@ class LibraryController extends Controller
         $library->modules = $modules = [];
         $library->config = $request->input("config");
 
+        $modules = [];
         foreach ($request->input('modules') as $group) {
             if (strtolower($group['name']) == 'default') {
-                $modules = $group['modules'];
+                $modules = array_merge($modules,$group['modules']);
             } else {
                 $modules[$group['name']] = $group['modules'];
             }
