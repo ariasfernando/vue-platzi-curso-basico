@@ -1,5 +1,5 @@
 aside{
-	width: 210px!important;
+	width: 260px!important;
 	vertical-align: top;
 	display:table-cell;
 	background: @stensul-white;
@@ -22,43 +22,59 @@ aside{
 				font-size: 13px;
 				text-transform: uppercase;
 				font-weight: 300;
-				color: @stensul-gray;
+				color: #999999;
 				.box-sizing(border-box);
 				background-color: @stensul-white;
 				padding: 15px 10px 13px 10px;
 				margin: 0;
 				position: relative;
 				border-bottom: 1px solid #F4F4F4;
+				transition: all 0.3s linear;
+
+				.glyph-inline{
+					position: static;
+					margin-right: 4px;
+					color: #999999;
+					transition: all 0.3s linear;
+				}
 
 				i{
 					top: 50%;
 					right: 8px;
-					font-size: 12px;
+					font-size: 10px;
 					margin: -6px 0 0;
 					position: absolute;
 
 					@media screen and (min-width: @screen-md-min) {
 						right: 10px;
-						font-size: 12px;
+						font-size: 10px;
 						margin: -4px 0 0;
 						color: #CCCCCC;
+					}
+				}
+
+				&:hover{
+					color: #555555;
+
+					.glyph-inline{
+						color: #555555;
 					}
 				}
 			}
 
 			.level-1{
 				h2{
-					text-transform: capitalize;
+					text-transform: uppercase;
 				}
 			}
 		}
         // icon expand
         .expand{
 
-            &>h2>i{
+            &>h2>i.glyphicon-menu-down{
                 .glyphicon-menu-down();
             }
-            &>h2>i.icon-open-expan{
+            &>h2>i.glyphicon-menu-up{
                 .glyphicon-menu-up();
             }
         }
@@ -76,6 +92,23 @@ aside{
 				h2{
 					background: none;
 					border-bottom: 1px solid #eeeeee;
+					padding-left: 35px;
+					transition: all 0.3s linear;
+
+					.glyph-inline{
+						position: static;
+						margin-right: 4px;
+						color: #999999;
+						transition: all 0.3s linear;
+					}
+				}
+
+				&:hover{
+					color: #555555;
+
+					.glyph-inline{
+						color: #555555;
+					}
 				}
 			}
 			.expand{
@@ -113,6 +146,7 @@ aside{
 				background: @stensul-white;
 				width: 100%;
 				padding: 7px;
+				border: 1px solid #f4f4f4;
 			}
 		}
 	}
@@ -143,22 +177,25 @@ aside{
 		.unlock-campaign-btn,
 		.lock-campaign-btn{
 			float: right;
-			min-width: 24px;
-			padding: 5px 5px;
-			.border-radius(50%);
-			background: @stensul-purple!important;
+			background: none!important;
+			color: @stensul-purple!important;
 			border: none;
 		    width: 24px;
-		    height: 24px;
+		    height: 20px;
 		    margin-top: 3px;
 		    line-height: 14px;
+		    outline: 0;
 
 			i{
 				font-size: 12px;
 			}
 
+			&:focus{
+				outline: 0;
+			}
+
 			&:hover{
-				background: @stensul-purple!important;
+				background: none!important;
 			}
 
 			&.ajax-loader-small{

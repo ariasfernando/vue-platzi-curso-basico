@@ -1,6 +1,6 @@
 <template>
   <div class="expand configuration-mod">
-    <h2><i class="glyphicon glyphicon-cog"></i> Settings <i class="glyphicon glyphicon-menu-down"></i></h2>
+    <h2><i class="glyphicon glyphicon-cog glyph-inline"></i> Settings <i class="glyphicon glyphicon-menu-down"></i></h2>
     <div class="level-1 open-section-campaign">
       <form>
         <!-- Configuration Inputs -->

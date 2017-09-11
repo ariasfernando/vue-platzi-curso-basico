@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h2>Select an image</h2>
+      <label>Select an image</label>
       <input type="file" @change="onFileChange">
     </div>
 </template>

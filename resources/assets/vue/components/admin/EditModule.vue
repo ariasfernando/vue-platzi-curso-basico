@@ -172,6 +172,7 @@
 
   #edit-container{
     padding: 0px;
+    min-height: 780px;
   }
 
   .module {
@@ -387,7 +388,7 @@
     }
 
     .left-bar {
-      width: 230px;
+      width: 251px;
       color: #666666;
       display: table-cell;
       float: none;
@@ -726,7 +727,7 @@
     }
 
     .right-bar {
-      width: 230px;
+      width: 251px;
       display: table-cell;
       float: none;
       padding: 0px;

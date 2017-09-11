@@ -1,5 +1,6 @@
 <template>
   <div class="component-settings section-box" v-if="ready">
+    <h2><i class="glyphicon glyphicon-pencil"></i> STYLES</h2>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
         <component v-if="plugin.enabled && $globalComponents.indexOf('campaign-' + plugin.name) !== -1" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>

@@ -102,7 +102,7 @@
         sidebar.style.display = 'block';
 
         const container = document.getElementsByClassName('base-admin')[0];
-        container.style.paddingLeft = '175px';
+        container.style.paddingLeft = '225px';
       },
     },
     created () {

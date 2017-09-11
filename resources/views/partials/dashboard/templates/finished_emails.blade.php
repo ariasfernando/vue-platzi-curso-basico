@@ -12,15 +12,7 @@
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
-                    <th width="150" v-else="showCreatedBy">
-                        <column-sort
-                            field="created_at"
-                            title="Date Started"
-                            :sort="sortKey"
-                            :reverse="reverse"
-                            v-on:change-sort="sortBy"></column-sort>
-                    </th>
-                    <th width="150" v-if="showCreatedBy">
+                    <th width="200" v-if="showCreatedBy">
                         <column-sort
                             field="created_email"
                             title="Created by"
@@ -28,10 +20,10 @@
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
-                    <th width="150">
+                    <th width="200">
                         <column-sort
                             field="user_email"
-                            title="Last Modified by"
+                            title="Last Modified"
                             :sort="sortKey"
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
@@ -39,7 +31,7 @@
                     <th>
                         <column-sort
                             field="campaign_name"
-                            title="Email Name"
+                            title="Campaign Name"
                             :sort="sortKey"
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
@@ -54,7 +46,9 @@
                         <span>@{{ campaign.updated_at }}</span>
                     </td>
                     <td :title="campaign.created_email" v-if="showCreatedBy">@{{ campaign.created_email }}</td>
-                    <td :title="campaign.user_email" v-html="prepareOutput(campaign.user_email, 'user_email')"></td>
+                    <td :title="campaign.user_email">
+                        <span>@{{ campaign.updated_at }}</span><br><span>by @{{ campaign.user_email }}</span>
+                    </td>
                     <td :title="campaign.campaign_name">
                         <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
                         <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock text-danger" v-if="enableLocking && campaign.locked"></i>

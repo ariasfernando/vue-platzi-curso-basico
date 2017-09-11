@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label>{{ plugin.title }}</label><br>
+    <label>{{ plugin.title }}</label>
     <compact-picker ref="compact" v-model="colors" @input="updateValue"></compact-picker>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label>{{ plugin.title }}</label><br>
+    <label>{{ plugin.title }}</label>
     <select title="vertical-alignment" name="alignment" :value="value" @change="change">
       <option v-for="option in options" :value="option" :selected="option === value">{{ option }}</option>
     </select>
