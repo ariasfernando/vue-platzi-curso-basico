@@ -250,7 +250,6 @@ gulp.task('elixir-scripts', function () {
           [
             'js/library/custom-plugins/st-pagination-bar.jquery.js',
             'js/library/campaign-preview.js',
-            'js/library/campaign-manager.js',
             'js/library/campaign-controller.js',
             'js/library/dashboard-controller.js',
             jsAppFilePath('dashboard-vue.js'),
@@ -301,8 +300,6 @@ gulp.task('elixir-scripts', function () {
             'js/library/campaign-manager.js',
             'js/library/campaign-menu.js',
             'js/library/image-manager.js',
-            'js/library/locking-manager.js',
-            jsAppFilePath('campaign.js')
           ],
           jsDestinationPath + 'campaign.js',
           assetsPath
