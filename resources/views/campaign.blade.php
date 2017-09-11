@@ -5,12 +5,6 @@
 	<div id="campaign">
 	    <campaign campaign-id="{{ $params['campaign_id'] }}"></campaign>
     </div>
-	{{-- MODALS --}}
-	@include('partials.campaign.modal_campaign_plain_text')
-	@include('partials.campaign.modal_campaign_processed')
-	@include('partials.campaign.modal_campaign_preview')
-	@include('partials.campaign.modal_campaign_finished')
-	@include('partials.proof.modal_proof')
 
 @endsection
 
