@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label>{{ plugin.title }}</label>
+    <label>{{ plugin.title }}</label><br>
     <compact-picker ref="compact" v-model="colors" @input="updateValue"></compact-picker>
   </div>
 </template>
@@ -9,20 +9,20 @@
   import { Compact } from 'vue-color'
 
   export default {
-    props: ['name', 'plugin', 'moduleId', 'columnId'],
+    props: ['name', 'plugin', 'moduleId'],
     components: {
       'compact-picker': Compact
     },
     computed: {
-      modules() {
-        return this.$store.getters["campaign/modules"];
+      currentModule() {
+        return this.$store.getters["campaign/currentModule"];
       },
-      column() {
-        return this.modules[this.moduleId].structure.columns[this.columnId];
+      module() {
+        return this.$store.getters["campaign/modules"][this.currentModule];
       },
       colors() {
         return {
-          hex: this.column.attribute.bgcolor || this.plugin.config.defaultValue
+          hex: this.module.structure.attribute.bgcolor || this.plugin.config.defaultValue
         }
       },
     },
@@ -36,7 +36,6 @@
         const payload = {
           plugin: this.name,
           moduleId: this.moduleId,
-          columnId: this.columnId,
           attribute: 'bgcolor',
           attributeValue: value.hex,
         };

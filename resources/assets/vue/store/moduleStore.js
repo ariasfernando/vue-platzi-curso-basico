@@ -98,10 +98,14 @@ const mutations = {
     _.merge(pluginData, data.data);
   },
   togglePlugin(state, data) {
-    if (data.componentId >= 0) {
-      state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].enabled = data.enabled;
+    if (data.columnId >= 0 || data.componentId >= 0) {
+      if (data.componentId >= 0) {
+        state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].enabled = data.enabled;
+      } else {
+        state.module.structure.columns[data.columnId].plugins[data.plugin].enabled = data.enabled;
+      }
     } else {
-      state.module.structure.columns[data.columnId].plugins[data.plugin].enabled = data.enabled;
+      state.module.plugins[data.plugin].enabled = data.enabled;
     }
   },
   saveComponentAttribute(state, data) {

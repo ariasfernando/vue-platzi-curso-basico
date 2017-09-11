@@ -124,15 +124,13 @@
         </div>
 
         <div class="row" v-if="module.plugins && Object.keys(module.plugins).length !== 0">
-          <label class="col-sm-8 control-label" for="set-column">Plugins</label>
-
-          <div class="col-sm-4">
+          <div class="col-sm-12">
             <div>
-              <!-- Column Plugins -->
+              <!-- Module Plugins -->
               <div v-for="(plugin, moduleKey) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
                 <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin"></component>
               </div>
-              <!-- /Column Plugins -->
+              <!-- /Module Plugins -->
             </div>
           </div>
         </div>

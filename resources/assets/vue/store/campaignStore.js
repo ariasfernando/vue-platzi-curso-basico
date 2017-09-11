@@ -97,6 +97,7 @@ const mutations = {
   },
   setCurrentComponent(state, data) {
     state.currentComponent = data;
+    state.currentModuleId = undefined;
   },
   saveComponent(state, data) {
     const moduleId = data.moduleId;
@@ -121,6 +122,7 @@ const mutations = {
   },
   setCurrentModule(state, moduleId) {
     state.currentModuleId = moduleId;
+    state.currentComponent = {};
   },
   setTemplating(state, templating) {
     state.campaign.campaign_data.template = templating;
