@@ -13,6 +13,7 @@ module.exports = {
   attribute: {
     width: '100%',
     valign: 'middle',
+    bgcolor: '#FFFFFF',
   },
   settings: [
     {

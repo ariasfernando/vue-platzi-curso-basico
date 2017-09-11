@@ -18,10 +18,14 @@ function Module(data = {}) {
   this.status = data.status || '';
   const style = (data.structure && data.structure.style) ? data.structure.style : {};
   const settings = (data.structure && data.structure.settings) ? data.structure.settings : [];
+  const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : [];
 
   this.plugins = data.plugins || getPlugins();
 
   this.structure = {
+    attribute: {
+      bgcolor: '#FFFFFF',
+    },
     style: {
       backgroundColor: style.backgroundColor || '#FFFFFF',
       paddingTop: style.paddingTop || 0,
@@ -34,9 +38,9 @@ function Module(data = {}) {
     },
     settings: [
       {
-        link: 'style',
+        link: 'attribute',
         label: 'Background Color',
-        name: 'backgroundColor',
+        name: 'bgcolor',
         type: 'color',
         value: '#FFFFFF',
       },
@@ -108,6 +112,7 @@ function Module(data = {}) {
   };
 
   _.extend(this.structure.settings, settings);
+  _.extend(this.structure.attribute, attribute);
 
   return this;
 }

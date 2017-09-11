@@ -33,6 +33,8 @@
           if (!_.isEmpty(this.currentComponent)) {
             this.component = modules[this.currentComponent.moduleId].structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
             this.ready = true;
+          } else {
+            this.ready = false;
           }
         },
         deep: true
