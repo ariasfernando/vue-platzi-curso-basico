@@ -1,3 +1,10 @@
+// -- AJAX Setup --
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-token': Application.globals.csrfToken
+    }
+});
+
 /*
  * Campaign Controller
  * delete | clone | displayModalCode | showHtml | showPlaintext
