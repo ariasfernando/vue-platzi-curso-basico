@@ -13,6 +13,7 @@ module.exports = {
   attribute: {
     width: '100%',
     valign: 'middle',
+    bgcolor: '#FFFFFF',
   },
   settings: [
     {
@@ -27,7 +28,7 @@ module.exports = {
       label: 'Background Color',
       name: 'backgroundColor',
       type: 'color',
-      value: { hex: '#FFFFFF' },
+      value: {hex: '#FFFFFF'},
     },
     {
       link: 'style',
@@ -88,10 +89,11 @@ module.exports = {
           label: 'Border Color',
           name: 'borderColor',
           type: 'color',
-          value: { hex: '#000000' },
+          value: {hex: '#000000'},
         },
       ],
     },
   ],
   components: [],
+  plugins: {},
 };

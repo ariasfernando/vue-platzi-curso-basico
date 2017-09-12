@@ -2,7 +2,7 @@
     <div class="proof-viewer-container">
 
         <div class="proof-top-bar">
-            <div class="col-xs-6">
+            <div class="col-xs-4">
                 <div class="switch pull-right">
                     <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
                     <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
@@ -15,7 +15,7 @@
                      <span class="switch-selection"></span>
                   </div>
              </div>
-             <div class="col-xs-6 text-right" id="section-canvas-buttons-col">
+             <div class="col-xs-8 text-right" id="section-canvas-buttons-col">
                  <proof-decision
                      :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
                      :token="token"

@@ -104,6 +104,7 @@ class ModuleController extends Controller
         $params = [
             'name' => $request->input('name'),
             'structure' => $request->input('structure'),
+            'plugins' => $request->input('plugins'),
             'status' => $request->input('status', 'draft'),
             'type' => 'studio'
         ];

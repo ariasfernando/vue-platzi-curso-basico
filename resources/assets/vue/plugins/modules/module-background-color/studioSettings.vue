@@ -14,14 +14,14 @@
 </template>
 
 <script>
-  export default {
-    props: ['name', 'columnId'],
+export default {
+    props: ['name'],
     computed: {
       module() {
         return this.$store.getters["module/module"];
       },
       plugin() {
-        const plugin = this.module.structure.columns[this.columnId].plugins[this.name];
+        const plugin = this.module.plugins[this.name];
         this.enabled = plugin.enabled;
 
         return plugin;
@@ -36,7 +36,6 @@
       toggle(e) {
         const payload = {
           plugin: this.name,
-          columnId: this.columnId,
           enabled: e.value,
         };
 

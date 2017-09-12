@@ -28,11 +28,15 @@
         return this.$store.getters["campaign/currentComponent"];
       },
       component() {
-        const moduleId = this.currentComponent.moduleId;
-        const columnId = this.currentComponent.columnId;
-        const componentId = this.currentComponent.componentId;
+        let component = {};
+        if (Object.keys(this.currentComponent).length !== 0) {
+          const moduleId = this.currentComponent.moduleId;
+          const columnId = this.currentComponent.columnId;
+          const componentId = this.currentComponent.componentId;
 
-        return this.$store.state.campaign.modules[moduleId].structure.columns[columnId].components[componentId];
+          component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
+        }
+        return component;
       },
       href() {
         return this.component.attribute.href;

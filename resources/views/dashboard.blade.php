@@ -12,7 +12,6 @@
 	{{-- MODALS --}}
 	@include('partials.dashboard.modal_dashboard_code')
 	@include('partials.proof.modal_proof')
-	@include('partials.modal_campaign_preview')
 
 	{{-- VUE TEMPLATES --}}
 	@include('partials.dashboard.vue_templates')

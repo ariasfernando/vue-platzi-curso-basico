@@ -1,4 +1,15 @@
 import _ from 'lodash';
+import clone from 'clone';
+
+function getPlugins() {
+  const plugins = {};
+  _.each(Application.globals.modulePlugins, (plugin, name) => {
+    if (plugin.target.indexOf('module') !== -1) {
+      plugins[name] = clone(plugin);
+    }
+  });
+  return plugins;
+}
 
 function Module(data = {}) {
   this.moduleId = data._id || undefined;
@@ -7,8 +18,14 @@ function Module(data = {}) {
   this.status = data.status || '';
   const style = (data.structure && data.structure.style) ? data.structure.style : {};
   const settings = (data.structure && data.structure.settings) ? data.structure.settings : [];
+  const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : [];
+
+  this.plugins = data.plugins || getPlugins();
 
   this.structure = {
+    attribute: {
+      bgcolor: '#FFFFFF',
+    },
     style: {
       backgroundColor: style.backgroundColor || '#FFFFFF',
       paddingTop: style.paddingTop || 0,
@@ -16,14 +33,14 @@ function Module(data = {}) {
       paddingBottom: style.paddingBottom || 0,
       paddingRight: style.paddingRight || 0,
       borderWidth: style.borderWidth || '0px',
-      borderStyle: style.borderStyle ||'none',
-      borderColor: style.borderColor ||'#000000',
+      borderStyle: style.borderStyle || 'none',
+      borderColor: style.borderColor || '#000000',
     },
     settings: [
       {
-        link: 'style',
+        link: 'attribute',
         label: 'Background Color',
-        name: 'backgroundColor',
+        name: 'bgcolor',
         type: 'color',
         value: '#FFFFFF',
       },
@@ -95,6 +112,7 @@ function Module(data = {}) {
   };
 
   _.extend(this.structure.settings, settings);
+  _.extend(this.structure.attribute, attribute);
 
   return this;
 }
