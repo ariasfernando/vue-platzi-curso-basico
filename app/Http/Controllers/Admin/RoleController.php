@@ -38,7 +38,8 @@ class RoleController extends Controller
      */
     public function getIndex()
     {
-        $roles_data = Role::orderBy('updated_at', 'desc')->paginate(5);
+        $data_page = config('admin.sections.roles.limit_per_page',10);
+        $roles_data = Role::orderBy('updated_at', 'desc')->paginate((int) $data_page);
         return $this->renderView('admin.roles', array('roles' => $roles_data));
     }
 
@@ -49,7 +50,7 @@ class RoleController extends Controller
      */
     public function getList(Request $request)
     {
-        $data_page = $request->input('limit') ?: 5;
+        $data_page = $request->input('limit') ?: config('admin.sections.roles.limit_per_page',10);
         $data_order_field = ($request->input('order_field')) ?: 'updated_at';
         $data_order_type = ($request->input('order_type')) ?: 'DESC';
 
