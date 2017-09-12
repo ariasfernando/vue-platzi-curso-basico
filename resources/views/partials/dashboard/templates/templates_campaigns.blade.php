@@ -4,26 +4,10 @@
             v-bind:class="{ loading: loading }">
             <thead>
                 <tr>
-                    <th width="110" v-if="showCreatedBy">
-                        <column-sort
-                            field="created_at"
-                            title="Date Started"
-                            :sort="sortKey"
-                            :reverse="reverse"
-                            v-on:change-sort="sortBy"></column-sort>
-                    </th>
-                    <th width="150" v-else="showCreatedBy">
-                        <column-sort
-                            field="created_at"
-                            title="Date Started"
-                            :sort="sortKey"
-                            :reverse="reverse"
-                            v-on:change-sort="sortBy"></column-sort>
-                    </th>
                     <th width="200" v-if="showCreatedBy">
                         <column-sort
-                            field="created_email"
-                            title="Created by"
+                            field="created_at"
+                            title="Created"
                             :sort="sortKey"
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
@@ -31,7 +15,7 @@
                     <th width="200">
                         <column-sort
                             field="user_email"
-                            title="Last Modified by"
+                            title="Last Modified"
                             :sort="sortKey"
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
@@ -51,12 +35,10 @@
             <tbody>
                 <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
                     <td class="last-modified">
-                        <span>@{{ campaign.updated_at }}</span>
+                        <span>@{{ campaign.created_at }}</span><br><span>by @{{ campaign.created_email }}</span>
                     </td>
-                    <td :title="campaign.created_email" v-if="showCreatedBy">@{{ campaign.created_email }}</td>
-                    <td :title="campaign.user_email">
-                        <span v-html="prepareOutput(campaign.user_email, 'user_email')"></span>
-                        <i class="fa fa-lock text-danger" v-if="enableTemplateLocking && campaign.locked"></i>
+                    <td class="last-modified" :title="campaign.user_email">
+                        <span>@{{ campaign.updated_at }}</span><br><span>by @{{ campaign.user_email }}</span>
                     </td>
                     <td :title="campaign.campaign_name">
                         <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
