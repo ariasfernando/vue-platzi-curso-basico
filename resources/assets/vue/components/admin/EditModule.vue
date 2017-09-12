@@ -227,6 +227,19 @@
         margin: 0px -10px 15px -10px;
       }
 
+      .field-padding{
+        padding-right: 15px;
+
+        .col-sm-3{
+          float: right!important;
+          width: 72px;
+
+          input{
+            width: 40px;
+          }
+        }
+      }
+
     }
 
     .header {
@@ -342,6 +355,8 @@
     }
 
     .beta-btn-primary{
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 13px;
       margin-top: -8px;
       background: @stensul-purple;
       border: none;
@@ -352,7 +367,8 @@
     }
 
     .beta-btn-secondary{
-      font-size: 14px;
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 13px;
       font-weight: 400;
       color: #666666;
       padding: 7px 10px;
