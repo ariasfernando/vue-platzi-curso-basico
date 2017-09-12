@@ -38,10 +38,10 @@
           moduleId: this.moduleId,
           columnId: this.columnId,
           attribute: 'bgcolor',
-          attributeValue: value.hex,
+          attributeValue: value,
         };
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.$store.commit('campaign/saveColumnAttribute', payload);
       }
     },
     mounted() {

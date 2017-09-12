@@ -8,7 +8,8 @@
 
   <tr v-else class="st-module-wrapper">
     <td class="st-toolbar-content st-position-relative"
-        :style="module.structure.style" 
+        :style="module.structure.style"
+        :bgcolor="module.structure.attribute.bgcolor.hex"
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
     >
       <table width="100%" cellspacing="0" cellpadding="0">
@@ -22,7 +23,7 @@
                    :style="column.style"
             >
                 <tr v-for="(component, componentId) in column.components">
-                  <td width="100%" :valign="column.attribute.valign"
+                  <td width="100%" :bgcolor="column.attribute.bgcolor.hex" :valign="column.attribute.valign"
                       :align="component.attribute.align || 'center'"
                   >
                     <component :is="component.type"

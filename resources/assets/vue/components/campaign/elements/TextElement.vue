@@ -3,7 +3,7 @@
   <tr @click.prevent="setComponent"
       data-type="text-element"
   >
-    <td width="100%">
+    <td width="100%" :bgcolor="component.attribute.bgcolor.hex">
       <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
         <tr>
           <td width="100%" 

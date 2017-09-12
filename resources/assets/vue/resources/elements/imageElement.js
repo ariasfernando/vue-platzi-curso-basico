@@ -9,6 +9,7 @@ module.exports = {
   },
   attribute: {
     placeholder: 'studio/placeholder-square.jpg',
+    bgcolor: { hex: '#FFFFFF' },
     href: 'http://stensul.com',
     alt: 'Image',
     title: 'Image',
