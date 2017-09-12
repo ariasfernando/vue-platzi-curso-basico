@@ -122,7 +122,7 @@ function fileExists(file) {
  */
 gulp.task('elixir-scripts', function () {
   let assetsPath = 'resources/assets/';
-  let customerAssetsPath = 'stensul/customer/' + assetsPath + 'js/';
+  let customerAssetsPath = 'stensul/customer/' + assetsPath + 'vue/';
   let jsDestinationPath = 'public/js/';
 
   elixir((mix) => {

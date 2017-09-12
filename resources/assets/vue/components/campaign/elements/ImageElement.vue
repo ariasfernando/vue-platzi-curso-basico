@@ -5,7 +5,8 @@
     >
       <td width="100%" 
           align="center"
-          :style="component.style" 
+          :style="component.style"
+          :bgcolor="component.attribute.bgcolor.hex"
           class="st-position-relative"
       >
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
