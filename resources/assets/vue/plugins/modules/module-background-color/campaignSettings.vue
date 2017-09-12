@@ -35,12 +35,12 @@
       updateValue(value) {
         const payload = {
           plugin: this.name,
-          moduleId: this.moduleId,
+          moduleId: this.currentModule,
           attribute: 'bgcolor',
-          attributeValue: value.hex,
+          attributeValue: value,
         };
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.$store.commit('campaign/saveModuleAttribute', payload);
       }
     },
     mounted() {

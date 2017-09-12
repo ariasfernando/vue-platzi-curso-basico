@@ -27,7 +27,6 @@ function Module(data = {}) {
       bgcolor: '#FFFFFF',
     },
     style: {
-      backgroundColor: style.backgroundColor || '#FFFFFF',
       paddingTop: style.paddingTop || 0,
       paddingLeft: style.paddingLeft || 0,
       paddingBottom: style.paddingBottom || 0,

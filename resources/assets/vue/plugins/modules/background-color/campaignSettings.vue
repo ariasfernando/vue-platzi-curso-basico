@@ -47,7 +47,7 @@
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
           attribute: 'bgcolor',
-          attributeValue: value.hex,
+          attributeValue: value,
         };
 
         this.$store.commit('campaign/saveComponentAttribute', payload);
