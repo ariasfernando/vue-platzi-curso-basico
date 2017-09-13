@@ -2,6 +2,7 @@
   <div class="beta-subheader">
     <div class="section-box-header section-canvas-title">
       <div class="row">
+        <div class="col-xs-5 col-md-5 col-lg-5"></div>
 
         <div class="col-xs-2 col-md-2 col-lg-2">
           <div class="switch">
@@ -17,7 +18,7 @@
           </div>
         </div>
 
-        <div class="col-xs-10 col-md-10 col-lg-10 text-right" id="section-canvas-buttons-col">
+        <div class="col-xs-5 col-md-5 col-lg-5 text-right" id="section-canvas-buttons-col">
 
           <button v-show="!locked" class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
             Preview
