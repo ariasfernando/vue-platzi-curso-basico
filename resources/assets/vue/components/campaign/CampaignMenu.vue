@@ -2,7 +2,7 @@
   <div>
     <div v-for="item in items">
       <div v-if="item.sub_menu" class="expand">
-        <h2 @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
+        <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
 
         <div :class="item.level" :style="{ display: expanded.indexOf(item.name) !== -1 ? 'block' : 'none' }">
 
@@ -32,7 +32,8 @@
     name: 'CampaignMenu',
     data () {
       return {
-        expanded: []
+        expanded: [],
+        isActive: false
       }
     },
     computed: {
@@ -73,6 +74,12 @@
           this.expanded.splice(index, 1);
         } else {
           this.expanded.push(item);
+        }
+
+        if(event.target.className == "menu-active") {
+          event.target.className = "selected";
+        } else {
+          event.target.className = "menu-active";
         }
       },
     }

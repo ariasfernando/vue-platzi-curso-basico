@@ -29,6 +29,7 @@ aside{
 				position: relative;
 				border-bottom: 1px solid #F4F4F4;
 				transition: all 0.3s linear;
+				z-index: 2;
 
 				span{
 					text-overflow: ellipsis;
@@ -37,6 +38,7 @@ aside{
 				    width: 170px;
 				    display: inline-block;
 				    vertical-align: top;
+				    pointer-events: none;
 				}
 
 				.glyph-inline{
@@ -67,6 +69,16 @@ aside{
 					.glyph-inline{
 						color: #555555;
 					}
+				}
+			}
+
+			h2.selected{
+				.glyph-inline{
+					.glyphicon-folder-open();
+				}
+
+				.glyphicon-menu-down{
+					transform: rotate(180deg);
 				}
 			}
 
@@ -139,7 +151,7 @@ aside{
 	.expand.configuration-mod{
 		&>h2{
 			background-color: @stensul-white;
-			padding: 19px 10px 17px 10px;
+			padding: 15px 10px 13px 10px;
 		}
 		form{
 			padding: 10px;
