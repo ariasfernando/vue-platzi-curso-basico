@@ -1,7 +1,5 @@
 <template>
   <div>
-    <email-actions></email-actions>
-
     <!-- content canvas email -->
     <div class="section-box-content section-canvas-container">
       <table cellpadding="0" cellspacing="0" width="100%">
