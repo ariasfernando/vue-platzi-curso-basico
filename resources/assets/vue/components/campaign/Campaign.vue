@@ -1,5 +1,6 @@
 <template>
   <div class="section-container-campaign">
+    <email-actions></email-actions>
 
     <!-- column left (menu) -->
     <aside>
@@ -39,6 +40,7 @@
   import ComponentSettings from './ComponentSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
   import Spinner from '../common/Spinner.vue'
+  import EmailActions from './EmailActions.vue'
 
   export default {
     name: 'Campaign',
@@ -52,7 +54,8 @@
       ModalComplete,
       ModalPreview,
       ModalProof,
-      Spinner
+      Spinner,
+      'email-actions': EmailActions,
     },
     data: function () {
       return {
