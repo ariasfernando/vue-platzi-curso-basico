@@ -467,6 +467,7 @@
       margin-bottom: 20px;
       padding: 15px 0;
       border-bottom: 1px solid #DDDDDD;
+      margin-top: -3px;
 
       .header-col {
         height: 100%;
