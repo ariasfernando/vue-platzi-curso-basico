@@ -1,6 +1,5 @@
 module.exports = {
   style: {
-    textAlign: 'center',
     paddingTop: '0px',
     paddingLeft: '0px',
     paddingBottom: '0px',

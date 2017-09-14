@@ -112,6 +112,7 @@ export default {
     transition: border-color .3s,background-color .3s;
     width: 34px;
     height: 19px;
+    z-index: 1;
 
     &:before {
       display: block;
@@ -125,7 +126,7 @@ export default {
       transition: transform .3s;
       width: 15px;
       height: 15px;
-      z-index: 20;
+      z-index: 1;
       background-color: #fff;
     }
   }

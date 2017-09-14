@@ -39,7 +39,11 @@
         <!--2 COLUMNS -->
         <!--1 COLUMN -->
         <tr v-else v-for="(component, componentId) in module.structure.columns[0].components">
-          <td width="100%" :valign="component.attribute.valign" :align="component.attribute.align || 'center'">
+          <td :width="module.structure.columns[0].style.width"
+              :style="module.structure.columns[0].style"
+              :valign="component.attribute.valign" 
+              :align="component.attribute.align || 'center'" 
+          >
               <component :is="component.type"
                          :component="component"
                          :module-id="moduleId"

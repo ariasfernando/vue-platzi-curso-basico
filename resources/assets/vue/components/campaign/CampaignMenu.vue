@@ -1,23 +1,26 @@
 <template>
-  <div>
-    <div v-for="item in items">
-      <div v-if="item.sub_menu" class="expand">
-        <h2 @click="expand(item.name)"><i class="glyphicon glyphicon-th-large glyph-inline"></i> {{ item.name }}<i class="glyphicon glyphicon-menu-down"></i></h2>
+  <div class="expand">
+    <h2 class="show-modules" v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> MODULES <i class="glyphicon glyphicon-menu-up"></i></h2>
+    <div class="level-1 open-section-campaign"l v-bind:class="{'is-collapsed' : collapsed }">
+      <div v-for="item in items">
+        <div v-if="item.sub_menu" class="expand">
+          <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
 
-        <div :class="item.level" :style="{ display: expanded.indexOf(item.name) !== -1 ? 'block' : 'none' }">
+          <div :class="item.level" :style="{ display: expanded.indexOf(item.name) !== -1 ? 'block' : 'none' }">
 
-          <div v-for="subitem in item.sub_menu">
-            <div class="add single">
-              <h2 @click="addModule(subitem)"><i class="glyphicon glyphicon-menu-right glyph-inline"></i> {{ subitem.name }} <i
-                class="glyphicon glyphicon-plus"></i></h2>
+            <div v-for="subitem in item.sub_menu">
+              <div class="add single">
+                <h2 @click="addModule(subitem)"><i class="glyphicon glyphicon-minus glyph-inline"></i> <span>{{ subitem.name }}</span> <i
+                  class="glyphicon glyphicon-plus"></i></h2>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div v-else class="add single">
-        <h2 @click="addModule(item)"><i class="glyphicon glyphicon-menu-right glyph-inline"></i> {{ item.name }} <i
-          class="glyphicon glyphicon-plus"></i></h2>
+        <div v-else class="add single">
+          <h2 @click="addModule(item)"><i class="glyphicon glyphicon-th-large glyph-inline"></i> {{ item.name }} <i
+            class="glyphicon glyphicon-plus"></i></h2>
+        </div>
       </div>
     </div>
   </div>
@@ -32,7 +35,9 @@
     name: 'CampaignMenu',
     data () {
       return {
-        expanded: []
+        expanded: [],
+        collapsed: true,
+        isActive: false
       }
     },
     computed: {
@@ -73,6 +78,12 @@
           this.expanded.splice(index, 1);
         } else {
           this.expanded.push(item);
+        }
+
+        if(event.target.className == "menu-active") {
+          event.target.className = "selected";
+        } else {
+          event.target.className = "menu-active";
         }
       },
     }

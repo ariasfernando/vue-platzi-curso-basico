@@ -42,7 +42,7 @@ class UserController extends Controller
         $search_text = ($request->input('q'))? '%'.trim($request->input("q")).'%' : null;
         $data_order_field = ($request->input('order_field')) ?: 'created_at';
         $data_order_type = ($request->input('order_type')) ?: 'DESC';
-        $data_page = $request->input('limit') ?: 5;
+        $data_page = $request->input('limit') ?: config('admin.sections.users.limit_per_page',10);
         $search_operator = 'like';
         $search_query = (count($request->all()))? $request->all() : [];
 

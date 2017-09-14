@@ -1,7 +1,7 @@
 <template>
   <div class="expand configuration-mod">
-    <h2><i class="glyphicon glyphicon-cog glyph-inline"></i> Settings <i class="glyphicon glyphicon-menu-down"></i></h2>
-    <div class="level-1 open-section-campaign">
+    <h2 class="show-configuration" v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-cog glyph-inline"></i> Campaign Settings <i class="glyphicon glyphicon-menu-up"></i></h2>
+    <div class="level-1 open-section-campaign"l v-bind:class="{'is-collapsed' : collapsed }">
       <form>
         <!-- Configuration Inputs -->
         <div>
@@ -66,6 +66,7 @@
     name: 'CampaignConfiguration',
     data () {
       return {
+        collapsed: false,
         enablePreheader: false,
         enableTagging: false,
         enableAutoSave: false,

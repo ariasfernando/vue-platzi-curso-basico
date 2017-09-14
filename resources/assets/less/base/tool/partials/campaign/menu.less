@@ -8,8 +8,7 @@ aside{
 	.menu-campaign{
 		// single module
 		.single{
-			margin-bottom: 20px;
-			border-radius: @section-border-radius;
+			margin-bottom: 0px;
 		}
 		// action type module
 		.expand>h2, .add{
@@ -30,6 +29,17 @@ aside{
 				position: relative;
 				border-bottom: 1px solid #F4F4F4;
 				transition: all 0.3s linear;
+				z-index: 2;
+
+				span{
+					text-overflow: ellipsis;
+				    white-space: nowrap;
+				    overflow: hidden;
+				    width: 170px;
+				    display: inline-block;
+				    vertical-align: top;
+				    pointer-events: none;
+				}
 
 				.glyph-inline{
 					position: static;
@@ -62,6 +72,38 @@ aside{
 				}
 			}
 
+			h2.selected{
+				.glyph-inline{
+					.glyphicon-folder-open();
+				}
+
+				.glyphicon-menu-down{
+					transform: rotate(180deg);
+				}
+			}
+
+			h2.config-selected{
+				.glyph-inline{
+					transform: rotate(45deg);
+				}
+
+				.glyphicon-menu-up{
+					transform: rotate(180deg);
+				}
+			}
+
+			h2.show-modules{
+				.glyph-inline{
+					transform: rotate(45deg);
+				}
+
+				&.config-selected{
+					.glyph-inline{
+						transform: rotate(90deg);
+					}
+				}
+			}
+
 			.level-1{
 				h2{
 					text-transform: uppercase;
@@ -85,14 +127,17 @@ aside{
 			padding-bottom: 0px;
 			background: #f8f8f8;
 
+			h2{
+				background: @stensul-white;
+			}
+
 			.add, .expand{
 				margin: 0px;
 				background: none;
 
 				h2{
-					background: none;
+					background: #f8f8f8;
 					border-bottom: 1px solid #eeeeee;
-					padding-left: 35px;
 					transition: all 0.3s linear;
 
 					.glyph-inline{
@@ -101,15 +146,20 @@ aside{
 						color: #999999;
 						transition: all 0.3s linear;
 					}
-				}
 
-				&:hover{
-					color: #555555;
-
-					.glyph-inline{
+					&:hover{
 						color: #555555;
+
+						.glyph-inline{
+							color: #555555;
+						}
 					}
 				}
+
+				.single h2{
+					padding-left: 20px;
+				}
+
 			}
 			.expand{
 				background-color: @menu-container-sub-section-background-color;
@@ -131,7 +181,7 @@ aside{
 	.expand.configuration-mod{
 		&>h2{
 			background-color: @stensul-white;
-			padding: 19px 10px 17px 10px;
+			padding: 15px 10px 13px 10px;
 		}
 		form{
 			padding: 10px;
@@ -215,4 +265,7 @@ aside{
 		}
 	}
 
+	.is-collapsed{
+		display: none!important;
+	}
 }

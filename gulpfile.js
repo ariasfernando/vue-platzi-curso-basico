@@ -154,7 +154,6 @@ gulp.task('elixir-scripts', function () {
         )
         .browserify(
           [
-            'vue/dashboard.js',
             'js/library/custom-plugins/st-pagination-bar.jquery.js',
             'js/library/campaign-preview.js',
             'js/library/campaign-controller.js',
@@ -296,7 +295,6 @@ gulp.task('elixir-scripts', function () {
             'js/library/campaign-preview.js',
             'js/library/module-manager.js',
             'js/library/modal-manager.js',
-            'js/library/campaign-manager.js',
             'js/library/campaign-menu.js',
             'js/library/image-manager.js',
           ],

@@ -4,26 +4,10 @@
             v-bind:class="{ loading: loading }">
             <thead>
                 <tr>
-                    <th width="110" v-if="showCreatedBy">
-                        <column-sort
-                            field="created_at"
-                            title="Date Started"
-                            :sort="sortKey"
-                            :reverse="reverse"
-                            v-on:change-sort="sortBy"></column-sort>
-                    </th>
-                    <th width="150" v-else="showCreatedBy">
-                        <column-sort
-                            field="created_at"
-                            title="Date Started"
-                            :sort="sortKey"
-                            :reverse="reverse"
-                            v-on:change-sort="sortBy"></column-sort>
-                    </th>
                     <th width="200" v-if="showCreatedBy">
                         <column-sort
-                            field="created_email"
-                            title="Created by"
+                            field="created_at"
+                            title="Created"
                             :sort="sortKey"
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
@@ -50,8 +34,9 @@
             </thead>
             <tbody>
                 <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
-                    <td>@{{ campaign.created_at }}</td>
-                    <td :title="campaign.created_email" v-if="showCreatedBy">@{{ campaign.created_email }}</td>
+                    <td class="last-modified">
+                        <span>@{{ campaign.created_at }}</span><br><span>by @{{ campaign.created_email }}</span>
+                    </td>
                     <td class="last-modified">
                         <span>@{{ campaign.updated_at }}</span><br><span>by @{{ campaign.user_email }}</span>
                     </td>

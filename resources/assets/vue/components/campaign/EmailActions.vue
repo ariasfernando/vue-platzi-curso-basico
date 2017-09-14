@@ -1,11 +1,10 @@
 <template>
-  <div class="beta-subheader">
+  <div class="beta-subheader" v-sticky="{ zIndex: 3, stickyTop: 0 }">
     <div class="section-box-header section-canvas-title">
       <div class="row">
-        <div class="col-xs-3 col-md-4 col-lg-3" id="section-canvas-title-col">
-        </div>
+        <div class="col-xs-5 col-md-5 col-lg-5"></div>
 
-        <div class="col-xs-1 col-md-1 col-lg-2">
+        <div class="col-xs-2 col-md-2 col-lg-2">
           <div class="switch">
             <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" @click="switchMode('desktop')" checked>
             <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
@@ -19,7 +18,7 @@
           </div>
         </div>
 
-        <div class="col-xs-8 col-md-7 col-lg-7 text-right" id="section-canvas-buttons-col">
+        <div class="col-xs-5 col-md-5 col-lg-5 text-right" id="section-canvas-buttons-col">
 
           <button v-show="!locked" class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
             Preview
@@ -57,7 +56,7 @@
           <a class="btn campaign-continue beta-btn-primary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete"
             v-show="!locked">
             Complete
-            <i class="glyphicon glyphicon-triangle-right"></i>
+            <i class="glyphicon glyphicon-menu-right"></i>
           </a>
         </div>
       </div>
@@ -80,6 +79,7 @@
   import campaignService from '../../services/campaign';
   import configService from '../../services/config';
   import campaignCleaner from '../../utils/campaignCleaner';
+  import VueSticky from 'vue-sticky';
 
   export default {
     name: 'EmailActions',
@@ -113,6 +113,9 @@
         },
         campaignConfig: {}
       }
+    },
+    directives: {
+      'sticky': VueSticky,
     },
     methods: {
       switchMode(mode) {

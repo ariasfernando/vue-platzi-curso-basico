@@ -26,22 +26,26 @@ $default = [
         "users" => [
             "title" => "Users",
             "controller" => 'Admin\UserController',
-            "path" => "user"
+            "path" => "user",
+            "limit_per_page" => 10
         ],
         "roles" => [
             "title" => "Roles",
             "controller" => 'Admin\RoleController',
-            "path" => "role"
+            "path" => "role",
+            "limit_per_page" => 10
         ],
         "permissions" => [
             "title" => "Permissions",
             "controller" => 'Admin\PermissionController',
-            "path" => "permission"
+            "path" => "permission",
+            "limit_per_page" => 20
         ],
         "libraries" => [
             "title" => "Libraries",
             "controller" => 'Admin\LibraryController',
-            "path" => "library"
+            "path" => "library",
+            "limit_per_page" => 10
         ],
         "modules" => [
             "title" => "Modules",
@@ -51,7 +55,8 @@ $default = [
         "log" => [
             "title" => "Logs",
             "controller" => 'Admin\LogController',
-            "path" => "log"
+            "path" => "log",
+            "limit_per_page" => 20
         ],
     ]
 

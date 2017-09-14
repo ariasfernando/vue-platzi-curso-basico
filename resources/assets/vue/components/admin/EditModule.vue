@@ -245,9 +245,11 @@
     .header {
       color: @stensul-purple;
       background-color: #FFFFFF;
-      height: 50px;
-      padding: 15px 0;
-      border-bottom: 1px solid #DDDDDD;
+      height: 53px;
+      padding: 17px 0;
+      box-shadow: 0px 0px 4px #999999;
+      margin-top: -3px;
+
 
       .header-col {
         height: 100%;
@@ -357,8 +359,9 @@
     .beta-btn-primary{
       font-family: 'Open Sans', Arial, sans-serif;
       font-size: 13px;
-      margin-top: -8px;
+      margin-top: -6px;
       background: @stensul-purple;
+      padding: 5px 7px;
       border: none;
 
       &:hover{
@@ -371,13 +374,13 @@
       font-size: 13px;
       font-weight: 400;
       color: #666666;
-      padding: 7px 10px;
+      padding: 5px 7px;
       border: 1px solid #666666;
       background: @stensul-white;
       border: 1px solid #dddddd;
       transition: all 0.3s linear;
       margin: 0px;
-      margin-top: -8px;
+      margin-top: -6px;
       border-radius: 2px;
       cursor: pointer;
 

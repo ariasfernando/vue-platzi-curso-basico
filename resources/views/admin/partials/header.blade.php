@@ -1,5 +1,5 @@
 <header>
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row">
 			<!-- Logo -->
 			<div class="col-xs-8 col-md-6 logoContainer">
@@ -12,7 +12,7 @@
 			</div>
 
 			<!-- Navigation -->
-			<div class="col-xs-4 col-md-6 logButton">
+			<div class="col-xs-4 col-md-6 logButton pull-right">
 				<nav>
 					@if (!Auth::guest())
 						<span>{{ Auth::user()->name }}</span>

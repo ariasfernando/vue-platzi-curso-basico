@@ -1,9 +1,10 @@
 <template id="proof-viewer">
     <div class="proof-viewer-container">
 
-        <div class="proof-top-bar">
-            <div class="col-xs-4">
-                <div class="switch pull-right">
+        <div class="proof-top-bar" v-sticky="{ zIndex: 3, stickyTop: 0 }">
+            <div class="col-xs-5"></div>
+            <div class="col-xs-2">
+                <div class="switch">
                     <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
                     <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
                         <i class="fa fa-desktop"></i>
@@ -15,7 +16,7 @@
                      <span class="switch-selection"></span>
                   </div>
              </div>
-             <div class="col-xs-8 text-right" id="section-canvas-buttons-col">
+             <div class="col-xs-5 text-right" id="section-canvas-buttons-col">
                  <proof-decision
                      :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
                      :token="token"
@@ -69,6 +70,7 @@
     import ProofComments from './ProofComments.vue';
     import ProofDecision from './ProofDecision.vue';
     import Alert from './Alert.vue';
+    import VueSticky from 'vue-sticky';
 
     module.exports = {
         name: 'proofViewer',
@@ -97,6 +99,9 @@
 
             // Get campaign data
             this.getProofData();
+        },       
+        directives: {
+          'sticky': VueSticky,
         },
         methods: {
             getProofData: function() {
@@ -130,5 +135,7 @@
 <style lang="sass">
     .proof-viewer-container {
         width: 100%;
+        display: table;
+        min-height: 100%;
     }
 </style>
