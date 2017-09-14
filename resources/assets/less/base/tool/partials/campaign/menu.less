@@ -82,6 +82,28 @@ aside{
 				}
 			}
 
+			h2.config-selected{
+				.glyph-inline{
+					transform: rotate(45deg);
+				}
+
+				.glyphicon-menu-up{
+					transform: rotate(180deg);
+				}
+			}
+
+			h2.show-modules{
+				.glyph-inline{
+					transform: rotate(45deg);
+				}
+
+				&.config-selected{
+					.glyph-inline{
+						transform: rotate(90deg);
+					}
+				}
+			}
+
 			.level-1{
 				h2{
 					text-transform: uppercase;
@@ -105,12 +127,16 @@ aside{
 			padding-bottom: 0px;
 			background: #f8f8f8;
 
+			h2{
+				background: @stensul-white;
+			}
+
 			.add, .expand{
 				margin: 0px;
 				background: none;
 
 				h2{
-					background: none;
+					background: #f8f8f8;
 					border-bottom: 1px solid #eeeeee;
 					padding-left: 20px;
 					transition: all 0.3s linear;
@@ -235,4 +261,7 @@ aside{
 		}
 	}
 
+	.is-collapsed{
+		display: none!important;
+	}
 }
