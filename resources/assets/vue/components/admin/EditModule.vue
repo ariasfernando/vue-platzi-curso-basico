@@ -10,8 +10,9 @@
               <!-- START: General Settings -->
               <general-settings v-if="ready"></general-settings>
 
-              <!-- START: Module Settings -->
-              <column-settings v-if="ready"></column-settings>
+              <column-settings v-if="ready && module.structure.columns.length > 1 "></column-settings>
+
+              <elements-settings v-if="ready"></elements-settings>
               <!-- END: Elements -->
             </div>
         </aside>
@@ -47,6 +48,7 @@
   import ModuleHeader from './partials/ModuleHeader.vue'
   import GeneralSettings from './partials/GeneralSettings.vue';
   import ColumnSettings from './partials/ColumnSettings.vue';
+  import ElementsSettings from './partials/ElementsSettings.vue';
   import ComponentSettings from './ComponentSettings.vue';
   import moduleService from '../../services/module';
   import Spinner from '../common/Spinner.vue';
@@ -57,6 +59,7 @@
       Module,
       ModuleHeader,
       ColumnSettings,
+      ElementsSettings,
       GeneralSettings,
       ComponentSettings,
       Spinner,

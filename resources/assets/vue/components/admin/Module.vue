@@ -1,6 +1,6 @@
 <template>
-  <table :width="module.structure.style.width || '100%'"
-         :bgcolor="module.structure.style.backgroundColor || '#FFFFFF'" 
+  <table width="100%"
+         :bgcolor="module.structure.attribute.bgcolor" 
          :style="module.structure.style"
          cellspacing="0" 
          cellpadding="0" 
@@ -10,7 +10,7 @@
     <!-- START: 2 COLUMNS -->
     <tr v-if="module.structure.columns.length > 1">
       <td width="100%">
-        <table :width="module.structure.style.width || '100%'" 
+        <table width="100%" 
                class="st-wrapper" 
                cellspacing="0" 
                cellpadding="0" 

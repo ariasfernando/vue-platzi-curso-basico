@@ -51,7 +51,7 @@
                      :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
                      :name="generalSetting.name"
                      :placeholder="generalSetting.label"
-                     :value="colorsBackground.hex"
+                     :value="generalSetting.sketchPickerValue.hex"
                      @click.prevent="toggleSketch"
                      @change="saveModuleStyle">
               <div v-if="generalSetting.type === 'color'"
@@ -60,9 +60,9 @@
                 <i class="glyphicon glyphicon-remove"></i>
               </div>
               <sketch-picker v-if="generalSetting.type === 'color'"
-                             v-model="colorsBackground"
+                             v-model="generalSetting.sketchPickerValue"
                              class="sketch-picker"
-                             @click.native="triggerInputColor(colorsBackground.hex, generalSetting.name)"></sketch-picker>
+                             @click.native="triggerInputColor(generalSetting.sketchPickerValue.hex, generalSetting.name)"></sketch-picker>
             </div>
             <!-- Span General Error -->
             <span v-show="errors.has(generalSetting.name)"
@@ -88,9 +88,9 @@
               <div>
                 <b-form-select
                     v-if="generalSettingGroup.type === 'select'"
-                    v-model="selectedBorderStyle"
+                    v-model="generalSettingGroup.value"
                     :name="generalSettingGroup.name"
-                    :options="optionsSelectedBorderStyle"
+                    :options="generalSettingGroup.options"
                     @change.native="saveModuleStyle">
                 </b-form-select>
               </div>
@@ -102,7 +102,7 @@
                      :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
                      :name="generalSettingGroup.name"
                      :placeholder="generalSettingGroup.label"
-                     :value="colorsBorder.hex"
+                     :value="generalSettingGroup.sketchPickerValue.hex"
                      @click.prevent="toggleSketch"
                      @change="saveModuleStyle">
 
@@ -112,9 +112,9 @@
                 <i class="glyphicon glyphicon-remove"></i>
               </div>
               <sketch-picker v-if="generalSettingGroup.type === 'color'"
-                             v-model="colorsBorder"
+                             v-model="generalSettingGroup.sketchPickerValue"
                              class="sketch-picker"
-                             @click.native="triggerInputColor(colorsBorder.hex, generalSettingGroup.name)"></sketch-picker>
+                             @click.native="triggerInputColor(generalSettingGroup.sketchPickerValue.hex, generalSettingGroup.name)"></sketch-picker>
               <!-- Span General Error -->
               <span v-show="errors.has(generalSettingGroup.name)"
                     class="help is-danger">{{ errors.first(generalSettingGroup.name) }}
@@ -141,7 +141,7 @@
 
 <script>
 
-  import { Sketch } from 'vue-color'
+  import { Sketch } from 'vue-color';
   import BootstrapVue from 'bootstrap-vue';
 
   export default {
@@ -157,21 +157,7 @@
     data () {
       return {
         maxCols: 8,
-        selectedBackgroundColor: '1',
-        selectedBorderStyle: 'solid',
-
-        optionsSelectedBorderStyle: [
-          { value: 'solid', text: 'solid' },
-          { value: 'inherit', text: 'inherit' },
-          { value: 'initial', text: 'initial' },
-          { value: 'outset', text: 'outset' },
-          { value: 'inset', text: 'inset' },
-          { value: 'double', text: 'double' },
-          { value: 'dashed', text: 'dashed' },
-          { value: 'dotted', text: 'dotted' },
-          { value: 'hidden', text: 'hidden' },
-          { value: 'none', text: 'none' },
-        ],
+        selectedBackgroundColor: '1',        
         optionsSelected: [
           { value: '1', text: '1' },
           { value: '2', text: '2' },
@@ -182,8 +168,6 @@
           { value: '7', text: '7' },
           { value: '8', text: '8' },
         ],
-        colorsBackground: {hex: '#FFFFFF'},
-        colorsBorder: {hex: '#000000'},
       }
     },
     methods: {

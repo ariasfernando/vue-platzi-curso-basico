@@ -122,39 +122,6 @@
         </b-tabs>
       </b-card>
     </b-collapse>
-    <!-- END: Module Settings -->
-    <!-- START: Elements -->
-    <b-btn block v-b-toggle.element class="module-settings-item">
-      <p class="pull-left"><i class="glyphicon glyphicon-th-large"></i> ELEMENTS</p>
-      <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
-    </b-btn>
-
-    <b-collapse id="element" accordion="module-settings-accordion">
-      <b-card class="control">
-        <draggable :element="'ul'"
-                   :options="options"
-                   width="100%"
-                   class="components-list"
-        >
-          <li class="component-item" data-type="text-element">
-            <i class="fa fa-align-justify"></i>
-            <p>Text</p>
-          </li>
-          <li class="component-item" data-type="image-element">
-            <i class="fa fa-picture-o" aria-hidden="true"></i>
-            <p>Image</p>
-          </li>
-          <li class="component-item" data-type="button-element">
-            <i class="fa fa-square" aria-hidden="true"></i>
-            <p>CTA</p>
-          </li>
-          <li class="component-item" data-type="divider-element">
-            <i class="fa fa-minus-square" aria-hidden="true"></i>
-            <p>Divider</p>
-          </li>
-        </draggable>
-      </b-card>
-    </b-collapse>
   </div>
 </template>
 
@@ -162,12 +129,10 @@
 
   import _ from 'lodash';
   import { Sketch } from 'vue-color';
-  import Draggable from 'vuedraggable';
   import BootstrapVue from 'bootstrap-vue';
 
   export default {
     components: {
-      Draggable,
       BootstrapVue,
       'sketch-picker': Sketch,
     },
@@ -201,17 +166,6 @@
           { value: 'none', text: 'none' },
         ],
         tabIndex: null,
-        options: {
-          group:{
-            name:'componentsList',
-            pull: 'clone',
-            put: false,
-          },
-          sort: false,
-          ghostClass: "ghost-component-menu",  // Class name for the drop placeholder
-          chosenClass: "chosen-component-menu",  // Class name for the chosen item
-          dragClass: "drag-component-menu"  // Class name for the dragging item
-        },
       }
     },
     methods: {
