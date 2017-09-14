@@ -56,7 +56,7 @@
           <a class="btn campaign-continue beta-btn-primary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete"
             v-show="!locked">
             Complete
-            <i class="glyphicon glyphicon-triangle-right"></i>
+            <i class="glyphicon glyphicon-menu-right"></i>
           </a>
         </div>
       </div>

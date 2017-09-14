@@ -333,6 +333,9 @@
       font-family: monospace, serif;
     }
   }
+  .btn-reviewer-add{
+    margin-top: -4px;
+  }
   #modal-proof-message {
     textarea {
       height: 200px;

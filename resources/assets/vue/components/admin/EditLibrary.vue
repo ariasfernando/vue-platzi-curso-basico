@@ -611,9 +611,10 @@
     .beta-btn-primary{
       font-family: 'Open Sans', Arial, sans-serif;
       font-size: 13px;
-      margin-top: -8px;
+      margin-top: -6px;
       background: @stensul-purple;
       border: none;
+      padding: 5px 7px;
 
       &:hover{
         border: none;
@@ -625,13 +626,13 @@
       font-size: 13px;
       font-weight: 400;
       color: #666666;
-      padding: 7px 10px;
+      padding: 5px 7px;
       border: 1px solid #666666;
       background: @stensul-white;
       border: 1px solid #dddddd;
       transition: all 0.3s linear;
       margin: 0px;
-      margin-top: -8px;
+      margin-top: -6px;
       border-radius: 2px;
       cursor: pointer;
 
