@@ -98,9 +98,9 @@
     display: table-caption;
     width: 100%;
     background-color: #FFFFFF;
-    height: 50px;
-    padding: 8px 10px;
-    border-bottom: 1px solid #DDDDDD;
+    height: 53px;
+    padding: 11px 10px;
+    box-shadow: 0px 0px 4px #999999;
   }
 
   .component-settings-wrapper {
@@ -206,7 +206,7 @@
           border-radius: 3px;
           margin: 0 auto;
           border: 1px solid #DFDFDF;
-          margin-top: 4px;
+          margin-top: 2px;
       }
 
       .switch-label {

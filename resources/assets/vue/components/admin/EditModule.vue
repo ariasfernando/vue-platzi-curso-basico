@@ -245,9 +245,9 @@
     .header {
       color: @stensul-purple;
       background-color: #FFFFFF;
-      height: 50px;
-      padding: 15px 0;
-      border-bottom: 1px solid #DDDDDD;
+      height: 53px;
+      padding: 17px 0;
+      box-shadow: 0px 0px 4px #999999;
       margin-top: -3px;
 
 

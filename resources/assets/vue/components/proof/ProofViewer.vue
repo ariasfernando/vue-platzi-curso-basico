@@ -1,7 +1,7 @@
 <template id="proof-viewer">
     <div class="proof-viewer-container">
 
-        <div class="proof-top-bar">
+        <div class="proof-top-bar" v-sticky="{ zIndex: 3, stickyTop: 0 }">
             <div class="col-xs-5"></div>
             <div class="col-xs-2">
                 <div class="switch">
@@ -70,6 +70,7 @@
     import ProofComments from './ProofComments.vue';
     import ProofDecision from './ProofDecision.vue';
     import Alert from './Alert.vue';
+    import VueSticky from 'vue-sticky';
 
     module.exports = {
         name: 'proofViewer',
@@ -98,6 +99,9 @@
 
             // Get campaign data
             this.getProofData();
+        },       
+        directives: {
+          'sticky': VueSticky,
         },
         methods: {
             getProofData: function() {
@@ -131,5 +135,7 @@
 <style lang="sass">
     .proof-viewer-container {
         width: 100%;
+        display: table;
+        min-height: 100%;
     }
 </style>

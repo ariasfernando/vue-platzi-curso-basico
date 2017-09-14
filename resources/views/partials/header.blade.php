@@ -1,5 +1,5 @@
 <header>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             {{-- Logo --}}
             <div class="col-xs-8 col-md-6 logoContainer">
@@ -16,7 +16,7 @@
             </div>
 
             {{-- Navigation --}}
-            <div class="col-xs-4 col-md-6 logButton">
+            <div class="col-xs-4 col-md-6 logButton pull-right">
                 <nav>
                     @if (config('app.help.enabled'))
                         <a href="{{ url(config('app.help.url')) }}" class="help" target="_blank">

@@ -1,5 +1,5 @@
 <template>
-  <div class="beta-subheader">
+  <div class="beta-subheader" v-sticky="{ zIndex: 3, stickyTop: 0 }">
     <div class="section-box-header section-canvas-title">
       <div class="row">
         <div class="col-xs-5 col-md-5 col-lg-5"></div>
@@ -79,6 +79,7 @@
   import campaignService from '../../services/campaign';
   import configService from '../../services/config';
   import campaignCleaner from '../../utils/campaignCleaner';
+  import VueSticky from 'vue-sticky';
 
   export default {
     name: 'EmailActions',
@@ -112,6 +113,9 @@
         },
         campaignConfig: {}
       }
+    },
+    directives: {
+      'sticky': VueSticky,
     },
     methods: {
       switchMode(mode) {

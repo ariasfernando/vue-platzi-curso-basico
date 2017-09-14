@@ -1,6 +1,6 @@
 <template>
   <div class="col-xs-12 library">
-    <div class="row header">
+    <div class="row header" v-sticky="{ zIndex: 3, stickyTop: 0 }">
       <div class="col-xs-9 header-col">
         <div class="beta-btn-secondary pull-left">
           <i class="glyphicon glyphicon-menu-left"></i>
@@ -326,6 +326,7 @@
   import ToggleButton from '../common/ToggleButton.vue'
   import Tabs from '../common/Tabs.vue'
   import Tab from '../common/Tab.vue'
+  import VueSticky from 'vue-sticky'
 
   export default {
     name: 'EditLibrary',
@@ -342,6 +343,9 @@
         ready: false,
         campaignConfig: {}
       }
+    },
+    directives: {
+      'sticky': VueSticky,
     },
     methods: {
       updateToggle(element) {
@@ -463,10 +467,10 @@
     .header {
       color: @stensul-purple;
       background-color: @stensul-white;
-      height: 50px;
+      height: 53px;
       margin-bottom: 20px;
-      padding: 15px 0;
-      border-bottom: 1px solid #DDDDDD;
+      padding: 17px 0;
+      box-shadow: 0px 0px 4px #999999;
       margin-top: -3px;
 
       .header-col {
