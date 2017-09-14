@@ -1,46 +1,35 @@
 <template>
-  <div class="modal-mpf-content-data" id="master-image-editor">
-    <h1>{{ module.title }}</h1>
-    <form method="post" id="master-image-editor-form">
-      <input type="hidden" id="campaign-id" :value="campaignId || ''">
-
-        <!-- image editor upload fields -->
-
-        {{-- File Upload Files --}}
-        <upload-field :module="module"></upload-field>
-        @include('base.modals.partials.image_editor_upload_fields')
-
-        {{-- Destination URL --}}
-        @include('demo.'.$params['library_name'].'.modals.partials.image_editor_default_fields')
-
-        @if ( isset($params["image_crop"]) && $params["image_crop"] == "enabled" && isset($params["multi_crop"]) && $params["multi_crop"] == "enabled" )
-            {{-- Multiple tabs --}}
-            @include('base.modals.partials.image_editor_multiple_crop_tab')
-        @endif
-
-        <!-- Tab panes start  -->
-        <div class="tab-content">
-            {{-- Crop Default --}}
-            @include('base.modals.partials.image_editor_default')
-
-            @if ( isset($params["image_crop"]) && $params["image_crop"] == "enabled" && isset($params["multi_crop"]) && $params["multi_crop"] == "enabled" )
-                {{-- crop mobile --}}
-                @include('base.modals.partials.image_editor_crop_mobile')
-            @endif
-        </div>
-
-        {{-- Input submit --}}
-        <div class="modal-mpf-submit">
-            {!! Form::submit('Submit', array ( 'class' => 'btn btn-success pull-right submit-config')) !!}
-        </div>
-
-      {!! Form::close() !!}
-  </div>
+  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" style="vertical-align:middle;">
+        <table style="width:100%!important;" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="vertical-align:top;" valign="top" align="center" bgcolor="#ffffff">
+              <a :href="module.data.href || module.params.href" data-key="image0" data-open-element-config="hero_image">
+                <img :src="module.data.imageSrc || module.params.imagePlaceholder"
+                     :alt="module.data.imageAlt || ''" :title="module.data.imageAlt || ''"
+                     width="100%" border="0" class="full-width"
+                     style="display:block; border:none; max-width:100%; height:auto;">
+              </a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script>
   export default {
-
+    props: ['moduleId'],
+    computed: {
+      module() {
+        return this.$store.getters["campaign/modules"][this.moduleId];
+      }
+    },
+    data () {
+      return {}
+    },
   }
 </script>
 
