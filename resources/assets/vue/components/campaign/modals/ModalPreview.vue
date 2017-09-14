@@ -23,7 +23,17 @@
                 <div class="preview-body">
                   <div class="preview-container">
                     <div class="mobile-frame"></div>
-                    <div class="iframe-container" :data-template-width="this.campaign.campaign_data.library_config.templateWidth"><iframe id="email-preview-iframe" style="width: 660px;" :src="previewUrl" scrolling="no"></iframe></div>
+                    <slot name="body">
+                      <b-tabs>
+                        <b-tab title="Desktop" @click="togglePreview('desktop')" active>
+                        </b-tab>
+                        <b-tab title="Mobile" @click="togglePreview('mobile')">
+                        </b-tab>
+                      </b-tabs>
+                    </slot>
+                    <div class="iframe-container" :data-template-width="widthPreview">
+                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" scrolling="no" frameborder="0"></iframe>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -42,7 +52,19 @@
 </template>
 
 <script>
+  import BootstrapVue from 'bootstrap-vue';
+
   export default {
+    components: {
+      BootstrapVue
+    },
+    data () {
+      return {
+        widthMobile: 480,
+        widthDesktop: null,
+        widthPreview: null,
+      }
+    },
     computed: {
       modalPreview () {
         return this.$store.state.campaign.modalPreview;
@@ -72,9 +94,18 @@
           this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
+      togglePreview(mode) {
+
+        switch(mode) {
+          case 'mobile': this.widthPreview = this.widthMobile;
+          break;
+          default: this.widthPreview = this.widthDesktop;
+        }
+      },
     },
     created () {
-
+      this.widthDesktop = this.widthPreview
+        = this.$store.state.campaign.campaign.campaign_data.library_config.templateWidth || 660;
     }
   };
 </script>
