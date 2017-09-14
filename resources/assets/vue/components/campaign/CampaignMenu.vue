@@ -10,7 +10,7 @@
 
             <div v-for="subitem in item.sub_menu">
               <div class="add single">
-                <h2 @click="addModule(subitem)"><i class="glyphicon glyphicon-th-large glyph-inline"></i> <span>{{ subitem.name }}</span> <i
+                <h2 @click="addModule(subitem)"><i class="glyphicon glyphicon-minus glyph-inline"></i> <span>{{ subitem.name }}</span> <i
                   class="glyphicon glyphicon-plus"></i></h2>
               </div>
             </div>
