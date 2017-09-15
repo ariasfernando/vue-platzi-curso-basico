@@ -20,13 +20,5 @@
 <script>
   export default {
     props: ['module'],
-    computed: {
-
-    },
-    data () {
-      return {
-        ready: false,
-      }
-    },
   }
 </script>
