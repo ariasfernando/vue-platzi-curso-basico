@@ -24,7 +24,7 @@ function Module(data = {}) {
 
   this.structure = {
     attribute: {
-      bgcolor: '#FFFFFF',
+      bgcolor: attribute.bgcolor || '#FFFFFF',
     },
     style: {
       paddingTop: style.paddingTop || 0,
@@ -42,6 +42,7 @@ function Module(data = {}) {
         name: 'bgcolor',
         type: 'color',
         value: '#FFFFFF',
+        sketchPickerValue:{hex: '#FFFFFF'},
       },
       {
         link: 'style',
@@ -94,7 +95,19 @@ function Module(data = {}) {
             label: 'Border Style',
             name: 'borderStyle',
             type: 'select',
-            value: 'solid',
+            value: 'none',
+            options: [
+              { value: 'solid', text: 'solid' },
+              { value: 'inherit', text: 'inherit' },
+              { value: 'initial', text: 'initial' },
+              { value: 'outset', text: 'outset' },
+              { value: 'inset', text: 'inset' },
+              { value: 'double', text: 'double' },
+              { value: 'dashed', text: 'dashed' },
+              { value: 'dotted', text: 'dotted' },
+              { value: 'hidden', text: 'hidden' },
+              { value: 'none', text: 'none' },
+            ],
           },
           {
             link: 'style',
@@ -102,6 +115,7 @@ function Module(data = {}) {
             name: 'borderColor',
             type: 'color',
             value: '#000000',
+            sketchPickerValue:{hex: '#000000'},
           },
         ],
       }, 
