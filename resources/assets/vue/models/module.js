@@ -18,14 +18,10 @@ function Module(data = {}) {
   this.status = data.status || '';
   const style = (data.structure && data.structure.style) ? data.structure.style : {};
   const settings = (data.structure && data.structure.settings) ? data.structure.settings : [];
-  const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : [];
 
   this.plugins = data.plugins || getPlugins();
 
   this.structure = {
-    attribute: {
-      bgcolor: attribute.bgcolor || '#FFFFFF',
-    },
     style: {
       paddingTop: style.paddingTop || 0,
       paddingLeft: style.paddingLeft || 0,
@@ -34,12 +30,13 @@ function Module(data = {}) {
       borderWidth: style.borderWidth || '0px',
       borderStyle: style.borderStyle || 'none',
       borderColor: style.borderColor || '#000000',
+      backgroundColor: style.backgroundColor || '#FFFFFF',
     },
     settings: [
       {
-        link: 'attribute',
+        link: 'style',
         label: 'Background Color',
-        name: 'bgcolor',
+        name: 'backgroundColor',
         type: 'color',
         value: '#FFFFFF',
         sketchPickerValue:{hex: '#FFFFFF'},
@@ -125,7 +122,6 @@ function Module(data = {}) {
   };
 
   _.extend(this.structure.settings, settings);
-  _.extend(this.structure.attribute, attribute);
 
   return this;
 }

@@ -37,11 +37,11 @@ module.exports = {
       label: 'Align',
       name: 'align',
       type: 'select',
-      value: 'center',
+      value: 'left',
       options:[
-        { value: 'center', text: 'center' },
-        { value: 'right', text: 'Right' },
         { value: 'left', text: 'Left' },
+        { value: 'center', text: 'Center' },
+        { value: 'right', text: 'Right' },
       ],
     },
     {

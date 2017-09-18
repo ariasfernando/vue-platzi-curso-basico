@@ -177,7 +177,14 @@
 
   span.st-preheader{ 
     display: none!important;
-  }  
+  } 
+
+  .st-edit-text{
+    p{
+      margin: 0;
+      padding: 0;
+    }
+  }
 
   .st-wrapper {
     width: 600px;

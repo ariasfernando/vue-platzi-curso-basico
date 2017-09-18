@@ -1,6 +1,6 @@
 <template>
   <table width="100%"
-         :bgcolor="module.structure.attribute.bgcolor" 
+         :bgcolor="module.structure.style.backgroundColor" 
          :style="module.structure.style"
          cellspacing="0" 
          cellpadding="0" 
@@ -100,8 +100,8 @@
           v-for="(column, columnId) in module.structure.columns"
           :class="!column.components.length ? 'empty-col' : ''" 
           :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
-          :style="column.style || ''"
-          :bgcolor="module.structure.attribute.bgcolor" 
+          :style="module.structure.style || ''"
+          :bgcolor="module.structure.style.backgroundColor" 
           :data-col="columnId"
       >
         <draggable v-if="column.components.length"

@@ -9,7 +9,7 @@
   <tr v-else class="st-module-wrapper">
     <td class="st-toolbar-content st-position-relative"
         :style="module.structure.style"
-        :bgcolor="module.structure.attribute.bgcolor.hex"
+        :bgcolor="module.structure.style.backgroundColor"
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
     >
       <table width="100%" cellspacing="0" cellpadding="0">
@@ -39,10 +39,8 @@
         <!--2 COLUMNS -->
         <!--1 COLUMN -->
         <tr v-else v-for="(component, componentId) in module.structure.columns[0].components">
-          <td :width="module.structure.columns[0].style.width"
-              :style="module.structure.columns[0].style"
-              :valign="component.attribute.valign" 
-              :align="component.attribute.align || 'center'" 
+          <td :valign="component.attribute.valign" 
+              :align="component.attribute.align || 'left'" 
           >
               <component :is="component.type"
                          :component="component"
