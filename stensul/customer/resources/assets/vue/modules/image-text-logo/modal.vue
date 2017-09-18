@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import imageEditorModal from './image-editor/imageEditorModal.vue';
+  import imageEditorModal from 'image-editor';
 
   export default {
     props: ['module'],
