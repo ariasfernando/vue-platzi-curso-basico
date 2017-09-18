@@ -1,6 +1,6 @@
 <template>
-  <table :width="module.structure.style.width || '100%'"
-         :bgcolor="module.structure.style.backgroundColor || '#FFFFFF'" 
+  <table width="100%"
+         :bgcolor="module.structure.attribute.bgcolor" 
          :style="module.structure.style"
          cellspacing="0" 
          cellpadding="0" 
@@ -10,7 +10,7 @@
     <!-- START: 2 COLUMNS -->
     <tr v-if="module.structure.columns.length > 1">
       <td width="100%">
-        <table :width="module.structure.style.width || '100%'" 
+        <table width="100%" 
                class="st-wrapper" 
                cellspacing="0" 
                cellpadding="0" 
@@ -101,18 +101,19 @@
           :class="!column.components.length ? 'empty-col' : ''" 
           :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
           :style="column.style || ''"
+          :bgcolor="module.structure.attribute.bgcolor" 
           :data-col="columnId"
       >
-        <draggable v-if="column.components.length" 
+        <draggable v-if="column.components.length"
                    class="st-content-component"
-                   @add="onAdd"
-                   :element="'table'"
-                   :options="options" 
-                   :data-col="columnId"
-                   cellpadding="0" 
-                   cellspacing="0" 
                    border="0"
                    width="100%"
+                   cellpadding="0"
+                   cellspacing="0"
+                   @add="onAdd"
+                   :element="'table'"
+                   :options="options"
+                   :data-col="columnId"
         >
           <component v-for="(component, componentId) in column.components"
                      :is="component.type" 
