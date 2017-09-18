@@ -110,7 +110,7 @@
                 </div>
               </div>
             </div>
-            <!-- /Column Settings -->
+            <!-- Column Settings -->
 
             <!-- Column Plugins -->
             <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
