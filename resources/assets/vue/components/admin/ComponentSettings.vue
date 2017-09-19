@@ -51,7 +51,7 @@
                 <sketch-picker v-if="setting.type === 'color'" 
                                v-model="setting.value" 
                                class="sketch-picker" 
-                               @click.native="updateColumnSettings(setting.name, setting.link, false )"></sketch-picker>
+                               @click.native="updateColorPickerSetting(setting.name, setting.link, false )"></sketch-picker>
                 
                 <!-- Span General Error -->
                 <span v-show="errors.has(setting.name)" 
@@ -101,7 +101,7 @@
                 <sketch-picker v-if="settingGroup.type === 'color'" 
                                v-model="colorsBackground" 
                                class="sketch-picker" 
-                               @click.native="updateColumnSettings(settingGroup.name, settingGroup.link, true )"></sketch-picker>
+                               @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
                 
                 <!-- Span General Error -->
                 <span v-show="errors.has(settingGroup.name)" 
@@ -176,6 +176,7 @@
         const inputElement = e.toElement;
         $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
       },
+      
       saveComponent() {
         _.each(this.component.settings, (option) => {
           if (option.link === 'style') {
@@ -202,29 +203,28 @@
           style: this.component.style || {},
           attribute: this.component.attribute || {}
         }); 
-        
       },
+
       // TODO Update date used mutation.
-      updateColumnSettings( name, link , isGroup ){
+      updateColorPickerSetting( name, link , isGroup ){
         _.each(this.component.settings, (option, index) => {
             if ( isGroup ){
                _.each(option.group, (optionGroup, indexGroup) => {
                 if (optionGroup.name === name) {
+                  if (link === 'style'){
                     this.component[link][name] = optionGroup.value.hex;
-                }   
+                  }else{
+                    this.component[link][name] = optionGroup.value;
+                  } 
+                }  
               });
             }else{
               if (option.name === name) {
-                if (name === 'color') {
+                if (link === 'style'){
                   this.component[link][name] = option.value.hex;
-                } else {
-                  if (name === 'backgroundColor' && link === 'style') {
-                    this.component[link][name] = option.value.hex;
-                  } else {
-                    this.component[link][name] = option.value;
-                  }
+                }else{
+                  this.component[link][name] = option.value;
                 }
-
               }
             }
         });
@@ -234,6 +234,7 @@
           attribute: this.component.attribute || {}
         });
       },
+
       changeSetting(key, setting) {
         setting.value = !setting.value;
         this.component.settings[key] = setting;
