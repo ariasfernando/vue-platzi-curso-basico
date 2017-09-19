@@ -15,7 +15,7 @@ module.exports = {
   attribute: {
     valign: 'middle',
     align: 'left',
-    bgcolor: { hex: '#FFFFFF' },
+    bgcolor: 'transparent',
   },
   settings: [
     {
