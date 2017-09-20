@@ -1,4 +1,4 @@
-const imageTextLogo = require('./image-text-logo');
+import imageTextLogo from './image-text-logo';
 
 module.exports = {
   imageTextLogo,

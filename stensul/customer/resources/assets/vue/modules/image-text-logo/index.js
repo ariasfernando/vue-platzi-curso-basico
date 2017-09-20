@@ -1,10 +1,11 @@
-import Module from './module.vue';
+import view from './view.vue';
 
 module.exports = {
   name: 'image-text-logo',
   title: 'Image + Text + Logo',
   version: '0.0.1',
   author: 'emiliano@stensul.com',
+  type: 'custom',
   params: {
     scaleRatio: 2,
     enabledOptions: 'destination_url alt_text image_upload image_crop image_tracking image_library fetch_url',
@@ -60,5 +61,5 @@ module.exports = {
     ],
   },
   data: {},
-  Module,
+  view,
 };
