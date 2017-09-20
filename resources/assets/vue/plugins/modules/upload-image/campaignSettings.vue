@@ -1,8 +1,8 @@
 <template>
   <div>
-      <label>Select an image</label>
-      <input type="file" @change="onFileChange">
-    </div>
+    <label>Select an image</label>
+    <input type="file" @change="onFileChange">
+  </div>
 </template>
 
 <script>

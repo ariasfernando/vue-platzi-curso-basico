@@ -15,6 +15,14 @@
             <div v-if="!setting.group" >
               <label class="col-sm-8 control-label" :for="setting.name">{{ setting.label }}</label>
               <div class="col-sm-4 position-relative content-colorpicker">
+                  <!-- Input File -->
+                  <input v-if="setting.type === 'file'"
+                         v-validate="'required'" 
+                         :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                         :name="setting.name"
+                         type="file" 
+                         @change="onFileChange">
+
                 <!-- Input Text -->
                 <input v-if="setting.type === 'text'"
                        v-validate="'required'" 
@@ -64,7 +72,6 @@
               <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
               <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" 
                   v-for="(settingGroup, keyGroup) in setting.group" >
-               
                 <!-- Input Text -->
                 <input v-if="settingGroup.type === 'text'"
                        :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
@@ -175,6 +182,37 @@
       toggleSketch(e){
         const inputElement = e.toElement;
         $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
+      },
+
+      onFileChange(e) {
+        const files = e.target.files || e.dataTransfer.files;
+
+        if (!files.length)
+          return;
+        
+        this.createImage(files[0]);
+      },
+
+      createImage(file) {
+        const image = new Image();
+        const reader = new FileReader();
+        const vm = this;
+
+        reader.onload = (e) => {
+          vm.image = e.target.result;
+          this.updateAttribute(vm.image);
+        };
+
+        reader.readAsDataURL(file);
+
+      },
+
+      updateAttribute(e) {
+        this.component.attribute.placeholder = e;
+
+        this.$store.commit('module/setChangeSettingComponent',{
+          attribute: this.component.attribute || {}
+        });
       },
       
       saveComponent() {

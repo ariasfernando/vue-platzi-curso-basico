@@ -53,7 +53,11 @@
     data(){
       return {
         imageUrl(imagePath) {
-          return this.$app.imageUrl + imagePath;
+          if (imagePath.indexOf('placeholder') > -1){
+            return this.$app.imageUrl + imagePath;
+          }else{
+            return imagePath;
+          }
         }
       }
     },
