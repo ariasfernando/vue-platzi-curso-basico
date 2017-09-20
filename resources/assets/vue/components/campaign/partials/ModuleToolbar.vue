@@ -54,7 +54,7 @@
   .st-module-wrapper {
     &:hover > * {
       outline: 1px solid @icon-option;
-      background-color: @hover!important;
+      opacity: 0.75;
       z-index: 800;
       .icon-move, .icon-remove, 
       .icon-clone, .icon-config {
