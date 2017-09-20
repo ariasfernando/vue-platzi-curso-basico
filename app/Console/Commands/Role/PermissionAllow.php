@@ -35,30 +35,30 @@ class PermissionAllow extends Command
         if ($name != "") {
             if (Role::where('name', '=', $name)->exists()) {
                 $role_data = Role::where('name', '=', $name)->firstOrFail();
-                $permissions_data = Permission::all(['name', 'description'])->toArray();
-                $permissions_array = [];
+                $all_permissions = Permission::all(['name', 'description'])->toArray();
+                $available_permissions = [];
 
-                foreach ($permissions_data as $permission) {
-                    if (!in_array($permission['name'], $role_data['permissions'])) {
-                        $permissions_array[] = $permission['name'];
+                foreach ($all_permissions as $permission) {
+                    if (!isset($role_data['permissions']) || !in_array($permission['name'], $role_data['permissions'])) {
+                        $available_permissions[] = $permission['name'];
                     }
                 }
 
-                if (count($permissions_array) === 0) {
+                if (count($available_permissions) === 0) {
                     $this->info('The role ' . $name . ' has all the permissions!');
                 } else {
-                    if (count($permissions_array) > 1) {
-                        array_unshift($permissions_array, "all");
+                    if (count($available_permissions) > 1) {
+                        array_unshift($available_permissions, "all");
                     }
 
                     $permission_choice = (is_null($options["permission"]))
-                        ? $this->ask('Select a permission: ('.join(", ", $permissions_array).')')
+                        ? $this->ask('Select a permission: ('.join(", ", $available_permissions).')')
                         : $options["permission"];
 
                     if (strtolower($permission_choice) == "all") {
-                        array_shift($permissions_array);
-                        $role_data->permissions = array_merge($role_data->permissions, $permissions_array);
-                    } elseif (in_array($permission_choice, $permissions_array)) {
+                        array_shift($available_permissions);
+                        $role_data->permissions = array_merge($role_data->permissions, $available_permissions);
+                    } elseif (in_array($permission_choice, $available_permissions)) {
                         $role_data->permissions = array_merge($role_data->permissions, [ $permission_choice ]);
                     } else {
                         $this->error("The permission " . $permission_choice . " doesn't exist!");

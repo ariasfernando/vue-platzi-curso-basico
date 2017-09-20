@@ -28,6 +28,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('AdminAuthenticate');
+        $this->middleware('acl.permission:access_admin_users');
     }
 
     /**

@@ -234,7 +234,6 @@
         padding-right: 15px;
 
         .col-sm-3{
-          float: right!important;
           width: 72px;
 
           input{

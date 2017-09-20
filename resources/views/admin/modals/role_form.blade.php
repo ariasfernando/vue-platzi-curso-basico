@@ -31,7 +31,6 @@
 				'id' => 'permissions',
 				'name' => 'permissions[]',
 				'multiple' => 'true',
-				'data-validation' => '{"required":"true"}'
 			)); !!}
 		</div>
 

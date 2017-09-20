@@ -28,7 +28,7 @@
                    :data-api-driver="campaign.library_config.espProvider" v-html="campaign.library_config.espProvider">
               </div>
 
-              <div v-if="campaign.library_config.view_in_browser">
+              <div>
                 <a :href="viewInBrowser" target="_blank" type="button" class="btn btn-default beta-btn-secondary">View in browser</a>
               </div>
 
@@ -56,12 +56,14 @@
       },
       campaign () {
         return this.$store.getters['campaign/campaign'];
+      },
+      viewInBrowser () {
+        return this.$app.baseUrl + '/campaign/public-path/' + this.campaign.campaign_id;
       }
     },
     methods: {
       data () {
         return {
-          viewInBrowser: this.$app.baseUrl + 'campaign/public-path/' + this.campaign.campaign_id,
           plainText: '',
         }
       },
