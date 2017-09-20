@@ -1,12 +1,12 @@
-import Component from './component.vue';
+import view from './view.vue';
 
 module.exports = {
   name: 'image-text-logo',
   title: 'Image + Text + Logo',
   version: '0.0.1',
   author: 'emiliano@stensul.com',
-  Component,
-  config: {
+  type: 'custom',
+  params: {
     scaleRatio: 2,
     enabledOptions: 'destination_url alt_text image_upload image_crop image_tracking image_library fetch_url',
     enabledPlugins: 'overlay imageLibrary imageTracking fetchUrl',
@@ -61,5 +61,5 @@ module.exports = {
     ],
   },
   data: {},
-  enabled: false,
+  view,
 };

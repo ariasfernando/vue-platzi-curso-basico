@@ -16,10 +16,7 @@
                          :element="'table'"
                          @sort="onSort"
              >
-
-                  <module v-for="(module, moduleId) in dragList"
-                                 :key="moduleId"
-                                 :module-id="moduleId"></module>
+                  <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
           </td>
         </tr>
@@ -29,6 +26,7 @@
 </template>
 
 <script>
+  import _ from 'lodash';
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';

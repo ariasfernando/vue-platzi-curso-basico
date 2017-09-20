@@ -80,6 +80,16 @@ module.exports = {
         label: 'Font color',
         key: 'forecolor',
         value: false,
+        textcolor_map: [
+          '000000', 'Black',
+          '666666', 'Gray',
+          'FFFFFF', 'White',
+          'EC2127', 'Red',
+          '3c763d', 'Green',
+          '0715c3', 'Blue',
+          'ec971f', 'Orange',
+        ],
+
       },
       backcolor: {
         label: 'Background color',
