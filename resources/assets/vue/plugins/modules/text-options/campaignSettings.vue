@@ -34,7 +34,7 @@
         const options = _.filter(this.plugin.data.options, 'value');
         let toolbar = [];
 
-        if (options.length) {
+        if (!_.isEmpty(options)) {
           _.each(options, (option) => {
             toolbar.push(option.key)
           });
@@ -45,7 +45,7 @@
 
         const editorId = ['editor', this.currentComponent.moduleId, this.currentComponent.columnId, this.currentComponent.componentId].join('-');
 
-        let settings = {
+        const settings = {
           selector: `#${editorId}`,
           document_base_url: Application.globals.cdnHost + "/js/tinymce/",
           skin: 'lightgray',
@@ -68,6 +68,15 @@
             });
           }
         };
+
+        if (!_.isEmpty(options)) {
+          _.each(options, (option) => {
+            if ( option.key === 'forecolor' && !_.isEmpty(option.textcolor_map) ) {
+              settings.plugins = [settings.plugins, 'textcolor'].join(' ');
+              settings['textcolor_map'] = option.textcolor_map;
+            }
+          });
+        }
 
         tinymce.init(settings);
         tinymce.execCommand('mceFocus', false, editorId);

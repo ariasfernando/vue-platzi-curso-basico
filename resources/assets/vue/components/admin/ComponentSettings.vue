@@ -15,6 +15,14 @@
             <div v-if="!setting.group" >
               <label class="col-sm-8 control-label" :for="setting.name">{{ setting.label }}</label>
               <div class="col-sm-4 position-relative content-colorpicker">
+                  <!-- Input File -->
+                  <input v-if="setting.type === 'file'"
+                         v-validate="'required'" 
+                         :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                         :name="setting.name"
+                         type="file" 
+                         @change="onFileChange">
+
                 <!-- Input Text -->
                 <input v-if="setting.type === 'text'"
                        v-validate="'required'" 
@@ -32,27 +40,30 @@
                 </span>
                
                 <!-- Input color -->
-                <input v-if="setting.type === 'color'"
-                       v-validate="'required'" 
-                       v-model="setting.value.hex"
-                       type="text"
-                       class="sketchbackground"                        
-                       :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                       :name="setting.name"
-                       :placeholder="setting.label"
-                       @click.prevent="toggleSketch"
-                       @change="saveComponent">
+                <div @click.prevent="toggleSketch">
+                  <input v-if="setting.type === 'color'"
+                         v-validate="'required'"
+                         v-model="setting.value.hex"
+                         type="text"
+                         class="sketchbackground"
+                         :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                         :name="setting.name"
+                         :placeholder="setting.label"
+                         @click.prevent="toggleSketch"
+                         disabled
+                         @change="saveComponent">
+                </div>
                 <div v-if="setting.type === 'color'"
-                     class="icon-remove st-remove-sketch" 
-                     @click.prevent="toggleSketch"  
+                     class="icon-remove st-remove-sketch"
+                     @click.prevent="toggleSketch"
                 >
                   <i class="glyphicon glyphicon-remove"></i>
                 </div>
-                <sketch-picker v-if="setting.type === 'color'" 
-                               v-model="setting.value" 
-                               class="sketch-picker" 
+                <sketch-picker v-if="setting.type === 'color'"
+                               v-model="setting.value"
+                               class="sketch-picker"
                                @click.native="updateColorPickerSetting(setting.name, setting.link, false )"></sketch-picker>
-                
+
                 <!-- Span General Error -->
                 <span v-show="errors.has(setting.name)" 
                       class="help is-danger">{{ errors.first(setting.name) }}
@@ -64,7 +75,6 @@
               <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
               <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" 
                   v-for="(settingGroup, keyGroup) in setting.group" >
-               
                 <!-- Input Text -->
                 <input v-if="settingGroup.type === 'text'"
                        :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
@@ -82,16 +92,19 @@
                 </span>
                 
                 <!-- Input color -->
-                <input v-if="settingGroup.type === 'color'"
-                       v-model="settingGroup.value.hex"
-                       v-validate="'required'" 
-                       type="text"
-                       class="sketchbackground"                        
-                       :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
-                       :name="settingGroup.name"
-                       :placeholder="settingGroup.label"
-                       @click.prevent="toggleSketch"
-                       @change="saveComponent">
+                <div @click.prevent="toggleSketch">
+                  <input v-if="settingGroup.type === 'color'"
+                         v-model="settingGroup.value.hex"
+                         v-validate="'required'"
+                         type="text"
+                         class="sketchbackground"
+                         :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
+                         :name="settingGroup.name"
+                         :placeholder="settingGroup.label"
+                         @click.prevent="toggleSketch"
+                         @input="saveComponent"
+                         disabled>
+                </div>
                 <div v-if="settingGroup.type === 'color'"
                      class="icon-remove st-remove-sketch" 
                      @click.prevent="toggleSketch"  
@@ -175,6 +188,44 @@
       toggleSketch(e){
         const inputElement = e.toElement;
         $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
+      },
+
+      onFileChange(e) {
+        const files = e.target.files || e.dataTransfer.files;
+
+        if (!files.length)
+          return;
+        
+        this.createImage(files[0]);
+      },
+
+      createImage(file) {
+        const image = new Image();
+        const reader = new FileReader();
+        const vm = this;
+
+        reader.onload = (e) => {
+          vm.image = e.target.result;
+          this.updateAttributePlaceholder(vm.image);
+        };
+
+        reader.readAsDataURL(file);
+
+      },
+
+      updateAttributePlaceholder(e) {
+        this.component.attribute.placeholder = e;
+
+        _.each(this.component.settings, (option) => {
+          if (option.name === 'placeholder') {
+            option.value = e;
+          };
+        });    
+      
+        this.$store.commit('module/setChangeSettingComponent',{
+          attribute: this.component.attribute || {}
+        });
+      
       },
       
       saveComponent() {

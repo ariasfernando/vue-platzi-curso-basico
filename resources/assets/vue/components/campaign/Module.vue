@@ -1,10 +1,11 @@
 <template >
-  <tr v-if="module.type === 'custom'" class="st-module-wrapper">  
+
+  <tr v-if="module.type === 'custom'" class="st-module-wrapper">
     <td class="st-toolbar-content st-position-relative">
-      <div v-html="module.template"></div>
+      <component v-if="$customModules.indexOf('custom-' + module.name) !== -1" :is="'custom-' + module.name" :name="module.name" :module="module"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
     </td>
-  </tr>  
+  </tr>
 
   <tr v-else class="st-module-wrapper">
     <td class="st-toolbar-content st-position-relative"
@@ -39,8 +40,8 @@
         <!--2 COLUMNS -->
         <!--1 COLUMN -->
         <tr v-else v-for="(component, componentId) in module.structure.columns[0].components">
-          <td :valign="component.attribute.valign" 
-              :align="component.attribute.align || 'left'" 
+          <td :valign="component.attribute.valign"
+              :align="component.attribute.align || 'left'"
           >
               <component :is="component.type"
                          :component="component"
@@ -68,12 +69,9 @@
     name: 'Module',
     props: ['moduleId'],
     computed: {
-      modules() {
-        return this.$store.getters["campaign/modules"];
-      },
       module() {
-        return this.modules[this.moduleId];
-      }
+        return this.$store.getters["campaign/modules"][this.moduleId];
+      },
     },
     methods: {
       setComponent(ref) {

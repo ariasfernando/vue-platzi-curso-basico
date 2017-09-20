@@ -22,6 +22,13 @@ module.exports = {
   settings: [
     {
       link: 'attribute',
+      label: 'Select an image',
+      name: 'placeholder',
+      type: 'file',
+      value: 'studio/placeholder-square.jpg',
+    },
+    {
+      link: 'attribute',
       label: 'Default URL',
       name: 'href',
       type: 'text',
