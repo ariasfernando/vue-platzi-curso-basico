@@ -228,8 +228,11 @@ var tableMixin = {
       sortKey: 'updated_at',
       reverse: false,
       showModal: false,
+      showPreview: false,
       selectedCampaignId: null,
-      baseUrl: Application.globals.baseUrl
+      baseUrl: Application.globals.baseUrl,
+      widthPreview: 660,
+      previewSrc: null
     }
   },
   props: {
@@ -344,7 +347,75 @@ var tableMixin = {
       unlockCampaign.done(function(data) {
         vm.$emit('change-page', page, vm.type);
       });
-    }
+    },
+    preview: function(campaign_id) {
+      this.showPreview = true;
+      this.previewSrc = Application.globals.baseUrl + "/public/html/" + campaign_id;
+      this.selectedCampaignId = campaign_id;
+    },
+    togglePreview: function(mode) {
+      switch(mode) {
+        case 'mobile': this.widthPreview = 480;
+        break;
+        default: this.widthPreview = 660;
+      }
+    },
+    sendPreview: function() {
+
+      let $modal = $('.dashboard-campaign-preview');
+      let $sendPreviewForm = $modal.find("#send-preview-form");
+
+      // Validate Emails form
+      if (Application.utils.validate.validateForm($sendPreviewForm[0])) {
+
+        $modal.find(".btn-send").addClass("ajax-loader-small").attr("disabled", "disabled");
+        $modal.find(".btn-send").parent().removeClass("success").addClass("spinner");
+
+        let data = {
+          campaign_id: this.selectedCampaignId,
+          mail: $sendPreviewForm.find("input[name=send-preview-to]").val()
+        };
+
+        let sendPreviewRequest = Application.utils.doAjax("/campaign/send-preview", {
+          type: "POST",
+          data: data
+        });
+
+        sendPreviewRequest.done(function(response){
+
+          if (response.processed) {
+            // Display success icon.
+            if (!$modal.find(".btn-send .glyphicon-ok").length) {
+              $modal.find(".btn-send").append('<i class="glyphicon glyphicon-ok status-icon"></i>');
+            }
+            $modal.find(".btn-send").parent().removeClass("spinner").addClass("success");
+            $modal.find(".btn-send").find('.status-icon').animate({
+              opacity: 1
+            });
+          } else {
+            $modal.find(".btn-send")
+              .parent()
+              .removeClass("spinner")
+              .find("[name=send-preview-to]")
+              .addClass("error")
+              .after('<label class="error">We couldn\'t find a valid email address.</label>');
+          }
+        });
+
+        sendPreviewRequest.fail(function(){
+          // On error display alert
+          $modal.find(".send-preview")
+            .prepend('We couldn\'t send your preview, please try again.')
+            .find(".alert").slideDown();
+        });
+
+        sendPreviewRequest.always(function(){
+          // Remove loader.
+          $modal.find(".btn-send").removeClass("ajax-loader-small").removeAttr("disabled", "disabled");
+        });
+      }
+    },
+
   }
 };
 
