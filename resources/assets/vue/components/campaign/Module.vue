@@ -1,12 +1,11 @@
 <template >
-  <div>
 
-    <tr v-if="module.type === 'custom'" class="st-module-wrapper">
-      <td class="st-toolbar-content st-position-relative">
-        <component v-if="$customModules.indexOf('custom-' + module.name) !== -1" :is="'custom-' + module.name" :name="module.name" :module="module"></component>
-        <module-toolbar :module-id="moduleId"></module-toolbar>
-      </td>
-    </tr>
+  <tr v-if="module.type === 'custom'" class="st-module-wrapper">
+    <td class="st-toolbar-content st-position-relative">
+      <component v-if="$customModules.indexOf('custom-' + module.name) !== -1" :is="'custom-' + module.name" :name="module.name" :module="module"></component>
+      <module-toolbar :module-id="moduleId"></module-toolbar>
+    </td>
+  </tr>
 
   <tr v-else class="st-module-wrapper">
     <td class="st-toolbar-content st-position-relative"

@@ -230,6 +230,12 @@
             style: this.module.structure.columns[colId].components[componentId].style || {},
             attribute: this.module.structure.columns[colId].components[componentId].attribute || {}
           });
+
+          this.setComponent({
+            columnId: +colId,
+            componentId,
+          });
+
           return false;
         }
 
@@ -256,6 +262,7 @@
           e.clone.style.opacity = "1";
           cloneItem.parentNode.removeChild(cloneItem);
         }
+
 
         this.setComponent({
           columnId: +colId,
