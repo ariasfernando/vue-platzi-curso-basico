@@ -40,27 +40,30 @@
                 </span>
                
                 <!-- Input color -->
-                <input v-if="setting.type === 'color'"
-                       v-validate="'required'" 
-                       v-model="setting.value.hex"
-                       type="text"
-                       class="sketchbackground"                        
-                       :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                       :name="setting.name"
-                       :placeholder="setting.label"
-                       @click.prevent="toggleSketch"
-                       @change="saveComponent">
+                <div @click.prevent="toggleSketch">
+                  <input v-if="setting.type === 'color'"
+                         v-validate="'required'"
+                         v-model="setting.value.hex"
+                         type="text"
+                         class="sketchbackground"
+                         :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                         :name="setting.name"
+                         :placeholder="setting.label"
+                         @click.prevent="toggleSketch"
+                         disabled
+                         @change="saveComponent">
+                </div>
                 <div v-if="setting.type === 'color'"
-                     class="icon-remove st-remove-sketch" 
-                     @click.prevent="toggleSketch"  
+                     class="icon-remove st-remove-sketch"
+                     @click.prevent="toggleSketch"
                 >
                   <i class="glyphicon glyphicon-remove"></i>
                 </div>
-                <sketch-picker v-if="setting.type === 'color'" 
-                               v-model="setting.value" 
-                               class="sketch-picker" 
+                <sketch-picker v-if="setting.type === 'color'"
+                               v-model="setting.value"
+                               class="sketch-picker"
                                @click.native="updateColorPickerSetting(setting.name, setting.link, false )"></sketch-picker>
-                
+
                 <!-- Span General Error -->
                 <span v-show="errors.has(setting.name)" 
                       class="help is-danger">{{ errors.first(setting.name) }}
@@ -89,16 +92,19 @@
                 </span>
                 
                 <!-- Input color -->
-                <input v-if="settingGroup.type === 'color'"
-                       v-model="settingGroup.value.hex"
-                       v-validate="'required'" 
-                       type="text"
-                       class="sketchbackground"                        
-                       :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
-                       :name="settingGroup.name"
-                       :placeholder="settingGroup.label"
-                       @click.prevent="toggleSketch"
-                       @change="saveComponent">
+                <div @click.prevent="toggleSketch">
+                  <input v-if="settingGroup.type === 'color'"
+                         v-model="settingGroup.value.hex"
+                         v-validate="'required'"
+                         type="text"
+                         class="sketchbackground"
+                         :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
+                         :name="settingGroup.name"
+                         :placeholder="settingGroup.label"
+                         @click.prevent="toggleSketch"
+                         @input="saveComponent"
+                         disabled>
+                </div>
                 <div v-if="settingGroup.type === 'color'"
                      class="icon-remove st-remove-sketch" 
                      @click.prevent="toggleSketch"  
