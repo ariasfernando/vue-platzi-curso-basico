@@ -66,7 +66,6 @@
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"];
-        return this.$store.state.campaign.campaign;
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
