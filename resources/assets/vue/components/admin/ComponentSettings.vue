@@ -234,12 +234,21 @@
           if (option.link === 'style') {
             if ( option.group && option.group.length > 0 ){
               _.each(option.group, (optionGroup) => {
-                this.component.style[optionGroup.name] = optionGroup.value;
+                if (option.group.type == 'color'){
+                  this.component.style[optionGroup.name] = optionGroup.value.hex;
+                }else{
+                  this.component.style[optionGroup.name] = optionGroup.value;
+                };
               }); 
             }else{
-              this.component.style[option.name] = option.value;
-            }
-          }
+              if (option.group.type == 'color'){
+                this.component.style[option.name] = option.value.hex;
+              }else{
+                this.component.style[option.name] = option.value;
+              }   
+            };
+          };
+
           if (option.link === 'attribute') {
             if (option.group && option.group.length > 0 ){
               _.each(option.group, (optionGroup) => {
@@ -247,8 +256,8 @@
               }); 
             }else{
               this.component.attribute[option.name] = option.value;
-            }
-          }
+            };
+          };
         });
 
         this.$store.commit('module/setChangeSettingComponent',{
