@@ -3,7 +3,7 @@
     <email-actions v-if="ready"></email-actions>
 
     <!-- column left (menu) -->
-    <aside>
+    <aside v-sticky="{ zIndex: 997, stickyTop: 53 }">
       <div class="menu-campaign">
         <campaign-configuration v-if="ready"></campaign-configuration>
         <campaign-menu v-if="ready"></campaign-menu>
@@ -15,7 +15,7 @@
       <email-canvas v-if="ready"></email-canvas>
     </section>
 
-    <aside class="component-settings-wrapper">
+    <aside class="component-settings-wrapper" v-sticky="{ zIndex: 997, stickyTop: 53 }">
       <module-settings v-if="currentComponent"></module-settings>
       <component-settings v-if="currentComponent"></component-settings>
     </aside>
@@ -41,6 +41,7 @@
   import ModuleSettings from './ModuleSettings.vue'
   import Spinner from '../common/Spinner.vue'
   import EmailActions from './EmailActions.vue'
+  import VueSticky from 'vue-sticky'
 
   export default {
     name: 'Campaign',
@@ -65,11 +66,13 @@
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"];
-        return this.$store.state.campaign.campaign;
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
       }
+    },
+    directives: {
+      'sticky': VueSticky,
     },
     methods: {
       loadCampaign() {

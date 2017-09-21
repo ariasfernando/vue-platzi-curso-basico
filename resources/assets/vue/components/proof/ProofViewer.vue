@@ -1,7 +1,7 @@
 <template id="proof-viewer">
     <div class="proof-viewer-container">
 
-        <div class="proof-top-bar" v-sticky="{ zIndex: 3, stickyTop: 0 }">
+        <div class="proof-top-bar" v-sticky="{ zIndex: 999, stickyTop: 0 }">
             <div class="col-xs-5"></div>
             <div class="col-xs-2">
                 <div class="switch">
