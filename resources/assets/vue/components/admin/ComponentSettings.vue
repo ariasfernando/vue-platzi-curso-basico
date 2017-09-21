@@ -223,6 +223,7 @@
         });    
       
         this.$store.commit('module/setChangeSettingComponent',{
+          style: this.component.style || {},
           attribute: this.component.attribute || {}
         });
       
