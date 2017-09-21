@@ -206,19 +206,26 @@
 
         reader.onload = (e) => {
           vm.image = e.target.result;
-          this.updateAttribute(vm.image);
+          this.updateAttributePlaceholder(vm.image);
         };
 
         reader.readAsDataURL(file);
 
       },
 
-      updateAttribute(e) {
+      updateAttributePlaceholder(e) {
         this.component.attribute.placeholder = e;
 
+        _.each(this.component.settings, (option) => {
+          if (option.name === 'placeholder') {
+            option.value = e;
+          };
+        });    
+      
         this.$store.commit('module/setChangeSettingComponent',{
           attribute: this.component.attribute || {}
         });
+      
       },
       
       saveComponent() {

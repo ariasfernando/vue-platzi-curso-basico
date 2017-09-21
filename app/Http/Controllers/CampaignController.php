@@ -434,6 +434,17 @@ class CampaignController extends Controller
     }
 
     /**
+     * Download campaign HTML.
+     * @param  Request $request
+     * @param  string $campaign_id
+     * @return \Illuminate\Http\Response
+     */
+    public function getDownloadHtml(Request $request, $campaign_id)
+    {
+        return Campaign::downloadHtml($campaign_id);
+    }
+
+    /**
      *  Update AutoSave campaign attribute
      *
      * @param \Illuminate\Http\Request $request

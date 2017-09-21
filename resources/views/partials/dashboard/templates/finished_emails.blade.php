@@ -58,9 +58,10 @@
                         <a href="#" class="plaintext" v-if="showPlaintext">Normal Plaintext</a>
                     </td>
                     <td class="actions icons text-right" width="200">
-                        <a href="#" class="public-view" title="Preview" target="_blank"
-                            v-if="campaign.library_config.view_in_browser"><i class="glyphicon glyphicon-eye-open"></i></a>
-                        <a :href="baseUrl + '/campaign/download-html/' + campaign._id" v-if="enableDownload">
+                        <a href="#" v-on:click.prevent="preview(campaign._id)" title="Preview" target="_blank">
+                            <i class="glyphicon glyphicon-eye-open"></i>
+                        </a>
+                        <a :href="baseUrl + '/campaign/download-html/' + campaign._id">
                             <i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i>
                         </a>
                         <a
@@ -117,6 +118,16 @@
         <modal v-if="showModal" v-on:close="showModal = false" v-on:accept="confirmDeleteCampaign" class="delete-modal">
             <div slot="body">
                 <p>Are you sure you want to delete this email?</p>
+            </div>
+        </modal>
+
+        <modal class="dashboard-campaign-preview" v-if="showPreview" v-on:close="showPreview = false">
+            <div slot="header">
+                <button type="button" class="close" @click.prevent="showPreview = false"><span>&times;</span></button>
+                <h4>Preview</h4>
+            </div>
+            <div slot="body">
+                @include('partials.dashboard.templates.campaign_preview')
             </div>
         </modal>
     </div>
