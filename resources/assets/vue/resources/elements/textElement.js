@@ -20,6 +20,13 @@ module.exports = {
   settings: [
     {
       link: 'style',
+      label: 'Font Family',
+      name: 'font-family',
+      type: 'text',
+      value: 'sans-serif',
+    },
+    {
+      link: 'style',
       label: 'Color',
       name: 'color',
       type: 'color',
