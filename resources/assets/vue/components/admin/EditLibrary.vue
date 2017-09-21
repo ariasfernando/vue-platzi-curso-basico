@@ -1,6 +1,6 @@
 <template>
   <div class="col-xs-12 library">
-    <div class="row header" v-sticky="{ zIndex: 3, stickyTop: 0 }">
+    <div class="row header" v-sticky="{ zIndex: 999, stickyTop: 0 }">
       <div class="col-xs-9 header-col">
         <div class="beta-btn-secondary pull-left">
           <i class="glyphicon glyphicon-menu-left"></i>
