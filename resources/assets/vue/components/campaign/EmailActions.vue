@@ -1,5 +1,5 @@
 <template>
-  <div class="beta-subheader" v-sticky="{ zIndex: 3, stickyTop: 0 }">
+  <div class="beta-subheader" v-sticky="{ zIndex: 999, stickyTop: 0 }">
     <div class="section-box-header section-canvas-title">
       <div class="row">
         <div class="col-xs-5 col-md-5 col-lg-5 hidden-sm hidden-xs"></div>

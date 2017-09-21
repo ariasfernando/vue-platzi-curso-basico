@@ -128,7 +128,7 @@
       color: #666666;
       box-shadow: none;
       border-radius: 2px;
-      height: 36px;
+      height: 30px;
 
       &:focus{
        border: 1px solid #DDDDDD;
@@ -148,6 +148,7 @@
 
       .iframe-container{
         text-align: center;
+        background: #F4F4F4;
       }
     }
   }
