@@ -18,9 +18,9 @@
         <div class="form-group pull-right">
             <label>Share url</label>
             <div class="input-group">
-                <input type="text" class="form-control" readonly>
+                <input type="text" class="form-control share-preview" :value="shareURL" readonly>
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">Copy</button>
+                    <button class="btn btn-default" @click="copyURL" type="button">Copy</button>
                 </span>
             </div>
         </div>

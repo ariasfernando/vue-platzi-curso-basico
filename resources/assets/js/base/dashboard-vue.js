@@ -352,6 +352,14 @@ var tableMixin = {
       this.showPreview = true;
       this.previewSrc = Application.globals.baseUrl + "/public/html/" + campaign_id;
       this.selectedCampaignId = campaign_id;
+      this.shareURL = Application.globals.baseUrl + '/public/view/' + campaign_id;
+    },
+    copyURL: function() {
+      let $modal = $('.dashboard-campaign-preview');
+      let input = $modal.find(".share-preview input")[0]
+      input.focus();
+      input.setSelectionRange(0, input.value.length);
+      document.execCommand("copy");
     },
     togglePreview: function(mode) {
       switch(mode) {
