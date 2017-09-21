@@ -1,0 +1,31 @@
+.modal-mask{
+	.tabs{
+		.nav-tabs{
+
+			a{
+				padding: 5px 0px;
+				background: none;
+				font-size: 14px;
+				font-weight: 300;
+				color: @stensul-gray;
+				margin-right: 20px;
+				border-radius: 0px;
+				border: none;
+
+				&:focus,
+				&:active{
+					background-color: none;
+				}
+			}
+
+			a.active{
+				border-bottom: 3px solid @stensul-highlight;
+			}
+
+			&:focus{
+				outline: 0;
+			}
+		}
+	}
+}
+

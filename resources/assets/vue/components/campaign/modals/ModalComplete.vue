@@ -21,18 +21,18 @@
 
           <div class="modal-footer">
             <slot name="footer">
-              <button v-if="campaign.process_plaintext" type="button" class="btn btn-default btn-plain-text">Plaintext</button>
+              <button v-if="campaign.process_plaintext" type="button" class="btn btn-plain-text">Plaintext</button>
 
               <div v-if="campaign.library_config.esp && campaign.library_config.espProvider"
                    type="button" class="btn btn-default btn-upload-api beta-btn-secondary" :data-campaign-id="campaign.campaign_id"
                    :data-api-driver="campaign.library_config.espProvider" v-html="campaign.library_config.espProvider">
               </div>
 
-              <div>
-                <a :href="viewInBrowser" target="_blank" type="button" class="btn btn-default beta-btn-secondary">View in browser</a>
+              <div class="view-browser">
+                <a :href="viewInBrowser" target="_blank" type="button" class="btn beta-btn-secondary">View in browser</a>
               </div>
 
-              <a :href="$app.baseUrl" class="btn btn-default btn-back-to-dashboard beta-btn-primary" data-dismiss="modal">Go back to the dashboard</a>
+              <a :href="$app.baseUrl" class="btn btn-back-to-dashboard beta-btn-primary" data-dismiss="modal">Go back to the dashboard</a>
             </slot>
           </div>
         </div>
@@ -86,18 +86,28 @@
 </script>
 
 <style lang="less" scoped>
+  @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400');
+
   .modal-container {
     width: 900px;
 
     textarea {
       width: 100%;
       height: 330px;
-      border: 1px solid #ccc;
-      font-family: monospace, serif;
+      border: 1px solid #dddddd;
+      font-family: 'Source Code Pro', monospace;
+      border-radius: 2px;
+      padding: 10px;
+      font-size: 14px;
+      color: #666666;
+      outline: 0;
     }
   }
   .show {
     display: block !important;
     opacity: 1 !important;
+  }
+  .view-browser{
+    display: inline;
   }
 </style>

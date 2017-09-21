@@ -18,6 +18,7 @@ $default = [
             '/campaign/edit/{campaign_id?}'          => 'CampaignController@getEdit',
             '/campaign/plain-text'                   => 'CampaignController@getPlainText',
             '/campaign/html'                         => 'CampaignController@getHtml',
+            '/campaign/download-html/{campaign_id}'  => 'CampaignController@getDownloadHtml',
             '/campaign/public-path/{campaign_id?}'   => 'CampaignController@getPublicPath',
             '/template/module'                       => 'TemplateController@getModule',
             '/template/library/{library}'            => 'TemplateController@getLibrary',
