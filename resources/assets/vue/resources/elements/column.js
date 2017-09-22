@@ -7,7 +7,7 @@ module.exports = {
     borderWidth: '0px',
     borderColor: '#000000',
     borderStyle: 'solid',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
   },
   attribute: {
     width: '100%',
@@ -27,7 +27,7 @@ module.exports = {
       label: 'Background Color',
       name: 'backgroundColor',
       type: 'color',
-      value: {hex: '#FFFFFF'},
+      value: { hex: '#FFFFFF' },
     },
     {
       link: 'style',

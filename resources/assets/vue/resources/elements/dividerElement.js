@@ -1,7 +1,7 @@
 module.exports = {
   type: 'divider-element',
   style: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
     height: '5px',
   },
   settings: [
@@ -10,7 +10,7 @@ module.exports = {
       label: 'Background Color',
       name: 'backgroundColor',
       type: 'color',
-      value: { hex: '#000000' },
+      value: { hex: 'transparent' },
     },
     {
       link: 'style',
@@ -29,7 +29,7 @@ module.exports = {
   ],
   attribute: {
     align: 'center',
-    bgcolor: { hex: '#FFFFFF' },
+    bgcolor: { hex: 'transparent' },
     width: '100%',
   },
 };
