@@ -29,6 +29,13 @@ class Create extends Command
      */
     public function fire()
     {
+
+        //Amount of users validation
+        if(config('admin.users_limit') <= User::count()){
+            $this->error('The maximum number of users has been reached.');
+            return 2;
+        }
+
         $options = $this->option();
         $roles_data = Role::all(['name', 'description'])->toArray();
         $roles_array = [];

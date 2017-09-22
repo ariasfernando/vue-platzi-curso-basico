@@ -110,6 +110,10 @@ var userController = function( customOptions ){
 								errorField.focus().addClass("error");
 								errorField.parent().append('<label class="error">' + data.message + '</label>');
 							}
+							if (data.status == 2) {
+								$.magnificPopup.close();
+								Application.utils.alert.display("Error:", data.message, "danger");
+							}
 						}
 						return false;
 					})
