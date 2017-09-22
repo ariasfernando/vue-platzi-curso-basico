@@ -1,27 +1,32 @@
 <template>
   <div class="expand">
+      <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
     
-      <div v-for="item in items">
-        
-        <div v-if="item.sub_menu" class="expand">
-          <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
-
-          <div v-for="subitem in item.sub_menu">
-            <div class="add single">
-              <h2 @click="addModule(subitem)">
-                {{ subitem.name }}
-              </h2>
-            </div>
-          </div>
+      <div class="beta-subitem" v-bind:class="{'is-collapsed' : collapsed }">
+        <div v-for="item in items">
           
-        </div>
+          <div v-if="item.sub_menu" class="expand">
+            <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
+              
+              <div class="beta-submodules">
+                <div v-for="subitem in item.sub_menu">
+                  <div class="add single">
+                    <h2 @click="addModule(subitem)">
+                      <i class="glyphicon glyphicon-minus glyph-inline"></i> {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            
+          </div>
 
-        <div v-else class="add single">
-          <h2 @click="addModule(item)">
-            {{ item.name }}
-          </h2>
-        </div>
+          <div v-else class="add single">
+            <h2 @click="addModule(item)">
+              {{ item.name }}
+            </h2>
+          </div>
 
+        </div>
       </div>
     
   </div>
@@ -83,9 +88,12 @@
 
         if(event.target.className == "menu-active") {
           event.target.className = "selected";
+          event.target.nextElementSibling.className += " beta-submodules-expanded";
         } else {
           event.target.className = "menu-active";
+          event.target.nextElementSibling.classList.remove("beta-submodules-expanded");
         }
+
       },
     }
   };

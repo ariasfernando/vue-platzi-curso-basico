@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <div class="col-xs-5 col-md-5 col-lg-5 text-right" id="section-canvas-buttons-col">
+        <div class="col-xs-7 col-md-5 col-lg-5 text-right" id="section-canvas-buttons-col">
 
           <button v-show="!locked" class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
             Preview
