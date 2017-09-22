@@ -4,7 +4,7 @@ module.exports = {
   style: {
     fontFamily: 'sans-serif',
     fontSize: '12px',
-    fontWeight: 'normal',
+    fontWeight: '300',
     lineHeight: '16px',
     paddingTop: '0px',
     paddingBottom: '0px',
