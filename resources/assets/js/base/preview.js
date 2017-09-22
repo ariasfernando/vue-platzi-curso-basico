@@ -98,8 +98,8 @@
     }
 
     $('.btn-copy').click(function(){
-      let $modal = $('.public-view-modal');
-      let input = $modal.find(".share-preview input")[0]
+      var $modal = $('.public-view-modal');
+      var input = $modal.find(".share-preview input")[0]
       input.focus();
       input.setSelectionRange(0, input.value.length);
       document.execCommand("copy");

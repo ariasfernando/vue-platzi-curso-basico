@@ -129,6 +129,7 @@
             <div slot="body">
                 @include('partials.dashboard.templates.campaign_preview')
             </div>
+            <div slot="footer"></div>
         </modal>
     </div>
 </div>

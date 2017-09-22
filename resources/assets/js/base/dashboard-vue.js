@@ -355,8 +355,8 @@ var tableMixin = {
       this.shareURL = Application.globals.baseUrl + '/public/view/' + campaign_id;
     },
     copyURL: function() {
-      let $modal = $('.dashboard-campaign-preview');
-      let input = $modal.find(".share-preview input")[0]
+      var $modal = $('.dashboard-campaign-preview');
+      var input = $modal.find(".share-preview input")[0]
       input.focus();
       input.setSelectionRange(0, input.value.length);
       document.execCommand("copy");
@@ -370,8 +370,8 @@ var tableMixin = {
     },
     sendPreview: function() {
 
-      let $modal = $('.dashboard-campaign-preview');
-      let $sendPreviewForm = $modal.find("#send-preview-form");
+      var $modal = $('.dashboard-campaign-preview');
+      var $sendPreviewForm = $modal.find("#send-preview-form");
 
       // Validate Emails form
       if (Application.utils.validate.validateForm($sendPreviewForm[0])) {
@@ -379,12 +379,12 @@ var tableMixin = {
         $modal.find(".btn-send").addClass("ajax-loader-small").attr("disabled", "disabled");
         $modal.find(".btn-send").parent().removeClass("success").addClass("spinner");
 
-        let data = {
+        var data = {
           campaign_id: this.selectedCampaignId,
           mail: $sendPreviewForm.find("input[name=send-preview-to]").val()
         };
 
-        let sendPreviewRequest = Application.utils.doAjax("/campaign/send-preview", {
+        var sendPreviewRequest = Application.utils.doAjax("/campaign/send-preview", {
           type: "POST",
           data: data
         });
