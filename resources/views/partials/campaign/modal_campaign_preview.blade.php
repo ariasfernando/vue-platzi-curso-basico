@@ -32,9 +32,9 @@
                         <div class="form-group pull-right">
                             <label>Share url</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" readonly>
+                                <input type="text" class="form-control" value="{{url('/') . '/public/view/' . $campaign_id}}" readonly>
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">Copy</button>
+                                    <button class="btn btn-default btn-copy" type="button">Copy</button>
                                 </span>
                             </div>
                         </div>
@@ -53,7 +53,9 @@
                 <div class="preview-body">
                     <div class="preview-container">
                         <div class="mobile-frame"></div>
-                        <div class="iframe-container"><iframe id="email-preview-iframe" scrolling="no"></iframe></div>
+                        <div class="iframe-container" data-template-width="{{ $width or $params['campaign_data']->getLibraryConfig('template_width') }}" style="width:{{ $width or $params['campaign_data']->getLibraryConfig('template_width') }}px;">
+                            <iframe id="email-preview-iframe" src="{{ $path or url('/template/email-preview/' . $params['campaign_id'] ) }}" scrolling="no"></iframe>
+                        </div>
                     </div>
                 </div>
             </div>
