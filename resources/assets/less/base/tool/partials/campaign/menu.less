@@ -4,7 +4,14 @@ aside{
 	vertical-align: top;
 	display: table-cell;
 	background: @stensul-white;
-	font-family: 'Open Sans', Arial, sans-serif; 
+	font-family: 'Open Sans', Arial, sans-serif;
+    height: 100vh;
+    overflow-y: auto;
+    float: left;
+
+	.aside-inner{
+		height: 100%;
+	}
 
 	.menu-campaign{
 		// single module
@@ -324,4 +331,7 @@ aside{
 	.is-collapsed{
 		display: none!important;
 	}
+}
+aside.component-settings-wrapper{
+	float: right;
 }
