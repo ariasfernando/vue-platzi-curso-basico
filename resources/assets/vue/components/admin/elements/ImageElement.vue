@@ -143,6 +143,7 @@
     height: 22px;
     width: 22px;
     border-radius: 100%;
+    font-size: 11px!important;
     line-height: 25px;
     background-color: @icon-option;
     opacity: 1;

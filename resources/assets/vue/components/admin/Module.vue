@@ -284,20 +284,6 @@
   @hover: @focus-light;
   @icon-option: #78DCD6;
 
-  .st-content-component{
-    outline: 1px dashed @icon-option;
-    border: none!important;
-  }
-  
-  .st-component{
-    &:hover{
-        opacity: 0.75;
-        .icon-move, .icon-remove{
-          display: block;
-        }
-    }
-  }
-
   .st-col{
     border: none!important;
   }
@@ -310,23 +296,18 @@
     float: left;
   }
 
-  td.empty-cell{
-    font-weight: normal;
-    color: @focus;
-  }
-
-  table.empty-table{
+  .st-content-component{
     outline: 1px dashed @icon-option;
-    background-color: @hover;
-  }
-
-  div.empty-cell {
-    font-weight: normal;
-    color: @focus;
-    display: table-cell;
-    height: 80px;
-    width: 100%;
-    vertical-align: middle;
+    border: none!important;
+  
+    .st-component{
+      &:hover{
+        opacity: 0.75;
+        .icon-move, .icon-remove{
+          display: block;
+        }
+      }
+    }
   }
 
   div.empty-table {
@@ -334,41 +315,68 @@
     background-color: @hover;
     display: table;
     width: 100%;
+    
+    &:hover{
+      div.empty-cell {
+        font-size: 13px;
+      }
+    }
+
+    div.empty-cell {
+      font-weight: normal;
+      color: @focus;
+      display: table-cell;
+      height: 80px;
+      width: 100%;
+      vertical-align: middle;
+      font-size: 0px;
+      
+    }
   }
 
-  li.ghost-component-menu{
-    outline: 2px dashed @icon-option;
-    color:@focus;
-    background-color: @hover;
-    height: 10px;
-    display: table-row;
-    list-style-type: none;
-    font-size: 13px;
-    z-index: 300;
-    opacity: 1!important;
-    &:before{
-      content: "Drag content here";
-    }
-    i{
-      display: none;
-    }
-    p{
-      display: none;
+  .module-wrapper {
+    li.ghost-component-menu{
+      outline: 2px dashed @icon-option;
+      color:@focus;
+      background-color: @hover;
+      height: 80px;
+      line-height: 80px;
+      width: 100%;
+      display: table-row;
+      list-style-type: none;
+      font-size: 13px;
+      z-index: 300;
+      text-align: center;
+      opacity: 1!important;
+      vertical-align: middle;
+      position: relative;
+      &:before{
+        content: "Drag content here";
+      }
+      i{
+        display: none;
+      }
+      p{
+        display: none;
+      }
+
     }
 
-  }
+    tr.ghost-component{
+      outline: 2px dashed @icon-option;
+      color:@focus;
+      background-color: @hover;
+      text-align: center;
+      height: 20px;
+      line-height: 20px;
+      &:before{
+        content: "Drag content here";
+      }
+      td{
+        display: none;
+      }
 
-  tr.ghost-component{
-    outline: 2px dashed @icon-option;
-    color:@focus;
-    background-color: @hover;
-    height: 10px;
-    &:before{
-      content: "Drag content here";
     }
-    td{
-      display: none;
-    }
-
+    
   }
 </style>

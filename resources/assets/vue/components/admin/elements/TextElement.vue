@@ -129,6 +129,7 @@
     width: 22px;
     border-radius: 100%;
     line-height: 25px;
+    font-size: 11px!important;
     background-color: @icon-option;
     opacity: 1;
     margin-top: -11px;
