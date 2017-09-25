@@ -22,7 +22,7 @@
       },
       colors() {
         return {
-          hex: this.module.structure.attribute.bgcolor || this.plugin.config.defaultValue
+          hex: this.module.structure.attribute && this.module.structure.attribute.bgcolor ? this.module.structure.attribute.bgcolor : this.plugin.config.defaultValue
         }
       },
     },
