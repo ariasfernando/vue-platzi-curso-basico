@@ -70,13 +70,15 @@
       },
       currentComponent() {
         return this.$store.getters["module/currentComponent"];
+      },
+      buildingMode() {
+        return this.$store.getters["module/buildingMode"];
       }
     },
     data () {
       return {
         showRaw: false,
         ready: false,
-        buildingMode: 'desktop',
       }
     },
     watch:{

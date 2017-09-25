@@ -12,11 +12,11 @@
       <div class="section-title vertical-center">
         <div class="switch">
           <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-          <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="buildingMode = 'desktop'">
+          <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="changeBuildingMode('desktop')">
             <i class="fa fa-desktop"></i>
           </label>
           <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-          <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="buildingMode = 'mobile'">
+          <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="changeBuildingMode('mobile')">
             <i class="glyphicon glyphicon-phone"></i>
           </label>
           <span class="switch-selection"></span>
@@ -41,6 +41,9 @@
     computed: {
       module() {
         return this.$store.getters["module/module"];
+      },
+      buildingMode() {
+        return this.$store.getters["module/buildingMode"];
       }
     },
     data () {
@@ -55,6 +58,9 @@
     methods: {
       toggleRaw() {
         this.showRaw = !this.showRaw;
+      },
+      changeBuildingMode(mode) {
+        this.$store.commit("module/setBuildingMode", mode);
       },
       updateRawModule(e) {
         this.$store.commit("module/setModuleData", JSON.parse(e.target.value));

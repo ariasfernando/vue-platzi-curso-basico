@@ -8,6 +8,7 @@ const state = {
   module: {},
   currentComponent: {},
   activeColumn: 0,
+  buildingMode: 'desktop',
   changeSettingComponent: {
     style: {},
     attribute: {},
@@ -28,6 +29,9 @@ const getters = {
   activeColumn(state) {
     return state.activeColumn;
   },
+  buildingMode(state) {
+    return state.buildingMode;
+  }
 };
 
 const mutations = {
@@ -114,6 +118,9 @@ const mutations = {
   },
   setActiveColumn(state, columnId) {
     state.activeColumn = columnId;
+  },
+  setBuildingMode(state, mode) {
+    state.buildingMode = mode;
   },
   error(state, err) {
     console.log(err);
