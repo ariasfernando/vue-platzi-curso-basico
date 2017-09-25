@@ -4,19 +4,24 @@
     <div class="level-1 open-section-campaign"l v-bind:class="{'is-collapsed' : collapsed }">
       <form>
         <!-- Configuration Inputs -->
-        <div>
+        <div class="configuration-field configuration-nomargin">
+          <label>Campaign Name</label>
           <input type="text" placeholder="Campaign Name" name="campaignName" :value="campaign.campaign_name" @blur="saveSettings"/>
         </div>
 
-        <div class="form-group" v-if="enablePreheader">
+        <div class="form-group configuration-field configuration-nomargin" v-if="enablePreheader">
+          <label>Preheader Text</label>
           <input type="text" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
         </div>
-        <div class="config-box-divider" v-if="enableAutoSave">
-          <input type="checkbox" class="btn-auto-save" id="autoSave" name="autoSave" v-model="form.autoSave" @change="autoSaveChange">
-          <label for="autoSave">Auto Save</label>
-        </div>
-        <div class="config-box-divider" v-if="enableTagging">
+
+        <div class="config-box-divider configuration-field configuration-nomargin" v-if="enableTagging">
+          <label>Tags</label>
           <input-tag :on-change="tagChange" :tags="form.tags" validate="text" placeholder="Add Tag"></input-tag>
+        </div>
+
+        <div class="config-box-divider" v-if="enableAutoSave">
+          <label for="autoSave">Auto Save</label>
+          <toggle-button :value="autoSave" color="#78DCD6" :sync="true" :labels="{checked: 'True', unchecked: 'False'}" @change="autoSaveChange" v-model="form.autoSave"></toggle-button>
         </div>
 
         <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
@@ -58,10 +63,12 @@
   import _ from 'lodash'
   import configService from '../../services/config'
   import InputTag from 'vue-input-tag'
+  import ToggleButton from '../common/ToggleButton.vue'
 
   export default {
     components: {
-      InputTag
+      InputTag,
+      ToggleButton
     },
     name: 'CampaignConfiguration',
     data () {
@@ -202,6 +209,17 @@
     border-left: 1px solid #BBB;
     padding: 0 0 0 5px;
     font-weight: normal !important;
+  }
+  label{
+    font-weight: 300;
+    color: #666666;
+  }
+  .vue-js-switch{
+    float: right;
+  }
+  .v-switch-core {
+    background: #dddddd;
+    border: 1px solid #dddddd;
   }
 }
 </style>
