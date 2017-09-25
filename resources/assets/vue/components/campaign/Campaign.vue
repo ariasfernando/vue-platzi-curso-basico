@@ -116,7 +116,7 @@
 
     .component-settings {
       background: #FFFFFF;
-      border-radius: 5px;
+      border-radius: 0px;
       border: 1px solid transparent;
       height: 100%;
       display: table;
