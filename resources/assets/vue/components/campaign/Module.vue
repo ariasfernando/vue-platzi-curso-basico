@@ -24,7 +24,10 @@
                    :style="column.style"
             >
                 <tr v-for="(component, componentId) in column.components">
-                  <td width="100%" :bgcolor="column.attribute.bgcolor.hex" :valign="column.attribute.valign"
+                  <td width="100%" 
+                      :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight +';background-color: '+ column.style.backgroundColor+';'"
+                      :bgcolor="column.attribute.bgcolor.hex" 
+                      :valign="column.attribute.valign"
                       :align="component.attribute.align || 'center'"
                   >
                     <component :is="component.type"
