@@ -198,6 +198,40 @@ aside{
 				}
 			}
 		}
+
+		.configuration-field{
+			position: relative;
+
+			label{
+				display: inline-block;
+			    position: relative;
+			    top: 21px;
+			    padding: 5px 5px;
+			    background: #f8f8f8;
+			    z-index: 2;
+			    font-weight: 300;
+			    font-size: 11px;
+			    margin-left: 5px;
+			    text-transform: uppercase;
+			    color: #999999;
+			}
+
+			input[type=text]{
+				width: 100%!important;
+			    padding: 9px 7px 6px!important;
+			    font-size: 13px!important;
+			    font-weight: 300!important;
+			    color: @stensul-gray!important;
+			    border: 1px solid #dddddd!important;
+			    background: #f8f8f8!important;
+			    box-sizing: border-box!important;
+			    border-radius: 2px!important;
+			    outline: 0!important;
+			}
+		}
+		.configuration-nomargin{
+			margin-top: -17px!important;
+		}
 	}
 
 	// Configuration module
@@ -239,9 +273,8 @@ aside{
 	.configuration-mod{
 
 		.config-box-divider{
-			border-top: 1px solid #e4e4e4;
 			padding: 5px 0 0;
-			margin: 10px 0 0;
+			margin: 5px 0 0;
 		}
 		#tags-box{
 			padding-top: 10px;
@@ -260,7 +293,7 @@ aside{
 		    outline: 0;
 
 			i{
-				font-size: 12px;
+				font-size: 13px;
 			}
 
 			&:focus{
@@ -283,7 +316,7 @@ aside{
 		label.locking{
 			margin: 5px 0;
 			font-weight: 300;
-			font-size: 12px;
+			font-size: 13px;
 			color: @stensul-gray;
 		}
 	}
