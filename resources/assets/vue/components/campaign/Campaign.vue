@@ -104,6 +104,7 @@
     height: 53px;
     padding: 11px 10px;
     box-shadow: 0px 0px 4px #999999;
+    overflow: hidden;
   }
 
   .component-settings-wrapper {
