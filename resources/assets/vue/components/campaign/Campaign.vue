@@ -4,9 +4,11 @@
 
     <!-- column left (menu) -->
     <aside v-sticky="{ zIndex: 997, stickyTop: 53 }">
-      <div class="menu-campaign">
-        <campaign-configuration v-if="ready"></campaign-configuration>
-        <campaign-menu v-if="ready"></campaign-menu>
+      <div>
+        <div class="menu-campaign">
+          <campaign-configuration v-if="ready"></campaign-configuration>
+          <campaign-menu v-if="ready"></campaign-menu>
+        </div>
       </div>
     </aside>
 
@@ -16,8 +18,10 @@
     </section>
 
     <aside class="component-settings-wrapper" v-sticky="{ zIndex: 997, stickyTop: 53 }">
-      <module-settings v-if="currentComponent"></module-settings>
-      <component-settings v-if="currentComponent"></component-settings>
+      <div>
+        <module-settings v-if="currentComponent"></module-settings>
+        <component-settings v-if="currentComponent"></component-settings>
+      </div>
     </aside>
 
     <!-- Modals -->
@@ -104,6 +108,7 @@
     height: 53px;
     padding: 11px 10px;
     box-shadow: 0px 0px 4px #999999;
+    overflow: hidden;
   }
 
   .component-settings-wrapper {
