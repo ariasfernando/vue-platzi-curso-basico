@@ -236,10 +236,10 @@
         padding-right: 15px;
 
         .col-sm-3{
-          width: 72px;
+          width: 70px;
 
           input{
-            width: 40px;
+            width: 37px;
           }
         }
       }
