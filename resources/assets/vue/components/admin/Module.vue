@@ -33,7 +33,9 @@
                      class="st-content-component st-col"
               >
                 <tr>
-                  <td width="100%">
+                  <td width="100%" 
+                      :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight +';background-color: '+ column.style.backgroundColor+';'"
+                  >
                     <draggable v-model="column.components"
                                @add="onAdd"
                                :element="'table'"
