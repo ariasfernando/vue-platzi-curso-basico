@@ -1,16 +1,41 @@
 <template>
   <div class="module-toolbar">
     <div class="icon-move"><i class="fa fa-arrows"></i></div>
-    <div class="icon-config" @click="config"><i class="fa fa-cogs"></i></div>
+    <div class="icon-config" v-if="hasConfig" @click="config"><i class="fa fa-cogs"></i></div>
     <div class="icon-clone" @click="clone"><i class="fa fa-clone"></i></div>
     <div class="icon-remove" @click="remove"><i class="fa fa-trash-o"></i></div>
   </div>
 </template>
 
 <script>
+
+  import _ from 'lodash';
+
   export default {
     name: 'ModuleToolbar',
     props: ['moduleId'],
+    computed: {
+      hasConfig() {
+        const module = this.$store.getters["campaign/modules"][this.moduleId];
+        let hasConfig = false;
+
+        _.each(module.plugins, (plugin) => {
+          if (plugin.enabled === true) {
+            hasConfig = true;
+          }
+        });
+
+        _.each(module.structure.columns, (column) => {
+          _.each(column.plugins, (plugin) => {
+            if (plugin.enabled === true) {
+              hasConfig = true;
+            }
+          });
+        });
+
+        return hasConfig;
+      },
+    },
     methods: {
       config(){
         this.$store.commit("campaign/setCurrentModule", this.moduleId);

@@ -34,6 +34,7 @@
 
 <script>
 
+  import clone from 'clone';
   import moduleService from '../../services/module';
   import _ from 'lodash';
 
@@ -74,7 +75,7 @@
               this.$root.$toast('Error loading custom module', {className: 'et-error'});
             });
         } else {
-          this.$store.commit('campaign/addModule', module);
+          this.$store.commit('campaign/addModule', clone(module));
           this.$store.commit("global/setLoader", false);
         }
       },
