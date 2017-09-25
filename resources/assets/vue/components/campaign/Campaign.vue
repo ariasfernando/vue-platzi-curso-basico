@@ -4,7 +4,7 @@
 
     <!-- column left (menu) -->
     <aside v-sticky="{ zIndex: 997, stickyTop: 53 }">
-      <div>
+      <div class="aside-inner">
         <div class="menu-campaign">
           <campaign-configuration v-if="ready"></campaign-configuration>
           <campaign-menu v-if="ready"></campaign-menu>
@@ -18,7 +18,7 @@
     </section>
 
     <aside class="component-settings-wrapper" v-sticky="{ zIndex: 997, stickyTop: 53 }">
-      <div>
+      <div class="aside-inner">
         <module-settings v-if="currentComponent"></module-settings>
         <component-settings v-if="currentComponent"></component-settings>
       </div>
