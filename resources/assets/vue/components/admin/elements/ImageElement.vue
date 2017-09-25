@@ -11,7 +11,7 @@
       >
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
           <tr>
-            <td width="100%" :align="component.attribute.align" :valign="component.attribute.valign">
+            <td width="100%" :bgcolor="component.attribute.bgcolor.hex" :align="component.attribute.align" :valign="component.attribute.valign">
               <a @click.prevent
                  :href="component.attribute.href" 
                  :alt="component.attribute.alt"

@@ -38,7 +38,7 @@
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
           inline: true,
           menubar: false,
-          toolbar: 'undo redo | alignleft aligncenter alignright | bold italic underline | link | forecolor',
+          toolbar: 'undo redo | alignleft aligncenter alignright | bold italic underline | link | forecolor backcolor',
           plugins: 'paste advlist autolink lists textcolor link',
           link_validate_url: true,
           link_title: false,

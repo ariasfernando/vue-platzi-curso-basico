@@ -10,7 +10,8 @@
         <tr>
           <td width="100%" 
               class="st-text-style st-position-relative" 
-              :align="component.attribute.align" 
+              :align="component.attribute.align"
+              :bgcolor="component.attribute.bgcolor.hex"
               :style="component.style"
           >
             <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>

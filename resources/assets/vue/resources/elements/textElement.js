@@ -59,6 +59,13 @@ module.exports = {
       value: '16px',
     },
     {
+      link: 'attribute',
+      label: 'Background color',
+      name: 'bgcolor',
+      type: 'color',
+      value: { hex: '#FFFFFF' },
+    },
+    {
       link: 'style',
       label: 'Padding',
       name: 'padding',

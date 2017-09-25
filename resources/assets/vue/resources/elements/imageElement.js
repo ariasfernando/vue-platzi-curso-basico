@@ -99,6 +99,13 @@ module.exports = {
       ],
     },
     {
+      link: 'attribute',
+      label: 'Background color',
+      name: 'bgcolor',
+      type: 'color',
+      value: { hex: 'transparent' },
+    },
+    {
       link: 'style',
       label: 'Padding',
       name: 'padding',

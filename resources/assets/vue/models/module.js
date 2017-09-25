@@ -13,7 +13,7 @@ function getPlugins() {
 
 function Module(data = {}) {
   this.moduleId = data._id || undefined;
-  this.name = data.name || data.title || '';
+  this.name = data.name || data.title || 'Untitled module';
   this.type = data.type || 'studio';
   this.status = data.status || '';
   const style = (data.structure && data.structure.style) ? data.structure.style : {};
