@@ -49,7 +49,6 @@
     data () {
       return {
         showRaw: false,
-        buildingMode: 'desktop'
       }
     },
     directives: {
