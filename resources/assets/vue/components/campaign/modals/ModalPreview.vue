@@ -3,6 +3,9 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
+            <slot name="header">
+                <button type="button" class="close" @click="close"><span>&times;</span></button>
+            </slot>
             <slot name="body">
               <h4>Preview</h4>
               <div class="send-preview">
@@ -40,9 +43,7 @@
             </slot>
           <div class="modal-footer">
             <slot name="footer">
-
               <button type="button" class="btn btn-default beta-btn-secondary" @click="close">Close</button>
-
             </slot>
           </div>
         </div>
@@ -113,13 +114,15 @@
     created () {
       this.widthDesktop = this.widthPreview
         = this.$store.state.campaign.campaign.campaign_data.library_config.templateWidth || 660;
+
+      this.widthMobile = this.$store.state.campaign.campaign.campaign_data.library_config.templateMobileWidth || 480;
     }
   };
 </script>
 
 <style lang="less" scoped>
   .modal-container {
-    width: 750px;
+    width: 800px;
     height: 550px;
     overflow: scroll;
 
