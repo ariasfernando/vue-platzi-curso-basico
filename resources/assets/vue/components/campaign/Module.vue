@@ -10,7 +10,7 @@
   <tr v-else class="st-module-wrapper">
     <td class="st-toolbar-content st-position-relative"
         :style="module.structure.style"
-        :bgcolor="module.structure.style.backgroundColor"
+        :bgcolor="module.structure.attribute.bgcolor.hex"
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
     >
       <table width="100%" cellspacing="0" cellpadding="0">

@@ -67,6 +67,13 @@ const mutations = {
   saveModuleStyle(state, data) {
     state.module.structure.style[data.property] = data.value;
   },
+  saveModuleAttribute(state, data) {
+    if (data.property === 'bgcolor') {
+      state.module.structure.attribute[data.property] = data.value.hex ? data.value : { hex: data.value };
+    } else {
+      state.module.structure.attribute[data.property] = data.value;
+    }
+  },
   saveModule(state, moduleId) {
     state.module.moduleId = moduleId;
   },

@@ -1,16 +1,15 @@
 <template>
   <table width="100%"
-         :bgcolor="module.structure.style.backgroundColor" 
          :style="module.structure.style"
          cellspacing="0" 
          cellpadding="0" 
-         border="0" 
+         border="0"
          align="center"
   >
     <!-- START: 2 COLUMNS -->
     <tr v-if="module.structure.columns.length > 1">
-      <td width="100%">
-        <table width="100%" 
+      <td width="100%" :bgcolor="module.structure.attribute.bgcolor.hex">
+        <table width="100%"
                class="st-wrapper" 
                cellspacing="0" 
                cellpadding="0" 
@@ -34,7 +33,7 @@
               >
                 <tr>
                   <td width="100%" 
-                      :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight +';background-color: '+ column.style.backgroundColor+';'"
+                      :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight + ';'"
                   >
                     <draggable v-model="column.components"
                                @add="onAdd"
@@ -103,7 +102,7 @@
           :class="!column.components.length ? 'empty-col' : ''" 
           :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
           :style="module.structure.style || ''"
-          :bgcolor="module.structure.style.backgroundColor" 
+          :bgcolor="module.structure.attribute.bgcolor.hex"
           :data-col="columnId"
       >
         <draggable v-if="column.components.length"

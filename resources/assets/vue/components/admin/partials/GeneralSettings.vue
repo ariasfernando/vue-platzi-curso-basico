@@ -53,10 +53,12 @@
                      :placeholder="generalSetting.label"
                      :value="generalSetting.sketchPickerValue.hex"
                      @click.prevent="toggleSketch"
-                     @change="saveModuleStyle">
+                     @change="saveModuleAttribute">
+
               <div v-if="generalSetting.type === 'color'"
                    class="icon-remove st-remove-sketch"
                    @click.prevent="toggleSketch">
+
                 <i class="glyphicon glyphicon-remove"></i>
               </div>
               <sketch-picker v-if="generalSetting.type === 'color'"
@@ -104,7 +106,7 @@
                      :placeholder="generalSettingGroup.label"
                      :value="generalSettingGroup.sketchPickerValue.hex"
                      @click.prevent="toggleSketch"
-                     @change="saveModuleStyle">
+                     @change="saveModuleAttribute">
 
               <div v-if="generalSettingGroup.type === 'color'"
                    class="icon-remove st-remove-sketch"
@@ -182,7 +184,7 @@
         $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
       },
       triggerInputColor(valueColor, typeName){
-        this.saveModuleStyle({
+        this.saveModuleAttribute({
           target:{
             name :typeName,
             value : valueColor
@@ -191,6 +193,12 @@
       },
       saveModuleStyle(e) {
          this.$store.commit('module/saveModuleStyle',{
+          property: e.target.name,
+          value: e.target.value,
+        });
+      },
+      saveModuleAttribute(e) {
+         this.$store.commit('module/saveModuleAttribute',{
           property: e.target.name,
           value: e.target.value,
         });

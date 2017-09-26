@@ -18,13 +18,13 @@ function Module(data = {}) {
   this.status = data.status || '';
   const style = (data.structure && data.structure.style) ? data.structure.style : {};
   const settings = (data.structure && data.structure.settings) ? data.structure.settings : [];
-  const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : [];
+  const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : {};
 
   this.plugins = data.plugins || getPlugins();
 
   this.structure = {
     attribute: {
-      bgcolor: attribute.bgcolor || '#FFFFFF',
+      bgcolor: attribute.bgcolor || { hex: '#FFFFFF' },
     },
     style: {
       paddingTop: style.paddingTop || 0,
@@ -34,16 +34,15 @@ function Module(data = {}) {
       borderWidth: style.borderWidth || '0px',
       borderStyle: style.borderStyle || 'none',
       borderColor: style.borderColor || '#000000',
-      backgroundColor: style.backgroundColor || '#FFFFFF',
     },
     settings: [
       {
-        link: 'style',
+        link: 'attribute',
         label: 'Background Color',
-        name: 'backgroundColor',
+        name: 'bgcolor',
         type: 'color',
         value: '#FFFFFF',
-        sketchPickerValue:{hex: '#FFFFFF'},
+        sketchPickerValue: { hex: '#FFFFFF' },
       },
       {
         link: 'style',
@@ -116,7 +115,7 @@ function Module(data = {}) {
             name: 'borderColor',
             type: 'color',
             value: '#000000',
-            sketchPickerValue:{hex: '#000000'},
+            sketchPickerValue: { hex: '#000000' },
           },
         ],
       }, 
