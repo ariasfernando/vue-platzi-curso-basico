@@ -354,6 +354,11 @@ var tableMixin = {
       this.selectedCampaignId = campaign_id;
       this.shareURL = Application.globals.baseUrl + '/public/view/' + campaign_id;
     },
+    resizePreviewFrame: function() {
+      var $emailBody = $('.dashboard-campaign-preview').find("iframe").contents().find('.email-body');
+      var height = $emailBody.height() > 200 ? $emailBody.height() : 150;
+      $("#email-preview-iframe").height(height);
+    },
     copyURL: function() {
       var $modal = $('.dashboard-campaign-preview');
       var input = $modal.find(".share-preview input")[0]
@@ -367,6 +372,11 @@ var tableMixin = {
         break;
         default: this.widthPreview = 660;
       }
+      _this = this;
+      // Give some time to the browser to resize.
+      setTimeout(function() {
+        _this.resizePreviewFrame();
+      }, 10);
     },
     sendPreview: function() {
 

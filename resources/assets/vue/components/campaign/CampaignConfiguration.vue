@@ -21,7 +21,7 @@
 
         <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave">Auto Save</label>
-          <input type="checkbox" class="btn-auto-save" id="autoSave" name="autoSave" v-model="form.autoSave" @change="autoSaveChange">
+          <toggle-button :value="form.autoSave" color="#78DCD6" :sync="true" :labels="true" @change="autoSaveChange"></toggle-button>
         </div>
 
         <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
@@ -142,6 +142,7 @@
         });
       },
       autoSaveChange() {
+        this.form.autoSave = !this.form.autoSave;
         this.$store.commit('campaign/saveSetting', {
           name: 'autoSave',
           value: this.form.autoSave
