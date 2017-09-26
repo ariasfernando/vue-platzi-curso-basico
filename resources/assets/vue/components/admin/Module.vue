@@ -211,12 +211,13 @@
       },
       onAdd(e){
         console.log('onAdd');
+        
         let colId = e.to.getAttribute('data-col');
         let elType = e.clone.getAttribute('data-type');
         let cloneItem = e.item;
         let el = clone(defaultElements[elType]);
         let plugins = {};
-        const componentId = this.module.structure.columns[colId].components.length;
+        let componentId = e.newIndex;
 
         if ( !(e.from.getAttribute('class') === 'components-list')){
           if (this.module.structure.columns[colId].components.length === 0) {
@@ -226,19 +227,16 @@
               index: componentId,
               colId
             });
-          }
+          };
+        }else{
+          e.clone.style.opacity = "1";
+          cloneItem.parentNode.removeChild(cloneItem);
 
-          this.$store.commit('module/setChangeSettingComponent',{
-            style: this.module.structure.columns[colId].components[componentId].style || {},
-            attribute: this.module.structure.columns[colId].components[componentId].attribute || {}
+          this.$store.commit("module/addComponent", {
+            el,
+            index: componentId,
+            colId
           });
-
-          this.setComponent({
-            columnId: +colId,
-            componentId,
-          });
-
-          return false;
         }
 
         _.each(this.$app.modulePlugins, (plugin, name) => {
@@ -249,22 +247,10 @@
 
         el.plugins = plugins;
 
-        this.$store.commit("module/addComponent", {
-          el,
-          index: componentId,
-          colId
-        });
-
         this.$store.commit('module/setChangeSettingComponent',{
           style: this.module.structure.columns[colId].components[componentId].style || {},
           attribute: this.module.structure.columns[colId].components[componentId].attribute || {}
         });
-
-        if (e.clone.getAttribute('class') === 'component-item') {
-          e.clone.style.opacity = "1";
-          cloneItem.parentNode.removeChild(cloneItem);
-        }
-
 
         this.setComponent({
           columnId: +colId,
