@@ -81,6 +81,7 @@
     methods: {
       close () {
         this.$store.commit("campaign/toggleModal", 'modalPreview');
+        this.widthPreview = this.widthDesktop;
       },
       send() {
         const emailAddress =  document.getElementById('send-preview-to').value;
