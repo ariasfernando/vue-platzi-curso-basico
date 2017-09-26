@@ -32,7 +32,7 @@
                       </b-tabs>
                     </slot>
                     <div class="iframe-container" :data-template-width="widthPreview">
-                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" scrolling="no" frameborder="0"></iframe>
+                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
                     </div>
                   </div>
                 </div>
@@ -63,6 +63,7 @@
         widthMobile: 480,
         widthDesktop: null,
         widthPreview: null,
+        previewFrameHeight: null
       }
     },
     computed: {
@@ -101,6 +102,12 @@
           break;
           default: this.widthPreview = this.widthDesktop;
         }
+        this.resizePreviewFrame();
+      },
+      resizePreviewFrame() {
+        let $emailBody = $('.preview-container').find("iframe").contents().find('.email-body');
+        let height = $emailBody.height() > 200 ? $emailBody.height() + 60 : 150;
+        this.previewFrameHeight = height;
       },
     },
     created () {
@@ -113,6 +120,8 @@
 <style lang="less" scoped>
   .modal-container {
     width: 750px;
+    height: 550px;
+    overflow: scroll;
 
     textarea {
       width: 100%;
