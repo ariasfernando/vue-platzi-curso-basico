@@ -1,6 +1,6 @@
 <template>
   <div class="component-settings section-box" v-if="ready">
-    <h2><i class="glyphicon glyphicon-pencil"></i> STYLES</h2>
+    <h2><i class="glyphicon glyphicon-pencil"></i> {{ toCamel(component.type) }} </h2>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
         <component v-if="plugin.enabled && $globalComponents.indexOf('campaign-' + plugin.name) !== -1" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
@@ -18,7 +18,7 @@
     data () {
       return {
         ready: false,
-        component: {}
+        component: {},
       }
     },
     computed: {
@@ -41,6 +41,9 @@
       },
     },
     methods: {
+      toCamel(str) {
+        return _.startCase(str);
+      },
       saveComponent() {
         this.$store.commit('campaign/saveComponent', {
           moduleId: this.currentComponent.moduleId,
