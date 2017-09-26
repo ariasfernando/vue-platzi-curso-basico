@@ -3,6 +3,9 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
+            <slot name="header">
+                <button type="button" class="close" @click="close"><span>&times;</span></button>
+            </slot>
             <slot name="body">
               <h4>Preview</h4>
               <div class="send-preview">
@@ -32,7 +35,7 @@
                       </b-tabs>
                     </slot>
                     <div class="iframe-container" :data-template-width="widthPreview">
-                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" scrolling="no" frameborder="0"></iframe>
+                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
                     </div>
                   </div>
                 </div>
@@ -40,9 +43,7 @@
             </slot>
           <div class="modal-footer">
             <slot name="footer">
-
               <button type="button" class="btn btn-default beta-btn-secondary" @click="close">Close</button>
-
             </slot>
           </div>
         </div>
@@ -63,6 +64,7 @@
         widthMobile: 480,
         widthDesktop: null,
         widthPreview: null,
+        previewFrameHeight: null
       }
     },
     computed: {
@@ -79,6 +81,7 @@
     methods: {
       close () {
         this.$store.commit("campaign/toggleModal", 'modalPreview');
+        this.widthPreview = this.widthDesktop;
       },
       send() {
         const emailAddress =  document.getElementById('send-preview-to').value;
@@ -101,18 +104,28 @@
           break;
           default: this.widthPreview = this.widthDesktop;
         }
+        this.resizePreviewFrame();
+      },
+      resizePreviewFrame() {
+        let $emailBody = $('.preview-container').find("iframe").contents().find('.email-body');
+        let height = $emailBody.height() > 200 ? $emailBody.height() + 60 : 150;
+        this.previewFrameHeight = height;
       },
     },
     created () {
       this.widthDesktop = this.widthPreview
         = this.$store.state.campaign.campaign.campaign_data.library_config.templateWidth || 660;
+
+      this.widthMobile = this.$store.state.campaign.campaign.campaign_data.library_config.templateMobileWidth || 480;
     }
   };
 </script>
 
 <style lang="less" scoped>
   .modal-container {
-    width: 750px;
+    width: 800px;
+    height: 550px;
+    overflow: scroll;
 
     textarea {
       width: 100%;
