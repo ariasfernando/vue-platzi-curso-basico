@@ -95,7 +95,7 @@ module.exports = {
       label: 'Color',
       name: 'color',
       type: 'color',
-      value: { hex: '#000000' },
+      value: { hex: '#FFFFFF' },
     },
     {
       link: 'style',
