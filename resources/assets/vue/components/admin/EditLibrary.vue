@@ -6,7 +6,8 @@
           <i class="glyphicon glyphicon-menu-left"></i>
           <router-link to="/">Back</router-link>
         </div>
-        <div class="col-xs-11 section-title vertical-center">{{ library.id ? 'Edit' : 'New' }} Library</div>
+        <div class="col-xs-11 section-title vertical-center" v-if="library.id"> Edit {{library.name}} Library</div>
+        <div class="col-xs-11 section-title vertical-center" v-if="!library.id">New Library</div>
       </div>
 
       <div class="col-xs-3 header-col">
