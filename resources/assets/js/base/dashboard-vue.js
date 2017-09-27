@@ -231,7 +231,7 @@ var tableMixin = {
       showPreview: false,
       selectedCampaignId: null,
       baseUrl: Application.globals.baseUrl,
-      widthPreview: 660,
+      widthPreview: Application.globals.emailWidth || 660,
       previewSrc: null
     }
   },
@@ -368,15 +368,19 @@ var tableMixin = {
     },
     togglePreview: function(mode) {
       switch(mode) {
-        case 'mobile': this.widthPreview = 480;
+        case 'mobile': this.widthPreview = Application.globals.emailMobileWidth || 660;
         break;
-        default: this.widthPreview = 660;
+        default: this.widthPreview = Application.globals.emailWidth || 480;
       }
       _this = this;
       // Give some time to the browser to resize.
       setTimeout(function() {
         _this.resizePreviewFrame();
       }, 10);
+    },
+    closePreview: function() {
+      this.showPreview = false;
+      this.widthPreview = Application.globals.emailWidth;
     },
     sendPreview: function() {
 
