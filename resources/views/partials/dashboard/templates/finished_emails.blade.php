@@ -123,7 +123,7 @@
 
         <modal class="dashboard-campaign-preview" v-if="showPreview" v-on:close="showPreview = false">
             <div slot="header">
-                <button type="button" class="close" @click.prevent="showPreview = false"><span>&times;</span></button>
+                <button type="button" class="close" @click.prevent="closePreview"><span>&times;</span></button>
                 <h4>Preview</h4>
             </div>
             <div slot="body">
