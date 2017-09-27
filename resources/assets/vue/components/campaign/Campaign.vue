@@ -18,7 +18,7 @@
     </section>
 
     <aside class="component-settings-wrapper" v-sticky="{ zIndex: 997, stickyTop: 53 }">
-      <div class="aside-inner">
+      <div class="aside-inner section-box">
         <module-settings v-if="currentComponent"></module-settings>
         <component-settings v-if="currentComponent"></component-settings>
       </div>
@@ -204,6 +204,10 @@
 
   aside {
     width: 20%;
+
+    .section-box {
+      background-color: #FFFFFF;
+    }
   }
 
   .switch {

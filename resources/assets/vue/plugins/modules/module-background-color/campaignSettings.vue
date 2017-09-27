@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <label>{{ plugin.title }}</label><br>
+  <div class="component-module-background-color">
+    <label>{{ plugin.title }}</label>
     <compact-picker ref="compact" v-model="colors" @input="updateValue"></compact-picker>
   </div>
 </template>
@@ -48,3 +48,12 @@
     }
   }
 </script>
+
+<style lang="less">
+  .component-module-background-color {
+    .vc-compact {
+      width: 100% !important;
+      float: none;
+    }
+  }
+</style>

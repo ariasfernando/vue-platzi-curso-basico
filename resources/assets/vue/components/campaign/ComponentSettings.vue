@@ -1,5 +1,5 @@
 <template>
-  <div class="component-settings section-box" v-if="ready">
+  <div class="component-settings" v-if="ready && component.plugins && Object.keys(component.plugins).length !== 0">
     <h2><i class="glyphicon glyphicon-pencil"></i> {{ toCamel(component.type) }} </h2>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
@@ -30,11 +30,15 @@
       currentComponent: {
         handler: function() {
           let modules = this.$store.getters["campaign/modules"];
+          this.ready = false;
+
           if (!_.isEmpty(this.currentComponent)) {
             this.component = modules[this.currentComponent.moduleId].structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
-            this.ready = true;
-          } else {
-            this.ready = false;
+            _.each(this.component.plugins, (plugin) => {
+              if ( plugin.enabled ) {
+                this.ready = true;
+              }
+            });
           }
         },
         deep: true

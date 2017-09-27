@@ -1,20 +1,17 @@
 <template>
   <div class="column-settings section-box" v-if="module">
 
-    <div class="module-plugins" v-if="module.plugins && Object.keys(module.plugins).length !== 0">
-      <h2><i class="glyphicon glyphicon-tasks"></i> Module Plugins</h2>
+    <div class="module-plugins" v-if="hasEnabledPlugins(module)">
+
       <div v-for="(plugin, key) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
         <component v-if="plugin.enabled && $globalComponents.indexOf('campaign-' + plugin.name) !== -1" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
 
-    <br>
-
     <div class="column-plugins">
-      <h2><i class="glyphicon glyphicon-tasks"></i> Column Plugins</h2>
       <b-card class="control container-fluid" no-block>
         <b-tabs card ref="tabs">
-          <b-tab v-for="(column, columnKey) in module.structure.columns" v-if="column.plugins && Object.keys(column.plugins).length !== 0"
+          <b-tab v-for="(column, columnKey) in module.structure.columns" v-if="hasEnabledPlugins(column)"
                  :title="`Column ${columnKey+1}`" :button-id="`column-${columnKey}`" :key="columnKey">
             <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
               <component v-if="plugin.enabled && $globalComponents.indexOf('campaign-' + plugin.name) !== -1"
@@ -63,6 +60,17 @@
         deep: true
       },
     },
+    methods: {
+      hasEnabledPlugins(o) {
+        let enabled = false;
+        _.each(o.plugins, (plugin) => {
+          if (plugin.enabled) {
+            enabled = true;
+          }
+        });
+        return enabled;
+      }
+    }
   }
 </script>
 
@@ -72,6 +80,7 @@
   }
 
   .plugin-wrapper {
+    display: inline-block;
     margin-bottom: 10px;
   }
   aside{
