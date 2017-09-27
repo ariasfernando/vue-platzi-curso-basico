@@ -21,7 +21,7 @@
           <div class="col-sm-4">
             <div>
               <b-form-select
-                v-model="selectedBackgroundColor"
+                v-model="numColumns"
                 :options="optionsSelected"
                 @input="setColumns">
               </b-form-select>
@@ -155,11 +155,13 @@
       module() {
         return this.$store.getters["module/module"];
       },
+      numColumns() {
+        return this.$store.getters["module/module"].structure.columns.length;
+      }
     },
     data () {
       return {
         maxCols: 8,
-        selectedBackgroundColor: '1',        
         optionsSelected: [
           { value: '1', text: '1' },
           { value: '2', text: '2' },
