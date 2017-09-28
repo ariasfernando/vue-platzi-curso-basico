@@ -5,7 +5,7 @@
             <p class="alert alert-info upload-warning">Warning! The preview email is not (ready/suitable) for production. Click Complete to publish your campaign and access the HTML code.</p>
             <label>Email address</label>
             <div class="input-group">
-                <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
+                <input type="text" class="form-control skip-next-on-error" name="send-preview-to" id="send-preview-to" value="" placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
                 <button type="button" class="btn btn-default btn-send" @click="sendPreview">Send</button>
                 <label class="info">Use a comma or a semicolon to separate multiple email addresses</label>
             </div>
@@ -20,7 +20,7 @@
             <div class="input-group">
                 <input type="text" class="form-control share-preview" :value="shareURL" readonly>
                 <span class="input-group-btn">
-                    <button class="btn btn-default" @click="copyURL" type="button">Copy</button>
+                    <button class="btn btn-default btn-copy" @click="copyURL" type="button">Copy</button>
                 </span>
             </div>
         </div>

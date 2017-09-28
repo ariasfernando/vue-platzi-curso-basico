@@ -405,10 +405,11 @@ var tableMixin = {
 
         sendPreviewRequest.done(function(response){
 
+          $modal.find('label.error').remove();
           if (response.processed) {
             // Display success icon.
             if (!$modal.find(".btn-send .glyphicon-ok").length) {
-              $modal.find(".btn-send").append('<i class="glyphicon glyphicon-ok status-icon"></i>');
+              $modal.find(".btn-send").append(' <i class="glyphicon glyphicon-ok status-icon"></i>');
             }
             $modal.find(".btn-send").parent().removeClass("spinner").addClass("success");
             $modal.find(".btn-send").find('.status-icon').animate({
@@ -420,6 +421,7 @@ var tableMixin = {
               .removeClass("spinner")
               .find("[name=send-preview-to]")
               .addClass("error")
+              .next()
               .after('<label class="error">We couldn\'t find a valid email address.</label>');
           }
         });

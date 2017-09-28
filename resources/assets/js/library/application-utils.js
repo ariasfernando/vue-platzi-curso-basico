@@ -328,8 +328,8 @@ Application.utils = {
         setError: function( field, message ){
 
             var label = '<label class="error">' + message + '</label>';
-
-            if ($(field).hasClass('selectpicker')) {
+            $(field).parent().find('label.error').remove();
+            if ($(field).hasClass('selectpicker') || $(field).hasClass('skip-next-on-error')) {
                 $(field).addClass('error').next().after(label);
             } else {
                 $(field).addClass('error').after(label);
