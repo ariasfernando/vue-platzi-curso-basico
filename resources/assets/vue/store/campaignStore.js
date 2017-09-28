@@ -204,8 +204,7 @@ const actions = {
     context.commit('updateComponentData', edited);
   },
   sendPreview(context, data) {
-    return campaignService.sendPreview(data)
-      .catch(error => context.commit('error', error));
+    return campaignService.sendPreview(data);
   },
   removeModule(context, moduleId) {
     context.commit('removeModule', moduleId);

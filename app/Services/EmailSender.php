@@ -36,6 +36,10 @@ class EmailSender
 
         $email_array = Helper::parseEmails($email);
 
+        if (!count($email_array)) {
+            return ['error' => 'invalid emails'];
+        }
+
         $campaign_data = ModelCampaign::findOrFail($campaign_id);
 
         $subject = isset($params['subject']) && strlen($params['subject'])

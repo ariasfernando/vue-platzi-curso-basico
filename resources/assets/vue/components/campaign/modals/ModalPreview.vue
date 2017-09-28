@@ -20,6 +20,7 @@
                         <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send</button>
                       </span>
                     </div>
+                    <label class="error" v-if="emailError">{{emailError}}</label>
                     <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
                   </div>
                 </form>
@@ -64,7 +65,8 @@
         widthMobile: 480,
         widthDesktop: null,
         widthPreview: null,
-        previewFrameHeight: null
+        previewFrameHeight: null,
+        emailError: null
       }
     },
     computed: {
@@ -82,6 +84,7 @@
       close () {
         this.$store.commit("campaign/toggleModal", 'modalPreview');
         this.widthPreview = this.widthDesktop;
+        this.emailError = null;
       },
       send() {
         const emailAddress =  document.getElementById('send-preview-to').value;
@@ -90,7 +93,13 @@
           campaignId: this.campaign.campaign_id,
           emailAddress: emailAddress
         }).then(response => {
-          this.$root.$toast('This email was sent successfully.', {className: 'et-info'});
+          if (response.error === undefined) {
+            this.close();
+            this.$root.$toast('This email was sent successfully.', {className: 'et-info'});
+          }
+          else {
+            this.emailError = 'We couldn\'t find a valid email address.';
+          }
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
