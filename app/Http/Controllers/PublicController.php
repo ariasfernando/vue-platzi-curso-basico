@@ -27,13 +27,15 @@ class PublicController extends Controller
      */
     public function view($campaign_id = null)
     {
-        $width = \Config::get("view.libraries.default.template_width", '');
-
+        $campaign = Campaign::findOrFail($campaign_id);
+        // dd($campaign);
         return view(
             'view_in_browser',
             array(
                 'campaign_id' =>  $campaign_id,
-                'width' => $width
+                'params' => [
+                    'campaign_data' => $campaign
+                ]
             )
         );
     }

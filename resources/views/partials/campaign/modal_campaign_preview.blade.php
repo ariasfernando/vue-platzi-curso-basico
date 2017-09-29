@@ -53,13 +53,14 @@
                 <div class="preview-body">
                     <div class="preview-container">
                         <div class="mobile-frame"></div>
-                        <div class="iframe-container" data-template-width="{{ $width or $params['campaign_data']->getLibraryConfig('template_width') }}" style="width:{{ $width or $params['campaign_data']->getLibraryConfig('template_width') }}px;">
+                        <div class="iframe-container" data-template-width="{{ $params['campaign_data']->getLibraryConfig('templateWidth') }}"
+                            data-template-mobile-width="{{ $params['campaign_data']->getLibraryConfig('templateMobileWidth') }}"
+                            style="width:{{ $params['campaign_data']->getLibraryConfig('templateWidth') }}px;">
                             <iframe id="email-preview-iframe" src="{{ $path or url('/template/email-preview/' . $params['campaign_id'] ) }}" scrolling="no"></iframe>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

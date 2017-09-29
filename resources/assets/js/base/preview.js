@@ -27,65 +27,55 @@
 
         $('#modal-campaign-preview').find("#email-preview-iframe").load(function () {
             var $this = $(this);
-            $this.height($this.contents().find('.email-body').height());
+            $this.height($this.contents().height());
         });
 
     });
 
     function animatePreviewToDesktop() {
       var $iframeContainer = $("#modal-campaign-preview .preview-container .iframe-container");
-
-      // Animate mobile frame to opacity 0
+      $("#modal-campaign-preview .preview-body").scrollTop(0);
+      // Animate desktop frame to opacity 0
       $("#modal-campaign-preview .preview-container .mobile-frame").animate({
         opacity: 0
       }, "normal", function () {
         $iframeContainer
           .scrollTop(0)
-          .css("overflow-y", "hidden")
+          .css("overflow-y", "auto")
           .animate({
             width: $iframeContainer.data("template-width"),
             top: "0"
           }, function () {
             $.when(
               // Animate container to desktop size
-              $(".iframe-container, .preview-container, .iframe-container > iframe").animate({
-                height: $iframeContainer.find('iframe').contents().find('.email-body').height()
+              $(".iframe-container > iframe").animate({
+                height: $iframeContainer.find('iframe').contents().find('body').find('table').height()
               })
             ).done(function () {
-              $iframeContainer
-                .css("height", "auto");
+              $iframeContainer.css("height", "auto");
               $iframeContainer.find("iframe").width("100%");
+              $iframeContainer.find("iframe .wrapper-table").css('width', '100%');
             });
-            // Reset preview container height
-            $(".preview-container").height("auto");
           });
       });
     }
 
     function animatePreviewToMobile() {
-      var displayWidth = 320;
-      var displayHeight = 525;
       var $iframeContainer = $("#modal-campaign-preview .preview-container .iframe-container");
+      var displayWidth = $iframeContainer.data("template-mobile-width");
+      var $iframe = $("#modal-campaign-preview .preview-container iframe");
 
-      // Animate container to mobile height
-      $("#modal-campaign-preview .preview-container").animate({
-        height: $(".mobile-frame").height()
-      });
       // Animate iframe to mobile size
       $iframeContainer.animate({
         width: displayWidth,
-        height: displayHeight,
-        top: 125
+        top: 0
       }, function () {
-        var emailHeight = $("#modal-campaign-preview .preview-container iframe").contents().find("body").height();
-        var iframeHeight = displayHeight - 1;
 
-        if (emailHeight > iframeHeight) {
-          iframeHeight = emailHeight;
-        }
-
-        $("#modal-campaign-preview .preview-container iframe").animate({
-          height: iframeHeight
+        $iframe.contents().find('.wrapper-table').css('width', '100%');
+        
+        $iframe.animate({
+          height: $iframe.contents().find("body").height(),
+          width: displayWidth,
         }, function () {
           $iframeContainer.css("overflow-y", "auto");
         });
