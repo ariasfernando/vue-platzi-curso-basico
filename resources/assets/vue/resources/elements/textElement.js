@@ -17,14 +17,8 @@ module.exports = {
     align: 'left',
     bgcolor: 'transparent',
   },
+  componentSettings: ['font-family'],
   settings: [
-    {
-      link: 'style',
-      label: 'Font Family',
-      name: 'font-family',
-      type: 'text',
-      value: 'sans-serif',
-    },
     {
       link: 'style',
       label: 'Color',

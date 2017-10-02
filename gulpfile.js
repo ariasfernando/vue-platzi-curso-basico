@@ -21,10 +21,8 @@ require('dotenv').config();
  */
 let elixir = require('laravel-elixir');
 let gulp = require('gulp');
-let gutil = require('gulp-util');
 let fs = require('fs');
 let data = require('gulp-data');
-let fm = require('front-matter');
 let path = require('path');
 let gulpsync = require('gulp-sync')(gulp);
 
@@ -228,21 +226,6 @@ gulp.task('elixir-scripts', function () {
           assetsPath
         )
 
-        // === Plugins ===
-        // .scripts(
-        //   ['js/plugins/*.js', 'js/plugins/**/*.js'],
-        //   jsDestinationPath + 'plugins.js',
-        //   assetsPath
-        // )
-        //
-
-        // === Custom Modules ===
-        .scripts(
-          ['../views/modules/**/*.js', 'js/library/modules-placeholder.js'],
-          jsDestinationPath + 'custom-modules.js',
-          assetsPath
-        )
-
         // === Dashboard page ===
         .scripts(
           [
@@ -345,44 +328,9 @@ gulp.task('elixir-version', () => {
 
 /*
  | --------------------------------------------------------------------------
- | Custom tasks
- | --------------------------------------------------------------------------
- */
-gulp.task('st-custom-tasks', () => {
-  gulp.watch(['resources/views/**/layouts/partials/*.blade.php'], ['validate-fonts']);
-});
-
-gulp.task('validate-fonts', () => {
-  return gulp.src('resources/views/**/layouts/partials/*.blade.php')
-    .pipe(data((file) => {
-      // Get file content
-      let content = fm(String(file.contents));
-      let fileName = path.basename(file.path);
-
-      // Find font lines
-      let fontLinesRegex = /\/fonts\/.+/g;
-      let fontLinesMatches = content.body.match(fontLinesRegex);
-
-      let fontFamilyRegex = /\.(eot|woff|svg|ttf|woff2)(;?)/g;
-
-      if (fontLinesMatches) {
-        fontLinesMatches.forEach((match) => {
-          // Find extension
-          let extMatch = match.match(fontFamilyRegex);
-
-          if (!extMatch) {
-            gutil.log(gutil.colors.red('Missing or bad extension in'), gutil.colors.cyan(fileName), gutil.colors.white.bgRed(' - ' + match));
-          }
-        });
-      }
-    }))
-});
-
-/*
- | --------------------------------------------------------------------------
  | Gulp Tasks
  | --------------------------------------------------------------------------
  */
 gulp.task('jshint', ['elixir-jshint']);
-gulp.task('watch', gulpsync.sync(['st-custom-tasks', 'elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
-gulp.task('default', gulpsync.sync(['validate-fonts', 'elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
+gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
+gulp.task('default', gulpsync.sync(['elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
