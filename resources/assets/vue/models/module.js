@@ -24,7 +24,7 @@ function Module(data = {}) {
 
   this.structure = {
     attribute: {
-      bgcolor: attribute.bgcolor || { hex: '#FFFFFF' },
+      bgcolor: attribute.bgcolor || { hex: 'transparent' },
     },
     style: {
       paddingTop: style.paddingTop || 0,
@@ -41,7 +41,8 @@ function Module(data = {}) {
         label: 'Background Color',
         name: 'bgcolor',
         type: 'color',
-        value: '#FFFFFF',
+        transparentChecked: true,
+        value: 'transparent',
         sketchPickerValue: { hex: '#FFFFFF' },
       },
       {
@@ -114,6 +115,7 @@ function Module(data = {}) {
             label: 'Border Color',
             name: 'borderColor',
             type: 'color',
+            transparentChecked: false,
             value: '#000000',
             sketchPickerValue: { hex: '#000000' },
           },
