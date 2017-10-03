@@ -11,34 +11,40 @@
       <b-card class="default-settings">
         
         <form class="form-horizontal">
+
+          <div v-for="setting in component.componentSettings" class="form-group" :class="'field-' + setting.name">
+            <component :is="'input-' + setting" :setting="setting"></component>
+          </div>
+
           <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings">
+
             <div v-if="!setting.group" >
               <label class="col-sm-8 control-label" :for="setting.name">{{ setting.label }}</label>
               <div class="col-sm-4 position-relative content-colorpicker">
-                  <!-- Input File -->
-                  <input v-if="setting.type === 'file'"
-                         v-validate="'required'" 
-                         :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                         :name="setting.name"
-                         type="file" 
-                         @change="onFileChange">
+                <!-- Input File -->
+                <input v-if="setting.type === 'file'"
+                       v-validate="'required'"
+                       :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                       :name="setting.name"
+                       type="file"
+                       @change="onFileChange">
 
                 <!-- Input Text -->
                 <input v-if="setting.type === 'text'"
-                       v-validate="'required'" 
+                       v-validate="'required'"
                        v-model="setting.value"
                        :class="{'input': true, 'is-danger': errors.has(setting.name) }"
                        :name="setting.name"
                        :placeholder="setting.label"
                        type="text"
                        @change="saveComponent">
-                
+
                 <!-- Input select -->
                 <span v-if="setting.type === 'select'">
                   <b-form-select v-model="setting.value" :name="setting.name" :options="setting.options" @change.native="saveComponent">
                   </b-form-select>
                 </span>
-               
+
                 <!-- Input color -->
                 <div @click.prevent="toggleSketch">
                   <input v-if="setting.type === 'color'"
@@ -53,6 +59,7 @@
                          disabled
                          @change="saveComponent">
                 </div>
+
                 <div v-if="setting.type === 'color'"
                      class="icon-remove st-remove-sketch"
                      @click.prevent="toggleSketch"
@@ -65,15 +72,15 @@
                                @click.native="updateColorPickerSetting(setting.name, setting.link, false )"></sketch-picker>
 
                 <!-- Span General Error -->
-                <span v-show="errors.has(setting.name)" 
+                <span v-show="errors.has(setting.name)"
                       class="help is-danger">{{ errors.first(setting.name) }}
-                </span>  
+                </span>
               </div>
             </div>
 
             <div v-else>
               <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
-              <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" 
+              <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker"
                   v-for="(settingGroup, keyGroup) in setting.group" >
                 <!-- Input Text -->
                 <input v-if="settingGroup.type === 'text'"
@@ -82,15 +89,15 @@
                        :placeholder="settingGroup.label"
                        v-model="settingGroup.value"
                        type="text"
-                       v-validate="'required'" 
+                       v-validate="'required'"
                        @change="saveComponent">
-               
+
                 <!-- Input select -->
                 <span v-if="setting.type === 'select'">
                   <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponent">
                   </b-form-select>
                 </span>
-                
+
                 <!-- Input color -->
                 <div @click.prevent="toggleSketch">
                   <input v-if="settingGroup.type === 'color'"
@@ -106,21 +113,21 @@
                          disabled>
                 </div>
                 <div v-if="settingGroup.type === 'color'"
-                     class="icon-remove st-remove-sketch" 
-                     @click.prevent="toggleSketch"  
+                     class="icon-remove st-remove-sketch"
+                     @click.prevent="toggleSketch"
                 >
                   <i class="glyphicon glyphicon-remove"></i>
                 </div>
-                <sketch-picker v-if="settingGroup.type === 'color'" 
-                               v-model="colorsBackground" 
-                               class="sketch-picker" 
+                <sketch-picker v-if="settingGroup.type === 'color'"
+                               v-model="colorsBackground"
+                               class="sketch-picker"
                                @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
-                
+
                 <!-- Span General Error -->
-                <span v-show="errors.has(settingGroup.name)" 
+                <span v-show="errors.has(settingGroup.name)"
                       class="help is-danger">{{ errors.first(settingGroup.name) }}
-                </span> 
-               
+                </span>
+
               </div>
             </div>
           </div>
@@ -155,6 +162,7 @@
   import defaultElements from '../../resources/elements';
   import BootstrapVue from 'bootstrap-vue';
   import { Sketch } from 'vue-color';
+  import * as elementSettings from './settings';
 
   export default {
     data () {
@@ -166,6 +174,7 @@
     components: {
       BootstrapVue,
       'sketch-picker': Sketch,
+      'input-font-family': elementSettings.FontFamily,
     },
     computed: {
       currentComponent() {

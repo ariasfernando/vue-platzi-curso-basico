@@ -1,9 +1,12 @@
 import _ from 'lodash';
 import plugins from '../plugins';
 import modules from '../modules';
+import fonts from './fonts';
 
 export default {
   install(Vue, options) {
+
+    Vue.customer = Vue.prototype.$customer = customer || {};
 
     // Register Global Plugins
     if (customer.plugins) {
@@ -36,6 +39,8 @@ export default {
       Application.globals.modulePlugins[name] = component;
     });
 
+    Vue.globalComponents = Vue.prototype.$globalComponents = globalComponents;
+
     // Register Custom Modules
     let customModules = [];
     Application.globals.customModules = {};
@@ -51,9 +56,16 @@ export default {
       Application.globals.customModules[module.name] = module;
     });
 
-    Vue.app = Vue.prototype.$app = Application.globals;
-    Vue.customer = Vue.prototype.$customer = customer;
-    Vue.globalComponents = Vue.prototype.$globalComponents = globalComponents;
     Vue.customModules = Vue.prototype.$customModules = customModules;
+
+    // Register Fonts
+    if (customer.config && customer.config.plugins) {
+      _.merge(fonts, customer.config.fonts);
+    }
+
+    Application.globals.fonts = fonts;
+
+    Vue.app = Vue.prototype.$app = Application.globals;
+
   },
 };
