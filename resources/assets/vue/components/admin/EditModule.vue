@@ -680,8 +680,9 @@
 
       .content-colorpicker{
         .sketch-picker{
-          display: none;
           position: absolute!important;
+          display: none;
+          padding: 30px 10px 0px 10px;
           z-index: 300;
         }
         .icon-remove{
@@ -691,6 +692,20 @@
           margin-top: -20px;
           margin-left: -20px;
           padding-top: 4px;
+        }
+        .checkbox-transparent{
+          position: absolute!important;
+          display: none;
+          left: 25px;
+          top: 30px;
+          width: 195px;
+          z-index: 400;
+          font-size: 11px;
+
+          input{
+            margin: 0!important;
+            height: 19px!important;
+          } 
         }
       }
 

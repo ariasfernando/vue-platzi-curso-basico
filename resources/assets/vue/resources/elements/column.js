@@ -27,7 +27,7 @@ module.exports = {
       label: 'Background Color',
       name: 'backgroundColor',
       type: 'color',
-      value: { hex: '#FFFFFF' },
+      value: { hex: 'transparent' },
     },
     {
       link: 'style',
