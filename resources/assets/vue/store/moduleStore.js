@@ -119,6 +119,10 @@ const mutations = {
       state.module.plugins[data.plugin].enabled = data.enabled;
     }
   },
+  saveComponentStyle(state, data) {
+    const component = state.module.structure.columns[data.columnId].components[data.componentId];
+    component.style[data.property] = data.value;
+  },
   saveComponentAttribute(state, data) {
     const attributes = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
     attributes[data.attribute] = data.attributeValue;

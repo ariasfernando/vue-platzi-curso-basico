@@ -2,27 +2,29 @@
   <div class="section-container-campaign">
     <email-actions v-if="ready"></email-actions>
 
-    <!-- column left (menu) -->
-    <aside v-sticky="{ zIndex: 997, stickyTop: 53 }">
-      <div class="aside-inner">
-        <div class="menu-campaign">
-          <campaign-configuration v-if="ready"></campaign-configuration>
-          <campaign-menu v-if="ready"></campaign-menu>
+    <div class="container-campaign-subwrapper" v-sticky="{ zIndex: 997, stickyTop: 53 }">
+      <!-- column left (menu) -->
+      <aside>
+        <div class="aside-inner">
+          <div class="menu-campaign">
+            <campaign-configuration v-if="ready"></campaign-configuration>
+            <campaign-menu v-if="ready"></campaign-menu>
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
 
-    <!-- column right (container email) -->
-    <section class="section-canvas-email section-box">
-      <email-canvas v-if="ready"></email-canvas>
-    </section>
+      <!-- column right (container email) -->
+      <section class="section-canvas-email section-box">
+        <email-canvas v-if="ready"></email-canvas>
+      </section>
 
-    <aside class="component-settings-wrapper" v-sticky="{ zIndex: 997, stickyTop: 53 }">
-      <div class="aside-inner section-box">
-        <module-settings v-if="currentComponent"></module-settings>
-        <component-settings v-if="currentComponent"></component-settings>
-      </div>
-    </aside>
+      <aside class="component-settings-wrapper">
+        <div class="aside-inner section-box">
+          <module-settings v-if="currentComponent"></module-settings>
+          <component-settings v-if="currentComponent"></component-settings>
+        </div>
+      </aside>
+    </div>
 
     <!-- Modals -->
     <modal-complete v-if="ready"></modal-complete>
@@ -109,6 +111,11 @@
     padding: 11px 10px;
     box-shadow: 0px 0px 4px #999999;
     overflow: hidden;
+  }
+
+  .container-campaign-subwrapper{
+    height:calc(~"100vh - 53px"); 
+    width:100%;
   }
 
   .component-settings-wrapper {
@@ -206,7 +213,7 @@
     width: 20%;
 
     .section-box {
-      background-color: #FFFFFF;
+      background-color: none;
     }
   }
 

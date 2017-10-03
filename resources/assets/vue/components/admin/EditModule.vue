@@ -177,7 +177,8 @@
 
   #edit-container{
     padding: 0px;
-    min-height: 780px;
+    height:calc(~"100vh - 53px"); 
+    overflow: hidden;
   }
 
   .module {
@@ -411,10 +412,10 @@
     }
 
     .left-bar {
-      width: 251px;
+      width: 260px;
       color: #666666;
-      display: table-cell;
-      float: none;
+      display: block;
+      float: left;
       padding: 0px;
       background-color: #FFFFFF;
 
@@ -765,9 +766,9 @@
     }
 
     .right-bar {
-      width: 251px;
-      display: table-cell;
-      float: none;
+      width: 260px;
+      display: block;
+      float: left;
       padding: 0px;
 
       .form-group{
@@ -845,8 +846,12 @@
     .module-container {
       padding: 20px;
       background: #F0F0F0;
-      display: table-cell;
-      float: none;
+      display: block;
+      float: left;
+      height: calc(~"100vh - 53px");
+      width: calc(~"100% - 520px");
+      overflow-x: hidden;
+      overflow-y: visible;
     }
 
     .module-table {

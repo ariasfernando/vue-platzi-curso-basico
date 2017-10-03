@@ -35,28 +35,15 @@
     function animatePreviewToDesktop() {
       var $iframeContainer = $("#modal-campaign-preview .preview-container .iframe-container");
       $("#modal-campaign-preview .preview-body").scrollTop(0);
-      // Animate desktop frame to opacity 0
-      $("#modal-campaign-preview .preview-container .mobile-frame").animate({
-        opacity: 0
-      }, "normal", function () {
-        $iframeContainer
-          .scrollTop(0)
-          .css("overflow-y", "auto")
-          .animate({
-            width: $iframeContainer.data("template-width"),
-            top: "0"
-          }, function () {
-            $.when(
-              // Animate container to desktop size
-              $(".iframe-container > iframe").animate({
-                height: $iframeContainer.find('iframe').contents().find('body').find('table').height()
-              })
-            ).done(function () {
-              $iframeContainer.css("height", "auto");
-              $iframeContainer.find("iframe").width("100%");
-              $iframeContainer.find("iframe .wrapper-table").css('width', '100%');
-            });
-          });
+
+      $iframeContainer
+        .scrollTop(0)
+        .css('overflow-y', 'auto')
+        .css('width', $iframeContainer.data("template-width"))
+        .css('height', 'auto');
+
+      $iframeContainer.find("iframe, iframe .wrapper-table").animate({
+        width: '100%'
       });
     }
 
@@ -65,25 +52,18 @@
       var displayWidth = $iframeContainer.data("template-mobile-width");
       var $iframe = $("#modal-campaign-preview .preview-container iframe");
 
-      // Animate iframe to mobile size
-      $iframeContainer.animate({
+      $iframe.contents().find('.wrapper-table').css('width', '100%');
+      
+      $iframe.animate({
+        height: $iframe.contents().find("body").height(),
         width: displayWidth,
-        top: 0
       }, function () {
+        $iframeContainer.css("overflow-y", "auto");
+      });
 
-        $iframe.contents().find('.wrapper-table').css('width', '100%');
-        
-        $iframe.animate({
-          height: $iframe.contents().find("body").height(),
-          width: displayWidth,
-        }, function () {
-          $iframeContainer.css("overflow-y", "auto");
-        });
-
-        // Animate mobile frame to opacity 1
-        $("#modal-campaign-preview .preview-container .mobile-frame").animate({
-          opacity: 1
-        });
+      // Animate mobile frame to opacity 1
+      $("#modal-campaign-preview .preview-container .mobile-frame").animate({
+        opacity: 1
       });
     }
 
