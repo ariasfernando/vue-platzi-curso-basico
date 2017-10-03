@@ -41,6 +41,6 @@
 <div class="preview-body">
     <div class="preview-container">
         <div class="mobile-frame"></div>
-        <div class="iframe-container"><iframe :src="previewSrc" :width="widthPreview" id="email-preview-iframe" @load="resizePreviewFrame()" scrolling="no"></iframe></div>
+        <div class="iframe-container"><iframe frameborder="0" :src="previewSrc" :width="widthPreview" id="email-preview-iframe" @load="resizePreviewFrame()" scrolling="no"></iframe></div>
     </div>
 </div>
