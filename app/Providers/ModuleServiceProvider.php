@@ -3,6 +3,7 @@
 namespace Stensul\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Stensul\Services\ModelKeyManager;
 use Stensul\Models\Module;
 
 class ModuleServiceProvider extends ServiceProvider
@@ -27,7 +28,7 @@ class ModuleServiceProvider extends ServiceProvider
     public function boot()
     {
         self::$app_name = app('config')->get('app.name');
-        self::$module_dir = app()->resourcePath() . DS . 'views' . DS . 'modules';
+        self::$module_dir = base_path() . DS . 'stensul' . DS . 'customer' . DS . 'resources' . DS . 'assets' . DS . 'vue' . DS . 'modules';
     }
 
     /**
@@ -57,7 +58,8 @@ class ModuleServiceProvider extends ServiceProvider
         foreach ($files as $file) {
             if ($file->isFile() && $file->getFilename() === 'config.json') {
                  $config = json_decode(file_get_contents($file->getPathName()), true);
-                 $modules[$config['module_id']] = $config;
+                 $module_key = ModelKeyManager::getStandardKey(new Module, $config['name']);
+                 $modules[$module_key] = $config;
             }
         }
 

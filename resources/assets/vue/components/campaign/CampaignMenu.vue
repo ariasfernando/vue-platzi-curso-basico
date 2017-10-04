@@ -61,23 +61,7 @@
     },
     methods: {
       addModule (module) {
-        this.$store.commit("global/setLoader", true);
-
-        const campaignId = this.$store.state.campaign.campaign.campaign_id;
-
-        if (module.type === 'custom') {
-          moduleService.getCustomModule(module.key, campaignId)
-            .then( response => {
-              module.template = response;
-              this.$store.commit('campaign/addModule', module);
-              this.$store.commit("global/setLoader", false);
-            }).catch( error => {
-              this.$root.$toast('Error loading custom module', {className: 'et-error'});
-            });
-        } else {
-          this.$store.commit('campaign/addModule', clone(module));
-          this.$store.commit("global/setLoader", false);
-        }
+        this.$store.commit('campaign/addModule', clone(module));
       },
       expand (item) {
         const index = this.expanded.indexOf(item);
@@ -87,7 +71,7 @@
           this.expanded.push(item);
         }
 
-        if(event.target.className == "menu-active") {
+        if(event.target.className === "menu-active") {
           event.target.className = "selected";
           event.target.nextElementSibling.className += " beta-submodules-expanded";
         } else {

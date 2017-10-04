@@ -3,7 +3,6 @@
     <label class="typo__label col-sm-12 control-label">Font Family</label>
 
     <div class="col-sm-12">
-      <!--multiselect v-model="value" :options="options" :multiple="true" :select-label="'Select'" @select="saveValue" :close-on-select="true" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Select Font" label="label" track-by="label"-->
       <multiselect v-model="value" :options="options" :multiple="true" :select-label="'Select'" @select="saveValue" :close-on-select="true" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Choose font">
         <template slot="tag" scope="props">
           <span>{{ props.option }}</span>
@@ -38,7 +37,6 @@
       value() {
         const module = this.$store.getters["module/module"];
         const component = module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
-        console.log(component.style.fontFamily);
         return component.style.fontFamily.split(', ');
       }
     },
@@ -48,13 +46,11 @@
         let arr = clone(this.value);
         arr.push(selected);
 
-        const newValue = arr.join(', ');
-
         this.$store.commit('module/saveComponentStyle', {
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
           property: 'fontFamily',
-          value: newValue,
+          value: arr.join(', '),
         });
       }
     }
