@@ -13,8 +13,11 @@
 
   export default {
     name: 'ModuleToolbar',
-    props: ['moduleId'],
+    props: ['moduleId', 'custom'],
     computed: {
+      module() {
+        return this.$store.getters["campaign/modules"][this.moduleId];
+      },
       hasConfig() {
         const module = this.$store.getters["campaign/modules"][this.moduleId];
         let hasConfig = false;
@@ -25,20 +28,31 @@
           }
         });
 
-        _.each(module.structure.columns, (column) => {
-          _.each(column.plugins, (plugin) => {
-            if (plugin.enabled === true) {
-              hasConfig = true;
-            }
+        if (module.structure) {
+          _.each(module.structure.columns, (column) => {
+            _.each(column.plugins, (plugin) => {
+              if (plugin.enabled === true) {
+                hasConfig = true;
+              }
+            });
           });
-        });
+        }
+
+        if (module.modal) {
+          hasConfig = true;
+        }
 
         return hasConfig;
       },
     },
     methods: {
       config(){
-        this.$store.commit("campaign/setCurrentModule", this.moduleId);
+        if (this.module.type === 'custom') {
+          this.$store.commit("campaign/setCustomModule", this.moduleId);
+        } else {
+          this.$store.commit("campaign/setCurrentModule", this.moduleId);
+        }
+
       },
       clone(){
         this.$store.commit("campaign/cloneModule", this.moduleId);
