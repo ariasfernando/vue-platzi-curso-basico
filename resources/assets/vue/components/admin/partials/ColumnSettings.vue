@@ -47,10 +47,21 @@
                        @click.prevent="toggleSketch">
                     <i class="glyphicon glyphicon-remove"></i>
                   </div>
+                  <div v-if="columnSetting.type === 'color'"
+                       class="checkbox-transparent"
+                  >
+                    <span>Transparent</span>
+                    <input type="checkbox"
+                           v-model="columnSetting.transparentChecked"
+                           :value="columnSetting.transparentChecked"
+                           :name="columnSetting.name +'-transparent'"
+                           @click="updateColumnSettings(key, columnSetting.name, columnSetting.link, false, columnSetting.transparentChecked )"
+                    >
+                  </div>
                   <sketch-picker v-if="columnSetting.type === 'color'"
                                  v-model="columnSetting.value"
                                  class="sketch-picker"
-                                 @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false )"></sketch-picker>
+                                 @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false, columnSetting.transparentChecked )"></sketch-picker>
 
                   <!-- Span General Error -->
                   <span v-show="errors.has(columnSetting.name)"
@@ -94,6 +105,17 @@
                          type="text"
                          @click.prevent="toggleSketch"
                          @change="saveColumnSettings(key)">
+                   <div v-if="columnSettingGroup.type === 'color'"
+                       class="checkbox-transparent"
+                  >
+                    <span>Transparent</span>
+                    <input type="checkbox"
+                           v-model="columnSettingGroup.transparentChecked"
+                           :value="columnSettingGroup.transparentChecked"
+                           :name="columnSettingGroup.name +'-transparent'"
+                           @click="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true, columnSettingGroup.transparentChecked )"
+                    >
+                  </div>       
                   <div v-if="columnSettingGroup.type === 'color'"
                        class="icon-remove st-remove-sketch"
                        @click.prevent="toggleSketch">
@@ -102,7 +124,7 @@
                   <sketch-picker v-if="columnSettingGroup.type === 'color'"
                                  v-model="columnSettingGroup.value"
                                  class="sketch-picker"
-                                 @click.native="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true  )"></sketch-picker>
+                                 @click.native="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true,columnSettingGroup.transparentChecked )"></sketch-picker>
                   <!-- Span General Error -->
                   <span v-show="errors.has(columnSettingGroup.name)"
                         class="help is-danger">{{ errors.first(columnSettingGroup.name) }}
@@ -171,7 +193,8 @@
     methods: {
       toggleSketch(e){
         const inputElement = e.toElement;
-        $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
+        $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch, .checkbox-transparent')
+                                                       .toggleClass('st-show-element');
       },
       saveColumnSettings(key) {
         _.each(this.module.structure.columns[key].settings, (option, index) => {
@@ -196,18 +219,18 @@
         });
       },
       // TODO Update date used mutation.
-      updateColumnSettings( key , name, link , isGroup ){
+      updateColumnSettings( key , name, link , isGroup, transparentChecked ){
         _.each(this.module.structure.columns[key].settings, (option, index) => {
 
             if ( isGroup ){
                _.each(option.group, (optionGroup, indexGroup) => {
                 if (optionGroup.name === name) {
-                    this.module.structure.columns[key][link][name] = optionGroup.value.hex;
+                    this.module.structure.columns[key][link][name] = (transparentChecked)? 'transparent':optionGroup.value.hex;
                 }
               });
             }else{
               if (option.name === name) {
-                this.module.structure.columns[key][link][name] = option.value.hex;
+                this.module.structure.columns[key][link][name] = (transparentChecked)? 'transparent':option.value.hex;
               }
             }
 
