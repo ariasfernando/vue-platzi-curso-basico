@@ -1,5 +1,5 @@
-import imageTextLogo from './image-text-logo';
+import customFooter from './custom-footer';
 
 module.exports = {
-  imageTextLogo,
+  customFooter,
 };

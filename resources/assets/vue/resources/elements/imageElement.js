@@ -15,7 +15,6 @@ module.exports = {
     title: 'Image',
     align: 'center',
     valign: 'middle',
-    height: 'auto',
     target: '_blank',
     width: '220',
   },

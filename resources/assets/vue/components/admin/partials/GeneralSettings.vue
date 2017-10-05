@@ -44,6 +44,7 @@
                      type="text"
                      v-validate="'required'"
                      @change="saveModuleStyle">
+              
               <!-- Input color -->
               <input v-if="generalSetting.type === 'color'"
                      v-validate="'required'"
@@ -51,7 +52,7 @@
                      :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
                      :name="generalSetting.name"
                      :placeholder="generalSetting.label"
-                     :value="generalSetting.sketchPickerValue.hex"
+                     :value="(generalSetting.transparentChecked)? 'transparent' : generalSetting.sketchPickerValue.hex"
                      @click.prevent="toggleSketch"
                      @change="saveModuleAttribute">
 
@@ -61,10 +62,24 @@
 
                 <i class="glyphicon glyphicon-remove"></i>
               </div>
+
+              <div v-if="generalSetting.type === 'color'"
+                   class="checkbox-transparent"
+              >
+                <span>Transparent</span>
+                <input type="checkbox"
+                       v-model="generalSetting.transparentChecked"
+                       :name="generalSetting.name +'-transparent'"
+                       :value="generalSetting.transparentChecked"
+                       @click="triggerInputColor(generalSetting.sketchPickerValue.hex, generalSetting.name, generalSetting.transparentChecked, generalSetting.link)"
+                >
+              </div>
+              
               <sketch-picker v-if="generalSetting.type === 'color'"
                              v-model="generalSetting.sketchPickerValue"
                              class="sketch-picker"
-                             @click.native="triggerInputColor(generalSetting.sketchPickerValue.hex, generalSetting.name)"></sketch-picker>
+                             @click.native="triggerInputColor(generalSetting.sketchPickerValue.hex, generalSetting.name, generalSetting.transparentChecked, generalSetting.link)"
+              ></sketch-picker>
             </div>
             <!-- Span General Error -->
             <span v-show="errors.has(generalSetting.name)"
@@ -104,7 +119,7 @@
                      :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
                      :name="generalSettingGroup.name"
                      :placeholder="generalSettingGroup.label"
-                     :value="generalSettingGroup.sketchPickerValue.hex"
+                     :value="(generalSettingGroup.transparentChecked)? 'transparent' : generalSettingGroup.sketchPickerValue.hex"
                      @click.prevent="toggleSketch"
                      @change="saveModuleAttribute">
 
@@ -113,10 +128,23 @@
                    @click.prevent="toggleSketch" >
                 <i class="glyphicon glyphicon-remove"></i>
               </div>
+
+              <div v-if="generalSettingGroup.type === 'color'"
+                   class="checkbox-transparent"
+              >
+                <span>Transparent</span>
+                <input type="checkbox"
+                       v-model="generalSettingGroup.transparentChecked"
+                       :value="generalSettingGroup.transparentChecked"
+                       :name="generalSettingGroup.name +'-transparent'"
+                       @click="triggerInputColor(generalSettingGroup.sketchPickerValue.hex, generalSettingGroup.name, generalSettingGroup.transparentChecked, generalSettingGroup.link)"
+                >
+              </div>
+
               <sketch-picker v-if="generalSettingGroup.type === 'color'"
                              v-model="generalSettingGroup.sketchPickerValue"
                              class="sketch-picker"
-                             @click.native="triggerInputColor(generalSettingGroup.sketchPickerValue.hex, generalSettingGroup.name)"></sketch-picker>
+                             @click.native="triggerInputColor(generalSettingGroup.sketchPickerValue.hex, generalSettingGroup.name, generalSettingGroup.transparentChecked, generalSettingGroup.link)"></sketch-picker>
               <!-- Span General Error -->
               <span v-show="errors.has(generalSettingGroup.name)"
                     class="help is-danger">{{ errors.first(generalSettingGroup.name) }}
@@ -183,15 +211,22 @@
       },
       toggleSketch(e){
         const inputElement = e.toElement;
-        $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
+        $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch, .checkbox-transparent')
+                                                       .toggleClass('st-show-element');
       },
-      triggerInputColor(valueColor, typeName){
-        this.saveModuleAttribute({
-          target:{
-            name :typeName,
-            value : valueColor
-          }
-        });
+      triggerInputColor(valueColor, typeName, checked, link){
+        if (checked){
+          valueColor = 'transparent';
+        }
+
+        const ObjectTarget = { target:{ name : typeName,value : valueColor} }
+
+        if ( link === "attribute"){
+          this.saveModuleAttribute(ObjectTarget);
+        }else{
+          this.saveModuleStyle(ObjectTarget);
+        }
+
       },
       saveModuleStyle(e) {
          this.$store.commit('module/saveModuleStyle',{
@@ -233,6 +268,6 @@
         }
 
       },
-    },
+    }
   }
 </script>

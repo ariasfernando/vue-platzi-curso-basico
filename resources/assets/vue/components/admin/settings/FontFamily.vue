@@ -3,11 +3,10 @@
     <label class="typo__label col-sm-12 control-label">Font Family</label>
 
     <div class="col-sm-12">
-      <!--multiselect v-model="value" :options="options" :multiple="true" :select-label="'Select'" @select="saveValue" :close-on-select="true" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Select Font" label="label" track-by="label"-->
       <multiselect v-model="value" :options="options" :multiple="true" :select-label="'Select'" @select="saveValue" :close-on-select="true" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Choose font">
         <template slot="tag" scope="props">
-          <span>{{ props.option }}</span>
-          <i class="custom__remove glyphicon glyphicon-remove" @click="props.remove(props.option)"></i>
+          <span v-if="props.option">{{ props.option }}</span>
+          <i class="custom__remove glyphicon glyphicon-remove" @click="remove(props)" v-if="props.option"></i>
         </template>
       </multiselect>
     </div>
@@ -38,23 +37,37 @@
       value() {
         const module = this.$store.getters["module/module"];
         const component = module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
-        console.log(component.style.fontFamily);
         return component.style.fontFamily.split(', ');
       }
     },
     methods: {
-      saveValue(selected) {
+      remove(props) {
+        props.remove(props.option);
 
         let arr = clone(this.value);
-        arr.push(selected);
 
-        const newValue = arr.join(', ');
+        let index = arr.indexOf(props.option);
+        if (index !== -1) {
+          arr.splice(index, 1);
+        }
 
         this.$store.commit('module/saveComponentStyle', {
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
           property: 'fontFamily',
-          value: newValue,
+          value: arr.join(', '),
+        });
+      },
+      saveValue(selected) {
+
+        let arr = clone(this.value);
+        arr.push(selected);
+
+        this.$store.commit('module/saveComponentStyle', {
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          property: 'fontFamily',
+          value: arr.join(', '),
         });
       }
     }

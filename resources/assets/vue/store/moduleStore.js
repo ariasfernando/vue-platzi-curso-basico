@@ -53,6 +53,9 @@ const mutations = {
   setCurrentComponent(state, data) {
     state.currentComponent = data;
   },
+  clearCurrentComponent(state) {
+    state.currentComponent = {};
+  },
   updateElement(state, data) {
     _.each(data.data, (value, field) => {
       state.module.structure.columns[data.columnId].components[data.componentId][field] = value;

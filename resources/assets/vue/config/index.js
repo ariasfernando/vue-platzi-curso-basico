@@ -52,7 +52,8 @@ export default {
       Vue.component(`custom-${module.name}`, module.view);
       customModules.push(`custom-${module.name}`);
 
-      delete module.module;
+      delete module.view;
+
       Application.globals.customModules[module.name] = module;
     });
 
