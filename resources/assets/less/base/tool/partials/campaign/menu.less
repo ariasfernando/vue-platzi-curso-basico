@@ -15,6 +15,9 @@ aside{
 	}
 
 	.menu-campaign{
+		.configuration-mod{
+			border-bottom: 7px solid #f4f4f4;
+		}
 		// single module
 		.single{
 			margin-bottom: 0px;
@@ -37,8 +40,11 @@ aside{
 				margin: 0;
 				position: relative;
 				border-bottom: 1px solid #F4F4F4;
-				transition: all 0.3s linear;
 				z-index: 2;
+				background: #ffffff;
+				background: linear-gradient(to bottom, #ffffff 0%, #ffffff 95%, #f4f4f4 93%, #ffffff 100%);
+				background: -moz-linear-gradient(to bottom, #ffffff 0%, #ffffff 95%, #f4f4f4 93%, #ffffff 100%);
+				background: -webkit-linear-gradient(to bottom, #ffffff 0%, #ffffff 95%, #f4f4f4 93%, #ffffff 100%);
 
 				span{
 					text-overflow: ellipsis;
@@ -53,8 +59,7 @@ aside{
 				.glyph-inline{
 					position: static;
 					margin-right: 4px;
-					color: #999999;
-					transition: all 0.3s linear;
+					color: @stensul-gray;
 				}
 
 				i{
@@ -73,15 +78,24 @@ aside{
 				}
 
 				&:hover{
-					color: #555555;
+					color: @stensul-white;
+					box-shadow: 0px 0px 4px #888888;
+    				position: relative;
+    				z-index: 10;
+    				background: @stensul-highlight;
+    				border-bottom: 1px solid @stensul-highlight;
+
+    				i{
+    					color: @stensul-white;
+    				}
 
 					.glyph-inline{
-						color: #555555;
+						color: @stensul-white;
 					}
 				}
 			}
 
-			h2.selected{
+			/*h2.selected{
 				.glyph-inline{
 					.glyphicon-folder-open();
 				}
@@ -111,7 +125,7 @@ aside{
 						transform: rotate(90deg);
 					}
 				}
-			}
+			}*/
 
 			.level-1{
 				h2{
@@ -121,7 +135,7 @@ aside{
 		}
 		.beta-subitem{
 			h2{
-				background-color: #f8f8f8;
+				background-color: #ffffff;
 				padding-left: 20px;
 			}
 		}
@@ -132,7 +146,7 @@ aside{
 			display: block!important;
 
 			h2{
-				background-color: #f8f8f8;
+				background-color: #ffffff;
 				padding-left: 20px;
 
 				.glyphicon-minus{
@@ -156,7 +170,7 @@ aside{
 		.level-1{
 			display: none;
 			padding-bottom: 0px;
-			background: #f8f8f8;
+			background: #ffffff;
 
 			h2{
 				background: @stensul-white;
@@ -197,6 +211,8 @@ aside{
 			}
 			&.open-section-campaign{
 				display: block;
+				border-bottom: 1px solid #f4f4f4;
+
 				.level-2{
 					display: none;
 					padding-bottom: 10px;
@@ -215,7 +231,7 @@ aside{
 			    position: relative;
 			    top: 21px;
 			    padding: 5px 5px;
-			    background: #f8f8f8;
+			    background: #ffffff;
 			    z-index: 2;
 			    font-weight: 300;
 			    font-size: 11px;
@@ -231,7 +247,6 @@ aside{
 			    font-weight: 300!important;
 			    color: @stensul-gray!important;
 			    border: 1px solid #dddddd!important;
-			    background: #f8f8f8!important;
 			    box-sizing: border-box!important;
 			    border-radius: 2px!important;
 			    outline: 0!important;
@@ -247,6 +262,10 @@ aside{
 		&>h2{
 			background-color: @stensul-white;
 			padding: 15px 10px 13px 10px;
+
+			&:hover{
+				box-shadow: none;
+			}
 		}
 		form{
 			padding: 10px;
