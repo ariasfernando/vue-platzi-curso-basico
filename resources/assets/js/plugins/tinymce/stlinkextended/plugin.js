@@ -442,6 +442,61 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                         win.find('#href')[0].tooltip().text(errorMessage).show();
                         return false;
                     }
+
+                    // validateUrlExists
+                    if(Application.globals.validateUrlExists) {
+                        var $input = $('.mce-link-input .mce-textbox');
+                        var urlValidated = false;
+                        var dataUrlValidated = $input.data("url-validated")
+                        // Update modal styles.
+                        $input.closest(".mce-abs-layout-item").css("height","100%");
+                        $input.closest(".mce-container.mce-abs-layout-item").css("height","100%");
+                        $input.closest(".mce-abs-layout").css("height","100%");
+                        $input.closest(".mce-container-body").css("height","100%");
+
+                        if(dataUrlValidated){
+                            $.each(dataUrlValidated,function(index,validation){
+                                if( validation.url == $input.val() ){
+                                    urlValidated = true;
+                                }
+                            });
+                        }
+
+                        if( !urlValidated ){
+                            Application.helpers.validateUrlExist({
+                                $target: $input,
+                                onProcess: function(){
+                                    // Disable submit button
+                                    $('.mce-link-input .mce-textbox').parents(".mce-panel").find(".mce-btn.mce-first button")
+                                        .attr("disabled","disabled")
+                                        .css("opacity", 0.6);
+                                },
+                                onFinish: function(resultsArr){
+                                    // Enable submit button
+                                    $('.mce-link-input .mce-textbox').parents(".mce-panel").find(".mce-btn.mce-first button")
+                                        .removeAttr("disabled")
+                                        .css("opacity", 1);
+                                    // Check if some url doesn't exist
+                                    var validated = true;
+                                    if(resultsArr){
+                                        $.each(resultsArr,function(index,validationData){
+                                            if( !validationData.isValid ){
+                                                validated = false;
+                                            }
+                                        });
+                                    }
+
+                                    // Submit form if every url was validated
+                                    if(validated){
+                                       $('.mce-link-input .mce-textbox').parents(".mce-panel").find(".mce-btn.mce-first button").click();
+                                    }
+                                }
+                            });
+                            
+                            return false;
+                        }
+
+                    }
                 }
 
                 $('.mce-link-input .mce-textbox').removeAttr('style');

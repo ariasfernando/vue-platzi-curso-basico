@@ -8,6 +8,7 @@ function Campaign(data) {
   this.modules_data = data.modules;
   this.body_html = data.campaign.bodyHtml;
   this.auto_save = data.settings.autoSave;
+  this.favorite = data.campaign.isFavorite;
   this.template = data.campaign.campaign_data.template;
 
   return this;

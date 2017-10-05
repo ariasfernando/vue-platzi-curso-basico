@@ -28,7 +28,6 @@ class PublicController extends Controller
     public function view($campaign_id = null)
     {
         $campaign = Campaign::findOrFail($campaign_id);
-        // dd($campaign);
         return view(
             'view_in_browser',
             array(

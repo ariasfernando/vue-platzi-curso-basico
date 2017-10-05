@@ -4,6 +4,9 @@
             v-bind:class="{ loading: loading }">
             <thead>
                 <tr>
+                    @if (config('campaign.enable_favorite_template'))
+                        <th width="20">&nbsp;</th>
+                    @endif
                     <th width="200" v-if="showCreatedBy">
                         <column-sort
                             field="created_at"
@@ -34,6 +37,11 @@
             </thead>
             <tbody>
                 <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
+                    @if (config('campaign.enable_favorite_template'))
+                        <td class="fav icons text-center">
+                            <a href="#" {{(Auth::user()->can('access_favorites') ) ? 'class=favorite' : "@click.prevent"}}  v-if="enableFavorite" title="Favorite" v-html="isFavorite(campaign)"></a>
+                        </td>
+                    @endif
                     <td class="last-modified">
                         <span>@{{ campaign.created_at }}</span><br><span>by @{{ campaign.created_email }}</span>
                     </td>

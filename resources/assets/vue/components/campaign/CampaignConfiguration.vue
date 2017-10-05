@@ -5,12 +5,19 @@
       <form>
         <!-- Configuration Inputs -->
         <div class="configuration-field configuration-nomargin">
-          <label>Campaign Name</label>
+          <label>
+            Campaign Name
+            <a v-if="enableFavorite" @click.prevent="toggleFavorite" href="#" title="Favorite">
+              <i class="glyphicon"
+                v-bind:class="favoriteClass">
+              </i>
+            </a>
+          </label>
           <input type="text" placeholder="Campaign Name" name="campaignName" :value="campaign.campaign_name" @blur="saveSettings"/>
         </div>
 
         <div class="form-group configuration-field configuration-nomargin" v-if="enablePreheader">
-          <label>Preheader Text</label>
+          <label title="The best practice is to limit preheaders to 50 characters.">Preheader Text</label>
           <input type="text" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
         </div>
 
@@ -95,10 +102,27 @@
       campaign() {
         return this.$store.getters["campaign/campaign"].campaign_data;
       },
+      favoriteClass() {
+        return {
+          'glyphicon-star': this.campaign.isFavorite,
+          'glyphicon-star-empty': !this.campaign.isFavorite
+        };
+      },
+      enableFavorite() {
+        return this.campaign.template && Application.globals.permissions.indexOf('access_favorites') >= 0;
+      }
     },
 
     created () {
       this.enablePreheader = this.campaign.library_config.preheader;
+      this.preheaderMaxLength = Application.globals.preheaderConfig.max_length;
+
+/*
+          $data_validation = Config::get('view.preheader.max_length') 
+            ? '{"required": true, "maxLength": ' . Config::get('view.preheader.max_length') . '}'
+            : '{"required": true}';
+
+*/
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
@@ -185,6 +209,19 @@
           this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
             {className: 'et-error'});
         });
+      },
+      toggleFavorite() {
+        let successMessage = this.campaign.isFavorite ? 'Campaign no longer a favorite.' : 'Campaign set as a favorite.';
+
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/favoriteCampaign", this.campaign._id).then(response => {
+          this.$root.$toast(successMessage, {className: 'et-info'});
+          this.$store.commit("global/setLoader", false);
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'});
+        });
       }
     }
   }
@@ -211,16 +248,22 @@
     padding: 0 0 0 5px;
     font-weight: normal !important;
   }
-  label{
+  label {
     font-weight: 300;
     color: #666666;
   }
-  .vue-js-switch{
+  .vue-js-switch {
     float: right;
   }
   .v-switch-core {
     background: #dddddd;
     border: 1px solid #dddddd;
+  }
+  .glyphicon-star-empty {
+    color: #999999;
+  }
+  .glyphicon-star {
+    color: #eac827;
   }
 }
 </style>

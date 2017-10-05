@@ -45,7 +45,9 @@ class Campaign extends Eloquent
         'locked_by',
         'campaign_settings',
         'auto_save',
-        'parent_campaign_id'
+        'parent_campaign_id',
+        'favorite',
+        'favorite_by'
     ];
 
     protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token'];
@@ -80,7 +82,10 @@ class Campaign extends Eloquent
         'locked' => false,
         'locked_by' => null,
         'campaign_settings' => [],
-        'auto_save' => null
+        'auto_save' => null,
+        'parent_campaign_id' => null,
+        'favorite' => false,
+        'favorite_by' => array()
     );
 
     /**
@@ -92,6 +97,16 @@ class Campaign extends Eloquent
     {
         $this->setRawAttributes($this->defaults, true);
         parent::__construct($attributes);
+    }
+
+    /**
+     * Favorite by user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function favorite_user()
+    {
+        return $this->belongsToMany('Stensul\Models\User', '_id');
     }
 
     /**

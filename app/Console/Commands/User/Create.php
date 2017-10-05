@@ -31,7 +31,7 @@ class Create extends Command
     {
 
         //Amount of users validation
-        if(config('admin.users_limit') <= User::count()){
+        if (config('admin.users_limit') <= User::count()) {
             $this->error('The maximum number of users has been reached.');
             return 2;
         }

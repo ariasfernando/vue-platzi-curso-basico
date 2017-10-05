@@ -112,6 +112,46 @@ class CampaignManager
         return $campaign_id;
     }
 
+
+    /**
+     * Toggle favorite flag on a campaign.
+     *
+     * @param array $inputs
+     *
+     * @return array [campaign_id => $campaign_id, favorite => bool]
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public static function favorite($inputs)
+    {
+
+        $campaign_id = $inputs['campaign_id'];
+        if (isset($campaign_id)) {
+            $campaign = Campaign::findOrFail($inputs['campaign_id']);
+            $type = \Config::get('campaign.favorite_settings.type');
+
+            if ($type === 'global') {
+                $campaign->favorite = $campaign->favorite ? false : true;
+            } elseif ($type === 'user') {
+                if (count($campaign->favorite_user()->find(["_id", Auth::id()]))) {
+                    $campaign->favorite_user()->detach(Auth::user());
+                } else {
+                    $campaign->favorite_user()->attach(Auth::user());
+                }
+            }
+
+            $campaign->save();
+
+            Activity::log('Campaign updated', array('properties' =>
+                ['campaign_id' => new ObjectId($campaign_id)]
+            ));
+        }
+
+        return ['campaign_id' => $campaign_id, 'favorite' => $campaign->favorite];
+    }
+
+
     /**
      * Delete campaign.
      *
@@ -235,6 +275,7 @@ class CampaignManager
         $new_campaign_attr['user_email'] = Auth::user()->email;
 
         unset($new_campaign_attr['published_at']);
+        unset($new_campaign_attr['favorite']);
 
         // cdn path must be unique
         // when unset it will be automagically assigned

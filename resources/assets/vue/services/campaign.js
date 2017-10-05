@@ -114,7 +114,25 @@ export default {
 
     return deferred.promise;
   },
+  favoriteCampaign(campaignId) {
+    const endpoint = endpoints.campaign.favoriteCampaign;
+    const deferred = Q.defer();
 
+    const params = {
+      endpoint,
+      json: {
+        campaign_id: campaignId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
   checkProcessStatus(processId) {
     const endpoint = endpoints.campaign.processStatus;
     const deferred = Q.defer();

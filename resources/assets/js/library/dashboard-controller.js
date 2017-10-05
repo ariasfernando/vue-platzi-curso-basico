@@ -5,6 +5,7 @@ var dashboardController = function( customOptions ){
             campaignList: "table.campaign-list",
             deleteCampaign: ".actions .delete",
             cloneCampaign: ".actions .clone",
+            favoriteCampaign: ".fav .favorite",
             showHtmlCampaign: ".actions .html-code",
             showPlainTextCampaign: ".actions .plaintext",
             goEdit: ".actions .edit",
@@ -47,6 +48,19 @@ var dashboardController = function( customOptions ){
         }
     };
 
+    this.doFavorite = function(element){
+      var campaignId = $(element).parents("[data-campaign]").attr("data-campaign");
+
+      if (campaignId){
+        // Show spinner
+        spinner.show();
+        var campaign = new campaignController(campaignId);
+        // Delete Campaign
+        campaign.favorite(function(){
+          spinner.hide();
+        });
+      }
+    };
     this.goEdit = function( element ){
         var campaignId = $(element).parents("[data-campaign]").attr("data-campaign");
 
@@ -113,6 +127,11 @@ var dashboardController = function( customOptions ){
             // Delete campaign.
             .on("click", options.selectors.deleteCampaign, function(){
                 _this.doDelete( this );
+                return false;
+            })
+            // Clone Campaign
+            .on("click", options.selectors.favoriteCampaign, function(){
+                _this.doFavorite( this );
                 return false;
             })
             // Clone Campaign

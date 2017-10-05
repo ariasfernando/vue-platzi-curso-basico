@@ -71,6 +71,16 @@
                             </div>
                         </div>
                     </div>
+                @elseif( session()->has('campaign_permission') )
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="global-messages-placeholder text-center">
+                                <div class="alert alert-warning" role="alert">
+                                    You are not allowed to open this campaign.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @else
                     <div class="row">
                         <div class="col-xs-12">

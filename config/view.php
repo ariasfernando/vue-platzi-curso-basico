@@ -55,8 +55,15 @@ $default = [
     |--------------------------------------------------------------------------
     | Preheader global config
     |--------------------------------------------------------------------------
+    |
+    |  If max_length exists, enables the recomendable length warning validation
+    | 
     */
-    'preheader' => false,
+    'preheader' => [
+        'enabled'   => true,
+        'max_length'=> 50
+    ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +113,10 @@ $default = [
             "font_family" => "Arial, Helvetica, sans-serif",
             "building_mode_select" => true,
             "api_connection" => false,
-            "preheader" => false,
+            'preheader' => [
+                'enabled'   => true,
+                'max_length'=> 50
+            ],
         ]
     ]
 ];

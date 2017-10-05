@@ -55,10 +55,10 @@ var moduleManager = {
 
 			var module = this;
 
-            // If module name is the same as the last module added, only draw it.
-             if (module.viewContent != null && $(module.viewContent).data("params") && moduleName == $(module.viewContent).data("params").type && $(module.viewContent).data("duplicated")) {
-               // Draw module on canvas
-                module.drawOnCanvas(function () {
+        // If module name is the same as the last module added, only draw it.
+        if (module.viewContent != null && $(module.viewContent).data("params") && moduleName == $(module.viewContent).data("params").type && $(module.viewContent).data("duplicated")) {
+            // Draw module on canvas
+            module.drawOnCanvas(function () {
 					// init module plugins
 					module.initPlugins();
                     Application.utils.changeBuildingMode(selectedMode);

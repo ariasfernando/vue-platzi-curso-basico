@@ -199,6 +199,20 @@ const actions = {
     });
     return deferred.promise;
   },
+  favoriteCampaign(context, campaignId) {
+    const deferred = Q.defer();
+
+    campaignService.favoriteCampaign(campaignId)
+    .then(response => {
+      context.dispatch('getCampaignData', response.campaign_id);
+      deferred.resolve(response);
+    })
+    .catch(error => {
+      context.commit('error', error);
+      deferred.reject(error);
+    });
+    return deferred.promise;
+  },
   updateElement(context, edited) {
     context.commit('setDirty', true);
     context.commit('updateComponentData', edited);

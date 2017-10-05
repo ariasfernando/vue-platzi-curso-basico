@@ -13,6 +13,7 @@ use Stensul\Models\User;
 use Stensul\Models\Campaign;
 use Stensul\Models\Upload;
 use MongoDB\BSON\ObjectID as ObjectID;
+use GuzzleHttp\Client as Client;
 
 class ApiController extends Controller
 {
@@ -122,5 +123,31 @@ class ApiController extends Controller
         $api_config = \Config::get("api");
         $api_client = Api::driver($api_config[$api_config['api_driver']]['class']);
         return $api_client->oauth($request);
+    }
+
+    /**
+     * Validate a given url.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return json
+     */
+    public function postValidateUrl(Request $request)
+    {
+        if (!$request->has('url') || !filter_var($request->input('url'), FILTER_VALIDATE_URL)) {
+            return ['is_valid' => false];
+        }
+
+        $client = new Client();
+
+        try {
+            $response = $client->get($request->input('url'));
+
+            if ($response && $response->getReasonPhrase() === 'OK') {
+                return ['is_valid' => true];
+            }
+        } catch (\Exception $e) {
+        }
+
+        return ['is_valid' => false];
     }
 }

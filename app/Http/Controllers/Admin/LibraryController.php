@@ -43,7 +43,7 @@ class LibraryController extends Controller
         $search_text = ($request->input('q'))? '%'.trim($request->input("q")).'%' : null;
         $data_order_field = ($request->input('order_field')) ?: 'created_at';
         $data_order_type = ($request->input('order_type')) ?: 'DESC';
-        $data_page = $request->input('limit') ?: config('admin.sections.libraries.limit_per_page',10);
+        $data_page = $request->input('limit') ?: config('admin.sections.libraries.limit_per_page', 10);
         $search_operator = 'like';
         $search_query = (count($request->all()))? $request->all() : [];
 
@@ -169,7 +169,7 @@ class LibraryController extends Controller
         $modules = [];
         foreach ($request->input('modules') as $group) {
             if (strtolower($group['name']) == 'default') {
-                $modules = array_merge($modules,$group['modules']);
+                $modules = array_merge($modules, $group['modules']);
             } else {
                 $modules[$group['name']] = $group['modules'];
             }

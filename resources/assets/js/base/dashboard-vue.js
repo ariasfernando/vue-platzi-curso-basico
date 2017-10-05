@@ -89,7 +89,13 @@ Vue.component('dashboard', {
         terms: this.terms,
         sort: this.pagination[type].sortBy
       };
-      $.getJSON(Application.globals.baseUrl + '/dashboard/campaigns/' + type, data, function(campaigns) {
+      if (type == "template") {
+        var url = '/dashboard/templates/';
+      } else {
+        var url = '/dashboard/campaigns/';
+      }
+
+      $.getJSON(Application.globals.baseUrl + url + type, data, function(campaigns) {
         this.campaigns[type] = campaigns;
         this.showLoading[type] = false;
       }.bind(this));
@@ -270,6 +276,9 @@ var tableMixin = {
     enableLocking: function() {
       return this.config.locking;
     },
+    enableFavorite: function() {
+      return this.config.enable_favorite_template;
+    },
     search: function() {
       return this.tags.concat(this.terms).join('~~').toLowerCase().split('~~');
     }
@@ -296,10 +305,20 @@ var tableMixin = {
         this.$emit('refresh-campaigns', this.type);
       }.bind(this), 'json');
     },
+    isFavorite: function(data) {
+      if (!data.favorite) {
+        var star ='<i class="glyphicon glyphicon-star-empty"aria-hidden="true" style="color:#999999;"></i>';
+      } else {
+        var star ='<i class="glyphicon glyphicon-star" style="color:#eac827" aria-hidden="true"></i>';
+      }
+      return star;
+    },
     highlightTag: function(tag) {
       if (this.config.search_settings.highlight_matches === true) {
-        if (this.tags.indexOf(tag) > -1) {
-          return true;
+        for (var i = 0; i < this.search.length; i++) {
+          if (this.search[i].toLowerCase() == tag.toLowerCase()) {
+            return true;
+          }
         }
         for (var i = 0; i < this.terms.length; i++) {
           if (this.terms[i].length > 0) {
@@ -332,7 +351,15 @@ var tableMixin = {
       var data = {
         campaign_id: campaign_id
       };
-      var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {data: data});
+      var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {
+        data: data,
+        error: function(xhr) {
+          if (xhr.status == 409) {
+              Application.utils.alert.display('', 'Another user is editing this campaign [' + xhr.responseText + ']' , 'warning');
+          }
+        }
+      });
+
       var vm = this;
       lockCampaign.done(function(data) {
         vm.$emit('change-page', page, vm.type);

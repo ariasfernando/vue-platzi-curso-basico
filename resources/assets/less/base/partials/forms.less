@@ -19,14 +19,26 @@ form{
       user-select: none;
     }
 
-	input.error,
-	select.error{
-		border: 1px solid @brand-danger !important;
+    input, select{
+        &.error{
+			border: 1px solid @brand-danger !important;
+		}
 	}
+	input.warning,
+	select.warning{
+		border: 1px solid @brand-warning !important;
+	}
+
 
 	.bootstrap-select{
 		&.error {
 			border: 1px solid @brand-danger !important;
+		}
+        &.warning{
+            border: 1px solid @brand-warning !important;
+        }
+        &.success{
+            border: 1px solid @brand-success !important;
 		}
 	}
 
@@ -38,7 +50,7 @@ form{
 		width: 100%;
 
 		&.error{
-			border: 1px solid @brand-danger !important;;
+			border: 1px solid @brand-danger !important;
 		}
 	}
 
@@ -59,12 +71,26 @@ form{
 
 		&.error{
 			font-size: 11px;
-			color: @brand-danger !important;;
+			color: @brand-danger !important;
+		}
+
+		&.warning{
+			font-size: 11px;
+			color: @brand-warning !important;
+		}
+
+		&.success{
+			font-size: 11px;
+			color: @brand-success !important;
 		}
 
 		&.info{
 			font-size: 11px;
 			color: @brand-info;
+		}
+		&.warning{
+			font-size: 11px;
+			color: @brand-warning;
 		}
 	}
 	.btn{
@@ -75,7 +101,7 @@ form{
 		&:active{
 			border-color: @btn-success-bg;
 			background: @btn-success-bg;
-			color: @btn-default-color
+			color: @btn-default-color;
 		}
 	}
 }

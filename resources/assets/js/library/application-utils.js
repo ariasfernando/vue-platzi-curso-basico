@@ -219,9 +219,16 @@ Application.utils = {
             email: "Please, enter a valid email address.",
             compareTo: "The field not match.",
             minLength: "The field minimum size is [min].",
+            maxLength: "The best practice is to limit preheaders to 50 characters.",
             url: "Please, enter a valid url.",
             invalidFileType: "Please, upload a valid file.",
-            invalidFileSize: "The file exceeds the size limit."
+            invalidFileSize: "The file exceeds the size limit.",
+            validateUrl: {
+                error: "The destination for this URL does not appear to exist. Please doublecheck the link. If this is expected, please ignore.",
+                success: "The url exists.",
+                fail: "The system cannot validate if the url exists. Please, try again.",
+                verifying: "Verifying if the given url exists..."
+            }
         },
         // Validate if a field is filled.
         validateRequiredField: function( field ){
@@ -335,6 +342,16 @@ Application.utils = {
                 $(field).addClass('error').after(label);
             }
         },
+        setWarning: function( field, message ){
+            $(field).addClass("warning").after('<label class="warning">'+message+'</label>');
+            Application.utils.validate.setMessage(field, message);
+        },
+        setMessage: function( field, message, type ){
+            if(!type){
+                type = "error";
+            }
+            $(field).addClass(type).after('<label class="'+type+'">'+message+'</label>');
+        },
         validateField: function( field ){
             var errors = false;
             var validate = this;
@@ -404,6 +421,17 @@ Application.utils = {
                 }
             }
 
+            // MAX LENGTH: check the filed max length.
+            if( validationParams.maxLength && validationResult.success != false ){
+                // Set the result of the validation
+                validationResult.success = (field.value.length <= validationParams.maxLength );
+
+                // If isn't successful, set the error messages.
+                if( !validationResult.success ){
+                    validationResult.message = validate.messages.maxLength;
+                }
+            }
+
             // URL FORMAT: check valid url.
             if( validationParams.url && validationResult.success != false ){
                 // Set the result of the validation
@@ -467,7 +495,8 @@ Application.utils = {
     },
 
     processQueue: {
-        getJobStatus: function( jobId, callback, failCallback ){
+        getJobStatus: function( jobId, callback, failCallback, run ){
+
             if( !jobId ) {
                 return false;
             }
@@ -945,6 +974,16 @@ Application.utils = {
         }
 
         return false;
+    },
+
+    preheaderWarning: function (el) {
+        Application.utils.validate.initField(el);
+        if ( $(el).val().length > 0 ){
+            var validationResult = Application.utils.validate.validateField(el);
+            if(!validationResult.success) {
+                Application.utils.validate.setWarning(el,validationResult.message);   
+            }
+        }
     }
 
 };

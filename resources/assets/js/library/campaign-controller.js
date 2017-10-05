@@ -42,6 +42,29 @@ function campaignController( campaignId ){
 
     }
 
+    // favorite campaign
+    this.favorite = function( callBack ){
+
+        var request = Application.utils.doAjax( "/campaign/favorite", { dataType: "json", data: { campaign_id: this.campaignId }});
+
+        // Ajax: On Success
+        request.done(function( response ){
+            $vm.$children[0].fetchCampaigns('template');
+            if(callBack){
+                callBack();
+            }
+        });
+
+        // Ajax: On Fail
+        request.fail(function(err){
+            Application.utils.alert.display("Error:","An error occurred while trying to favorite the template, please try again later.","danger");
+            if(callBack){
+                callBack();
+            }
+        });
+    }
+
+
     // Clone campaign
     this.clone = function( callBack ){
         var request = Application.utils.doAjax( "/campaign/clone", { dataType: "json", data: { campaign_id: this.campaignId }});

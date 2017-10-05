@@ -30,6 +30,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Enable favorite template feature
+     */
+
+    'enable_favorite_template' => true,
+
+    'favorite_settings' => [
+        /*
+         | Type of favorite templates (global - user)
+         */
+        'type' => 'user',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Search feature
     |--------------------------------------------------------------------------
      */
@@ -77,6 +91,7 @@ return [
     |--------------------------------------------------------------------------
      */
     'locking' => true,
+    'locking_templates' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -146,6 +161,20 @@ return [
     ],
 
     /*
+    | Enable validate url exists - global Config
+    |--------------------------------------------------------------------------
+     */
+    'validate_url_exists' => true,
+
+    'validate_url_settings' => [
+
+        /*
+         | List the selectors classes where the url validation should be done.
+         */
+        'selector_class' => ['image-destination-url', 'url-format']
+    ],
+
+    /*
     |--------------------------------------------------------------------------
     | Current user email who is editing the email
     |--------------------------------------------------------------------------
@@ -154,5 +183,5 @@ return [
     |
     */
 
-    'show_who_is_locking' => false,
+    'show_who_is_locking' => true,
 ];

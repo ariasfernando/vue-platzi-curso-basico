@@ -38,7 +38,7 @@ class PermissionController extends Controller
      */
     public function getIndex()
     {
-        $data_page = config('admin.sections.permissions.limit_per_page',10);
+        $data_page = config('admin.sections.permissions.limit_per_page', 10);
         $permissions = Permission::orderBy('updated_at', 'desc')->paginate((int) $data_page);
         return $this->renderView('admin.permissions', array('permissions' => $permissions));
     }
@@ -50,7 +50,7 @@ class PermissionController extends Controller
      */
     public function getList(Request $request)
     {
-        $data_page = $request->input('limit') ?: config('admin.sections.permissions.limit_per_page',10);
+        $data_page = $request->input('limit') ?: config('admin.sections.permissions.limit_per_page', 10);
         $data_order_field = ($request->input('order_field')) ?: 'updated_at';
         $data_order_type = ($request->input('order_type')) ?: 'DESC';
 

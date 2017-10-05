@@ -101,6 +101,15 @@ class CampaignController extends Controller
             );
         }
 
+        if (\Config::get('campaign.enable_favorite_template')) {
+            $type = \Config::get('campaign.favorite_settings.type');
+            if ($type == "global") {
+                $params['campaign_data']->isFavorite = $params['campaign_data']->favorite;
+            } elseif ($type == "user") {
+                $params['campaign_data']->isFavorite = $params['campaign_data']->favorite_user()->exists(Auth::id());
+            }
+        }
+
         // Initialize locale
         StensulLocale::init($params['locale']);
 
@@ -163,6 +172,25 @@ class CampaignController extends Controller
     public function postSave(Request $request)
     {
         return Campaign::save($request->input());
+    }
+
+    /**
+     * Set Favorite.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return string
+     *
+     * @throws
+     */
+    public function postFavorite(Request $request)
+    {
+        if (!Auth::user()->can("access_favorites")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
+        return Campaign::favorite($request->input());
     }
 
     /**

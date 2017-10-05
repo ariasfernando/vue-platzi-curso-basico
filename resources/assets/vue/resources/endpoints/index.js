@@ -29,6 +29,7 @@ module.exports = {
     processPlainText: { method: 'get', path: `${baseUrl}/campaign/plain-text?campaign_id=:campaignId` },
     lockCampaign: { method: 'post', path: `${baseUrl}/campaign/force-lock` },
     unlockCampaign: { method: 'post', path: `${baseUrl}/campaign/unlock-forced` },
+    favoriteCampaign: { method: 'post', path: `${baseUrl}/campaign/favorite` },
   },
   config: {
     getConfig: { method: 'get', path: `${baseUrl}/config/:key` },
