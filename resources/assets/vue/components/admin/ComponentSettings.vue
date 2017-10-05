@@ -183,11 +183,14 @@
     },
     watch : {
       currentComponent: {
-        handler: function() {
+        handler: function(currentComponent) {
+
           let module = this.$store.getters["module/module"];
-          if (!_.isEmpty(this.currentComponent) &&  (this.currentComponent.componentId >= 0) ) {
-            this.component = module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
+          if (!_.isEmpty(currentComponent) &&  (currentComponent.componentId >= 0) ) {
+            this.component = module.structure.columns[currentComponent.columnId].components[currentComponent.componentId];
             this.ready = true;
+          } else {
+            this.ready = false;
           }
         },
         deep: true

@@ -49,7 +49,6 @@ export default {
     }
 
     _.each(modules, (module, name) => {
-      console.log(module);
       Vue.component(`custom-${module.name}`, module.view);
       customModules.push(`custom-${module.name}`);
 

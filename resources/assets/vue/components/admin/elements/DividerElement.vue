@@ -10,8 +10,7 @@
             <td :style="component.style"></td>
           </tr>
         </table>
-        <div class="icon-move"><i class="glyphicon glyphicon-move"></i></div> 
-        <div class="icon-remove st-remove"  @click="removeComponent"><i class="glyphicon glyphicon-trash st-remove"></i></div>
+        <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
       </td>
     </tr>
   <!-- DIVIDER ELEMENT ENDS -->
@@ -19,9 +18,13 @@
 
 <script>
   import _ from 'underscore';
+  import ComponentToolbar from './ComponentToolbar.vue'
   
   export default {
     name: 'DividerElement',
+    components: {
+      ComponentToolbar
+    },
     props: [
       'module-id',
       'column-id',
@@ -65,19 +68,6 @@
           });
         }  
       },
-
-      removeComponent(){
-        this.$store.commit("module/removeComponents", {
-          index: this.componentId,
-          number: 1,
-          colId: this.columnId
-        });
-
-        this.$store.commit("module/setCurrentComponent", {
-          columnId: this.columnId,
-          componentId: this.componentId - 1
-        });
-      }
     }
   };
 </script>
@@ -92,46 +82,5 @@
 
   .st-position-relative{
     position: relative;
-  }
-
-  .icon-move {
-    display: none;
-    cursor: move;
-    cursor: -webkit-grabbing;
-    position: absolute;
-    top: 0%;
-    text-align: center;
-    color: #fff;
-    z-index: 5;
-    right: -11px;
-    height: 22px;
-    width: 22px;
-    border-radius: 100%;
-    line-height: 25px;
-    font-size: 11px!important;
-    background-color: @icon-option;
-    opacity: 1;
-    margin-top: -11px;
-  }
-
-  .icon-remove {
-    display: none;
-    width: 22px;
-    height: 22px;
-    line-height: 14px;
-    font-size: 11px!important;
-    cursor: pointer;
-    position: absolute;
-    text-align: center;
-    color: #ffffff;
-    background-color: @icon-option;
-    border-radius: 100%;
-    z-index: 5;
-    top: 0%;
-    opacity: 1;
-    left: 0%;
-    margin-top: -11px;
-    margin-left: -11px;
-    padding-top: 5px;
   }
 </style>

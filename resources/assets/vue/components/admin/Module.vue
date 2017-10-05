@@ -209,8 +209,6 @@
 
       },
       onAdd(e){
-        console.log('onAdd');
-        
         let colId = e.to.getAttribute('data-col');
         let elType = e.clone.getAttribute('data-type');
         let cloneItem = e.item;
