@@ -27,6 +27,7 @@ module.exports = {
       label: 'Background Color',
       name: 'backgroundColor',
       type: 'color',
+      transparentChecked: true,
       value: { hex: 'transparent' },
     },
     {
@@ -88,6 +89,7 @@ module.exports = {
           label: 'Border Color',
           name: 'borderColor',
           type: 'color',
+          transparentChecked: false,
           value: {hex: '#000000'},
         },
       ],

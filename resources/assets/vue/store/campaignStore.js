@@ -9,6 +9,7 @@ const state = {
   editedModules: [],
   editedSettings: {},
   currentModuleId: undefined,
+  currentCustomModuleId: undefined,
   currentComponent: {},
   modalComplete: false,
   modalPreview: false,
@@ -30,6 +31,9 @@ const getters = {
   },
   currentModule(state) {
     return state.currentModuleId;
+  },
+  currentCustomModuleId(state) {
+    return state.currentCustomModuleId;
   },
   templateWidth(state) {
     const templateWidth = 600;
@@ -77,6 +81,9 @@ const mutations = {
   cloneModule(state, moduleId) {
     const clone = _.cloneDeep(state.modules[moduleId]);
     state.modules.push(clone);
+  },
+  setCustomModule(state, moduleId) {
+    state.currentCustomModuleId = moduleId;
   },
   updateComponentData(state, edited) {
     for (const key in edited.data) {

@@ -480,6 +480,10 @@
         margin-bottom: 0px;
       }
 
+      label.vue-js-switch{
+        float: right;
+      }
+
       .text-no-columns{
         font-size: 13px;
         font-weight: 300;
@@ -792,7 +796,7 @@
           background: #f4f4f4;
           box-shadow: none;
           font-weight: 300;
-          width: 50px;
+          width: 65px;
           float: right;
       }
 
@@ -804,7 +808,7 @@
         float: right;
         font-size: 11px;
         font-weight: 300;
-        width: 50px;
+        width: 65px;
       }
 
       input[name="href"]{

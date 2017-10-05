@@ -66,9 +66,9 @@ let jsAppFilePath = (file) => {
 elixir.config.cssOutput = 'public/css';
 elixir.config.sourcemaps = false;
 
-if (elixir.config.babel) {
-  elixir.config.babel.enabled = false;
-}
+// if (elixir.config.babel) {
+//   elixir.config.babel.enabled = false;
+// }
 
 /*
  | --------------------------------------------------------------------------
