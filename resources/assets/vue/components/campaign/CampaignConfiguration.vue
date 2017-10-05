@@ -116,13 +116,6 @@
     created () {
       this.enablePreheader = this.campaign.library_config.preheader;
       this.preheaderMaxLength = Application.globals.preheaderConfig.max_length;
-
-/*
-          $data_validation = Config::get('view.preheader.max_length') 
-            ? '{"required": true, "maxLength": ' . Config::get('view.preheader.max_length') . '}'
-            : '{"required": true}';
-
-*/
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
