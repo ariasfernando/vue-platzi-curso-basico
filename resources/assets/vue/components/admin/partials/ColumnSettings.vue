@@ -18,8 +18,8 @@
             <!-- Column Settings -->
             <div class="row" :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings">
               <div v-if="!columnSetting.group" >
-                <label class="col-sm-8 control-label" :for="columnSetting.name">{{ columnSetting.label }}</label>
-                <div class="col-sm-4 position-relative content-colorpicker">
+                <label class="col-sm-7 control-label" :for="columnSetting.name">{{ columnSetting.label }}</label>
+                <div class="col-sm-5 position-relative content-colorpicker">
 
                   <!-- Input Text -->
                   <input v-if="columnSetting.type === 'text'"

@@ -33,8 +33,8 @@
              v-for="(generalSetting, keyGeneral) in module.structure.settings">
 
           <div v-if="!generalSetting.group" >
-            <label class="col-sm-8 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
-            <div class="col-sm-4 position-relative content-colorpicker">
+            <label class="col-sm-7 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
+            <div class="col-sm-5 position-relative content-colorpicker">
             <!-- Input Text -->
               <input v-if="generalSetting.type === 'text'"
                      :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"

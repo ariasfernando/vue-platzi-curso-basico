@@ -108,12 +108,32 @@
     margin-bottom: 8px;
   }
 
+  .multiselect .multiselect__tags{
+    border-radius: 2px;
+    background: #F4F4F4;
+    border: none;
+    font-size: 11px;
+  }
+
+  .multiselect .multiselect__tags input{
+    background: #f4f4f4!important;
+  }
+
   .multiselect .multiselect__tags-wrap span {
     padding-left: 5px;
     font-size: 11px;
   }
 
   .multiselect .multiselect__tags-wrap i {
-    font-size: 9px;
+    font-size: 7px;
+  }
+
+  .multiselect__option--highlight {
+    background: #78DCD6;
+    color: #fff;
+  }
+  .multiselect__option--highlight:after {
+    background: #78DCD6;
+    color: #fff;
   }
 </style>

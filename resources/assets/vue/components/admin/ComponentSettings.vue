@@ -19,8 +19,8 @@
           <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings">
 
             <div v-if="!setting.group" >
-              <label class="col-sm-8 control-label" :for="setting.name">{{ setting.label }}</label>
-              <div class="col-sm-4 position-relative content-colorpicker">
+              <label class="col-sm-7 control-label" :for="setting.name">{{ setting.label }}</label>
+              <div class="col-sm-5 position-relative content-colorpicker">
                 <!-- Input File -->
                 <input v-if="setting.type === 'file'"
                        v-validate="'required'"
