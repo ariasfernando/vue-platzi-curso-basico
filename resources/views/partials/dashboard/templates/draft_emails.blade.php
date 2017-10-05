@@ -28,6 +28,14 @@
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
+                    <th>
+                        <column-sort
+                            field="library_name"
+                            title="Library"
+                            :sort="sortKey"
+                            :reverse="reverse"
+                            v-on:change-sort="sortBy"></column-sort>
+                    </th>
                     <th v-if="showTags == 1">Tags</th>
                     <th width="180" class="bold">Actions</th>
                 </tr>
@@ -50,6 +58,9 @@
                             title="Track active proof"
                             v-if="proof.allow && proof.status && campaign.has_active_proof"
                         ><i class="fa fa-sticky-note"></i></a>
+                    </td>
+                    <td>
+                        <span>@{{ campaign.library_name }}</span>
                     </td>
                     <td v-if="showTags == 1">
                         <campaign-tag

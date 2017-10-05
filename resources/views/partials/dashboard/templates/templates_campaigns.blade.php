@@ -28,6 +28,14 @@
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
+                    <th>
+                        <column-sort
+                            field="library_name"
+                            title="Library"
+                            :sort="sortKey"
+                            :reverse="reverse"
+                            v-on:change-sort="sortBy"></column-sort>
+                    </th>
                     <th v-if="showTags == 1">Tags</th>
                     <th  width="180" class="bold">Actions</th>
                 </tr>
@@ -43,6 +51,9 @@
                     <td :title="campaign.campaign_name">
                         <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
                         <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock pull-left campaign-locking" v-if="enableLocking && campaign.locked"></i>
+                    </td>
+                    <td>
+                        <span>@{{ campaign.library_name }}</span>
                     </td>
                     <td v-if="showTags == 1">
                         <campaign-tag
