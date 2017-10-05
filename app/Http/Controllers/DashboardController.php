@@ -115,7 +115,15 @@ class DashboardController extends Controller
         $direction = strlen($request->input('direction')) ? $request->input('direction', 'updated_at') : 'desc';
         $campaigns->orderBy($sort, $direction);
 
-        return $campaigns->paginate(5);
+        $result = $campaigns->paginate(5);
+        $libraries = [];
+        foreach (Auth::user()->getLibraries() as $library) {
+            $libraries[$library['_id']] = $library['name'];
+        }
+        foreach ($result as $key => $campaign) {
+            $result[$key]->library_name = $libraries[(string)$campaign->library];
+        }
+        return $result;
     }
 
     public function getTags()

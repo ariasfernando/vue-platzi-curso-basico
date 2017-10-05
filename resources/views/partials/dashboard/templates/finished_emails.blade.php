@@ -28,11 +28,19 @@
                             :reverse="reverse"
                             v-on:change-sort="sortBy"></column-sort>
                     </th>
+                    <th>
+                        <column-sort
+                            field="library_name"
+                            title="Library"
+                            :sort="sortKey"
+                            :reverse="reverse"
+                            v-on:change-sort="sortBy"></column-sort>
+                    </th>
                     <th v-if="showTags == 1">Tags</th>
                     <th  width="300" class="bold" colspan="2">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody> 
                 <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
                     <td class="last-modified">
                         <span>@{{ campaign.created_at }}</span><br><span>by @{{ campaign.created_email }}</span>
@@ -44,6 +52,9 @@
                         <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
                         <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock text-danger" v-if="enableLocking && campaign.locked"></i>
                         <i class="glyphicon glyphicon-cloud-upload text-danger" v-if="isUploaded(campaign)"></i>
+                    </td>
+                    <td>
+                        <span>@{{ campaign.library_name }}</span>
                     </td>
                     <td v-if="showTags == 1">
                         <campaign-tag
