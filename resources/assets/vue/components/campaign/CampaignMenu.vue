@@ -12,7 +12,7 @@
                 <div v-for="subitem in item.sub_menu">
                   <div class="add single">
                     <h2 @click="addModule(subitem)">
-                      <i class="glyphicon glyphicon-minus glyph-inline"></i> {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
+                      {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
                     </h2>
                   </div>
                 </div>
