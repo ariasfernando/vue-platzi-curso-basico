@@ -703,7 +703,10 @@ Application.proof = (function($) {
      * @return {void}
      */
     this.initialChecks = function() {
-        if (typeof Application.utils.getConfigurationForm === 'function' && Application.utils.getConfigurationForm()) {
+        if (typeof Application.utils.getConfigurationForm === 'function'
+            && Application.utils.getConfigurationForm()
+            && $(options.openModalSelector).length > 0
+        ) {
             var campaignId = campaignManager.getCampaignId();
             this.getCampaignData(campaignId, function(data) {
                 if ("can_be_processed" in data && data.can_be_processed === false) {

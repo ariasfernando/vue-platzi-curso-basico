@@ -95,6 +95,7 @@ class Responsys implements ApiConnector
             $this->campaign = $campaign;
             $original_filename = (is_null($request) || !isset($request['filename']))
                 ? $campaign->campaign_name : $request['filename'];
+            $original_filename = str_replace(' ', '_', $original_filename);
             if (strlen($original_filename)) {
                 $this->auth = $this->call('auth');
                 if (isset($this->auth['data']['endPoint']) && isset($this->auth['data']['authToken'])) {

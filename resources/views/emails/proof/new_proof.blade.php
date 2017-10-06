@@ -7,22 +7,29 @@
         </td>
     </tr>
     <tr>
+        <td align="left" valign="top" height="22" style="height: 22px;"><!-- &nbsp; !--></td>
+    </tr>
+    <tr>
         <td align="left" valign="top" style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">
-            Please, click here to review in your browser: {{ $params['proof_url'] }}. Login required.
+            Please, click here to review in your browser (Login required): <br>{{ $params['proof_url'] }}.
         </td>
     </tr>
     @if (strlen($params['notification_message']))
         <tr>
             <td align="left" valign="top" style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">
-                <p>Message from {{ $params['requestor'] }}:</p>
-                <p>{{ $params['notification_message'] }}</p>
+                <p style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">Message from {{ $params['requestor'] }}:</p>
+                <p style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">{{ $params['notification_message'] }}</p>
             </td>
+        </tr>
+    @else
+        <tr>
+            <td align="left" valign="top" height="22" style="height: 22px;"><!-- &nbsp; !--></td>
         </tr>
     @endif
     <tr>
         <td align="left" valign="top" style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">
             Thanks,<br>
-            the stensul team
+            The stensul team
         </td>
     </tr>
     <tr>

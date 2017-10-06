@@ -92,7 +92,8 @@ Application.utils = {
             },
             onSubmit: function(){},
             onCancel: function(){},
-            onClose: function(){}
+            onClose: function(){},
+            onEscape: function(){}
         };
 
         this.confirmOptions = $.extend( this.defaultConfig, options );
@@ -119,6 +120,13 @@ Application.utils = {
             $confirmModal.find(".close").one( "click", function(){
                 confirm.confirmOptions.onClose();
                 $confirmModal.modal("hide");
+            });
+
+            // Set on escape key press
+            $confirmModal.keydown(function(e) {
+                 if (e.keyCode == 27) { 
+                    confirm.confirmOptions.onEscape();
+                }
             });
 
             if(!confirm.confirmOptions.noCancel){

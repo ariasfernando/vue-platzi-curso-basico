@@ -71,7 +71,17 @@ return [
         /*
          | List the fields where the search should be done.
          */
-        'fields_to_search' => ['campaign_name', 'user_email']
+        'fields_to_search' => ['campaign_name', 'user_email'],
+
+        /*
+         | Show popular tags in the beginning of autocomplete.
+         */
+        'show_popular_tags' => true,
+
+        /*
+         | How many popular tags should be listed.
+         */
+        'number_of_popular_tags' => 5,
     ],
 
     /*

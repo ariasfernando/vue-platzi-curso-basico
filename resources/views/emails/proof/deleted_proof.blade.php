@@ -1,4 +1,4 @@
-@extends('emails.proof.layout')
+@extends('base.emails.proof.layout')
 
 @section('content')
     <tr>
