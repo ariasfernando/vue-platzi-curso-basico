@@ -7,10 +7,9 @@ $path = url('/public/html/' . $campaign_id );
     <div class="col-xs-12">
 
         <div class="section-container-campaign">
-
+            @include('partials.campaign.modal_campaign_preview')
             <!-- column right (container email) -->
             <section class="section-canvas-email section-box">
-                @include('partials.campaign.modal_campaign_preview')
             </section>
         </div>
 
