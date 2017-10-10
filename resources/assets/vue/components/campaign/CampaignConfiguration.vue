@@ -225,21 +225,28 @@
     border: 0;
     background: none;
     padding: 0px;
+    display: flex;
+    flex-wrap: wrap;
   }
   .input-tag {
-    background-color: #CBCBCB !important;
-    color: #777 !important;
-    border: 1px solid #BBB !important;
+    background-color: #e4e4e4 !important;
+    color: #888888 !important;
+    border: none !important;
     border-radius: 10px !important;
-    padding: 0 7px 0 9px !important;
+    padding: 2px 7px 2px 9px !important;
     margin: 0 5px 5px 0 !important;
     font-weight: normal !important;
+    order: 2;
+    font-size: 11px !important;
+    font-weight: 300 !important;
   }
   .remove {
-    color: #777 !important;
-    border-left: 1px solid #BBB;
+    color: #888888 !important;
+    border-left: 1px solid #FFFFFF;
     padding: 0 0 0 5px;
-    font-weight: normal !important;
+    font-weight: 300 !important;
+    margin-left: 3px;
+    font-size: 10px;
   }
   label {
     font-weight: 300;
