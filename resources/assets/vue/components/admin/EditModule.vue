@@ -177,8 +177,9 @@
 
   #edit-container{
     padding: 0px;
-    height:calc(~"100vh - 53px"); 
+    height: calc(~"100vh - 53px"); 
     overflow: hidden;
+    min-width: 1200px;
   }
 
   .module {
@@ -188,7 +189,7 @@
       margin: 0 auto;
 
       &.desktop-mode {
-        width: 720px;
+        width: 640px;
       }
       &.mobile-mode {
         width: 480px;
@@ -254,6 +255,7 @@
       padding: 17px 0;
       box-shadow: 0px 0px 4px #999999;
       margin-top: -3px;
+      min-width: 1200px;
 
 
       .header-col {
@@ -854,6 +856,7 @@
       float: left;
       height: calc(~"100vh - 53px");
       width: calc(~"100% - 520px");
+      min-width: 680px;
       overflow-x: hidden;
       overflow-y: visible;
     }
