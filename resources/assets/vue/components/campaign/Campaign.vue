@@ -106,6 +106,7 @@
   .beta-subheader{
     display: table-caption;
     width: 100%;
+    min-width: 1200px;
     background-color: #FFFFFF;
     height: 53px;
     padding: 11px 10px;
