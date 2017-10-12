@@ -33,21 +33,20 @@ class Campaign extends Eloquent
         'library',
         'published_at',
         'cdn_path',
-        'user_id',
-        'user_email',
         'created_by',
-        'created_email',
+        'updated_by',
+        'deleted_by',
+        'favorite_by',
+        'locked_by',
         'email_sent_history',
         'campaign_preheader',
         'tags',
         'template',
         'locked',
-        'locked_by',
+        'favorite',
         'campaign_settings',
         'auto_save',
         'parent_campaign_id',
-        'favorite',
-        'favorite_by'
     ];
 
     protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token'];
@@ -71,21 +70,20 @@ class Campaign extends Eloquent
         'status' => 1,
         'library' => "default",
         'cdn_path' => null,
-        'user_id' => null,
-        'user_email' => null,
-        'created_by' => null,
-        'created_email' => null,
+        'created_by' => [],
+        'updated_by' => [],
+        'deleted_by' => [],
+        'favorite_by' => [],
+        'locked_by' => null,
         'email_sent_history' => [],
         'campaign_preheader' => '',
         'tags' => [],
         'template' => false,
         'locked' => false,
-        'locked_by' => null,
+        'favorite' => false,
         'campaign_settings' => [],
         'auto_save' => null,
-        'parent_campaign_id' => null,
-        'favorite' => false,
-        'favorite_by' => array()
+        'parent_campaign_id' => null
     );
 
     /**
@@ -106,7 +104,7 @@ class Campaign extends Eloquent
      */
     public function favorite_user()
     {
-        return $this->belongsToMany('Stensul\Models\User', '_id');
+        return $this->belongsToMany('Stensul\Models\User', null, null, 'favorite_by');
     }
 
     /**

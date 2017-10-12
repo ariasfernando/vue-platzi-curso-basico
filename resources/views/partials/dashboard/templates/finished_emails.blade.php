@@ -42,11 +42,11 @@
             </thead>
             <tbody> 
                 <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
-                    <td class="last-modified">
-                        <span>@{{ campaign.created_at }}</span><br><span>by @{{ campaign.created_email }}</span>
+                    <td class="last-modified" :title="campaign.created_by.email">
+                        <span>@{{ campaign.created_at }}</span><br><span>by @{{ campaign.created_by.email }}</span>
                     </td>
-                    <td class="last-modified" :title="campaign.user_email">
-                        <span>@{{ campaign.updated_at }}</span><br><span>by @{{ campaign.user_email }}</span>
+                    <td class="last-modified" :title="campaign.updated_by.email">
+                        <span>@{{ campaign.updated_at }}</span><br><span>by @{{ campaign.updated_by.email }}</span>
                     </td>
                     <td :title="campaign.campaign_name">
                         <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>

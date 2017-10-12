@@ -25,15 +25,15 @@ class DashboardController extends Controller
     private static $campaign_fields = [
         '_id',
         'campaign_name',
-        'user_email',
         'status',
         'tags',
         'library',
         'template',
         'locked',
         'locked_by',
+        'updated_by',
+        'created_by',
         'created_at',
-        'created_email',
         'updated_at',
         'published_at'
     ];

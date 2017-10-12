@@ -75,10 +75,7 @@ class CampaignController extends Controller
                 }
             }
         } else {
-            $params = [
-                'user_id' => Auth::id(),
-                'user_email' => Auth::user()->email
-                ];
+            $params = [];
 
             if (!is_null($request->input("locale"))) {
                 $params['locale'] = $request->input("locale");
