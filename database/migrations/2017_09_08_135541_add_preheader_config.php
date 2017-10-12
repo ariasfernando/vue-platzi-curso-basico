@@ -5,7 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Stensul\Models\Setting;
 
-
 class AddPreheaderConfig extends Migration
 {
     /**
