@@ -1,13 +1,11 @@
 <section class="col-xs-12 section-container">
-    <div class="row">
-        <div class="col-xs-12 col-sm-6">
-            {{-- Language / Style Selector --}}
-            <div class="dropdown default-dropdown">
-                @include('partials.dashboard.menu')
-            </div>
+    <div class="row dash-header">
+        <div class="col-xs-12 col-sm-4">
+            {{-- Tabs --}}
+            <campaign-tabs></campaign-tabs>
         </div>
 
-        <div class="col-xs-12 col-sm-offset-2 col-sm-4">
+        <div class="col-xs-12 col-sm-3 pull-right">
             {{-- Search --}}
             <campaign-search
                 :can-search="canSearch"
@@ -24,9 +22,16 @@
                 v-on:update-campaigns="updateCampaigns"
             ></campaign-search>
         </div>
+
+        <div class="col-xs-12 col-sm-2 pull-right no-gutters">
+            {{-- Language / Style Selector --}}
+            <div class="dropdown default-dropdown pull-right">
+                @include('partials.dashboard.menu')
+            </div>
+        </div>
     </div>
 
-    <div class="row">
+    <div class="row" id="draft-emails-campaign">
         <div class="col-xs-12">
             <h2>Draft Emails</h2>
             {{-- Draft Emails Table --}}
@@ -47,7 +52,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" id="finished-campaign">
         <div class="col-xs-12">
             <h2>Finished emails</h2>
             {{-- Finished Emails Table --}}
@@ -69,7 +74,7 @@
         </div>
     </div>
 
-    <div class="row" v-if="config.enable_templating">
+    <div class="row" v-if="config.enable_templating" id="templates-campaign">
         <div class="col-xs-12">
             <h2>Templates</h2>
             {{-- Templates Table --}}
