@@ -1,6 +1,7 @@
 /*
  * Vue
  */
+
 Vue.component('dashboard', {
   template: '#dashboard-template',
   created: function() {
@@ -594,6 +595,20 @@ Vue.component('campaign-search', {
         $el.autocomplete("close");
         return false;
       }
+    });
+  }
+});
+
+Vue.component('campaign-tabs', {
+  template: '#campaign-tabs-template',
+  mounted: function () {
+    $('.dash-tabs a').click(function(e){
+      e.preventDefault();
+      var tabTarget = $(this).attr('href');
+      $(tabTarget).fadeIn();
+      $(tabTarget).siblings().hide();
+      $(this).parent().addClass('active');
+      $(this).parent().siblings().removeClass('active');
     });
   }
 });

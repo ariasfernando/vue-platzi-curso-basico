@@ -2,6 +2,10 @@
     @include('partials.dashboard.templates.campaign_search')
 </template>
 
+<template id="campaign-tabs-template">
+    @include('partials.dashboard.templates.tabs')
+</template>
+
 <template id="campaign-tag-template">
     @include('partials.dashboard.templates.campaign_tag')
 </template>
