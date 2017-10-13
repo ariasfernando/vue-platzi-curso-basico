@@ -79,6 +79,14 @@ class DashboardController extends Controller
                 break;
         }
 
+        if (\Config::get('campaign.enable_templating')) {
+            if ($type == 'template') {
+                $campaigns->where('template', '=', true, 'AND');
+            } else {
+                $campaigns->whereIn('template', [null, false]);
+            }
+        }
+
         if (count($user_visibility) !== 0) {
             $campaigns->whereIn('library', $user_visibility);
         }
