@@ -8,6 +8,7 @@ use Stensul\Models\Log;
 use Stensul\Models\User;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log as Logging;
 
 class FixCreatedUpdated extends Migration
 {
@@ -24,63 +25,65 @@ class FixCreatedUpdated extends Migration
         Campaign::withTrashed()->chunk(100, function ($campaigns) {
 
             foreach ($campaigns as $campaign) {
-                $created_found = false;
+                if (!is_array($campaign->created_by)) {
+                    $log = Log::where('properties.campaign_id', new ObjectID($campaign->id))
+                        ->where('description', 'Campaign created')
+                        ->take(1)
+                        ->first();
 
-                $logs = Log::where('properties.campaign_id', new ObjectID($campaign->id))
-                    ->where('description', 'Campaign created')
-                    ->take(1)
-                    ->get();
-
-                foreach ($logs as $log) {
-
-                    $campaign->created_by = [
-                        'id' => $log->properties['user_id'],
-                        'email' => $this->getEmail($log->properties['user_id'])
-                    ];
-                    $created_found = true;
-                }
-
-                $logs = Log::where('properties.campaign_id', new ObjectID($campaign->id))
-                    ->where('description', 'Campaign updated')
-                    ->orderBy('created_at', 'DESC')
-                    ->take(1)
-                    ->get();
-
-                foreach ($logs as $log) {
-
-                    $campaign->updated_by = [
-                        'id' => $log->properties['user_id'],
-                        'email' => $this->getEmail($log->properties['user_id'])
-                    ];
-                }
-
-                if (!empty($campaign->user_id) && !empty($campaign->user_email)) {
-                    if (!$created_found) {
+                    if ($log) {
+                        Logging::info('Updating created_by, campaign id ' . $campaign->id);
                         $campaign->created_by = [
-                            'id' => $campaign->user_id,
-                            'email' => $campaign->user_email
+                            'id' => $log->properties['user_id'],
+                            'email' => $this->getEmail($log->properties['user_id'])
                         ];
                     }
                 }
 
-                if (!empty($campaign->deleted_at)) {
+                if (!is_array($campaign->updated_by)) {
+                    $log = Log::where('properties.campaign_id', new ObjectID($campaign->id))
+                        ->where('description', 'Campaign updated')
+                        ->orderBy('created_at', 'DESC')
+                        ->take(1)
+                        ->first();
 
-                    $campaign->drop('deleted_by');
-                    $campaign->deleted_by = [
-                        'id' => $this->getUserId($campaign->deleted_by),
-                        'email' => $campaign->deleted_by
-                    ];
-
+                    if ($log) {
+                        Logging::info('Updating updated_by, campaign id ' . $campaign->id);
+                        $campaign->updated_by = [
+                            'id' => $log->properties['user_id'],
+                            'email' => $this->getEmail($log->properties['user_id'])
+                        ];
+                    }
                 }
 
-                $campaign->drop(['user_id', 'user_email']);
+                if (!empty($campaign->user_id) && !empty($campaign->user_email) && empty($campaign->created_by)) {
+                    Logging::info('Updating created_by, campaign id ' . $campaign->id);
+                    $campaign->created_by = [
+                        'id' => $campaign->user_id,
+                        'email' => $campaign->user_email
+                    ];
+                }
 
+                if (!empty($campaign->deleted_at) && empty($campaign->deleted_by)) {
+                    $log = Log::where('properties.campaign_id', new ObjectID($campaign->id))
+                    ->where('description', 'Campaign deleted')
+                    ->orderBy('created_at', 'DESC')
+                    ->take(1)
+                    ->first();
+
+                    if ($log) {
+                        Logging::info('Updating delete_by, campaign id ' . $campaign->id);
+                        $campaign->deleted_by = [
+                            'id' => $log->properties['user_id'],
+                            'email' => $this->getEmail($log->properties['user_id'])
+                        ];
+                    }
+                }
+
+                $campaign->drop(['user_id', 'user_email', 'created_email']);
                 $campaign->save();
             }
         });
-
-        // @todo temporary, prevent migration from succeeding.
-        throw new Exception;
     }
 
     /**
@@ -90,6 +93,7 @@ class FixCreatedUpdated extends Migration
      */
     public function down()
     {
+        throw new Exception('Not implemented');
     }
 
     /***
@@ -108,27 +112,6 @@ class FixCreatedUpdated extends Migration
             if ($user = User::find($user_id)) {
                 Cache::put($key, $user->email, 5);
                 return $user->email;
-            }
-            return false;
-        });
-    }
-
-    /***
-     * Get email by user id, cache resuls for 5 minutes.
-     *
-     * @param string $email
-     * @return string user_id
-     */
-    private function getUserId($email)
-    {
-        
-        $key = 'user_cache_' . $email;
-
-        return Cache::get($key, function () use ($email, $key) {
-
-            if ($user = User::where('email', $email)->first()) {
-                Cache::put($key, $user->id, 5);
-                return $user->id;
             }
             return false;
         });
