@@ -138,6 +138,7 @@
         padding: 15px 10px 13px 10px;
         border-bottom: 1px solid #F0F0F0;
         margin-top: 0px;
+        text-transform: uppercase;
       }
 
       .plugins{
