@@ -178,6 +178,13 @@ gulp.task('elixir-scripts', function () {
             'bower/tinymce/plugins/autolink/plugin.js',
             'bower/tinymce/plugins/link/plugin.js',
             'bower/tinymce/plugins/advlist/plugin.js',
+            'bower/magnific-popup/dist/jquery.magnific-popup.js',
+            'bower/cropit/dist/jquery.cropit.js',
+            'js/library/application-utils.js',
+            'js/library/master-image-editor.v2.js',
+            'js/library/modal-manager.js',
+            'js/library/image-manager.js',
+            'js/library/modals/*.js'
           ],
           jsDestinationPath + 'library-v2.js',
           assetsPath

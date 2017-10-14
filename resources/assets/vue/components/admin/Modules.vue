@@ -41,7 +41,7 @@
             </thead>
             <tbody v-if="ready">
             <tr v-for="(module, id) in modules" :data-module="id">
-              <td :title="module.name">{{ module.name }}</td>
+              <td :title="module.title">{{ module.title }}</td>
               <td :title="module.type">{{ module.type }}</td>
               <td :title="module.status">{{ module.status }}</td>
               <td class="text-right actions icons">
