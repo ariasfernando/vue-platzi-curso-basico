@@ -48,12 +48,3 @@
     }
   }
 </script>
-
-<style lang="less">
-  .component-module-background-color {
-    .vc-compact {
-      width: 100% !important;
-      float: none;
-    }
-  }
-</style>
