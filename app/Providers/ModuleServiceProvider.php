@@ -59,7 +59,7 @@ class ModuleServiceProvider extends ServiceProvider
             if ($file->isFile() && $file->getFilename() === 'config.json') {
                 $config = json_decode(file_get_contents($file->getPathName()), true);
                 $module_key = ModelKeyManager::getStandardKey(new Module, $config['name']);
-                if (isset($config['enable']) && $config['enabled'] === true) {
+                if (isset($config['enabled']) && $config['enabled'] === true) {
                     $modules[$module_key] = $config;
                 }
             }
