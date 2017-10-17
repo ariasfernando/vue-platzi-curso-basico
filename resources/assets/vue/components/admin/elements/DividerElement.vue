@@ -4,10 +4,18 @@
         :data-component="JSON.stringify(component)"
         data-type="divider-element"
     >
-      <td class="st-separator st-position-relative" :style="component.style">
+      <td class="st-separator st-position-relative" 
+          :bgcolor="component.style.backgroundColor" 
+          :height="component.style.height"
+          :width="component.style.width"
+          :style="'line-height:'+ component.style.height +';height:'+ component.style.height +';'"
+      >
         <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td :style="component.style"></td>
+            <td :bgcolor="component.style.backgroundColor" 
+                :height="component.style.height"
+                :width="component.style.width"
+                :style="'line-height:'+ component.style.height +';height:'+ component.style.height +';'">&nbsp;</td>
           </tr>
         </table>
         <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>

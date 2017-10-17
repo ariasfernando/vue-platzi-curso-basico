@@ -25,15 +25,15 @@ class DashboardController extends Controller
     private static $campaign_fields = [
         '_id',
         'campaign_name',
-        'user_email',
         'status',
         'tags',
         'library',
         'template',
         'locked',
         'locked_by',
+        'updated_by',
+        'created_by',
         'created_at',
-        'created_email',
         'updated_at',
         'published_at'
     ];
@@ -77,6 +77,14 @@ class DashboardController extends Controller
             case 'finished':
                 $campaigns->where('processed', '=', 1, 'AND');
                 break;
+        }
+
+        if (\Config::get('campaign.enable_templating')) {
+            if ($type == 'template') {
+                $campaigns->where('template', '=', true, 'AND');
+            } else {
+                $campaigns->whereIn('template', [null, false]);
+            }
         }
 
         if (count($user_visibility) !== 0) {
