@@ -34,7 +34,9 @@ class AdminPermissions extends Migration
      */
     public function down()
     {
-        $names_to_delete = array_map(function($row){ return $row['name']; }, $this->permissions);
-        Permission::whereIn('name',$names_to_delete)->delete();
+        $names_to_delete = array_map(function ($row) {
+            return $row['name'];
+        }, $this->permissions);
+        Permission::whereIn('name', $names_to_delete)->delete();
     }
 }

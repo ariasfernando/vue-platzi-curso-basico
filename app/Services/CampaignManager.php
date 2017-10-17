@@ -66,8 +66,10 @@ class CampaignManager
             $campaign->campaign_name = $campaign_name;
             $campaign->modules_data = $modules_data;
             $campaign->processed = 0;
-            $campaign->user_id = new ObjectID(Auth::id());
-            $campaign->user_email = Auth::user()->email;
+            $campaign->updated_by = [
+                'id' => new ObjectID(Auth::id()),
+                'email' => Auth::user()->email
+            ];
             $campaign->campaign_settings = $campaign_settings;
             $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
             $campaign->auto_save = isset($inputs['auto_save']) && $inputs['auto_save'] ? true : false;
@@ -167,6 +169,11 @@ class CampaignManager
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->status = 2;
             $campaign_data->deleted_at = Carbon::now();
+            $campaign_data->deleted_by = [
+                'id' => new ObjectID(Auth::id()),
+                'email' => Auth::user()->email
+            ];
+
             if ($campaign_data->save()) {
                 Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectId($campaign_id)]));
                 // Check proof
@@ -184,7 +191,7 @@ class CampaignManager
             }
         }
 
-        return array('error' => $campaign_id);
+        return ['error' => $campaign_id];
     }
 
     /**
@@ -226,9 +233,12 @@ class CampaignManager
         if (!isset($data['cdn_path']) || !strlen($data['cdn_path'])) {
             $data['cdn_path'] = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 10);
         }
-        $data['user_id'] = new ObjectId(Auth::id());
-        $data['created_email'] = Auth::user()->email;
-        $data['created_by'] = new ObjectId(Auth::id());
+
+        $data['created_by'] = [
+            'id' => new ObjectId(Auth::id()),
+            'email' => Auth::user()->email,
+        ];
+        $data['update_by'] = $data['created_by'];
 
         $campaign = Campaign::create($data);
 
@@ -272,7 +282,10 @@ class CampaignManager
         $new_campaign_attr['locked'] = false;
         $new_campaign_attr['locked_by'] = null;
         $new_campaign_attr['parent_campaign_id'] = new ObjectID($campaign_id);
-        $new_campaign_attr['user_email'] = Auth::user()->email;
+        $new_campaign_attr['created_by'] = [
+            'id' => new ObjectId(Auth::id()),
+            'email' => Auth::user()->email
+        ];
 
         unset($new_campaign_attr['published_at']);
         unset($new_campaign_attr['favorite']);
@@ -640,6 +653,12 @@ class CampaignManager
             unset($tags[$key]);
         }
         $campaign->tags = array_values($tags);
+
+        $campaign->updated_by = [
+            'id' => new ObjectId(Auth::id()),
+            'email' => Auth::user()->email,
+        ];
+
         $campaign->save();
         return $campaign->id;
     }

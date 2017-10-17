@@ -50,11 +50,11 @@
                             <a href="#" {{(Auth::user()->can('access_favorites') ) ? 'class=favorite' : "@click.prevent"}}  v-if="enableFavorite" title="Favorite" v-html="isFavorite(campaign)"></a>
                         </td>
                     @endif
-                    <td class="last-modified">
-                        <span>@{{ campaign.created_at }}</span><br><span>by @{{ campaign.created_email }}</span>
+                    <td class="last-modified" :title="campaign.created_by.email">
+                        <span>@{{ campaign.created_at }}</span><br><span>by @{{ campaign.created_by.email }}</span>
                     </td>
-                    <td class="last-modified" :title="campaign.user_email">
-                        <span>@{{ campaign.updated_at }}</span><br><span>by @{{ campaign.user_email }}</span>
+                    <td class="last-modified" :title="campaign.updated_by.email">
+                        <span>@{{ campaign.updated_at }}</span><br><span>by @{{ campaign.updated_by.email }}</span>
                     </td>
                     <td :title="campaign.campaign_name">
                         <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>

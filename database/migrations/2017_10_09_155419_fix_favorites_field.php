@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Stensul\Models\Setting;
 
-class AddPreheaderConfig extends Migration
+class FixFavoritesField extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +13,9 @@ class AddPreheaderConfig extends Migration
      */
     public function up()
     {
-        Setting::create([
-            'name' => 'Enable Preheader',
-            'key' => 'enable_preheader',
-            'value' => '1'
-        ]);
+        Schema::table('users', function ($table) {
+            $table->renameColumn('user_ids', 'favorite_by');
+        });
     }
 
     /**
@@ -28,8 +25,5 @@ class AddPreheaderConfig extends Migration
      */
     public function down()
     {
-        if ($setting = Setting::where('key', '=', 'enable_preheader')->first()) {
-            $setting->delete();
-        }
     }
 }
