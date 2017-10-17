@@ -3,6 +3,8 @@ import VueResource from 'vue-resource/dist/vue-resource';
 import VeeValidate from 'vee-validate';
 import Toast from 'vue-easy-toast';
 import BootstrapVue from 'bootstrap-vue';
+import Croppa from 'vue-croppa';
+// import 'vue-croppa/dist/vue-croppa.css';
 import interceptors from './interceptors';
 import Config from './config';
 import store from './store';
@@ -19,7 +21,7 @@ Vue.use(Toast, {
   duration: 5000,
 });
 Vue.use(BootstrapVue);
-
+Vue.use(Croppa);
 Vue.use(interceptors);
 
 const app = new Vue({

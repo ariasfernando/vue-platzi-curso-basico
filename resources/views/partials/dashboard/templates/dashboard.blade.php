@@ -33,7 +33,6 @@
 
     <div class="row" id="draft-emails-campaign">
         <div class="col-xs-12">
-            <h2>Draft Emails</h2>
             {{-- Draft Emails Table --}}
             <draft-emails
                 :campaigns="campaigns.current"
@@ -54,7 +53,6 @@
 
     <div class="row" id="finished-campaign">
         <div class="col-xs-12">
-            <h2>Finished emails</h2>
             {{-- Finished Emails Table --}}
             <finished-emails
                 :campaigns="campaigns.finished"
@@ -76,7 +74,6 @@
 
     <div class="row" v-if="config.enable_templating" id="templates-campaign">
         <div class="col-xs-12">
-            <h2>Templates</h2>
             {{-- Templates Table --}}
             <templates-campaigns
                 :campaigns="campaigns.template"

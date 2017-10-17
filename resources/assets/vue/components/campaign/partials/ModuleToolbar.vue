@@ -90,15 +90,16 @@
 
   }
 
-  .st-module-wrapper {
-    &:hover > * {
-      outline: 1px solid @icon-option;
-      opacity: 0.75;
-      z-index: 800;
-      .icon-move, .icon-remove, 
-      .icon-clone, .icon-config {
-        display: inline-block;
-      }
+  .st-module-wrapper:hover {
+
+    .st-toolbar-content{
+      outline: 1px solid @focus;
+      outline-offset: -1px;
+    }
+
+    .icon-move, .icon-remove,
+    .icon-clone, .icon-config {
+      display: inline-block;
     }
   }
 
@@ -111,7 +112,7 @@
     position: absolute;
     background-color: @icon-option;
     height: 30px;
-    bottom: 0;
+    top: 0;
     right: -98px;
     div {
       cursor: pointer;

@@ -20,8 +20,12 @@
 
       <aside class="component-settings-wrapper">
         <div class="aside-inner section-box">
-          <module-settings v-if="currentComponent"></module-settings>
-          <component-settings v-if="currentComponent"></component-settings>
+          <transition name="slide-fade">
+            <module-settings v-if="currentComponent"></module-settings>
+          </transition>
+          <transition name="slide-fade">
+            <component-settings v-if="currentComponent"></component-settings>
+          </transition>
         </div>
       </aside>
     </div>
@@ -120,7 +124,7 @@
   }
 
   .component-settings-wrapper {
-    background: none;
+    background: @stensul-white;
 
     .component-settings {
       background: #FFFFFF;
@@ -213,10 +217,7 @@
 
   aside {
     width: 20%;
-
-    .section-box {
-      background-color: none;
-    }
+    background: @stensul-white;
   }
 
   .switch {
@@ -291,5 +292,18 @@
           -moz-transition: left 0.15s ease-out;
           -o-transition: left 0.15s ease-out;
           transition: left 0.15s ease-out;
+      }
+
+      .slide-fade-enter-active {
+        transition: all .3s ease;
+      }
+
+      .slide-fade-leave-active {
+        transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+      }
+
+      .slide-fade-enter, .slide-fade-leave-to {
+        transform: translateX(50px);
+        opacity: 0;
       }
 </style>

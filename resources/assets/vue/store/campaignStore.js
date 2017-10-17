@@ -128,6 +128,9 @@ const mutations = {
     const attributes = state.modules[data.moduleId].structure.attribute;
     attributes[data.attribute] = data.attributeValue;
   },
+  saveCustomModuleData(state, data) {
+    state.modules[data.moduleId].data = data.data;
+  },
   setEditorOptions(state, toolbar) {
     state.editorToolbar = toolbar;
   },
