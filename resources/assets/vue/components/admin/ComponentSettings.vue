@@ -119,7 +119,7 @@
                   <i class="glyphicon glyphicon-remove"></i>
                 </div>
                 <sketch-picker v-if="settingGroup.type === 'color'"
-                               v-model="colorsBackground"
+                               v-model="settingGroup.value"
                                class="sketch-picker"
                                @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
 
