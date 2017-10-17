@@ -136,13 +136,17 @@
       padding: 0px;
 
       h2{
-        color: #555555;
+        color: #666666;
         font-weight: 300;
         font-size: 13px;
         padding: 15px 10px 13px 10px;
         border-bottom: 1px solid #F0F0F0;
         margin-top: 0px;
         text-transform: uppercase;
+
+        i{
+          font-size: 10px;
+        }
       }
 
       .plugins{
