@@ -105,7 +105,6 @@
 
   .st-position-relative {
     position: relative;
-    height: 30px;
   }
 
   .module-toolbar {
