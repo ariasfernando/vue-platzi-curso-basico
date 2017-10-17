@@ -93,7 +93,7 @@
                        @change="saveComponent">
 
                 <!-- Input select -->
-                <span v-if="setting.type === 'select'">
+                <span v-if="settingGroup.type === 'select'">
                   <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponent">
                   </b-form-select>
                 </span>
