@@ -1,4 +1,4 @@
-<template >
+<template>
 
   <tr v-if="module.type === 'custom'" class="st-module-wrapper">
     <td class="st-toolbar-content st-position-relative">

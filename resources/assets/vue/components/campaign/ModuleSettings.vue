@@ -86,8 +86,15 @@
 
   .plugin-wrapper {
     display: inline-block;
-    margin-bottom: 10px;
     width: 100%;
+
+    div:first-child{
+      margin-bottom: 10px;
+    }
+
+    div:empty{
+      margin-bottom: 0px;
+    }
   }
   aside{
     .column-settings{

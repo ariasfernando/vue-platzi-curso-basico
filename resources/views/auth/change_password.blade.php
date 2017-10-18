@@ -6,8 +6,8 @@
 
 @section('content')
 
-	<section class="col-md-4"></section>
-	<section class="col-md-4 beta-login">
+	<section class="col-md-4 col-sm-1 col-xs-1"></section>
+	<section class="col-md-4 col-sm-10 col-xs-10 beta-login">
 		@if (count($errors) > 0)
 			<div class="col-md-6 col-md-offset-3">
 				<div class="alert alert-danger">
@@ -52,7 +52,7 @@
 				</form>
 			</div>
 	</section>
-	<section class="col-md-4"></section>
+	<section class="col-md-4 col-sm-1 col-xs-1"></section>
 @endsection
 
 @section('footer-script')

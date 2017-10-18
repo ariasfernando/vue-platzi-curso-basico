@@ -5,8 +5,8 @@
 @stop
 
 @section('content')
-	<section class="col-md-4"></section>
-	<section class="col-md-4 beta-login">
+	<section class="col-md-4 col-sm-1 col-xs-1"></section>
+	<section class="col-md-4 col-sm-10 col-xs-10 beta-login">
 		@if (count($errors) > 0)
 		<div class="alert alert-danger">
 				<strong>Error:</strong> There were some problems with your input.<br><br>
@@ -61,7 +61,7 @@
         </div>
 
 	</section>
-	<section class="col-md-4"></section>
+	<section class="col-md-4 col-sm-1 col-xs-1"></section>
 
 @endsection
 
