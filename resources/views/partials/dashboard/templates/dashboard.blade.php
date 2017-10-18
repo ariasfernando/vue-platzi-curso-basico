@@ -20,6 +20,8 @@
                 v-on:remove-search-tag="removeSearchTag"
                 v-on:remove-search-term="removeSearchTerm"
                 v-on:update-campaigns="updateCampaigns"
+                v-on:reset-page="resetPage"
+                v-on:reset-search="resetSearch"
             ></campaign-search>
         </div>
 

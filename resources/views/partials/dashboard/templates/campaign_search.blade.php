@@ -11,7 +11,7 @@
             <button class="btn btn-default search" type="button" v-on:click.stop.prevent="addSearchTerm"
                 ><i class="glyphicon glyphicon-search"></i></button>
         </span>
-        <button class="btn btn-success" id="search-clear-btn">
+        <button class="btn btn-success" id="search-clear-btn" v-on:click.stop.prevent="clearSearch">
             <i class="glyphicon glyphicon-remove-sign"></i>
         </button>
     </div>
