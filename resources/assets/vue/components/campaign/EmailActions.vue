@@ -4,21 +4,9 @@
       <div class="row">
         <div class="col-xs-5 col-md-5 col-lg-5 hidden-sm hidden-xs"></div>
 
-        <div class="col-xs-2 col-md-2 col-lg-2">
-          <div class="switch">
-            <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" @click="switchMode('desktop')" checked>
-            <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
-              <i class="fa fa-desktop"></i>
-            </label>
-            <input type="radio" class="switch-input" name="view" value="mobile" id="mobile" @click="switchMode('mobile')">
-            <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
-              <i class="glyphicon glyphicon-phone"></i>
-            </label>
-            <span class="switch-selection"></span>
-          </div>
-        </div>
+        
 
-        <div class="col-xs-7 col-md-5 col-lg-5 text-right" id="section-canvas-buttons-col">
+        <div class="col-xs-7 col-md-5 col-lg-5 text-right pull-right" id="section-canvas-buttons-col">
 
           <button v-show="!locked" class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
             Preview
@@ -58,6 +46,20 @@
             Complete
             <i class="glyphicon glyphicon-menu-right"></i>
           </a>
+        </div>
+
+        <div class="switch-container">
+          <div class="switch">
+            <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" @click="switchMode('desktop')" checked>
+            <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
+              <i class="fa fa-desktop"></i>
+            </label>
+            <input type="radio" class="switch-input" name="view" value="mobile" id="mobile" @click="switchMode('mobile')">
+            <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
+              <i class="glyphicon glyphicon-phone"></i>
+            </label>
+            <span class="switch-selection"></span>
+          </div>
         </div>
       </div>
       <b-modal v-if="campaignConfig.enable_templating"

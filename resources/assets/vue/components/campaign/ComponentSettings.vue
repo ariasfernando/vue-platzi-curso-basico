@@ -69,8 +69,4 @@
   .vue-js-switch {
     margin-top: 4px
   }
-
-  .plugin-wrapper {
-    margin-bottom: 10px;
-  }
 </style>
