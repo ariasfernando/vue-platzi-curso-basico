@@ -4,18 +4,19 @@
     <tr @click.prevent="setComponent"
         data-type="divider-element"
     >
-      <td class="st-separator st-position-relative" 
+      <td class="st-separator st-position-relative st-line-height-reset" 
           :bgcolor="component.style.backgroundColor" 
           :height="component.style.height"
           :width="component.style.width"
-          :style="'line-height:'+ component.style.height +';height:'+ component.style.height +';'"
+          :style="'height:'+ component.style.height +';'"
       >
         <table style="width:100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td :bgcolor="component.style.backgroundColor" 
+            <td class="st-line-height-reset"
+                :bgcolor="component.style.backgroundColor" 
                 :height="component.style.height"
                 :width="component.style.width"
-                :style="'line-height:'+ component.style.height +';height:'+ component.style.height +';'">&nbsp;</td>
+                :style="'height:'+ component.style.height +';border-top-width:'+ component.style.borderTopWidth +';border-right-width:'+ component.style.borderRightWidth +';border-bottom-width:'+ component.style.borderBottomWidth +';border-left-width:'+ component.style.borderLeftWidth +';border-top-style:'+ component.style.borderTopStyle +';border-right-style:'+ component.style.borderRightStyle +';border-bottom-style:'+ component.style.borderBottomStyle +';border-left-style:'+ component.style.borderLeftStyle +'    ;border-top-color:'+ component.style.borderTopColor +';border-right-color:'+ component.style.borderRightColor +';border-bottom-color:'+ component.style.borderBottomColor +';border-left-color:'+ component.style.borderLeftColor +';'">&nbsp;</td>
           </tr>
         </table>
       </td>
@@ -61,3 +62,9 @@
     }
   };
 </script>
+
+<style lang="less">
+  .st-line-height-reset{
+    line-height: 0;
+  }
+</style>

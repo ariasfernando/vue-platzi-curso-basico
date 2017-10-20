@@ -82,12 +82,9 @@ module.exports = {
         value: false,
         textcolor_map: [
           '000000', 'Black',
-          '666666', 'Gray',
-          'FFFFFF', 'White',
-          'EC2127', 'Red',
-          '3c763d', 'Green',
-          '0715c3', 'Blue',
-          'ec971f', 'Orange',
+          '474646', 'Gray',
+          '79a8c9', 'Blue',
+          'cd202c', 'Red',
         ],
 
       },

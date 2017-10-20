@@ -9,7 +9,7 @@ module.exports = {
     fontFamily: 'sans-serif',
     color: '#FFFFFF',
     fontSize: '12px',
-    lineHeight: '16px',
+    lineHeight: '40px',
     paddingTop: '0px',
     paddingBottom: '0px',
     paddingRight: '0px',
@@ -125,7 +125,7 @@ module.exports = {
       label: 'Line Height',
       name: 'lineHeight',
       type: 'text',
-      value: '12px',
+      value: '40px',
     },
     {
       link: 'style',
