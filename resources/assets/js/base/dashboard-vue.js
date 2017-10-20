@@ -121,6 +121,10 @@ Vue.component('dashboard', {
       this.pagination.finished.page = 1;
       this.pagination.template.page = 1;
     },
+    resetSearch: function() {
+      this.terms = [];
+      this.tags = [];
+    },
     updateCampaigns: function() {
       this.fetchCampaigns('current');
       this.fetchCampaigns('finished');
@@ -573,6 +577,12 @@ Vue.component('campaign-search', {
     }
   },
   methods: {
+    clearSearch: function() {
+      this.search = '';
+      this.$emit('reset-search');
+      this.$emit('reset-page');
+      this.$emit('update-campaigns');
+    },
     addSearchTerm: function(event) {
       this.$emit('add-search-term', this.search);
       var $el = $(".search-key");

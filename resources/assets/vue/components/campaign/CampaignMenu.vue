@@ -3,7 +3,7 @@
       <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
     
       <div class="beta-subitem" v-bind:class="{'is-collapsed' : collapsed }">
-        <div v-for="item in items">
+        <div v-for="item in items" class="beta-subitem-single">
           
           <div v-if="item.sub_menu" class="expand">
             <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
@@ -22,7 +22,7 @@
 
           <div v-else class="add single">
             <h2 @click="addModule(item)">
-              {{ item.name }}
+              {{ item.name }} <i class="glyphicon glyphicon-plus"></i>
             </h2>
           </div>
 

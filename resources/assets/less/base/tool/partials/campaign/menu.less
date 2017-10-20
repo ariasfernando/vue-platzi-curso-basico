@@ -42,7 +42,6 @@ aside{
 				border-bottom: 1px solid #F4F4F4;
 				z-index: 2;
 				background: #ffffff;
-				background: linear-gradient(to bottom, #ffffff 0%, #ffffff 95%, #f4f4f4 93%, #ffffff 100%);
 
 				span{
 					text-overflow: ellipsis;
@@ -74,26 +73,9 @@ aside{
 						color: #CCCCCC;
 					}
 				}
-
-				&:hover{
-					color: @stensul-white;
-					box-shadow: 0px 0px 4px #888888;
-    				position: relative;
-    				z-index: 10;
-    				background: @stensul-highlight;
-    				border-bottom: 1px solid @stensul-highlight;
-
-    				i{
-    					color: @stensul-white;
-    				}
-
-					.glyph-inline{
-						color: @stensul-white;
-					}
-				}
 			}
 
-			/*h2.selected{
+			h2.selected{
 				.glyph-inline{
 					.glyphicon-folder-open();
 				}
@@ -104,26 +86,10 @@ aside{
 			}
 
 			h2.config-selected{
-				.glyph-inline{
-					transform: rotate(45deg);
-				}
-
 				.glyphicon-menu-up{
 					transform: rotate(180deg);
 				}
 			}
-
-			h2.show-modules{
-				.glyph-inline{
-					transform: rotate(45deg);
-				}
-
-				&.config-selected{
-					.glyph-inline{
-						transform: rotate(90deg);
-					}
-				}
-			}*/
 
 			.level-1{
 				h2{
@@ -131,30 +97,101 @@ aside{
 				}
 			}
 		}
+
 		.beta-subitem{
+			padding: 10px 10px;
+
 			h2{
-				background-color: #ffffff;
-				padding-left: 20px;
+				background-color: @stensul-white;
+				padding: 12px 10px 11px 10px;
 			}
 		}
-		.beta-submodules{
-			display: none;
+
+		.beta-subitem-single{
+			border: 1px solid #eeeeee;
+		    border-radius: 2px;
+		    margin-bottom: 5px;
+		    background: #fafafa;
+
+		    h2{
+		    	transition: all 0.3s linear;
+		    	border-bottom: none;
+
+		    	&:hover{
+    				position: relative;
+    				z-index: 10;
+    				color: @stensul-purple;
+
+    				i{
+    					color: @stensul-purple;
+    				}
+				}
+		    }
+
+		    .beta-submodules{
+				display: none;
+				padding: 10px;
+				background: @body-bg;
+
+				.single{
+					transition: all 0.3s linear;
+					border: 1px solid #eeeeee;
+					margin-bottom: 5px;
+
+					&:hover{
+						border: 1px solid @stensul-purple;
+					}
+
+					h2{
+						border-bottom: none;
+					}
+				}
+			}
+
+			.beta-submodules-expanded{
+				display: block!important;
+
+				h2{
+					background-color: @stensul-white;
+
+					.glyphicon-minus{
+						font-size: 7px;
+					}
+				}
+			}
 		}
-		.beta-submodules-expanded{
-			display: block!important;
+
+		.single{
+			transition: all 0.3s linear;
+			border: 1px solid #eeeeee;
+			margin-bottom: 5px;
+
+			&:hover{
+				border: 1px solid @stensul-purple;
+				box-shadow: 0px 0px 4px #888888;
+
+				h2{
+					color: @stensul-purple;
+
+					i{
+						color: @stensul-purple;
+					}
+				}
+			}
 
 			h2{
-				background-color: #ffffff;
-				padding-left: 20px;
-
-				.glyphicon-minus{
-					font-size: 7px;
-				}
+				border-bottom: none;
 			}
 		}
 
         // icon expand
         .expand{
+
+        	h2:first-child{
+        		&:hover{
+        			box-shadow: none;
+        		}
+        	}
 
             &>h2>i.glyphicon-menu-down{
                 .glyphicon-menu-down();

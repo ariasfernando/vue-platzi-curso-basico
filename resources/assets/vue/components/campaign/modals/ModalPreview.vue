@@ -2,7 +2,7 @@
   <transition name="modal" v-if="modalPreview">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container modal-preview">
             <slot name="header">
                 <button type="button" class="close" @click="close"><span>&times;</span></button>
             </slot>
@@ -116,9 +116,12 @@
         this.resizePreviewFrame();
       },
       resizePreviewFrame() {
-        let $emailBody = $('.preview-container').find("iframe").contents().find('.email-body');
-        let height = $emailBody.height() > 200 ? $emailBody.height() + 60 : 150;
-        this.previewFrameHeight = height;
+        // Give some time to the browser to resize.
+        setTimeout(() => {
+          let $emailBody = $('.preview-container').find("iframe").contents().find('.email-body');
+          let height = $emailBody.height() > 200 ? $emailBody.height() + 60 : 150;
+          this.previewFrameHeight = height;
+        }, 10);
       },
     },
     created () {
@@ -143,14 +146,24 @@
       font-family: monospace, serif;
     }
 
+    .send-preview{
+      height: 430px;
+      padding-top: 20px;
+      overflow: auto;
+    }
+
+    #send-preview-form button{
+      padding: 8px 20px 7px 20px;
+    }
+
     #send-preview-to{
       font-family: 'Open Sans', Arial, Helvetica, sans-serif;
       font-size: 14px;
-      font-weight: 400;
+      font-weight: 300;
       color: #666666;
       box-shadow: none;
       border-radius: 2px;
-      height: 30px;
+      height: 35px;
 
       &:focus{
        border: 1px solid #DDDDDD;
@@ -171,6 +184,22 @@
       .iframe-container{
         text-align: center;
         background: #F4F4F4;
+      }
+    }
+  }
+
+  .modal-preview {
+    h4{
+      margin-bottom: 0px;
+    }
+
+    .close{
+      margin-top: -10px;
+      margin-right: -7px;
+
+      &:focus{
+        outline: none;
+        background: none;
       }
     }
   }

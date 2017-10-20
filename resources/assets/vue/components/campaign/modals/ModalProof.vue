@@ -334,7 +334,7 @@
     }
   }
   .btn-reviewer-add{
-    margin-top: -4px;
+    margin-top: 0px;
   }
   #modal-proof-message {
     textarea {
