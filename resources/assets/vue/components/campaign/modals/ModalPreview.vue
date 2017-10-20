@@ -116,9 +116,12 @@
         this.resizePreviewFrame();
       },
       resizePreviewFrame() {
-        let $emailBody = $('.preview-container').find("iframe").contents().find('.email-body');
-        let height = $emailBody.height() > 200 ? $emailBody.height() + 60 : 150;
-        this.previewFrameHeight = height;
+        // Give some time to the browser to resize.
+        setTimeout(() => {
+          let $emailBody = $('.preview-container').find("iframe").contents().find('.email-body');
+          let height = $emailBody.height() > 200 ? $emailBody.height() + 60 : 150;
+          this.previewFrameHeight = height;
+        }, 10);
       },
     },
     created () {
