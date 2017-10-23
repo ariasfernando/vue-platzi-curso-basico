@@ -53,7 +53,7 @@
           inline: true,
           menubar: false,
           toolbar: toolbar,
-          plugins: 'paste advlist autolink lists textcolor stlinkextended',
+          plugins: 'paste advlist autolink lists textcolor stlinkextended sttextcolorextended',
 
           init_instance_callback: (editor) => {
 
