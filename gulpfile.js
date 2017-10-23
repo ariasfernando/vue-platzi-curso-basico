@@ -199,7 +199,8 @@ gulp.task('elixir-scripts', function () {
             'js/library/master-image-editor.v2.js',
             'js/library/modal-manager.js',
             'js/library/image-manager.js',
-            'js/library/modals/*.js'
+            'js/library/modals/*.js',
+            'js/plugins/tinymce/**/plugin.js',
           ],
           jsDestinationPath + 'library-v2.js',
           assetsPath

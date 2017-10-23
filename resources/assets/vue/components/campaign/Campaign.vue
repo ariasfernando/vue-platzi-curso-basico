@@ -136,13 +136,17 @@
       padding: 0px;
 
       h2{
-        color: #555555;
+        color: #666666;
         font-weight: 300;
         font-size: 13px;
         padding: 15px 10px 13px 10px;
         border-bottom: 1px solid #F0F0F0;
         margin-top: 0px;
         text-transform: uppercase;
+
+        i{
+          font-size: 10px;
+        }
       }
 
       .plugins{
@@ -220,90 +224,101 @@
     background: @stensul-white;
   }
 
+  .section-canvas-button-col{
+    width: 700px
+  }
+
+  .switch-container{
+    position: relative;
+    left: 50%;
+    margin-left: -50px;
+    width: 100px;
+  }
+
   .switch {
-          position: relative;
-          height: 29px;
-          width: 100px;
-          background: @stensul-white;
-          border-radius: 3px;
-          margin: 0 auto;
-          border: 1px solid #DFDFDF;
-          margin-top: 2px;
-      }
+    position: relative;
+    height: 29px;
+    width: 100px;
+    background: @stensul-white;
+    border-radius: 3px;
+    margin: 0 auto;
+    border: 1px solid #DFDFDF;
+    margin-top: 2px;
+  }
 
-      .switch-label {
-          position: relative;
-          z-index: 2;
-          float: left;
-          width: 49px;
-          line-height: 21px;
-          font-size: 16px;
-          color: @stensul-purple;
-          text-align: center;
-          cursor: pointer;
-          margin: 0 !important;
+  .switch-label {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 49px;
+    line-height: 21px;
+    font-size: 16px;
+    color: @stensul-purple;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 !important;
 
-          i {
-            display: inline-block;
-            vertical-align: sub;
-          }
-      }
+    i {
+      display: inline-block;
+      vertical-align: sub;
+    }
+  }
 
-      .switch-label:active {
-          font-weight: bold;
-      }
+  .switch-label:active {
+    font-weight: bold;
+  }
 
-      .switch-label-off {
-          padding-left: 2px;
-      }
+  .switch-label-off {
+    padding-left: 2px;
+  }
 
-      .switch-label-on {
-          padding-right: 2px;
-      }
+  .switch-label-on {
+    padding-right: 2px;
+  }
 
-      .switch-input {
-          display: none;
-      }
+  .switch-input {
+    display: none;
+  }
 
-      .switch-input:checked + .switch-label {
-          font-weight: bold;
-          color: @stensul-white;
-          -webkit-transition: 0.15s ease-out;
-          -moz-transition: 0.15s ease-out;
-          -o-transition: 0.15s ease-out;
-          transition: 0.15s ease-out;
-      }
+  .switch-input:checked + .switch-label {
+    font-weight: bold;
+    color: @stensul-white;
+    -webkit-transition: 0.15s ease-out;
+    -moz-transition: 0.15s ease-out;
+    -o-transition: 0.15s ease-out;
+    transition: 0.15s ease-out;
+  }
 
-      .switch-input:checked + .switch-label-on ~ .switch-selection {
-          left: 50px;
-      }
+  .switch-input:checked + .switch-label-on ~ .switch-selection {
+    left: 50px;
+  }
 
-      .switch-selection {
-          display: block;
-          position: absolute;
-          z-index: 1;
-          top: 2px;
-          left: 2px;
-          width: 46px;
-          height: 23px;
-          border-radius: 2px;
-          background: @stensul-purple;
-          -webkit-transition: left 0.15s ease-out;
-          -moz-transition: left 0.15s ease-out;
-          -o-transition: left 0.15s ease-out;
-          transition: left 0.15s ease-out;
-      }
+  .switch-selection {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 2px;
+    left: 2px;
+    width: 46px;
+    height: 23px;
+    border-radius: 2px;
+    background: @stensul-purple;
+    -webkit-transition: left 0.15s ease-out;
+    -moz-transition: left 0.15s ease-out;
+    -o-transition: left 0.15s ease-out;
+    transition: left 0.15s ease-out;
+  }
 
-      .slide-fade-enter-active {
-        transition: all .3s ease;
-      }
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
 
-      .slide-fade-leave-active {
-        transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-      }
+  .slide-fade-leave-active {
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
 
-      .slide-fade-enter, .slide-fade-leave-to {
-        transform: translateX(50px);
-        opacity: 0;
-      }
+  .slide-fade-enter, .slide-fade-leave-to {
+    transform: translateX(50px);
+    opacity: 0;
+  }
 </style>

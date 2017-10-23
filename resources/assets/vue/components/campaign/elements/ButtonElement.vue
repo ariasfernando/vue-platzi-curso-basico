@@ -7,25 +7,30 @@
         class="st-position-relative"
         width="100%"
     >
-      <table :width="component.attribute.width" 
-             :height="component.attribute.height" 
-             :bgcolor="component.attribute.bgcolor.hex"
-             border="0" 
-             cellpadding="0" 
-             cellspacing="0"
+      <a @click.prevent 
+           :href="component.attribute.href" 
+           :target="component.attribute.target" 
+           style="text-decoration:none;"
       >
-        <tr>
-          <td width="100%" 
-              align="center" 
-              :bgcolor="component.attribute.bgcolor.hex"
-              :height="component.attribute.height"
-          >
-            <a @click.prevent :href="component.attribute.href" :target="component.attribute.target" :style="component.style">
-             <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
-            </a>
-          </td>
-        </tr>
-      </table>
+        <table :width="component.attribute.width" 
+               :height="component.attribute.height" 
+               :bgcolor="component.attribute.bgcolor.hex"
+               border="0" 
+               cellpadding="0" 
+               cellspacing="0"
+        >
+          <tr>
+            <td width="100%" 
+                align="center" 
+                :bgcolor="component.attribute.bgcolor.hex"
+                :height="component.attribute.height"
+                :style="component.style"
+            >
+              <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
+            </td>
+          </tr>
+        </table>
+      </a>  
     </td>
   </tr>
   <!-- CALL TO ACTION ELEMENT ENDS -->

@@ -8,28 +8,31 @@
         class="st-position-relative"
         width="100%"
     >
-      <table :width="component.attribute.width" 
-             :height="component.attribute.height" 
-             :bgcolor="component.attribute.bgcolor.hex"
-             border="0" 
-             cellpadding="0" 
-             cellspacing="0"
-      >
-        <tr>
-          <td width="100%" 
-              align="center" 
-              :bgcolor="component.attribute.bgcolor.hex"
-              :height="component.attribute.height"
-          >
-            <a @click.prevent :href="component.attribute.href" :target="component.attribute.target" :style="component.style">
-              <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
-            </a>
-
-            <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
-
-          </td>
-        </tr>
-      </table>
+      <a @click.prevent 
+           :href="component.attribute.href" 
+           :target="component.attribute.target" 
+           style="text-decoration:none;"
+      >  
+        <table :width="component.attribute.width" 
+               :height="component.attribute.height" 
+               :bgcolor="component.attribute.bgcolor.hex"
+               border="0" 
+               cellpadding="0" 
+               cellspacing="0"
+        >
+          <tr>
+            <td width="100%" 
+                align="center" 
+                :bgcolor="component.attribute.bgcolor.hex"
+                :height="component.attribute.height"
+                :style="component.style"
+            >
+                <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
+                <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
+            </td>
+          </tr>
+        </table>
+      </a>
     </td>
   </tr>
   <!-- CALL TO ACTION ELEMENT ENDS -->

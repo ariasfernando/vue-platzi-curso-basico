@@ -17,7 +17,7 @@
                     </th>
                     <th width="200">
                         <column-sort
-                            field="user_email"
+                            field="updated_at"
                             title="Last Modified"
                             :sort="sortKey"
                             :reverse="reverse"

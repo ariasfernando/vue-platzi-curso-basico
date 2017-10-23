@@ -777,6 +777,20 @@
       float: left;
       padding: 0px;
 
+      .field-border{
+
+        .row:nth-child(2){
+          width: 37%;
+        }
+        .row:nth-child(3){
+          width: 23%;
+        }
+        .row:nth-child(4){
+          width: 34%;
+        }
+
+      }
+
       .form-group{
         margin-bottom: 10px;
       }
