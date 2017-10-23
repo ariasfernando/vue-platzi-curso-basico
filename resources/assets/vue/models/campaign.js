@@ -15,3 +15,9 @@ function Campaign(data) {
 }
 
 module.exports = Campaign;
+
+export default function (data) {
+  this.name = data.name || undefined;
+
+  return this;
+};
