@@ -61,7 +61,9 @@
     },
     methods: {
       addModule (module) {
-        this.$store.commit('campaign/addModule', clone(module));
+        const mod = clone(module);
+        mod.data = {};
+        this.$store.commit('campaign/addModule', mod);
       },
       expand (item) {
         const index = this.expanded.indexOf(item);

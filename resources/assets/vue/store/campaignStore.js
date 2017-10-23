@@ -128,7 +128,9 @@ const mutations = {
     attributes[data.attribute] = data.attributeValue;
   },
   saveCustomModuleData(state, data) {
-    state.modules[data.moduleId].data = _.extend(state.modules[data.moduleId].data, data.data);
+    _.each(data.data, (val, key) => {
+      state.modules[data.moduleId].data[key] = val;
+    });
   },
   saveCustomModuleDataField(state, data) {
     state.modules[data.moduleId].data[data.field] = data.value;

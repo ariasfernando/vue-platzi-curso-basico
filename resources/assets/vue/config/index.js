@@ -2,6 +2,7 @@ import _ from 'lodash';
 import plugins from '../plugins';
 import modules from '../modules';
 import fonts from './fonts';
+import utils from './utils';
 
 export default {
   install(Vue, options) {
@@ -65,6 +66,13 @@ export default {
     }
 
     Application.globals.fonts = fonts;
+
+    // Register Util Functions
+    if (customer.config && customer.config.utils) {
+      _.merge(utils, customer.config.utils);
+    }
+
+    Vue.prototype.$utils = utils;
 
     Vue.app = Vue.prototype.$app = Application.globals;
 
