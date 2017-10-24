@@ -109,10 +109,11 @@
 
   .module-toolbar {
     position: absolute;
-    background-color: @icon-option;
+    background-color: #69dac8;
     height: 30px;
-    top: 0;
-    right: -98px;
+    top: -30px;
+    right: 0px;
+    
     div {
       cursor: pointer;
       display: none;
