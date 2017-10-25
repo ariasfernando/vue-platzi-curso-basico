@@ -1,9 +1,9 @@
 <template>
-  <div class="component-settings" v-if="ready && module.type === 'custom' && module.modal">
+  <div class="component-settings" v-if="ready && module.type === 'custom' && module.settings">
     <h2><i class="glyphicon glyphicon-tasks"></i> {{ toCamel(module.params.title) }} </h2>
     <div class="plugins">
       <div>
-        <component v-if="$customModals.indexOf('custom-modal-' + module.name) !== -1" :is="'custom-modal-' + module.name" :module="module"></component>
+        <component v-if="$customSettings.indexOf('custom-settings-' + module.name) !== -1" :is="'custom-settings-' + module.name" :module="module"></component>
       </div>
     </div>
   </div>

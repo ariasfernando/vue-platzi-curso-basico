@@ -44,7 +44,7 @@ export default {
 
     // Register Custom Modules
     let customModules = [];
-    let customModals = [];
+    let customSettings = [];
     Application.globals.customModules = {};
     if (customer.modules) {
       _.merge(modules, customer.modules);
@@ -52,19 +52,19 @@ export default {
 
     _.each(modules, (module, name) => {
       Vue.component(`custom-${module.name}`, module.view);
-      Vue.component(`custom-modal-${module.name}`, module.modal);
+      Vue.component(`custom-settings-${module.name}`, module.settings);
 
       customModules.push(`custom-${module.name}`);
-      customModals.push(`custom-modal-${module.name}`);
+      customSettings.push(`custom-settings-${module.name}`);
 
       delete module.view;
-      delete module.modal;
+      delete module.settings;
 
       Application.globals.customModules[module.name] = module;
     });
 
     Vue.customModules = Vue.prototype.$customModules = customModules;
-    Vue.customModals = Vue.prototype.$customModals = customModals;
+    Vue.customSettings = Vue.prototype.$customSettings = customSettings;
 
     // Register Fonts
     if (customer.config && customer.config.plugins) {
