@@ -26,6 +26,9 @@
           <transition name="slide-fade">
             <component-settings v-if="currentComponent"></component-settings>
           </transition>
+          <transition name="slide-fade">
+            <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
+          </transition>
         </div>
       </aside>
     </div>
@@ -48,10 +51,12 @@
   import CampaignMenu from './CampaignMenu.vue'
   import EmailCanvas from './EmailCanvas.vue'
   import ComponentSettings from './ComponentSettings.vue'
+  import CustomModuleSettings from './CustomModuleSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
   import Spinner from '../common/Spinner.vue'
   import EmailActions from './EmailActions.vue'
   import VueSticky from 'vue-sticky'
+  import _ from 'lodash'
 
   export default {
     name: 'Campaign',
@@ -61,6 +66,7 @@
       CampaignMenu,
       EmailCanvas,
       ComponentSettings,
+      CustomModuleSettings,
       ModuleSettings,
       ModalComplete,
       ModalPreview,
@@ -79,7 +85,10 @@
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
-      }
+      },
+      currentCustomModule() {
+        return !_.isUndefined(this.$store.getters["campaign/currentCustomModule"]);
+      },
     },
     directives: {
       'sticky': VueSticky,

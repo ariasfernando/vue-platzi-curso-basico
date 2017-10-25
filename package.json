@@ -10,7 +10,7 @@
   "license": "Propietary",
   "private": true,
   "dependencies": {
-    "image-editor": "git+ssh://git@git.stensuldev.net:emiliano/image-editor.git",
+    "image-editor": "git+ssh://git@git.stensuldev.net:stensul/image-editor.git",
     "bootstrap": "^3.3.7",
     "bootstrap-vue": "^1.0.0-beta.9",
     "browserify-fs": "^1.0.0",

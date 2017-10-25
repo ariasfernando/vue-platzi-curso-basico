@@ -31,7 +31,7 @@ const getters = {
   currentModule(state) {
     return state.currentModuleId;
   },
-  currentCustomModuleId(state) {
+  currentCustomModule(state) {
     return state.currentCustomModuleId;
   },
   templateWidth(state) {
