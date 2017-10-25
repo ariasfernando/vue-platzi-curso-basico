@@ -51,69 +51,120 @@ class CampaignManager
     {
         $campaign_id = $inputs['campaign_id'];
 
-        if (isset($campaign_id)) {
-            $campaign = Campaign::findOrFail($inputs['campaign_id']);
-            if ($campaign->locked) {
-                throw new AuthorizationException('The campaign is locked and you can not change it');
-            }
-            $campaign_name = $inputs['campaign_name'] ?? '';
-            $modules_data = $inputs['modules_data'] ?? [];
-            if (!is_array($campaign->tags)) {
-                $campaign->tags = [];
-            }
-            $campaign_settings = $inputs['campaign_settings'] ?? [];
-
-            $campaign->campaign_name = $campaign_name;
-            $campaign->modules_data = $modules_data;
-            $campaign->processed = 0;
-            $campaign->updated_by = [
-                'id' => new ObjectID(Auth::id()),
-                'email' => Auth::user()->email
-            ];
-            $campaign->campaign_settings = $campaign_settings;
-            $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
-            $campaign->auto_save = isset($inputs['auto_save']) && $inputs['auto_save'] ? true : false;
-
-            if (isset($inputs['body_html'])) {
-                $campaign->body_html = $inputs['body_html'];
-            }
-
-            if (isset($inputs['plain_text'])) {
-                $campaign->plain_text = $inputs['plain_text'];
-            }
-
-            $campaign->tags = [];
-            if (!empty($inputs['tags'])) {
-                $campaign->tags = array_unique($inputs['tags']);
-                // Add New tags to collection
-                $saved_tags = Tag::all()->keyBy('name')->all();
-
-                foreach ($campaign->tags as $tag) {
-                    if (!array_key_exists($tag, $saved_tags)) {
-                        Tag::create(['name'=> $tag]);
-                    }
-                }
-            }
-
-            if (isset($inputs['template'])) {
-                $campaign->template = false;
-                if ($inputs['template'] === true) {
-                    $campaign->template = true;
-                }
-
-                if ($inputs['template'] !== true && $campaign->template === true) {
-                    abort(400, 'You are trying to save a template campaign as non template one');
-                }
-            }
-
-            $campaign->save();
-
-            Activity::log('Campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
+        $campaign = Campaign::findOrFail($inputs['campaign_id']);
+        if ($campaign->locked) {
+            throw new AuthorizationException('The campaign is locked and you can not change it');
         }
+        $campaign_name = $inputs['campaign_name'] ?? '';
+        $modules_data = $inputs['modules_data'] ?? [];
+        if (!is_array($campaign->tags)) {
+            $campaign->tags = [];
+        }
+        $campaign_settings = $inputs['campaign_settings'] ?? [];
+
+        $campaign->campaign_name = $campaign_name;
+        $campaign->modules_data = $modules_data;
+        $campaign->processed = 0;
+        $campaign->updated_by = [
+            'id' => new ObjectID(Auth::id()),
+            'email' => Auth::user()->email
+        ];
+        $campaign->campaign_settings = $campaign_settings;
+        $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
+        $campaign->auto_save = isset($inputs['auto_save']) && $inputs['auto_save'] ? true : false;
+
+        if (isset($inputs['body_html'])) {
+            $campaign->body_html = $inputs['body_html'];
+        }
+
+        if (isset($inputs['plain_text'])) {
+            $campaign->plain_text = $inputs['plain_text'];
+        }
+
+        $campaign->tags = [];
+        if (!empty($inputs['tags'])) {
+            $campaign->tags = array_unique($inputs['tags']);
+            // Add New tags to collection
+            $saved_tags = Tag::all()->keyBy('name')->all();
+
+            foreach ($campaign->tags as $tag) {
+                if (!array_key_exists($tag, $saved_tags)) {
+                    Tag::create(['name'=> $tag]);
+                }
+            }
+        }
+
+        if (isset($inputs['template'])) {
+            $campaign->template = false;
+            if ($inputs['template'] === true) {
+                $campaign->template = true;
+            }
+
+            if ($inputs['template'] !== true && $campaign->template === true) {
+                abort(400, 'You are trying to save a template campaign as non template one');
+            }
+        }
+
+        $campaign->modules_data = self::saveModuleImages($inputs['modules_data'], $campaign);
+        $campaign->save();
+
+        Activity::log('Campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
 
         return $campaign_id;
     }
 
+    /**
+     * Look for module images to save.
+     *
+     * @param array $modules_data
+     * @return array Returns modules data with the image path instead of base64 encoded.
+     */
+    private static function saveModuleImages($modules_data, $campaign)
+    {
+
+        foreach ($modules_data as $moduleIdx => $module) {
+            if (!empty($module['structure']['columns'])) {
+                foreach ($module['structure']['columns'] as $columnIdx => $column) {
+                    if (!empty($column['components'])) {
+                        foreach ($column['components'] as $componentIdx => $component) {
+                            if (!empty($component['type']) && $component['type'] === 'image-element'
+                                && !empty($component['attribute']['placeholder'])
+                                && substr($component['attribute']['placeholder'], 0, 10) === 'data:image') {
+                                if (!empty($file = $modules_data[$moduleIdx]['structure']
+                                    ['columns'][$columnIdx]['components'][$componentIdx]['attribute']['placeholder'])) {
+                                    $assets = new Assets($campaign);
+                                    $response = $assets->saveImage($file);
+
+                                    if (isset($response['error'])) {
+                                        Activity::log(
+                                            'Campaign save file error',
+                                            [
+                                                'properties' => [
+                                                    'campaign_id' => new ObjectID($campaign->id),
+                                                    'error' => $response['error']
+                                                ]
+                                            ]
+                                        );
+                                    } else {
+                                        $modules_data[$moduleIdx]['structure']
+                                            ['columns'][$columnIdx]['components'][$componentIdx]['attribute']['placeholder']
+                                            = $response['path'];
+
+                                        Activity::log(
+                                            'Campaign save file',
+                                            ['properties' => ['campaign_id' => new ObjectID($campaign->id)]]
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $modules_data;
+    }
 
     /**
      * Toggle favorite flag on a campaign.

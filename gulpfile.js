@@ -104,6 +104,21 @@ gulp.task('elixir-copy-bower', function () {
   });
 });
 
+
+/*
+ | --------------------------------------------------------------------------
+ | Customer task
+ | --------------------------------------------------------------------------
+ */
+gulp.task('copy-customer-images', () => {
+  const customerAssetsPath = 'stensul/customer/resources/assets/images';
+  const publicPath = 'public/images/studio/';
+
+  elixir((mix) => {
+    mix.copy(customerAssetsPath, publicPath);
+  });
+});
+
 function fileExists(file) {
   try {
     fs.accessSync(file, fs.F_OK);
@@ -119,9 +134,9 @@ function fileExists(file) {
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-scripts', function () {
-  let assetsPath = 'resources/assets/';
-  let customerAssetsPath = 'stensul/customer/' + assetsPath + 'vue/';
-  let jsDestinationPath = 'public/js/';
+  const assetsPath = 'resources/assets/';
+  const customerAssetsPath = 'stensul/customer/' + assetsPath + 'vue/';
+  const jsDestinationPath = 'public/js/';
 
   elixir((mix) => {
       mix
@@ -184,7 +199,8 @@ gulp.task('elixir-scripts', function () {
             'js/library/master-image-editor.v2.js',
             'js/library/modal-manager.js',
             'js/library/image-manager.js',
-            'js/library/modals/*.js'
+            'js/library/modals/*.js',
+            'js/plugins/tinymce/**/plugin.js',
           ],
           jsDestinationPath + 'library-v2.js',
           assetsPath
@@ -340,4 +356,4 @@ gulp.task('elixir-version', () => {
  */
 gulp.task('jshint', ['elixir-jshint']);
 gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
-gulp.task('default', gulpsync.sync(['elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
+gulp.task('default', gulpsync.sync(['copy-customer-images', 'elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));

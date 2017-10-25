@@ -57,7 +57,7 @@ module.exports = {
       label: 'Background color',
       name: 'bgcolor',
       type: 'color',
-      value: { hex: '#FFFFFF' },
+      value: { hex: 'transparent' },
     },
     {
       link: 'style',

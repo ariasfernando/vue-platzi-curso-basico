@@ -52,8 +52,9 @@
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
           inline: true,
           menubar: false,
-
           toolbar: toolbar,
+          plugins: 'paste advlist autolink lists textcolor stlinkextended sttextcolorextended',
+
           init_instance_callback: (editor) => {
 
             editor.on('Blur', (e) => {

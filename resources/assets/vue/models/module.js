@@ -17,6 +17,7 @@ function Module(data = {}) {
   this.title = data.title || data.name;
   this.type = data.type || 'studio';
   this.status = data.status || '';
+  this.data = data.data || {};
   const style = (data.structure && data.structure.style) ? data.structure.style : {};
   const settings = (data.structure && data.structure.settings) ? data.structure.settings : [];
   const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : {};

@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import uc from 'underscore-contrib';
 import Q from 'q';
 import campaignService from '../services/campaign';
 
@@ -129,7 +128,12 @@ const mutations = {
     attributes[data.attribute] = data.attributeValue;
   },
   saveCustomModuleData(state, data) {
-    state.modules[data.moduleId].data = data.data;
+    _.each(data.data, (val, key) => {
+      state.modules[data.moduleId].data[key] = val;
+    });
+  },
+  saveCustomModuleDataField(state, data) {
+    state.modules[data.moduleId].data[data.field] = data.value;
   },
   setEditorOptions(state, toolbar) {
     state.editorToolbar = toolbar;
