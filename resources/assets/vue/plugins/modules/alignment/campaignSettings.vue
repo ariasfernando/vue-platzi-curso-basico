@@ -1,9 +1,16 @@
 <template>
-  <div>
+  <div class="plugin-wrapper-inner">
     <label>{{ plugin.title }}</label>
+    <div class="alignment-options">
+      <a data-tooltip="Left"><i class="glyphicon glyphicon-align-left"></i></a>
+      <a data-tooltip="Center"><i class="glyphicon glyphicon-align-center"></i></a>
+      <a data-tooltip="Right" class="plugin-setting-active"><i class="glyphicon glyphicon-align-right"></i></a>
+    </div>
+    <!--
     <select title="alignment" name="alignment" :value="value" @change="change">
       <option v-for="option in options" :value="option" :selected="option === value">{{ option }}</option>
     </select>
+    -->
   </div>
 </template>
 

@@ -157,7 +157,24 @@
         display: table;
         width: 100%;
 
-        div {
+        .plugin-wrapper-inner:first-child{
+          background: #f4f4f4;
+          margin-bottom: 7px;
+          padding: 10px;
+          border: 1px solid #E9E9E9;
+          width: 100%;
+          display: table;
+          border-radius: 2px;
+        }
+
+        .plugin-wrapper-inner:empty{
+          background: none; 
+          margin-bottom: 0px;
+          padding: 0px;
+          border: none;
+        }
+
+        .plugin-wrapper-inner {
           span{
             display: block;
             width: 100%;
@@ -167,33 +184,46 @@
         label{
           text-align: left;
           color: #666666;
-          padding-top: 2px;
+          margin-bottom: 6px;
           font-weight: 300;
-          font-size: 13px;
-          margin-bottom: 0px;
+          font-size: 12px;
+          margin-bottom: 5px;
+          width: 100%;
+          display: block;
         }
 
         input[type=text]{
-          height: 22px;
-          background: #F4F4F4;
+          height: 28px;
+          background: #FFFFFF;
           border-radius: 2px;
           border: none;
           float: right;
           font-size: 11px;
           font-weight: 300;
-          width: 120px;
+          width: 100%;
+          border: 1px solid #EEEEEE;
+          padding: 7px;
+
+          &:focus{
+            outline: 0;
+          }
         }
 
         select{
-          height: 22px;
+          height: 28px;
           font-size: 11px;
           color: #666666;
           border: none;
-          background: #f4f4f4;
+          background: #FFFFFF;
           box-shadow: none;
           font-weight: 300;
-          width: 75px;
+          width: 100%;
           float: right;
+          border: 1px solid #EEEEEE;
+
+          &:focus{
+            outline: 0;
+          }
         }
 
       }

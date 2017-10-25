@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="plugin-wrapper-inner">
     <div>
       <span>
         <label>Destination Url</label>
@@ -7,11 +7,17 @@
       </span>
       <span>
         <label>Target</label>
-        <select name="target" @change="change">
+        <div class="alignment-options">
+          <a data-tooltip="_blank"><i class="glyphicon glyphicon-unchecked"></i></a>
+          <a data-tooltip="_self"><i class="glyphicon glyphicon-expand"></i></a>
+          <a data-tooltip="_top" class="plugin-setting-active"><i class="glyphicon glyphicon-new-window"></i></a>
+        </div>
+
+        <!-- <select name="target" @change="change">
           <option value="_blank" :selected="target">_blank</option>
           <option value="_self" :selected="target">_self</option>
           <option value="_top" :selected="target">_top</option>
-        </select>
+        </select> -->
       </span>
     </div>
 
