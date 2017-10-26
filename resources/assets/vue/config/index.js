@@ -45,22 +45,29 @@ export default {
     // Register Custom Modules
     let customModules = [];
     let customSettings = [];
+
+    // Register Custom Modules Settings
     Application.globals.customModules = {};
+    Application.globals.customSettings = {};
+
+    // Merge base and custom modules
     if (customer.modules) {
       _.merge(modules, customer.modules);
     }
 
     _.each(modules, (module, name) => {
       Vue.component(`custom-${module.name}`, module.view);
-      Vue.component(`custom-settings-${module.name}`, module.settings);
-
       customModules.push(`custom-${module.name}`);
-      customSettings.push(`custom-settings-${module.name}`);
-
       delete module.view;
-      delete module.settings;
+
+      if (module.settings) {
+        Vue.component(`custom-settings-${module.name}`, module.settings);
+        customSettings.push(`custom-settings-${module.name}`);
+        delete module.settings;
+      }
 
       Application.globals.customModules[module.name] = module;
+
     });
 
     Vue.customModules = Vue.prototype.$customModules = customModules;

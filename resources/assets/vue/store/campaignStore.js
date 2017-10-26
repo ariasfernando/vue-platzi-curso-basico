@@ -128,9 +128,7 @@ const mutations = {
     attributes[data.attribute] = data.attributeValue;
   },
   saveCustomModuleData(state, data) {
-    _.each(data.data, (val, key) => {
-      state.modules[data.moduleId].data[key] = val;
-    });
+    state.modules[data.moduleId].data[data.key] = data.val;
   },
   saveCustomModuleDataField(state, data) {
     state.modules[data.moduleId].data[data.field] = data.value;
@@ -151,6 +149,15 @@ const mutations = {
 };
 
 const actions = {
+  saveCustomModuleData(context, data) {
+    _.each(data.data, (value, field) => {
+      context.commit('saveCustomModuleDataField', {
+        moduleId: data.moduleId,
+        field,
+        value,
+      });
+    });
+  },
   getCampaignData(context, campaignId) {
     return campaignService.getCampaign(campaignId)
       .then((response) => {
