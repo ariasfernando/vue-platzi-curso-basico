@@ -34,6 +34,9 @@ const getters = {
   currentCustomModule(state) {
     return state.currentCustomModuleId;
   },
+  buildingMode(state) {
+    return state.buildingMode;
+  },
   templateWidth(state) {
     const templateWidth = 600;
     const templateMobileWidth = 480;
