@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import Q from 'q';
 import campaignService from '../services/campaign';
+import clone from 'clone';
 
 const state = {
   campaign: {},
   modules: [],
-  editedModules: [],
   editedSettings: {},
   currentModuleId: undefined,
   currentCustomModuleId: undefined,
@@ -128,7 +128,8 @@ const mutations = {
     attributes[data.attribute] = data.attributeValue;
   },
   saveCustomModuleData(state, data) {
-    state.modules[data.moduleId].data[data.key] = data.val;
+    // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
+    state.modules[data.moduleId].data = _.merge(clone(state.modules[data.moduleId].data), data.data);
   },
   saveCustomModuleDataField(state, data) {
     state.modules[data.moduleId].data[data.field] = data.value;

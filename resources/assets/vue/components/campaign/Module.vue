@@ -2,7 +2,7 @@
 
   <tr v-if="module.type === 'custom'" class="st-module-wrapper">
     <td class="st-toolbar-content st-position-relative">
-      <component v-if="$customModules.indexOf('custom-' + module.name) !== -1" :is="'custom-' + module.name" :module-id="moduleId"></component>
+      <component v-if="$customModules.indexOf('custom-' + module.name) !== -1" :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
     </td>
   </tr>

@@ -10,6 +10,14 @@ aside{
     overflow-x: hidden;
     float: left;
 
+    &:first-child{
+    	border-right: 1px solid #EEEEEE;
+    }
+
+    &:last-child{
+    	border-left: 1px solid #EEEEEE;
+    }
+
 	.aside-inner{
 		height: 100%;
 	}
@@ -112,6 +120,11 @@ aside{
 		    border-radius: 2px;
 		    margin-bottom: 5px;
 		    background: #fafafa;
+
+		    .add{
+		    	margin-bottom: 0px;
+			    border: none;
+		    }
 
 		    h2{
 		    	transition: all 0.3s linear;
