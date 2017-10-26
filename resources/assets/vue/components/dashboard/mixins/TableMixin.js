@@ -1,0 +1,251 @@
+import ColumnSort from '../ColumnSort.vue';
+import Pagination from '../../common/Pagination.vue';
+
+export default {
+  components: {
+    ColumnSort,
+    Pagination
+  },
+  data: function() {
+    return {
+      sortKey: 'updated_at',
+      reverse: false,
+      showModal: false,
+      showPreview: false,
+      selectedCampaignId: null,
+      baseUrl: Application.globals.baseUrl,
+      widthPreview: Application.globals.emailWidth || 660,
+      previewSrc: null
+    }
+  },
+  props: {
+    campaigns: {
+      type: Object,
+      required: true
+    },
+    config: {
+      type: Object,
+      required: true
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    templating: {
+      type: Boolean,
+      default: false
+    },
+    tags: {
+      type: Array
+    },
+    terms: {
+      type: Array
+    },
+    type: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
+    showTags: function() {
+      return this.config.enable_tagging;
+    },
+    enableLocking: function() {
+      return this.config.locking;
+    },
+    enableFavorite: function() {
+      return this.config.enable_favorite_template;
+    },
+    accessFavorite: function() {
+      return Application.globals.permissions.indexOf('access_favorites') >= 0;
+    },
+    search: function() {
+      return this.tags.concat(this.terms).join('~~').toLowerCase().split('~~');
+    }
+  },
+  methods: {
+    addSearchTag: function(tag) {
+      if (this.config.enable_search === true) {
+        this.$emit('add-search-tag', tag);
+      }
+    },
+    askToDeleteCampaign: function(campaignId) {
+      this.selectedCampaignId = campaignId;
+      this.showModal = true;
+    },
+    changePage: function(page) {
+      this.$emit('change-page', page, this.type);
+    },
+    confirmDeleteCampaign: function() {
+      $.post(Application.globals.baseUrl + '/campaign/delete', {
+        campaign_id: this.selectedCampaignId
+      }, function(campaigns) {
+        this.selectedCampaignId = null;
+        this.showModal = false;
+        this.$emit('refresh-campaigns', this.type);
+      }.bind(this), 'json');
+    },
+    isFavorite: function(data) {
+      if (!data.favorite) {
+        var star ='<i class="glyphicon glyphicon-star-empty"aria-hidden="true" style="color:#999999;"></i>';
+      } else {
+        var star ='<i class="glyphicon glyphicon-star" style="color:#eac827" aria-hidden="true"></i>';
+      }
+      return star;
+    },
+    highlightTag: function(tag) {
+      if (this.config.search_settings.highlight_matches === true) {
+        for (var i = 0; i < this.search.length; i++) {
+          if (this.search[i].toLowerCase() == tag.toLowerCase()) {
+            return true;
+          }
+        }
+        for (var i = 0; i < this.terms.length; i++) {
+          if (this.terms[i].length > 0) {
+            var re = new RegExp('('+this.terms[i]+')', 'gi');
+            if (re.test(tag)) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    },
+    sortBy: function(sortKey) {
+      this.reverse = (this.sortKey == sortKey) ? !this.reverse : false;
+      this.$emit('apply-sort', sortKey, this.reverse == true ? 'asc' : 'desc', this.type, (this.sortKey != sortKey));
+      this.sortKey = sortKey;
+    },
+    prepareOutput: function(value, field) {
+      var search = this.terms;
+      if (this.config.search_settings.highlight_matches === true && this.config.search_settings.fields_to_search.indexOf(field) > -1) {
+        for (var i = 0; i < search.length; i++) {
+          value = value.replace(new RegExp('('+search[i]+')', 'gi'), '%%%$1###');
+        }
+        value = value.replace(/%%%/g, '<span class="highlight">');
+        value = value.replace(/###/g, '</span>');
+      }
+      return value;
+    },
+    lockCampaign: function(campaign_id, page) {
+      var data = {
+        campaign_id: campaign_id
+      };
+      var lockCampaign = Application.utils.doAjax('/campaign/force-lock', {
+        data: data,
+        error: function(xhr) {
+          if (xhr.status == 409) {
+              Application.utils.alert.display('', 'Another user is editing this campaign [' + xhr.responseText + ']' , 'warning');
+          }
+        }
+      });
+
+      var vm = this;
+      lockCampaign.done(function(data) {
+        vm.$emit('change-page', page, vm.type);
+      });
+    },
+    unlockCampaign: function(campaign_id, page) {
+      var data = {
+        campaign_id: campaign_id
+      };
+      var unlockCampaign = Application.utils.doAjax('/campaign/unlock-forced', {data: data});
+      var vm = this;
+      unlockCampaign.done(function(data) {
+        vm.$emit('change-page', page, vm.type);
+      });
+    },
+    preview: function(campaign_id) {
+      this.showPreview = true;
+      this.previewSrc = Application.globals.baseUrl + "/public/html/" + campaign_id;
+      this.selectedCampaignId = campaign_id;
+      this.shareURL = Application.globals.baseUrl + '/public/view/' + campaign_id;
+    },
+    resizePreviewFrame: function() {
+      var $emailBody = $('.dashboard-campaign-preview').find("iframe").contents().find('.email-body');
+      var height = $emailBody.height() > 200 ? $emailBody.height() : 150;
+      $("#email-preview-iframe").height(height);
+    },
+    copyURL: function() {
+      var $modal = $('.dashboard-campaign-preview');
+      var input = $modal.find(".share-preview input")[0]
+      input.focus();
+      input.setSelectionRange(0, input.value.length);
+      document.execCommand("copy");
+    },
+    togglePreview: function(mode) {
+      switch(mode) {
+        case 'mobile': this.widthPreview = Application.globals.emailMobileWidth || 660;
+        break;
+        default: this.widthPreview = Application.globals.emailWidth || 480;
+      }
+      _this = this;
+      // Give some time to the browser to resize.
+      setTimeout(function() {
+        _this.resizePreviewFrame();
+      }, 10);
+    },
+    closePreview: function() {
+      this.showPreview = false;
+      this.widthPreview = Application.globals.emailWidth;
+    },
+    sendPreview: function() {
+
+      var $modal = $('.dashboard-campaign-preview');
+      var $sendPreviewForm = $modal.find("#send-preview-form");
+
+      // Validate Emails form
+      if (Application.utils.validate.validateForm($sendPreviewForm[0])) {
+
+        $modal.find(".btn-send").addClass("ajax-loader-small").attr("disabled", "disabled");
+        $modal.find(".btn-send").parent().removeClass("success").addClass("spinner");
+
+        var data = {
+          campaign_id: this.selectedCampaignId,
+          mail: $sendPreviewForm.find("input[name=send-preview-to]").val()
+        };
+
+        var sendPreviewRequest = Application.utils.doAjax("/campaign/send-preview", {
+          type: "POST",
+          data: data
+        });
+
+        sendPreviewRequest.done(function(response){
+
+          $modal.find('label.error').remove();
+          if (response.processed) {
+            // Display success icon.
+            if (!$modal.find(".btn-send .glyphicon-ok").length) {
+              $modal.find(".btn-send").append(' <i class="glyphicon glyphicon-ok status-icon"></i>');
+            }
+            $modal.find(".btn-send").parent().removeClass("spinner").addClass("success");
+            $modal.find(".btn-send").find('.status-icon').animate({
+              opacity: 1
+            });
+          } else {
+            $modal.find(".btn-send")
+              .parent()
+              .removeClass("spinner")
+              .find("[name=send-preview-to]")
+              .addClass("error")
+              .next()
+              .after('<label class="error">We couldn\'t find a valid email address.</label>');
+          }
+        });
+
+        sendPreviewRequest.fail(function(){
+          // On error display alert
+          $modal.find(".send-preview")
+            .prepend('We couldn\'t send your preview, please try again.')
+            .find(".alert").slideDown();
+        });
+
+        sendPreviewRequest.always(function(){
+          // Remove loader.
+          $modal.find(".btn-send").removeClass("ajax-loader-small").removeAttr("disabled", "disabled");
+        });
+      }
+    },
+
+  }
+};

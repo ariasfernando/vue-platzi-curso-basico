@@ -166,11 +166,15 @@ gulp.task('elixir-scripts', function () {
           assetsPath
         )
         .browserify(
+          'vue/dashboard.js',
+          jsDestinationPath + "dashboard-components.js",
+          assetsPath
+        )
+        .browserify(
           [
             'js/library/custom-plugins/st-pagination-bar.jquery.js',
             'js/library/campaign-preview.js',
             'js/library/campaign-controller.js',
-            'js/library/dashboard-controller.js'
           ],
           jsDestinationPath + "dashboard-components.js",
           assetsPath
@@ -256,7 +260,6 @@ gulp.task('elixir-scripts', function () {
             'js/library/campaign-preview.js',
             'js/library/campaign-controller.js',
             'js/library/dashboard-controller.js',
-            jsAppFilePath('dashboard-vue.js'),
             jsAppFilePath('dashboard.js'),
             // @TODO turn the rest of the modals into Vue components like ModalProof.vue
             'js/library/application-proof.js',
