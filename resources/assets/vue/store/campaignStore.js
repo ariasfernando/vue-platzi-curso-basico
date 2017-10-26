@@ -129,8 +129,7 @@ const mutations = {
   },
   saveCustomModuleData(state, data) {
     // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
-    const mergedData = _.merge(clone(state.modules[data.moduleId].data), data.data);
-    state.modules[data.moduleId].data = mergedData;
+    state.modules[data.moduleId].data = _.merge(clone(state.modules[data.moduleId].data), data.data);
   },
   saveCustomModuleDataField(state, data) {
     state.modules[data.moduleId].data[data.field] = data.value;
