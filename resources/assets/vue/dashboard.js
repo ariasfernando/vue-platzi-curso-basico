@@ -16,8 +16,7 @@ Vue.use(Toast, {
   duration: 5000,
 });
 Vue.use(BootstrapVue);
-// @TODO check undefined Vue.http
-// Vue.use(interceptors);
+Vue.use(interceptors);
 const app = new Vue({
   components: {
     Dashboard,

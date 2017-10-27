@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    props: {
+  props: {
     highlighted: {
       type: Boolean,
       default: false
