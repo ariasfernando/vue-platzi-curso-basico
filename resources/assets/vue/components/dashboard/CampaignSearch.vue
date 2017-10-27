@@ -17,13 +17,13 @@
         <i class="glyphicon glyphicon-remove-sign"></i>
       </button>
     </div>
-    <small class="search-error" v-if="!canSearch && showLimitMessage">There's a limit of @{{ limit }} search terms.</small>
+    <small class="search-error" v-if="!canSearch && showLimitMessage">There's a limit of {{limit}} search terms.</small>
     <div class="btn-group">
       <button v-for="term in terms" class="btn btn-default btn-xs term" v-on:click="removeSearchTerm(term)">
-        @{{ term }} <i class="glyphicon glyphicon-remove"></i>
+        {{term}} <i class="glyphicon glyphicon-remove"></i>
       </button>
       <button v-for="tag in tags" class="btn btn-default btn-xs tag" v-on:click="removeSearchTag(tag)">
-        @{{ tag }} <i class="glyphicon glyphicon-remove"></i>
+        {{tag}} <i class="glyphicon glyphicon-remove"></i>
       </button>
     </div>
   </div>

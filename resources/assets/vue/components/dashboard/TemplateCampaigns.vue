@@ -5,9 +5,7 @@
         v-bind:class="{ loading: loading }">
         <thead>
           <tr>
-            @if (config('campaign.enable_favorite_template'))
-              <th width="20">&nbsp;</th>
-            @endif
+            <th width="20" v-if="enableFavorite">&nbsp;</th>
             <th width="200" v-if="showCreatedBy">
               <column-sort
                 field="created_at"
@@ -51,17 +49,17 @@
                 <!--{{(Auth::user()->can('access_favorites') ) ? 'class=favorite' : "@click.prevent"}}-->
               </td>
             <td class="last-modified" :title="campaign.created_by.email">
-              <span>@{{ campaign.created_at }}</span><br><span>by @{{ campaign.created_by.email }}</span>
+              <span>{{campaign.created_at}}</span><br><span>by {{campaign.created_by.email}}</span>
             </td>
             <td class="last-modified" :title="campaign.updated_by.email">
-              <span>@{{ campaign.updated_at }}</span><br><span>by @{{ campaign.updated_by.email }}</span>
+              <span>{{campaign.updated_at}}</span><br><span>by {{campaign.updated_by.email}}</span>
             </td>
             <td :title="campaign.campaign_name">
               <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
               <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock pull-left campaign-locking" v-if="enableLocking && campaign.locked"></i>
             </td>
             <td>
-              <span>@{{ campaign.library_name }}</span>
+              <span>{{campaign.library_name}}</span>
             </td>
             <td v-if="showTags == 1">
               <campaign-tag

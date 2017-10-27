@@ -44,10 +44,10 @@
         <tbody>
           <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
             <td class="last-modified">
-              <span>campaign.created_at</span><br><span>by campaign.created_by.email</span>
+              <span>{{campaign.created_at}}</span><br><span>by {{campaign.created_by.email}}</span>
             </td>
             <td class="last-modified">
-              <span>campaign.updated_at</span><br><span>by campaign.updated_by.email</span>
+              <span>{{campaign.updated_at}}</span><br><span>by {{campaign.updated_by.email}}</span>
             </td>
             <td :title="campaign.campaign_name">
               <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
@@ -61,7 +61,7 @@
               ><i class="fa fa-sticky-note"></i></a>
             </td>
             <td>
-              <span>campaign.library_name</span>
+              <span>{{campaign.library_name}}</span>
             </td>
             <td v-if="showTags == 1">
               <campaign-tag
