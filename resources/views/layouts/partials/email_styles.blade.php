@@ -48,10 +48,6 @@
 
 	@media screen and (max-width: 480px) {
 
-        img {
-            max-width: 320px !important;
-        }
-
 		table.wrapper-table {
             width: 100% !important;
         }
