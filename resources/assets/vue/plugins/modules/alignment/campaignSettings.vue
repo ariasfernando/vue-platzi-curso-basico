@@ -1,16 +1,20 @@
 <template>
   <div class="plugin-wrapper-inner">
     <label>{{ plugin.title }}</label>
+    
     <div class="alignment-options">
-      <a data-tooltip="Left"><i class="glyphicon glyphicon-align-left"></i></a>
-      <a data-tooltip="Center"><i class="glyphicon glyphicon-align-center"></i></a>
-      <a data-tooltip="Right" class="plugin-setting-active"><i class="glyphicon glyphicon-align-right"></i></a>
+      <a v-for="option in options" 
+         :data-tooltip="option"
+         :data-value="value"
+         :class="option === value  ? 'plugin-setting-active' : ''"
+         @click="change"
+      >
+        <i :class="'glyphicon glyphicon-align-'+ option"
+           :data-tooltip="option"
+        ></i>
+      </a>
     </div>
-    <!--
-    <select title="alignment" name="alignment" :value="value" @change="change">
-      <option v-for="option in options" :value="option" :selected="option === value">{{ option }}</option>
-    </select>
-    -->
+
   </div>
 </template>
 
@@ -45,13 +49,14 @@
     },
     methods: {
       change(e) {
+        console.log(e.target.getAttribute('data-tooltip'));
         const payload = {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
           attribute: 'align',
-          attributeValue: e.target.value,
+          attributeValue: e.target.getAttribute('data-tooltip'),
         };
 
         this.$store.commit('campaign/saveComponentAttribute', payload);
