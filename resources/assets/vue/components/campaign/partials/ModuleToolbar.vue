@@ -48,8 +48,10 @@
       config(){
         if (this.module.type === 'custom') {
           this.$store.commit("campaign/setCustomModule", this.moduleId);
+          this.$store.commit("campaign/setCurrentModule", undefined);
         } else {
           this.$store.commit("campaign/setCurrentModule", this.moduleId);
+          this.$store.commit("campaign/setCustomModule", undefined);
         }
 
       },
