@@ -3,7 +3,7 @@
     <label class="typo__label col-sm-12 control-label">Font Family</label>
 
     <div class="col-sm-12">
-      <multiselect v-model="value" :options="options" :multiple="true" :select-label="'Select'" @select="saveValue" :close-on-select="true" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Choose font">
+      <multiselect v-model="value" :options="options()" :multiple="true" :select-label="'Select'" @select="saveValue" :close-on-select="true" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Choose font">
         <template slot="tag" scope="props">
           <span v-if="props.option">{{ props.option }}</span>
           <i class="custom__remove glyphicon glyphicon-remove" @click="remove(props)" v-if="props.option"></i>
@@ -27,7 +27,17 @@
     },
     data(){
       return {
-        options: this.$app.fonts,
+        options() {
+          const options = [];
+
+          _.each(this.$app.fonts, (group) => {
+            _.each(group, (font) => {
+              options.push(font);
+            });
+          });
+
+          return options;
+        }
       }
     },
     computed: {
@@ -37,6 +47,11 @@
       value() {
         const module = this.$store.getters["module/module"];
         const component = module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
+
+        if (!component.style.fontFamily) {
+          return [];
+        }
+
         return component.style.fontFamily.split(', ');
       }
     },

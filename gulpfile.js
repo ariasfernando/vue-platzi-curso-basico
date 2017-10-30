@@ -110,23 +110,14 @@ gulp.task('elixir-copy-bower', function () {
  | Customer task
  | --------------------------------------------------------------------------
  */
-gulp.task('copy-customer-images', () => {
-  const customerAssetsPath = 'stensul/customer/resources/assets/images';
-  const publicPath = 'public/images/studio/';
+gulp.task('copy-customer-assets', () => {
+  const customerAssetsPath = 'stensul/customer/resources/assets';
 
   elixir((mix) => {
-    mix.copy(customerAssetsPath, publicPath);
+    mix.copy(`${customerAssetsPath}/images`, 'public/images/customer');
+    mix.copy(`${customerAssetsPath}/fonts`, 'public/fonts');
   });
 });
-
-function fileExists(file) {
-  try {
-    fs.accessSync(file, fs.F_OK);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
 
 /*
  | --------------------------------------------------------------------------
@@ -356,4 +347,4 @@ gulp.task('elixir-version', () => {
  */
 gulp.task('jshint', ['elixir-jshint']);
 gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
-gulp.task('default', gulpsync.sync(['copy-customer-images', 'elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
+gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
