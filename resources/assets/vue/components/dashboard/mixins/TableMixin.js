@@ -1,10 +1,12 @@
 import ColumnSort from '../ColumnSort.vue';
 import Pagination from '../../common/Pagination.vue';
+import Modal from '../../common/Modal.vue';
 
 export default {
   components: {
     ColumnSort,
-    Pagination
+    Pagination,
+    Modal
   },
   data: function() {
     return {

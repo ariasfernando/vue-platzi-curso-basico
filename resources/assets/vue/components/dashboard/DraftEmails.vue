@@ -97,7 +97,7 @@
                   href="#"
                   class="edit"
                   title="Edit"
-                  v-if="!enableLocking || (!campaign.locked || campaign.locked_by === Application.globals.logged_user)"
+                  v-if="!enableLocking || (!campaign.locked || campaign.locked_by === $app.logged_user)"
                 >
                   <i class="glyphicon glyphicon-pencil"></i>
                 </a>
@@ -116,7 +116,7 @@
                 <a
                   href="#"
                   class="unlock-campaign"
-                  v-if="enableLocking && campaign.locked && campaign.locked_by === Application.globals.logged_user"
+                  v-if="enableLocking && campaign.locked && campaign.locked_by === $app.logged_user"
                   v-on:click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                   data-toggle="tooltip"
                   data-placement="bottom"

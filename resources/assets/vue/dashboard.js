@@ -22,3 +22,9 @@ const app = new Vue({
     Dashboard,
   }
 }).$mount('#dashboard');
+
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-token': Application.globals.csrfToken
+  }
+});
