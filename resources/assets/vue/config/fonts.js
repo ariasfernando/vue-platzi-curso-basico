@@ -1,6 +1,9 @@
-module.exports = [
-  'sans-serif',
-  'Materhorn',
-  'Materhorn Bold',
-  'Open Sans',
-];
+module.exports = {
+  system: [
+    'sans-serif',
+  ],
+  web: [
+    'Open Sans',
+  ],
+  custom: [],
+};

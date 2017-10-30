@@ -6,7 +6,6 @@ import utils from './utils';
 
 export default {
   install(Vue, options) {
-
     Vue.customer = Vue.prototype.$customer = customer || {};
 
     // Register Global Plugins
@@ -19,11 +18,10 @@ export default {
     });
 
     // Register Global Components
-    let globalComponents = [];
+    const globalComponents = [];
     Application.globals.modulePlugins = {};
 
     _.each(plugins.modules, (component, name) => {
-
       if (component.studioSettings) {
         Vue.component(`studio-${component.name}`, component.studioSettings);
         globalComponents.push(`studio-${component.name}`);
@@ -43,8 +41,8 @@ export default {
     Vue.globalComponents = Vue.prototype.$globalComponents = globalComponents;
 
     // Register Custom Modules
-    let customModules = [];
-    let customSettings = [];
+    const customModules = [];
+    const customSettings = [];
 
     // Register Custom Modules Settings
     Application.globals.customModules = {};
@@ -67,16 +65,37 @@ export default {
       }
 
       Application.globals.customModules[module.name] = module;
-
     });
 
     Vue.customModules = Vue.prototype.$customModules = customModules;
     Vue.customSettings = Vue.prototype.$customSettings = customSettings;
 
-    // Register Fonts
-    if (customer.config && customer.config.plugins) {
+    // Merge custom Fonts
+    if (customer.config && customer.config.fonts) {
       _.merge(fonts, customer.config.fonts);
     }
+
+    // Fonts path
+    const fontPath = `${Application.globals.baseUrl}/fonts/`;
+
+    // Register custom fonts
+    _.each(fonts.custom, (fontFace) => {
+      const style = document.createElement('style');
+      const fontFile = fontFace.replace(' ', '');
+
+      style.appendChild(document.createTextNode(`\
+        @font-face {\
+            font-family: ${fontFace};\
+            src: url('${fontPath}${fontFile}.eot') format('eot');\
+            src: url('${fontPath}${fontFile}.eot?#iefix') format('embedded-opentype'),
+            src: url('${fontPath}${fontFile}.woff') format('woff'),\
+            src: url('${fontPath}${fontFile}.ttf') format('truetype'),\
+            src: url('${fontPath}${fontFile}.svg') format('svg');\
+        }\
+      `));
+
+      document.head.appendChild(style);
+    });
 
     Application.globals.fonts = fonts;
 
@@ -88,6 +107,5 @@ export default {
     Vue.prototype.$utils = utils;
 
     Vue.app = Vue.prototype.$app = Application.globals;
-
   },
 };
