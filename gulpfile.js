@@ -183,6 +183,7 @@ gulp.task('elixir-scripts', function () {
         .scripts(
           [
             'bower/jquery/dist/jquery.js',
+            'bower/jquery-ui/jquery-ui.min.js',
             'bower/bootstrap/dist/js/bootstrap.min.js',
             'bower/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js',
             'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
