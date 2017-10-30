@@ -1,3 +1,5 @@
+import Vue from 'vue/dist/vue';
+
 function Campaign(data) {
   this.campaign_name = data.settings.campaignName || data.campaign.campaign_name;
   this.campaign_preheader = data.settings.campaignPreheader || data.campaign.campaign_data.campaign_preheader;
@@ -10,6 +12,10 @@ function Campaign(data) {
   this.auto_save = data.settings.autoSave;
   this.favorite = data.campaign.isFavorite;
   this.template = data.campaign.campaign_data.template;
+  this.campaign_settings = data.campaign.campaign_data.campaign_settings || {};
+
+  // hack to save fonts
+  this.campaign_fonts = Vue.app.fonts || {};
 
   return this;
 }

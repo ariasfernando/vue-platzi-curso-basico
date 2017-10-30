@@ -73,6 +73,10 @@ class CampaignManager
         $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
         $campaign->auto_save = isset($inputs['auto_save']) && $inputs['auto_save'] ? true : false;
 
+        if (isset($inputs['campaign_fonts'])) {
+            $campaign->campaign_fonts = $inputs['campaign_fonts'];
+        }
+
         if (isset($inputs['body_html'])) {
             $campaign->body_html = $inputs['body_html'];
         }
@@ -80,6 +84,7 @@ class CampaignManager
         if (isset($inputs['plain_text'])) {
             $campaign->plain_text = $inputs['plain_text'];
         }
+
 
         $campaign->tags = [];
         if (!empty($inputs['tags'])) {
