@@ -82,6 +82,9 @@ class CampaignController extends Controller
             }
             if (!is_null($request->input("library"))) {
                 $params['library'] = new ObjectID($request->input("library"));
+            } else {
+                $library = Library::orderBy('created_at')->first();
+                $params['library'] = $library->id;
             }
 
             $campaign = Campaign::create($params);

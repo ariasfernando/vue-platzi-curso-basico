@@ -24,8 +24,7 @@
       </div>
       <div class="col-xs-12 col-sm-2 pull-right no-gutters">
         <div class="dropdown default-dropdown pull-right">
-          <!-- @TODO Create new component -->
-          <!-- @include('partials.dashboard.menu')-->
+          <dashboard-menu :config="config"></dashboard-menu>
         </div>
       </div>
     </div>
@@ -91,11 +90,14 @@
 </template>
 
 <script>
+  import Vue from 'vue/dist/vue';
+  import VueResource from 'vue-resource/dist/vue-resource';
   import CampaignSearch from './CampaignSearch.vue';
   import CampaignTabs from './CampaignTabs.vue';
   import DraftEmails from './DraftEmails.vue';
   import FinishedEmails from './FinishedEmails.vue';
   import TemplateCampaigns from './TemplateCampaigns.vue';
+  import DashboardMenu from './DashboardMenu.vue';
 
   export default {
     components: {
@@ -103,7 +105,8 @@
       CampaignTabs,
       DraftEmails,
       FinishedEmails,
-      TemplateCampaigns
+      TemplateCampaigns,
+      DashboardMenu
     },
     created: function() {
       this.updateCampaigns();
