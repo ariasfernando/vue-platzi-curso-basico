@@ -21,7 +21,7 @@
           <div class="col-sm-4">
             <div>
               <b-form-select
-                v-model="numColumns"
+                :value="numColumns"
                 :options="optionsSelected"
                 @input="setColumns">
               </b-form-select>
