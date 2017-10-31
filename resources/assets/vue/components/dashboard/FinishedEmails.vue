@@ -102,14 +102,17 @@
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
               <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
-              <a href="#" class="edit" title="Edit"><i class="glyphicon glyphicon-pencil" v-if="!campaign.locked || campaign.locked_by === $app.logged_user"></i></a>
+              <a :href="$app.baseUrl + '/campaign/edit/' + campaign._id"
+                class="edit"
+                title="Edit"
+                ><i class="glyphicon glyphicon-pencil" v-if="!campaign.locked || campaign.locked_by === $app.logged_user"></i></a>
               <a href="#" class="btn-upload-api"
                 v-for="api in campaign.api"
                 v-if="!campaign.locked"
                 :data-campaign-id="campaign._id"
                 :data-api-driver="api.driver"
                 :title="'Upload to ' + api.title"><i class="glyphicon glyphicon-cloud-upload"></i></a>
-              <a href="#" title="Delete" v-if="!campaign.locked" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
+              <a href="#" title="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>

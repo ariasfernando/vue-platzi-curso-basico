@@ -211,7 +211,7 @@
           var url = '/dashboard/templates/';
         }
 
-        $.getJSON(Application.globals.baseUrl + url + type, data, function(campaigns) {
+        $.getJSON(this.$app.baseUrl + url + type, data, function(campaigns) {
           this.campaigns[type] = campaigns;
           this.showLoading[type] = false;
           this.ready[type] = true;

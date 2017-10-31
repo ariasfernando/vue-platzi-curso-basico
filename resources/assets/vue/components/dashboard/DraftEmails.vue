@@ -94,7 +94,7 @@
                 ><i class="glyphicon glyphicon-search"></i></a>
 
               <a
-                href="#"
+                :href="$app.baseUrl + '/campaign/edit/' + campaign._id"
                 class="edit"
                 title="Edit"
                 v-if="!enableLocking || (!campaign.locked || campaign.locked_by === $app.logged_user)"
@@ -105,11 +105,10 @@
                 href="#"
                 class="lock-campaign"
                 v-if="enableLocking && !campaign.locked"
-                v-on:click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
+                @click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
                 title="Lock Campaign"
-                @click.prevent
               >
                 <i class="glyphicon fa fa-lock"></i>
               </a>
@@ -117,15 +116,14 @@
                 href="#"
                 class="unlock-campaign"
                 v-if="enableLocking && campaign.locked && campaign.locked_by === $app.logged_user"
-                v-on:click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
+                @click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
                 title="Unlock Campaign"
-                @click.prevent
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
-              <a href="#" title="Delete" v-if="!enableLocking || !campaign.locked" v-on:click.stop.prevent="askToDeleteCampaign(campaign._id)"
+              <a href="#" title="Delete" v-if="!enableLocking || !campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
