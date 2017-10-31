@@ -28,64 +28,66 @@
         </div>
       </div>
     </div>
-      <div class="row" id="draft-emails-campaign">
-        <div class="col-xs-12">
-          <draft-emails
-            v-if="ready.current"
-            :campaigns="campaigns.current"
-            :config="config"
-            :loading="showLoading.current"
-            :tags="tags"
-            :terms="terms"
-            :type="'current'"
-            :enable-locking="config.locking"
-            :show-created-by="config.created_by_dashboard"
-            v-on:add-search-tag="addSearchTag"
-            v-on:apply-sort="applySort"
-            v-on:change-page="changePage"
-            v-on:refresh-campaigns="fetchCampaigns"
-          ></draft-emails>
-        </div>
+    <div class="row" id="draft-emails-campaign">
+      <div class="col-xs-12">
+        <draft-emails
+          v-if="ready.current"
+          :campaigns="campaigns.current"
+          :config="config"
+          :loading="showLoading.current"
+          :tags="tags"
+          :terms="terms"
+          :type="'current'"
+          :enable-locking="config.locking"
+          :show-created-by="config.created_by_dashboard"
+          v-on:add-search-tag="addSearchTag"
+          v-on:apply-sort="applySort"
+          v-on:change-page="changePage"
+          v-on:refresh-campaigns="fetchCampaigns"
+        ></draft-emails>
       </div>
-      <div class="row" id="finished-campaign">
-        <div class="col-xs-12">
-          <finished-emails
-            v-if="ready.finished"
-            :campaigns="campaigns.finished"
-            :config="config"
-            :enable-download="config.download_html"
-            :loading="showLoading.finished"
-            :tags="tags"
-            :terms="terms"
-            :type="'finished'"
-            :enable-locking="config.locking"
-            :show-created-by="config.created_by_dashboard"
-            v-on:add-search-tag="addSearchTag"
-            v-on:apply-sort="applySort"
-            v-on:change-page="changePage"
-            v-on:refresh-campaigns="fetchCampaigns"
-          ></finished-emails>
-        </div>
+    </div>
+    <div class="row" id="finished-campaign">
+      <div class="col-xs-12">
+        <finished-emails
+          v-if="ready.finished"
+          :campaigns="campaigns.finished"
+          :config="config"
+          :enable-download="config.download_html"
+          :loading="showLoading.finished"
+          :tags="tags"
+          :terms="terms"
+          :type="'finished'"
+          :enable-locking="config.locking"
+          :show-created-by="config.created_by_dashboard"
+          v-on:add-search-tag="addSearchTag"
+          v-on:apply-sort="applySort"
+          v-on:change-page="changePage"
+          v-on:refresh-campaigns="fetchCampaigns"
+        ></finished-emails>
       </div>
-      <div class="row" v-if="config.enable_templating" id="templates-campaign">
-        <div class="col-xs-12">
-          <template-campaigns
-            v-if="ready.template"
-            :campaigns="campaigns.template"
-            :config="config"
-            :loading="showLoading.template"
-            :tags="tags"
-            :terms="terms"
-            :type="'template'"
-            :enable-locking="config.locking"
-            :show-created-by="config.created_by_dashboard"
-            v-on:add-search-tag="addSearchTag"
-            v-on:apply-sort="applySort"
-            v-on:change-page="changePage"
-            v-on:refresh-campaigns="fetchCampaigns"
-          ></template-campaigns>
-        </div>
+    </div>
+    <div class="row" v-if="config.enable_templating" id="templates-campaign">
+      <div class="col-xs-12">
+        <template-campaigns
+          v-if="ready.template"
+          :campaigns="campaigns.template"
+          :config="config"
+          :loading="showLoading.template"
+          :tags="tags"
+          :terms="terms"
+          :type="'template'"
+          :enable-locking="config.locking"
+          :show-created-by="config.created_by_dashboard"
+          v-on:add-search-tag="addSearchTag"
+          v-on:apply-sort="applySort"
+          v-on:change-page="changePage"
+          v-on:refresh-campaigns="fetchCampaigns"
+        ></template-campaigns>
       </div>
+    </div>
+    <modal-preview></modal-preview>
+    <spinner></spinner>
   </section>
 </template>
 
@@ -98,6 +100,8 @@
   import FinishedEmails from './FinishedEmails.vue';
   import TemplateCampaigns from './TemplateCampaigns.vue';
   import DashboardMenu from './DashboardMenu.vue';
+  import Spinner from '../common/Spinner.vue';
+  import ModalPreview from '../campaign/modals/ModalPreview.vue'
 
   export default {
     components: {
@@ -106,7 +110,9 @@
       DraftEmails,
       FinishedEmails,
       TemplateCampaigns,
-      DashboardMenu
+      DashboardMenu,
+      Spinner,
+      ModalPreview
     },
     created: function() {
       this.updateCampaigns();

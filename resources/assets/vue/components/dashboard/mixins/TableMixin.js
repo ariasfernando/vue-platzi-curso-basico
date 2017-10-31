@@ -66,6 +66,40 @@ export default {
     }
   },
   methods: {
+    clone: function(campaignId) {
+
+      if (campaignId) {
+        // Show spinner
+        this.$store.commit("global/setLoader", true);
+        var request = Application.utils.doAjax("/campaign/clone", {dataType: "json", data: {campaign_id: campaignId}});
+
+        let _this = this;
+        // Ajax: On Success
+        request.done(function(response){
+          // check if the ajax returns a campaign_id and isn't the origin ID
+          if (response.campaign_id && response.campaign_id != campaignId) {
+            // Redirect to edit view.
+            window.location.href = Application.globals.baseUrl + "/campaign/edit/" + response.campaign_id;
+          } else {
+            // Display alert on error
+            _this.$store.commit("global/setLoader", false);
+            _this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+              {className: 'et-error'}
+            );
+          }
+        });
+
+        // Ajax: On Fail
+        request.fail(function(){
+          _this.$store.commit("global/setLoader", false);
+          _this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
+        });
+      }
+    },
     addSearchTag: function(tag) {
       if (this.config.enable_search === true) {
         this.$emit('add-search-tag', tag);

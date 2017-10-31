@@ -5,6 +5,7 @@ import BootstrapVue from 'bootstrap-vue';
 import interceptors from './interceptors';
 import Config from './config';
 import Dashboard from './components/dashboard/Dashboard.vue';
+import store from './store';
 
 Vue.use(Config);
 Vue.use(VueResource);
@@ -18,6 +19,7 @@ Vue.use(Toast, {
 Vue.use(BootstrapVue);
 Vue.use(interceptors);
 const app = new Vue({
+  store,
   components: {
     Dashboard,
   }
