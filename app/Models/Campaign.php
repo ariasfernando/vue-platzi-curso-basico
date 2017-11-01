@@ -46,8 +46,7 @@ class Campaign extends Eloquent
         'favorite',
         'campaign_settings',
         'auto_save',
-        'parent_campaign_id',
-        'proof_id'
+        'parent_campaign_id'
     ];
 
     protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token'];

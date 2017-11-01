@@ -345,7 +345,6 @@ class CampaignManager
 
         unset($new_campaign_attr['published_at']);
         unset($new_campaign_attr['favorite']);
-        unset($new_campaign_attr['proof_id']);
 
         // cdn path must be unique
         // when unset it will be automagically assigned
