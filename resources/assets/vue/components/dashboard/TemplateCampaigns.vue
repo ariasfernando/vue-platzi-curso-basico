@@ -98,7 +98,7 @@
                 >
                   <i class="glyphicon fa fa-unlock"></i>
                 </a>
-                <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
+                <a href="#" @click.prevent="clone(campaign._id)" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
                 <a :href="$app.baseUrl + '/campaign/edit/' + campaign._id"
                   class="edit"
                   title="Edit"

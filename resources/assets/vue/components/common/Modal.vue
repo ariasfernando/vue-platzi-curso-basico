@@ -25,8 +25,8 @@
         name: 'modal',
         props: {
             size: {
-                type: String,
-                default: 'sm'
+              type: String,
+              default: 'sm'
             }
         }
     };

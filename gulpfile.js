@@ -161,7 +161,6 @@ gulp.task('elixir-scripts', function () {
             'vue/dashboard.js',
             'js/library/custom-plugins/st-pagination-bar.jquery.js',
             'js/library/campaign-preview.js',
-            'js/library/campaign-controller.js',
           ],
           jsDestinationPath + "dashboard-components.js",
           assetsPath

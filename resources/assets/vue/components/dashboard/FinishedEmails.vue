@@ -68,7 +68,7 @@
             </td>
             <td class="actions links" width="150">
               <a href="#" class="html-code">Normal HTML</a><br>
-              <a href="#" class="plaintext" v-if="showPlaintext">Normal Plaintext</a>
+              <a href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
             </td>
             <td class="actions icons text-right" width="200">
               <a href="#" v-on:click.prevent="preview(campaign._id)" title="Preview" target="_blank">
@@ -101,7 +101,7 @@
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
-              <a href="#" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
+              <a href="#" @click.prevent="clone(campaign._id)" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
               <a :href="$app.baseUrl + '/campaign/edit/' + campaign._id"
                 class="edit"
                 title="Edit"
@@ -162,13 +162,6 @@
     },
     mixins: [ TableMixin ],
     props: {
-      showPlaintext: {
-        type: Number
-      },
-      enableDownload: {
-        type: Boolean,
-        default: false
-      },
       showCreatedBy: {
         type: Boolean,
         default: false
