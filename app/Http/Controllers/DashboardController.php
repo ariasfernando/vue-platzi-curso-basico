@@ -227,11 +227,17 @@ class DashboardController extends Controller
             }
         }
 
+        $libraries = [];
+        foreach (Auth::user()->getLibraries() as $library) {
+            $libraries[$library['_id']] = $library['name'];
+        }
+
         if (isset($campaigns_array)) {
             $result = [];
             $x = ($current_page == 1 ) ? 1 : 0;
             foreach ($campaigns_array as $key => $value) {
                 if ($x >= $from && $x <= $to) {
+                    $value->library_name = $libraries[(string) $value->library];
                     $result[] =  $value;
                 }
                 $x++;
@@ -248,7 +254,11 @@ class DashboardController extends Controller
                 'data' => $result
             );
         } else {
-            return $campaigns->paginate(self::RESULTS_X_PAGE, self::$campaign_fields);
+            $result = $campaigns->paginate(self::RESULTS_X_PAGE, self::$campaign_fields);
+            foreach ($result as $key => $campaign) {
+                $result[$key]->library_name = $libraries[(string) $campaign->library];
+            }
+            return $result;
         }
     }
 }
