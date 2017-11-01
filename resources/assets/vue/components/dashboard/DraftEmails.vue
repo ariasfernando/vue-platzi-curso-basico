@@ -74,14 +74,13 @@
             </td>
             <td class="text-right actions icons">
               <a href="#"
-                :data-proof-token="campaign.proof_token"
+                @click.prevent="goProof(campaign.proof_token)"
                 class="proof"
                 data-toggle="tooltip"
                 data-placement="top"
                 title="Open proof review"
                 v-if="proof.allow && proof.status && campaign.has_active_proof"
                 ><i class="glyphicon glyphicon-blackboard"></i></a>
-
               <a href="#" @click.prevent="clone(campaign._id)" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
 
               <a :data-campaign-id="campaign._id"
@@ -165,9 +164,18 @@
     data: function() {
       return {
         proof: {
-          status: Application.globals.proofConfig.status,
-          allow: Application.globals.permissions.indexOf('edit_proof')
-                  || Application.globals.permissions.indexOf('access_proof')
+          status: this.$app.proofConfig.status,
+          allow: this.$app.permissions.indexOf('edit_proof')
+                || this.$app.permissions.indexOf('access_proof')
+        }
+      }
+    },
+    methods: {
+      goProof: function(token) {
+
+        if (token) {
+            var win = window.open(this.$app.baseUrl + "/proof/review/" + token, '_blank');
+            win.focus();
         }
       }
     }

@@ -47,6 +47,7 @@ class Campaign extends Eloquent
         'campaign_settings',
         'auto_save',
         'parent_campaign_id',
+        'proof_id'
     ];
 
     protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token'];
@@ -83,7 +84,8 @@ class Campaign extends Eloquent
         'favorite' => false,
         'campaign_settings' => [],
         'auto_save' => null,
-        'parent_campaign_id' => null
+        'parent_campaign_id' => null,
+        'proof_id' => null
     );
 
     /**
@@ -281,6 +283,7 @@ class Campaign extends Eloquent
      */
     public function getProof()
     {
+        error_log($this->proof_id);
         if (isset($this->proof_id)) {
             return Proof::find($this->proof_id);
         }

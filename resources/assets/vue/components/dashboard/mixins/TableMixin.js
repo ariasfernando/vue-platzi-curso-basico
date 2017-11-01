@@ -129,6 +129,28 @@ export default {
       }
       return star;
     },
+    doFavorite: function(campaignId) {
+
+      let request = Application.utils.doAjax( "/campaign/favorite", { dataType: "json", data: { campaign_id: campaignId }});
+      let _this = this;
+      _this.$store.commit("global/setLoader", true);
+
+      // Ajax: On Success
+      request.done(function(response){
+        _this.$emit('refresh-campaigns', _this.type);
+        _this.$store.commit("global/setLoader", false);
+      });
+
+      // Ajax: On Fail
+      request.fail(function(err) {
+        _this.$store.commit("global/setLoader", false);
+        _this.$root.$toast(
+          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+          {className: 'et-error'}
+        );
+      });
+
+    },
     highlightTag: function(tag) {
       if (this.config.search_settings.highlight_matches === true) {
         for (var i = 0; i < this.search.length; i++) {

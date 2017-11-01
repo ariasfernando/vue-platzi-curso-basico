@@ -45,8 +45,12 @@
         <tbody>
           <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
               <td class="fav icons text-center" v-if="config.enable_favorite_template">
-                <a href="#" :class="accessFavorite ? 'favorite' : ''" v-if="enableFavorite" title="Favorite" v-html="isFavorite(campaign)"></a>
-                <!--{{(Auth::user()->can('access_favorites') ) ? 'class=favorite' : "@click.prevent"}}-->
+                <a href="#"
+                  @click.prevent="doFavorite(campaign._id)"
+                  :class="accessFavorite ? 'favorite' : ''"
+                  v-if="enableFavorite && accessFavorite"
+                  title="Favorite"
+                  v-html="isFavorite(campaign)"></a>
               </td>
             <td class="last-modified" :title="campaign.created_by.email">
               <span>{{campaign.created_at}}</span><br><span>by {{campaign.created_by.email}}</span>

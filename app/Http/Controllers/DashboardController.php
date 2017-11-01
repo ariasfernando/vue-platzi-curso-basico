@@ -35,7 +35,8 @@ class DashboardController extends Controller
         'created_by',
         'created_at',
         'updated_at',
-        'published_at'
+        'published_at',
+        'proof_id'
     ];
 
     const RESULTS_X_PAGE = 10;
