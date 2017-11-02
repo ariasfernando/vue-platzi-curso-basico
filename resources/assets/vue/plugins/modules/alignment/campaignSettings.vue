@@ -1,9 +1,20 @@
 <template>
-  <div>
+  <div class="plugin-wrapper-inner">
     <label>{{ plugin.title }}</label>
-    <select title="alignment" name="alignment" :value="value" @change="change">
-      <option v-for="option in options" :value="option" :selected="option === value">{{ option }}</option>
-    </select>
+    
+    <div class="alignment-options">
+      <a v-for="option in options" 
+         :data-tooltip="option"
+         :data-value="value"
+         :class="option === value  ? 'plugin-setting-active' : ''"
+         @click="change"
+      >
+        <i :class="'glyphicon glyphicon-align-'+ option"
+           :data-tooltip="option"
+        ></i>
+      </a>
+    </div>
+
   </div>
 </template>
 
@@ -38,13 +49,14 @@
     },
     methods: {
       change(e) {
+        console.log(e.target.getAttribute('data-tooltip'));
         const payload = {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
           attribute: 'align',
-          attributeValue: e.target.value,
+          attributeValue: e.target.getAttribute('data-tooltip'),
         };
 
         this.$store.commit('campaign/saveComponentAttribute', payload);

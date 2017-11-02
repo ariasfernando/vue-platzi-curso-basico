@@ -1,7 +1,13 @@
 <template>
-  <div>
+  <div class="plugin-wrapper-inner">
     <label>Select an image</label>
-    <input type="file" @change="onFileChange">
+    <div class="plugin-upload">
+      <label for="upload-image" class="upload-image-trigger">
+        <i class="glyphicon glyphicon-cloud-upload"></i>
+      </label>
+      <input type="file" @change="onFileChange" id="upload-image">
+      <span class="upload-image-filename" id="upload-image-filename">No file chosen</span>
+    </div>
   </div>
 </template>
 
@@ -33,7 +39,7 @@
     },
     methods: {
       onFileChange(e) {
-        const files = e.target.files || e.dataTransfer.files;
+        const files = e.target.files || e.dataTransfer.files;  
 
         if (!files.length)
           return;
@@ -65,6 +71,6 @@
 
         this.$store.commit('campaign/saveComponentAttribute', payload);
       }
-    },
+    }
   }
 </script>
