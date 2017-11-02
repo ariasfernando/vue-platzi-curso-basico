@@ -76,6 +76,11 @@ module.exports = {
         key: 'bullist',
         value: false,
       },
+      numlist: {
+        label: 'Number list',
+        key: 'numlist',
+        value: false,
+      },
       forecolor: {
         label: 'Font color',
         key: 'forecolor',
