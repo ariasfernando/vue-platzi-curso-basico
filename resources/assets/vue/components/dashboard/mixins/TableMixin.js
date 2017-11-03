@@ -213,23 +213,10 @@ export default {
         vm.$emit('change-page', page, vm.type);
       });
     },
-    preview: function(campaign_id) {
-      this.showPreview = true;
-      this.previewSrc = Application.globals.baseUrl + "/public/html/" + campaign_id;
-      this.selectedCampaignId = campaign_id;
-      this.shareURL = Application.globals.baseUrl + '/public/view/' + campaign_id;
-    },
     resizePreviewFrame: function() {
       var $emailBody = $('.dashboard-campaign-preview').find("iframe").contents().find('.email-body');
       var height = $emailBody.height() > 200 ? $emailBody.height() : 150;
       $("#email-preview-iframe").height(height);
-    },
-    copyURL: function() {
-      var $modal = $('.dashboard-campaign-preview');
-      var input = $modal.find(".share-preview input")[0]
-      input.focus();
-      input.setSelectionRange(0, input.value.length);
-      document.execCommand("copy");
     },
     togglePreview: function(mode) {
       switch(mode) {

@@ -136,25 +136,19 @@
           <p>Are you sure you want to delete this email?</p>
         </div>
       </modal>
-
-      <modal class="dashboard-campaign-preview" v-if="showPreview" v-on:close="showPreview = false">
-        <div slot="header">
-          <button type="button" class="close" @click.prevent="closePreview"><span>&times;</span></button>
-          <h4>Preview</h4>
-        </div>
-        <div slot="body">
-          @include('partials.dashboard.templates.campaign_preview')
-        </div>
-        <div slot="footer"></div>
-      </modal>
+      <modal-preview></modal-preview>
     </div>
   </div>
 </template>
 
 <script>
   import TableMixin from './mixins/TableMixin.js';
+  import ModalPreview from '../campaign/modals/ModalPreview.vue'
 
   export default {
+    components: {
+      ModalPreview
+    },
     data: function() {
       return {
         last_uploads: {},
@@ -177,7 +171,22 @@
           }
         }
         return false;
-      }
+      },
+      preview(campaignId) {
+
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/getCampaignData", campaignId).then(response => {
+          this.$refs.preview.updateDimensions();
+          this.$store.commit("global/setLoader", false);
+          this.$store.commit("campaign/toggleModal", 'modalPreview');
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
+        });
+      },
     }
   }
 </script>

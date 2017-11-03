@@ -86,7 +86,6 @@
         ></template-campaigns>
       </div>
     </div>
-    <modal-preview></modal-preview>
     <spinner></spinner>
   </section>
 </template>
@@ -101,7 +100,6 @@
   import TemplateCampaigns from './TemplateCampaigns.vue';
   import DashboardMenu from './DashboardMenu.vue';
   import Spinner from '../common/Spinner.vue';
-  import ModalPreview from '../campaign/modals/ModalPreview.vue'
 
   export default {
     components: {
@@ -111,8 +109,7 @@
       FinishedEmails,
       TemplateCampaigns,
       DashboardMenu,
-      Spinner,
-      ModalPreview
+      Spinner
     },
     created: function() {
       this.updateCampaigns();

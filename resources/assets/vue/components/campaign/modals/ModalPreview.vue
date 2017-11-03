@@ -11,10 +11,14 @@
               <div class="send-preview">
                 <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent>
                   <div class="form-group">
-                    <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview email is not suitable for deployment. In order to access the production-ready HTML, please click Complete to publish your campaign.</p>
+                    <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
+                      email is not suitable for deployment. In order to access the production-ready HTML, please click
+                      Complete to publish your campaign.
+                    </p>
                     <div class="input-group">
                       <span class="btn-group">
-                        <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
+                        <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
+                          placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
                       </span>
                       <span class="input-group-btn">
                         <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send</button>
@@ -24,6 +28,19 @@
                     <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
                   </div>
                 </form>
+                <div class="share-preview">
+                  <form class="form-inline">
+                    <div class="form-group pull-right">
+                      <label>Share url</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control share-preview" :value="shareURL" readonly>
+                            <span class="input-group-btn">
+                              <button class="btn btn-default btn-copy" @click="copyURL" type="button">Copy</button>
+                            </span>
+                        </div>
+                      </div>
+                  </form>
+                </div>
                 <div class="preview-body">
                   <div class="preview-container">
                     <div class="mobile-frame"></div>
@@ -103,7 +120,10 @@
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
         });
       },
       togglePreview(mode) {
@@ -123,20 +143,38 @@
           this.previewFrameHeight = height;
         }, 10);
       },
+      updateDimensions() {
+
+        this.widthDesktop = this.widthPreview
+          = this.$store.state.campaign.campaign.campaign_data.library_config.templateWidth || 660;
+
+        this.widthMobile = this.$store.state.campaign.campaign.campaign_data.library_config.templateMobileWidth || 480;
+
+        this.previewSrc = this.$app.baseUrl + "/public/html/" + this.campaign.campaign_id;
+        this.shareURL = this.$app.baseUrl + '/public/view/' + this.campaign.campaign_id;
+      },
+      copyURL() {
+        var $modal = $('.modal-preview');
+        var input = $modal.find(".share-preview input")[0]
+        input.focus();
+        input.setSelectionRange(0, input.value.length);
+        document.execCommand("copy");
+      }
     },
     created () {
-      this.widthDesktop = this.widthPreview
-        = this.$store.state.campaign.campaign.campaign_data.library_config.templateWidth || 660;
 
-      this.widthMobile = this.$store.state.campaign.campaign.campaign_data.library_config.templateMobileWidth || 480;
+      if (this.$store.state.campaign.campaign.campaign_data) {
+        this.updateDimensions();
+      }
     }
   };
 </script>
 
 <style lang="less" scoped>
+
   .modal-container {
-    width: 800px;
-    height: 550px;
+    width: 750px;
+    height: 577px;
     overflow: scroll;
 
     textarea {
@@ -155,33 +193,42 @@
     #send-preview-form button{
       padding: 8px 20px 7px 20px;
     }
-
-    #send-preview-to{
+    .btn-copy {
+      height: 34px;
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+    .btn-send {
+      height: 36px;
+    }
+    #send-preview-to {
       font-family: 'Open Sans', Arial, Helvetica, sans-serif;
       font-size: 14px;
-      font-weight: 300;
+      font-weight: 400;
       color: #666666;
       box-shadow: none;
       border-radius: 2px;
-      height: 35px;
+      height: 36px;
+      width: 636px;
 
-      &:focus{
-       border: 1px solid #DDDDDD;
+      &:focus {
+        border: 1px solid #DDDDDD;
       }
     }
 
-    p.info{
-     font-weight: 300;
-     color: #999999;
-     font-size: 11px;
-     margin-top: 5px;
-    }
-
-    .preview-body{
-      margin-bottom: 15px;
+    p.info {
+      font-weight: 300;
+      color: #999999;
+      font-size: 11px;
       margin-top: 5px;
+    }
+    label.info {
+      margin-left: 4px;
+    }
+    .preview-body {
+      margin: 0 0 15px 0;
 
-      .iframe-container{
+      .iframe-container {
         text-align: center;
         background: #F4F4F4;
       }
