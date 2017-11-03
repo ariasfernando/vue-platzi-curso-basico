@@ -136,7 +136,7 @@
           <p>Are you sure you want to delete this email?</p>
         </div>
       </modal>
-      <modal-preview></modal-preview>
+      <modal-preview ref="preview"></modal-preview>
     </div>
   </div>
 </template>
