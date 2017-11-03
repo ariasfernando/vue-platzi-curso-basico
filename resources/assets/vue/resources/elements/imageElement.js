@@ -8,7 +8,7 @@ module.exports = {
     paddingLeft: '0px',
   },
   attribute: {
-    placeholder: 'studio/placeholder-square.jpg',
+    placeholder: 'default/placeholder-square.jpg',
     bgcolor: { hex: 'transparent' },
     href: 'http://stensul.com',
     alt: 'Image',
@@ -24,7 +24,7 @@ module.exports = {
       label: 'Select an image',
       name: 'placeholder',
       type: 'file',
-      value: 'studio/placeholder-square.jpg',
+      value: 'default/placeholder-square.jpg',
     },
     {
       link: 'attribute',
