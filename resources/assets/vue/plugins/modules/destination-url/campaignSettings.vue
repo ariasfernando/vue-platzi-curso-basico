@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="plugin-wrapper-inner">
     <div>
       <span>
         <label>Destination Url</label>
@@ -7,11 +7,21 @@
       </span>
       <span>
         <label>Target</label>
-        <select name="target" @change="change">
-          <option value="_blank" :selected="target">_blank</option>
-          <option value="_self" :selected="target">_self</option>
-          <option value="_top" :selected="target">_top</option>
-        </select>
+        <div class="alignment-options">
+          <a v-for="(icon, option) in options" 
+             name="target"
+             :data-tooltip="option"
+             :data-value="option"
+             :class="option === target  ? 'plugin-setting-active' : ''"
+             @click="change"
+          >
+            <i :class="'glyphicon glyphicon-'+ icon"
+               :data-tooltip="option"
+               @click="change"
+            ></i>
+          </a>
+        </div>
+
       </span>
     </div>
 
@@ -45,15 +55,22 @@
         return this.component.attribute.target;
       }
     },
+    data() {
+      return {
+        options: this.plugin.config.options,
+      }
+    },
     methods: {
       change(e) {
+        let valueTarget = (e.type === 'click')? e.target.getAttribute('data-tooltip'): e.target.value; 
+
         const payload = {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
           attribute: e.target.name,
-          attributeValue: e.target.value,
+          attributeValue: valueTarget,
         };
 
         this.$store.commit('campaign/saveComponentAttribute', payload);

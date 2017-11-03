@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="plugin-wrapper-inner">
     <label>{{ plugin.title }}</label>
     <compact-picker ref="compact" v-model="colors" @input="updateValue"></compact-picker>
   </div>

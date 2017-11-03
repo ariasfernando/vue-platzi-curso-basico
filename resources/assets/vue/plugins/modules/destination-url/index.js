@@ -9,7 +9,14 @@ module.exports = {
   target: ['button', 'image'],
   studioSettings,
   campaignSettings,
-  config: {},
+  config: {
+    options: {
+      '_blank':'unchecked', 
+      '_self':'expand', 
+      '_top':'new-window' 
+    },
+    defaultValue: '_blank',
+  },
   data: {},
   enabled: false,
 };
