@@ -28,9 +28,9 @@
                     <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
                   </div>
                 </form>
-                <div class="share-preview">
+                <div class="share-preview pull-right">
                   <form class="form-inline">
-                    <div class="form-group pull-right">
+                    <div class="form-group">
                       <label>Share url</label>
                         <div class="input-group">
                             <input type="text" class="form-control share-preview" :value="shareURL" readonly>
@@ -171,11 +171,45 @@
 </script>
 
 <style lang="less" scoped>
+  .modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: table;
+    transition: opacity .3s ease;
+  }
+  .modal-confirm{
+    .modal-content{
+      border-radius: 0px;
+      padding: 15px;
 
+      .modal-footer{
+        border-top: 1px solid #dddddd;
+        padding: 15px 0px 0px 0px;
+      }
+
+      .modal-body{
+        padding: 10px 0px 15px;
+        font-weight: 300;
+        font-family: 'Open Sans', Arial, sans-serif;
+      }
+    }
+  }
   .modal-container {
     width: 750px;
     height: 577px;
     overflow: scroll;
+    margin: 0 auto;
+    padding: 15px;
+    padding-top: 40px;
+    background-color: #fff;
+    border-radius: 0;
+    box-shadow: none;
+    transition: all .3s ease;
 
     textarea {
       width: 100%;
@@ -187,7 +221,6 @@
     .send-preview{
       height: 430px;
       padding-top: 20px;
-      overflow: auto;
     }
 
     #send-preview-form button{
@@ -228,16 +261,22 @@
     .preview-body {
       margin: 0 0 15px 0;
 
+      .preview-container {
+        padding-top: 6px;
+      }
       .iframe-container {
+        height: 224px;
+        overflow-y: auto;
         text-align: center;
         background: #F4F4F4;
+
       }
     }
   }
 
   .modal-preview {
     h4{
-      margin-bottom: 0px;
+      margin: 0;
     }
 
     .close{
