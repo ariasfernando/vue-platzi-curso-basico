@@ -13,6 +13,7 @@ const state = {
   modalComplete: false,
   modalPreview: false,
   modalProof: false,
+  modalEnableTemplating: false,
   buildingMode: 'desktop',
   editorToolbar: '',
   dirty: false,
