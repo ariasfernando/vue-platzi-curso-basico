@@ -46,7 +46,7 @@ class EmailHtmlCreator
      */
     public function createTextVersion()
     {
-        $text = new Text(array('modules' => $this->campaign['modules_data']));
+        $text = new Text($this->campaign);
 
         return $text->createTextVersion();
     }

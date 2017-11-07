@@ -25,31 +25,13 @@ class EmailTextCreator
     /**
      * Create text version.
      *
-     * @param array $modules Modules data
      * @return string
      */
-    public function createTextVersion($modules)
+    public function createTextVersion()
     {
-        $plain_text = (isset($this->campaign['title'])) ? $this->campaign['title'] . self::$line_break : '';
+        $plain_text = isset($this->campaign['title']) ?? $this->campaign['title'] . self::$line_break;
 
-        foreach ($modules as $module) {
-            // Initialize locale and module settings
-            StensulLocale::init(
-                $this->campaign['locale'],
-                [
-                    "name" => $module['module_id'],
-                    "app_name" => $module['file_parent']
-                ]
-            );
-
-            $path = $this->getModulesPath($module['file_parent']);
-            if (\view::exists($path . '.' . $module['module_id'] . '.text')) {
-                $plain_text .= $this->getTxtByTpl($module);
-            } else {
-                $plain_text .= trim($this->defaultHtml2TextConverter($module));
-            }
-            $plain_text .= self::$module_break;
-        }
+        $plain_text .= trim(self::htmlToText($this->campaign->body_html));
         $plain_text = $this->replaceTags($plain_text);
 
         return $plain_text;

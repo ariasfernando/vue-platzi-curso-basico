@@ -52,6 +52,7 @@ class ProcessCampaign implements ShouldQueue
             $assets->storeAssetsInCdn();
         }
 
+        $campaign->plain_text = $html->createTextVersion();
         $campaign->processed = 1;
         $campaign->published_at = strtotime(date('c'));
         $campaign->save();
