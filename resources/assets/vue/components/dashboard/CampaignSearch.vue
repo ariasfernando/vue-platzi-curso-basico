@@ -7,7 +7,7 @@
         v-bind:disabled="!canSearch"
         v-on:keyup.enter="addSearchTerm"
         v-on:keyup.tab="addSearchTerm"
-        v-model="search">
+        v-model="searchModel">
  <!--data-tags='<?php echo htmlentities( json_encode(Tag::getTagNames()), ENT_QUOTES, 'UTF-8' ); ?>'-->
       <span class="input-group-btn">
         <button class="btn btn-default search" type="button" v-on:click.stop.prevent="addSearchTerm"
@@ -33,7 +33,8 @@
   export default {
     data: function() {
       return {
-        timer: null
+        timer: null,
+        searchModel: ''
       }
     },
     props: {
@@ -60,14 +61,20 @@
       }
     },
     methods: {
+      clearModel: function() {
+        this.searchModel = '';
+        this.$emit('update-search', this.searchModel);
+      },
       clearSearch: function() {
-        this.search = '';
+        this.clearModel();
+        this.$emit('update-search', this.searchModel);
         this.$emit('reset-search');
         this.$emit('reset-page');
         this.$emit('update-campaigns');
       },
       addSearchTerm: function(event) {
-        this.$emit('add-search-term', this.search);
+        this.$emit('add-search-term', this.searchModel);
+        this.clearModel();
         var $el = $(".search-key");
         $el.autocomplete("close");
       },

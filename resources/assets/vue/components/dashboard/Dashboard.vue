@@ -20,6 +20,7 @@
           v-on:update-campaigns="updateCampaigns"
           v-on:reset-page="resetPage"
           v-on:reset-search="resetSearch"
+          v-on:update-search="updateSearch"
         ></campaign-search>
       </div>
       <div class="col-xs-12 col-sm-2 pull-right no-gutters">
@@ -235,8 +236,12 @@
         this.pagination.template.page = 1;
       },
       resetSearch: function() {
+        this.search = '';
         this.terms = [];
         this.tags = [];
+      },
+      updateSearch: function(value) {
+        this.search = value;
       },
       updateCampaigns: function() {
         this.fetchCampaigns('current');
