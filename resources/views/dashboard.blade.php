@@ -10,7 +10,6 @@
 	</div>
 
 	{{-- MODALS --}}
-	@include('partials.dashboard.modal_dashboard_code')
 	@include('partials.proof.modal_proof')
 
 @endsection

@@ -67,8 +67,8 @@
               ></campaign-tag>
             </td>
             <td class="actions links" width="150">
-              <a href="#" class="html-code">Normal HTML</a><br>
-              <a href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
+              <a @click="code(campaign._id, 'html')" href="#" class="html-code">Normal HTML</a><br>
+              <a @click="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
             </td>
             <td class="actions icons text-right" width="200">
               <a href="#" v-on:click.prevent="preview(campaign._id)" title="Preview" target="_blank">
@@ -137,6 +137,7 @@
         </div>
       </modal>
       <modal-preview ref="preview"></modal-preview>
+      <modal-code :type="codeType"></modal-code>
     </div>
   </div>
 </template>
@@ -144,14 +145,17 @@
 <script>
   import TableMixin from './mixins/TableMixin.js';
   import ModalPreview from '../campaign/modals/ModalPreview.vue'
+  import ModalCode from '../campaign/modals/ModalCode.vue'
 
   export default {
     components: {
-      ModalPreview
+      ModalPreview,
+      ModalCode
     },
     data: function() {
       return {
         last_uploads: {},
+        codeType: ''
       }
     },
     mixins: [ TableMixin ],
@@ -179,6 +183,21 @@
           this.$refs.preview.updateDimensions();
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalPreview');
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
+        });
+      },
+      code(campaignId, type) {
+
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/getCampaignData", campaignId).then(response => {
+          this.codeType = type;
+          this.$store.commit("global/setLoader", false);
+          this.$store.commit("campaign/toggleModal", 'modalCode');
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
