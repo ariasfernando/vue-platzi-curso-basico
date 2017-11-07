@@ -211,6 +211,7 @@ class EmailSender
         $params = [
             'params' => $data,
             'email' => $reviewer['email'],
+            'reviewer_name' => User::find($reviewer['user_id'])->name,
             'from_name' => \Config::get('proof.email.from_name'),
             'from_email' => \Config::get('proof.email.from_email'),
             'subject' => $subject
