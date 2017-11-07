@@ -59,9 +59,6 @@
         this.$store.commit("campaign/toggleModal", 'modalCode');
       },
 
-    },
-    created () {
-      console.log('code!');
     }
   };
 </script>
