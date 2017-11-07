@@ -6,7 +6,7 @@ module.exports = {
   style: {
     verticalAlign: 'middle',
     textAlign: 'center',
-    fontFamily: 'sans-serif',
+    fontFamily: 'Helvetica, arial, sans-serif',
     color: '#FFFFFF',
     fontSize: '12px',
     lineHeight: '40px',
@@ -41,6 +41,7 @@ module.exports = {
     href: 'http://stensul.com',
     target: '_blank',
   },
+  componentSettings: ['font-family'],
   settings: [
     {
       link: 'attribute',

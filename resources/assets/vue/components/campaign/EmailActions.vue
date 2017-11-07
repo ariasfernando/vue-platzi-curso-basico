@@ -20,7 +20,7 @@
             Show if it's not already a template, if it's not a processed campaign
             and templating is enabled on the tool.
           -->
-          <b-btn v-b-modal.confirm-modal class="btn btn-default save-as-template beta-btn-secondary"
+          <b-btn @click="template" class="btn btn-default save-as-template beta-btn-secondary"
             v-show="!locked"
             v-if="campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
               && campaign.campaign_data.library_config.templating">
@@ -30,7 +30,7 @@
           <!--
             Show if it's already a template, skip confirmation modal.
           -->
-          <button class="btn btn-default save-as-template beta-btn-secondary" @click="template()"
+          <button class="btn btn-default save-as-template beta-btn-secondary" @click="template"
             :class="hiddenClass()" v-if="campaign.campaign_data.template"
             v-show="!locked">
             Save Template
@@ -62,16 +62,7 @@
           </div>
         </div>
       </div>
-      <b-modal v-if="campaignConfig.enable_templating"
-        id="confirm-modal"
-        ref="confirmModal" 
-        ok-title="Accept"
-        close-title="Cancel"
-        @ok="confirmSave">
-        <h4>Save as Template</h4>
-        Remember that if you save this campaign as template, you won't be able to publish it,
-        you will only be able to edit and clone it.
-      </b-modal>
+
     </div>
   </div>
 </template>
@@ -141,13 +132,7 @@
         });
       },
       template() {
-        this.$store.commit("campaign/setTemplating", true);
-        this.save();
-      },
-      confirmSave(e) {
-        e.cancel();
-        this.template();
-        this.$refs.confirmModal.hide()
+        this.$store.commit("campaign/toggleModal", 'modalEnableTemplating');
       },
       checkProcessStatus(processId) {
         return campaignService.checkProcessStatus(processId);

@@ -14,6 +14,7 @@ const state = {
   modalPreview: false,
   modalProof: false,
   modalCode: false,
+  modalEnableTemplating: false,
   buildingMode: 'desktop',
   editorToolbar: '',
   dirty: false,
