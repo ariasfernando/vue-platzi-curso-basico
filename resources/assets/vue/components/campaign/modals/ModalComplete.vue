@@ -2,12 +2,15 @@
   <transition name="modal" v-if="modalComplete">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container modal-complete">
+          <slot name="header">
+            <button type="button" class="close" @click="close"><span>&times;</span></button>
+          </slot>
+
+          <h4>Processed Campaign</h4>
 
           <div class="modal-body">
-
             <slot name="body">
-              <h4>Processed Campaign</h4>
               <b-tabs>
                 <b-tab title="Normal HTML">
                   <textarea v-html="campaign.campaign_data.body_html"></textarea>
@@ -88,7 +91,7 @@
 <style lang="less" scoped>
   @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400');
 
-  .modal-container {
+  .modal-complete {
     width: 900px;
 
     textarea {
@@ -96,11 +99,13 @@
       height: 330px;
       border: 1px solid #dddddd;
       font-family: 'Source Code Pro', monospace;
+      font-weight: 300;
       border-radius: 2px;
       padding: 10px;
-      font-size: 14px;
-      color: #666666;
+      font-size: 13px;
+      color: #333333;
       outline: 0;
+      border-top: none;
     }
   }
   .show {
