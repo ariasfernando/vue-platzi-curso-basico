@@ -48,7 +48,7 @@ class ProcessCampaign implements ShouldQueue
         $html->createHtmlBody();
         $html->storeHtmlInCdn();
 
-        if (!env('CDN_UPLOAD_PRETEND', false)) {
+        if (!env('CDN_UPLOAD_PRETEND')) {
             $assets->storeAssetsInCdn();
         }
 
