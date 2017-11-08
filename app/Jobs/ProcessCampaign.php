@@ -48,10 +48,11 @@ class ProcessCampaign implements ShouldQueue
         $html->createHtmlBody();
         $html->storeHtmlInCdn();
 
-        if (!env('CDN_UPLOAD_PRETEND', false)) {
+        if (!env('CDN_UPLOAD_PRETEND')) {
             $assets->storeAssetsInCdn();
         }
 
+        $campaign->plain_text = $html->createTextVersion();
         $campaign->processed = 1;
         $campaign->published_at = strtotime(date('c'));
         $campaign->save();

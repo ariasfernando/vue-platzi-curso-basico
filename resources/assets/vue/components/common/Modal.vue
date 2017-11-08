@@ -25,13 +25,13 @@
         name: 'modal',
         props: {
             size: {
-                type: String,
-                default: 'sm'
+              type: String,
+              default: 'sm'
             }
         }
     };
 </script>
 
-<style lang="sass">
+<style lang="less">
 
 </style>

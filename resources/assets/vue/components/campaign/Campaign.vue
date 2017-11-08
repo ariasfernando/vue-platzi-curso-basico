@@ -2,7 +2,9 @@
   <div class="section-container-campaign">
     <email-actions v-if="ready"></email-actions>
 
-    <div class="container-campaign-subwrapper" v-sticky="{ zIndex: 997, stickyTop: 53 }">
+    <div class="container-campaign-subwrapper" v-sticky="{ zIndex: 9998, stickyTop: 53 }">
+      <div class="beta-wrapper"></div>
+      <div class="beta-shadow"></div>
       <!-- column left (menu) -->
       <aside>
         <div class="aside-inner">
@@ -37,6 +39,7 @@
     <modal-complete v-if="ready"></modal-complete>
     <modal-preview v-if="ready"></modal-preview>
     <modal-proof v-if="ready"></modal-proof>
+    <modal-enable-templating v-if="ready"></modal-enable-templating>
 
     <spinner></spinner>
 
@@ -48,6 +51,7 @@
   import ModalComplete from './modals/ModalComplete.vue'
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
+  import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import EmailCanvas from './EmailCanvas.vue'
   import ComponentSettings from './ComponentSettings.vue'
@@ -71,6 +75,7 @@
       ModalComplete,
       ModalPreview,
       ModalProof,
+      ModalEnableTemplating,
       Spinner,
       EmailActions
     },
@@ -128,8 +133,8 @@
   }
 
   .container-campaign-subwrapper{
-    height:calc(~"100vh - 53px"); 
-    width:100%;
+    height: calc(~"100vh - 53px");
+    width: 100%;
   }
 
   .component-settings-wrapper {
@@ -177,7 +182,7 @@
         }
 
         .plugin-wrapper-inner:empty{
-          background: none; 
+          background: none;
           margin-bottom: 0px;
           padding: 0px;
           border: none;
@@ -195,6 +200,11 @@
           color: #666666;
           margin-bottom: 6px;
           font-weight: 300;
+
+          &.label-custom{
+            display: inline-block;
+            margin: 0 0px 10px 0;
+          }
           font-size: 12px;
           margin-bottom: 5px;
           width: 100%;

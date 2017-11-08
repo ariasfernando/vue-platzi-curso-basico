@@ -1,0 +1,256 @@
+<template id="dashboard">
+  <section class="col-xs-12 section-container">
+    <div class="row dash-header">
+      <div class="col-xs-12 col-sm-4">
+        <campaign-tabs></campaign-tabs>
+      </div>
+      <div class="col-xs-12 col-sm-3 pull-right">
+        <campaign-search
+          :can-search="canSearch"
+          :enabled="config.enable_search"
+          :limit="config.search_settings.max_tags"
+          :show-limit-message="config.search_settings.max_tags_alert"
+          :search="search"
+          :tags="tags"
+          :terms="terms"
+          v-on:add-search-tag="addSearchTag"
+          v-on:add-search-term="addSearchTerm"
+          v-on:remove-search-tag="removeSearchTag"
+          v-on:remove-search-term="removeSearchTerm"
+          v-on:update-campaigns="updateCampaigns"
+          v-on:reset-page="resetPage"
+          v-on:reset-search="resetSearch"
+          v-on:update-search="updateSearch"
+        ></campaign-search>
+      </div>
+      <div class="col-xs-12 col-sm-2 pull-right no-gutters">
+        <div class="dropdown default-dropdown pull-right">
+          <dashboard-menu :config="config"></dashboard-menu>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="draft-emails-campaign">
+      <div class="col-xs-12">
+        <draft-emails
+          v-if="ready.current"
+          :campaigns="campaigns.current"
+          :config="config"
+          :loading="showLoading.current"
+          :tags="tags"
+          :terms="terms"
+          :type="'current'"
+          :enable-locking="config.locking"
+          :show-created-by="config.created_by_dashboard"
+          v-on:add-search-tag="addSearchTag"
+          v-on:apply-sort="applySort"
+          v-on:change-page="changePage"
+          v-on:refresh-campaigns="fetchCampaigns"
+        ></draft-emails>
+      </div>
+    </div>
+    <div class="row" id="finished-campaign">
+      <div class="col-xs-12">
+        <finished-emails
+          v-if="ready.finished"
+          :campaigns="campaigns.finished"
+          :config="config"
+          :enable-download="config.download_html"
+          :loading="showLoading.finished"
+          :tags="tags"
+          :terms="terms"
+          :type="'finished'"
+          :enable-locking="config.locking"
+          :show-created-by="config.created_by_dashboard"
+          v-on:add-search-tag="addSearchTag"
+          v-on:apply-sort="applySort"
+          v-on:change-page="changePage"
+          v-on:refresh-campaigns="fetchCampaigns"
+        ></finished-emails>
+      </div>
+    </div>
+    <div class="row" v-if="config.enable_templating" id="templates-campaign">
+      <div class="col-xs-12">
+        <template-campaigns
+          v-if="ready.template"
+          :campaigns="campaigns.template"
+          :config="config"
+          :loading="showLoading.template"
+          :tags="tags"
+          :terms="terms"
+          :type="'template'"
+          :enable-locking="config.locking"
+          :show-created-by="config.created_by_dashboard"
+          v-on:add-search-tag="addSearchTag"
+          v-on:apply-sort="applySort"
+          v-on:change-page="changePage"
+          v-on:refresh-campaigns="fetchCampaigns"
+        ></template-campaigns>
+      </div>
+    </div>
+    <spinner></spinner>
+  </section>
+</template>
+
+<script>
+  import Vue from 'vue/dist/vue';
+  import VueResource from 'vue-resource/dist/vue-resource';
+  import CampaignSearch from './CampaignSearch.vue';
+  import CampaignTabs from './CampaignTabs.vue';
+  import DraftEmails from './DraftEmails.vue';
+  import FinishedEmails from './FinishedEmails.vue';
+  import TemplateCampaigns from './TemplateCampaigns.vue';
+  import DashboardMenu from './DashboardMenu.vue';
+  import Spinner from '../common/Spinner.vue';
+
+  export default {
+    components: {
+      CampaignSearch,
+      CampaignTabs,
+      DraftEmails,
+      FinishedEmails,
+      TemplateCampaigns,
+      DashboardMenu,
+      Spinner
+    },
+    created: function() {
+      this.updateCampaigns();
+    },
+    data: function() {
+      return {
+        campaigns: {
+          current: [],
+          finished: [],
+          template: []
+        },
+        terms: [],
+        tags: [],
+        pagination: {
+          current: {
+            page: 1,
+            sortBy: '',
+            direction: ''
+          },
+          finished: {
+            page: 1,
+            sortBy: '',
+            direction: ''
+          },
+          template: {
+            page: 1,
+            sortBy: '',
+            direction: ''
+          }
+        },
+        search: '',
+        showLoading: {
+          current: false,
+          finished: false,
+          template: false
+        },
+        last_uploads: {},
+        ready: {
+          current: false,
+          template: false,
+          finished: false
+        }
+      }
+    },
+    props: ['config'],
+    computed: {
+      canSearch: function() {
+        return this.checkTagLimit();
+      }
+    },
+    methods: {
+      addSearchTag: function(tag) {
+        if (this.checkTagLimit() && tag.length > 0 && this.getIndex(this.tags, tag) < 0) {
+          this.search = '';
+          this.tags.push(tag);
+          this.resetPage();
+          this.updateCampaigns();
+        }
+      },
+      addSearchTerm: function(term) {
+        if (this.checkTagLimit() && term.length > 0 && this.getIndex(this.terms, term) < 0) {
+          this.search = '';
+          this.terms.push(term);
+          this.resetPage();
+          this.updateCampaigns();
+        }
+      },
+      applySort: function(sortKey, direction, type, resetPage) {
+        this.pagination[type].sortBy = sortKey;
+        this.pagination[type].direction = direction;
+        if (resetPage) {
+          this.pagination[type].page = 1;
+        }
+        this.fetchCampaigns(type);
+      },
+      changePage: function(page, type) {
+        this.pagination[type].page = page;
+        this.fetchCampaigns(type);
+      },
+      checkTagLimit: function() {
+        return (this.config.search_settings.max_tags == 0
+          || parseInt(this.tags.length + this.terms.length) < this.config.search_settings.max_tags);
+      },
+      fetchCampaigns: function(type) {
+        this.showLoading[type] = true;
+        var data = {
+          direction: this.pagination[type].direction,
+          page: this.pagination[type].page,
+          tags: this.tags,
+          terms: this.terms,
+          sort: this.pagination[type].sortBy
+        };
+
+        var url = '/dashboard/campaigns/';
+        if (type == "template") {
+          var url = '/dashboard/templates/';
+        }
+
+        $.getJSON(this.$app.baseUrl + url + type, data, function(campaigns) {
+          this.campaigns[type] = campaigns;
+          this.showLoading[type] = false;
+          this.ready[type] = true;
+        }.bind(this));
+      },
+      getIndex: function(data, value) {
+        return data.map(function (data) { return data; }).indexOf(value);
+      },
+      removeSearchTag: function(tag) {
+        var index = this.getIndex(this.tags, tag);
+        this.tags.splice(index, 1);
+        this.resetPage();
+        this.updateCampaigns();
+      },
+      removeSearchTerm: function(term) {
+        var index = this.getIndex(this.terms, term);
+        this.terms.splice(index, 1);
+        this.resetPage();
+        this.updateCampaigns();
+      },
+      resetPage: function() {
+        this.pagination.current.page = 1;
+        this.pagination.finished.page = 1;
+        this.pagination.template.page = 1;
+      },
+      resetSearch: function() {
+        this.search = '';
+        this.terms = [];
+        this.tags = [];
+      },
+      updateSearch: function(value) {
+        this.search = value;
+      },
+      updateCampaigns: function() {
+        this.fetchCampaigns('current');
+        this.fetchCampaigns('finished');
+        this.fetchCampaigns('template');
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+</style>

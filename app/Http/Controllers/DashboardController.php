@@ -35,8 +35,11 @@ class DashboardController extends Controller
         'created_by',
         'created_at',
         'updated_at',
-        'published_at'
+        'published_at',
+        'proof_id'
     ];
+
+    const RESULTS_X_PAGE = 10;
 
     /**
      * Create a new controller instance.
@@ -99,7 +102,7 @@ class DashboardController extends Controller
         $direction = strlen($request->input('direction')) ? $request->input('direction', 'updated_at') : 'desc';
         $campaigns->orderBy($sort, $direction);
 
-        $result = $campaigns->paginate(5, self::$campaign_fields);
+        $result = $campaigns->paginate(self::RESULTS_X_PAGE, self::$campaign_fields);
         $libraries = [];
         foreach (Auth::user()->getLibraries() as $library) {
             $libraries[$library['_id']] = $library['name'];
@@ -251,7 +254,7 @@ class DashboardController extends Controller
                 'data' => $result
             );
         } else {
-            $result = $campaigns->paginate(5, self::$campaign_fields);
+            $result = $campaigns->paginate(self::RESULTS_X_PAGE, self::$campaign_fields);
             foreach ($result as $key => $campaign) {
                 $result[$key]->library_name = $libraries[(string) $campaign->library];
             }

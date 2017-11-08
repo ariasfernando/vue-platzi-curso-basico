@@ -46,7 +46,6 @@ $default = [
     | "languages" Use the languages list of the config locales to create the menu.
     | "libraries" Use the libraries list of the config view libraries and config auth
     | user permissions to create the menu.
-    | "default" Create mew mail simple link
     |
     */
     "campaign_format" => "libraries",

@@ -2,7 +2,7 @@ module.exports = {
   type: 'text-element',
   text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.',
   style: {
-    fontFamily: 'sans-serif',
+    fontFamily: 'Helvetica, arial, sans-serif',
     fontSize: '12px',
     fontWeight: '300',
     lineHeight: '16px',

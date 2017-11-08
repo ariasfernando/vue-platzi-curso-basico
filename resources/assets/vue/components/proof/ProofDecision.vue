@@ -61,7 +61,7 @@
 </template>
 
 <script>
-    import Modal from './Modal.vue';
+    import Modal from '../common/Modal.vue';
     import ProofDecisionButton from './ProofDecisionButton.vue';
 
     module.exports = {
