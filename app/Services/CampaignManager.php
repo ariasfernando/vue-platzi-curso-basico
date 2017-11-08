@@ -294,7 +294,7 @@ class CampaignManager
             'id' => new ObjectId(Auth::id()),
             'email' => Auth::user()->email,
         ];
-        $data['update_by'] = $data['created_by'];
+        $data['updated_by'] = $data['created_by'];
 
         $campaign = Campaign::create($data);
 
