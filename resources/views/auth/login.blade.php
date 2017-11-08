@@ -7,7 +7,6 @@
 
 {{-- Login content --}}
 @section('content')
-    <section class="col-md-4 col-sm-1 col-xs-1"></section>
     <section class="col-md-4 col-sm-10 col-xs-10 beta-login">
 
         <div class="text-center">
@@ -69,5 +68,4 @@
             </div>
         </div>
     </section>
-    <section class="col-md-4 col-sm-1 col-xs-1"></section>
 @endsection
