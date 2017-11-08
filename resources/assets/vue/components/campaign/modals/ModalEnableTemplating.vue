@@ -3,24 +3,25 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
+          <slot name="header">
+            <button type="button" class="close" @click="close"><span>&times;</span></button>
+          </slot>
 
-          <div class="modal-header">
-            <slot name="header">
-              <h4>Save as Template</h4>
-            </slot>
-          </div>
+          <h4>Save as Template</h4>
 
           <div class="modal-body">
             <slot name="body">
-              Remember that if you save this campaign as template, you won't be able to publish it,
-              you will only be able to edit and clone it.
+              <p>
+                Remember that if you save this campaign as template, you won't be able to publish it,
+                you will only be able to edit and clone it.
+              </p>
             </slot>
           </div>
 
           <div class="modal-footer">
             <slot name="footer">
-              <button type="button" class="btn" @click="close">Cancel</button>
-              <button type="button" class="btn" @click="confirmSave">Accept</button>
+              <button type="button" class="btn beta-btn-secondary" @click="close">Cancel</button>
+              <button type="button" class="btn beta-btn-primary" @click="confirmSave">Accept</button>
             </slot>
           </div>
         </div>

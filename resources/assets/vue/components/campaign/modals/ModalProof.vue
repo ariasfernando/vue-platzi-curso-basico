@@ -3,6 +3,9 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
+          <slot name="header">
+            <button type="button" class="close" @click="close"><span>&times;</span></button>
+          </slot>
           <slot name="body">
               <h4>Who would you like to send this email to for review?</h4>
               <div class="send-proof">

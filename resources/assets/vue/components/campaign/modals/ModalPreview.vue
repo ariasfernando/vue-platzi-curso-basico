@@ -206,7 +206,6 @@
     overflow: scroll;
     margin: 0 auto;
     padding: 15px;
-    padding-top: 40px;
     background-color: #fff;
     border-radius: 0;
     box-shadow: none;
@@ -221,7 +220,6 @@
 
     .send-preview{
       height: 430px;
-      padding-top: 20px;
     }
 
     #send-preview-form button{
@@ -238,12 +236,11 @@
     #send-preview-to {
       font-family: 'Open Sans', Arial, Helvetica, sans-serif;
       font-size: 14px;
-      font-weight: 400;
+      font-weight: 300;
       color: #666666;
       box-shadow: none;
       border-radius: 2px;
       height: 36px;
-      width: 636px;
 
       &:focus {
         border: 1px solid #DDDDDD;
@@ -276,13 +273,8 @@
   }
 
   .modal-preview {
-    h4{
-      margin: 0;
-    }
 
     .close{
-      margin-top: -10px;
-      margin-right: -7px;
 
       &:focus{
         outline: none;
