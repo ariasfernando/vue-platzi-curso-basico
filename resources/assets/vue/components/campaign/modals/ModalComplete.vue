@@ -100,12 +100,11 @@
       border: 1px solid #dddddd;
       font-family: 'Source Code Pro', monospace;
       font-weight: 300;
-      border-radius: 2px;
+      border-radius: 0px 0px 2px 2px;
       padding: 10px;
       font-size: 13px;
       color: #333333;
       outline: 0;
-      border-top: none;
     }
   }
   .show {

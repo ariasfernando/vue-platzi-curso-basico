@@ -35,7 +35,7 @@
                         <div class="input-group">
                             <input type="text" class="form-control share-preview" :value="shareURL" readonly>
                             <span class="input-group-btn">
-                              <button class="btn btn-default btn-copy" @click="copyURL" type="button">Copy</button>
+                              <button class="btn btn-default btn-copy beta-btn-primary" @click="copyURL" type="button">Copy</button>
                             </span>
                         </div>
                       </div>
