@@ -160,7 +160,7 @@
       },
       fetchUsers () {
 
-        $.getJSON('/proof/users', {}, function(users) {
+        $.getJSON(this.$app.baseUrl + '/proof/users', {}, function(users) {
           this.users = users;
         }.bind(this));
 
@@ -168,7 +168,7 @@
       },
       fetchReviewers () {
 
-        $.getJSON('/proof/reviewers/' + this.campaign.campaign_data._id, {}, function(response) {
+        $.getJSON(this.$app.baseUrl + '/proof/reviewers/' + this.campaign.campaign_data._id, {}, function(response) {
 
           if (response && response.status === 'success') {
               for (index in response.data) {

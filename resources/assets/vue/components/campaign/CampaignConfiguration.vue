@@ -139,7 +139,7 @@
         configService.getConfig('global_settings')
           .then((response) => {
             this.enableAutoSave = response.auto_save === '1';
-            this.enablePreheader = response.enable_preheader === '1';
+            this.enablePreheader = response.enable_preheader === '1' && this.campaign.library_config.preheader;
           })
           .catch((error) => {
             this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
