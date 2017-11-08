@@ -39,7 +39,7 @@ function Module(data = {}) {
       borderTopStyle: style.borderTopStyle || 'none',
       borderTopColor: style.borderTopColor || '#000000',
       // Border Right
-      borderRightWidth: style.borderTopWidth || '0px',
+      borderRightWidth: style.borderRightWidth || '0px',
       borderRightStyle: style.borderRightStyle || 'none',
       borderRightColor: style.borderRightColor || '#000000',
       // Border Bottom
