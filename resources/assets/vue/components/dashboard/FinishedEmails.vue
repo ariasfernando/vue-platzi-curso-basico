@@ -74,7 +74,7 @@
               <a href="#" v-on:click.prevent="preview(campaign._id)" title="Preview" target="_blank">
                 <i class="glyphicon glyphicon-eye-open"></i>
               </a>
-              <a :href="baseUrl + '/campaign/download-html/' + campaign._id" title="Download">
+              <a :href="$app.baseUrl + '/campaign/download-html/' + campaign._id" title="Download">
                 <i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i>
               </a>
               <a
