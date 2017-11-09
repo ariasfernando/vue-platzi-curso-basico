@@ -79,6 +79,9 @@
             this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
       },
+      close () {
+        this.$store.commit("campaign/toggleModal", 'modalComplete');
+      },
     },
     created () {
       if (this.campaign.library_config.plainText) {
