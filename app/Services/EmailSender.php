@@ -42,14 +42,10 @@ class EmailSender
 
         $campaign_data = ModelCampaign::findOrFail($campaign_id);
 
-        $subject = isset($params['subject']) && strlen($params['subject'])
-            ? $params['subject']
-            : env('MAIL_PREVIEW_SUBJECT', 'Preview email!');
+        $subject = !empty($params['subject']) ? $params['subject'] : env('MAIL_PREVIEW_SUBJECT', 'Preview email!');
 
-        $preheader = isset($params['preheader']) && strlen($params['preheader'])
-            ? $params['preheader']
-            : false;
-        
+        $preheader = $params['preheader'] ?? false;
+
         $library = Library::find($campaign_data->library);
 
         for ($i = 0; $i < count($email_array); ++$i) {
