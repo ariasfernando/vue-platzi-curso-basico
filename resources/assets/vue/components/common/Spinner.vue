@@ -27,9 +27,9 @@
   .spinner-wrapper {
     width: 50px;
     height: 40px;
-    position: fixed;
-    right: 15px;
-    bottom: 15px;
+    position: absolute;
+    z-index: 99999;
+    display: block;
   }
 
   .spinner {

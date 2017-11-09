@@ -159,6 +159,21 @@
 .modal-mask{
     background: rgba(0,0,0,0.7);
     font-family: 'Open Sans', Arial, sans-serif!important;
+
+    .close{
+    	float: right;
+	    font-size: 21px!important;
+	    font-weight: 700!important;
+	    line-height: 1;
+	    color: #000!important;
+	    text-shadow: 0 1px 0 @stensul-white;
+	    opacity: .2;
+	    filter: alpha(opacity=20);
+	    width: auto!important;
+	    height: auto!important;
+	    background: none!important;
+	    border: none!important;
+    }
 	
     h4,
     h3{
@@ -400,10 +415,11 @@
         	}
 
         	label.logo-alignment{
-				font-weight: 300;
+				font-weight: 300!important;
 				float: left;
     			width: auto;
     			margin-right: 20px;
+    			margin-left: 20px;
 			}
 
 			.logo-alignment-radio-group{
