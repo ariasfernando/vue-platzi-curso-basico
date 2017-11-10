@@ -30,6 +30,10 @@
     position: absolute;
     z-index: 99999;
     display: block;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -25px;
   }
 
   .spinner {
