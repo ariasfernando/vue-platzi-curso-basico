@@ -279,8 +279,8 @@ class CampaignController extends Controller
      */
     public function postSendPreview(Request $request)
     {
-        $params = Campaign::find($request->input('campaign_id'));
-        StensulLocale::init($params['locale']);
+        $campaign = Campaign::find($request->input('campaign_id'));
+        StensulLocale::init($campaign['locale']);
         if (env('EMAIL_PREVIEW_AS_ATTACHMENT', false)) {
             return EmailSender::sendPreviewAsAttachment(
                 $request->input('campaign_id'),
@@ -290,11 +290,11 @@ class CampaignController extends Controller
         } else {
             $params = [];
 
-            if ($request->has('subject') && \Config::get('campaign.preview.edit_subject_line')) {
-                $params['subject'] = $request->input('subject');
-            }
+            $params['subject'] = $request->input('subject');
 
-            if ($request->has('preheader') && \Config::get('campaign.preview.show_preheader')) {
+            if (isset($campaign['campaign_data']['library_config']['preheader'])
+                && $campaign['campaign_data']['library_config']['preheader'] === true) {
+
                 $params['preheader'] = $request->input('preheader');
             }
 

@@ -26,6 +26,15 @@
                     </div>
                     <label class="error" v-if="emailError">{{emailError}}</label>
                     <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
+                    <div class="input-group">
+                      <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
+                        id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
+                    </div>
+                    <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
+                      <input type="text" class="form-control" name="send-preview-preheader" value=""
+                        id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
+                        <p class="info">The best practice is to limit preheaders to 50 characters.</p>
+                    </div>
                   </div>
                 </form>
                 <div class="share-preview pull-right">
@@ -104,11 +113,20 @@
         this.emailError = null;
       },
       send() {
-        const emailAddress =  document.getElementById('send-preview-to').value;
+        const emailAddress = document.getElementById('send-preview-to').value;
+        const subject = document.getElementById('send-preview-subject')
+          ? document.getElementById('send-preview-subject').value
+          : null;
+        const preheader = document.getElementById('send-preview-preheader')
+          ? document.getElementById('send-preview-preheader').value
+          : null;
+
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch("campaign/sendPreview", {
           campaignId: this.campaign.campaign_id,
-          emailAddress: emailAddress
+          emailAddress: emailAddress,
+          subject: subject,
+          preheader: preheader
         }).then(response => {
           if (response.error === undefined) {
             this.close();
@@ -147,9 +165,9 @@
       updateDimensions() {
 
         this.widthDesktop = this.widthPreview
-          = this.$store.state.campaign.campaign.campaign_data.library_config.templateWidth || 660;
+          = this.campaign.campaign_data.library_config.templateWidth || 660;
 
-        this.widthMobile = this.$store.state.campaign.campaign.campaign_data.library_config.templateMobileWidth || 480;
+        this.widthMobile = this.campaign.campaign_data.library_config.templateMobileWidth || 480;
 
         this.previewSrc = this.$app.baseUrl + "/public/html/" + this.campaign.campaign_id;
         this.shareURL = this.$app.baseUrl + '/public/view/' + this.campaign.campaign_id;
@@ -164,7 +182,7 @@
     },
     created () {
 
-      if (this.$store.state.campaign.campaign.campaign_data) {
+      if (this.campaign.campaign_data) {
         this.updateDimensions();
       }
     }
@@ -202,9 +220,9 @@
   }
   .modal-container {
     width: 750px;
-    height: 577px;
+    height: 632px;
     overflow: scroll;
-    margin: 0 auto;
+    margin: -20px auto;
     padding: 15px;
     background-color: #fff;
     border-radius: 0;
@@ -224,6 +242,10 @@
 
     #send-preview-form button{
       padding: 8px 20px 7px 20px;
+    }
+    #send-preview-form .input-group {
+      width: 100%;
+      margin-top: 10px;
     }
     .btn-copy {
       height: 34px;

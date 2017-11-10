@@ -203,6 +203,8 @@ export default {
       json: {
         campaign_id: data.campaignId,
         mail: data.emailAddress,
+        subject: data.subject || '',
+        preheader: data.preheader || ''
       },
       endpoint: endpoints.campaign.sendPreview,
     };
