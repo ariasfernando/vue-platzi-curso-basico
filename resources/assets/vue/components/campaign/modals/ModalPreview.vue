@@ -28,11 +28,12 @@
                     <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
                     <div class="input-group">
                       <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
-                        id="send-preview-subject" placeholder="Subject Line" data-validation='{ "required":"false" }'/>
+                        id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
                     </div>
                     <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
                       <input type="text" class="form-control" name="send-preview-preheader" value=""
-                        id="send-preview-preheader" placeholder="Preheader" data-validation='{ "required":"false" }'/>
+                        id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
+                        <p class="info">The best practice is to limit preheaders to 50 characters.</p>
                     </div>
                   </div>
                 </form>
@@ -219,9 +220,9 @@
   }
   .modal-container {
     width: 750px;
-    height: 607px;
+    height: 632px;
     overflow: scroll;
-    margin: 0 auto;
+    margin: -20px auto;
     padding: 15px;
     background-color: #fff;
     border-radius: 0;
