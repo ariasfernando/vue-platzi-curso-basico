@@ -2,6 +2,7 @@ import _ from 'lodash';
 import Q from 'q';
 import clone from 'clone';
 import campaignService from '../services/campaign';
+import imageService from '../services/image';
 
 function campaignStore() {
   return {
@@ -238,6 +239,20 @@ function campaignStore() {
           context.commit('error', error);
           deferred.reject(error);
         });
+        return deferred.promise;
+      },
+      uploadImages(context, data) {
+        const deferred = Q.defer();
+
+        imageService.uploadImages(data)
+          .then((response) => {
+            deferred.resolve(response);
+          })
+          .catch(error => {
+            context.commit('error', error);
+            deferred.reject(error);
+          });
+
         return deferred.promise;
       },
       updateElement(context, edited) {

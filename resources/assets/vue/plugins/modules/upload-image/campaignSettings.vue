@@ -17,6 +17,9 @@
   export default {
     props: ['name', 'plugin'],
     computed: {
+      campaign() {
+        return this.$store.getters["campaign/campaign"];
+      },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
       },
@@ -47,13 +50,19 @@
         this.createImage(files[0]);
       },
       createImage(file) {
-        const image = new Image();
         const reader = new FileReader();
         const vm = this;
 
         reader.onload = (e) => {
           vm.image = e.target.result;
-          this.updateAttribute(vm.image);
+
+          // Upload Image
+          this.$store.dispatch('campaign/uploadImages', {
+            images: [ vm.image ],
+            campaignId: this.campaign.campaign_id
+          }).then((res) => {
+            this.updateAttribute(res[0]);
+          });
         };
 
         reader.readAsDataURL(file);

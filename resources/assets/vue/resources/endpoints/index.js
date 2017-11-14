@@ -31,6 +31,9 @@ module.exports = {
     unlockCampaign: { method: 'post', path: `${baseUrl}/campaign/unlock-forced` },
     favoriteCampaign: { method: 'post', path: `${baseUrl}/campaign/favorite` },
   },
+  image: {
+    uploadImage: { method: 'post', path: `${baseUrl}/campaign/upload-image` },
+  },
   config: {
     getConfig: { method: 'get', path: `${baseUrl}/config/:key` },
   },

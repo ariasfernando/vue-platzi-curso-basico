@@ -29,4 +29,5 @@ const app = new Vue({
   components: {
     Campaign,
   },
+  comments: true,
 }).$mount('#campaign');
