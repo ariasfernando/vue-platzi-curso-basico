@@ -158,6 +158,9 @@
         setTimeout(() => {
           let $emailBody = $('.preview-container').find("iframe").contents().find('.email-body');
           let height = $emailBody.height();
+          $emailBody.find('a').click(function () {
+              return false;
+          });
           this.previewFrameHeight = height;
           $('.iframe-container').scrollTop(0);
         }, 10);
