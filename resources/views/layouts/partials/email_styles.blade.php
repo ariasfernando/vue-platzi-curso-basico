@@ -46,6 +46,11 @@
         display: none !important;
     }
 
+    p {
+        margin: 0;
+        padding: 0;
+    }
+
 	@media screen and (max-width: 480px) {
 
 		table.wrapper-table {
