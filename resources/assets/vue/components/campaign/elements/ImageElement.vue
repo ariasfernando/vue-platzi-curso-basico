@@ -13,7 +13,7 @@
           <tr>
             <td width="100%" :align="component.attribute.align" :valign="component.attribute.valign">
               <a @click.prevent
-                 :href="component.attribute.href" 
+                 :href="component.attribute.href"
                  :alt="component.attribute.alt"
                  :title="component.attribute.title"
                  :target="component.attribute.target"
@@ -22,7 +22,8 @@
                      :src="imageUrl(component.attribute.placeholder)" 
                      :width="component.attribute.width" 
                      :height="component.attribute.height"
-                     :data-open-element-config="elementConfig" 
+                     :alt="component.attribute.alt"
+                     :title="component.attribute.title"
                      border="0"
                 >
               </a>

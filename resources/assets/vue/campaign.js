@@ -4,7 +4,6 @@ import VeeValidate from 'vee-validate';
 import Toast from 'vue-easy-toast';
 import BootstrapVue from 'bootstrap-vue';
 import Croppa from 'vue-croppa';
-// import 'vue-croppa/dist/vue-croppa.css';
 import interceptors from './interceptors';
 import Config from './config';
 import store from './store';
