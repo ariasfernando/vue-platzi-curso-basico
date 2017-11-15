@@ -3,76 +3,71 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container modal-preview">
-            <slot name="header">
-                <button type="button" class="close" @click="close"><span>&times;</span></button>
-            </slot>
-            <slot name="body">
-              <h4>Preview</h4>
-              <div class="send-preview">
-                <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent>
-                  <div class="form-group">
-                    <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
-                      email is not suitable for deployment. In order to access the production-ready HTML, please click
-                      Complete to publish your campaign.
-                    </p>
-                    <div class="input-group">
-                      <span class="btn-group">
-                        <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
-                          placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
-                      </span>
-                      <span class="input-group-btn">
-                        <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send</button>
-                      </span>
-                    </div>
-                    <label class="error" v-if="emailError">{{emailError}}</label>
-                    <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
-                    <div class="input-group">
-                      <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
-                        id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
-                    </div>
-                    <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
-                      <input type="text" class="form-control" name="send-preview-preheader" value=""
-                        id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
-                        <p class="info">The best practice is to limit preheaders to 50 characters.</p>
-                    </div>
+          <slot name="header">
+            <button type="button" class="close" @click="close"><span>&times;</span></button>
+          </slot>
+          <slot name="body">
+            <h4>Preview</h4>
+            <div class="send-preview">
+              <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent>
+                <div class="form-group">
+                  <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
+                    email is not suitable for deployment. In order to access the production-ready HTML, please click
+                    Complete to publish your campaign.
+                  </p>
+                  <div class="input-group">
+                    <span class="btn-group">
+                      <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
+                        placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
+                    </span>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send</button>
+                    </span>
                   </div>
-                </form>
-                <div class="share-preview pull-right">
-                  <form class="form-inline">
-                    <div class="form-group">
-                      <label>Share url</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control share-preview" :value="shareURL" readonly>
-                            <span class="input-group-btn">
-                              <button class="btn btn-default btn-copy beta-btn-primary" @click="copyURL" type="button">Copy</button>
-                            </span>
-                        </div>
-                      </div>
-                  </form>
+                  <label class="error" v-if="emailError">{{emailError}}</label>
+                  <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
+                  <div class="input-group">
+                    <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
+                      id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
+                  </div>
+                  <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
+                    <input type="text" class="form-control" name="send-preview-preheader" value=""
+                      id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
+                      <p class="info">The best practice is to limit preheaders to 50 characters.</p>
+                  </div>
                 </div>
-                <div class="preview-body">
-                  <div class="preview-container">
-                    <div class="mobile-frame"></div>
-                    <slot name="body">
-                      <b-tabs>
-                        <b-tab title="Desktop" @click="togglePreview('desktop')" active>
-                        </b-tab>
-                        <b-tab title="Mobile" @click="togglePreview('mobile')">
-                        </b-tab>
-                      </b-tabs>
-                    </slot>
-                    <div class="iframe-container" :data-template-width="widthPreview">
-                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
+              </form>
+              <div class="share-preview pull-right">
+                <form class="form-inline">
+                  <div class="form-group">
+                    <label>Share url</label>
+                      <div class="input-group">
+                          <input type="text" class="form-control share-preview" :value="shareURL" readonly>
+                          <span class="input-group-btn">
+                            <button class="btn btn-default btn-copy beta-btn-primary" @click="copyURL" type="button">Copy</button>
+                          </span>
+                      </div>
                     </div>
+                </form>
+              </div>
+              <div class="preview-body">
+                <div class="preview-container">
+                  <div class="mobile-frame"></div>
+                  <slot name="body">
+                    <b-tabs>
+                      <b-tab title="Desktop" @click="togglePreview('desktop')" active>
+                      </b-tab>
+                      <b-tab title="Mobile" @click="togglePreview('mobile')">
+                      </b-tab>
+                    </b-tabs>
+                  </slot>
+                  <div class="iframe-container" :data-template-width="widthPreview">
+                    <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
                   </div>
                 </div>
               </div>
-            </slot>
-          <div class="modal-footer">
-            <slot name="footer">
-              <button type="button" class="btn btn-default beta-btn-secondary" @click="close">Close</button>
-            </slot>
-          </div>
+            </div>
+          </slot>
         </div>
       </div>
     </div>
