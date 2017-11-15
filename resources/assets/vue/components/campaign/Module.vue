@@ -68,6 +68,7 @@
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
+  import Comment from '../common/Comment.vue';
 
   module.exports = {
     name: 'Module',
@@ -88,6 +89,7 @@
       ImageElement,
       DividerElement,
       'module-toolbar': ModuleToolbar,
+      Comment
     }
   };
 </script>
