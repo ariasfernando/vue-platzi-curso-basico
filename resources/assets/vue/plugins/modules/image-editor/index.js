@@ -11,18 +11,6 @@ module.exports = {
   campaignSettings,
   data: {
     options: {
-      preventWhiteSpace: {
-        label: 'Prevent white space',
-        key: 'preventWhiteSpace',
-        value: false,
-        type: 'switch',
-      },
-      disableScroll: {
-        label: 'Disable Scroll',
-        key: 'disableScroll',
-        value: false,
-        type: 'switch',
-      },
       width: {
         label: 'Width',
         key: 'width',
@@ -40,6 +28,12 @@ module.exports = {
         key: 'quality',
         value: false,
         type: 'switch',
+      },
+      fileTypes: {
+        label: 'File Types',
+        key: 'fileTypes',
+        value: 'image/*',
+        type: 'text',
       },
       initialSize: {
         label: 'Initial Size',
@@ -63,17 +57,57 @@ module.exports = {
         value: false,
         type: 'switch',
       },
+      preventWhiteSpace: {
+        label: 'Prevent white space',
+        key: 'preventWhiteSpace',
+        value: false,
+        type: 'switch',
+      },
+      disableScroll: {
+        label: 'Disable Scroll',
+        key: 'disableScroll',
+        value: false,
+        type: 'switch',
+      },
       adjustableWidth: {
         label: 'Width Control',
         key: 'adjustableWidth',
         value: false,
         type: 'switch',
       },
+      maxWidth: {
+        label: 'Max width',
+        key: 'maxWidth',
+        value: '600',
+        type: 'text',
+        hint: 'Applies when width control is enabled',
+      },
+      minWidth: {
+        label: 'Min width',
+        key: 'minWidth',
+        value: '20',
+        type: 'text',
+        hint: 'Applies when width control is enabled',
+      },
       adjustableHeight: {
         label: 'Height Control',
         key: 'adjustableHeight',
         value: false,
         type: 'switch',
+      },
+      maxHeight: {
+        label: 'Max Height',
+        key: 'maxHeight',
+        value: '600',
+        type: 'text',
+        hint: 'Applies when height control is enabled',
+      },
+      minHeight: {
+        label: 'Min Height',
+        key: 'minHeight',
+        value: '20',
+        type: 'text',
+        hint: 'Applies when width control is enabled',
       },
       disableZoom: {
         label: 'Disable Zoom',
