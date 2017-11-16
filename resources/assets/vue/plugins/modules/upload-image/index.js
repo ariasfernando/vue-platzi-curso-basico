@@ -3,7 +3,7 @@ const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
   name: 'upload-image',
-  title: 'Upload image',
+  title: 'Single Upload',
   version: '0.0.1',
   author: 'andres@stensul.com',
   target: ['image'],

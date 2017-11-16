@@ -118,8 +118,11 @@ function campaignStore() {
         state.modules[moduleId].structure.columns[columnId].components[componentId] = data.component;
       },
       savePlugin(state, data) {
-        const pluginData = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data;
-        _.merge(pluginData, data.data);
+        const newData = _.extend(
+          clone(state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data),
+          data.data,
+        );
+        state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data = newData;
       },
       saveComponentAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
