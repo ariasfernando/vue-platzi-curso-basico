@@ -64,16 +64,16 @@
     },
     methods: {
       submitImage(data) {
+        this.$store.commit("global/setLoader", true);
         this.$store.dispatch('campaign/uploadImages', {
           images: [ data.imageUrl, data.rawImage ],
           campaignId: this.campaign.campaign_id
         }).then((images) => {
           this.updateAttribute(images[0]);
-
           this.updatePluginData(images, data);
+          this.$store.commit("global/setLoader", false);
+          this.showImageEditor = false;
         });
-
-        this.showImageEditor = false;
       },
       updatePluginData(images, data) {
         this.$store.commit('campaign/savePlugin', {
