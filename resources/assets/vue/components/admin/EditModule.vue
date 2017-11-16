@@ -572,6 +572,7 @@
               padding: 15px 7px;
               margin-bottom: 10px;
               width: 90%;
+              height: 40px;
             }
           }  
         }
