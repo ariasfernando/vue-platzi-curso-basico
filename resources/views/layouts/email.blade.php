@@ -18,7 +18,7 @@
 
 	<?php echo "</he"; ?><?php echo "ad>"; ?>
 
-	<body class="email-body">
+	<body class="st-email-body">
 		{{-- PREVIEW PREHEADER --}}
 		@if(isset($params['preheader_preview']) && strlen($params['preheader_preview']))
 			<div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['preheader_preview'] }}</div>
@@ -33,7 +33,7 @@
 					<table cellpadding="0"
 						   cellspacing="0"
 						   border="0"
-						   class="wrapper-table"
+						   class="st-wrapper-table"
 						   width="{{ $params['campaign_data']->getLibraryConfig('template_width') }}"
 					   >
 						<?= $params['body_html']; ?>
