@@ -70,7 +70,7 @@ export default {
     });
 
     // Remove every class starting with "st-"
-    $cleanedHtml.find("[class*=' st-'], [class^='st-']").removeClass((index, css) => (css.match(/(^|\s)st-\S+/g) || []).join(' '));
+    // $cleanedHtml.find("[class*=' st-'], [class^='st-']").removeClass((index, css) => (css.match(/(^|\s)st-\S+/g) || []).join(' '));
     
     // Remove attr class if it's empty.
     $cleanedHtml.find("[class='']").removeAttr('class');

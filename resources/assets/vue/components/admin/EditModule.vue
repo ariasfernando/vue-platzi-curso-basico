@@ -193,6 +193,22 @@
       }
       &.mobile-mode {
         width: 480px;
+        .st-wrapper{
+          width: 100% !important;
+        }
+        .st-wrapper-content{ 
+          padding: 0px !important;
+        }
+        .st-col{ 
+          display: block!important; 
+          width: 100%!important; 
+          padding: 0px !important;
+        }
+        .st-resize{ 
+          width: 100%!important;
+          display: block!important; 
+          height: auto !important;
+        }
       }
     }
 
@@ -556,6 +572,7 @@
               padding: 15px 7px;
               margin-bottom: 10px;
               width: 90%;
+              height: 40px;
             }
           }  
         }
