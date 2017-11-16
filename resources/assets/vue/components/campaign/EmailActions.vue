@@ -36,9 +36,10 @@
             Save Template
           </button>
 
-          <button class="btn btn-default proof-open-modal beta-btn-secondary" v-if="!campaign.campaign_data.template && this.$app.proofConfig.status"
-              v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
-              v-show="!locked"
+          <button class="btn btn-default proof-open-modal beta-btn-secondary"
+            v-if="!campaign.campaign_data.template && proofAccess.allow && proofAccess.status"
+            v-bind:data-campaign-id="campaign.campaign_id" @click="proof"
+            v-show="!locked"
           >Send for Review</button>
 
           <a class="btn campaign-continue beta-btn-primary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete"
@@ -104,7 +105,12 @@
         hiddenClass () {
           return this.campaign.locked ? 'hidden' : '';
         },
-        campaignConfig: {}
+        campaignConfig: {},
+        proofAccess: {
+          status: this.$app.proofConfig.status,
+          allow: this.$app.permissions.indexOf('edit_proof') >= 0
+            && this.$app.permissions.indexOf('access_proof') >= 0
+        }
       }
     },
     directives: {

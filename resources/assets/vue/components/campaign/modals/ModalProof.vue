@@ -301,6 +301,9 @@
 
     },
     created () {
+      if (!this.proofAccess.status || !this.proofAccess.allow) {
+        return;
+      }
       this.fetchUsers();
       this.fetchReviewers();
 
@@ -319,7 +322,12 @@
         reviewers: [],
         currentReviewer: {},
         currentNotificationMessage: '',
-        startProof: true
+        startProof: true,
+        proofAccess: {
+          status: this.$app.proofConfig.status,
+          allow: this.$app.permissions.indexOf('edit_proof') >= 0
+            && this.$app.permissions.indexOf('access_proof') >= 0
+        }
       }
     },
   };
