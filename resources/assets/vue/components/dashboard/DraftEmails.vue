@@ -165,8 +165,8 @@
       return {
         proof: {
           status: this.$app.proofConfig.status,
-          allow: this.$app.permissions.indexOf('edit_proof')
-                || this.$app.permissions.indexOf('access_proof')
+          allow: this.$app.permissions.indexOf('edit_proof') >= 0
+            && this.$app.permissions.indexOf('access_proof') >= 0
         }
       }
     },
