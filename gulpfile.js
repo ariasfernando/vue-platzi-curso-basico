@@ -165,7 +165,6 @@ gulp.task('elixir-scripts', function () {
           [
             'vue/dashboard.js',
             'js/library/custom-plugins/st-pagination-bar.jquery.js',
-            'js/library/campaign-preview.js',
           ],
           jsDestinationPath + "dashboard-components.js",
           assetsPath
@@ -288,24 +287,12 @@ gulp.task('elixir-scripts', function () {
             'js/library/master-image-editor.js',
             'js/library/master-image-editor.v2.js',
             'js/library/master-button-editor.js',
-            'js/library/campaign-preview.js',
             'js/library/module-manager.js',
             'js/library/modal-manager.js',
             'js/library/campaign-menu.js',
             'js/library/image-manager.js',
           ],
           jsDestinationPath + 'campaign.js',
-          assetsPath
-        )
-        // === Campaign Preview page ===
-        .scripts(
-          [
-            "bower/jquery/dist/jquery.min.js",
-            "bower/jquery-ui/jquery-ui.min.js",
-            "bower/bootstrap/dist/js/bootstrap.min.js",
-            jsAppFilePath("preview.js")
-          ],
-          jsDestinationPath + "preview.js",
           assetsPath
         );
     }
