@@ -89,7 +89,6 @@ class PublicController extends Controller
                 'library_config' => $library->config,
             ]
         );
-
     }
 
     /**

@@ -294,7 +294,6 @@ class CampaignController extends Controller
 
             if (isset($campaign['campaign_data']['library_config']['preheader'])
                 && $campaign['campaign_data']['library_config']['preheader'] === true) {
-
                 $params['preheader'] = $request->input('preheader');
             }
 
