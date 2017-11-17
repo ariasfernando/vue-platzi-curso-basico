@@ -77,10 +77,11 @@
       },
       updatePluginData(images, data) {
 
-        const newData = _.extend(data, {
-          imageSrc: images[0],
+        const newData = {
+          ...data,
+          imageUrl: images[0],
           rawImage: images[1]
-        });
+        };
 
         this.$store.commit('campaign/savePlugin', {
           plugin: this.name,

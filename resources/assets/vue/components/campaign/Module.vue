@@ -17,6 +17,9 @@
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
           <td width="100%">
+
+            <comment :content="msoStartingComment"></comment>
+
             <table class="st-col"
                    align="left"
                    v-for="(column, columnId) in module.structure.columns"
@@ -38,6 +41,9 @@
                   </td>
                 </tr>
             </table>
+
+            <comment :content="msoEndingComment"></comment>
+
           </td>
         </tr>
         <!--2 COLUMNS -->
@@ -68,7 +74,6 @@
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
-  import Comment from '../common/Comment.vue';
 
   module.exports = {
     name: 'Module',
@@ -77,6 +82,23 @@
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
       },
+      templateWidth() {
+        return this.$store.getters["campaign/campaign"].library_config.templateWidth;
+      },
+      msoStartingComment() {
+        return "[if lte mso 7]>" +
+          "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center'>" +
+          "<tr>" +
+          "<td style='width: " + this.templateWidth + "px !important'>" +
+          "<![endif]";
+      },
+      msoEndingComment() {
+        return "[if lte mso 7]>" +
+          "</td>" +
+          "</tr>" +
+          "</table>" +
+          "<![endif]";
+      }
     },
     methods: {
       setComponent(ref) {
@@ -88,8 +110,7 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      'module-toolbar': ModuleToolbar,
-      Comment
+      ModuleToolbar,
     }
   };
 </script>
