@@ -3,7 +3,7 @@ import VueResource from 'vue-resource/dist/vue-resource';
 import Toast from 'vue-easy-toast';
 import BootstrapVue from 'bootstrap-vue';
 import interceptors from './interceptors';
-import Config from './config';
+import Bootstrap from './bootstrap';
 import store from './store';
 import Campaign from './components/campaign/Campaign.vue';
 import ModalPreview from './components/campaign/modals/ModalPreview.vue';
