@@ -118,9 +118,9 @@ function campaignStore() {
         state.modules[moduleId].structure.columns[columnId].components[componentId] = data.component;
       },
       savePlugin(state, payload) {
-        let originalData = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data;
-
-        originalData = { ...originalData, ...payload.data };
+        const originalData = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data;
+        const updated = { ...originalData, ...payload.data };
+        state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data = updated;
       },
       saveComponentAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
