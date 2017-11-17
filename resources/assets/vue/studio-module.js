@@ -5,11 +5,11 @@ import VeeValidate from 'vee-validate';
 import Toast from 'vue-easy-toast';
 import BootstrapVue from 'bootstrap-vue';
 import interceptors from './interceptors';
-import Config from './config';
+import Bootstrap from './bootstrap';
 import { studioModuleRoutes } from './router';
 import store from './store';
 
-Vue.use(Config);
+Vue.use(Bootstrap);
 Vue.use(Toast, {
   horizontalPosition: 'center',
   verticalPosition: 'bottom',

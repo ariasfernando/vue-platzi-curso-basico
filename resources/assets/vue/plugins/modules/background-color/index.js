@@ -14,5 +14,6 @@ module.exports = {
     defaultValue: '#ffffff',
   },
   data: {},
+  render: true,
   enabled: false,
 };

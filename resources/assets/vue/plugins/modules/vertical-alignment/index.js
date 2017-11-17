@@ -14,5 +14,6 @@ module.exports = {
     defaultValue: 'middle',
   },
   data: {},
+  render: true,
   enabled: false,
 };

@@ -117,12 +117,10 @@ function campaignStore() {
         const componentId = data.componentId;
         state.modules[moduleId].structure.columns[columnId].components[componentId] = data.component;
       },
-      savePlugin(state, data) {
-        const newData = _.extend(
-          clone(state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data),
-          data.data,
-        );
-        state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data = newData;
+      savePlugin(state, payload) {
+        const originalData = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data;
+        const updated = { ...originalData, ...payload.data };
+        state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data = updated;
       },
       saveComponentAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;

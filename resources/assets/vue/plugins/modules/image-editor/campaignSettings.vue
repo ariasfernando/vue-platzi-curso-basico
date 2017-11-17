@@ -76,16 +76,19 @@
         });
       },
       updatePluginData(images, data) {
+
+        const newData = {
+          ...data,
+          imageUrl: images[0],
+          rawImage: images[1]
+        };
+
         this.$store.commit('campaign/savePlugin', {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          data: {
-            imageSrc: images[0],
-            rawImage: images[1],
-            ...data
-          }
+          data: newData
         });
       },
       updateAttribute(image) {

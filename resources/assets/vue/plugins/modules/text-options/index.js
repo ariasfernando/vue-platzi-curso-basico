@@ -105,5 +105,6 @@ module.exports = {
       },
     },
   },
+  render: false,
   enabled: false,
 };

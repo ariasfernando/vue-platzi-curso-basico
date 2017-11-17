@@ -5,7 +5,7 @@
       <form>
         <!-- Configuration Inputs -->
         <div class="configuration-field configuration-nomargin">
-          <label>
+          <label for="campaignName">
             Campaign Name
             <a v-if="enableFavorite" @click.prevent="toggleFavorite" href="#" title="Favorite">
               <i class="glyphicon"
@@ -13,12 +13,12 @@
               </i>
             </a>
           </label>
-          <input type="text" placeholder="Campaign Name" name="campaignName" :value="campaign.campaign_name" @blur="saveSettings"/>
+          <input type="text" placeholder="Campaign Name" name="campaignName" id="campaignName" :value="campaign.campaign_name" @blur="saveSettings"/>
         </div>
 
         <div class="form-group configuration-field configuration-nomargin" v-if="enablePreheader">
-          <label title="The best practice is to limit preheaders to 50 characters.">Preheader Text</label>
-          <input type="text" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
+          <label for="campaignPreheader" title="The best practice is to limit preheaders to 50 characters.">Preheader Text</label>
+          <input type="text" placeholder="Preheader Text" name="campaignPreheader" class="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
         </div>
 
         <div class="config-box-divider configuration-field configuration-nomargin" v-if="enableTagging">

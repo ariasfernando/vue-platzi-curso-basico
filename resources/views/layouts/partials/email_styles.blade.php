@@ -1,42 +1,45 @@
 <style type="text/css">
-	a {
-        text-decoration: none
-    }
-
-	/* Client-specific Styles */
-	body.email-body {
+	/* COMMON STYLES */
+    .st-email-body{ 
         width:100% !important;
         -webkit-text-size-adjust: 100%;
-        margin: 0;
-        padding: 0;
-        background:#FFFFFF;
+        margin: 0 !important;
+        padding: 0px; 
+        background-color: #ffffff; 
     }
 
-    /* Force Outlook to provide a "view in browser" menu link. */
-	#outlook a {
-        padding: 0;
-        text-decoration: none !important;
+    #outlook a{
+        padding:0;
+        text-decoration:none!important
     }
 
-	#backgroundTable {
+    #backgroundTable{
         margin:0;
         padding:0;
-        width:100% !important;
+        width:100%!important
     }
 
-    /* Force Hotmail to display emails at full width*/
-	.ExternalClass {
-        width:100%;
-    }
-	.ExternalClass * {
-        line-height: 100%;
-    }
-    /*Force Hotmail to display normal line spacing.  More on that: http://www.emailonacid.com/forum/viewthread/43/ */
-	.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
-        line-height: 100%;
+    .ExternalClass{
+        width:100%
     }
 
-	/*css generic*/
+    .ExternalClass *{
+        line-height:100%
+    }
+
+    .ExternalClass,.ExternalClass p,.ExternalClass span,.ExternalClass font,.ExternalClass td,.ExternalClass div{
+        line-height:100%
+    }
+
+    span.st-preheader{ 
+        display: none!important;
+    }  
+
+    .applelinks {
+        color:#ffffff !important; 
+        text-decoration: none !important; 
+    }  
+
 	a,a:hover,a:link,a:visited {
         text-decoration:none !important;
         outline: none;
@@ -51,54 +54,24 @@
         padding: 0;
     }
 
-	@media screen and (max-width: 480px) {
+    @if(isset($params['campaign_data']['library_config']) && 
+        isset($params['campaign_data']['library_config']['linkColor'])
+    )
+       a{
+            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}
+        } 
+    @endif
 
-		table.wrapper-table {
-            width: 100% !important;
-        }
-        th.element-block-center,
-		td.element-block-center {
-            display: block !important;
-            width: 100% !important;
-            text-align: center !important;
-            padding: 0 !important;
-        }
-		td.text-align-center {
-            text-align: center !important;
-        }
-		td.mobile-margin {
-            padding: 0 10px !important;
-        }
-		tr.show-device {
-            display: block !important;
-        }
-		*.hidden-device {
-            display: none !important;
-        }
-		div.show-img-device {
-			display: table !important;
-			width: 100% !important;
-			float: none;
-			overflow: visible !important;
-			height: auto !important;
-		}
-		.display-mobile {
-            display: block !important;
-            width: 100% !important;
-            overflow: visible !important;
-            max-height: 100% !important;
-        }
-        .image-mobile{
-            display:block!important;
-            width: 100%!important;
-            max-width: 100%!important;
-        }
-        .full-width {
-            width: 100% !important;
-        }
-	}
-    @if(isset($params['library_config']['propietaryCss']))
-        {{ $params['library_config']['propietaryCss'] }}
+    @media  screen and (max-width: 480px) {
+        /*BASE-LAYOUT*/
+        .st-wrapper {width: 100% !important;}
+        .st-wrapper-content{ padding: 0px !important;}
+        .st-col{ display: block!important; width: 100%!important; padding: 0px !important;}
+        .st-resize{ width: 100%!important; display: block!important; height: auto !important;}
+    }
+
+    @if(isset($params['campaign_data']['library_config']['propietaryCss']))
+        {{ $params['campaign_data']->getLibraryConfig('propietaryCss') }}
     @endif
 
     @if(isset($params['campaign_data']['campaign_fonts']))
@@ -122,9 +95,6 @@
 
 <!--[if mso]>
 	<style>
-		table[module-table-wrapper] {
-            width: 560px !important;
-        }
 		td, span, p, a, h5, h6, div {
             font-family: Arial, Helvetica, sans-serif !important;
         }
@@ -133,7 +103,6 @@
 
 <!--[if gte mso 9]>
 	<style>
-		.mso-side-padding-20{ padding-left:20px;padding-right:20px; }
 	</style>
 <![endif]-->
 

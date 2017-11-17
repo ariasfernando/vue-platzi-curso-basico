@@ -1,5 +1,7 @@
-const toggleButton = require('./toggle-button');
+const ToggleButton = require('./toggle-button');
+const Comment = require('./comment');
 
 module.exports = {
-  toggleButton,
+  ToggleButton,
+  Comment,
 };
