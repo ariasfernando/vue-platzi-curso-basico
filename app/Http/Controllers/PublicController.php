@@ -4,8 +4,10 @@ namespace Stensul\Http\Controllers;
 
 use Config;
 use Stensul\Models\Campaign;
+use Stensul\Models\Library;
 use Illuminate\Http\Request;
 use Stensul\Services\EmailHtmlCreator as Html;
+use StensulLocale;
 
 class PublicController extends Controller
 {
@@ -40,6 +42,29 @@ class PublicController extends Controller
     }
 
     /**
+     * Get campaign
+     *
+     * @param string $campaign_id
+     *
+     * @return \Illuminate\Http\RedirectResponse Object | \Illuminate\View\View
+     */
+    public function getCampaign($campaign_id = null)
+    {
+        $campaign = Campaign::findOrFail($campaign_id);
+
+        $library = Library::findOrFail($campaign['library']);
+        $campaign['library_config'] = $library->config;
+
+        return [
+            'campaign' => [
+                'campaign_id' => $campaign_id,
+                'campaign_data' => $campaign,
+                'library_config' => $library->config
+            ]
+        ];
+    }
+
+    /**
      * Html of the processed campaign.
      *
      * @param string $campaign_id
@@ -48,9 +73,23 @@ class PublicController extends Controller
      */
     public function html($campaign_id = null)
     {
-        $campaign = Campaign::findOrFail($campaign_id);
-        $html = new Html($campaign);
-        return $html->getBody();
+        $campaign_data = isset($campaign_id)
+            ? Campaign::findOrFail($campaign_id)
+            : null;
+        $library = Library::find($campaign_data->library);
+
+        StensulLocale::init($campaign_data['locale']);
+
+        return $this->renderView(
+            'layouts.email',
+            ['params' => [
+                'title' => 'preview',
+                'body_html' => $campaign_data->body_html,
+                'campaign_data' => $campaign_data],
+                'library_config' => $library->config,
+            ]
+        );
+
     }
 
     /**

@@ -157,6 +157,11 @@ gulp.task('elixir-scripts', function () {
           assetsPath
         )
         .browserify(
+          'vue/public-view.js',
+          jsDestinationPath + "public-view.js",
+          assetsPath
+        )
+        .browserify(
           [
             'vue/dashboard.js',
             'js/library/custom-plugins/st-pagination-bar.jquery.js',

@@ -1,23 +1,16 @@
-<?php
-$path = url('/public/html/' . $campaign_id );
-?>
 @extends('layouts.preview')
 @section('content')
 
     <div class="col-xs-12">
-
-        <div class="section-container-campaign">
-            @include('partials.campaign.modal_campaign_preview')
-            <!-- column right (container email) -->
-            <section class="section-canvas-email section-box">
-            </section>
+        <div class="col-xs-12" id="public-view">
+            <modal-preview ref="preview" :is-public="true"></modal-preview>
         </div>
-
     </div>
 
 @endsection
 
 @section('footer-script')
-    <script src="{{ cdn( elixir('js/preview.js') ) }}"></script>
-    
+    <script src="{{ cdn(elixir('js/customer.js')) }}"></script>
+    <script src="{{ cdn(elixir('js/library-v2.js')) }}"></script>
+    <script src="{{ cdn( elixir('js/public-view.js') ) }}"></script>
 @stop

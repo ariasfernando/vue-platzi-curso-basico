@@ -21,6 +21,10 @@
 
         </div>
 
+        @section('master-application-scripts')
+            {{-- Global Application JS object --}}
+            @include('partials.application_script')
+        @show
         @section('footer-script')
 
         @show

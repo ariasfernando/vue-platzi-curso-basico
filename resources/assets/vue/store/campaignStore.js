@@ -176,6 +176,14 @@ function campaignStore() {
           })
           .catch(error => context.commit('error', error));
       },
+      getCampaignDataPublic(context, campaignId) {
+        return campaignService.getCampaignPublic(campaignId)
+          .then((response) => {
+            context.commit('loadCampaignData', response.campaign);
+            context.commit('setDirty', false);
+          })
+          .catch(error => context.commit('error', error));
+      },
       saveCampaign(context, data) {
         const deferred = Q.defer();
         campaignService.saveCampaign(data)

@@ -22,7 +22,22 @@ export default {
 
     return deferred.promise;
   },
+  getCampaignPublic(campaignId) {
+    const deferred = Q.defer();
+    const endpoint = endpoints.campaign.getCampaignPublic;
+    const params = {
+      search: { campaignId },
+      endpoint: endpoints.campaign.getCampaignPublic,
+    };
 
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
   saveCampaign(data) {
     const endpoint = endpoints.campaign.saveCampaign;
 

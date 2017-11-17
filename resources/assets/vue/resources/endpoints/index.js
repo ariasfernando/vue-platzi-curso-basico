@@ -21,6 +21,7 @@ module.exports = {
   },
   campaign: {
     getCampaign: { method: 'get', path: `${baseUrl}/campaign/edit/:campaignId?json` },
+    getCampaignPublic: { method: 'get', path: `${baseUrl}/public/get/:campaignId?json` },
     processCampaign: { method: 'post', path: `${baseUrl}/campaign/process` },
     saveCampaign: { method: 'post', path: `${baseUrl}/campaign/save` },
     cloneCampaign: { method: 'post', path: `${baseUrl}/campaign/clone` },

@@ -11,7 +11,7 @@
 	{{-- @TODO Use configService from Vue resources/assets/vue/services/config.js --}}
 	Application.globals.proofConfig = {!! json_encode(Config::get('proof')) !!};
 	Application.globals.csrfToken = "{{ csrf_token() }}";
-	Application.globals.permissions = {!! json_encode(Auth::user()->getPermissions()) !!};
+	Application.globals.permissions = {!! Auth::user() ? json_encode(Auth::user()->getPermissions()) : "{}" !!};
 	Application.globals.preheaderConfig = {!! json_encode(Config::get('view.preheader')) !!};
 	Application.globals.validateUrlExists = ("{{ $app_config["campaign"]["validate_url_exists"]  }}") ? true : false;
 	Application.globals.validateUrlSettings = <?php echo (is_array($app_config['campaign']['validate_url_settings']) ? json_encode($app_config['campaign']['validate_url_settings']) : '[]') ?>;
