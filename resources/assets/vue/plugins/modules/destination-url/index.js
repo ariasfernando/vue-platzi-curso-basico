@@ -18,5 +18,6 @@ module.exports = {
     defaultValue: '_blank',
   },
   data: {},
+  render: true,
   enabled: false,
 };
