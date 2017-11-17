@@ -165,6 +165,10 @@
 
       .plugins{
         padding: 10px;
+
+        .settings-wrapper{
+          padding-bottom: 50px;
+        }
       }
 
       .plugin-wrapper{
