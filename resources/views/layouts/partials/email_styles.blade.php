@@ -7,7 +7,9 @@
         padding: 0px; 
         background-color: #ffffff; 
     }
-
+    .st-wrapper-table {
+        width: 100%;
+    }
     #outlook a{
         padding:0;
         text-decoration:none!important

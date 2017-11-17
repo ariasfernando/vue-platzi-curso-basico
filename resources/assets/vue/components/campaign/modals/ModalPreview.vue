@@ -165,7 +165,7 @@
             $('.iframe-container').height(478);
           }
 
-          let $emailBody = $('.preview-container').find("iframe").contents().find('.email-body');
+          let $emailBody = $('.preview-container').find("iframe").contents().find('.st-email-body');
           let height = $emailBody.height();
           $emailBody.find('a').click(function () {
             return false;
