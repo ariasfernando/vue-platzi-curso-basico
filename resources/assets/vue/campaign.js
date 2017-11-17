@@ -5,11 +5,11 @@ import Toast from 'vue-easy-toast';
 import BootstrapVue from 'bootstrap-vue';
 import Croppa from 'vue-croppa';
 import interceptors from './interceptors';
-import Config from './config';
+import Bootstrap from './bootstrap';
 import store from './store';
 import Campaign from './components/campaign/Campaign.vue';
 
-Vue.use(Config);
+Vue.use(Bootstrap);
 Vue.use(VueResource);
 Vue.use(VeeValidate);
 Vue.use(Toast, {

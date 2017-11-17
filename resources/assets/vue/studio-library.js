@@ -3,12 +3,12 @@ import VueRouter from 'vue-router';
 import VueResource from 'vue-resource/dist/vue-resource';
 import Toast from 'vue-easy-toast';
 import VeeValidate from 'vee-validate';
-import Config from './config';
+import Bootstrap from './bootstrap';
 import interceptors from './interceptors';
 import store from './store';
 import { studioLibraryRoutes } from './router';
 
-Vue.use(Config);
+Vue.use(Bootstrap);
 Vue.use(Toast, {
   horizontalPosition: 'center',
   verticalPosition: 'bottom',
