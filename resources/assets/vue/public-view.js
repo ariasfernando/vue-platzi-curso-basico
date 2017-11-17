@@ -8,7 +8,7 @@ import store from './store';
 import Campaign from './components/campaign/Campaign.vue';
 import ModalPreview from './components/campaign/modals/ModalPreview.vue';
 
-Vue.use(Config);
+Vue.use(Bootstrap);
 Vue.use(VueResource);
 Vue.use(Toast, {
   horizontalPosition: 'center',
