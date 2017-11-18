@@ -2,14 +2,14 @@
 
   <tr v-if="module.type === 'custom'" class="st-module-wrapper">
     <td class="st-toolbar-content st-position-relative">
-      <component v-if="$_app.customModules.indexOf('custom-' + module.name) !== -1" :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
+      <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
     </td>
   </tr>
 
   <tr v-else class="st-module-wrapper">
     <td class="st-toolbar-content st-position-relative"
-        :style="[module.structure.columns.length > 1 ? module.structure.style : '']"
+        :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
     >
@@ -51,7 +51,6 @@
         <tr v-else v-for="(component, componentId) in module.structure.columns[0].components">
           <td :valign="component.attribute.valign"
               :align="component.attribute.align || 'left'"
-              :style="module.structure.style"
           >
               <component :is="component.type"
                          :component="component"
