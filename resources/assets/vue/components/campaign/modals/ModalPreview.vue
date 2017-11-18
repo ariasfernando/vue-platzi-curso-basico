@@ -98,7 +98,7 @@
         return this.$store.state.campaign.campaign;
       },
       previewUrl () {
-        return this.$app.baseUrl + '/template/email-preview/' + this.$store.state.campaign.campaign.campaign_id 
+        return this.$_app.config.baseUrl + '/template/email-preview/' + this.$store.state.campaign.campaign.campaign_id
       }
     },
     methods: {
@@ -167,8 +167,8 @@
 
         this.widthMobile = this.campaign.campaign_data.library_config.templateMobileWidth || 480;
 
-        this.previewSrc = this.$app.baseUrl + "/public/html/" + this.campaign.campaign_id;
-        this.shareURL = this.$app.baseUrl + '/public/view/' + this.campaign.campaign_id;
+        this.previewSrc = this.$_app.config.baseUrl + "/public/html/" + this.campaign.campaign_id;
+        this.shareURL = this.$_app.config.baseUrl + '/public/view/' + this.campaign.campaign_id;
       },
       copyURL() {
         var $modal = $('.modal-preview');

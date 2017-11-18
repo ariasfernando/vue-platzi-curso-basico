@@ -35,7 +35,7 @@
                 <a :href="viewInBrowser" target="_blank" type="button" class="btn beta-btn-secondary">View in browser</a>
               </div>
 
-              <a :href="$app.baseUrl" class="btn btn-back-to-dashboard beta-btn-primary" data-dismiss="modal">Go back to the dashboard</a>
+              <a :href="$_app.config.baseUrl" class="btn btn-back-to-dashboard beta-btn-primary" data-dismiss="modal">Go back to the dashboard</a>
             </slot>
           </div>
         </div>
@@ -61,7 +61,7 @@
         return this.$store.getters['campaign/campaign'];
       },
       viewInBrowser () {
-        return this.$app.baseUrl + '/campaign/public-path/' + this.campaign.campaign_id;
+        return this.$_app.config.baseUrl + '/campaign/public-path/' + this.campaign.campaign_id;
       }
     },
     methods: {

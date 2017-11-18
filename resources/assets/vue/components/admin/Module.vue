@@ -236,7 +236,7 @@
           });
         }
 
-        _.each(this.$app.modulePlugins, (plugin, name) => {
+        _.each(this.$_app.modulePlugins, (plugin, name) => {
           if (plugin.target.indexOf(elType.replace('-element', '')) !== -1) {
             plugins[name] = clone(plugin);
           }

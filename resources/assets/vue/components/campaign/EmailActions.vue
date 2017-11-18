@@ -107,9 +107,9 @@
         },
         campaignConfig: {},
         proofAccess: {
-          status: this.$app.proofConfig.status,
-          allow: this.$app.permissions.indexOf('edit_proof') >= 0
-            && this.$app.permissions.indexOf('access_proof') >= 0
+          status: this.$_app.config.proofConfig.status,
+          allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
+            && this.$_app.config.permissions.indexOf('access_proof') >= 0
         }
       }
     },

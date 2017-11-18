@@ -196,7 +196,7 @@
       },
       fetchCampaigns: function(type) {
         this.showLoading[type] = true;
-        var data = {
+        const data = {
           direction: this.pagination[type].direction,
           page: this.pagination[type].page,
           tags: this.tags,
@@ -204,12 +204,12 @@
           sort: this.pagination[type].sortBy
         };
 
-        var url = '/dashboard/campaigns/';
-        if (type == "template") {
-          var url = '/dashboard/templates/';
+        let url = '/dashboard/campaigns/';
+        if (type === "template") {
+          url = '/dashboard/templates/';
         }
 
-        $.getJSON(this.$app.baseUrl + url + type, data, function(campaigns) {
+        $.getJSON(this.$_app.config.baseUrl + url + type, data, function(campaigns) {
           this.campaigns[type] = campaigns;
           this.showLoading[type] = false;
           this.ready[type] = true;
@@ -219,13 +219,13 @@
         return data.map(function (data) { return data; }).indexOf(value);
       },
       removeSearchTag: function(tag) {
-        var index = this.getIndex(this.tags, tag);
+        const index = this.getIndex(this.tags, tag);
         this.tags.splice(index, 1);
         this.resetPage();
         this.updateCampaigns();
       },
       removeSearchTerm: function(term) {
-        var index = this.getIndex(this.terms, term);
+        const index = this.getIndex(this.terms, term);
         this.terms.splice(index, 1);
         this.resetPage();
         this.updateCampaigns();

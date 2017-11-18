@@ -163,7 +163,7 @@
       },
       fetchUsers () {
 
-        $.getJSON(this.$app.baseUrl + '/proof/users', {}, function(users) {
+        $.getJSON(this.$_app.config.baseUrl + '/proof/users', {}, function(users) {
           this.users = users;
         }.bind(this));
 
@@ -171,7 +171,7 @@
       },
       fetchReviewers () {
 
-        $.getJSON(this.$app.baseUrl + '/proof/reviewers/' + this.campaign.campaign_data._id, {}, function(response) {
+        $.getJSON(this.$_app.config.baseUrl + '/proof/reviewers/' + this.campaign.campaign_data._id, {}, function(response) {
 
           if (response && response.status === 'success') {
               for (index in response.data) {
@@ -324,9 +324,9 @@
         currentNotificationMessage: '',
         startProof: true,
         proofAccess: {
-          status: this.$app.proofConfig.status,
-          allow: this.$app.permissions.indexOf('edit_proof') >= 0
-            && this.$app.permissions.indexOf('access_proof') >= 0
+          status: this.$_app.config.proofConfig.status,
+          allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
+            && this.$_app.config.permissions.indexOf('access_proof') >= 0
         }
       }
     },

@@ -50,7 +50,7 @@
           </button>
           <button
             class="unlock-campaign-btn btn btn-default"
-            :disabled="this.$app.logged_user !== lockedBy"
+            :disabled="this.$_app.config.logged_user !== lockedBy"
             data-toggle="tooltip"
             data-placement="bottom"
             title="Campaign is locked"

@@ -3,7 +3,7 @@
     <h2><i class="glyphicon glyphicon-tasks"></i> {{ toCamel(component.type) }} </h2>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component v-if="plugin.enabled && $globalComponents.indexOf('campaign-' + plugin.name) !== -1" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+        <component v-if="plugin.enabled" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <a v-if="showDefaultButton"
-      class="btn btn-default btn-create beta-btn-primary" :href="$app.baseUrl + '/campaign/edit/' + '?locale=en_us'">
+      class="btn btn-default btn-create beta-btn-primary" :href="$_app.config.baseUrl + '/campaign/edit/' + '?locale=en_us'">
       <i class="glyphicon glyphicon-plus-sign"></i> Create a new email
     </a>
 
@@ -11,7 +11,7 @@
       </button>
       <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
           <li v-for="(locale, key, index) in localeConfig.langs" role="presentation">
-            <a :href="$app.baseUrl + '/campaign/edit?locale=' + key">{{locale.name}}</a>
+            <a :href="$_app.config.baseUrl + '/campaign/edit?locale=' + key">{{locale.name}}</a>
           </li>
       </ul>
     </div>
@@ -23,7 +23,7 @@
       <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
         <li role="presentation">
         <li v-for="library in libraries" role="presentation">
-          <a :href="$app.baseUrl + '/campaign/edit?locale=en_us&library=' + library._id">
+          <a :href="$_app.config.baseUrl + '/campaign/edit?locale=en_us&library=' + library._id">
             {{library.name}}
           </a>
         </li>

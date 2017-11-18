@@ -3,7 +3,7 @@
     <h2><i class="glyphicon glyphicon-tasks"></i> {{ toCamel(module.params.title) }} </h2>
     <div class="plugins">
       <div>
-        <component v-if="$customSettings.indexOf('custom-settings-' + module.name) !== -1" :is="'custom-settings-' + module.name" :module-id="currentCustomModule" :module="module"></component>
+        <component v-if="$_app.customSettings.indexOf('custom-settings-' + module.name) !== -1" :is="'custom-settings-' + module.name" :module-id="currentCustomModule" :module="module"></component>
       </div>
     </div>
   </div>

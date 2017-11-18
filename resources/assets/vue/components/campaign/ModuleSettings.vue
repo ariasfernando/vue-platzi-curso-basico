@@ -6,7 +6,7 @@
     <div class="module-plugins" v-if="hasEnabledPlugins(module)">
 
       <div v-for="(plugin, key) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component v-if="plugin.enabled && $globalComponents.indexOf('campaign-' + plugin.name) !== -1" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+        <component v-if="plugin.enabled && $_app.globalComponents.indexOf('campaign-' + plugin.name) !== -1" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
 
@@ -16,7 +16,7 @@
           <b-tab v-for="(column, columnKey) in module.structure.columns" v-if="hasEnabledPlugins(column)"
                  :title="`${columnKey+1}`" :button-id="`column-${columnKey}`" :key="columnKey">
             <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-              <component v-if="plugin.enabled && $globalComponents.indexOf('campaign-' + plugin.name) !== -1"
+              <component v-if="plugin.enabled && $_app.globalComponents.indexOf('campaign-' + plugin.name) !== -1"
                          :is="'campaign-' + plugin.name" :name="moduleKey" :plugin="plugin"
                          :column-id="columnKey" :module-id="currentModule"></component>
             </div>

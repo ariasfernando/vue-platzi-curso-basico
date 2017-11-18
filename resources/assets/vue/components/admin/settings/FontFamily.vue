@@ -30,7 +30,7 @@
         options() {
           const options = [];
 
-          _.each(this.$app.fonts, (group) => {
+          _.each(this.$_app.config.fonts, (group) => {
             _.each(group, (font) => {
               options.push(font);
             });

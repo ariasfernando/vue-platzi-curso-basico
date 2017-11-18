@@ -93,10 +93,10 @@
                 ><i class="glyphicon glyphicon-search"></i></a>
 
               <a
-                :href="$app.baseUrl + '/campaign/edit/' + campaign._id"
+                :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
                 class="edit"
                 title="Edit"
-                v-if="!enableLocking || (!campaign.locked || campaign.locked_by === $app.logged_user)"
+                v-if="!enableLocking || (!campaign.locked || campaign.locked_by === $_app.config.logged_user)"
               >
                 <i class="glyphicon glyphicon-pencil"></i>
               </a>
@@ -114,7 +114,7 @@
               <a
                 href="#"
                 class="unlock-campaign"
-                v-if="enableLocking && campaign.locked && campaign.locked_by === $app.logged_user"
+                v-if="enableLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user"
                 @click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
@@ -164,9 +164,9 @@
     data: function() {
       return {
         proof: {
-          status: this.$app.proofConfig.status,
-          allow: this.$app.permissions.indexOf('edit_proof') >= 0
-            && this.$app.permissions.indexOf('access_proof') >= 0
+          status: this.$_app.config.proofConfig.status,
+          allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
+            && this.$_app.config.permissions.indexOf('access_proof') >= 0
         }
       }
     },
@@ -174,7 +174,7 @@
       goProof: function(token) {
 
         if (token) {
-            var win = window.open(this.$app.baseUrl + "/proof/review/" + token, '_blank');
+            const win = window.open(this.$_app.config.baseUrl + "/proof/review/" + token, '_blank');
             win.focus();
         }
       }

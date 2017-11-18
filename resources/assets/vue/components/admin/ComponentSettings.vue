@@ -145,8 +145,8 @@
     <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
         <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
-      </div>
+          <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
+        </div>
       </b-card>
     </b-collapse>
     <!-- END: Funcionalities -->

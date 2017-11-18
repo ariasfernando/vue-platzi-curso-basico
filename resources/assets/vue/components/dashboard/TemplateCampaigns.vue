@@ -90,7 +90,7 @@
                 <a
                   href="#"
                   class="unlock-campaign"
-                  v-if="enableTemplateLocking && campaign.locked && campaign.locked_by === $app.logged_user"
+                  v-if="enableTemplateLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user"
                   @click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                   data-toggle="tooltip"
                   data-placement="bottom"
@@ -99,10 +99,10 @@
                   <i class="glyphicon fa fa-unlock"></i>
                 </a>
                 <a href="#" @click.prevent="clone(campaign._id)" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
-                <a :href="$app.baseUrl + '/campaign/edit/' + campaign._id"
+                <a :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
                   class="edit"
                   title="Edit"
-                  v-if="!campaign.locked || campaign.locked_by === $app.logged_user"
+                  v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"
                   ><i class="glyphicon glyphicon-pencil"></i></a>
                 <a href="#" title="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
                   ><i class="glyphicon glyphicon-trash"></i></a>

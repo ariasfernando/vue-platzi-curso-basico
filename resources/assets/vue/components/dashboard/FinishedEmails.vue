@@ -74,7 +74,7 @@
               <a href="#" v-on:click.prevent="preview(campaign._id)" title="Preview" target="_blank">
                 <i class="glyphicon glyphicon-eye-open"></i>
               </a>
-              <a :href="$app.baseUrl + '/campaign/download-html/' + campaign._id" title="Download">
+              <a :href="$_app.config.baseUrl + '/campaign/download-html/' + campaign._id" title="Download">
                 <i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i>
               </a>
               <a
@@ -92,7 +92,7 @@
               <a
                 href="#"
                 class="unlock-campaign"
-                v-if="enableLocking && campaign.locked && campaign.locked_by === $app.logged_user"
+                v-if="enableLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user"
                 v-on:click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
@@ -102,10 +102,10 @@
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
               <a href="#" @click.prevent="clone(campaign._id)" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
-              <a :href="$app.baseUrl + '/campaign/edit/' + campaign._id"
+              <a :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
                 class="edit"
                 title="Edit"
-                ><i class="glyphicon glyphicon-pencil" v-if="!campaign.locked || campaign.locked_by === $app.logged_user"></i></a>
+                ><i class="glyphicon glyphicon-pencil" v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"></i></a>
               <a href="#" class="btn-upload-api"
                 v-for="api in campaign.api"
                 v-if="!campaign.locked"

@@ -398,7 +398,7 @@
           libraryService.saveLibrary(formData)
             .then((response) => {
               if (response.message === 'SUCCESS') {
-                window.location.href = this.$app.baseUrl + "/admin/library";
+                window.location.href = this.$_app.config.baseUrl + "/admin/library";
               }
             })
             .catch((error) => {
@@ -408,7 +408,7 @@
           libraryService.createLibrary(formData)
             .then((response) => {
               if (response.message === 'SUCCESS') {
-                window.location.href = this.$app.baseUrl + "/admin/library";
+                window.location.href = this.$_app.config.baseUrl + "/admin/library";
               } else if ( response.message === 'ERROR_EXISTS' ) {
                 this.$root.$toast('Library already exists', {className: 'et-error'});
               }

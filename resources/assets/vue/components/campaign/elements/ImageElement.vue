@@ -51,9 +51,9 @@
       return {
         imageUrl(imagePath) {
           if (imagePath.indexOf('placeholder') > -1) {
-            return this.$app.imageUrl + imagePath;
+            return this.$_app.config.imageUrl + imagePath;
           } else {
-            return this.$app.imageUrl + 'campaigns' + imagePath;
+            return this.$_app.config.imageUrl + 'campaigns' + imagePath;
           }
         }
       }

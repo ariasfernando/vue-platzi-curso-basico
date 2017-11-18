@@ -57,11 +57,11 @@
       return {
         imageUrl(imagePath) {
           if (imagePath.indexOf('placeholder') > -1) {
-            return this.$app.imageUrl + imagePath;
+            return this.$_app.config.imageUrl + imagePath;
           } else if (imagePath.indexOf('data:image') > -1) {
             return imagePath;
           } else {
-            return this.$app.imageUrl + 'campaigns' + imagePath;
+            return this.$_app.config.imageUrl + 'campaigns' + imagePath;
           }
         }
       }
