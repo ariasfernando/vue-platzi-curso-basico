@@ -35,7 +35,7 @@
           if (!_.isEmpty(this.currentComponent)) {
             this.component = modules[this.currentComponent.moduleId].structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
             _.each(this.component.plugins, (plugin) => {
-              if ( plugin.enabled ) {
+              if ( plugin.enabled && plugin.render !== false) {
                 this.ready = true;
               }
             });

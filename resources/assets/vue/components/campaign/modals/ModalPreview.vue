@@ -3,13 +3,13 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container modal-preview">
-          <slot name="header">
+          <slot name="header" v-if="!isPublic">
             <button type="button" class="close" @click="close"><span>&times;</span></button>
           </slot>
           <slot name="body">
             <h4>Preview</h4>
             <div class="send-preview">
-              <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent>
+              <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent  v-if="!isPublic">
                 <div class="form-group">
                   <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
                     email is not suitable for deployment. In order to access the production-ready HTML, please click
@@ -37,7 +37,7 @@
                   </div>
                 </div>
               </form>
-              <div class="share-preview pull-right">
+              <div class="share-preview pull-right" v-if="!isPublic">
                 <form class="form-inline">
                   <div class="form-group">
                     <label>Share url</label>
@@ -81,6 +81,12 @@
     components: {
       BootstrapVue
     },
+    props: {
+      isPublic: {
+        type: Boolean,
+        default: false
+      }
+    },
     data () {
       return {
         widthMobile: 480,
@@ -98,7 +104,11 @@
         return this.$store.state.campaign.campaign;
       },
       previewUrl () {
-        return this.$_app.config.baseUrl + '/template/email-preview/' + this.$store.state.campaign.campaign.campaign_id
+        if (!this.isPublic) {
+          return this.$_app.config.baseUrl + '/template/email-preview/' + this.$store.state.campaign.campaign.campaign_id
+        } else {
+          return this.$_app.config.baseUrl + '/public/html/' + this.$store.state.campaign.campaign.campaign_id
+        }
       }
     },
     methods: {
@@ -151,10 +161,14 @@
       resizePreviewFrame() {
         // Give some time to the browser to resize.
         setTimeout(() => {
-          let $emailBody = $('.preview-container').find("iframe").contents().find('.email-body');
+          if (this.isPublic) {
+            $('.iframe-container').height(478);
+          }
+
+          let $emailBody = $('.preview-container').find("iframe").contents().find('.st-email-body');
           let height = $emailBody.height();
           $emailBody.find('a').click(function () {
-              return false;
+            return false;
           });
           this.previewFrameHeight = height;
           $('.iframe-container').scrollTop(0);
@@ -287,7 +301,7 @@
         overflow-y: auto;
         text-align: center;
         background: #F4F4F4;
-
+        padding-top: 10px;
       }
     }
   }

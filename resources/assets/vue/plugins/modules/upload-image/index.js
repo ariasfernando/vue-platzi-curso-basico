@@ -11,5 +11,6 @@ module.exports = {
   campaignSettings,
   config: {},
   data: {},
+  render: true,
   enabled: false,
 };

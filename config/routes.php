@@ -31,6 +31,7 @@ $default = [
             '/dashboard/templates/{type}'            => 'DashboardController@getTemplates',
             '/public/view/{id}'                      => 'PublicController@view',
             '/public/html/{id}'                      => 'PublicController@html',
+            '/public/get/{id}'                       => 'PublicController@getCampaign',
             '/error'                                 => 'PublicController@error',
             '/config/{key}'                          => 'ConfigController@getGet',
             '/proof/campaign/{id}'                   => 'ProofController@getCampaign',
