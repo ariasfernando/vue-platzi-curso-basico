@@ -98,6 +98,15 @@
       outline-offset: -2px;
     }
 
+    .module-overlay{
+      position: absolute;
+      background: rgba(105, 218, 200, 0.1);
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+    }
+
     .icon-move, .icon-remove,
     .icon-clone, .icon-config {
       display: inline-block;
@@ -108,6 +117,10 @@
     .st-toolbar-content{
       outline: 2px solid @focus;
       outline-offset: -2px;
+    }
+
+    .module-overlay{
+      display: none;
     }
 
     .icon-move, .icon-remove,
