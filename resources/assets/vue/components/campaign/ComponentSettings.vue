@@ -33,6 +33,7 @@
           this.ready = false;
 
           if (!_.isEmpty(this.currentComponent)) {
+            this.unsetCustomModule();
             this.component = modules[this.currentComponent.moduleId].structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
             _.each(this.component.plugins, (plugin) => {
               if ( plugin.enabled && plugin.render !== false) {
@@ -61,6 +62,9 @@
         this.component.settings[key] = setting;
         this.saveComponent();
       },
+      unsetCustomModule() {
+        this.$store.commit("campaign/setCustomModule", undefined);
+      }
     }
   }
 </script>
