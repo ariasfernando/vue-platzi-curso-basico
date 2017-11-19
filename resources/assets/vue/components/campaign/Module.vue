@@ -1,13 +1,13 @@
 <template>
 
-  <tr v-if="module.type === 'custom'" class="st-module-wrapper">
+  <tr v-if="module.type === 'custom'" class="st-module-wrapper" @click="activateModule();">
     <td class="st-toolbar-content st-position-relative">
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
     </td>
   </tr>
 
-  <tr v-else class="st-module-wrapper">
+  <tr v-else class="st-module-wrapper" @click="activateModule();">
     <td class="st-toolbar-content st-position-relative"
         :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
@@ -103,6 +103,23 @@
       setComponent(ref) {
         this.$store.commit("campaign/setCurrentComponent", ref);
       },
+      activateModule(){
+        var module = document.querySelectorAll('.st-module-wrapper');
+
+        var active;
+
+        for (var i = 0; i < module.length; i++){
+          module[i].addEventListener('click', function(evt){
+
+            if (active) { active.classList.remove('st-module-wrapper-active') }
+
+            evt.currentTarget.classList.add('st-module-wrapper-active');
+
+            active = evt.currentTarget
+
+          });
+        }
+      }
     },
     components: {
       TextElement,

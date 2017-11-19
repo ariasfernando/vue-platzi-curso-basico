@@ -94,8 +94,20 @@
   .st-module-wrapper:hover {
 
     .st-toolbar-content{
-      outline: 1px solid @focus;
-      outline-offset: -1px;
+      outline: 2px solid @focus;
+      outline-offset: -2px;
+    }
+
+    .icon-move, .icon-remove,
+    .icon-clone, .icon-config {
+      display: inline-block;
+    }
+  }
+
+  .st-module-wrapper-active{
+    .st-toolbar-content{
+      outline: 2px solid @focus;
+      outline-offset: -2px;
     }
 
     .icon-move, .icon-remove,
