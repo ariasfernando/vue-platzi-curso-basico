@@ -145,7 +145,9 @@ const actions = {
   addColumn(context) {
     const column = clone(defaultElements.column);
     const colPlugins = {};
-    _.each(Vue.app.modulePlugins, (plugin, name) => {
+    const modulePlugins = Vue.prototype.$_app.modulePlugins;
+
+    _.each(modulePlugins, (plugin, name) => {
       if (plugin.target.indexOf('column') !== -1) {
         colPlugins[name] = clone(plugin);
       }

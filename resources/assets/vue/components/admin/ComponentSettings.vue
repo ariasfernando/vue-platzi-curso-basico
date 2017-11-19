@@ -32,7 +32,7 @@
                 <!-- Input Text -->
                 <input v-if="setting.type === 'text'"
                        v-validate="'required'"
-                       v-model="setting.value"
+                       :value="setting.value"
                        :class="{'input': true, 'is-danger': errors.has(setting.name) }"
                        :name="setting.name"
                        :placeholder="setting.label"
@@ -49,7 +49,7 @@
                 <div @click.prevent="toggleSketch">
                   <input v-if="setting.type === 'color'"
                          v-validate="'required'"
-                         v-model="setting.value.hex"
+                         :value="setting.value.hex"
                          type="text"
                          class="sketchbackground"
                          :class="{'input': true, 'is-danger': errors.has(setting.name) }"
