@@ -7,7 +7,7 @@
           <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
               <draggable id="emailCanvas"
                          :class="buildingMode + '-mode'"
-                         class="email-canvas"
+                         class="email-canvas st-wrapper-table"
                          cellspacing="0"
                          cellpadding="0"
                          border="0"

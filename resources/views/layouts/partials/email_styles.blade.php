@@ -7,9 +7,7 @@
         padding: 0px; 
         background-color: #ffffff; 
     }
-    .st-wrapper-table {
-        width: 100%;
-    }
+
     #outlook a{
         padding:0;
         text-decoration:none!important
@@ -68,6 +66,7 @@
         /*BASE-LAYOUT*/
         .st-wrapper {width: 100% !important;}
         .st-wrapper-content{ padding: 0px !important;}
+        .st-wrapper-table { width: 100% !important; }
         .st-col{ display: block!important; width: 100%!important; padding: 0px !important;}
         .st-resize{ width: 100%!important; display: block!important; height: auto !important;}
     }
