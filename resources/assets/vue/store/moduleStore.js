@@ -9,6 +9,7 @@ const state = {
   currentComponent: {},
   activeColumn: 0,
   buildingMode: 'desktop',
+  showRaw: false,
   changeSettingComponent: {
     style: {},
     attribute: {},
@@ -31,7 +32,10 @@ const getters = {
   },
   buildingMode(state) {
     return state.buildingMode;
-  }
+  },
+  showRaw(state) {
+    return state.showRaw;
+  },
 };
 
 const mutations = {
@@ -135,6 +139,9 @@ const mutations = {
   },
   setBuildingMode(state, mode) {
     state.buildingMode = mode;
+  },
+  toggleRaw(state) {
+    state.showRaw = !state.showRaw;
   },
   error(state, err) {
     console.log(err);

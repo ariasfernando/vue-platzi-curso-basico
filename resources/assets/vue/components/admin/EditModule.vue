@@ -73,11 +73,13 @@
       },
       buildingMode() {
         return this.$store.getters["module/buildingMode"];
-      }
+      },
+      showRaw() {
+        return this.$store.getters["module/showRaw"];
+      },
     },
     data () {
       return {
-        showRaw: false,
         ready: false,
       }
     },
@@ -133,7 +135,10 @@
         
         const sideToggled = document.getElementById('edit-container');
         sideToggled.classList.toggle('sidebar-closed');
-      }
+      },
+      updateRawModule(e) {
+        this.$store.commit("module/setModuleData", JSON.parse(e.target.value));
+      },
     },
     created () {
       this.loadModule();

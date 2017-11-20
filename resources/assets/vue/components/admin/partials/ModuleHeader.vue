@@ -56,13 +56,10 @@
     },
     methods: {
       toggleRaw() {
-        this.showRaw = !this.showRaw;
+        this.$store.commit("module/toggleRaw");
       },
       changeBuildingMode(mode) {
         this.$store.commit("module/setBuildingMode", mode);
-      },
-      updateRawModule(e) {
-        this.$store.commit("module/setModuleData", JSON.parse(e.target.value));
       },
       setModuleField(data) {
         this.$store.commit("module/setModuleFields", data);
