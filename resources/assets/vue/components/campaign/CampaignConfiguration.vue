@@ -13,7 +13,7 @@
               </i>
             </a>
           </label>
-          <input type="text" placeholder="Campaign Name" name="campaignName" id="campaignName" :value="campaign.campaign_name" @blur="saveSettings"/>
+          <input type="text" placeholder="Campaign Name" name="campaignName" id="campaignName" :value="form.campaignName" @blur="saveCampaignName"/>
         </div>
 
         <div class="form-group configuration-field configuration-nomargin" v-if="enablePreheader">
@@ -86,6 +86,7 @@
         enableAutoSave: false,
         enableLocking: false,
         form: {
+          campaignName: '',
           campaignProcess: false,
           autoSave: false,
           tags: []
@@ -119,6 +120,7 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
+      this.form.campaignName = this.campaign.campaign_name;
 
       this.loadConfig();
     },
@@ -215,7 +217,15 @@
           this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
             {className: 'et-error'});
         });
-      }
+      },
+      saveCampaignName(e) {
+        let value = e.target.value;
+        this.form.campaignName = value;
+        this.$store.commit('campaign/saveSetting', {
+          name: 'campaignName',
+          value: value
+        });
+      },
     }
   }
 </script>
