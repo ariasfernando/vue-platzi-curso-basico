@@ -115,7 +115,7 @@ class DashboardController extends Controller
 
     public function getTags()
     {
-        return Tag::getTagNames();
+        return Tag::getTagList();
     }
 
     private function tagsFilter($campaigns, $tags)

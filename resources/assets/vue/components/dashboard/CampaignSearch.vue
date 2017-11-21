@@ -8,7 +8,6 @@
         v-on:keyup.enter="addSearchTerm"
         v-on:keyup.tab="addSearchTerm"
         v-model="searchModel">
- <!--data-tags='<?php echo htmlentities( json_encode(Tag::getTagNames()), ENT_QUOTES, 'UTF-8' ); ?>'-->
       <span class="input-group-btn">
         <button class="btn btn-default search" type="button" v-on:click.stop.prevent="addSearchTerm"
           ><i class="glyphicon glyphicon-search"></i></button>
@@ -30,11 +29,14 @@
 </template>
 
 <script>
+  import tagService from '../../services/tag'
+
   export default {
     data: function() {
       return {
         timer: null,
-        searchModel: ''
+        searchModel: '',
+        tagNames: ''
       }
     },
     props: {
@@ -88,9 +90,28 @@
     mounted: function () {
       var $el = $(".search-key");
       var _this = this;
+      //  <!--data-tags='<?php echo htmlentities( json_encode(Tag::getTagNames()), ENT_QUOTES, 'UTF-8' ); ?>'-->
+
+      tagService.fetchTags().then((response) => {
+        // this.tagNames = response;
+        console.log(response);
+        this.tagNames = '{';
+        for (let n = 0; n < response.length; n++) {
+          console.log(response[n]);
+          this.tagNames += "'" + response[n] + "',";
+        }
+        this.tagNames += '}';
+        console.log(this.tagNames);
+        this.ready = true;
+        this.loading = false;
+      })
+      .catch((error) => {
+        this.$root.$toast(error, {className: 'et-error'});
+      });
+
       $el.autocomplete({
         source: $el.data('tags'),
-        select: function(event,ui){
+        select: function(event, ui) {
           _this.$emit('add-search-tag', ui.item.value);
           $el.autocomplete("close");
           return false;
