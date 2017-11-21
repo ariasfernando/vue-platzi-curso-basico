@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import plugins from '../plugins';
+import filters from '../filters';
+import directives from '../directives';
 import modules from '../modules';
 import fonts from './fonts';
 import utils from './utils';
@@ -21,6 +23,12 @@ export default {
 
     // Add base and customer fonts
     this.initFonts();
+
+    // Filters
+    this.initFilters();
+
+    // Directives
+    this.initDirectives();
 
     // Custom Modules
     this.initModules();
@@ -65,6 +73,26 @@ export default {
     });
 
     this.Vue.prototype.$_app.config.fonts = fonts;
+  },
+  initFilters() {
+    // Register Global Filters
+    if (customer.filters) {
+      _.merge(filters, customer.filters);
+    }
+
+    _.each(filters, (filter, name) => {
+      this.Vue.filter(name, filter);
+    });
+  },
+  initDirectives() {
+    // Register Global Directives
+    if (customer.directives) {
+      _.merge(directives, customer.directives);
+    }
+
+    _.each(directives, (directive, name) => {
+      this.Vue.directive(name, directive);
+    });
   },
   initModules() {
     // Register Custom Modules
