@@ -57,11 +57,6 @@
           component: this.component
         });
       },
-      changeSetting(key, setting) {
-        setting.value = !setting.value;
-        this.component.settings[key] = setting;
-        this.saveComponent();
-      },
       unsetCustomModule() {
         this.$store.commit("campaign/setCustomModule", undefined);
       }
