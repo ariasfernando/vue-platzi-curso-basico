@@ -34,6 +34,7 @@ module.exports = {
   },
   image: {
     uploadImage: { method: 'post', path: `${baseUrl}/campaign/upload-image` },
+    getLibrary: { method: 'get', path: `${baseUrl}/template/library/:library` },
   },
   config: {
     getConfig: { method: 'get', path: `${baseUrl}/config/:key` },

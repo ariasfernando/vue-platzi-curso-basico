@@ -838,6 +838,10 @@
           float: right;
       }
 
+      select[multiple] {
+        height: 50px;
+      }
+
       input[type=text]{
         height: 22px;
         background: #F4F4F4;
