@@ -36,4 +36,21 @@ export default {
     return deferred.promise;
   },
 
+  getLibrary(library) {
+    const deferred = Q.defer();
+    const endpoint = endpoints.image.getLibrary;
+
+    const params = {
+      endpoint,
+      search: { library },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
 };
