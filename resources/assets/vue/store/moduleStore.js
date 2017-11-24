@@ -111,9 +111,9 @@ const mutations = {
   removeComponents(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);
   },
-  savePlugin(state, data) {
-    const pluginData = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data;
-    _.merge(pluginData, data.data);
+  savePlugin(state, payload) {
+    const pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
+    _.merge(pluginData, payload.config);
   },
   togglePlugin(state, data) {
     if (data.columnId >= 0 || data.componentId >= 0) {
