@@ -61,7 +61,7 @@ class Campaign extends Eloquent
     protected $dates = ['deleted_at', 'published_at'];
 
     protected $defaults = array(
-        'campaign_name' => 'Untitled Campaign',
+        'campaign_name' => '',
         'locale' => 'en_us',
         'modules_data' => [],
         'body_html' => '',
