@@ -18,7 +18,7 @@
         >
           <tr>
             <td width="100%">
-              <columns-staked-render @add="onAdd" @sort="onSort"></columns-staked-render> 
+              <columns-staked-render @add="onAdd"></columns-staked-render> 
             </td>
           </tr>
         </table>  
@@ -93,13 +93,13 @@
   import clone from 'clone';
   import _ from 'lodash';
   import uc from 'underscore-contrib';
+  import defaultElements from '../../resources/elements';
+  import Plugins from '../../plugins/modules';
+  import ColumnsStakedRender from './partials/ColumnsStakedRender.vue';
   import TextElement from './elements/TextElement.vue';
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
-  import ColumnsStakedRender from './partials/ColumnsStakedRender.vue';
-  import defaultElements from '../../resources/elements';
-  import Plugins from '../../plugins/modules';
 
   module.exports = {
     name: 'Module',
@@ -132,8 +132,6 @@
     },
     methods: {
       onSort(e) {
-        console.log('onSort');
-
         const colId = e.clone.getAttribute('data-column');
         this.$store.commit("module/sortColumn", {
           newIndex: e.newIndex,
@@ -143,7 +141,6 @@
 
       },
       onAdd(e){
-        console.log('asdsada', e);
         let colId = e.to.getAttribute('data-col');
         let elType = e.clone.getAttribute('data-type');
         let cloneItem = e.item;

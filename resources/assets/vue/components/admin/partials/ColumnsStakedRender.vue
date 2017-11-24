@@ -18,7 +18,6 @@
         >
           <draggable v-model="column.components"
                      @add="onAdd"
-                     @sort="onSort"
                      :element="'table'"
                      :options="options" 
                      :data-col="columnId"
@@ -111,12 +110,7 @@
       }
     },
     methods: {
-      onSort(e) {
-        this.$emit('sort');
-
-      },
       onAdd(e){
-        console.log('ale')
         this.$emit('add', e);
       }    
     }    
