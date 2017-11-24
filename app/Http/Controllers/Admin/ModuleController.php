@@ -3,6 +3,7 @@
 namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
+use Imagine;
 use Activity;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
@@ -169,5 +170,17 @@ class ModuleController extends Controller
         );
 
         return ["deleted" => $request->input("moduleId")];
+    }
+    /**
+     * Upload Image to the Module.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
+    public function postUploadImage(Request $request)
+    {
+        $image = new Imagine;
+        return $image->saveImage($request->input('data_image'), 'local:modules');
     }
 }

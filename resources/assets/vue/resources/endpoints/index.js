@@ -18,6 +18,7 @@ module.exports = {
     getAllModules: { method: 'get', path: `${baseUrl}/admin/module/modules` },
     saveModule: { method: 'post', path: `${baseUrl}/admin/module/save` },
     deleteModule: { method: 'post', path: `${baseUrl}/admin/module/delete` },
+    uploadImage: { method: 'post', path: `${baseUrl}/admin/module/upload-image` },
   },
   campaign: {
     getCampaign: { method: 'get', path: `${baseUrl}/campaign/edit/:campaignId?json` },

@@ -36,6 +36,37 @@ export default {
     return deferred.promise;
   },
 
+  uploadModuleImages(data) {
+    const deferred = Q.defer();
+    const endpoint = endpoints.module.uploadImage;
+
+    const promises = [];
+
+    _.each(data.images, (image) => {
+      const params = {
+        endpoint,
+        json: {
+          data_image: image,
+        },
+      };
+      promises.push(request[endpoint.method](params));
+    });
+
+    const images = [];
+
+    Q.all(promises).then((responses) => {
+      _.each(responses, (imageResponse) => {
+        images.push(imageResponse.body.path);
+      });
+
+      deferred.resolve(images);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+
   getLibrary(library) {
     const deferred = Q.defer();
     const endpoint = endpoints.image.getLibrary;
