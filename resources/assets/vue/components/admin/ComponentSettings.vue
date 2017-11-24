@@ -352,7 +352,8 @@
     margin-top: 4px
   }
 
-  .plugin-wrapper {
+  .plugin-wrapper, 
+  .row-toggle{
     border-bottom: 1px solid #f4f4f4;
     margin-bottom: 15px;
 
