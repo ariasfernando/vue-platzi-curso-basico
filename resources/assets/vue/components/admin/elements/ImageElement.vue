@@ -61,7 +61,7 @@
           } else if (imagePath.indexOf('data:image') > -1) {
             return imagePath;
           } else {
-            return this.$_app.config.imageUrl + 'campaigns' + imagePath;
+            return this.$_app.config.imageUrl + 'customer/modules' + imagePath;
           }
         }
       }

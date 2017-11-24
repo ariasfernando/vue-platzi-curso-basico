@@ -65,6 +65,11 @@ return [
             'root'   => public_path() . '/images/customer/libraries/',
         ],
 
+        'local:modules' => [
+            'driver' => 'local',
+            'root'   => public_path() . '/images/customer/modules/',
+        ],
+
         'cloud' => [
             'driver' => 's3',
             'key'    => env('AWS_S3_KEY', ''),

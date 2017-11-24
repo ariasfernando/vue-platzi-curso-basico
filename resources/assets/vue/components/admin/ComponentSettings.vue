@@ -211,18 +211,22 @@
         
         this.createImage(files[0]);
       },
-
       createImage(file) {
-        const image = new Image();
         const reader = new FileReader();
         const vm = this;
 
         reader.onload = (e) => {
           vm.image = e.target.result;
-          this.updateAttributePlaceholder(vm.image);
+
+          // Upload Image
+          this.$store.dispatch('module/uploadImages', {
+            images: [ vm.image ],
+          }).then((res) => {
+            this.updateAttributePlaceholder(res[0]);
+          });
         };
 
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file); 
 
       },
 
@@ -352,7 +356,8 @@
     margin-top: 4px
   }
 
-  .plugin-wrapper {
+  .plugin-wrapper, 
+  .row-toggle{
     border-bottom: 1px solid #f4f4f4;
     margin-bottom: 15px;
 

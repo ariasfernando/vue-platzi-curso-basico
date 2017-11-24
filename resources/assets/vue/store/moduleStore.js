@@ -1,8 +1,10 @@
 import Vue from 'vue/dist/vue';
+import Q from 'q';
 import _ from 'lodash';
 import clone from 'clone';
 import moduleService from '../services/module';
 import defaultElements from '../resources/elements';
+import imageService from '../services/image';
 
 const state = {
   module: {},
@@ -196,6 +198,20 @@ const actions = {
         }
       })
       .catch(error => context.commit('error', error));
+  },
+  uploadImages(context, data) {
+    const deferred = Q.defer();
+
+    imageService.uploadModuleImages(data)
+      .then((response) => {
+        deferred.resolve(response);
+      })
+      .catch(error => {
+        context.commit('error', error);
+        deferred.reject(error);
+      });
+
+    return deferred.promise;
   },
 };
 
