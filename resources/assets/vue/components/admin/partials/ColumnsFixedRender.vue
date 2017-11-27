@@ -8,10 +8,12 @@
            cellpadding="0" 
            cellspacing="0" 
            border="0" 
-           class="st-content-component st-col"
+           class="st-content-component"
     >
       <tr>
-        <td width="100%">
+        <td width="100%" 
+            valign="top"
+        >
           <draggable v-model="column.components"
                      @add="onAdd"
                      :element="'table'"
@@ -25,7 +27,7 @@
             <component v-for="(component, componentId) in column.components"
                        :is="component.type" 
                        :component="component" 
-                       :module-id="moduleId" 
+                       :module-id="module.id"
                        :column-id="columnId"
                        :component-id="componentId" 
                        :key="componentId"
@@ -39,10 +41,10 @@
     <table v-else 
           align="left"
           :style="column.style || ''"
-          :width="column.style && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+          width="100%"
     >
       <tr>
-        <td>
+        <td width="100%">
           <draggable @add="onAdd"
                      :element="'div'" 
                      :options="options" 
@@ -89,10 +91,6 @@
       column: { 
         type: Object,
         default: {}
-      },
-      moduleid: {
-        type: String,
-        default: ''
       },
       columnId: {
         type: Number,

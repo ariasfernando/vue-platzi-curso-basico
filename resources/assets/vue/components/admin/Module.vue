@@ -22,10 +22,10 @@
             </td> -->
             <td v-for="(column, columnId) in module.structure.columns"
                 :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+                valign="top" 
             >
               <columns-fixed-render @add="onAdd" 
                                     :column="column"
-                                    :module-id="module.id" 
                                     :column-id="columnId"
               ></columns-fixed-render>
             </td>
@@ -70,8 +70,7 @@
 
         <!-- Empty Col -->
         <div v-else >
-          <draggable 
-                     @add="onAdd"
+          <draggable @add="onAdd"
                      :element="'div'" 
                      :options="options" 
                      :data-col="columnId"
