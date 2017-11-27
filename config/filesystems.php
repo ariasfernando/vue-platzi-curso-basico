@@ -62,7 +62,12 @@ return [
 
         'local:libraries' => [
             'driver' => 'local',
-            'root'   => public_path() . '/images/libraries/',
+            'root'   => public_path() . '/images/customer/libraries/',
+        ],
+
+        'local:modules' => [
+            'driver' => 'local',
+            'root'   => public_path() . '/images/customer/modules/',
         ],
 
         'cloud' => [

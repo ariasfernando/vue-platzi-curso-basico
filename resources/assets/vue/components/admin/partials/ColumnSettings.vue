@@ -16,7 +16,7 @@
                  v-for="(column, key) in module.structure.columns"
           >
             <!-- Column Settings -->
-            <div class="row" :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings">
+            <div class="row row-style" :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings">
               <div v-if="!columnSetting.group" >
                 <label class="col-sm-7 control-label" :for="columnSetting.name">{{ columnSetting.label }}</label>
                 <div class="col-sm-5 position-relative content-colorpicker">
@@ -134,6 +134,20 @@
             </div>
             <!-- Column Settings -->
 
+            <!-- Fixed Columns  -->
+            <div class="row-toggle">
+              <form class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-sm-7 control-label"><b>Fixed Columns</b></label>
+                  <div class="col-sm-5">
+                    <span>
+                      <toggle-button :value="enabled" color="#78DCD6" :sync="true" :labels="true" @change=""></toggle-button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+            </div>
+ 
             <!-- Column Plugins -->
             <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
               <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="key"></component>
@@ -188,6 +202,7 @@
           { value: 'none', text: 'none' },
         ],
         tabIndex: null,
+        enabled: false,
       }
     },
     methods: {

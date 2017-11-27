@@ -14,8 +14,13 @@
       </span>
     </div>
 
-    <image-editor-modal v-if="showImageEditor" :params="params()" :data="plugin.data"
-                        @update-data="updatePluginData" @image-submit="submitImage" @close="showImageEditor = false">
+    <image-editor-modal
+      v-if="showImageEditor"
+      :params="params"
+      :data="plugin.data"
+      @update-data="updatePluginData"
+      @image-submit="submitImage"
+      @close="showImageEditor = false">
     </image-editor-modal>
   </div>
 </template>
@@ -23,6 +28,7 @@
 <script>
   import _ from 'lodash';
   import ImageEditorModal from 'stensul-image-editor';
+  import imageService from '../../../services/image';
 
   export default {
     props: ['name', 'plugin'],
@@ -46,20 +52,32 @@
           component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
         }
         return component;
-      }
+      },
+      params() {
+        const params = {};
+
+        _.each(this.plugin.config, (option, key) => {
+          if (option.value === true && option.config) {
+            params[key] = option.config;
+          } else {
+            params[key] = option.value;
+          }
+        });
+
+        return params;
+      },
     },
     data() {
       return {
         showImageEditor: false,
-        params() {
-          const params = {};
-
-          _.each(this.plugin.data.options, (option, key) => {
-            params[key] = option.value;
-          });
-
-          return params;
-        },
+        libraryImages: [],
+      }
+    },
+    created() {
+      if (this.params.library) {
+        imageService.getLibrary(this.params.library).then(res => {
+          this.params.libraryImages = res.images;
+        });
       }
     },
     methods: {

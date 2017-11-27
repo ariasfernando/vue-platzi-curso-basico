@@ -170,7 +170,7 @@ module.exports = {
       group: [
         {
           link: 'style',
-          label: 'border top width',
+          label: 'Border top width',
           name: 'borderTopWidth',
           type: 'text',
           value: '0px',

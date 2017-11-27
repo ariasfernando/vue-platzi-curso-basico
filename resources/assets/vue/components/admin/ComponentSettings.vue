@@ -94,7 +94,7 @@
 
                 <!-- Input select -->
                 <span v-if="settingGroup.type === 'select'">
-                  <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponent">
+                  <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponent" >
                   </b-form-select>
                 </span>
 
@@ -191,7 +191,8 @@
             this.ready = true;
           } else {
             this.ready = false;
-          }
+          };
+
         },
         deep: true
       },
@@ -210,18 +211,22 @@
         
         this.createImage(files[0]);
       },
-
       createImage(file) {
-        const image = new Image();
         const reader = new FileReader();
         const vm = this;
 
         reader.onload = (e) => {
           vm.image = e.target.result;
-          this.updateAttributePlaceholder(vm.image);
+
+          // Upload Image
+          this.$store.dispatch('module/uploadImages', {
+            images: [ vm.image ],
+          }).then((res) => {
+            this.updateAttributePlaceholder(res[0]);
+          });
         };
 
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file); 
 
       },
 
@@ -241,35 +246,70 @@
       
       },
       
-      saveComponent() {
-        _.each(this.component.settings, (option) => {
+      saveComponent(evt) {
+        let valTarget = evt.target.value;
+        let nameTarget = evt.target.name;
+
+        _.each(this.component.settings, (option, indexOption) => {
+
+          
           if (option.link === 'style') {
+            
             if ( option.group && option.group.length > 0 ){
-              _.each(option.group, (optionGroup) => {
-                if (option.group.type === 'color'){
-                  this.component.style[optionGroup.name] = optionGroup.value.hex;
+              _.each(option.group, (optionGroup, indexGroup) => {
+
+                if (optionGroup.name === nameTarget){
+
+                  if (optionGroup.type === 'color'){
+                    this.component.style[optionGroup.name] = optionGroup.value.hex;
+                  }else{
+                    if(optionGroup.type === 'select'){
+                      this.component.style[optionGroup.name] = valTarget;
+                    }else{
+                      this.component.style[optionGroup.name] = optionGroup.value;
+                    }
+                  };
+                }
+             
+              }); 
+            
+            }else{
+              
+              if (option.name === nameTarget){
+                if (option.type === 'color'){
+                  this.component.style[option.name] = option.value.hex;
                 }else{
-                  this.component.style[optionGroup.name] = optionGroup.value;
+                  this.component.style[option.name] = option.value;
+                };
+              }
+
+            };
+          };
+
+          if (option.link === 'attribute') {
+            
+            if (option.group && option.group.length > 0 ){
+              _.each(option.group, (optionGroup, indexGroup) => {
+                if (optionGroup.name === nameTarget){
+                  if(optionGroup.type === 'select'){
+                    this.component.attribute[optionGroup.name] = valTarget;
+                  }else{
+                    this.component.attribute[optionGroup.name] = optionGroup.value;
+                  }
                 }
               }); 
             }else{
-              if (option.type === 'color'){
-                this.component.style[option.name] = option.value.hex;
-              }else{
-                this.component.style[option.name] = option.value;
-              }   
-            }
-          }
+              if (option.name === nameTarget){
+                if (option.type === 'select' ){
+                  this.component.attribute[option.name] = valTarget;
+                }else{
+                  this.component.attribute[option.name] = option.value;
+                }
+              }
+            };
 
-          if (option.link === 'attribute') {
-            if (option.group && option.group.length > 0 ){
-              _.each(option.group, (optionGroup) => {
-                this.component.attribute[optionGroup.name] = optionGroup.value;
-              }); 
-            }else{
-              this.component.attribute[option.name] = option.value;
-            }
-          }
+          };
+
         });
 
         this.$store.commit('module/setChangeSettingComponent',{
@@ -307,12 +347,6 @@
           attribute: this.component.attribute || {}
         });
       },
-
-      changeSetting(key, setting) {
-        setting.value = !setting.value;
-        this.component.settings[key] = setting;
-        this.saveComponent();
-      },
     }
   }
 </script>
@@ -322,7 +356,8 @@
     margin-top: 4px
   }
 
-  .plugin-wrapper {
+  .plugin-wrapper, 
+  .row-toggle{
     border-bottom: 1px solid #f4f4f4;
     margin-bottom: 15px;
 

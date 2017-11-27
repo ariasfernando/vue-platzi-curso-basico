@@ -1,8 +1,10 @@
 import Vue from 'vue/dist/vue';
+import Q from 'q';
 import _ from 'lodash';
 import clone from 'clone';
 import moduleService from '../services/module';
 import defaultElements from '../resources/elements';
+import imageService from '../services/image';
 
 const state = {
   module: {},
@@ -111,9 +113,9 @@ const mutations = {
   removeComponents(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);
   },
-  savePlugin(state, data) {
-    const pluginData = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].data;
-    _.merge(pluginData, data.data);
+  savePlugin(state, payload) {
+    const pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
+    _.merge(pluginData, payload.config);
   },
   togglePlugin(state, data) {
     if (data.columnId >= 0 || data.componentId >= 0) {
@@ -196,6 +198,20 @@ const actions = {
         }
       })
       .catch(error => context.commit('error', error));
+  },
+  uploadImages(context, data) {
+    const deferred = Q.defer();
+
+    imageService.uploadModuleImages(data)
+      .then((response) => {
+        deferred.resolve(response);
+      })
+      .catch(error => {
+        context.commit('error', error);
+        deferred.reject(error);
+      });
+
+    return deferred.promise;
   },
 };
 

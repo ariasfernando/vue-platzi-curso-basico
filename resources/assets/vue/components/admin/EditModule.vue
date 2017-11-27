@@ -168,6 +168,11 @@
     display: block!important;
   }
 
+  .row-toggle{
+    border-bottom: 1px solid #f4f4f4;
+    margin-bottom: 15px;
+  }
+
   .st-remove-sketch{
     top:30px!important;
     left:25px!important;
@@ -185,6 +190,10 @@
     height: calc(~"100vh - 53px"); 
     overflow: hidden;
     min-width: 1200px;
+  }
+
+  .row-style-left{
+    padding-bottom: 5px;
   }
 
   .module {
@@ -435,6 +444,10 @@
     }
 
     .left-bar {
+      .row{
+        &:extend(.row-style-left);
+      }
+
       width: 260px;
       color: #666666;
       display: block;
@@ -836,6 +849,10 @@
           font-weight: 300;
           width: 65px;
           float: right;
+      }
+
+      select[multiple] {
+        height: 50px;
       }
 
       input[type=text]{
