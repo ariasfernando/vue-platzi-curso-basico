@@ -17,8 +17,17 @@
                align="center"
         >
           <tr>
-            <td width="100%">
-              <columns-staked-render @add="onAdd"></columns-staked-render> 
+            <!-- <td width="100%">
+              <columns-staked-render @add="onAdd"></columns-staked-render>
+            </td> -->
+            <td v-for="(column, columnId) in module.structure.columns"
+                :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+            >
+              <columns-fixed-render @add="onAdd" 
+                                    :column="column"
+                                    :module-id="module.id" 
+                                    :column-id="columnId"
+              ></columns-fixed-render>
             </td>
           </tr>
         </table>  
@@ -96,6 +105,7 @@
   import defaultElements from '../../resources/elements';
   import Plugins from '../../plugins/modules';
   import ColumnsStakedRender from './partials/ColumnsStakedRender.vue';
+  import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import TextElement from './elements/TextElement.vue';
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
@@ -109,6 +119,7 @@
       ButtonElement,
       ImageElement,
       DividerElement,
+      ColumnsFixedRender,
       ColumnsStakedRender
     },
     data () {
