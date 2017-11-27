@@ -17,10 +17,16 @@
                align="center"
         >
           <tr>
-            <!-- <td width="100%">
+            <!-- If columnsFixed is false, show Columns staked render -->
+            <td width="100%" 
+                v-if="!columnsFixed"
+            >
               <columns-staked-render @add="onAdd"></columns-staked-render>
-            </td> -->
-            <td v-for="(column, columnId) in module.structure.columns"
+            </td> 
+
+            <!-- If columnsFixed is true, show Columns fixed render -->
+            <td v-else 
+                v-for="(column, columnId) in module.structure.columns"
                 :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
                 valign="top" 
             >
@@ -139,7 +145,16 @@
       module() {
         return this.$store.getters["module/module"];
       },
-    },
+      columnsFixed: {
+        get() {
+          return this.$store.getters["module/columnsFixed"];
+        },
+        set(value) {
+          this.columnsFixed = value;
+        },
+  
+      },
+    },   
     methods: {
       onSort(e) {
         const colId = e.clone.getAttribute('data-column');

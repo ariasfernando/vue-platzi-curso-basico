@@ -10,6 +10,7 @@ const state = {
   module: {},
   currentComponent: {},
   activeColumn: 0,
+  columnsFixed: false,
   buildingMode: 'desktop',
   showRaw: false,
   changeSettingComponent: {
@@ -22,6 +23,9 @@ const state = {
 const getters = {
   module(state) {
     return state.module;
+  },
+  columnsFixed(state) {
+    return state.columnsFixed;
   },
   currentComponent(state) {
     return state.currentComponent;
@@ -141,6 +145,9 @@ const mutations = {
   },
   setBuildingMode(state, mode) {
     state.buildingMode = mode;
+  },
+  setColumnsFixed(state, data) {
+    state.columnsFixed = data;
   },
   toggleRaw(state) {
     state.showRaw = !state.showRaw;
