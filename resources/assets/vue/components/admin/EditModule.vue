@@ -943,4 +943,8 @@
     }
   }
 
+  .mce-edit-focus{
+    outline: none!important;
+  }
+
 </style>
