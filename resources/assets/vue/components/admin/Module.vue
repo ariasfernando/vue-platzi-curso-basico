@@ -147,7 +147,7 @@
       },
       columnsFixed: {
         get() {
-          return this.$store.getters["module/columnsFixed"];
+          return this.module.structure.columnsFixed;
         },
         set(value) {
           this.columnsFixed = value;
