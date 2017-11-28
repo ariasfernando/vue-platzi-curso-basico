@@ -374,4 +374,8 @@
     transform: translateX(50px);
     opacity: 0;
   }
+
+  .mce-edit-focus{
+    outline: none!important;
+  }
 </style>
