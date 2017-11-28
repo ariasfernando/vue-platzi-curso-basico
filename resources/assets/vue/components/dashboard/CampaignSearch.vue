@@ -94,14 +94,11 @@
 
       tagService.fetchTags().then((response) => {
         // this.tagNames = response;
-        console.log(response);
         this.tagNames = '{';
         for (let n = 0; n < response.length; n++) {
-          console.log(response[n]);
           this.tagNames += "'" + response[n] + "',";
         }
         this.tagNames += '}';
-        console.log(this.tagNames);
         this.ready = true;
         this.loading = false;
       })
