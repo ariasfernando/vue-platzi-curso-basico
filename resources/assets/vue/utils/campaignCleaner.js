@@ -11,6 +11,7 @@ export default {
       'text-editable-0',
       'mce-edit-focus',
       'mce-content-body',
+      'hubspot-mergetag'
     ],
     // Array of attributes to clean from final html
     attrSelectors: [
@@ -33,6 +34,7 @@ export default {
       'data-mce-href',
       'data-mce-style',
       'id',
+      'module'
     ],
     blockSelectors: [
       '.module-toolbar',
