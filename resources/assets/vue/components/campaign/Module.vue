@@ -16,8 +16,9 @@
       <table width="100%" cellspacing="0" cellpadding="0">
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
-          <td width="100%">
-
+          <td :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
+              v-if="!module.structure.columnsFixed"
+          >
             <comment :content="msoStartingComment"></comment>
 
             <table class="st-col"
@@ -42,7 +43,31 @@
                 </tr>
             </table>
 
-            <comment :content="msoEndingComment"></comment>
+            <comment  v-for="(column, columnId) in module.structure.columns" :content="msoEndingComment"></comment>
+
+          </td>
+          <td width="100%" valign="top" v-else v-for="(column, columnId) in module.structure.columns">
+
+            <table class="st-col"
+                   align="left"
+                   :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+                   :style="column.style"
+            >
+                <tr v-for="(component, componentId) in column.components">
+                  <td width="100%" 
+                      :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight +';'"
+                      :bgcolor="column.attribute.bgcolor.hex" 
+                      :valign="column.attribute.valign"
+                      :align="component.attribute.align || 'center'"
+                  >
+                    <component :is="component.type"
+                               :component="component"
+                               :module-id="moduleId"
+                               :column-id="columnId"
+                               :component-id="componentId"></component>
+                  </td>
+                </tr>
+            </table>
 
           </td>
         </tr>

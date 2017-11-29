@@ -21,7 +21,7 @@
             <td width="100%" 
                 v-if="!columnsFixed"
             >
-              <columns-staked-render @add="onAdd"></columns-staked-render>
+              <columns-stacked-render @add="onAdd"></columns-staked-render>
             </td> 
 
             <!-- If columnsFixed is true, show Columns fixed render -->
@@ -30,10 +30,7 @@
                 :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
                 valign="top" 
             >
-              <columns-fixed-render @add="onAdd" 
-                                    :column="column"
-                                    :column-id="columnId"
-              ></columns-fixed-render>
+              <columns-fixed-render @add="onAdd" :column="column" :column-id="columnId"></columns-fixed-render>
             </td>
           </tr>
         </table>  
@@ -109,7 +106,7 @@
   import uc from 'underscore-contrib';
   import defaultElements from '../../resources/elements';
   import Plugins from '../../plugins/modules';
-  import ColumnsStakedRender from './partials/ColumnsStakedRender.vue';
+  import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import TextElement from './elements/TextElement.vue';
   import ButtonElement from './elements/ButtonElement.vue';
@@ -125,7 +122,7 @@
       ImageElement,
       DividerElement,
       ColumnsFixedRender,
-      ColumnsStakedRender
+      ColumnsStackedRender
     },
     data () {
       return {
