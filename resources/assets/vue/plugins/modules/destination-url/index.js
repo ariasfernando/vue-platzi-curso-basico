@@ -11,9 +11,9 @@ module.exports = {
   campaignSettings,
   config: {
     options: {
-      '_blank':'unchecked', 
-      '_self':'expand', 
-      '_top':'new-window' 
+      _blank: 'unchecked',
+      _self: 'expand',
+      _top: 'new-window',
     },
     defaultValue: '_blank',
   },

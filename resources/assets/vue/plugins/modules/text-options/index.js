@@ -9,7 +9,7 @@ module.exports = {
   target: ['button', 'text'],
   studioSettings,
   campaignSettings,
-  data: {
+  config: {
     options: {
       undo: {
         label: 'Undo',

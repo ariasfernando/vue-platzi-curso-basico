@@ -10,7 +10,7 @@
         </div>
       </div>
 
-      <div v-if="plugin.enabled" class="form-group" v-for="(option, name) in plugin.data.options">
+      <div v-if="plugin.enabled" class="form-group" v-for="(option, name) in plugin.config.options">
         <label class="col-sm-7 control-label" :data-name="name"><b>{{ option.label }}</b></label>
         <div class="col-sm-5">
           <span>
@@ -43,7 +43,7 @@
 
         const plugin = module.structure.columns[columnId].components[componentId].plugins[this.name];
         this.enabled = plugin.enabled;
-        this.options = plugin.data.options;
+        this.options = plugin.config.options;
 
         return plugin;
       }
@@ -77,7 +77,7 @@
           plugin: this.name,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          data: {
+          config: {
             options,
           },
         };
