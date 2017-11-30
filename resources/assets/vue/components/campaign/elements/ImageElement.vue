@@ -19,7 +19,7 @@
                  :target="component.attribute.target"
               >
                 <img class="st-resize st-image"
-                     :src="imageUrl(component.attribute.placeholder)" 
+                     :src="imageUrl(component.attribute.placeholder)"
                      :width="component.attribute.width" 
                      :height="component.attribute.height"
                      :alt="component.attribute.alt"
@@ -50,11 +50,7 @@
     data(){
       return {
         imageUrl(imagePath) {
-          if (imagePath.indexOf('placeholder') > -1) {
-            return this.$_app.config.imageUrl + imagePath;
-          } else {
-            return this.$_app.config.imageUrl + 'campaigns' + imagePath;
-          }
+          return this.$_app.config.imageUrl + imagePath;
         }
       }
     },
