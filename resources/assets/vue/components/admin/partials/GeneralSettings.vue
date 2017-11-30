@@ -164,6 +164,21 @@
             </div>
           </div>
         </div>
+
+        <!-- Fixed Columns  -->
+        <div v-if="module.structure.columns.length > 1" class="row-toggle">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label class="col-sm-7 control-label"><b>Fixed Columns</b></label>
+              <div class="col-sm-5">
+                <span>
+                  <toggle-button :value="module.structure.columnsFixed" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
+                </span>
+              </div>
+            </div>
+          </form>
+        </div>
+
       </b-card>
     </b-collapse>
   </div>
@@ -240,6 +255,9 @@
           value: e.target.value,
         });
       },
+      toggle(e){
+        this.$store.commit("module/setColumnsFixed", e.value);
+      },
       setColumns(value) {
         let cols = value;
         let numCols = this.module.structure.columns.length;
@@ -268,6 +286,7 @@
         }
 
       },
+
     }
   }
 </script>

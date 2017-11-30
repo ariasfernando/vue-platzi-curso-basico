@@ -2,7 +2,7 @@
     <div class="rm-wrapper">  
       <table class="st-col st-mso-full-width"
              align="left"
-             :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+             :width="column.attribute && column.attribute.width ? column.attribute.width : 100/numColumns + '%'"
              :style="column.style"
              cellspacing="0" 
              cellpadding="0" 
@@ -25,7 +25,7 @@
           </td>
         </tr>
       </table>
-      <comment v-if="module.structure.columns.length === columnId + 1" :content="msoEndingComment"></comment>
+      <comment v-if="numColumns === columnId + 1" :content="msoEndingComment"></comment>
       <comment v-else :content="msoBetweenComment"></comment>
     </div>
 </template>
@@ -67,10 +67,13 @@
       templateWidth() {
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
+      numColumns() {
+        return this.module.structure.columns.length;
+      },
       msoBetweenComment() {
         return "[if gte mso 9]>" +
           "</td>" +
-          "<td width='width: " + this.templateWidth / this.module.structure.columns.length + "px !important' align='left' valign='top'>" +
+          "<td width='width: " + this.templateWidth / this.numColumns + "px !important' align='left' valign='top'>" +
           "<![endif]";
       },
       msoEndingComment() {

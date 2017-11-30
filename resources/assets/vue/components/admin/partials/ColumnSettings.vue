@@ -133,20 +133,6 @@
               </div>
             </div>
             <!-- Column Settings -->
-
-            <!-- Fixed Columns  -->
-            <div class="row-toggle">
-              <form class="form-horizontal">
-                <div class="form-group">
-                  <label class="col-sm-7 control-label"><b>Fixed Columns</b></label>
-                  <div class="col-sm-5">
-                    <span>
-                      <toggle-button :value="module.structure.columnsFixed" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
-                    </span>
-                  </div>
-                </div>
-              </form>
-            </div>
  
             <!-- Column Plugins -->
             <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
@@ -209,9 +195,6 @@
         const inputElement = e.toElement;
         $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch, .checkbox-transparent')
                                                        .toggleClass('st-show-element');
-      },
-      toggle(e){
-        this.$store.commit("module/setColumnsFixed", e.value);
       },
       saveColumnSettings(key) {
         _.each(this.module.structure.columns[key].settings, (option, index) => {
