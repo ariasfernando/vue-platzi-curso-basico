@@ -69,8 +69,8 @@ export default {
       $cleanedHtml.find(selector).remove();
     });
 
-    // Remove every class starting with "st-"
-    // $cleanedHtml.find("[class*=' st-'], [class^='st-']").removeClass((index, css) => (css.match(/(^|\s)st-\S+/g) || []).join(' '));
+    // Remove every class starting with "rm-"
+    $cleanedHtml.find("[class*=' rm-'], [class^='rm-']").removeClass((index, css) => (css.match(/(^|\s)st-\S+/g) || []).join(' '));
     
     // Remove attr class if it's empty.
     $cleanedHtml.find("[class='']").removeAttr('class');
@@ -96,6 +96,16 @@ export default {
         $(element).removeAttr('data-contenteditable-href'); 
       });
     }
+
+    // Remove empty links
+    var $wrapperElementRemove = $cleanedHtml.find('.rm-wrapper');
+
+    $.each($wrapperElementRemove, function (i, element) {
+        var $element = $(element);
+
+        // Replace element with the content element.
+        $element.replaceWith($element.html());
+    });
 
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);

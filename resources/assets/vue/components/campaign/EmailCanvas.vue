@@ -16,8 +16,8 @@
                          :options="options"
                          :element="'table'"
                          @sort="onSort"
-             >
-                  <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
+              >
+                <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
           </td>
         </tr>

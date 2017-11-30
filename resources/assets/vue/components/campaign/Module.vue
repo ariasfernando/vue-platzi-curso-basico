@@ -13,65 +13,28 @@
         :bgcolor="module.structure.attribute.bgcolor.hex"
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
     >
-      <table width="100%" cellspacing="0" cellpadding="0">
+      <table width="100%" cellspacing="0" cellpadding="0" border="0">
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
-          <td :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
+          <td width="100%" 
               v-if="!module.structure.columnsFixed"
           >
+
             <comment :content="msoStartingComment"></comment>
-
-            <table class="st-col"
-                   align="left"
-                   v-for="(column, columnId) in module.structure.columns"
-                   :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
-                   :style="column.style"
-            >
-                <tr v-for="(component, componentId) in column.components">
-                  <td width="100%" 
-                      :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight +';'"
-                      :bgcolor="column.attribute.bgcolor.hex" 
-                      :valign="column.attribute.valign"
-                      :align="component.attribute.align || 'center'"
-                  >
-                    <component :is="component.type"
-                               :component="component"
-                               :module-id="moduleId"
-                               :column-id="columnId"
-                               :component-id="componentId"></component>
-                  </td>
-                </tr>
-            </table>
-
-            <comment  v-for="(column, columnId) in module.structure.columns" :content="msoEndingComment"></comment>
-
+            <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-staked-render>
+            
           </td>
-          <td width="100%" valign="top" v-else v-for="(column, columnId) in module.structure.columns">
 
-            <table class="st-col"
-                   align="left"
-                   :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
-                   :style="column.style"
-            >
-                <tr v-for="(component, componentId) in column.components">
-                  <td width="100%" 
-                      :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight +';'"
-                      :bgcolor="column.attribute.bgcolor.hex" 
-                      :valign="column.attribute.valign"
-                      :align="component.attribute.align || 'center'"
-                  >
-                    <component :is="component.type"
-                               :component="component"
-                               :module-id="moduleId"
-                               :column-id="columnId"
-                               :component-id="componentId"></component>
-                  </td>
-                </tr>
-            </table>
-
+          <td v-else
+              v-for="(column, columnId) in module.structure.columns" 
+              :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
+              valign="top"
+          >
+            <columns-fixed-render :column="column" :column-id="columnId" :module-id="moduleId"></columns-fixed-render>
           </td>
         </tr>
         <!--2 COLUMNS -->
+
         <!--1 COLUMN -->
         <tr v-else v-for="(component, componentId) in module.structure.columns[0].components">
           <td :valign="component.attribute.valign"
@@ -98,6 +61,8 @@
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
+  import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
+  import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
 
   module.exports = {
     name: 'Module',
@@ -110,17 +75,10 @@
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
       msoStartingComment() {
-        return "[if lte mso 7]>" +
+        return "[if gte mso 9]>" +
           "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center'>" +
           "<tr>" +
-          "<td style='width: " + this.templateWidth + "px !important'>" +
-          "<![endif]";
-      },
-      msoEndingComment() {
-        return "[if lte mso 7]>" +
-          "</td>" +
-          "</tr>" +
-          "</table>" +
+          "<td style='width: " + this.templateWidth / this.module.structure.columns.length + "px !important'>" +
           "<![endif]";
       }
     },
@@ -152,6 +110,8 @@
       ImageElement,
       DividerElement,
       ModuleToolbar,
+      ColumnsStackedRender,
+      ColumnsFixedRender
     }
   };
 </script>

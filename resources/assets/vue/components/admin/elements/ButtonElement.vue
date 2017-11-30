@@ -8,10 +8,10 @@
         class="st-position-relative"
         width="100%"
     >
-      <a @click.prevent 
-           :href="component.attribute.href" 
-           :target="component.attribute.target" 
-           style="text-decoration:none;"
+      <a style="text-decoration:none;" 
+         :href="component.attribute.href" 
+         :target="component.attribute.target" 
+         @click.prevent
       >  
         <table :width="component.attribute.width" 
                :height="component.attribute.height" 

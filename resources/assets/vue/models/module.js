@@ -25,7 +25,7 @@ function Module(data = {}) {
   this.plugins = data.plugins || getPlugins();
 
   this.structure = {
-    columnsFixed: false,
+    columnsFixed: data.structure.columnsFixed || false,
     attribute: {
       bgcolor: attribute.bgcolor || { hex: 'transparent' },
     },

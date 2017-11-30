@@ -104,6 +104,9 @@
 
 <!--[if gte mso 9]>
 	<style>
+       .st-mso-full-width{
+            width: 100%;
+       }
 	</style>
 <![endif]-->
 

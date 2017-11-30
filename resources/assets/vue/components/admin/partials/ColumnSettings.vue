@@ -141,7 +141,7 @@
                   <label class="col-sm-7 control-label"><b>Fixed Columns</b></label>
                   <div class="col-sm-5">
                     <span>
-                      <toggle-button :value="enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
+                      <toggle-button :value="module.structure.columnsFixed" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
                     </span>
                   </div>
                 </div>
@@ -178,9 +178,6 @@
       },
       activeColumn() {
         return this.$store.getters["module/activeColumn"];
-      },
-      enabled(){
-        return this.$store.getters["module/columnsFixed"];
       }
     },
     watch : {
