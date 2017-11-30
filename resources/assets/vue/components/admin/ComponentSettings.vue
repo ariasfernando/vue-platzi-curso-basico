@@ -222,7 +222,7 @@
           this.$store.dispatch('module/uploadImages', {
             images: [ vm.image ],
           }).then((res) => {
-            this.updateAttributePlaceholder(res[0]);
+            this.updateAttributePlaceholder('customer/modules' + res[0]);
           });
         };
 

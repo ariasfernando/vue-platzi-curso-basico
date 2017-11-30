@@ -1,3 +1,4 @@
+import Vue from 'vue/dist/vue';
 import _ from 'lodash';
 import Q from 'q';
 import clone from 'clone';
@@ -254,8 +255,12 @@ function campaignStore() {
         const deferred = Q.defer();
 
         imageService.uploadImages(data)
-          .then((response) => {
-            deferred.resolve(response);
+          .then((images) => {
+            // override with full path
+            _.each(images, (image, key) => {
+              images[key] = `campaigns${image}`;
+            });
+            deferred.resolve(images);
           })
           .catch(error => {
             context.commit('error', error);
