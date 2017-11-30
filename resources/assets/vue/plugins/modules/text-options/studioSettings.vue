@@ -10,13 +10,20 @@
         </div>
       </div>
 
-      <div v-if="plugin.enabled" class="form-group" v-for="(option, name) in plugin.config.options">
-        <label class="col-sm-7 control-label" :data-name="name"><b>{{ option.label }}</b></label>
-        <div class="col-sm-5">
-          <span>
-            <toggle-button :disabled="!enabled" :value="option.value" :name="name" color="#78DCD6" :sync="true" :labels="true" @change="toggleOption"></toggle-button>
-          </span>
-        </div>
+      <div class="btn-group">
+       <button v-if="plugin.enabled" v-for="(option, name) in plugin.data.options" 
+         :data-tooltip="option.label"
+         :class="'btn selectable'"
+         :name="name"
+         :value="option.value"
+         :class="[option.value ? 'active' : '']"
+         @click.prevent="toggleOption"
+         type="button"
+        >
+          <i :class="'mce-ico ' + option.icon" 
+             :data-tooltip="option.label"
+          ></i>
+        </button>
       </div>
     </form>
 
@@ -26,7 +33,7 @@
 <script>
 
   import _ from 'lodash';
-
+  
   export default {
     props: ['name'],
     computed: {
@@ -66,11 +73,22 @@
         this.$store.commit('module/togglePlugin', payload);
       },
       toggleOption(e) {
-        const parentElement = e.srcEvent.target.parentElement;
+        const parentElement = $(e.target).hasClass("mce-ico")
+          ? e.target.parentElement 
+          : e.target;
+
+        // toggle class
+        $(parentElement).toggleClass('active');
+        parentElement.value = $(parentElement).hasClass('active');
+        const value = parentElement.value;
+
+        console.log("value", value);
+        
         const option = parentElement.attributes.getNamedItem('name').value;
+
         const options = {};
         options[option] = {
-          value: e.value
+          value: (value == 'true')
         };
 
         const payload = {
@@ -82,8 +100,72 @@
           },
         };
 
+        console.log("payload", payload)
+
         this.$store.commit('module/savePlugin', payload);
       }
     }
   }
 </script>
+<style lang="less">
+  .btn-group {
+    text-align: left;
+    padding: 5px 5px 10px;
+    .btn {
+      &.selectable {
+        background: #E9E9E9;
+        padding: 4px 8px;
+        margin: 2px;
+        border-color: transparent;
+
+        &.active {
+          background: #78DCD6 !important;
+          color: #FFFFFF !important;
+        }
+
+        &:hover {
+          background: #78DCD6 !important;
+        }
+      }
+    }
+
+    button[data-tooltip]:after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 130%;
+      left: 6%;
+      font-size: 12px;
+      font-weight: 300;
+      background: #666666;
+      padding: 2px 7px;
+      color: #FFFFFF;
+      border-radius: 2px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+    button[data-tooltip]:before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-top: 10px solid #666666;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      transition: all 0.5s ease;
+      opacity: 0;
+      left: 10%;
+      bottom: 90%;
+    }
+    button[data-tooltip]:hover:after {
+      bottom: 54%;
+    }
+    button[data-tooltip]:hover:before {
+      bottom: 52%;
+    }
+    button[data-tooltip]:hover:after,
+    button[data-tooltip]:hover:before {
+      opacity: 1;
+    }
+  }
+</style>
