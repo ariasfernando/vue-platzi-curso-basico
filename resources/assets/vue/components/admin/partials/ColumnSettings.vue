@@ -17,120 +17,19 @@
           >
             <!-- Column Settings -->
             <div class="row row-style" :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings">
+              
               <div v-if="!columnSetting.group" >
-                <label class="col-sm-7 control-label" :for="columnSetting.name">{{ columnSetting.label }}</label>
-                <div class="col-sm-5 position-relative content-colorpicker">
-
-                  <!-- Input Text -->
-                  <input v-if="columnSetting.type === 'text'"
-                         v-model="columnSetting.value"
-                         v-validate="'required'"
-                         :class="{'input': true, 'is-danger': errors.has(columnSetting.name) }"
-                         :name="columnSetting.name"
-                         :placeholder="columnSetting.label"
-                         type="text"
-                         @change="saveColumnSettings(key)">
-
-                  <!-- Input color -->
-                  <input v-if="columnSetting.type === 'color'"
-                         v-model="columnSetting.value.hex"
-                         v-validate="'required'"
-                         class="sketchbackground"
-                         :class="{'input': true, 'is-danger': errors.has(columnSetting.name) }"
-                         :name="columnSetting.name"
-                         :placeholder="columnSetting.label"
-                         type="text"
-                         @click.prevent="toggleSketch"
-                         @change="saveColumnSettings(key)">
-                  <div v-if="columnSetting.type === 'color'"
-                       class="icon-remove st-remove-sketch"
-                       @click.prevent="toggleSketch">
-                    <i class="glyphicon glyphicon-remove"></i>
-                  </div>
-                  <div v-if="columnSetting.type === 'color'"
-                       class="checkbox-transparent"
-                  >
-                    <span>Transparent</span>
-                    <input type="checkbox"
-                           v-model="columnSetting.transparentChecked"
-                           :value="columnSetting.transparentChecked"
-                           :name="columnSetting.name +'-transparent'"
-                           @click="updateColumnSettings(key, columnSetting.name, columnSetting.link, false, columnSetting.transparentChecked )"
-                    >
-                  </div>
-                  <sketch-picker v-if="columnSetting.type === 'color'"
-                                 v-model="columnSetting.value"
-                                 class="sketch-picker"
-                                 @click.native="updateColumnSettings(key, columnSetting.name, columnSetting.link, false, columnSetting.transparentChecked )"></sketch-picker>
-
-                  <!-- Span General Error -->
-                  <span v-show="errors.has(columnSetting.name)"
-                        class="help is-danger">{{ errors.first(columnSetting.name) }}
-                  </span>
-                </div>
+                <column-setting-group :column-setting="columnSetting" 
+                                      :column-key="key">
+                </column-setting-group>
               </div>
 
               <div v-else>
-                <label class="col-sm-4 control-label" :for="columnSetting.name">{{ columnSetting.label }}</label>
-                <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" v-for="(columnSettingGroup, keySettings) in columnSetting.group" >
-
-                 <!-- Input text -->
-                  <input v-if="columnSettingGroup.type === 'text'"
-                         :class="{'input': true, 'is-danger': errors.has(columnSettingGroup.name) }"
-                         :name="columnSettingGroup.name"
-                         v-model="columnSettingGroup.value"
-                         :placeholder="columnSettingGroup.label"
-                         type="text"
-                         v-validate="'required'"
-                         @change="saveColumnSettings(key)">
-                  <!-- Input select -->
-                  <div>
-                    <b-form-select
-                        v-if="columnSettingGroup.type === 'select'"
-                        v-model="columnSettingGroup.value"
-                        :name="columnSettingGroup.name"
-                        :options="optionsSelectedBorderStyle"
-                        @change.native="saveColumnSettings(key)">
-                    </b-form-select>
-                  </div>
-
-                  <!-- Input color -->
-                  <input v-if="columnSettingGroup.type === 'color'"
-                         v-model="columnSettingGroup.value.hex"
-                         v-validate="'required'"
-                         class="sketchborder"
-                         :class="{'input': true, 'is-danger': errors.has(columnSettingGroup.name) }"
-                         :name="columnSettingGroup.name"
-                         :placeholder="columnSettingGroup.label"
-                         type="text"
-                         @click.prevent="toggleSketch"
-                         @change="saveColumnSettings(key)">
-                   <div v-if="columnSettingGroup.type === 'color'"
-                       class="checkbox-transparent"
-                  >
-                    <span>Transparent</span>
-                    <input type="checkbox"
-                           v-model="columnSettingGroup.transparentChecked"
-                           :value="columnSettingGroup.transparentChecked"
-                           :name="columnSettingGroup.name +'-transparent'"
-                           @click="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true, columnSettingGroup.transparentChecked )"
-                    >
-                  </div>       
-                  <div v-if="columnSettingGroup.type === 'color'"
-                       class="icon-remove st-remove-sketch"
-                       @click.prevent="toggleSketch">
-                    <i class="glyphicon glyphicon-remove"></i>
-                  </div>
-                  <sketch-picker v-if="columnSettingGroup.type === 'color'"
-                                 v-model="columnSettingGroup.value"
-                                 class="sketch-picker"
-                                 @click.native="updateColumnSettings(key, columnSettingGroup.name, columnSettingGroup.link, true,columnSettingGroup.transparentChecked )"></sketch-picker>
-                  <!-- Span General Error -->
-                  <span v-show="errors.has(columnSettingGroup.name)"
-                        class="help is-danger">{{ errors.first(columnSettingGroup.name) }}
-                  </span>
-                </div>
+                <column-setting-element :column-setting="columnSetting"
+                                        :column-key="key">
+                </column-setting-element>
               </div>
+
             </div>
             <!-- Column Settings -->
  
@@ -147,16 +46,16 @@
   </div>
 </template>
 
+
 <script>
 
-  import _ from 'lodash';
-  import { Sketch } from 'vue-color';
-  import BootstrapVue from 'bootstrap-vue';
-
+  import ColumnSettingGroup from './ColumnSettingGroup.vue';
+  import ColumnSettingElement from './ColumnSettingElement.vue';
+  
   export default {
     components: {
-      BootstrapVue,
-      'sketch-picker': Sketch,
+      ColumnSettingGroup,
+      ColumnSettingElement
     },
     computed: {
       module() {
@@ -188,54 +87,8 @@
           { value: 'none', text: 'none' },
         ],
         tabIndex: null,
+        enabled: false,
       }
-    },
-    methods: {
-      toggleSketch(e){
-        const inputElement = e.toElement;
-        $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch, .checkbox-transparent')
-                                                       .toggleClass('st-show-element');
-      },
-      saveColumnSettings(key) {
-        _.each(this.module.structure.columns[key].settings, (option, index) => {
-          if (option.link === 'style') {
-            if ( option.group && option.group.length > 0 ){
-              _.each(option.group, (optionGroup, indexGroup) => {
-                this.module.structure.columns[key].style[optionGroup.name] = optionGroup.value;
-              });
-            }else{
-              this.module.structure.columns[key].style[option.name] = option.value;
-            }
-          }
-          if (option.link === 'attribute') {
-            if (option.group && option.group.length > 0 ){
-              _.each(option.group, (optionGroup, indexGroup) => {
-                this.module.structure.columns[key].attribute[optionGroup.name] = optionGroup.value;
-              });
-            }else{
-              this.module.structure.columns[key].attribute[option.name] = option.value;
-            }
-          }
-        });
-      },
-      // TODO Update date used mutation.
-      updateColumnSettings( key , name, link , isGroup, transparentChecked ){
-        _.each(this.module.structure.columns[key].settings, (option, index) => {
-
-            if ( isGroup ){
-               _.each(option.group, (optionGroup, indexGroup) => {
-                if (optionGroup.name === name) {
-                    this.module.structure.columns[key][link][name] = (transparentChecked)? 'transparent':optionGroup.value.hex;
-                }
-              });
-            }else{
-              if (option.name === name) {
-                this.module.structure.columns[key][link][name] = (transparentChecked)? 'transparent':option.value.hex;
-              }
-            }
-
-        });
-      },
-    },
+    }
   }
 </script>
