@@ -31,7 +31,7 @@
     },
     methods: {
       initTinyMCE() {
-        const options = _.filter(this.plugin.data.options, 'value');
+        const options = _.filter(this.plugin.config.options, 'value');
         let toolbar = [];
 
         if (!_.isEmpty(options)) {
