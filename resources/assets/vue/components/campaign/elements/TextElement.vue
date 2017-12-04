@@ -20,6 +20,7 @@
                 :style="component.style"
             >
               <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
+              <div :class="'tool-box-'+editorId"></div>
             </td>
           </tr> 
         </table>     

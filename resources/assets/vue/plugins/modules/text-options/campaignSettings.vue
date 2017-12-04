@@ -48,6 +48,7 @@
 
         const settings = {
           selector: `#${editorId}`,
+          fixed_toolbar_container: `.tool-box-${editorId}`,
           document_base_url: Application.globals.cdnHost + "/js/tinymce/",
           skin: 'lightgray',
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
@@ -68,7 +69,15 @@
                 }
               });
             });
+          },
+
+          setup: function(editor) {
+              editor.on('focus', function(e) {
+                  console.log('focus event', e);
+              });
           }
+
+
         };
 
         if (!_.isEmpty(options)) {
