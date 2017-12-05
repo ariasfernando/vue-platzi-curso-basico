@@ -18,6 +18,11 @@ class ConfigServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        if (env('DOCKER_BUILDING')) {
+            return false;
+        }
+
         $customerConfigPath = base_path() . DS . env('CUSTOMER_CONFIG_FOLDER', 'stensul/customer/config/');
         
         if (\File::exists($customerConfigPath)) {
