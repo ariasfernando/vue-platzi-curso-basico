@@ -1,0 +1,36 @@
+.st-toolbar {
+  position: absolute;
+  top: -34px;
+  z-index: 300;
+  background-color: #f2fcfb;
+  
+  .mce-btn{
+    &.mce-active{
+      background-color: #78DCD6!important;
+      border-color: #69dac8!important;
+
+      &:hover{
+        background-color: #78DCD6!important;
+        border-color: #69dac8!important;
+      }
+    }
+    &[aria-label="Font Sizes"],
+    &[aria-label="Font Family"]{
+      width: 45px;
+      button{
+        padding: 0 20px 0 8px;
+        
+        i.st-toolbar-icon{
+          width: 20px;
+          height: 20px;
+          margin: 0;
+          padding: 7px 0 0 0;
+          border-right: 1px solid #bfbfbf;
+          font-family: 'Glyphicons Halflings'!important;
+        }
+
+      }
+    }       
+    
+  } 
+}
