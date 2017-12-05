@@ -31,7 +31,6 @@
 <script>
   import _ from 'lodash'
   import uc from 'underscore-contrib'
-  import defaultElements from '../../resources/elements'
 
   export default {
     data () {
