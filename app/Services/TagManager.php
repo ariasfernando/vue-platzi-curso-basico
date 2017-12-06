@@ -39,29 +39,6 @@ class TagManager
     }
 
     /**
-     * Get all available tags as an array of names
-     *
-     * @return array
-     */
-    public static function getTagNames()
-    {
-        $tags = [];
-        // Get tags from campaigns, so we won't show tags related to only deleted campaigns
-        $campaign_tags = Campaign::raw(function($collection) {
-            return $collection->aggregate([
-                ['$match' => ['status' => ['$ne' => 2]]], // ignore deleted campaigns
-                ['$unwind' => '$tags'],
-                ['$group' => ['_id' => '$tags']],
-                ['$sort' => ['_id' => 1]]
-            ]);
-        });
-        if (isset($campaign_tags['items'])) {
-            $tags = array_column($campaign_tags['items'], '_id');
-        }
-        return $tags;
-    }
-
-    /**
      * Get a list of tags
      * @return [type] [description]
      */
@@ -91,6 +68,33 @@ class TagManager
     }
 
     /**
+     * Get all available tags as an array of names
+     *
+     * @return array
+     */
+    public static function getTagNames()
+    {
+        $tags = [];
+        // Get tags from campaigns, so we won't show tags related to only deleted campaigns
+        $campaign_tags = Campaign::raw(function($collection) {
+            return $collection->aggregate([
+                ['$match' => ['status' => ['$ne' => 2]]], // ignore deleted campaigns
+                ['$unwind' => '$tags'],
+                ['$group' => ['_id' => '$tags']],
+                ['$sort' => ['_id' => 1]]
+            ]);
+        });
+
+        $campaign_tags = Tag::hydrate($campaign_tags->toArray())->toArray();
+
+        if (count($campaign_tags)) {
+            $tags = array_column($campaign_tags, '_id');
+        }
+
+        return $tags;
+    }
+
+    /**
      * Get a list of popular tags used in campaign
      *
      * @return array
@@ -105,10 +109,7 @@ class TagManager
                 ['$project' => ['count' => ['$size' => '$ids']]]
             ]);
         });
-        if (!isset($tags['items'])) {
-            return [];
-        }
-        $tags = Tag::hydrate($tags['items'])->toArray();
+        $tags = Tag::hydrate($tags->toArray())->toArray();
 
         if (count($tags)) {
             // Sort
