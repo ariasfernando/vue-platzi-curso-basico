@@ -1,6 +1,9 @@
 <template>
-  <div class="component-settings" v-if="ready && component.plugins && Object.keys(component.plugins).length !== 0">
-    <h2><i class="glyphicon glyphicon-tasks"></i> {{ toCamel(component.type) }} </h2>
+  <div class="component-settings">
+    <h2 v-if="ready && component.plugins && Object.keys(component.plugins).length !== 0">
+      <i class="glyphicon glyphicon-tasks"></i>
+      {{ toCamel(component.type) }}
+    </h2>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
         <component v-if="plugin.enabled" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>

@@ -1,29 +1,32 @@
 <template>
   <!-- TEXT ELEMENT -->
-  <tr @click.prevent="setComponent"
-      data-type="text-element"
-  >
-    <td width="100%" 
-        :bgcolor="component.attribute.bgcolor.hex || 'transparent'"
+  <table>
+    <tr @click.prevent="setComponent"
+        data-type="text-element"
     >
-      <table width="100%" 
-             align="center"
-             border="0" 
-             cellpadding="0" 
-             cellspacing="0" 
+      <td width="100%" 
+          :bgcolor="component.attribute.bgcolor.hex || 'transparent'"
       >
-        <tr>
-          <td width="100%" 
-              class="st-text-style st-position-relative" 
-              :align="component.attribute.align" 
-              :style="component.style"
-          >
-            <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
-          </td>
-        </tr> 
-      </table>     
-    </td>
-  </tr>
+        <table width="100%" 
+               align="center"
+               border="0" 
+               cellpadding="0" 
+               cellspacing="0" 
+        >
+          <tr>
+            <td width="100%" 
+                class="st-text-style st-position-relative" 
+                :align="component.attribute.align" 
+                :style="component.style"
+            >
+              <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
+              <div :class="'st-toolbar toolbar-'+editorId"></div>
+            </td>
+          </tr> 
+        </table>     
+      </td>
+    </tr>
+  </table>
   <!-- TEXT ELEMENT ENDS -->
 </template>
 

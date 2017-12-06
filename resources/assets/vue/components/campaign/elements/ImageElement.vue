@@ -1,5 +1,7 @@
 <template>
   <!-- IMAGE ELEMENT -->
+  <table>
+    
     <tr @click.prevent="setComponent"
         data-type="image-element"
     >
@@ -32,6 +34,7 @@
         </table>
       </td>
     </tr>
+  </table>
   <!-- IMAGE ELEMENT ENDS -->
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <table v-for="(column, columnId) in module.structure.columns"
-           v-if="column.components.length"
+    <table v-if="column.components.length"
+           v-for="(column, columnId) in module.structure.columns"
            :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
            :style="column.style || ''" 
            :data-col="columnId"
@@ -81,7 +81,7 @@
   import defaultElements from '../../../resources/elements';
 
   export default {
-    name: 'ColumnsStakedRender',
+    name: 'ColumnsStackedRender',
 
     components: {
       Draggable,

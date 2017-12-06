@@ -142,6 +142,9 @@ const mutations = {
   setBuildingMode(state, mode) {
     state.buildingMode = mode;
   },
+  setColumnsFixed(state, data) {
+    state.module.structure.columnsFixed = data;
+  },
   toggleRaw(state) {
     state.showRaw = !state.showRaw;
   },

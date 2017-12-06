@@ -7,19 +7,19 @@ module.exports = {
     backgroundColor: 'transparent',
     // Border Top
     borderTopWidth: '0px',
-    borderTopStyle: 'solid',
+    borderTopStyle: 'none',
     borderTopColor: '#000000',
     // Border Right
     borderRightWidth: '0px',
-    borderRightStyle: 'solid',
+    borderRightStyle: 'none',
     borderRightColor: '#000000',
     // Border Bottom
     borderBottomWidth: '0px',
-    borderBottomStyle: 'solid',
+    borderBottomStyle: 'none',
     borderBottomColor: '#000000',
     // Border Left
     borderLeftWidth: '0px',
-    borderLeftStyle: 'solid',
+    borderLeftStyle: 'none',
     borderLeftColor: '#000000',
   },
   attribute: {

@@ -108,7 +108,9 @@ class DashboardController extends Controller
             $libraries[$library['_id']] = $library['name'];
         }
         foreach ($result as $key => $campaign) {
-            $result[$key]->library_name = $libraries[(string) $campaign->library];
+            if (isset($libraries[(string) $campaign->library])) {
+                $result[$key]->library_name = $libraries[(string) $campaign->library];
+            }
         }
         return $result;
     }
@@ -236,7 +238,7 @@ class DashboardController extends Controller
             $result = [];
             $x = ($current_page == 1 ) ? 1 : 0;
             foreach ($campaigns_array as $key => $value) {
-                if ($x >= $from && $x <= $to) {
+                if ($x >= $from && $x <= $to && isset($libraries[(string) $value->library])) {
                     $value->library_name = $libraries[(string) $value->library];
                     $result[] =  $value;
                 }
@@ -256,7 +258,9 @@ class DashboardController extends Controller
         } else {
             $result = $campaigns->paginate(self::RESULTS_X_PAGE, self::$campaign_fields);
             foreach ($result as $key => $campaign) {
-                $result[$key]->library_name = $libraries[(string) $campaign->library];
+                if (isset($libraries[(string) $campaign->library])) {
+                    $result[$key]->library_name = $libraries[(string) $campaign->library];
+                }
             }
             return $result;
         }

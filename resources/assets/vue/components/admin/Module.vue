@@ -17,8 +17,20 @@
                align="center"
         >
           <tr>
-            <td width="100%">
-              <columns-staked-render @add="onAdd"></columns-staked-render> 
+            <!-- If columnsFixed is false, show Columns staked render -->
+            <td width="100%" 
+                v-if="!columnsFixed"
+            >
+              <columns-stacked-render @add="onAdd"></columns-staked-render>
+            </td> 
+
+            <!-- If columnsFixed is true, show Columns fixed render -->
+            <td v-else 
+                v-for="(column, columnId) in module.structure.columns"
+                :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+                valign="top" 
+            >
+              <columns-fixed-render @add="onAdd" :column="column" :column-id="columnId"></columns-fixed-render>
             </td>
           </tr>
         </table>  
@@ -61,8 +73,7 @@
 
         <!-- Empty Col -->
         <div v-else >
-          <draggable 
-                     @add="onAdd"
+          <draggable @add="onAdd"
                      :element="'div'" 
                      :options="options" 
                      :data-col="columnId"
@@ -95,7 +106,8 @@
   import uc from 'underscore-contrib';
   import defaultElements from '../../resources/elements';
   import Plugins from '../../plugins/modules';
-  import ColumnsStakedRender from './partials/ColumnsStakedRender.vue';
+  import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
+  import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import TextElement from './elements/TextElement.vue';
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
@@ -109,7 +121,8 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      ColumnsStakedRender
+      ColumnsFixedRender,
+      ColumnsStackedRender
     },
     data () {
       return {
@@ -129,7 +142,16 @@
       module() {
         return this.$store.getters["module/module"];
       },
-    },
+      columnsFixed: {
+        get() {
+          return this.module.structure.columnsFixed;
+        },
+        set(value) {
+          this.columnsFixed = value;
+        },
+  
+      },
+    },   
     methods: {
       onSort(e) {
         const colId = e.clone.getAttribute('data-column');

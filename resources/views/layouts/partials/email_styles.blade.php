@@ -104,11 +104,18 @@
 
 <!--[if gte mso 9]>
 	<style>
+        .st-mso-full-width{
+            width: 100%;
+        }
 	</style>
 <![endif]-->
 
 <!--[if IEMobile]>
 	<style type="text/css">
 		td, span, p, a, h5, h6, div{font-family: Arial, Helvetica, sans-serif !important;}
-	</style>
+	   .st-mso-full-width{
+            width: 100%;
+       }
+        
+    </style>
 <![endif]-->
