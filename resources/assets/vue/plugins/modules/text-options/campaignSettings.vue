@@ -31,7 +31,6 @@
     },
     methods: {
       initTinyMCE() {
-        console.log(this.plugin);
         const options = _.filter(this.plugin.config.options, 'value');
         let toolbar = [];
 
@@ -48,6 +47,7 @@
 
         const settings = {
           selector: `#${editorId}`,
+          fixed_toolbar_container: `.toolbar-${editorId}`,
           document_base_url: Application.globals.cdnHost + "/js/tinymce/",
           skin: 'lightgray',
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
@@ -65,10 +65,34 @@
                 componentId: this.currentComponent.componentId,
                 data: {
                   text: editor.getContent()
-                }
+                } 
               });
             });
+          },
+
+          setup: function(editor) {
+            editor.on('focus', function(e) {
+                
+                // Change icon tiny
+                // TODO  implement DRY.
+                let $toolbox = $(editor.settings.fixed_toolbar_container);
+
+                if( $toolbox.length && !$toolbox.find("div[aria-label='Font Sizes'] .text-size").length ){
+                    setTimeout(function(){
+                        $toolbox.find('div[aria-label="Font Sizes"] button:first').empty();
+                        $toolbox.find('div[aria-label="Font Sizes"] button:first').append('<i class="mce-caret"></i><i class="st-toolbar-icon glyphicon glyphicon-text-size"></i>');
+                    }, 100);
+                };
+                if( $toolbox.length && !$toolbox.find("div[aria-label='Font Family'] .text-size").length ){
+                    setTimeout(function(){
+                        $toolbox.find('div[aria-label="Font Family"] button:first').empty();
+                        $toolbox.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="st-toolbar-icon glyphicon glyphicon-font"></i>');
+                    }, 100);
+                };
+                
+            });
           }
+
         };
 
         if (!_.isEmpty(options)) {

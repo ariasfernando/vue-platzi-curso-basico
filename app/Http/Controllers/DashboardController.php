@@ -108,14 +108,16 @@ class DashboardController extends Controller
             $libraries[$library['_id']] = $library['name'];
         }
         foreach ($result as $key => $campaign) {
-            $result[$key]->library_name = $libraries[(string) $campaign->library];
+            if (isset($libraries[(string) $campaign->library])) {
+                $result[$key]->library_name = $libraries[(string) $campaign->library];
+            }
         }
         return $result;
     }
 
     public function getTags()
     {
-        return Tag::getTagNames();
+        return Tag::getTagList();
     }
 
     private function tagsFilter($campaigns, $tags)
@@ -166,10 +168,10 @@ class DashboardController extends Controller
 
         $total = $campaigns->count();
         $current_page = (int) $request->input('page');
-        $per_page = 5;
+        $per_page = self::RESULTS_X_PAGE;
         $from = ($current_page == 1 ) ? (int) $current_page : (int) ($per_page * ($current_page - 1)) ;
         $to = ($from + ($per_page - 1) <= $total) ? $from + ($per_page - 1) : $total ;
-        $last_page = ($total <= $per_page) ? 1 : ($total % 5) ? (int) ($total / 5) + 1 : (int) ($total / 5);
+        $last_page = ($total <= $per_page) ? 1 : ($total % $per_page) ? (int) ($total / $per_page) + 1 : (int) ($total / $per_page);
 
         if ($current_page != 1) {
             $prev_page_url = \Config::get('app.url') . '/dashboard/templates/current/?page=' . ($current_page - 1);
@@ -236,7 +238,7 @@ class DashboardController extends Controller
             $result = [];
             $x = ($current_page == 1 ) ? 1 : 0;
             foreach ($campaigns_array as $key => $value) {
-                if ($x >= $from && $x <= $to) {
+                if ($x >= $from && $x <= $to && isset($libraries[(string) $value->library])) {
                     $value->library_name = $libraries[(string) $value->library];
                     $result[] =  $value;
                 }
@@ -256,7 +258,9 @@ class DashboardController extends Controller
         } else {
             $result = $campaigns->paginate(self::RESULTS_X_PAGE, self::$campaign_fields);
             foreach ($result as $key => $campaign) {
-                $result[$key]->library_name = $libraries[(string) $campaign->library];
+                if (isset($libraries[(string) $campaign->library])) {
+                    $result[$key]->library_name = $libraries[(string) $campaign->library];
+                }
             }
             return $result;
         }

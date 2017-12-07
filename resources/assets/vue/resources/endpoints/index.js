@@ -40,4 +40,7 @@ module.exports = {
   config: {
     getConfig: { method: 'get', path: `${baseUrl}/config/:key` },
   },
+  tag: {
+    fetchTags: { method: 'get', path: `${baseUrl}/dashboard/tags`}
+  }
 };

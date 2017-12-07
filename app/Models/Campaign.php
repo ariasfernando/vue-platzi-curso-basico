@@ -240,14 +240,16 @@ class Campaign extends Eloquent
     public function getApiAttribute()
     {
         $data = [];
-        $api_list = \Helper::getApiDrivers($this->attributes['library']);
-        if (count($api_list)) {
-            foreach ($api_list as $api) {
-                $data[] = [
-                    'driver' => $api,
-                    'title' => \Config::get("api.{$api}.title"),
-                    'class' => \Config::get("api.{$api}.class")
-                ];
+        if (isset($this->attributes['library'])) {
+            $api_list = \Helper::getApiDrivers($this->attributes['library']);
+            if (count($api_list)) {
+                foreach ($api_list as $api) {
+                    $data[] = [
+                        'driver' => $api,
+                        'title' => \Config::get("api.{$api}.title"),
+                        'class' => \Config::get("api.{$api}.class")
+                    ];
+                }
             }
         }
         return $data;
@@ -259,9 +261,12 @@ class Campaign extends Eloquent
     public function getLibraryConfigAttribute()
     {
         $libraryConfig = [];
-        if (Library::find($this->attributes['library'])) {
-            $libraryConfig = Library::find($this->attributes['library'])->config;
+        if (isset($this->attributes['library'])) {
+            if (Library::find($this->attributes['library'])) {
+                $libraryConfig = Library::find($this->attributes['library'])->config;
+            }
         }
+
         return $libraryConfig;
     }
 

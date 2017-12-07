@@ -30,29 +30,6 @@ require('elixir-jshint');
 require('laravel-elixir-vueify');
 
 /*
- | --------------------------------------------------------------------------
- | Define App name
- | --------------------------------------------------------------------------
- */
-
-let appName = process.env.APP_NAME.toLowerCase() || "base";
-
-/*
- | --------------------------------------------------------------------------
- | Include file from App path in case it exists, if not from Base path
- | --------------------------------------------------------------------------
- */
-
-let jsAppFilePath = (file) => {
-  if (fs.existsSync('resources/assets/js/' + appName + '/' + file)) {
-    return 'js/' + appName + '/' + file;
-  }
-  else {
-    return 'js/base/' + file;
-  }
-};
-
-/*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
  |--------------------------------------------------------------------------
@@ -131,11 +108,11 @@ gulp.task('elixir-scripts', function () {
 
   return elixir((mix) => {
       mix
-      mix.browserify(
-        'main.js',
-        jsDestinationPath + 'customer.js',
-        customerAssetsPath
-      )
+        mix.browserify(
+          'main.js',
+          jsDestinationPath + 'customer.js',
+          customerAssetsPath
+        )
         .browserify(
           'vue/campaign.js',
           jsDestinationPath + 'campaign-components.js',
@@ -256,9 +233,9 @@ gulp.task('elixir-scripts', function () {
 
         // === Proof page ===
         .scripts(
-          jsAppFilePath('proof.js'),
-          jsDestinationPath + 'proof.js',
-          assetsPath
+            'js/base/proof.js',
+            jsDestinationPath + 'proof.js',
+            assetsPath
         )
 
         // === Admin page ===
@@ -266,7 +243,7 @@ gulp.task('elixir-scripts', function () {
           [
             'js/library/custom-plugins/st-pagination-bar.jquery.js',
             'js/library/admin/*.js',
-            jsAppFilePath('admin.js')
+            'js/base/admin.js'
           ],
           jsDestinationPath + 'admin.js',
           assetsPath
@@ -305,10 +282,10 @@ gulp.task('elixir-scripts', function () {
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-less', () => {
-  return elixir((mix) => {
-    mix.less(appName + '/tool/tool.less');
-    mix.less(appName + '/base-v2/admin.less');
-  });
+   return elixir((mix) => {
+        mix.less( 'base/tool/tool.less');
+        mix.less( 'base/base-v2/admin.less');
+    });
 });
 
 /*

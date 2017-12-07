@@ -1,12 +1,14 @@
 import ColumnSort from '../ColumnSort.vue';
 import Pagination from '../../common/Pagination.vue';
 import Modal from '../../common/Modal.vue';
+import CampaignTag from '../CampaignTag.vue';
 
 export default {
   components: {
     ColumnSort,
     Pagination,
-    Modal
+    Modal,
+    CampaignTag
   },
   data: function() {
     return {
