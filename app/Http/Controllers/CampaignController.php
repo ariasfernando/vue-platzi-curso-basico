@@ -62,6 +62,7 @@ class CampaignController extends Controller
                     $library = Library::find($library_id);
                     $params['menu_list'] = $library->getModules();
                     $params['library_config'] = $library->config;
+                    $params['campaign_data']['library_name'] = $library->name;
                     uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
                         if ($menu_item_a['name'] == $menu_item_b['name']) {
                             return 0;
