@@ -44,6 +44,7 @@ class StaticProcessor
         $local = Storage::disk('local:campaigns');
         $public = Storage::disk('local:public');
         $cloud = Storage::disk('cloud');
+        $module = Storage::disk('local:modules');
 
         // get email template
         $html = new Html($this->getCampaign());
@@ -53,6 +54,7 @@ class StaticProcessor
         $files['image'] = $local->allFiles($this->getCampaign()->fsRelativePath());
         $files['common'] = $public->allFiles('_common');
         $files['font'] = $public->allFiles('fonts');
+        $files['module'] = $module->allFiles();
 
         foreach ($files as $fileType => $fileGroup) {
             foreach ($fileGroup as $file) {
@@ -65,6 +67,8 @@ class StaticProcessor
 
                         if ($fileType == 'image') {
                             $cloud->put($path, $local->get($file), AdapterInterface::VISIBILITY_PUBLIC);
+                        } elseif ($fileType == 'module') {
+                            $cloud->put($path, $module->get($file), AdapterInterface::VISIBILITY_PUBLIC);
                         } else {
                             $cloud->put($path, $public->get($file), AdapterInterface::VISIBILITY_PUBLIC);
                         }
