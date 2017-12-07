@@ -258,6 +258,10 @@
     #send-preview-form .input-group {
       width: 100%;
       margin-top: 10px;
+
+      .btn-group {
+        padding: 0px;
+      }
     }
     .btn-copy {
       height: 34px;
@@ -303,6 +307,10 @@
         background: #F4F4F4;
         padding-top: 10px;
       }
+    }
+
+    input.share-preview {
+      width: 300px;
     }
   }
 
