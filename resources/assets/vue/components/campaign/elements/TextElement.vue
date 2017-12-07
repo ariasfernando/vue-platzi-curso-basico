@@ -19,7 +19,7 @@
                 :align="component.attribute.align" 
                 :style="component.style"
             >
-              <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
+              <div class="st-edit-text" :id="editorId" v-html="component.data.text"></div>
             </td>
           </tr> 
         </table>     

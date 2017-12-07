@@ -44,11 +44,11 @@ let appName = process.env.APP_NAME.toLowerCase() || "base";
  */
 
 let jsAppFilePath = (file) => {
-    if (fs.existsSync('resources/assets/js/' + appName + '/' + file)) {
-        return 'js/' + appName + '/' + file;
-    }
-    else {
-        return 'js/base/' + file;
+  if (fs.existsSync('resources/assets/js/' + appName + '/' + file)) {
+    return 'js/' + appName + '/' + file;
+  }
+  else {
+    return 'js/base/' + file;
   }
 };
 
@@ -76,7 +76,7 @@ elixir.config.sourcemaps = false;
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-jshint', () => {
-  elixir((mix) => {
+  return elixir((mix) => {
     mix.jshint([
       'resources/assets/js/**/*'
     ]);
@@ -92,7 +92,7 @@ gulp.task('elixir-jshint', () => {
 gulp.task('elixir-copy-bower', function () {
   let bowerPath = 'resources/assets/bower/';
 
-  elixir((mix) => {
+  return elixir((mix) => {
     mix
     // Bootstrap colorpicker
       .copy(bowerPath + 'bootstrapcolorpicker/dist/img/bootstrap-colorpicker', 'public/css/images/bootstrap-colorpicker')
@@ -113,7 +113,7 @@ gulp.task('elixir-copy-bower', function () {
 gulp.task('copy-customer-assets', () => {
   const customerAssetsPath = 'stensul/customer/resources/assets';
 
-  elixir((mix) => {
+  return elixir((mix) => {
     mix.copy(`${customerAssetsPath}/images`, 'public/images/customer');
     mix.copy(`${customerAssetsPath}/fonts`, 'public/fonts');
   });
@@ -129,13 +129,13 @@ gulp.task('elixir-scripts', function () {
   const customerAssetsPath = 'stensul/customer/' + assetsPath + 'vue/';
   const jsDestinationPath = 'public/js/';
 
-  elixir((mix) => {
+  return elixir((mix) => {
       mix
-        mix.browserify(
-          'main.js',
-          jsDestinationPath + 'customer.js',
-          customerAssetsPath
-        )
+      mix.browserify(
+        'main.js',
+        jsDestinationPath + 'customer.js',
+        customerAssetsPath
+      )
         .browserify(
           'vue/campaign.js',
           jsDestinationPath + 'campaign-components.js',
@@ -256,9 +256,9 @@ gulp.task('elixir-scripts', function () {
 
         // === Proof page ===
         .scripts(
-            jsAppFilePath('proof.js'),
-            jsDestinationPath + 'proof.js',
-            assetsPath
+          jsAppFilePath('proof.js'),
+          jsDestinationPath + 'proof.js',
+          assetsPath
         )
 
         // === Admin page ===
@@ -305,10 +305,10 @@ gulp.task('elixir-scripts', function () {
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-less', () => {
-    elixir((mix) => {
-        mix.less( appName + '/tool/tool.less');
-        mix.less( appName + '/base-v2/admin.less');
-    });
+  return elixir((mix) => {
+    mix.less(appName + '/tool/tool.less');
+    mix.less(appName + '/base-v2/admin.less');
+  });
 });
 
 /*
@@ -316,12 +316,12 @@ gulp.task('elixir-less', () => {
  | Elixir Version
  | --------------------------------------------------------------------------
  */
-gulp.task('elixir-version', () => {
-  elixir((mix) => {
+gulp.task('elixir-version', ['elixir-copy-bower', 'elixir-scripts'], () => {
+  return elixir((mix) => {
     mix.version([
       'css/admin.css',
       'css/tool.css',
-      'js'
+      'js',
     ]);
   });
 });
@@ -332,5 +332,5 @@ gulp.task('elixir-version', () => {
  | --------------------------------------------------------------------------
  */
 gulp.task('jshint', ['elixir-jshint']);
-gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
-gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
+gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-version']));
+gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-version']));

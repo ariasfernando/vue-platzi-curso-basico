@@ -18,7 +18,7 @@
       </button>
     </div>
     <small class="search-error" v-if="!canSearch && showLimitMessage">There's a limit of {{limit}} search terms.</small>
-    <div class="btn-group">
+    <div class="btn-group" v-show="terms.length > 0">
       <button v-for="term in terms" class="btn btn-default btn-xs term" v-on:click="removeSearchTerm(term)">
         {{term}} <i class="glyphicon glyphicon-remove"></i>
       </button>

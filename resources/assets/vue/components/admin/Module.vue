@@ -108,6 +108,8 @@
   import Plugins from '../../plugins/modules';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
+  import Element from '../../models/Element';
+  import Plugin from '../../models/Plugin';
   import TextElement from './elements/TextElement.vue';
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
@@ -163,46 +165,56 @@
 
       },
       onAdd(e){
-        let colId = e.to.getAttribute('data-col');
-        let elType = e.clone.getAttribute('data-type');
-        let cloneItem = e.item;
-        let el = clone(defaultElements[elType]);
-        let plugins = {};
-        let componentId = e.newIndex;
+        const componentId = e.newIndex;
+        const colId = e.to.getAttribute('data-col');
 
-        if ( !(e.from.getAttribute('class') === 'components-list')){
+        if ( !(e.from.getAttribute('class') === 'components-list')) {
+          // Just clone the object when user drop an element from other column
           if (this.module.structure.columns[colId].components.length === 0) {
-            el = JSON.parse(e.clone.getAttribute('data-component'));
+            const el = JSON.parse(e.clone.getAttribute('data-component'));
             this.$store.commit("module/addComponent", {
               el,
               index: componentId,
               colId
             });
-          };
-        }else{
-          e.clone.style.opacity = "1";
-          cloneItem.parentNode.removeChild(cloneItem);
+          }
 
+        } else {
+          const elType = e.clone.getAttribute('data-type');
+
+          // Get element compatible plugins
+          const plugins = {};
+          _.each(this.$_app.modulePlugins, (pluginProperties, name) => {
+            if (pluginProperties.target.indexOf(elType.replace('-element', '')) !== -1) {
+              const plugin = new Plugin(pluginProperties);
+              console.log(plugin);
+              plugins[name] = plugin.getProperties();
+            }
+          });
+
+          // Create a new Element with default properties
+          const element = new Element({ type: elType, plugins });
+
+          // Add it to the list
           this.$store.commit("module/addComponent", {
-            el,
+            el: element.getProperties(),
             index: componentId,
             colId
           });
+
+          // Remove ghost element
+          const cloneItem = e.item;
+          cloneItem.parentNode.removeChild(cloneItem);
+          e.clone.style.opacity = "1";
         }
 
-        _.each(this.$_app.modulePlugins, (plugin, name) => {
-          if (plugin.target.indexOf(elType.replace('-element', '')) !== -1) {
-            plugins[name] = clone(plugin);
-          }
-        });
-
-        el.plugins = plugins;
-
+        // ?
         this.$store.commit('module/setChangeSettingComponent',{
           style: this.module.structure.columns[colId].components[componentId].style || {},
           attribute: this.module.structure.columns[colId].components[componentId].attribute || {}
         });
 
+        // Set dropped element as selected
         this.setComponent({
           columnId: +colId,
           componentId,

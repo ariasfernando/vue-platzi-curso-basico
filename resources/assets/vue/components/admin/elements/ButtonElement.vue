@@ -84,16 +84,6 @@
       },
     },
     methods: {
-      input (text, key) {
-        this.$store.commit('module/updateElement', {
-          columnId: this.columnId,
-          componentId: this.componentId,
-          data: {
-            text: text
-          }
-        });
-      },
-
       setComponent(e) {
         if (!$(e.target).hasClass("st-remove")){
           this.$store.commit("module/setCurrentComponent", {

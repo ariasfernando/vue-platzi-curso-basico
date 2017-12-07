@@ -59,7 +59,7 @@
           init_instance_callback: (editor) => {
 
             editor.on('Blur', (e) => {
-              this.$store.dispatch('campaign/updateElement', {
+              this.$store.commit('campaign/updateElement', {
                 moduleId: this.currentComponent.moduleId,
                 columnId: this.currentComponent.columnId,
                 componentId: this.currentComponent.componentId,

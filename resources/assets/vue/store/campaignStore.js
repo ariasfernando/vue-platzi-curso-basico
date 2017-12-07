@@ -91,10 +91,11 @@ function campaignStore() {
       setCustomModule(state, moduleId) {
         state.currentCustomModuleId = moduleId;
       },
-      updateComponentData(state, edited) {
-        for (const key in edited.data) {
-          state.modules[edited.moduleId].structure.columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
-        }
+      updateElement(state, payload) {
+        const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
+        state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
+
+        state.dirty = true;
       },
       saveSetting(state, setting) {
         state.editedSettings[setting.name] = setting.value;
@@ -268,10 +269,6 @@ function campaignStore() {
           });
 
         return deferred.promise;
-      },
-      updateElement(context, edited) {
-        context.commit('setDirty', true);
-        context.commit('updateComponentData', edited);
       },
       sendPreview(context, data) {
         return campaignService.sendPreview(data);
