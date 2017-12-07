@@ -376,6 +376,6 @@
   }
 
   .mce-edit-focus{
-    outline: none!important;
+    outline: 1px dotted #333!important;
   }
 </style>
