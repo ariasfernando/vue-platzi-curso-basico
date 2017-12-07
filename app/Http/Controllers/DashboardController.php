@@ -168,10 +168,10 @@ class DashboardController extends Controller
 
         $total = $campaigns->count();
         $current_page = (int) $request->input('page');
-        $per_page = 5;
+        $per_page = self::RESULTS_X_PAGE;
         $from = ($current_page == 1 ) ? (int) $current_page : (int) ($per_page * ($current_page - 1)) ;
         $to = ($from + ($per_page - 1) <= $total) ? $from + ($per_page - 1) : $total ;
-        $last_page = ($total <= $per_page) ? 1 : ($total % 5) ? (int) ($total / 5) + 1 : (int) ($total / 5);
+        $last_page = ($total <= $per_page) ? 1 : ($total % $per_page) ? (int) ($total / $per_page) + 1 : (int) ($total / $per_page);
 
         if ($current_page != 1) {
             $prev_page_url = \Config::get('app.url') . '/dashboard/templates/current/?page=' . ($current_page - 1);
