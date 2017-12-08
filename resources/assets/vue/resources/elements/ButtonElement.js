@@ -325,6 +325,7 @@ function buttonDefault() {
         ],
       },
     ],
+    plugins: {},
   };
 }
 

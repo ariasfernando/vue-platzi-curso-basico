@@ -209,6 +209,9 @@ function dividerDefault() {
       bgcolor: { hex: 'transparent' },
       width: '100%',
     },
+    plugins: {},
+    data: {},
+    componentSettings: [],
   };
 }
 

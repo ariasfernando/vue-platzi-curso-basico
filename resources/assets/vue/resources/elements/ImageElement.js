@@ -141,6 +141,9 @@ function imageDefault() {
         ],
       },
     ],
+    plugins: {},
+    data: {},
+    componentSettings: [],
   };
 }
 

@@ -165,7 +165,7 @@ const actions = {
     });
 
     // Create new instance of Element width default column data
-    const element = new Element({ type: 'column', colPlugins });
+    const element = new Element({ type: 'column-element', colPlugins });
 
     context.commit('addColumn', element.getProperties());
   },

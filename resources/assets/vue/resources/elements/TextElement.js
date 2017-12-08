@@ -98,6 +98,7 @@ function textDefault() {
         ],
       },
     ],
+    plugins: {},
   };
 }
 

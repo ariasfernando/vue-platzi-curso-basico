@@ -1,5 +1,6 @@
 function columnDefault() {
   return {
+    type: 'column-element',
     style: {
     paddingTop: '0px',
     paddingLeft: '0px',

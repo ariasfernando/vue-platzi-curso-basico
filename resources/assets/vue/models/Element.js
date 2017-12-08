@@ -2,7 +2,11 @@ import defaultElements from '../resources/elements';
 
 class Element {
   constructor(properties) {
-    if (!properties.type) {
+
+    try {
+      /* eslint no-unused-expressions:0 */
+      properties.type;
+    } catch (e) {
       throw new Error('Type not defined');
     }
 
