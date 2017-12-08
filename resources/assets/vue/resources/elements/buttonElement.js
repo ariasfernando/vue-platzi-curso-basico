@@ -123,6 +123,13 @@ module.exports = {
     },
     {
       link: 'style',
+      label: 'Font Weight',
+      name: 'fontWeight',
+      type: 'text',
+      value: 'normal',
+    },
+    {
+      link: 'style',
       label: 'Line Height',
       name: 'lineHeight',
       type: 'text',
