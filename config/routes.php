@@ -29,6 +29,7 @@ $default = [
             '/dashboard'                             => 'DashboardController@index',
             '/dashboard/campaigns/{type}'            => 'DashboardController@getCampaigns',
             '/dashboard/templates/{type}'            => 'DashboardController@getTemplates',
+            '/dashboard/tags'                        => 'DashboardController@getTags',
             '/public/view/{id}'                      => 'PublicController@view',
             '/public/html/{id}'                      => 'PublicController@html',
             '/public/get/{id}'                       => 'PublicController@getCampaign',

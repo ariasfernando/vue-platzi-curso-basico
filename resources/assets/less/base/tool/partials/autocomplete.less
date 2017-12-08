@@ -1,5 +1,8 @@
 .ui-autocomplete{
 	z-index: @zindex-autocomplete;
+	max-height: 350px;
+	overflow: scroll;
+	overflow-x: hidden;
 
 	.ui-state-focus{
 		font-weight: normal;
@@ -10,5 +13,13 @@
 
 	.ui-menu-item{
 		font-size: 14px;
+		padding-left: 30px;
+	}
+
+	.ui-autocomplete-category {
+		font-weight: bold;
+		padding: 0px 15px;
+		margin: .8em 0 .2em;
+		line-height: 1.2;
 	}
 }

@@ -1,14 +1,16 @@
 <template>
-  <div id="search" class="pull-right" v-if="enabled == 1">
+  <div id="search" class="pull-right" v-if="config.enable_search == 1" v-on-clickaway="closeTagDropdown">
     <div class="input-group">
       <input type="text" class="form-control search-key" placeholder="Search"
         maxlength="30"
         data-tags=""
+        @click="openTagDropdown"
+        v-if="ready"
         v-bind:disabled="!canSearch"
         v-on:keyup.enter="addSearchTerm"
         v-on:keyup.tab="addSearchTerm"
+        v-on:keyup="filterSearchTerm"
         v-model="searchModel">
- <!--data-tags='<?php echo htmlentities( json_encode(Tag::getTagNames()), ENT_QUOTES, 'UTF-8' ); ?>'-->
       <span class="input-group-btn">
         <button class="btn btn-default search" type="button" v-on:click.stop.prevent="addSearchTerm"
           ><i class="glyphicon glyphicon-search"></i></button>
@@ -26,23 +28,49 @@
         {{tag}} <i class="glyphicon glyphicon-remove"></i>
       </button>
     </div>
+    <ul v-if="showTagDropdown && ready" class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content"
+      tabindex="0" style="top: 33px; left: 0; width: 100%;">
+      <li class="ui-autocomplete-category">Popular tags</li>
+      <li v-for="tag in filteredTagNames.popular" :aria-label="'Popular tags: ' + tag.label" class="ui-menu-item" tabindex="-1"
+        @click.prevent="addSearchTerm(tag.label)">{{tag.label}}</li>
+      <li class="ui-autocomplete-category">Tags</li>
+      <li v-for="tag in filteredTagNames.tags" :aria-label="'Tags: ' + tag.label" class="ui-menu-item" tabindex="-1"
+        @click.prevent="addSearchTerm(tag.label)">{{tag.label}}</li>
+    </ul>
   </div>
 </template>
 
 <script>
+  import tagService from '../../services/tag'
+  import clone from 'clone';
+  import { mixin as clickaway } from 'vue-clickaway';
+
   export default {
     data: function() {
       return {
         timer: null,
-        searchModel: ''
+        searchModel: '',
+        tagNames: {
+          popular: [],
+          tags: []
+        },
+        filteredTagNames: {
+          popular: [],
+          tags: []
+        },
+        showTagDropdown: false,
+        ready: false
       }
     },
+    mixins: [
+      clickaway
+    ],
     props: {
       canSearch: {
         type: Boolean
       },
-      enabled: {
-        type: Boolean
+      config: {
+        type: Object
       },
       limit: {
         type: Number
@@ -66,36 +94,93 @@
         this.$emit('update-search', this.searchModel);
       },
       clearSearch: function() {
+        this.closeTagDropdown();
+        this.filteredTagNames = clone(this.tagNames);
         this.clearModel();
         this.$emit('update-search', this.searchModel);
         this.$emit('reset-search');
         this.$emit('reset-page');
         this.$emit('update-campaigns');
       },
-      addSearchTerm: function(event) {
-        this.$emit('add-search-term', this.searchModel);
+      addSearchTerm: function(term) {
+
+        if (typeof term == 'object') {
+          term = this.searchModel;
+        }
+        this.$emit('add-search-term', term);
         this.clearModel();
-        var $el = $(".search-key");
-        $el.autocomplete("close");
+        this.filteredTagNames = clone(this.tagNames);
+        this.closeTagDropdown();
       },
       removeSearchTag: function(tag) {
         this.$emit('remove-search-tag', tag);
       },
       removeSearchTerm: function(term) {
         this.$emit('remove-search-term', term);
+      },
+      closeTagDropdown: function() {
+        this.filteredTagNames = clone(this.tagNames);
+        this.showTagDropdown = false;
+      },
+      openTagDropdown: function() {
+        this.showTagDropdown = true;
+      },
+      filterSearchTerm: function(event) {
+
+        switch (event.key) {
+          case 'ArrowLeft':
+          case 'ArrowRight':
+          case 'ArrowUp':
+          case 'ArrowDown':
+          case 'Control':
+          case 'Meta':
+          case 'Alt':
+          case 'Shift':
+          case 'Enter':
+          case 'Tab': return;
+          break;
+          case 'Escape': this.closeTagDropdown();
+            return;
+        }
+        this.openTagDropdown();
+        this.filteredTagNames.popular = [];
+        this.filteredTagNames.tags = [];
+
+        const regex = new RegExp(escape(this.searchModel), 'i');
+
+        for (const index in this.tagNames.popular) {
+          if (this.tagNames.popular[index].label.match(regex)) {
+            this.filteredTagNames.popular.push(this.tagNames.popular[index]);
+          }
+        }
+        for (const index in this.tagNames.tags) {
+          if (this.tagNames.tags[index].label.match(regex)) {
+            this.filteredTagNames.tags.push(this.tagNames.tags[index]);
+          }
+        }
       }
     },
     mounted: function () {
-      var $el = $(".search-key");
-      var _this = this;
-      $el.autocomplete({
-        source: $el.data('tags'),
-        select: function(event,ui){
-          _this.$emit('add-search-tag', ui.item.value);
-          $el.autocomplete("close");
-          return false;
+
+      tagService.fetchTags().then((response) => {
+
+        if (response.length) {
+          for (const index in response) {
+            if (response[index].category === 'Popular tags') {
+              this.tagNames.popular.push(response[index]);
+            } else {
+              this.tagNames.tags.push(response[index]);
+            }
+          }
+          this.filteredTagNames = clone(this.tagNames);
         }
+
+        this.ready = true;
+        this.loading = false;
+      })
+      .catch((error) => {
+        this.$root.$toast(error, {className: 'et-error'});
       });
-    }    
+    }
   }
 </script>

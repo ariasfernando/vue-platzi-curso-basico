@@ -7,7 +7,7 @@
       <div class="col-xs-12 col-sm-3 pull-right">
         <campaign-search
           :can-search="canSearch"
-          :enabled="config.enable_search"
+          :config="config"
           :limit="config.search_settings.max_tags"
           :show-limit-message="config.search_settings.max_tags_alert"
           :search="search"

@@ -94,7 +94,7 @@
   .st-module-wrapper:hover {
 
     .st-toolbar-content{
-      outline: 2px solid @focus;
+      outline: 2px solid #b5e9e1;
       outline-offset: -2px;
     }
 
@@ -105,11 +105,12 @@
       left: 0px;
       width: 100%;
       height: 100%;
+      display: block;
     }
 
     .icon-move, .icon-remove,
     .icon-clone, .icon-config {
-      display: inline-block;
+      display: none;
     }
   }
 
@@ -126,6 +127,22 @@
     .icon-move, .icon-remove,
     .icon-clone, .icon-config {
       display: inline-block;
+    }
+
+    &:hover{
+      .st-toolbar-content{
+        outline: 2px solid @focus;
+        outline-offset: -2px;
+      }
+
+      .module-overlay{
+        display: none;
+      }
+
+      .icon-move, .icon-remove,
+      .icon-clone, .icon-config {
+        display: inline-block;
+      }
     }
   }
 

@@ -50,6 +50,7 @@
         <!--1 COLUMN -->
       </table>
       <module-toolbar :module-id="moduleId"></module-toolbar>
+      <div class="module-overlay"></div>
     </td>
   </tr>  
 </template>
