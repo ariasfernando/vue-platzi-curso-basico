@@ -15,6 +15,7 @@ function campaignStore() {
       currentModuleId: undefined,
       currentCustomModuleId: undefined,
       currentComponent: {},
+      modalCode: false,
       modalComplete: false,
       modalPreview: false,
       modalProof: false,
