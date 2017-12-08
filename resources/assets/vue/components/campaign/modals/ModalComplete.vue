@@ -4,7 +4,7 @@
       <div class="modal-wrapper">
         <div class="modal-container modal-complete">
           <slot name="header">
-            <button type="button" class="close" @click="close"><span>&times;</span></button>
+            <button type="button" class="close hidden" @click="close"><span>&times;</span></button>
           </slot>
 
           <h4>Processed Campaign</h4>
