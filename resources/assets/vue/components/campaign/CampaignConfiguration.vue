@@ -30,7 +30,11 @@
 
         <div class="config-box-divider configuration-field configuration-nomargin" v-if="enableTagging">
           <label>Tags</label>
-          <input-tag :on-change="tagChange" :tags="form.tags" validate="text" placeholder="Add Tag"></input-tag>
+          <multiselect v-model="form.tags" :options="tagOptions" :multiple="true"
+            :select-label="'Select'" :close-on-select="true" :taggable="true"
+            :hide-selected="true" :preserve-search="true"
+            @remove="tagRemove" @select="tagAdd" placeholder="Choose tag">
+          </multiselect>
         </div>
 
         <div class="config-box-divider" v-if="enableAutoSave">
@@ -76,13 +80,13 @@
 <script>
   import _ from 'lodash'
   import configService from '../../services/config'
-  import InputTag from 'vue-input-tag'
   import ToggleButton from '../common/ToggleButton.vue'
+  import Multiselect from 'vue-multiselect';
 
   export default {
     components: {
-      InputTag,
-      ToggleButton
+      ToggleButton,
+      Multiselect
     },
     name: 'CampaignConfiguration',
     data () {
@@ -98,6 +102,7 @@
           autoSave: false,
           tags: []
         },
+        tagOptions: []
       }
     },
     computed: {
@@ -130,6 +135,15 @@
       this.form.campaignName = this.campaign.campaign_name;
       this.libraryName = this.campaign.library_name;
 
+      let tagList = this.$store.getters["campaign/campaign"].tag_list;
+      for (let n = 0; n < tagList.length; n++) {
+        this.tagOptions.push(tagList[n].name);
+      }
+
+      this.$store.commit('campaign/saveSetting', {
+        name: 'tags',
+        value: this.form.tags
+      });
       this.loadConfig();
     },
     methods: {
@@ -162,10 +176,17 @@
               this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
             });
       },
-      tagChange(tags) {
+      tagAdd(tag) {
+        this.form.tags.push(tag);
         this.$store.commit('campaign/saveSetting', {
           name: 'tags',
-          value: tags
+          value: this.form.tags
+        });
+      },
+      tagRemove(tag) {
+        this.$store.commit('campaign/saveSetting', {
+          name: 'tags',
+          value: this.form.tags
         });
       },
       autoSaveChange() {
@@ -265,6 +286,9 @@
     font-weight: 300 !important;
     margin-left: 3px;
     font-size: 10px;
+  }
+  .multiselect {
+    z-index: 2;
   }
   label {
     font-weight: 300;
