@@ -8,15 +8,16 @@
           </slot>
 
           <h4>Processed Campaign</h4>
+          <a class="btn beta-btn-primary copy-to-clipboard" @click="copyTextArea" >Copy to clipboard <i class="fa fa-clipboard"></i></a>
 
           <div class="modal-body">
             <slot name="body">
               <b-tabs>
-                <b-tab title="Normal HTML">
-                  <textarea v-html="campaign.campaign_data.body_html"></textarea>
+                <b-tab title="Normal HTML" @click="changeTypeTextArea('normal_html')" >
+                  <textarea ref="normal_html" v-html="campaign.campaign_data.body_html"></textarea>
                 </b-tab>
-                <b-tab title="Plain Text" v-if="campaign.library_config.plainText">
-                  <textarea v-html="plainText"></textarea>
+                <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">
+                  <textarea ref="plain_text" v-html="plainText"></textarea>
                 </b-tab>
               </b-tabs>
             </slot>
@@ -62,12 +63,13 @@
       },
       viewInBrowser () {
         return this.$_app.config.baseUrl + '/campaign/public-path/' + this.campaign.campaign_id;
-      }
+      },
     },
     methods: {
       data () {
         return {
           plainText: '',
+          textareaType: 'normal_html'
         }
       },
       getPlainText() {
@@ -78,6 +80,13 @@
           .catch((error) => {
             this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
+      },
+      changeTypeTextArea(type){
+        this.textareaType = type;
+      },
+      copyTextArea() {
+        this.$refs[this.textareaType].select();
+        document.execCommand('copy');
       },
       close () {
         this.$store.commit("campaign/toggleModal", 'modalComplete');
@@ -96,6 +105,13 @@
 
   .modal-complete {
     width: 900px;
+
+    .copy-to-clipboard{
+      float: right;
+      z-index: 300;
+      cursor: pointer!important;
+      position: relative;
+    }
 
     textarea {
       width: 100%;
