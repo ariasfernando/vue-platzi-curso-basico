@@ -27,7 +27,7 @@
                 :height="component.attribute.height"
                 :style="component.style"
             >
-                <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
+                <tiny-mce :id="editorId" :value="component.data.text" data-key="text"></tiny-mce>
                 <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
             </td>
           </tr>
