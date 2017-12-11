@@ -1,5 +1,5 @@
 import Element from '../../resources/assets/vue/models/Element';
-import Plugin from '../../resources/assets/vue/models/Element';
+import Plugin from '../../resources/assets/vue/models/Plugin';
 
 require('dotenv').config();
 
@@ -179,34 +179,38 @@ describe('== Models ==', () => {
 
   });
 
-  /*
+
   describe('Plugins', () => {
-    const element = new Plugin();
-    const properties = element.getProperties();
+
+    const testPlugin = {
+      name: 'test',
+      title: 'Test Plugin',
+      target: ['text'],
+    };
+
+    const plugin = new Plugin(testPlugin);
+    const properties = plugin.getProperties();
 
     it('Should return a valid object', (done) => {
-      expect(element).to.be.an('object');
-      done();
-    });
-
-    it('Should return a valid object of type button-element', (done) => {
-      expect(properties).to.have.property('type', 'button-element');
+      expect(plugin).to.be.an('object');
       done();
     });
 
     it('Should only have a specific set of properties', (done) => {
       expect(properties).to.have.keys([
-        'type',
-        'style',
-        'attribute',
-        'settings',
-        'plugins',
-        'componentSettings',
+        'name',
+        'title',
+        'version',
+        'author',
+        'target',
+        'config',
         'data',
+        'render',
+        'enabled',
       ]);
 
       done();
     });
   });
-  */
+
 });

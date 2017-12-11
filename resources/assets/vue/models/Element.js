@@ -2,7 +2,6 @@ import defaultElements from '../resources/elements';
 
 class Element {
   constructor(properties) {
-
     try {
       /* eslint no-unused-expressions:0 */
       properties.type;
