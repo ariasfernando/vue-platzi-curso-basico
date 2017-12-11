@@ -253,16 +253,5 @@
 </script>
 
 <style lang="less">
-
    @import '../../less/common/modals';
-
-  .btn-create{
-    background: #78DCD6!important;
-    border: 1px solid #78DCD6!important;
-    
-    &:hover{
-      border-color: #78DCD6!important;
-      background: #78DCD6!important;
-    }
-  }
 </style>
