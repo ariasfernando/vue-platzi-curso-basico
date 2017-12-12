@@ -1,9 +1,9 @@
 <template>
   <div class="module-toolbar">
-    <div class="icon-move"><i class="fa fa-arrows"></i></div>
+    <div class="icon-remove" @click="remove"><i class="fa fa-trash-o"></i></div>
     <div class="icon-config" v-if="hasConfig" @click="config"><i class="fa fa-cogs"></i></div>
     <div class="icon-clone" @click="clone"><i class="fa fa-clone"></i></div>
-    <div class="icon-remove" @click="remove"><i class="fa fa-trash-o"></i></div>
+    <div class="icon-move"><i class="fa fa-arrows"></i></div>
   </div>
 </template>
 
@@ -103,6 +103,7 @@
     }
 
     .module-overlay{
+      pointer-events: none;
       position: absolute;
       background: rgba(65, 168, 152, 0.1);
       top: 0px;
