@@ -28,7 +28,7 @@
           <input type="text" placeholder="Preheader Text" name="campaignPreheader" class="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
         </div>
 
-        <div class="config-box-divider configuration-field configuration-nomargin" v-if="enableTagging">
+        <div class="config-box-divider configuration-field configuration-nomargin configuration-tag" v-if="enableTagging">
           <label>Tags</label>
           <multiselect v-model="form.tags" :options="tagOptions" :multiple="true"
             :select-label="'Select'" :close-on-select="true" :taggable="true"
@@ -264,6 +264,13 @@
   }
 </script>
 <style lang="less">
+@stensul-purple: #514960;
+@stensul-secondary: #625876;
+@stensul-white: #FFFFFF;
+@stensul-highlight: #78DCD6;
+@stensul-gray: #666666;
+@stensul-gray-secondary: #DDDDDD;
+
 .menu-campaign {
   .vue-input-tag-wrapper {
     border: 0;
@@ -271,6 +278,12 @@
     padding: 0px;
     display: flex;
     flex-wrap: wrap;
+  }
+  .configuration-tag{
+    label{
+      z-index: 1000!important;
+      top: 14px!important;
+    }
   }
   .input-tag {
     background-color: #e4e4e4 !important;
@@ -293,7 +306,74 @@
     font-size: 10px;
   }
   .multiselect {
-    z-index: 2;
+    z-index: 999;
+
+    .multiselect__input{
+      height: 32px!important;
+      margin-top: 1px!important;
+    }
+
+    .multiselect__option--selected.multiselect__option--highlight:after {
+      background: @stensul-highlight;
+    }
+
+    .multiselect__tags{
+      border-radius: 2px;
+      border: 1px solid @stensul-gray-secondary;
+    }
+
+    .multiselect__option{
+      font-size: 13px;
+      color: @stensul-gray;
+      padding: 9px;
+      line-height: 24px;
+      font-weight:300;
+
+      &:hover{
+        color: @stensul-white;
+      }
+    }
+
+    .multiselect__option--highlight{
+      background: @stensul-highlight;
+      color: @stensul-white;
+    }
+
+    .multiselect__option--highlight:after {
+      background: @stensul-highlight;
+    }
+
+    .multiselect__tag{
+      border-radius: 2px;
+      margin-top: 1px;
+      font-size: 13px;
+      font-weight: 300;
+      color: @stensul-gray;
+      background: @stensul-gray-secondary;
+      padding: 4px 23px 4px 4px;
+
+      .multiselect__tag-icon{
+        
+        &:hover,
+        &:focus{
+          background: none;
+        }
+      }
+
+      .multiselect__tag-icon:after {
+        color: @stensul-gray;
+      }
+
+      .multiselect__tag-icon:focus:after,
+      .multiselect__tag-icon:hover:after {
+        color: @stensul-gray;
+      }
+
+      .multiselect__tag-icon:focus, 
+      .multiselect__tag-icon:hover{
+        background: none;
+      }
+    }
   }
   label {
     font-weight: 300;
