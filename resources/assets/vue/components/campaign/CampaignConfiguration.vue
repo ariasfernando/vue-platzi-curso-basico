@@ -321,6 +321,10 @@
     .multiselect__tags{
       border-radius: 2px;
       border: 1px solid @stensul-gray-secondary;
+
+      .multiselect__input {
+        position: relative !important;
+      }
     }
 
     .multiselect__option{
