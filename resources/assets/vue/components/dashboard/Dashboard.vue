@@ -253,4 +253,5 @@
 </script>
 
 <style lang="less">
+  @import '../../less/common/modals';
 </style>
