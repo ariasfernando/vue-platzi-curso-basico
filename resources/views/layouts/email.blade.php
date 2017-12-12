@@ -29,7 +29,7 @@
 		@endif
 		<table cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
+				<td align="center" bgcolor="{{ $params['campaign_data']->getLibraryConfig('templateBackgroundColor')}} " style="vertical-align:top;">
 					<table cellpadding="0"
 						   cellspacing="0"
 						   border="0"
