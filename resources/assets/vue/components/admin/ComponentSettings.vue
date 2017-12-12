@@ -159,7 +159,6 @@
   import Vue from 'vue/dist/vue';
   import _ from 'lodash';
   import uc from 'underscore-contrib';
-  import defaultElements from '../../resources/elements';
   import BootstrapVue from 'bootstrap-vue';
   import { Sketch } from 'vue-color';
   import * as elementSettings from './settings';

@@ -67,8 +67,8 @@
               ></campaign-tag>
             </td>
             <td class="actions links" width="150">
-              <a @click="code(campaign._id, 'html')" href="#" class="html-code">Normal HTML</a><br>
-              <a @click="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
+              <a @click.prevent="code(campaign._id, 'html')" href="#" class="html-code">Normal HTML</a><br>
+              <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
             </td>
             <td class="actions icons text-right" width="200">
               <a href="#" v-on:click.prevent="preview(campaign._id)" title="Preview" target="_blank">
@@ -116,7 +116,7 @@
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
-          <tr v-if="campaigns.data == 0">
+          <tr v-if="campaigns.data === 0">
             <td :colspan="showTags ? 6 : 5">
               There are no emails to show in this list
             </td>
@@ -192,7 +192,6 @@
         });
       },
       code(campaignId, type) {
-
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch("campaign/getCampaignData", campaignId).then(response => {
           this.codeType = type;

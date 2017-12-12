@@ -93,23 +93,32 @@
 
   .st-module-wrapper:hover {
 
+    .module-toolbar{
+      background: #c0dfda;
+    }
+
     .st-toolbar-content{
-      outline: 2px solid @focus;
+      outline: 2px solid #c0dfda;
       outline-offset: -2px;
     }
 
     .module-overlay{
       position: absolute;
-      background: rgba(105, 218, 200, 0.1);
+      background: rgba(65, 168, 152, 0.1);
       top: 0px;
       left: 0px;
       width: 100%;
       height: 100%;
+      display: block;
     }
 
-    .icon-move, .icon-remove,
-    .icon-clone, .icon-config {
+    .icon-move{
       display: inline-block;
+    }
+
+    .icon-remove,
+    .icon-clone, .icon-config {
+      display: none;
     }
   }
 
@@ -126,6 +135,26 @@
     .icon-move, .icon-remove,
     .icon-clone, .icon-config {
       display: inline-block;
+    }
+
+    &:hover{
+      .st-toolbar-content{
+        outline: 2px solid @focus;
+        outline-offset: -2px;
+      }
+
+      .module-overlay{
+        display: none;
+      }
+
+      .module-toolbar{
+        background-color: #69dac8;
+      }
+
+      .icon-move, .icon-remove,
+      .icon-clone, .icon-config {
+        display: inline-block;
+      }
     }
   }
 
