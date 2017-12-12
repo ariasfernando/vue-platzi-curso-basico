@@ -27,7 +27,7 @@
       }
     },
     computed: {
-      pages: function () {
+      pages() {
         let pages = [];
         if (this.lastPage <= 1) {
           return pages;
@@ -37,11 +37,12 @@
             pages.push(i);
           }
         } else {
+          let slidingStart = 0;
           let numAdjacents = Math.floor((this.maxPages - 3) / 2);
           if (this.currentPage + numAdjacents > this.lastPage) {
-            let slidingStart = this.lastPage - this.maxPages + 2;
+            slidingStart = this.lastPage - this.maxPages + 2;
           } else {
-            let slidingStart = this.currentPage - numAdjacents;
+            slidingStart = this.currentPage - numAdjacents;
           }
           if (slidingStart < 2) {
             slidingStart = 2;
@@ -54,7 +55,7 @@
           if (slidingStart > 2) {
             pages.push('...');
           }
-          for ($i = slidingStart; $i <= slidingEnd; $i++) {
+          for (let $i = slidingStart; $i <= slidingEnd; $i++) {
             pages.push($i);
           }
           if (slidingEnd < this.lastPage - 1) {
@@ -66,7 +67,7 @@
       }
     },
     methods: {
-      changePage: function (page) {
+      changePage (page) {
         if (page !== this.currentPage && page !== '...') {
           this.$emit('change-page', page);
         }

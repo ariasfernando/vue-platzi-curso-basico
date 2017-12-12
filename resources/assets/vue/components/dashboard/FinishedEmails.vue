@@ -102,9 +102,10 @@
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
               <a href="#" @click.prevent="clone(campaign._id)" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
-              <a :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
+              <a href="#"
                 class="edit"
                 title="Edit"
+                @click.prevent="askToEditCampaign(campaign._id)"
                 ><i class="glyphicon glyphicon-pencil" v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"></i></a>
               <a href="#" class="btn-upload-api"
                 v-for="api in campaign.api"
@@ -134,6 +135,13 @@
       <modal v-if="showModal" v-on:close="showModal = false" v-on:accept="confirmDeleteCampaign" class="delete-modal">
         <div slot="body">
           <p>Are you sure you want to delete this email?</p>
+        </div>
+      </modal>
+      <modal v-if="showModalEdit" v-on:close="showModalEdit = false" v-on:accept="confirmEditCampaign" class="delete-modal">
+        <div slot="body">
+          <p>You are editing a finished email</p>
+
+          <p>If this message has been deployed, changes will impact the view in browser version of the message.</p>
         </div>
       </modal>
       <modal-preview ref="preview"></modal-preview>
