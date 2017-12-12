@@ -311,6 +311,7 @@
     .multiselect__input{
       height: 32px!important;
       margin-top: 1px!important;
+      clear: both;
     }
 
     .multiselect__option--selected.multiselect__option--highlight:after {
