@@ -33,7 +33,7 @@
           <multiselect v-model="form.tags" :options="tagOptions" :multiple="true"
             :select-label="'Select'" :close-on-select="true" :taggable="true"
             :hide-selected="true" :preserve-search="true"
-            @remove="tagRemove" @select="tagAdd" placeholder="Choose tag">
+            @remove="tagRemove" @tag="tagAdd" @select="tagAdd" placeholder="Choose tag">
           </multiselect>
         </div>
 
