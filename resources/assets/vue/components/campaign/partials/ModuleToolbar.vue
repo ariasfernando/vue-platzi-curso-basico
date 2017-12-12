@@ -103,6 +103,7 @@
     }
 
     .module-overlay{
+      pointer-events: none;
       position: absolute;
       background: rgba(65, 168, 152, 0.1);
       top: 0px;
