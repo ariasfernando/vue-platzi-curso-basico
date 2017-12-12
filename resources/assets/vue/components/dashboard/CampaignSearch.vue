@@ -33,9 +33,11 @@
       <li class="ui-autocomplete-category">Popular tags</li>
       <li v-for="tag in filteredTagNames.popular" :aria-label="'Popular tags: ' + tag.label" class="ui-menu-item" tabindex="-1"
         @click.prevent="addSearchTerm(tag.label)">{{tag.label}}</li>
+      <li v-if="!filteredTagNames.popular.length" class="ui-menu-item">There are no popular tags.</li>
       <li class="ui-autocomplete-category">Tags</li>
       <li v-for="tag in filteredTagNames.tags" :aria-label="'Tags: ' + tag.label" class="ui-menu-item" tabindex="-1"
         @click.prevent="addSearchTerm(tag.label)">{{tag.label}}</li>
+      <li v-if="!filteredTagNames.tags.length" class="ui-menu-item">There are no tags to show.</li>
     </ul>
   </div>
 </template>
