@@ -177,7 +177,12 @@
             });
       },
       tagAdd(tag) {
-        this.form.tags.push(tag);
+
+        if (tag.match(/[^a-z0-9-_]+/i)) {
+          this.$root.$toast('Only alphanumeric characters, hyphens and underscores are allowed.', {className: 'et-error'});
+          return false;
+        }
+        this.form.tags.push(tag.toLowerCase());
         this.$store.commit('campaign/saveSetting', {
           name: 'tags',
           value: this.form.tags
