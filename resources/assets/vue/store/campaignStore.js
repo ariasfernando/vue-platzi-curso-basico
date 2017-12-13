@@ -21,6 +21,7 @@ function campaignStore() {
       modalPreview: false,
       modalProof: false,
       modalEnableTemplating: false,
+      modalEsp: false,
       buildingMode: 'desktop',
       editorToolbar: '',
       dirty: false,

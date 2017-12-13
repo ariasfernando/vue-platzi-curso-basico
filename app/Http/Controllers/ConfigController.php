@@ -22,7 +22,8 @@ class ConfigController extends Controller
         'modals',
         'modules',
         'proof',
-        'view'
+        'view',
+        'api.eloqua'
     ];
 
     /**
