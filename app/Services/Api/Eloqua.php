@@ -8,6 +8,7 @@ use Session;
 use Activity;
 use Carbon\Carbon;
 use Stensul\Models\Upload;
+use Stensul\Models\Library;
 use GuzzleHttp\Client as Client;
 use MongoDB\BSON\ObjectID as ObjectID;
 
@@ -48,9 +49,9 @@ class Eloqua implements ApiConnector
         if ($eloqua_config['use_oauth']) {
             return $this->getTokenByOauth();
         }
-        if (!$force || Cache::has('api:eloqua:' . $this->library_name . ':token')) {
+        if (!$force && Cache::has('api:eloqua:' . $this->library_name . ':token')) {
             $eloqua_token = Cache::get('api:eloqua:' . $this->library_name . ':token');
-        } elseif (!$force || Cache::has('api:eloqua:token')) {
+        } elseif (!$force && Cache::has('api:eloqua:token')) {
             $eloqua_token = Cache::get('api:eloqua:token');
         } else {
             $options = [
@@ -436,7 +437,8 @@ class Eloqua implements ApiConnector
     {
         if (!is_null($campaign)) {
             if ($campaign->library) {
-                $this->library_name = $campaign->library;
+                $library = Library::find($campaign->library);
+                $this->library_name = $library->name;
             } elseif (!empty($request['library_name'])) {
                 $this->library_name = $request['library_name'];
             }
