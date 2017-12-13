@@ -15,8 +15,7 @@
                          :width="templateWidth"
                          :options="options"
                          :element="'table'"
-                         @sort="onSort"
-              >
+                         @sort="onSort">
                 <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
           </td>
@@ -31,6 +30,8 @@
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';
+
+  let dragGhost = {};
 
   export default {
     name: 'EmailCanvas',
@@ -67,7 +68,60 @@
           handle:'.icon-move',
           ghostClass: "ghost-component",
           chosenClass: "chosen-component",
-          dragClass: "drag-component"
+          dragClass: "drag-component",
+          setData: function (dataTransfer, dragEl) {
+            // Get the element type
+            const type = $(dragEl).find('tr[data-type]').data('type');
+
+            // Create the content & Stylize it
+            dragGhost = document.createElement("div");
+            dragGhost.classList.add('custom-drag-ghost');
+
+            // Icon
+            icon = document.createElement("i");
+            icon.classList.add('fa');
+            let iconClass = '';
+            let text = '';
+
+            // Text
+            paragraph = document.createElement("p");
+            
+            // Get the class for given icon
+            switch(type) {
+              case 'image-element':
+                iconClass = 'fa-picture-o';
+                text = 'Image';
+                break;
+              case 'text-element':
+                iconClass = 'fa-align-justify';
+                text = 'Text';
+                break;
+              case 'button-element':
+                iconClass = 'fa-square';
+                text = 'CTA';
+                break;
+              case 'divider-element':
+                iconClass = 'fa-minus-square';
+                text = 'Divider';
+                break;
+              default:
+                iconClass = '';
+            }
+            
+            icon.classList.add(iconClass);
+            paragraph.innerText = text;
+
+            // Place it into the DOM tree
+            dragGhost.appendChild(icon);
+            dragGhost.appendChild(paragraph);
+            document.body.appendChild(dragGhost);
+            
+            // Set the new stylized "drag image" of the dragged element
+            dataTransfer.setDragImage(dragGhost, 0, 0);
+          },
+          onEnd: function () {
+            dragGhost.parentNode.removeChild(dragGhost);
+          }
         },
         templateBackgroundColor(){
           return  this.campaign.campaign_data.library_config.templateBackgroundColor;
@@ -144,60 +198,93 @@
 </script>
 
 <style lang="less">
-/* COMMON STYLES */
-span{
-  &.st-preheader{ 
-    display: none!important;
+  @icon-option: #69dac8;
+  @focus: #69dac8;
+  @focus-light: lighten(@focus, 30%);
+  @hover: @focus-light;
+
+  /* COMMON STYLES */
+  span{
+    &.st-preheader{ 
+      display: none!important;
+    }  
+
+  }
+
+  .applelinks{
+    color:#FFFFFF !important; 
+    text-decoration: none !important; 
   }  
-
-}
-
-.applelinks{
-  color:#FFFFFF !important; 
-  text-decoration: none !important; 
-}  
-       
-/*BASE-LAYOUT*/
-.st-email-body{ 
-  width:100% !important;
-  -webkit-text-size-adjust: 100%; 
-  margin: 0 !important; 
-  padding: 0px; 
-  background-color: #000000; 
-}
-
-.st-edit-text{
-  p{
-    margin: 0;
-    padding: 0;
+         
+  /*BASE-LAYOUT*/
+  .st-email-body{ 
+    width:100% !important;
+    -webkit-text-size-adjust: 100%; 
+    margin: 0 !important; 
+    padding: 0px; 
+    background-color: #000000; 
   }
 
-  a:hover, 
-  a:focus{
-    text-decoration: none !important;
-  }
-}
+  .st-edit-text{
+    p{
+      margin: 0;
+      padding: 0;
+    }
 
-#emailCanvas{
-  &.mobile-mode {
-    /*BASE-LAYOUT*/
-    .st-wrapper{
-      width: 100% !important;
-    }
-    .st-wrapper-content{ 
-      padding: 0px !important;
-    }
-    .st-col{ 
-      display: block!important; 
-      width: 100%!important; 
-      padding: 0px !important;
-    }
-    .st-resize{ 
-      width: 100%!important;
-      display: block!important; 
-      height: auto !important;
+    a:hover, 
+    a:focus{
+      text-decoration: none !important;
     }
   }
-}
+
+  .custom-drag-ghost {
+    /* The original cloned element must not take place up in the page and must not be visible */
+    position: absolute;
+    top: -99999px;
+    left: -99999px;
+
+    width: 92px;
+    height: 82px;
+    background: white;
+    border: 1px solid @icon-option;
+    margin: 0 5px;
+    font-size: 34px;
+    text-align: center;
+    color:@focus;
+    background-color: @hover;
+    opacity: 1!important;
+    font-weight: 100 !important;
+
+    i.fa {
+      vertical-align: bottom;
+    }
+
+    p{
+      font-size: 14px;
+      font-weight: 100 !important;
+    }
+  }
+
+  #emailCanvas{
+    &.mobile-mode {
+      /*BASE-LAYOUT*/
+      .st-wrapper{
+        width: 100% !important;
+      }
+      .st-wrapper-content{ 
+        padding: 0px !important;
+      }
+      .st-col{ 
+        display: block!important; 
+        width: 100%!important; 
+        padding: 0px !important;
+      }
+      .st-resize{ 
+        width: 100%!important;
+        display: block!important; 
+        height: auto !important;
+      }
+    }
+  }
 
 </style>
