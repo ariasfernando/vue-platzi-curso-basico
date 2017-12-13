@@ -36,15 +36,17 @@
         <!--2 COLUMNS -->
 
         <!--1 COLUMN -->
-        <tr v-else v-for="(component, componentId) in module.structure.columns[0].components">
+        <tr v-else v-for="(component, componentId) in module.structure.columns[0].components" @click.prevent="setComponent(moduleId, 0, componentId)">
           <td :valign="component.attribute.valign"
               :align="component.attribute.align || 'left'"
           >
-              <component :is="component.type"
-                         :component="component"
-                         :module-id="moduleId"
-                         :column-id="0"
-                         :component-id="componentId"></component>
+            <component
+              :is="component.type"
+              :component="component"
+              :module-id="moduleId"
+              :column-id="0"
+              :component-id="componentId">
+            </component>
           </td>
         </tr>
         <!--1 COLUMN -->
@@ -87,11 +89,22 @@
       },
     },
     methods: {
-      setComponent(ref) {
-        this.$store.commit("campaign/setCurrentComponent", ref);
+      setComponent(moduleId, columnId, componentId) {
+        setTimeout(() => {
+          // TODO: find better way to do this
+          this.$store.commit("campaign/setCurrentComponent", {
+            moduleId,
+            columnId,
+            componentId,
+          });
+        }, 50);
       },
       setActiveModule(moduleId) {
+        // Set active Module
         this.$store.commit("campaign/setActiveModule", moduleId);
+        // Clear 3rd column
+        this.$store.commit("campaign/setCurrentComponent", {});
+        this.$store.commit("campaign/setCurrentModule", null);
       }
     },
     components: {

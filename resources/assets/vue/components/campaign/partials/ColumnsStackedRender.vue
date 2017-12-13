@@ -8,7 +8,7 @@
              cellpadding="0" 
              border="0"
       >
-        <tr v-for="(component, componentId) in column.components" :key="componentId">
+        <tr v-for="(component, componentId) in column.components" :key="componentId" @click="setComponent(moduleId, columnId, componentId)">
           <td width="100%" 
               :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight +';'"
               :bgcolor="column.attribute.bgcolor.hex" 
@@ -83,6 +83,15 @@
           "</table>" +
           "<![endif]";
       }   
+    },
+    methods: {
+      setComponent(moduleId, columnId, componentId) {
+        this.$store.commit("campaign/setCurrentComponent", {
+          moduleId,
+          columnId,
+          componentId,
+        });
+      },
     }
   };
 </script>

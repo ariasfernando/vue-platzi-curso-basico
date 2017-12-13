@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-wrapper plugin-wrapper">
+  <div class="settings-wrapper plugin-wrapper" v-if="component">
 
     <div class="plugin-wrapper-inner">
       <span>

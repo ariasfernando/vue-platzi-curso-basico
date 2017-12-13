@@ -1,17 +1,12 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
-    <tr @click.prevent="setComponent"
-        data-type="button-element"
-    >
-      <td :align="component.attribute.align" 
-          class="st-position-relative"
-          width="100%"
-      >
+    <tr data-type="button-element">
+      <td :align="component.attribute.align" class="st-position-relative" width="100%">
         <a @click.prevent 
-             :href="component.attribute.href" 
-             :target="component.attribute.target" 
-             style="text-decoration:none;"
+           :href="component.attribute.href" 
+           :target="component.attribute.target" 
+           style="text-decoration:none;"
         >
           <table :width="component.attribute.width" 
                  :height="component.attribute.height" 
@@ -55,17 +50,6 @@
         editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-'),
       }
     },
-    methods: {
-      setComponent(e) {
-        if (!$(e.target).hasClass("st-remove")){
-          this.$store.commit("campaign/setCurrentComponent", {
-            moduleId: this.moduleId,
-            columnId: this.columnId,
-            componentId: this.componentId
-          });
-        }
-      },
-    }
   };
 </script>
 

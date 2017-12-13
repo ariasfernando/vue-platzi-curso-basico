@@ -1,9 +1,7 @@
 <template>
   <!-- TEXT ELEMENT -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
-    <tr @click.prevent="setComponent"
-        data-type="text-element"
-    >
+    <tr data-type="text-element">
       <td width="100%" 
           :bgcolor="component.attribute.bgcolor.hex || 'transparent'"
       >
@@ -48,16 +46,5 @@
         fixed: false,
       }
     },
-    methods: {
-      setComponent(e) {
-        if (!$(e.target).hasClass("st-remove")){
-          this.$store.commit("campaign/setCurrentComponent", {
-            moduleId: this.moduleId,
-            columnId: this.columnId,
-            componentId: this.componentId
-          });
-        }
-      },
-    }
   };
 </script>
