@@ -1,5 +1,5 @@
 <template>
-  <div class="plugin-wrapper-inner">
+  <div class="plugin-wrapper-inner" v-if="component">
     <div>
       <span>
         <label>Destination Url</label>
@@ -49,10 +49,10 @@
         return component;
       },
       href() {
-        return this.component.attribute.href;
+        return this.component.attribute ? this.component.attribute.href : '';
       },
       target() {
-        return this.component.attribute.target;
+        return this.component.attribute ? this.component.attribute.target : '';
       }
     },
     data() {

@@ -1,7 +1,7 @@
 <template>
-  <div class="spinner-wrapper">
+  <div class="modal-mask" v-if="loading">
     <transition>
-      <div class="spinner" v-if="loading">
+      <div class="spinner modal-container modal-preview">
         <div class="rect1"></div>
         <div class="rect2"></div>
         <div class="rect3"></div>
@@ -36,6 +36,12 @@
     margin-left: -25px;
   }
 
+  .modal-container {
+    background-color: transparent;
+    margin-top: 20%;
+    width: 10% !important;
+  }
+
   .spinner {
     width: 50px;
     height: 40px;
@@ -44,8 +50,8 @@
   }
 
   .spinner > div {
-    background-color: #514960;
-    height: 100%;
+    background-color: #78dcd6;
+    height: 50px;
     width: 6px;
     display: inline-block;
 

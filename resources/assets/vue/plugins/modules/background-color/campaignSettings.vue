@@ -1,5 +1,5 @@
 <template>
-  <div class="plugin-wrapper-inner">
+  <div class="plugin-wrapper-inner" v-if="component">
     <label>{{ plugin.title }}</label>
     <compact-picker ref="compact" v-model="colors" @input="updateValue"></compact-picker>
   </div>
@@ -30,7 +30,7 @@
       },
       colors() {
         return {
-          hex: this.component.attribute.bgcolor || this.plugin.config.defaultValue
+          hex: this.component.attribute ? this.component.attribute.bgcolor : this.plugin.config.defaultValue
         }
       },
     },

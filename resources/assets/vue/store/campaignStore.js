@@ -15,6 +15,7 @@ function campaignStore() {
       currentModuleId: undefined,
       currentCustomModuleId: undefined,
       currentComponent: {},
+      activeModule: undefined,
       modalCode: false,
       modalComplete: false,
       modalPreview: false,
@@ -37,6 +38,9 @@ function campaignStore() {
       },
       currentModule(state) {
         return state.currentModuleId;
+      },
+      activeModule(state) {
+        return state.activeModule;
       },
       currentCustomModule(state) {
         return state.currentCustomModuleId;
@@ -113,6 +117,9 @@ function campaignStore() {
       setCurrentComponent(state, data) {
         state.currentComponent = data;
         state.currentModuleId = undefined;
+      },
+      setActiveModule(state, moduleId) {
+        state.activeModule = moduleId;
       },
       saveComponent(state, data) {
         const moduleId = data.moduleId;
