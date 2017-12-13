@@ -20,7 +20,7 @@
       </button>
     </div>
     <small class="search-error" v-if="!canSearch && showLimitMessage">There's a limit of {{limit}} search terms.</small>
-    <div class="btn-group" v-show="terms.length > 0">
+    <div class="btn-group" v-show="terms.length > 0 || tags.length > 0">
       <button v-for="term in terms" class="btn btn-default btn-xs term" v-on:click="removeSearchTerm(term)">
         {{term}} <i class="glyphicon glyphicon-remove"></i>
       </button>
@@ -108,8 +108,11 @@
 
         if (typeof term == 'object') {
           term = this.searchModel;
+          this.$emit('add-search-term', term);
+        } else {
+          this.$emit('add-search-tag', term);
         }
-        this.$emit('add-search-term', term);
+
         this.clearModel();
         this.filteredTagNames = clone(this.tagNames);
         this.closeTagDropdown();
