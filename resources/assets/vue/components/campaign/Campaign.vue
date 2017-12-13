@@ -38,6 +38,7 @@
     <!-- Modals -->
     <modal-complete v-if="ready"></modal-complete>
     <modal-preview v-if="ready"></modal-preview>
+    <modal-esp v-if="ready"></modal-esp>
     <modal-proof v-if="ready"></modal-proof>
     <modal-enable-templating v-if="ready"></modal-enable-templating>
 
@@ -51,6 +52,7 @@
   import ModalComplete from './modals/ModalComplete.vue'
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
+  import ModalEsp from './modals/ModalEsp.vue'
   import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import EmailCanvas from './EmailCanvas.vue'
@@ -75,6 +77,7 @@
       ModalComplete,
       ModalPreview,
       ModalProof,
+      ModalEsp,
       ModalEnableTemplating,
       Spinner,
       EmailActions
