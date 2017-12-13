@@ -2,9 +2,9 @@
   <div>
     <!-- content canvas email -->
     <div class="section-box-content section-canvas-container">
-      <table cellpadding="0" cellspacing="0" width="100%">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
+          <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;">
               <draggable id="emailCanvas"
                          :class="buildingMode + '-mode'"
                          class="email-canvas st-wrapper-table"
@@ -68,6 +68,9 @@
           ghostClass: "ghost-component",
           chosenClass: "chosen-component",
           dragClass: "drag-component"
+        },
+        templateBackgroundColor(){
+          return  this.campaign.campaign_data.library_config.templateBackgroundColor;
         },
         title  () {
           let libraryTitle = this.campaign.campaign_data.library_config.title || 'Campaign Editor';
