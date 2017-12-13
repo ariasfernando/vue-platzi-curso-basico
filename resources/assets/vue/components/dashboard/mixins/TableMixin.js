@@ -16,6 +16,7 @@ export default {
       reverse: false,
       showModal: false,
       showPreview: false,
+      showModalEdit: false,
       selectedCampaignId: null,
       baseUrl: Application.globals.baseUrl,
       widthPreview: Application.globals.emailWidth || 660,
@@ -102,19 +103,23 @@ export default {
         });
       }
     },
-    addSearchTag: function(tag) {
+    addSearchTag(tag) {
       if (this.config.enable_search === true) {
         this.$emit('add-search-tag', tag);
       }
     },
-    askToDeleteCampaign: function(campaignId) {
+    askToDeleteCampaign(campaignId) {
       this.selectedCampaignId = campaignId;
       this.showModal = true;
     },
-    changePage: function(page) {
+    askToEditCampaign(campaignId) {
+      this.selectedCampaignId = campaignId;
+      this.showModalEdit = true;
+    },
+    changePage(page) {
       this.$emit('change-page', page, this.type);
     },
-    confirmDeleteCampaign: function() {
+    confirmDeleteCampaign() {
       $.post(Application.globals.baseUrl + '/campaign/delete', {
         campaign_id: this.selectedCampaignId
       }, function(campaigns) {
@@ -122,6 +127,9 @@ export default {
         this.showModal = false;
         this.$emit('refresh-campaigns', this.type);
       }.bind(this), 'json');
+    },
+    confirmEditCampaign() {
+      window.location.href = this.$_app.config.baseUrl + '/campaign/edit/' + this.selectedCampaignId;
     },
     isFavorite: function(data) {
       if (!data.favorite) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="plugin-wrapper-inner">
+  <div class="plugin-wrapper-inner" v-if="component">
     <label>{{ plugin.title }}</label>
     
     <div class="alignment-options">
@@ -39,7 +39,7 @@
         return component;
       },
       value() {
-        return this.component.attribute.align;
+        return this.component.attribute ? this.component.attribute.align : '';
       }
     },
     data() {
