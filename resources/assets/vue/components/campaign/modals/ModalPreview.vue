@@ -6,7 +6,6 @@
           <div class="share-preview pull-right" v-if="!isPublic">
             <form class="form-inline">
               <div class="form-group">
-                <label>Share URL:</label>
                 <div class="input-group">
                   <input type="text" class="form-control share-preview" :value="shareURL" readonly>
                   <span class="input-group-btn">
@@ -252,7 +251,7 @@
   }
   .modal-container {
     width: 920px!important;
-    height: 700px!important;
+    height: 695px!important;
     overflow: scroll;
     margin: -20px auto;
     background-color: #fff;
@@ -263,7 +262,7 @@
 
     .share-preview{
       position: absolute;
-      bottom: 31px;
+      bottom: 26px;
       height: 30px;
 
       label{
