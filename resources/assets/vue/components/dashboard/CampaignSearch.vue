@@ -20,7 +20,7 @@
       </button>
     </div>
     <small class="search-error" v-if="!canSearch && showLimitMessage">There's a limit of {{limit}} search terms.</small>
-    <div class="btn-group" v-show="terms.length > 0">
+    <div class="btn-group" v-show="terms.length > 0 || tags.length > 0">
       <button v-for="term in terms" class="btn btn-default btn-xs term" v-on:click="removeSearchTerm(term)">
         {{term}} <i class="glyphicon glyphicon-remove"></i>
       </button>
@@ -33,9 +33,11 @@
       <li class="ui-autocomplete-category">Popular tags</li>
       <li v-for="tag in filteredTagNames.popular" :aria-label="'Popular tags: ' + tag.label" class="ui-menu-item" tabindex="-1"
         @click.prevent="addSearchTerm(tag.label)">{{tag.label}}</li>
+      <li v-if="!filteredTagNames.popular.length" class="ui-menu-item">There are no popular tags.</li>
       <li class="ui-autocomplete-category">Tags</li>
       <li v-for="tag in filteredTagNames.tags" :aria-label="'Tags: ' + tag.label" class="ui-menu-item" tabindex="-1"
         @click.prevent="addSearchTerm(tag.label)">{{tag.label}}</li>
+      <li v-if="!filteredTagNames.tags.length" class="ui-menu-item">There are no tags to show.</li>
     </ul>
   </div>
 </template>
@@ -106,8 +108,11 @@
 
         if (typeof term == 'object') {
           term = this.searchModel;
+          this.$emit('add-search-term', term);
+        } else {
+          this.$emit('add-search-tag', term);
         }
-        this.$emit('add-search-term', term);
+
         this.clearModel();
         this.filteredTagNames = clone(this.tagNames);
         this.closeTagDropdown();

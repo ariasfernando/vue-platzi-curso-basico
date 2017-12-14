@@ -42,5 +42,9 @@ module.exports = {
   },
   tag: {
     fetchTags: { method: 'get', path: `${baseUrl}/dashboard/tags`}
+  },
+  api: {
+    uploadEmail: { method: 'post', path: `${baseUrl}/api/upload-email`},
+    uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId`}
   }
 };
