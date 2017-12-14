@@ -55,7 +55,7 @@
     .title{
       font-family: 'Open Sans', Helvetica, Arial, sans-serif;
       color: #666666;
-      font-size: 13px;
+      font-size: 14px;
     }
     .btn-group{
       button.btn{
