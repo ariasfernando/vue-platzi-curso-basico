@@ -1,5 +1,5 @@
 <template>
-    <div class="rm-wrapper">  
+    <div class="stx-wrapper">
       <table class="st-col st-mso-full-width"
              align="left"
              :width="column.attribute && column.attribute.width ? column.attribute.width : 100/numColumns + '%'"
