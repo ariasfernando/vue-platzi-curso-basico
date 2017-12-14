@@ -55,13 +55,13 @@
     .title{
       font-family: 'Open Sans', Helvetica, Arial, sans-serif;
       color: #666666;
-      font-size: 9px;
+      font-size: 13px;
     }
     .btn-group{
       button.btn{
         margin-right: 5px;
         border-radius: 0;
-        font-size: 13px;
+        font-size: 12px;
         i.glyphicon{
           margin-right: 0!important;
         }
