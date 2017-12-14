@@ -33,6 +33,7 @@
     "gulp-util": "3.0.4",
     "htmltidy": "0.0.6",
     "jquery": "^3.2.1",
+    "js-beautify": "^1.7.5",
     "laravel-elixir": "^4.2.1",
     "lodash": "^4.17.4",
     "path-ends-with": "^1.1.0",

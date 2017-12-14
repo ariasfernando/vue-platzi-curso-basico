@@ -47,7 +47,7 @@
 <script>
   import Vue from 'vue/dist/vue';
   import BootstrapVue from 'bootstrap-vue';
-  import cleaner from 'clean-html';
+  import { html_beautify } from 'js-beautify';
   import campaignService from '../../../services/campaign'
 
   export default {
@@ -67,8 +67,9 @@
     },
     watch:{
       campaign(value){
-        cleaner.clean(value.campaign_data.body_html, (html) => {
-          this.html = html;
+        this.html = html_beautify(value.campaign_data.body_html, {
+          'indent_size': 2,
+          'wrap_line_length': 120,
         });
       },
     },

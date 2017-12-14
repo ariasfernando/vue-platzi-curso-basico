@@ -99,8 +99,6 @@ export default {
       });
     }
 
-    debugger;
-
     // Remove empty links
     const $wrapperElementRemove = $cleanedHtml.find('.rm-wrapper');
 
@@ -108,8 +106,8 @@ export default {
       const $element = $(element);
 
       // Replace element with the content element.
-      if ($element.children().is('tbody')) {
-        $element.replaceWith($element.children().html());
+      if ($element.is('table')) {
+        $element.replaceWith($element.find('td:first').html());
       } else {
         $element.replaceWith($element.html());
       }

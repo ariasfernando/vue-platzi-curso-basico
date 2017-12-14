@@ -9,8 +9,8 @@
 		<meta name="MobileOptimized" content="320"/>
 		<meta name="viewport" content="width=device-width" />
 		<title></title>
-		
-		@if(isset($params['library_config']['externalCssLink']))
+
+		@if(isset($params['library_config']['externalCssLink']) && !empty($params['library_config']['externalCssLink']))
 			<link href="{{ $params['library_config']['externalCssLink'] }}" rel="stylesheet">
 		@endif
 

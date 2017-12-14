@@ -69,11 +69,10 @@
 </template>
 
 <script>
-
+  import VueSticky from 'vue-sticky';
   import campaignService from '../../services/campaign';
   import configService from '../../services/config';
   import campaignCleaner from '../../utils/campaignCleaner';
-  import VueSticky from 'vue-sticky';
 
   export default {
     name: 'EmailActions',
