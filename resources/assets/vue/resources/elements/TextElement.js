@@ -7,7 +7,7 @@ function textDefault() {
     style: {
       fontFamily: 'Helvetica, arial, sans-serif',
       fontSize: '12px',
-      fontWeight: '300',
+      fontWeight: 'normal',
       lineHeight: '16px',
       paddingTop: '0px',
       paddingBottom: '0px',
@@ -35,6 +35,13 @@ function textDefault() {
         name: 'fontSize',
         type: 'text',
         value: '12px',
+      },
+      {
+        link: 'style',
+        label: 'Font Weight',
+        name: 'fontWeight',
+        type: 'text',
+        value: 'normal',
       },
       {
         link: 'attribute',
@@ -99,7 +106,7 @@ function textDefault() {
       },
     ],
     plugins: {},
-  };
+  }
 }
 
 module.exports = textDefault;
