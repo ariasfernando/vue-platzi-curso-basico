@@ -340,7 +340,7 @@
     }
 
     .multiselect__option--highlight{
-      background: @stensul-highlight;
+      background: @stensul-purple;
       color: @stensul-white;
     }
 
