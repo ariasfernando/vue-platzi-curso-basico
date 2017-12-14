@@ -11,18 +11,13 @@
     <td class="st-toolbar-content st-position-relative"
         :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
-        :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
-    >
-      <table width="100%" cellspacing="0" cellpadding="0" border="0">
+        :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
+      <table width="100%" cellspacing="0" cellpadding="0" border="0" :class="{ 'rm-wrapper': module.structure.columns.length === 1 }">
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
-          <td width="100%" 
-              v-if="!module.structure.columnsFixed"
-          >
-
+          <td width="100%" v-if="!module.structure.columnsFixed">
             <comment :content="msoStartingComment"></comment>
             <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
-            
           </td>
 
           <td v-else
@@ -37,9 +32,7 @@
 
         <!--1 COLUMN -->
         <tr v-else v-for="(component, componentId) in module.structure.columns[0].components" @click.prevent="setComponent(moduleId, 0, componentId)">
-          <td :valign="component.attribute.valign"
-              :align="component.attribute.align || 'left'"
-          >
+          <td :valign="component.attribute.valign" :align="component.attribute.align || 'left'">
             <component
               :is="component.type"
               :component="component"

@@ -42,7 +42,7 @@ export default {
       '.st-remove-element',
     ],
   },
-  
+
   clean(selector) {
     let $canvas = null;
     let $cleanedHtml = null;
@@ -51,14 +51,14 @@ export default {
 
     // Clone content
     $cleanedHtml = $canvas.clone(true);
-    
+
     // Remove attr tags function clean
     const $removeAttr = this.removeDataHtml($cleanedHtml, this.cleanOptions.attrSelectors, 'attr');
     // Function removeDataHtml fail attributes
     if ($removeAttr !== false) {
       $cleanedHtml = $removeAttr;
     }
-    
+
     // Remove class tags
     const $removeClass = this.removeDataHtml($cleanedHtml, this.cleanOptions.classSelectors, 'class');
     // Function removeDataHtml fail attributes
@@ -73,45 +73,49 @@ export default {
 
     // Remove every class starting with "rm-"
     $cleanedHtml.find("[class*=' rm-'], [class^='rm-']").removeClass((index, css) => (css.match(/(^|\s)st-\S+/g) || []).join(' '));
-    
+
     // Remove attr class if it's empty.
     $cleanedHtml.find("[class='']").removeAttr('class');
-    
+
     // Remove attr style if it's empty.
     $cleanedHtml.find("[style='']").removeAttr('style');
-    
+
     // Remove tooltip
     $cleanedHtml.find('.actions-buttons-tooltip').remove();
-    
+
     // Remove toolbox Tinymce
     $cleanedHtml.find('.text-overlay-toolbox').remove();
-    
+
     // Convert data-contenteditable-href to href
     if ($cleanedHtml.find('[data-contenteditable-href]').length) {
       const $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
-      
+
       $.each($targetContenteditableHref, (key, element) => {
         const tempDataContenteditableHref = $(element).data('contenteditable-href');
         // Add href
         $(element).attr('href', tempDataContenteditableHref);
-        // Remove data-contenteditable-href 
-        $(element).removeAttr('data-contenteditable-href'); 
+        // Remove data-contenteditable-href
+        $(element).removeAttr('data-contenteditable-href');
       });
     }
 
     // Remove empty links
-    var $wrapperElementRemove = $cleanedHtml.find('.rm-wrapper');
+    const $wrapperElementRemove = $cleanedHtml.find('.rm-wrapper');
 
-    $.each($wrapperElementRemove, function (i, element) {
-        var $element = $(element);
+    $.each($wrapperElementRemove, (i, element) => {
+      const $element = $(element);
 
-        // Replace element with the content element.
+      // Replace element with the content element.
+      if ($element.is('table')) {
+        $element.replaceWith($element.find('td:first').html());
+      } else {
         $element.replaceWith($element.html());
+      }
     });
 
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
-    
+
     return this.charConvert($cleanedHtml.html());
   },
   
