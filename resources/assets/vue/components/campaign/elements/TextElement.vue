@@ -17,7 +17,7 @@
                 :align="component.attribute.align" 
                 :style="component.style"
             >
-              <div class="st-edit-text rm-wrapper" :id="editorId" v-html="component.text"></div>
+              <div class="st-edit-text stx-wrapper" :id="editorId" v-html="component.text"></div>
               <div :class="'st-remove-element st-toolbar toolbar-'+editorId"></div>
             </td>
           </tr> 

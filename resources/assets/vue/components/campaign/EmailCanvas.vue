@@ -9,15 +9,15 @@
                 id="emailCanvas"
                 :class="`stx-${buildingMode}-mode`"
                 class="stx-email-canvas st-wrapper-table"
-                         cellspacing="0"
-                         cellpadding="0"
-                         border="0"
-                         v-model="dragList"
-                         :width="templateWidth"
-                         :options="options"
-                         :element="'table'"
-                         @sort="onSort">
-                <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
+                cellspacing="0"
+                cellpadding="0"
+                border="0"
+                v-model="dragList"
+                :width="templateWidth"
+                :options="options"
+                :element="'table'"
+                @sort="onSort">
+                  <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
           </td>
         </tr>
