@@ -202,10 +202,10 @@
     .module-wrapper {
       margin: 0 auto;
 
-      &.desktop-mode {
+      &.stx-desktop-mode {
         width: 640px;
       }
-      &.mobile-mode {
+      &.stx-mobile-mode {
         width: 480px;
         .st-wrapper{
           width: 100% !important;

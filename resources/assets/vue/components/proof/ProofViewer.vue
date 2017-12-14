@@ -46,7 +46,7 @@
                         </tr>
                         <tr>
                             <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
-                                <table id="emailCanvas" class="email-canvas wrapper-table" :width="campaign.template_width" cellspacing="0" cellpadding="0" border="0">
+                                <table id="emailCanvas" class="stx-email-canvas wrapper-table" :width="campaign.template_width" cellspacing="0" cellpadding="0" border="0">
                                     <tbody v-html="campaign.body_html"></tbody>
                                 </table>
                             </td>

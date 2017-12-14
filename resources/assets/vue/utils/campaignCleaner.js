@@ -11,7 +11,7 @@ export default {
       'text-editable-0',
       'mce-edit-focus',
       'mce-content-body',
-      'hubspot-mergetag'
+      'hubspot-mergetag',
     ],
     // Array of attributes to clean from final html
     attrSelectors: [
@@ -71,8 +71,8 @@ export default {
       $cleanedHtml.find(selector).remove();
     });
 
-    // Remove every class starting with "rm-"
-    $cleanedHtml.find("[class*=' rm-'], [class^='rm-']").removeClass((index, css) => (css.match(/(^|\s)st-\S+/g) || []).join(' '));
+    // Remove every class starting with "stx-"
+    $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
 
     // Remove attr class if it's empty.
     $cleanedHtml.find("[class='']").removeAttr('class');
@@ -99,8 +99,8 @@ export default {
       });
     }
 
-    // Remove empty links
-    const $wrapperElementRemove = $cleanedHtml.find('.rm-wrapper');
+    // Remove wrappers
+    const $wrapperElementRemove = $cleanedHtml.find('.stx-wrapper');
 
     $.each($wrapperElementRemove, (i, element) => {
       const $element = $(element);
