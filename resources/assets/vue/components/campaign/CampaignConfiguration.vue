@@ -315,7 +315,7 @@
     }
 
     .multiselect__option--selected.multiselect__option--highlight:after {
-      background: @stensul-highlight;
+      background: @stensul-purple;
     }
 
     .multiselect__tags{
@@ -345,7 +345,7 @@
     }
 
     .multiselect__option--highlight:after {
-      background: @stensul-highlight;
+      background: @stensul-purple;
     }
 
     .multiselect__tag{
