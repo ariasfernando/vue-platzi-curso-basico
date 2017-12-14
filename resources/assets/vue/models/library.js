@@ -14,7 +14,7 @@ function Library(data = {}) {
     templateWidth: config.templateWidth || '660',
     templateMobileWidth: config.templateMobileWidth || '480',
     templateBackgroundColor: config.templateBackgroundColor || '#FFFFFF',
-    contentBackgroundColor: config.templateBackgroundColor || '#FFFFFF',
+    contentBackgroundColor: config.contentBackgroundColor || '#FFFFFF',
     fontFamily: config.fontFamily || 'Arial',
     fontSize: config.fontSize || '14',
     fontColor: config.fontColor || '#000000',
