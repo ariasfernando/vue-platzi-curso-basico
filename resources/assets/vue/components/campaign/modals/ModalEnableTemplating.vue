@@ -3,9 +3,6 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container modal-templating">
-          <slot name="header">
-            <button type="button" class="close" @click="close"><span>&times;</span></button>
-          </slot>
 
           <h4>Save as Template</h4>
 

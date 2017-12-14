@@ -3,83 +3,88 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container modal-preview">
+          <div class="share-preview pull-right" v-if="!isPublic">
+                    <form class="form-inline">
+                      <div class="form-group">
+                        <label>Share URL:</label>
+                          <div class="input-group">
+                              <input type="text" class="form-control share-preview" :value="shareURL" readonly>
+                              <span class="input-group-btn">
+                                <button class="btn btn-default btn-copy beta-btn-primary" @click="copyURL" type="button" data-tooltip="Copy URL">
+                                  <span class="glyphicon glyphicon-copy"></span>
+                                </button>
+                              </span>
+                          </div>
+                        </div>
+                    </form>
+                  </div>
+
+
           <slot name="header" v-if="!isPublic">
             <button type="button" class="close" @click="close"><span>&times;</span></button>
           </slot>
-          <slot name="body">
-            <h4>
-              Preview
-
-              <div class="share-preview pull-right" v-if="!isPublic">
-                <form class="form-inline">
+          <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent  v-if="!isPublic">
+            <slot name="body">
+              <h4>
+                Preview
+              </h4>
+              <div class="send-preview">
+                
                   <div class="form-group">
-                    <label>Share URL:</label>
-                      <div class="input-group">
-                          <input type="text" class="form-control share-preview" :value="shareURL" readonly>
-                          <span class="input-group-btn">
-                            <button class="btn btn-default btn-copy beta-btn-primary" @click="copyURL" type="button" data-tooltip="Copy URL">
-                              <span class="glyphicon glyphicon-copy"></span>
-                            </button>
-                          </span>
-                      </div>
-                    </div>
-                </form>
-              </div>
-            </h4>
-            <div class="send-preview">
-              <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent  v-if="!isPublic">
-                <div class="form-group">
-                  <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
-                    email is not suitable for deployment. To access the production-ready HTML, please click
-                    "Complete" to publish your campaign.
-                  </p>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="input-group">
-                        <span class="btn-group">
+                    <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
+                      email is not suitable for deployment. To access the production-ready HTML, please click
+                      "Complete" to publish your campaign.
+                    </p>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="input-group">
                           <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
-                            placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
-                        </span>
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send</button>
-                        </span>
+                              placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
+                        </div>
+                        <label class="error" v-if="emailError">{{emailError}}</label>
+                        <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
                       </div>
-                      <label class="error" v-if="emailError">{{emailError}}</label>
-                      <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="input-group">
-                        <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
-                          id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
+                      <div class="col-md-12">
+                        <div class="input-group">
+                          <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
+                            id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
+                        </div>
                       </div>
                     </div>
+                    <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
+                      <input type="text" class="form-control" name="send-preview-preheader" value=""
+                        id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
+                        <p class="info">The best practice is to limit preheaders to 50 characters.</p>
+                    </div>
                   </div>
-                  <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
-                    <input type="text" class="form-control" name="send-preview-preheader" value=""
-                      id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
-                      <p class="info">The best practice is to limit preheaders to 50 characters.</p>
-                  </div>
-                </div>
-              </form>
-              <div class="modal-divider"></div>
-              <div class="preview-body">
-                <div class="preview-container">
-                  <div class="mobile-frame"></div>
-                  <slot name="body">
-                    <b-tabs>
-                      <b-tab title="Desktop" @click="togglePreview('desktop')" active>
-                      </b-tab>
-                      <b-tab title="Mobile" @click="togglePreview('mobile')">
-                      </b-tab>
-                    </b-tabs>
-                  </slot>
-                  <div class="iframe-container" :data-template-width="widthPreview">
-                    <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
+                
+                <div class="modal-divider"></div>
+                <div class="preview-body">
+                  <div class="preview-container">
+                    <div class="mobile-frame"></div>
+                    <slot name="body">
+                      <b-tabs>
+                        <b-tab title="Desktop" @click="togglePreview('desktop')" active>
+                        </b-tab>
+                        <b-tab title="Mobile" @click="togglePreview('mobile')">
+                        </b-tab>
+                      </b-tabs>
+                    </slot>
+
+
+                    <div class="iframe-container" :data-template-width="widthPreview">
+                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
+                    </div>
                   </div>
                 </div>
               </div>
+            </slot>
+            <div class="modal-footer">
+              <slot name="footer">
+                <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send Preview</button>
+              </slot>
             </div>
-          </slot>
+          </form>
         </div>
       </div>
     </div>
@@ -242,18 +247,24 @@
       }
     }
   }
+  .modal-footer{
+    margin-top: 30px;
+  }
   .modal-container {
     width: 920px!important;
-    height: 620px!important;
+    height: 710px!important;
     overflow: scroll;
     margin: -20px auto;
     background-color: #fff;
     border-radius: 0;
     box-shadow: none;
     transition: all .3s ease;
+    position: relative;
 
     .share-preview{
-      margin-top: -4px;
+      position: absolute;
+      bottom: 45px;
+      width: 500px;
 
       label{
         font-weight: 600;
@@ -262,20 +273,27 @@
       input{
         border: none;
         background: none;
-        margin-top: -2px;
+        margin-top: 0px;
         padding-left: 1px;
+        position: static;
       }
       button{
         border-radius: 50%;
-        margin-top: -7px;
+        margin-top: -3px;
         font-size: 13px!important;
         width: 25px;
         text-align: center;
         padding: 0px;
         position: relative;
+        background: none!important;
+        color: #514960!important;
+        border: none!important;
 
         &:focus{
           outline: none;
+          background: none!important;
+          color: #514960!important;
+          border: none!important;
         }
       }
       button[data-tooltip]:after {
@@ -325,13 +343,6 @@
       font-family: monospace, serif;
     }
 
-    .send-preview{
-      height: 430px;
-    }
-
-    #send-preview-form button{
-      padding: 8px 20px 7px 20px;
-    }
     #send-preview-form .input-group {
       width: 100%;
       margin-top: 10px;
@@ -344,9 +355,6 @@
       height: 34px;
       border-top-right-radius: 3px;
       border-bottom-right-radius: 3px;
-    }
-    .btn-send {
-      height: 36px;
     }
     #send-preview-to,
     #send-preview-subject,
@@ -401,7 +409,7 @@
   .modal-divider{
     width: 100%;
     border-top: 1px solid #dddddd;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     margin-top: 25px;
   }
 
