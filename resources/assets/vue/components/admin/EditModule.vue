@@ -22,7 +22,7 @@
           <div v-if="showRaw" class="module-wrapper">
             <textarea v-html="module" @change="updateRawModule" rows="30" style="width: 100%"></textarea>
           </div>
-          <div v-else class="module-wrapper" :class="buildingMode + '-mode'">
+          <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
             <module></module>
           </div>
         </div>

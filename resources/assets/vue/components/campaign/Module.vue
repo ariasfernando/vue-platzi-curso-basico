@@ -45,7 +45,7 @@
           <!--1 COLUMN -->
         </table>
         <module-toolbar :module-id="moduleId"></module-toolbar>
-        <div class="module-overlay"></div>
+        <div class="st-remove-element module-overlay"></div>
       </td>
     </tr>
   </tbody>
