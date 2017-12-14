@@ -5,10 +5,10 @@
     </small>
     <div class="btn-group" v-show="terms.length > 0 || tags.length > 0">
       <span class="title">Search results for:</span>
-      <button v-for="term in terms" class="btn btn-default btn-xs term" @click="removeSearchTerm(term)">
+      <button v-for="term in terms" class="btn beta-btn-primary btn-default btn-xs term" @click="removeSearchTerm(term)">
         {{term}} <i class="glyphicon glyphicon-remove"></i>
       </button>
-      <button v-for="tag in tags" class="btn btn-default btn-xs tag" @click="removeSearchTag(tag)">
+      <button v-for="tag in tags" class="btn beta-btn-primary btn-default btn-xs tag" @click="removeSearchTag(tag)">
         {{tag}} <i class="glyphicon glyphicon-remove"></i>
       </button>
     </div>
@@ -55,7 +55,20 @@
     .title{
       font-family: 'Open Sans', Helvetica, Arial, sans-serif;
       color: #666666;
-      font-size: 14px;
+      font-size: 16px;
+      font-weight: 300;
+      margin-right: 5px;
+    }
+    .beta-btn-primary{
+      border-radius: 2px!important;
+      margin-left: 3px;
+      padding: 3px 5px 1px 5px;
+      font-size: 12px!important;
+      margin-top: -5px;
+
+      &:hover{
+        border: 1px solid #514960;
+      }
     }
     .btn-group{
       button.btn{
