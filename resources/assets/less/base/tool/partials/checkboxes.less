@@ -1,0 +1,30 @@
+.checkbox-component > input + label > .input-box,
+.radio-component > input + label > .input-box {
+  border-color: @stensul-gray-secondary!important;
+  background: @stensul-gray-secondary!important;
+  border-radius: 2px!important;
+  margin-right: 3px!important;
+}
+.checkbox-component > input + label > .input-box:focus,
+.radio-component > input + label > .input-box:focus{
+  outline: none!important;
+}
+.checkbox-component > input:checked + label > .input-box,
+.radio-component > input:checked + label > .input-box{
+  border-color: @stensul-highlight!important;
+  background: @stensul-highlight!important;
+}
+.checkbox-component > input + label > .input-box > .input-box-tick{
+    display: inline-block!important;
+    margin-top: 1px!important;
+    float: left!important;
+}
+.checkbox-component > input + label{
+  padding-left: 0px!important;
+}
+.checkbox-component > input + label > .input-box > .input-box-tick > path {
+  stroke: @stensul-white!important;
+}
+.radio-component > input + label > .input-box > .input-box-circle {
+  background: @stensul-white!important;
+}

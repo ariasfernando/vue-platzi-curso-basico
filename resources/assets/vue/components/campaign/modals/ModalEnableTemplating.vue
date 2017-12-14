@@ -2,7 +2,7 @@
   <transition name="modal" v-if="modalEnableTemplating && campaignConfig.enable_templating">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container modal-templating">
           <slot name="header">
             <button type="button" class="close" @click="close"><span>&times;</span></button>
           </slot>
@@ -76,3 +76,9 @@
     }
   }
 </script>
+
+<style lang="less" scoped>
+  .modal-templating{
+    width: 400px!important;
+  }
+</style>
