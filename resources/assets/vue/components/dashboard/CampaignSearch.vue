@@ -19,15 +19,6 @@
         <i class="glyphicon glyphicon-remove-sign"></i>
       </button>
     </div>
-    <small class="search-error" v-if="!canSearch && showLimitMessage">There's a limit of {{limit}} search terms.</small>
-    <div class="btn-group" v-show="terms.length > 0 || tags.length > 0">
-      <button v-for="term in terms" class="btn btn-default btn-xs term" v-on:click="removeSearchTerm(term)">
-        {{term}} <i class="glyphicon glyphicon-remove"></i>
-      </button>
-      <button v-for="tag in tags" class="btn btn-default btn-xs tag" v-on:click="removeSearchTag(tag)">
-        {{tag}} <i class="glyphicon glyphicon-remove"></i>
-      </button>
-    </div>
     <ul v-if="showTagDropdown && ready" class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content"
       tabindex="0" style="top: 33px; left: 0; width: 100%;">
       <li class="ui-autocomplete-category">Popular tags</li>
@@ -116,12 +107,6 @@
         this.clearModel();
         this.filteredTagNames = clone(this.tagNames);
         this.closeTagDropdown();
-      },
-      removeSearchTag: function(tag) {
-        this.$emit('remove-search-tag', tag);
-      },
-      removeSearchTerm: function(term) {
-        this.$emit('remove-search-term', term);
       },
       closeTagDropdown: function() {
         this.filteredTagNames = clone(this.tagNames);

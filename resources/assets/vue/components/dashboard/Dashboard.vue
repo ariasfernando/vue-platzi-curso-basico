@@ -13,14 +13,12 @@
           :search="search"
           :tags="tags"
           :terms="terms"
-          v-on:add-search-tag="addSearchTag"
-          v-on:add-search-term="addSearchTerm"
-          v-on:remove-search-tag="removeSearchTag"
-          v-on:remove-search-term="removeSearchTerm"
-          v-on:update-campaigns="updateCampaigns"
-          v-on:reset-page="resetPage"
-          v-on:reset-search="resetSearch"
-          v-on:update-search="updateSearch"
+          @add-search-tag="addSearchTag"
+          @add-search-term="addSearchTerm"
+          @update-campaigns="updateCampaigns"
+          @reset-page="resetPage"
+          @reset-search="resetSearch"
+          @update-search="updateSearch"
         ></campaign-search>
       </div>
       <div class="col-xs-12 col-sm-2 pull-right no-gutters">
@@ -31,6 +29,12 @@
     </div>
     <div class="row" id="draft-emails-campaign">
       <div class="col-xs-12">
+        <search-result 
+          :tags="tags"
+          :terms="terms"
+          @remove-search-tag="removeSearchTag" 
+          @remove-search-term="removeSearchTerm"
+        ></search-result>
         <draft-emails
           v-if="ready.current"
           :campaigns="campaigns.current"
@@ -41,15 +45,21 @@
           :type="'current'"
           :enable-locking="config.locking"
           :show-created-by="config.created_by_dashboard"
-          v-on:add-search-tag="addSearchTag"
-          v-on:apply-sort="applySort"
-          v-on:change-page="changePage"
-          v-on:refresh-campaigns="fetchCampaigns"
+          @add-search-tag="addSearchTag"
+          @apply-sort="applySort"
+          @change-page="changePage"
+          @refresh-campaigns="fetchCampaigns"
         ></draft-emails>
       </div>
     </div>
     <div class="row" id="finished-campaign">
       <div class="col-xs-12">
+        <search-result 
+          :tags="tags"
+          :terms="terms"
+          @remove-search-tag="removeSearchTag" 
+          @remove-search-term="removeSearchTerm"
+        ></search-result>
         <finished-emails
           v-if="ready.finished"
           :campaigns="campaigns.finished"
@@ -61,15 +71,21 @@
           :type="'finished'"
           :enable-locking="config.locking"
           :show-created-by="config.created_by_dashboard"
-          v-on:add-search-tag="addSearchTag"
-          v-on:apply-sort="applySort"
-          v-on:change-page="changePage"
-          v-on:refresh-campaigns="fetchCampaigns"
+          @add-search-tag="addSearchTag"
+          @apply-sort="applySort"
+          @change-page="changePage"
+          @refresh-campaigns="fetchCampaigns"
         ></finished-emails>
       </div>
     </div>
     <div class="row" v-if="config.enable_templating" id="templates-campaign">
       <div class="col-xs-12">
+        <search-result 
+          :tags="tags"
+          :terms="terms"
+          @remove-search-tag="removeSearchTag" 
+          @remove-search-term="removeSearchTerm"
+        ></search-result>
         <template-campaigns
           v-if="ready.template"
           :campaigns="campaigns.template"
@@ -80,10 +96,10 @@
           :type="'template'"
           :enable-locking="config.locking"
           :show-created-by="config.created_by_dashboard"
-          v-on:add-search-tag="addSearchTag"
-          v-on:apply-sort="applySort"
-          v-on:change-page="changePage"
-          v-on:refresh-campaigns="fetchCampaigns"
+          @add-search-tag="addSearchTag"
+          @apply-sort="applySort"
+          @change-page="changePage"
+          @refresh-campaigns="fetchCampaigns"
         ></template-campaigns>
       </div>
     </div>
@@ -100,6 +116,7 @@
   import FinishedEmails from './FinishedEmails.vue';
   import TemplateCampaigns from './TemplateCampaigns.vue';
   import DashboardMenu from './DashboardMenu.vue';
+  import SearchResult from './partials/SearchResult.vue';
   import Spinner from '../common/Spinner.vue';
 
   export default {
@@ -110,7 +127,8 @@
       FinishedEmails,
       TemplateCampaigns,
       DashboardMenu,
-      Spinner
+      Spinner,
+      SearchResult
     },
     created: function() {
       this.updateCampaigns();

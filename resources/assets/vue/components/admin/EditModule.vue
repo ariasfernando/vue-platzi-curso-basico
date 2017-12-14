@@ -22,7 +22,7 @@
           <div v-if="showRaw" class="module-wrapper">
             <textarea v-html="module" @change="updateRawModule" rows="30" style="width: 100%"></textarea>
           </div>
-          <div v-else class="module-wrapper" :class="buildingMode + '-mode'">
+          <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
             <module></module>
           </div>
         </div>
@@ -202,10 +202,10 @@
     .module-wrapper {
       margin: 0 auto;
 
-      &.desktop-mode {
+      &.stx-desktop-mode {
         width: 640px;
       }
-      &.mobile-mode {
+      &.stx-mobile-mode {
         width: 480px;
         .st-wrapper{
           width: 100% !important;

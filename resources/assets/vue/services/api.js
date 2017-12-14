@@ -4,40 +4,39 @@ import request from '../utils/request';
 import endpoints from '../resources/endpoints';
 
 export default {
-  uploadEmail(data) {
-    const endpoint = endpoints.api.uploadEmail;
-    const deferred = Q.defer();
-    const params = {
-      endpoint,
-      json: data
-    };
+    uploadEmail(data) {
+        const endpoint = endpoints.api.uploadEmail;
+        const deferred = Q.defer();
+        const params = {
+            endpoint,
+            json: data
+        };
 
-    request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body);
-    }).catch((err) => {
-      deferred.reject(err);
-    });
+        request[endpoint.method](params).then((response) => {
+            deferred.resolve(response.body);
+        }).catch((err) => {
+            deferred.reject(err);
+        });
 
-    return deferred.promise;
-  },
-  uploadedHistory(campaignId) {
-    console.log(campaignId);
-    const endpoint = endpoints.api.uploadedHistory;
-    const deferred = Q.defer();
-    const params = {
-      endpoint,
-      search: {
-        campaignId,
-      },
-    };
+        return deferred.promise;
+    },
+    uploadedHistory(campaignId) {
+        const endpoint = endpoints.api.uploadedHistory;
+        const deferred = Q.defer();
+        const params = {
+            endpoint,
+            search: {
+                campaignId,
+            },
+        };
 
-    request[endpoint.method](params).then((response) => {
-      deferred.resolve(response.body);
-    }).catch((err) => {
-      deferred.reject(err);
-    });
+        request[endpoint.method](params).then((response) => {
+            deferred.resolve(response.body);
+        }).catch((err) => {
+            deferred.reject(err);
+        });
 
-    return deferred.promise;
-  },
+        return deferred.promise;
+    },
 
 };

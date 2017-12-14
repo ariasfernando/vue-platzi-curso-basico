@@ -14,7 +14,7 @@
             <slot name="body">
               <b-tabs>
                 <b-tab title="Normal HTML" @click="changeTypeTextArea('normal_html')" >
-                  <textarea ref="normal_html" v-html="campaign.campaign_data.body_html"></textarea>
+                  <textarea ref="normal_html" v-html="html"></textarea>
                 </b-tab>
                 <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">
                   <textarea ref="plain_text" v-html="plainText"></textarea>
@@ -48,6 +48,7 @@
 <script>
   import Vue from 'vue/dist/vue';
   import BootstrapVue from 'bootstrap-vue';
+  import { html_beautify } from 'js-beautify';
   import campaignService from '../../../services/campaign'
 
   export default {
@@ -65,11 +66,20 @@
         return this.$_app.config.baseUrl + '/campaign/public-path/' + this.campaign.campaign_id;
       },
     },
+    watch:{
+      campaign(value){
+        this.html = html_beautify(value.campaign_data.body_html, {
+          'indent_size': 2,
+          'wrap_line_length': 120,
+        });
+      },
+    },
     methods: {
       data () {
         return {
           plainText: '',
-          textareaType: 'normal_html'
+          textareaType: 'normal_html',
+          html: '',
         }
       },
       getPlainText() {

@@ -22,6 +22,9 @@
                               </span>
                           </div>
                       </div>
+                      
+                      <div class="modal-divider"></div>
+
                       <table class="table table-condensed" id="reviewers-table">
                           <thead>
                               <tr>
@@ -37,10 +40,12 @@
                                     :value="reviewer.email">{{reviewer.email}}
                                 </td>
                                 <td>
-                                  <input type="checkbox" :name="'reviewers[' + key + '][required]'"
+                                  <checkbox name="'reviewers[' + key + '][required]'" value="reviewer.requiredValue" checked="reviewer.checked" disabled="reviewer.requiredDisable || false"></checkbox>
+
+                                  <!-- <input type="checkbox" :name="'reviewers[' + key + '][required]'"
                                     :checked="reviewer.checked"
                                     :value="reviewer.requiredValue"
-                                    :disabled="reviewer.requiredDisable || false">
+                                    :disabled="reviewer.requiredDisable || false"> -->
                                 </td>
                                 <td>
                                   <input type="hidden" :name="'reviewers[' + key + '][notification_message]'"
@@ -53,16 +58,21 @@
                             </tr>
                           </tbody>
                       </table>
+                      <div class="modal-divider"></div>
                       <div class="checkbox new-proof-checkbox">
                         <div class="input-group">
                           <label data-toggle="tooltip" data-placement="top"
                             title="Existing comments, approvals, and rejections will be archived.">
-                            <input type="checkbox" value="1" name="create_new_proof" v-model="startProof"> Start proof from scratch
+                            <checkbox name="create_new_proof" value="1" v-model="startProof">
+                              Start proof from scratch
+                            </checkbox>
                           </label>
                         </div>
                         <div class="input-group">
                           <label>
-                            <input type="checkbox" value="1" name="send_to_all"> Send a notification to all reviewers
+                            <checkbox name="send_to_all" value="1">
+                              Send a notification to all reviewers
+                            </checkbox>
                           </label>
                         </div>
                       </div>
@@ -106,6 +116,7 @@
 <script>
   import request from '../../../utils/request';
   import Q from 'q';
+  import { Checkbox } from  'vue-checkbox-radio';
 
   // @TODO remove jQuery dependencies.
   $.ajaxSetup({
@@ -115,6 +126,9 @@
   });
 
   export default {
+    components: {
+      Checkbox
+    },
     computed: {
       modalProof () {
         return this.$store.state.campaign.modalProof;
@@ -343,13 +357,43 @@
       border: 1px solid #ccc;
       font-family: monospace, serif;
     }
+
+    .new-proof-checkbox{
+      padding-bottom: 30px;
+
+      label{
+        padding-left: 0px;
+
+        label{
+          padding-left: 0px;
+          color: #666666;
+        }
+      }
+    }
+    
   }
   .btn-reviewer-add{
     margin-top: 0px;
   }
+
   #modal-proof-message {
     textarea {
       height: 200px;
     }
+  }
+
+  .modal-divider{
+    width: 100%;
+    border-top: 1px solid #dddddd;
+    margin-bottom: 30px;
+    margin-top: 30px;
+  }
+
+  .table tbody tr:last-child td{
+    border-bottom: none;
+  }
+
+  .bootstrap-select .dropdown-toggle:focus{
+    outline: none;
   }
 </style>

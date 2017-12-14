@@ -20,7 +20,6 @@ export default {
       'st-line-height-reset',
       'st-text-style',
       'st-edit-text'
-
     ],
     // Array of attributes to clean from final html
     attrSelectors: [
@@ -81,8 +80,8 @@ export default {
       $cleanedHtml.find(selector).remove();
     });
 
-    // Remove every class starting with "rm-"
-    $cleanedHtml.find("[class*=' rm-'], [class^='rm-']").removeClass((index, css) => (css.match(/(^|\s)st-\S+/g) || []).join(' '));
+    // Remove every class starting with "stx-"
+    $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
     
     // Remove attr class if it's empty.
     $cleanedHtml.find("[class='']").removeAttr('class');
@@ -109,14 +108,18 @@ export default {
       });
     }
 
-    // Remove empty links
-    var $wrapperElementRemove = $cleanedHtml.find('.rm-wrapper');
+    // Remove wrappers
+    const $wrapperElementRemove = $cleanedHtml.find('.stx-wrapper');
 
-    $.each($wrapperElementRemove, function (i, element) {
-        var $element = $(element);
+    $.each($wrapperElementRemove, (i, element) => {
+      const $element = $(element);
 
         // Replace element with the content element.
+      if ($element.is('table')) {
+        $element.replaceWith($element.find('td:first').html());
+      } else {
         $element.replaceWith($element.html());
+      }
     });
 
     // Convert special chars to html entities ---

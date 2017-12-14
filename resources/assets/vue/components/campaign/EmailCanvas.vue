@@ -5,9 +5,10 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;">
-              <draggable id="emailCanvas"
-                         :class="buildingMode + '-mode'"
-                         class="email-canvas st-wrapper-table"
+              <draggable
+                id="emailCanvas"
+                :class="`stx-${buildingMode}-mode`"
+                class="stx-email-canvas st-wrapper-table"
                          cellspacing="0"
                          cellpadding="0"
                          border="0"

@@ -93,6 +93,16 @@
 
   .st-module-wrapper:hover {
 
+    &::before{
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      display: block;
+      outline: 2px solid #c0dfda;
+      outline-offset: -2px;
+    }
+
     .module-toolbar{
       background: #c0dfda;
     }
@@ -111,6 +121,8 @@
       width: 100%;
       height: 100%;
       display: block;
+      outline: 2px solid #c0dfda;
+      outline-offset: -2px;
     }
 
     .icon-move{
@@ -129,8 +141,27 @@
       outline-offset: -2px;
     }
 
+    &::before{
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      display: block;
+      outline: 2px solid @focus;
+      outline-offset: -2px;
+    }
+
     .module-overlay{
-      display: none;
+      pointer-events: none;
+      position: absolute;
+      background: none;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      display: block;
+      outline: 2px solid @focus;
+      outline-offset: -2px;
     }
 
     .icon-move, .icon-remove,
@@ -145,7 +176,9 @@
       }
 
       .module-overlay{
-        display: none;
+        outline: 2px solid @focus;
+        outline-offset: -2px;
+        background: none;
       }
 
       .module-toolbar{
