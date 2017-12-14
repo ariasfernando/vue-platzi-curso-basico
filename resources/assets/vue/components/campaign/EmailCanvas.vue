@@ -267,7 +267,7 @@
   }
 
   #emailCanvas{
-    &.mobile-mode {
+    &.stx-mobile-mode {
       /*BASE-LAYOUT*/
       .st-wrapper{
         width: 100% !important;
