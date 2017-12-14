@@ -3,71 +3,88 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container modal-preview">
+          <div class="share-preview pull-right" v-if="!isPublic">
+                    <form class="form-inline">
+                      <div class="form-group">
+                        <label>Share URL:</label>
+                          <div class="input-group">
+                              <input type="text" class="form-control share-preview" :value="shareURL" readonly>
+                              <span class="input-group-btn">
+                                <button class="btn btn-default btn-copy beta-btn-primary" @click="copyURL" type="button" data-tooltip="Copy URL">
+                                  <span class="glyphicon glyphicon-copy"></span>
+                                </button>
+                              </span>
+                          </div>
+                        </div>
+                    </form>
+                  </div>
+
+
           <slot name="header" v-if="!isPublic">
             <button type="button" class="close" @click="close"><span>&times;</span></button>
           </slot>
-          <slot name="body">
-            <h4>Preview</h4>
-            <div class="send-preview">
-              <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent  v-if="!isPublic">
-                <div class="form-group">
-                  <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
-                    email is not suitable for deployment. In order to access the production-ready HTML, please click
-                    Complete to publish your campaign.
-                  </p>
-                  <div class="input-group">
-                    <span class="btn-group">
-                      <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
-                        placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
-                    </span>
-                    <span class="input-group-btn">
-                      <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send</button>
-                    </span>
-                  </div>
-                  <label class="error" v-if="emailError">{{emailError}}</label>
-                  <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
-                  <div class="input-group">
-                    <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
-                      id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
-                  </div>
-                  <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
-                    <input type="text" class="form-control" name="send-preview-preheader" value=""
-                      id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
-                      <p class="info">The best practice is to limit preheaders to 50 characters.</p>
-                  </div>
-                </div>
-              </form>
-              <div class="share-preview pull-right" v-if="!isPublic">
-                <form class="form-inline">
+          <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent  v-if="!isPublic">
+            <slot name="body">
+              <h4>
+                Preview
+              </h4>
+              <div class="send-preview">
+                
                   <div class="form-group">
-                    <label>Share url</label>
-                      <div class="input-group">
-                          <input type="text" class="form-control share-preview" :value="shareURL" readonly>
-                          <span class="input-group-btn">
-                            <button class="btn btn-default btn-copy beta-btn-primary" @click="copyURL" type="button">Copy</button>
-                          </span>
+                    <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
+                      email is not suitable for deployment. To access the production-ready HTML, please click
+                      "Complete" to publish your campaign.
+                    </p>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="input-group">
+                          <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
+                              placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
+                        </div>
+                        <label class="error" v-if="emailError">{{emailError}}</label>
+                        <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="input-group">
+                          <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
+                            id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
+                        </div>
                       </div>
                     </div>
-                </form>
-              </div>
-              <div class="preview-body">
-                <div class="preview-container">
-                  <div class="mobile-frame"></div>
-                  <slot name="body">
-                    <b-tabs>
-                      <b-tab title="Desktop" @click="togglePreview('desktop')" active>
-                      </b-tab>
-                      <b-tab title="Mobile" @click="togglePreview('mobile')">
-                      </b-tab>
-                    </b-tabs>
-                  </slot>
-                  <div class="iframe-container" :data-template-width="widthPreview">
-                    <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
+                    <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
+                      <input type="text" class="form-control" name="send-preview-preheader" value=""
+                        id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
+                        <p class="info">The best practice is to limit preheaders to 50 characters.</p>
+                    </div>
+                  </div>
+                
+                <div class="modal-divider"></div>
+                <div class="preview-body">
+                  <div class="preview-container">
+                    <div class="mobile-frame"></div>
+                    <slot name="body">
+                      <b-tabs>
+                        <b-tab title="Desktop" @click="togglePreview('desktop')" active>
+                        </b-tab>
+                        <b-tab title="Mobile" @click="togglePreview('mobile')">
+                        </b-tab>
+                      </b-tabs>
+                    </slot>
+
+
+                    <div class="iframe-container" :data-template-width="widthPreview">
+                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
+                    </div>
                   </div>
                 </div>
               </div>
+            </slot>
+            <div class="modal-footer">
+              <slot name="footer">
+                <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send Preview</button>
+              </slot>
             </div>
-          </slot>
+          </form>
         </div>
       </div>
     </div>
@@ -230,16 +247,94 @@
       }
     }
   }
+  .modal-footer{
+    margin-top: 30px;
+  }
   .modal-container {
-    width: 750px;
-    height: 632px;
+    width: 920px!important;
+    height: 710px!important;
     overflow: scroll;
     margin: -20px auto;
-    padding: 15px;
     background-color: #fff;
     border-radius: 0;
     box-shadow: none;
     transition: all .3s ease;
+    position: relative;
+
+    .share-preview{
+      position: absolute;
+      bottom: 45px;
+      width: 500px;
+
+      label{
+        font-weight: 600;
+      }
+
+      input{
+        border: none;
+        background: none;
+        margin-top: 0px;
+        padding-left: 1px;
+        position: static;
+      }
+      button{
+        border-radius: 50%;
+        margin-top: -3px;
+        font-size: 13px!important;
+        width: 25px;
+        text-align: center;
+        padding: 0px;
+        position: relative;
+        background: none!important;
+        color: #514960!important;
+        border: none!important;
+
+        &:focus{
+          outline: none;
+          background: none!important;
+          color: #514960!important;
+          border: none!important;
+        }
+      }
+      button[data-tooltip]:after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: -20px;
+        font-size: 12px;
+        font-weight: 300;
+        background: #666666;
+        padding: 2px 7px;
+        color: #FFFFFF;
+        border-radius: 2px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: all 0.5s ease;
+      }
+      button[data-tooltip]:before {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-top: 10px solid #666666;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        transition: all 0.5s ease;
+        opacity: 0;
+        left: 30%;
+        bottom: 90%;
+      }
+      button[data-tooltip]:hover:after {
+        bottom: 100%;
+      }
+      button[data-tooltip]:hover:before {
+        bottom: 70%;
+      }
+      button[data-tooltip]:hover:after,
+      button[data-tooltip]:hover:before {
+        opacity: 1;
+      }
+      
+    }
 
     textarea {
       width: 100%;
@@ -248,13 +343,6 @@
       font-family: monospace, serif;
     }
 
-    .send-preview{
-      height: 430px;
-    }
-
-    #send-preview-form button{
-      padding: 8px 20px 7px 20px;
-    }
     #send-preview-form .input-group {
       width: 100%;
       margin-top: 10px;
@@ -268,12 +356,11 @@
       border-top-right-radius: 3px;
       border-bottom-right-radius: 3px;
     }
-    .btn-send {
-      height: 36px;
-    }
-    #send-preview-to {
+    #send-preview-to,
+    #send-preview-subject,
+    #preview-preheader {
       font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 300;
       color: #666666;
       box-shadow: none;
@@ -283,6 +370,10 @@
       &:focus {
         border: 1px solid #DDDDDD;
       }
+    }
+
+    p.alert-info{
+      font-size: 12px;
     }
 
     p.info {
@@ -301,17 +392,25 @@
         padding-top: 6px;
       }
       .iframe-container {
-        height: 224px;
+        height: 250px;
         overflow-y: auto;
         text-align: center;
         background: #F4F4F4;
         padding-top: 10px;
+        margin-top: -15px;
       }
     }
 
     input.share-preview {
       width: 300px;
     }
+  }
+
+  .modal-divider{
+    width: 100%;
+    border-top: 1px solid #dddddd;
+    margin-bottom: 20px;
+    margin-top: 25px;
   }
 
   .modal-preview {
