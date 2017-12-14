@@ -59,7 +59,7 @@
     }
     .btn-group{
       button.btn{
-        margin-right: 0;
+        margin-right: 5px;
         border-radius: 0;
         font-size: 13px;
         i.glyphicon{
