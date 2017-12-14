@@ -11,9 +11,8 @@
     <td class="st-toolbar-content st-position-relative"
         :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
-        :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']"
-    >
-      <table width="100%" cellspacing="0" cellpadding="0" border="0">
+        :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
+      <table width="100%" cellspacing="0" cellpadding="0" border="0" class="rm-wrapper">
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
           <td width="100%" 
@@ -36,10 +35,11 @@
         <!--2 COLUMNS -->
 
         <!--1 COLUMN -->
-        <tr v-else v-for="(component, componentId) in module.structure.columns[0].components" @click.prevent="setComponent(moduleId, 0, componentId)">
-          <td :valign="component.attribute.valign"
-              :align="component.attribute.align || 'left'"
-          >
+        <tr class="rm-wrapper"
+          v-else
+          v-for="(component, componentId) in module.structure.columns[0].components"
+          @click.prevent="setComponent(moduleId, 0, componentId)">
+          <td :valign="component.attribute.valign" :align="component.attribute.align || 'left'" class="rm-wrapper">
             <component
               :is="component.type"
               :component="component"

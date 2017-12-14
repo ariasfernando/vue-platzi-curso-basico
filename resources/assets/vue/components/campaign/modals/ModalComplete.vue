@@ -13,7 +13,7 @@
             <slot name="body">
               <b-tabs>
                 <b-tab title="Normal HTML">
-                  <textarea v-html="campaign.campaign_data.body_html"></textarea>
+                  <textarea v-html="html"></textarea>
                 </b-tab>
                 <b-tab title="Plain Text" v-if="campaign.library_config.plainText">
                   <textarea v-html="plainText"></textarea>
@@ -47,6 +47,7 @@
 <script>
   import Vue from 'vue/dist/vue';
   import BootstrapVue from 'bootstrap-vue';
+  import cleaner from 'clean-html';
   import campaignService from '../../../services/campaign'
 
   export default {
@@ -62,12 +63,20 @@
       },
       viewInBrowser () {
         return this.$_app.config.baseUrl + '/campaign/public-path/' + this.campaign.campaign_id;
-      }
+      },
+    },
+    watch:{
+      campaign(value){
+        cleaner.clean(value.campaign_data.body_html, (html) => {
+          this.html = html;
+        });
+      },
     },
     methods: {
       data () {
         return {
           plainText: '',
+          html: '',
         }
       },
       getPlainText() {
