@@ -43,7 +43,7 @@
     data () {
       return {
         expanded: [],
-        collapsed: true,
+        collapsed: false,
         isActive: false
       }
     },

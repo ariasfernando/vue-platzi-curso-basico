@@ -28,7 +28,7 @@
 
               <div v-if="campaign.library_config.esp && campaign.library_config.espProvider"
                    type="button" class="btn btn-default btn-upload-api beta-btn-secondary" :data-campaign-id="campaign.campaign_id"
-                   :data-api-driver="campaign.library_config.espProvider" v-html="campaign.library_config.espProvider">
+                   :data-api-driver="campaign.library_config.espProvider" v-html="'Upload to ' + campaign.library_config.espProvider" @click="uploadModal">
               </div>
 
               <div class="view-browser">
@@ -90,6 +90,10 @@
       },
       close () {
         this.$store.commit("campaign/toggleModal", 'modalComplete');
+      },
+      uploadModal() {
+        this.close();
+        this.$store.commit("campaign/toggleModal", 'modalEsp');
       },
     },
     created () {

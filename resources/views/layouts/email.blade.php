@@ -27,20 +27,9 @@
 		@if(Config::get('view.preheader') && (!Config::has('view.libraries.' . $params['campaign_data']['library'] . '.preheader') || Config::get('view.libraries.' . $params['campaign_data']['library'] . '.preheader')))
 			<div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['campaign_data']['campaign_preheader'] or '' }}</div>
 		@endif
-		<table cellpadding="0" cellspacing="0" width="100%">
-			<tr>
-				<td align="center" bgcolor="{{ $params['campaign_data']->getLibraryConfig('templateBackgroundColor')}} " style="vertical-align:top;">
-					<table cellpadding="0"
-						   cellspacing="0"
-						   border="0"
-						   class="st-wrapper-table"
-						   width="{{ $params['campaign_data']->getLibraryConfig('template_width') }}"
-					   >
-						<?= $params['body_html']; ?>
-					</table>
-				</td>
-			</tr>
-		</table>
+					
+		<?= $params['body_html']; ?>
+				
 
 	</body>
 
