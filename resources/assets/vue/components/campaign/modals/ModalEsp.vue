@@ -114,8 +114,10 @@
       }
     },
     created () {
-      configService.getConfig('api.' + this.campaign.library_config.espProvider).then((response) => this.espProviderConfig = response);
-      this.updateUploadedTable();
+      if (this.campaign.library_config.espProvider) {
+        configService.getConfig('api.' + this.campaign.library_config.espProvider).then((response) => this.espProviderConfig = response);
+        this.updateUploadedTable();
+      }
     }
   };
 </script>
