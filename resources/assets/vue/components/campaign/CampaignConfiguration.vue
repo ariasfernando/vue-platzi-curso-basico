@@ -319,7 +319,7 @@
     }
 
     .multiselect__option--selected.multiselect__option--highlight:after {
-      background: @stensul-purple;
+      background: #F4F4F4;
     }
 
     .multiselect__tags{
@@ -353,17 +353,17 @@
       font-weight:300;
 
       &:hover{
-        color: @stensul-white;
+        color: @stensul-gray;
       }
     }
 
     .multiselect__option--highlight{
-      background: @stensul-purple;
-      color: @stensul-white;
+      background: #F4F4F4;
+      color: @stensul-gray;
     }
 
     .multiselect__option--highlight:after {
-      background: @stensul-purple;
+      background: @stensul-gray;
     }
 
     .multiselect__tag{

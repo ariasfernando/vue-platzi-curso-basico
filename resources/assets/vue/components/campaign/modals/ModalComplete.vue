@@ -8,7 +8,6 @@
           </slot>
 
           <h4>Processed Campaign</h4>
-          <copy-to-clipboard :textarea-type="textareaType" @click="copyTextArea"></copy-to-clipboard>
 
           <div class="modal-body">
             <slot name="body">
@@ -37,6 +36,8 @@
               </div>
 
               <a :href="$_app.config.baseUrl" class="btn btn-back-to-dashboard beta-btn-primary" data-dismiss="modal">Go back to the dashboard</a>
+
+              <copy-to-clipboard :textarea-type="textareaType" @click="copyTextArea"></copy-to-clipboard>
             </slot>
           </div>
         </div>
@@ -128,7 +129,7 @@
       border: 1px solid #dddddd;
       font-family: 'Source Code Pro', monospace;
       font-weight: 300;
-      border-radius: 0px 0px 2px 2px;
+      border-radius: 2px;
       padding: 10px;
       font-size: 13px;
       color: #333333;
