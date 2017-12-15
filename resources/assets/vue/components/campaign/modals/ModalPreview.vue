@@ -22,42 +22,40 @@
           <slot name="header" v-if="!isPublic">
             <button type="button" class="close" @click="close"><span>&times;</span></button>
           </slot>
-          <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent  v-if="!isPublic">
+          <form name="send-preview-form" id="send-preview-form" v-on:submit.prevent>
             <slot name="body">
               <h4>
                 Preview
               </h4>
               <div class="send-preview">
-                
-                  <div class="form-group">
-                    <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
-                      email is not suitable for deployment. To access the production-ready HTML, please click
-                      "Complete" to publish your campaign.
-                    </p>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="input-group">
-                          <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
-                              placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
-                        </div>
-                        <label class="error" v-if="emailError">{{emailError}}</label>
-                        <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
+                <div class="form-group" v-if="!isPublic">
+                  <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
+                    email is not suitable for deployment. To access the production-ready HTML, please click
+                    "Complete" to publish your campaign.
+                  </p>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
+                            placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
                       </div>
-                      <div class="col-md-12">
-                        <div class="input-group">
-                          <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
-                            id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
-                        </div>
-                      </div>
+                      <label class="error" v-if="emailError">{{emailError}}</label>
+                      <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
                     </div>
-                    <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
-                      <input type="text" class="form-control" name="send-preview-preheader" value=""
-                        id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
-                        <p class="info">The best practice is to limit preheaders to 50 characters.</p>
+                    <div class="col-md-12">
+                      <div class="input-group">
+                        <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
+                          id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
+                      </div>
                     </div>
                   </div>
-                
-                <div class="modal-divider"></div>
+                  <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
+                    <input type="text" class="form-control" name="send-preview-preheader" value=""
+                      id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
+                      <p class="info">The best practice is to limit preheaders to 50 characters.</p>
+                  </div>
+                </div>
+                <div class="modal-divider" v-if="!isPublic"></div>
                 <div class="preview-body">
                   <div class="preview-container">
                     <div class="mobile-frame"></div>
@@ -69,8 +67,6 @@
                         </b-tab>
                       </b-tabs>
                     </slot>
-
-
                     <div class="iframe-container" :data-template-width="widthPreview">
                       <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
                     </div>
@@ -79,7 +75,7 @@
               </div>
             </slot>
             <div class="modal-footer">
-              <slot name="footer">
+              <slot name="footer" v-if="!isPublic">
                 <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send Preview</button>
               </slot>
             </div>
