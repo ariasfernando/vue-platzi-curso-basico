@@ -8,7 +8,7 @@
           </slot>
 
           <h4>Processed Campaign</h4>
-          <a class="btn beta-btn-primary copy-to-clipboard" @click="copyTextArea" >Copy to clipboard <i class="fa fa-clipboard"></i></a>
+          <copy-to-clipboard :textarea-type="textareaType" @click="copyTextArea"></copy-to-clipboard>
 
           <div class="modal-body">
             <slot name="body">
@@ -50,10 +50,12 @@
   import BootstrapVue from 'bootstrap-vue';
   import { html_beautify } from 'js-beautify';
   import campaignService from '../../../services/campaign'
+  import CopyToClipboard from './partials/CopyToClipboard.vue'
 
   export default {
     components: {
       BootstrapVue,
+      CopyToClipboard
     },
     computed: {
       modalComplete () {

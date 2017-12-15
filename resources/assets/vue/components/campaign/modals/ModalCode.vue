@@ -8,8 +8,10 @@
           </slot>
           <slot name="body">
             <h4>Code</h4>
+            <copy-to-clipboard :textarea-type="textareaType" @click="copyTextArea"></copy-to-clipboard>
+
             <div class="modal-body">
-              <textarea v-model="code"></textarea>
+              <textarea ref="normal_html" v-model="code"></textarea>
             </div>
           </slot>
           <div class="modal-footer">
@@ -25,13 +27,16 @@
 
 <script>
   import BootstrapVue from 'bootstrap-vue';
+  import CopyToClipboard from './partials/CopyToClipboard.vue'
 
   export default {
     components: {
-      BootstrapVue
+      BootstrapVue,
+      CopyToClipboard
     },
     data () {
       return {
+        textareaType: 'normal_html'
       }
     },
     props: {
@@ -58,7 +63,10 @@
       close () {
         this.$store.commit("campaign/toggleModal", 'modalCode');
       },
-
+      copyTextArea() {
+        this.$refs[this.textareaType].select();
+        document.execCommand('copy');
+      },
     }
   };
 </script>
@@ -106,7 +114,7 @@
 
     textarea {
       width: 100%;
-      height: 450px;
+      height: 375px;
       border: 1px solid #ccc;
       font-family: monospace, serif;
     }
