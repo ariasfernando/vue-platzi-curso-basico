@@ -363,7 +363,8 @@
     }
 
     .multiselect__option--highlight:after {
-      background: @stensul-gray;
+      background: #F4F4F4;
+      color: @stensul-gray;
     }
 
     .multiselect__tag{

@@ -135,6 +135,11 @@
       color: #333333;
       outline: 0;
     }
+    .copy-to-clipboard{
+      i{
+        display: none;
+      }
+    }
   }
   .show {
     display: block !important;

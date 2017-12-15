@@ -132,6 +132,12 @@
     label.info {
       margin-left: 4px;
     }
+
+    .copy-to-clipboard{
+      i{
+        display: none;
+      }
+    }
   }
 
   .modal-code {
