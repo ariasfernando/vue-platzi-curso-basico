@@ -44,15 +44,16 @@
                     </div>
                     <div class="col-md-12">
                       <div class="input-group">
-                        <input type="text" class="form-optional form-control" name="send-preview-subject" value=""
-                          id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
+                        <input type="text" class="form-optional form-control" name="send-preview-subject" value="" id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
                       </div>
                     </div>
-                  </div>
-                  <div class="input-group" v-if="campaign.campaign_data.library_config.preheader">
-                    <input type="text" class="form-control" name="send-preview-preheader" value=""
-                      id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
+                    <div class="col-md-12" v-if="campaign.campaign_data.library_config.preheader">
+                      <div class="input-group">
+                        <input type="text" class="form optional form-control" name="send-preview-preheader" value=""
+                            id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
+                      </div>
                       <p class="info">The best practice is to limit preheaders to 50 characters.</p>
+                    </div>
                   </div>
                 </div>
                 <div class="modal-divider" v-if="!isPublic"></div>
@@ -247,7 +248,6 @@
   }
   .modal-container {
     width: 920px!important;
-    height: 695px!important;
     overflow: scroll;
     margin: -20px auto;
     background-color: #fff;
@@ -258,7 +258,7 @@
 
     .share-preview{
       position: absolute;
-      bottom: 26px;
+      bottom: 30px;
       height: 30px;
 
       label{
@@ -292,7 +292,7 @@
     }
     #send-preview-to,
     #send-preview-subject,
-    #preview-preheader {
+    #send-preview-preheader {
       font-family: 'Open Sans', Arial, Helvetica, sans-serif;
       font-size: 13px;
       font-weight: 300;
@@ -315,6 +315,7 @@
       color: #999999;
       font-size: 11px;
       margin-top: 5px;
+      margin-bottom: 0px;
     }
     label.info {
       margin-left: 4px;
