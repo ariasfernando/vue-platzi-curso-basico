@@ -272,6 +272,19 @@
 @stensul-gray-secondary: #DDDDDD;
 
 .menu-campaign {
+  ::-webkit-input-placeholder {
+    color: #CCCCCC;
+  }
+  ::-moz-placeholder {
+    color: #CCCCCC;
+  }
+  :-ms-input-placeholder {
+    color: #CCCCCC;
+  }
+  :-moz-placeholder {
+    color: #CCCCCC;
+  }
+
   .vue-input-tag-wrapper {
     border: 0;
     background: none;
@@ -343,6 +356,7 @@
 
     .multiselect__content-wrapper{
       top: 41px;
+      box-shadow: 0px 2px 3px #cccccc;
     }
 
     .multiselect__option{
