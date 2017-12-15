@@ -4,20 +4,19 @@
       <div class="modal-wrapper">
         <div class="modal-container modal-preview">
           <div class="share-preview pull-right" v-if="!isPublic">
-                    <form class="form-inline">
-                      <div class="form-group">
-                        <label>Share URL:</label>
-                          <div class="input-group">
-                              <input type="text" class="form-control share-preview" :value="shareURL" readonly>
-                              <span class="input-group-btn">
-                                <button class="btn btn-default btn-copy beta-btn-primary" @click="copyURL" type="button" data-tooltip="Copy URL">
-                                  <span class="glyphicon glyphicon-copy"></span>
-                                </button>
-                              </span>
-                          </div>
-                        </div>
-                    </form>
-                  </div>
+            <form class="form-inline">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" class="form-control share-preview" :value="shareURL" readonly>
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-copy beta-btn-secondary" @click="copyURL" type="button">
+                      Copy URL
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </form>
+          </div>
 
 
           <slot name="header" v-if="!isPublic">
@@ -237,7 +236,7 @@
 
       .modal-footer{
         border-top: 1px solid #dddddd;
-        padding: 15px 0px 0px 0px;
+        padding: 25px 0px 0px 0px;
       }
 
       .modal-body{
@@ -252,7 +251,7 @@
   }
   .modal-container {
     width: 920px!important;
-    height: 710px!important;
+    height: 695px!important;
     overflow: scroll;
     margin: -20px auto;
     background-color: #fff;
@@ -263,75 +262,15 @@
 
     .share-preview{
       position: absolute;
-      bottom: 45px;
-      width: 500px;
+      bottom: 26px;
+      height: 30px;
 
       label{
         font-weight: 600;
       }
 
       input{
-        border: none;
-        background: none;
-        margin-top: 0px;
-        padding-left: 1px;
         position: static;
-      }
-      button{
-        border-radius: 50%;
-        margin-top: -3px;
-        font-size: 13px!important;
-        width: 25px;
-        text-align: center;
-        padding: 0px;
-        position: relative;
-        background: none!important;
-        color: #514960!important;
-        border: none!important;
-
-        &:focus{
-          outline: none;
-          background: none!important;
-          color: #514960!important;
-          border: none!important;
-        }
-      }
-      button[data-tooltip]:after {
-        content: attr(data-tooltip);
-        position: absolute;
-        left: -20px;
-        font-size: 12px;
-        font-weight: 300;
-        background: #666666;
-        padding: 2px 7px;
-        color: #FFFFFF;
-        border-radius: 2px;
-        white-space: nowrap;
-        opacity: 0;
-        transition: all 0.5s ease;
-      }
-      button[data-tooltip]:before {
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 0;
-        border-top: 10px solid #666666;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        transition: all 0.5s ease;
-        opacity: 0;
-        left: 30%;
-        bottom: 90%;
-      }
-      button[data-tooltip]:hover:after {
-        bottom: 100%;
-      }
-      button[data-tooltip]:hover:before {
-        bottom: 70%;
-      }
-      button[data-tooltip]:hover:after,
-      button[data-tooltip]:hover:before {
-        opacity: 1;
       }
       
     }
@@ -352,7 +291,6 @@
       }
     }
     .btn-copy {
-      height: 34px;
       border-top-right-radius: 3px;
       border-bottom-right-radius: 3px;
     }
@@ -402,7 +340,7 @@
     }
 
     input.share-preview {
-      width: 300px;
+      width: 250px;
     }
   }
 
