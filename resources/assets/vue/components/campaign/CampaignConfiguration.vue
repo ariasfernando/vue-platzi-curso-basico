@@ -272,6 +272,19 @@
 @stensul-gray-secondary: #DDDDDD;
 
 .menu-campaign {
+  ::-webkit-input-placeholder {
+    color: #CCCCCC;
+  }
+  ::-moz-placeholder {
+    color: #CCCCCC;
+  }
+  :-ms-input-placeholder {
+    color: #CCCCCC;
+  }
+  :-moz-placeholder {
+    color: #CCCCCC;
+  }
+
   .vue-input-tag-wrapper {
     border: 0;
     background: none;
@@ -319,7 +332,7 @@
     }
 
     .multiselect__option--selected.multiselect__option--highlight:after {
-      background: @stensul-purple;
+      background: #F4F4F4;
     }
 
     .multiselect__tags{
@@ -343,6 +356,7 @@
 
     .multiselect__content-wrapper{
       top: 41px;
+      box-shadow: 0px 2px 3px #cccccc;
     }
 
     .multiselect__option{
@@ -353,17 +367,18 @@
       font-weight:300;
 
       &:hover{
-        color: @stensul-white;
+        color: @stensul-gray;
       }
     }
 
     .multiselect__option--highlight{
-      background: @stensul-purple;
-      color: @stensul-white;
+      background: #F4F4F4;
+      color: @stensul-gray;
     }
 
     .multiselect__option--highlight:after {
-      background: @stensul-purple;
+      background: #F4F4F4;
+      color: @stensul-gray;
     }
 
     .multiselect__tag{
