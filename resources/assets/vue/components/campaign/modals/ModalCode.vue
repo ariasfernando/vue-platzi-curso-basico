@@ -8,13 +8,14 @@
           </slot>
           <slot name="body">
             <h4>Code</h4>
+
             <div class="modal-body">
-              <textarea v-model="code"></textarea>
+              <textarea ref="normal_html" v-model="code"></textarea>
             </div>
           </slot>
           <div class="modal-footer">
             <slot name="footer">
-              <button type="button" class="btn btn-default beta-btn-secondary" @click="close">Close</button>
+              <copy-to-clipboard :textarea-type="textareaType" @click="copyTextArea"></copy-to-clipboard>
             </slot>
           </div>
         </div>
@@ -25,13 +26,16 @@
 
 <script>
   import BootstrapVue from 'bootstrap-vue';
+  import CopyToClipboard from './partials/CopyToClipboard.vue'
 
   export default {
     components: {
-      BootstrapVue
+      BootstrapVue,
+      CopyToClipboard
     },
     data () {
       return {
+        textareaType: 'normal_html'
       }
     },
     props: {
@@ -58,12 +62,17 @@
       close () {
         this.$store.commit("campaign/toggleModal", 'modalCode');
       },
-
+      copyTextArea() {
+        this.$refs[this.textareaType].select();
+        document.execCommand('copy');
+      },
     }
   };
 </script>
 
 <style lang="less" scoped>
+  @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400');
+
   .modal-mask {
     position: fixed;
     z-index: 9998;
@@ -94,11 +103,8 @@
   }
   .modal-container {
     width: 750px;
-    height: 577px;
     overflow: scroll;
     margin: 0 auto;
-    padding: 15px;
-    padding-top: 40px;
     background-color: #fff;
     border-radius: 0;
     box-shadow: none;
@@ -106,9 +112,15 @@
 
     textarea {
       width: 100%;
-      height: 450px;
-      border: 1px solid #ccc;
-      font-family: monospace, serif;
+      height: 330px;
+      border: 1px solid #dddddd;
+      font-family: 'Source Code Pro', monospace;
+      font-weight: 300;
+      border-radius: 2px;
+      padding: 10px;
+      font-size: 13px;
+      color: #333333;
+      outline: 0;
     }
 
     p.info {
@@ -119,6 +131,12 @@
     }
     label.info {
       margin-left: 4px;
+    }
+
+    .copy-to-clipboard{
+      i{
+        display: none;
+      }
     }
   }
 

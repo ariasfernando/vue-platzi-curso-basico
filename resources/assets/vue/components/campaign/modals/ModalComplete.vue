@@ -12,11 +12,11 @@
           <div class="modal-body">
             <slot name="body">
               <b-tabs>
-                <b-tab title="Normal HTML">
-                  <textarea v-html="html"></textarea>
+                <b-tab title="Normal HTML" @click="changeTypeTextArea('normal_html')" >
+                  <textarea ref="normal_html" v-html="html"></textarea>
                 </b-tab>
-                <b-tab title="Plain Text" v-if="campaign.library_config.plainText">
-                  <textarea v-html="plainText"></textarea>
+                <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">
+                  <textarea ref="plain_text" v-html="plainText"></textarea>
                 </b-tab>
               </b-tabs>
             </slot>
@@ -36,6 +36,8 @@
               </div>
 
               <a :href="$_app.config.baseUrl" class="btn btn-back-to-dashboard beta-btn-primary" data-dismiss="modal">Go back to the dashboard</a>
+
+              <copy-to-clipboard :textarea-type="textareaType" @click="copyTextArea"></copy-to-clipboard>
             </slot>
           </div>
         </div>
@@ -49,10 +51,12 @@
   import BootstrapVue from 'bootstrap-vue';
   import { html_beautify } from 'js-beautify';
   import campaignService from '../../../services/campaign'
+  import CopyToClipboard from './partials/CopyToClipboard.vue'
 
   export default {
     components: {
       BootstrapVue,
+      CopyToClipboard
     },
     computed: {
       modalComplete () {
@@ -77,6 +81,7 @@
       data () {
         return {
           plainText: '',
+          textareaType: 'normal_html',
           html: '',
         }
       },
@@ -88,6 +93,13 @@
           .catch((error) => {
             this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
+      },
+      changeTypeTextArea(type){
+        this.textareaType = type;
+      },
+      copyTextArea() {
+        this.$refs[this.textareaType].select();
+        document.execCommand('copy');
       },
       close () {
         this.$store.commit("campaign/toggleModal", 'modalComplete');
@@ -117,11 +129,16 @@
       border: 1px solid #dddddd;
       font-family: 'Source Code Pro', monospace;
       font-weight: 300;
-      border-radius: 0px 0px 2px 2px;
+      border-radius: 2px;
       padding: 10px;
       font-size: 13px;
       color: #333333;
       outline: 0;
+    }
+    .copy-to-clipboard{
+      i{
+        display: none;
+      }
     }
   }
   .show {

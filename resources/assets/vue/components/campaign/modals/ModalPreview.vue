@@ -308,6 +308,7 @@
 
     p.alert-info{
       font-size: 12px;
+      margin-bottom: 10px;
     }
 
     p.info {
@@ -327,7 +328,7 @@
         padding-top: 6px;
       }
       .iframe-container {
-        height: 250px;
+        height: 210px;
         overflow-y: auto;
         text-align: center;
         background: #F4F4F4;
@@ -344,8 +345,8 @@
   .modal-divider{
     width: 100%;
     border-top: 1px solid #dddddd;
-    margin-bottom: 20px;
-    margin-top: 25px;
+    margin-bottom: 10px;
+    margin-top: 20px;
   }
 
   .modal-preview {

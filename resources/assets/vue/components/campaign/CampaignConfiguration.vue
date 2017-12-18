@@ -272,6 +272,19 @@
 @stensul-gray-secondary: #DDDDDD;
 
 .menu-campaign {
+  ::-webkit-input-placeholder {
+    color: #CCCCCC;
+  }
+  ::-moz-placeholder {
+    color: #CCCCCC;
+  }
+  :-ms-input-placeholder {
+    color: #CCCCCC;
+  }
+  :-moz-placeholder {
+    color: #CCCCCC;
+  }
+
   .vue-input-tag-wrapper {
     border: 0;
     background: none;
@@ -308,23 +321,42 @@
   .multiselect {
     z-index: 999;
 
+    .multiselect__select{
+      display: none;
+    }
+
     .multiselect__input{
-      height: 32px!important;
       margin-top: 1px!important;
       clear: both;
+      margin-bottom: 0px;
     }
 
     .multiselect__option--selected.multiselect__option--highlight:after {
-      background: @stensul-purple;
+      background: #F4F4F4;
     }
 
     .multiselect__tags{
       border-radius: 2px;
-      border: 1px solid @stensul-gray-secondary;
+      border: none;
+      padding: 0px;
+      display: flex;
+      flex-flow: column;
 
       .multiselect__input {
         position: relative !important;
+        display: block!important;
+        order: 1;
       }
+
+      .multiselect__tags-wrap{
+        order: 2;
+        margin-top: 7px;
+      }
+    }
+
+    .multiselect__content-wrapper{
+      top: 41px;
+      box-shadow: 0px 2px 3px #cccccc;
     }
 
     .multiselect__option{
@@ -335,17 +367,18 @@
       font-weight:300;
 
       &:hover{
-        color: @stensul-white;
+        color: @stensul-gray;
       }
     }
 
     .multiselect__option--highlight{
-      background: @stensul-purple;
-      color: @stensul-white;
+      background: #F4F4F4;
+      color: @stensul-gray;
     }
 
     .multiselect__option--highlight:after {
-      background: @stensul-purple;
+      background: #F4F4F4;
+      color: @stensul-gray;
     }
 
     .multiselect__tag{
