@@ -40,6 +40,7 @@ class CampaignController extends Controller
      * Show the edit campaign.
      *
      * @return \Illuminate\Http\RedirectResponse Object | \Illuminate\View\View
+     * @throws \Exception
      */
     public function getEdit(Request $request, $campaign_id = null)
     {
@@ -85,7 +86,13 @@ class CampaignController extends Controller
                 $params['library'] = new ObjectID($request->input("library"));
             } else {
                 $library = Library::orderBy('created_at')->first();
-                $params['library'] = $library->id;
+                $libraries = Auth::user()->getLibraries();
+                if (count($libraries)) {
+                    $params['library'] = new ObjectID($libraries[0]['_id']);
+                } else {
+                    throw new \Exception('You don\'t have available libraries to create a new email 
+                        please contact our support team.');
+                }
             }
 
             $campaign = Campaign::create($params);
