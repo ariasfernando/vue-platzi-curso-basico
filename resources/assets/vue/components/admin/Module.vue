@@ -187,7 +187,6 @@
           _.each(this.$_app.modulePlugins, (pluginProperties, name) => {
             if (pluginProperties.target.indexOf(elType.replace('-element', '')) !== -1) {
               const plugin = new Plugin(pluginProperties);
-              console.log(plugin);
               plugins[name] = plugin.getProperties();
             }
           });

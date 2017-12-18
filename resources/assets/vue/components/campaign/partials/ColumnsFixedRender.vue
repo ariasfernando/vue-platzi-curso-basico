@@ -61,11 +61,14 @@
     },
     methods: {
       setComponent(moduleId, columnId, componentId) {
-        this.$store.commit("campaign/setCurrentComponent", {
-          moduleId,
-          columnId,
-          componentId,
-        });
+        setTimeout(() => {
+          // TODO: find better way to do this
+          this.$store.commit("campaign/setCurrentComponent", {
+            moduleId,
+            columnId,
+            componentId,
+          });
+        }, 50);
       },
     }
   };

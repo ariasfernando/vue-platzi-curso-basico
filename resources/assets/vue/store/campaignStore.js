@@ -1,4 +1,3 @@
-import Vue from 'vue/dist/vue';
 import _ from 'lodash';
 import Q from 'q';
 import clone from 'clone';
