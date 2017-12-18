@@ -1,13 +1,23 @@
 <template>
-  <tbody>
-    <tr v-if="module.type === 'custom'" class="st-module-wrapper" :class="{ 'st-module-wrapper-active': activeModule === moduleId }" @click="setActiveModule(moduleId)">
+    <tr v-if="module.type === 'custom'" 
+        class="st-module-wrapper" 
+        :class="{ 'st-module-wrapper-active': activeModule === moduleId }" 
+        @click="setActiveModule(moduleId)"
+        @mouseover="setModulesMouseOver"
+        @mouseleave="setModulesMouseLeave"
+    >
       <td class="st-toolbar-content st-position-relative">
         <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
         <module-toolbar :module-id="moduleId"></module-toolbar>
       </td>
     </tr>
 
-    <tr v-else class="st-module-wrapper" :class="{ 'st-module-wrapper-active': activeModule === moduleId }" @click="setActiveModule(moduleId)">
+    <tr v-else class="st-module-wrapper" 
+        :class="{ 'st-module-wrapper-active': activeModule === moduleId }" 
+        @click="setActiveModule(moduleId)" 
+        @mouseover="setModulesMouseOver"
+        @mouseleave="setModulesMouseLeave"
+    >
       <td class="st-toolbar-content st-position-relative"
           :style="module.structure.style"
           :bgcolor="module.structure.attribute.bgcolor.hex"
@@ -48,7 +58,6 @@
         <div class="st-remove-element module-overlay"></div>
       </td>
     </tr>
-  </tbody>
 </template>
 
 <script>
@@ -92,6 +101,52 @@
             componentId,
           });
         }, 50);
+      },
+      getModuleRow( event ){
+        let $row = null; 
+
+        if( $(event.target).hasClass('st-module-wrapper') ){
+          $row = $(event.target);
+        }else{
+          $row = $(event.target).closest('.st-module-wrapper');
+        };
+
+        if (!$row){
+          return false
+        };
+
+        return $row;
+      },
+      setModulesMouseOver(e){
+        let $row = this.getModuleRow(e);
+
+        // Highlight module
+        if (!$row.find("#moduleHighlight").length && $row.height() < 5) {
+          const $hoverTable = $('<table id="moduleHighlight"><tr><td></td></tr></table>');
+
+          $hoverTable.css({
+            width: Application.globals.emailWidth,
+            height: $row.height()
+          });
+
+          $row.find("> td")
+            .append($hoverTable);
+
+          $row.find("#moduleHighlight").animate({
+            top: "-10px",
+            left: "-10px",
+            borderWidth: "10px",
+            width: "100%"
+
+          }, 50);
+        }
+        
+      },
+      setModulesMouseLeave(e){
+        let $row = this.getModuleRow(e);
+
+        // Remove module highlight element
+        $row.find("#moduleHighlight").remove();
       },
       setActiveModule(moduleId) {
         // Set active Module

@@ -132,13 +132,13 @@
 
       if (!this.campaign.campaign_data.library_config.building_mode_select) {
         this.titleCols += 2;
-      }
+      };
 
       if (saveAsTemplate && !isTemplate) {
         this.buttonsCols += 2;
       } else {
         this.titleCols += 2;
-      }
+      };
     }
   };
 </script>
