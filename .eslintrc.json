@@ -4,6 +4,7 @@
     "import"
   ],
   "rules": {
+    "max-len": ["error", { "code": 120 }],
     "no-trailing-spaces": "off",
     "no-plusplus": [
       2,

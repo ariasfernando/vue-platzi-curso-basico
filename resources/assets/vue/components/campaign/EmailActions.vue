@@ -42,8 +42,8 @@
             v-show="!locked"
           >Send for Review</button>
 
-          <a class="btn campaign-continue beta-btn-primary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="complete"
-            v-show="!locked">
+          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': hasErrors } " v-if="!campaign.campaign_data.template" @click="complete"
+            v-show="!locked" >
             Complete
             <i class="glyphicon glyphicon-menu-right"></i>
           </a>
@@ -85,7 +85,10 @@
       },
       locked() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked
-      }
+      },
+      hasErrors() {
+        return this.errors.items.length > 0;
+      },
     },
     data () {
       return {
@@ -143,6 +146,11 @@
         return campaignService.checkProcessStatus(processId);
       },
       complete() {
+        debugger;
+        if (this.errors.items.length > 0) {
+          return false;
+        }
+
         // Show Loader
         this.$store.commit("global/setLoader", true);
 
@@ -238,3 +246,9 @@
     },
   };
 </script>
+
+<style>
+  .button-disabled {
+    cursor: not-allowed;
+  }
+</style>
