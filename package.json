@@ -103,7 +103,9 @@
     "pre-commit": "^1.2.2",
     "webpack": "^3.5.6"
   },
-  "pre-commit": [ "test:single" ],
+  "pre-commit": [
+    "cover"
+  ],
   "scripts": {
     "prod": "gulp --production",
     "dev": "gulp watch",

@@ -2,13 +2,11 @@ import Element from '../../resources/assets/vue/models/Element';
 import Plugin from '../../resources/assets/vue/models/Plugin';
 
 require('dotenv').config();
-
-process.env.APP_ENV = 'test';
-
 const chai = require('chai');
 
 const expect = chai.expect;
 
+process.env.APP_ENV = 'test';
 /*
  * == Test: Models
  */
