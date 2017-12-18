@@ -19,7 +19,9 @@ export default {
   },
   methods: {
     addTag: function(tag) {
-      this.$emit('add-search-tag', tag);
+      if (!this.highlighted) {
+        this.$emit('add-search-tag', tag);
+      }
     }
   }
 }

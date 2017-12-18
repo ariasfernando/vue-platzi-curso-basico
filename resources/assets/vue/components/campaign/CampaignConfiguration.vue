@@ -28,9 +28,13 @@
           <input type="text" placeholder="Preheader Text" name="campaignPreheader" class="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
         </div>
 
-        <div class="config-box-divider configuration-field configuration-nomargin" v-if="enableTagging">
+        <div class="config-box-divider configuration-field configuration-nomargin configuration-tag" v-if="enableTagging">
           <label>Tags</label>
-          <input-tag :on-change="tagChange" :tags="form.tags" validate="text" placeholder="Add Tag"></input-tag>
+          <multiselect v-model="form.tags" :options="tagOptions" :multiple="true"
+            :select-label="'Select'" :close-on-select="true" :taggable="true"
+            :hide-selected="true" :preserve-search="true"
+            @remove="tagRemove" @tag="tagAdd" @select="tagAdd" placeholder="Choose tag">
+          </multiselect>
         </div>
 
         <div class="config-box-divider" v-if="enableAutoSave">
@@ -76,13 +80,13 @@
 <script>
   import _ from 'lodash'
   import configService from '../../services/config'
-  import InputTag from 'vue-input-tag'
   import ToggleButton from '../common/ToggleButton.vue'
+  import Multiselect from 'vue-multiselect';
 
   export default {
     components: {
-      InputTag,
-      ToggleButton
+      ToggleButton,
+      Multiselect
     },
     name: 'CampaignConfiguration',
     data () {
@@ -98,6 +102,7 @@
           autoSave: false,
           tags: []
         },
+        tagOptions: []
       }
     },
     computed: {
@@ -130,6 +135,15 @@
       this.form.campaignName = this.campaign.campaign_name;
       this.libraryName = this.campaign.library_name;
 
+      let tagList = this.$store.getters["campaign/campaign"].tag_list;
+      for (let n = 0; n < tagList.length; n++) {
+        this.tagOptions.push(tagList[n].name);
+      }
+
+      this.$store.commit('campaign/saveSetting', {
+        name: 'tags',
+        value: this.form.tags
+      });
       this.loadConfig();
     },
     methods: {
@@ -162,10 +176,22 @@
               this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
             });
       },
-      tagChange(tags) {
+      tagAdd(tag) {
+
+        if (tag.match(/[^a-z0-9-_]+/i)) {
+          this.$root.$toast('Only alphanumeric characters, hyphens and underscores are allowed.', {className: 'et-error'});
+          return false;
+        }
+        this.form.tags.push(tag.toLowerCase());
         this.$store.commit('campaign/saveSetting', {
           name: 'tags',
-          value: tags
+          value: this.form.tags
+        });
+      },
+      tagRemove(tag) {
+        this.$store.commit('campaign/saveSetting', {
+          name: 'tags',
+          value: this.form.tags
         });
       },
       autoSaveChange() {
@@ -238,13 +264,39 @@
   }
 </script>
 <style lang="less">
+@stensul-purple: #514960;
+@stensul-secondary: #625876;
+@stensul-white: #FFFFFF;
+@stensul-highlight: #78DCD6;
+@stensul-gray: #666666;
+@stensul-gray-secondary: #DDDDDD;
+
 .menu-campaign {
+  ::-webkit-input-placeholder {
+    color: #CCCCCC;
+  }
+  ::-moz-placeholder {
+    color: #CCCCCC;
+  }
+  :-ms-input-placeholder {
+    color: #CCCCCC;
+  }
+  :-moz-placeholder {
+    color: #CCCCCC;
+  }
+
   .vue-input-tag-wrapper {
     border: 0;
     background: none;
     padding: 0px;
     display: flex;
     flex-wrap: wrap;
+  }
+  .configuration-tag{
+    label{
+      z-index: 1000!important;
+      top: 14px!important;
+    }
   }
   .input-tag {
     background-color: #e4e4e4 !important;
@@ -265,6 +317,101 @@
     font-weight: 300 !important;
     margin-left: 3px;
     font-size: 10px;
+  }
+  .multiselect {
+    z-index: 999;
+
+    .multiselect__select{
+      display: none;
+    }
+
+    .multiselect__input{
+      margin-top: 1px!important;
+      clear: both;
+      margin-bottom: 0px;
+    }
+
+    .multiselect__option--selected.multiselect__option--highlight:after {
+      background: #F4F4F4;
+    }
+
+    .multiselect__tags{
+      border-radius: 2px;
+      border: none;
+      padding: 0px;
+      display: flex;
+      flex-flow: column;
+
+      .multiselect__input {
+        position: relative !important;
+        display: block!important;
+        order: 1;
+      }
+
+      .multiselect__tags-wrap{
+        order: 2;
+        margin-top: 7px;
+      }
+    }
+
+    .multiselect__content-wrapper{
+      top: 41px;
+      box-shadow: 0px 2px 3px #cccccc;
+    }
+
+    .multiselect__option{
+      font-size: 13px;
+      color: @stensul-gray;
+      padding: 9px;
+      line-height: 24px;
+      font-weight:300;
+
+      &:hover{
+        color: @stensul-gray;
+      }
+    }
+
+    .multiselect__option--highlight{
+      background: #F4F4F4;
+      color: @stensul-gray;
+    }
+
+    .multiselect__option--highlight:after {
+      background: #F4F4F4;
+      color: @stensul-gray;
+    }
+
+    .multiselect__tag{
+      border-radius: 2px;
+      margin-top: 1px;
+      font-size: 13px;
+      font-weight: 300;
+      color: @stensul-gray;
+      background: @stensul-gray-secondary;
+      padding: 4px 23px 4px 4px;
+
+      .multiselect__tag-icon{
+        
+        &:hover,
+        &:focus{
+          background: none;
+        }
+      }
+
+      .multiselect__tag-icon:after {
+        color: @stensul-gray;
+      }
+
+      .multiselect__tag-icon:focus:after,
+      .multiselect__tag-icon:hover:after {
+        color: @stensul-gray;
+      }
+
+      .multiselect__tag-icon:focus, 
+      .multiselect__tag-icon:hover{
+        background: none;
+      }
+    }
   }
   label {
     font-weight: 300;

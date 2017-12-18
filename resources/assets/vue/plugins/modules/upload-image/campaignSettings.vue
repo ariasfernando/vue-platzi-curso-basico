@@ -1,5 +1,5 @@
 <template>
-  <div class="plugin-wrapper-inner">
+  <div class="plugin-wrapper-inner" v-if="component">
     <label>Select an image</label>
     <div class="plugin-upload">
       <label for="upload-image" class="upload-image-trigger">

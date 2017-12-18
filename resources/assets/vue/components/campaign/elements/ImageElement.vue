@@ -1,10 +1,7 @@
 <template>
   <!-- IMAGE ELEMENT -->
   <table>
-    
-    <tr @click.prevent="setComponent"
-        data-type="image-element"
-    >
+    <tr data-type="image-element">
       <td width="100%" 
           align="center"
           :style="component.style"
@@ -63,15 +60,6 @@
 
         if (this.component.directives && this.component.directives.elementConfig) {
           this.elementConfig = this.component.directives.elementConfig;
-        }
-      },
-      setComponent(e) {
-        if (!$(e.target).hasClass("st-remove")){
-          this.$store.commit("campaign/setCurrentComponent", {
-            moduleId: this.moduleId,
-            columnId: this.columnId,
-            componentId: this.componentId
-          });
         }
       },
     }

@@ -38,7 +38,7 @@
                 :reverse="reverse"
                 v-on:change-sort="sortBy"></column-sort>
             </th>
-            <th v-if="showTags == 1">Tags</th>
+            <th v-if="showTags == 1" class="col-200">Tags</th>
             <th  width="180" class="bold">Actions</th>
           </tr>
         </thead>

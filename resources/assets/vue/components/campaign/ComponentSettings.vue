@@ -20,31 +20,31 @@
     data () {
       return {
         ready: false,
-        component: {},
       }
     },
     computed: {
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
-      }
-    },
-    watch : {
-      currentComponent: {
-        handler: function() {
-          let modules = this.$store.getters["campaign/modules"];
-          this.ready = false;
+      },
+      component() {
+        let component = {};
+        if (Object.keys(this.currentComponent).length !== 0) {
+          const moduleId = this.currentComponent.moduleId;
+          const columnId = this.currentComponent.columnId;
+          const componentId = this.currentComponent.componentId;
 
-          if (!_.isEmpty(this.currentComponent)) {
-            this.unsetCustomModule();
-            this.component = modules[this.currentComponent.moduleId].structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
-            _.each(this.component.plugins, (plugin) => {
-              if ( plugin.enabled && plugin.render !== false) {
-                this.ready = true;
-              }
-            });
-          }
-        },
-        deep: true
+          component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
+
+          _.each(component.plugins, (plugin) => {
+            if ( plugin.enabled && plugin.render !== false) {
+              this.ready = true;
+            }
+          });
+        }
+        else {
+          this.ready = false;
+        }
+        return component;
       },
     },
     methods: {

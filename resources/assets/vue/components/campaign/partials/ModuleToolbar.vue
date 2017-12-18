@@ -1,9 +1,9 @@
 <template>
   <div class="module-toolbar">
-    <div class="icon-move"><i class="fa fa-arrows"></i></div>
+    <div class="icon-remove" @click="remove"><i class="fa fa-trash-o"></i></div>
     <div class="icon-config" v-if="hasConfig" @click="config"><i class="fa fa-cogs"></i></div>
     <div class="icon-clone" @click="clone"><i class="fa fa-clone"></i></div>
-    <div class="icon-remove" @click="remove"><i class="fa fa-trash-o"></i></div>
+    <div class="icon-move"><i class="fa fa-arrows"></i></div>
   </div>
 </template>
 
@@ -93,22 +93,43 @@
 
   .st-module-wrapper:hover {
 
-    .st-toolbar-content{
-      outline: 2px solid #b5e9e1;
-      outline-offset: -2px;
-    }
-
-    .module-overlay{
-      position: absolute;
-      background: rgba(105, 218, 200, 0.1);
+    &::before{
       top: 0px;
       left: 0px;
       width: 100%;
       height: 100%;
       display: block;
+      outline: 2px solid #c0dfda;
+      outline-offset: -2px;
     }
 
-    .icon-move, .icon-remove,
+    .module-toolbar{
+      background: #c0dfda;
+    }
+
+    .st-toolbar-content{
+      outline: 2px solid #c0dfda;
+      outline-offset: -2px;
+    }
+
+    .module-overlay{
+      pointer-events: none;
+      position: absolute;
+      background: rgba(65, 168, 152, 0.1);
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      display: block;
+      outline: 2px solid #c0dfda;
+      outline-offset: -2px;
+    }
+
+    .icon-move{
+      display: inline-block;
+    }
+
+    .icon-remove,
     .icon-clone, .icon-config {
       display: none;
     }
@@ -120,8 +141,27 @@
       outline-offset: -2px;
     }
 
+    &::before{
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      display: block;
+      outline: 2px solid @focus;
+      outline-offset: -2px;
+    }
+
     .module-overlay{
-      display: none;
+      pointer-events: none;
+      position: absolute;
+      background: none;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      display: block;
+      outline: 2px solid @focus;
+      outline-offset: -2px;
     }
 
     .icon-move, .icon-remove,
@@ -136,7 +176,13 @@
       }
 
       .module-overlay{
-        display: none;
+        outline: 2px solid @focus;
+        outline-offset: -2px;
+        background: none;
+      }
+
+      .module-toolbar{
+        background-color: #69dac8;
       }
 
       .icon-move, .icon-remove,

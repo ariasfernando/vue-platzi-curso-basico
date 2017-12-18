@@ -83,6 +83,7 @@
 		cursor: pointer;
 		line-height: 20px;
 		padding: 0 10px;
+		margin-bottom: 3px;
 	}
 	header nav .home {
   		display:none;
@@ -102,7 +103,7 @@
 		background: @stensul-white;
 		height: 53px;
 		box-shadow: 0px 0px 4px #999999;
-		margin: -16px -20px 35px -20px;
+		margin: -16px -20px 20px -20px;
     	padding-top: 9px;
     	display: block!important;
     	position: relative;
@@ -150,5 +151,27 @@
 	#finished-campaign,
 	#templates-campaign{
 		display: none;
+	}
+
+	.ui-autocomplete{
+		background: @stensul-white;
+		font-family: 'Open Sans';
+		box-shadow: 0px 2px 3px #cccccc;
+
+		.ui-menu-item{
+			font-size: 13px;
+			font-weight: 300;
+			color: @stensul-gray;
+
+			&:hover{
+				background: #f4f4f4;
+			}
+		}
+
+		.ui-autocomplete-category{
+			font-size: 15px;
+			font-weight: 600;
+			color: @stensul-gray
+		}
 	}
 }
