@@ -8,6 +8,7 @@ use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\Library;
 use Stensul\Models\Permission;
+use Stensul\Models\Role;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
 use Stensul\Services\ModelKeyManager;
@@ -108,7 +109,7 @@ class LibraryController extends Controller
     {
         $libraries = Auth::User()->getLibraries();
 
-        $request['search_in'] = array_map(function($library) {
+        $request['search_in'] = array_map(function ($library) {
             return $library['_id'];
         }, $libraries);
 
@@ -242,6 +243,15 @@ class LibraryController extends Controller
             } else {
                 Library::create($params);
                 Permission::create($permission_params);
+
+                // Add newly created permission to admin role.
+                if ($role = Role::where('name', '=', 'admin')->first()) {
+                    $permissions = $role->permissions;
+                    $permissions[] = $permission_params['name'];
+                    $role->permissions = $permissions;
+                    $role->save();
+                }
+
                 $response_message = array("message"=> "SUCCESS");
             }
         }
