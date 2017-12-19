@@ -167,16 +167,16 @@ class ImageProcessor extends ImageDriver
                     list(, $blob) = explode(',', $blob);
                     list(, $extension) = explode('/', $type);
                     $blob = base64_decode($blob);
-                    $image = Self::load($blob);
+                    $image = self::load($blob);
                 } else {
                     $storage = Storage::disk($storage_disk);
                     $image = (strpos($blob, public_path()) === false)?
-                        Self::load($storage->get($blob)) :
-                        Self::open($blob);
+                        self::load($storage->get($blob)) :
+                        self::open($blob);
                     $extension = pathinfo($blob)["extension"];
                 }
             } else {
-                $image = Self::open($blob);
+                $image = self::open($blob);
                 $extension = pathinfo($blob)["extension"];
             }
         } catch (\Exception $e) {
