@@ -23,6 +23,7 @@ stages:
 
 before_script:
   # js related
+  - node_modules/.bin/npm-cli-login -u $NPM_USER -p $NPM_PASSWORD -e $NPM_EMAIL -r $NPM_REGISTRY
   - npm install
   # Install composer dependencies
   - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
