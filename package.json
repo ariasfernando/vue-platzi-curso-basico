@@ -101,7 +101,6 @@
     "laravel-elixir-vueify": "^1.0.0",
     "less-loader": "^4.0.5",
     "mocha-lcov-reporter": "^1.3.0",
-    "npm-cli-login": "0.0.10",
     "nyc": "^11.0.2",
     "webpack": "^3.5.6"
   },
