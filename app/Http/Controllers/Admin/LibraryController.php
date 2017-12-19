@@ -39,13 +39,15 @@ class LibraryController extends Controller
      */
     protected function queryConstructor($request)
     {
-        $search_type = ($request->input('type'))? $request->input("type") : null;
-        $search_text = ($request->input('q'))? '%'.trim($request->input("q")).'%' : null;
-        $data_order_field = ($request->input('order_field')) ?: 'created_at';
-        $data_order_type = ($request->input('order_type')) ?: 'DESC';
+        $search_type = $request->input('type') ? $request->input("type") : null;
+        $search_text = $request->input('q') ? '%' . trim($request->input("q")) . '%' : null;
+        $search_in   = $request->input('search_in') ? $request->input("search_in") : null;
+
+        $data_order_field = $request->input('order_field') ?: 'created_at';
+        $data_order_type = $request->input('order_type') ?: 'DESC';
         $data_page = $request->input('limit') ?: config('admin.sections.libraries.limit_per_page', 10);
         $search_operator = 'like';
-        $search_query = (count($request->all()))? $request->all() : [];
+        $search_query = count($request->all()) ? $request->all() : [];
 
         if (strpos($search_type, '_id') !== false) {
             try {
@@ -64,6 +66,8 @@ class LibraryController extends Controller
         if (!is_null($search_type) && !is_null($search_text)) {
             $libraries = Library::where($search_type, $search_operator, $search_text)
                 ->orderBy($data_order_field, $data_order_type)->paginate((int) $data_page);
+        } elseif ($search_in) {
+            $libraries = Library::whereIn('_id', $search_in)->orderBy($data_order_field, $data_order_type)->paginate((int) $data_page);
         } else {
             $libraries = Library::orderBy($data_order_field, $data_order_type)->paginate((int) $data_page);
         }
@@ -102,7 +106,18 @@ class LibraryController extends Controller
      */
     public function postList(Request $request)
     {
+        $libraries = Auth::User()->getLibraries();
+
+        $request['search_in'] = array_map(function($library) {
+            return $library['_id'];
+        }, $libraries);
+
+        if (!count($request['search_in'])) {
+            $request['search_in'] = [false];
+        }
+
         $result = $this->queryConstructor($request);
+
         return $result['libraries'];
     }
 

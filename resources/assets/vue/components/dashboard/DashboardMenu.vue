@@ -1,6 +1,7 @@
 <template>
   <div>
     <a v-if="showDefaultButton"
+      @click="checkLibrary"
       class="btn btn-default btn-create beta-btn-primary" :href="$_app.config.baseUrl + '/campaign/edit/' + '?locale=en_us'">
       <i class="glyphicon glyphicon-plus-sign"></i> Create a new email
     </a>
@@ -93,7 +94,12 @@
 
     },
     methods: {
-
+      checkLibrary (event) {
+        if (!this.libraries.length) {
+          event.preventDefault();
+          this.$root.$toast('Oops! There are no libraries available, please contact our support team.', {className: 'et-error'});
+        }
+      }
     }
   }
 </script>

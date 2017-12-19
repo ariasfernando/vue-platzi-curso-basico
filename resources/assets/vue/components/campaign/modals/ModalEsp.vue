@@ -8,7 +8,7 @@
           </slot>
           <slot name="body">
             <h4>Upload to {{ espProviderConfig.title }}</h4>
-            <div v-if="uploadedSuccessfully" class="response-message response-message-success alert alert-success">
+            <div v-if="uploadedSuccessfully" class="response-message response-message-success alert alert-success beta-alert beta-alert-success">
               Email successfully uploaded to {{ espProviderConfig.title }}. <a :href="$_app.config.baseUrl" class="allow-exit">View dashboard</a>.
             </div>
             <form name="upload-api-form" class="upload-api-form">
@@ -47,7 +47,7 @@
           </slot>
           <slot name="footer">
             <div>
-              <a target="_blank" type="button" class="btn beta-btn-secondary" @click="uploadEmail">Upload</a>
+              <a target="_blank" type="button" class="btn beta-btn-primary" @click="uploadEmail">Upload</a>
             </div>
           </slot>
         </div>
@@ -155,12 +155,24 @@
     width: 750px;
     height: 632px;
     overflow: scroll;
-    margin: -20px auto;
-    padding: 15px;
     background-color: #fff;
     border-radius: 0;
     box-shadow: none;
     transition: all .3s ease;
+
+    input[type=text]{
+      font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: #666666;
+      box-shadow: none;
+      border-radius: 2px;
+      height: 36px;
+
+      &:focus {
+        border: 1px solid #DDDDDD;
+      }
+    }
 
     textarea {
       width: 100%;

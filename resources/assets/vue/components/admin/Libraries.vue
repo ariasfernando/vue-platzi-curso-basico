@@ -68,6 +68,13 @@
         </div>
       </div>
     </div>
+    <div class="row" v-if="ready && !libraries.data.length">
+      <div class="col-xs-12">
+        There are no libraries created or you don't have permission to access any,
+        check the roles or create a new one.
+      </div>
+    </div>
+
 
   </section>
 
