@@ -23,7 +23,6 @@ stages:
 
 before_script:
   # js related
-  - echo $NPM_USER
   - npm install npm-cli-login
   - npm config set registry https://npm.stensuldev.net
   - node_modules/.bin/npm-cli-login -u $NPM_USER -p $NPM_PASSWORD -e $NPM_EMAIL -r $NPM_REGISTRY
