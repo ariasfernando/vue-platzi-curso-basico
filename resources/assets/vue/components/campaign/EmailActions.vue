@@ -4,8 +4,6 @@
       <div class="row">
         <div class="col-xs-5 col-md-5 col-lg-5 hidden-sm hidden-xs"></div>
 
-        
-
         <div class="col-xs-7 col-md-5 col-lg-5 text-right pull-right" id="section-canvas-buttons-col">
 
           <button v-show="!locked" class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
@@ -42,7 +40,7 @@
             v-show="!locked"
           >Send for Review</button>
 
-          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': hasErrors } " v-if="!campaign.campaign_data.template" @click="complete"
+          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="!campaign.campaign_data.template" @click="complete"
             v-show="!locked" >
             Complete
             <i class="glyphicon glyphicon-menu-right"></i>
@@ -86,8 +84,8 @@
       locked() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked
       },
-      hasErrors() {
-        return this.errors.items.length > 0;
+      fieldErrors() {
+        return this.$store.state.campaign.fieldErrors;
       },
     },
     data () {
@@ -123,6 +121,19 @@
         this.$store.commit("campaign/changeBuildingMode", mode);
       },
       save() {
+        // Do not save if there are missing or wrong fields
+        if (this.fieldErrors.length > 0) {
+          this.$root.$toast(
+            'To continue, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, ' +
+            'or remove the incomplete module(s).',
+            {
+              className: 'et-error',
+              duration: 10000,
+            }
+          );
+          return false;
+        }
+
         this.$store.commit("global/setLoader", true);
         const bodyHtml = campaignCleaner.clean('.section-canvas-container');
         this._save(bodyHtml).then(response => {
@@ -146,8 +157,15 @@
         return campaignService.checkProcessStatus(processId);
       },
       complete() {
-        debugger;
-        if (this.errors.items.length > 0) {
+        // Do not save if there are missing or wrong fields
+        if (this.fieldErrors.length > 0) {
+          this.$root.$toast(
+            'To continue, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, ' +
+            'or remove the incomplete module(s).',
+            {
+              className: 'et-error'
+            }
+          );
           return false;
         }
 

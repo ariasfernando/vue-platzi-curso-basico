@@ -3,15 +3,14 @@
     <div>
       <span>
         <label>Destination Url</label>
-        <p :class="{ 'control': true }">
+        <p>
           <input
             name="href"
             type="text"
             placeholder="http://examp.le"
             v-model="href"
-            v-validate="'required'"
-            :class="{'input': true, 'is-danger': errors.has('href') }"
-            >
+            v-validate="'required|url'"
+            :class="{'input': true, 'is-danger': errors.has('href') }">
           <span v-show="errors.has('href')" class="help is-danger">{{ errors.first('href') }}</span>
         </p>
       </span>
@@ -43,6 +42,11 @@
 
   export default {
     props: ['name', 'plugin'],
+    mounted() {
+      this.$validator.validateAll().then((result) => {
+        this.collectErrors();
+      });
+    },
     computed: {
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
@@ -67,6 +71,7 @@
         },
         set(value) {
           this.saveComponentAttribute('href', value);
+          this.collectErrors();
         },
       }
     },
@@ -76,6 +81,11 @@
       }
     },
     methods: {
+      collectErrors() {
+        if (this.$validator.errors.items.length) {
+          this.$store.commit('campaign/addErrors', this.$validator.errors.items);
+        }
+      },
       change(e) {
         const attribute = e.target.name;
         const value = e.target.getAttribute('data-tooltip');

@@ -1,4 +1,3 @@
-import Vue from 'vue/dist/vue';
 import _ from 'lodash';
 import Q from 'q';
 import clone from 'clone';
@@ -25,6 +24,7 @@ function campaignStore() {
       buildingMode: 'desktop',
       editorToolbar: '',
       dirty: false,
+      fieldErrors: [],
     },
     getters: {
       modules(state) {
@@ -71,6 +71,7 @@ function campaignStore() {
         }
         return false;
       },
+
     },
     mutations: {
       loadCampaignData(state, campaignData) {
@@ -161,6 +162,11 @@ function campaignStore() {
       },
       setTemplating(state, templating) {
         state.campaign.campaign_data.template = templating;
+      },
+      addErrors(state, errors) {
+        _.each(errors, (error) => {
+          state.fieldErrors.push(error);
+        });
       },
       error(err) {
         console.error(err);
