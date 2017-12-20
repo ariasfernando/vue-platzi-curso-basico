@@ -49,7 +49,6 @@
     },
     methods: {
       change(e) {
-        console.log(e.target.getAttribute('data-tooltip'));
         const payload = {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
