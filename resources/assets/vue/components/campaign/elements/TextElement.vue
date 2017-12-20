@@ -1,6 +1,6 @@
 <template>
   <!-- TEXT ELEMENT -->
-  <table>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr data-type="text-element">
       <td width="100%" 
           :bgcolor="component.attribute.bgcolor.hex || 'transparent'"
@@ -17,8 +17,8 @@
                 :align="component.attribute.align" 
                 :style="component.style"
             >
-              <div class="st-edit-text" :id="editorId" v-html="component.text"></div>
-              <div :class="'st-toolbar toolbar-'+editorId"></div>
+              <div class="st-edit-text stx-wrapper" :id="editorId" v-html="component.data.text"></div>
+              <div :class="'st-remove-element st-toolbar toolbar-'+editorId"></div>
             </td>
           </tr> 
         </table>     

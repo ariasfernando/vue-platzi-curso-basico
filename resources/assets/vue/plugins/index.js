@@ -1,5 +1,5 @@
-const common = require('./common');
-const modules = require('./modules');
+import common from './common';
+import modules from './modules';
 
 module.exports = {
   common,

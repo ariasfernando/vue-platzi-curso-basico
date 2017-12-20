@@ -1,63 +1,52 @@
 <template>
-    <tr v-if="module.type === 'custom'" 
-        class="st-module-wrapper" 
-        :class="{ 'st-module-wrapper-active': activeModule === moduleId }" 
-        @click="setActiveModule(moduleId)"
-        @mouseover="setModulesMouseOver"
-        @mouseleave="setModulesMouseLeave"
-    >
-      <td class="st-toolbar-content st-position-relative">
-        <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
-        <module-toolbar :module-id="moduleId"></module-toolbar>
-      </td>
-    </tr>
+  <tr v-if="module.type === 'custom'" class="st-module-wrapper" :class="{ 'st-module-wrapper-active': activeModule === moduleId }" @click="setActiveModule(moduleId)">
+    <td class="st-toolbar-content st-position-relative">
+      <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
+      <module-toolbar :module-id="moduleId"></module-toolbar>
+    </td>
+  </tr>
 
-    <tr v-else class="st-module-wrapper" 
-        :class="{ 'st-module-wrapper-active': activeModule === moduleId }" 
-        @click="setActiveModule(moduleId)" 
-        @mouseover="setModulesMouseOver"
-        @mouseleave="setModulesMouseLeave"
-    >
-      <td class="st-toolbar-content st-position-relative"
-          :style="module.structure.style"
-          :bgcolor="module.structure.attribute.bgcolor.hex"
-          :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
-        <table width="100%" cellspacing="0" cellpadding="0" border="0" :class="{ 'stx-wrapper': module.structure.columns.length === 1 }">
-          <!--2 COLUMNS -->
-          <tr v-if="module.structure.columns.length > 1">
-            <td width="100%" v-if="!module.structure.columnsFixed">
-              <comment :content="msoStartingComment"></comment>
-              <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
-            </td>
+  <tr v-else class="st-module-wrapper" :class="{ 'st-module-wrapper-active': activeModule === moduleId }" @click="setActiveModule(moduleId)">
+    <td class="st-toolbar-content st-position-relative"
+        :style="module.structure.style"
+        :bgcolor="module.structure.attribute.bgcolor.hex"
+        :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
+      <table width="100%" cellspacing="0" cellpadding="0" border="0" :class="{ 'stx-wrapper': module.structure.columns.length === 1 }">
+        <!--2 COLUMNS -->
+        <tr v-if="module.structure.columns.length > 1">
+          <td width="100%" v-if="!module.structure.columnsFixed">
+            <comment :content="msoStartingComment"></comment>
+            <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
+          </td>
 
-            <td v-else
-                v-for="(column, columnId) in module.structure.columns"
-                :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
-                valign="top"
-            >
-              <columns-fixed-render :column="column" :column-id="columnId" :module-id="moduleId"></columns-fixed-render>
-            </td>
-          </tr>
-          <!--2 COLUMNS -->
+          <td v-else
+              v-for="(column, columnId) in module.structure.columns"
+              :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+              valign="top"
+          >
+            <columns-fixed-render :column="column" :column-id="columnId" :module-id="moduleId"></columns-fixed-render>
+          </td>
+        </tr>
+        <!--2 COLUMNS -->
 
-          <!--1 COLUMN -->
-          <tr v-else v-for="(component, componentId) in module.structure.columns[0].components" @click.prevent="setComponent(moduleId, 0, componentId)">
-            <td :valign="component.attribute.valign" :align="component.attribute.align || 'left'">
-              <component
-                :is="component.type"
-                :component="component"
-                :module-id="moduleId"
-                :column-id="0"
-                :component-id="componentId">
-              </component>
-            </td>
-          </tr>
-          <!--1 COLUMN -->
-        </table>
-        <module-toolbar :module-id="moduleId"></module-toolbar>
-        <div class="st-remove-element module-overlay"></div>
-      </td>
-    </tr>
+        <!--1 COLUMN -->
+        <tr v-else v-for="(component, componentId) in module.structure.columns[0].components" @click.prevent="setComponent(moduleId, 0, componentId)">
+          <td :valign="component.attribute.valign" :align="component.attribute.align || 'left'">
+            <component
+              :is="component.type"
+              :component="component"
+              :module-id="moduleId"
+              :column-id="0"
+              :component-id="componentId">
+            </component>
+          </td>
+        </tr>
+        <!--1 COLUMN -->
+      </table>
+      <module-toolbar :module-id="moduleId"></module-toolbar>
+      <div class="st-remove-element module-overlay"></div>
+    </td>
+  </tr>
 </template>
 
 <script>
@@ -101,52 +90,6 @@
             componentId,
           });
         }, 50);
-      },
-      getModuleRow( event ){
-        let $row = null; 
-
-        if( $(event.target).hasClass('st-module-wrapper') ){
-          $row = $(event.target);
-        }else{
-          $row = $(event.target).closest('.st-module-wrapper');
-        };
-
-        if (!$row){
-          return false
-        };
-
-        return $row;
-      },
-      setModulesMouseOver(e){
-        let $row = this.getModuleRow(e);
-
-        // Highlight module
-        if (!$row.find("#moduleHighlight").length && $row.height() < 5) {
-          const $hoverTable = $('<table id="moduleHighlight"><tr><td></td></tr></table>');
-
-          $hoverTable.css({
-            width: Application.globals.emailWidth,
-            height: $row.height()
-          });
-
-          $row.find("> td")
-            .append($hoverTable);
-
-          $row.find("#moduleHighlight").animate({
-            top: "-10px",
-            left: "-10px",
-            borderWidth: "10px",
-            width: "100%"
-
-          }, 50);
-        }
-        
-      },
-      setModulesMouseLeave(e){
-        let $row = this.getModuleRow(e);
-
-        // Remove module highlight element
-        $row.find("#moduleHighlight").remove();
       },
       setActiveModule(moduleId) {
         // Set active Module

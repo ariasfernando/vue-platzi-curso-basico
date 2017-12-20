@@ -1,7 +1,13 @@
+import ColumnElement from './ColumnElement';
+import TextElement from './TextElement';
+import ImageElement from './ImageElement';
+import ButtonElement from './ButtonElement';
+import DividerElement from './DividerElement';
+
 module.exports = {
-  column: require('./column'),
-  'text-element': require('./textElement'),
-  'image-element': require('./imageElement'),
-  'button-element': require('./buttonElement'),
-  'divider-element': require('./dividerElement'),
+  'column-element': ColumnElement,
+  'text-element': TextElement,
+  'image-element': ImageElement,
+  'button-element': ButtonElement,
+  'divider-element': DividerElement,
 };
