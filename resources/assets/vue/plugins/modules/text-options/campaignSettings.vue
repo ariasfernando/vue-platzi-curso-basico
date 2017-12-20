@@ -26,7 +26,7 @@
         component: {},
       }
     },
-    created() {
+    mounted() {
       this.initTinyMCE();
     },
     methods: {
@@ -46,6 +46,7 @@
         const editorId = ['editor', this.currentComponent.moduleId, this.currentComponent.columnId, this.currentComponent.componentId].join('-');
 
         const settings = {
+
           selector: `#${editorId}`,
           fixed_toolbar_container: `.toolbar-${editorId}`,
           document_base_url: Application.globals.cdnHost + "/js/tinymce/",
@@ -54,12 +55,16 @@
           inline: true,
           menubar: false,
           toolbar: toolbar,
-          plugins: 'paste advlist autolink lists textcolor stlinkextended sttextcolorextended',
+          plugins: 'paste advlist autolink lists textcolor link',
+          link_validate_url: true,
+          link_title: false,
+          link_text_to_display: false,
+          paste_as_text: true,
 
           init_instance_callback: (editor) => {
 
-            editor.on('Blur', (e) => {
-              this.$store.commit('campaign/updateElement', {
+            editor.on('blur', (e) => {
+              this.$store.dispatch('campaign/updateElement', {
                 moduleId: this.currentComponent.moduleId,
                 columnId: this.currentComponent.columnId,
                 componentId: this.currentComponent.componentId,
@@ -105,7 +110,9 @@
         }
 
         tinymce.init(settings);
-        tinymce.execCommand('mceFocus', false, editorId);
+      },
+      destroyed () {
+        tinymce.get(editorId).destroy();
       }
     }
   }

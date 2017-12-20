@@ -123,6 +123,13 @@
   .modal-complete {
     width: 900px;
 
+    .copy-to-clipboard{
+      float: right;
+      z-index: 300;
+      cursor: pointer!important;
+      position: relative;
+    }
+
     textarea {
       width: 100%;
       height: 330px;

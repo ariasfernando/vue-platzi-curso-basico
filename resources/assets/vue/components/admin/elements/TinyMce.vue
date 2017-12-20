@@ -46,7 +46,7 @@
           paste_as_text: true,
           init_instance_callback: (editor) => {
 
-            editor.on('Blur', (e) => {
+            editor.on('blur', (e) => {
               const parts = this.id.split('-');
 
               this.$store.commit('module/updateElement', {
