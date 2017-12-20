@@ -90,10 +90,10 @@ class EmailHtmlCreatorTest extends TestCase
         $this->html_service->setBody($body);
         $replaced = $this->html_service->replaceViewInBrowserLink();
 
-         $this->assertEquals(
-             $replaced,
-             '<p>' . trim($this->campaign->getCdnPath(true), DS) . DS . EmailHtmlCreator::$HTML_FILENAME . '</p>'
-         );
+        $this->assertEquals(
+            $replaced,
+            '<p>' . trim($this->campaign->getCdnPath(true), DS) . DS . EmailHtmlCreator::$HTML_FILENAME . '</p>'
+        );
     }
 
     /**

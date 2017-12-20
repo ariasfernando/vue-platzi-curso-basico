@@ -76,7 +76,7 @@ class TagManager
     {
         $tags = [];
         // Get tags from campaigns, so we won't show tags related to only deleted campaigns
-        $campaign_tags = Campaign::raw(function($collection) {
+        $campaign_tags = Campaign::raw(function ($collection) {
             return $collection->aggregate([
                 ['$match' => ['status' => ['$ne' => 2]]], // ignore deleted campaigns
                 ['$unwind' => '$tags'],
@@ -101,7 +101,7 @@ class TagManager
      */
     public static function getPopularTags()
     {
-        $tags = Campaign::raw(function($collection) {
+        $tags = Campaign::raw(function ($collection) {
             return $collection->aggregate([
                 ['$match' => ['status' => ['$ne' => 2]]], // ignore deleted campaigns
                 ['$unwind' => '$tags'],

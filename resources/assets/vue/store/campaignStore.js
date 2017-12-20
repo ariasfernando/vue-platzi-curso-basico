@@ -132,6 +132,10 @@ function campaignStore() {
         const updated = { ...originalData, ...payload.data };
         state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data = updated;
       },
+      saveComponentStyle(state, data) {
+        const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
+        component.style[data.property] = data.value;
+      },
       saveComponentAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
         attributes[data.attribute] = data.attributeValue;
