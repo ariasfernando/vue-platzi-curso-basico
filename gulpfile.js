@@ -53,7 +53,7 @@ elixir.config.sourcemaps = false;
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-jshint', () => {
-  elixir((mix) => {
+  return elixir((mix) => {
     mix.jshint([
       'resources/assets/js/**/*'
     ]);
@@ -282,7 +282,7 @@ gulp.task('elixir-scripts', function () {
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-less', () => {
-    return elixir((mix) => {
+   return elixir((mix) => {
         mix.less( 'base/tool/tool.less');
         mix.less( 'base/base-v2/admin.less');
     });
@@ -293,12 +293,12 @@ gulp.task('elixir-less', () => {
  | Elixir Version
  | --------------------------------------------------------------------------
  */
-gulp.task('elixir-version', () => {
+gulp.task('elixir-version', ['elixir-copy-bower', 'elixir-scripts'], () => {
   return elixir((mix) => {
     mix.version([
       'css/admin.css',
       'css/tool.css',
-      'js'
+      'js',
     ]);
   });
 });
@@ -309,5 +309,5 @@ gulp.task('elixir-version', () => {
  | --------------------------------------------------------------------------
  */
 gulp.task('jshint', ['elixir-jshint']);
-gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
-gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-scripts', 'elixir-copy-bower', 'elixir-version']));
+gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-version']));
+gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-version']));

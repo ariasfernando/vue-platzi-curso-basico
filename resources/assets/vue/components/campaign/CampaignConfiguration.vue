@@ -16,13 +16,6 @@
           <input type="text" placeholder="Campaign Name" name="campaignName" id="campaignName" :value="form.campaignName" @blur="saveCampaignName"/>
         </div>
 
-        <div class="configuration-field configuration-nomargin">
-          <label for="libraryName">
-            Library Name
-          </label>
-          <input type="text" name="libraryName" id="libraryName" :value="libraryName" readonly/>
-        </div>
-
         <div class="form-group configuration-field configuration-nomargin" v-if="enablePreheader">
           <label for="campaignPreheader" title="The best practice is to limit preheaders to 50 characters.">Preheader Text</label>
           <input type="text" placeholder="Preheader Text" name="campaignPreheader" class="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
@@ -133,7 +126,6 @@
       this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name;
-      this.libraryName = this.campaign.library_name;
 
       let tagList = this.$store.getters["campaign/campaign"].tag_list;
       for (let n = 0; n < tagList.length; n++) {

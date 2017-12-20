@@ -1,19 +1,23 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
-  <table>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr data-type="button-element">
       <td :align="component.attribute.align" class="st-position-relative" width="100%">
-        <a @click.prevent :href="component.attribute.href" :target="component.attribute.target" style="text-decoration:none;">
-          <table :width="component.attribute.width"
-                 :height="component.attribute.height"
+        <a @click.prevent 
+           :href="component.attribute.href" 
+           :target="component.attribute.target" 
+           style="text-decoration:none;"
+        >
+          <table :width="component.attribute.width" 
+                 :height="component.attribute.height" 
                  :bgcolor="component.attribute.bgcolor.hex"
-                 border="0"
-                 cellpadding="0"
+                 border="0" 
+                 cellpadding="0" 
                  cellspacing="0"
           >
             <tr>
-              <td width="100%"
-                  align="center"
+              <td width="100%" 
+                  align="center" 
                   :bgcolor="component.attribute.bgcolor.hex"
                   :height="component.attribute.height"
                   :style="component.style"
@@ -23,10 +27,10 @@
               </td>
             </tr>
           </table>
-        </a>
+        </a>  
       </td>
     </tr>
-  </table>
+  </table>  
   <!-- CALL TO ACTION ELEMENT ENDS -->
 </template>
 

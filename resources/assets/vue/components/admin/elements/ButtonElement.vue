@@ -27,7 +27,7 @@
                 :height="component.attribute.height"
                 :style="component.style"
             >
-                <tiny-mce :id="editorId" :value="component.text" data-key="text"></tiny-mce>
+                <tiny-mce :id="editorId" :value="component.data.text" data-key="text"></tiny-mce>
                 <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
             </td>
           </tr>
@@ -84,16 +84,6 @@
       },
     },
     methods: {
-      input (text, key) {
-        this.$store.commit('module/updateElement', {
-          columnId: this.columnId,
-          componentId: this.componentId,
-          data: {
-            text: text
-          }
-        });
-      },
-
       setComponent(e) {
         if (!$(e.target).hasClass("st-remove")){
           this.$store.commit("module/setCurrentComponent", {
