@@ -96,6 +96,12 @@
                 };
                 
             });
+
+            editor.on('init', (e) => {
+              // Set focus on first click
+              editor.focus();
+            });
+
           }
 
         };
