@@ -1,5 +1,5 @@
 web:
-  image: "fanbridge/web:v2.0"
+  image: "registry.stensuldev.net/dockerfiles/web-2.0.0"
   ports:
    - "3000:80"
   volumes:
@@ -10,7 +10,7 @@ web:
     - queue
 
 worker:
-  image: "fanbridge/web:v2.0"
+  image: "registry.stensuldev.net/dockerfiles/web-2.0.0"
   command: php /usr/src/app/artisan queue:work --daemon
   volumes:
    - ./storage/logs/:/var/log/
