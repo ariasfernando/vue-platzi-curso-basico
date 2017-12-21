@@ -13,7 +13,9 @@ class Jobs extends Migration
      */
     public function up()
     {
-        Schema::create('jobs');
+        if (!Schema::hasTable('jobs')) {
+            Schema::create('jobs');
+        }
     }
 
     /**

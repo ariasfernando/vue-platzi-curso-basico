@@ -13,7 +13,9 @@ class LogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('logs');
+        if (!Schema::hasTable('logs')) {
+            Schema::create('logs');
+        }
     }
 
     /**

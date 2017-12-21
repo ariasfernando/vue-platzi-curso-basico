@@ -8,12 +8,17 @@ use Stensul\Models\Permission;
 class AdminPermissions extends Migration
 {
     private $permissions = [
-        ['name' => 'access_admin', 'description' => 'Allow user to access to Admin panel.'],
+        ['name' => 'access_admin', 'description' => 'Allow user to access the Admin panel.'],
         ['name' => 'access_admin_libraries', 'description' => 'Allow user to access libraries.'],
         ['name' => 'access_admin_modules', 'description' => 'Allow user to access modules.'],
         ['name' => 'access_admin_permissions', 'description' => 'Allow user to access permissions.'],
         ['name' => 'access_admin_roles', 'description' => 'Allow user to access roles.'],
-        ['name' => 'access_admin_users', 'description' => 'Allow user to access users.']
+        ['name' => 'access_admin_users', 'description' => 'Allow user to access users.'],
+        ['name' => 'access_dashboard', 'description' => 'Allow user to access the dashboard.'],
+        ['name' => 'access_campaigns', 'description' => 'Allow user to access campaigns.'],
+        ['name' => 'edit_campaign', 'description' => 'Allow user to access the campaign editor.'],
+        ['name' => 'access_proof', 'description' => 'Allow user to access Proofs.'],
+        ['name' => 'edit_proof', 'description' => 'Allow user to edit Proofs.']
     ];
     /**
      * Run the migrations.

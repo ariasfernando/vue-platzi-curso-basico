@@ -13,7 +13,9 @@ class MigrationsTable extends Migration
      */
     public function up()
     {
-        //
+        if (!Schema::hasTable('migrations')) {
+            Schema::create('migrations');
+        }
     }
 
     /**
@@ -23,6 +25,6 @@ class MigrationsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('migrations');
     }
 }

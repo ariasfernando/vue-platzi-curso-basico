@@ -13,7 +13,9 @@ class CreateRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('roles');
+        if (!Schema::hasTable('roles')) {
+            Schema::create('roles');
+        }
     }
 
     /**
