@@ -13,7 +13,9 @@ class CreateModulesTable extends Migration
      */
     public function up()
     {
-        Schema::create('modules');
+        if (!Schema::hasTable('modules')) {
+            Schema::create('modules');
+        }
     }
 
     /**

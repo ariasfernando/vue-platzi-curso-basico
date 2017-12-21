@@ -5,6 +5,7 @@
       @click="setActiveModule(moduleId)"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
+      v-on-clickaway="unsetActiveModule"
   >
     <td class="st-toolbar-content st-position-relative">
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
@@ -17,6 +18,7 @@
       @click="setActiveModule(moduleId)" 
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
+      v-on-clickaway="unsetActiveModule"
   >
     <td class="st-toolbar-content st-position-relative"
         :style="module.structure.style"
@@ -69,9 +71,13 @@
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
+  import { mixin as clickaway } from 'vue-clickaway';
 
   module.exports = {
     name: 'Module',
+    mixins: [
+      clickaway
+    ],
     props: ['moduleId'],
     computed: {
       module() {
@@ -154,7 +160,26 @@
         // Clear 3rd column
         this.$store.commit("campaign/setCurrentComponent", {});
         this.$store.commit("campaign/setCurrentModule", null);
+      },
+      unsetActiveModule(e) {
+        // TODO: improve this code using store.getters, avoiding using classes from 
+        let isTargetingThirdColumn = $(e.target).closest(".component-settings").length > 0;
+        let isTargetingAModule = $(e.target).hasClass("st-module-wrapper") || $(e.target).closest(".st-module-wrapper").length > 0;
+        let hasPluginsActivated = $(".settings-wrapper").length > 0;
+
+        if(!isTargetingThirdColumn) {
+          if(!isTargetingAModule) {
+            this.$store.commit("campaign/setActiveModule", null);
+            this.$store.commit("campaign/setCurrentModule", null);
+          }
+        }
+        else {
+          if(!hasPluginsActivated) {
+            this.$store.commit("campaign/setActiveModule", null);
+          }
+        }
       }
+
     },
     components: {
       TextElement,

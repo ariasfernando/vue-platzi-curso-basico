@@ -13,7 +13,9 @@ class CreatePasswordResetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('password_resets');
+        if (Schema::hasTable('password_resets')) {
+            Schema::create('password_resets');
+        }
     }
 
     /**
