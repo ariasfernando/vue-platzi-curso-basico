@@ -2,7 +2,7 @@
   <div class="component-settings">
     <h2 v-if="ready && component.plugins && Object.keys(component.plugins).length !== 0">
       <i class="glyphicon glyphicon-tasks"></i>
-      {{ toCamel(component.type) }}
+      {{ toCamel(component.type.replace('-element', '')) }}
     </h2>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
