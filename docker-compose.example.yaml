@@ -31,3 +31,12 @@ services:
     - "8008:80" 
     links:
       - documentstore:db
+    environment:
+      - DB_NAME=documentstore
+      - DB_PORT_27017_TCP_ADDR=documentstore
+  mail:
+    image: "jeanberu/mailcatcher"
+    ports:
+      - "1080:1080"
+    environment:
+      - SMTP_PORT=25
