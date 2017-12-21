@@ -8,7 +8,7 @@ use Stensul\Models\Permission;
 class AdminPermissions extends Migration
 {
     private $permissions = [
-        ['name' => 'access_admin', 'description' => 'Allow user to access to Admin panel.'],
+        ['name' => 'access_admin', 'description' => 'Allow user to access the Admin panel.'],
         ['name' => 'access_admin_libraries', 'description' => 'Allow user to access libraries.'],
         ['name' => 'access_admin_modules', 'description' => 'Allow user to access modules.'],
         ['name' => 'access_admin_permissions', 'description' => 'Allow user to access permissions.'],
