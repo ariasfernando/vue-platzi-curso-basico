@@ -31,3 +31,6 @@ services:
     - "8008:80" 
     links:
       - documentstore:db
+    environment:
+      - DB_NAME=documentstore
+      - DB_PORT_27017_TCP_ADDR=documentstore
