@@ -13,7 +13,9 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users');
+        if (!Schema::hasTable('users')) {
+            Schema::create('users');
+        }
     }
 
     /**

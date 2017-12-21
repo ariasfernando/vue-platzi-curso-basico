@@ -13,7 +13,9 @@ class Libraries extends Migration
      */
     public function up()
     {
-        Schema::create('libraries');
+        if (!Schema::hasTable('white_list')) {
+            Schema::create('white_list');
+        }
     }
 
     /**

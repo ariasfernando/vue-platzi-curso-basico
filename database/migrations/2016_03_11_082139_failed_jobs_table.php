@@ -13,7 +13,9 @@ class FailedJobsTable extends Migration
      */
     public function up()
     {
-        Schema::create('failed_jobs');
+        if (!Schema::hasTable('failed_jobs')) {
+            Schema::create('failed_jobs');
+        }
     }
 
     /**

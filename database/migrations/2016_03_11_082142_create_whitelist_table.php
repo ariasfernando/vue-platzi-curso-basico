@@ -13,7 +13,9 @@ class CreateWhitelistTable extends Migration
      */
     public function up()
     {
-        Schema::create('white_list');
+        if (!Schema::hasTable('white_list')) {
+            Schema::create('white_list');
+        }
     }
 
     /**
