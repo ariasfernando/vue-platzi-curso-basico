@@ -64,7 +64,7 @@
           init_instance_callback: (editor) => {
 
             editor.on('blur', (e) => {
-              this.$store.dispatch('campaign/updateElement', {
+              this.$store.commit('campaign/updateElement', {
                 moduleId: this.currentComponent.moduleId,
                 columnId: this.currentComponent.columnId,
                 componentId: this.currentComponent.componentId,
@@ -96,6 +96,12 @@
                 };
                 
             });
+
+            editor.on('init', (e) => {
+              // Set focus on first click
+              editor.focus();
+            });
+
           }
 
         };

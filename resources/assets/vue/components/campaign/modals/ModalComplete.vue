@@ -70,21 +70,21 @@
       },
     },
     watch:{
-      campaign(value){
+      campaign(value) {
         this.html = html_beautify(value.campaign_data.body_html, {
           'indent_size': 2,
           'wrap_line_length': 120,
         });
       },
     },
+    data () {
+      return {
+        plainText: '',
+        textareaType: 'normal_html',
+        html: '',
+      }
+    },
     methods: {
-      data () {
-        return {
-          plainText: '',
-          textareaType: 'normal_html',
-          html: '',
-        }
-      },
       getPlainText() {
         campaignService.processPlainText(this.campaign.campaign_id)
           .then((response) => {
