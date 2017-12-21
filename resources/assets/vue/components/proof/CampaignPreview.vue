@@ -5,7 +5,7 @@
             <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
-                        <table id="emailCanvas" class="email-canvas wrapper-table" width="{{ $params['campaign_data']->getLibraryConfig('template_width') }}" cellspacing="0" cellpadding="0" border="0">
+                        <table id="emailCanvas" class="stx-email-canvas wrapper-table" width="{{ $params['campaign_data']->getLibraryConfig('template_width') }}" cellspacing="0" cellpadding="0" border="0">
                             <tbody>
                                 {!! $params['campaign_data']->body_html !!}
                             </tbody>

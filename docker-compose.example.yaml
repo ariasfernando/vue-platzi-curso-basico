@@ -1,35 +1,42 @@
-web:
-  image: "fanbridge/web:v2.0"
-  ports:
-   - "3000:80"
-  volumes:
-   - ./storage/logs/:/var/log/
-   - .:/usr/src/app
-  links:
-    - documentstore
-    - queue
-
-worker:
-  image: "fanbridge/web:v2.0"
-  command: php /usr/src/app/artisan queue:work --daemon
-  volumes:
-   - ./storage/logs/:/var/log/
-   - .:/usr/src/app
-  links:
-    - documentstore
-    - queue
-
-documentstore:
-  image: "mongo"
-  volumes:
-    - ./storage/data/:/data/db
-    
-queue:
-  image: "redis"
-
-rockmongo:
-  image: "webts/rockmongo"
-  ports:
-   - "8008:80" 
-  links:
-    - documentstore:db
+version: '2'
+services:
+  web:
+    image: "registry.stensuldev.net/dockerfiles/web-2.0.0"
+    ports:
+    - "3000:80"
+    volumes:
+    - ./storage/logs/:/var/log/
+    - .:/usr/src/app
+    links:
+      - documentstore
+      - queue
+  worker:
+    image: "registry.stensuldev.net/dockerfiles/web-2.0.0"
+    command: php /usr/src/app/artisan queue:work --daemon
+    volumes:
+    - ./storage/logs/:/var/log/
+    - .:/usr/src/app
+    links:
+      - documentstore
+      - queue
+  documentstore:
+    image: "mongo"
+    volumes:
+      - ./storage/data/:/data/db
+  queue:
+    image: "redis"
+  rockmongo:
+    image: "webts/rockmongo"
+    ports:
+    - "8008:80" 
+    links:
+      - documentstore:db
+    environment:
+      - DB_NAME=documentstore
+      - DB_PORT_27017_TCP_ADDR=documentstore
+  mail:
+    image: "jeanberu/mailcatcher"
+    ports:
+      - "1080:1080"
+    environment:
+      - SMTP_PORT=25

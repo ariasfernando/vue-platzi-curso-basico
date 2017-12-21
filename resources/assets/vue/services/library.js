@@ -1,7 +1,7 @@
 import Q from 'q';
 import _ from 'underscore-contrib';
 import request from '../utils/request';
-import Library from '../models/library';
+import Library from '../models/Library';
 import endpoints from '../resources/endpoints';
 
 export default {

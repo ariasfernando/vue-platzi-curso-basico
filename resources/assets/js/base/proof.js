@@ -16,7 +16,7 @@
 			$(document).trigger('switchBuildingMode', selected);
 
 			var width = ( selected == 'desktop' ) ? Application.globals.emailWidth : Application.globals.emailMobileWidth;
-			$('.email-canvas').css({width: width + "px"});
+			$('.stx-email-canvas').css({width: width + "px"});
 
 			// TODO: Can you enlighten me?
 			Application.utils.changeBuildingMode(selected);
