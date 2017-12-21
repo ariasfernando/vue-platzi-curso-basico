@@ -76,7 +76,7 @@
     outline: 2px dashed @icon-option;
     color:@focus;
     background-color: @hover;
-    height: 10px;
+    height: 15px;
     display: table-row;
     list-style-type: none;
     font-size: 13px;

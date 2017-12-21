@@ -7,6 +7,7 @@ const columnBackgroundColor = require('./column-background-color');
 const moduleBackgroundColor = require('./module-background-color');
 const uploadImage = require('./upload-image');
 const imageEditor = require('./image-editor');
+const variableHeight = require('./variable-height');
 
 module.exports = {
   alignment,
@@ -18,4 +19,5 @@ module.exports = {
   columnBackgroundColor,
   moduleBackgroundColor,
   imageEditor,
+  variableHeight,
 };

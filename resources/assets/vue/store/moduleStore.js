@@ -2,8 +2,8 @@ import Vue from 'vue/dist/vue';
 import Q from 'q';
 import _ from 'lodash';
 import clone from 'clone';
+import Element from '../models/Element';
 import moduleService from '../services/module';
-import defaultElements from '../resources/elements';
 import imageService from '../services/image';
 
 const state = {
@@ -62,10 +62,9 @@ const mutations = {
   clearCurrentComponent(state) {
     state.currentComponent = {};
   },
-  updateElement(state, data) {
-    _.each(data.data, (value, field) => {
-      state.module.structure.columns[data.columnId].components[data.componentId][field] = value;
-    });
+  updateElement(state, payload) {
+    const update = { ...state.module.structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
+    state.module.structure.columns[payload.columnId].components[payload.componentId].data = update;
   },
   saveComponent(state, data) {
     state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
@@ -155,7 +154,7 @@ const mutations = {
 
 const actions = {
   addColumn(context) {
-    const column = clone(defaultElements.column);
+    // Get column plugins
     const colPlugins = {};
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
 
@@ -165,9 +164,10 @@ const actions = {
       }
     });
 
-    column.plugins = colPlugins;
+    // Create new instance of Element width default column data
+    const element = new Element({ type: 'column-element', colPlugins });
 
-    context.commit('addColumn', column);
+    context.commit('addColumn', element.getProperties());
   },
   sortColumn(context, data) {
     context.commit('sortColumn', data);
@@ -209,7 +209,7 @@ const actions = {
       .then((response) => {
         deferred.resolve(response);
       })
-      .catch(error => {
+      .catch((error) => {
         context.commit('error', error);
         deferred.reject(error);
       });

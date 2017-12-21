@@ -4,7 +4,8 @@ body.base-auth-challenge-recaptcha_login,
 body.base-auth-login,
 body.base-password,
 body.base-register,
-body.base-change_password{
+body.base-change_password,
+body.base-reset{
 	background: @stensul-purple;
 	padding-top: 80px;
 
@@ -15,6 +16,7 @@ body.base-change_password{
 		width: 370px;
 		float: none;
 		margin: 0 auto;
+		clear:both;
 
 		a{
 			font-size: 50px;
@@ -73,8 +75,30 @@ body.base-change_password{
 			border: none;
 		}
 
+		.alert {
+			&.alert-success {
+				&.text-center a{
+					color: #00A4E4;
+				    text-decoration: none;
+				    font-weight: 700;
+				    font-size: 14px;
+
+				    &:hover,
+					&:focus {
+					    color: #006d98;
+					    text-decoration: underline;
+					}
+				}
+			}
+		}
+
 		.app-email{
 			margin-top: 10px;
+		}
+
+		.g-recaptcha {
+			transform: scale(0.96);
+			transform-origin: 0 0;
 		}
 	}
 

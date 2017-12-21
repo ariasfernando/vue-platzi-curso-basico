@@ -12,9 +12,18 @@ export default {
       'mce-edit-focus',
       'mce-content-body',
       'hubspot-mergetag',
+      // Remove Class to aig
+      'st-module-wrapper',
+      'st-toolbar-content',
+      'st-position-relative',
+      'st-toolbar',
+      'st-line-height-reset',
+      'st-text-style',
+      'st-edit-text'
     ],
     // Array of attributes to clean from final html
     attrSelectors: [
+      'data-type',
       'data-params',
       'data-modal',
       'data-open-element-config',
@@ -42,7 +51,7 @@ export default {
       '.st-remove-element',
     ],
   },
-
+  
   clean(selector) {
     let $canvas = null;
     let $cleanedHtml = null;
@@ -51,14 +60,14 @@ export default {
 
     // Clone content
     $cleanedHtml = $canvas.clone(true);
-
+    
     // Remove attr tags function clean
     const $removeAttr = this.removeDataHtml($cleanedHtml, this.cleanOptions.attrSelectors, 'attr');
     // Function removeDataHtml fail attributes
     if ($removeAttr !== false) {
       $cleanedHtml = $removeAttr;
     }
-
+    
     // Remove class tags
     const $removeClass = this.removeDataHtml($cleanedHtml, this.cleanOptions.classSelectors, 'class');
     // Function removeDataHtml fail attributes
@@ -73,29 +82,29 @@ export default {
 
     // Remove every class starting with "stx-"
     $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
-
+    
     // Remove attr class if it's empty.
     $cleanedHtml.find("[class='']").removeAttr('class');
-
+    
     // Remove attr style if it's empty.
     $cleanedHtml.find("[style='']").removeAttr('style');
-
+    
     // Remove tooltip
     $cleanedHtml.find('.actions-buttons-tooltip').remove();
-
+    
     // Remove toolbox Tinymce
     $cleanedHtml.find('.text-overlay-toolbox').remove();
-
+    
     // Convert data-contenteditable-href to href
     if ($cleanedHtml.find('[data-contenteditable-href]').length) {
       const $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
-
+      
       $.each($targetContenteditableHref, (key, element) => {
         const tempDataContenteditableHref = $(element).data('contenteditable-href');
         // Add href
         $(element).attr('href', tempDataContenteditableHref);
-        // Remove data-contenteditable-href
-        $(element).removeAttr('data-contenteditable-href');
+        // Remove data-contenteditable-href 
+        $(element).removeAttr('data-contenteditable-href'); 
       });
     }
 
@@ -105,7 +114,7 @@ export default {
     $.each($wrapperElementRemove, (i, element) => {
       const $element = $(element);
 
-      // Replace element with the content element.
+        // Replace element with the content element.
       if ($element.is('table')) {
         $element.replaceWith($element.find('td:first').html());
       } else {
@@ -115,7 +124,7 @@ export default {
 
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
-
+    
     return this.charConvert($cleanedHtml.html());
   },
   

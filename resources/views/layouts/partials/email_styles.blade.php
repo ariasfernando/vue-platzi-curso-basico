@@ -58,8 +58,14 @@
         isset($params['campaign_data']['library_config']['linkColor'])
     )
        a{
-            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}
-        } 
+            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+        }
+        a *{ 
+            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+        }         
+        a:link{ 
+             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+        }  
     @endif
 
     @media  screen and (max-width: 480px) {
@@ -99,6 +105,22 @@
 		td, span, p, a, h5, h6, div {
             font-family: Arial, Helvetica, sans-serif !important;
         }
+
+        @if(isset($params['campaign_data']['library_config']) && 
+            isset($params['campaign_data']['library_config']['linkColor'])
+        )
+           a{
+                color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
+            }
+          
+            a *{ 
+                color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
+            } 
+                    
+            a:link{ 
+                 color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
+            }  
+        @endif
 	</style>
 <![endif]-->
 
@@ -107,6 +129,21 @@
         .st-mso-full-width{
             width: 100%;
         }
+        @if(isset($params['campaign_data']['library_config']) && 
+            isset($params['campaign_data']['library_config']['linkColor'])
+        )
+           a{
+                color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
+            }
+          
+            a *{ 
+                color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
+            } 
+                    
+            a:link{ 
+                 color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
+            }  
+        @endif
 	</style>
 <![endif]-->
 

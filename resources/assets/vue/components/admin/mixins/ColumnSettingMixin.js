@@ -21,16 +21,6 @@ export default {
     module() {
       return this.$store.getters["module/module"];
     },
-    activeColumn() {
-      return this.$store.getters["module/activeColumn"];
-    }
-  },
-  watch : {
-    activeColumn(val) {
-      setTimeout(() => {
-        this.$refs.tabs.setTab(val);
-      }, 100);
-    },
   },
   data () {
     return {
@@ -57,7 +47,6 @@ export default {
                                                      .toggleClass('st-show-element');
     },
     saveColumnSettings( key ) {
-      console.log("save", key)
       _.each(this.module.structure.columns[key].settings, (option, index) => {
         if (option.link === 'style') {
           if ( option.group && option.group.length > 0 ){
@@ -81,7 +70,6 @@ export default {
     },
     // TODO Update date used mutation.
     updateColumnSettings( key , name, link , isGroup, transparentChecked ){
-      console.log("update", [key, name, link, isGroup, transparentChecked])
       _.each(this.module.structure.columns[key].settings, (option, index) => {
 
           if ( isGroup ){
@@ -101,7 +89,6 @@ export default {
 
     updateFromPicker(value) {
       this.colors = value;
-      console.log('changed by picker');
     },
 
 

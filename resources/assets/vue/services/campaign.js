@@ -3,7 +3,7 @@ import _ from 'lodash';
 import request from '../utils/request';
 import endpoints from '../resources/endpoints';
 import store from '../store';
-import Campaign from '../models/campaign';
+import Campaign from '../models/Campaign';
 
 export default {
   getCampaign(campaignId) {

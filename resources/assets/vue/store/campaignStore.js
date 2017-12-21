@@ -1,4 +1,3 @@
-import Vue from 'vue/dist/vue';
 import _ from 'lodash';
 import Q from 'q';
 import clone from 'clone';
@@ -97,10 +96,11 @@ function campaignStore() {
       setCustomModule(state, moduleId) {
         state.currentCustomModuleId = moduleId;
       },
-      updateComponentData(state, edited) {
-        for (const key in edited.data) {
-          state.modules[edited.moduleId].structure.columns[edited.columnId].components[edited.componentId][key] = edited.data[key];
-        }
+      updateElement(state, payload) {
+        const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
+        state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
+
+        state.dirty = true;
       },
       saveSetting(state, setting) {
         state.editedSettings[setting.name] = setting.value;
@@ -131,6 +131,10 @@ function campaignStore() {
         const originalData = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data;
         const updated = { ...originalData, ...payload.data };
         state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data = updated;
+      },
+      saveComponentStyle(state, data) {
+        const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
+        component.style[data.property] = data.value;
       },
       saveComponentAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
@@ -277,10 +281,6 @@ function campaignStore() {
           });
 
         return deferred.promise;
-      },
-      updateElement(context, edited) {
-        context.commit('setDirty', true);
-        context.commit('updateComponentData', edited);
       },
       sendPreview(context, data) {
         return campaignService.sendPreview(data);
