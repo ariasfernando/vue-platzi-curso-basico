@@ -40,3 +40,4 @@ services:
       - "1080:1080"
     environment:
       - SMTP_PORT=25
+
