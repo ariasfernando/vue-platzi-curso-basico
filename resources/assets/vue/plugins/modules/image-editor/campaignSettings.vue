@@ -3,7 +3,7 @@
 
     <div class="plugin-wrapper-inner">
       <span>
-        <button @click="showImageEditor = true"><i class="glyphicon glyphicon-cloud-upload"></i> Upload Image</button>
+        <button @click="showImageEditor = true"><i class="glyphicon glyphicon-cloud-upload"></i> Update Image</button>
       </span>
     </div>
 
