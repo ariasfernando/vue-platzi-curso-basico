@@ -109,7 +109,6 @@
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import Element from '../../models/Element';
-  import Plugin from '../../models/Plugin';
   import TextElement from './elements/TextElement.vue';
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
@@ -184,10 +183,9 @@
 
           // Get element compatible plugins
           const plugins = {};
-          _.each(this.$_app.modulePlugins, (pluginProperties, name) => {
-            if (pluginProperties.target.indexOf(elType.replace('-element', '')) !== -1) {
-              const plugin = new Plugin(pluginProperties);
-              plugins[name] = plugin.getProperties();
+          _.each(this.$_app.modulePlugins, (plugin, name) => {
+            if (plugin.target.indexOf(elType.replace('-element', '')) !== -1) {
+              plugins[name] = clone(plugin);
             }
           });
 
