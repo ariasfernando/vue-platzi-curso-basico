@@ -155,17 +155,17 @@ const mutations = {
 const actions = {
   addColumn(context) {
     // Get column plugins
-    const colPlugins = {};
+    const plugins = {};
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
 
     _.each(modulePlugins, (plugin, name) => {
       if (plugin.target.indexOf('column') !== -1) {
-        colPlugins[name] = clone(plugin);
+        plugins[name] = clone(plugin);
       }
     });
 
     // Create new instance of Element width default column data
-    const element = new Element({ type: 'column-element', colPlugins });
+    const element = new Element({ type: 'column-element', plugins });
 
     context.commit('addColumn', element.getProperties());
   },

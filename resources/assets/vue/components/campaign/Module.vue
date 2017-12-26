@@ -165,7 +165,7 @@
         // TODO: improve this code using store.getters, avoiding using classes from 
         let isTargetingThirdColumn = $(e.target).closest(".component-settings").length > 0;
         let isTargetingAModule = $(e.target).hasClass("st-module-wrapper") || $(e.target).closest(".st-module-wrapper").length > 0;
-        let hasPluginsActivated = $(".settings-wrapper").length > 0;
+        let hasPluginsActivated = $(".settings-wrapper, .plugin-wrapper").length > 0;
 
         if(!isTargetingThirdColumn) {
           if(!isTargetingAModule) {

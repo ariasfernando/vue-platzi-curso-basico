@@ -16,6 +16,7 @@ export default {
       reverse: false,
       showModal: false,
       showPreview: false,
+      showModalEsp: false,
       showModalEdit: false,
       selectedCampaignId: null,
       baseUrl: Application.globals.baseUrl,
