@@ -109,10 +109,11 @@
                 ><i class="glyphicon glyphicon-pencil" v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"></i></a>
               <a href="#" class="btn-upload-api"
                 v-for="api in campaign.api"
-                v-if="!campaign.locked"
+                v-if="!campaign.locked && campaign.library_config.esp && campaign.library_config.espProvider"
                 :data-campaign-id="campaign._id"
                 :data-api-driver="api.driver"
-                :title="'Upload to ' + api.title"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                :title="'Upload to ' + api.title"
+                @click="upload(campaign._id)"><i class="glyphicon glyphicon-cloud-upload"></i></a>
               <a href="#" title="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
@@ -146,6 +147,7 @@
       </modal>
       <modal-preview ref="preview"></modal-preview>
       <modal-code :type="codeType"></modal-code>
+      <modal-esp v-if="showModalEsp" v-on:close="showModalEsp = false"></modal-esp>
     </div>
   </div>
 </template>
@@ -154,16 +156,18 @@
   import TableMixin from './mixins/TableMixin.js';
   import ModalPreview from '../campaign/modals/ModalPreview.vue'
   import ModalCode from '../campaign/modals/ModalCode.vue'
+  import ModalEsp from '../campaign/modals/ModalEsp.vue'
 
   export default {
     components: {
       ModalPreview,
-      ModalCode
+      ModalCode,
+      ModalEsp
     },
     data: function() {
       return {
         last_uploads: {},
-        codeType: ''
+        codeType: '',
       }
     },
     mixins: [ TableMixin ],
@@ -185,7 +189,6 @@
         return false;
       },
       preview(campaignId) {
-
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch("campaign/getCampaignData", campaignId).then(response => {
           this.$refs.preview.updateDimensions();
@@ -205,6 +208,20 @@
           this.codeType = type;
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalCode');
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
+        });
+      },
+      upload(campaignId) {
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/getCampaignData", campaignId).then(response => {
+          this.$store.commit("global/setLoader", false);
+          this.showModalEsp = true;
+          this.$store.commit("campaign/toggleModal", 'modalEsp');
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(

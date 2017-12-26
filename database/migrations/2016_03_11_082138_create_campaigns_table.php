@@ -13,7 +13,9 @@ class CreateCampaignsTable extends Migration
      */
     public function up()
     {
-        Schema::create('campaigns');
+        if (!Schema::hasTable('campaigns')) {
+            Schema::create('campaigns');
+        }
     }
 
     /**

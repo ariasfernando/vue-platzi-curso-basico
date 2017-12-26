@@ -16,6 +16,7 @@
                 :width="templateWidth"
                 :options="options"
                 :element="'table'"
+                @end="onEnd"
                 @sort="onSort">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
@@ -148,6 +149,18 @@
       onSort(e){
         this.$store.commit("campaign/setDirty", true);
       },
+      onEnd (evt) {
+        // moduleId is a reactive prop, and it matches the index
+        const moduleId = evt.newIndex;
+        // Set active Module
+        this.$store.commit("campaign/setActiveModule", moduleId);
+        // Set the first component in the module as current component
+        this.$store.commit("campaign/setCurrentComponent", {
+          moduleId,
+          columnId: 0, 
+          componentId: 0
+        });
+      },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
       },
@@ -247,7 +260,6 @@
     width: 92px;
     height: 82px;
     background: white;
-    border: 1px solid @icon-option;
     margin: 0 5px;
     font-size: 34px;
     text-align: center;
@@ -284,6 +296,30 @@
         width: 100%!important;
         display: block!important; 
         height: auto !important;
+      }
+    }
+
+    tr.ghost-component{
+      text-align: center;
+      color:@focus;
+      background-color: @hover;
+      display: table-row;
+      vertical-align: middle;
+      list-style-type: none;
+      font-size: 13px;
+      z-index: 300;
+      opacity: 1!important;
+      &:before{
+        outline: 2px dashed @icon-option;
+        content: "Drag content here";
+        padding: 10px;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: center;
+        border: none;
+      }
+      *{
+        display: none;
       }
     }
   }

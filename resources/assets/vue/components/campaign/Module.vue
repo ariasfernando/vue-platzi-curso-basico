@@ -5,6 +5,7 @@
       @click="setActiveModule(moduleId)"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
+      v-on-clickaway="unsetActiveModule"
   >
     <td class="st-toolbar-content st-position-relative">
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
@@ -17,6 +18,7 @@
       @click="setActiveModule(moduleId)" 
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
+      v-on-clickaway="unsetActiveModule"
   >
     <td class="st-toolbar-content st-position-relative"
         :style="module.structure.style"
@@ -69,9 +71,13 @@
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
+  import { mixin as clickaway } from 'vue-clickaway';
 
   module.exports = {
     name: 'Module',
+    mixins: [
+      clickaway
+    ],
     props: ['moduleId'],
     computed: {
       module() {
@@ -151,10 +157,47 @@
       setActiveModule(moduleId) {
         // Set active Module
         this.$store.commit("campaign/setActiveModule", moduleId);
-        // Clear 3rd column
-        this.$store.commit("campaign/setCurrentComponent", {});
-        this.$store.commit("campaign/setCurrentModule", null);
+        // Set the first component in the module as current component
+        this.$store.commit("campaign/setCurrentComponent", {
+          moduleId,
+          columnId: 0, 
+          componentId: 0
+        });
+      },
+      isWrappedIn(e,className) {
+        return $(e.target).hasClass(className) || $(e.target).closest(`.${className}`).length > 0;
+      },
+      unsetActiveModule(e) {
+        // TODO: improve this code (related to v-on-clickaway directive) avoiding using UI selectors
+        // Idea 1, using Automata Theory, defining states and event transitions
+        // Idea 2, using getters from the campaign's store
+
+        let isTargetingThirdColumn  = $(e.target).closest(".component-settings").length > 0;
+        let isTargetingAModule      = this.isWrappedIn(e, "st-module-wrapper");
+        let isTargetingMenuModule   = this.isWrappedIn(e, "beta-subitem-single");
+        let hasPluginsActivated     = $(".settings-wrapper, .plugin-wrapper").length > 0;
+
+        // Treatment for anything except 3rd column
+        if(!isTargetingThirdColumn) {
+          // Treatment for anything except a module
+          if(!isTargetingAModule) {
+            // Treatment for anything except the menu module
+            // Necesary filter to keep active state for last module added, triggered in EmailCanvas.vue::addModule()
+            if(!isTargetingMenuModule) {
+              this.$store.commit("campaign/setActiveModule", null);
+              this.$store.commit("campaign/setCurrentModule", null);
+            }
+          }
+        }
+        // Keep open 3rd column for active module
+        else {
+          // Deactive only if it hasn't activated plugins
+          if(!hasPluginsActivated) {
+            this.$store.commit("campaign/setActiveModule", null);
+          }
+        }
       }
+
     },
     components: {
       TextElement,

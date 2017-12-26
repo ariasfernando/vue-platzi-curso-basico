@@ -287,7 +287,6 @@ class Campaign extends Eloquent
      */
     public function getProof()
     {
-        error_log($this->proof_id);
         if (isset($this->proof_id)) {
             return Proof::find($this->proof_id);
         }
