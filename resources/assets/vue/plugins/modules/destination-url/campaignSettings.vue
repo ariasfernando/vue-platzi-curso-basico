@@ -3,15 +3,18 @@
     <div>
       <span>
         <label>Destination Url</label>
-        <p>
+        <p v-if="validationRules">
           <input
             name="href"
             type="text"
             placeholder="http://examp.le"
             v-model="href"
-            v-validate.initial="'required|url'"
+            v-validate.initial="validationRules"
             :class="{'input': true, 'is-danger': errors.has('href') }">
           <span v-show="errors.has('href')" class="help is-danger">{{ errors.first('href') }}</span>
+        </p>
+        <p v-else>
+          <input name="href" type="text" placeholder="http://examp.le" v-model="href">
         </p>
       </span>
       <span>
@@ -67,9 +70,18 @@
         },
         set(value) {
           this.saveComponentAttribute('href', value);
-          this.validate();
+
+          if (this.validationRules) {
+            this.validate();
+          }
         },
+      },
+      validationRules() {
+        return this.plugin.config.required ? 'required|url' : null;
       }
+    },
+    mounted() {
+      console.log(this.plugin);
     },
     data() {
       return {
