@@ -161,19 +161,34 @@
         this.$store.commit("campaign/setCurrentComponent", {});
         this.$store.commit("campaign/setCurrentModule", null);
       },
+      isWrappedIn(e,className) {
+        return $(e.target).hasClass(className) || $(e.target).closest(`.${className}`).length > 0;
+      },
       unsetActiveModule(e) {
-        // TODO: improve this code using store.getters, avoiding using classes from 
-        let isTargetingThirdColumn = $(e.target).closest(".component-settings").length > 0;
-        let isTargetingAModule = $(e.target).hasClass("st-module-wrapper") || $(e.target).closest(".st-module-wrapper").length > 0;
-        let hasPluginsActivated = $(".settings-wrapper, .plugin-wrapper").length > 0;
+        // TODO: improve this code (related to v-on-clickaway directive) avoiding using UI selectors
+        // Idea 1, using Automata Theory, defining states and event transitions
+        // Idea 2, using getters from the campaign's store
 
+        let isTargetingThirdColumn  = $(e.target).closest(".component-settings").length > 0;
+        let isTargetingAModule      = this.isWrappedIn(e, "st-module-wrapper");
+        let isTargetingMenuModule   = this.isWrappedIn(e, "beta-subitem-single");
+        let hasPluginsActivated     = $(".settings-wrapper, .plugin-wrapper").length > 0;
+
+        // Treatment for anything except 3rd column
         if(!isTargetingThirdColumn) {
+          // Treatment for anything except a module
           if(!isTargetingAModule) {
-            this.$store.commit("campaign/setActiveModule", null);
-            this.$store.commit("campaign/setCurrentModule", null);
+            // Treatment for anything except the menu module
+            // Necesary filter to keep active state for last module added, triggered in EmailCanvas.vue::addModule()
+            if(!isTargetingMenuModule) {
+              this.$store.commit("campaign/setActiveModule", null);
+              this.$store.commit("campaign/setCurrentModule", null);
+            }
           }
         }
+        // Keep open 3rd column for active module
         else {
+          // Deactive only if it hasn't activated plugins
           if(!hasPluginsActivated) {
             this.$store.commit("campaign/setActiveModule", null);
           }
