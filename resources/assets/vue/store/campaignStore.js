@@ -121,6 +121,9 @@ function campaignStore() {
       setActiveModule(state, moduleId) {
         state.activeModule = moduleId;
       },
+      setActiveLastModule(state) {
+        state.activeModule = state.modules.length-1;
+      },
       saveComponent(state, data) {
         const moduleId = data.moduleId;
         const columnId = data.columnId;

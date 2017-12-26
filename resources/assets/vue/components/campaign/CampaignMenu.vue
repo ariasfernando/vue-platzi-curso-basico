@@ -1,5 +1,5 @@
 <template>
-  <div class="expand">
+  <div class="expand st-module-menu-wrapper">
       <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
     
       <div class="beta-subitem" v-bind:class="{'is-collapsed' : collapsed }">
@@ -64,6 +64,8 @@
         const mod = clone(module);
         mod.data = {};
         this.$store.commit('campaign/addModule', mod);
+        // Set active on last module added
+        this.$store.commit('campaign/setActiveLastModule');
       },
       expand (item) {
         const index = this.expanded.indexOf(item);
