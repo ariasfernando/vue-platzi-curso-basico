@@ -4,6 +4,7 @@ namespace Stensul\Http\Controllers;
 
 use Auth;
 use Stensul\Models\Campaign;
+use Stensul\Models\Library;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Services\TagManager as Tag;
@@ -63,6 +64,15 @@ class DashboardController extends Controller
         ];
 
         return $this->renderView('dashboard', ['params' => $params]);
+    }
+
+    /**
+     * Get libraries for which the user has permission.
+     *
+     * @return array
+     */
+    public function getLibraries() {
+        return Auth::user()->getLibraries();
     }
 
     public function getCampaigns(Request $request, $type)

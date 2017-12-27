@@ -4,5 +4,6 @@ module.exports = {
   saveLibrary: require('./saveLibrary'),
   createLibrary: require('./createLibrary'),
   deleteLibrary: require('./deleteLibrary'),
+  searchLibraries: require('./searchLibrary'),
   fetchLibraries: require('./fetchLibrary')
 };

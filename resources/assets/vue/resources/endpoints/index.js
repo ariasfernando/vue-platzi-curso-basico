@@ -9,7 +9,8 @@ module.exports = {
     saveLibrary: { method: 'post', path: `${baseUrl}/admin/library/edit` },
     createLibrary: { method: 'post', path: `${baseUrl}/admin/library/create` },
     deleteLibrary: { method: 'post', path: `${baseUrl}/admin/library/delete` },
-    fetchLibraries: { method: 'post', path: `${baseUrl}/admin/library/list` },
+    searchLibraries: { method: 'post', path: `${baseUrl}/admin/library/list` },
+    fetchLibraries: { method: 'get', path: `${baseUrl}/dashboard/libraries` },
     espProviders: { method: 'post', path: `${baseUrl}/admin/library/esp` },
   },
   module: {
@@ -41,10 +42,10 @@ module.exports = {
     getConfig: { method: 'get', path: `${baseUrl}/config/:key` },
   },
   tag: {
-    fetchTags: { method: 'get', path: `${baseUrl}/dashboard/tags`}
+    fetchTags: { method: 'get', path: `${baseUrl}/dashboard/tags` }
   },
   api: {
-    uploadEmail: { method: 'post', path: `${baseUrl}/api/upload-email`},
-    uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId`}
+    uploadEmail: { method: 'post', path: `${baseUrl}/api/upload-email` },
+    uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId` }
   }
 };

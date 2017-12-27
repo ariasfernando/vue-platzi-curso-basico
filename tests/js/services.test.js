@@ -14,21 +14,29 @@ const expect = chai.expect;
  * == Test: Services
  */
 describe("== Services ==", () => {
-    describe("Library Services", () => {
-        describe("Fetch Libraries", () => {
-            it('Should return a list of libraries', (done) => {
-              libraryService.fetchLibraries().then((result) => {
-                expect(result).to.equal(fixtures.library.fetchLibraries);
-              }).then(done, done);
-            });
-        });
-
-        // describe("Get Library", () => {
-        //     it('Should return a library object', (done) => {
-        //       libraryService.getLibrary().then((result) => {
-        //         expect(result).to.equal(fixtures.library.getLibrary);
-        //       }).then(done, done);
-        //     });
-        // });
+  describe("Library Services", () => {
+    describe("Search Libraries", () => {
+      it('Should return a list of libraries', (done) => {
+        libraryService.searchLibraries().then((result) => {
+          expect(result).to.equal(fixtures.library.searchLibraries);
+        }).then(done, done);
+      });
     });
+
+    describe("Fetch Libraries", () => {
+      it('Should return a list of libraries', (done) => {
+        libraryService.fetchLibraries().then((result) => {
+          expect(result).to.equal(fixtures.library.fetchLibraries);
+        }).then(done, done);
+      });
+    });
+
+    // describe("Get Library", () => {
+    //   it('Should return a library object', (done) => {
+    //     libraryService.getLibrary().then((result) => {
+    //     expect(result).to.equal(fixtures.library.getLibrary);
+    //     }).then(done, done);
+    //   });
+    // });
+  });
 });

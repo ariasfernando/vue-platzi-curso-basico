@@ -153,7 +153,7 @@
           order_type: this.pagination.direction,
         };
 
-        libraryService.fetchLibraries(data)
+        libraryService.searchLibraries(data)
           .then((response) => {
             this.libraries = response;
             this.ready = true;
