@@ -63,9 +63,26 @@
       addModule (module) {
         const mod = clone(module);
         mod.data = {};
+
+        // Add module
         this.$store.commit('campaign/addModule', mod);
+        
         // Set active on last module added
         this.$store.commit('campaign/setActiveLastModule');
+        
+        setTimeout(() => {
+          this.autoScroll();
+        }, 100);  
+      },
+      autoScroll(){
+        let bounds = $(".section-canvas-container").outerHeight();
+        let isVisible = bounds < window.innerHeight && bounds > 0;
+
+        if (!isVisible) {
+            $('html,  .section-canvas-email').animate({
+                scrollTop: bounds
+            }, 2000);
+        }
       },
       expand (item) {
         const index = this.expanded.indexOf(item);
