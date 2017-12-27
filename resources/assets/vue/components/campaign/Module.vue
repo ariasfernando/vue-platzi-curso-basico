@@ -157,12 +157,9 @@
       setActiveModule(moduleId) {
         // Set active Module
         this.$store.commit("campaign/setActiveModule", moduleId);
-        // Set the first component in the module as current component
-        this.$store.commit("campaign/setCurrentComponent", {
-          moduleId,
-          columnId: 0, 
-          componentId: 0
-        });
+        // Clear 3rd column
+        this.$store.commit("campaign/setCurrentComponent", {});
+        this.$store.commit("campaign/setCurrentModule", null);
       },
       isWrappedIn(e,className) {
         return $(e.target).hasClass(className) || $(e.target).closest(`.${className}`).length > 0;

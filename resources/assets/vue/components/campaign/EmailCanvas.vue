@@ -154,12 +154,7 @@
         const moduleId = evt.newIndex;
         // Set active Module
         this.$store.commit("campaign/setActiveModule", moduleId);
-        // Set the first component in the module as current component
-        this.$store.commit("campaign/setCurrentComponent", {
-          moduleId,
-          columnId: 0, 
-          componentId: 0
-        });
+        // Trigger click to load 3rd Column
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
