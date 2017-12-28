@@ -5,7 +5,8 @@
       <draggable class="beta-subitem"
                  :element="'div'"
                  :options="options"
-                 :class="{'is-collapsed' : collapsed }">
+                 :class="{'is-collapsed' : collapsed }"
+                 @clone="onClone">
         <div v-for="item in items" class="beta-subitem-single">
           
           <div v-if="item.sub_menu" class="expand">
@@ -14,7 +15,7 @@
               <div class="beta-submodules">
                 <div v-for="subitem in item.sub_menu">
                   <div class="add single">
-                    <h2 @click="addModule(subitem)">
+                    <h2 class="draggable-item" @click="addModule(subitem)" :module="JSON.stringify(subitem)">
                       {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
                     </h2>
                   </div>
@@ -24,7 +25,7 @@
           </div>
 
           <div v-else class="add single">
-            <h2 @click="addModule(item)">
+            <h2 class="draggable-item" @click="addModule(item)" :module="JSON.stringify(item)">
               {{ item.name }} <i class="glyphicon glyphicon-plus"></i>
             </h2>
           </div>
@@ -78,7 +79,6 @@
     },
     methods: {
       addModule (module) {
-        console.log("addModule", module)
         const mod = clone(module);
         mod.data = {};
 
@@ -117,8 +117,15 @@
           event.target.className = "menu-active";
           event.target.nextElementSibling.classList.remove("beta-submodules-expanded");
         }
-
       },
+      onClone: function (evt) {
+        // Hack to handle draggable element and re-bind click to addModule method after drag & drop an element into email canvas
+        let cloneEl = evt.clone;
+        cloneEl.addEventListener('click', (e) => {
+          let module = JSON.parse($(cloneEl).find('.draggable-item').attr('module'));
+          this.addModule(module);
+        });
+      }
     }
   };
 </script>
@@ -128,28 +135,30 @@
   @focus-light: lighten(@focus, 30%);
   @hover: @focus-light;
 
-  .ghost-component{
-    text-align: center;
-    color:@focus;
-    background-color: @hover;
-    display: table-row;
-    vertical-align: middle;
-    list-style-type: none;
-    font-size: 13px;
-    z-index: 300;
-    opacity: 1!important;
-    &:before{
-      outline: 2px dashed @icon-option;
-      outline-offset: -2px;
-      content: "Drag content here";
-      padding: 10px;
-      text-transform: uppercase;
-      display: flex;
-      justify-content: center;
-      border: none;
-    }
-    *{
-      display: none;
+   #emailCanvas{
+    .ghost-component{
+      text-align: center;
+      color:@focus;
+      background-color: @hover;
+      display: table-row;
+      vertical-align: middle;
+      list-style-type: none;
+      font-size: 13px;
+      z-index: 300;
+      opacity: 1!important;
+      &:before{
+        outline: 2px dashed @icon-option;
+        outline-offset: -2px;
+        content: "Drag content here";
+        padding: 10px;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: center;
+        border: none;
+      }
+      *{
+        display: none;
+      }
     }
   }
 </style>

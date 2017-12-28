@@ -159,14 +159,7 @@
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
         // Set active on last module inserted
         this.$store.commit('campaign/setActiveModule', e.newIndex);
-        // Is thing working?
-        this.$forceUpdate();
-
-        this.nextTick(function () {
-          // DOM updated
-          console.log("DOM updated")
-        });
-
+        
          // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
