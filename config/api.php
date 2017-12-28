@@ -1,6 +1,6 @@
 <?php
 
- return [
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -41,7 +41,7 @@
             'type' => 'POST',
             'url' => '/rest/api/v1.1/auth/token',
             'config' => [
-                'base_uri' => 'https://login2.responsys.net'
+                'base_uri' => env('API_RESPONSYS_BASE_URI', '')
             ],
             'options' => [
                 'form_params' => [
@@ -290,5 +290,4 @@
             'url' => '/rest/asset/v1/folders.json'
         ]
     ]
-
- ];
+];

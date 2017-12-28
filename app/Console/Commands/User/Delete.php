@@ -6,6 +6,7 @@ use Stensul\Models\User;
 use Illuminate\Console\Command;
 use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
+use Symfony\Component\Console\Input\InputOption;
 
 class Delete extends Command
 {
@@ -28,7 +29,10 @@ class Delete extends Command
      */
     public function fire()
     {
-        $email = $this->ask('What is the user email ?');
+        $options = $this->option();
+        $email = is_null($options["email"])
+            ? $this->ask('What is the user email?')
+            : $options["email"];
 
         if ($email != "") {
             if (!User::where('email', '=', $email)->where('status', '!=', 'deleted')->exists()) {
@@ -63,6 +67,8 @@ class Delete extends Command
      */
     protected function getOptions()
     {
-        return [];
+        return [
+            ['email', null, InputOption::VALUE_OPTIONAL, 'User email', null],
+        ];
     }
 }
