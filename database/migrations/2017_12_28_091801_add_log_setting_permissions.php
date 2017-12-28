@@ -34,8 +34,6 @@ class AddLogSettingPermissions extends Migration
             $role->permissions = $role_perms;
             $role->save();
         }
-
-
     }
 
     /**

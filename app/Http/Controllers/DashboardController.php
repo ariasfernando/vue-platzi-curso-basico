@@ -71,7 +71,8 @@ class DashboardController extends Controller
      *
      * @return array
      */
-    public function getLibraries() {
+    public function getLibraries()
+    {
         return Auth::user()->getLibraries();
     }
 

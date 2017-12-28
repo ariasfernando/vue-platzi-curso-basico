@@ -20,7 +20,6 @@ class AssignPermissions extends Migration
             $permissions = Permission::all();
             $role_perms = [];
             foreach ($permissions as $permission) {
-
                 $role_perms[] = $permission->name;
             }
             $role->permissions = $role_perms;
