@@ -147,7 +147,6 @@ if (env("APP_ADMIN", false)) {
             '/admin/permission/edit'   => 'Admin\PermissionController@getEdit',
             '/admin/log'               => 'Admin\LogController@getIndex',
             '/admin/log/list'          => 'Admin\LogController@getList',
-            '/admin/studio'            => 'Admin\StudioController@getIndex',
             '/admin/library'           => 'Admin\LibraryController@getIndex',
             '/admin/library/list'      => 'Admin\LibraryController@getList',
             '/admin/library/create'    => 'Admin\LibraryController@getCreate',
