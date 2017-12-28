@@ -16,4 +16,5 @@
 	Application.globals.validateUrlExists = ("{{ $app_config["campaign"]["validate_url_exists"]  }}") ? true : false;
 	Application.globals.validateUrlSettings = <?php echo (is_array($app_config['campaign']['validate_url_settings']) ? json_encode($app_config['campaign']['validate_url_settings']) : '[]') ?>;
 	Application.globals.showPopularTags = ("{{ isset($app_config["campaign"]["search_settings"]["show_popular_tags"]) && $app_config["campaign"]["search_settings"]["show_popular_tags"]  }}") ? true : false;
+	Application.globals.cleanEmptyLinks = ("{{ isset($app_config["campaign"]["clean_empty_links"]) && $app_config["campaign"]["clean_empty_links"] }}") ? true : false;
 </script>
