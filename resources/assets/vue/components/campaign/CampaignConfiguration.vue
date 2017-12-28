@@ -13,7 +13,18 @@
               </i>
             </a>
           </label>
-          <input type="text" placeholder="Campaign Name" name="campaignName" id="campaignName" :value="form.campaignName" @blur="saveCampaignName"/>
+          <p>
+            <input type="text" 
+                 placeholder="Campaign Name" 
+                 name="campaignName" 
+                 id="campaignName" 
+                 v-validate.initial="'required'"
+                 :value="form.campaignName" 
+                 :class="{'input': true, 'is-danger': errors.has('campaignName') }"
+                 @input="saveCampaignName"/>
+
+            <span v-show="errors.has('campaignName')" class="help is-danger">{{ errors.first('campaignName') }}</span>
+          </p>
         </div>
 
         <div class="form-group configuration-field configuration-nomargin" v-if="enablePreheader">
@@ -54,13 +65,12 @@
           </button>
           <button
             class="unlock-campaign-btn btn btn-default"
-            :disabled="this.$_app.config.logged_user !== lockedBy"
             data-toggle="tooltip"
             data-placement="bottom"
             title="Campaign is locked"
+            :disabled="this.$_app.config.logged_user !== lockedBy"
             @click.prevent="unlockCampaign"
-            v-show="locked"
-          >
+            v-show="locked">
             <i class="fa fa-lock" aria-hidden="true"></i>
           </button>
         </div>
@@ -139,6 +149,22 @@
       this.loadConfig();
     },
     methods: {
+      validate() {
+        this.$validator.validateAll().then(() => {
+          if (this.$validator.errors.items.length) {
+            _.each(this.$validator.errors.items, (err) => {
+              _.extend(err, { 
+                scope: 'Campaign Name', 
+              });
+            });
+
+            this.$store.dispatch('campaign/addErrors', this.$validator.errors.items);
+          } else {
+            this.$store.commit('campaign/clearErrorsByScope', 'Campaign Name');
+          }
+
+        });
+      },
       saveSettings(e) {
         let value = e.target.value;
 
@@ -249,8 +275,10 @@
         this.form.campaignName = value;
         this.$store.commit('campaign/saveSetting', {
           name: 'campaignName',
-          value: value
+          value
         });
+
+        this.validate();
       },
     }
   }
