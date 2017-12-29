@@ -193,5 +193,12 @@ return [
     |
     */
 
-    'show_who_is_locking' => true,
+    'show_who_is_locking' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Clean empty tag without link - will be replaced with span tag
+    |--------------------------------------------------------------------------
+     */
+    'clean_empty_links' => false
 ];

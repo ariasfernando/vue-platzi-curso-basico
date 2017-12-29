@@ -6,6 +6,7 @@ use Stensul\Models\User;
 use Illuminate\Console\Command;
 use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
+use Symfony\Component\Console\Input\InputOption;
 
 class Restore extends Command
 {
@@ -28,7 +29,10 @@ class Restore extends Command
      */
     public function fire()
     {
-        $email = $this->ask('What is the user email that you want restore?');
+        $options = $this->option();
+        $email = is_null($options["email"])
+            ? $this->ask('What is the user email that you want restore?')
+            : $options["email"];
 
         if ($email != "") {
             if (!User::where('email', '=', $email)->exists()) {
@@ -64,6 +68,8 @@ class Restore extends Command
      */
     protected function getOptions()
     {
-        return [];
+        return [
+            ['email', null, InputOption::VALUE_OPTIONAL, 'User email', null],
+        ];
     }
 }

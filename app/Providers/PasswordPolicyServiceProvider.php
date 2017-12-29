@@ -20,11 +20,15 @@ class PasswordPolicyServiceProvider extends ZxcvbnServiceProvider
     public static function should_update_password(User $user)
     {
         // @codingStandardsIgnoreEnd
+
+        // Skip the policy if the login method is not default
+        if (env('USER_LOGIN', 'default') != "default") {
+            return false;
+        }
         $password_policy = \Config::get('auth.password_policy');
         if ($password_policy['allow_force_password_reset']
             && isset($user->force_password)
-            && $user->force_password == 1
-            && env('USER_LOGIN', 'default') != "oauth") {
+            && $user->force_password == 1) {
                 return true;
         } elseif ($days = $password_policy['force_update']) {
             if (isset($user->last_password_change)) {
