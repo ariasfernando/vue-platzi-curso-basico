@@ -325,7 +325,7 @@
       z-index: 300;
       opacity: 1!important;
       &:before{
-        content: "Drag modules here... Or just click’em.";
+        content: "Drag content here";
         display: flex;
         justify-content: center;
         border: none;
