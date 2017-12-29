@@ -73,7 +73,6 @@
 
   tr.ghost-component{
     text-align: center;
-    outline: 2px dashed @icon-option;
     color:@focus;
     background-color: @hover;
     height: 15px;

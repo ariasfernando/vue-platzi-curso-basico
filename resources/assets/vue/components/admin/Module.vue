@@ -309,7 +309,6 @@
     }
 
     tr.ghost-component{
-      outline: 2px dashed @icon-option;
       color:@focus;
       background-color: @hover;
       text-align: center;
@@ -317,6 +316,17 @@
       line-height: 20px;
       &:before{
         content: "Drag content here";
+        display: flex;
+        justify-content: center;
+        border: none;
+        color:@focus;
+        background-color: @hover;
+        height: 80px;
+        line-height: 80px;
+        font-family: 'Open Sans', Arial, serif;
+        opacity: 1;
+        outline: 2px dashed @icon-option;
+        outline-offset: -10px;
       }
       td{
         display: none;
