@@ -136,6 +136,40 @@
   @hover: @focus-light;
 
    #emailCanvas{
+     &:empty{
+      border: none;
+      color:@focus;
+      background-color: @hover;
+      height: 80px;
+      line-height: 80px;
+      font-family: 'Open Sans', Arial, serif;
+      font-size: 16px;
+
+      &:before{
+        content: "Drag modules here... Or just click’em.";
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        opacity: 0.7;
+
+      }
+
+      &:hover{
+        &:before{
+          display: none;
+        }
+
+        &:after{
+          content: "Drag modules here... Or just click’em!";
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          opacity: 1;
+          outline: 2px dashed @icon-option;
+          outline-offset: -10px;
+        }
+      }
+    }
     .ghost-component{
       text-align: center;
       color:@focus;
@@ -147,14 +181,19 @@
       z-index: 300;
       opacity: 1!important;
       &:before{
-        outline: 2px dashed @icon-option;
-        outline-offset: -2px;
-        content: "Drag content here";
-        padding: 10px;
-        text-transform: uppercase;
+        content: "Drag modules here... Or just click’em.";
         display: flex;
         justify-content: center;
         border: none;
+        color:@focus;
+        background-color: @hover;
+        height: 80px;
+        line-height: 80px;
+        font-family: 'Open Sans', Arial, serif;
+        font-size: 16px;
+        opacity: 1;
+        outline: 2px dashed @icon-option;
+        outline-offset: -10px;
       }
       *{
         display: none;

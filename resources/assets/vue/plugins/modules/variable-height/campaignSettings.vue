@@ -1,6 +1,17 @@
 <template>
   <div class="plugin-wrapper-inner" v-if="component">
     <label>{{ plugin.title }}</label>
+
+    <!-- <div class="plugin-variable-value">
+      <a>
+        <i class="glyphicon glyphicon-minus"></i>
+      </a>
+      <input type="text" value="15">
+        <a>
+        <i class="glyphicon glyphicon-plus"></i>
+      </a>
+    </div> -->
+
     <div class="plugin-upload">
       <input 
         type="number" 
@@ -13,7 +24,6 @@
         v-validate.initial="`between:${options.min},${options.max}`"
       >
         <span v-show="errors.has('height')" class="help is-danger">{{ errors.first('height') }}</span>
-
     </div>
   </div>
 </template>
