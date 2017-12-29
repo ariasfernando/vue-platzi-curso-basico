@@ -1,6 +1,17 @@
 <template>
   <div class="plugin-wrapper-inner" v-if="component">
     <label>{{ plugin.title }}</label>
+
+    <!-- <div class="plugin-variable-value">
+      <a>
+        <i class="glyphicon glyphicon-minus"></i>
+      </a>
+      <input type="text" value="15">
+        <a>
+        <i class="glyphicon glyphicon-plus"></i>
+      </a>
+    </div> -->
+
     <div class="plugin-upload">
       <input 
         type="number" 
@@ -11,7 +22,6 @@
         :min="options.min"
         :value="height"
         @input="updateStyle('variableHeight')">
-
     </div>
   </div>
 </template>
