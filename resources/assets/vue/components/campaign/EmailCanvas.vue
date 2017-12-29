@@ -325,13 +325,19 @@
       z-index: 300;
       opacity: 1!important;
       &:before{
-        outline: 2px dashed @icon-option;
         content: "Drag content here";
-        padding: 10px;
-        text-transform: uppercase;
         display: flex;
         justify-content: center;
         border: none;
+        color:@focus;
+        background-color: @hover;
+        height: 80px;
+        line-height: 80px;
+        font-family: 'Open Sans', Arial, serif;
+        font-size: 16px;
+        opacity: 1;
+        outline: 2px dashed @icon-option;
+        outline-offset: -10px;
       }
       *{
         display: none;
