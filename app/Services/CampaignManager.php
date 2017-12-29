@@ -110,65 +110,12 @@ class CampaignManager
             }
         }
 
-        $campaign->modules_data = self::saveModuleImages($inputs['modules_data'], $campaign);
+        $campaign->modules_data = $inputs['modules_data'];
         $campaign->save();
 
         Activity::log('Campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
 
         return $campaign_id;
-    }
-
-    /**
-     * Look for module images to save.
-     *
-     * @param array $modules_data
-     * @return array Returns modules data with the image path instead of base64 encoded.
-     */
-    private static function saveModuleImages($modules_data, $campaign)
-    {
-
-        foreach ($modules_data as $moduleIdx => $module) {
-            if (!empty($module['structure']['columns'])) {
-                foreach ($module['structure']['columns'] as $columnIdx => $column) {
-                    if (!empty($column['components'])) {
-                        foreach ($column['components'] as $componentIdx => $component) {
-                            if (!empty($component['type']) && $component['type'] === 'image-element'
-                                && !empty($component['attribute']['placeholder'])
-                                && substr($component['attribute']['placeholder'], 0, 10) === 'data:image') {
-                                if (!empty($file = $modules_data[$moduleIdx]['structure']
-                                    ['columns'][$columnIdx]['components'][$componentIdx]['attribute']['placeholder'])) {
-                                    $assets = new Assets($campaign);
-                                    $response = $assets->saveImage($file);
-
-                                    if (isset($response['error'])) {
-                                        Activity::log(
-                                            'Campaign save file error',
-                                            [
-                                                'properties' => [
-                                                    'campaign_id' => new ObjectID($campaign->id),
-                                                    'error' => $response['error']
-                                                ]
-                                            ]
-                                        );
-                                    } else {
-                                        $modules_data[$moduleIdx]['structure']
-                                            ['columns'][$columnIdx]['components'][$componentIdx]['attribute']['placeholder']
-                                            = $response['path'];
-
-                                        Activity::log(
-                                            'Campaign save file',
-                                            ['properties' => ['campaign_id' => new ObjectID($campaign->id)]]
-                                        );
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $modules_data;
     }
 
     /**

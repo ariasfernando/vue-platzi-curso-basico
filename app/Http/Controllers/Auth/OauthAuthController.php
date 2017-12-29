@@ -97,7 +97,8 @@ class OauthAuthController extends Controller
             \Log::error($error);
             return view('auth.session')->with('error', $error['message']);
         } else {
-            return view('auth.session')->with('redirect_to', env('APP_BASE_URL', $this->redirect_to));
+            $redirect_to = Session::has('url.intended') ? Session::get('url.intended') : env('APP_BASE_URL', $this->redirect_to);
+            return view('auth.session')->with('redirect_to', $redirect_to);
         }
     }
 

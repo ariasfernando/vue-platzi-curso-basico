@@ -16,6 +16,7 @@
                 :width="templateWidth"
                 :options="options"
                 :element="'table'"
+                @add="onAdd"
                 @end="onEnd"
                 @sort="onSort">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
@@ -29,6 +30,7 @@
 
 <script>
   import _ from 'lodash';
+  import clone from 'clone';
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';
@@ -59,7 +61,10 @@
       },
       buildingMode() {
         return this.$store.getters["campaign/buildingMode"];
-      }
+      },
+      items () {
+        return this.$store.state.campaign.campaign.menu_list;
+      },
     },
     data () {
       return {
@@ -146,6 +151,20 @@
       }
     },
     methods: {
+      onAdd(e) {
+        const module = this.items[e.oldIndex];
+        const mod = clone(module);
+        mod.data = {};
+        
+        this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
+        // Set active on last module inserted
+        this.$store.commit('campaign/setActiveModule', e.newIndex);
+        
+         // Remove ghost element
+        const cloneItem = e.item;
+        cloneItem.parentNode.removeChild(cloneItem);
+        e.clone.style.opacity = "1";
+      },
       onSort(e){
         this.$store.commit("campaign/setDirty", true);
       },
@@ -274,6 +293,7 @@
   }
 
   #emailCanvas{
+    min-height: 40px;
     &.stx-mobile-mode {
       /*BASE-LAYOUT*/
       .st-wrapper{
