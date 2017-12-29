@@ -423,5 +423,28 @@ export default {
     
     return str;
   },
+
+  imagesErrors(selector){
+    let errorFound = false;
+
+    // Check if all images are uploaded.
+    let nonEditedImages = $(selector).find("img[src*='/default/']:visible");
+
+    if (nonEditedImages.length) {
+        $.each(nonEditedImages, function (index, img) {
+            $(img).parent().addClass("default-image-error");
+        });
+
+        errorFound = true;
+    }
+
+
+    if (errorFound) {
+      return true;
+    }else{
+      return false
+    }
+    
+  }
   
 };

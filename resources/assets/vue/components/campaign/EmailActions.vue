@@ -158,7 +158,7 @@
       },
       complete() {
         // Do not save if there are missing or wrong fields
-        if (this.fieldErrors.length > 0) {
+        if (this.fieldErrors.length > 0 || campaignCleaner.imagesErrors('#emailCanvas') ) {
           this.$root.$toast(
             'To continue, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',

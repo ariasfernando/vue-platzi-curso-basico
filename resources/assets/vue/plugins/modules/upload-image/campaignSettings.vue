@@ -41,6 +41,14 @@
       }
     },
     methods: {
+      removeErrorsImages(){
+        let $contentImgError = $('.st-module-wrapper-active').find('.default-image-error');
+
+        if ($contentImgError.length > 0){
+          $contentImgError.removeClass('default-image-error');
+        }
+
+      },
       onFileChange(e) {
         const files = e.target.files || e.dataTransfer.files;  
 
@@ -77,6 +85,8 @@
           attribute: 'placeholder',
           attributeValue: e
         };
+
+        this.removeErrorsImages();
 
         this.$store.commit('campaign/saveComponentAttribute', payload);
       }
