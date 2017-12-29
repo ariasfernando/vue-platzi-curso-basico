@@ -258,6 +258,10 @@
     transition: all .3s ease;
     position: relative;
 
+    .send-preview{
+      margin-top: 10px;
+    }
+
     .share-preview{
       position: absolute;
       bottom: 30px;
@@ -287,6 +291,7 @@
       .btn-group {
         padding: 0px;
       }
+
     }
     .btn-copy {
       border-top-right-radius: 3px;
@@ -330,7 +335,7 @@
         padding-top: 0px;
       }
       .iframe-container {
-        height: 300px;
+        height: 480px;
         overflow-y: auto;
         text-align: center;
         background: #F4F4F4;
