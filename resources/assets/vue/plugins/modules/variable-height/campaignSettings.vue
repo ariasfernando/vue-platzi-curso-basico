@@ -4,13 +4,15 @@
     <div class="plugin-upload">
       <input 
         type="number" 
-        name="variable-height"
+        name="height"
         class="variable-height" 
-        ref="variableHeight" 
+        v-model="height"
         :max="options.max" 
         :min="options.min"
-        :value="height"
-        @input="updateStyle('variableHeight')">
+        :class="{'input': true, 'is-danger': errors.has('height') }"
+        v-validate.initial="`between:${options.min},${options.max}`"
+      >
+        <span v-show="errors.has('height')" class="help is-danger">{{ errors.first('height') }}</span>
 
     </div>
   </div>
@@ -18,9 +20,11 @@
 
 <script>
   import _ from 'lodash';
+  import mixinValidator from '../mixins/validator';
 
   export default {
     props: ['name', 'plugin'],
+    mixins: [mixinValidator],
     computed: {
       modules() {
         return this.$store.getters["campaign/modules"];
@@ -40,9 +44,15 @@
 
         return component;
       },
-      height(){
-        return _.parseInt(this.component.style.height);
-      }
+      height: {
+        get() {
+          return _.parseInt(this.component.style.height);
+        },
+        set(value) {
+          this.validate();
+          this.updateStyle('height', value);
+        },
+      },
     },
     data() {
       return {
@@ -50,24 +60,18 @@
       }
     },
     methods: {
-    
-      updateStyle(field){ 
-        const value = this.$refs[field].value;
-        
-        if ( +value < +this.plugin.config.options.min || +value > +this.plugin.config.options.max  ){
-          return false;
-        }
+      updateStyle(property, value){ 
+          
+          const payload = {
+            plugin: this.name,
+            moduleId: this.currentComponent.moduleId,
+            columnId: this.currentComponent.columnId,
+            componentId: this.currentComponent.componentId,
+            property,
+            value: value +'px',
+          };
 
-        const payload = {
-          plugin: this.name,
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          property: 'height',
-          value: value +'px',
-        };
-
-        this.$store.commit('campaign/saveComponentStyle', payload);
+          this.$store.commit('campaign/saveComponentStyle', payload);
       }
     }
   }
