@@ -93,7 +93,6 @@ class FixCreatedUpdated extends Migration
      */
     public function down()
     {
-        Logging::info('Not implemented');
     }
 
     /***

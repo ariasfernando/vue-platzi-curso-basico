@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         'Stensul\Console\Commands\User\Delete',
         'Stensul\Console\Commands\User\Show',
         'Stensul\Console\Commands\User\Restore',
+        'Stensul\Console\Commands\User\ResetPassword',
         'Stensul\Console\Commands\Role\Show',
         'Stensul\Console\Commands\Role\PermissionAllow',
         'Stensul\Console\Commands\Role\PermissionDeny',

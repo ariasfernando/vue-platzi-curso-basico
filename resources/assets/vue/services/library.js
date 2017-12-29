@@ -107,6 +107,24 @@ export default {
     return deferred.promise;
   },
 
+  searchLibraries(data) {
+    const endpoint = endpoints.library.searchLibraries;
+    const deferred = Q.defer();
+    const params = {
+      path: 'library.searchLibraries',
+      endpoint,
+      json: data,
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+
   fetchLibraries(data) {
     const endpoint = endpoints.library.fetchLibraries;
     const deferred = Q.defer();

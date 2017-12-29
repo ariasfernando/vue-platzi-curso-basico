@@ -8,6 +8,7 @@ use Session;
 use Activity;
 use Validator;
 use Challenge;
+use PasswordPolicy;
 use Stensul\Models\User;
 use Stensul\Models\Role;
 use Stensul\Http\Requests\LoginRequest;
@@ -51,9 +52,9 @@ class BaseLoginController extends Controller
         return Validator::make(
             $data,
             [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:8',
+                'name' => 'required|max:255',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => PasswordPolicy::password_rule($data),
             ]
         );
     }
@@ -137,13 +138,11 @@ class BaseLoginController extends Controller
         if ($error) {
             return redirect()->back()->with(array("message" => "ERROR_DEFAULT"));
         } else {
-            if (isset($user_data) && isset($user_data->force_password)
-                && $user_data->force_password == 1
-                && env('USER_FORCE_PASSWORD', true)
-            ) {
-                return \Redirect::to('password/change');
+            $user = $auth->getUser();
+            if (PasswordPolicy::should_update_password($user)) {
+                return redirect('password/change');
             } else {
-                return \Redirect::to($this->redirect_to);
+                return redirect()->intended($this->redirect_to);
             }
         }
     }

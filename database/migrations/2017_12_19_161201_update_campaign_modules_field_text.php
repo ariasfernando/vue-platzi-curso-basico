@@ -8,7 +8,6 @@ use Stensul\Models\Module;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Illuminate\Support\Facades\Log as Logging;
 
-
 class UpdateCampaignModulesFieldText extends Migration
 {
     /**
@@ -29,7 +28,6 @@ class UpdateCampaignModulesFieldText extends Migration
         Campaign::withTrashed()->chunk(100, function ($campaigns) {
 
             foreach ($campaigns as $campaign) {
-
                 Logging::info('Campaign ' . $campaign->id);
 
                 /*
@@ -54,7 +52,6 @@ class UpdateCampaignModulesFieldText extends Migration
                         foreach ($module['structure']['columns'] as $column_key => $column_value) {
                             if (isset($column_value['components'])) {
                                 foreach ($column_value['components'] as $component_key => $component_value) {
-
                                     if (isset($component_value['type']) && $component_value['type'] === 'text-element') {
                                         if (isset($component_value['text'])) {
                                             $modules_data[$key]['structure']['columns'][$column_key]
@@ -79,7 +76,6 @@ class UpdateCampaignModulesFieldText extends Migration
                 $campaign->save();
             }
         });
-
     }
 
     /**

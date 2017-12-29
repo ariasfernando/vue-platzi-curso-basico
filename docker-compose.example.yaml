@@ -3,13 +3,14 @@ services:
   web:
     image: "registry.stensuldev.net/dockerfiles/web-2.0.0"
     ports:
-    - "3000:80"
+    - "127.0.0.1:3000:80"
     volumes:
     - ./storage/logs/:/var/log/
     - .:/usr/src/app
     links:
       - documentstore
       - queue
+      - mail
   worker:
     image: "registry.stensuldev.net/dockerfiles/web-2.0.0"
     command: php /usr/src/app/artisan queue:work --daemon
@@ -19,16 +20,19 @@ services:
     links:
       - documentstore
       - queue
+      - mail
   documentstore:
     image: "mongo"
     volumes:
       - ./storage/data/:/data/db
+    ports:
+      - "127.0.0.1:3001:27017"
   queue:
     image: "redis"
   rockmongo:
     image: "webts/rockmongo"
     ports:
-    - "8008:80" 
+    - "127.0.0.1:8008:80" 
     links:
       - documentstore:db
     environment:
@@ -37,6 +41,6 @@ services:
   mail:
     image: "jeanberu/mailcatcher"
     ports:
-      - "1080:1080"
+      - "127.0.0.1:1080:1080"
     environment:
       - SMTP_PORT=25

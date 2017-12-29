@@ -91,6 +91,9 @@ function campaignStore() {
       addModule(state, moduleData) {
         state.modules.push(moduleData);
       },
+      insertModule(state, {index, moduleData}) {
+        state.modules.splice(index, 0, moduleData);
+      },
       cloneModule(state, moduleId) {
         const clone = _.cloneDeep(state.modules[moduleId]);
         state.modules.push(clone);

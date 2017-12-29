@@ -2,7 +2,11 @@
   <div class="expand st-module-menu-wrapper">
       <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
     
-      <div class="beta-subitem" v-bind:class="{'is-collapsed' : collapsed }">
+      <draggable class="beta-subitem"
+                 :element="'div'"
+                 :options="options"
+                 :class="{'is-collapsed' : collapsed }"
+                 @clone="onClone">
         <div v-for="item in items" class="beta-subitem-single">
           
           <div v-if="item.sub_menu" class="expand">
@@ -11,7 +15,7 @@
               <div class="beta-submodules">
                 <div v-for="subitem in item.sub_menu">
                   <div class="add single">
-                    <h2 @click="addModule(subitem)">
+                    <h2 class="draggable-item" @click="addModule(subitem)" :module="JSON.stringify(subitem)">
                       {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
                     </h2>
                   </div>
@@ -21,14 +25,13 @@
           </div>
 
           <div v-else class="add single">
-            <h2 @click="addModule(item)">
+            <h2 class="draggable-item" @click="addModule(item)" :module="JSON.stringify(item)">
               {{ item.name }} <i class="glyphicon glyphicon-plus"></i>
             </h2>
           </div>
 
         </div>
-      </div>
-    
+      </draggable>
   </div>
 </template>
 
@@ -37,11 +40,26 @@
   import clone from 'clone';
   import moduleService from '../../services/module';
   import _ from 'lodash';
+  import Draggable from 'vuedraggable';
 
   export default {
     name: 'CampaignMenu',
+    components: {
+      Draggable
+    },
     data () {
       return {
+        options: {
+          group:{
+            name: 'componentsEmailCanvas',
+            pull: 'clone',
+            put: false,
+          },
+          sort: false,
+          ghostClass: "ghost-component",  // Class name for the drop placeholder
+          chosenClass: "chosen-component",  // Class name for the chosen item
+          dragClass: "drag-component"  // Class name for the dragging item
+        },
         expanded: [],
         collapsed: false,
         isActive: false
@@ -63,17 +81,26 @@
       addModule (module) {
         const mod = clone(module);
         mod.data = {};
+
+        // Add module
         this.$store.commit('campaign/addModule', mod);
+        
         // Set active on last module added
         this.$store.commit('campaign/setActiveLastModule');
-        // Get active module
-        let moduleId = this.$store.getters["campaign/activeModule"];
-        // Set the first component in the module as current component
-        this.$store.commit("campaign/setCurrentComponent", {
-          moduleId,
-          columnId: 0, 
-          componentId: 0
-        });
+        
+        setTimeout(() => {
+          this.autoScroll();
+        }, 100);  
+      },
+      autoScroll(){
+        let bounds = $(".section-canvas-container").outerHeight();
+        let isVisible = bounds < window.innerHeight && bounds > 0;
+
+        if (!isVisible) {
+            $('html,  .section-canvas-email').animate({
+                scrollTop: bounds
+            }, 2000);
+        }
       },
       expand (item) {
         const index = this.expanded.indexOf(item);
@@ -90,8 +117,48 @@
           event.target.className = "menu-active";
           event.target.nextElementSibling.classList.remove("beta-submodules-expanded");
         }
-
       },
+      onClone: function (evt) {
+        // Hack to handle draggable element and re-bind click to addModule method after drag & drop an element into email canvas
+        let cloneEl = evt.clone;
+        cloneEl.addEventListener('click', (e) => {
+          let module = JSON.parse($(cloneEl).find('.draggable-item').attr('module'));
+          this.addModule(module);
+        });
+      }
     }
   };
 </script>
+<style lang="less">
+  @icon-option: #69dac8;
+  @focus: #69dac8;
+  @focus-light: lighten(@focus, 30%);
+  @hover: @focus-light;
+
+   #emailCanvas{
+    .ghost-component{
+      text-align: center;
+      color:@focus;
+      background-color: @hover;
+      display: table-row;
+      vertical-align: middle;
+      list-style-type: none;
+      font-size: 13px;
+      z-index: 300;
+      opacity: 1!important;
+      &:before{
+        outline: 2px dashed @icon-option;
+        outline-offset: -2px;
+        content: "Drag content here";
+        padding: 10px;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: center;
+        border: none;
+      }
+      *{
+        display: none;
+      }
+    }
+  }
+</style>
