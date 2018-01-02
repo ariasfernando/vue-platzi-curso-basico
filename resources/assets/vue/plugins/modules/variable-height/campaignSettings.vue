@@ -1,16 +1,27 @@
 <template>
   <div class="plugin-wrapper-inner" v-if="component">
     <label>{{ plugin.title }}</label>
+
+    <!-- <div class="plugin-variable-value">
+      <a>
+        <i class="glyphicon glyphicon-minus"></i>
+      </a>
+      <input type="text" value="15">
+        <a>
+        <i class="glyphicon glyphicon-plus"></i>
+      </a>
+    </div> -->
+
     <div class="plugin-upload">
-      <input type="number" 
+      <input 
+        type="number" 
+        name="variable-height"
         class="variable-height" 
         ref="variableHeight" 
         :max="options.max" 
         :min="options.min"
         :value="height"
-        @keyup="keypress"
-        @input="updateStyle('variableHeight')"
-      >
+        @input="updateStyle('variableHeight')">
     </div>
   </div>
 </template>
@@ -49,16 +60,11 @@
       }
     },
     methods: {
-      keypress(event){
-        if ( event.target.value < this.options.min || event.target.value > this.options.max  ){
-          return false;
-        }
-
-      },
+    
       updateStyle(field){ 
         const value = this.$refs[field].value;
         
-        if ( value < this.options.min || value > this.options.max  ){
+        if ( +value < +this.plugin.config.options.min || +value > +this.plugin.config.options.max  ){
           return false;
         }
 
