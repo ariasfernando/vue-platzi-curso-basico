@@ -1,17 +1,17 @@
 <template>
   <div class="expand st-module-menu-wrapper">
       <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
-    
+
       <draggable class="beta-subitem"
                  :element="'div'"
                  :options="options"
                  :class="{'is-collapsed' : collapsed }"
                  @clone="onClone">
         <div v-for="item in items" class="beta-subitem-single">
-          
+
           <div v-if="item.sub_menu" class="expand">
             <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
-              
+
               <div class="beta-submodules">
                 <div v-for="subitem in item.sub_menu">
                   <div class="add single">
@@ -21,7 +21,7 @@
                   </div>
                 </div>
               </div>
-            
+
           </div>
 
           <div v-else class="add single">
@@ -84,13 +84,13 @@
 
         // Add module
         this.$store.commit('campaign/addModule', mod);
-        
+
         // Set active on last module added
         this.$store.commit('campaign/setActiveLastModule');
-        
+
         setTimeout(() => {
           this.autoScroll();
-        }, 100);  
+        }, 100);
       },
       autoScroll(){
         let bounds = $(".section-canvas-container").outerHeight();
@@ -146,7 +146,7 @@
       font-size: 16px;
 
       &:before{
-        content: "Drag modules here... Or just click’em.";
+        content: "Drag modules here... Or just click’em!";
         width: 100%;
         display: flex;
         justify-content: center;
