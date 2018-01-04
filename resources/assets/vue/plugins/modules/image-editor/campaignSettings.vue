@@ -81,6 +81,14 @@
       }
     },
     methods: {
+      removeErrorsImages(){
+        let $contentImgError = $('.st-module-wrapper-active').find('.default-image-error');
+
+        if ($contentImgError.length > 0){
+          $contentImgError.removeClass('default-image-error');
+        }
+
+      },
       submitImage(data) {
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch('campaign/uploadImages', {
@@ -133,8 +141,9 @@
           attributeValue: value,
         };
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.removeErrorsImages();
 
+        this.$store.commit('campaign/saveComponentAttribute', payload);
 
       },
     }

@@ -3,7 +3,7 @@
     <label>Select an image</label>
     <div class="plugin-upload">
       <label for="upload-image" class="upload-image-trigger">
-        <i class="glyphicon glyphicon-cloud-upload"></i>
+        <i class="glyphicon glyphicon-cloud-upload"></i> Upload Image
       </label>
       <input type="file" @change="onFileChange" id="upload-image">
       <span class="upload-image-filename" id="upload-image-filename">No file chosen</span>
@@ -41,6 +41,14 @@
       }
     },
     methods: {
+      removeErrorsImages(){
+        let $contentImgError = $('.st-module-wrapper-active').find('.default-image-error');
+
+        if ($contentImgError.length > 0){
+          $contentImgError.removeClass('default-image-error');
+        }
+
+      },
       onFileChange(e) {
         const files = e.target.files || e.dataTransfer.files;  
 
@@ -78,8 +86,23 @@
           attributeValue: e
         };
 
+        this.removeErrorsImages();
+
         this.$store.commit('campaign/saveComponentAttribute', payload);
       }
     }
   }
 </script>
+<style lang="less">
+.plugin-upload{
+  .upload-image-trigger{
+    display: block;
+    width: 100%!important;
+    font-size: 12px!important;
+  }
+
+}
+#upload-image-filename{
+  display: none!important;
+}
+</style>

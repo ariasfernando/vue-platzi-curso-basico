@@ -134,24 +134,26 @@
   @focus: #69dac8;
   @focus-light: lighten(@focus, 30%);
   @hover: @focus-light;
+  @font-color: #999999;
+  @bg-color: #f0f0f0;
 
    #emailCanvas{
      &:empty{
       border: none;
-      color:@focus;
-      background-color: @hover;
-      height: 80px;
-      line-height: 80px;
+      color:@font-color;
+      background-color: @bg-color;
+      height: 65px;
       font-family: 'Open Sans', Arial, serif;
-      font-size: 16px;
-
+      font-size: 14px;
+      
       &:before{
-        content: "Drag modules here... Or just click’em!";
+        content: "Drag a module here or click one from the menu to add it to the bottom of the email";
         width: 100%;
-        display: flex;
-        justify-content: center;
+        display: table-cell;
+        vertical-align: middle;
         opacity: 0.7;
-
+        text-align: center;
+        padding: 0 10px;
       }
 
       &:hover{
@@ -160,13 +162,15 @@
         }
 
         &:after{
-          content: "Drag modules here... Or just click’em!";
+          content: "Drag a module here or click one from the menu to add it to the bottom of the email";
           width: 100%;
-          display: flex;
-          justify-content: center;
+          display: table-cell;
+          vertical-align: middle;
           opacity: 1;
-          outline: 2px dashed @icon-option;
+          outline: 2px dashed @font-color;
           outline-offset: -10px;
+          text-align: center;
+          padding: 0 10px;
         }
       }
     }
@@ -177,23 +181,24 @@
       display: table-row;
       vertical-align: middle;
       list-style-type: none;
-      font-size: 13px;
+      font-size: 14px;
       z-index: 300;
       opacity: 1!important;
       &:before{
-        content: "Drag modules here... Or just click’em.";
-        display: flex;
-        justify-content: center;
+        content: "Drag the module here";
+        display: table-cell;
+        vertical-align: middle;
         border: none;
         color:@focus;
         background-color: @hover;
-        height: 80px;
-        line-height: 80px;
+        height: 65px;
         font-family: 'Open Sans', Arial, serif;
-        font-size: 16px;
+        font-size: 14px;
         opacity: 1;
         outline: 2px dashed @icon-option;
         outline-offset: -10px;
+        text-align: center;
+        padding: 0 10px;
       }
       *{
         display: none;

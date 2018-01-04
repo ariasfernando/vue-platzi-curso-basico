@@ -1,5 +1,6 @@
 <template>
   <div>
+    <back-to-top></back-to-top>
     <!-- content canvas email -->
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -34,6 +35,7 @@
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';
+  import BackToTop from '../common/BackToTop.vue';
 
   let dragGhost = {};
 
@@ -43,6 +45,7 @@
       Module,
       Draggable,
       'email-actions': EmailActions,
+      BackToTop
     },
     computed: {
       dragList: {
@@ -173,7 +176,6 @@
         const moduleId = evt.newIndex;
         // Set active Module
         this.$store.commit("campaign/setActiveModule", moduleId);
-        // Trigger click to load 3rd Column
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
@@ -325,19 +327,20 @@
       z-index: 300;
       opacity: 1!important;
       &:before{
-        content: "Drag content here";
-        display: flex;
-        justify-content: center;
+        content: "Drag the module here";
+        display: table-cell;
+        vertical-align: middle;
         border: none;
         color:@focus;
         background-color: @hover;
-        height: 80px;
-        line-height: 80px;
+        height: 65px;
         font-family: 'Open Sans', Arial, serif;
-        font-size: 16px;
+        font-size: 14px;
         opacity: 1;
         outline: 2px dashed @icon-option;
         outline-offset: -10px;
+        text-align: center;
+        padding: 0 10px;
       }
       *{
         display: none;
