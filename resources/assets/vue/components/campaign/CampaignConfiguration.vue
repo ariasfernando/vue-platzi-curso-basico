@@ -130,13 +130,15 @@
     },
 
     created () {
+      this.validate();
+      
       this.enablePreheader = this.campaign.library_config.preheader;
       this.preheaderMaxLength = Application.globals.preheaderConfig.max_length;
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name;
-
+     
       let tagList = this.$store.getters["campaign/campaign"].tag_list;
       for (let n = 0; n < tagList.length; n++) {
         this.tagOptions.push(tagList[n].name);
@@ -147,6 +149,13 @@
         value: this.form.tags
       });
       this.loadConfig();
+    },
+    mounted (){
+      let inputcampaignName = document.getElementById("campaignName");
+
+      if ( inputcampaignName.value === "" ){
+        inputcampaignName.focus();
+      }
     },
     methods: {
       validate() {
