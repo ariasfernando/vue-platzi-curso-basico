@@ -325,19 +325,20 @@
       z-index: 300;
       opacity: 1!important;
       &:before{
-        content: "Drag content here";
-        display: flex;
-        justify-content: center;
+        content: "Drag the module here";
+        display: table-cell;
+        vertical-align: middle;
         border: none;
         color:@focus;
         background-color: @hover;
-        height: 80px;
-        line-height: 80px;
+        height: 65px;
         font-family: 'Open Sans', Arial, serif;
-        font-size: 16px;
+        font-size: 14px;
         opacity: 1;
         outline: 2px dashed @icon-option;
         outline-offset: -10px;
+        text-align: center;
+        padding: 0 10px;
       }
       *{
         display: none;
