@@ -24,6 +24,7 @@ function campaignStore() {
       buildingMode: 'desktop',
       editorToolbar: '',
       dirty: false,
+      fieldErrors: [],
     },
     getters: {
       modules(state) {
@@ -70,6 +71,7 @@ function campaignStore() {
         }
         return false;
       },
+
     },
     mutations: {
       loadCampaignData(state, campaignData) {
@@ -172,11 +174,31 @@ function campaignStore() {
       setTemplating(state, templating) {
         state.campaign.campaign_data.template = templating;
       },
+      addError(state, error) {
+        state.fieldErrors.push(error);
+      },
+      clearErrorsByModuleId(state, moduleId) {
+        const filtered = state.fieldErrors.filter(err => err.scope.moduleId !== moduleId);
+        state.fieldErrors = filtered;
+      },
+      clearErrorsByScope(state, scope) {
+        const filtered = state.fieldErrors.filter(err => !_.isEqual(err.scope, scope));
+        state.fieldErrors = filtered;
+      },
       error(err) {
         console.error(err);
       },
     },
     actions: {
+      addErrors(context, errors) {
+        _.each(errors, (error) => {
+          context.commit('clearErrorsByScope', error.scope);
+
+          if (context.state.fieldErrors.indexOf(error) === -1) {
+            context.commit('addError', error);
+          }
+        });
+      },
       saveCustomModuleData(context, data) {
         _.each(data.data, (value, field) => {
           context.commit('saveCustomModuleDataField', {
@@ -293,9 +315,10 @@ function campaignStore() {
       },
       removeModule(context, moduleId) {
         context.commit('removeModule', moduleId);
+        context.commit('clearErrorsByModuleId', moduleId);
       },
     },
-  }
-};
+  };
+}
 
 module.exports = campaignStore();

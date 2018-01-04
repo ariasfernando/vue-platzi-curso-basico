@@ -16,6 +16,7 @@ module.exports = {
       _top: 'new-window',
     },
     defaultValue: '_blank',
+    required: false,
   },
   data: {},
   render: true,

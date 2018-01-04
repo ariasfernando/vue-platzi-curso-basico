@@ -3,7 +3,19 @@
     <div>
       <span>
         <label>Destination Url</label>
-        <input name="href" type="text" :value="href" @change="change">
+        <p v-if="validationRules">
+          <input
+            name="href"
+            type="text"
+            placeholder="http://examp.le"
+            v-model="href"
+            v-validate.initial="validationRules"
+            :class="{'input': true, 'is-danger': errors.has('href') }">
+          <span v-show="errors.has('href')" class="help is-danger">{{ errors.first('href') }}</span>
+        </p>
+        <p v-else>
+          <input name="href" type="text" placeholder="http://examp.le" v-model="href">
+        </p>
       </span>
       <span>
         <label>Target</label>
@@ -21,7 +33,6 @@
             ></i>
           </a>
         </div>
-
       </span>
     </div>
 
@@ -30,9 +41,11 @@
 
 <script>
   import _ from 'lodash';
+  import mixinValidator from '../mixins/validator';
 
   export default {
     props: ['name', 'plugin'],
+    mixins: [mixinValidator],
     computed: {
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
@@ -48,12 +61,27 @@
         }
         return component;
       },
-      href() {
-        return this.component.attribute ? this.component.attribute.href : '';
-      },
       target() {
         return this.component.attribute ? this.component.attribute.target : '';
+      },
+      href: {
+        get() {
+          return this.component.attribute.href;
+        },
+        set(value) {
+          this.saveComponentAttribute('href', value);
+
+          if (this.validationRules) {
+            this.validate();
+          }
+        },
+      },
+      validationRules() {
+        return this.plugin.config.required ? 'required|url' : null;
       }
+    },
+    mounted() {
+      console.log(this.plugin);
     },
     data() {
       return {
@@ -62,15 +90,19 @@
     },
     methods: {
       change(e) {
-        let valueTarget = (e.type === 'click')? e.target.getAttribute('data-tooltip'): e.target.value; 
+        const attribute = e.target.name;
+        const value = e.target.getAttribute('data-tooltip');
 
+        this.saveComponentAttribute(attribute, value);
+      },
+      saveComponentAttribute(attribute, value) {
         const payload = {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          attribute: e.target.name,
-          attributeValue: valueTarget,
+          attribute,
+          attributeValue: value,
         };
 
         this.$store.commit('campaign/saveComponentAttribute', payload);
