@@ -1,5 +1,6 @@
 <template>
   <div>
+    <back-to-top></back-to-top>
     <!-- content canvas email -->
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -34,6 +35,7 @@
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';
+  import BackToTop from '../common/BackToTop.vue';
 
   let dragGhost = {};
 
@@ -43,6 +45,7 @@
       Module,
       Draggable,
       'email-actions': EmailActions,
+      BackToTop
     },
     computed: {
       dragList: {
