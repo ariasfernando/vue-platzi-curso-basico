@@ -173,7 +173,6 @@
         const moduleId = evt.newIndex;
         // Set active Module
         this.$store.commit("campaign/setActiveModule", moduleId);
-        // Trigger click to load 3rd Column
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
