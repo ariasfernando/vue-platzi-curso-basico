@@ -34,7 +34,18 @@ class PasswordController extends Controller
         $this->auth = $auth;
         $this->passwords = $passwords;
         $this->subject = env('MAIL_FORGOT_SUBJECT', 'stensul Password Reset Link');
-        $this->middleware('Authenticate', ['except' => [ 'getEmail', 'postEmail', 'getReset', 'postReset' ] ]);
+        $this->middleware('Authenticate',
+            [
+                'except' => [
+                    'getEmail',
+                    'postEmail',
+                    'getReset',
+                    'postReset',
+                    'getChange',
+                    'postChange'
+                ]
+            ]
+        );
     }
 
     /**
@@ -162,6 +173,11 @@ class PasswordController extends Controller
      */
     public function postChange(PasswordChangeRequest $request)
     {
+
+        if (!Auth::check()) {
+            return redirect('auth/login')->with('message', 'ERROR_CHANGE');
+        }
+
         $user_data = Auth::user();
         $inputs = $request->all();
 
