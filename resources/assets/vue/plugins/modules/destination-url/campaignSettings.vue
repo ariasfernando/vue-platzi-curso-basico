@@ -80,9 +80,6 @@
         return this.plugin.config.required ? 'required|url' : null;
       }
     },
-    mounted() {
-      console.log(this.plugin);
-    },
     data() {
       return {
         options: this.plugin.config.options,
