@@ -69,7 +69,7 @@
   }
 </script>
 
-<style lang="sass">
+<style lang="scss">
   .st-edit-text {
     cursor: text;
   }

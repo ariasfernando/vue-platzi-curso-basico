@@ -83,7 +83,6 @@
                   data-toggle="tooltip"
                   data-placement="bottom"
                   title="Lock Campaign"
-                  @click.prevent
                 >
                   <i class="glyphicon fa fa-lock"></i>
                 </a>

@@ -51,12 +51,12 @@
     }
 </script>
 
-<style lang="sass">
+<style lang="scss">
     .approved {
         background: #daeadd;
         border: none;
         color: green;
-    },
+    }
     .rejected {
         background: #fcded9;
         border: none;
