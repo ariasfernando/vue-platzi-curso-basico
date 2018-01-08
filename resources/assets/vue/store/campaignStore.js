@@ -90,13 +90,16 @@ function campaignStore() {
       },
       addModule(state, moduleData) {
         state.modules.push(moduleData);
+        state.dirty = true;
       },
       insertModule(state, {index, moduleData}) {
         state.modules.splice(index, 0, moduleData);
+        state.dirty = true;
       },
       cloneModule(state, moduleId) {
         const clone = _.cloneDeep(state.modules[moduleId]);
         state.modules.push(clone);
+        state.dirty = true;
       },
       setCustomModule(state, moduleId) {
         state.currentCustomModuleId = moduleId;
@@ -104,7 +107,6 @@ function campaignStore() {
       updateElement(state, payload) {
         const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
         state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
-
         state.dirty = true;
       },
       saveSetting(state, setting) {
@@ -115,6 +117,7 @@ function campaignStore() {
       },
       removeModule(state, moduleId) {
         state.modules.splice(moduleId, 1);
+        state.dirty = true;
       },
       setProcessStatus(state, processed = true) {
         state.campaign.campaign_data.processed = processed;
@@ -134,35 +137,43 @@ function campaignStore() {
         const columnId = data.columnId;
         const componentId = data.componentId;
         state.modules[moduleId].structure.columns[columnId].components[componentId] = data.component;
+        state.dirty = true;
       },
       savePlugin(state, payload) {
         const originalData = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data;
         const updated = { ...originalData, ...payload.data };
         state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data = updated;
+        state.dirty = true;
       },
       saveComponentStyle(state, data) {
         const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
         component.style[data.property] = data.value;
+        state.dirty = true;
       },
       saveComponentAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
         attributes[data.attribute] = data.attributeValue;
+        state.dirty = true;
       },
       saveColumnAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].attribute;
         attributes[data.attribute] = data.attributeValue;
+        state.dirty = true;
       },
       saveModuleAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.attribute;
         attributes[data.attribute] = data.attributeValue;
+        state.dirty = true;
       },
       saveCustomModuleData(state, data) {
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
         const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
         state.modules[data.moduleId].data = newData;
+        state.dirty = true;
       },
       saveCustomModuleDataField(state, data) {
         state.modules[data.moduleId].data[data.field] = data.value;
+        state.dirty = true;
       },
       setEditorOptions(state, toolbar) {
         state.editorToolbar = toolbar;

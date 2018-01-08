@@ -97,6 +97,20 @@
       currentCustomModule() {
         return !_.isUndefined(this.$store.getters["campaign/currentCustomModule"]);
       },
+      dirty() {
+        return this.$store.getters["campaign/dirty"];
+      }
+    },
+    watch:{
+      dirty(value) {
+        if (value === true) {
+          $(window).bind('beforeunload', () => {
+            return "If you leave this page, you will lose any unsaved changes.";
+          });
+        } else {
+          $(window).unbind('beforeunload');
+        }
+      },
     },
     directives: {
       'sticky': VueSticky,
@@ -110,7 +124,7 @@
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
-      }
+      },
     },
     created: function () {
       this.$store.commit("global/setLoader", true);
