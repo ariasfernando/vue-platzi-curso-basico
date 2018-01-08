@@ -8,10 +8,13 @@ import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
 import store from './store';
 import Campaign from './components/campaign/Campaign.vue';
+import { campaignDictionary } from './resources/dictionary';
 
 Vue.use(Bootstrap);
 Vue.use(VueResource);
 Vue.use(VeeValidate);
+VeeValidate.Validator.localize('en', campaignDictionary);
+
 Vue.use(Toast, {
   horizontalPosition: 'center',
   verticalPosition: 'bottom',

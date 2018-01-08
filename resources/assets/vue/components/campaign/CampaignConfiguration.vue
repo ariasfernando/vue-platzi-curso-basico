@@ -38,6 +38,7 @@
             :select-label="'Select'" :close-on-select="true" :taggable="true"
             :hide-selected="true" :preserve-search="true"
             @remove="tagRemove" @tag="tagAdd" @select="tagAdd" placeholder="Choose tag">
+            <slot name="noResult"></slot>
           </multiselect>
         </div>
 
