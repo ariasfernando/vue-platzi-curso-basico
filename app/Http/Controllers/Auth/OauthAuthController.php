@@ -9,7 +9,6 @@ use Socialite;
 use Stensul\Models\User;
 use Stensul\Models\Role;
 use Illuminate\Http\Request;
-use Stensul\Models\WhiteList;
 use Illuminate\Contracts\Auth\Guard;
 use Stensul\Http\Controllers\Controller;
 
