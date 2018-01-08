@@ -256,7 +256,7 @@ Application.utils = {
         },
         validateEmailFormat: function( field ){
             var emails = field.value.split(";").filter(Boolean)
-            var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            var re = /^(([\w-\+]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/i;
 
             for( var i=0; i<emails.length; i++ ){
                 if( !re.test(emails[i].trim()) ){
