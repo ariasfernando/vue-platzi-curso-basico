@@ -13,7 +13,18 @@
               </i>
             </a>
           </label>
-          <input type="text" placeholder="Campaign Name" name="campaignName" id="campaignName" :value="form.campaignName" @blur="saveCampaignName"/>
+          <p>
+            <input type="text" 
+                 placeholder="Campaign Name" 
+                 name="campaignName" 
+                 id="campaignName" 
+                 v-validate.initial="'required'"
+                 :value="form.campaignName" 
+                 :class="{'input': true, 'is-danger': errors.has('campaignName') }"
+                 @input="saveCampaignName"/>
+
+            <span v-show="errors.has('campaignName')" class="help is-danger">{{ errors.first('campaignName') }}</span>
+          </p>
         </div>
 
         <div class="form-group configuration-field configuration-nomargin" v-if="enablePreheader">
@@ -27,6 +38,7 @@
             :select-label="'Select'" :close-on-select="true" :taggable="true"
             :hide-selected="true" :preserve-search="true"
             @remove="tagRemove" @tag="tagAdd" @select="tagAdd" placeholder="Choose tag">
+            <slot name="noResult"></slot>
           </multiselect>
         </div>
 
@@ -54,13 +66,12 @@
           </button>
           <button
             class="unlock-campaign-btn btn btn-default"
-            :disabled="this.$_app.config.logged_user !== lockedBy"
             data-toggle="tooltip"
             data-placement="bottom"
             title="Campaign is locked"
+            :disabled="this.$_app.config.logged_user !== lockedBy"
             @click.prevent="unlockCampaign"
-            v-show="locked"
-          >
+            v-show="locked">
             <i class="fa fa-lock" aria-hidden="true"></i>
           </button>
         </div>
@@ -120,13 +131,15 @@
     },
 
     created () {
+      this.validate();
+      
       this.enablePreheader = this.campaign.library_config.preheader;
       this.preheaderMaxLength = Application.globals.preheaderConfig.max_length;
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name;
-
+     
       let tagList = this.$store.getters["campaign/campaign"].tag_list;
       for (let n = 0; n < tagList.length; n++) {
         this.tagOptions.push(tagList[n].name);
@@ -138,7 +151,30 @@
       });
       this.loadConfig();
     },
+    mounted (){
+      let inputcampaignName = document.getElementById("campaignName");
+
+      if ( inputcampaignName.value === "" ){
+        inputcampaignName.focus();
+      }
+    },
     methods: {
+      validate() {
+        this.$validator.validateAll().then(() => {
+          if (this.$validator.errors.items.length) {
+            _.each(this.$validator.errors.items, (err) => {
+              _.extend(err, { 
+                scope: 'Campaign Name', 
+              });
+            });
+
+            this.$store.dispatch('campaign/addErrors', this.$validator.errors.items);
+          } else {
+            this.$store.commit('campaign/clearErrorsByScope', 'Campaign Name');
+          }
+
+        });
+      },
       saveSettings(e) {
         let value = e.target.value;
 
@@ -249,8 +285,10 @@
         this.form.campaignName = value;
         this.$store.commit('campaign/saveSetting', {
           name: 'campaignName',
-          value: value
+          value
         });
+
+        this.validate();
       },
     }
   }

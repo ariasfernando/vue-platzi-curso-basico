@@ -1,6 +1,6 @@
 <template>
   <div class="module-toolbar">
-    <div class="icon-remove" @click="remove"><i class="fa fa-trash-o"></i></div>
+    <div class="icon-remove" @click.stop="remove"><i class="fa fa-trash-o"></i></div>
     <div class="icon-config" v-if="hasConfig" @click="config"><i class="fa fa-cogs"></i></div>
     <div class="icon-clone" @click="clone"><i class="fa fa-clone"></i></div>
     <div class="icon-move"><i class="fa fa-arrows"></i></div>
@@ -60,6 +60,8 @@
       },
       remove() {
         this.$store.dispatch("campaign/removeModule", this.moduleId);
+        this.$store.commit("campaign/setActiveModule", null);
+        this.$store.commit("campaign/setCurrentModule", null);
       },
     },
   };

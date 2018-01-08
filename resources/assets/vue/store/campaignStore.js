@@ -24,6 +24,7 @@ function campaignStore() {
       buildingMode: 'desktop',
       editorToolbar: '',
       dirty: false,
+      fieldErrors: [],
     },
     getters: {
       modules(state) {
@@ -70,6 +71,7 @@ function campaignStore() {
         }
         return false;
       },
+
     },
     mutations: {
       loadCampaignData(state, campaignData) {
@@ -88,13 +90,16 @@ function campaignStore() {
       },
       addModule(state, moduleData) {
         state.modules.push(moduleData);
+        state.dirty = true;
       },
       insertModule(state, {index, moduleData}) {
         state.modules.splice(index, 0, moduleData);
+        state.dirty = true;
       },
       cloneModule(state, moduleId) {
         const clone = _.cloneDeep(state.modules[moduleId]);
         state.modules.push(clone);
+        state.dirty = true;
       },
       setCustomModule(state, moduleId) {
         state.currentCustomModuleId = moduleId;
@@ -102,7 +107,6 @@ function campaignStore() {
       updateElement(state, payload) {
         const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
         state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
-
         state.dirty = true;
       },
       saveSetting(state, setting) {
@@ -113,6 +117,7 @@ function campaignStore() {
       },
       removeModule(state, moduleId) {
         state.modules.splice(moduleId, 1);
+        state.dirty = true;
       },
       setProcessStatus(state, processed = true) {
         state.campaign.campaign_data.processed = processed;
@@ -132,35 +137,43 @@ function campaignStore() {
         const columnId = data.columnId;
         const componentId = data.componentId;
         state.modules[moduleId].structure.columns[columnId].components[componentId] = data.component;
+        state.dirty = true;
       },
       savePlugin(state, payload) {
         const originalData = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data;
         const updated = { ...originalData, ...payload.data };
         state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data = updated;
+        state.dirty = true;
       },
       saveComponentStyle(state, data) {
         const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
         component.style[data.property] = data.value;
+        state.dirty = true;
       },
       saveComponentAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
         attributes[data.attribute] = data.attributeValue;
+        state.dirty = true;
       },
       saveColumnAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].attribute;
         attributes[data.attribute] = data.attributeValue;
+        state.dirty = true;
       },
       saveModuleAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.attribute;
         attributes[data.attribute] = data.attributeValue;
+        state.dirty = true;
       },
       saveCustomModuleData(state, data) {
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
         const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
         state.modules[data.moduleId].data = newData;
+        state.dirty = true;
       },
       saveCustomModuleDataField(state, data) {
         state.modules[data.moduleId].data[data.field] = data.value;
+        state.dirty = true;
       },
       setEditorOptions(state, toolbar) {
         state.editorToolbar = toolbar;
@@ -172,11 +185,31 @@ function campaignStore() {
       setTemplating(state, templating) {
         state.campaign.campaign_data.template = templating;
       },
+      addError(state, error) {
+        state.fieldErrors.push(error);
+      },
+      clearErrorsByModuleId(state, moduleId) {
+        const filtered = state.fieldErrors.filter(err => err.scope.moduleId !== moduleId);
+        state.fieldErrors = filtered;
+      },
+      clearErrorsByScope(state, scope) {
+        const filtered = state.fieldErrors.filter(err => !_.isEqual(err.scope, scope));
+        state.fieldErrors = filtered;
+      },
       error(err) {
         console.error(err);
       },
     },
     actions: {
+      addErrors(context, errors) {
+        _.each(errors, (error) => {
+          context.commit('clearErrorsByScope', error.scope);
+
+          if (context.state.fieldErrors.indexOf(error) === -1) {
+            context.commit('addError', error);
+          }
+        });
+      },
       saveCustomModuleData(context, data) {
         _.each(data.data, (value, field) => {
           context.commit('saveCustomModuleDataField', {
@@ -293,9 +326,10 @@ function campaignStore() {
       },
       removeModule(context, moduleId) {
         context.commit('removeModule', moduleId);
+        context.commit('clearErrorsByModuleId', moduleId);
       },
     },
-  }
-};
+  };
+}
 
 module.exports = campaignStore();

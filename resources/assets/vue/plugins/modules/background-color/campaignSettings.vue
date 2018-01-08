@@ -1,7 +1,7 @@
 <template>
   <div class="plugin-wrapper-inner" v-if="component">
     <label>{{ plugin.title }}</label>
-    <compact-picker ref="compact" v-model="colors" @input="updateValue"></compact-picker>
+    <compact-picker ref="compact" v-model="colors" ></compact-picker>
   </div>
 </template>
 
@@ -28,10 +28,13 @@
         }
         return component;
       },
-      colors() {
-        return {
-          hex: this.component.attribute ? this.component.attribute.bgcolor : this.plugin.config.defaultValue
-        }
+      colors: {
+        get() {
+          return { hex: this.component.attribute ? this.component.attribute.bgcolor : this.plugin.config.defaultValue }
+        },
+        set(value) {
+          this.updateValue('bgcolor', value);
+        },
       },
     },
     data() {
@@ -40,21 +43,18 @@
       }
     },
     methods: {
-      updateValue(value) {
+      updateValue(attribute, value) {
         const payload = {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          attribute: 'bgcolor',
+          attribute,
           attributeValue: value,
         };
 
         this.$store.commit('campaign/saveComponentAttribute', payload);
       }
-    },
-    mounted() {
-      this.$refs.compact.defaultColors = this.defaultColors;
     }
   }
 </script>
