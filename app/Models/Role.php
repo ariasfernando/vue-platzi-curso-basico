@@ -3,9 +3,11 @@
 namespace Stensul\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class Role extends Eloquent
 {
+    use SoftDeletes;
 
     /**
      * The database table used by the model.
