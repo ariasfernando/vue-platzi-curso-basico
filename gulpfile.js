@@ -165,6 +165,7 @@ gulp.task('elixir-scripts', function () {
             'bower/tinymce/plugins/autolink/plugin.js',
             'bower/tinymce/plugins/link/plugin.js',
             'bower/tinymce/plugins/advlist/plugin.js',
+            'js/library/helpers/*.js',
             'bower/magnific-popup/dist/jquery.magnific-popup.js',
             'bower/cropit/dist/jquery.cropit.js',
             'js/library/application-utils.js',
@@ -202,6 +203,7 @@ gulp.task('elixir-scripts', function () {
             'bower/tinymce/plugins/autolink/plugin.js',
             'bower/tinymce/plugins/link/plugin.js',
             'bower/tinymce/plugins/advlist/plugin.js',
+            'js/library/helpers/*.js',
             // -- zxcvbn --
             'bower/zxcvbn/dist/zxcvbn.js',
             // -- Vue --

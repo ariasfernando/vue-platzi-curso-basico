@@ -330,15 +330,25 @@ Application.utils = {
             return true;
         },
         initField: function( field ){
-            if( $(field).hasClass("error") ){
-                $(field).removeClass("error");
-
-                if ($(field).hasClass('selectpicker')) {
-                    $(field).next().next("label.error").remove();
-                } else {
-                    $(field).next("label.error").remove();
-                }
+            $(field)
+                .removeClass("error warning success")
+                .removeAttr("disabled");
+            
+            var $labelMessage = $(field).next("label");
+            if( $labelMessage.hasClass("error") || $labelMessage.hasClass("success") || $labelMessage.hasClass("warning") ){
+                $labelMessage.remove();
             }
+
+            if ($(field).prop('tagName') === 'SELECT' && $(field).hasClass('selectpicker')) {
+                // If field is a select multiple, remove error near .bootstrap-select
+                $(field).parent().find('.bootstrap-select').removeClass('error').next("label.error").remove();;
+            }
+
+            if( $(field).hasClass("warning") ){
+                $(field).removeClass("warning");
+                $(field).next("label.warning").remove();
+            }
+
         },
         setError: function( field, message ){
 

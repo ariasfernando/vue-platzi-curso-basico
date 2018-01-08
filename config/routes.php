@@ -77,7 +77,8 @@ $default = [
             '/api/history' => 'ApiController@getHistory'
         ],
         'post'   => [
-            '/api/upload-email' => 'ApiController@postUploadEmail'
+            '/api/upload-email' => 'ApiController@postUploadEmail',
+            '/api/validate-url' => 'ApiController@postValidateUrl'
         ],
         'put'    => [],
         'delete' => [],
