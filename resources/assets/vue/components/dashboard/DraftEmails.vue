@@ -78,24 +78,24 @@
                 class="proof"
                 data-toggle="tooltip"
                 data-placement="top"
-                title="Open proof review"
+                data-tooltip="Open proof review"
                 v-if="proof.allow && proof.status && campaign.has_active_proof"
                 ><i class="glyphicon glyphicon-blackboard"></i></a>
-              <a href="#" @click.prevent="clone(campaign._id)" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
+              <a href="#" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
 
               <a :data-campaign-id="campaign._id"
                 class="proof-open-modal"
                 data-toggle="tooltip"
                 data-placement="top"
                 href="#"
-                title="Send for review"
+                data-tooltip="Send for review"
                 v-if="proof.allow && proof.status"
                 ><i class="glyphicon glyphicon-search"></i></a>
 
               <a
                 :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
                 class="edit"
-                title="Edit"
+                data-tooltip="Edit"
                 v-if="!enableLocking || (!campaign.locked || campaign.locked_by === $_app.config.logged_user)"
               >
                 <i class="glyphicon glyphicon-pencil"></i>
@@ -107,7 +107,7 @@
                 @click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title="Lock Campaign"
+                data-tooltip="Lock"
               >
                 <i class="glyphicon fa fa-lock"></i>
               </a>
@@ -118,11 +118,11 @@
                 @click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title="Unlock Campaign"
+                data-tooltip="Unlock"
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
-              <a href="#" title="Delete" v-if="!enableLocking || !campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
+              <a href="#" data-tooltip="Delete" v-if="!enableLocking || !campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
