@@ -105,9 +105,12 @@ function campaignStore() {
         state.currentCustomModuleId = moduleId;
       },
       updateElement(state, payload) {
-        const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
-        state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
-        state.dirty = true;
+        // This is necessary, since the clickaway function is executed.
+        if ( !_.isUndefined(payload.moduleId) ){ 
+          const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
+          state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
+          state.dirty = true;
+        }
       },
       saveSetting(state, setting) {
         state.editedSettings[setting.name] = setting.value;

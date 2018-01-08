@@ -3,7 +3,7 @@
     <label>Select an image</label>
     <div class="plugin-upload">
       <label for="upload-image" class="upload-image-trigger">
-        <i class="glyphicon glyphicon-cloud-upload"></i> Upload Image
+        <i class="glyphicon glyphicon-cloud-upload"></i> Update Image
       </label>
       <input type="file" @change="onFileChange" id="upload-image">
       <span class="upload-image-filename" id="upload-image-filename">No file chosen</span>
