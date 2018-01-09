@@ -14,6 +14,7 @@ require(Mix.paths.mix());
  */
 
 Mix.dispatch('init', Mix);
+Mix.manifest.name = 'build/rev-manifest.json';
 
 /**
  * Now that we know which build tasks are required by the

@@ -4,12 +4,12 @@
 
 let mix = require('laravel-mix');
 const path = require('path');
-//const fs = require('fs');
+const fs = require('fs');
 const appName = process.env && process.env.APP_NAME && process.env.APP_NAME.toLowerCase() || 'base';
-const assetsPath = './resources/assets/';
+const assetsPath = 'resources/assets/';
 const assetsVuePath = `${assetsPath}/vue/`;
 const jsDestinationPath = 'public/js/';
-const bowerPath = './resources/assets/bower/';
+const bowerPath = 'resources/assets/bower/';
 const customerAssetsPath = 'stensul/customer/resources/assets';
 function jsAppFilePath (file) {
   // if (fs.existsSync( assetsPath + 'js/' + appName + '/' + file )) {
@@ -22,7 +22,29 @@ function jsAppFilePath (file) {
 mix.webpackConfig({
     node: {
       fs: "empty"
+    },
+    module:{
+      loaders: [
+        { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
+      ],
     }
+    // module: {
+    //   rules: [
+    //     { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
+    //   ]
+    // }
+    // module: {
+    //   rules: [{
+    //         test: /\.less$/,
+    //         use: [{
+    //             loader: "style-loader" // creates style nodes from JS strings
+    //         }, {
+    //             loader: "css-loader" // translates CSS into CommonJS
+    //         }, {
+    //             loader: "less-loader" // compiles Less to CSS
+    //         }]
+    //     }]
+    // }
 });
 
 mix
@@ -40,9 +62,9 @@ mix
   })
   .less(assetsPath + 'less/base/tool/tool.less', `public/css/tool.css`)
   .less(assetsPath + 'less/base/base-v2/admin.less', `public/css/admin.css`)
-  // .js([
-  //   assetsVuePath + 'main.js'
-  // ], `${jsDestinationPath}customer.js`)
+  .js([
+    customerAssetsPath + '/vue/main.js'
+  ], `${jsDestinationPath}customer.js`)
   .js([
     assetsVuePath + 'campaign.js'
   ], `${jsDestinationPath}campaign-components.js`)
@@ -62,6 +84,33 @@ mix
     assetsVuePath + 'dashboard.js',
     assetsPath + 'js/library/custom-plugins/st-pagination-bar.jquery.js'
   ], `${jsDestinationPath}dashboard-components.js`)
+  .scripts([
+    `${bowerPath}jquery/dist/jquery.min.js`,
+    `${bowerPath}jquery-ui/jquery-ui.min.js`,
+    `${bowerPath}bootstrap/dist/js/bootstrap.min.js`,
+    `${bowerPath}bootstrapcolorpicker/dist/js/bootstrap-colorpicker.min.js`,
+    `${bowerPath}bootstrap-select/dist/js/bootstrap-select.min.js`,
+    // -- TinyMCE editor --
+    `${bowerPath}tinymce/tinymce.js`,
+    `${bowerPath}tinymce/themes/modern/theme.js`,
+    `${bowerPath}tinymce/plugins/image/plugin.js`,
+    `${bowerPath}tinymce/plugins/imagetools/plugin.js`,
+    `${bowerPath}tinymce/plugins/paste/plugin.js`,
+    `${bowerPath}tinymce/plugins/textcolor/plugin.js`,
+    `${bowerPath}tinymce/plugins/colorpicker/plugin.js`,
+    `${bowerPath}tinymce/plugins/lists/plugin.js`,
+    `${bowerPath}tinymce/plugins/autolink/plugin.js`,
+    `${bowerPath}tinymce/plugins/link/plugin.js`,
+    `${bowerPath}tinymce/plugins/advlist/plugin.js`,
+    `${bowerPath}magnific-popup/dist/jquery.magnific-popup.js`,
+    `${bowerPath}cropit/dist/jquery.cropit.js`,
+    'js/library/application-utils.js',
+    'js/library/master-image-editor.v2.js',
+    'js/library/modal-manager.js',
+    'js/library/image-manager.js',
+    'js/library/modals/*.js',
+    'js/plugins/tinymce/**/plugin.js'
+  ], `${jsDestinationPath}/library-v2.js`)
   .scripts([
     `${bowerPath}underscore/underscore.js`,
     `${bowerPath}jquery/dist/jquery.min.js`,
@@ -85,7 +134,7 @@ mix
     `${bowerPath}tinymce/plugins/link/plugin.js`,
     `${bowerPath}tinymce/plugins/advlist/plugin.js`,
     `${bowerPath}zxcvbn/dist/zxcvbn.js`,
-    //`${bowerPath}tinymce/plugins/noneditable/plugin.js`,
+    `${bowerPath}tinymce/plugins/noneditable/plugin.js`,
     // -- Vue --
     `${bowerPath}vue/dist/vue.min.js`,
     // assetsPath + jsAppFilePath('vue/mixins.js'),
@@ -151,39 +200,44 @@ mix
     //`${assetsPath}js/library/campaign-manager.js`,
     assetsPath + jsAppFilePath('admin.js'),
   ], `${jsDestinationPath}/admin.js`)
-  // .scripts([
-  //   `${bowerPath}jquery/dist/jquery.min.js`,
-  //   `${bowerPath}jquery-ui/jquery-ui.min.js`,
-  //   `${bowerPath}bootstrap/dist/js/bootstrap.min.js`,
-  //   assetsPath + jsAppFilePath('preview.js')
-  // ], `${jsDestinationPath}/preview.js`)
-  .version()
+  .scripts([
+    `${bowerPath}jquery/dist/jquery.min.js`,
+    `${bowerPath}jquery-ui/jquery-ui.min.js`,
+    `${bowerPath}bootstrap/dist/js/bootstrap.min.js`,
+    assetsPath + jsAppFilePath('preview.js')
+  ], `${jsDestinationPath}/preview.js`)
+  //.version()
+  //.sourceMaps()
   .copyDirectory(`${bowerPath}tinymce/plugins/textcolor`, './public/build/js/plugins/tinymce/plugins/textcolor')
   //.version(['./public/build/js/plugins/tinymce/plugins/textcolor'])
   // Bootstrap colorpicker
-  .copyDirectory(`${bowerPath}bootstrapcolorpicker/dist/img/bootstrap-colorpicker`, './public/css/images/bootstrap-colorpicker')
+  .copyDirectory(`${bowerPath}bootstrapcolorpicker/dist/img/bootstrap-colorpicker`, 'public/css/images/bootstrap-colorpicker')
   // jQuery UI
-  .copyDirectory(`${bowerPath}jquery-ui/themes/ui-lightness/images`, './public/css/images/jquery-ui')
+  .copyDirectory(`${bowerPath}jquery-ui/themes/ui-lightness/images`, 'public/css/images/jquery-ui')
   // TinyMCE
-  .copyDirectory(`${bowerPath}tinymce/skins`, './public/css/tinymce')
-  .copyDirectory(`${bowerPath}tinymce/plugins/textcolor`, '.public/js/plugins/tinymce/plugins/textcolor')
+  .copyDirectory(`${bowerPath}tinymce/skins`, 'public/css/tinymce')
+  .copyDirectory(`${bowerPath}tinymce/plugins/textcolor`, 'public/js/plugins/tinymce/plugins/textcolor')
   // Customer Assets
   //.copyDirectory(`${customerAssetsPath}/images`, 'public/images/customer')
   //.copyDirectory(`${customerAssetsPath}/fonts`, 'public/fonts')
+  .copyDirectory(`public/js`, 'public/build/js')
+  .copyDirectory(`public/css/admin.css`, 'public/build/css/admin.css')
+  .copyDirectory(`public/css/tool.css`, 'public/build/css/tool.css')
+  .copyDirectory(`public/fonts`, 'public/build/fonts')
+  .copyDirectory(`public/images`, 'public/build/images')
+  .then(function () {
+    const fileToEdit = './public/build/rev-manifest.json';
+    fs.readFile(fileToEdit, 'utf8', function (err,data) {
+      if (err) {
+        return console.log(err);
+      }
+      const lessBuildPath = data.replace(/\/build\//g, '');
+      const lessCssPath = lessBuildPath; //.replace(/\/css\//g, '../css/')
+      fs.writeFile(fileToEdit, lessCssPath, 'utf8', function (err) {
+         if (err) return console.log(err);
+      });
+    })})
   ;
-  // .then(function () {
-  //   const fileToEdit = './public/build/rev-manifest.json';
-  //   fs.readFile(fileToEdit, 'utf8', function (err,data) {
-  //     if (err) {
-  //       return console.log(err);
-  //     }
-  //     const lessBuildPath = data.replace(/\/build\//g, '');
-  //     const lessCssPath = lessBuildPath.replace(/\/css\//g, '../css/')
-  //     fs.writeFile(fileToEdit, lessCssPath, 'utf8', function (err) {
-  //        if (err) return console.log(err);
-  //     });
-  //   }) 
-  //});
 
 // Full API
 // mix.js(src, output);
