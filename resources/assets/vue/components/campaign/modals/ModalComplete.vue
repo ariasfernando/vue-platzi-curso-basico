@@ -27,8 +27,13 @@
               <button v-if="campaign.process_plaintext" type="button" class="btn btn-plain-text">Plaintext</button>
 
               <div v-if="campaign.library_config.esp && campaign.library_config.espProvider"
-                   type="button" class="btn btn-default btn-upload-api beta-btn-secondary" :data-campaign-id="campaign.campaign_id"
-                   :data-api-driver="campaign.library_config.espProvider" v-html="'Upload to ' + campaign.library_config.espProvider" @click="uploadModal">
+                   type="button" 
+                   class="btn btn-default btn-upload-api beta-btn-secondary " 
+                   :data-campaign-id="campaign.campaign_id"
+                   :data-api-driver="campaign.library_config.espProvider" 
+                   v-html="'Upload to ' +  toCamel( campaign.library_config.espProvider ) " 
+                   @click="uploadModal"
+              >
               </div>
 
               <div class="view-browser">
@@ -52,6 +57,8 @@
   import { html_beautify } from 'js-beautify';
   import campaignService from '../../../services/campaign'
   import CopyToClipboard from './partials/CopyToClipboard.vue'
+  import _ from 'lodash'
+  import uc from 'underscore-contrib'
 
   export default {
     components: {
@@ -85,6 +92,9 @@
       }
     },
     methods: {
+      toCamel(str) {
+        return _.startCase(str);
+      },
       getPlainText() {
         campaignService.processPlainText(this.campaign.campaign_id)
           .then((response) => {
