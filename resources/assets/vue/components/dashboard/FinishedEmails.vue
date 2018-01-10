@@ -176,9 +176,6 @@
         default: false
       }
     },
-    mounted: function() {
-      console.log(this.campaigns.data);
-    },
     methods: {
       isUploaded: function(campaign) {
         if (campaign.uploads.length) {
