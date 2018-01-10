@@ -138,7 +138,7 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
-      this.form.campaignName = this.campaign.campaign_name;
+      this.form.campaignName = this.campaign.campaign_name || 'Campaign Name';
 
       let tagList = this.$store.getters["campaign/campaign"].tag_list;
       for (let n = 0; n < tagList.length; n++) {
