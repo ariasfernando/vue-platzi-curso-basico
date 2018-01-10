@@ -118,6 +118,8 @@
         });
       },
       updateAttribute(image) {
+        this.removeErrorsImages();
+        
         const payload = {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
@@ -140,8 +142,6 @@
           attribute: 'alt',
           attributeValue: value,
         };
-
-        this.removeErrorsImages();
 
         this.$store.commit('campaign/saveComponentAttribute', payload);
 
