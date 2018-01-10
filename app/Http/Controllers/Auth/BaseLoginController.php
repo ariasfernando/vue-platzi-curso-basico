@@ -159,7 +159,8 @@ class BaseLoginController extends Controller
         }
     }
 
-    private function returnWithError() {
+    private function returnWithError()
+    {
         return redirect()->back()->with(array("message" => "ERROR_DEFAULT"));
     }
 
