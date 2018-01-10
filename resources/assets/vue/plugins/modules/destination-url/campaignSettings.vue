@@ -17,7 +17,8 @@
           <input name="href" type="text" placeholder="http://examp.le" v-model="href">
         </p>
       </span>
-      <span>
+
+      <span v-if="plugin.config.target">
         <label>Target</label>
         <div class="alignment-options">
           <a v-for="(icon, option) in options" 

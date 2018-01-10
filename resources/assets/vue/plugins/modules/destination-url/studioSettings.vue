@@ -11,12 +11,20 @@
         </div>
       </div>
 
-
       <div v-if="plugin.enabled" class="form-group">
         <label class="col-sm-7 control-label" data-name="required"><b>Required</b></label>
         <div class="col-sm-5">
           <span>
             <toggle-button :value="plugin.config.required" name="required" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
+          </span>
+        </div>
+      </div>
+
+      <div v-if="plugin.enabled" class="form-group">
+        <label class="col-sm-7 control-label" data-name="target"><b>Target</b></label>
+        <div class="col-sm-5">
+          <span>
+            <toggle-button :value="plugin.config.target" name="target" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
           </span>
         </div>
       </div>
@@ -69,13 +77,16 @@
         this.$store.commit('module/togglePlugin', payload);
       },
       updateField(e) {
+
+        const option = e.srcEvent.target.parentElement.attributes.getNamedItem('name').value;
+        const config = {};
+        config[option] = e.value;
+
         const payload = {
           plugin: this.name,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          config: {
-            required: e.value,
-          },
+          config,
         };
 
         this.$store.commit('module/savePlugin', payload);
