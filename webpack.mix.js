@@ -1,7 +1,3 @@
-//require('dotenv').config();
-
-//console.log("process.env", process.env)
-
 let mix = require('laravel-mix');
 const path = require('path');
 const fs = require('fs');
@@ -9,52 +5,22 @@ const appName = process.env && process.env.APP_NAME && process.env.APP_NAME.toLo
 const assetsPath = 'resources/assets/';
 const assetsVuePath = `${assetsPath}/vue/`;
 const jsDestinationPath = 'public/js/';
-const bowerPath = 'resources/assets/bower/';
 const customerAssetsPath = 'stensul/customer/resources/assets';
 function jsAppFilePath (file) {
-  // if (fs.existsSync( assetsPath + 'js/' + appName + '/' + file )) {
-  //   return 'js/' + appName + '/' + file;
-  // } else {
     return 'js/base/' + file;
-  //}
 }
 
 mix.webpackConfig({
     node: {
       fs: "empty"
-    },
-    module:{
-      loaders: [
-        { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
-      ],
     }
-    // module: {
-    //   rules: [
-    //     { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
-    //   ]
-    // }
-    // module: {
-    //   rules: [{
-    //         test: /\.less$/,
-    //         use: [{
-    //             loader: "style-loader" // creates style nodes from JS strings
-    //         }, {
-    //             loader: "css-loader" // translates CSS into CommonJS
-    //         }, {
-    //             loader: "less-loader" // compiles Less to CSS
-    //         }]
-    //     }]
-    // }
 });
 
 mix
   .setPublicPath('public/')
   .options({
-    extractVueStyles: true,
-    processCssUrls: false,
-    uglify: {
-      minimize: true
-    }
+    extractVueStyles: false,
+    processCssUrls: false
   })
   .autoload({
     $: "jquery",
@@ -85,25 +51,24 @@ mix
     assetsPath + 'js/library/custom-plugins/st-pagination-bar.jquery.js'
   ], `${jsDestinationPath}dashboard-components.js`)
   .scripts([
-    `${bowerPath}jquery/dist/jquery.min.js`,
-    `${bowerPath}jquery-ui/jquery-ui.min.js`,
-    `${bowerPath}bootstrap/dist/js/bootstrap.min.js`,
-    `${bowerPath}bootstrapcolorpicker/dist/js/bootstrap-colorpicker.min.js`,
-    `${bowerPath}bootstrap-select/dist/js/bootstrap-select.min.js`,
+    `node_modules/jquery/dist/jquery.min.js`,
+    `node_modules/jquery-ui/jquery-ui.min.js`,
+    `node_modules/bootstrap/dist/js/bootstrap.min.js`,
+    `node_modules/bootstrap-select/dist/js/bootstrap-select.min.js`,
     // -- TinyMCE editor --
-    `${bowerPath}tinymce/tinymce.js`,
-    `${bowerPath}tinymce/themes/modern/theme.js`,
-    `${bowerPath}tinymce/plugins/image/plugin.js`,
-    `${bowerPath}tinymce/plugins/imagetools/plugin.js`,
-    `${bowerPath}tinymce/plugins/paste/plugin.js`,
-    `${bowerPath}tinymce/plugins/textcolor/plugin.js`,
-    `${bowerPath}tinymce/plugins/colorpicker/plugin.js`,
-    `${bowerPath}tinymce/plugins/lists/plugin.js`,
-    `${bowerPath}tinymce/plugins/autolink/plugin.js`,
-    `${bowerPath}tinymce/plugins/link/plugin.js`,
-    `${bowerPath}tinymce/plugins/advlist/plugin.js`,
-    `${bowerPath}magnific-popup/dist/jquery.magnific-popup.js`,
-    `${bowerPath}cropit/dist/jquery.cropit.js`,
+    `node_modules/tinymce/tinymce.js`,
+    `node_modules/tinymce/themes/modern/theme.js`,
+    `node_modules/tinymce/plugins/image/plugin.js`,
+    `node_modules/tinymce/plugins/imagetools/plugin.js`,
+    `node_modules/tinymce/plugins/paste/plugin.js`,
+    `node_modules/tinymce/plugins/textcolor/plugin.js`,
+    `node_modules/tinymce/plugins/colorpicker/plugin.js`,
+    `node_modules/tinymce/plugins/lists/plugin.js`,
+    `node_modules/tinymce/plugins/autolink/plugin.js`,
+    `node_modules/tinymce/plugins/link/plugin.js`,
+    `node_modules/tinymce/plugins/advlist/plugin.js`,
+    `node_modules/magnific-popup/dist/jquery.magnific-popup.js`,
+    `node_modules/cropit/dist/jquery.cropit.js`,
     'js/library/application-utils.js',
     'js/library/master-image-editor.v2.js',
     'js/library/modal-manager.js',
@@ -112,33 +77,30 @@ mix
     'js/plugins/tinymce/**/plugin.js'
   ], `${jsDestinationPath}/library-v2.js`)
   .scripts([
-    `${bowerPath}underscore/underscore.js`,
-    `${bowerPath}jquery/dist/jquery.min.js`,
-    `${bowerPath}jquery-ui/jquery-ui.min.js`,
-    `${bowerPath}bootstrap/dist/js/bootstrap.min.js`,
-    `${bowerPath}magnific-popup/dist/jquery.magnific-popup.js`,
-    `${bowerPath}cropit/dist/jquery.cropit.js`,
-    `${bowerPath}bootstrapcolorpicker/dist/js/bootstrap-colorpicker.min.js`,
-    `${bowerPath}bootstrap-select/dist/js/bootstrap-select.min.js`,
-    `${bowerPath}noty/js/noty/packaged/jquery.noty.packaged.js`,
+    `node_modules/underscore/underscore.js`,
+    `node_modules/jquery/dist/jquery.min.js`,
+    `node_modules/jquery-ui/jquery-ui.min.js`,
+    `node_modules/bootstrap/dist/js/bootstrap.min.js`,
+    `node_modules/magnific-popup/dist/jquery.magnific-popup.js`,
+    `node_modules/cropit/dist/jquery.cropit.js`,
+    `node_modules/bootstrap-select/dist/js/bootstrap-select.min.js`,
+    `node_modules/noty/js/noty/packaged/jquery.noty.packaged.js`,
     // -- Jquery Simple colorpicker List --
-    `${bowerPath}jquery-simplecolorpicker/jquery.simplecolorpicker.js`,
+    `node_modules/jquery-simplecolorpicker/jquery.simplecolorpicker.js`,
     // -- TinyMCE editor --
-    `${bowerPath}tinymce/tinymce.js`,
-    `${bowerPath}tinymce/themes/modern/theme.js`,
-    `${bowerPath}tinymce/plugins/paste/plugin.js`,
-    `${bowerPath}tinymce/plugins/textcolor/plugin.js`,
-    `${bowerPath}tinymce/plugins/colorpicker/plugin.js`,
-    `${bowerPath}tinymce/plugins/lists/plugin.js`,
-    `${bowerPath}tinymce/plugins/autolink/plugin.js`,
-    `${bowerPath}tinymce/plugins/link/plugin.js`,
-    `${bowerPath}tinymce/plugins/advlist/plugin.js`,
-    `${bowerPath}zxcvbn/dist/zxcvbn.js`,
-    `${bowerPath}tinymce/plugins/noneditable/plugin.js`,
+    `node_modules/tinymce/tinymce.js`,
+    `node_modules/tinymce/themes/modern/theme.js`,
+    `node_modules/tinymce/plugins/paste/plugin.js`,
+    `node_modules/tinymce/plugins/textcolor/plugin.js`,
+    `node_modules/tinymce/plugins/colorpicker/plugin.js`,
+    `node_modules/tinymce/plugins/lists/plugin.js`,
+    `node_modules/tinymce/plugins/autolink/plugin.js`,
+    `node_modules/tinymce/plugins/link/plugin.js`,
+    `node_modules/tinymce/plugins/advlist/plugin.js`,
+    `node_modules/zxcvbn/dist/zxcvbn.js`,
+    `node_modules/tinymce/plugins/noneditable/plugin.js`,
     // -- Vue --
-    `${bowerPath}vue/dist/vue.min.js`,
-    // assetsPath + jsAppFilePath('vue/mixins.js'),
-    // assetsPath + jsAppFilePath('vue/components.js'),
+    `node_modules/vue/dist/vue.min.js`,
     // -- Extended plugins --
     `${assetsPath}js/plugins/**/*.js`,
     // -- Common scripts --
@@ -168,7 +130,6 @@ mix
   .scripts([
     `${assetsPath}js/library/custom-plugins/st-pagination-bar.jquery.js`,
     `${assetsPath}js/library/admin/*.js`,
-    //`${assetsPath}js/library/campaign-manager.js`,
     assetsPath + jsAppFilePath('admin.js'),
   ], `${jsDestinationPath}/admin.js`)
   .scripts([
@@ -179,7 +140,6 @@ mix
     `${assetsPath}js/library/custom-plugins/st-color-picker.js`,
     // Configuration Modals [ Deprecated ]
     `${assetsPath}js/library/modals/*`,
-    //`${assetsPath}js/library/modules/*.js`,
     // Library
     `${assetsPath}js/library/image-library.js`,
     `${assetsPath}js/library/master-image-editor.js`,
@@ -188,41 +148,32 @@ mix
     `${assetsPath}js/library/campaign-preview.js`,
     `${assetsPath}js/library/module-manager.js`,
     `${assetsPath}js/library/modal-manager.js`,
-    //`${assetsPath}js/library/campaign-manager.js`,
     `${assetsPath}js/library/campaign-menu.js`,
     `${assetsPath}js/library/image-manager.js`,
-    //`${assetsPath}js/library/locking-manager.js`,
-    //assetsPath + jsAppFilePath('campaign.js'),
   ], `${jsDestinationPath}/campaign.js`)
   .scripts([
     `${assetsPath}js/library/custom-plugins/st-pagination-bar.jquery.js`,
     `${assetsPath}js/library/admin/*.js`,
-    //`${assetsPath}js/library/campaign-manager.js`,
     assetsPath + jsAppFilePath('admin.js'),
   ], `${jsDestinationPath}/admin.js`)
   .scripts([
-    `${bowerPath}jquery/dist/jquery.min.js`,
-    `${bowerPath}jquery-ui/jquery-ui.min.js`,
-    `${bowerPath}bootstrap/dist/js/bootstrap.min.js`,
+    `node_modules/jquery/dist/jquery.min.js`,
+    `node_modules/jquery-ui/jquery-ui.min.js`,
+    `node_modules/bootstrap/dist/js/bootstrap.min.js`,
     assetsPath + jsAppFilePath('preview.js')
   ], `${jsDestinationPath}/preview.js`)
-  //.version()
+  .version()
   //.sourceMaps()
-  .copyDirectory(`${bowerPath}tinymce/plugins/textcolor`, './public/build/js/plugins/tinymce/plugins/textcolor')
-  //.version(['./public/build/js/plugins/tinymce/plugins/textcolor'])
+  .copyDirectory(`node_modules/tinymce/plugins/textcolor`, './public/build/js/plugins/tinymce/plugins/textcolor')
   // Bootstrap colorpicker
-  .copyDirectory(`${bowerPath}bootstrapcolorpicker/dist/img/bootstrap-colorpicker`, 'public/css/images/bootstrap-colorpicker')
   // jQuery UI
-  .copyDirectory(`${bowerPath}jquery-ui/themes/ui-lightness/images`, 'public/css/images/jquery-ui')
+  .copyDirectory(`node_modules/jquery-ui/themes/base/images`, 'public/css/images/jquery-ui')
   // TinyMCE
-  .copyDirectory(`${bowerPath}tinymce/skins`, 'public/css/tinymce')
-  .copyDirectory(`${bowerPath}tinymce/plugins/textcolor`, 'public/js/plugins/tinymce/plugins/textcolor')
-  // Customer Assets
+  .copyDirectory(`node_modules/tinymce/skins`, 'public/css/tinymce')
+  .copyDirectory(`node_modules/tinymce/plugins/textcolor`, 'public/js/plugins/tinymce/plugins/textcolor')
+  // Customer Assets if needed
   //.copyDirectory(`${customerAssetsPath}/images`, 'public/images/customer')
   //.copyDirectory(`${customerAssetsPath}/fonts`, 'public/fonts')
-  .copyDirectory(`public/js`, 'public/build/js')
-  .copyDirectory(`public/css/admin.css`, 'public/build/css/admin.css')
-  .copyDirectory(`public/css/tool.css`, 'public/build/css/tool.css')
   .copyDirectory(`public/fonts`, 'public/build/fonts')
   .copyDirectory(`public/images`, 'public/build/images')
   .then(function () {
@@ -232,7 +183,7 @@ mix
         return console.log(err);
       }
       const lessBuildPath = data.replace(/\/build\//g, '');
-      const lessCssPath = lessBuildPath; //.replace(/\/css\//g, '../css/')
+      const lessCssPath = lessBuildPath.replace(/\/css\//g, '../css/')
       fs.writeFile(fileToEdit, lessCssPath, 'utf8', function (err) {
          if (err) return console.log(err);
       });
