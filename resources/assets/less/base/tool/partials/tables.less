@@ -38,6 +38,8 @@ table{
 		white-space: nowrap;
 		opacity: 0;
 		transition: all 0.5s ease;
+		left: 50%;
+    	transform: translateX(-50%);
 	}
 	a[data-tooltip]:before {
 		content: "";
@@ -51,13 +53,15 @@ table{
 		opacity: 0;
 		left: 0%;
 		bottom: 90%;
+		left: 50%;
+    	transform: translateX(-50%);
 	}
 	a[data-tooltip]:hover:after {
 		bottom: 120%;
 	}
 	a[data-tooltip]:hover:before {
 		bottom: 95%;
-		left: 0%;
+		left: 50%;
 	}
 	a[data-tooltip]:hover:after,
 	a[data-tooltip]:hover:before {
