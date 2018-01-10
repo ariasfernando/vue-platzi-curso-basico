@@ -140,6 +140,7 @@ class PasswordController extends Controller
             function ($user, $password) {
 
                 $user->password = bcrypt($password);
+                $user->last_password_change = Carbon::now();
 
                 $user->save();
             }
