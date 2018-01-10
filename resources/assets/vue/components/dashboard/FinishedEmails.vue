@@ -117,7 +117,7 @@
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
-          <tr v-if="campaigns.data === 0">
+          <tr v-if="!campaigns.data.length">
             <td :colspan="showTags ? 6 : 5">
               There are no emails to show in this list
             </td>
