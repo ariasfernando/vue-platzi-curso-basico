@@ -88,13 +88,13 @@
             dragGhost.classList.add('custom-drag-ghost');
 
             // Icon
-            icon = document.createElement("i");
+            let icon = document.createElement("i");
             icon.classList.add('fa');
             let iconClass = '';
             let text = '';
 
             // Text
-            paragraph = document.createElement("p");
+            let paragraph = document.createElement("p");
             
             // Get the class for given icon
             switch(type) {
