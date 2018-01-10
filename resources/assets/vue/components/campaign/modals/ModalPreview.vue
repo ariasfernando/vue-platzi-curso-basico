@@ -28,7 +28,7 @@
                 Preview
               </h4>
               <div class="row">
-                <div class="send-preview col-md-4">
+                <div class="send-preview col-md-4" v-if="!isPublic">
                   <div class="form-group" v-if="!isPublic">
                     <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
                       email is not suitable for deployment. To access the production-ready HTML, please click
@@ -58,27 +58,26 @@
                     </div>
                   </div>
                 </div>
-
-                  <div class="preview-body col-md-8">
-                    <div class="preview-container">
-                      <div class="mobile-frame"></div>
-                      <slot name="body">
-                        <b-tabs>
-                          <b-tab title="Desktop" @click="togglePreview('desktop')" active>
-                          </b-tab>
-                          <b-tab title="Mobile" @click="togglePreview('mobile')">
-                          </b-tab>
-                        </b-tabs>
-                      </slot>
-                      <div class="iframe-container" :data-template-width="widthPreview">
-                        <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
-                      </div>
+                <div class="preview-body" :class="previewBodyClass">
+                  <div class="preview-container">
+                    <div class="mobile-frame"></div>
+                    <slot name="body">
+                      <b-tabs>
+                        <b-tab title="Desktop" @click="togglePreview('desktop')" active>
+                        </b-tab>
+                        <b-tab title="Mobile" @click="togglePreview('mobile')">
+                        </b-tab>
+                      </b-tabs>
+                    </slot>
+                    <div class="iframe-container" :data-template-width="widthPreview">
+                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
                     </div>
                   </div>
+                </div>
               </div>
             </slot>
-            <div class="modal-footer">
-              <slot name="footer" v-if="!isPublic">
+            <div class="modal-footer" v-if="!isPublic">
+              <slot name="footer">
                 <button type="button" class="btn btn-default btn-send beta-btn-primary" @click="send">Send Preview</button>
               </slot>
             </div>
@@ -124,6 +123,9 @@
         } else {
           return this.$_app.config.baseUrl + '/public/html/' + this.$store.state.campaign.campaign.campaign_id
         }
+      },
+      previewBodyClass () {
+        return this.isPublic ? 'col-md-12' : 'col-md-8';
       }
     },
     methods: {
