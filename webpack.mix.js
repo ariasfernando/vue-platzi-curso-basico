@@ -175,7 +175,7 @@ mix
   //.copyDirectory(`${customerAssetsPath}/images`, 'public/images/customer')
   //.copyDirectory(`${customerAssetsPath}/fonts`, 'public/fonts')
   .copyDirectory(`public/fonts`, 'public/build/fonts')
-  .copyDirectory(`public/images`, 'public/build/images')
+  //.copyDirectory(`public/images`, 'public/build/images')
   .then(function () {
     const fileToEdit = './public/build/rev-manifest.json';
     fs.readFile(fileToEdit, 'utf8', function (err,data) {
