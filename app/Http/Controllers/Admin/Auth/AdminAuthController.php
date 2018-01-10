@@ -9,10 +9,10 @@ use Validator;
 use PasswordPolicy;
 use Stensul\Models\User;
 use Stensul\Http\Requests\LoginRequest;
-use Stensul\Http\Controllers\Controller;
+use Stensul\Http\Controllers\Auth\BaseLoginController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-class AdminAuthController extends Controller
+class AdminAuthController extends BaseLoginController
 {
     /*
     |--------------------------------------------------------------------------
@@ -26,6 +26,7 @@ class AdminAuthController extends Controller
     */
 
     protected $redirect_to = '/admin/user';
+    protected $is_admin = true;
 
     use AuthenticatesUsers;
 
@@ -35,81 +36,6 @@ class AdminAuthController extends Controller
      */
     public function __construct()
     {
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make(
-            $data,
-            [
-                'name' => 'required|max:255',
-                'email' => 'required|email|max:255|unique:users',
-                'password' => PasswordPolicy::password_rule($data),
-            ]
-        );
-    }
-
-    /**
-     * Show login view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function getLogin()
-    {
-        return view('admin.auth.login');
-    }
-
-    /**
-     * Try to login.
-     *
-     * @param LoginRequest $request
-     * @return \Illuminate\Http\$this
-     */
-    public function postLogin(LoginRequest $request)
-    {
-        $email = strtolower($request->input('email'));
-        $password = $request->input('password');
-        $app_admin = env('APP_ADMIN', false);
-        $attempt_admin = false;
-
-        if ($app_admin && User::where('email', '=', $email)->where('status', '!=', 'deleted')->exists()) {
-            $attempt_admin = User::where('email', '=', $email)->first()->can('access_admin');
-        }
-
-        if ($attempt_admin) {
-            if ($this::guard()->attempt(['email' => $email, 'password' => $password])) {
-                Activity::log('Admin Logged in');
-            } else {
-                $error = array( "message" => "ERROR_LOGIN" );
-            }
-        } else {
-            $error = array( "message" => "ERROR_ADMIN" );
-        }
-
-
-        if (isset($error)) {
-            return redirect()->back()->with($error);
-        } else {
-            return redirect($this->redirect_to);
-        }
-    }
-
-    /**
-     * Logout.
-     *
-     * @return \Illuminate\Http\RedirectResponse Object
-     */
-    public function getLogout()
-    {
-        Auth::logout();
-        Session::flush();
-        return redirect('/admin/login');
     }
 
     /**

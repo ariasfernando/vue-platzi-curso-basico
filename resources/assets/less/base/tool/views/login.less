@@ -1,11 +1,12 @@
 body.base-login,
-body.base-auth-oauth_login,
+body.base-oauth_login,
 body.base-auth-challenge-recaptcha_login,
 body.base-auth-login,
 body.base-password,
 body.base-register,
 body.base-change_password,
-body.base-reset{
+body.base-reset,
+body.base-session {
 	background: @stensul-purple;
 	padding-top: 80px;
 
@@ -227,7 +228,7 @@ body.base-reset{
 				color: #ffffff;
 				opacity: 1;
 			}
-		}
+    }
 	}
 
 	.login-footer{
@@ -253,4 +254,29 @@ body.base-auth-password{
 		float: right;
 		padding: 6px 0px 0px 30px;
 	}
+}
+body.auth-session {
+  a {
+    font-size: 16px !important;
+    &:hover{
+      color: #ffffff !important;
+      opacity: 1;
+    }
+  }
+}
+
+body.base-change_password,
+body.base-reset,
+body.base-register {
+  .progress {
+		width: 100%;
+		display: block;
+		height: 5px;
+		border-radius: 0 0 4px 4px;
+		margin-top: 0;
+		margin-bottom: 0px;
+  }
+  .validate-password {
+    border-radius: 2px 2px 0 0 !important;
+  }
 }

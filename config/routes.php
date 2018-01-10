@@ -77,7 +77,8 @@ $default = [
             '/api/history' => 'ApiController@getHistory'
         ],
         'post'   => [
-            '/api/upload-email' => 'ApiController@postUploadEmail'
+            '/api/upload-email' => 'ApiController@postUploadEmail',
+            '/api/validate-url' => 'ApiController@postValidateUrl'
         ],
         'put'    => [],
         'delete' => [],
@@ -112,9 +113,11 @@ $oauthAuth = [
         '/auth/oauth-login' => 'Auth\OauthAuthController@getOauthLogin',
         '/auth/session'     => 'Auth\OauthAuthController@getSession',
         '/auth/logout'      => 'Auth\OauthAuthController@getLogout',
-
+        '/auth/register'    => 'Auth\BaseRegisterController@getRegister',
     ],
-    'post' => [],
+    'post' => [
+        '/auth/register' => 'Auth\BaseRegisterController@postRegister',
+    ],
 ];
 if (env('USER_LOGIN', 'default') === 'oauth') {
     $default['web']['get'] = array_merge($oauthAuth['get'], $default['web']['get']);
@@ -188,9 +191,9 @@ if (env("APP_ADMIN", false)) {
 if (env('USER_LOGIN', 'default') != "oauth") {
     $passwordRoutes = [
         'get'    => [
-            '/password/email'  => 'Auth\PasswordController@getEmail',
+            '/password/email'          => 'Auth\PasswordController@getEmail',
             '/password/reset/{token}'  => 'Auth\PasswordController@getReset',
-            '/password/change' => 'Auth\PasswordController@getChange',
+            '/password/change'         => 'Auth\PasswordController@getChange',
         ],
         'post'   => [
             '/password/email'  => 'Auth\PasswordController@postEmail',

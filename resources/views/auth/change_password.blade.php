@@ -8,7 +8,7 @@
 
 	<section class="col-md-4 col-sm-10 col-xs-10 beta-login">
 		@if (count($errors) > 0)
-			<div class="col-md-6 col-md-offset-3">
+			<div class="col-md-12">
 				<div class="alert alert-danger">
 					<strong>Error:</strong> There were some problems with your input.<br><br>
 					<ul>
@@ -44,7 +44,9 @@
 					<div class="form-group">
 						<input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
 					</div>
-
+                    <div class="form-group">
+                        <div class="sublink"><a href="{{ url('/password/email') }}">Forgot password?</a></div>
+                    </div>
 					<div class="form-group">
 						<button type="submit" class="btn btn-default">Change Password</button>
 					</div>

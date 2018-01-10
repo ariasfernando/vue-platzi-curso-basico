@@ -12,14 +12,14 @@
         <div class="text-center">
             <a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">stensul</a>
             <h4>
-                Email Creator
+                {{$is_admin or false ? 'Administration Panel' : 'Email Creator'}}
             </h4>
         </div>
 
         {{-- Login error message --}}
 
         <div class="text-center">
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/login') }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ $is_admin or false ? url('/admin/login') : url('/auth/login') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                 @if (session("message"))
@@ -31,7 +31,7 @@
                          <div class="alert alert-success" role="alert">
                              Your account has been successfully created.
                          </div>
-                     @else
+                    @else
                         <div class="alert alert-danger" role="alert">
                             <strong>Whoops!</strong> There were some problems with your input.
                         </div>
@@ -52,17 +52,15 @@
                     @include('auth.partials.' . $challenge_provider)
                 @endif
 
-
                 <div class="form-group submit-row">
                     <div class="text-center">
                         <button type="submit" class="btn">Login</button>
                         @if ( env('USER_REGISTRATION', true) )
-                            <a href="register" class="register">Don't have a user? Register here.</a>
+                            <a href="{{ url('/auth/register') }}" class="register">Don't have a user? Register here.</a>
                         @endif
                     </div>
                 </div>
             </form>
-
             <div>
                 <p class="app-email">For access or more information, please email {{$app_config["app_mail_address"]}}</p>
             </div>

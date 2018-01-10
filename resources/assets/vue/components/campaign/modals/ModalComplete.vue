@@ -28,7 +28,8 @@
 
               <div v-if="campaign.library_config.esp && campaign.library_config.espProvider"
                    type="button" class="btn btn-default btn-upload-api beta-btn-secondary" :data-campaign-id="campaign.campaign_id"
-                   :data-api-driver="campaign.library_config.espProvider" v-html="'Upload to ' + campaign.library_config.espProvider" @click="uploadModal">
+                   :data-api-driver="campaign.library_config.espProvider" @click="uploadModal">
+                   Upload to {{campaign.library_config.espProvider | capitalize}}
               </div>
 
               <div class="view-browser">
@@ -108,6 +109,13 @@
         this.close();
         this.$store.commit("campaign/toggleModal", 'modalEsp');
       },
+    },
+    filters: {
+      capitalize: function (value) {
+        if (!value) return ''
+        value = value.toString()
+        return value.charAt(0).toUpperCase() + value.slice(1)
+      }
     },
     created () {
       if (this.campaign.library_config.plainText) {

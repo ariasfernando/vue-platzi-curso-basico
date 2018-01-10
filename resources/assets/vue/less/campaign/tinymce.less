@@ -1,0 +1,27 @@
+@warning: #f0ad4e;
+
+.mce-panel{
+    &.mce-window{
+        .mce-link-input{
+            input{
+                &.warning{
+                    border: 1px solid @warning!important;
+                    border-color: @warning!important;
+                }
+            }
+            select{
+                &.warning{
+                    border: 1px solid @warning!important;
+                }
+            }
+            label{
+                display: block;
+
+                &.warning {
+                    font-size: 11px;
+                    color: @warning!important;
+                }
+            }
+        } 
+    } 
+}

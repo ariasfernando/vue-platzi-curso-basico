@@ -256,7 +256,7 @@ Application.utils = {
         },
         validateEmailFormat: function( field ){
             var emails = field.value.split(";").filter(Boolean)
-            var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            var re = /^(([\w-\+]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/i;
 
             for( var i=0; i<emails.length; i++ ){
                 if( !re.test(emails[i].trim()) ){
@@ -330,15 +330,25 @@ Application.utils = {
             return true;
         },
         initField: function( field ){
-            if( $(field).hasClass("error") ){
-                $(field).removeClass("error");
-
-                if ($(field).hasClass('selectpicker')) {
-                    $(field).next().next("label.error").remove();
-                } else {
-                    $(field).next("label.error").remove();
-                }
+            $(field)
+                .removeClass("error warning success")
+                .removeAttr("disabled");
+            
+            var $labelMessage = $(field).next("label");
+            if( $labelMessage.hasClass("error") || $labelMessage.hasClass("success") || $labelMessage.hasClass("warning") ){
+                $labelMessage.remove();
             }
+
+            if ($(field).prop('tagName') === 'SELECT' && $(field).hasClass('selectpicker')) {
+                // If field is a select multiple, remove error near .bootstrap-select
+                $(field).parent().find('.bootstrap-select').removeClass('error').next("label.error").remove();;
+            }
+
+            if( $(field).hasClass("warning") ){
+                $(field).removeClass("warning");
+                $(field).next("label.warning").remove();
+            }
+
         },
         setError: function( field, message ){
 

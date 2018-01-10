@@ -24,6 +24,50 @@ table{
 		}
 	}
 
+	a[data-tooltip]:after {
+		content: attr(data-tooltip);
+		position: absolute;
+		bottom: 130%;
+		left: -10%;
+		font-size: 12px;
+		font-weight: 300;
+		background: @stensul-gray;
+		padding: 2px 7px;
+		color: @stensul-white;
+		border-radius: 2px;
+		white-space: nowrap;
+		opacity: 0;
+		transition: all 0.5s ease;
+		left: 50%;
+    	transform: translateX(-50%);
+	}
+	a[data-tooltip]:before {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 0;
+		border-top: 10px solid @stensul-gray;
+		border-left: 10px solid transparent;
+		border-right: 10px solid transparent;
+		transition: all 0.5s ease;
+		opacity: 0;
+		left: 0%;
+		bottom: 90%;
+		left: 50%;
+    	transform: translateX(-50%);
+	}
+	a[data-tooltip]:hover:after {
+		bottom: 120%;
+	}
+	a[data-tooltip]:hover:before {
+		bottom: 95%;
+		left: 50%;
+	}
+	a[data-tooltip]:hover:after,
+	a[data-tooltip]:hover:before {
+		opacity: 1;
+	}
+
 	thead tr th,
 	tfoot tr th,
 	tbody tr td{
@@ -88,6 +132,7 @@ table{
 	td.actions a{
 		color: @input-color;
 		float: left;
+		position: relative;
 	}
 
 	a.proof-track-modal{

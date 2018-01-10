@@ -71,10 +71,10 @@
               <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
             </td>
             <td class="actions icons text-right" width="200">
-              <a href="#" v-on:click.prevent="preview(campaign._id)" title="Preview" target="_blank">
+              <a href="#" v-on:click.prevent="preview(campaign._id)" data-tooltip="Preview" target="_blank">
                 <i class="glyphicon glyphicon-eye-open"></i>
               </a>
-              <a :href="$_app.config.baseUrl + '/campaign/download-html/' + campaign._id" title="Download">
+              <a :href="$_app.config.baseUrl + '/campaign/download-html/' + campaign._id" data-tooltip="Download">
                 <i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i>
               </a>
               <a
@@ -84,7 +84,7 @@
                 v-on:click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title="Lock Campaign"
+                data-tooltip="Lock"
                 @click.prevent
               >
                 <i class="glyphicon fa fa-lock"></i>
@@ -96,29 +96,28 @@
                 v-on:click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title="Unlock Campaign"
+                data-tooltip="Unlock"
                 @click.prevent
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
-              <a href="#" @click.prevent="clone(campaign._id)" class="clone" title="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
+              <a href="#" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
               <a href="#"
                 class="edit"
-                title="Edit"
+                data-tooltip="Edit"
                 @click.prevent="askToEditCampaign(campaign._id)"
                 ><i class="glyphicon glyphicon-pencil" v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"></i></a>
-              <a href="#" class="btn-upload-api"
+              <a href="#" data-tooltip="Upload" class="btn-upload-api"
                 v-for="api in campaign.api"
                 v-if="!campaign.locked && campaign.library_config.esp && campaign.library_config.espProvider"
                 :data-campaign-id="campaign._id"
                 :data-api-driver="api.driver"
-                :title="'Upload to ' + api.title"
                 @click="upload(campaign._id)"><i class="glyphicon glyphicon-cloud-upload"></i></a>
-              <a href="#" title="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
+              <a href="#" data-tooltip="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
-          <tr v-if="campaigns.data === 0">
+          <tr v-if="!campaigns.data.length">
             <td :colspan="showTags ? 6 : 5">
               There are no emails to show in this list
             </td>

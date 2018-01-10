@@ -437,7 +437,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                             errorMessage = Application.utils.validate.messages.url;
                         }
                         $('.mce-link-input .mce-textbox')
-                            .css('cssText', 'border-color: red !important')
+                            .css('cssText', 'border-color: red')
                             .focus();
                         win.find('#href')[0].tooltip().text(errorMessage).show();
                         return false;

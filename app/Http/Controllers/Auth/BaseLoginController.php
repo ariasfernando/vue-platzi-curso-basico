@@ -29,6 +29,7 @@ class BaseLoginController extends Controller
     */
 
     protected $redirect_to = '/';
+    protected $is_admin = false;
 
     use AuthenticatesUsers;
 
@@ -36,9 +37,12 @@ class BaseLoginController extends Controller
      * Construct.
      *
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->middleware('guest', ['except' => 'getLogout']);
+        if ($request->is('admin/*')) {
+            $this->is_admin = true;
+        }
     }
 
     /**
@@ -75,10 +79,13 @@ class BaseLoginController extends Controller
             if (Cache::get($cache_key) >= $config['max_failed_attemtps']) {
                 return view('auth.login')
                         ->with('challenge_key', $config['key'])
-                        ->with('challenge_provider', $challenge_provider);
+                        ->with('challenge_provider', $challenge_provider)
+                        ->with('is_admin', $this->is_admin);
             }
         }
-        return view('auth.login');
+
+        return view('auth.login')
+            ->with('is_admin', $this->is_admin);
     }
 
     /**
@@ -108,43 +115,52 @@ class BaseLoginController extends Controller
         $email = strtolower($request->input('email'));
         $password = $request->input('password');
         $remember = $request->input('remember');
+        $user = User::where('email', '=', $email)->first();
 
-        if (User::where('email', '=', $email)->exists() && !$error) {
-            $auth = $this::guard();
-
-            if ($auth->validate(['email' => $email, 'password' => $password])) {
-                $roles_array = array_column(Role::all(['name'])->toArray(), 'name');
-                $user_roles = User::where('email', '=', $email)->firstOrFail()->roles;
-
-                if (count($roles_array) != 0 && (count(array_intersect($user_roles, $roles_array)) > 0)) {
-                    if ($auth->attempt(['email' => $email, 'password' => $password], $remember)
-                        || $auth->viaRemember()
-                    ) {
-                        Activity::log('User Logged in');
-                    }
-                } else {
-                    Activity::log('User login fail [ERROR_ROLE]');
-                    $error = true;
-                }
-            } else {
-                Activity::log('User login fail [ERROR_LOGIN]');
-                $error = true;
-            }
-        } else {
+        if (!$user || $error) {
             Activity::log('User login fail [ERROR_EMAIL]');
-            $error = true;
+            return $this->returnWithError();
         }
 
-        if ($error) {
-            return redirect()->back()->with(array("message" => "ERROR_DEFAULT"));
-        } else {
-            $user = $auth->getUser();
-            if (PasswordPolicy::should_update_password($user)) {
-                return redirect('password/change');
+        $auth = $this::guard();
+
+        if (!$auth->validate(['email' => $email, 'password' => $password])) {
+            Activity::log('User login fail [ERROR_LOGIN]');
+            return $this->returnWithError();
+        }
+
+        if ($this->is_admin && !$user->can('access_admin')) {
+            Activity::log('User login fail [ERROR_ADMIN]');
+            return $this->returnWithError();
+        }
+
+        if (!$this->is_admin && !$user->can('access_dashboard')) {
+            Activity::log('User login fail [ERROR_ROLE]');
+            return $this->returnWithError();
+        }
+
+        if ($auth->attempt(['email' => $email, 'password' => $password], $remember)
+            || $auth->viaRemember()
+        ) {
+            if ($this->is_admin) {
+                Activity::log('Admin Logged in');
             } else {
-                return redirect()->intended($this->redirect_to);
+                Activity::log('User Logged in');
             }
         }
+
+        if (PasswordPolicy::should_update_password($user)) {
+            return redirect('password/change');
+        } else {
+            if ($this->is_admin) {
+                return redirect('/admin');
+            }
+            return redirect()->intended($this->redirect_to);
+        }
+    }
+
+    private function returnWithError() {
+        return redirect()->back()->with(array("message" => "ERROR_DEFAULT"));
     }
 
     /**

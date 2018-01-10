@@ -14,12 +14,12 @@
             </a>
           </label>
           <p>
-            <input type="text" 
-                 placeholder="Campaign Name" 
-                 name="campaignName" 
-                 id="campaignName" 
+            <input type="text"
+                 placeholder="Campaign Name"
+                 name="campaignName"
+                 id="campaignName"
                  v-validate.initial="'required'"
-                 :value="form.campaignName" 
+                 :value="form.campaignName"
                  :class="{'input': true, 'is-danger': errors.has('campaignName') }"
                  @input="saveCampaignName"/>
 
@@ -101,7 +101,7 @@
         enableAutoSave: false,
         enableLocking: false,
         form: {
-          campaignName: '',
+          campaignName: 'Campaign Name',
           campaignProcess: false,
           autoSave: false,
           tags: []
@@ -132,14 +132,14 @@
 
     created () {
       this.validate();
-      
+
       this.enablePreheader = this.campaign.library_config.preheader;
       this.preheaderMaxLength = Application.globals.preheaderConfig.max_length;
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
-      this.form.campaignName = this.campaign.campaign_name;
-     
+      this.form.campaignName = this.campaign.campaign_name || 'Campaign Name';
+
       let tagList = this.$store.getters["campaign/campaign"].tag_list;
       for (let n = 0; n < tagList.length; n++) {
         this.tagOptions.push(tagList[n].name);
@@ -163,8 +163,8 @@
         this.$validator.validateAll().then(() => {
           if (this.$validator.errors.items.length) {
             _.each(this.$validator.errors.items, (err) => {
-              _.extend(err, { 
-                scope: 'Campaign Name', 
+              _.extend(err, {
+                scope: 'Campaign Name',
               });
             });
 
@@ -421,7 +421,7 @@
       padding: 4px 23px 4px 4px;
 
       .multiselect__tag-icon{
-        
+
         &:hover,
         &:focus{
           background: none;
@@ -437,7 +437,7 @@
         color: @stensul-gray;
       }
 
-      .multiselect__tag-icon:focus, 
+      .multiselect__tag-icon:focus,
       .multiselect__tag-icon:hover{
         background: none;
       }

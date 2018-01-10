@@ -6,7 +6,7 @@
       </a>
     </li>
     <li>
-      <a href="#finished-campaign">
+      <a class="finishedEmailsTab" href="#finished-campaign">
         Finished Emails
       </a>
     </li>

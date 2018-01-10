@@ -49,9 +49,9 @@ class Eloqua implements ApiConnector
         if ($eloqua_config['use_oauth']) {
             return $this->getTokenByOauth();
         }
-        if (!$force || Cache::has('api:eloqua:' . $this->library_name . ':token')) {
+        if (!$force && Cache::has('api:eloqua:' . $this->library_name . ':token')) {
             $eloqua_token = Cache::get('api:eloqua:' . $this->library_name . ':token');
-        } elseif (!$force || Cache::has('api:eloqua:token')) {
+        } elseif (!$force && Cache::has('api:eloqua:token')) {
             $eloqua_token = Cache::get('api:eloqua:token');
         } else {
             $options = [
