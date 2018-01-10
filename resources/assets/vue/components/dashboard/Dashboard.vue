@@ -266,7 +266,12 @@
         this.fetchCampaigns('finished');
         this.fetchCampaigns('template');
       }
-    }
+    },
+    mounted() {
+      if (window.location.href.includes('#finished-campaign')) {
+          $('.finishedEmailsTab').click();
+      }
+    },
   }
 </script>
 <style lang="less">

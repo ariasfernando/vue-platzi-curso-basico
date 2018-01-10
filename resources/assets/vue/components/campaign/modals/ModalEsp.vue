@@ -85,7 +85,7 @@
     methods: {
       close () {
         this.$store.commit("campaign/toggleModal", 'modalEsp');
-        window.location.href = '/';
+        window.location.href = '/#finished-campaign';
       },
       uploadEmail () {
         const data = {
