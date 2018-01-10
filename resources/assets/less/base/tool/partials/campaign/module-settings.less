@@ -133,6 +133,8 @@
 			white-space: nowrap;
 			opacity: 0;
 			transition: all 0.5s ease;
+			left: 50%;
+    		transform: translateX(-50%);
 		}
 		a[data-tooltip]:before {
 			content: "";
@@ -144,8 +146,9 @@
 			border-right: 10px solid transparent;
 			transition: all 0.5s ease;
 			opacity: 0;
-			left: 30%;
 			bottom: 90%;
+			left: 50%;
+    		transform: translateX(-50%);
 		}
 		a[data-tooltip]:hover:after {
 			bottom: 100%;

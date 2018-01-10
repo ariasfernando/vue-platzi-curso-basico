@@ -71,6 +71,7 @@
   import campaignService from '../../services/campaign';
   import configService from '../../services/config';
   import campaignCleaner from '../../utils/campaignCleaner';
+  import { html_beautify } from 'js-beautify';
 
   export default {
     name: 'EmailActions',
@@ -135,7 +136,14 @@
         }
 
         this.$store.commit("global/setLoader", true);
-        const bodyHtml = campaignCleaner.clean('.section-canvas-container');
+
+        const cleanHtml = campaignCleaner.clean('.section-canvas-container');
+
+        const bodyHtml = html_beautify(cleanHtml, {
+          'indent_size': 2,
+          'wrap_line_length': 120,
+        });
+
         this._save(bodyHtml).then(response => {
           this.$root.$toast('Email saved', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
@@ -173,7 +181,12 @@
         this.$store.commit("global/setLoader", true);
 
         // Obtain current html
-        const bodyHtml = campaignCleaner.clean('.section-canvas-container');
+        const cleanHtml = campaignCleaner.clean('.section-canvas-container');
+
+        const bodyHtml = html_beautify(cleanHtml, {
+          'indent_size': 2,
+          'wrap_line_length': 120,
+        });
 
         // Save Request
         this._save(bodyHtml).then(() => {
@@ -225,7 +238,12 @@
       },
       preview() {
         this.$store.commit("global/setLoader", true);
-        const bodyHtml = campaignCleaner.clean('.section-canvas-container');
+        const cleanHtml = campaignCleaner.clean('.section-canvas-container');
+
+        const bodyHtml = html_beautify(cleanHtml, {
+          'indent_size': 2,
+          'wrap_line_length': 120,
+        });
         this._save(bodyHtml).then(response => {
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalPreview');
@@ -236,7 +254,12 @@
       },
       proof() {
         this.$store.commit("global/setLoader", true);
-        const bodyHtml = campaignCleaner.clean('.section-canvas-container');
+        const cleanHtml = campaignCleaner.clean('.section-canvas-container');
+
+        const bodyHtml = html_beautify(cleanHtml, {
+          'indent_size': 2,
+          'wrap_line_length': 120,
+        });
         this._save(bodyHtml).then(response => {
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalProof');
