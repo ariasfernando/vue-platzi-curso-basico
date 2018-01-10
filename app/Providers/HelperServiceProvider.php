@@ -196,11 +196,12 @@ class HelperServiceProvider extends ServiceProvider
     }
 
     /**
-     * get api driver by libraries
+     * Get api drivers, optionally filtered by the given library Id.
      *
+     * @param String $library_id Library Id (optional)
      * @return array
      */
-    public static function getApiDrivers()
+    public static function getApiDrivers($library_id = null)
     {
         $user_libraries = \Auth::user() ? \Auth::user()->getLibraries() : [];
         $api_drivers = [];
@@ -208,7 +209,9 @@ class HelperServiceProvider extends ServiceProvider
         foreach ($user_libraries as $library) {
             $library_config = Library::findOrFail($library['_id'])->config;
             if (isset($library_config['esp']) && $library_config['esp'] && $library_config['espProvider']) {
-                $api_drivers[] = $library_config['espProvider'];
+                if (!$library_id || $library_id == $library['_id']) {
+                    $api_drivers[] = $library_config['espProvider'];
+                }
             }
         }
 
