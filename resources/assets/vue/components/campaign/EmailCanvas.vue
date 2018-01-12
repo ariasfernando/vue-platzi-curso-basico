@@ -37,8 +37,6 @@
   import EmailActions from './EmailActions.vue';
   import BackToTop from '../common/BackToTop.vue';
 
-  let dragGhost = {};
-
   export default {
     name: 'EmailCanvas',
     components: {
@@ -76,62 +74,16 @@
             name: 'componentsEmailCanvas'
           },
           handle:'.icon-move',
-          ghostClass: "ghost-component",
+          // Class name for the drop placeholder
+          ghostClass: "ghost-component", 
+          // Class name for the chosen item
           chosenClass: "chosen-component",
+          // Class name for the dragging item
           dragClass: "drag-component",
-          setData: function (dataTransfer, dragEl) {
-            // Get the element type
-            const type = $(dragEl).find('tr[data-type]').data('type');
-
-            // Create the content & Stylize it
-            dragGhost = document.createElement("div");
-            dragGhost.classList.add('custom-drag-ghost');
-
-            // Icon
-            icon = document.createElement("i");
-            icon.classList.add('fa');
-            let iconClass = '';
-            let text = '';
-
-            // Text
-            paragraph = document.createElement("p");
-            
-            // Get the class for given icon
-            switch(type) {
-              case 'image-element':
-                iconClass = 'fa-picture-o';
-                text = 'Image';
-                break;
-              case 'text-element':
-                iconClass = 'fa-align-justify';
-                text = 'Text';
-                break;
-              case 'button-element':
-                iconClass = 'fa-square';
-                text = 'CTA';
-                break;
-              case 'divider-element':
-                iconClass = 'fa-minus-square';
-                text = 'Divider';
-                break;
-              default:
-                iconClass = '';
-            }
-            
-            icon.classList.add(iconClass);
-            paragraph.innerText = text;
-
-            // Place it into the DOM tree
-            dragGhost.appendChild(icon);
-            dragGhost.appendChild(paragraph);
-            document.body.appendChild(dragGhost);
-            
-            // Set the new stylized "drag image" of the dragged element
-            dataTransfer.setDragImage(dragGhost, 0, 0);
-          },
-          onEnd: function () {
-            dragGhost.parentNode.removeChild(dragGhost);
-          }
+          // ignore the HTML5 DnD behaviour and force the fallback to kick in
+          forceFallback: true,
+          // Class name for the cloned DOM Element when using forceFallback
+          fallbackClass: "fallback-component"
         },
         templateBackgroundColor(){
           return  this.campaign.campaign_data.library_config.templateBackgroundColor;
@@ -267,30 +219,16 @@
     }
   }
 
-  .custom-drag-ghost {
-    /* The original cloned element must not take place up in the page and must not be visible */
-    position: absolute;
-    top: -99999px;
-    left: -99999px;
-
-    width: 92px;
-    height: 82px;
-    background: white;
-    margin: 0 5px;
-    font-size: 34px;
-    text-align: center;
-    color:@focus;
-    background-color: @hover;
-    opacity: 1!important;
-    font-weight: 100 !important;
-
-    i.fa {
-      vertical-align: bottom;
-    }
-
-    p{
-      font-size: 14px;
-      font-weight: 100 !important;
+  .fallback-component {
+    opacity: 0;
+    &:before {
+      content: url("../../../../../../images/layout/module-placeholder-min.png");
+      margin: 0px;
+      margin-left: 570px;
+      position: relative;
+      top: -26px;
+      outline: none !important;
+      height: 52px;
     }
   }
 
