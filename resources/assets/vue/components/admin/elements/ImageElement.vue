@@ -7,7 +7,7 @@
       <td width="100%" 
           align="center"
           :style="component.style" 
-          class="st-position-relative"
+          class="stx-position-relative"
       >
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
           <tr>
@@ -111,7 +111,7 @@
 <style lang="less">
   @icon-option: #69dac8;
 
-  .st-position-relative{
+  .stx-position-relative{
     position: relative;
   }
 </style>

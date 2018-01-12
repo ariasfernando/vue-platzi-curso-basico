@@ -9,7 +9,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
         <tr>
           <td width="100%" 
-              class="st-text-style st-position-relative" 
+              class="stx-edit-text stx-position-relative" 
               :align="component.attribute.align"
               :bgcolor="component.attribute.bgcolor.hex"
               :style="component.style"
@@ -91,11 +91,11 @@
 <style lang="less">
   @icon-option: #78DCD6;
 
-  .st-position-relative{
+  .stx-position-relative{
     position: relative;
   }
 
-  .st-edit-text{
+  .stx-edit-text{
     p{
       margin: 0;
       padding: 0;

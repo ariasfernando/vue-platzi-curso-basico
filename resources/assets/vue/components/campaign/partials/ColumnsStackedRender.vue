@@ -1,19 +1,25 @@
 <template>
     <div class="stx-wrapper">
-      <table class="st-col st-mso-full-width"
-             align="left"
-             :width="column.attribute && column.attribute.width ? column.attribute.width : 100/numColumns + '%'"
-             :style="column.style"
-             cellspacing="0" 
-             cellpadding="0" 
-             border="0"
+      <table 
+        class="st-col st-mso-full-width"
+        align="left"
+        cellpadding="0" 
+        cellspacing="0" 
+        border="0"
+        :width="column.attribute && column.attribute.width ? column.attribute.width : 100/numColumns + '%'"
+        :style="column.style"
       >
-        <tr v-for="(component, componentId) in column.components" :key="componentId" @click="setComponent(moduleId, columnId, componentId)">
-          <td width="100%" 
-              :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight +';'"
-              :bgcolor="column.attribute.bgcolor.hex" 
-              :valign="column.attribute.valign"
-              :align="component.attribute.align || 'center'"
+        <tr 
+          v-for="(component, componentId) in column.components" 
+          :key="componentId" 
+          @click="setComponent(moduleId, columnId, componentId)"
+        >
+          <td 
+            width="100%" 
+            :style="styles"
+            :bgcolor="column.attribute.bgcolor.hex" 
+            :valign="column.attribute.valign"
+            :align="component.attribute.align || 'center'"
           >
             <component 
               :is="component.type"
@@ -82,6 +88,11 @@
           "</tr>" +
           "</table>" +
           "<![endif]";
+      },
+      styles() {
+        let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`; 
+
+        return padding;
       }   
     },
     methods: {

@@ -6,7 +6,7 @@
           align="center"
           :style="component.style"
           :bgcolor="component.attribute.bgcolor.hex"
-          class="st-position-relative"
+          class="stx-position-relative"
       >
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
           <tr>

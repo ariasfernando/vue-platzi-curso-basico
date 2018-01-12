@@ -92,7 +92,7 @@
 
   }
 
-  .st-module-wrapper:hover {
+  .stx-module-wrapper:hover {
 
     &::before{
       top: 0px;
@@ -108,7 +108,7 @@
       background: #c0dfda;
     }
 
-    .st-toolbar-content{
+    .stx-toolbar-content{
       outline: 2px solid #c0dfda;
       outline-offset: -2px;
     }
@@ -136,8 +136,8 @@
     }
   }
 
-  .st-module-wrapper-active{
-    .st-toolbar-content{
+  .stx-module-wrapper-active{
+    .stx-toolbar-content{
       outline: 2px solid @focus;
       outline-offset: -2px;
     }
@@ -171,7 +171,7 @@
     }
 
     &:hover{
-      .st-toolbar-content{
+      .stx-toolbar-content{
         outline: 2px solid @focus;
         outline-offset: -2px;
       }
@@ -193,7 +193,7 @@
     }
   }
 
-  .st-position-relative {
+  .stx-position-relative {
     position: relative;
   }
 

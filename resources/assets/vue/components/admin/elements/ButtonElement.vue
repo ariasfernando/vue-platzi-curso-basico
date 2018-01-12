@@ -5,7 +5,7 @@
       data-type="button-element"
   >
     <td :align="component.attribute.align" 
-        class="st-position-relative"
+        class="stx-position-relative"
         width="100%"
     >
       <a style="text-decoration:none;" 
@@ -104,7 +104,7 @@
 <style lang="less">
   @icon-option: #69dac8;
 
-  .st-position-relative{
+  .stx-position-relative{
     position: relative;
   }
 

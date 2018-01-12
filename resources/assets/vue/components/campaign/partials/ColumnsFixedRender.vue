@@ -2,17 +2,19 @@
   <table class="st-col"
          align="left"
          width="100%"
-         :style="column.style"
          cellspacing="0" 
          cellpadding="0" 
          border="0"
+         :style="column.style"
   >
-      <tr v-for="(component, componentId) in column.components"  @click="setComponent(moduleId, columnId, componentId)">
+      <tr v-for="(component, componentId) in column.components"  
+          @click="setComponent(moduleId, columnId, componentId)"
+      >
         <td width="100%"
-            :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight +';'"
-            :bgcolor="column.attribute.bgcolor.hex" 
             :valign="column.attribute.valign"
             :align="component.attribute.align || 'center'"
+            :bgcolor="column.attribute.bgcolor.hex" 
+            :style="styles"
         >
           <component :is="component.type"
                      :component="component"
@@ -57,6 +59,11 @@
     computed: {
       module() {
          return this.$store.getters["campaign/modules"][this.moduleId];
+      },
+      styles() {
+        let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`; 
+
+        return padding;
       }
     },
     methods: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="st-edit-text" :id="id" v-html="value"></div>
+  <div class="stx-edit-text" :id="id" v-html="value"></div>
 </template>
 
 <script>
@@ -70,7 +70,7 @@
 </script>
 
 <style lang="sass">
-  .st-edit-text {
+  .stx-edit-text {
     cursor: text;
   }
 </style>

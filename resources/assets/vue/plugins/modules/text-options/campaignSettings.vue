@@ -93,13 +93,13 @@
                 if( $toolbox.length && !$toolbox.find("div[aria-label='Font Sizes'] .text-size").length ){
                     setTimeout(function(){
                         $toolbox.find('div[aria-label="Font Sizes"] button:first').empty();
-                        $toolbox.find('div[aria-label="Font Sizes"] button:first').append('<i class="mce-caret"></i><i class="st-toolbar-icon glyphicon glyphicon-text-size"></i>');
+                        $toolbox.find('div[aria-label="Font Sizes"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
                     }, 100);
                 };
                 if( $toolbox.length && !$toolbox.find("div[aria-label='Font Family'] .text-size").length ){
                     setTimeout(function(){
                         $toolbox.find('div[aria-label="Font Family"] button:first').empty();
-                        $toolbox.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="st-toolbar-icon glyphicon glyphicon-font"></i>');
+                        $toolbox.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
                     }, 100);
                 };
                 

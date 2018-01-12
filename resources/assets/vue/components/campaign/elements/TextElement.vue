@@ -13,12 +13,12 @@
         >
           <tr>
             <td width="100%" 
-                class="st-text-style st-position-relative" 
+                class="stx-position-relative" 
                 :align="component.attribute.align" 
                 :style="component.style"
             >
-              <div class="st-edit-text stx-wrapper" :id="editorId" v-html="component.data.text"></div>
-              <div :class="'st-remove-element st-toolbar toolbar-'+editorId"></div>
+              <div class="stx-edit-text stx-wrapper" :id="editorId" v-html="component.data.text"></div>
+              <div :class="'st-remove-element stx-toolbar toolbar-'+editorId"></div>
             </td>
           </tr> 
         </table>     
