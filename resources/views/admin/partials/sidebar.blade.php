@@ -1,73 +1,48 @@
+<?php $sections = config('admin.sections'); ?>
 <aside id="admin-sidebar">
 	<ul>
+	@foreach ($sections as $section)
 		<li>
+		@if(isset($section['action']))
+			<a href="{{ action($section['action']) }}">
+		@elseif(isset($section['children']))
 			<a href="" class="beta-accordion-trigger">
+		@else
+			<a href="">
+		@endif
 				<span>
-					<i class="glyphicon glyphicon-user"></i> Users
+				@if(isset($section['icon']))
+					<i class="glyphicon glyphicon-{{ $section['icon'] }}">
+				@else
+					<i class="glyphicon glyphicon-">
+				@endif
+						</i> {{ ucfirst($section['title']) }}
 				</span>
 			</a>
+		@if(isset($section['children']))
 			<i class="glyphicon glyphicon-menu-down pull-right menu-dropdown"></i>
 			<ul class="beta-menu-dropdown">
+			@foreach($section['children'] as $link)
 				<li>
-					<a href="{{ url('admin/user') }}">
+				@if(isset($link['action']))
+					<a href="{{ action($link['action']) }}">
+				@else
+					<a href="">
+				@endif
 						<span>
-							<i class="glyphicon glyphicon-list"></i> List
+							@if(isset($link['icon']))
+								<i class="glyphicon glyphicon-{{ $link['icon'] }}">
+							@else
+								<i class="glyphicon glyphicon-">
+							@endif
+								</i> {{ ucfirst($link['title']) }}
 						</span>
 					</a>
 				</li>
-				<li>
-					<a href="{{ url('admin/role') }}">
-						<span>
-							<i class="glyphicon glyphicon-cog"></i> Roles
-						</span>
-					</a>
-				</li>
-				<li>
-					<a href="{{ url('admin/permission') }}">
-						<span>
-							<i class="glyphicon glyphicon-lock"></i> Permissions
-						</span>
-					</a>
-				</li>
+			@endforeach
 			</ul>
+		@endif
 		</li>
-		<li>
-			<a href="{{ url('admin/setting') }}">
-				<span>
-					<i class="glyphicon glyphicon-list-alt"></i> Global Settings
-				</span>
-			</a>
-		</li>
-		<li>
-			<a href="" class="beta-accordion-trigger">
-				<span>
-					<i class="glyphicon glyphicon-th-large"></i> Studio
-				</span>
-			</a>
-			<i class="glyphicon glyphicon-menu-down pull-right menu-dropdown"></i>
-			<ul class="beta-menu-dropdown">
-				<li>
-					<a href="{{ url('admin/library') }}">
-						<span>
-							<i class="glyphicon glyphicon-folder-open"></i> Libraries
-						</span>
-					</a>
-				</li>
-				<li>
-					<a href="{{ url('admin/module') }}">
-						<span>
-							<i class="glyphicon glyphicon-th-list"></i> Modules
-						</span>
-					</a>
-				</li>
-			</ul>
-		</li>
-		<li>
-			<a href="{{ url('admin/log') }}">
-				<span>
-					<i class="glyphicon glyphicon-menu-hamburger"></i> Logs
-				</span>
-			</a>
-		</li>
+	@endforeach
 	</ul>
 </aside>
