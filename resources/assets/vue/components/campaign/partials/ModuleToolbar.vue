@@ -93,7 +93,6 @@
   }
 
   .st-module-wrapper:hover {
-
     &::before{
       top: 0px;
       left: 0px;
@@ -106,11 +105,6 @@
 
     .module-toolbar{
       background: #c0dfda;
-    }
-
-    .st-toolbar-content{
-      outline: 2px solid #c0dfda;
-      outline-offset: -2px;
     }
 
     .module-overlay{
@@ -137,10 +131,6 @@
   }
 
   .st-module-wrapper-active{
-    .st-toolbar-content{
-      outline: 2px solid @focus;
-      outline-offset: -2px;
-    }
 
     &::before{
       top: 0px;
@@ -171,11 +161,6 @@
     }
 
     &:hover{
-      .st-toolbar-content{
-        outline: 2px solid @focus;
-        outline-offset: -2px;
-      }
-
       .module-overlay{
         outline: 2px solid @focus;
         outline-offset: -2px;
