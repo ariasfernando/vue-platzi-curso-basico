@@ -18,7 +18,6 @@
             </form>
           </div>
 
-
           <slot name="header" v-if="!isPublic">
             <button type="button" class="close" @click="close"><span>&times;</span></button>
           </slot>
@@ -249,9 +248,14 @@
   }
   .modal-footer{
     margin-top: 30px;
+    position: absolute;
+    width: 1110px;
+    bottom: 25px;
   }
   .modal-container {
     width: 1160px!important;
+    height: 80vh;
+    min-height: 450px;
     overflow: scroll;
     margin: -20px auto;
     background-color: #fff;
@@ -337,12 +341,13 @@
         padding-top: 0px;
       }
       .iframe-container {
-        height: 480px;
+        height: 45vh;
         overflow-y: auto;
         text-align: center;
         background: #F4F4F4;
         padding-top: 10px;
         margin-top: -15px;
+        min-height: 215px;
       }
     }
 
