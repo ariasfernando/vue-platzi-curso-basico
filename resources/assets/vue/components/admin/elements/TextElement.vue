@@ -1,25 +1,34 @@
 <template>
   <!-- TEXT ELEMENT -->
-  <tr @click.prevent="setComponent"
-      :data-component="JSON.stringify(component)"
-      :data-column="columnId"
-      data-type="text-element"
+  <tr 
+    data-type="text-element"
+    :data-component="JSON.stringify(component)"
+    :data-column="columnId"
+    @click.prevent="setComponent"
   >
-    <td width="100%">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
+    <td width="100%" style="width: 100%;">
+      <table 
+        width="100%" 
+        cellpadding="0" 
+        cellspacing="0" 
+        border="0" 
+        align="center" 
+        style="width: 100%;"
+      >
         <tr>
-          <td width="100%" 
-              class="stx-edit-text stx-position-relative" 
-              :align="component.attribute.align"
-              :bgcolor="component.attribute.bgcolor.hex"
-              :style="component.style"
+          <td 
+            width="100%" 
+            class="stx-edit-text stx-position-relative" 
+            :align="component.attribute.align"
+            :bgcolor="component.attribute.bgcolor.hex"
+            :style="component.style"
           >
             <tiny-mce :id="editorId" :value="component.data.text" data-key="text"></tiny-mce>
             <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
           </td>
         </tr> 
       </table>     
-    </td>
+    </td> 
   </tr>
   <!-- TEXT ELEMENT ENDS -->
 </template>
@@ -89,8 +98,6 @@
 </script>
 
 <style lang="less">
-  @icon-option: #78DCD6;
-
   .stx-position-relative{
     position: relative;
   }

@@ -4,11 +4,15 @@
       :data-component="JSON.stringify(component)"
       data-type="divider-element"
   >
-    <td class="stx-line-height-reset stx-position-relative"
-        :bgcolor="component.style.backgroundColor" 
-        :height="component.style.height"
-        :width="component.style.width"
-        :style="inlineStyle"><component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar></td>
+    <td 
+      class="stx-line-height-reset stx-position-relative"
+      :bgcolor="component.style.backgroundColor" 
+      :height="component.style.height"
+      :width="component.style.width || '100%'"
+      :style="inlineStyle"
+    >
+      <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
+    </td>
   </tr>
   <!-- DIVIDER ELEMENT ENDS -->
 </template>
@@ -36,19 +40,20 @@
         return this.$store.getters["module/currentComponent"];
       },
       styles(){
-        let inlineStyle = `height:${component.style.height};
-                          border-top-width:${component.style.borderTopWidth};  
-                          border-right-width:${component.style.borderRightWidth};
-                          border-bottom-width:${component.style.borderBottomWidth};
-                          border-left-width:${component.style.borderLeftWidth};
-                          border-top-style:${component.style.borderTopStyle};
-                          border-right-style:${component.style.borderRightStyle};
-                          border-bottom-style:${component.style.borderBottomStyle};
-                          border-left-style:${component.style.borderLeftStyle};
-                          border-top-color:${component.style.borderTopColor};
-                          border-right-color:${component.style.borderRightColor};
-                          border-bottom-color:${component.style.borderBottomColor};
-                          border-left-color:${component.style.borderLeftColor};`;
+        let inlineStyle = `height:${this.component.style.height};
+                          width:${this.component.style.width };
+                          border-top-width:${this.component.style.borderTopWidth};  
+                          border-right-width:${cthis.omponent.style.borderRightWidth};
+                          border-bottom-width:${this.component.style.borderBottomWidth};
+                          border-left-width:${this.component.style.borderLeftWidth};
+                          border-top-style:${this.component.style.borderTopStyle};
+                          border-right-style:${this.component.style.borderRightStyle};
+                          border-bottom-style:${this.component.style.borderBottomStyle};
+                          border-left-style:${this.component.style.borderLeftStyle};
+                          border-top-color:${this.component.style.borderTopColor};
+                          border-right-color:${this.component.style.borderRightColor};
+                          border-bottom-color:${this.component.style.borderBottomColor};
+                          border-left-color:${this.component.style.borderLeftColor};`;
 
         return inlineStyle;
       }

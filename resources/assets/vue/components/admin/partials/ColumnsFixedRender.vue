@@ -1,66 +1,67 @@
 <template>
-    <table v-if="column.components.length"
-           width="100%"
-           :style="column.style || ''" 
-           :data-col="columnId"
-           :class="!column.components.length ? 'empty-col' : ''"
-           align="left"
-           cellpadding="0" 
-           cellspacing="0" 
-           border="0" 
-           class="st-content-component"
+    <table 
+      v-if="column.components.length"
+      width="100%"
+      align="left"
+      cellspacing="0" 
+      cellpadding="0" 
+      border="0" 
+      class="st-content-component"
+      :class="!column.components.length ? 'empty-col' : ''"
+      :style="column.style || ''" 
+      :data-col="columnId"
     >
       <tr>
-        <td width="100%" 
-            valign="top"
-            :style="styles"
-        >
-          <draggable v-model="column.components"
-                     @add="onAdd"
-                     :element="'table'"
-                     :options="options" 
-                     :data-col="columnId"
-                     cellpadding="0" 
-                     cellspacing="0" 
-                     border="0"
-                     width="100%"
+        <td width="100%" valign="top" :style="styles">
+          <draggable 
+            cellpadding="0" 
+            cellspacing="0" 
+            border="0"
+            width="100%"
+            v-model="column.components"
+            :element="'table'"
+            :options="options" 
+            :data-col="columnId"
+            @add="onAdd"
           >
-            <component v-for="(component, componentId) in column.components"
-                       :is="component.type" 
-                       :component="component" 
-                       :module-id="module.id"
-                       :column-id="columnId"
-                       :component-id="componentId" 
-                       :key="componentId"
-                       class="st-component"></component>
+            <component 
+              class="st-component"
+              v-for="(component, componentId) in column.components"
+              :is="component.type" 
+              :component="component" 
+              :module-id="module.id"
+              :column-id="columnId"
+              :component-id="componentId" 
+              :key="componentId"></component>
           </draggable>
         </td>
       </tr>  
     </table>
 
     <!-- Empty Col -->
-    <table v-else 
-          align="left"
-          :style="column.style || ''"
-          width="100%"
-    >
+    <table v-else width="100%" align="left" :style="column.style || 'width:100%'">
       <tr>
-        <td width="100%">
-          <draggable @add="onAdd"
-                     :element="'div'" 
-                     :options="options" 
-                     :data-col="columnId"
-                     cellpadding="0" 
-                     cellspacing="0" 
-                     border="0"
-                     width="100%"
-                     class="empty-table"
+        <td width="100%" style="widht:100%">
+          <draggable 
+            cellpadding="0" 
+            cellspacing="0" 
+            border="0"
+            width="100%"
+            class="empty-table"
+            :element="'div'" 
+            :options="options" 
+            :data-col="columnId"
+            @add="onAdd"
           >
             <div style="display:table-row;"> 
-              <div align="center"
-                  class="empty-cell"
-                  height="80"
-                  :data-col="columnId">Drag content here</div>
+              <div 
+                align="center"
+                class="empty-cell"
+                height="80"
+                :data-col="columnId"
+              >
+                Drag content here
+              </div>
             </div>
           </draggable>
         </td>
@@ -116,22 +117,22 @@
         return this.$store.getters["module/module"];
       },
       styles(){
-        let inlineStyle = `padding-top:${column.style.paddingTop};
-                           padding-left:${column.style.paddingLeft};
-                           padding-bottom:${column.style.paddingBottom};
-                           padding-right:${column.style.paddingRight};
-                           border-top-width:${column.style.borderTopWidth};
-                           border-right-width:${column.style.borderRightWidth};
-                           border-bottom-width:${column.style.borderBottomWidth};
-                           border-left-width:${column.style.borderLeftWidth};
-                           border-top-style:${column.style.borderTopStyle};
-                           border-right-style:${column.style.borderRightStyle};
-                           border-bottom-style:${column.style.borderBottomStyle};
-                           border-left-style:${column.style.borderLeftStyle};
-                           border-top-color:${column.style.borderTopColor};
-                           border-right-color:${column.style.borderRightColor};
-                           border-bottom-color:${column.style.borderBottomColor};
-                           border-left-color:${column.style.borderLeftColor};`
+        let inlineStyle = `padding-top:${this.column.style.paddingTop};
+                           padding-left:${this.column.style.paddingLeft};
+                           padding-bottom:${this.column.style.paddingBottom};
+                           padding-right:${this.column.style.paddingRight};
+                           border-top-width:${this.column.style.borderTopWidth};
+                           border-right-width:${this.column.style.borderRightWidth};
+                           border-bottom-width:${this.column.style.borderBottomWidth};
+                           border-left-width:${this.column.style.borderLeftWidth};
+                           border-top-style:${this.column.style.borderTopStyle};
+                           border-right-style:${this.column.style.borderRightStyle};
+                           border-bottom-style:${this.column.style.borderBottomStyle};
+                           border-left-style:${this.column.style.borderLeftStyle};
+                           border-top-color:${this.column.style.borderTopColor};
+                           border-right-color:${this.column.style.borderRightColor};
+                           border-bottom-color:${this.column.style.borderBottomColor};
+                           border-left-color:${this.column.style.borderLeftColor};`
 
         return inlineStyle;
       }
