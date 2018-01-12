@@ -220,7 +220,9 @@
   }
 
   .fallback-component {
-    opacity: 0;
+    * {
+      opacity: 0;
+    }
     &:before {
       content: url("../../../../../../images/layout/module-placeholder-min.png");
       margin: 0px;
