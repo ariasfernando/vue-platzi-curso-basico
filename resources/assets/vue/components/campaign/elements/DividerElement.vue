@@ -7,7 +7,7 @@
         :bgcolor="component.style.backgroundColor"
         :height="component.style.height"
         :width="component.style.width || '100%'"
-        :style="inlineStyle"
+        :style="styles"
       ></td>
     </tr>
   </table>

@@ -61,7 +61,10 @@
          return this.$store.getters["campaign/modules"][this.moduleId];
       },
       styles() {
-        let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`; 
+        let padding = `padding-top:${this.column.style.paddingTop};
+                       padding-left:${this.column.style.paddingLeft};
+                       padding-bottom:${this.column.style.paddingBottom};
+                       padding-right:${this.column.style.paddingRight};`; 
 
         return padding;
       }
