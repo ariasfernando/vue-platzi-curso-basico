@@ -31,3 +31,4 @@ coverage
 typings.json
 typings/
 ci/vendor/
+dump.rdb
