@@ -18,7 +18,6 @@
                 :options="options"
                 :element="'table'"
                 @add="onAdd"
-                @end="onEnd"
                 @sort="onSort">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
@@ -45,6 +44,9 @@
       'email-actions': EmailActions,
       BackToTop
     },
+    data: {
+      dragGhost: null
+    },
     computed: {
       dragList: {
         get() {
@@ -66,6 +68,9 @@
       items () {
         return this.$store.state.campaign.campaign.menu_list;
       },
+      baseUrl (){
+        return this.$_app.config.baseUrl;
+      }
     },
     data () {
       return {
@@ -80,10 +85,22 @@
           chosenClass: "chosen-component",
           // Class name for the dragging item
           dragClass: "drag-component",
-          // ignore the HTML5 DnD behaviour and force the fallback to kick in
-          forceFallback: true,
-          // Class name for the cloned DOM Element when using forceFallback
-          fallbackClass: "fallback-component"
+          setData: (dataTransfer, dragEl) => {
+            // Is Firefox?
+            const isFirefox = /firefox/i.test(navigator.userAgent);
+            // Hack for Firefox,  FF needs this parameter defined to use setData function
+            dataTransfer.setData('Text', dragEl.textContent);
+            // Get dragGhost element
+            let img = this.dragGhost;
+            if(isFirefox) {
+              // Place it into the DOM tree
+              document.body.appendChild(img);
+            }
+            // Stylize it
+            img.classList.add('custom-drag-ghost');
+            // Set the new stylized "drag image" of the dragged element
+            dataTransfer.setDragImage(img, 0, 0);
+          }
         },
         templateBackgroundColor(){
           return  this.campaign.campaign_data.library_config.templateBackgroundColor;
@@ -128,6 +145,8 @@
         const moduleId = evt.newIndex;
         // Set active Module
         this.$store.commit("campaign/setActiveModule", moduleId);
+        // Don't forget to remove the ghost DOM object when done dragging
+        document.getElementById('drag-image').remove();
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
@@ -175,6 +194,12 @@
       } else {
         this.titleCols += 2;
       };
+    },
+    mounted () {
+      // Prefecth placeholder image
+      this.dragGhost = new Image();
+      this.dragGhost.id = 'drag-image';
+      this.dragGhost.src = this.baseUrl + "/images/layout/module-placeholder-min.png";
     }
   };
 </script>
@@ -219,19 +244,11 @@
     }
   }
 
-  .fallback-component {
-    * {
-      opacity: 0;
-    }
-    &:before {
-      content: url("../../../../../../images/layout/module-placeholder-min.png");
-      margin: 0px;
-      margin-left: 570px;
-      position: relative;
-      top: -26px;
-      outline: none !important;
-      height: 52px;
-    }
+  .custom-drag-ghost {
+    /* The original cloned element must not take place up in the page and must not be visible */
+    position: absolute;
+    top: -99999px;
+    left: -99999px;
   }
 
   #emailCanvas{

@@ -130,6 +130,7 @@
             {
               className: 'et-error',
               duration: 10000,
+              closeable: true
             }
           );
           return false;
@@ -171,7 +172,8 @@
             'To continue, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
             {
-              className: 'et-error'
+              className: 'et-error',
+              closeable: true
             }
           );
           return false;

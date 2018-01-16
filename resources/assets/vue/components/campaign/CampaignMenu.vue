@@ -6,9 +6,7 @@
                  :element="'div'"
                  :options="options"
                  :class="{'is-collapsed' : collapsed }"
-                 @clone="onClone"
-                 @start="onStart"
-                 @end="onEnd">
+                 @clone="onClone">
         <div v-for="item in items" class="beta-subitem-single">
 
           <div v-if="item.sub_menu" class="expand">
@@ -63,10 +61,7 @@
           // Class name for the chosen item
           chosenClass: "chosen-component",
           // Class name for the dragging item
-          dragClass: "drag-component",
-          // Ignore the HTML5 DnD behaviour and force the fallback to kick in
-          // Should be match the EmailCanvas.vue configuration for vue-dragabble list
-          forceFallback: true
+          dragClass: "drag-component"
         },
         expanded: [],
         collapsed: false,
@@ -126,13 +121,6 @@
           event.target.nextElementSibling.classList.remove("beta-submodules-expanded");
         }
       },
-      onStart: function() {
-        // Prevent text selection in firefox
-        $('html').addClass("prevent-text-selection")
-      },
-      onEnd: function() {
-        $('html').removeClass("prevent-text-selection")
-      },
       onClone: function (evt) {
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop an element into email canvas
         let cloneEl = evt.clone;
@@ -151,15 +139,6 @@
   @hover: @focus-light;
   @font-color: #999999;
   @bg-color: #f0f0f0;
-
-  .prevent-text-selection {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
 
    #emailCanvas{
      &:empty{
