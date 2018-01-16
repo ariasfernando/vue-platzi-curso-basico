@@ -201,6 +201,8 @@
                 this.$store.commit("global/setLoader", false);
                 // Show complete after campaign is completely processed
                 this.$store.commit("campaign/toggleModal", 'modalComplete');
+                // Redirect to `/dashboard` if user refreshes the page
+                window.history.replaceState(null, null, "?processed=true");
               }
 
               // Poll server with job id
@@ -214,6 +216,8 @@
                       this.$store.commit('campaign/setProcessStatus');
                       // Show complete after campaign is completely processed
                       this.$store.commit("campaign/toggleModal", 'modalComplete');
+                      // Redirect to `/dashboard` if user refreshes the page
+                      window.history.replaceState(null, null, "?processed=true");
                     }
                   });
                 }, 2000);

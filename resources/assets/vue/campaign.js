@@ -26,6 +26,17 @@ Vue.use(BootstrapVue);
 Vue.use(Croppa);
 Vue.use(interceptors);
 
+/**
+ * If the campaign has just been processed redirect to the dashboard
+ */
+const url = new URL(window.location.href);
+const processed = url.searchParams.get('processed');
+
+if (processed === 'true') {
+  window.location.href = '/';
+}
+
+
 const app = new Vue({
   store,
   components: {
