@@ -1,6 +1,6 @@
-function dividerDefault() {
+function separatorDefault() {
   return {
-    type: 'divider-element',
+    type: 'separator-element',
     style: {
       backgroundColor: 'transparent',
       height: '5px',
@@ -216,4 +216,4 @@ function dividerDefault() {
   };
 }
 
-module.exports = dividerDefault;
+module.exports = separatorDefault;

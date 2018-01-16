@@ -1,12 +1,12 @@
 <template>
   <!-- DIVIDER ELEMENT -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-    <tr data-type="divider-element">
+    <tr data-type="separator-element">
       <td 
         class="stx-position-relative stx-line-height-reset"
         :bgcolor="component.style.backgroundColor"
         :height="component.style.height"
-        :width="component.style.width || '100%'"
+        :width="component.style.width"
         :style="styles"
       ></td>
     </tr>
@@ -16,7 +16,7 @@
 
 <script>
   export default {
-    name: 'DividerElement',
+    name: 'SeparatorElement',
     props: [
       'module-id',
       'column-id',

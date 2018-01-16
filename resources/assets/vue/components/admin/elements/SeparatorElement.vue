@@ -2,7 +2,7 @@
   <!-- DIVIDER ELEMENT -->
   <tr @click.prevent="setComponent"
       :data-component="JSON.stringify(component)"
-      data-type="divider-element"
+      data-type="separator-element"
   >
     <td 
       class="stx-line-height-reset stx-position-relative"
@@ -22,7 +22,7 @@
   import ComponentToolbar from './ComponentToolbar.vue'
   
   export default {
-    name: 'DividerElement',
+    name: 'SeparatorElement',
     components: {
       ComponentToolbar
     },
@@ -42,7 +42,7 @@
       styles(){
         let inlineStyle = `height:${this.component.style.height};
                            width:${this.component.style.width };
-                           border-top-width:${this.component.style.borderTopWidth};
+                           border-top-width:${this.component.style.borderTopWidth};  
                            border-right-width:${this.component.style.borderRightWidth};
                            border-bottom-width:${this.component.style.borderBottomWidth};
                            border-left-width:${this.component.style.borderLeftWidth};
