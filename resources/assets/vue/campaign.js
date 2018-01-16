@@ -34,9 +34,8 @@ const url = new URL(window.location.href);
 const processed = url.searchParams.get('processed');
 
 if (processed === 'true') {
-  window.location.href = '/';
+  window.location.href = '/#finished-campaign';
 }
-
 
 const app = new Vue({
   store,
