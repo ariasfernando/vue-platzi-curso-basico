@@ -56,9 +56,12 @@
             put: false,
           },
           sort: false,
-          ghostClass: "ghost-component",  // Class name for the drop placeholder
-          chosenClass: "chosen-component",  // Class name for the chosen item
-          dragClass: "drag-component"  // Class name for the dragging item
+          // Class name for the drop placeholder
+          ghostClass: "ghost-component", 
+          // Class name for the chosen item
+          chosenClass: "chosen-component",
+          // Class name for the dragging item
+          dragClass: "drag-component"
         },
         expanded: [],
         collapsed: false,
@@ -174,6 +177,7 @@
         }
       }
     }
+
     .ghost-component{
       text-align: center;
       color:@focus;

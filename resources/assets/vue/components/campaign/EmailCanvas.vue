@@ -18,7 +18,6 @@
                 :options="options"
                 :element="'table'"
                 @add="onAdd"
-                @end="onEnd"
                 @sort="onSort">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
@@ -37,8 +36,6 @@
   import EmailActions from './EmailActions.vue';
   import BackToTop from '../common/BackToTop.vue';
 
-  let dragGhost = {};
-
   export default {
     name: 'EmailCanvas',
     components: {
@@ -46,6 +43,9 @@
       Draggable,
       'email-actions': EmailActions,
       BackToTop
+    },
+    data: {
+      dragGhost: null
     },
     computed: {
       dragList: {
@@ -68,6 +68,9 @@
       items () {
         return this.$store.state.campaign.campaign.menu_list;
       },
+      baseUrl (){
+        return this.$_app.config.baseUrl;
+      }
     },
     data () {
       return {
@@ -76,61 +79,27 @@
             name: 'componentsEmailCanvas'
           },
           handle:'.icon-move',
-          ghostClass: "ghost-component",
+          // Class name for the drop placeholder
+          ghostClass: "ghost-component", 
+          // Class name for the chosen item
           chosenClass: "chosen-component",
+          // Class name for the dragging item
           dragClass: "drag-component",
-          setData: function (dataTransfer, dragEl) {
-            // Get the element type
-            const type = $(dragEl).find('tr[data-type]').data('type');
-
-            // Create the content & Stylize it
-            dragGhost = document.createElement("div");
-            dragGhost.classList.add('custom-drag-ghost');
-
-            // Icon
-            icon = document.createElement("i");
-            icon.classList.add('fa');
-            let iconClass = '';
-            let text = '';
-
-            // Text
-            paragraph = document.createElement("p");
-            
-            // Get the class for given icon
-            switch(type) {
-              case 'image-element':
-                iconClass = 'fa-picture-o';
-                text = 'Image';
-                break;
-              case 'text-element':
-                iconClass = 'fa-align-justify';
-                text = 'Text';
-                break;
-              case 'button-element':
-                iconClass = 'fa-square';
-                text = 'CTA';
-                break;
-              case 'divider-element':
-                iconClass = 'fa-minus-square';
-                text = 'Divider';
-                break;
-              default:
-                iconClass = '';
+          setData: (dataTransfer, dragEl) => {
+            // Is Firefox?
+            const isFirefox = /firefox/i.test(navigator.userAgent);
+            // Hack for Firefox,  FF needs this parameter defined to use setData function
+            dataTransfer.setData('Text', dragEl.textContent);
+            // Get dragGhost element
+            let img = this.dragGhost;
+            if(isFirefox) {
+              // Place it into the DOM tree
+              document.body.appendChild(img);
             }
-            
-            icon.classList.add(iconClass);
-            paragraph.innerText = text;
-
-            // Place it into the DOM tree
-            dragGhost.appendChild(icon);
-            dragGhost.appendChild(paragraph);
-            document.body.appendChild(dragGhost);
-            
+            // Stylize it
+            img.classList.add('custom-drag-ghost');
             // Set the new stylized "drag image" of the dragged element
-            dataTransfer.setDragImage(dragGhost, 0, 0);
-          },
-          onEnd: function () {
-            dragGhost.parentNode.removeChild(dragGhost);
+            dataTransfer.setDragImage(img, 0, 0);
           }
         },
         templateBackgroundColor(){
@@ -176,6 +145,8 @@
         const moduleId = evt.newIndex;
         // Set active Module
         this.$store.commit("campaign/setActiveModule", moduleId);
+        // Don't forget to remove the ghost DOM object when done dragging
+        document.getElementById('drag-image').remove();
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
@@ -223,6 +194,12 @@
       } else {
         this.titleCols += 2;
       };
+    },
+    mounted () {
+      // Prefecth placeholder image
+      this.dragGhost = new Image();
+      this.dragGhost.id = 'drag-image';
+      this.dragGhost.src = this.baseUrl + "/images/layout/module-placeholder-min.png";
     }
   };
 </script>
@@ -272,26 +249,6 @@
     position: absolute;
     top: -99999px;
     left: -99999px;
-
-    width: 92px;
-    height: 82px;
-    background: white;
-    margin: 0 5px;
-    font-size: 34px;
-    text-align: center;
-    color:@focus;
-    background-color: @hover;
-    opacity: 1!important;
-    font-weight: 100 !important;
-
-    i.fa {
-      vertical-align: bottom;
-    }
-
-    p{
-      font-size: 14px;
-      font-weight: 100 !important;
-    }
   }
 
   #emailCanvas{

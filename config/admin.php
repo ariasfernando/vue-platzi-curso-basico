@@ -13,7 +13,7 @@ $default = [
     | Admin should only be allowed to have this amount of users.
     |
     */
-    "users_limit" => 20,
+    "users_limit" => env('APP_USER_LIMIT') ?? 20,
 
     /*
     |--------------------------------------------------------------------------
@@ -25,39 +25,51 @@ $default = [
     "sections" => [
         "users" => [
             "title" => "Users",
-            "controller" => 'Admin\UserController',
-            "path" => "user",
-            "limit_per_page" => 10
+            "icon" => "user",
+            "children" => [
+                "list" => [
+                    "title" => "List",
+                    "action" => "Admin\UserController@getIndex",
+                    "icon" => "list"
+                ],
+                "roles" => [
+                    "title" => "Roles",
+                    "action" => "Admin\RoleController@getIndex",
+                    "icon" => "cog"
+                ],
+                "permission" => [
+                    "title" => "Permissions",
+                    "action" => "Admin\PermissionController@getIndex",
+                    "icon" => "lock"
+                ],
+            ]
         ],
-        "roles" => [
-            "title" => "Roles",
-            "controller" => 'Admin\RoleController',
-            "path" => "role",
-            "limit_per_page" => 10
+        "settings" => [
+            "title" => "Global Settings",
+            "icon" => "list-alt",
+            "action" => "Admin\SettingController@getIndex"
         ],
-        "permissions" => [
-            "title" => "Permissions",
-            "controller" => 'Admin\PermissionController',
-            "path" => "permission",
-            "limit_per_page" => 20
-        ],
-        "libraries" => [
-            "title" => "Libraries",
-            "controller" => 'Admin\LibraryController',
-            "path" => "library",
-            "limit_per_page" => 10
-        ],
-        "modules" => [
-            "title" => "Modules",
-            "controller" => 'Admin\ModuleController',
-            "path" => "module"
+        "studio" => [
+            "title" => "Studio",
+            "icon" => "th-large",
+            "children" => [
+                "library" => [
+                    "title" => "Libraries",
+                    "action" => "Admin\LibraryController@getIndex",
+                    "icon" => "folder-open"
+                ],
+                "module" => [
+                    "title" => "Modules",
+                    "action" => "Admin\ModuleController@getIndex",
+                    "icon" => "th-list"
+                ]
+            ]
         ],
         "log" => [
             "title" => "Logs",
-            "controller" => 'Admin\LogController',
-            "path" => "log",
-            "limit_per_page" => 20
-        ],
+            "action" => 'Admin\LogController@getIndex',
+            "icon" => "menu-hamburger"
+        ]
     ]
 
 ];

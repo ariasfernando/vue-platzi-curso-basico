@@ -130,6 +130,7 @@
             {
               className: 'et-error',
               duration: 10000,
+              closeable: true
             }
           );
           return false;
@@ -171,7 +172,8 @@
             'To continue, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
             {
-              className: 'et-error'
+              className: 'et-error',
+              closeable: true
             }
           );
           return false;
@@ -201,6 +203,8 @@
                 this.$store.commit("global/setLoader", false);
                 // Show complete after campaign is completely processed
                 this.$store.commit("campaign/toggleModal", 'modalComplete');
+                // Redirect to `/dashboard` if user refreshes the page
+                window.history.replaceState(null, null, "?processed=true");
               }
 
               // Poll server with job id
@@ -214,6 +218,8 @@
                       this.$store.commit('campaign/setProcessStatus');
                       // Show complete after campaign is completely processed
                       this.$store.commit("campaign/toggleModal", 'modalComplete');
+                      // Redirect to `/dashboard` if user refreshes the page
+                      window.history.replaceState(null, null, "?processed=true");
                     }
                   });
                 }, 2000);

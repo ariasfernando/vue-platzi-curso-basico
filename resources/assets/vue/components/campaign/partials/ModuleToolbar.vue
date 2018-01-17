@@ -93,7 +93,6 @@
   }
 
   .stx-module-wrapper:hover {
-
     &::before{
       top: 0px;
       left: 0px;
@@ -106,11 +105,6 @@
 
     .module-toolbar{
       background: #c0dfda;
-    }
-
-    .stx-toolbar-content{
-      outline: 2px solid #c0dfda;
-      outline-offset: -2px;
     }
 
     .module-overlay{
@@ -137,10 +131,6 @@
   }
 
   .stx-module-wrapper-active{
-    .stx-toolbar-content{
-      outline: 2px solid @focus;
-      outline-offset: -2px;
-    }
 
     &::before{
       top: 0px;
@@ -171,11 +161,6 @@
     }
 
     &:hover{
-      .stx-toolbar-content{
-        outline: 2px solid @focus;
-        outline-offset: -2px;
-      }
-
       .module-overlay{
         outline: 2px solid @focus;
         outline-offset: -2px;

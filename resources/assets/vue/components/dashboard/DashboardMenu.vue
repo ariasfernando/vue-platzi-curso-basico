@@ -11,7 +11,7 @@
         <i class="glyphicon glyphicon-plus-sign"></i> Create a new email<span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-          <li v-for="(locale, key, index) in localeConfig.langs" role="presentation">
+          <li v-for="(locale, key, index) in localeConfig.langs" :key="key" :name="camel(locale.name)" role="presentation">
             <a :href="$_app.config.baseUrl + '/campaign/edit?locale=' + key">{{locale.name}}</a>
           </li>
       </ul>
@@ -22,8 +22,7 @@
         <i class="glyphicon glyphicon-plus-sign"></i> Create a new email<span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-        <li role="presentation">
-        <li v-for="library in libraries" role="presentation">
+        <li v-for="library in libraries" :key="library._id" :name="camel(library.name)" role="presentation">
           <a :href="$_app.config.baseUrl + '/campaign/edit?locale=en_us&library=' + library._id">
             {{library.name}}
           </a>
@@ -35,6 +34,7 @@
 </template>
 
 <script>
+  import _ from 'lodash';
   import configService from '../../services/config';
   import libraryService from '../../services/library';
 
@@ -99,7 +99,14 @@
           event.preventDefault();
           this.$root.$toast('Oops! There are no libraries available, please contact our support team.', {className: 'et-error'});
         }
+      },
+      camel(str) {
+        return _.camelCase(str);
       }
     }
   }
 </script>
+
+<li role="presentation" name="AIG pilot">
+  <a href="#">AIG pilot</a>
+</li>
