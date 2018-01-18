@@ -48,10 +48,10 @@
       config(){
         if (this.module.type === 'custom') {
           this.$store.commit("campaign/setCustomModule", this.moduleId);
-          this.$store.commit("campaign/setCurrentModule", undefined);
+          this.$store.commit("campaign/unsetCurrentModule");
         } else {
           this.$store.commit("campaign/setCurrentModule", this.moduleId);
-          this.$store.commit("campaign/setCustomModule", undefined);
+          this.$store.commit("campaign/unsetCustomModule");
         }
 
       },
@@ -60,8 +60,8 @@
       },
       remove() {
         this.$store.dispatch("campaign/removeModule", this.moduleId);
-        this.$store.commit("campaign/setActiveModule", null);
-        this.$store.commit("campaign/setCurrentModule", null);
+        this.$store.commit("campaign/unsetActiveModule");
+        this.$store.commit("campaign/unsetCurrentModule");
       },
     },
   };

@@ -3,22 +3,15 @@
     <label>{{ plugin.title }}</label>
 
     <div class="alignment-options">
-      <a data-tooltip="Top"><i class="glyphicon glyphicon-object-align-top"></i></a>
-      <a data-tooltip="Middle"><i class="glyphicon glyphicon-object-align-horizontal"></i></a>
-      <a data-tooltip="Bottom" class="plugin-setting-active"><i class="glyphicon glyphicon-object-align-bottom"></i></a>
+      <a data-tooltip="Top" :class="{ 'plugin-setting-active': value === 'top' }" @click="change('top')"><i class="glyphicon glyphicon-object-align-top"></i></a>
+      <a data-tooltip="Middle" :class="{ 'plugin-setting-active': value === 'middle' }" @click="change('middle')"><i class="glyphicon glyphicon-object-align-horizontal"></i></a>
+      <a data-tooltip="Bottom" :class="{ 'plugin-setting-active': value === 'bottom' }" @click="change('bottom')"><i class="glyphicon glyphicon-object-align-bottom"></i></a>
     </div>
-    
-    <!--
-    <select title="vertical-alignment" name="alignment" :value="value" @change="change">
-      <option v-for="option in options" :value="option" :selected="option === value">{{ option }}</option>
-    </select>
-    -->
+
   </div>
 </template>
 
 <script>
-  import _ from 'lodash';
-
   export default {
     props: ['name', 'plugin', 'moduleId', 'columnId'],
     computed: {
@@ -38,13 +31,13 @@
       }
     },
     methods: {
-      change(e) {
+      change(val) {
         const payload = {
           plugin: this.name,
           moduleId: this.moduleId,
           columnId: this.columnId,
           attribute: 'valign',
-          attributeValue: e.target.value,
+          attributeValue: val,
         };
 
         this.$store.commit('campaign/saveColumnAttribute', payload);
