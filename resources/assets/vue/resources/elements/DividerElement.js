@@ -4,6 +4,7 @@ function dividerDefault() {
     style: {
       backgroundColor: 'transparent',
       height: '5px',
+      width: '100%',
       // Border Top
       borderTopWidth: '0px',
       borderTopStyle: 'none',

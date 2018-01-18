@@ -92,7 +92,7 @@
 
   }
 
-  .st-module-wrapper:hover {
+  .stx-module-wrapper:hover {
     &::before{
       top: 0px;
       left: 0px;
@@ -130,7 +130,7 @@
     }
   }
 
-  .st-module-wrapper-active{
+  .stx-module-wrapper-active{
 
     &::before{
       top: 0px;
@@ -178,7 +178,7 @@
     }
   }
 
-  .st-position-relative {
+  .stx-position-relative {
     position: relative;
   }
 

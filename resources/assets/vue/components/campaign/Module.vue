@@ -1,26 +1,27 @@
 <template>
   <tr v-if="module.type === 'custom'" 
-      class="st-module-wrapper" 
-      :class="{ 'st-module-wrapper-active': activeModule === moduleId }" 
+      class="stx-module-wrapper" 
+      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }" 
       @click="setActiveModule"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
       v-on-clickaway="unsetActiveModule"
   >
-    <td class="st-toolbar-content st-position-relative">
+    <td class="stx-toolbar-content stx-position-relative">
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
     </td>
   </tr>
 
-  <tr v-else class="st-module-wrapper" 
-      :class="{ 'st-module-wrapper-active': activeModule === moduleId }" 
+  <tr v-else class="stx-module-wrapper" 
+      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }" 
       @click="setActiveModule"
+
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
       v-on-clickaway="unsetActiveModule"
   >
-    <td class="st-toolbar-content st-position-relative"
+    <td class="stx-toolbar-content stx-position-relative"
         :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
@@ -68,6 +69,7 @@
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
+  import SeparatorElement from './elements/SeparatorElement.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
@@ -111,10 +113,10 @@
       getModuleRow( event ){
         let $row = null; 
 
-        if( $(event.target).hasClass('st-module-wrapper') ){
+        if( $(event.target).hasClass('stx-module-wrapper') ){
           $row = $(event.target);
         }else{
-          $row = $(event.target).closest('.st-module-wrapper');
+          $row = $(event.target).closest('.stx-module-wrapper');
         };
 
         if (!$row){
@@ -175,7 +177,7 @@
 
         let isTargetingComponentSettings  = $(e.target).closest(".component-settings").length > 0;
         let isTargetingColumnSettings  = this.isWrappedIn(e, "column-settings");
-        let isTargetingAModule      = this.isWrappedIn(e, "st-module-wrapper");
+        let isTargetingAModule      = this.isWrappedIn(e, "stx-module-wrapper");
         let isTargetingMenuModule   = this.isWrappedIn(e, "beta-subitem-single");
         let hasPluginsActivated     = $(".settings-wrapper, .plugin-wrapper").length > 0;
 
@@ -206,6 +208,7 @@
       ButtonElement,
       ImageElement,
       DividerElement,
+      SeparatorElement,
       ModuleToolbar,
       ColumnsStackedRender,
       ColumnsFixedRender
