@@ -26,6 +26,15 @@
           ></i>
         </button>
       </div>
+
+      <div v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" class="form-group" :key="key">
+        <label class="col-sm-7 control-label"><b>{{ tinySetting.title }}</b></label>
+        <div class="col-sm-5">
+          <span>
+            <toggle-button :value="tinySetting.value" :name="key" color="#78DCD6" :sync="true" :labels="true" @change="toggleSetting"></toggle-button>
+          </span>
+        </div>
+      </div>
     </form>
 
   </div>
@@ -107,6 +116,28 @@
           componentId: this.currentComponent.componentId,
           config: {
             options,
+          },
+        };
+
+        // Save plugin data
+        this.$store.commit('module/savePlugin', payload);
+      },
+      toggleSetting(e) {
+        const target = e.srcEvent.target;
+        const value = e.value;
+        const setting = target.parentElement.attributes.getNamedItem('name').value;
+
+        const options = {};
+        options[setting] = {
+          value,
+        };
+
+        const payload = {
+          plugin: this.name,
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          config: {
+            settings: options,
           },
         };
 

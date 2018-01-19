@@ -32,6 +32,12 @@
     methods: {
       initTinyMCE() {
         const options = _.filter(this.plugin.config.options, 'value');
+        const customSettings = {};
+
+        _.each(this.plugin.config.settings, (e, k) => {
+          customSettings[k] = e.value;
+        });
+
         let toolbar = [];
 
         if (!_.isEmpty(options)) {
@@ -63,7 +69,7 @@
           forced_root_block :false,
           target_list: false,
           invalid_elements:'img',
-          link_validate_url:true,
+          link_validate_url: true,
           data_description:true,
           paste_as_text:true,
           relative_urls: false,
@@ -122,6 +128,8 @@
             }
           });
         }
+
+        _.extend(settings, customSettings);
 
         tinymce.init(settings);
       },
