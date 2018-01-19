@@ -82,7 +82,7 @@
     },
     methods: {
       removeErrorsImages(){
-        let $contentImgError = $('.st-module-wrapper-active').find('.default-image-error');
+        let $contentImgError = $('.stx-module-wrapper-active').find('.default-image-error');
 
         if ($contentImgError.length > 0){
           $contentImgError.removeClass('default-image-error');

@@ -232,7 +232,7 @@
     background-color: #000000; 
   }
 
-  .st-edit-text{
+  .stx-edit-text{
     p{
       margin: 0;
       padding: 0;

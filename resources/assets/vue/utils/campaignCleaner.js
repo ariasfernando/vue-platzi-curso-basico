@@ -7,29 +7,15 @@ export default {
     classSelectors: [
       'text-overlay',
       'prevent-overflow',
-      'text-editable-2',
-      'text-editable-0',
       'mce-edit-focus',
       'mce-content-body',
       'hubspot-mergetag',
-      // Remove Class to aig
-      'st-module-wrapper',
-      'st-toolbar-content',
-      'st-position-relative',
-      'st-toolbar',
-      'st-line-height-reset',
-      'st-text-style',
-      'st-edit-text'
     ],
     // Array of attributes to clean from final html
     attrSelectors: [
       'data-type',
       'data-params',
       'data-modal',
-      'data-open-element-config',
-      'data-master-image-editor',
-      'data-master-button-editor',
-      'data-image-library',
       'data-medium-element',
       'data-placeholder',
       'contenteditable',

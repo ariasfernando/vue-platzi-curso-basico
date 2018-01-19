@@ -1,29 +1,45 @@
 <template>
   <!-- IMAGE ELEMENT -->
-    <tr @click.prevent="setComponent"
-        :data-component="JSON.stringify(component)"
-        data-type="image-element"
+    <tr
+      data-type="image-element"
+      :data-component="JSON.stringify(component)"
+      @click.prevent="setComponent"
     >
-      <td width="100%" 
-          align="center"
-          :style="component.style" 
-          class="st-position-relative"
+      <td 
+        width="100%" 
+        align="center"
+        class="stx-position-relative"
+        :style="component.style" 
       >
-        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+        <table 
+          width="100%" 
+          cellspacing="0" 
+          cellpadding="0" 
+          border="0" 
+          style="width: 100%;"
+        >
           <tr>
-            <td width="100%" :bgcolor="component.attribute.bgcolor.hex" :align="component.attribute.align" :valign="component.attribute.valign">
-              <a @click.prevent
-                 :href="component.attribute.href" 
-                 :alt="component.attribute.alt"
-                 :title="component.attribute.title"
-                 :target="component.attribute.target"
+            <td 
+              width="100%" 
+              :bgcolor="component.attribute.bgcolor.hex" 
+              :align="component.attribute.align" 
+              :valign="component.attribute.valign"
+            >
+              <a 
+                @click.prevent
+                :href="component.attribute.href" 
+                :alt="component.attribute.alt"
+                :title="component.attribute.title"
+                :target="component.attribute.target"
               >
-                <img class="st-resize st-image"
-                     :src="imageUrl(component.attribute.placeholder)" 
-                     :width="component.attribute.width" 
-                     :height="component.attribute.height"
-                     :data-open-element-config="elementConfig" 
-                     border="0"
+                <img 
+                  class="st-resize"
+                  border="0"
+                  style="border: 0; display: block;" 
+                  :src="imageUrl(component.attribute.placeholder)" 
+                  :width="component.attribute.width" 
+                  :height="component.attribute.height"
+                  :data-open-element-config="elementConfig"
                 >
               </a>
               <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
@@ -111,7 +127,7 @@
 <style lang="less">
   @icon-option: #69dac8;
 
-  .st-position-relative{
+  .stx-position-relative{
     position: relative;
   }
 </style>
