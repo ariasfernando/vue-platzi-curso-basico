@@ -4,7 +4,7 @@ const campaignSettings = require('./campaignSettings.vue');
 module.exports = {
   name: 'destination-url',
   title: 'Destination Url',
-  version: '0.0.1',
+  version: '0.0.2',
   author: 'emiliano@stensul.com',
   target: ['button', 'image'],
   studioSettings,
@@ -16,8 +16,11 @@ module.exports = {
       _top: 'new-window',
     },
     defaultValue: '_blank',
+    validations: {
+      required: false,
+      url: false,
+    },
     target: false,
-    required: false,
   },
   data: {},
   render: true,
