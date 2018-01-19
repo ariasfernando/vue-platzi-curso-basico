@@ -361,6 +361,9 @@
       margin: 0 0 15px 0!important;
       width: 100%!important;
     }
+    .preview-body.col-md-8{
+      padding: 0px!important;
+    }
 
     input.share-preview {
       width: 250px;
