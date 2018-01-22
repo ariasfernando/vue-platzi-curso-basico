@@ -101,9 +101,6 @@ function campaignStore() {
         state.modules.push(clone);
         state.dirty = true;
       },
-      setCustomModule(state, moduleId) {
-        state.currentCustomModuleId = moduleId;
-      },
       updateElement(state, payload) {
         // This is necessary, since the clickaway function is executed.
         if ( !_.isUndefined(payload.moduleId) ){ 
@@ -127,10 +124,12 @@ function campaignStore() {
       },
       setCurrentComponent(state, data) {
         state.currentComponent = data;
-        state.currentModuleId = undefined;
       },
       setActiveModule(state, moduleId) {
         state.activeModule = moduleId;
+      },
+      unsetActiveModule(state) {
+        state.activeModule = undefined;
       },
       setActiveLastModule(state) {
         state.activeModule = state.modules.length-1;
@@ -184,6 +183,15 @@ function campaignStore() {
       setCurrentModule(state, moduleId) {
         state.currentModuleId = moduleId;
         state.currentComponent = {};
+      },
+      unsetCurrentModule(state) {
+        state.currentModuleId = undefined;
+      },
+      setCustomModule(state, moduleId) {
+        state.currentCustomModuleId = moduleId;
+      },
+      unsetCustomModule(state) {
+        state.currentCustomModuleId = undefined;
       },
       setTemplating(state, templating) {
         state.campaign.campaign_data.template = templating;

@@ -14,7 +14,22 @@
     >
       <tr>
         <td width="100%" 
-            :style="'padding-top:'+ column.style.paddingTop +';padding-left:'+ column.style.paddingLeft +';padding-bottom:'+ column.style.paddingBottom +';padding-right:'+ column.style.paddingRight + ';border-top-width:'+ column.style.borderTopWidth +';border-right-width:'+ column.style.borderRightWidth +';border-bottom-width:'+ column.style.borderBottomWidth +';border-left-width:'+ column.style.borderLeftWidth +';border-top-style:'+ column.style.borderTopStyle +';border-right-style:'+ column.style.borderRightStyle +';border-bottom-style:'+ column.style.borderBottomStyle +';border-left-style:'+ column.style.borderLeftStyle +';border-top-color:'+ column.style.borderTopColor +';border-right-color:'+ column.style.borderRightColor +';border-bottom-color:'+ column.style.borderBottomColor +';border-left-color:'+ column.style.borderLeftColor +';'"
+            :style="`padding-top:${column.style.paddingTop};
+                     padding-left:${column.style.paddingLeft};
+                     padding-bottom:${column.style.paddingBottom};
+                     padding-right:${column.style.paddingRight};
+                     border-top-width:${column.style.borderTopWidth};
+                     border-right-width:${column.style.borderRightWidth};
+                     border-bottom-width:${column.style.borderBottomWidth};
+                     border-left-width:${column.style.borderLeftWidth};
+                     border-top-style:${column.style.borderTopStyle};
+                     border-right-style:${column.style.borderRightStyle};
+                     border-bottom-style:${column.style.borderBottomStyle};
+                     border-left-style:${column.style.borderLeftStyle};
+                     border-top-color:${column.style.borderTopColor};
+                     border-right-color:${column.style.borderRightColor};
+                     border-bottom-color:${column.style.borderBottomColor};
+                     border-left-color:${column.style.borderLeftColor};`"
         >
           <draggable v-model="column.components"
                      @add="onAdd"
@@ -78,6 +93,7 @@
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
+  import SeparatorElement from '../elements/SeparatorElement.vue';
 
   export default {
     name: 'ColumnsStackedRender',
@@ -87,7 +103,8 @@
       TextElement,
       ButtonElement,
       ImageElement,
-      DividerElement
+      DividerElement,
+      SeparatorElement
     },
     data () {
       return {

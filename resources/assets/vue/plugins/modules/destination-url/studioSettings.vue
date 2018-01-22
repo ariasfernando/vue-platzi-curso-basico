@@ -12,10 +12,19 @@
       </div>
 
       <div v-if="plugin.enabled" class="form-group">
-        <label class="col-sm-7 control-label" data-name="required"><b>Required</b></label>
+        <label class="col-sm-7 control-label" data-name="validations.required"><b>Required</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="plugin.config.required" name="required" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
+            <toggle-button :value="plugin.config.validations.required" name="validations.required" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
+          </span>
+        </div>
+      </div>
+
+      <div v-if="plugin.enabled" class="form-group">
+        <label class="col-sm-7 control-label" data-name="validations.url"><b>Validate URL</b></label>
+        <div class="col-sm-5">
+          <span>
+            <toggle-button :value="plugin.config.validations.url" name="validations.url" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
           </span>
         </div>
       </div>
@@ -35,6 +44,9 @@
 </template>
 
 <script>
+
+  import _ from 'lodash';
+
   export default {
     props: {
       name: {
@@ -77,10 +89,10 @@
         this.$store.commit('module/togglePlugin', payload);
       },
       updateField(e) {
-
-        const option = e.srcEvent.target.parentElement.attributes.getNamedItem('name').value;
         const config = {};
-        config[option] = e.value;
+        const option = e.srcEvent.target.parentElement.attributes.getNamedItem('name').value;
+
+        _.set(config, option, e.value);
 
         const payload = {
           plugin: this.name,

@@ -48,10 +48,10 @@
       config(){
         if (this.module.type === 'custom') {
           this.$store.commit("campaign/setCustomModule", this.moduleId);
-          this.$store.commit("campaign/setCurrentModule", undefined);
+          this.$store.commit("campaign/unsetCurrentModule");
         } else {
           this.$store.commit("campaign/setCurrentModule", this.moduleId);
-          this.$store.commit("campaign/setCustomModule", undefined);
+          this.$store.commit("campaign/unsetCustomModule");
         }
 
       },
@@ -60,8 +60,8 @@
       },
       remove() {
         this.$store.dispatch("campaign/removeModule", this.moduleId);
-        this.$store.commit("campaign/setActiveModule", null);
-        this.$store.commit("campaign/setCurrentModule", null);
+        this.$store.commit("campaign/unsetActiveModule");
+        this.$store.commit("campaign/unsetCurrentModule");
       },
     },
   };
@@ -92,7 +92,7 @@
 
   }
 
-  .st-module-wrapper:hover {
+  .stx-module-wrapper:hover {
     &::before{
       top: 0px;
       left: 0px;
@@ -130,7 +130,7 @@
     }
   }
 
-  .st-module-wrapper-active{
+  .stx-module-wrapper-active{
 
     &::before{
       top: 0px;
@@ -178,7 +178,7 @@
     }
   }
 
-  .st-position-relative {
+  .stx-position-relative {
     position: relative;
   }
 
