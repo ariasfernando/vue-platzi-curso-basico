@@ -1,20 +1,15 @@
 // VENDOR
 @import "../base";
-// VENDOR
-@import "../commons/bootstrap";
+@import "~bootstrap/less/bootstrap.less";
 
 // MIXINS
 @import "../mixins/border-radius";
 @import "../mixins/font-face";
 
 // VENDOR
-@import (inline) "../../../bower/magnific-popup/dist/magnific-popup.css";
-@import (inline) "../../../bower/bootstrapcolorpicker/dist/css/bootstrap-colorpicker.min.css";
-@import (inline) "../../../bower/jquery-ui/themes/ui-lightness/jquery-ui.min.css";
-@import (inline) "../../../bower/jquery-simplecolorpicker/jquery.simplecolorpicker.css";
-@import (inline) "../../../bower/bootstrap-select/dist/css/bootstrap-select.min.css";
-@import "../../../bower/css-toggle-switch/src/toggle-switch";
-
+@import "~jquery-ui/themes/base/theme.css";
+@import "~jquery-simplecolorpicker/jquery.simplecolorpicker.css";
+@import "~bootstrap-select/dist/css/bootstrap-select.min.css";
 
 // COMMON
 @import "../commons/fonts";
@@ -22,7 +17,6 @@
 @import "../commons/layout";
 
 // PARTIALS
-@import "../partials/rewrite-bower-class";
 @import "../partials/header";
 @import "../partials/dropdowns";
 @import "../partials/buttons";
@@ -32,10 +26,8 @@
 @import "../partials/modal";
 @import "../partials/bootstrap-modal";
 @import "../partials/tinymce";
-@import "../partials/master-image-editor";
 @import "../partials/master-button-editor";
 @import "../partials/image-library";
-@import "../partials/switch";
 @import "../partials/autocomplete";
 @import "partials/admin-layout";
 @import "partials/admin-sidebar";

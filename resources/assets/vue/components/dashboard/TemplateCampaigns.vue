@@ -82,8 +82,12 @@
                   @click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                   data-toggle="tooltip"
                   data-placement="bottom"
+<<<<<<< HEAD
                   data-tooltip="Lock"
                   @click.prevent
+=======
+                  title="Lock Campaign"
+>>>>>>> 5ebdc53b2c57598854080296326380a3d4e618d5
                 >
                   <i class="glyphicon fa fa-lock"></i>
                 </a>

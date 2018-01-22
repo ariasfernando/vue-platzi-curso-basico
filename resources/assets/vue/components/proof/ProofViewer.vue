@@ -132,7 +132,7 @@
     };
 </script>
 
-<style lang="sass">
+<style lang="scss">
     .proof-viewer-container {
         width: 100%;
         display: table;

@@ -85,6 +85,7 @@
           chosenClass: "chosen-component",
           // Class name for the dragging item
           dragClass: "drag-component",
+<<<<<<< HEAD
           setData: (dataTransfer, dragEl) => {
             // Is Firefox?
             const isFirefox = /firefox/i.test(navigator.userAgent);
@@ -95,6 +96,45 @@
             if(isFirefox) {
               // Place it into the DOM tree
               document.body.appendChild(img);
+=======
+          setData: function (dataTransfer, dragEl) {
+            // Get the element type
+            const type = $(dragEl).find('tr[data-type]').data('type');
+
+            // Create the content & Stylize it
+            dragGhost = document.createElement("div");
+            dragGhost.classList.add('custom-drag-ghost');
+
+            // Icon
+            let icon = document.createElement("i");
+            icon.classList.add('fa');
+            let iconClass = '';
+            let text = '';
+
+            // Text
+            let paragraph = document.createElement("p");
+            
+            // Get the class for given icon
+            switch(type) {
+              case 'image-element':
+                iconClass = 'fa-picture-o';
+                text = 'Image';
+                break;
+              case 'text-element':
+                iconClass = 'fa-align-justify';
+                text = 'Text';
+                break;
+              case 'button-element':
+                iconClass = 'fa-square';
+                text = 'CTA';
+                break;
+              case 'divider-element':
+                iconClass = 'fa-minus-square';
+                text = 'Divider';
+                break;
+              default:
+                iconClass = '';
+>>>>>>> 5ebdc53b2c57598854080296326380a3d4e618d5
             }
             // Stylize it
             img.classList.add('custom-drag-ghost');

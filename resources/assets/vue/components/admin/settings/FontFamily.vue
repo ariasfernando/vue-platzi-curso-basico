@@ -4,7 +4,7 @@
 
     <div class="col-sm-12">
       <multiselect v-model="value" :options="options()" :multiple="true" :select-label="'Select'" @select="saveValue" :close-on-select="true" :clear-on-select="false" :hide-selected="true" :preserve-search="true" placeholder="Choose font">
-        <template slot="tag" scope="props">
+        <template slot="tag" slot-scope="props">
           <span v-if="props.option">{{ props.option }}</span>
           <i class="custom__remove glyphicon glyphicon-remove" @click="remove(props)" v-if="props.option"></i>
         </template>

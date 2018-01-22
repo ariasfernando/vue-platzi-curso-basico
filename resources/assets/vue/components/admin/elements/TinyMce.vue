@@ -69,8 +69,13 @@
   }
 </script>
 
+<<<<<<< HEAD
 <style lang="sass">
   .stx-edit-text {
+=======
+<style lang="scss">
+  .st-edit-text {
+>>>>>>> 5ebdc53b2c57598854080296326380a3d4e618d5
     cursor: text;
   }
 </style>
