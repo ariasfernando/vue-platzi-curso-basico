@@ -84,7 +84,7 @@
     };
 </script>
 
-<style lang="sass">
+<style lang="scss">
     .proof-comments-container {
         width: 100%;
         padding-left: 35px;
