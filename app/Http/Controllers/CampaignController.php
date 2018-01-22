@@ -95,6 +95,8 @@ class CampaignController extends Controller
                 }
             }
 
+            $params['campaign_name'] = 'Untitled Campaign';
+
             $campaign = Campaign::create($params);
 
             return redirect('campaign/edit/'.$campaign->id);

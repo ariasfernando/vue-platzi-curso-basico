@@ -1,24 +1,29 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
-  <tr @click.prevent="setComponent"
-      :data-component="JSON.stringify(component)"
-      data-type="button-element"
+  <tr 
+    data-type="button-element"
+    :data-component="JSON.stringify(component)"
+    @click.prevent="setComponent"
   >
-    <td :align="component.attribute.align" 
-        class="st-position-relative"
-        width="100%"
+    <td 
+      class="stx-position-relative"
+      width="100%"
+      style="width: 100%;"
+      :align="component.attribute.align" 
     >
       <a style="text-decoration:none;" 
          :href="component.attribute.href" 
          :target="component.attribute.target" 
          @click.prevent
       >  
-        <table :width="component.attribute.width" 
-               :height="component.attribute.height" 
-               :bgcolor="component.attribute.bgcolor.hex"
-               border="0" 
-               cellpadding="0" 
-               cellspacing="0"
+        <table 
+          cellpadding="0" 
+          cellspacing="0"
+          border="0" 
+          :width="component.attribute.width" 
+          :height="component.attribute.height" 
+          :bgcolor="component.attribute.bgcolor.hex"
+          :style="`width:${component.attribute.width}px`" 
         >
           <tr>
             <td width="100%" 
@@ -104,7 +109,7 @@
 <style lang="less">
   @icon-option: #69dac8;
 
-  .st-position-relative{
+  .stx-position-relative{
     position: relative;
   }
 

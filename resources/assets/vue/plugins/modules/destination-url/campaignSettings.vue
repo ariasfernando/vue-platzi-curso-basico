@@ -78,7 +78,14 @@
         },
       },
       validationRules() {
-        return this.plugin.config.required ? 'required|url' : null;
+        const rules = [];
+        _.each(this.plugin.config.validations, (e,i) => {
+          if (e) {
+            rules.push(i);
+          }
+        });
+
+        return rules.join('|');
       }
     },
     data() {

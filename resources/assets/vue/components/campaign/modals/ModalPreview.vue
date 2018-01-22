@@ -27,7 +27,7 @@
                 Preview
               </h4>
               <div class="row">
-                <div class="send-preview col-md-4" v-if="!isPublic">
+                <div class="send-preview" v-if="!isPublic">
                   <div class="form-group" v-if="!isPublic">
                     <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
                       email is not suitable for deployment. To access the production-ready HTML, please click
@@ -57,6 +57,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="preview-body" :class="previewBodyClass">
                   <div class="preview-container">
                     <div class="mobile-frame"></div>
@@ -256,7 +257,7 @@
     width: 1160px!important;
     height: 80vh;
     min-height: 450px;
-    overflow: scroll;
+    overflow: auto;
     margin: -20px auto;
     background-color: #fff;
     border-radius: 0;
@@ -266,6 +267,10 @@
 
     .send-preview{
       margin-top: 10px;
+      width: 360px;
+      float: left;
+      margin-left: 15px;
+      margin-right: 15px;
     }
 
     .share-preview{
@@ -335,7 +340,9 @@
       margin-left: 4px;
     }
     .preview-body {
-      margin: 0 0 15px 0;
+      margin: 0 15px 15px 15px;
+      float: left;
+      width: 720px;
 
       .preview-container {
         padding-top: 0px;
@@ -349,6 +356,13 @@
         margin-top: -15px;
         min-height: 215px;
       }
+    }
+    .preview-body.col-md-12{
+      margin: 0 0 15px 0!important;
+      width: 100%!important;
+    }
+    .preview-body.col-md-8{
+      padding: 0px!important;
     }
 
     input.share-preview {

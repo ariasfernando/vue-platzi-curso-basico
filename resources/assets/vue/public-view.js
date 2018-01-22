@@ -12,10 +12,11 @@ Vue.use(Bootstrap);
 Vue.use(VueResource);
 Vue.use(Toast, {
   horizontalPosition: 'center',
-  verticalPosition: 'bottom',
+  verticalPosition: 'top',
   parent: 'body',
   transition: 'fade',
   duration: 5000,
+  closeable: true
 });
 Vue.use(BootstrapVue);
 Vue.use(interceptors);

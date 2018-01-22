@@ -6,19 +6,28 @@
     <div class="module-plugins" v-if="hasEnabledPlugins(module)">
 
       <div v-for="(plugin, key) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component v-if="plugin.enabled && $_app.globalComponents.indexOf('campaign-' + plugin.name) !== -1" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+        <component v-if="plugin.enabled && $_app.modulePlugins[key]" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
 
     <div class="column-plugins">
       <b-card class="control container-fluid" no-block>
-        <b-tabs card ref="tabs">
-          <b-tab v-for="(column, columnKey) in module.structure.columns" v-if="hasEnabledPlugins(column)"
-                 :title="`${columnKey+1}`" :button-id="`column-${columnKey}`" :key="columnKey">
+        <b-tabs card>
+          <b-tab
+            v-for="(column, columnKey) in module.structure.columns"
+            v-if="hasEnabledPlugins(column)"
+            :title="`${columnKey+1}`"
+            :button-id="`column-${columnKey}`"
+            :key="columnKey">
             <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-              <component v-if="plugin.enabled && $_app.globalComponents.indexOf('campaign-' + plugin.name) !== -1"
-                         :is="'campaign-' + plugin.name" :name="moduleKey" :plugin="plugin"
-                         :column-id="columnKey" :module-id="currentModule"></component>
+              <component
+                v-if="plugin.enabled && $_app.modulePlugins[moduleKey]"
+                :is="'campaign-' + plugin.name"
+                :name="moduleKey"
+                :plugin="plugin"
+                :column-id="columnKey"
+                :module-id="currentModule">
+              </component>
             </div>
           </b-tab>
         </b-tabs>
@@ -30,7 +39,6 @@
 
 <script>
   import _ from 'lodash'
-  import uc from 'underscore-contrib'
 
   export default {
     data () {
@@ -42,12 +50,9 @@
       currentModule() {
         return this.$store.getters["campaign/currentModule"];
       },
-      modules() {
-        return this.$store.getters["campaign/modules"];
-      },
       module() {
-        return this.modules[this.currentModule];
-      }
+        return this.$store.getters["campaign/modules"][this.currentModule];
+      },
     },
     watch : {
       currentColumn: {

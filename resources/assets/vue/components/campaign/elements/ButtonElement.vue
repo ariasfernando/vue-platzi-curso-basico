@@ -2,28 +2,37 @@
   <!-- CALL TO ACTION ELEMENT -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr data-type="button-element">
-      <td :align="component.attribute.align" class="st-position-relative" width="100%">
-        <a @click.prevent 
-           :href="component.attribute.href" 
-           :target="component.attribute.target" 
-           style="text-decoration:none;"
+      <td 
+        class="stx-position-relative" 
+        width="100%"
+        style="width: 100%;"
+        :align="component.attribute.align"
+      >
+        <a 
+          @click.prevent 
+          :href="component.attribute.href" 
+          :target="component.attribute.target" 
+          style="text-decoration:none;"
         >
-          <table :width="component.attribute.width" 
-                 :height="component.attribute.height" 
-                 :bgcolor="component.attribute.bgcolor.hex"
-                 border="0" 
-                 cellpadding="0" 
-                 cellspacing="0"
+          <table 
+            border="0" 
+            cellpadding="0" 
+            cellspacing="0"
+            :width="component.attribute.width" 
+            :height="component.attribute.height" 
+            :bgcolor="component.attribute.bgcolor.hex"
+            :style="`width:${component.attribute.width}px`" 
           >
             <tr>
-              <td width="100%" 
-                  align="center" 
-                  :bgcolor="component.attribute.bgcolor.hex"
-                  :height="component.attribute.height"
-                  :style="component.style"
+              <td 
+                width="100%" 
+                align="center" 
+                :bgcolor="component.attribute.bgcolor.hex"
+                :height="component.attribute.height"
+                :style="styles"
               >
-                <div class="st-edit-text stx-wrapper" :id="editorId" v-html="component.data.text"></div>
-                <div class="st-remove-element st-toolbar" :class="`toolbar-${editorId}`"></div>
+                <div class="stx-edit-text stx-wrapper" :id="editorId" v-html="component.data.text"></div>
+                <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
               </td>
             </tr>
           </table>
@@ -48,6 +57,15 @@
     data(){
       return {
         editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-'),
+      }
+    },
+    computed: {
+      styles(){
+        let height = {
+          height: `${this.component.attribute.height}px`
+        }; 
+
+        return _.extend( this.component.style, height );
       }
     },
   };
