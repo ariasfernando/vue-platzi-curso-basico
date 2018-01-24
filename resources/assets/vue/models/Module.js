@@ -26,6 +26,7 @@ function Module(data = {}) {
 
   this.structure = {
     columnsFixed: (data.structure && data.structure.columnsFixed) ? data.structure.columnsFixed : false,
+    invertedStacking: (data.structure && data.structure.invertedStacking) ? data.structure.invertedStacking : false,
     attribute: {
       bgcolor: attribute.bgcolor || { hex: 'transparent' },
     },

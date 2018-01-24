@@ -25,12 +25,35 @@
         :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
-      <table width="100%" cellspacing="0" cellpadding="0" border="0" :class="{ 'stx-wrapper': module.structure.columns.length === 1 }">
+      <table 
+        width="100%" 
+        cellspacing="0" 
+        cellpadding="0" 
+        border="0" 
+        :class="{ 'stx-wrapper': module.structure.columns.length === 1 }"
+        >
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
-          <td width="100%" v-if="!module.structure.columnsFixed">
+          <td width="100%" v-if="!module.structure.columnsFixed && !module.structure.invertedStacking">
             <comment :content="msoStartingComment"></comment>
             <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
+          </td>
+
+          <td width="100%" v-else-if="!module.structure.columnsFixed && module.structure.invertedStacking">
+            <table 
+              width="100%" 
+              cellspacing="0" 
+              cellpadding="0" 
+              border="0"
+              dir="rtl" 
+              >
+              <tr>
+                <td width="100%">
+                  <comment :content="msoStartingCommentInverted"></comment>
+                  <columns-inverted-stacking-render v-for="(column, columnId) in module.structure.columns.slice().reverse() " :module-id="moduleId" :column="column" :column-id="columnId"></columns-inverted-stacking-render>
+                </td>
+              </tr>
+            </table>
           </td>
 
           <td v-else
@@ -73,6 +96,7 @@
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
+  import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
   import { mixin as clickaway } from 'vue-clickaway';
 
   module.exports = {
@@ -93,6 +117,13 @@
           "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center'>" +
           "<tr>" +
           "<td style='width: " + this.templateWidth / this.module.structure.columns.length + "px !important'>" +
+          "<![endif]";
+      },
+      msoStartingCommentInverted() {
+        return "[if gte mso 9]>" +
+          "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center' dir='rtl'>" +
+          "<tr>" +
+          "<td style='width: " + this.templateWidth / this.module.structure.columns.length + "px !important' dir='ltr'>" +
           "<![endif]";
       },
       activeModule() {
@@ -211,7 +242,8 @@
       SeparatorElement,
       ModuleToolbar,
       ColumnsStackedRender,
-      ColumnsFixedRender
+      ColumnsFixedRender,
+      ColumnsInvertedStackingRender,
     }
   };
 </script>

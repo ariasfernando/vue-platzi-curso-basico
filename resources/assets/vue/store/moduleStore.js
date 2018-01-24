@@ -144,6 +144,9 @@ const mutations = {
   setColumnsFixed(state, data) {
     state.module.structure.columnsFixed = data;
   },
+  setInvertedStacking(state, data) {
+    state.module.structure.invertedStacking = data;
+  },
   toggleRaw(state) {
     state.showRaw = !state.showRaw;
   },
