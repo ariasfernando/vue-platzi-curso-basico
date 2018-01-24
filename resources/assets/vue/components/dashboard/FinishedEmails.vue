@@ -84,7 +84,7 @@
                 v-on:click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                data-tooltip="Lock"
+                data-tooltip="Lock this email for editing"
                 @click.prevent
               >
                 <i class="glyphicon fa fa-lock"></i>
