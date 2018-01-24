@@ -22,7 +22,7 @@
                               </span>
                           </div>
                       </div>
-                      
+
                       <div class="modal-divider"></div>
 
                       <table class="table table-condensed" id="reviewers-table">
@@ -40,12 +40,12 @@
                                     :value="reviewer.email">{{reviewer.email}}
                                 </td>
                                 <td>
-                                  <checkbox name="'reviewers[' + key + '][required]'" value="reviewer.requiredValue" checked="reviewer.checked" disabled="reviewer.requiredDisable || false"></checkbox>
-
-                                  <!-- <input type="checkbox" :name="'reviewers[' + key + '][required]'"
+                                  <checkbox
                                     :checked="reviewer.checked"
+                                    :disabled="reviewer.requiredDisable || false"
+                                    :name="'reviewers[' + key + '][required]'"
                                     :value="reviewer.requiredValue"
-                                    :disabled="reviewer.requiredDisable || false"> -->
+                                  ></checkbox>
                                 </td>
                                 <td>
                                   <input type="hidden" :name="'reviewers[' + key + '][notification_message]'"
@@ -58,8 +58,8 @@
                             </tr>
                           </tbody>
                       </table>
-                      <div class="modal-divider"></div>
-                      <div class="checkbox new-proof-checkbox">
+                      <div class="modal-divider" v-show="this.campaign.campaign_data.proof_id !== null"></div>
+                      <div class="checkbox new-proof-checkbox" v-show="this.campaign.campaign_data.proof_id !== null">
                         <div class="input-group">
                           <label data-toggle="tooltip" data-placement="top"
                             title="Existing comments, approvals, and rejections will be archived.">
@@ -116,7 +116,7 @@
 <script>
   import request from '../../../utils/request';
   import Q from 'q';
-  import { Checkbox } from  'vue-checkbox-radio';
+  import { Checkbox } from 'vue-checkbox-radio';
 
   // @TODO remove jQuery dependencies.
   $.ajaxSetup({
@@ -139,6 +139,7 @@
     },
     methods: {
       close () {
+        this.fetched = false;
         this.$store.commit("campaign/toggleModal", 'modalProof');
       },
       send () {
@@ -205,7 +206,6 @@
        * @return {void}
        */
       addReviewer: function(email, params) {
-
         var $table = this.getReviewersTable();
 
         if (typeof email === 'object') {
@@ -223,19 +223,18 @@
               notification_message: ''
             }, params );
 
-            var requiredChecked = params.required ? 'checked="checked"' : '';
             var requiredValue = 1;
             var requiredDisable = false;
             var notification_message = params.notification_message || '';
 
             if ("require_unabled" in params) {
                 requiredValue = 0;
-                requiredDisable = 'disabled';
+                requiredDisable = true;
             }
 
             this.reviewers.push({
               email: email,
-              checked: params.required ? 'checked' : '',
+              checked: params.required ? true : false,
               requiredValue: requiredValue,
               requiredDisable: requiredDisable,
               notificationMessage: notification_message
@@ -319,19 +318,25 @@
         return;
       }
       this.fetchUsers();
-      this.fetchReviewers();
 
-      if (this.campaign.campaign_data.proof_id) {
+      if (this.campaign.campaign_data.proof_id !== null) {
+        // If a proof already exists, set the "Start proof from scratch" off
         this.startProof = false;
       }
     },
     updated () {
+      if (!this.fetched) {
+        this.fetched = true;
+        this.reviewers = [];
+        this.fetchReviewers();
+      }
       if ($('.proof-users-picker').length) {
           $('.proof-users-picker').selectpicker();
       }
     },
     data: function() {
       return {
+        fetched: false,
         users: [],
         reviewers: [],
         currentReviewer: {},
@@ -370,7 +375,7 @@
         }
       }
     }
-    
+
   }
   .btn-reviewer-add{
     margin-top: 0px;
