@@ -24,7 +24,7 @@
             <th>
               <column-sort
                 field="campaign_name"
-                title="Campaign Name"
+                title="Email Name"
                 :sort="sortKey"
                 :reverse="reverse"
                 v-on:change-sort="sortBy"></column-sort>
@@ -41,7 +41,7 @@
             <th  width="300" class="bold" colspan="2">Actions</th>
           </tr>
         </thead>
-        <tbody> 
+        <tbody>
           <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
             <td class="last-modified" :title="campaign.created_by.email">
               <span>{{campaign.created_at}}</span><br><span>by {{campaign.created_by.email}}</span>

@@ -11,7 +11,7 @@
 
 return [
 
-    'DEFAULT_CAMPAIGN_NAME' => 'Untitled Campaign',
+    'DEFAULT_CAMPAIGN_NAME' => 'Untitled Email',
     'DEFAULT_LOCALE' => 'en_us',
 
 ];

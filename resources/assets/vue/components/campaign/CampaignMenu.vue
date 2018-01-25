@@ -93,7 +93,7 @@
 
         setTimeout(() => {
           this.autoScroll();
-        }, 50);
+        }, 25);
       },
       autoScroll(){
         let bounds = $(".section-canvas-container").outerHeight();
@@ -102,7 +102,7 @@
         if (!isVisible) {
             $('html,  .section-canvas-email').animate({
                 scrollTop: bounds
-            }, 500);
+            }, 100);
         }
       },
       expand (item) {
