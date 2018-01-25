@@ -177,15 +177,28 @@
 
       },
       fetchUsers () {
-
         $.getJSON(this.$_app.config.baseUrl + '/proof/users', {}, function(users) {
           this.users = users;
         }.bind(this));
 
         return this.users;
       },
-      fetchReviewers () {
+      checkCampaign () {
+        $.getJSON(this.$_app.config.baseUrl + '/proof/campaign/' + this.campaign.campaign_data._id, {}, function(response) {
+          if (response.status === 'success') {
+            this.campaignData = response.data;
 
+            if ('can_be_processed' in this.campaignData && this.campaignData.can_be_processed === false) {
+              this.$root.$toast(
+                this.campaignData.alert,
+                {className: 'et-info'}
+              );
+              $('.campaign-continue').hide();
+            }
+          }
+        }.bind(this));
+      },
+      fetchReviewers () {
         $.getJSON(this.$_app.config.baseUrl + '/proof/reviewers/' + this.campaign.campaign_data._id, {}, function(response) {
 
           if (response && response.status === 'success') {
@@ -317,7 +330,9 @@
       if (!this.proofAccess.status || !this.proofAccess.allow) {
         return;
       }
+
       this.fetchUsers();
+      this.checkCampaign();
 
       if (this.campaign.campaign_data.proof_id !== null) {
         // If a proof already exists, set the "Start proof from scratch" off
@@ -337,6 +352,7 @@
     data: function() {
       return {
         fetched: false,
+        campaignData: {},
         users: [],
         reviewers: [],
         currentReviewer: {},
