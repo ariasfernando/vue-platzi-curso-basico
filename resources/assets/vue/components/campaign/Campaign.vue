@@ -2,9 +2,8 @@
   <div class="section-container-campaign">
     <email-actions v-if="ready"></email-actions>
 
-    <div class="container-campaign-subwrapper" v-sticky="{ zIndex: 9998, stickyTop: 53 }">
+    <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
-      <div class="beta-shadow"></div>
       <!-- column left (menu) -->
       <aside>
         <div class="aside-inner">
@@ -143,15 +142,20 @@
     width: 100%;
     min-width: 1200px;
     background-color: #FFFFFF;
-    height: 53px;
-    padding: 11px 10px;
+    height: 45px;
+    padding: 8px 10px;
     box-shadow: 0px 0px 4px #999999;
     overflow: hidden;
+    position: fixed;
+    top: 45px;
+    z-index: 1000;
   }
 
   .container-campaign-subwrapper{
-    height: calc(~"100vh - 53px");
+    height: calc(~"100vh - 90px");
     width: 100%;
+    position: fixed;
+    top: 90px;
   }
 
   .component-settings-wrapper {
@@ -182,6 +186,7 @@
 
       .plugins{
         padding: 10px;
+        padding-bottom: 90px;
 
         .settings-wrapper{
           padding-bottom: 50px;

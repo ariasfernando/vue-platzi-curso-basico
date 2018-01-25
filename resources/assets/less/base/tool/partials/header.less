@@ -1,5 +1,5 @@
 header{
-	height: 53px;
+	height: 45px;
 	margin-bottom: 0px;
 	background-color: @stensul-purple;
 	font-family: 'Open Sans', Arial, sans-serif;
@@ -21,7 +21,7 @@ header{
 
 	div.logo{
 		display: table;
-		margin: 5px 0 0;
+		margin: 0px;
 
 		a{
 			display: inline-block;
@@ -57,10 +57,13 @@ header{
 	nav{
 		text-align: right;
 
+		a{
+			margin-top: 4px;
+		}
+
 		.logout{
 			width: 38px;
 			height: 38px;
-			margin: 8px 0 0;
 			padding: 10px 10px 8px;
 			overflow: hidden;
 			display: inline-block;
@@ -98,7 +101,6 @@ header{
 		.home{
 			width: 38px;
 			height: 38px;
-			margin: 8px 0 0;
 			padding: 10px 10px 8px;
 			overflow: hidden;
 			display: inline-block;
@@ -131,8 +133,17 @@ header{
 
 .base-dashboard{
 	header{
-		position: relative;
+		position: fixed;
+		top: 0px;
 		z-index: 3;
 		overflow: hidden;
+	}
+}
+
+.base-campaign{
+	header{
+		position: fixed;
+		top: 0px;
+		z-index: 1000;
 	}
 }
