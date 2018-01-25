@@ -29,7 +29,6 @@
 </template>
 
 <script>
-  import _ from 'lodash';
   import clone from 'clone';
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
@@ -48,6 +47,9 @@
       dragGhost: null
     },
     computed: {
+      currentComponent() {
+        return this.$store.getters["campaign/currentComponent"];
+      },
       dragList: {
         get() {
           return this.$store.getters['campaign/modules'];
@@ -138,6 +140,12 @@
         e.clone.style.opacity = "1";
       },
       onSort(e){
+        this.$store.commit('campaign/setCurrentComponent', {
+          moduleId: e.newIndex,
+          columnId: 0,
+          componentId: 0,
+        });
+        this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
       },
       onEnd (evt) {
