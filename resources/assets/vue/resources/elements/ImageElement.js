@@ -17,7 +17,7 @@ function imageDefault() {
       align: 'center',
       valign: 'middle',
       target: '_blank',
-      width: '220',
+      width: '100%',
     },
     settings: [
       {
