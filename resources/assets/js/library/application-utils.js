@@ -124,7 +124,7 @@ Application.utils = {
 
             // Set on escape key press
             $confirmModal.keydown(function(e) {
-                 if (e.keyCode == 27) { 
+                 if (e.keyCode == 27) {
                     confirm.confirmOptions.onEscape();
                 }
             });
@@ -333,7 +333,7 @@ Application.utils = {
             $(field)
                 .removeClass("error warning success")
                 .removeAttr("disabled");
-            
+
             var $labelMessage = $(field).next("label");
             if( $labelMessage.hasClass("error") || $labelMessage.hasClass("success") || $labelMessage.hasClass("warning") ){
                 $labelMessage.remove();
@@ -999,7 +999,7 @@ Application.utils = {
         if ( $(el).val().length > 0 ){
             var validationResult = Application.utils.validate.validateField(el);
             if(!validationResult.success) {
-                Application.utils.validate.setWarning(el,validationResult.message);   
+                Application.utils.validate.setWarning(el,validationResult.message);
             }
         }
     }

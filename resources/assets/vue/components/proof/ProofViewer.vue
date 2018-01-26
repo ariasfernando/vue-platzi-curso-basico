@@ -99,7 +99,7 @@
 
             // Get campaign data
             this.getProofData();
-        },       
+        },
         directives: {
           'sticky': VueSticky,
         },
