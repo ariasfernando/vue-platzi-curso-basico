@@ -101,7 +101,8 @@
             // Stylize it
             img.classList.add('custom-drag-ghost');
             // Set the new stylized "drag image" of the dragged element
-            dataTransfer.setDragImage(img, 0, 0);
+            // The placeholder image is 170x52, this positioning forces the placeholder image: top-right
+            dataTransfer.setDragImage(img, 130, 16);
           }
         },
         templateBackgroundColor(){
