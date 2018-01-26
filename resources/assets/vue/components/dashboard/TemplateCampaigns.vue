@@ -25,7 +25,7 @@
               <th>
                 <column-sort
                   field="campaign_name"
-                  title="Campaign Name"
+                  title="Email Name"
                   :sort="sortKey"
                   :reverse="reverse"
                   v-on:change-sort="sortBy"></column-sort>
@@ -39,7 +39,7 @@
                 v-on:change-sort="sortBy"></column-sort>
             </th>
             <th v-if="showTags == 1" class="col-200">Tags</th>
-            <th  width="180" class="bold">Actions</th>
+            <th  width="200" class="bold">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -74,7 +74,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="actions icons text-right">
+            <td class="actions icons text-left">
                 <a
                   href="#"
                   class="lock-campaign"
@@ -82,7 +82,7 @@
                   @click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                   data-toggle="tooltip"
                   data-placement="bottom"
-                  data-tooltip="Lock"
+                  data-tooltip="Lock this email for editing"
                   @click.prevent
                 >
                   <i class="glyphicon fa fa-lock"></i>

@@ -14,7 +14,7 @@
     },
     methods: {
       initToTopButton: function() {
-        
+
         const $parent = $('.section-canvas-email');
 
         $parent.bind('scroll', function() {
@@ -32,7 +32,7 @@
       backToTop: function() {
         $('html, body, .section-canvas-email').stop().animate({
           scrollTop: 0
-        }, 1500);
+        }, 500);
       }
     },
     mounted: function() {

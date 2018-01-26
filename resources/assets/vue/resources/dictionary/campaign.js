@@ -4,7 +4,7 @@ const campaignDictionary = {
       required: 'Destination url is required',
     },
     campaignName: {
-      required: 'Campaign name is required',
+      required: 'Email name is required',
     },
   },
 };

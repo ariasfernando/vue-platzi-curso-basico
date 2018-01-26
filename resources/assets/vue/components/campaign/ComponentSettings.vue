@@ -1,5 +1,5 @@
 <template>
-  <div class="component-settings">
+  <div class="component-settings" v-if="component">
     <h2 v-if="ready && component.plugins && Object.keys(component.plugins).length !== 0">
       <i class="glyphicon glyphicon-tasks"></i>
       {{ toCamel(component.type.replace('-element', '')) }}
@@ -28,6 +28,9 @@
       },
       component() {
         let component = {};
+        this.ready = false;
+
+        if (Object.keys(this.currentComponent).length !== 0) {
 
         const modules = this.$store.getters["campaign/modules"];
 
@@ -43,14 +46,13 @@
 
           component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
 
-          _.each(component.plugins, (plugin) => {
-            if ( plugin.enabled && plugin.render !== false) {
-              this.ready = true;
-            }
-          });
-        }
-        else {
-          this.ready = false;
+          if (component) {
+            _.each(component.plugins, (plugin) => {
+              if (plugin.enabled && plugin.render !== false) {
+                this.ready = true;
+              }
+            });
+          }
         }
         return component;
       },

@@ -1,5 +1,5 @@
 <template>
-  <div class="beta-subheader" v-sticky="{ zIndex: 9997, stickyTop: 0 }">
+  <div class="beta-subheader">
     <div class="section-box-header section-canvas-title">
       <div class="row">
         <div class="col-xs-5 col-md-5 col-lg-5 hidden-sm hidden-xs"></div>
@@ -125,7 +125,7 @@
         // Do not save if there are missing or wrong fields
         if (this.fieldErrors.length > 0) {
           this.$root.$toast(
-            'To continue, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, ' +
+            'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
             {
               className: 'et-error',
@@ -169,7 +169,7 @@
         // Do not save if there are missing or wrong fields
         if (this.fieldErrors.length > 0 || campaignCleaner.imagesErrors('#emailCanvas') ) {
           this.$root.$toast(
-            'To continue, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, ' +
+            'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
             {
               className: 'et-error',

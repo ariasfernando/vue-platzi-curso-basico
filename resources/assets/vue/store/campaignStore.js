@@ -125,6 +125,9 @@ function campaignStore() {
       setCurrentComponent(state, data) {
         state.currentComponent = data;
       },
+      unsetCurrentComponent(state) {
+        state.currentComponent = undefined;
+      },
       setActiveModule(state, moduleId) {
         state.activeModule = moduleId;
       },

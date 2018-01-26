@@ -57,16 +57,42 @@
 </template>
 
 <script>
+  import _ from 'lodash';
+
   export default {
     name: 'ImageElement',
     props: [
       'module-id',
       'column-id',
       'component-id',
-      'component'
+      'component',
+      'number-required'
     ],
     created () {
       this.setupModule();
+      if(this.numberRequired) {
+        let tempWidth = _.toString(this.component.attribute.width);
+        let paddingLeft = Number(this.component.style.paddingLeft.replace(/px$/, ''));
+        let paddingRight = Number(this.component.style.paddingRight.replace(/px$/, ''));
+        
+        if ( tempWidth.indexOf('%') > 1){
+
+          let widthPercent = Number(tempWidth.replace(/%$/, ''));
+          tempWidth = (this.$store.getters["campaign/campaign"].library_config.templateWidth / 2) * widthPercent / 100;
+        }else if ( tempWidth.indexOf('px') > 1){
+          tempWidth = Number(tempWidth.replace(/px$/, ''));
+        }
+        
+        const payload = {
+          moduleId: this.moduleId,
+          columnId: this.columnId,
+          componentId: 0,
+          attribute: 'width',
+          attributeValue: ( tempWidth - (paddingLeft + paddingRight) ),
+        };
+
+        this.$store.commit('campaign/saveComponentAttribute', payload);
+      }
     },
     data(){
       return {

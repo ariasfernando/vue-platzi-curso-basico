@@ -179,6 +179,20 @@
           </form>
         </div>
 
+        <!-- Invert Stack on Mobile  -->
+        <div v-if="module.structure.columns.length == 2" class="row-toggle">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label class="col-sm-7 control-label"><b>Inverted Stacking on Mobile</b></label>
+              <div class="col-sm-5">
+                <span>
+                  <toggle-button :value="module.structure.invertedStacking" color="#78DCD6" :sync="true" :labels="true" @change="toggleStacking"></toggle-button>
+                </span>
+              </div>
+            </div>
+          </form>
+        </div>
+
       </b-card>
     </b-collapse>
   </div>
@@ -255,8 +269,11 @@
           value: e.target.value,
         });
       },
-      toggle(e){
+      toggle(e) {
         this.$store.commit("module/setColumnsFixed", e.value);
+      },
+      toggleStacking(e) {
+        this.$store.commit("module/setInvertedStacking", e.value);
       },
       setColumns(value) {
         let cols = value;
