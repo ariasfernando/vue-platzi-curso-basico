@@ -223,6 +223,10 @@
           display: block!important; 
           height: auto !important;
         }
+        .st-inverted-stacking{
+          display:flex;
+          flex-direction:column-reverse;
+        }
       }
     }
 
