@@ -34,11 +34,14 @@
         >
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
+
+          <!--2 COLUMNS STACKING -->
           <td width="100%" v-if="!module.structure.columnsFixed && !module.structure.invertedStacking">
             <comment :content="msoStartingComment"></comment>
             <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
           </td>
 
+          <!--2 COLUMNS INVERTED STACKING ONLY FOR 2 COLUMNS-->
           <td width="100%" v-else-if="!module.structure.columnsFixed && module.structure.invertedStacking">
             <table 
               width="100%" 
@@ -50,12 +53,24 @@
               <tr>
                 <td width="100%">
                   <comment :content="msoStartingCommentInverted"></comment>
-                  <columns-inverted-stacking-render v-for="(column, columnId) in module.structure.columns.slice().reverse() " :module-id="moduleId" :column="column" :column-id="columnId"></columns-inverted-stacking-render>
+
+                  <columns-inverted-stacking-render 
+                    :module-id="moduleId" 
+                    :column="module.structure.columns[1]" 
+                    :column-id="1">
+                  </columns-inverted-stacking-render>
+                  <columns-inverted-stacking-render 
+                    :module-id="moduleId" 
+                    :column="module.structure.columns[0]" 
+                    :column-id="0">
+                  </columns-inverted-stacking-render>
+
                 </td>
               </tr>
             </table>
           </td>
 
+          <!--2 COLUMNS FIXED -->
           <td v-else
               v-for="(column, columnId) in module.structure.columns"
               :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"

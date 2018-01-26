@@ -2,12 +2,12 @@
     <div class="stx-wrapper">
       <table 
         class="st-col st-mso-full-width"
-        :align="columnId == 0 ? 'right' : 'left'"
+        :align="columnId == 1 ? 'right' : 'left'"
         dir="ltr"
         cellpadding="0" 
         cellspacing="0" 
         border="0"
-        :width="column.attribute && column.attribute.width ? column.attribute.width : 100/numColumns + '%'"
+        :width="templateWidth/numColumns"
         :style="column.style"
       >
         <tr 
@@ -27,12 +27,13 @@
               :component="component"
               :module-id="moduleId"
               :column-id="columnId"
-              :component-id="componentId">  
+              :component-id="componentId"
+              :number-required="true">  
             </component>
           </td>
         </tr>
       </table>
-      <comment v-if="numColumns === columnId + 1" :content="msoEndingComment"></comment>
+      <comment v-if="columnId == 0" :content="msoEndingComment"></comment>
       <comment v-else :content="msoBetweenComment"></comment>
     </div>
 </template>
@@ -82,7 +83,7 @@
       msoBetweenComment() {
         return "[if gte mso 9]>" +
           "</td>" +
-          "<td width='width: " + this.templateWidth / this.numColumns + "px !important' align='left' valign='top'>" +
+          "<td style='width: " + this.templateWidth / this.numColumns + "px' align='left' valign='top'>" +
           "<![endif]";
       },
       msoEndingComment() {
