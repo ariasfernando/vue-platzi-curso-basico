@@ -6,7 +6,6 @@
     </h2>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        {{ plugin.name }} : {{ plugin.enabled }}
         <component v-if="plugin.enabled" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
