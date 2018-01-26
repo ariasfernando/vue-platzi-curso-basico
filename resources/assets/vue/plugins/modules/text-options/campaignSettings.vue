@@ -62,10 +62,8 @@
           plugins: 'paste advlist autolink lists stlinkextended textcolor sttextcolorextended',
           inline: true,
           menubar: false,
-          link_validate_url: true,
           link_title: false,
           link_text_to_display: false,
-          paste_as_text: true,
           forced_root_block :false,
           target_list: false,
           invalid_elements:'img',
@@ -86,6 +84,8 @@
                   text: editor.getContent()
                 } 
               });
+
+              tinymce.get(editorId).destroy();
             });
           },
 
