@@ -134,10 +134,10 @@ class BaseLoginController extends Controller
             return $this->returnWithError();
         }
 
-        if (!$this->is_admin && !$user->can('access_dashboard')) {
-            Activity::log('User login fail [ERROR_ROLE]');
-            return $this->returnWithError();
-        }
+        #if (!$this->is_admin && !$user->can('access_dashboard')) {
+        #    Activity::log('User login fail [ERROR_ROLE]');
+        #    return $this->returnWithError();
+        #}
 
         if ($auth->attempt(['email' => $email, 'password' => $password], $remember)
             || $auth->viaRemember()
