@@ -14,7 +14,6 @@
 
 <script>
   import _ from 'lodash'
-  import uc from 'underscore-contrib'
 
   export default {
     data () {
