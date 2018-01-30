@@ -23,8 +23,6 @@
             :bgcolor="component.attribute.bgcolor.hex"
             :truncate="component.attribute.truncate"
             :style="component.style"
-            @keydown="onKeyDown"
-            @paste="onPaste"  
           >
             <tiny-mce :id="editorId" :value="component.data.text" data-key="text"></tiny-mce>
             <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
@@ -96,45 +94,6 @@
           });
         }  
       },
-      //truncate on Keydown
-      onKeyDown(e){
-        // Allow: backspace, delete, tab, escape, enter and .
-        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
-              // Allow: Ctrl+A, Command+A
-            (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
-              // Allow: home, end, left, right, down, up
-            (e.keyCode >= 35 && e.keyCode <= 40)) {
-                  // let it happen, don't do anything
-                  return;
-        }
-        let $el= $(e.currentTarget);
-        let maxLength = $el.attr('truncate');
-        
-        console.log($el.text().length);
-        
-        if (!(_.isUndefined(maxLength))){
-          let truncated = $(e.target).text().trim();
-          if (truncated.length >= maxLength) {
-              e.preventDefault();
-              return;
-          }
-        }
-      },
-      //truncate on paste
-      onPaste (e) {
-        e.preventDefault();
-				let text = (e.originalEvent || e).clipboardData.getData('text/plain') || prompt('Paste something..');
-				document.execCommand('insertText', false, text);
-        console.log(text);
-        // Truncate pasted text if truncate attr is present
-        let $el = $(e.currentTarget);
-        let maxLength = $el.attr('truncate');
-        if ( !(_.isUndefined(maxLength)) ) {
-          if ($el.text().trim().length >= maxLength) {
-						this.$emit($el.text().trim().substring(0, maxLength));
-					}
-				}
-      }
     }
   };
 </script>
