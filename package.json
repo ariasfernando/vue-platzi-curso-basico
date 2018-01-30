@@ -108,7 +108,7 @@
   ],
   "scripts": {
     "prod": "gulp --production",
-    "dev": "gulp watch",
+    "dev": "while [ 1 ]; do gulp watch; done",
     "watch:test": "npm t -- -w",
     "check-coverage": "istanbul check-coverage --statements 10 --branches 10 --functions 10 --lines 10",
     "test": "mocha tests/js/*.js --compilers js:babel-register",

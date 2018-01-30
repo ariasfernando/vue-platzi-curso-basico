@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import clone from 'clone';
+import Vue from 'vue/dist/vue';
 
 function getPlugins() {
   const plugins = {};
-  _.each(Application.globals.modulePlugins, (plugin, name) => {
+  _.each(Vue.prototype.$_app.modulePlugins, (plugin, name) => {
     if (plugin.target.indexOf('module') !== -1) {
       plugins[name] = clone(plugin);
     }
@@ -21,6 +22,7 @@ function Module(data = {}) {
   const style = (data.structure && data.structure.style) ? data.structure.style : {};
   const settings = (data.structure && data.structure.settings) ? data.structure.settings : [];
   const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : {};
+  const mobileClasses = data.mobileClasses || [];
 
   this.plugins = data.plugins || getPlugins();
 
@@ -30,6 +32,7 @@ function Module(data = {}) {
     attribute: {
       bgcolor: attribute.bgcolor || { hex: 'transparent' },
     },
+    mobileClasses,
     style: {
       // Padding
       paddingTop: style.paddingTop || 0,

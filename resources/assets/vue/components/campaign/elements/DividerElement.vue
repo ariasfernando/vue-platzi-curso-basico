@@ -1,13 +1,17 @@
 <template>
   <!-- DIVIDER ELEMENT -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-    <tr data-type="divider-element">
+    <tr 
+      data-type="divider-element"
+      :class="getMobileClasses(component,'tr')"
+    >
       <td 
         class="stx-position-relative stx-line-height-reset"
         :bgcolor="component.style.backgroundColor"
         :height="component.style.height"
         :width="component.style.width || '100%'"
         :style="styles"
+        :class="getMobileClasses(component,'td:first')"
       ></td>
     </tr>
   </table>
@@ -15,6 +19,8 @@
 </template>
 
 <script>
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+
   export default {
     name: 'DividerElement',
     props: [
@@ -23,6 +29,7 @@
       'component-id',
       'component'
     ],
+    mixins: [ MobileStylesMixin ],
     computed: {
       styles(){
         let inlineStyle = `height:${this.component.style.height};
@@ -42,7 +49,7 @@
 
         return inlineStyle;
       }
-    },  
+    },
   };
 </script>
 

@@ -7,13 +7,17 @@
     border="0"
     style="width: 100%;"
   >
-    <tr data-type="image-element">
+    <tr 
+      data-type="image-element"
+      :class="getMobileClasses(component,'tr')"
+    >
       <td 
         width="100%" 
         align="center"
         class="stx-position-relative"
         :style="component.style"
         :bgcolor="component.attribute.bgcolor.hex"
+        :class="getMobileClasses(component,'td:first')"
       >
         <table 
           width="100%" 
@@ -58,6 +62,7 @@
 
 <script>
   import _ from 'lodash';
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
 
   export default {
     name: 'ImageElement',
@@ -68,6 +73,7 @@
       'component',
       'number-required'
     ],
+    mixins: [ MobileStylesMixin ],
     created () {
       this.setupModule();
       if(this.numberRequired) {
