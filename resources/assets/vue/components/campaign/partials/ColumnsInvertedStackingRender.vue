@@ -8,7 +8,6 @@
         cellspacing="0" 
         border="0"
         :width="columnWidthPadding / this.numColumns"
-        :style="column.style"
       >
         <tr 
           v-for="(component, componentId) in column.components" 
@@ -29,7 +28,6 @@
               :column-id="columnId"
               :component-id="componentId"
               :number-required="true"
-              :column-style="column.style"
               :column-width="columnWidthPadding / numColumns">  
             </component>
           </td>
