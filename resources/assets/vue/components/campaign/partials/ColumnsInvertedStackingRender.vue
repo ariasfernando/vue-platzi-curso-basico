@@ -7,7 +7,7 @@
         cellpadding="0" 
         cellspacing="0" 
         border="0"
-        :width="templateWidth/numColumns"
+        :width="columnWidthPadding / this.numColumns"
         :style="column.style"
       >
         <tr 
@@ -29,7 +29,8 @@
               :column-id="columnId"
               :component-id="componentId"
               :number-required="true"
-              :column-style="column.style">  
+              :column-style="column.style"
+              :column-width="columnWidthPadding / numColumns">  
             </component>
           </td>
         </tr>
@@ -69,6 +70,10 @@
       columnId: {
         type: Number,
         default: ''
+      },
+      columnWidthPadding: {
+        type: Number,
+        default: '' 
       }
     },
     computed: {
@@ -84,7 +89,7 @@
       msoBetweenComment() {
         return "[if gte mso 9]>" +
           "</td>" +
-          "<td style='width: " + this.templateWidth / this.numColumns + "px' align='left' valign='top'>" +
+          "<td style='width: " + this.columnWidthPadding / this.numColumns + "px' align='left' valign='top'>" +
           "<![endif]";
       },
       msoEndingComment() {

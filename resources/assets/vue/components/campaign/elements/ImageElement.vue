@@ -66,7 +66,8 @@
       'column-id',
       'component-id',
       'component',
-      'number-required'
+      'number-required',
+      'column-width'
     ],
     created () {
       this.setupModule();
@@ -80,7 +81,7 @@
         if ( tempWidth.indexOf('%') > 1){
 
           let widthPercent = _.parseInt(tempWidth.replace(/%$/, ''));
-          tempWidth = (this.$store.getters["campaign/campaign"].library_config.templateWidth / 2) * widthPercent / 100;
+          tempWidth = this.columnWidth * widthPercent / 100;
         }else if ( tempWidth.indexOf('px') > 1){
           tempWidth = _.parseInt(tempWidth.replace(/px$/, ''));
         }
