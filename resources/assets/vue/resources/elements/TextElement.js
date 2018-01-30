@@ -37,11 +37,18 @@ function textDefault() {
         value: '12px',
       },
       {
-        link: 'style',
-        label: 'Font Weight',
-        name: 'fontWeight',
+        link: 'attribute',
+        label: 'Background color',
+        name: 'bgcolor',
+        type: 'color',
+        value: { hex: 'transparent' },
+      },
+      {
+        link: 'attribute',
+        label: 'Character Limit',
+        name: 'truncate',
         type: 'text',
-        value: 'normal',
+        value: '',
       },
       {
         link: 'attribute',
