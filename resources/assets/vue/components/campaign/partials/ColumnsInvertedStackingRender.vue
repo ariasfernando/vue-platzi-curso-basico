@@ -28,7 +28,8 @@
               :module-id="moduleId"
               :column-id="columnId"
               :component-id="componentId"
-              :number-required="true">  
+              :number-required="true"
+              :column-style="column.style">  
             </component>
           </td>
         </tr>

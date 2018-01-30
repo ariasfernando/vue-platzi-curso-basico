@@ -72,15 +72,17 @@
       this.setupModule();
       if(this.numberRequired) {
         let tempWidth = _.toString(this.component.attribute.width);
-        let paddingLeft = Number(this.component.style.paddingLeft.replace(/px$/, ''));
-        let paddingRight = Number(this.component.style.paddingRight.replace(/px$/, ''));
+        let paddingLeft = _.parseInt(this.component.style.paddingLeft.replace(/px$/, ''));
+        let paddingRight = _.parseInt(this.component.style.paddingRight.replace(/px$/, ''));
+        let paddingColumLeft = _.parseInt(this.$attrs["column-style"].paddingLeft.replace(/px$/, ''));
+        let paddingColumRight = _.parseInt(this.$attrs["column-style"].paddingRight.replace(/px$/, ''));
         
         if ( tempWidth.indexOf('%') > 1){
 
-          let widthPercent = Number(tempWidth.replace(/%$/, ''));
+          let widthPercent = _.parseInt(tempWidth.replace(/%$/, ''));
           tempWidth = (this.$store.getters["campaign/campaign"].library_config.templateWidth / 2) * widthPercent / 100;
         }else if ( tempWidth.indexOf('px') > 1){
-          tempWidth = Number(tempWidth.replace(/px$/, ''));
+          tempWidth = _.parseInt(tempWidth.replace(/px$/, ''));
         }
         
         const payload = {
@@ -88,7 +90,7 @@
           columnId: this.columnId,
           componentId: 0,
           attribute: 'width',
-          attributeValue: ( tempWidth - (paddingLeft + paddingRight) ),
+          attributeValue: ( tempWidth - (paddingLeft + paddingRight) - (paddingColumLeft + paddingColumRight)),
         };
 
         this.$store.commit('campaign/saveComponentAttribute', payload);
