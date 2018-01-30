@@ -31,18 +31,28 @@
         this.ready = false;
 
         if (Object.keys(this.currentComponent).length !== 0) {
-          const moduleId = this.currentComponent.moduleId;
-          const columnId = this.currentComponent.columnId;
-          const componentId = this.currentComponent.componentId;
 
-          component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
+          const modules = this.$store.getters["campaign/modules"];
 
-          if (component) {
-            _.each(component.plugins, (plugin) => {
-              if (plugin.enabled && plugin.render !== false) {
-                this.ready = true;
-              }
-            });
+          if (modules.length !== 0 && Object.keys(this.currentComponent).length !== 0) {
+            const moduleId = this.currentComponent.moduleId;
+            const columnId = this.currentComponent.columnId;
+            const componentId = this.currentComponent.componentId;
+
+            if (!modules[moduleId]) {
+              this.ready = false;
+              return component;
+            }
+
+            component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
+
+            if (component) {
+              _.each(component.plugins, (plugin) => {
+                if (plugin.enabled && plugin.render !== false) {
+                  this.ready = true;
+                }
+              });
+            }
           }
         }
         return component;
