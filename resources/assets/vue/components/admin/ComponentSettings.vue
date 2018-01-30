@@ -229,20 +229,25 @@
 
       },
 
-      updateAttributePlaceholder(e) {
-        this.component.attribute.placeholder = e;
+      updateAttributePlaceholder(imgSrc) {
+        // Set the src after we have loaded the new image
+        const tmp = new Image();
+        tmp.src = this.$_app.config.imageUrl + imgSrc;
 
-        _.each(this.component.settings, (option) => {
-          if (option.name === 'placeholder') {
-            option.value = e;
-          };
-        });    
-      
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style || {},
-          attribute: this.component.attribute || {}
-        });
-      
+        tmp.onload = () => {
+          this.component.attribute.placeholder = imgSrc;
+
+          _.each(this.component.settings, (option) => {
+            if (option.name === 'placeholder') {
+              option.value = imgSrc;
+            }
+          });
+
+          this.$store.commit('module/setChangeSettingComponent',{
+            style: this.component.style || {},
+            attribute: this.component.attribute || {}
+          });
+        };
       },
       
       saveComponent(evt) {
