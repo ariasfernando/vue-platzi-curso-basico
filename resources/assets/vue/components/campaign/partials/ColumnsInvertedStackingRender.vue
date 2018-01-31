@@ -17,7 +17,7 @@
           <td 
             width="100%" 
             :style="styles"
-            :bgcolor="column.style.backgroundColor" 
+            :bgcolor="columnColor" 
             :valign="column.attribute.valign"
             :align="component.attribute.align || 'center'"
           >
@@ -47,6 +47,7 @@
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
   import SeparatorElement from '../elements/SeparatorElement.vue';
+  import _ from 'lodash';
 
   export default {
     name: 'ColumnsInvertedStackingRender',
@@ -103,7 +104,14 @@
         let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`; 
 
         return padding;
-      }   
+      },  
+      columnColor(){
+        if( this.column.style.backgroundColor.hex ){
+          return this.column.style.backgroundColor.hex;
+        }else{
+          return this.column.style.backgroundColor;
+        }
+      }
     },
     methods: {
       setComponent(moduleId, columnId, componentId) {
