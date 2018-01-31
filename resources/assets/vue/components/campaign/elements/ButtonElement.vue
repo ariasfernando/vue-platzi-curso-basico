@@ -52,7 +52,8 @@
       'module-id',
       'column-id',
       'component-id',
-      'component'
+      'component',
+      'column'
     ],
     data(){
       return {

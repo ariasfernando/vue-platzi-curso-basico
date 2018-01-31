@@ -7,8 +7,7 @@
         cellpadding="0" 
         cellspacing="0" 
         border="0"
-        :width="templateWidth/numColumns"
-        :style="column.style"
+        :width="columnWidthPadding / this.numColumns"
       >
         <tr 
           v-for="(component, componentId) in column.components" 
@@ -18,7 +17,7 @@
           <td 
             width="100%" 
             :style="styles"
-            :bgcolor="column.attribute.bgcolor.hex" 
+            :bgcolor="columnColor" 
             :valign="column.attribute.valign"
             :align="component.attribute.align || 'center'"
           >
@@ -28,7 +27,10 @@
               :module-id="moduleId"
               :column-id="columnId"
               :component-id="componentId"
-              :number-required="true">  
+              :number-required="true"
+              :column-width="columnWidthPadding / numColumns"
+              :column="column"
+              >
             </component>
           </td>
         </tr>
@@ -45,6 +47,7 @@
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
   import SeparatorElement from '../elements/SeparatorElement.vue';
+  import _ from 'lodash';
 
   export default {
     name: 'ColumnsInvertedStackingRender',
@@ -68,6 +71,10 @@
       columnId: {
         type: Number,
         default: ''
+      },
+      columnWidthPadding: {
+        type: Number,
+        default: '' 
       }
     },
     computed: {
@@ -83,7 +90,7 @@
       msoBetweenComment() {
         return "[if gte mso 9]>" +
           "</td>" +
-          "<td style='width: " + this.templateWidth / this.numColumns + "px' align='left' valign='top'>" +
+          "<td style='width: " + this.columnWidthPadding / this.numColumns + "px' align='left' valign='top'>" +
           "<![endif]";
       },
       msoEndingComment() {
@@ -97,7 +104,14 @@
         let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`; 
 
         return padding;
-      }   
+      },  
+      columnColor(){
+        if( this.column.style.backgroundColor.hex ){
+          return this.column.style.backgroundColor.hex;
+        }else{
+          return this.column.style.backgroundColor;
+        }
+      }
     },
     methods: {
       setComponent(moduleId, columnId, componentId) {
