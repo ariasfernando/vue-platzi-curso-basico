@@ -43,7 +43,7 @@
     <tr v-else>
       <td class="st-col" 
           v-for="(column, columnId) in module.structure.columns"
-          :class="module.structure.mobileClasses.join(' ') + ' ' + (!column.components.length ? 'empty-col' : '')"
+          :class="!column.components.length ? 'empty-col' : ''"
           :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
           :style="module.structure.style || ''"
           :bgcolor="module.structure.attribute.bgcolor.hex"
