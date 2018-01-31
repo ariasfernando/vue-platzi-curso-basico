@@ -17,7 +17,7 @@
           <td 
             width="100%" 
             :style="styles"
-            :bgcolor="column.attribute.bgcolor.hex" 
+            :bgcolor="column.style.backgroundColor" 
             :valign="column.attribute.valign"
             :align="component.attribute.align || 'center'"
           >
@@ -28,7 +28,9 @@
               :column-id="columnId"
               :component-id="componentId"
               :number-required="true"
-              :column-width="columnWidthPadding / numColumns">  
+              :column-width="columnWidthPadding / numColumns"
+              :column="column"
+              >
             </component>
           </td>
         </tr>

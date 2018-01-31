@@ -67,7 +67,8 @@
       'component-id',
       'component',
       'number-required',
-      'column-width'
+      'column-width',
+      'column'
     ],
     created () {
       this.setupModule();
@@ -75,8 +76,8 @@
         let tempWidth = _.toString(this.component.attribute.width);
         let paddingLeft = _.parseInt(this.component.style.paddingLeft.replace(/px$/, ''));
         let paddingRight = _.parseInt(this.component.style.paddingRight.replace(/px$/, ''));
-        let paddingColumLeft = _.parseInt(this.$attrs["column-style"].paddingLeft.replace(/px$/, ''));
-        let paddingColumRight = _.parseInt(this.$attrs["column-style"].paddingRight.replace(/px$/, ''));
+        let paddingColumLeft = _.parseInt(this.column.style.paddingLeft.replace(/px$/, ''));
+        let paddingColumRight = _.parseInt(this.column.style.paddingRight.replace(/px$/, ''));
         
         if ( tempWidth.indexOf('%') > 1){
 
