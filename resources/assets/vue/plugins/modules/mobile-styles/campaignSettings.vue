@@ -1,50 +1,15 @@
 <template>
-  <div class="component-module-background-color plugin-wrapper-inner">
-    <label>{{ plugin.title }}</label>
-    <p>...</p>
-  </div>
+
 </template>
 
 <script>
-  import { Compact } from 'vue-color'
-
+  // Default skeleton for component's plugin mobile styles
   export default {
-    props: ['name', 'plugin', 'moduleId'],
-    components: {
-      'compact-picker': Compact
-    },
+    props: ['name', 'plugin'],
     computed: {
-      currentModule() {
-        return this.$store.getters["campaign/currentModule"];
+      currentComponent() {
+        return this.$store.getters["campaign/currentComponent"];
       },
-      module() {
-        return this.$store.getters["campaign/modules"][this.currentModule];
-      },
-      colors() {
-        return {
-          hex: this.module.structure.attribute && this.module.structure.attribute.bgcolor ? this.module.structure.attribute.bgcolor : this.plugin.config.defaultValue
-        }
-      },
-    },
-    data() {
-      return {
-        defaultColors: this.plugin.config.defaultColors,
-      }
-    },
-    methods: {
-      updateValue(value) {
-        const payload = {
-          plugin: this.name,
-          moduleId: this.currentModule,
-          attribute: 'bgcolor',
-          attributeValue: value,
-        };
-
-        this.$store.commit('campaign/saveModuleAttribute', payload);
-      }
-    },
-    mounted() {
-      this.$refs.compact.defaultColors = this.defaultColors;
     }
   }
 </script>
