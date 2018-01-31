@@ -4,7 +4,7 @@ export default {
   methods: {
     // Get an array of classes matching the selector param in config (NOT in DOM or VDOM)
     getMobileClasses(component, selector) {
-      if(_.has('mobileStyles',component.plugins)) {
+      if(_.has(component.plugins, 'mobileStyles')) {
         let arrayClassesToApply =
         _.reduce(
           // settings is an object, get properties as array
