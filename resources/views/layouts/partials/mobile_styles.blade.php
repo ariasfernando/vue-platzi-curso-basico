@@ -9,9 +9,9 @@
                 {
                     echo File::get('css/mobile_core_styles.css');
                 }
-                catch (Illuminate\Filesystem\FileNotFoundException $exception)
+                catch (Illuminate\Filesystem\FileNotFoundException $e)
                 {
-                    die("The file doesn't exist");
+                    Activity::log("The file doesn't exist: ".$e->getMessage());
                 }
             ?>
         @show
@@ -23,9 +23,9 @@
                 {
                     echo File::get('css/mobile_client_styles.css');
                 }
-                catch (Illuminate\Filesystem\FileNotFoundException $exception)
+                catch (Illuminate\Filesystem\FileNotFoundException $e)
                 {
-                    die("The file doesn't exist");
+                    Activity::log("The file doesn't exist: ".$e->getMessage());
                 }
             ?>
         @show
