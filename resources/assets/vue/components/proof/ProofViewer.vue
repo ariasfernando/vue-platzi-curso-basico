@@ -1,8 +1,7 @@
 <template id="proof-viewer">
     <div class="proof-viewer-container">
         <div class="proof-top-bar" v-sticky="{ zIndex: 999, stickyTop: 0 }">
-            <div class="col-xs-5"></div>
-            <div class="col-xs-2">
+            <div class="col-md-offset-3 col-md-2 col-xs-2">
                 <div class="switch">
                     <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
                     <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="mode = 'desktop'">
@@ -15,7 +14,7 @@
                     <span class="switch-selection"></span>
                   </div>
              </div>
-             <div class="col-xs-5 text-right" id="section-canvas-buttons-col">
+             <div class="col-md-7 col-xs-10 text-right" id="section-canvas-buttons-col">
                  <proof-decision
                      :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
                      :token="token"
