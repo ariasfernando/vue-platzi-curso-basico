@@ -560,7 +560,7 @@ class ProofController extends Controller
     public function getUsers()
     {
         $users = [];
-        $data = User::where('email', '!=', Auth::user()->email)->get(['email'])->toArray();
+        $data = User::where('email', '!=', Auth::user()->email)->where('roles', '!=', 'stensul-internal')->get(['email'])->toArray();
         if (count($data)) {
             foreach ($data as $user) {
                 $users[] = $user['email'];
