@@ -65,7 +65,7 @@ function imageDefault() {
         label: 'Width',
         name: 'width',
         type: 'text',
-        value: '220',
+        value: '100%',
       },
       {
         link: 'attribute',

@@ -7,6 +7,7 @@ const moduleBackgroundColor = require('./module-background-color');
 const uploadImage = require('./upload-image');
 const imageEditor = require('./image-editor');
 const variableHeight = require('./variable-height');
+const mobileStyles = require('./mobile-styles');
 
 module.exports = {
   alignment,
@@ -18,4 +19,5 @@ module.exports = {
   moduleBackgroundColor,
   imageEditor,
   variableHeight,
+  mobileStyles
 };

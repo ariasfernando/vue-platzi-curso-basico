@@ -9,6 +9,7 @@ import Bootstrap from './bootstrap';
 import store from './store';
 import Campaign from './components/campaign/Campaign.vue';
 import { campaignDictionary } from './resources/dictionary';
+import 'url-search-params-polyfill';
 
 Vue.use(Bootstrap);
 Vue.use(VueResource);
@@ -30,8 +31,8 @@ Vue.use(interceptors);
 /**
  * If the campaign has just been processed redirect to the dashboard
  */
-const url = new URL(window.location.href);
-const processed = url.searchParams.get('processed');
+const searchParams = new URLSearchParams(window.location.search);
+const processed = searchParams.get('processed');
 
 if (processed === 'true') {
   window.location.href = '/#finished-campaign';

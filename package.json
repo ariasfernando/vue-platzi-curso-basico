@@ -46,6 +46,7 @@
     "tinymce-vue-2": "0.0.2",
     "underscore": "1.8.3",
     "underscore-contrib": "^0.3.0",
+    "url-search-params-polyfill": "^2.0.2",
     "vee-validate": "^2.0.0-rc.23",
     "vue": "^2.5.8",
     "vue-checkbox-radio": "^0.6.0",
@@ -107,7 +108,7 @@
   ],
   "scripts": {
     "prod": "gulp --production",
-    "dev": "gulp watch",
+    "dev": "while [ 1 ]; do gulp watch; done",
     "watch:test": "npm t -- -w",
     "check-coverage": "istanbul check-coverage --statements 10 --branches 10 --functions 10 --lines 10",
     "test": "mocha tests/js/*.js --compilers js:babel-register",

@@ -263,23 +263,9 @@
   #emailCanvas{
     min-height: 40px;
     &.stx-mobile-mode {
-      /*BASE-LAYOUT*/
-      .st-wrapper{
-        width: 100% !important;
-      }
-      .st-wrapper-content{ 
-        padding: 0px !important;
-      }
-      .st-col{ 
-        display: block!important; 
-        width: 100%!important; 
-        padding: 0px !important;
-      }
-      .st-resize{ 
-        width: 100%!important;
-        display: block!important; 
-        height: auto !important;
-      }
+      // Mobile Classes
+      @import '../../../less/base/commons/mobile/mobile_core_styles';
+      @import '../../../less/base/commons/mobile/mobile_client_styles';
     }
 
     tr.ghost-component{
