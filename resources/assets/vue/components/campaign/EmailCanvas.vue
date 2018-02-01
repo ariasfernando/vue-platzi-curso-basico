@@ -80,7 +80,7 @@
           },
           handle:'.icon-move',
           // Class name for the drop placeholder
-          ghostClass: "ghost-component", 
+          ghostClass: "ghost-component",
           // Class name for the chosen item
           chosenClass: "chosen-component",
           // Class name for the dragging item
@@ -127,11 +127,11 @@
         const module = this.items[e.oldIndex];
         const mod = clone(module);
         mod.data = {};
-        
+
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
         // Set active on last module inserted
         this.$store.commit('campaign/setActiveModule', e.newIndex);
-        
+
          // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
@@ -212,24 +212,24 @@
 
   /* COMMON STYLES */
   span{
-    &.st-preheader{ 
+    &.st-preheader{
       display: none!important;
-    }  
+    }
 
   }
 
   .applelinks{
-    color:#FFFFFF !important; 
-    text-decoration: none !important; 
-  }  
-         
+    color:#FFFFFF !important;
+    text-decoration: none !important;
+  }
+
   /*BASE-LAYOUT*/
-  .st-email-body{ 
+  .st-email-body{
     width:100% !important;
-    -webkit-text-size-adjust: 100%; 
-    margin: 0 !important; 
-    padding: 0px; 
-    background-color: #000000; 
+    -webkit-text-size-adjust: 100%;
+    margin: 0 !important;
+    padding: 0px;
+    background-color: #000000;
   }
 
   .stx-edit-text{
@@ -238,7 +238,7 @@
       padding: 0;
     }
 
-    a:hover, 
+    a:hover,
     a:focus{
       text-decoration: none !important;
     }
@@ -258,17 +258,17 @@
       .st-wrapper{
         width: 100% !important;
       }
-      .st-wrapper-content{ 
+      .st-wrapper-content{
         padding: 0px !important;
       }
-      .st-col{ 
-        display: block!important; 
-        width: 100%!important; 
-        padding: 0px !important;
-      }
-      .st-resize{ 
+      .st-col{
+        display: block!important;
         width: 100%!important;
-        display: block!important; 
+        padding: 0px !important;
+      }
+      .st-resize{
+        width: 100%!important;
+        display: block!important;
         height: auto !important;
       }
     }
