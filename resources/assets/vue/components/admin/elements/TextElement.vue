@@ -4,9 +4,14 @@
     data-type="text-element"
     :data-component="JSON.stringify(component)"
     :data-column="columnId"
+    :class="getMobileClasses(component,'tr')"
     @click.prevent="setComponent"
   >
-    <td width="100%" style="width: 100%;">
+    <td
+      width="100%"
+      style="width: 100%;"
+      :class="getMobileClasses(component,'td:first')"
+    >
       <table 
         width="100%" 
         cellpadding="0" 
@@ -16,7 +21,7 @@
         style="width: 100%;"
       >
         <tr>
-          <td 
+          <td
             width="100%" 
             class="stx-edit-text stx-position-relative" 
             :align="component.attribute.align"
@@ -36,7 +41,8 @@
 <script>
   import TinyMCE from './TinyMce.vue';
   import ComponentToolbar from './ComponentToolbar.vue';
-  import _ from 'underscore';
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import _ from 'lodash';
 
   export default {
     name: 'TextElement',
@@ -50,6 +56,7 @@
       'tiny-mce': TinyMCE,
       ComponentToolbar,
     },
+    mixins: [ MobileStylesMixin ],
     data(){
       return {
         editorId: ['editor', this.columnId, this.componentId].join('-'),
@@ -92,7 +99,7 @@
             attribute: this.component.attribute || {}
           });
         }  
-      },
+      }
     }
   };
 </script>

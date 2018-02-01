@@ -1,12 +1,16 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
-    <tr data-type="button-element">
+    <tr 
+      data-type="button-element"
+      :class="getMobileClasses(component,'tr')"
+    >
       <td
         class="stx-position-relative"
         width="100%"
         style="width: 100%;"
         :align="component.attribute.align"
+        :class="getMobileClasses(component,'td:first')"
       >
         <a
           @click.prevent
@@ -44,6 +48,7 @@
 </template>
 
 <script>
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import _ from 'lodash';
 
   export default {
@@ -69,6 +74,7 @@
         return _.extend( this.component.style, height );
       }
     },
+    mixins: [ MobileStylesMixin ],
   };
 </script>
 

@@ -2,6 +2,7 @@
   <!-- DIVIDER ELEMENT -->
   <tr @click.prevent="setComponent"
       :data-component="JSON.stringify(component)"
+      :class="getMobileClasses(component,'tr')"
       data-type="divider-element"
   >
     <td 
@@ -10,6 +11,7 @@
       :height="component.style.height"
       :width="component.style.width || '100%'"
       :style="styles"
+      :class="getMobileClasses(component,'td:first')"
     >
       <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
     </td>
@@ -19,7 +21,8 @@
 
 <script>
   import _ from 'underscore';
-  import ComponentToolbar from './ComponentToolbar.vue'
+  import ComponentToolbar from './ComponentToolbar.vue';
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   
   export default {
     name: 'DividerElement',
@@ -32,6 +35,7 @@
       'component-id',
       'component'
     ],
+    mixins: [ MobileStylesMixin ],
     computed: {
       styleComponent() {
         return this.$store.getters["module/changeSettingComponent"];
