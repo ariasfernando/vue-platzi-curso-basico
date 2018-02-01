@@ -155,268 +155,262 @@
 </template>
 
 <script>
+import Vue from "vue/dist/vue";
+import _ from "lodash";
+import uc from "underscore-contrib";
+import BootstrapVue from "bootstrap-vue";
+import { Sketch } from "vue-color";
+import * as elementSettings from "./settings";
 
-  import Vue from 'vue/dist/vue';
-  import _ from 'lodash';
-  import uc from 'underscore-contrib';
-  import BootstrapVue from 'bootstrap-vue';
-  import { Sketch } from 'vue-color';
-  import * as elementSettings from './settings';
-
-  export default {
-    data () {
-      return {
-        ready: false,
-        component: {}
-      }
-    },
-    components: {
-      BootstrapVue,
-      'sketch-picker': Sketch,
-      'input-font-family': elementSettings.FontFamily,
-    },
-    computed: {
-      currentComponent() {
-        return this.$store.getters["module/currentComponent"];
-      }
-    },
-    watch : {
-      currentComponent: {
-        handler: function(currentComponent) {
-
-          let module = this.$store.getters["module/module"];
-          if (!_.isEmpty(currentComponent) &&  (currentComponent.componentId >= 0) ) {
-            this.component = module.structure.columns[currentComponent.columnId].components[currentComponent.componentId];
-            this.ready = true;
-          } else {
-            this.ready = false;
-          };
-
-        },
-        deep: true
+export default {
+  data() {
+    return {
+      ready: false,
+      component: {}
+    };
+  },
+  components: {
+    BootstrapVue,
+    "sketch-picker": Sketch,
+    "input-font-family": elementSettings.FontFamily
+  },
+  computed: {
+    currentComponent() {
+      return this.$store.getters["module/currentComponent"];
+    }
+  },
+  watch: {
+    currentComponent: {
+      handler: function(currentComponent) {
+        let module = this.$store.getters["module/module"];
+        if (!_.isEmpty(currentComponent) && currentComponent.componentId >= 0) {
+          this.component =
+            module.structure.columns[currentComponent.columnId].components[
+              currentComponent.componentId
+            ];
+          this.ready = true;
+        } else {
+          this.ready = false;
+        }
       },
+      deep: true
+    }
+  },
+  methods: {
+    toggleSketch(e) {
+      const inputElement = e.toElement;
+      $(inputElement)
+        .closest(".content-colorpicker")
+        .find(".sketch-picker, .st-remove-sketch")
+        .toggleClass("st-show-element");
     },
-    methods: {
-      toggleSketch(e){
-        const inputElement = e.toElement;
-        $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
-      },
 
-      onFileChange(e) {
-        const files = e.target.files || e.dataTransfer.files;
+    onFileChange(e) {
+      const files = e.target.files || e.dataTransfer.files;
 
-        if (!files.length)
-          return;
-        
-        this.createImage(files[0]);
-      },
-      createImage(file) {
-        const reader = new FileReader();
-        const vm = this;
+      if (!files.length) return;
 
-        reader.onload = (e) => {
-          vm.image = e.target.result;
+      this.createImage(files[0]);
+    },
+    createImage(file) {
+      const reader = new FileReader();
+      const vm = this;
 
-          // Upload Image
-          this.$store.dispatch('module/uploadImages', {
-            images: [ vm.image ],
-          }).then((res) => {
-            this.updateAttributePlaceholder('customer/modules' + res[0]);
+      reader.onload = e => {
+        vm.image = e.target.result;
+
+        // Upload Image
+        this.$store
+          .dispatch("module/uploadImages", {
+            images: [vm.image]
+          })
+          .then(res => {
+            this.updateAttributePlaceholder("customer/modules" + res[0]);
           });
-        };
+      };
 
-        reader.readAsDataURL(file); 
+      reader.readAsDataURL(file);
+    },
 
-      },
+    updateAttributePlaceholder(e) {
+      this.component.attribute.placeholder = e;
 
-      updateAttributePlaceholder(e) {
-        this.component.attribute.placeholder = e;
+      _.each(this.component.settings, option => {
+        if (option.name === "placeholder") {
+          option.value = e;
+        }
+      });
 
-        _.each(this.component.settings, (option) => {
-          if (option.name === 'placeholder') {
-            option.value = e;
-          };
-        });    
-      
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style || {},
-          attribute: this.component.attribute || {}
-        });
-      
-      },
-      
-      saveComponent(evt) {
-        let valTarget = evt.target.value;
-        let nameTarget = evt.target.name;
+      this.$store.commit("module/setChangeSettingComponent", {
+        style: this.component.style || {},
+        attribute: this.component.attribute || {}
+      });
+    },
 
-        _.each(this.component.settings, (option, indexOption) => {
+    saveComponent(evt) {
+      let valTarget = evt.target.value;
+      let nameTarget = evt.target.name;
 
-          
-          if (option.link === 'style') {
-            
-            if ( option.group && option.group.length > 0 ){
-              _.each(option.group, (optionGroup, indexGroup) => {
-
-                if (optionGroup.name === nameTarget){
-
-                  if (optionGroup.type === 'color'){
-                    this.component.style[optionGroup.name] = optionGroup.value.hex;
-                  }else{
-                    if(optionGroup.type === 'select'){
-                      this.component.style[optionGroup.name] = valTarget;
-                    }else{
-                      this.component.style[optionGroup.name] = optionGroup.value;
-                    }
-                  };
-                }
-             
-              }); 
-            
-            }else{
-              
-              if (option.name === nameTarget){
-                if (option.type === 'color'){
-                  this.component.style[option.name] = option.value.hex;
-                }else{
-                  this.component.style[option.name] = option.value;
-                };
-              }
-
-            };
-          };
-
-          if (option.link === 'attribute') {
-            
-            if (option.group && option.group.length > 0 ){
-              _.each(option.group, (optionGroup, indexGroup) => {
-                if (optionGroup.name === nameTarget){
-                  if(optionGroup.type === 'select'){
-                    this.component.attribute[optionGroup.name] = valTarget;
-                  }else{
-                    this.component.attribute[optionGroup.name] = optionGroup.value;
+      _.each(this.component.settings, (option, indexOption) => {
+        if (option.link === "style") {
+          if (option.group && option.group.length > 0) {
+            _.each(option.group, (optionGroup, indexGroup) => {
+              if (optionGroup.name === nameTarget) {
+                if (optionGroup.type === "color") {
+                  this.component.style[optionGroup.name] =
+                    optionGroup.value.hex;
+                } else {
+                  if (optionGroup.type === "select") {
+                    this.component.style[optionGroup.name] = valTarget;
+                  } else {
+                    this.component.style[optionGroup.name] = optionGroup.value;
                   }
                 }
-              }); 
-            }else{
-              if (option.name === nameTarget){
-                if (option.type === 'select' ){
-                  this.component.attribute[option.name] = valTarget;
-                }else{
-                  this.component.attribute[option.name] = option.value;
-                }
               }
-            };
-
-          };
-
-        });
-
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style || {},
-          attribute: this.component.attribute || {}
-        }); 
-      },
-
-      // TODO Update date used mutation.
-      updateColorPickerSetting( name, link , isGroup ){
-        _.each(this.component.settings, (option, index) => {
-            if ( isGroup ){
-               _.each(option.group, (optionGroup, indexGroup) => {
-                if (optionGroup.name === name) {
-                  if (link === 'style'){
-                    this.component[link][name] = optionGroup.value.hex;
-                  }else{
-                    this.component[link][name] = optionGroup.value;
-                  } 
-                }  
-              });
-            }else{
-              if (option.name === name) {
-                if (link === 'style'){
-                  this.component[link][name] = option.value.hex;
-                }else{
-                  this.component[link][name] = option.value;
-                }
+            });
+          } else {
+            if (option.name === nameTarget) {
+              if (option.type === "color") {
+                this.component.style[option.name] = option.value.hex;
+              } else {
+                this.component.style[option.name] = option.value;
               }
             }
-        });
+          }
+        }
 
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style || {},
-          attribute: this.component.attribute || {}
-        });
-      },
+        if (option.link === "attribute") {
+          if (option.group && option.group.length > 0) {
+            _.each(option.group, (optionGroup, indexGroup) => {
+              if (optionGroup.name === nameTarget) {
+                if (optionGroup.type === "select") {
+                  this.component.attribute[optionGroup.name] = valTarget;
+                } else {
+                  this.component.attribute[optionGroup.name] =
+                    optionGroup.value;
+                }
+              }
+            });
+          } else {
+            if (option.name === nameTarget) {
+              if (option.type === "select") {
+                this.component.attribute[option.name] = valTarget;
+              } else {
+                this.component.attribute[option.name] = option.value;
+              }
+            }
+          }
+        }
+      });
+
+      this.$store.commit("module/setChangeSettingComponent", {
+        style: this.component.style || {},
+        attribute: this.component.attribute || {}
+      });
+    },
+
+    // TODO Update date used mutation.
+    updateColorPickerSetting(name, link, isGroup) {
+      _.each(this.component.settings, (option, index) => {
+        if (isGroup) {
+          _.each(option.group, (optionGroup, indexGroup) => {
+            if (optionGroup.name === name) {
+              if (link === "style") {
+                this.component[link][name] = optionGroup.value.hex;
+              } else {
+                this.component[link][name] = optionGroup.value;
+              }
+            }
+          });
+        } else {
+          if (option.name === name) {
+            if (link === "style") {
+              this.component[link][name] = option.value.hex;
+            } else {
+              this.component[link][name] = option.value;
+            }
+          }
+        }
+      });
+
+      this.$store.commit("module/setChangeSettingComponent", {
+        style: this.component.style || {},
+        attribute: this.component.attribute || {}
+      });
     }
   }
+};
 </script>
 
 <style lang="less">
-  .vue-js-switch {
-    margin-top: 4px
+.vue-js-switch {
+  margin-top: 4px;
+}
+
+.plugin-wrapper,
+.row-toggle {
+  border-bottom: 1px solid #f4f4f4;
+  margin-bottom: 15px;
+
+  b {
+    font-weight: 300;
+    color: #333333;
   }
+}
 
-  .plugin-wrapper, 
-  .row-toggle{
-    border-bottom: 1px solid #f4f4f4;
-    margin-bottom: 15px;
+button.module-settings-item-right {
+  line-height: 13px;
+  box-shadow: none;
+  border-bottom: 1px solid #f0f0f0;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  padding: 15px 10px 13px 10px;
 
-    b{
-      font-weight: 300;
-      color: #333333;
-    }
-  }
-
-  button.module-settings-item-right{
-    line-height: 13px;
+  &:hover,
+  &:visited,
+  &:focus,
+  &:active,
+  &:active:focus {
+    color: #666666;
+    outline: none;
     box-shadow: none;
-    border-bottom: 1px solid #F0F0F0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    padding: 15px 10px 13px 10px; 
+  }
+  p {
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+    font-weight: 300;
 
-    &:hover, &:visited,
-    &:focus, &:active,
-    &:active:focus{
+    i {
       color: #666666;
-      outline: none;
-      box-shadow: none;
-    }
-    p{
-      font-size: 13px;
-      margin: 0;
-      padding: 0;
-      font-weight: 300;
-
-      i{
-        color: #666666;
-        vertical-align: baseline!important;
-        transform: rotate(0deg);
-        margin-right: 2px;
-      }
-    }
-    i{
-      color:#CCCCCC;
-      line-height: 12px!important;
+      vertical-align: baseline !important;
+      transform: rotate(0deg);
+      margin-right: 2px;
     }
   }
-  button[aria-expanded="false"]{
-    opacity: 0.5;
-    transition: all 0.3s linear;
-
-    &:hover{
-      opacity: 1;
-    }
+  i {
+    color: #cccccc;
+    line-height: 12px !important;
   }
+}
+button[aria-expanded="false"] {
+  opacity: 0.5;
+  transition: all 0.3s linear;
 
-  button[aria-expanded="true"]{
+  &:hover {
     opacity: 1;
-
-    p{
-      font-weight: 600!important;
-    }
-    i{
-      transform: rotate(180deg);
-    }
   }
+}
+
+button[aria-expanded="true"] {
+  opacity: 1;
+
+  p {
+    font-weight: 600 !important;
+  }
+  i {
+    transform: rotate(180deg);
+  }
+}
 </style>
