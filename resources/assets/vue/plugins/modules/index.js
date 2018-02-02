@@ -9,6 +9,7 @@ const imageEditor = require('./image-editor');
 const variableHeight = require('./variable-height');
 const mobileStyles = require('./mobile-styles');
 
+
 module.exports = {
   alignment,
   destinationUrl,
