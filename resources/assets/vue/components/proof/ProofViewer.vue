@@ -19,19 +19,10 @@
                      :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
                      :token="token"
                      v-if="showDecision ? true : false"
-                     v-on:update-alert="updateAlert"
                     v-on:decision="decisionMade()"
                 ></proof-decision>
             </div>
         </div>
-
-        <alert
-            :title="alert.title"
-            :message="alert.message"
-            :type="alert.type"
-            :show="alert.show"
-            v-on:hide-alert="alert.show = false"
-        ></alert>
 
         <div class="section-container-campaign">
             <section class="section-canvas-email section-box">
@@ -62,7 +53,6 @@
             <aside>
                 <proof-comments
                     :token="token"
-                    v-on:update-alert="updateAlert"
                 ></proof-comments>
             </aside>
         </div>
@@ -73,24 +63,16 @@
 <script>
     import ProofComments from './ProofComments.vue';
     import ProofDecision from './ProofDecision.vue';
-    import Alert from './Alert.vue';
     import VueSticky from 'vue-sticky';
 
     export default {
         name: 'proofViewer',
         components: {
-            Alert,
             ProofComments,
             ProofDecision
         },
         data() {
             return {
-                alert: {
-                    title: '',
-                    message: '',
-                    type: '',
-                    show: false
-                },
                 campaign: [],
                 showDecision: false,
                 reviewer: [],
@@ -133,16 +115,10 @@
                             vm.reviewer = resp.body.data.reviewer;
                             vm.showDecision = resp.body.data.show_decision;
                             if ('message' in resp.body.data) {
-                                vm.alert = {
-                                    message: resp.body.data.message,
-                                    show: true
-                                }
+                                vm.$root.$toast(resp.body.data.message, {className: 'et-success'});
                             }
                         }
                     });
-            },
-            updateAlert: function(data) {
-                this.alert = data;
             },
             decisionMade: function() {
                 // Ugly but works. @TODO: find a better way to do this (e.g. vuex)
