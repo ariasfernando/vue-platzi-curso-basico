@@ -31,7 +31,7 @@
                 :height="component.attribute.height"
                 :style="styles"
               >
-                <div class="stx-edit-text stx-wrapper" :id="editorId" v-html="component.data.text"></div>
+                <div class="stx-edit-text stx-wrapper" v-html="setColorContent(component.data.text, styles.color)" :id="editorId" ></div>
                 <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
               </td>
             </tr>
@@ -69,6 +69,11 @@
         return _.extend( this.component.style, height );
       }
     },
+    methods: {
+      setColorContent(text, color) {
+        return text.replace("<p>", `<p style='color:${color || inherit} !important'>`);
+      }
+    }
   };
 </script>
 

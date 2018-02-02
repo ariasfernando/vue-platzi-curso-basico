@@ -44,6 +44,7 @@
           link_title: false,
           link_text_to_display: false,
           paste_as_text: true,
+          forced_root_block : 'p',
           init_instance_callback: (editor) => {
 
             editor.on('blur', (e) => {
