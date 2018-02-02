@@ -1,7 +1,10 @@
 <template>
   <!-- DIVIDER ELEMENT -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-    <tr data-type="separator-element">
+    <tr 
+      data-type="separator-element"
+      :class="getMobileClasses(component,'tr')"
+    >
       <td 
         class="stx-position-relative" 
         width="100%" 
@@ -9,6 +12,7 @@
         :height="component.style.height" 
         :bgcolor="component.style.backgroundColor" 
         :style="[defaultFirstTdStyle, firstTdStyle]"
+        :class="getMobileClasses(component,'td:first')"
       >
         <table 
           width="100%" 
@@ -35,6 +39,7 @@
 </template>
 
 <script>
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import _ from 'lodash';
 
   export default {
@@ -43,8 +48,10 @@
       'module-id',
       'column-id',
       'component-id',
-      'component'
+      'component',
+      'column'
     ],
+    mixins: [ MobileStylesMixin ],
     data(){
       return{
         defaultFirstTdStyle: {
@@ -94,7 +101,7 @@
           fontSize: this.component.style.height,
         };
       }
-    },  
+    }
   };
 </script>
 

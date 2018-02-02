@@ -3,6 +3,7 @@
   <tr 
     data-type="button-element"
     :data-component="JSON.stringify(component)"
+    :class="getMobileClasses(component,'tr')"
     @click.prevent="setComponent"
   >
     <td 
@@ -10,6 +11,7 @@
       width="100%"
       style="width: 100%;"
       :align="component.attribute.align" 
+      :class="getMobileClasses(component,'td:first')"
     >
       <a style="text-decoration:none;" 
          :href="component.attribute.href" 
@@ -50,6 +52,7 @@
 <script>
   import TinyMCE from './TinyMce.vue';
   import ComponentToolbar from './ComponentToolbar.vue';
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
 
   import _ from 'underscore';
 
@@ -65,6 +68,7 @@
       'tiny-mce': TinyMCE,
       ComponentToolbar,
     },
+    mixins: [ MobileStylesMixin ],
     data(){
       return {
         editorId: ['editor', this.columnId, this.componentId].join('-')

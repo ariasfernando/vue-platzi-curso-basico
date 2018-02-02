@@ -1,41 +1,45 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
-    <tr data-type="button-element">
-      <td 
-        class="stx-position-relative" 
+    <tr
+      data-type="button-element"
+      :class="getMobileClasses(component,'tr')"
+    >
+      <td
+        class="stx-position-relative"
         width="100%"
         style="width: 100%;"
         :align="component.attribute.align"
+        :class="getMobileClasses(component,'td:first')"
       >
-        <a 
-          @click.prevent 
-          :href="component.attribute.href" 
-          :target="component.attribute.target" 
+        <a
+          @click.prevent
+          :href="component.attribute.href"
+          :target="component.attribute.target"
           style="text-decoration:none;"
         >
-          <table 
-            border="0" 
-            cellpadding="0" 
+          <table
+            border="0"
+            cellpadding="0"
             cellspacing="0"
-            :width="component.attribute.width" 
-            :height="component.attribute.height" 
+            :width="component.attribute.width"
+            :height="component.attribute.height"
             :bgcolor="component.attribute.bgcolor.hex"
-            :style="`width:${component.attribute.width}px`" 
+            :style="`width:${component.attribute.width}px`"
           >
             <tr>
-              <td 
-                width="100%" 
-                align="center" 
+              <td
+                width="100%"
+                align="center"
                 :bgcolor="component.attribute.bgcolor.hex"
                 :height="component.attribute.height"
                 :style="styles"
               >
                 <div
-                  class="stx-edit-text stx-wrapper cta-text-wrapper"
-                  style="display: inline-block !important; vertical-align: middle"
-                  :id="editorId"
-                  v-html="component.data.text">
+                    class="stx-edit-text stx-wrapper"
+                    style="display: inline-block !important; vertical-align: middle"
+                    v-html="setColorContent(component.data.text, styles.color)"
+                    :id="editorId" >
                 </div>
                 <img v-if="component.attribute.buttonCaret"
                      :src="$_app.config.imageUrl + component.attribute.buttonCaret"
@@ -46,14 +50,15 @@
               </td>
             </tr>
           </table>
-        </a>  
+        </a>
       </td>
     </tr>
-  </table>  
-  <!-- CALL TO ACTION ELEMENT ENDS -->
+  </table>
+  <!-- CTA ELEMENT ENDS -->
 </template>
 
 <script>
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import _ from 'lodash';
 
   export default {
@@ -62,7 +67,8 @@
       'module-id',
       'column-id',
       'component-id',
-      'component'
+      'component',
+      'column'
     ],
     data(){
       return {
@@ -73,11 +79,17 @@
       styles(){
         let height = {
           height: `${this.component.attribute.height}px`
-        }; 
+        };
 
         return _.extend( this.component.style, height );
       }
     },
+    mixins: [ MobileStylesMixin ],
+    methods: {
+      setColorContent(text, color) {
+        return text.replace("<p>", `<p style='color:${color || inherit} !important'>`);
+      }
+    }
   };
 </script>
 

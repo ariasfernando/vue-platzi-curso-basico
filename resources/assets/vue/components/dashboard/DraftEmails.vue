@@ -54,7 +54,7 @@
               <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock pull-left campaign-locking" v-if="enableLocking && campaign.locked"></i>
               <a :data-campaign-id="campaign._id"
                 :data-campaign-name="campaign.campaign_name"
-                class="proof-track-modal pull-left right-icon"
+                class="proof-track-modal pull-right right-icon"
                 href="#"
                 title="Track active proof"
                 v-if="proof.allow && proof.status && campaign.has_active_proof"
@@ -72,7 +72,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="text-left actions icons">
+            <td class="text-right actions icons">
               <a href="#"
                 @click.prevent="goProof(campaign.proof_token)"
                 class="proof"

@@ -10,12 +10,12 @@ function buttonDefault() {
       fontFamily: 'Helvetica, arial, sans-serif',
       color: '#FFFFFF',
       fontSize: '12px',
-      lineHeight: '40px',
+      // Warning: line-height affects vertical alignment
+      lineHeight: '14px',
       paddingTop: '0px',
       paddingBottom: '0px',
       paddingRight: '0px',
       paddingLeft: '0px',
-      display: 'block',
       fontWeight: 'normal',
       // Border Top
       borderTopWidth: '0px',
@@ -92,6 +92,13 @@ function buttonDefault() {
       },
       {
         link: 'attribute',
+        label: 'Character Limit',
+        name: 'truncate',
+        type: 'text',
+        value: '',
+      },
+      {
+        link: 'attribute',
         label: 'Default URL',
         name: 'href',
         type: 'text',
@@ -135,7 +142,7 @@ function buttonDefault() {
         label: 'Line Height',
         name: 'lineHeight',
         type: 'text',
-        value: '40px',
+        value: '14px',
       },
       {
         link: 'style',
