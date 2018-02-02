@@ -141,10 +141,16 @@
         const target = e.srcEvent.target;
         const value = e.value;
         const setting = target.parentElement.attributes.getNamedItem('name').value;
-
+        let content = e.content;
         const options = {};
+
+        // if toogle is disabled the inputs value will be 0
+        if( value == false){
+          content = 0;
+        }
         options[setting] = {
             value,
+            content
           };
 
         const payload = {
@@ -160,12 +166,11 @@
         this.$store.commit('module/savePlugin', payload);
       },
       changeOption(e){
-        console.log('aca');
         // Save input value
         const value = e.target.value;
         const setting = e.target.name;
         const options = {};
-
+        // switch to other var because value saved toggle state.
         const content = value;
           
         options[setting] = {

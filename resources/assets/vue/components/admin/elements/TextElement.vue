@@ -24,7 +24,7 @@
             :truncate="component.attribute.truncate"
             :style="component.style"
           >
-            <tiny-mce :id="editorId" :value="component.data.text" data-key="text"></tiny-mce>
+            <tiny-mce :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
             <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
           </td>
         </tr> 
