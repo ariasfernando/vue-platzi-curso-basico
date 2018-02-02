@@ -31,7 +31,17 @@
                 :height="component.attribute.height"
                 :style="styles"
               >
-                <div class="stx-edit-text stx-wrapper" :id="editorId" v-html="component.data.text"></div>
+                <div
+                  class="stx-edit-text stx-wrapper cta-text-wrapper"
+                  style="display: inline-block !important; vertical-align: middle"
+                  :id="editorId"
+                  v-html="component.data.text">
+                </div>
+                <img v-if="component.attribute.buttonCaret"
+                     :src="$_app.config.imageUrl + component.attribute.buttonCaret"
+                     width="10"
+                     height="10"
+                     style="display: inline-block !important; vertical-align: middle">
                 <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
               </td>
             </tr>
@@ -75,4 +85,5 @@
   .st-unlink {
     cursor: default;
   }
+
 </style>

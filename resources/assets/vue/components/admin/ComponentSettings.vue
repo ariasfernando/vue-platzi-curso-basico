@@ -12,7 +12,7 @@
         
         <form class="form-horizontal">
 
-          <div v-for="setting in component.componentSettings" class="form-group" :class="'field-' + setting.name">
+          <div v-for="setting in component.componentSettings" class="form-group" :class="'field-' + setting">
             <component :is="'input-' + setting" :setting="setting"></component>
           </div>
 
@@ -156,9 +156,7 @@
 
 <script>
 
-  import Vue from 'vue/dist/vue';
   import _ from 'lodash';
-  import uc from 'underscore-contrib';
   import BootstrapVue from 'bootstrap-vue';
   import { Sketch } from 'vue-color';
   import * as elementSettings from './settings';
@@ -174,6 +172,7 @@
       BootstrapVue,
       'sketch-picker': Sketch,
       'input-font-family': elementSettings.FontFamily,
+      'input-button-caret': elementSettings.ButtonCaret,
     },
     computed: {
       currentComponent() {

@@ -41,8 +41,9 @@ function buttonDefault() {
       bgcolor: { hex: '#514960' },
       href: 'http://stensul.com',
       target: '_blank',
+      buttonCaret: undefined,
     },
-    componentSettings: ['font-family'],
+    componentSettings: ['font-family', 'button-caret'],
     settings: [
       {
         link: 'attribute',
