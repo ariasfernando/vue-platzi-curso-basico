@@ -1,7 +1,7 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
-    <tr 
+    <tr
       data-type="button-element"
       :class="getMobileClasses(component,'tr')"
     >
@@ -35,7 +35,7 @@
                 :height="component.attribute.height"
                 :style="styles"
               >
-                <div class="stx-edit-text stx-wrapper" :id="editorId" v-html="component.data.text"></div>
+                <div class="stx-edit-text stx-wrapper" v-html="setColorContent(component.data.text, styles.color)" :id="editorId" ></div>
                 <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
               </td>
             </tr>
@@ -43,7 +43,7 @@
         </a>
       </td>
     </tr>
-  </table>  
+  </table>
   <!-- CTA ELEMENT ENDS -->
 </template>
 
@@ -75,6 +75,11 @@
       }
     },
     mixins: [ MobileStylesMixin ],
+    methods: {
+      setColorContent(text, color) {
+        return text.replace("<p>", `<p style='color:${color || inherit} !important'>`);
+      }
+    }
   };
 </script>
 

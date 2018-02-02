@@ -57,7 +57,7 @@
           paste_as_text: true,
           max_chars: this.settings.truncate.content,
           max_lines: this.settings.lines_limit.content,
-
+          forced_root_block : 'p',
           init_instance_callback: (editor) => {
 
             editor.on('blur', (e) => {
@@ -71,7 +71,7 @@
                 }
               });
 
-              
+
             });
           },
           setup: (editor) => {
@@ -84,11 +84,11 @@
                 if(!tinyMax){
                   //if truncate is NAN, returns and avoid validations
                   return
-                } 
+                }
                 tinyLength = editor.getContent({format: 'text'}).length;
                 let $textElement = $('#'+tinyMCE.activeEditor.id);
                 //let hasError = $textElement.$root.$toast('Error', {className: 'et-error'});
-                        
+
                 const allowKeys = [
                   //  key      keyCode
                     'Backspace',    8,
@@ -140,7 +140,7 @@
                 tinyLength = editor.getContent({format: 'text'}).trim().length;
                 let $textElement = $('#'+tinyMCE.activeEditor.id);
 
-                //Check for Characters Limit            
+                //Check for Characters Limit
                 if (tinyLength > +this.settings.truncate.content) {
                   this.$root.$toast("You've reached the maximum number of characters (" + (+this.settings.truncate.content) +")",{
                     className: 'et-error',
@@ -150,7 +150,7 @@
 
                 //Check for Lines Limit
                 if( (+this.settings.lines_limit.content > 0) ){
-                
+
                   let divHeight = $textElement.height();
                   let lineHeight = parseInt($textElement.css("lineHeight"));
                   let actualLines = divHeight / lineHeight;
@@ -176,20 +176,20 @@
               });
           },
           paste_preprocess: (plugin, args) => {
-            
+
             let editor = tinymce.get(tinymce.activeEditor.id);
             let tinyMax = +this.settings.truncate.content;
-            
+
             if(!tinyMax){
               //if truncate is NAN, returns and avoid validations
               return
             }
 
             //trim string if exceed max char limit
-            let tinyLength = editor.getContent({format: 'text'}).length - 1;            
+            let tinyLength = editor.getContent({format: 'text'}).length - 1;
             let charsToPaste = +this.settings.truncate.content - tinyLength;
             args.content = args.content.trim().substring(0, charsToPaste);
-            
+
 
           }
         }, params);
