@@ -123,16 +123,7 @@
       },
       save() {
         // Do not save if there are missing or wrong fields
-        if (this.fieldErrors.length > 0) {
-          this.$root.$toast(
-            'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
-            'or remove the incomplete module(s).',
-            {
-              className: 'et-error',
-              duration: 10000,
-              closeable: true
-            }
-          );
+        if (!this._validate()) {
           return false;
         }
 
@@ -158,6 +149,21 @@
           campaign: this.campaign,
           bodyHtml
         });
+      },
+      _validate(message = undefined) {
+        if (this.fieldErrors.length > 0) {
+          this.$root.$toast(
+            message || 'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
+            'or remove the incomplete module(s).',
+            {
+              className: 'et-error',
+              duration: 10000,
+              closeable: true
+            }
+          );
+          return false;
+        }
+        return true;
       },
       template() {
         this.$store.commit("campaign/toggleModal", 'modalEnableTemplating');
@@ -259,6 +265,12 @@
         });
       },
       proof() {
+        // Do not show proof modal if there are missing or wrong fields
+        let message = 'To send an email for review, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.';
+        if (!this._validate(message)) {
+          return false;
+        }
+
         this.$store.commit("global/setLoader", true);
         const cleanHtml = campaignCleaner.clean('.section-canvas-container');
 
@@ -266,6 +278,7 @@
           'indent_size': 2,
           'wrap_line_length': 120,
         });
+
         this._save(bodyHtml).then(response => {
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalProof');
