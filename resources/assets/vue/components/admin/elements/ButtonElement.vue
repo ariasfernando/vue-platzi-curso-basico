@@ -35,6 +35,10 @@
                 :style="component.style"
             >
                 <tiny-mce :id="editorId" :value="component.data.text" data-key="text"></tiny-mce>
+                <img v-if="component.attribute.buttonCaret"
+                   :src="$_app.config.imageUrl + component.attribute.buttonCaret"
+                   width="10"
+                   height="10">
                 <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
             </td>
           </tr>

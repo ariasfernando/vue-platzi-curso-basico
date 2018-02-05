@@ -41,8 +41,9 @@ function buttonDefault() {
       bgcolor: { hex: '#514960' },
       href: 'http://stensul.com',
       target: '_blank',
+      buttonCaret: undefined,
     },
-    componentSettings: ['font-family'],
+    componentSettings: ['font-family', 'button-caret'],
     settings: [
       {
         link: 'attribute',
@@ -88,6 +89,13 @@ function buttonDefault() {
         name: 'bgcolor',
         type: 'color',
         value: { hex: '#514960' },
+      },
+      {
+        link: 'attribute',
+        label: 'Character Limit',
+        name: 'truncate',
+        type: 'text',
+        value: '',
       },
       {
         link: 'attribute',

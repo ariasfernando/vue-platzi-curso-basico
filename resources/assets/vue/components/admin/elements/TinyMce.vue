@@ -1,5 +1,5 @@
 <template>
-  <div class="stx-edit-text" :id="id" v-html="value"></div>
+  <div class="cta-text-wrapper stx-edit-text" :id="id" v-html="value" style="display: inline-block"></div>
 </template>
 
 <script>
@@ -203,7 +203,7 @@
   }
 </script>
 
-<style lang="sass">
+<style lang="less">
   .stx-edit-text {
     cursor: text;
   }
