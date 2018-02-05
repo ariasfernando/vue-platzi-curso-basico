@@ -14,6 +14,7 @@
           v-for="(component, componentId) in column.components" 
           :key="componentId" 
           @click="setComponent(moduleId, columnId, componentId)"
+          :class="component.attribute.hideElement ? 'hide-element st-remove-element' : '' "
         >
           <td 
             width="100%" 
