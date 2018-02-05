@@ -130,8 +130,6 @@
 
               </div>
             </div>
-            <div v-if="setting.name ==='fontSizeAndWeight6'" >
-              <div v-for="(settingGroup, keyGroup) in setting.group" class="col-sm-6" :key="settingGroup.name">
           </div>
         </form>
       </b-card>
