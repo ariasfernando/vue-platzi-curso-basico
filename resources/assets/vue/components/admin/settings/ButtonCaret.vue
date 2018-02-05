@@ -71,6 +71,11 @@
             attributeValue: e
           });
         };
+
+        tmp.onerror = () => {
+          // Retry to load image
+          this.updateAttributePlaceholder(e);
+        };
       },
     }
   }
