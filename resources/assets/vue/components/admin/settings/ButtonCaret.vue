@@ -58,14 +58,19 @@
 
         reader.readAsDataURL(file);
       },
-
       updateAttributePlaceholder(e) {
-        this.$store.commit('module/saveComponentAttribute',{
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          attribute: 'buttonCaret',
-          attributeValue: e
-        });
+        // Set the src after we have loaded the new image
+        const tmp = new Image();
+        tmp.src = this.$_app.config.imageUrl + e;
+
+        tmp.onload = () => {
+          this.$store.commit('module/saveComponentAttribute', {
+            columnId: this.currentComponent.columnId,
+            componentId: this.currentComponent.componentId,
+            attribute: 'buttonCaret',
+            attributeValue: e
+          });
+        };
       },
     }
   }
