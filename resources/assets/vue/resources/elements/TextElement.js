@@ -20,7 +20,7 @@ function textDefault() {
       align: 'left',
       bgcolor: 'transparent',
     },
-    componentSettings: ['font-family'],
+    componentSettings: ['font-family', 'font-style'],
     settings: [
       {
         link: 'style',
@@ -28,13 +28,6 @@ function textDefault() {
         name: 'color',
         type: 'color',
         value: { hex: '#000000' },
-      },
-      {
-        link: 'style',
-        label: 'Font Size',
-        name: 'fontSize',
-        type: 'text',
-        value: '12px',
       },
       {
         link: 'style',
@@ -113,7 +106,7 @@ function textDefault() {
       },
     ],
     plugins: {},
-  }
+  };
 }
 
 module.exports = textDefault;

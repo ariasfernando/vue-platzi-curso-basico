@@ -12,11 +12,11 @@
         
         <form class="form-horizontal">
 
-          <div v-for="setting in component.componentSettings" class="form-group" :class="'field-' + setting.name">
+          <div v-for="setting in component.componentSettings" class="form-group" :class="'field-' + setting.name" :key="setting">
             <component :is="'input-' + setting" :setting="setting"></component>
           </div>
 
-          <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings">
+          <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
 
             <div v-if="!setting.group" >
               <label class="col-sm-7 control-label" :for="setting.name">{{ setting.label }}</label>
@@ -37,11 +37,11 @@
                        :name="setting.name"
                        :placeholder="setting.label"
                        type="text"
-                       @change="saveComponent">
+                       @change="saveComponentByEvent">
 
                 <!-- Input select -->
                 <span v-if="setting.type === 'select'">
-                  <b-form-select v-model="setting.value" :name="setting.name" :options="setting.options" @change.native="saveComponent">
+                  <b-form-select v-model="setting.value" :name="setting.name" :options="setting.options" @change.native="saveComponentByEvent">
                   </b-form-select>
                 </span>
 
@@ -57,7 +57,7 @@
                          :placeholder="setting.label"
                          @click.prevent="toggleSketch"
                          disabled
-                         @change="saveComponent">
+                         @change="saveComponentByEvent">
                 </div>
 
                 <div v-if="setting.type === 'color'"
@@ -78,10 +78,10 @@
               </div>
             </div>
 
-            <div v-else>
+            <div v-else-if="setting.name=='padding'">
               <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
               <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker"
-                  v-for="(settingGroup, keyGroup) in setting.group" >
+                  v-for="(settingGroup, keyGroup) in setting.group" :key="settingGroup.name">
                 <!-- Input Text -->
                 <input v-if="settingGroup.type === 'text'"
                        :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
@@ -90,11 +90,11 @@
                        v-model="settingGroup.value"
                        type="text"
                        v-validate="'required'"
-                       @change="saveComponent">
+                       @change="saveComponentByEvent">
 
                 <!-- Input select -->
                 <span v-if="settingGroup.type === 'select'">
-                  <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponent" >
+                  <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponentByEvent" >
                   </b-form-select>
                 </span>
 
@@ -109,7 +109,7 @@
                          :name="settingGroup.name"
                          :placeholder="settingGroup.label"
                          @click.prevent="toggleSketch"
-                         @input="saveComponent"
+                         @input="saveComponentByEvent"
                          disabled>
                 </div>
                 <div v-if="settingGroup.type === 'color'"
@@ -130,6 +130,8 @@
 
               </div>
             </div>
+            <div v-if="setting.name ==='fontSizeAndWeight6'" >
+              <div v-for="(settingGroup, keyGroup) in setting.group" class="col-sm-6" :key="settingGroup.name">
           </div>
         </form>
       </b-card>
@@ -144,7 +146,7 @@
 
     <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
-        <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
+        <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name"  :key="key">
           <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
         </div>
       </b-card>
@@ -172,7 +174,8 @@ export default {
   components: {
     BootstrapVue,
     "sketch-picker": Sketch,
-    "input-font-family": elementSettings.FontFamily
+    "input-font-family": elementSettings.FontFamily,
+    "input-font-style": elementSettings.FontStyle
   },
   computed: {
     currentComponent() {
@@ -247,10 +250,11 @@ export default {
       });
     },
 
-    saveComponent(evt) {
-      let valTarget = evt.target.value;
-      let nameTarget = evt.target.name;
+    saveComponentByEvent(evt){
+      this.saveComponent(evt.target.name, evt.target.value)
+    },
 
+    saveComponent(nameTarget, valTarget) {
       _.each(this.component.settings, (option, indexOption) => {
         if (option.link === "style") {
           if (option.group && option.group.length > 0) {
