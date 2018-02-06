@@ -866,7 +866,8 @@
       label{
         text-align: left;
         color: #666666;
-        padding-top: 2px;
+        padding-top: 10px;
+        padding-bottom: 10px;
         font-weight: 300;
         padding-right: 0px;
       }

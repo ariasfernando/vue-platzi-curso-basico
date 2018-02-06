@@ -12,9 +12,9 @@
         
         <form class="form-horizontal">
 
-          <div v-for="setting in component.componentSettings" class="form-group" :class="'field-' + setting.name" :key="setting">
-            <component :is="'input-' + setting" :setting="setting"></component>
-          </div>
+          <template v-for="setting in component.componentSettings" >
+            <component :is="'input-' + setting" :setting="setting" :key="setting"></component>
+          </template>
 
           <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
 

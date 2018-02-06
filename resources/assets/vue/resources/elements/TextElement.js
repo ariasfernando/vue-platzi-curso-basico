@@ -15,6 +15,9 @@ function textDefault() {
       paddingLeft: '0px',
       color: '#000000',
     },
+    styleOptions: {
+      isBlockLineHeight: false,
+    },
     attribute: {
       valign: 'middle',
       align: 'left',
