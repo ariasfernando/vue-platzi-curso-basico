@@ -130,6 +130,7 @@ export default {
   width: 36px;
   text-align: center;
   padding-top: 4px;
+    z-index: 2;
   cursor: pointer;
   i {
     color: #666666;

@@ -10,12 +10,12 @@ function buttonDefault() {
       fontFamily: 'Helvetica, arial, sans-serif',
       color: '#FFFFFF',
       fontSize: '12px',
-      lineHeight: '40px',
+      // Warning: line-height affects vertical alignment
+      lineHeight: '14px',
       paddingTop: '0px',
       paddingBottom: '0px',
       paddingRight: '0px',
       paddingLeft: '0px',
-      display: 'block',
       fontWeight: 'normal',
       // Border Top
       borderTopWidth: '0px',
@@ -41,8 +41,9 @@ function buttonDefault() {
       bgcolor: { hex: '#514960' },
       href: 'http://stensul.com',
       target: '_blank',
+      buttonCaret: undefined,
     },
-    componentSettings: ['font-family', 'font-style'],
+    componentSettings: ['font-family', 'font-style', 'button-caret'],
     styleOptions: {
       isBlockLineHeight: false,
     },
@@ -91,6 +92,13 @@ function buttonDefault() {
         name: 'bgcolor',
         type: 'color',
         value: { hex: '#514960' },
+      },
+      {
+        link: 'attribute',
+        label: 'Character Limit',
+        name: 'truncate',
+        type: 'text',
+        value: '',
       },
       {
         link: 'attribute',

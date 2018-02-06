@@ -37,7 +37,21 @@ function textDefault() {
         label: 'Font Weight',
         name: 'fontWeight',
         type: 'text',
-        value: 'normal',
+        value: '',
+      },
+      {
+        link: 'attribute',
+        label: 'Background color',
+        name: 'bgcolor',
+        type: 'color',
+        value: { hex: 'transparent' },
+      },
+      {
+        link: 'attribute',
+        label: 'Character Limit',
+        name: 'truncate',
+        type: 'text',
+        value: '',
       },
       {
         link: 'style',
@@ -57,13 +71,6 @@ function textDefault() {
           { value: 'center', text: 'Center' },
           { value: 'right', text: 'Right' },
         ],
-      },
-      {
-        link: 'style',
-        label: 'Line Height',
-        name: 'lineHeight',
-        type: 'text',
-        value: '16px',
       },
       {
         link: 'attribute',

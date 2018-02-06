@@ -289,6 +289,8 @@ gulp.task('elixir-less', () => {
    return elixir((mix) => {
         mix.less( 'base/tool/tool.less');
         mix.less( 'base/base-v2/admin.less');
+        mix.less( 'base/commons/mobile/mobile_core_styles.less');
+        mix.less( 'base/commons/mobile/mobile_client_styles.less');
     });
 });
 

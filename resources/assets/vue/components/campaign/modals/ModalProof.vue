@@ -200,8 +200,8 @@
       },
       fetchReviewers () {
         $.getJSON(this.$_app.config.baseUrl + '/proof/reviewers/' + this.campaign.campaign_data._id, {}, function(response) {
-
           if (response && response.status === 'success') {
+              this.reviewers = [];
               for (index in response.data) {
                 this.addReviewer(response.data[index].email, response.data[index]);
               }
@@ -342,7 +342,6 @@
     updated () {
       if (!this.fetched) {
         this.fetched = true;
-        this.reviewers = [];
         this.fetchReviewers();
       }
       if ($('.proof-users-picker').length) {

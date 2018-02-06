@@ -9,13 +9,17 @@
 
     <b-collapse id="style" visible accordion="module-settings-accordion-right">
       <b-card class="default-settings">
-        
-        <form class="form-horizontal">
+
+        <b-tabs card ref="styles-tabs">
+          <!-- Render Styles Tabs -->
+          <!-- Desktop Styles -->
+          <b-tab title="Desktop" active>
+            <form class="form-horizontal">
 
           <template v-for="setting in component.componentSettings" >
             <component :is="'input-' + setting" :setting="setting" :key="setting"></component>
           </template>
-
+          
           <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
 
             <div v-if="!setting.group" >
@@ -119,9 +123,9 @@
                   <i class="glyphicon glyphicon-remove"></i>
                 </div>
                 <sketch-picker v-if="settingGroup.type === 'color'"
-                               v-model="settingGroup.value"
-                               class="sketch-picker"
-                               @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
+                                v-model="settingGroup.value"
+                                class="sketch-picker"
+                                @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
 
                 <!-- Span General Error -->
                 <span v-show="errors.has(settingGroup.name)"
@@ -129,9 +133,24 @@
                 </span>
 
               </div>
+                </div>
+              </div>
+            </form>
+          </b-tab>
+          <!-- Mobile Styles -->
+          <b-tab title="Mobile">
+            <div
+              v-for="(plugin, key) in component.plugins"
+              v-if="shouldRenderInStyles(plugin)"
+              class="plugin-wrapper"
+              :class="'plugin-' + plugin.name"
+              :key="plugin.name"
+            >
+              <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
             </div>
-          </div>
-        </form>
+          </b-tab>
+        </b-tabs>
+
       </b-card>
     </b-collapse>
     <!-- END: Style -->
@@ -144,7 +163,13 @@
 
     <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
-        <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name"  :key="key">
+        <div
+          v-for="(plugin, key) in component.plugins"
+          v-if="!shouldRenderInStyles(plugin)"
+          class="plugin-wrapper"
+          :class="'plugin-' + plugin.name"
+          :key="key"
+        >
           <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
         </div>
       </b-card>
@@ -155,13 +180,10 @@
 </template>
 
 <script>
-import Vue from "vue/dist/vue";
 import _ from "lodash";
-import uc from "underscore-contrib";
 import BootstrapVue from "bootstrap-vue";
 import { Sketch } from "vue-color";
 import * as elementSettings from "./settings";
-
 export default {
   data() {
     return {
@@ -173,7 +195,8 @@ export default {
     BootstrapVue,
     "sketch-picker": Sketch,
     "input-font-family": elementSettings.FontFamily,
-    "input-font-style": elementSettings.FontStyle
+    "input-font-style": elementSettings.FontStyle,
+    "input-button-caret": elementSettings.ButtonCaret
   },
   computed: {
     currentComponent() {
@@ -248,8 +271,8 @@ export default {
       });
     },
 
-    saveComponentByEvent(evt){
-      this.saveComponent(evt.target.name, evt.target.value)
+    saveComponentByEvent(evt) {
+      this.saveComponent(evt.target.name, evt.target.value);
     },
 
     saveComponent(nameTarget, valTarget) {
@@ -334,19 +357,66 @@ export default {
           }
         }
       });
-
       this.$store.commit("module/setChangeSettingComponent", {
         style: this.component.style || {},
         attribute: this.component.attribute || {}
       });
+    },
+    shouldRenderInStyles(plugin) {
+      return _.indexOf(plugin.target, "styles") >= 0;
     }
   }
 };
 </script>
 
 <style lang="less">
+@focus: #78dcd6;
+@focus-light: lighten(@focus, 30%);
+
 .vue-js-switch {
   margin-top: 4px;
+}
+
+.card-header {
+  padding-bottom: 20px;
+
+  ul {
+    margin-left: -10px;
+    margin-right: -10px;
+    border-bottom: 1px solid #dddddd;
+
+    .nav-item {
+      border-top: 1px solid #dddddd;
+      border-left: 1px solid #dddddd;
+      margin-bottom: -2px;
+
+      &:first-child {
+        margin-left: 10px;
+      }
+
+      &:last-of-type {
+        border-right: 1px solid #dddddd;
+      }
+      .nav-link {
+        margin-right: 0;
+        padding: 4px 7px;
+        border: 0;
+        border-radius: 0;
+        font-weight: 300;
+        color: #666666;
+        &.active {
+          border-bottom: 2px solid @focus;
+          background: @focus-light;
+        }
+        &:focus {
+          background-color: transparent;
+        }
+        &:hover {
+          background-color: @focus-light;
+        }
+      }
+    }
+  }
 }
 
 .plugin-wrapper,

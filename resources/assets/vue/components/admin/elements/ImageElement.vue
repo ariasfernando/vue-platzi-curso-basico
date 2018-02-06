@@ -3,6 +3,7 @@
     <tr
       data-type="image-element"
       :data-component="JSON.stringify(component)"
+      :class="getMobileClasses(component,'tr')"
       @click.prevent="setComponent"
     >
       <td 
@@ -10,6 +11,7 @@
         align="center"
         class="stx-position-relative"
         :style="component.style" 
+        :class="getMobileClasses(component,'td:first')"
       >
         <table 
           width="100%" 
@@ -54,6 +56,7 @@
 <script>
   import _ from 'underscore';
   import ComponentToolbar from './ComponentToolbar.vue';
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   
   export default {
     name: 'ImageElement',
@@ -66,6 +69,7 @@
     components: {
       ComponentToolbar,
     },
+    mixins: [ MobileStylesMixin ],
     created () {
       this.setupModule();
     },

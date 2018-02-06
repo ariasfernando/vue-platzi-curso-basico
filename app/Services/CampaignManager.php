@@ -187,7 +187,7 @@ class CampaignManager
                         $proof->save();
 
                         // Send emails to reviewers
-                        Bus::dispatch(new SendReviewersEmail($proof, 'deleted_proof'));
+                        dispatch(new SendReviewersEmail($proof, 'deleted_proof'));
                     }
                 }
                 return array('success' => $campaign_id);

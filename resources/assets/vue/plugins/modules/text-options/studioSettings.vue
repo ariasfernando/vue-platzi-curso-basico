@@ -10,8 +10,8 @@
         </div>
       </div>
 
-      <div class="btn-group">
-       <button v-if="plugin.enabled" v-for="(option, name) in plugin.config.options"
+      <div class="btn-group" v-if="plugin.enabled">
+       <button v-for="(option, name) in plugin.config.options"
          class="btn toggleable"
          v-b-tooltip.hover
          :title="option.label"
@@ -33,6 +33,21 @@
           <span>
             <toggle-button :value="tinySetting.value" :name="key" color="#78DCD6" :sync="true" :labels="true" @change="toggleSetting"></toggle-button>
           </span>
+        </div>
+        <!-- Input if config needs it -->
+        <div class="col-sm-12">
+          <div class="btn-group number-input">
+            <input v-if="tinySetting.value == true"
+              class="btn toggleable"
+              v-b-tooltip.hover
+              :title="key"
+              :name="key"
+              :value="tinySetting.content || 0"
+              type="number"
+              @input.prevent="changeOption"
+              min="0"
+            />
+          </div>
         </div>
       </div>
     </form>
@@ -126,11 +141,17 @@
         const target = e.srcEvent.target;
         const value = e.value;
         const setting = target.parentElement.attributes.getNamedItem('name').value;
-
+        let content = e.content;
         const options = {};
+
+        // if toogle is disabled the inputs value will be 0
+        if( value == false){
+          content = 0;
+        }
         options[setting] = {
-          value,
-        };
+            value,
+            content
+          };
 
         const payload = {
           plugin: this.name,
@@ -143,6 +164,31 @@
 
         // Save plugin data
         this.$store.commit('module/savePlugin', payload);
+      },
+      changeOption(e){
+        // Save input value
+        const value = e.target.value;
+        const setting = e.target.name;
+        const options = {};
+        // switch to other var because value saved toggle state.
+        const content = value;
+          
+        options[setting] = {
+          content
+        };  
+
+        const payload = {
+          plugin: this.name,
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          config: {
+            settings: options,
+          },
+        };
+
+        // Save plugin data
+        this.$store.commit('module/savePlugin', payload);
+
       }
     }
   }
@@ -173,5 +219,10 @@
         width: 16px;
       }
     }
+  }
+
+  .btn-group.number-input{
+    text-align: right;
+    padding: 10px 0;
   }
 </style>
