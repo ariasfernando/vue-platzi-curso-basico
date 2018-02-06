@@ -10,9 +10,9 @@
       data-type="separator-element"
       :class="getMobileClasses(component,'tr')"
     >
-      <td 
+      <td
         class="stx-position-relative" 
-        width="100%" 
+        width="100%"
         align="center"
         :height="heightAsInt"
         :bgcolor="component.style.backgroundColor" 
@@ -30,8 +30,6 @@
           <tbody>
             <tr>
               <td
-                width="100%"
-                align="center"
                 :bgcolor="component.style.borderColor" 
                 :height="heightAsInt"
                 :style="[defaultInnerTdStyle, innerTdStyle]"

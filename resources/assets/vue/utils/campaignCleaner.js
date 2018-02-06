@@ -152,10 +152,8 @@ export default {
   },
 
   addCSSHacks($target, newStyles) {
-      console.log('newStyles',newStyles)
       newStyles.replace(';','');
       var originalStyles = $target.attr('style');
-      console.log('originalStyles',originalStyles)
       var originalStylesArray = originalStyles.split(';');
 
       if(!originalStyles.includes(newStyles)){

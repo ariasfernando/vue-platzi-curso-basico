@@ -13,8 +13,6 @@
       :class="getMobileClasses(component,'tr')"
     >
       <td
-        width="100%"
-        align="center"
         class="stx-position-relative stx-line-height-reset"
         :bgcolor="component.style.backgroundColor"
         :height="heightAsInt"
@@ -81,7 +79,7 @@
       },
       heightAsInt() {
         return _.parseInt(this.component.style.height);
-      },
+      }
     }
   };
 </script>
