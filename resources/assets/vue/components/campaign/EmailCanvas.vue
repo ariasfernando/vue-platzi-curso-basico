@@ -261,7 +261,9 @@
   }
 
   #emailCanvas{
-    min-height: 40px;
+    &:empty {
+      min-height: 40px;
+    }
     &.stx-mobile-mode {
       width: 480px;
       // Mobile Classes

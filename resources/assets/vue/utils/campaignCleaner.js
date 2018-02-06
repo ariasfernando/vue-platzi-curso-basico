@@ -53,7 +53,7 @@ export default {
     if ($removeAttr !== false) {
       $cleanedHtml = $removeAttr;
     }
-    
+
     // Remove class tags
     const $removeClass = this.removeDataHtml($cleanedHtml, this.cleanOptions.classSelectors, 'class');
     // Function removeDataHtml fail attributes
@@ -108,6 +108,20 @@ export default {
       }
     });
 
+    // Convert and add data-persist-styles to css property inline in styles attribute
+    if ($cleanedHtml.find('[data-persist-styles]').length) {
+      const $toPersistArray = $cleanedHtml.find("[data-persist-styles]");
+      $.each($toPersistArray, (i, element) => {
+        const $element = $(element);
+        // Add inline data-saved CSS hacks
+        this.addCSSHacks(
+          $element,
+          Application.utils.objToCss($element.data('persist-styles'))
+        );
+        $element.removeAttr('data-persist-styles');
+      });
+    }
+
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
     
@@ -135,6 +149,28 @@ export default {
     }
     
     return $editedHtml;
+  },
+
+  addCSSHacks($target, newStyles) {
+      console.log('newStyles',newStyles)
+      newStyles.replace(';','');
+      var originalStyles = $target.attr('style');
+      console.log('originalStyles',originalStyles)
+      var originalStylesArray = originalStyles.split(';');
+
+      if(!originalStyles.includes(newStyles)){
+          originalStylesArray.push(newStyles);
+      }
+
+      for (var i = 0; i < originalStylesArray.length; i++) {
+          originalStylesArray[i] = originalStylesArray[i].replace(' ','');
+      }
+
+      originalStylesArray = originalStylesArray.filter(function(item) {
+          return item !== '';
+      })
+      newStyles = originalStylesArray.join('; ');
+      $target.attr('style', newStyles);
   },
   
   encodeHtmlEntities($cleanedHtml) {

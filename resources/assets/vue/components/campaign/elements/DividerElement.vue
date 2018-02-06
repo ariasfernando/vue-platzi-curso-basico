@@ -1,18 +1,28 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+  <table
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="width:100%;"
+    :style="tableStyle"
+  >
     <tr 
       data-type="divider-element"
       :class="getMobileClasses(component,'tr')"
     >
-      <td 
+      <td
+        width="100%"
+        align="center"
         class="stx-position-relative stx-line-height-reset"
         :bgcolor="component.style.backgroundColor"
-        :height="component.style.height"
+        :height="heightAsInt"
         :width="component.style.width || '100%'"
         :style="styles"
         :class="getMobileClasses(component,'td:first')"
-      ></td>
+        :data-persist-styles="JSON.stringify(dataPersistStyles)"
+      >&nbsp;</td>
     </tr>
   </table>
   <!-- DIVIDER ELEMENT ENDS -->
@@ -20,6 +30,7 @@
 
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import _ from 'lodash';
 
   export default {
     name: 'DividerElement',
@@ -31,6 +42,17 @@
       'column'
     ],
     mixins: [ MobileStylesMixin ],
+    data(){
+      return{
+        dataPersistStyles: {
+          '-webkit-text-size-adjust':'100%',
+          '-ms-text-size-adjust':'100%',
+          'mso-line-height-rule':'exactly',
+          'mso-table-lspace':'0pt',
+          'mso-table-rspace':'0pt'
+        },
+      }
+    },
     computed: {
       styles(){
         let inlineStyle = `height:${this.component.style.height};
@@ -49,8 +71,18 @@
                           border-left-color:${this.component.style.borderLeftColor};`;
 
         return inlineStyle;
-      }
-    },  
+      },
+      tableStyle() {
+        return {
+          height: this.component.style.height,
+          lineHeight: this.component.style.height,
+          fontSize: this.component.style.height,
+        };
+      },
+      heightAsInt() {
+        return _.parseInt(this.component.style.height);
+      },
+    }
   };
 </script>
 
