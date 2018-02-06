@@ -5,6 +5,7 @@ namespace Stensul\Services\Api;
 use Auth;
 use Cache;
 use Activity;
+use Stensul\Models\Library;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
 use Folklore\Image\Exception\Exception;
@@ -48,8 +49,9 @@ class Silverpop implements ApiConnector
 
         if (!is_null($campaign)) {
             if ($campaign->library) {
-                $library_name = $campaign->library;
-            } elseif (array_key_exists('library_name', $request)) {
+                $library = Library::find($campaign->library);
+                $library_name = $library->name;
+            } elseif (!empty($request['library_name'])) {
                 $library_name = $request['library_name'];
             }
             if (isset($library_name) && !empty($this->silverpop_config['libraries'][$library_name])) {
