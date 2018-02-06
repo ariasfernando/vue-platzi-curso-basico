@@ -15,12 +15,15 @@ function textDefault() {
       paddingLeft: '0px',
       color: '#000000',
     },
+    styleOptions: {
+      isBlockLineHeight: false,
+    },
     attribute: {
       valign: 'middle',
       align: 'left',
       bgcolor: 'transparent',
     },
-    componentSettings: ['font-family'],
+    componentSettings: ['font-family', 'font-style'],
     settings: [
       {
         link: 'style',
@@ -31,10 +34,10 @@ function textDefault() {
       },
       {
         link: 'style',
-        label: 'Font Size',
-        name: 'fontSize',
+        label: 'Font Weight',
+        name: 'fontWeight',
         type: 'text',
-        value: '12px',
+        value: '',
       },
       {
         link: 'attribute',
@@ -68,13 +71,6 @@ function textDefault() {
           { value: 'center', text: 'Center' },
           { value: 'right', text: 'Right' },
         ],
-      },
-      {
-        link: 'style',
-        label: 'Line Height',
-        name: 'lineHeight',
-        type: 'text',
-        value: '16px',
       },
       {
         link: 'attribute',
@@ -120,7 +116,7 @@ function textDefault() {
       },
     ],
     plugins: {},
-  }
+  };
 }
 
 module.exports = textDefault;

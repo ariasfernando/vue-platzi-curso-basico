@@ -846,17 +846,6 @@
         height: 50px;
       }
 
-      input[type=text]{
-        height: 22px;
-        background: #F4F4F4;
-        border-radius: 2px;
-        border: none;
-        float: right;
-        font-size: 11px;
-        font-weight: 300;
-        width: 65px;
-      }
-
       input[name="href"]{
         width: 115px;
       }
@@ -864,7 +853,8 @@
       label{
         text-align: left;
         color: #666666;
-        padding-top: 2px;
+        padding-top: 10px;
+        padding-bottom: 10px;
         font-weight: 300;
         padding-right: 0px;
       }
