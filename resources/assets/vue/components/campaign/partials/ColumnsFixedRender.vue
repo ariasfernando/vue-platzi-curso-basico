@@ -2,19 +2,19 @@
   <table class="st-col"
          align="left"
          width="100%"
-         cellspacing="0" 
-         cellpadding="0" 
+         cellspacing="0"
+         cellpadding="0"
          border="0"
          :style="column.style"
   >
-      <tr v-for="(component, componentId) in column.components"  
+      <tr v-for="(component, componentId) in column.components"
           @click="setComponent(moduleId, columnId, componentId)"
-          :class="component.attribute.hideElement ? 'hide-element st-remove-element' : '' "
+          :class="component.attribute.hideElement ? 'stx-hide-element st-remove-element' : '' "
       >
         <td width="100%"
             :valign="column.attribute.valign"
             :align="component.attribute.align || 'center'"
-            :bgcolor="column.attribute.bgcolor.hex" 
+            :bgcolor="column.attribute.bgcolor.hex"
             :style="styles"
         >
           <component :is="component.type"
@@ -46,7 +46,7 @@
       SeparatorElement
     },
     props: {
-      column: { 
+      column: {
         type: Object,
         default: {}
       },
@@ -67,7 +67,7 @@
         let padding = `padding-top:${this.column.style.paddingTop};
                        padding-left:${this.column.style.paddingLeft};
                        padding-bottom:${this.column.style.paddingBottom};
-                       padding-right:${this.column.style.paddingRight};`; 
+                       padding-right:${this.column.style.paddingRight};`;
 
         return padding;
       }
