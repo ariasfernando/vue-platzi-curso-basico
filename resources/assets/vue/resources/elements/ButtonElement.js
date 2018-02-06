@@ -42,7 +42,10 @@ function buttonDefault() {
       href: 'http://stensul.com',
       target: '_blank',
     },
-    componentSettings: ['font-family'],
+    componentSettings: ['font-family', 'font-style'],
+    styleOptions: {
+      isBlockLineHeight: false,
+    },
     settings: [
       {
         link: 'attribute',
@@ -117,24 +120,10 @@ function buttonDefault() {
       },
       {
         link: 'style',
-        label: 'Font Size',
-        name: 'fontSize',
-        type: 'text',
-        value: '12px',
-      },
-      {
-        link: 'style',
         label: 'Font Weight',
         name: 'fontWeight',
         type: 'text',
         value: 'normal',
-      },
-      {
-        link: 'style',
-        label: 'Line Height',
-        name: 'lineHeight',
-        type: 'text',
-        value: '40px',
       },
       {
         link: 'style',
