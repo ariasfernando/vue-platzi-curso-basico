@@ -86,7 +86,11 @@
         <!--2 COLUMNS -->
 
         <!--1 COLUMN -->
-        <tr v-else v-for="(component, componentId) in module.structure.columns[0].components" @click.prevent="setComponent(moduleId, 0, componentId)">
+        <tr v-else
+          v-for="(component, componentId) in module.structure.columns[0].components"
+          @click.prevent="setComponent(moduleId, 0, componentId)"
+          :class="component.attribute.hideElement ? 'stx-hide-element st-remove-element' : '' "
+        >
           <td :valign="component.attribute.valign" :align="component.attribute.align || 'left'">
             <component
               :is="component.type"
