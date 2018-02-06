@@ -58,13 +58,13 @@
         isset($params['campaign_data']['library_config']['linkColor'])
     )
        a{
-            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
         }
         a *{ 
-            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
         }         
         a:link{ 
-             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
         }  
     @endif
 

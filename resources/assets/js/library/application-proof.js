@@ -272,18 +272,12 @@ Application.proof = (function($) {
                 comment = params.comment;
             }
 
-            var message = '';
-            if (comment.length > 0) {
-                message = '<span" data-toggle="tooltip" data-placement="left" title="' + comment + '">' +
-                    '<i class="glyphicon glyphicon-comment"></i></span>';
-            }
-
             var html = '' +
                 '<tr data-email="' + email + '">' +
                     '<td ' + required + '>' + email + '</td>' +
                     '<td>' + decision + '</td>' +
                     '<td>' + params.last_modified_date + '</td>' +
-                    '<td>' + message + '</td>' +
+                    '<td>' + comment + '</td>' +
                 '</tr>';
 
             $table.append(html);

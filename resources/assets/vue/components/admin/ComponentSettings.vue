@@ -16,9 +16,9 @@
           <b-tab title="Desktop" active>
             <form class="form-horizontal">
 
-              <div v-for="setting in component.componentSettings" class="form-group" :class="'field-' + setting.name">
-                <component :is="'input-' + setting" :setting="setting"></component>
-              </div>
+          <div v-for="setting in component.componentSettings" class="form-group" :class="'field-' + setting">
+            <component :is="'input-' + setting" :setting="setting"></component>
+          </div>
 
               <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings">
 
@@ -139,7 +139,7 @@
           </b-tab>
           <!-- Mobile Styles -->
           <b-tab title="Mobile">
-            <div 
+            <div
               v-for="(plugin, key) in component.plugins"
               v-if="shouldRenderInStyles(plugin)"
               class="plugin-wrapper"
@@ -149,7 +149,7 @@
             </div>
           </b-tab>
         </b-tabs>
-        
+
       </b-card>
     </b-collapse>
     <!-- END: Style -->
@@ -162,7 +162,7 @@
 
     <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
-        <div 
+        <div
           v-for="(plugin, key) in component.plugins"
           v-if="!shouldRenderInStyles(plugin)"
           class="plugin-wrapper"
@@ -179,9 +179,7 @@
 
 <script>
 
-  import Vue from 'vue/dist/vue';
   import _ from 'lodash';
-  import uc from 'underscore-contrib';
   import BootstrapVue from 'bootstrap-vue';
   import { Sketch } from 'vue-color';
   import * as elementSettings from './settings';
@@ -197,6 +195,7 @@
       BootstrapVue,
       'sketch-picker': Sketch,
       'input-font-family': elementSettings.FontFamily,
+      'input-button-caret': elementSettings.ButtonCaret,
     },
     computed: {
       currentComponent() {
@@ -379,7 +378,7 @@
 <style lang="less">
   @focus: #78DCD6;
   @focus-light: lighten(@focus, 30%);
-  
+
   .vue-js-switch {
     margin-top: 4px
   }
@@ -421,12 +420,12 @@
           &:hover{
             background-color:@focus-light;
           }
-        } 
+        }
       }
     }
   }
 
-  .plugin-wrapper, 
+  .plugin-wrapper,
   .row-toggle{
     border-bottom: 1px solid #f4f4f4;
     margin-bottom: 15px;
