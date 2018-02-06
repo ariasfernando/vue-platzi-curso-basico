@@ -177,8 +177,6 @@
 
               })
               .on('keyup change', (e) => {
-
-                console.log('aca');
                 if( !(tinyMax || tinyMaxLines) ){
                   //if truncate is NAN, returns and avoid validations
                   return

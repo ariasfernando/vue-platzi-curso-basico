@@ -75,13 +75,12 @@
             });
           },
           setup: (editor) => {
-            let tinyMax = +this.settings.truncate.content;
             let tinyMaxLines = +editor.settings.max_lines;
             let tinyLength, tinyText;
 
             editor
               .on('keydown',(e) => {
-                if(!tinyMax){
+                if(!(+this.settings.truncate.content)){
                   //if truncate is NAN, returns and avoid validations
                   return
                 }
@@ -132,7 +131,7 @@
               })
               .on('keyup change', (e) => {
 
-                if( !tinyMax ){
+                if( !(+this.settings.truncate.content) ){
                   //if truncate is NAN, returns and avoid validations
                   return
                 }
@@ -178,9 +177,8 @@
           paste_preprocess: (plugin, args) => {
 
             let editor = tinymce.get(tinymce.activeEditor.id);
-            let tinyMax = +this.settings.truncate.content;
 
-            if(!tinyMax){
+            if(!(+this.settings.truncate.content)){
               //if truncate is NAN, returns and avoid validations
               return
             }
