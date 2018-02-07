@@ -36,9 +36,9 @@
           </span>
         </div>
         <!-- Input if config needs it -->
-        <div v-if="tinySetting.type !== undefined" class="col-sm-12 control-label">
+        <div v-if=" tinySetting.value == true && tinySetting.type !== undefined" class="col-sm-12 control-label">
           <div class="btn-group number-input">
-            <input v-if="tinySetting.value == true"
+            <input
               class="btn toggleable"
               v-b-tooltip.hover
               :title="key"
