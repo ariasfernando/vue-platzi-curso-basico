@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form-group" :class="'field-' + setting">
     <label class="typo__label col-sm-12 control-label">Font Family</label>
 
     <div class="col-sm-12">

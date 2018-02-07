@@ -43,7 +43,11 @@ function buttonDefault() {
       target: '_blank',
       buttonCaret: undefined,
     },
-    componentSettings: ['font-family', 'button-caret'],
+    componentSettings: ['font-family', 'font-style', 'button-caret'],
+    styleOptions: {
+      isBlockLineHeight: false,
+
+    },
     settings: [
       {
         link: 'attribute',
@@ -125,24 +129,10 @@ function buttonDefault() {
       },
       {
         link: 'style',
-        label: 'Font Size',
-        name: 'fontSize',
-        type: 'text',
-        value: '12px',
-      },
-      {
-        link: 'style',
         label: 'Font Weight',
         name: 'fontWeight',
         type: 'text',
         value: 'normal',
-      },
-      {
-        link: 'style',
-        label: 'Line Height',
-        name: 'lineHeight',
-        type: 'text',
-        value: '14px',
       },
       {
         link: 'style',

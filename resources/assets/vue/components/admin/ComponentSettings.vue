@@ -16,123 +16,123 @@
           <b-tab title="Desktop" active>
             <form class="form-horizontal">
 
-          <div v-for="setting in component.componentSettings" class="form-group" :class="'field-' + setting">
-            <component :is="'input-' + setting" :setting="setting"></component>
-          </div>
+          <template v-for="setting in component.componentSettings" >
+            <component :is="'input-' + setting" :setting="setting" :key="setting"></component>
+          </template>
+          
+          <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
 
-              <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings">
+            <div v-if="!setting.group" >
+              <label class="col-sm-7 control-label" :for="setting.name">{{ setting.label }}</label>
+              <div class="col-sm-5 position-relative content-colorpicker">
+                <!-- Input File -->
+                <input v-if="setting.type === 'file'"
+                       v-validate="'required'"
+                       :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                       :name="setting.name"
+                       type="file"
+                       @change="onFileChange">
 
-                <div v-if="!setting.group" >
-                  <label class="col-sm-7 control-label" :for="setting.name">{{ setting.label }}</label>
-                  <div class="col-sm-5 position-relative content-colorpicker">
-                    <!-- Input File -->
-                    <input v-if="setting.type === 'file'"
-                           v-validate="'required'"
-                           :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                           :name="setting.name"
-                           type="file"
-                           @change="onFileChange">
+                <!-- Input Text -->
+                <input v-if="setting.type === 'text'"
+                       v-validate="'required'"
+                       v-model="setting.value"
+                       :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                       :name="setting.name"
+                       :placeholder="setting.label"
+                       type="text"
+                       @change="saveComponentByEvent">
 
-                    <!-- Input Text -->
-                    <input v-if="setting.type === 'text'"
-                           v-validate="'required'"
-                           v-model="setting.value"
-                           :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                           :name="setting.name"
-                           :placeholder="setting.label"
-                           type="text"
-                           @change="saveComponent">
+                <!-- Input select -->
+                <span v-if="setting.type === 'select'">
+                  <b-form-select v-model="setting.value" :name="setting.name" :options="setting.options" @change.native="saveComponentByEvent">
+                  </b-form-select>
+                </span>
 
-                    <!-- Input select -->
-                    <span v-if="setting.type === 'select'">
-                      <b-form-select v-model="setting.value" :name="setting.name" :options="setting.options" @change.native="saveComponent">
-                      </b-form-select>
-                    </span>
-
-                    <!-- Input color -->
-                    <div @click.prevent="toggleSketch">
-                      <input v-if="setting.type === 'color'"
-                             v-validate="'required'"
-                             v-model="setting.value.hex"
-                             type="text"
-                             class="sketchbackground"
-                             :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                             :name="setting.name"
-                             :placeholder="setting.label"
-                             @click.prevent="toggleSketch"
-                             disabled
-                             @change="saveComponent">
-                    </div>
-
-                    <div v-if="setting.type === 'color'"
-                         class="icon-remove st-remove-sketch"
+                <!-- Input color -->
+                <div @click.prevent="toggleSketch">
+                  <input v-if="setting.type === 'color'"
+                         v-validate="'required'"
+                         v-model="setting.value.hex"
+                         type="text"
+                         class="sketchbackground"
+                         :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                         :name="setting.name"
+                         :placeholder="setting.label"
                          @click.prevent="toggleSketch"
-                    >
-                      <i class="glyphicon glyphicon-remove"></i>
-                    </div>
-                    <sketch-picker v-if="setting.type === 'color'"
-                                   v-model="setting.value"
-                                   class="sketch-picker"
-                                   @click.native="updateColorPickerSetting(setting.name, setting.link, false )"></sketch-picker>
-
-                    <!-- Span General Error -->
-                    <span v-show="errors.has(setting.name)"
-                          class="help is-danger">{{ errors.first(setting.name) }}
-                    </span>
-                  </div>
+                         disabled
+                         @change="saveComponentByEvent">
                 </div>
 
-                <div v-else>
-                  <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
-                  <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker"
-                      v-for="(settingGroup, keyGroup) in setting.group" >
-                    <!-- Input Text -->
-                    <input v-if="settingGroup.type === 'text'"
-                           :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
-                           :name="settingGroup.name"
-                           :placeholder="settingGroup.label"
-                           v-model="settingGroup.value"
-                           type="text"
-                           v-validate="'required'"
-                           @change="saveComponent">
+                <div v-if="setting.type === 'color'"
+                     class="icon-remove st-remove-sketch"
+                     @click.prevent="toggleSketch"
+                >
+                  <i class="glyphicon glyphicon-remove"></i>
+                </div>
+                <sketch-picker v-if="setting.type === 'color'"
+                               v-model="setting.value"
+                               class="sketch-picker"
+                               @click.native="updateColorPickerSetting(setting.name, setting.link, false )"></sketch-picker>
 
-                    <!-- Input select -->
-                    <span v-if="settingGroup.type === 'select'">
-                      <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponent" >
-                      </b-form-select>
-                    </span>
+                <!-- Span General Error -->
+                <span v-show="errors.has(setting.name)"
+                      class="help is-danger">{{ errors.first(setting.name) }}
+                </span>
+              </div>
+            </div>
 
-                    <!-- Input color -->
-                    <div @click.prevent="toggleSketch">
-                      <input v-if="settingGroup.type === 'color'"
-                             v-model="settingGroup.value.hex"
-                             v-validate="'required'"
-                             type="text"
-                             class="sketchbackground"
-                             :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
-                             :name="settingGroup.name"
-                             :placeholder="settingGroup.label"
-                             @click.prevent="toggleSketch"
-                             @input="saveComponent"
-                             disabled>
-                    </div>
-                    <div v-if="settingGroup.type === 'color'"
-                         class="icon-remove st-remove-sketch"
+            <div v-else-if="setting.name=='padding'">
+              <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
+              <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker"
+                  v-for="(settingGroup, keyGroup) in setting.group" :key="settingGroup.name">
+                <!-- Input Text -->
+                <input v-if="settingGroup.type === 'text'"
+                       :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
+                       :name="settingGroup.name"
+                       :placeholder="settingGroup.label"
+                       v-model="settingGroup.value"
+                       type="text"
+                       v-validate="'required'"
+                       @change="saveComponentByEvent">
+
+                <!-- Input select -->
+                <span v-if="settingGroup.type === 'select'">
+                  <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponentByEvent" >
+                  </b-form-select>
+                </span>
+
+                <!-- Input color -->
+                <div @click.prevent="toggleSketch">
+                  <input v-if="settingGroup.type === 'color'"
+                         v-model="settingGroup.value.hex"
+                         v-validate="'required'"
+                         type="text"
+                         class="sketchbackground"
+                         :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
+                         :name="settingGroup.name"
+                         :placeholder="settingGroup.label"
                          @click.prevent="toggleSketch"
-                    >
-                      <i class="glyphicon glyphicon-remove"></i>
-                    </div>
-                    <sketch-picker v-if="settingGroup.type === 'color'"
-                                   v-model="settingGroup.value"
-                                   class="sketch-picker"
-                                   @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
+                         @input="saveComponentByEvent"
+                         disabled>
+                </div>
+                <div v-if="settingGroup.type === 'color'"
+                     class="icon-remove st-remove-sketch"
+                     @click.prevent="toggleSketch"
+                >
+                  <i class="glyphicon glyphicon-remove"></i>
+                </div>
+                <sketch-picker v-if="settingGroup.type === 'color'"
+                                v-model="settingGroup.value"
+                                class="sketch-picker"
+                                @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
 
-                    <!-- Span General Error -->
-                    <span v-show="errors.has(settingGroup.name)"
-                          class="help is-danger">{{ errors.first(settingGroup.name) }}
-                    </span>
+                <!-- Span General Error -->
+                <span v-show="errors.has(settingGroup.name)"
+                      class="help is-danger">{{ errors.first(settingGroup.name) }}
+                </span>
 
-                  </div>
+              </div>
                 </div>
               </div>
             </form>
@@ -144,6 +144,7 @@
               v-if="shouldRenderInStyles(plugin)"
               class="plugin-wrapper"
               :class="'plugin-' + plugin.name"
+              :key="plugin.name"
             >
               <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
             </div>
@@ -167,6 +168,7 @@
           v-if="!shouldRenderInStyles(plugin)"
           class="plugin-wrapper"
           :class="'plugin-' + plugin.name"
+          :key="key"
         >
           <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
         </div>
@@ -178,315 +180,309 @@
 </template>
 
 <script>
-
-  import _ from 'lodash';
-  import BootstrapVue from 'bootstrap-vue';
-  import { Sketch } from 'vue-color';
-  import * as elementSettings from './settings';
-
-  export default {
-    data () {
-      return {
-        ready: false,
-        component: {}
-      }
-    },
-    components: {
-      BootstrapVue,
-      'sketch-picker': Sketch,
-      'input-font-family': elementSettings.FontFamily,
-      'input-button-caret': elementSettings.ButtonCaret,
-    },
-    computed: {
-      currentComponent() {
-        return this.$store.getters["module/currentComponent"];
-      }
-    },
-    watch : {
-      currentComponent: {
-        handler: function(currentComponent) {
-
-          let module = this.$store.getters["module/module"];
-          if (!_.isEmpty(currentComponent) &&  (currentComponent.componentId >= 0) ) {
-            this.component = module.structure.columns[currentComponent.columnId].components[currentComponent.componentId];
-            this.ready = true;
-          } else {
-            this.ready = false;
-          };
-
-        },
-        deep: true
+import _ from "lodash";
+import BootstrapVue from "bootstrap-vue";
+import { Sketch } from "vue-color";
+import * as elementSettings from "./settings";
+export default {
+  data() {
+    return {
+      ready: false,
+      component: {}
+    };
+  },
+  components: {
+    BootstrapVue,
+    "sketch-picker": Sketch,
+    "input-font-family": elementSettings.FontFamily,
+    "input-font-style": elementSettings.FontStyle,
+    "input-button-caret": elementSettings.ButtonCaret
+  },
+  computed: {
+    currentComponent() {
+      return this.$store.getters["module/currentComponent"];
+    }
+  },
+  watch: {
+    currentComponent: {
+      handler: function(currentComponent) {
+        let module = this.$store.getters["module/module"];
+        if (!_.isEmpty(currentComponent) && currentComponent.componentId >= 0) {
+          this.component =
+            module.structure.columns[currentComponent.columnId].components[
+              currentComponent.componentId
+            ];
+          this.ready = true;
+        } else {
+          this.ready = false;
+        }
       },
+      deep: true
+    }
+  },
+  methods: {
+    toggleSketch(e) {
+      const inputElement = e.toElement;
+      $(inputElement)
+        .closest(".content-colorpicker")
+        .find(".sketch-picker, .st-remove-sketch")
+        .toggleClass("st-show-element");
     },
-    methods: {
-      toggleSketch(e){
-        const inputElement = e.toElement;
-        $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch').toggleClass('st-show-element');
-      },
 
-      onFileChange(e) {
-        const files = e.target.files || e.dataTransfer.files;
+    onFileChange(e) {
+      const files = e.target.files || e.dataTransfer.files;
 
-        if (!files.length)
-          return;
-        
-        this.createImage(files[0]);
-      },
-      createImage(file) {
-        const reader = new FileReader();
-        const vm = this;
+      if (!files.length) return;
 
-        reader.onload = (e) => {
-          vm.image = e.target.result;
+      this.createImage(files[0]);
+    },
+    createImage(file) {
+      const reader = new FileReader();
+      const vm = this;
 
-          // Upload Image
-          this.$store.dispatch('module/uploadImages', {
-            images: [ vm.image ],
-          }).then((res) => {
-            this.updateAttributePlaceholder('customer/modules' + res[0]);
+      reader.onload = e => {
+        vm.image = e.target.result;
+
+        // Upload Image
+        this.$store
+          .dispatch("module/uploadImages", {
+            images: [vm.image]
+          })
+          .then(res => {
+            this.updateAttributePlaceholder("customer/modules" + res[0]);
           });
-        };
+      };
 
-        reader.readAsDataURL(file); 
+      reader.readAsDataURL(file);
+    },
 
-      },
+    updateAttributePlaceholder(e) {
+      this.component.attribute.placeholder = e;
 
-      updateAttributePlaceholder(e) {
-        this.component.attribute.placeholder = e;
+      _.each(this.component.settings, option => {
+        if (option.name === "placeholder") {
+          option.value = e;
+        }
+      });
 
-        _.each(this.component.settings, (option) => {
-          if (option.name === 'placeholder') {
-            option.value = e;
-          };
-        });    
-      
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style || {},
-          attribute: this.component.attribute || {}
-        });
-      
-      },
-      
-      saveComponent(evt) {
-        let valTarget = evt.target.value;
-        let nameTarget = evt.target.name;
+      this.$store.commit("module/setChangeSettingComponent", {
+        style: this.component.style || {},
+        attribute: this.component.attribute || {}
+      });
+    },
 
-        _.each(this.component.settings, (option, indexOption) => {
+    saveComponentByEvent(evt) {
+      this.saveComponent(evt.target.name, evt.target.value);
+    },
 
-          
-          if (option.link === 'style') {
-            
-            if ( option.group && option.group.length > 0 ){
-              _.each(option.group, (optionGroup, indexGroup) => {
-
-                if (optionGroup.name === nameTarget){
-
-                  if (optionGroup.type === 'color'){
-                    this.component.style[optionGroup.name] = optionGroup.value.hex;
-                  }else{
-                    if(optionGroup.type === 'select'){
-                      this.component.style[optionGroup.name] = valTarget;
-                    }else{
-                      this.component.style[optionGroup.name] = optionGroup.value;
-                    }
-                  };
-                }
-             
-              }); 
-            
-            }else{
-              
-              if (option.name === nameTarget){
-                if (option.type === 'color'){
-                  this.component.style[option.name] = option.value.hex;
-                }else{
-                  this.component.style[option.name] = option.value;
-                };
-              }
-
-            };
-          };
-
-          if (option.link === 'attribute') {
-            
-            if (option.group && option.group.length > 0 ){
-              _.each(option.group, (optionGroup, indexGroup) => {
-                if (optionGroup.name === nameTarget){
-                  if(optionGroup.type === 'select'){
-                    this.component.attribute[optionGroup.name] = valTarget;
-                  }else{
-                    this.component.attribute[optionGroup.name] = optionGroup.value;
+    saveComponent(nameTarget, valTarget) {
+      _.each(this.component.settings, (option, indexOption) => {
+        if (option.link === "style") {
+          if (option.group && option.group.length > 0) {
+            _.each(option.group, (optionGroup, indexGroup) => {
+              if (optionGroup.name === nameTarget) {
+                if (optionGroup.type === "color") {
+                  this.component.style[optionGroup.name] =
+                    optionGroup.value.hex;
+                } else {
+                  if (optionGroup.type === "select") {
+                    this.component.style[optionGroup.name] = valTarget;
+                  } else {
+                    this.component.style[optionGroup.name] = optionGroup.value;
                   }
                 }
-              }); 
-            }else{
-              if (option.name === nameTarget){
-                if (option.type === 'select' ){
-                  this.component.attribute[option.name] = valTarget;
-                }else{
-                  this.component.attribute[option.name] = option.value;
-                }
               }
-            };
-
-          };
-
-        });
-
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style || {},
-          attribute: this.component.attribute || {}
-        }); 
-      },
-
-      // TODO Update date used mutation.
-      updateColorPickerSetting( name, link , isGroup ){
-        _.each(this.component.settings, (option, index) => {
-            if ( isGroup ){
-               _.each(option.group, (optionGroup, indexGroup) => {
-                if (optionGroup.name === name) {
-                  if (link === 'style'){
-                    this.component[link][name] = optionGroup.value.hex;
-                  }else{
-                    this.component[link][name] = optionGroup.value;
-                  } 
-                }  
-              });
-            }else{
-              if (option.name === name) {
-                if (link === 'style'){
-                  this.component[link][name] = option.value.hex;
-                }else{
-                  this.component[link][name] = option.value;
-                }
+            });
+          } else {
+            if (option.name === nameTarget) {
+              if (option.type === "color") {
+                this.component.style[option.name] = option.value.hex;
+              } else {
+                this.component.style[option.name] = option.value;
               }
             }
-        });
+          }
+        }
 
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.component.style || {},
-          attribute: this.component.attribute || {}
-        });
-      },
-      shouldRenderInStyles(plugin) {
-        return _.indexOf(plugin.target,'styles') >= 0;
-      }
+        if (option.link === "attribute") {
+          if (option.group && option.group.length > 0) {
+            _.each(option.group, (optionGroup, indexGroup) => {
+              if (optionGroup.name === nameTarget) {
+                if (optionGroup.type === "select") {
+                  this.component.attribute[optionGroup.name] = valTarget;
+                } else {
+                  this.component.attribute[optionGroup.name] =
+                    optionGroup.value;
+                }
+              }
+            });
+          } else {
+            if (option.name === nameTarget) {
+              if (option.type === "select") {
+                this.component.attribute[option.name] = valTarget;
+              } else {
+                this.component.attribute[option.name] = option.value;
+              }
+            }
+          }
+        }
+      });
+
+      this.$store.commit("module/setChangeSettingComponent", {
+        style: this.component.style || {},
+        attribute: this.component.attribute || {}
+      });
+    },
+
+    // TODO Update date used mutation.
+    updateColorPickerSetting(name, link, isGroup) {
+      _.each(this.component.settings, (option, index) => {
+        if (isGroup) {
+          _.each(option.group, (optionGroup, indexGroup) => {
+            if (optionGroup.name === name) {
+              if (link === "style") {
+                this.component[link][name] = optionGroup.value.hex;
+              } else {
+                this.component[link][name] = optionGroup.value;
+              }
+            }
+          });
+        } else {
+          if (option.name === name) {
+            if (link === "style") {
+              this.component[link][name] = option.value.hex;
+            } else {
+              this.component[link][name] = option.value;
+            }
+          }
+        }
+      });
+      this.$store.commit("module/setChangeSettingComponent", {
+        style: this.component.style || {},
+        attribute: this.component.attribute || {}
+      });
+    },
+    shouldRenderInStyles(plugin) {
+      return _.indexOf(plugin.target, "styles") >= 0;
     }
   }
+};
 </script>
 
 <style lang="less">
-  @focus: #78DCD6;
-  @focus-light: lighten(@focus, 30%);
+@focus: #78dcd6;
+@focus-light: lighten(@focus, 30%);
 
-  .vue-js-switch {
-    margin-top: 4px
-  }
+.vue-js-switch {
+  margin-top: 4px;
+}
 
-  .card-header{
-    padding-bottom: 20px;
+.card-header {
+  padding-bottom: 20px;
 
-    ul{
-      margin-left: -10px;
-      margin-right: -10px;
-      border-bottom: 1px solid #DDDDDD;
+  ul {
+    margin-left: -10px;
+    margin-right: -10px;
+    border-bottom: 1px solid #dddddd;
 
-      .nav-item{
-        border-top: 1px solid #DDDDDD;
-        border-left: 1px solid #DDDDDD;
-        margin-bottom: -2px;
+    .nav-item {
+      border-top: 1px solid #dddddd;
+      border-left: 1px solid #dddddd;
+      margin-bottom: -2px;
 
-        &:first-child{
-          margin-left: 10px;
-        }
-
-        &:last-of-type{
-          border-right: 1px solid #DDDDDD;
-        }
-        .nav-link{
-          margin-right:0;
-          padding: 4px 7px;
-          border: 0;
-          border-radius:0;
-          font-weight: 300;
-          color: #666666;
-          &.active{
-            border-bottom: 2px solid @focus;
-            background: @focus-light;
-          }
-          &:focus{
-            background-color: transparent;
-          }
-          &:hover{
-            background-color:@focus-light;
-          }
-        }
+      &:first-child {
+        margin-left: 10px;
       }
-    }
-  }
 
-  .plugin-wrapper,
-  .row-toggle{
-    border-bottom: 1px solid #f4f4f4;
-    margin-bottom: 15px;
-
-    b{
-      font-weight: 300;
-      color: #333333;
-    }
-  }
-
-  button.module-settings-item-right{
-    line-height: 13px;
-    box-shadow: none;
-    border-bottom: 1px solid #F0F0F0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    padding: 15px 10px 13px 10px; 
-
-    &:hover, &:visited,
-    &:focus, &:active,
-    &:active:focus{
-      color: #666666;
-      outline: none;
-      box-shadow: none;
-    }
-    p{
-      font-size: 13px;
-      margin: 0;
-      padding: 0;
-      font-weight: 300;
-
-      i{
+      &:last-of-type {
+        border-right: 1px solid #dddddd;
+      }
+      .nav-link {
+        margin-right: 0;
+        padding: 4px 7px;
+        border: 0;
+        border-radius: 0;
+        font-weight: 300;
         color: #666666;
-        vertical-align: baseline!important;
-        transform: rotate(0deg);
-        margin-right: 2px;
+        &.active {
+          border-bottom: 2px solid @focus;
+          background: @focus-light;
+        }
+        &:focus {
+          background-color: transparent;
+        }
+        &:hover {
+          background-color: @focus-light;
+        }
       }
     }
-    i{
-      color:#CCCCCC;
-      line-height: 12px!important;
+  }
+}
+
+.plugin-wrapper,
+.row-toggle {
+  border-bottom: 1px solid #f4f4f4;
+  margin-bottom: 15px;
+
+  b {
+    font-weight: 300;
+    color: #333333;
+  }
+}
+
+button.module-settings-item-right {
+  line-height: 13px;
+  box-shadow: none;
+  border-bottom: 1px solid #f0f0f0;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  padding: 15px 10px 13px 10px;
+
+  &:hover,
+  &:visited,
+  &:focus,
+  &:active,
+  &:active:focus {
+    color: #666666;
+    outline: none;
+    box-shadow: none;
+  }
+  p {
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+    font-weight: 300;
+
+    i {
+      color: #666666;
+      vertical-align: baseline !important;
+      transform: rotate(0deg);
+      margin-right: 2px;
     }
   }
-  button[aria-expanded="false"]{
-    opacity: 0.5;
-    transition: all 0.3s linear;
-
-    &:hover{
-      opacity: 1;
-    }
+  i {
+    color: #cccccc;
+    line-height: 12px !important;
   }
+}
+button[aria-expanded="false"] {
+  opacity: 0.5;
+  transition: all 0.3s linear;
 
-  button[aria-expanded="true"]{
+  &:hover {
     opacity: 1;
-
-    p{
-      font-weight: 600!important;
-    }
-    i{
-      transform: rotate(180deg);
-    }
   }
+}
+
+button[aria-expanded="true"] {
+  opacity: 1;
+
+  p {
+    font-weight: 600 !important;
+  }
+  i {
+    transform: rotate(180deg);
+  }
+}
 </style>
