@@ -30,13 +30,13 @@
 
       <div v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" class="form-group" :key="key">
         <label class="col-sm-7 control-label"><b>{{ tinySetting.title }}</b></label>
-        <div class="col-sm-5">
+        <div class="col-sm-5 control-label">
           <span>
             <toggle-button :value="tinySetting.value" active-color="#78DCD6"  @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
           </span>
         </div>
         <!-- Input if config needs it -->
-        <div class="col-sm-12">
+        <div v-if="tinySetting.type !== undefined" class="col-sm-12 control-label">
           <div class="btn-group number-input">
             <input v-if="tinySetting.value == true"
               class="btn toggleable"
@@ -141,7 +141,7 @@
       toggleSetting(value, setting) {
         const options = {};
         let content;
-        
+
         // if toogle is disabled the inputs value will be 0
         if( value == false){
           content = 0;
