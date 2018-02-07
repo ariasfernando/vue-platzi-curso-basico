@@ -6,13 +6,10 @@
         <div class="col-sm-5">
           <span>
             <toggle-button 
-              color="#78DCD6" 
+              active-color="#78DCD6" 
               ref="key"
               :value="mobileSetting.value" 
-              :name="key"
-              :sync="true" 
-              :labels="true" 
-              @change="toggleSetting">
+              @change="(newValue)=>toggleSetting(newValue,key)">
             </toggle-button>
           </span>
         </div>
@@ -51,32 +48,7 @@ export default {
       }
     },
     methods: {
-      toggle(e) {
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          enabled: e.value,
-        };
-        // Update state of the component
-        this.$store.commit('module/togglePlugin', payload);
-
-        // Set current component
-        this.$store.commit("module/setCurrentComponent", {
-          columnId: payload.columnId,
-          componentId: payload.componentId
-        });
-        // Update component view in the third column
-        this.$store.commit('module/setChangeSettingComponent',{
-          style: this.module.structure.columns[payload.columnId].components[payload.componentId].style || {},
-          attribute: this.module.structure.columns[payload.columnId].components[payload.componentId].attribute || {}
-        });
-      },
-      toggleSetting(e) {
-        const target = e.srcEvent.target;
-        const value = e.value;
-        const setting = target.parentElement.attributes.getNamedItem('name').value;
-        
+      toggleSetting(value, setting) {
         const options = {};
         options[setting] = {
           value,

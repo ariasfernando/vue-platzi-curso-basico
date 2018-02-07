@@ -38,7 +38,7 @@ export default {
     this.isBlockLineHeight = this.getValue("isBlockLineHeight");
     this.fontStyleSettings = [
       {
-        label: "Line size",
+        label: "Font size",
         name: "fontSize",
         value: this.getValue("fontSize"),
         min: 5,
