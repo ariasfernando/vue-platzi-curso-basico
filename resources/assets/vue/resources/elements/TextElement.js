@@ -22,6 +22,7 @@ function textDefault() {
       valign: 'middle',
       align: 'left',
       bgcolor: 'transparent',
+      hideElement: false,
     },
     componentSettings: ['font-family', 'font-style'],
     settings: [

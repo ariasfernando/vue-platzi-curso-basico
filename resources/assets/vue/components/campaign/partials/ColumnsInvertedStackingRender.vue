@@ -1,27 +1,28 @@
 <template>
     <div class="stx-wrapper">
-      <table 
+      <table
         class="st-col st-mso-full-width"
         :align="columnId == 1 ? 'right' : 'left'"
         dir="ltr"
-        cellpadding="0" 
-        cellspacing="0" 
+        cellpadding="0"
+        cellspacing="0"
         border="0"
         :width="columnWidthPadding / this.numColumns"
       >
-        <tr 
-          v-for="(component, componentId) in column.components" 
-          :key="componentId" 
+        <tr
+          v-for="(component, componentId) in column.components"
+          :key="componentId"
           @click="setComponent(moduleId, columnId, componentId)"
+          :class="component.attribute.hideElement ? 'stx-hide-element st-remove-element' : '' "
         >
-          <td 
-            width="100%" 
+          <td
+            width="100%"
             :style="styles"
             :bgcolor="columnColor" 
             :valign="column.attribute.valign"
             :align="component.attribute.align || 'center'"
           >
-            <component 
+            <component
               :is="component.type"
               :component="component"
               :module-id="moduleId"
@@ -101,7 +102,7 @@
           "<![endif]";
       },
       styles() {
-        let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`; 
+        let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`;
 
         return padding;
       },  

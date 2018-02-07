@@ -46,6 +46,7 @@ function buttonDefault() {
     componentSettings: ['font-family', 'font-style', 'button-caret'],
     styleOptions: {
       isBlockLineHeight: false,
+
     },
     settings: [
       {

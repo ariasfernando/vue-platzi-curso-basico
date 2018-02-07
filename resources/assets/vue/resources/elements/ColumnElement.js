@@ -28,6 +28,7 @@ function columnDefault() {
       width: '100%',
       valign: 'middle',
       bgcolor: 'transparent',
+      hideElement: false,
     },
     settings: [
       {
