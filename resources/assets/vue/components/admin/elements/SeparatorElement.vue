@@ -65,13 +65,8 @@
         },
         defaultInnerTdStyle: {
           display:'block',
-          margin:'0 auto',
-          '-webkit-text-size-adjust':'100%',
-          '-ms-text-size-adjust':'100%',
-          'mso-line-height-rule':'exactly',
-          'mso-table-lspace':'0pt',
-          'mso-table-rspace':'0pt'
-        },
+          margin:'0 auto'
+        }
       }
     },
     computed: {
