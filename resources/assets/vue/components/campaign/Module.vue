@@ -57,12 +57,16 @@
                   <columns-inverted-stacking-render
                     :module-id="moduleId"
                     :column="module.structure.columns[1]"
-                    :column-id="1">
+                    :column-id="1"
+                    :column-width-padding="columnWidthPadding"
+                    >
                   </columns-inverted-stacking-render>
                   <columns-inverted-stacking-render
                     :module-id="moduleId"
                     :column="module.structure.columns[0]"
-                    :column-id="0">
+                    :column-id="0"
+                    :column-width-padding="columnWidthPadding"
+                    >
                   </columns-inverted-stacking-render>
 
                 </td>
@@ -117,6 +121,7 @@
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
   import { mixin as clickaway } from 'vue-clickaway';
+  import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
@@ -140,14 +145,17 @@
       },
       msoStartingCommentInverted() {
         return "[if gte mso 9]>" +
-          "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center' dir='rtl'>" +
+          "<table width='" + this.columnWidthPadding + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center' dir='rtl'>" +
           "<tr>" +
-          "<td style='width: " + this.templateWidth / this.module.structure.columns.length + "px !important' dir='ltr'>" +
+          "<td style='width: " + this.columnWidthPadding / this.module.structure.columns.length + "px !important' dir='ltr'>" +
           "<![endif]";
       },
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
       },
+      columnWidthPadding(){
+        return this.templateWidth - (_.parseInt(this.module.structure.style.paddingLeft) + _.parseInt(this.module.structure.style.paddingRight));
+      }
     },
     methods: {
       setComponent(moduleId, columnId, componentId) {

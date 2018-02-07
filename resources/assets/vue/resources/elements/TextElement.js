@@ -45,6 +45,13 @@ function textDefault() {
         value: 'normal',
       },
       {
+        link: 'style',
+        label: 'Letter Spacing',
+        name: 'letter-spacing',
+        type: 'text',
+        value: 'normal',
+      },
+      {
         link: 'attribute',
         label: 'Align',
         name: 'align',
