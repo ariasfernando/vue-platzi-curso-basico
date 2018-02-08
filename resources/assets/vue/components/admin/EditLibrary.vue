@@ -52,7 +52,7 @@
                       <!-- Field Preheader -->
                       <label for="preheader" class="col-sm-4 control-label">Preheader</label>
                       <p class="control col-sm-8">
-                        <toggle-button :value="library.config.preheader" :sync="true" :labels="true" @change="updateToggle('preheader')"></toggle-button>
+                        <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')"></toggle-button>
                       </p>
                     </div>
 
@@ -60,7 +60,7 @@
                     <div class="row" v-if="campaignConfig.process_plaintext">
                       <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
                       <p class="control col-sm-8">
-                        <toggle-button :value="library.config.plainText" :sync="true" :labels="true" @change="updateToggle('plainText')"></toggle-button>
+                        <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')"></toggle-button>
                       </p>
                     </div>
 
@@ -68,12 +68,12 @@
                     <div class="row">
                       <label for="preheader" class="col-sm-4 control-label">ESP</label>
                       <p class="control col-sm-1">
-                        <toggle-button :value="library.config.esp" :sync="true" :labels="true" @change="updateToggle('esp')"></toggle-button>
+                        <toggle-button :value="library.config.esp" @change="updateToggle('esp')"></toggle-button>
                       </p>
                       <div v-if="library.config.esp" class="col-md-5">
                         <p class="control">
                           <select v-model="library.config.espProvider">
-                            <option v-for="(esp, key) in this.espList" v-bind:value="key">
+                            <option v-for="(esp, key) in this.espList" v-bind:value="key" :key="esp.title">
                               {{ esp.title }}
                             </option>
                           </select>
@@ -85,7 +85,7 @@
                     <div class="row" v-if="campaignConfig.enable_tagging">
                       <label for="tagging" class="col-sm-4 control-label">Tags</label>
                       <p class="control col-sm-1">
-                        <toggle-button :value="library.config.tagging" :sync="true" :labels="true" @change="updateToggle('tagging')"></toggle-button>
+                        <toggle-button :value="library.config.tagging" @change="updateToggle('tagging')"></toggle-button>
                       </p>
                     </div>
 
@@ -93,7 +93,7 @@
                     <div class="row" v-if="campaignConfig.enable_templating">
                       <label for="templating" class="col-sm-4 control-label">Enable templating</label>
                       <p class="control col-sm-1">
-                        <toggle-button :value="library.config.templating" :sync="true" :labels="true" @change="updateToggle('templating')"></toggle-button>
+                        <toggle-button :value="library.config.templating" @change="updateToggle('templating')"></toggle-button>
                       </p>
                     </div>
                 </tab>
@@ -262,7 +262,7 @@
                       <div class="col-md-12">
                         <div id="modules-container">
 
-                          <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name">
+                          <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name" :key="group.name">
 
                             <div :id="'group-container-' + group.name">
 
@@ -324,7 +324,6 @@
 <script>
   import libraryService from '../../services/library'
   import configService from '../../services/config'
-  import ToggleButton from '../common/ToggleButton.vue'
   import Tabs from '../common/Tabs.vue'
   import Tab from '../common/Tab.vue'
   import VueSticky from 'vue-sticky'
@@ -332,7 +331,6 @@
   export default {
     name: 'EditLibrary',
     components: {
-      ToggleButton,
       Tabs,
       Tab
     },
