@@ -72,7 +72,7 @@
                        v-model="generalSetting.transparentChecked"
                        :name="generalSetting.name +'-transparent'"
                        :value="generalSetting.transparentChecked"
-                       @click="triggerInputColor(generalSetting.sketchPickerValue.hex, generalSetting.name, generalSetting.transparentChecked, generalSetting.link)"
+                       @click="triggerInputColor(generalSetting.sketchPickerValue.hex, generalSetting.name, !generalSetting.transparentChecked, generalSetting.link)"
                 >
               </div>
               
