@@ -36,11 +36,10 @@
                 <!-- Input Text -->
                 <el-input
                   v-if="setting.type === 'text'"
-                  v-validate="'required'"
                   v-model="setting.value"
                   :placeholder="setting.label"
                   :name="setting.name"
-                  @change="(newValue)=>saveComponent(newValue, setting.name)"
+                  @change="(newValue)=>saveComponent(setting.name, newValue)"
                   :class="{'is-danger': errors.has(setting.name) }"
                 ></el-input>
 
