@@ -34,14 +34,14 @@
                        @change="onFileChange">
 
                 <!-- Input Text -->
-                <input v-if="setting.type === 'text'"
-                       v-validate="'required'"
-                       v-model="setting.value"
-                       :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                       :name="setting.name"
-                       :placeholder="setting.label"
-                       type="text"
-                       @change="saveComponentByEvent">
+                <el-input
+                  v-if="setting.type === 'text'"
+                  v-model="setting.value"
+                  :placeholder="setting.label"
+                  :name="setting.name"
+                  @change="(newValue)=>saveComponent(setting.name, newValue)"
+                  :class="{'is-danger': errors.has(setting.name) }"
+                ></el-input>
 
                 <!-- Input select -->
                 <span v-if="setting.type === 'select'">
@@ -82,7 +82,7 @@
               </div>
             </div>
 
-            <div v-else-if="setting.name=='padding'">
+            <div v-else-if="setting.name === 'padding'">
               <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
               <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker"
                   v-for="(settingGroup, keyGroup) in setting.group" :key="settingGroup.name">

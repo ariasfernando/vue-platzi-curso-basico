@@ -36,7 +36,7 @@
           </span>
         </div>
         <!-- Input if config needs it -->
-        <div v-if=" tinySetting.value == true && tinySetting.type !== undefined" class="col-sm-12 control-label">
+        <div v-if=" tinySetting.value === true && tinySetting.type !== undefined" class="col-sm-12 control-label">
           <div class="btn-group number-input">
             <input
               class="btn toggleable"

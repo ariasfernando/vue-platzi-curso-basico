@@ -21,5 +21,5 @@ module.exports = {
   moduleBackgroundColor,
   imageEditor,
   variableHeight,
-  mobileStyles
+  mobileStyles,
 };

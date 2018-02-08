@@ -85,6 +85,7 @@
   import _ from 'lodash'
   import configService from '../../services/config'
   import Multiselect from 'vue-multiselect';
+  import ToggleButton from '../../plugins/common/toggle-button'
 
   export default {
     components: {
