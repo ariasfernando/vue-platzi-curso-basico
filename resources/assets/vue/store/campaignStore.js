@@ -50,7 +50,7 @@ function campaignStore() {
       },
       templateWidth(state) {
         const templateWidth = 600;
-        return state.campaign.library_config.templateWidth || templateWidth;
+        return (state.campaign.library_config && state.campaign.library_config.templateWidth) || templateWidth;
       },
       editorToolbar(state) {
         return state.editorToolbar;
