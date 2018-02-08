@@ -35,13 +35,13 @@
                 :target="component.attribute.target"
               >
                 <img 
-                  class="st-resize"
                   border="0"
                   style="border: 0; display: block;" 
                   :src="imageUrl(component.attribute.placeholder)" 
                   :width="component.attribute.width" 
                   :height="component.attribute.height"
                   :data-open-element-config="elementConfig"
+                  :class="getMobileClasses(component,'img')"
                 >
               </a>
               <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>

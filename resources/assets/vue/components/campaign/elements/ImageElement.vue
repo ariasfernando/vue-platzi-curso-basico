@@ -41,7 +41,6 @@
                 :target="component.attribute.target"
               >
                 <img 
-                  class="st-resize"
                   style="border: 0; display: block;"
                   border="0"
                   :src="imageUrl(component.attribute.placeholder)"
@@ -49,6 +48,7 @@
                   :height="component.attribute.height"
                   :alt="component.attribute.alt"
                   :title="component.attribute.title"
+                  :class="getMobileClasses(component,'img')"
                 >
               </a>
             </td>
