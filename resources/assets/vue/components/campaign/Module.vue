@@ -1,7 +1,7 @@
 <template>
-  <tr v-if="module.type === 'custom'" 
-      class="stx-module-wrapper" 
-      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }" 
+  <tr v-if="module.type === 'custom'"
+      class="stx-module-wrapper"
+      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
       @click="setActiveModule"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
@@ -13,8 +13,8 @@
     </td>
   </tr>
 
-  <tr v-else class="stx-module-wrapper" 
-      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }" 
+  <tr v-else class="stx-module-wrapper"
+      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
       @click="setActiveModule"
 
       @mouseover="setModulesMouseOver"
@@ -25,11 +25,11 @@
         :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
         :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
-      <table 
-        width="100%" 
-        cellspacing="0" 
-        cellpadding="0" 
-        border="0" 
+      <table
+        width="100%"
+        cellspacing="0"
+        cellpadding="0"
+        border="0"
         :class="{ 'stx-wrapper': module.structure.columns.length === 1 }"
         >
         <!--2 COLUMNS -->
@@ -43,26 +43,30 @@
 
           <!--2 COLUMNS INVERTED STACKING ONLY FOR 2 COLUMNS-->
           <td width="100%" v-else-if="!module.structure.columnsFixed && module.structure.invertedStacking">
-            <table 
-              width="100%" 
-              cellspacing="0" 
-              cellpadding="0" 
+            <table
+              width="100%"
+              cellspacing="0"
+              cellpadding="0"
               border="0"
-              dir="rtl" 
+              dir="rtl"
               >
               <tr>
                 <td width="100%">
                   <comment :content="msoStartingCommentInverted"></comment>
 
-                  <columns-inverted-stacking-render 
-                    :module-id="moduleId" 
-                    :column="module.structure.columns[1]" 
-                    :column-id="1">
+                  <columns-inverted-stacking-render
+                    :module-id="moduleId"
+                    :column="module.structure.columns[1]"
+                    :column-id="1"
+                    :column-width-padding="columnWidthPadding"
+                    >
                   </columns-inverted-stacking-render>
-                  <columns-inverted-stacking-render 
-                    :module-id="moduleId" 
-                    :column="module.structure.columns[0]" 
-                    :column-id="0">
+                  <columns-inverted-stacking-render
+                    :module-id="moduleId"
+                    :column="module.structure.columns[0]"
+                    :column-id="0"
+                    :column-width-padding="columnWidthPadding"
+                    >
                   </columns-inverted-stacking-render>
 
                 </td>
@@ -82,7 +86,11 @@
         <!--2 COLUMNS -->
 
         <!--1 COLUMN -->
-        <tr v-else v-for="(component, componentId) in module.structure.columns[0].components" @click.prevent="setComponent(moduleId, 0, componentId)">
+        <tr v-else
+          v-for="(component, componentId) in module.structure.columns[0].components"
+          @click.prevent="setComponent(moduleId, 0, componentId)"
+          :class="component.attribute.hideElement ? 'stx-hide-element st-remove-element' : '' "
+        >
           <td :valign="component.attribute.valign" :align="component.attribute.align || 'left'">
             <component
               :is="component.type"
@@ -113,6 +121,7 @@
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
   import { mixin as clickaway } from 'vue-clickaway';
+  import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
@@ -136,14 +145,17 @@
       },
       msoStartingCommentInverted() {
         return "[if gte mso 9]>" +
-          "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center' dir='rtl'>" +
+          "<table width='" + this.columnWidthPadding + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center' dir='rtl'>" +
           "<tr>" +
-          "<td style='width: " + this.templateWidth / this.module.structure.columns.length + "px !important' dir='ltr'>" +
+          "<td style='width: " + this.columnWidthPadding / this.module.structure.columns.length + "px !important' dir='ltr'>" +
           "<![endif]";
       },
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
       },
+      columnWidthPadding(){
+        return this.templateWidth - (_.parseInt(this.module.structure.style.paddingLeft) + _.parseInt(this.module.structure.style.paddingRight));
+      }
     },
     methods: {
       setComponent(moduleId, columnId, componentId) {
@@ -157,7 +169,7 @@
         }, 50);
       },
       getModuleRow( event ){
-        let $row = null; 
+        let $row = null;
 
         if( $(event.target).hasClass('stx-module-wrapper') ){
           $row = $(event.target);
@@ -194,7 +206,7 @@
 
           }, 50);
         }
-        
+
       },
       setModulesMouseLeave(e){
         let $row = this.getModuleRow(e);

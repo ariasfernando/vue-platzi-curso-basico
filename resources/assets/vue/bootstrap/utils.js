@@ -1,7 +1,9 @@
+import 'url-search-params-polyfill';
+
 module.exports = {
   log(msg) {
-    const url = new URL(window.location.href);
-    const debug = url.searchParams.get('debug');
+    const searchParams = new URLSearchParams(window.location.search);
+    const debug = searchParams.get('debug');
 
     if (debug === 'true' || debug === '1') {
       console.log(msg);

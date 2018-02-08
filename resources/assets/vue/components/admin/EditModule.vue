@@ -204,29 +204,16 @@
 
       &.stx-desktop-mode {
         width: 640px;
+
+        .st-hide-desktop {
+          display: none;
+        }
       }
       &.stx-mobile-mode {
         width: 480px;
-        .st-wrapper{
-          width: 100% !important;
-        }
-        .st-wrapper-content{ 
-          padding: 0px !important;
-        }
-        .st-col{ 
-          display: block!important; 
-          width: 100%!important; 
-          padding: 0px !important;
-        }
-        .st-resize{ 
-          width: 100%!important;
-          display: block!important; 
-          height: auto !important;
-        }
-        .st-inverted-stacking{
-          display:flex;
-          flex-direction:column-reverse;
-        }
+        // Mobile Classes
+        @import '../../../less/base/commons/mobile/mobile_core_styles';
+        @import '../../../less/base/commons/mobile/mobile_client_styles';
       }
     }
 
@@ -859,17 +846,6 @@
         height: 50px;
       }
 
-      input[type=text]{
-        height: 22px;
-        background: #F4F4F4;
-        border-radius: 2px;
-        border: none;
-        float: right;
-        font-size: 11px;
-        font-weight: 300;
-        width: 65px;
-      }
-
       input[name="href"]{
         width: 115px;
       }
@@ -877,7 +853,8 @@
       label{
         text-align: left;
         color: #666666;
-        padding-top: 2px;
+        padding-top: 10px;
+        padding-bottom: 10px;
         font-weight: 300;
         padding-right: 0px;
       }

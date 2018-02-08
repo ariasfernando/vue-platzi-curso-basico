@@ -146,7 +146,7 @@
     padding: 8px 10px;
     box-shadow: 0px 0px 4px #999999;
     overflow: hidden;
-    position: fixed;
+    position: sticky;
     top: 45px;
     z-index: 1000;
   }
@@ -154,8 +154,11 @@
   .container-campaign-subwrapper{
     height: calc(~"100vh - 90px");
     width: 100%;
-    position: fixed;
-    top: 90px;
+    position: relative;
+    top: 0px;
+    min-width: 1200px;
+    overflow-x: auto;
+    overflow-y: hidden; 
   }
 
   .component-settings-wrapper {

@@ -30,8 +30,9 @@
         </div>
         <div class="row"
              :class="'field-' + generalSetting.name"
-             v-for="(generalSetting, keyGeneral) in module.structure.settings">
-
+             v-for="(generalSetting, keyGeneral) in module.structure.settings"
+             :key="generalSetting.name"
+             >
           <div v-if="!generalSetting.group" >
             <label class="col-sm-7 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
             <div class="col-sm-5 position-relative content-colorpicker">
@@ -71,7 +72,7 @@
                        v-model="generalSetting.transparentChecked"
                        :name="generalSetting.name +'-transparent'"
                        :value="generalSetting.transparentChecked"
-                       @click="triggerInputColor(generalSetting.sketchPickerValue.hex, generalSetting.name, generalSetting.transparentChecked, generalSetting.link)"
+                       @click="triggerInputColor(generalSetting.sketchPickerValue.hex, generalSetting.name, !generalSetting.transparentChecked, generalSetting.link)"
                 >
               </div>
               
@@ -89,7 +90,7 @@
 
           <div v-else>
             <label class="col-sm-4 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
-            <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" v-for="(generalSettingGroup, keyGeneral) in generalSetting.group" >
+            <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" v-for="(generalSettingGroup, keyGeneral) in generalSetting.group" :key="generalSettingGroup.name">
 
              <!-- Input text -->
               <input v-if="generalSettingGroup.type === 'text'"
@@ -157,7 +158,7 @@
           <div class="col-sm-12">
             <div>
               <!-- Module Plugins -->
-              <div v-for="(plugin, moduleKey) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
+              <div v-for="(plugin, moduleKey) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name" :key="plugin.name">
                 <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin"></component>
               </div>
               <!-- /Module Plugins -->
@@ -172,7 +173,7 @@
               <label class="col-sm-7 control-label"><b>Fixed Columns</b></label>
               <div class="col-sm-5">
                 <span>
-                  <toggle-button :value="module.structure.columnsFixed" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
+                  <toggle-button :value="module.structure.columnsFixed" active-color="#78DCD6" @change="toggle"></toggle-button>
                 </span>
               </div>
             </div>
@@ -186,7 +187,7 @@
               <label class="col-sm-7 control-label"><b>Inverted Stacking on Mobile</b></label>
               <div class="col-sm-5">
                 <span>
-                  <toggle-button :value="module.structure.invertedStacking" color="#78DCD6" :sync="true" :labels="true" @change="toggleStacking"></toggle-button>
+                  <toggle-button :value="module.structure.invertedStacking" active-color="#78DCD6" @change="toggleStacking"></toggle-button>
                 </span>
               </div>
             </div>
@@ -269,11 +270,11 @@
           value: e.target.value,
         });
       },
-      toggle(e) {
-        this.$store.commit("module/setColumnsFixed", e.value);
+      toggle(value) {
+        this.$store.commit("module/setColumnsFixed", value);
       },
-      toggleStacking(e) {
-        this.$store.commit("module/setInvertedStacking", e.value);
+      toggleStacking(value) {
+        this.$store.commit("module/setInvertedStacking", value);
       },
       setColumns(value) {
         let cols = value;

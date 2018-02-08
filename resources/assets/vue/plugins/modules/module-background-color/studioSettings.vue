@@ -5,7 +5,7 @@
         <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
+            <toggle-button :value="enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
           </span>
         </div>
       </div>
@@ -33,10 +33,10 @@ export default {
       }
     },
     methods: {
-      toggle(e) {
+      toggle(value) {
         const payload = {
           plugin: this.name,
-          enabled: e.value,
+          enabled: value,
         };
 
         this.$store.commit('module/togglePlugin', payload);

@@ -28,7 +28,7 @@ let gulpsync = require('gulp-sync')(gulp);
 
 require('elixir-jshint');
 require('laravel-elixir-vueify');
-
+ 
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -77,7 +77,9 @@ gulp.task('elixir-copy-bower', function () {
       .copy(bowerPath + 'jquery-ui/themes/ui-lightness/images', 'public/css/images/jquery-ui')
       // TinyMCE
       .copy(bowerPath + 'tinymce/skins', 'public/css/tinymce')
-      .copy(bowerPath + 'tinymce/plugins/textcolor', 'public/js/plugins/tinymce/plugins/textcolor');
+      .copy(bowerPath + 'tinymce/plugins/textcolor', 'public/js/plugins/tinymce/plugins/textcolor')
+      // element-ui Fonts
+      .copy('node_modules/element-ui/lib/theme-chalk/fonts', 'public/build/css/fonts');
   });
 });
 
@@ -287,6 +289,8 @@ gulp.task('elixir-less', () => {
    return elixir((mix) => {
         mix.less( 'base/tool/tool.less');
         mix.less( 'base/base-v2/admin.less');
+        mix.less( 'base/commons/mobile/mobile_core_styles.less');
+        mix.less( 'base/commons/mobile/mobile_client_styles.less');
     });
 });
 

@@ -18,6 +18,7 @@ function imageDefault() {
       valign: 'middle',
       target: '_blank',
       width: '100%',
+      hideElement: false,
     },
     settings: [
       {
@@ -65,7 +66,7 @@ function imageDefault() {
         label: 'Width',
         name: 'width',
         type: 'text',
-        value: '220',
+        value: '100%',
       },
       {
         link: 'attribute',

@@ -14,7 +14,7 @@
 	</div>
 
 	<div id="modal-track-proof" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-md">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 
 				<div class="modal-header">
@@ -31,10 +31,10 @@
 						<table class="table table-condensed" id="track-table">
 							<thead>
 								<tr>
-									<th class='col-xs-5'>Email</th>
-									<th class='col-xs-3'>Status</th>
+									<th class='col-xs-4'>Email</th>
+									<th class='col-xs-2'>Status</th>
 									<th class='col-xs-3'>Last modified date</th>
-									<th class='col-xs-1'></th>
+									<th class='col-xs-3'>Comment</th>
 								</tr>
 							</thead>
 							<tbody></tbody>
