@@ -19,10 +19,6 @@ export default {
       type: Boolean,
       default: false
     },
-    sync: {
-      type: Boolean,
-      default: false
-    },
     activeColor: {
       type: String,
       default: "#78DCD6"

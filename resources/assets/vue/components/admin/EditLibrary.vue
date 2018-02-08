@@ -32,9 +32,12 @@
                       <div class="col-md-6">
                         <label for="name">Name</label>
                         <p class="control">
-                          <input v-model="library.name" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('name') }" name="name" type="text"
-                                 placeholder="Enter name here.">
+                          <el-input
+                                v-validate="'required'"
+                                v-model="library.name"
+                                placeholder="Enter name here."
+                                :class="{'is-danger': errors.has('name') }"
+                          ></el-input>
                           <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
                         </p>
                       </div>
@@ -43,7 +46,13 @@
                       <div class="col-md-6">
                         <label for="description">Description</label>
                         <p class="control">
-                          <input v-model="library.description" name="description" type="text" placeholder="Enter description here.">
+
+                          <el-input
+                                v-model="library.description"
+                                placeholder="Enter description here."
+                                :class="{'is-danger': errors.has('name') }"
+                                name="description"
+                          ></el-input>
                         </p>
                       </div>
                     </div>
@@ -240,7 +249,11 @@
                       <div class="col-md-3">
                         <label for="externalCssLink">External CSS Link</label>
                         <p class="control">
-                          <input v-model="library.config.externalCssLink" name="linkColor" type="text" placeholder="http://www.example.com/css/styles.css">
+                          <el-input
+                            v-model="library.config.externalCssLink"
+                            name="linkColor" 
+                            placeholder="http://www.example.com/css/styles.css"
+                          ></el-input>
                         </p>
                       </div>
                     </div>
@@ -268,15 +281,20 @@
 
                               <label for="fontFamily">Group Name</label>
                               <p :class="{ 'control': true }">
-                                <input v-model="group.name" v-validate="'required'"
-                                       :class="{'input': true, 'is-danger': errors.has('groupName-' + idx) }"
-                                       :name="'modules[' + idx + '][name]'" type="text" placeholder="Enter group name">
+
+                                <el-input
+                                  v-model="group.name"
+                                  v-validate="'required'"
+                                  :name="'modules[' + idx + '][name]'"
+                                  placeholder="Enter group name"
+                                  :class="{'is-danger': errors.has('groupName-' + idx) }"
+                                ></el-input>
                                 <span v-show="errors.has('groupName-' + idx)"
                                       class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
                               </p>
 
                               <select v-model="group.modules" :name="'modules[' + idx + '][modules]'" class="form-control" multiple>
-                                <option v-for="module in modules" :value="module" :selected="group.modules.indexOf(module) >= 0">
+                                <option v-for="module in modules" :value="module" :selected="group.modules.indexOf(module) >= 0" :key="module">
                                   {{ module }}
                                 </option>
                               </select>
