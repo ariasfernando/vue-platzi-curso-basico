@@ -55,8 +55,8 @@
           link_title: false,
           link_text_to_display: false,
           paste_as_text: true,
-          max_chars: this.settings.truncate.content || 0,
-          max_lines: this.settings.lines_limit.content || 0,
+          max_chars: _.has(this.settings, 'truncate') ? this.settings.truncate.content : 0,
+          max_lines: _.has(this.settings, 'lines_limit') ? this.settings.lines_limit.content : 0,
           forced_root_block : 'p',
           init_instance_callback: (editor) => {
 
@@ -80,7 +80,7 @@
 
             editor
               .on('keydown',(e) => {
-                if(!(+this.settings.truncate.content)){
+                if( !_.has(this.settings, 'truncate') || _.isNaN(this.settings.truncate.content) ){
                   //if truncate is NAN, returns and avoid validations
                   return
                 }
@@ -116,7 +116,7 @@
                   return;
                 }
 
-                if (tinyLength > (+this.settings.truncate.content + 1)){
+                if (tinyLength > (+this.settings.truncate.content + 1) ){
                   // Prevent insertion of typed character
                   //tinymax + 1 because is needed to show alert and force the user to delete a character
                   this.$root.$toast("You've reached the maximum number of characters (" + (+this.settings.truncate.content) +")",{
@@ -131,7 +131,7 @@
               })
               .on('keyup change', (e) => {
 
-                if( !(+this.settings.truncate.content) ){
+                if( !_.has(this.settings, 'truncate') || _.isNaN(this.settings.truncate.content) ){
                   //if truncate is NAN, returns and avoid validations
                   return
                 }
@@ -148,7 +148,7 @@
                 }
 
                 //Check for Lines Limit
-                if( (+this.settings.lines_limit.content > 0) ){
+                if( _.has(this.settings, 'line_limit') && (+this.settings.lines_limit.content > 0) ){
 
                   let divHeight = $textElement.height();
                   let lineHeight = parseInt($textElement.css("lineHeight"));
@@ -176,9 +176,9 @@
           },
           paste_preprocess: (plugin, args) => {
 
-            let editor = tinymce.get(tinymce.activeEditor.id);
+            let editor = tinymce.get(tinymce.activeEditor.id);``
 
-            if(!(+this.settings.truncate.content)){
+            if( !_.has(this.settings, 'truncate') || _.isNaN(this.settings.truncate.content) ){
               //if truncate is NAN, returns and avoid validations
               return
             }
