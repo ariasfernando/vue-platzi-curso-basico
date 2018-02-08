@@ -1,6 +1,6 @@
 <template>
   <transition name="modal" v-if="modalProof">
-    <div class="modal-mask">
+    <div class="modal-mask modal-proof">
       <div class="modal-wrapper">
         <div class="modal-container">
           <slot name="header">
@@ -366,54 +366,3 @@
     },
   };
 </script>
-
-<style lang="less" scoped>
-  .modal-container {
-    width: 750px;
-
-    textarea {
-      width: 100%;
-      height: 500px;
-      border: 1px solid #ccc;
-      font-family: monospace, serif;
-    }
-
-    .new-proof-checkbox{
-      padding-bottom: 30px;
-
-      label{
-        padding-left: 0px;
-
-        label{
-          padding-left: 0px;
-          color: #666666;
-        }
-      }
-    }
-
-  }
-  .btn-reviewer-add{
-    margin-top: 0px;
-  }
-
-  #modal-proof-message {
-    textarea {
-      height: 200px;
-    }
-  }
-
-  .modal-divider{
-    width: 100%;
-    border-top: 1px solid #dddddd;
-    margin-bottom: 30px;
-    margin-top: 30px;
-  }
-
-  .table tbody tr:last-child td{
-    border-bottom: none;
-  }
-
-  .bootstrap-select .dropdown-toggle:focus{
-    outline: none;
-  }
-</style>

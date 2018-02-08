@@ -73,9 +73,3 @@
     }
   }
 </script>
-
-<style lang="less" scoped>
-  .modal-templating{
-    width: 400px!important;
-  }
-</style>
