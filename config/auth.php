@@ -142,7 +142,7 @@ return [
         // Password requirements
         'min_length' => 10,
         'max_length' => 100,
-        'min_score' => 2
+        'min_score'  => (int) env('PASSWORD_POLICY_MIN_SCORE', 2)
     ]
 
 ];
