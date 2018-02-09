@@ -34,7 +34,7 @@
                 :title="component.attribute.title"
                 :target="component.attribute.target"
               >
-                <img 
+                <img
                   border="0"
                   style="border: 0; display: block;" 
                   :src="imageUrl(component.attribute.placeholder)" 
@@ -54,7 +54,6 @@
 </template>
 
 <script>
-  import _ from 'underscore';
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   
@@ -80,28 +79,6 @@
         }
       }
     },
-    computed: {
-      styleComponent() {
-        return this.$store.getters["module/changeSettingComponent"];
-      },
-      currentComponent() {
-        return this.$store.getters["module/currentComponent"];
-      }
-    },
-    watch : {
-      styleComponent: {
-        handler: function() {
-          if (!_.isEmpty(this.styleComponent) && 
-            this.currentComponent.columnId === this.columnId &&
-            this.currentComponent.componentId === this.componentId )
-          {
-            this.component.style = this.styleComponent.style;
-            this.component.attribute = this.styleComponent.attribute;
-          }
-        },
-        deep: true  
-      },
-    },
     methods: {
       setupModule () {
         this.elementConfig = null;
@@ -116,11 +93,6 @@
           this.$store.commit("module/setCurrentComponent", {
             columnId: this.columnId,
             componentId: this.componentId
-          });
-
-          this.$store.commit('module/setChangeSettingComponent',{
-            style: this.component.style || {},
-            attribute: this.component.attribute || {}
           });
         }
       },

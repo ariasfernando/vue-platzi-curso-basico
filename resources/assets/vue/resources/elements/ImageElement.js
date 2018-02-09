@@ -18,6 +18,7 @@ function imageDefault() {
       valign: 'middle',
       target: '_blank',
       width: '100%',
+      height: 'auto',
       hideElement: false,
     },
     settings: [
