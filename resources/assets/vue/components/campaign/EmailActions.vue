@@ -238,7 +238,7 @@
       },
       autoSave() {
         setInterval(() => {
-          if (this.dirty) {
+          if (this.dirty && this.campaign.campaign_data.auto_save) {
             this._save().then(response => {
               this.$store.commit("global/setLoader", false);
             }, error => {
