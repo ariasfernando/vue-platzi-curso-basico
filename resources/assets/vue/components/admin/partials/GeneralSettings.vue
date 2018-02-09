@@ -17,14 +17,17 @@
                  @input="updateName">
         </div>
         <div class="row">
-          <label class="col-sm-8 control-label" for="set-column">Columns</label>
-          <div class="col-sm-4">
+          <label class="col-sm-6 control-label" for="set-column">Columns</label>
+          <div class="col-sm-6">
             <div>
-              <b-form-select
+
+              <el-input-number
+                size="mini" 
                 :value="numColumns"
-                :options="optionsSelected"
-                @input="setColumns">
-              </b-form-select>
+                @change="(newValue)=>setColumns(newValue)"
+                :min="1"
+                :max="8"
+              ></el-input-number>
             </div>
           </div>
         </div>
@@ -47,7 +50,7 @@
                      @change="saveModuleStyle">
               
               <!-- Input color -->
-              <input v-if="generalSetting.type === 'color'"
+                 <input v-if="generalSetting.type === 'color'"
                      v-validate="'required'"
                      type="text"
                      :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
@@ -93,15 +96,16 @@
             <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker" v-for="(generalSettingGroup, keyGeneral) in generalSetting.group" :key="generalSettingGroup.name">
 
              <!-- Input text -->
-              <input v-if="generalSettingGroup.type === 'text'"
-                     v-model="generalSettingGroup.value"
-                     v-validate="'required'"
-                     type="text"
-                     :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
-                     :name="generalSettingGroup.name"
-                     :placeholder="generalSettingGroup.label"
-                     @change="saveModuleStyle">
 
+              <el-input
+                v-if="generalSettingGroup.type === 'text'"
+                v-model="generalSetting.value"
+                v-validate="'required'"
+                :class="{'is-danger': errors.has(generalSetting.name) }"
+                :name="generalSetting.name"
+                :placeholder="generalSetting.label"
+                @change="(newValue)=>saveModuleStyle(newValue, generalSetting.name)"
+              ></el-input>
               <!-- Input select -->
               <div>
                 <b-form-select
@@ -109,7 +113,7 @@
                     v-model="generalSettingGroup.value"
                     :name="generalSettingGroup.name"
                     :options="generalSettingGroup.options"
-                    @change.native="saveModuleStyle">
+                    @change.native="saveModuleStyleByEvent">
                 </b-form-select>
               </div>
 
@@ -254,11 +258,17 @@
         if ( link === "attribute"){
           this.saveModuleAttribute(ObjectTarget);
         }else{
-          this.saveModuleStyle(ObjectTarget);
+          this.saveModuleStyleByEvent(ObjectTarget);
         }
 
       },
-      saveModuleStyle(e) {
+      saveModuleStyle(name, value) {
+         this.$store.commit('module/saveModuleStyle',{
+          property: name,
+          value: value,
+        });
+      },
+      saveModuleStyleByEvent(e) {
          this.$store.commit('module/saveModuleStyle',{
           property: e.target.name,
           value: e.target.value,

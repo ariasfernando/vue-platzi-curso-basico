@@ -50,7 +50,6 @@
                           <el-input
                                 v-model="library.description"
                                 placeholder="Enter description here."
-                                :class="{'is-danger': errors.has('name') }"
                                 name="description"
                           ></el-input>
                         </p>
@@ -114,9 +113,14 @@
                       <div class="col-md-3">
                         <label for="templateWidth">Template width</label>
                         <p class="control">
-                          <input v-model="library.config.templateWidth" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('templateWidth') }" name="templateWidth"
-                                 type="text" placeholder="660">
+
+                          <el-input-number
+                            size="mini" 
+                            v-validate="'required'"
+                            v-model="library.config.templateWidth"
+                            :class="{'is-danger': errors.has('templateWidth') }"
+                            :name="'templateWidth'"
+                          ></el-input-number>
                           <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth') }}</span>
                         </p>
                       </div>
@@ -125,9 +129,14 @@
                       <div class="col-md-3">
                         <label for="templateMobileWidth">Template Mobile Width</label>
                         <p class="control">
-                          <input v-model="library.config.templateMobileWidth" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('templateMobileWidth') }"
-                                 name="templateMobileWidth" type="text" placeholder="480">
+
+                          <el-input-number
+                            size="mini" 
+                            v-validate="'required'"
+                            v-model="library.config.templateMobileWidth"
+                            :class="{'is-danger': errors.has('templateMobileWidth') }"
+                            :name="'templateMobileWidth'"
+                          ></el-input-number>
                           <span v-show="errors.has('templateMobileWidth')"
                                 class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
                         </p>
@@ -191,9 +200,14 @@
                       <div class="col-md-3">
                         <label for="fontSize">Font Size</label>
                         <p class="control">
-                          <input v-model="library.config.fontSize" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('fontSize') }" name="fontSize" type="text"
-                                 placeholder="12">
+
+                          <el-input-number
+                            size="mini" 
+                            v-validate="'required'"
+                            v-model="library.config.fontSize"
+                            :class="{'is-danger': errors.has('fontSize') }"
+                            :name="'fontSize'"
+                          ></el-input-number>
                           <span v-show="errors.has('fontSize')" class="help is-danger">{{ errors.first('fontSize') }}</span>
                         </p>
                       </div>
@@ -202,9 +216,13 @@
                       <div class="col-md-3">
                         <label for="lineHeight">Line Height</label>
                         <p class="control">
-                          <input v-model="library.config.lineHeight" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('lineHeight') }" name="lineHeight" type="text"
-                                 placeholder="14">
+                          <el-input-number
+                            size="mini" 
+                            v-validate="'required'"
+                            v-model="library.config.lineHeight"
+                            :class="{'is-danger': errors.has('lineHeight') }"
+                            :name="'lineHeight'"
+                          ></el-input-number>
                           <span v-show="errors.has('lineHeight')" class="help is-danger">{{ errors.first('lineHeight') }}</span>
                         </p>
                       </div>
@@ -240,7 +258,14 @@
                       <div class="col-md-3">
                         <label for="padding">Padding</label>
                         <p class="control">
-                          <input type="text" class="" v-model="library.config.padding" v-validate="'required'" name="padding" :class="{'input': true, 'is-danger': errors.has('padding') }" placeholder="10px"/>
+
+                          <el-input-number
+                            size="mini" 
+                            v-validate="'required'"
+                            v-model="library.config.padding"
+                            :class="{'is-danger': errors.has('padding') }"
+                            :name="'padding'"
+                          ></el-input-number>
                           <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
                         </p>
                       </div>

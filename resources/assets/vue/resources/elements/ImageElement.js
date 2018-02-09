@@ -8,6 +8,10 @@ function imageDefault() {
       paddingRight: '0px',
       paddingLeft: '0px',
     },
+    styleOptions: {
+      isBlockHeight: true,
+      isPxWidth: false,
+    },
     attribute: {
       placeholder: 'default/placeholder-square.jpg',
       bgcolor: { hex: 'transparent' },
@@ -18,8 +22,10 @@ function imageDefault() {
       valign: 'middle',
       target: '_blank',
       width: '100%',
+      height: 'auto',
       hideElement: false,
     },
+    componentSettings: ['image-size'],
     settings: [
       {
         link: 'attribute',
@@ -144,7 +150,6 @@ function imageDefault() {
     ],
     plugins: {},
     data: {},
-    componentSettings: [],
   };
 }
 

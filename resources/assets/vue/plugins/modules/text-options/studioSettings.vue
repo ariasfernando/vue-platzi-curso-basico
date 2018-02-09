@@ -36,7 +36,7 @@
           </span>
         </div>
         <!-- Input if config needs it -->
-        <div v-if=" tinySetting.value === true && tinySetting.type !== undefined" class="col-sm-12 control-label">
+        <div v-if="isAValidSetting(tinySetting)" class="col-sm-12 control-label">
           <div class="btn-group number-input">
             <input
               class="btn toggleable"
@@ -109,6 +109,7 @@
           attribute: this.module.structure.columns[payload.columnId].components[payload.componentId].attribute || {}
         });
       },
+      
       toggleOption(e) {
         // Get button, user can clicks the button or the icon
         const parentElement = $(e.target).hasClass("mce-ico") || $(e.target).hasClass("mce-ico-adapter")
@@ -138,6 +139,7 @@
         // Save plugin data
         this.$store.commit('module/savePlugin', payload);
       },
+
       toggleSetting(value, setting) {
         const options = {};
         let content;
@@ -163,6 +165,7 @@
         // Save plugin data
         this.$store.commit('module/savePlugin', payload);
       },
+
       changeOption(e){
         // Save input value
         const value = e.target.value;
@@ -186,7 +189,10 @@
 
         // Save plugin data
         this.$store.commit('module/savePlugin', payload);
+      },
 
+      isAValidSetting(tinySetting) {
+        return tinySetting.value && !_.isUndefined(tinySetting.type);
       }
     }
   }

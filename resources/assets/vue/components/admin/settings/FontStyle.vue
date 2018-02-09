@@ -6,9 +6,8 @@
           size="mini" 
           v-validate="'required'"
           v-model="fontStyleSetting.value"
-          :class="{'input clearfix': true, 'is-danger': errors.has(fontStyleSetting.name) }"
+          :class="{'clearfix': true, 'is-danger': errors.has(fontStyleSetting.name) }"
           :name="fontStyleSetting.name"
-          :ref="fontStyleSetting.name"
           @change="(newValue)=>clangeValue(newValue,fontStyleSetting.name)"
           :min="fontStyleSetting.min"
           :max="fontStyleSetting.max"
@@ -23,7 +22,6 @@
 </template>
 
 <script>
-import _ from "lodash";
 
 export default {
   name: "FontStyle",

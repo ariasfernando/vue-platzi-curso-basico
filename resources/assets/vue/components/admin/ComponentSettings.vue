@@ -175,7 +175,6 @@
       </b-card>
     </b-collapse>
     <!-- END: Funcionalities -->
-
   </div>
 </template>
 
@@ -196,6 +195,7 @@ export default {
     "sketch-picker": Sketch,
     "input-font-family": elementSettings.FontFamily,
     "input-font-style": elementSettings.FontStyle,
+    "input-image-size": elementSettings.ImageSize,
     "input-button-caret": elementSettings.ButtonCaret
   },
   computed: {

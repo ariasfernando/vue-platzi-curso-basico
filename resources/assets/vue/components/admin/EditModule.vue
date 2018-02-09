@@ -597,7 +597,6 @@
           margin-top: -1px;
         }
 
-        #module-settings-left,
         #column-settings{
           border-top: 1px solid #FFFFFF;
           margin-top: -1px;

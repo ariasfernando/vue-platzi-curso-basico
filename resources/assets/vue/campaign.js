@@ -23,7 +23,7 @@ Vue.use(Toast, {
   parent: 'body',
   transition: 'fade',
   duration: 5000,
-  closeable: true
+  closeable: true,
 });
 Vue.use(BootstrapVue);
 Vue.use(Croppa);
