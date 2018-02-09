@@ -34,14 +34,14 @@
                 :title="component.attribute.title"
                 :target="component.attribute.target"
               >
-                <img 
+                <img
+                  class="st-resize"
                   border="0"
                   :style="styleComputed"
                   :src="imageUrl(component.attribute.placeholder)" 
                   :width="widthInline"
                   :height="component.attribute.height"
                   :data-open-element-config="elementConfig"
-                  :class="getMobileClasses(component,'img')"
                 >
               </a>
               <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
