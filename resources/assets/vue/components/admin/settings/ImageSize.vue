@@ -11,6 +11,7 @@
           :name="imageSizeSetting.name"
           @change="(newValue)=>clangeValue(newValue, imageSizeSetting.name)"
           :max="maxValue(imageSizeSetting.name)"
+          :min="0"
           :disabled="imageSizeSetting.name === 'height' ? isBlockHeight : false"
           :controls="false"
         ></el-input-number>
