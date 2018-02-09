@@ -74,14 +74,12 @@ export default {
     },
 
     clangeValue(newValue, property) {
-      if (!(property === "width" && !this.isPxWidth)) {
-        // is width+px or height+px
-        this.saveStyle(newValue + "px", property);
-        this.saveModuleAttribute(newValue, property);
-      } else {
+      if (property === "width" && !this.isPxWidth) {
         // is width+%
-        this.saveStyle(newValue + "%", property);
-        this.saveModuleAttribute(newValue + "%", property);
+        this.saveAttribute(newValue + "%", property);
+      } else {
+        // is width+px or height+px
+        this.saveAttribute(newValue, property);
       }
     },
     pixelOrPercentage(property) {
@@ -98,11 +96,11 @@ export default {
       let isPxWidth = !this.getValue("isPxWidth");
       if (isPxWidth) {
         // save width + px
-        this.saveStyle(width + "px", "height");
+        this.saveAttribute(width + "px", "width");
       } else {
         width = Math.min(100, width);
         this.imageSizeSettings[0].value = width;
-        this.saveStyle(width + "%", "height");
+        this.saveAttribute(width + "%", "width");
       }
       // save and update isPxWidth
       this.saveStyleOption(isPxWidth, "isPxWidth");
@@ -114,12 +112,11 @@ export default {
       if (isBlock) {
         // save and update height
         let height = "auto";
-        this.saveStyle(height, "height");
+        this.saveAttribute(height, "height");
         this.imageSizeSettings[1].value = height;
       } else {
         let height = 100;
-        this.saveStyle(height + "px", "height");
-        this.saveModuleAttribute(height, "height");
+        this.saveAttribute(height + "px", "height");
         this.imageSizeSettings[1].value = height;
       }
       // save and update isBlock
@@ -143,34 +140,28 @@ export default {
       return value;
     },
 
-    saveStyleOption(newValue, property) {
+    saveStyleOption(value, property) {
       this.$store.commit("module/saveComponentStyleOption", {
         columnId: this.currentComponent().columnId,
         componentId: this.currentComponent().componentId,
         property: property,
-        value: newValue
-      });
-    },
-
-    saveModuleAttribute(value, property) {
-      this.$store.commit("module/saveModuleAttribute", {
-        property: property,
         value: value
       });
     },
-    saveStyle(newValue, property) {
-      this.$store.commit("module/saveComponentStyle", {
+
+    saveAttribute(value, property) {
+      this.$store.commit("module/saveComponentAttribute", {
         columnId: this.currentComponent().columnId,
         componentId: this.currentComponent().componentId,
-        property: property,
-        value: newValue
+        attribute: property,
+        attributeValue: value
       });
     }
   }
 };
 </script>
 <style lang="less">
-.height-auto input{
+.height-auto input {
   text-align: center;
 }
 .height-icon-auto {
