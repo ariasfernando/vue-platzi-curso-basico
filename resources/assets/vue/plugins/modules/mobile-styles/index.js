@@ -32,14 +32,6 @@ module.exports = {
         selector: 'td:first',
         _class: 'st-pd-0'
       },
-      imageResize: {
-        value: true,
-        title: 'Resize 100% (only images)',
-        key: 'image_resize',
-        selector: 'img',
-        only: ['image'],
-        _class: 'st-resize'
-      }
     },
   },
   data: {},
