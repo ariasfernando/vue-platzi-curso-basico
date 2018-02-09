@@ -36,9 +36,9 @@
               >
                 <img 
                   border="0"
-                  style="border: 0; display: block;" 
+                  :style="styleComputed"
                   :src="imageUrl(component.attribute.placeholder)" 
-                  :width="component.attribute.width" 
+                  :width="widthInline"
                   :height="component.attribute.height"
                   :data-open-element-config="elementConfig"
                   :class="getMobileClasses(component,'img')"
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-  import _ from 'underscore';
+  import _ from 'lodash';
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   
@@ -86,6 +86,15 @@
       },
       currentComponent() {
         return this.$store.getters["module/currentComponent"];
+      },
+      styleComputed() {
+        const widthStyleInline = this.component.attribute.width.indexOf("%") !== -1 
+          ? this.component.attribute.width
+          : `${_.parseInt(this.component.attribute.width)}px`
+        return `border: 0; display: block; width: ${widthStyleInline}`;
+      },
+      widthInline() {
+        return this.component.attribute.width.indexOf("%") !== -1 ? this.component.attribute.width : _.parseInt(this.component.attribute.width);
       }
     },
     watch : {
@@ -98,6 +107,21 @@
             this.component.style = this.styleComponent.style;
             this.component.attribute = this.styleComponent.attribute;
           }
+        },
+        deep: true  
+      },
+      styleComputed: {
+        handler: function() {
+          const widthStyleInline = this.component.attribute.width.indexOf("%") !== -1 
+            ? this.component.attribute.width
+            : `${_.parseInt(this.component.attribute.width)}px`
+          return `border: 0; display: block; width: ${widthStyleInline}`;
+        },
+        deep: true  
+      },
+      widthInline: {
+        handler: function() {
+          return this.component.attribute.width.indexOf("%") !== -1 ? this.component.attribute.width : _.parseInt(this.component.attribute.width);
         },
         deep: true  
       },
