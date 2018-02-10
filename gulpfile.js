@@ -114,21 +114,21 @@ gulp.task('elixir-vue-scripts', function () {
       jsDestinationPath + 'customer.js',
       customerAssetsPath
     )
-    .browserify(
-      'vue/campaign.js',
-      jsDestinationPath + 'campaign-components.js',
-      assetsPath
-    )
-    .browserify(
-      'vue/studio-library.js',
-      jsDestinationPath + 'studio-library.js',
-      assetsPath
-    )
-    .browserify(
-      'vue/studio-module.js',
-      jsDestinationPath + 'studio-module.js',
-      assetsPath
-    );
+      .browserify(
+        'vue/campaign.js',
+        jsDestinationPath + 'campaign-components.js',
+        assetsPath
+      )
+      .browserify(
+        'vue/studio-library.js',
+        jsDestinationPath + 'studio-library.js',
+        assetsPath
+      )
+      .browserify(
+        'vue/studio-module.js',
+        jsDestinationPath + 'studio-module.js',
+        assetsPath
+      );
   });
 });
 
@@ -143,7 +143,7 @@ gulp.task('elixir-scripts', function () {
   const jsDestinationPath = 'public/js/';
 
   return elixir((mix) => {
-        mix
+      mix
         .browserify(
           'vue/proof.js',
           jsDestinationPath + "vue-components.js",
@@ -206,8 +206,6 @@ gulp.task('elixir-scripts', function () {
             'bower/zxcvbn/dist/zxcvbn.js',
             // -- Vue --
             'bower/vue/dist/vue.min.js',
-            // -- Extended plugins --
-            'js/plugins/**/*.js',
             // -- Common scripts --
             'js/library/custom-plugins/html2canvas-0.5.0-modified.js', // include always before application-utils.js
             'js/library/application-globals.js',
@@ -232,9 +230,9 @@ gulp.task('elixir-scripts', function () {
 
         // === Proof page ===
         .scripts(
-            'js/base/proof.js',
-            jsDestinationPath + 'proof.js',
-            assetsPath
+          'js/base/proof.js',
+          jsDestinationPath + 'proof.js',
+          assetsPath
         )
 
         // === Admin page ===
@@ -257,12 +255,12 @@ gulp.task('elixir-scripts', function () {
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-less', () => {
-   return elixir((mix) => {
-        mix.less( 'base/tool/tool.less');
-        mix.less( 'base/base-v2/admin.less');
-        mix.less( 'base/commons/mobile/mobile_core_styles.less');
-        mix.less( 'base/commons/mobile/mobile_client_styles.less');
-    });
+  return elixir((mix) => {
+    mix.less( 'base/tool/tool.less');
+    mix.less( 'base/base-v2/admin.less');
+    mix.less( 'base/commons/mobile/mobile_core_styles.less');
+    mix.less( 'base/commons/mobile/mobile_client_styles.less');
+  });
 });
 
 /*
