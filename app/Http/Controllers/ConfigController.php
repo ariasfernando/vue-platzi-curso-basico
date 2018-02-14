@@ -23,7 +23,8 @@ class ConfigController extends Controller
         'modules',
         'proof',
         'view',
-        'api.eloqua'
+        'api.eloqua',
+        'api.silverpop'
     ];
 
     /**

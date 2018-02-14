@@ -2,6 +2,7 @@ import Vue from 'vue/dist/vue';
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource/dist/vue-resource';
 import Toast from 'vue-easy-toast';
+import elementUi from 'element-ui';
 import VeeValidate from 'vee-validate';
 import Bootstrap from './bootstrap';
 import interceptors from './interceptors';
@@ -15,10 +16,11 @@ Vue.use(Toast, {
   parent: 'body',
   transition: 'fade',
   duration: 5000,
-  closeable: true
+  closeable: true,
 });
 Vue.use(VueResource);
 Vue.use(interceptors);
+Vue.use(elementUi);
 Vue.use(VueRouter);
 Vue.use(VeeValidate);
 

@@ -37,12 +37,6 @@
     ],
     mixins: [ MobileStylesMixin ],
     computed: {
-      styleComponent() {
-        return this.$store.getters["module/changeSettingComponent"];
-      },
-      currentComponent() {
-        return this.$store.getters["module/currentComponent"];
-      },
       styles(){
         let inlineStyle = `height:${this.component.style.height};
                            width:${this.component.style.width };
@@ -62,20 +56,6 @@
         return inlineStyle;
       }
     },
-    watch : {
-      styleComponent: {
-        handler: function() {
-          if (!_.isEmpty(this.styleComponent) && 
-            this.currentComponent.columnId === this.columnId &&
-            this.currentComponent.componentId === this.componentId )
-          {
-            this.component.style = this.styleComponent.style;
-            this.component.attribute = this.styleComponent.attribute;
-          }
-        },
-        deep: true  
-      },
-    },
     timeoutID: null,
     methods: {
       setComponent(e) {
@@ -83,11 +63,6 @@
           this.$store.commit("module/setCurrentComponent", {
             columnId: this.columnId,
             componentId: this.componentId
-          });
-
-          this.$store.commit('module/setChangeSettingComponent',{
-            style: this.component.style || {},
-            attribute: this.component.attribute || {}
           });
         }  
       },

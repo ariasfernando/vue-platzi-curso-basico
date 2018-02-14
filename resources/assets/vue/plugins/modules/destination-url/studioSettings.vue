@@ -6,7 +6,7 @@
         <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
+            <toggle-button :value="enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
           </span>
         </div>
       </div>
@@ -15,7 +15,7 @@
         <label class="col-sm-7 control-label" data-name="validations.required"><b>Required</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="plugin.config.validations.required" name="validations.required" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
+            <toggle-button :value="plugin.config.validations.required" active-color="#78DCD6" @change="(newValue)=>updateField(newValue, 'validations.required')"></toggle-button>
           </span>
         </div>
       </div>
@@ -24,7 +24,7 @@
         <label class="col-sm-7 control-label" data-name="validations.url"><b>Validate URL</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="plugin.config.validations.url" name="validations.url" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
+            <toggle-button :value="plugin.config.validations.url" active-color="#78DCD6" @change="(newValue)=>updateField(newValue, 'validations.url')"></toggle-button>
           </span>
         </div>
       </div>
@@ -33,7 +33,7 @@
         <label class="col-sm-7 control-label" data-name="target"><b>Target</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="plugin.config.target" name="target" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
+            <toggle-button :value="plugin.config.target" name="target" active-color="#78DCD6" @change="(newValue)=>updateField(newValue, 'target')"></toggle-button>
           </span>
         </div>
       </div>
@@ -78,21 +78,20 @@
       }
     },
     methods: {
-      toggle(e) {
+      toggle(value) {
         const payload = {
           plugin: this.name,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          enabled: e.value,
+          enabled: value,
         };
 
         this.$store.commit('module/togglePlugin', payload);
       },
-      updateField(e) {
+      updateField(value, option) {
         const config = {};
-        const option = e.srcEvent.target.parentElement.attributes.getNamedItem('name').value;
 
-        _.set(config, option, e.value);
+        _.set(config, option, value);
 
         const payload = {
           plugin: this.name,

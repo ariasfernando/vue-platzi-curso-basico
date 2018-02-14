@@ -5,7 +5,7 @@
         <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
+            <toggle-button :value="enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
           </span>
         </div>
       </div>
@@ -15,13 +15,20 @@
 
 <script>
   export default {
-    props: ['name', 'columnId'],
+    props: ['name'],
     computed: {
+      currentComponent() {
+        return this.$store.getters["module/currentComponent"];
+      },
       module() {
         return this.$store.getters["module/module"];
       },
       plugin() {
-        const plugin = this.module.structure.columns[this.columnId].plugins[this.name];
+        const module = this.module,
+              columnId = this.currentComponent.columnId,
+              componentId = this.currentComponent.componentId;
+
+        const plugin = module.structure.columns[columnId].components[componentId].plugins[this.name];
         this.enabled = plugin.enabled;
 
         return plugin;
@@ -33,11 +40,12 @@
       }
     },
     methods: {
-      toggle(value) {
+      toggle(e) {
         const payload = {
           plugin: this.name,
-          columnId: this.columnId,
-          enabled: value,
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          enabled: e.value,
         };
 
         this.$store.commit('module/togglePlugin', payload);

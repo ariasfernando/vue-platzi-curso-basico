@@ -34,12 +34,12 @@
                 :title="component.attribute.title"
                 :target="component.attribute.target"
               >
-                <img 
+                <img
                   class="st-resize"
                   border="0"
-                  style="border: 0; display: block;" 
+                  :style="styleComputed"
                   :src="imageUrl(component.attribute.placeholder)" 
-                  :width="component.attribute.width" 
+                  :width="widthInline"
                   :height="component.attribute.height"
                   :data-open-element-config="elementConfig"
                 >
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-  import _ from 'underscore';
+  import _ from 'lodash';
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   
@@ -81,23 +81,29 @@
       }
     },
     computed: {
-      styleComponent() {
-        return this.$store.getters["module/changeSettingComponent"];
+      styleComputed() {
+        const widthStyleInline = this.component.attribute.width.indexOf("%") !== -1
+          ? this.component.attribute.width
+          : `${_.parseInt(this.component.attribute.width)}px`
+        return `border: 0; display: block; width: ${widthStyleInline}`;
       },
-      currentComponent() {
-        return this.$store.getters["module/currentComponent"];
+      widthInline() {
+        return this.component.attribute.width.indexOf("%") !== -1 ? this.component.attribute.width : _.parseInt(this.component.attribute.width);
       }
     },
     watch : {
-      styleComponent: {
+      styleComputed: {
         handler: function() {
-          if (!_.isEmpty(this.styleComponent) && 
-            this.currentComponent.columnId === this.columnId &&
-            this.currentComponent.componentId === this.componentId )
-          {
-            this.component.style = this.styleComponent.style;
-            this.component.attribute = this.styleComponent.attribute;
-          }
+          const widthStyleInline = this.component.attribute.width.indexOf("%") !== -1
+            ? this.component.attribute.width
+            : `${_.parseInt(this.component.attribute.width)}px`
+          return `border: 0; display: block; width: ${widthStyleInline}`;
+        },
+        deep: true
+      },
+      widthInline: {
+        handler: function() {
+          return this.component.attribute.width.indexOf("%") !== -1 ? this.component.attribute.width : _.parseInt(this.component.attribute.width);
         },
         deep: true  
       },
@@ -116,11 +122,6 @@
           this.$store.commit("module/setCurrentComponent", {
             columnId: this.columnId,
             componentId: this.componentId
-          });
-
-          this.$store.commit('module/setChangeSettingComponent',{
-            style: this.component.style || {},
-            attribute: this.component.attribute || {}
           });
         }
       },

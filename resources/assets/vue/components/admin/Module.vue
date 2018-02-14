@@ -17,10 +17,10 @@
         >
           <tr>
             <!-- If columnsFixed is false, show Columns staked render -->
-            <td width="100%" 
+            <td width="100%"
                 v-if="!columnsFixed"
             >
-              <columns-stacked-render @add="onAdd"></columns-staked-render>
+              <columns-stacked-render @add="onAdd"></columns-stacked-render>
             </td> 
 
             <!-- If columnsFixed is true, show Columns fixed render -->

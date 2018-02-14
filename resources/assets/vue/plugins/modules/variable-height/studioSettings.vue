@@ -5,7 +5,7 @@
         <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="plugin.enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
+            <toggle-button :value="plugin.enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
           </span>
         </div>
       </div>
@@ -19,6 +19,7 @@
           :value="value"
           type="number"
           @input.prevent="changeOption"
+          :key="name"
         />
       </div>
     </form>
@@ -58,12 +59,12 @@
       }
     },
     methods: {
-      toggle(e) {
+      toggle(value) {
         const payload = {
           plugin: this.name,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          enabled: e.value,
+          enabled: value,
         };
         // Update state of the component
         this.$store.commit('module/togglePlugin', payload);

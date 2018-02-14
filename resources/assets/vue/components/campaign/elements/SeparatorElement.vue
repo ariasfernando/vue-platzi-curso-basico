@@ -1,33 +1,39 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+  <table
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="width: 100%;">
     <tr 
       data-type="separator-element"
       :class="getMobileClasses(component,'tr')"
     >
-      <td 
+      <td
         class="stx-position-relative" 
-        width="100%" 
-        align="center" 
-        :height="component.style.height" 
+        width="100%"
+        align="center"
+        :height="heightAsInt"
         :bgcolor="component.style.backgroundColor" 
         :style="[defaultFirstTdStyle, firstTdStyle]"
         :class="getMobileClasses(component,'td:first')"
       >
         <table 
-          width="100%" 
+          width="100%"
           cellpadding="0" 
           cellspacing="0" 
           border="0" 
-          style="width:100%;width:100%!important;" 
+          style="width:100%;width:100%!important;"
           :style="tableStyle"
         >
           <tbody>
             <tr>
-              <td 
+              <td
                 :bgcolor="component.style.borderColor" 
-                :height="component.style.height" 
+                :height="heightAsInt"
                 :style="[defaultInnerTdStyle, innerTdStyle]"
+                :data-persist-styles="JSON.stringify(dataPersistStyles)"
               >&nbsp;</td>
             </tr>
           </tbody>
@@ -62,6 +68,8 @@
         defaultInnerTdStyle: {
           display:'block',
           margin:'0 auto',
+        },
+        dataPersistStyles: {
           '-webkit-text-size-adjust':'100%',
           '-ms-text-size-adjust':'100%',
           'mso-line-height-rule':'exactly',
@@ -84,7 +92,6 @@
       },
       innerTdStyle() { 
         let widthTemplate = 640;
-        
         return {
           maxWidth: widthTemplate - (_.parseInt(this.component.style.paddingRight) + _.parseInt(this.component.style.paddingLeft)) + 'px', 
           height: this.component.style.height,
@@ -100,7 +107,10 @@
           lineHeight: this.component.style.height,
           fontSize: this.component.style.height,
         };
-      }
+      },
+      heightAsInt() {
+        return _.parseInt(this.component.style.height);
+      },
     }
   };
 </script>

@@ -41,8 +41,13 @@ function buttonDefault() {
       bgcolor: { hex: '#514960' },
       href: 'http://stensul.com',
       target: '_blank',
+      buttonCaret: undefined,
     },
-    componentSettings: ['font-family'],
+    componentSettings: ['font-family', 'font-style', 'button-caret'],
+    styleOptions: {
+      isBlockLineHeight: false,
+
+    },
     settings: [
       {
         link: 'attribute',
@@ -91,6 +96,13 @@ function buttonDefault() {
       },
       {
         link: 'attribute',
+        label: 'Character Limit',
+        name: 'truncate',
+        type: 'text',
+        value: '',
+      },
+      {
+        link: 'attribute',
         label: 'Default URL',
         name: 'href',
         type: 'text',
@@ -117,24 +129,10 @@ function buttonDefault() {
       },
       {
         link: 'style',
-        label: 'Font Size',
-        name: 'fontSize',
-        type: 'text',
-        value: '12px',
-      },
-      {
-        link: 'style',
         label: 'Font Weight',
         name: 'fontWeight',
         type: 'text',
         value: 'normal',
-      },
-      {
-        link: 'style',
-        label: 'Line Height',
-        name: 'lineHeight',
-        type: 'text',
-        value: '14px',
       },
       {
         link: 'style',

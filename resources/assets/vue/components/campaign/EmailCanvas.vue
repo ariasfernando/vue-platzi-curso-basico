@@ -261,8 +261,11 @@
   }
 
   #emailCanvas{
-    min-height: 40px;
+    &:empty {
+      min-height: 40px;
+    }
     &.stx-mobile-mode {
+      width: 480px;
       // Mobile Classes
       @import '../../../less/base/commons/mobile/mobile_core_styles';
       @import '../../../less/base/commons/mobile/mobile_client_styles';

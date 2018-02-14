@@ -70,7 +70,7 @@
               <a @click.prevent="code(campaign._id, 'html')" href="#" class="html-code">Normal HTML</a><br>
               <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
             </td>
-            <td class="text-right actions icons" width="250">
+            <td class="text-left actions icons" width="250">
               <a href="#" v-on:click.prevent="preview(campaign._id)" data-tooltip="Preview" target="_blank">
                 <i class="glyphicon glyphicon-eye-open"></i>
               </a>

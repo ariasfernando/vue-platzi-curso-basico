@@ -77,7 +77,9 @@ gulp.task('elixir-copy-bower', function () {
       .copy(bowerPath + 'jquery-ui/themes/ui-lightness/images', 'public/css/images/jquery-ui')
       // TinyMCE
       .copy(bowerPath + 'tinymce/skins', 'public/css/tinymce')
-      .copy(bowerPath + 'tinymce/plugins/textcolor', 'public/js/plugins/tinymce/plugins/textcolor');
+      .copy(bowerPath + 'tinymce/plugins/textcolor', 'public/js/plugins/tinymce/plugins/textcolor')
+      // element-ui Fonts
+      .copy('node_modules/element-ui/lib/theme-chalk/fonts', 'public/build/css/fonts');
   });
 });
 
@@ -98,6 +100,40 @@ gulp.task('copy-customer-assets', () => {
 
 /*
  | --------------------------------------------------------------------------
+ | Vue Scripts task
+ | --------------------------------------------------------------------------
+ */
+gulp.task('elixir-vue-scripts', function () {
+  const assetsPath = 'resources/assets/';
+  const customerAssetsPath = 'stensul/customer/' + assetsPath + 'vue/';
+  const jsDestinationPath = 'public/js/';
+
+  return elixir((mix) => {
+    mix.browserify(
+      'main.js',
+      jsDestinationPath + 'customer.js',
+      customerAssetsPath
+    )
+      .browserify(
+        'vue/campaign.js',
+        jsDestinationPath + 'campaign-components.js',
+        assetsPath
+      )
+      .browserify(
+        'vue/studio-library.js',
+        jsDestinationPath + 'studio-library.js',
+        assetsPath
+      )
+      .browserify(
+        'vue/studio-module.js',
+        jsDestinationPath + 'studio-module.js',
+        assetsPath
+      );
+  });
+});
+
+/*
+ | --------------------------------------------------------------------------
  | Scripts task
  | --------------------------------------------------------------------------
  */
@@ -108,26 +144,6 @@ gulp.task('elixir-scripts', function () {
 
   return elixir((mix) => {
       mix
-        mix.browserify(
-          'main.js',
-          jsDestinationPath + 'customer.js',
-          customerAssetsPath
-        )
-        .browserify(
-          'vue/campaign.js',
-          jsDestinationPath + 'campaign-components.js',
-          assetsPath
-        )
-        .browserify(
-          'vue/studio-library.js',
-          jsDestinationPath + 'studio-library.js',
-          assetsPath
-        )
-        .browserify(
-          'vue/studio-module.js',
-          jsDestinationPath + 'studio-module.js',
-          assetsPath
-        )
         .browserify(
           'vue/proof.js',
           jsDestinationPath + "vue-components.js",
@@ -166,14 +182,7 @@ gulp.task('elixir-scripts', function () {
             'bower/tinymce/plugins/autolink/plugin.js',
             'bower/tinymce/plugins/link/plugin.js',
             'bower/tinymce/plugins/advlist/plugin.js',
-            'js/library/helpers/*.js',
-            'bower/magnific-popup/dist/jquery.magnific-popup.js',
-            'bower/cropit/dist/jquery.cropit.js',
             'js/library/application-utils.js',
-            'js/library/master-image-editor.v2.js',
-            'js/library/modal-manager.js',
-            'js/library/image-manager.js',
-            'js/library/modals/*.js',
             'js/plugins/tinymce/**/plugin.js',
           ],
           jsDestinationPath + 'library-v2.js',
@@ -188,31 +197,17 @@ gulp.task('elixir-scripts', function () {
             'bower/jquery-ui/jquery-ui.min.js',
             'bower/bootstrap/dist/js/bootstrap.min.js',
             'bower/magnific-popup/dist/jquery.magnific-popup.js',
-            'bower/cropit/dist/jquery.cropit.js',
             'bower/bootstrapcolorpicker/dist/js/bootstrap-colorpicker.min.js',
             'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
             'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
             // -- Jquery Simple colorpicker List --
             'bower/jquery-simplecolorpicker/jquery.simplecolorpicker.js',
             // -- TinyMCE editor --
-            'bower/tinymce/tinymce.js',
-            'bower/tinymce/themes/modern/theme.js',
-            'bower/tinymce/plugins/paste/plugin.js',
-            'bower/tinymce/plugins/textcolor/plugin.js',
-            'bower/tinymce/plugins/colorpicker/plugin.js',
-            'bower/tinymce/plugins/lists/plugin.js',
-            'bower/tinymce/plugins/autolink/plugin.js',
-            'bower/tinymce/plugins/link/plugin.js',
-            'bower/tinymce/plugins/advlist/plugin.js',
-            'js/library/helpers/*.js',
             // -- zxcvbn --
             'bower/zxcvbn/dist/zxcvbn.js',
             // -- Vue --
             'bower/vue/dist/vue.min.js',
-            // -- Extended plugins --
-            'js/plugins/**/*.js',
             // -- Common scripts --
-            'js/library/helpers/*.js',
             'js/library/custom-plugins/html2canvas-0.5.0-modified.js', // include always before application-utils.js
             'js/library/application-globals.js',
             'js/library/application-utils.js',
@@ -236,9 +231,9 @@ gulp.task('elixir-scripts', function () {
 
         // === Proof page ===
         .scripts(
-            'js/base/proof.js',
-            jsDestinationPath + 'proof.js',
-            assetsPath
+          'js/base/proof.js',
+          jsDestinationPath + 'proof.js',
+          assetsPath
         )
 
         // === Admin page ===
@@ -249,30 +244,6 @@ gulp.task('elixir-scripts', function () {
             'js/base/admin.js'
           ],
           jsDestinationPath + 'admin.js',
-          assetsPath
-        )
-
-        // === Campaign page ===
-        .scripts(
-          [
-            // Transformers
-            'js/library/transformers.js',
-            // Custom Plugins
-            'js/library/custom-plugins/st-pagination-bar.jquery.js',
-            'js/library/custom-plugins/st-color-picker.js',
-            // Configuration Modals [ Deprecated ]
-            'js/library/modals/*',
-            // Library
-            'js/library/image-library.js',
-            'js/library/master-image-editor.js',
-            'js/library/master-image-editor.v2.js',
-            'js/library/master-button-editor.js',
-            'js/library/module-manager.js',
-            'js/library/modal-manager.js',
-            'js/library/campaign-menu.js',
-            'js/library/image-manager.js',
-          ],
-          jsDestinationPath + 'campaign.js',
           assetsPath
         );
     }
@@ -285,14 +256,14 @@ gulp.task('elixir-scripts', function () {
  | --------------------------------------------------------------------------
  */
 gulp.task('elixir-less', () => {
-   return elixir((mix) => {
-        mix
-          .less('base/tool/tool.less')
-          .less('base/base-v2/admin.less')
-          .less('base/commons/mobile/mobile_core_styles.less')
-          .less('base/commons/mobile/mobile_client_styles.less')
-          .less('vendor/stensul/media-gallery/media-gallery.less', 'public/css/media-gallery.css');
-    });
+  return elixir((mix) => {
+    mix
+      .less('base/tool/tool.less')
+      .less('base/base-v2/admin.less')
+      .less('base/commons/mobile/mobile_core_styles.less')
+      .less('base/commons/mobile/mobile_client_styles.less')
+      .less('vendor/stensul/media-gallery/media-gallery.less', 'public/css/media-gallery.css');
+  });
 });
 
 /*
@@ -300,7 +271,7 @@ gulp.task('elixir-less', () => {
  | Elixir Version
  | --------------------------------------------------------------------------
  */
-gulp.task('elixir-version', ['elixir-copy-bower', 'elixir-scripts'], () => {
+gulp.task('elixir-version', ['elixir-vue-scripts', 'elixir-scripts'], () => {
   return elixir((mix) => {
     mix.version([
       'css/admin.css',
@@ -317,4 +288,4 @@ gulp.task('elixir-version', ['elixir-copy-bower', 'elixir-scripts'], () => {
  */
 gulp.task('jshint', ['elixir-jshint']);
 gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-version']));
-gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-version']));
+gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-copy-bower', 'elixir-version']));

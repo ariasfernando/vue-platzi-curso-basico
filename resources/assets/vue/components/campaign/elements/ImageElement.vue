@@ -40,7 +40,7 @@
                 :title="component.attribute.title"
                 :target="component.attribute.target"
               >
-                <img 
+                <img
                   class="st-resize"
                   style="border: 0; display: block;"
                   border="0"

@@ -31,7 +31,7 @@ module.exports = {
         key: 'reset_padding',
         selector: 'td:first',
         _class: 'st-pd-0'
-      }
+      },
     },
   },
   data: {},

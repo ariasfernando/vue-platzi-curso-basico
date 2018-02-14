@@ -5,7 +5,7 @@
         <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="plugin.enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
+            <toggle-button :value="plugin.enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
           </span>
         </div>
       </div>
@@ -20,6 +20,7 @@
          :class="{active: option.value}"
          @click.prevent="toggleOption"
          type="button"
+         :key="name"
         >
           <i :class="option.icon"
              :data-tooltip="option.label"
@@ -29,15 +30,15 @@
 
       <div v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" class="form-group" :key="key">
         <label class="col-sm-7 control-label"><b>{{ tinySetting.title }}</b></label>
-        <div class="col-sm-5">
+        <div class="col-sm-5 control-label">
           <span>
-            <toggle-button :value="tinySetting.value" :name="key" color="#78DCD6" :sync="true" :labels="true" @change="toggleSetting"></toggle-button>
+            <toggle-button :value="tinySetting.value" active-color="#78DCD6"  @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
           </span>
         </div>
         <!-- Input if config needs it -->
-        <div class="col-sm-12">
+        <div v-if=" tinySetting.value === true && tinySetting.type !== undefined" class="col-sm-12 control-label">
           <div class="btn-group number-input">
-            <input v-if="tinySetting.value == true"
+            <input
               class="btn toggleable"
               v-b-tooltip.hover
               :title="key"
@@ -87,12 +88,12 @@
       }
     },
     methods: {
-      toggle(e) {
+      toggle(value) {
         const payload = {
           plugin: this.name,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          enabled: e.value,
+          enabled: value,
         };
         // Update state of the component
         this.$store.commit('module/togglePlugin', payload);
@@ -137,12 +138,9 @@
         // Save plugin data
         this.$store.commit('module/savePlugin', payload);
       },
-      toggleSetting(e) {
-        const target = e.srcEvent.target;
-        const value = e.value;
-        const setting = target.parentElement.attributes.getNamedItem('name').value;
-        let content = e.content;
+      toggleSetting(value, setting) {
         const options = {};
+        let content;
 
         // if toogle is disabled the inputs value will be 0
         if( value == false){
