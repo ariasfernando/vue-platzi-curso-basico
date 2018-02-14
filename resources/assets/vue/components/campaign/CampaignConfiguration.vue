@@ -1,12 +1,12 @@
 <template>
   <div class="expand configuration-mod">
-    <h2 class="show-configuration" v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-cog glyph-inline"></i> Campaign Settings <i class="glyphicon glyphicon-menu-up"></i></h2>
+    <h2 class="show-configuration" v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-cog glyph-inline"></i> Email Settings <i class="glyphicon glyphicon-menu-up"></i></h2>
     <div class="level-1 open-section-campaign"l v-bind:class="{'is-collapsed' : collapsed }">
       <form>
         <!-- Configuration Inputs -->
         <div class="configuration-field configuration-nomargin">
           <label for="campaignName">
-            Campaign Name
+            Email Name
             <a v-if="enableFavorite" @click.prevent="toggleFavorite" href="#" title="Favorite">
               <i class="glyphicon"
                 v-bind:class="favoriteClass">
@@ -44,21 +44,21 @@
 
         <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave">Auto Save</label>
-          <toggle-button :value="form.autoSave" color="#78DCD6" :sync="true" :labels="true" @change="autoSaveChange"></toggle-button>
+          <toggle-button :value="form.autoSave" active-color="#78DCD6" @change="autoSaveChange"></toggle-button>
         </div>
 
         <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
           <label class="locking">
             <span>{{locked ? 'Unlock' : 'Lock'}}</span>
             <span class="locking_type">
-              {{campaign.template ? 'Template' : 'Campaign'}}
+              {{campaign.template ? 'Template' : 'Email'}}
             </span>
           </label>
           <button
             class="lock-campaign-btn btn btn-default"
             data-toogle="tooltip"
             data-placement="botom"
-            title="Campaign is unlocked"
+            title="Email is unlocked"
             @click.prevent="lockCampaign"
             v-show="!locked"
           >
@@ -68,7 +68,7 @@
             class="unlock-campaign-btn btn btn-default"
             data-toggle="tooltip"
             data-placement="bottom"
-            title="Campaign is locked"
+            title="Email is locked"
             :disabled="this.$_app.config.logged_user !== lockedBy"
             @click.prevent="unlockCampaign"
             v-show="locked">
@@ -84,12 +84,11 @@
 <script>
   import _ from 'lodash'
   import configService from '../../services/config'
-  import ToggleButton from '../common/ToggleButton.vue'
   import Multiselect from 'vue-multiselect';
+  import ToggleButton from '../../plugins/common/toggle-button'
 
   export default {
     components: {
-      ToggleButton,
       Multiselect
     },
     name: 'CampaignConfiguration',

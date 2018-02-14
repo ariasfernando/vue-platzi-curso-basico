@@ -29,7 +29,6 @@
 </template>
 
 <script>
-  import _ from 'lodash';
   import clone from 'clone';
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
@@ -48,6 +47,9 @@
       dragGhost: null
     },
     computed: {
+      currentComponent() {
+        return this.$store.getters["campaign/currentComponent"];
+      },
       dragList: {
         get() {
           return this.$store.getters['campaign/modules'];
@@ -99,7 +101,8 @@
             // Stylize it
             img.classList.add('custom-drag-ghost');
             // Set the new stylized "drag image" of the dragged element
-            dataTransfer.setDragImage(img, 0, 0);
+            // The placeholder image is 170x52, this positioning forces the placeholder image: top-right
+            dataTransfer.setDragImage(img, 130, 16);
           }
         },
         templateBackgroundColor(){
@@ -138,6 +141,12 @@
         e.clone.style.opacity = "1";
       },
       onSort(e){
+        this.$store.commit('campaign/setCurrentComponent', {
+          moduleId: e.newIndex,
+          columnId: 0,
+          componentId: 0,
+        });
+        this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
       },
       onEnd (evt) {
@@ -252,25 +261,14 @@
   }
 
   #emailCanvas{
-    min-height: 40px;
+    &:empty {
+      min-height: 40px;
+    }
     &.stx-mobile-mode {
-      /*BASE-LAYOUT*/
-      .st-wrapper{
-        width: 100% !important;
-      }
-      .st-wrapper-content{ 
-        padding: 0px !important;
-      }
-      .st-col{ 
-        display: block!important; 
-        width: 100%!important; 
-        padding: 0px !important;
-      }
-      .st-resize{ 
-        width: 100%!important;
-        display: block!important; 
-        height: auto !important;
-      }
+      width: 480px;
+      // Mobile Classes
+      @import '../../../less/base/commons/mobile/mobile_core_styles';
+      @import '../../../less/base/commons/mobile/mobile_client_styles';
     }
 
     tr.ghost-component{

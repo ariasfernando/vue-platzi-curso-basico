@@ -24,7 +24,7 @@
             <th>
               <column-sort
                 field="campaign_name"
-                title="Campaign Name"
+                title="Email Name"
                 :sort="sortKey"
                 :reverse="reverse"
                 v-on:change-sort="sortBy"></column-sort>
@@ -38,7 +38,7 @@
                 v-on:change-sort="sortBy"></column-sort>
             </th>
             <th v-if="showTags == 1" class="col-200">Tags</th>
-            <th width="180" class="bold">Actions</th>
+            <th width="200" class="bold">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -54,7 +54,7 @@
               <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock pull-left campaign-locking" v-if="enableLocking && campaign.locked"></i>
               <a :data-campaign-id="campaign._id"
                 :data-campaign-name="campaign.campaign_name"
-                class="proof-track-modal pull-left right-icon"
+                class="proof-track-modal pull-right right-icon"
                 href="#"
                 title="Track active proof"
                 v-if="proof.allow && proof.status && campaign.has_active_proof"
@@ -72,7 +72,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="text-right actions icons">
+            <td class="text-left actions icons">
               <a href="#"
                 @click.prevent="goProof(campaign.proof_token)"
                 class="proof"
@@ -107,7 +107,7 @@
                 @click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                data-tooltip="Lock"
+                data-tooltip="Lock this email for editing"
               >
                 <i class="glyphicon fa fa-lock"></i>
               </a>

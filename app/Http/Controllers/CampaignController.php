@@ -90,12 +90,12 @@ class CampaignController extends Controller
                 if (count($libraries)) {
                     $params['library'] = new ObjectID($libraries[0]['_id']);
                 } else {
-                    throw new \Exception('You don\'t have available libraries to create a new email 
+                    throw new \Exception('You don\'t have available libraries to create a new email
                         please contact our support team.');
                 }
             }
 
-            $params['campaign_name'] = 'Untitled Campaign';
+            $params['campaign_name'] = 'Untitled Email';
 
             $campaign = Campaign::create($params);
 

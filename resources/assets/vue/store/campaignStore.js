@@ -50,14 +50,7 @@ function campaignStore() {
       },
       templateWidth(state) {
         const templateWidth = 600;
-        const templateMobileWidth = 480;
-        if (_.isEmpty(state.campaign)) {
-          return state.buildingMode === 'desktop' ? templateWidth : templateMobileWidth;
-        }
-        if (state.buildingMode === 'mobile') {
-          return state.campaign.library_config.templateMobileWidth || templateMobileWidth;
-        }
-        return state.campaign.library_config.templateWidth || templateWidth;
+        return (state.campaign.library_config && state.campaign.library_config.templateWidth) || templateWidth;
       },
       editorToolbar(state) {
         return state.editorToolbar;
@@ -124,6 +117,9 @@ function campaignStore() {
       },
       setCurrentComponent(state, data) {
         state.currentComponent = data;
+      },
+      unsetCurrentComponent(state) {
+        state.currentComponent = undefined;
       },
       setActiveModule(state, moduleId) {
         state.activeModule = moduleId;

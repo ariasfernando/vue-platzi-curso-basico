@@ -2,6 +2,7 @@ import Q from 'q';
 import _ from 'lodash';
 import request from '../utils/request';
 import endpoints from '../resources/endpoints';
+import Vue from 'vue/dist/vue';
 
 export default {
   uploadImages(data) {
@@ -9,8 +10,13 @@ export default {
     const endpoint = endpoints.image.uploadImage;
 
     const promises = [];
+    const campaignUrl = Vue.prototype.$_app.config.campaignImageUrl;
 
     _.each(data.images, (image) => {
+      if (image.indexOf(campaignUrl) !== -1) {
+        image = image.replace(campaignUrl, "");
+      }
+
       const params = {
         endpoint,
         json: {

@@ -53,24 +53,47 @@ export default {
     // Fonts path
     const fontPath = `${this.Vue.prototype.$_app.config.baseUrl}/fonts/`;
 
-    // Register custom fonts
-    _.each(fonts.custom, (fontFace) => {
-      const style = document.createElement('style');
-      const fontFile = fontFace.replace(' ', '');
+    let custom = [];
 
-      style.appendChild(document.createTextNode(`\
-        @font-face {\
-            font-family: ${fontFace};\
-            src: url('${fontPath}${fontFile}.eot') format('eot');\
-            src: url('${fontPath}${fontFile}.eot?#iefix') format('embedded-opentype'),
-            src: url('${fontPath}${fontFile}.woff') format('woff'),\
-            src: url('${fontPath}${fontFile}.ttf') format('truetype'),\
-            src: url('${fontPath}${fontFile}.svg') format('svg');\
-        }\
-      `));
+    fonts.custom.map(font => {
+      custom.push(font.name);
+
+      const style = document.createElement('style');
+
+      style.type = 'text/css';
+
+      let definition = `@font-face {font-family: '${font.name}';`;
+
+      font.types.map(typeFont => {
+        typeFont.files.map(fileFont => {
+          if (fileFont.file === 'eot') {
+            definition += `src: url('${fontPath}${font.folder}/${fileFont.file}?#iefix');`;
+          }
+        });
+      });
+
+      font.types.map(typeFont => {
+        definition += 'src: ';
+
+        typeFont.files.map((fileFont, index) => {
+          definition += `url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}') format('${fileFont.file}')`;
+
+          if (index < typeFont.files.length - 1) {
+            definition += ',';
+          } else {
+            definition += ';';
+          }
+        });
+
+        definition += `font-weight: ${typeFont.weight};}`;
+      });
+
+      style.appendChild(document.createTextNode(definition));
 
       document.head.appendChild(style);
     });
+
+    fonts.custom = custom;
 
     this.Vue.prototype.$_app.config.fonts = fonts;
   },

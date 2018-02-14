@@ -57,7 +57,7 @@
           },
           sort: false,
           // Class name for the drop placeholder
-          ghostClass: "ghost-component", 
+          ghostClass: "ghost-component",
           // Class name for the chosen item
           chosenClass: "chosen-component",
           // Class name for the dragging item
@@ -93,7 +93,7 @@
 
         setTimeout(() => {
           this.autoScroll();
-        }, 100);
+        }, 25);
       },
       autoScroll(){
         let bounds = $(".section-canvas-container").outerHeight();
@@ -102,7 +102,7 @@
         if (!isVisible) {
             $('html,  .section-canvas-email').animate({
                 scrollTop: bounds
-            }, 2000);
+            }, 100);
         }
       },
       expand (item) {
@@ -148,7 +148,7 @@
       height: 65px;
       font-family: 'Open Sans', Arial, serif;
       font-size: 14px;
-      
+
       &:before{
         content: "Drag a module here or click one from the menu to add it to the bottom of the email";
         width: 100%;

@@ -24,7 +24,7 @@
             <th>
               <column-sort
                 field="campaign_name"
-                title="Campaign Name"
+                title="Email Name"
                 :sort="sortKey"
                 :reverse="reverse"
                 v-on:change-sort="sortBy"></column-sort>
@@ -38,10 +38,10 @@
                 v-on:change-sort="sortBy"></column-sort>
             </th>
             <th v-if="showTags == 1" class="col-200">Tags</th>
-            <th  width="300" class="bold" colspan="2">Actions</th>
+            <th  width="400" class="bold" colspan="2">Actions</th>
           </tr>
         </thead>
-        <tbody> 
+        <tbody>
           <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
             <td class="last-modified" :title="campaign.created_by.email">
               <span>{{campaign.created_at}}</span><br><span>by {{campaign.created_by.email}}</span>
@@ -70,7 +70,7 @@
               <a @click.prevent="code(campaign._id, 'html')" href="#" class="html-code">Normal HTML</a><br>
               <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
             </td>
-            <td class="actions icons text-right" width="200">
+            <td class="text-left actions icons" width="250">
               <a href="#" v-on:click.prevent="preview(campaign._id)" data-tooltip="Preview" target="_blank">
                 <i class="glyphicon glyphicon-eye-open"></i>
               </a>
@@ -84,7 +84,7 @@
                 v-on:click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                data-tooltip="Lock"
+                data-tooltip="Lock this email for editing"
                 @click.prevent
               >
                 <i class="glyphicon fa fa-lock"></i>

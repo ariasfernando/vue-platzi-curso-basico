@@ -58,24 +58,18 @@
         isset($params['campaign_data']['library_config']['linkColor'])
     )
        a{
-            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
         }
         a *{ 
-            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
         }         
         a:link{ 
-             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
         }  
     @endif
 
-    @media  screen and (max-width: 480px) {
-        /*BASE-LAYOUT*/
-        .st-wrapper {width: 100% !important;}
-        .st-wrapper-content{ padding: 0px !important;}
-        .st-wrapper-table { width: 100% !important; }
-        .st-col{ display: block!important; width: 100%!important; padding: 0px !important;}
-        .st-resize{ width: 100%!important; display: block!important; height: auto !important;}
-    }
+    {{-- Mobile Styles --}}
+    @include('layouts.partials.mobile_styles')
 
     @if(isset($params['campaign_data']['library_config']['propietaryCss']))
         {{ $params['campaign_data']->getLibraryConfig('propietaryCss') }}

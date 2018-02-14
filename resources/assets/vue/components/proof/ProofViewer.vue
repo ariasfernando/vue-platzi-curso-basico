@@ -1,22 +1,20 @@
 <template id="proof-viewer">
     <div class="proof-viewer-container">
-
         <div class="proof-top-bar" v-sticky="{ zIndex: 999, stickyTop: 0 }">
-            <div class="col-xs-5"></div>
-            <div class="col-xs-2">
+            <div class="col-md-offset-3 col-md-2 col-xs-2">
                 <div class="switch">
                     <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-                    <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
+                    <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="mode = 'desktop'">
                         <i class="fa fa-desktop"></i>
                     </label>
-                       <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-                       <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
+                    <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
+                    <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="mode = 'mobile'">
                         <i class="glyphicon glyphicon-phone"></i>
                     </label>
-                     <span class="switch-selection"></span>
+                    <span class="switch-selection"></span>
                   </div>
              </div>
-             <div class="col-xs-5 text-right" id="section-canvas-buttons-col">
+             <div class="col-md-7 col-xs-10 text-right" id="section-canvas-buttons-col">
                  <proof-decision
                      :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
                      :token="token"
@@ -46,8 +44,14 @@
                         </tr>
                         <tr>
                             <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
-                                <table id="emailCanvas" class="stx-email-canvas wrapper-table" :width="campaign.template_width" cellspacing="0" cellpadding="0" border="0">
-                                    <tbody v-html="campaign.body_html"></tbody>
+                                <table
+                                    border="0"
+                                    class="stx-email-canvas wrapper-table"
+                                    id="emailCanvas"
+                                    cellspacing="0"
+                                    cellpadding="0"
+                                    :width="templateWidth">
+                                    <tbody v-html="campaignHtml"></tbody>
                                 </table>
                             </td>
                         </tr>
@@ -72,7 +76,7 @@
     import Alert from './Alert.vue';
     import VueSticky from 'vue-sticky';
 
-    module.exports = {
+    export default {
         name: 'proofViewer',
         components: {
             Alert,
@@ -89,17 +93,33 @@
                 },
                 campaign: [],
                 showDecision: false,
-                reviewer: []
+                reviewer: [],
+                mode: 'desktop'
             };
         },
         props: ['token'],
+        computed: {
+            campaignHtml () {
+                if ('body_html' in this.campaign) {
+                    // Yes, it's ugly, but this width value is set in the body_html and we need
+                    // to remove it so the switch can work.
+                    // @TODO: check why this value is in the body_html
+                    return this.campaign.body_html.replace('660', '');
+                } else {
+                    return '';
+                }
+            },
+            templateWidth () {
+                return this.mode === 'desktop' ? 600 : 440;
+            }
+        },
         created: function() {
             // TODO: find a way to define this in the vue instance
             Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             // Get campaign data
             this.getProofData();
-        },       
+        },
         directives: {
           'sticky': VueSticky,
         },
