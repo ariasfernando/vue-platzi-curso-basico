@@ -53,14 +53,14 @@ function buttonDefault() {
         link: 'attribute',
         label: 'Width',
         name: 'width',
-        type: 'text',
+        type: 'number',
         value: '150',
       },
       {
         link: 'attribute',
         label: 'Height',
         name: 'height',
-        type: 'text',
+        type: 'number',
         value: '40',
       },
       {

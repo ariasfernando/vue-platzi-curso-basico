@@ -53,11 +53,20 @@ export default {
       }
     ];
   },
-  methods: {
+  computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
     },
-
+    component() {
+      const module = this.$store.getters["module/module"];
+      const component =
+        module.structure.columns[this.currentComponent.columnId].components[
+          this.currentComponent.componentId
+        ];
+      return component;
+    }
+  },
+  methods: {
     clangeValue(newValue, property) {
       if (property === "fontSize" && this.isBlockLineHeight) {
         // if isBlockLineHeight then update lineHeight
@@ -84,16 +93,11 @@ export default {
     },
 
     getValue(name) {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent().columnId].components[
-          this.currentComponent().componentId
-        ];
       let value;
       if (name === "isBlockLineHeight") {
-        value = component.styleOptions[name];
+        value = this.component.styleOptions[name];
       } else {
-        value = component.style[name].replace("px", "");
+        value = this.component.style[name].replace("px", "");
       }
       return value;
     },

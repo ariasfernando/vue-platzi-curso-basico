@@ -69,20 +69,6 @@ function imageDefault() {
       },
       {
         link: 'attribute',
-        label: 'Width',
-        name: 'width',
-        type: 'text',
-        value: '100%',
-      },
-      {
-        link: 'attribute',
-        label: 'Height',
-        name: 'height',
-        type: 'text',
-        value: 'auto',
-      },
-      {
-        link: 'attribute',
         label: 'Align',
         name: 'align',
         type: 'select',

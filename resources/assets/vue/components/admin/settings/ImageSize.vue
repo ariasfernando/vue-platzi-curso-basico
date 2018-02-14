@@ -9,9 +9,9 @@
           v-model="imageSizeSetting.value"
           :class="{'clearfix': true,'input-number-size': true, 'is-danger': errors.has(imageSizeSetting.name) }"
           :name="imageSizeSetting.name"
-          @change="(newValue)=>clangeValue(newValue, imageSizeSetting.name)"
+          @change="(newValue)=>changeValue(newValue, imageSizeSetting.name)"
           :max="maxValue(imageSizeSetting.name)"
-          :min="0"
+          :min="min"
           :disabled="imageSizeSetting.name === 'height' ? isBlockHeight : false"
           :controls="false"
         ></el-input-number>
@@ -23,7 +23,7 @@
             :name="imageSizeSetting.name"
             placeholder="auto"
             disabled="disabled"
-            @change="(newValue)=>clangeValue(newValue,imageSizeSetting.name)"
+            @change="(newValue)=>changeValue(newValue,imageSizeSetting.name)"
           ></el-input>
         <el-button
           v-if="!(imageSizeSetting.name === 'height' && isBlockHeight)"
@@ -48,7 +48,8 @@ export default {
     return {
       isBlockHeight: true,
       isPxWidth: true,
-      imageSizeSettings: []
+      imageSizeSettings: [],
+      min: 10
     };
   },
   mounted() {
@@ -68,12 +69,23 @@ export default {
       }
     ];
   },
-  methods: {
+  computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
     },
+    component() {
+      const module = this.$store.getters["module/module"];
+      const component =
+        module.structure.columns[this.currentComponent.columnId].components[
+          this.currentComponent.componentId
+        ];
+      return component;
+    }
+  },
+  methods: {
 
-    clangeValue(newValue, property) {
+    changeValue(newValue, property) {
+      isNaN(newValue) || newValue < this.min ? this.min : newValue;
       if (property === "width" && !this.isPxWidth) {
         // is width+%
         this.saveAttribute(newValue + "%", property);
@@ -125,16 +137,11 @@ export default {
     },
 
     getValue(name) {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent().columnId].components[
-          this.currentComponent().componentId
-        ];
       let value;
       if (name === "isBlockHeight" || name === "isPxWidth") {
-        value = component.styleOptions[name];
+        value = this.component.styleOptions[name];
       } else {
-        value = component.attribute[name].replace("px", "");
+        value = this.component.attribute[name].replace("px", "");
         value = value.replace("%", "");
       }
       return value;
@@ -142,8 +149,8 @@ export default {
 
     saveStyleOption(value, property) {
       this.$store.commit("module/saveComponentStyleOption", {
-        columnId: this.currentComponent().columnId,
-        componentId: this.currentComponent().componentId,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
         property: property,
         value: value
       });
@@ -151,8 +158,8 @@ export default {
 
     saveAttribute(value, property) {
       this.$store.commit("module/saveComponentAttribute", {
-        columnId: this.currentComponent().columnId,
-        componentId: this.currentComponent().componentId,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
         attribute: property,
         attributeValue: value
       });

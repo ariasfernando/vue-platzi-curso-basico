@@ -10,17 +10,17 @@
         </div>
       </div>
 
-      <div class="btn-group">
-        <input v-if="plugin.enabled" v-for="(value, name) in plugin.config.options"
-          class="btn toggleable"
-          v-b-tooltip.hover
-          :title="name"
-          :name="name"
+      <div class="btn-group">        
+        <el-input-number
+          v-if="plugin.enabled" v-for="(value, name) in plugin.config.options"
+          size="mini" 
           :value="value"
-          type="number"
-          @input.prevent="changeOption"
+          :class="{'clearfix': true, 'is-danger': errors.has(name) }"
+          @change="(newValue)=>changeOption(newValue, name)"
+          :max="maxValue(name)"
+          :min="1"
           :key="name"
-        />
+        ></el-input-number>
       </div>
     </form>
 
@@ -80,9 +80,7 @@
           attribute: this.module.structure.columns[payload.columnId].components[payload.componentId].attribute || {}
         });
       },
-      changeOption(e) {
-        let nameHeight = e.target.name;
-        let valueHeight = e.target.value;
+      changeOption(valueHeight, nameHeight) {
         let maxHeight = this.plugin.config.options.max;
         let minHeight = this.plugin.config.options.min;
         let options = {};
