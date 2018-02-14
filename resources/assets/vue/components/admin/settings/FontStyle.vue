@@ -8,7 +8,7 @@
           v-model="fontStyleSetting.value"
           :class="{'clearfix': true, 'is-danger': errors.has(fontStyleSetting.name) }"
           :name="fontStyleSetting.name"
-          @change="(newValue)=>clangeValue(newValue,fontStyleSetting.name)"
+          @change="(val)=>clangeValue(val,fontStyleSetting)"
           :min="fontStyleSetting.min"
           :max="fontStyleSetting.max"
           :disabled="fontStyleSetting.name === 'lineHeight' ? isBlockLineHeight : false"
@@ -67,14 +67,14 @@ export default {
     }
   },
   methods: {
-    clangeValue(newValue, property) {
-      if (property === "fontSize" && this.isBlockLineHeight) {
+    clangeValue(val, setting) {
+      if (setting.name === "fontSize" && this.isBlockLineHeight) {
         // if isBlockLineHeight then update lineHeight
         let lineHeightCalculated = this.calculeLineHeight();
         this.fontStyleSettings[1].value = lineHeightCalculated;
         this.saveStyle(lineHeightCalculated, "lineHeight");
       }
-      this.saveStyle(newValue, property);
+      this.saveStyle(val, setting.name);
     },
 
     calculeLineHeight() {
@@ -102,21 +102,21 @@ export default {
       return value;
     },
 
-    saveStyleOption(newValue, property) {
+    saveStyleOption(val, name) {
       this.$store.commit("module/saveComponentStyleOption", {
         columnId: this.currentComponent().columnId,
         componentId: this.currentComponent().componentId,
-        property: property,
-        value: newValue
+        property: name,
+        value: val
       });
     },
 
-    saveStyle(newValue, property) {
+    saveStyle(val, name) {
       this.$store.commit("module/saveComponentStyle", {
         columnId: this.currentComponent().columnId,
         componentId: this.currentComponent().componentId,
-        property: property,
-        value: newValue + "px"
+        property: name,
+        value: val + "px"
       });
     }
   }

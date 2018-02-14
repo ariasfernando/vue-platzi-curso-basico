@@ -1,6 +1,6 @@
 <template>
   <div class="component-settings" v-if="ready">
-    
+
     <!-- START: Style -->
     <b-btn block v-b-toggle.style class="module-settings-item-right">
       <p class="pull-left"><i class="glyphicon glyphicon-pencil"></i> STYLES</p>
@@ -16,123 +16,124 @@
           <b-tab title="Desktop" active>
             <form class="form-horizontal">
 
-          <template v-for="setting in component.componentSettings" >
-            <component :is="'input-' + setting" :setting="setting" :key="setting"></component>
-          </template>
-          
-          <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
+              <template v-for="setting in component.componentSettings" >
+                <component :is="'input-' + setting" :setting="setting" :key="setting"></component>
+              </template>
 
-            <div v-if="!setting.group" >
-              <label class="col-sm-7 control-label" :for="setting.name">{{ setting.label }}</label>
-              <div class="col-sm-5 position-relative content-colorpicker">
-                <!-- Input File -->
-                <input v-if="setting.type === 'file'"
-                       v-validate="'required'"
-                       :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                       :name="setting.name"
-                       type="file"
-                       @change="onFileChange">
+              <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
 
-                <!-- Input Text -->
-                <el-input
-                  v-if="setting.type === 'text'"
-                  v-model="setting.value"
-                  :placeholder="setting.label"
-                  :name="setting.name"
-                  @change="(newValue)=>saveComponent(setting.name, newValue)"
-                  :class="{'is-danger': errors.has(setting.name) }"
-                ></el-input>
+                <div v-if="!setting.group" >
+                  <label class="col-sm-7 control-label" :for="setting.name">{{ setting.label }}</label>
+                  <div class="col-sm-5 position-relative content-colorpicker">
+                    <!-- Input File -->
+                    <input v-if="setting.type === 'file'"
+                           v-validate="'required'"
+                           :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                           :name="setting.name"
+                           type="file"
+                           @change="onFileChange">
 
-                <!-- Input select -->
-                <span v-if="setting.type === 'select'">
-                  <b-form-select v-model="setting.value" :name="setting.name" :options="setting.options" @change.native="saveComponentByEvent">
-                  </b-form-select>
-                </span>
+                    <!-- Input Text -->
+                    <el-input
+                      v-if="setting.type === 'text'"
+                      v-model="setting.value"
+                      :placeholder="setting.label"
+                      @change="(val)=>saveComponent(val, setting)"
+                      :class="{'is-danger': errors.has(setting.name) }"
+                    ></el-input>
 
-                <!-- Input color -->
-                <div @click.prevent="toggleSketch">
-                  <input v-if="setting.type === 'color'"
-                         v-validate="'required'"
-                         v-model="setting.value.hex"
-                         type="text"
-                         class="sketchbackground"
-                         :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                         :name="setting.name"
-                         :placeholder="setting.label"
+                    <!-- Input select -->
+                    <span v-if="setting.type === 'select'">
+                      <b-form-select
+                        v-model="setting.value"
+                        :options="setting.options"
+                        @change.native="(evt)=>saveComponentByEvent(evt, setting)">
+                      </b-form-select>
+                    </span>
+
+                    <!-- Input color -->
+                    <div @click.prevent="toggleSketch">
+                      <input v-if="setting.type === 'color'"
+                             v-validate="'required'"
+                             v-model="setting.value.hex"
+                             type="text"
+                             class="sketchbackground"
+                             :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                             :placeholder="setting.label"
+                             @click.prevent="toggleSketch"
+                             disabled
+                             @change="(evt)=>saveComponentByEvent(evt, setting)">
+                    </div>
+
+                    <div v-if="setting.type === 'color'"
+                         class="icon-remove st-remove-sketch"
                          @click.prevent="toggleSketch"
-                         disabled
-                         @change="saveComponentByEvent">
+                    >
+                      <i class="glyphicon glyphicon-remove"></i>
+                    </div>
+                    <sketch-picker v-if="setting.type === 'color'"
+                                   v-model="setting.value"
+                                   class="sketch-picker"
+                                   @click.native="updateColorPickerSetting(setting.name, setting.link, false )"></sketch-picker>
+
+                    <!-- Span General Error -->
+                    <span v-show="errors.has(setting.name)"
+                          class="help is-danger">{{ errors.first(setting.name) }}
+                    </span>
+                  </div>
                 </div>
 
-                <div v-if="setting.type === 'color'"
-                     class="icon-remove st-remove-sketch"
-                     @click.prevent="toggleSketch"
-                >
-                  <i class="glyphicon glyphicon-remove"></i>
-                </div>
-                <sketch-picker v-if="setting.type === 'color'"
-                               v-model="setting.value"
-                               class="sketch-picker"
-                               @click.native="updateColorPickerSetting(setting.name, setting.link, false )"></sketch-picker>
+                <div v-else-if="setting.name === 'padding'">
+                  <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
+                  <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker"
+                       v-for="(settingGroup, keyGroup) in setting.group" :key="settingGroup.name">
+                    <!-- Input Text -->
+                    <input v-if="settingGroup.type === 'text'"
+                           :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
+                           :name="settingGroup.name"
+                           :placeholder="settingGroup.label"
+                           v-model="settingGroup.value"
+                           type="text"
+                           v-validate="'required'"
+                           @change="(evt)=>saveComponentByEvent(evt, settingGroup)">
 
-                <!-- Span General Error -->
-                <span v-show="errors.has(setting.name)"
-                      class="help is-danger">{{ errors.first(setting.name) }}
-                </span>
-              </div>
-            </div>
-
-            <div v-else-if="setting.name === 'padding'">
-              <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
-              <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker"
-                  v-for="(settingGroup, keyGroup) in setting.group" :key="settingGroup.name">
-                <!-- Input Text -->
-                <input v-if="settingGroup.type === 'text'"
-                       :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
-                       :name="settingGroup.name"
-                       :placeholder="settingGroup.label"
-                       v-model="settingGroup.value"
-                       type="text"
-                       v-validate="'required'"
-                       @change="saveComponentByEvent">
-
-                <!-- Input select -->
-                <span v-if="settingGroup.type === 'select'">
+                    <!-- Input select -->
+                    <span v-if="settingGroup.type === 'select'">
                   <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponentByEvent" >
-                  </b-form-select>
-                </span>
+                      </b-form-select>
+                    </span>
 
-                <!-- Input color -->
-                <div @click.prevent="toggleSketch">
-                  <input v-if="settingGroup.type === 'color'"
-                         v-model="settingGroup.value.hex"
-                         v-validate="'required'"
-                         type="text"
-                         class="sketchbackground"
-                         :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
-                         :name="settingGroup.name"
-                         :placeholder="settingGroup.label"
+                    <!-- Input color -->
+                    <div @click.prevent="toggleSketch">
+                      <input v-if="settingGroup.type === 'color'"
+                             v-model="settingGroup.value.hex"
+                             v-validate="'required'"
+                             type="text"
+                             class="sketchbackground"
+                             :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
+                             :name="settingGroup.name"
+                             :placeholder="settingGroup.label"
+                             @click.prevent="toggleSketch"
+                             @input="(evt)=>saveComponentByEvent(evt, settingGroup)"
+                             disabled>
+                    </div>
+                    <div v-if="settingGroup.type === 'color'"
+                         class="icon-remove st-remove-sketch"
                          @click.prevent="toggleSketch"
-                         @input="saveComponentByEvent"
-                         disabled>
-                </div>
-                <div v-if="settingGroup.type === 'color'"
-                     class="icon-remove st-remove-sketch"
-                     @click.prevent="toggleSketch"
-                >
-                  <i class="glyphicon glyphicon-remove"></i>
-                </div>
-                <sketch-picker v-if="settingGroup.type === 'color'"
-                                v-model="settingGroup.value"
-                                class="sketch-picker"
-                                @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
+                    >
+                      <i class="glyphicon glyphicon-remove"></i>
+                    </div>
+                    <sketch-picker v-if="settingGroup.type === 'color'"
+                                   v-model="settingGroup.value"
+                                   class="sketch-picker"
+                                   @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
 
-                <!-- Span General Error -->
-                <span v-show="errors.has(settingGroup.name)"
-                      class="help is-danger">{{ errors.first(settingGroup.name) }}
-                </span>
+                    <!-- Span General Error -->
+                    <span v-show="errors.has(settingGroup.name)"
+                          class="help is-danger">{{ errors.first(settingGroup.name) }}
+                    </span>
 
-              </div>
+                  </div>
                 </div>
               </div>
             </form>
@@ -140,11 +141,11 @@
           <!-- Mobile Styles -->
           <b-tab title="Mobile">
             <div
-              v-for="(plugin, key) in component.plugins"
-              v-if="shouldRenderInStyles(plugin)"
-              class="plugin-wrapper"
-              :class="'plugin-' + plugin.name"
-              :key="plugin.name"
+                    v-for="(plugin, key) in component.plugins"
+                    v-if="shouldRenderInStyles(plugin)"
+                    class="plugin-wrapper"
+                    :class="'plugin-' + plugin.name"
+                    :key="plugin.name"
             >
               <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
             </div>
@@ -164,11 +165,11 @@
     <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
         <div
-          v-for="(plugin, key) in component.plugins"
-          v-if="!shouldRenderInStyles(plugin)"
-          class="plugin-wrapper"
-          :class="'plugin-' + plugin.name"
-          :key="key"
+                v-for="(plugin, key) in component.plugins"
+                v-if="!shouldRenderInStyles(plugin)"
+                class="plugin-wrapper"
+                :class="'plugin-' + plugin.name"
+                :key="key"
         >
           <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
         </div>
@@ -179,194 +180,160 @@
 </template>
 
 <script>
-import _ from "lodash";
-import BootstrapVue from "bootstrap-vue";
-import { Sketch } from "vue-color";
-import * as elementSettings from "./settings";
-export default {
-  data() {
-    return {
-      ready: false,
-      component: {}
-    };
-  },
-  components: {
-    BootstrapVue,
-    "sketch-picker": Sketch,
-    "input-font-family": elementSettings.FontFamily,
-    "input-font-style": elementSettings.FontStyle,
-    "input-image-size": elementSettings.ImageSize,
-    "input-button-caret": elementSettings.ButtonCaret
-  },
-  computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    }
-  },
-  watch: {
-    currentComponent: {
-      handler: function(currentComponent) {
-        let module = this.$store.getters["module/module"];
-        if (!_.isEmpty(currentComponent) && currentComponent.componentId >= 0) {
-          this.component =
-            module.structure.columns[currentComponent.columnId].components[
-              currentComponent.componentId
-            ];
-          this.ready = true;
-        } else {
-          this.ready = false;
+
+  import _ from "lodash";
+  import BootstrapVue from "bootstrap-vue";
+  import { Sketch } from "vue-color";
+  import * as elementSettings from "./settings";
+  export default {
+    data () {
+      return {
+        ready: false,
+        component: {}
+      };
+    },
+    components: {
+      BootstrapVue,
+      "sketch-picker": Sketch,
+      "input-font-family": elementSettings.FontFamily,
+      "input-font-style": elementSettings.FontStyle,
+      "input-image-size": elementSettings.ImageSize,
+      "input-button-caret": elementSettings.ButtonCaret
+    },
+    computed: {
+      currentComponent() {
+        return this.$store.getters["module/currentComponent"];
+      }
+    },
+    watch : {
+      currentComponent: {
+        handler: function(currentComponent) {
+          let module = this.$store.getters["module/module"];
+          if (!_.isEmpty(currentComponent) && currentComponent.componentId >= 0) {
+            this.component =
+              module.structure.columns[currentComponent.columnId].components[
+                currentComponent.componentId
+                ];
+            this.ready = true;
+          } else {
+            this.ready = false;
+          }
+        },
+        deep: true
+      }
+    },
+    methods: {
+      toggleSketch(e){
+        const inputElement = e.toElement;
+        $(inputElement)
+          .closest(".content-colorpicker")
+          .find(".sketch-picker, .st-remove-sketch")
+          .toggleClass("st-show-element");
+      },
+
+      onFileChange(e) {
+        const files = e.target.files || e.dataTransfer.files;
+
+        if (!files.length) return;
+
+        this.createImage(files[0]);
+      },
+      createImage(file) {
+        const reader = new FileReader();
+        const vm = this;
+
+        reader.onload = e => {
+          vm.image = e.target.result;
+
+          // Upload Image
+          this.$store
+            .dispatch("module/uploadImages", {
+              images: [vm.image]
+            })
+            .then(res => {
+              this.updateAttributePlaceholder("customer/modules" + res[0]);
+            });
+        };
+
+        reader.readAsDataURL(file);
+      },
+
+      updateAttributePlaceholder(imgSrc) {
+        // Set the src after we have loaded the new image
+        const tmp = new Image();
+        tmp.src = this.$_app.config.imageUrl + imgSrc;
+
+        tmp.onload = () => {
+          this.component.attribute.placeholder = imgSrc;
+
+          _.each(this.component.settings, (option) => {
+            if (option.name === 'placeholder') {
+              option.value = imgSrc;
+            }
+          });
+        };
+
+        tmp.onerror = () => {
+          // Retry to load image
+          this.updateAttributePlaceholder(imgSrc);
+        };
+
+      },
+
+      saveComponentByEvent(evt, setting) {
+        this.saveComponent(evt.target.value, setting);
+      },
+
+      saveComponent(val, setting) {
+        const data = {
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          property: setting.name,
+          value: val
+        };
+
+        if (setting.link === 'style') {
+          this.$store.commit('module/saveComponentStyle', data);
+        }
+
+        if (setting.link === 'attribute') {
+          this.$store.commit('module/saveComponentAttribute', data);
         }
       },
-      deep: true
-    }
-  },
-  methods: {
-    toggleSketch(e) {
-      const inputElement = e.toElement;
-      $(inputElement)
-        .closest(".content-colorpicker")
-        .find(".sketch-picker, .st-remove-sketch")
-        .toggleClass("st-show-element");
-    },
 
-    onFileChange(e) {
-      const files = e.target.files || e.dataTransfer.files;
-
-      if (!files.length) return;
-
-      this.createImage(files[0]);
-    },
-    createImage(file) {
-      const reader = new FileReader();
-      const vm = this;
-
-      reader.onload = e => {
-        vm.image = e.target.result;
-
-        // Upload Image
-        this.$store
-          .dispatch("module/uploadImages", {
-            images: [vm.image]
-          })
-          .then(res => {
-            this.updateAttributePlaceholder("customer/modules" + res[0]);
-          });
-      };
-
-      reader.readAsDataURL(file);
-    },
-
-    updateAttributePlaceholder(e) {
-      this.component.attribute.placeholder = e;
-
-      _.each(this.component.settings, option => {
-        if (option.name === "placeholder") {
-          option.value = e;
-        }
-      });
-
-      this.$store.commit("module/setChangeSettingComponent", {
-        style: this.component.style || {},
-        attribute: this.component.attribute || {}
-      });
-    },
-
-    saveComponentByEvent(evt) {
-      this.saveComponent(evt.target.name, evt.target.value);
-    },
-
-    saveComponent(nameTarget, valTarget) {
-      _.each(this.component.settings, (option, indexOption) => {
-        if (option.link === "style") {
-          if (option.group && option.group.length > 0) {
+      // TODO Update date used mutation.
+      updateColorPickerSetting( name, link , isGroup ){
+        _.each(this.component.settings, (option, index) => {
+          if ( isGroup ){
             _.each(option.group, (optionGroup, indexGroup) => {
-              if (optionGroup.name === nameTarget) {
-                if (optionGroup.type === "color") {
-                  this.component.style[optionGroup.name] =
-                    optionGroup.value.hex;
-                } else {
-                  if (optionGroup.type === "select") {
-                    this.component.style[optionGroup.name] = valTarget;
-                  } else {
-                    this.component.style[optionGroup.name] = optionGroup.value;
-                  }
+              if (optionGroup.name === name) {
+                if (link === "style") {
+                  this.component[link][name] = optionGroup.value.hex;
+                }else{
+                  this.component[link][name] = optionGroup.value;
                 }
               }
             });
-          } else {
-            if (option.name === nameTarget) {
-              if (option.type === "color") {
-                this.component.style[option.name] = option.value.hex;
-              } else {
-                this.component.style[option.name] = option.value;
-              }
-            }
-          }
-        }
-
-        if (option.link === "attribute") {
-          if (option.group && option.group.length > 0) {
-            _.each(option.group, (optionGroup, indexGroup) => {
-              if (optionGroup.name === nameTarget) {
-                if (optionGroup.type === "select") {
-                  this.component.attribute[optionGroup.name] = valTarget;
-                } else {
-                  this.component.attribute[optionGroup.name] =
-                    optionGroup.value;
-                }
-              }
-            });
-          } else {
-            if (option.name === nameTarget) {
-              if (option.type === "select") {
-                this.component.attribute[option.name] = valTarget;
-              } else {
-                this.component.attribute[option.name] = option.value;
-              }
-            }
-          }
-        }
-      });
-
-      this.$store.commit("module/setChangeSettingComponent", {
-        style: this.component.style || {},
-        attribute: this.component.attribute || {}
-      });
-    },
-
-    // TODO Update date used mutation.
-    updateColorPickerSetting(name, link, isGroup) {
-      _.each(this.component.settings, (option, index) => {
-        if (isGroup) {
-          _.each(option.group, (optionGroup, indexGroup) => {
-            if (optionGroup.name === name) {
+          }else{
+            if (option.name === name) {
               if (link === "style") {
-                this.component[link][name] = optionGroup.value.hex;
-              } else {
-                this.component[link][name] = optionGroup.value;
+                this.component[link][name] = option.value.hex;
+              }else{
+                this.component[link][name] = option.value;
               }
             }
-          });
-        } else {
-          if (option.name === name) {
-            if (link === "style") {
-              this.component[link][name] = option.value.hex;
-            } else {
-              this.component[link][name] = option.value;
-            }
           }
-        }
-      });
-      this.$store.commit("module/setChangeSettingComponent", {
-        style: this.component.style || {},
-        attribute: this.component.attribute || {}
-      });
-    },
-    shouldRenderInStyles(plugin) {
-      return _.indexOf(plugin.target, "styles") >= 0;
+        });
+        // this.$store.commit("module/setChangeSettingComponent", {
+        //   style: this.component.style || {},
+        //   attribute: this.component.attribute || {}
+        // });
+      },
+      shouldRenderInStyles(plugin) {
+        return _.indexOf(plugin.target, "styles") >= 0;
+      }
     }
-  }
-};
+  };
 </script>
 
 <style lang="less">

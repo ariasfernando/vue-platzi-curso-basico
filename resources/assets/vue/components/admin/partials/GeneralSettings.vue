@@ -294,9 +294,13 @@
           return true;
         }
 
-        if ( numCols > cols ) {
+        if ( (numCols > cols ) && confirm("Are you sure?") ) {
+
+          this.$store.commit("campaign/unsetActiveModule");
+          this.$store.commit("campaign/unsetCurrentModule");
+          this.$store.commit("campaign/unsetCurrentComponent");
           this.$store.commit("module/removeColumns", {
-            index: cols -1,
+            index: cols,
             number: numCols - cols
           });
         }

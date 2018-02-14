@@ -84,14 +84,14 @@ export default {
   },
   methods: {
 
-    changeValue(newValue, property) {
-      isNaN(newValue) || newValue < this.min ? this.min : newValue;
+    changeValue(val, property) {
+      isNaN(val) || val < this.min ? this.min : val;
       if (property === "width" && !this.isPxWidth) {
         // is width+%
-        this.saveAttribute(newValue + "%", property);
+        this.saveAttribute(val + "%", property);
       } else {
         // is width+px or height+px
-        this.saveAttribute(newValue, property);
+        this.saveAttribute(val, property);
       }
     },
     pixelOrPercentage(property) {
