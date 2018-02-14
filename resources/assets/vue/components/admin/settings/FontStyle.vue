@@ -7,7 +7,6 @@
           v-validate="'required'"
           v-model="fontStyleSetting.value"
           :class="{'clearfix': true, 'is-danger': errors.has(fontStyleSetting.name) }"
-          :name="fontStyleSetting.name"
           @change="(val)=>clangeValue(val,fontStyleSetting)"
           :min="fontStyleSetting.min"
           :max="fontStyleSetting.max"

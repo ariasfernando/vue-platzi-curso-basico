@@ -11,8 +11,8 @@ module.exports = {
   campaignSettings,
   config: {
     options: {
-      max: 100,
       min: 20,
+      max: 100,
     },
   },
   data: {},

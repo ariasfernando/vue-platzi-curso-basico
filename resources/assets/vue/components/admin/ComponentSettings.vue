@@ -23,8 +23,8 @@
               <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
 
                 <div v-if="!setting.group" >
-                  <label class="col-sm-7 control-label" :for="setting.name">{{ setting.label }}</label>
-                  <div class="col-sm-5 position-relative content-colorpicker">
+                  <label class="col-sm-6 control-label" :for="setting.name">{{ setting.label }}</label>
+                  <div class="col-sm-6 position-relative content-colorpicker">
                     <!-- Input File -->
                     <input v-if="setting.type === 'file'"
                            v-validate="'required'"
@@ -41,6 +41,16 @@
                       @change="(val)=>saveComponent(val, setting)"
                       :class="{'is-danger': errors.has(setting.name) }"
                     ></el-input>
+
+                    <el-input-number
+                      size="mini" 
+                      v-if="setting.type === 'number'"
+                      v-model="setting.value"
+                      :placeholder="setting.label"
+                      @change="(val)=>saveComponent(val, setting)"
+                      :class="{'is-danger': errors.has(setting.name) }"
+                      :min="0"
+                    ></el-input-number>
 
                     <!-- Input select -->
                     <span v-if="setting.type === 'select'">

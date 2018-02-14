@@ -9,7 +9,7 @@
           v-model="imageSizeSetting.value"
           :class="{'clearfix': true,'input-number-size': true, 'is-danger': errors.has(imageSizeSetting.name) }"
           :name="imageSizeSetting.name"
-          @change="(newValue)=>changeValue(newValue, imageSizeSetting.name)"
+          @change="(val)=>changeValue(val, imageSizeSetting.name)"
           :max="maxValue(imageSizeSetting.name)"
           :min="min"
           :disabled="imageSizeSetting.name === 'height' ? isBlockHeight : false"
@@ -23,7 +23,7 @@
             :name="imageSizeSetting.name"
             placeholder="auto"
             disabled="disabled"
-            @change="(newValue)=>changeValue(newValue,imageSizeSetting.name)"
+            @change="(val)=>changeValue(val,imageSizeSetting.name)"
           ></el-input>
         <el-button
           v-if="!(imageSizeSetting.name === 'height' && isBlockHeight)"
@@ -88,10 +88,10 @@ export default {
       isNaN(val) || val < this.min ? this.min : val;
       if (property === "width" && !this.isPxWidth) {
         // is width+%
-        this.saveAttribute(val + "%", property);
+        this.saveAttribute(`${val}%`, property);
       } else {
-        // is width+px or height+px
-        this.saveAttribute(val, property);
+        // is width or height
+        this.saveAttribute(`${val}`, property);
       }
     },
     pixelOrPercentage(property) {
@@ -128,7 +128,7 @@ export default {
         this.imageSizeSettings[1].value = height;
       } else {
         let height = 100;
-        this.saveAttribute(height + "px", "height");
+        this.saveAttribute(height, "height");
         this.imageSizeSettings[1].value = height;
       }
       // save and update isBlock
@@ -141,8 +141,7 @@ export default {
       if (name === "isBlockHeight" || name === "isPxWidth") {
         value = this.component.styleOptions[name];
       } else {
-        value = this.component.attribute[name].replace("px", "");
-        value = value.replace("%", "");
+        value = this.component.attribute[name].replace("px", "").replace("%", "");
       }
       return value;
     },
@@ -160,8 +159,8 @@ export default {
       this.$store.commit("module/saveComponentAttribute", {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
-        attribute: property,
-        attributeValue: value
+        property: property,
+        value: value
       });
     }
   }
