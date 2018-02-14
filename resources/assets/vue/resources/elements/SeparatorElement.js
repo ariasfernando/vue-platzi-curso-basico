@@ -11,6 +11,7 @@ function separatorDefault() {
       paddingRight: '10px',
       paddingLeft: '10px',
     },
+    componentSettings: ['input-height'],
     settings: [
       {
         link: 'style',
@@ -25,20 +26,6 @@ function separatorDefault() {
         name: 'borderColor',
         type: 'color',
         value: { hex: 'transparent' },
-      },
-      {
-        link: 'style',
-        label: 'Height',
-        name: 'height',
-        type: 'text',
-        value: '1px',
-      },
-      {
-        link: 'style',
-        label: 'Width',
-        name: 'width',
-        type: 'text',
-        value: '100%',
       },
       {
         link: 'style',
@@ -84,7 +71,6 @@ function separatorDefault() {
     },
     plugins: {},
     data: {},
-    componentSettings: [],
   };
 }
 

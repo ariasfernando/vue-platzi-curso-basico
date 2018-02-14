@@ -103,8 +103,8 @@ export default {
 
     saveStyleOption(val, name) {
       this.$store.commit("module/saveComponentStyleOption", {
-        columnId: this.currentComponent().columnId,
-        componentId: this.currentComponent().componentId,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
         property: name,
         value: val
       });
@@ -112,8 +112,8 @@ export default {
 
     saveStyle(val, name) {
       this.$store.commit("module/saveComponentStyle", {
-        columnId: this.currentComponent().columnId,
-        componentId: this.currentComponent().componentId,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
         property: name,
         value: val + "px"
       });

@@ -175,11 +175,11 @@
     <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
         <div
-                v-for="(plugin, key) in component.plugins"
-                v-if="!shouldRenderInStyles(plugin)"
-                class="plugin-wrapper"
-                :class="'plugin-' + plugin.name"
-                :key="key"
+          v-for="(plugin, key) in component.plugins"
+          v-if="!shouldRenderInStyles(plugin)"
+          class="plugin-wrapper"
+          :class="'plugin-' + plugin.name"
+          :key="key"
         >
           <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
         </div>
@@ -208,7 +208,8 @@
       "input-font-family": elementSettings.FontFamily,
       "input-font-style": elementSettings.FontStyle,
       "input-image-size": elementSettings.ImageSize,
-      "input-button-caret": elementSettings.ButtonCaret
+      "input-button-caret": elementSettings.ButtonCaret,
+      "input-input-height": elementSettings.InputHeight
     },
     computed: {
       currentComponent() {

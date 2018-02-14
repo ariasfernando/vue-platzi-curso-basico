@@ -22,6 +22,7 @@ function dividerDefault() {
       borderLeftStyle: 'none',
       borderLeftColor: '#000000',
     },
+    componentSettings: ['input-height'],
     settings: [
       {
         link: 'style',
@@ -29,20 +30,6 @@ function dividerDefault() {
         name: 'backgroundColor',
         type: 'color',
         value: { hex: 'transparent' },
-      },
-      {
-        link: 'style',
-        label: 'Height',
-        name: 'height',
-        type: 'text',
-        value: '5px',
-      },
-      {
-        link: 'style',
-        label: 'Width',
-        name: 'width',
-        type: 'text',
-        value: '100%',
       },
       {
         link: 'style',
@@ -213,7 +200,6 @@ function dividerDefault() {
     },
     plugins: {},
     data: {},
-    componentSettings: [],
   };
 }
 
