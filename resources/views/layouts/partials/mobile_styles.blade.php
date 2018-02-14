@@ -4,28 +4,28 @@
 
         {{-- Mobile Core Styles --}}
         @section('mobile_core_styles')
-            <?php 
+            <?php
                 try
                 {
-                    echo File::get('css/mobile_core_styles.css');
+                    echo Storage::disk('local:public')->get('css/mobile_core_styles.css');
                 }
-                catch (Illuminate\Filesystem\FileNotFoundException $e)
+                catch (Illuminate\Contracts\Filesystem\FileNotFoundException $e)
                 {
-                    Activity::log("The file doesn't exist: ".$e->getMessage());
+                    Activity::log("The file doesn't exist: " . $e->getMessage());
                 }
             ?>
         @show
         
         {{-- Mobile Client Styles --}}
         @section('mobile_client_styles')
-             <?php 
+             <?php
                 try
                 {
-                    echo File::get('css/mobile_client_styles.css');
+                    echo Storage::disk('local:public')->get('css/mobile_client_styles.css');
                 }
-                catch (Illuminate\Filesystem\FileNotFoundException $e)
+                catch (Illuminate\Contracts\Filesystem\FileNotFoundException $e)
                 {
-                    Activity::log("The file doesn't exist: ".$e->getMessage());
+                    Activity::log("The file doesn't exist: " . $e->getMessage());
                 }
             ?>
         @show
