@@ -26,53 +26,57 @@
               <h4>
                 Preview
               </h4>
-              <div class="row">
-                <div class="send-preview" v-if="!isPublic">
-                  <div class="form-group" v-if="!isPublic">
-                    <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
-                      email is not suitable for deployment. To access the production-ready HTML, please click
-                      "Complete" to publish your campaign.
-                    </p>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="input-group">
-                          <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
-                              placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
-                        </div>
-                        <label class="error" v-if="emailError">{{emailError}}</label>
-                        <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="input-group">
-                          <input type="text" class="form-optional form-control" name="send-preview-subject" value="" id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
-                        </div>
-                      </div>
-                      <div class="col-md-12" v-if="campaign.campaign_data.library_config.preheader">
-                        <div class="input-group">
-                          <input type="text" class="form optional form-control" name="send-preview-preheader" value=""
-                              id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
-                        </div>
-                        <p class="info">The best practice is to limit preheaders to 50 characters.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-                <div class="preview-body" :class="previewBodyClass">
-                  <div class="preview-container">
-                    <div class="mobile-frame"></div>
-                    <slot name="body">
-                      <b-tabs>
-                        <b-tab title="Desktop" @click="togglePreview('desktop')" active>
-                        </b-tab>
-                        <b-tab title="Mobile" @click="togglePreview('mobile')">
-                        </b-tab>
-                      </b-tabs>
-                    </slot>
-                    <div class="iframe-container" :data-template-width="widthPreview">
-                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
+              <div class="modal-container-inner">
+                <div class="row">
+                  <div class="send-preview" v-if="!isPublic">
+                    <div class="form-group" v-if="!isPublic">
+                      <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
+                        email is not suitable for deployment. To access the production-ready HTML, please click
+                        "Complete" to publish your campaign.
+                      </p>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="input-group">
+                            <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
+                                placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
+                          </div>
+                          <label class="error" v-if="emailError">{{emailError}}</label>
+                          <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="input-group">
+                            <input type="text" class="form-optional form-control" name="send-preview-subject" value="" id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
+                          </div>
+                        </div>
+                        <div class="col-md-12" v-if="campaign.campaign_data.library_config.preheader">
+                          <div class="input-group">
+                            <input type="text" class="form optional form-control" name="send-preview-preheader" value=""
+                                id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
+                          </div>
+                          <p class="info">The best practice is to limit preheaders to 50 characters.</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
+                  <div class="preview-body" :class="previewBodyClass">
+                    <div class="preview-container">
+                      <div class="mobile-frame"></div>
+                      <slot name="body">
+                        <b-tabs>
+                          <b-tab title="Desktop" @click="togglePreview('desktop')" active>
+                          </b-tab>
+                          <b-tab title="Mobile" @click="togglePreview('mobile')">
+                          </b-tab>
+                        </b-tabs>
+                      </slot>
+                      <div class="iframe-container" :data-template-width="widthPreview">
+                        <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </slot>
