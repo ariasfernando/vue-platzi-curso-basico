@@ -53,26 +53,30 @@ export default {
     // Fonts path
     const fontPath = `${this.Vue.prototype.$_app.config.baseUrl}/fonts/`;
 
-    let custom = [];
+    let custom = {};
 
     fonts.custom.map(font => {
-      custom.push(font.name);
+      custom[font.name] = true;
 
       const style = document.createElement('style');
 
       style.type = 'text/css';
 
-      let definition = `@font-face {font-family: '${font.name}';`;
+      let definition = '';
+
+      let ie = '';
 
       font.types.map(typeFont => {
         typeFont.files.map(fileFont => {
           if (fileFont.file === 'eot') {
-            definition += `src: url('${fontPath}${font.folder}/${fileFont.file}?#iefix');`;
+            ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}?#iefix');`;
           }
         });
       });
 
       font.types.map(typeFont => {
+        definition += `@font-face {font-family: '${font.name}';`;
+        definition += ie;
         definition += 'src: ';
 
         typeFont.files.map((fileFont, index) => {
@@ -93,7 +97,7 @@ export default {
       document.head.appendChild(style);
     });
 
-    fonts.custom = custom;
+    //fonts.custom = Object.keys(custom).map(item => item);
 
     this.Vue.prototype.$_app.config.fonts = fonts;
   },
