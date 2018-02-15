@@ -202,15 +202,20 @@
           this.$store.dispatch("campaign/completeCampaign", this.campaign)
             .then(completeResponse => {
 
-              // Set processed
-              if (completeResponse.processed) {
-                this.$store.commit('campaign/setProcessStatus');
+              let finishedProcessing = () => {
                 // Hide Loader
                 this.$store.commit("global/setLoader", false);
+                // Set campaign as processed
+                this.$store.commit('campaign/setProcessStatus');
                 // Show complete after campaign is completely processed
                 this.$store.commit("campaign/toggleModal", 'modalComplete');
                 // Redirect to `/dashboard` if user refreshes the page
                 window.history.replaceState(null, null, "?processed=true");
+              };
+
+              // Set processed
+              if (completeResponse.processed) {
+                return finishedProcessing();
               }
 
               // Poll server with job id
@@ -219,17 +224,13 @@
                   this.checkProcessStatus(completeResponse.jobId).then((response) => {
                     if (response.status === 'finished') {
                       clearInterval(processInterval);
-                      this.$store.commit("global/setLoader", false);
-                      // Set campaign as processed
-                      this.$store.commit('campaign/setProcessStatus');
-                      // Show complete after campaign is completely processed
-                      this.$store.commit("campaign/toggleModal", 'modalComplete');
-                      // Redirect to `/dashboard` if user refreshes the page
-                      window.history.replaceState(null, null, "?processed=true");
+                      finishedProcessing();
+                      // Reload campaign data
+                      this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id);
                     }
                   });
                 }, 2000);
-            }
+              }
           }, error => {
             this.$store.commit("global/setLoader", false);
             this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});

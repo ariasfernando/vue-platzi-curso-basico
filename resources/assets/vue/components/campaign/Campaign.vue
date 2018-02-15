@@ -22,10 +22,10 @@
       <aside class="component-settings-wrapper">
         <div class="aside-inner section-box">
           <transition name="slide-fade">
-            <module-settings v-if="currentComponent"></module-settings>
+            <module-settings v-if="Object.keys(currentComponent).length > 0"></module-settings>
           </transition>
           <transition name="slide-fade">
-            <component-settings v-if="currentComponent"></component-settings>
+            <component-settings v-if="Object.keys(currentComponent).length > 0"></component-settings>
           </transition>
           <transition name="slide-fade">
             <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
@@ -158,7 +158,7 @@
     top: 0px;
     min-width: 1200px;
     overflow-x: auto;
-    overflow-y: hidden; 
+    overflow-y: hidden;
   }
 
   .component-settings-wrapper {
