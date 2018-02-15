@@ -212,13 +212,11 @@ gulp.task('elixir-scripts', function () {
             'bower/jquery/dist/jquery.min.js',
             'bower/jquery-ui/jquery-ui.min.js',
             'bower/bootstrap/dist/js/bootstrap.min.js',
-            'bower/magnific-popup/dist/jquery.magnific-popup.js',
             'bower/bootstrapcolorpicker/dist/js/bootstrap-colorpicker.min.js',
             'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
             'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
             // -- Jquery Simple colorpicker List --
             'bower/jquery-simplecolorpicker/jquery.simplecolorpicker.js',
-            // -- TinyMCE editor --
             // -- zxcvbn --
             'bower/zxcvbn/dist/zxcvbn.js',
             // -- Vue --
