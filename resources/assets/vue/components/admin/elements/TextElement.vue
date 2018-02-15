@@ -4,7 +4,7 @@
     data-type="text-element"
     :data-component="JSON.stringify(component)"
     :data-column="columnId"
-    :class="getMobileClasses(component,'tr')"
+    :class="getMobileClasses(component,'tr') + component.attribute.classes.join(' ')"
     @click.prevent="setComponent"
   >
     <td

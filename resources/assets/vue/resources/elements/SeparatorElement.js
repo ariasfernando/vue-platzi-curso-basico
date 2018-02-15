@@ -1,6 +1,7 @@
 function separatorDefault() {
   return {
     type: 'separator-element',
+    componentSettings: ['class-input'],
     style: {
       backgroundColor: 'transparent',
       height: '1px',
@@ -81,10 +82,10 @@ function separatorDefault() {
       bgcolor: { hex: 'transparent' },
       width: '100%',
       hideElement: false,
+      classes: [],
     },
     plugins: {},
     data: {},
-    componentSettings: [],
   };
 }
 

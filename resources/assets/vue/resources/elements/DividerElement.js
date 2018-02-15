@@ -1,6 +1,7 @@
 function dividerDefault() {
   return {
     type: 'divider-element',
+    componentSettings: ['class-input'],
     style: {
       backgroundColor: 'transparent',
       height: '5px',
@@ -29,6 +30,7 @@ function dividerDefault() {
         name: 'backgroundColor',
         type: 'color',
         value: { hex: 'transparent' },
+        classes: [],
       },
       {
         link: 'style',
@@ -213,7 +215,6 @@ function dividerDefault() {
     },
     plugins: {},
     data: {},
-    componentSettings: [],
   };
 }
 

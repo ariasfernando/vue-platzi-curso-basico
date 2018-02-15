@@ -16,7 +16,7 @@
           <b-tab title="Desktop" active>
             <form class="form-horizontal">
 
-              <template v-for="setting in component.componentSettings" >
+              <template v-for="setting in component.componentSettings">
                 <component :is="'input-' + setting" :setting="setting" :key="setting"></component>
               </template>
 
@@ -197,7 +197,8 @@
       "sketch-picker": Sketch,
       "input-font-family": elementSettings.FontFamily,
       "input-font-style": elementSettings.FontStyle,
-      "input-button-caret": elementSettings.ButtonCaret
+      "input-button-caret": elementSettings.ButtonCaret,
+      "input-class-input": elementSettings.ClassInput,
     },
     computed: {
       currentComponent() {
@@ -287,8 +288,8 @@
         const data = {
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          property: setting.name,
-          value: val
+          attribute: setting.name,
+          attributeValue: val
         };
 
         if (setting.link === 'style') {

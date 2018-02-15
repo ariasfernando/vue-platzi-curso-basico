@@ -23,8 +23,9 @@ function textDefault() {
       align: 'left',
       bgcolor: 'transparent',
       hideElement: false,
+      classes: [],
     },
-    componentSettings: ['font-family', 'font-style'],
+    componentSettings: ['font-family', 'font-style', 'class-input'],
     settings: [
       {
         link: 'style',

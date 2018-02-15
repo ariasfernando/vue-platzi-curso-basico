@@ -135,13 +135,13 @@ const mutations = {
   },
   saveComponentStyleOption(state, data) {
     const component = state.module.structure.columns[data.columnId].components[data.componentId];
-    component.styleOptions[data.property] = data.value;
+    component.styleOptions[data.attribute] = data.attributeValue;
   },
   saveComponentAttribute(state, data) {
     const attribute = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
     const newAttr = {};
-    newAttr[data.property] = data.value;
-    _.merge(attribute, newAttr);
+    newAttr[data.attribute] = data.attributeValue;
+    _.extend(attribute, newAttr);
   },
   setActiveColumn(state, columnId) {
     state.activeColumn = columnId;

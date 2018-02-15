@@ -3,7 +3,7 @@
   <tr 
     data-type="separator-element"
     :data-component="JSON.stringify(component)"
-    :class="getMobileClasses(component,'tr')"
+    :class="getMobileClasses(component,'tr') + component.attribute.classes.join(' ')"
     @click.prevent="setComponent"
   >
     <td 

@@ -100,21 +100,21 @@ export default {
       return value;
     },
 
-    saveStyleOption(newValue, property) {
+    saveStyleOption(newValue, attribute) {
       this.$store.commit("module/saveComponentStyleOption", {
         columnId: this.currentComponent().columnId,
         componentId: this.currentComponent().componentId,
-        property: property,
-        value: newValue
+        attribute,
+        attributeValue: newValue
       });
     },
 
-    saveStyle(newValue, property) {
+    saveStyle(newValue, attribute) {
       this.$store.commit("module/saveComponentStyle", {
         columnId: this.currentComponent().columnId,
         componentId: this.currentComponent().componentId,
-        property: property,
-        value: newValue + "px"
+        attribute,
+        attributeValue: newValue + "px"
       });
     }
   }

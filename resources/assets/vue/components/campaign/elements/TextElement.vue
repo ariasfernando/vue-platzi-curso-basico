@@ -9,7 +9,7 @@
   >
     <tr
       data-type="text-element"
-      :class="getMobileClasses(component,'tr')"
+      :class="getMobileClasses(component,'tr') + component.attribute.classes.join(' ')"
     >
       <td width="100%" 
           style="width: 100%;"

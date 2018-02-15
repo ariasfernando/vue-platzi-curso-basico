@@ -1,34 +1,36 @@
 function columnDefault() {
   return {
     type: 'column-element',
+    componentSettings: ['class-input'],
     style: {
-    paddingTop: '0px',
-    paddingLeft: '0px',
-    paddingBottom: '0px',
-    paddingRight: '0px',
-    backgroundColor: 'transparent',
-    // Border Top
-    borderTopWidth: '0px',
-    borderTopStyle: 'none',
-    borderTopColor: '#000000',
-    // Border Right
-    borderRightWidth: '0px',
-    borderRightStyle: 'none',
-    borderRightColor: '#000000',
-    // Border Bottom
-    borderBottomWidth: '0px',
-    borderBottomStyle: 'none',
-    borderBottomColor: '#000000',
-    // Border Left
-    borderLeftWidth: '0px',
-    borderLeftStyle: 'none',
-    borderLeftColor: '#000000',
-  },
+      paddingTop: '0px',
+      paddingLeft: '0px',
+      paddingBottom: '0px',
+      paddingRight: '0px',
+      backgroundColor: 'transparent',
+      // Border Top
+      borderTopWidth: '0px',
+      borderTopStyle: 'none',
+      borderTopColor: '#000000',
+      // Border Right
+      borderRightWidth: '0px',
+      borderRightStyle: 'none',
+      borderRightColor: '#000000',
+      // Border Bottom
+      borderBottomWidth: '0px',
+      borderBottomStyle: 'none',
+      borderBottomColor: '#000000',
+      // Border Left
+      borderLeftWidth: '0px',
+      borderLeftStyle: 'none',
+      borderLeftColor: '#000000',
+    },
     attribute: {
       width: '100%',
       valign: 'middle',
       bgcolor: 'transparent',
       hideElement: false,
+      classes: [],
     },
     settings: [
       {

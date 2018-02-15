@@ -42,8 +42,9 @@ function buttonDefault() {
       href: 'http://stensul.com',
       target: '_blank',
       buttonCaret: undefined,
+      classes: [],
     },
-    componentSettings: ['font-family', 'font-style', 'button-caret'],
+    componentSettings: ['font-family', 'font-style', 'button-caret', 'class-input'],
     styleOptions: {
       isBlockLineHeight: false,
 

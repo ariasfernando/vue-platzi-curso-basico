@@ -69,8 +69,8 @@
         this.$store.commit('module/saveComponentStyle', {
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          property: 'fontFamily',
-          value: arr.join(', '),
+          attribute: 'fontFamily',
+          attributeValue: arr.join(', '),
         });
       },
       saveValue(selected) {
@@ -81,8 +81,8 @@
         this.$store.commit('module/saveComponentStyle', {
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          property: 'fontFamily',
-          value: arr.join(', '),
+          attribute: 'fontFamily',
+          attributeValue: arr.join(', '),
         });
       }
     }

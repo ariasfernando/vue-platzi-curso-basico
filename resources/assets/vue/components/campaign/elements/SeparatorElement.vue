@@ -8,7 +8,7 @@
     style="width: 100%;">
     <tr 
       data-type="separator-element"
-      :class="getMobileClasses(component,'tr')"
+      :class="getMobileClasses(component,'tr') + component.attribute.classes.join(' ')"
     >
       <td
         class="stx-position-relative" 

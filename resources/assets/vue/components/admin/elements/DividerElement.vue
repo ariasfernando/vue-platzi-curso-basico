@@ -2,7 +2,7 @@
   <!-- DIVIDER ELEMENT -->
   <tr @click.prevent="setComponent"
       :data-component="JSON.stringify(component)"
-      :class="getMobileClasses(component,'tr')"
+      :class="getMobileClasses(component,'tr') + component.attribute.classes.join(' ')"
       data-type="divider-element"
   >
     <td 

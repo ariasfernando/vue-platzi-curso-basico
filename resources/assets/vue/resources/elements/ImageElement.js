@@ -1,6 +1,7 @@
 function imageDefault() {
   return {
     type: 'image-element',
+    componentSettings: ['class-input'],
     style: {
       align: 'center',
       paddingTop: '0px',
@@ -20,6 +21,7 @@ function imageDefault() {
       width: '100%',
       height: 'auto',
       hideElement: false,
+      classes: [],
     },
     settings: [
       {
@@ -145,7 +147,6 @@ function imageDefault() {
     ],
     plugins: {},
     data: {},
-    componentSettings: [],
   };
 }
 
