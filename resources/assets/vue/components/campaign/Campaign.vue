@@ -338,7 +338,11 @@
 
     i {
       display: inline-block;
-      vertical-align: sub;
+      margin-top: 7px;
+    }
+
+    i.glyphicon-phone{
+      margin-top: 5px;
     }
   }
 
