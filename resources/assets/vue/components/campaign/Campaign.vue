@@ -9,7 +9,7 @@
         <div class="aside-inner">
           <div class="menu-campaign">
             <campaign-configuration v-if="ready"></campaign-configuration>
-            <campaign-menu v-if="ready"></campaign-menu>
+            <campaign-menu :library-id="libraryId"></campaign-menu>
           </div>
         </div>
       </aside>
@@ -65,7 +65,7 @@
 
   export default {
     name: 'Campaign',
-    props: ['campaignId'],
+    props: ['campaignId', 'libraryId'],
     components: {
       CampaignConfiguration,
       CampaignMenu,

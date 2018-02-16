@@ -3,7 +3,7 @@
 @section('content')
 
 	<div id="campaign">
-	    <campaign campaign-id="{{ $params['campaign_id'] }}"></campaign>
+	    <campaign campaign-id="{{ $params['campaign_id'] }}" library-id="{{ $params['library_id'] }}"></campaign>
     </div>
 
 @endsection

@@ -7,7 +7,7 @@
                  :options="options"
                  :class="{'is-collapsed' : collapsed }"
                  @clone="onClone">
-        <div v-for="item in items" class="beta-subitem-single">
+        <div v-if="ready" v-for="item in items" class="beta-subitem-single">
 
           <div v-if="item.sub_menu" class="expand">
             <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
@@ -38,7 +38,6 @@
 <script>
 
   import clone from 'clone';
-  import moduleService from '../../services/module';
   import _ from 'lodash';
   import Draggable from 'vuedraggable';
 
@@ -46,6 +45,12 @@
     name: 'CampaignMenu',
     components: {
       Draggable
+    },
+    props: {
+      libraryId: {
+        type: String,
+        required: true
+      }
     },
     data () {
       return {
@@ -65,22 +70,39 @@
         },
         expanded: [],
         collapsed: false,
-        isActive: false
+        isActive: false,
+        ready: false,
       }
     },
     computed: {
       items () {
-        return this.$store.state.campaign.campaign.menu_list;
+        return this.$store.getters["library/modules"];
       },
     },
     created() {
-      _.each(this.items, (item) => {
-        if (item.sub_menu) {
-          this.expanded[item.name] = false;
-        }
+
+      this.getLibrary().then(response => {
+        _.each(this.items, (item) => {
+          if (item.sub_menu) {
+            this.expanded[item.name] = false;
+          }
+        });
+        this.ready = true;
+      }, error => {
+        this.$store.commit("global/setLoader", false);
+        this.$root.$toast(
+          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+          {
+            className: 'et-error'
+          }
+        );
       });
+
     },
     methods: {
+      getLibrary () {
+        return this.$store.dispatch("library/getModulesData", this.libraryId);
+      },
       addModule (module) {
         const mod = clone(module);
         mod.data = {};
@@ -122,7 +144,8 @@
         }
       },
       onClone: function (evt) {
-        // Hack to handle draggable element and re-bind click to addModule method after drag & drop an element into email canvas
+        // Hack to handle draggable element and re-bind click to addModule method after drag & drop
+        // an element into email canvas
         let cloneEl = evt.clone;
         cloneEl.addEventListener('click', (e) => {
           let module = JSON.parse($(cloneEl).find('.draggable-item').attr('module'));
