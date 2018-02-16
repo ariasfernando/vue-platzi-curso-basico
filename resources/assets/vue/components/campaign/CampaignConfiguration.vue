@@ -1,7 +1,7 @@
 <template>
   <div class="expand configuration-mod">
     <h2 class="show-configuration" v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-cog glyph-inline"></i> Email Settings <i class="glyphicon glyphicon-menu-up"></i></h2>
-    <div class="level-1 open-section-campaign"l v-bind:class="{'is-collapsed' : collapsed }">
+    <div class="level-1 open-section-campaign" v-bind:class="{'is-collapsed' : collapsed }">
       <form>
         <!-- Configuration Inputs -->
         <div class="configuration-field configuration-nomargin">
