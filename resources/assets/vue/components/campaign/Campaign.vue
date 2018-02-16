@@ -140,7 +140,7 @@
   .beta-subheader{
     display: table-caption;
     width: 100%;
-    min-width: 1200px;
+    min-width: 1280px;
     background-color: #FFFFFF;
     height: 45px;
     padding: 8px 10px;
@@ -157,7 +157,7 @@
     width: 100%;
     position: relative;
     top: 0px;
-    min-width: 1200px;
+    min-width: 1280px;
     overflow-x: auto;
     overflow-y: hidden; 
   }
