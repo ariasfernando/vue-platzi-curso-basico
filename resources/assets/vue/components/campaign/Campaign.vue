@@ -149,6 +149,7 @@
     position: sticky;
     top: 45px;
     z-index: 1000;
+    border-bottom: 1px solid #f4f4f4;
   }
 
   .container-campaign-subwrapper{
