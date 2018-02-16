@@ -4,9 +4,10 @@
     <div class="col-xs-7 control-label">
       <el-select
         v-if="isCustomFontWeight"
-        class="custom-col text-center-from-input"
+        class="custom-col"
         size="mini"
-        v-model="fontWeight"
+        :value="fontWeight"
+        v-model="fontWeightData"
         placeholder="Font Weight"
         @change="(val)=>saveStyle(val,'fontWeight')"
         >
@@ -41,7 +42,8 @@ export default {
   props: ["setting"],
   data() {
     return {
-      options: []
+      options: [],
+      fontWeightData: this.fontWeight
     };
   },
   mounted() {
@@ -110,7 +112,12 @@ export default {
       let fontWeight = this.fontWeight === "normal" ? "bold" : "normal";
       this.saveStyle(fontWeight, "fontWeight");
     }
-  }
+  },
+  watch: {
+    fontWeight (value) {
+      this.fontWeightData= value
+    }
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -136,7 +143,7 @@ export default {
 </style>
 <style>
 /* not scoped */
-.text-center-from-input .el-input--mini .el-input__inner {
+.input-font-weight .el-input--mini .el-input__inner {
   text-align: center;
   border-right: 0;
 }

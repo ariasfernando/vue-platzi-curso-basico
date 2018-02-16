@@ -139,7 +139,10 @@ export default {
       if (name === "isBlockHeight" || name === "isPxWidth") {
         value = this.component.styleOptions[name];
       } else {
-        value = _.parseInt(this.component.attribute[name]);
+        value =
+          this.component.attribute[name] === "auto"
+            ? "auto"
+            : _.parseInt(this.component.attribute[name]);
       }
       return value;
     },
@@ -180,7 +183,7 @@ export default {
   z-index: 2;
   cursor: pointer;
   i {
-    color: #666666;
+    color: #959595;
   }
 }
 .el-button.is-disabled,
@@ -207,5 +210,10 @@ button.el-button {
     border: 1px solid #dcdfe6;
     color: #606266;
   }
+}
+</style>
+<style>
+.field-image-size input[type="text"]{
+  text-align: center;
 }
 </style>

@@ -86,8 +86,6 @@ export default {
       // save and update date
       this.saveStyleOption(isBlock, "isBlockLineHeight");
       this.saveStyle(lineHeight, "lineHeight");
-      this.isBlockLineHeight = isBlock;
-      this.fontStyleSettings[1].value = lineHeight;
     },
 
     getValue(name) {
