@@ -12,17 +12,17 @@ FROM registry.stensuldev.net/dockerfiles/web-2.0.0
 ARG DOCKER_BUILDING
 ARG APP_NAME
 
-# force cache for npm 
-COPY ./package.json /usr/src/app/package.json
-COPY ./package-lock.json /usr/src/app/package-lock.json
-RUN cd /usr/src/app/ && npm install
-
 # force cache for composer 
 COPY ./composer.json /usr/src/app/composer.json
 COPY ./composer.lock /usr/src/app/composer.lock
 COPY ./database /usr/src/app/database
 COPY ./tests /usr/src/app/tests
 RUN cd /usr/src/app/ && composer install --no-scripts
+
+# force cache for npm 
+COPY ./package.json /usr/src/app/package.json
+COPY ./package-lock.json /usr/src/app/package-lock.json
+RUN cd /usr/src/app/ && npm install
 
 # force cache for bower
 COPY ./.bowerrc /usr/src/app/.bowerrc
