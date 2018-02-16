@@ -41,34 +41,17 @@
 </template>
 
 <script>
+import _ from "lodash";
+
 export default {
   name: "ImageSize",
   props: ["setting"],
   data() {
     return {
-      isBlockHeight: true,
-      isPxWidth: true,
-      imageSizeSettings: [],
       min: 10
     };
   },
-  mounted() {
-    this.isBlockHeight = this.getValue("isBlockHeight");
-    this.isPxWidth = this.getValue("isPxWidth");
-    this.imageSizeSettings = [
-      {
-        label: "Width",
-        name: "width",
-        value: this.getValue("width")
-      },
-      {
-        label: "Height",
-        name: "height",
-        value: this.getValue("height"),
-        max: undefined
-      }
-    ];
-  },
+  mounted() {},
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
@@ -80,10 +63,30 @@ export default {
           this.currentComponent.componentId
         ];
       return component;
+    },
+    isBlockHeight() {
+      return this.getValue("isBlockHeight");
+    },
+    isPxWidth() {
+      return this.getValue("isPxWidth");
+    },
+    imageSizeSettings() {
+      return [
+        {
+          label: "Width",
+          name: "width",
+          value: this.getValue("width")
+        },
+        {
+          label: "Height",
+          name: "height",
+          value: this.getValue("height"),
+          max: undefined
+        }
+      ];
     }
   },
   methods: {
-
     changeValue(val, property) {
       isNaN(val) || val < this.min ? this.min : val;
       if (property === "width" && !this.isPxWidth) {
@@ -111,12 +114,10 @@ export default {
         this.saveAttribute(width + "px", "width");
       } else {
         width = Math.min(100, width);
-        this.imageSizeSettings[0].value = width;
         this.saveAttribute(width + "%", "width");
       }
       // save and update isPxWidth
       this.saveStyleOption(isPxWidth, "isPxWidth");
-      this.isPxWidth = isPxWidth;
     },
     onToggleBlockheight() {
       // set isBlock
@@ -125,15 +126,12 @@ export default {
         // save and update height
         let height = "auto";
         this.saveAttribute(height, "height");
-        this.imageSizeSettings[1].value = height;
       } else {
         let height = 100;
         this.saveAttribute(height, "height");
-        this.imageSizeSettings[1].value = height;
       }
       // save and update isBlock
       this.saveStyleOption(isBlock, "isBlockHeight");
-      this.isBlockHeight = isBlock;
     },
 
     getValue(name) {
@@ -141,7 +139,7 @@ export default {
       if (name === "isBlockHeight" || name === "isPxWidth") {
         value = this.component.styleOptions[name];
       } else {
-        value = this.component.attribute[name].replace("px", "").replace("%", "");
+        value = _.parseInt(this.component.attribute[name]);
       }
       return value;
     },
@@ -166,7 +164,7 @@ export default {
   }
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .height-auto input {
   text-align: center;
 }

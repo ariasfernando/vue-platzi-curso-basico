@@ -41,6 +41,11 @@ export default {
       toggled: this.value
     };
   },
+  watch: {
+    value (value) {
+      this.toggled = value
+    }
+  },
   methods: {
     toggle(value) {
       this.$emit('change', value);

@@ -17,6 +17,7 @@ function textDefault() {
     },
     styleOptions: {
       isBlockLineHeight: false,
+      isCustomFontWeight: false,
     },
     attribute: {
       valign: 'middle',
@@ -24,7 +25,7 @@ function textDefault() {
       bgcolor: 'transparent',
       hideElement: false,
     },
-    componentSettings: ['font-family', 'font-style'],
+    componentSettings: ['font-family', 'font-style', 'font-weight'],
     settings: [
       {
         link: 'style',

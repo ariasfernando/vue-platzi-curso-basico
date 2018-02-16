@@ -89,7 +89,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .typo__label {
     padding-bottom: 5px;
     display: inline-block;

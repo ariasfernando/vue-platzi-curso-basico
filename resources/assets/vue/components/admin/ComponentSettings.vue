@@ -209,7 +209,8 @@
       "input-font-style": elementSettings.FontStyle,
       "input-image-size": elementSettings.ImageSize,
       "input-button-caret": elementSettings.ButtonCaret,
-      "input-input-height": elementSettings.InputHeight
+      "input-input-height": elementSettings.InputHeight,
+      "input-font-weight": elementSettings.FontWeight
     },
     computed: {
       currentComponent() {

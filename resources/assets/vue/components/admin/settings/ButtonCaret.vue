@@ -81,7 +81,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .field-button-caret {
     input {
       display: inline;

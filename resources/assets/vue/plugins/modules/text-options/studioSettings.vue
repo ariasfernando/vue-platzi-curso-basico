@@ -36,7 +36,7 @@
           </span>
         </div>
         <!-- Input if config needs it -->
-        <div v-if="isAValidSetting(tinySetting)" class="col-sm-12 control-label">
+        <div v-if="tinySetting.value === true" class="col-sm-12 control-label">
           <div class="btn-group number-input">
             <input
               class="btn toggleable"
@@ -191,9 +191,6 @@
         this.$store.commit('module/savePlugin', payload);
       },
 
-      isAValidSetting(tinySetting) {
-        return tinySetting.value && !_.isUndefined(tinySetting.type);
-      }
     }
   }
 </script>
