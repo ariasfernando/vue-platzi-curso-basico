@@ -1,10 +1,31 @@
-const state = {};
+import libraryService from '../services/library';
 
-const getters = {};
+const state = {
+  modules: [],
+};
 
-const mutations = {};
+const getters = {
+  modules(state) {
+    return state.modules;
+  },
+};
 
-const actions = {};
+const mutations = {
+  loadModulesData(state, modulesData) {
+    state.modules = modulesData;
+  },
+};
+
+const actions = {
+  getModulesData(context, libraryId) {
+
+    return libraryService.getMenuItems(libraryId)
+      .then((response) => {
+        context.commit('loadModulesData', response.modules);
+      })
+      .catch(error => context.commit('error', error));
+  },
+};
 
 module.exports = {
   namespaced: true,

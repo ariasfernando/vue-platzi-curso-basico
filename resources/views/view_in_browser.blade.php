@@ -11,6 +11,6 @@
 
 @section('footer-script')
     <script src="{{ cdn(elixir('js/customer.js')) }}"></script>
-    <script src="{{ cdn(elixir('js/library-v2.js')) }}"></script>
+    <script src="{{ cdn(elixir('js/jquery.js')) }}"></script>
     <script src="{{ cdn( elixir('js/public-view.js') ) }}"></script>
 @stop

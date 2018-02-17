@@ -167,9 +167,21 @@ gulp.task('elixir-scripts', function () {
           [
             'bower/jquery/dist/jquery.js',
             'bower/jquery-ui/jquery-ui.min.js',
+          ],
+          jsDestinationPath + 'jquery.js',
+          assetsPath
+        )
+        .scripts(
+          [
             'bower/bootstrap/dist/js/bootstrap.min.js',
             'bower/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js',
             'bower/bootstrap-select/dist/js/bootstrap-select.min.js',
+          ],
+          jsDestinationPath + 'bootstrap.js',
+          assetsPath
+        )
+        .scripts(
+          [
             'bower/tinymce/tinymce.js',
             'bower/tinymce/themes/modern/theme.js',
             'bower/tinymce/plugins/image/plugin.js',
@@ -181,13 +193,18 @@ gulp.task('elixir-scripts', function () {
             'bower/tinymce/plugins/autolink/plugin.js',
             'bower/tinymce/plugins/link/plugin.js',
             'bower/tinymce/plugins/advlist/plugin.js',
-            'js/library/application-utils.js',
             'js/plugins/tinymce/**/plugin.js',
           ],
-          jsDestinationPath + 'library-v2.js',
+          jsDestinationPath + 'tinymce.js',
           assetsPath
         )
-
+        .scripts(
+          [
+            'js/library/application-utils.js',
+          ],
+          jsDestinationPath + 'application-utils-v2.js',
+          assetsPath
+        )
         // === Compile Vendor and Application scripts to library.js ===
         .scripts(
           [
@@ -201,7 +218,6 @@ gulp.task('elixir-scripts', function () {
             'bower/noty/js/noty/packaged/jquery.noty.packaged.js',
             // -- Jquery Simple colorpicker List --
             'bower/jquery-simplecolorpicker/jquery.simplecolorpicker.js',
-            // -- TinyMCE editor --
             // -- zxcvbn --
             'bower/zxcvbn/dist/zxcvbn.js',
             // -- Vue --
