@@ -253,7 +253,9 @@
             // Necesary filter to keep active state for last module added, triggered in EmailCanvas.vue::addModule()
             if(!isTargetingMenuModule) {
               this.$store.commit("campaign/unsetActiveModule");
-              this.$store.commit("campaign/unsetCurrentModule");
+              this.module.type === "custom"
+                ? this.$store.commit("campaign/unsetCustomModule")
+                : this.$store.commit("campaign/unsetCurrentModule");
             }
           }
         }
