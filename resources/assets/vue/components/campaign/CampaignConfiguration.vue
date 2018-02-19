@@ -83,7 +83,6 @@
 
 <script>
   import _ from 'lodash'
-  import configService from '../../services/config'
   import Multiselect from 'vue-multiselect';
   import ToggleButton from '../../plugins/common/toggle-button'
 
@@ -105,7 +104,9 @@
           autoSave: false,
           tags: []
         },
-        tagOptions: []
+        tagOptions: [],
+        globalConfig: {},
+        campaignConfig: {},
       }
     },
     computed: {
@@ -187,21 +188,21 @@
         });
       },
       loadConfig() {
-        configService.getConfig('global_settings')
-          .then((response) => {
-            this.enableAutoSave = response.auto_save === '1';
-            this.enablePreheader = response.enable_preheader === '1' && this.campaign.library_config.preheader;
-          })
-          .catch((error) => {
-            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+
+          this.$store.dispatch("config/getConfig", 'global_settings').then(response => {
+            this.globalConfig = this.$store.getters["config/config"].global_settings;
+            this.enableAutoSave = this.globalConfig.auto_save === '1';
+            this.enablePreheader = this.globalConfig.enable_preheader === '1' && this.campaign.library_config.preheader;
+          }, error => {
+            this.$store.commit("global/setLoader", false);
+            this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+              {className: 'et-error'}
+            );
           });
-          configService.getConfig('campaign')
-            .then((response) => {
-              this.enableLocking = response.locking === true;
-            })
-            .catch((error) => {
-              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
-            });
+
+          this.campaignConfig = this.$store.getters["config/config"].campaign;
+          this.enableLocking = this.campaignConfig.locking === true;
       },
       tagAdd(tag) {
 
