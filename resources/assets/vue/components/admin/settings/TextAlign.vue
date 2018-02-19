@@ -1,6 +1,6 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <label class="typo__label col-sm-6 control-label">Text align</label>
+    <label class="typo__label col-sm-6 control-label">Horizontal align</label>
     <el-button plain size="mini" @click="changeAlignment('left')" class="fa fa-align-left" :class="{ active: currentValue == 'left' }"></el-button>
     <el-button plain size="mini" @click="changeAlignment('center')" class="fa fa-align-center" :class="{ active: currentValue == 'center' }"></el-button>
     <el-button plain size="mini" @click="changeAlignment('right')" class="fa fa-align-right" :class="{ active: currentValue == 'right' }"></el-button>
