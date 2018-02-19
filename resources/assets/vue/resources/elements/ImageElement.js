@@ -25,7 +25,7 @@ function imageDefault() {
       height: 'auto',
       hideElement: false,
     },
-    componentSettings: ['image-size'],
+    componentSettings: ['image-size', 'text-align'],
     settings: [
       {
         link: 'attribute',
@@ -65,18 +65,6 @@ function imageDefault() {
           { value: '_blank', text: '_blank' },
           { value: '_self', text: '_self' },
           { value: '_top', text: '_top' },
-        ],
-      },
-      {
-        link: 'attribute',
-        label: 'Align',
-        name: 'align',
-        type: 'select',
-        value: 'center',
-        options:[
-          { value: 'left', text: 'left' },
-          { value: 'center', text: 'center' },
-          { value: 'right', text: 'right' },
         ],
       },
       {

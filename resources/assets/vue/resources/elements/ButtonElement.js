@@ -43,7 +43,7 @@ function buttonDefault() {
       target: '_blank',
       buttonCaret: undefined,
     },
-    componentSettings: ['font-family', 'font-style', 'button-caret'],
+    componentSettings: ['font-family', 'font-style', 'button-caret', 'text-align'],
     styleOptions: {
       isBlockLineHeight: false,
     },
@@ -61,18 +61,6 @@ function buttonDefault() {
         name: 'height',
         type: 'number',
         value: '40',
-      },
-      {
-        link: 'attribute',
-        label: 'Align',
-        name: 'align',
-        type: 'select',
-        value: 'center',
-        options:[
-          { value: 'center', text: 'center' },
-          { value: 'right', text: 'Right' },
-          { value: 'left', text: 'Left' },
-        ],
       },
       {
         link: 'attribute',
