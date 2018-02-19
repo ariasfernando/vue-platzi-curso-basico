@@ -25,7 +25,7 @@ function imageDefault() {
       height: 'auto',
       hideElement: false,
     },
-    componentSettings: ['image-size', 'text-align'],
+    componentSettings: ['image-size', 'text-align', 'vertical-align'],
     settings: [
       {
         link: 'attribute',
@@ -65,18 +65,6 @@ function imageDefault() {
           { value: '_blank', text: '_blank' },
           { value: '_self', text: '_self' },
           { value: '_top', text: '_top' },
-        ],
-      },
-      {
-        link: 'attribute',
-        label: 'Vertical align',
-        name: 'valign',
-        type: 'select',
-        value: 'middle',
-        options:[
-          { value: 'top', text: 'top' },
-          { value: 'middle', text: 'middle' },
-          { value: 'bottom', text: 'bottom' },
         ],
       },
       {

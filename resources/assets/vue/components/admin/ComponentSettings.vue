@@ -208,6 +208,7 @@
       "input-font-family": elementSettings.FontFamily,
       "input-font-style": elementSettings.FontStyle,
       "input-text-align": elementSettings.TextAlign,
+      "input-vertical-align": elementSettings.VerticalAlign,
       "input-image-size": elementSettings.ImageSize,
       "input-button-caret": elementSettings.ButtonCaret,
       "input-input-height": elementSettings.InputHeight,
