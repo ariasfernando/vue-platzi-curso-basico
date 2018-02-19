@@ -25,7 +25,7 @@ function textDefault() {
       bgcolor: 'transparent',
       hideElement: false,
     },
-    componentSettings: ['font-family', 'font-style', 'font-weight'],
+    componentSettings: ['font-family', 'font-style', 'font-weight', 'text-align'],
     settings: [
       {
         link: 'style',
@@ -61,18 +61,6 @@ function textDefault() {
         name: 'letter-spacing',
         type: 'text',
         value: 'normal',
-      },
-      {
-        link: 'attribute',
-        label: 'Align',
-        name: 'align',
-        type: 'select',
-        value: 'left',
-        options:[
-          { value: 'left', text: 'Left' },
-          { value: 'center', text: 'Center' },
-          { value: 'right', text: 'Right' },
-        ],
       },
       {
         link: 'attribute',
