@@ -22,10 +22,10 @@
       <aside class="component-settings-wrapper">
         <div class="aside-inner section-box">
           <transition name="slide-fade">
-            <module-settings v-if="currentComponent"></module-settings>
+            <module-settings v-if="Object.keys(currentComponent).length > 0"></module-settings>
           </transition>
           <transition name="slide-fade">
-            <component-settings v-if="currentComponent"></component-settings>
+            <component-settings v-if="Object.keys(currentComponent).length > 0"></component-settings>
           </transition>
           <transition name="slide-fade">
             <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
@@ -140,7 +140,7 @@
   .beta-subheader{
     display: table-caption;
     width: 100%;
-    min-width: 1200px;
+    min-width: 1280px;
     background-color: #FFFFFF;
     height: 45px;
     padding: 8px 10px;
@@ -149,6 +149,7 @@
     position: sticky;
     top: 45px;
     z-index: 1000;
+    border-bottom: 1px solid #f4f4f4;
   }
 
   .container-campaign-subwrapper{
@@ -156,9 +157,9 @@
     width: 100%;
     position: relative;
     top: 0px;
-    min-width: 1200px;
+    min-width: 1280px;
     overflow-x: auto;
-    overflow-y: hidden; 
+    overflow-y: hidden;
   }
 
   .component-settings-wrapper {
@@ -338,7 +339,11 @@
 
     i {
       display: inline-block;
-      vertical-align: sub;
+      margin-top: 7px;
+    }
+
+    i.glyphicon-phone{
+      margin-top: 5px;
     }
   }
 

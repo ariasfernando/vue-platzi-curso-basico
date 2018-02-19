@@ -1,45 +1,49 @@
 <template>
   <div class="modal-silverpop-upload">
     <h4>Upload to {{ espProviderConfig.title }}</h4>
-    <div v-if="uploadedSuccessfully" class="response-message response-message-success alert alert-success beta-alert beta-alert-success">
-      Email successfully uploaded to {{ espProviderConfig.title }}. <a :href="$_app.config.baseUrl" class="allow-exit">View dashboard</a>.
+
+    <div class="modal-container-inner">
+      <div v-if="uploadedSuccessfully" class="response-message response-message-success alert alert-success beta-alert beta-alert-success">
+        Email successfully uploaded to {{ espProviderConfig.title }}. <a :href="$_app.config.baseUrl" class="allow-exit">View dashboard</a>.
+      </div>
+      <form name="upload-api-form" class="upload-api-form">
+        <div class="form-group">
+          <label for="filename">Name</label>
+          <input type="text" class="form-control filename" name="filename" value=""
+              placeholder="Enter a name for your campaign" data-validation='{ "required":"true" }'
+              v-model="filename"/>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" class="form-control subject" name="subject" value=""
+              placeholder="Enter the subject for your campaign" data-validation='{ "required":"true" }'
+              v-model="subject"/>
+        </div>
+        <div class="uploaded-data" data-info="filename">
+          <label>File upload history:</label>
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Filename</th>
+                <th>stensul User</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="file in uploadedHistory">
+                <td>{{file.date}}</td>
+                <td>{{file.filename}}</td>
+                <td>{{file.user}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </form>  
     </div>
-    <form name="upload-api-form" class="upload-api-form">
-      <div class="form-group">
-        <label for="filename">Name</label>
-        <input type="text" class="form-control filename" name="filename" value=""
-            placeholder="Enter a name for your campaign" data-validation='{ "required":"true" }'
-            v-model="filename"/>
-      </div>
-      <div class="form-group">
-        <label for="subject">Subject</label>
-        <input type="text" id="subject" class="form-control subject" name="subject" value=""
-            placeholder="Enter the subject for your campaign" data-validation='{ "required":"true" }'
-            v-model="subject"/>
-      </div>
-      <div class="uploaded-data" data-info="filename">
-        <label>File upload history:</label>
-        <table class="table table-condensed">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Filename</th>
-              <th>stensul User</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="file in uploadedHistory">
-              <td>{{file.date}}</td>
-              <td>{{file.filename}}</td>
-              <td>{{file.user}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </form>
-    <div>
-      <a target="_blank" type="button" class="btn beta-btn-primary" @click="uploadEmail">Upload</a>
+    <div class="modal-footer">
+      <a target="_blank" type="button" class="btn beta-btn-primary pull-right" @click="uploadEmail">Upload</a>
     </div>
+
   </div>
 </template>
 

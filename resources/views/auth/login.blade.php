@@ -10,7 +10,7 @@
     <section class="col-md-4 col-sm-10 col-xs-10 beta-login">
 
         <div class="text-center">
-            <a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">stensul</a>
+            <a href="/" class="stensul-logo open-sans" target="_blank">stensul</a>
             <h4>
                 {{$is_admin or false ? 'Administration Panel' : 'Email Creator'}}
             </h4>
