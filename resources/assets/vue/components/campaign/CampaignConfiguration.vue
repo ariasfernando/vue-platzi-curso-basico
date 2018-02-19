@@ -99,7 +99,7 @@
         enableAutoSave: false,
         enableLocking: false,
         form: {
-          campaignName: 'Campaign Name',
+          campaignName: '',
           campaignProcess: false,
           autoSave: false,
           tags: []
@@ -138,7 +138,7 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
-      this.form.campaignName = this.campaign.campaign_name || 'Campaign Name';
+      this.form.campaignName = this.campaign.campaign_name || '';
 
       let tagList = this.$store.getters["campaign/campaign"].tag_list;
       for (let n = 0; n < tagList.length; n++) {
@@ -164,13 +164,13 @@
           if (this.$validator.errors.items.length) {
             _.each(this.$validator.errors.items, (err) => {
               _.extend(err, {
-                scope: 'Campaign Name',
+                scope: '',
               });
             });
 
             this.$store.dispatch('campaign/addErrors', this.$validator.errors.items);
           } else {
-            this.$store.commit('campaign/clearErrorsByScope', 'Campaign Name');
+            this.$store.commit('campaign/clearErrorsByScope', '');
           }
 
         });

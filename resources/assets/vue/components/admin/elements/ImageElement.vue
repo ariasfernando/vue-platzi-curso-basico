@@ -91,23 +91,6 @@
         return this.component.attribute.width.indexOf("%") !== -1 ? this.component.attribute.width : _.parseInt(this.component.attribute.width);
       }
     },
-    watch : {
-      styleComputed: {
-        handler: function() {
-          const widthStyleInline = this.component.attribute.width.indexOf("%") !== -1
-            ? this.component.attribute.width
-            : `${_.parseInt(this.component.attribute.width)}px`
-          return `border: 0; display: block; width: ${widthStyleInline}`;
-        },
-        deep: true
-      },
-      widthInline: {
-        handler: function() {
-          return this.component.attribute.width.indexOf("%") !== -1 ? this.component.attribute.width : _.parseInt(this.component.attribute.width);
-        },
-        deep: true  
-      },
-    },
     methods: {
       setupModule () {
         this.elementConfig = null;
