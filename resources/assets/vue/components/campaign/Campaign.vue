@@ -152,7 +152,7 @@
   .beta-subheader{
     display: table-caption;
     width: 100%;
-    min-width: 1200px;
+    min-width: 1280px;
     background-color: #FFFFFF;
     height: 45px;
     padding: 8px 10px;
@@ -161,6 +161,7 @@
     position: sticky;
     top: 45px;
     z-index: 1000;
+    border-bottom: 1px solid #f4f4f4;
   }
 
   .container-campaign-subwrapper{
@@ -168,7 +169,7 @@
     width: 100%;
     position: relative;
     top: 0px;
-    min-width: 1200px;
+    min-width: 1280px;
     overflow-x: auto;
     overflow-y: hidden;
   }
@@ -350,7 +351,11 @@
 
     i {
       display: inline-block;
-      vertical-align: sub;
+      margin-top: 7px;
+    }
+
+    i.glyphicon-phone{
+      margin-top: 5px;
     }
   }
 

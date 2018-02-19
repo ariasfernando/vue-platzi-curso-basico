@@ -81,6 +81,7 @@
             name: 'componentsEmailCanvas'
           },
           handle:'.icon-move',
+          forceFallback: (/Edge/.test(navigator.userAgent)) ? true : false,
           // Class name for the drop placeholder
           ghostClass: "ghost-component", 
           // Class name for the chosen item

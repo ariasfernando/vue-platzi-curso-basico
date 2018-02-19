@@ -7,13 +7,15 @@
       @mouseleave="setModulesMouseLeave"
       v-on-clickaway="unsetActiveModule"
   >
-    <td class="stx-toolbar-content stx-position-relative">
+    <td class="stx-toolbar-content stx-position-relative" @click.prevent="config">
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
+      <div class="st-remove-element module-overlay"></div>
     </td>
   </tr>
 
-  <tr v-else class="stx-module-wrapper"
+  <tr v-else 
+      class="stx-module-wrapper"
       :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
       @click="setActiveModule"
 
@@ -158,6 +160,10 @@
       }
     },
     methods: {
+      config() {
+        this.$store.commit("campaign/setCustomModule", this.moduleId);
+        this.$store.commit("campaign/unsetCurrentModule");
+      },
       setComponent(moduleId, columnId, componentId) {
         setTimeout(() => {
           // TODO: find better way to do this
