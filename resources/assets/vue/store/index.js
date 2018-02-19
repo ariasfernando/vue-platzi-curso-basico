@@ -7,6 +7,7 @@ import globalStore from './globalStore';
 import libraryStore from './libraryStore';
 import moduleStore from './moduleStore';
 import campaignStore from './campaignStore';
+import configStore from './configStore';
 
 const store = new Vuex.Store({
   strict: true,
@@ -15,6 +16,7 @@ const store = new Vuex.Store({
     library: libraryStore,
     module: moduleStore,
     campaign: campaignStore,
+    config: configStore,
   },
 });
 

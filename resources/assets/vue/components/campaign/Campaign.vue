@@ -121,13 +121,25 @@
           this.ready = true;
         }, error => {
           this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
         });
       },
     },
     created: function () {
       this.$store.commit("global/setLoader", true);
       this.loadCampaign();
+
+      this.$store.dispatch("config/getConfig", 'campaign').then(response => {
+      }, error => {
+        this.$root.$toast(
+          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+          {className: 'et-error'}
+        );
+      });
+
     }
   };
 </script>
