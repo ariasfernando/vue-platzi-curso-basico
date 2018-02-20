@@ -1,6 +1,6 @@
 <template>
   <div class="section-container-campaign">
-    <email-actions v-if="ready"></email-actions>
+    <email-actions v-if="campaignReady && campaignConfigReady"></email-actions>
 
     <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
@@ -8,15 +8,15 @@
       <aside>
         <div class="aside-inner">
           <div class="menu-campaign">
-            <campaign-configuration v-if="ready"></campaign-configuration>
-            <campaign-menu :library-id="libraryId"></campaign-menu>
+            <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
+            <campaign-menu v-if="campaignConfigReady" :library-id="libraryId"></campaign-menu>
           </div>
         </div>
       </aside>
 
       <!-- column right (container email) -->
       <section class="section-canvas-email section-box">
-        <email-canvas v-if="ready"></email-canvas>
+        <email-canvas v-if="campaignReady"></email-canvas>
       </section>
 
       <aside class="component-settings-wrapper">
@@ -35,11 +35,11 @@
     </div>
 
     <!-- Modals -->
-    <modal-complete v-if="ready"></modal-complete>
-    <modal-preview v-if="ready"></modal-preview>
-    <modal-esp v-if="ready"></modal-esp>
-    <modal-proof v-if="ready"></modal-proof>
-    <modal-enable-templating v-if="ready"></modal-enable-templating>
+    <modal-complete v-if="campaignReady"></modal-complete>
+    <modal-preview v-if="campaignReady"></modal-preview>
+    <modal-esp v-if="campaignReady"></modal-esp>
+    <modal-proof v-if="campaignReady"></modal-proof>
+    <modal-enable-templating v-if="campaignReady"></modal-enable-templating>
 
     <spinner></spinner>
 
@@ -83,7 +83,8 @@
     },
     data: function () {
       return {
-        ready: false,
+        campaignReady: false,
+        campaignConfigReady: false,
       }
     },
     computed: {
@@ -118,7 +119,7 @@
       loadCampaign() {
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
-          this.ready = true;
+          this.campaignReady = true;
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -127,19 +128,21 @@
           );
         });
       },
+      loadConfig() {
+        this.$store.dispatch("config/getConfig", 'campaign').then(response => {
+          this.campaignConfigReady = true;        
+        }, error => {
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
+        });
+      }
     },
     created: function () {
       this.$store.commit("global/setLoader", true);
       this.loadCampaign();
-
-      this.$store.dispatch("config/getConfig", 'campaign').then(response => {
-      }, error => {
-        this.$root.$toast(
-          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-          {className: 'et-error'}
-        );
-      });
-
+      this.loadConfig();
     }
   };
 </script>
