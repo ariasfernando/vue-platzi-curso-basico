@@ -89,7 +89,7 @@ function buttonDefault() {
         name: 'target',
         type: 'select',
         value: '_blank',
-        options:[
+        options: [
           { value: '_blank', text: '_blank' },
           { value: '_self', text: '_self' },
           { value: '_top', text: '_top' },

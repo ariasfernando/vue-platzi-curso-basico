@@ -7,7 +7,7 @@
           v-validate="'required'"
           v-model="fontStyleSetting.value"
           :class="{'clearfix': true, 'is-danger': errors.has(fontStyleSetting.name) }"
-          @change="(val)=>changeValue(val,fontStyleSetting)"
+          @change="(val)=>changeValue(val, fontStyleSetting)"
           :min="fontStyleSetting.min"
           :max="fontStyleSetting.max"
           :disabled="fontStyleSetting.name === 'lineHeight' ? isBlockLineHeight : false"
