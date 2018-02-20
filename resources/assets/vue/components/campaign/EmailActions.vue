@@ -121,6 +121,11 @@
         this.$store.commit("campaign/changeBuildingMode", mode);
       },
       save() {
+        // Do not save if there are missing or wrong fields
+        if (!this._validate()) {
+          return false;
+        }
+
         this.$store.commit("global/setLoader", true);
 
         const cleanHtml = campaignCleaner.clean('.section-canvas-container');

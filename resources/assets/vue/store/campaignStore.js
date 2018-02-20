@@ -172,12 +172,22 @@ function campaignStore() {
         state.dirty = true;
       },
       saveCustomModuleData(state, data) {
+        // Prevent empty arrays returned by php-mongo
+        if (_.isArray(state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data = {};
+        }
+
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
         const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
         state.modules[data.moduleId].data = newData;
         state.dirty = true;
       },
       saveCustomModuleDataField(state, data) {
+        // Prevent empty arrays returned by php-mongo
+        if (_.isArray(state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data = {};
+        }
+
         state.modules[data.moduleId].data[data.field] = data.value;
         state.dirty = true;
       },
