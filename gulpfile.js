@@ -200,6 +200,7 @@ gulp.task('elixir-scripts', function () {
         )
         .scripts(
           [
+            'js/library/helpers/*.js',
             'js/library/application-utils.js',
           ],
           jsDestinationPath + 'application-utils-v2.js',
@@ -300,5 +301,5 @@ gulp.task('elixir-version', ['elixir-vue-scripts', 'elixir-scripts'], () => {
  | --------------------------------------------------------------------------
  */
 gulp.task('jshint', ['elixir-jshint']);
-gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-version']));
-gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-copy-bower', 'elixir-version']));
+gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-vue-scripts', 'elixir-scripts']));
+gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-copy-bower', 'elixir-vue-scripts', 'elixir-scripts']));
