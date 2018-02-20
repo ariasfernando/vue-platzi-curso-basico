@@ -4,11 +4,11 @@
             <div class="col-md-offset-3 col-md-2 col-xs-2">
                 <div class="switch">
                     <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-                    <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="mode = 'desktop'">
+                    <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="changeBuildingMode('desktop')">
                         <i class="fa fa-desktop"></i>
                     </label>
                     <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-                    <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="mode = 'mobile'">
+                    <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="changeBuildingMode('mobile')">
                         <i class="glyphicon glyphicon-phone"></i>
                     </label>
                     <span class="switch-selection"></span>
@@ -94,7 +94,9 @@
                 campaign: [],
                 showDecision: false,
                 reviewer: [],
-                mode: 'desktop'
+                desktopWidth: '600',
+                mobileWidth: '300',
+                buildingMode: 'desktop'
             };
         },
         props: ['token'],
@@ -104,13 +106,17 @@
                     // Yes, it's ugly, but this width value is set in the body_html and we need
                     // to remove it so the switch can work.
                     // @TODO: check why this value is in the body_html
-                    return this.campaign.body_html.replace('660', '');
+                    return this.campaign.body_html.replace('width="' + this.desktopWidth + '"', '');
                 } else {
                     return '';
                 }
             },
             templateWidth () {
-                return this.mode === 'desktop' ? 600 : 440;
+                if (this.buildingMode === 'desktop') {
+                    return this.desktopWidth;
+                } else {
+                    return this.mobileWidth;
+                }
             }
         },
         created: function() {
@@ -132,6 +138,8 @@
                             vm.campaign = resp.body.data.campaign;
                             vm.reviewer = resp.body.data.reviewer;
                             vm.showDecision = resp.body.data.show_decision;
+                            vm.desktopWidth = resp.body.data.campaign.template_width;
+                            vm.mobileWidth = resp.body.data.campaign.template_mobile_width;
                             if ('message' in resp.body.data) {
                                 vm.alert = {
                                     message: resp.body.data.message,
@@ -147,6 +155,9 @@
             decisionMade: function() {
                 // Ugly but works. @TODO: find a better way to do this (e.g. vuex)
                 this.$children[1].getComments();
+            },
+            changeBuildingMode(mode) {
+                this.buildingMode = mode;
             }
         }
     };

@@ -313,6 +313,7 @@
   aside {
     width: 20%;
     background: @stensul-white;
+    -ms-overflow-style: none;
   }
 
   .section-canvas-button-col{
