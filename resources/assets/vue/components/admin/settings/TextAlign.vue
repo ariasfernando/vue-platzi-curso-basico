@@ -1,9 +1,11 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
     <label class="typo__label col-sm-6 control-label">Horizontal align</label>
-    <el-button plain size="mini" @click="changeAlignment('left')" class="fa fa-align-left" :class="{ active: currentValue == 'left' }"></el-button>
-    <el-button plain size="mini" @click="changeAlignment('center')" class="fa fa-align-center" :class="{ active: currentValue == 'center' }"></el-button>
-    <el-button plain size="mini" @click="changeAlignment('right')" class="fa fa-align-right" :class="{ active: currentValue == 'right' }"></el-button>
+    <div class="col-sm-6 padding-zero">
+      <el-button plain size="mini" @click="changeAlignment('left')" class="fa fa-align-left" :class="{ active: currentValue == 'left' }"></el-button>
+      <el-button plain size="mini" @click="changeAlignment('center')" class="fa fa-align-center" :class="{ active: currentValue == 'center' }"></el-button>
+      <el-button plain size="mini" @click="changeAlignment('right')" class="fa fa-align-right" :class="{ active: currentValue == 'right' }"></el-button>
+    </div>
   </div>
 </template>
 
@@ -11,10 +13,6 @@
 export default {
   name: "TextAlign",
   props: ["setting"],
-  data() {
-    return {
-    };
-  },
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
@@ -28,7 +26,7 @@ export default {
       return component;
     },
     currentValue() {
-      return this.component.attribute['align'];
+      return this.component.attribute["align"];
     }
   },
   methods: {
@@ -39,7 +37,7 @@ export default {
       this.$store.commit("module/saveComponentAttribute", {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
-        property: 'align',
+        property: "align",
         value: newValue
       });
     }
@@ -53,9 +51,23 @@ export default {
   border-color: inherit;
   background-color: inherit;
 }
-.el-button.active{
+.el-button.active {
   color: #ffffff;
   border-color: rgb(120, 220, 214);
   background-color: rgb(120, 220, 214);
+}
+.el-button + .el-button {
+  margin-left: none;
+}
+.el-button {
+  width: 34px;
+  padding: 4px 4px;
+  margin: 2.5px 2.5px 2.5px 3.5px;
+  height: 32px;
+  display: block;
+  float: left;
+}
+.padding-zero {
+  padding: 0;
 }
 </style>

@@ -83,7 +83,7 @@ export default {
       });
     }
   },
-  mounted () {
+  mounted() {
     this.fontFamilyData = this.fontFamily;
   },
   watch: {
@@ -96,5 +96,17 @@ export default {
 <style lang="less" scoped>
 .width-full {
   width: 100%;
+}
+</style>
+
+<style lang="less">
+.field-font-family {
+  span > span.el-tag.el-tag--info {
+    counter-increment: step-counter;
+    & span::before {
+    content: counter(step-counter);
+    margin-right: 5px;
+    }
+  }
 }
 </style>
