@@ -95,7 +95,7 @@ class CampaignController extends Controller
                 }
             }
 
-            $params['campaign_name'] = '';
+            $params['campaign_name'] = 'Untitled Email';
 
             $campaign = Campaign::create($params);
 
