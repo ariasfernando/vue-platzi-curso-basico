@@ -43,7 +43,7 @@ function buttonDefault() {
       target: '_blank',
       buttonCaret: undefined,
     },
-    componentSettings: ['font-family', 'font-style', 'button-caret', 'font-weight'],
+    componentSettings: ['font-family', 'font-style', 'button-caret', 'font-weight', 'text-align', 'vertical-align'],
     styleOptions: {
       isBlockLineHeight: false,
     },
@@ -61,30 +61,6 @@ function buttonDefault() {
         name: 'height',
         type: 'number',
         value: '40',
-      },
-      {
-        link: 'attribute',
-        label: 'Align',
-        name: 'align',
-        type: 'select',
-        value: 'center',
-        options:[
-          { value: 'center', text: 'center' },
-          { value: 'right', text: 'Right' },
-          { value: 'left', text: 'Left' },
-        ],
-      },
-      {
-        link: 'attribute',
-        label: 'Vertical Align',
-        name: 'valign',
-        type: 'select',
-        value: 'middle',
-        options: [
-          { value: 'top', text: 'Top' },
-          { value: 'middle', text: 'Middle' },
-          { value: 'bottom', text: 'Bottom' },
-        ],
       },
       {
         link: 'attribute',

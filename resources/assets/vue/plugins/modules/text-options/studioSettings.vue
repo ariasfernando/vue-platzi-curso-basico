@@ -102,14 +102,8 @@ export default {
       });
       // Update component view in the third column
       this.$store.commit("module/setChangeSettingComponent", {
-        style:
-          this.module.structure.columns[payload.columnId].components[
-            payload.componentId
-          ].style || {},
-        attribute:
-          this.module.structure.columns[payload.columnId].components[
-            payload.componentId
-          ].attribute || {}
+          style: this.module.structure.columns[payload.columnId].components[payload.componentId].style || {},
+          attribute: this.module.structure.columns[payload.columnId].components[payload.componentId].attribute || {}
       });
     },
 

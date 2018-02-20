@@ -28,23 +28,23 @@ export default {
   props: ["setting"],
   computed: {
     isBlockLineHeight() {
-      return this.getValue("isBlockLineHeight");
+      return this.getStyleOptionValue("isBlockLineHeight");
     },
     fontStyleSettings() {
       return [
         {
           label: "Font size",
           name: "fontSize",
-          value: this.getValue("fontSize"),
+          value: this.getStyleValue("fontSize"),
           min: 5,
           max: 50
         },
         {
           label: "Line Height",
           name: "lineHeight",
-          value: this.getValue("isBlockLineHeight")
-            ? this.calculeLineHeight()
-            : this.getValue("lineHeight"),
+          value: this.getStyleOptionValue("isBlockLineHeight")
+            ? this.calculateLineHeight()
+            : this.getStyleValue("lineHeight"),
           min: 6,
           max: 60
         }
@@ -68,37 +68,35 @@ export default {
     changeValue(val, setting) {
       if (setting.name === "fontSize" && this.isBlockLineHeight) {
         // if isBlockLineHeight then update lineHeight
-        let lineHeightCalculated = this.calculeLineHeight();
+        let lineHeightCalculated = this.calculateLineHeight();
         this.fontStyleSettings[1].value = lineHeightCalculated;
-        this.saveStyle(lineHeightCalculated, "lineHeight");
+        this.saveStyleValue(lineHeightCalculated, "lineHeight");
       }
-      this.saveStyle(val, setting.name);
+      this.saveStyleValue(val, setting.name);
     },
 
-    calculeLineHeight() {
-      return Math.round(this.getValue("fontSize") * 1.2);
+    calculateLineHeight() {
+      return Math.round(this.getStyleValue("fontSize") * 1.2);
     },
 
     toggleLineHeight() {
       // set date
-      let isBlock = !this.getValue("isBlockLineHeight");
-      let lineHeight = this.calculeLineHeight();
+      let isBlock = !this.getStyleOptionValue("isBlockLineHeight");
+      let lineHeight = this.calculateLineHeight();
       // save and update date
-      this.saveStyleOption(isBlock, "isBlockLineHeight");
-      this.saveStyle(lineHeight, "lineHeight");
+      this.saveStyleOptionValue(isBlock, "isBlockLineHeight");
+      this.saveStyleValue(lineHeight, "lineHeight");
     },
 
-    getValue(name) {
-      let value;
-      if (name === "isBlockLineHeight") {
-        value = this.component.styleOptions[name];
-      } else {
-        value = _.parseInt(this.component.style[name]);
-      }
-      return value;
+    getStyleValue(name) {
+      return _.parseInt(this.component.style[name]);
     },
 
-    saveStyleOption(val, name) {
+    getStyleOptionValue(name) {
+      return this.component.styleOptions[name];
+    },
+
+    saveStyleOptionValue(val, name) {
       this.$store.commit("module/saveComponentStyleOption", {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
@@ -107,7 +105,7 @@ export default {
       });
     },
 
-    saveStyle(val, name) {
+    saveStyleValue(val, name) {
       this.$store.commit("module/saveComponentStyle", {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
