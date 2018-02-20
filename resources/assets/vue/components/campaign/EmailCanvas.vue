@@ -88,7 +88,10 @@
             name: 'componentsEmailCanvas'
           },
           handle:'.icon-move',
+          // Ignore the HTML5 DnD behaviour and force the fallback to kick in (used only for MS Edge)
           forceFallback: (/Edge/.test(navigator.userAgent)) ? true : false,
+          // Class name for the fallback behaviour (only MS Edge)
+          fallbackClass: "sortable-fallback",
           // Class name for the drop placeholder
           ghostClass: "ghost-component", 
           // Class name for the chosen item
