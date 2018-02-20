@@ -43,7 +43,7 @@ function buttonDefault() {
       target: '_blank',
       buttonCaret: undefined,
     },
-    componentSettings: ['font-family', 'font-style', 'button-caret'],
+    componentSettings: ['font-family', 'font-style', 'button-caret', 'font-weight'],
     styleOptions: {
       isBlockLineHeight: false,
     },
@@ -125,13 +125,6 @@ function buttonDefault() {
         name: 'color',
         type: 'color',
         value: { hex: '#FFFFFF' },
-      },
-      {
-        link: 'style',
-        label: 'Font Weight',
-        name: 'fontWeight',
-        type: 'text',
-        value: 'normal',
       },
       {
         link: 'style',

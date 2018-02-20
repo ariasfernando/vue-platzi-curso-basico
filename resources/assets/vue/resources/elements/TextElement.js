@@ -35,13 +35,6 @@ function textDefault() {
         value: { hex: '#000000' },
       },
       {
-        link: 'style',
-        label: 'Font Weight',
-        name: 'fontWeight',
-        type: 'text',
-        value: '',
-      },
-      {
         link: 'attribute',
         label: 'Background color',
         name: 'bgcolor',

@@ -123,7 +123,7 @@ export default {
   }
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .btn-group {
   text-align: left;
   padding: 5px 5px 10px;
