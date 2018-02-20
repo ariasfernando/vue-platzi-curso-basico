@@ -44,7 +44,7 @@
 
         <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave">Auto Save</label>
-          <toggle-button :value="form.autoSave" active-color="#78DCD6" @change="autoSaveChange"></toggle-button>
+          <toggle-button :value="form.autoSave" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange" :disabled="campaign.locked"></toggle-button>
         </div>
 
         <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
@@ -107,6 +107,7 @@
         tagOptions: [],
         globalConfig: {},
         campaignConfig: {},
+        autoSaveTemp : false,
       }
     },
     computed: {
@@ -246,6 +247,12 @@
         });
       },
       lockCampaign() {
+
+        //TODO: make reactive and remove click
+        this.autoSaveTemp = this.form.autoSave;
+        if (this.form.autoSave){
+          document.getElementById('autoSave').click();
+        }
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch("campaign/lockCampaign", this.campaign._id).then(response => {
           this.$root.$toast('This campaign is locked now. Only you can unlock it.', {className: 'et-info'});
@@ -261,6 +268,11 @@
         this.$store.dispatch("campaign/unlockCampaign", this.campaign._id).then(response => {
           this.$root.$toast('This campaign is unlocked now, and you can make changes on it', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
+
+          //TODO: make reactive and remove click
+          if(this.autoSaveTemp){
+            document.getElementById('autoSave').click();
+          }
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
@@ -302,6 +314,8 @@
 @stensul-gray-secondary: #DDDDDD;
 
 .menu-campaign {
+   -ms-user-select: none !important;
+
   ::-webkit-input-placeholder {
     color: #CCCCCC;
   }

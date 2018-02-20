@@ -240,29 +240,37 @@
         // Idea 2, using getters from the campaign's store
 
         let isTargetingComponentSettings  = $(e.target).closest(".component-settings").length > 0;
-        let isTargetingColumnSettings  = this.isWrappedIn(e, "column-settings");
-        let isTargetingAModule      = this.isWrappedIn(e, "stx-module-wrapper");
-        let isTargetingMenuModule   = this.isWrappedIn(e, "beta-subitem-single");
-        let hasPluginsActivated     = $(".settings-wrapper, .plugin-wrapper").length > 0;
+        let isTargetingColumnSettings     = this.isWrappedIn(e, "column-settings");
+        let isTargetingAModule            = this.isWrappedIn(e, "stx-module-wrapper");
+        let isTargetingMenuModule         = this.isWrappedIn(e, "beta-subitem-single");
+        let isTargetingTinyMCEModal       = $(".mce-window.mce-in").length > 0;
+        let isTargetingTinyMCEModalButton = $(".mce-btn").length > 0;
+        let hasPluginsActivated           = $(".settings-wrapper, .plugin-wrapper").length > 0;
 
-        // Treatment for anything except 3rd column
-        if(!isTargetingComponentSettings && !isTargetingColumnSettings) {
-          // Treatment for anything except a module
-          if(!isTargetingAModule) {
-            // Treatment for anything except the menu module
-            // Necesary filter to keep active state for last module added, triggered in EmailCanvas.vue::addModule()
-            if(!isTargetingMenuModule) {
+        if(
+          // Anything except 1rd column
+             !isTargetingColumnSettings
+          // Anything except 3rd column
+          && !isTargetingComponentSettings
+          // Anything except a module
+          && !isTargetingAModule
+          // Anything except the menu module
+          // Neccesary filter to keep active state for last module added, triggered in EmailCanvas.vue::addModule()
+          && !isTargetingMenuModule
+          // Anything except the tinyMCE modal
+          && !isTargetingTinyMCEModal
+          // Anything except the tinyMCE modal button
+          && !isTargetingTinyMCEModalButton
+        ) {
               this.$store.commit("campaign/unsetActiveModule");
-              this.$store.commit("campaign/unsetCurrentModule");
-            }
-          }
+              this.module.type === "custom"
+                ? this.$store.commit("campaign/unsetCustomModule")
+                : this.$store.commit("campaign/unsetCurrentModule");
         }
         // Keep open 3rd column for active module
-        else {
-          // Deactive only if it hasn't activated plugins
-          if(!hasPluginsActivated) {
-            this.$store.commit("campaign/setActiveModule", null);
-          }
+        // Deactive only if it hasn't activated plugins
+        else if (!hasPluginsActivated) {
+          this.$store.commit("campaign/unsetActiveModule");
         }
       }
 

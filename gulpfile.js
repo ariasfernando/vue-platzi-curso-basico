@@ -200,6 +200,7 @@ gulp.task('elixir-scripts', function () {
         )
         .scripts(
           [
+            'js/library/helpers/*.js',
             'js/library/application-utils.js',
           ],
           jsDestinationPath + 'application-utils-v2.js',

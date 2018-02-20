@@ -204,7 +204,7 @@
         $.getJSON(this.$_app.config.baseUrl + '/proof/reviewers/' + this.campaign.campaign_data._id, {}, function(response) {
           if (response && response.status === 'success') {
               this.reviewers = [];
-              for (index in response.data) {
+              for (let index in response.data) {
                 this.addReviewer(response.data[index].email, response.data[index]);
               }
           }
