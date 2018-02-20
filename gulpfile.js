@@ -301,5 +301,5 @@ gulp.task('elixir-version', ['elixir-vue-scripts', 'elixir-scripts'], () => {
  | --------------------------------------------------------------------------
  */
 gulp.task('jshint', ['elixir-jshint']);
-gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-vue-scripts', 'elixir-scripts']));
-gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-copy-bower', 'elixir-vue-scripts', 'elixir-scripts']));
+gulp.task('watch', gulpsync.sync(['elixir-less', 'elixir-version']));
+gulp.task('default', gulpsync.sync(['copy-customer-assets', 'elixir-less', 'elixir-copy-bower', 'elixir-version']));
