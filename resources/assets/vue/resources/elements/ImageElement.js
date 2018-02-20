@@ -17,7 +17,9 @@ function imageDefault() {
       align: 'center',
       valign: 'middle',
       target: '_blank',
-      width: '220',
+      width: '100%',
+      height: 'auto',
+      hideElement: false,
     },
     settings: [
       {
@@ -65,7 +67,7 @@ function imageDefault() {
         label: 'Width',
         name: 'width',
         type: 'text',
-        value: '220',
+        value: '100%',
       },
       {
         link: 'attribute',

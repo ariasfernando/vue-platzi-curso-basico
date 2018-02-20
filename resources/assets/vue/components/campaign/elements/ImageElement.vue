@@ -7,13 +7,17 @@
     border="0"
     style="width: 100%;"
   >
-    <tr data-type="image-element">
+    <tr 
+      data-type="image-element"
+      :class="getMobileClasses(component,'tr')"
+    >
       <td 
         width="100%" 
         align="center"
         class="stx-position-relative"
         :style="component.style"
         :bgcolor="component.attribute.bgcolor.hex"
+        :class="getMobileClasses(component,'td:first')"
       >
         <table 
           width="100%" 
@@ -36,7 +40,7 @@
                 :title="component.attribute.title"
                 :target="component.attribute.target"
               >
-                <img 
+                <img
                   class="st-resize"
                   style="border: 0; display: block;"
                   border="0"
@@ -57,16 +61,48 @@
 </template>
 
 <script>
+  import _ from 'lodash';
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+
   export default {
     name: 'ImageElement',
     props: [
       'module-id',
       'column-id',
       'component-id',
-      'component'
+      'component',
+      'number-required',
+      'column-width',
+      'column'
     ],
+    mixins: [ MobileStylesMixin ],
     created () {
       this.setupModule();
+      if(this.numberRequired) {
+        let tempWidth = _.toString(this.component.attribute.width);
+        let paddingLeft = _.parseInt(this.component.style.paddingLeft.replace(/px$/, ''));
+        let paddingRight = _.parseInt(this.component.style.paddingRight.replace(/px$/, ''));
+        let paddingColumLeft = _.parseInt(this.column.style.paddingLeft.replace(/px$/, ''));
+        let paddingColumRight = _.parseInt(this.column.style.paddingRight.replace(/px$/, ''));
+        
+        if ( tempWidth.indexOf('%') > 1){
+
+          let widthPercent = _.parseInt(tempWidth.replace(/%$/, ''));
+          tempWidth = this.columnWidth * widthPercent / 100;
+        }else if ( tempWidth.indexOf('px') > 1){
+          tempWidth = _.parseInt(tempWidth.replace(/px$/, ''));
+        }
+        
+        const payload = {
+          moduleId: this.moduleId,
+          columnId: this.columnId,
+          componentId: 0,
+          attribute: 'width',
+          attributeValue: ( tempWidth - (paddingLeft + paddingRight) - (paddingColumLeft + paddingColumRight)),
+        };
+
+        this.$store.commit('campaign/saveComponentAttribute', payload);
+      }
     },
     data(){
       return {

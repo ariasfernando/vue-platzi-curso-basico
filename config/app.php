@@ -207,7 +207,7 @@ return [
          */
         Stensul\Providers\AppServiceProvider::class,
         Stensul\Providers\AuthServiceProvider::class,
-        Stensul\Providers\FilesystemServiceProvider::class,
+        Stensul\Filesystem\Providers\FilesystemServiceProvider::class,
         Stensul\Providers\ConfigServiceProvider::class,
         Stensul\Providers\EventServiceProvider::class,
         Stensul\Providers\RouteServiceProvider::class,

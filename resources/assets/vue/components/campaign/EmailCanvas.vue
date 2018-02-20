@@ -29,7 +29,6 @@
 </template>
 
 <script>
-  import _ from 'lodash';
   import clone from 'clone';
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
@@ -48,6 +47,9 @@
       dragGhost: null
     },
     computed: {
+      currentComponent() {
+        return this.$store.getters["campaign/currentComponent"];
+      },
       dragList: {
         get() {
           return this.$store.getters['campaign/modules'];
@@ -80,7 +82,7 @@
           },
           handle:'.icon-move',
           // Class name for the drop placeholder
-          ghostClass: "ghost-component",
+          ghostClass: "ghost-component", 
           // Class name for the chosen item
           chosenClass: "chosen-component",
           // Class name for the dragging item
@@ -99,7 +101,8 @@
             // Stylize it
             img.classList.add('custom-drag-ghost');
             // Set the new stylized "drag image" of the dragged element
-            dataTransfer.setDragImage(img, 0, 0);
+            // The placeholder image is 170x52, this positioning forces the placeholder image: top-right
+            dataTransfer.setDragImage(img, 130, 16);
           }
         },
         templateBackgroundColor(){
@@ -127,17 +130,23 @@
         const module = this.items[e.oldIndex];
         const mod = clone(module);
         mod.data = {};
-
+        
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
         // Set active on last module inserted
         this.$store.commit('campaign/setActiveModule', e.newIndex);
-
+        
          // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = "1";
       },
       onSort(e){
+        this.$store.commit('campaign/setCurrentComponent', {
+          moduleId: e.newIndex,
+          columnId: 0,
+          componentId: 0,
+        });
+        this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
       },
       onEnd (evt) {
@@ -212,24 +221,24 @@
 
   /* COMMON STYLES */
   span{
-    &.st-preheader{
+    &.st-preheader{ 
       display: none!important;
-    }
+    }  
 
   }
 
   .applelinks{
-    color:#FFFFFF !important;
-    text-decoration: none !important;
-  }
-
+    color:#FFFFFF !important; 
+    text-decoration: none !important; 
+  }  
+         
   /*BASE-LAYOUT*/
-  .st-email-body{
+  .st-email-body{ 
     width:100% !important;
-    -webkit-text-size-adjust: 100%;
-    margin: 0 !important;
-    padding: 0px;
-    background-color: #000000;
+    -webkit-text-size-adjust: 100%; 
+    margin: 0 !important; 
+    padding: 0px; 
+    background-color: #000000; 
   }
 
   .stx-edit-text{
@@ -238,7 +247,7 @@
       padding: 0;
     }
 
-    a:hover,
+    a:hover, 
     a:focus{
       text-decoration: none !important;
     }
@@ -252,25 +261,14 @@
   }
 
   #emailCanvas{
-    min-height: 40px;
+    &:empty {
+      min-height: 40px;
+    }
     &.stx-mobile-mode {
-      /*BASE-LAYOUT*/
-      .st-wrapper{
-        width: 100% !important;
-      }
-      .st-wrapper-content{
-        padding: 0px !important;
-      }
-      .st-col{
-        display: block!important;
-        width: 100%!important;
-        padding: 0px !important;
-      }
-      .st-resize{
-        width: 100%!important;
-        display: block!important;
-        height: auto !important;
-      }
+      width: 480px;
+      // Mobile Classes
+      @import '../../../less/base/commons/mobile/mobile_core_styles';
+      @import '../../../less/base/commons/mobile/mobile_client_styles';
     }
 
     tr.ghost-component{

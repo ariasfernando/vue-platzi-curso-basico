@@ -1,6 +1,5 @@
 <template>
-  <table width="100%"
-         :style="module.structure.style"
+  <table width="100%" 
          cellspacing="0" 
          cellpadding="0" 
          border="0"
@@ -8,7 +7,7 @@
   >
     <!-- START: 2 COLUMNS -->
     <tr v-if="module.structure.columns.length > 1">
-      <td width="100%" :bgcolor="module.structure.attribute.bgcolor.hex">
+      <td width="100%" :bgcolor="module.structure.attribute.bgcolor.hex" :style="module.structure.style">
         <table width="100%"
                class="st-wrapper" 
                cellspacing="0" 
@@ -18,10 +17,10 @@
         >
           <tr>
             <!-- If columnsFixed is false, show Columns staked render -->
-            <td width="100%" 
+            <td width="100%"
                 v-if="!columnsFixed"
             >
-              <columns-stacked-render @add="onAdd"></columns-staked-render>
+              <columns-stacked-render @add="onAdd"></columns-stacked-render>
             </td> 
 
             <!-- If columnsFixed is true, show Columns fixed render -->

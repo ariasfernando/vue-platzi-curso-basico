@@ -38,7 +38,10 @@
       color: @stensul-white !important;
       font-weight: normal;
       border: none;
-      background: #78DCD6 !important;
+      background: @stensul-highlight !important;
+      height: 30px!important;
+      margin-top: 4px;
+      padding-top: 6px;
 
       &:link,
       &:focus,
@@ -49,7 +52,7 @@
         color: @stensul-white !important;
         font-weight: normal;
         border: none!important;
-        background: #78DCD6 !important;
+        background: @stensul-highlight !important;
       }
     }
   }
@@ -111,6 +114,10 @@
       a{
         color: @input-color;
         background-color: @stensul-gray;
+        width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
       a:hover{
         background-color: @body-bg;
@@ -167,6 +174,10 @@
       font-size: 13px;
       font-weight: 300;
       padding: 6px 10px;
+      width: 100%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
 
       &:hover{
         color: @stensul-gray;

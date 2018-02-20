@@ -44,7 +44,7 @@
 
         <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave">Auto Save</label>
-          <toggle-button :value="form.autoSave" color="#78DCD6" :sync="true" :labels="true" @change="autoSaveChange"></toggle-button>
+          <toggle-button :value="form.autoSave" active-color="#78DCD6" @change="autoSaveChange"></toggle-button>
         </div>
 
         <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
@@ -84,12 +84,11 @@
 <script>
   import _ from 'lodash'
   import configService from '../../services/config'
-  import ToggleButton from '../common/ToggleButton.vue'
   import Multiselect from 'vue-multiselect';
+  import ToggleButton from '../../plugins/common/toggle-button'
 
   export default {
     components: {
-      ToggleButton,
       Multiselect
     },
     name: 'CampaignConfiguration',

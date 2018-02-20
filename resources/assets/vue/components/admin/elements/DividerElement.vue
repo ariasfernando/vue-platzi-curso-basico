@@ -2,6 +2,7 @@
   <!-- DIVIDER ELEMENT -->
   <tr @click.prevent="setComponent"
       :data-component="JSON.stringify(component)"
+      :class="getMobileClasses(component,'tr')"
       data-type="divider-element"
   >
     <td 
@@ -10,6 +11,7 @@
       :height="component.style.height"
       :width="component.style.width || '100%'"
       :style="styles"
+      :class="getMobileClasses(component,'td:first')"
     >
       <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
     </td>
@@ -19,7 +21,8 @@
 
 <script>
   import _ from 'underscore';
-  import ComponentToolbar from './ComponentToolbar.vue'
+  import ComponentToolbar from './ComponentToolbar.vue';
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   
   export default {
     name: 'DividerElement',
@@ -32,13 +35,8 @@
       'component-id',
       'component'
     ],
+    mixins: [ MobileStylesMixin ],
     computed: {
-      styleComponent() {
-        return this.$store.getters["module/changeSettingComponent"];
-      },
-      currentComponent() {
-        return this.$store.getters["module/currentComponent"];
-      },
       styles(){
         let inlineStyle = `height:${this.component.style.height};
                            width:${this.component.style.width };
@@ -58,20 +56,6 @@
         return inlineStyle;
       }
     },
-    watch : {
-      styleComponent: {
-        handler: function() {
-          if (!_.isEmpty(this.styleComponent) && 
-            this.currentComponent.columnId === this.columnId &&
-            this.currentComponent.componentId === this.componentId )
-          {
-            this.component.style = this.styleComponent.style;
-            this.component.attribute = this.styleComponent.attribute;
-          }
-        },
-        deep: true  
-      },
-    },
     timeoutID: null,
     methods: {
       setComponent(e) {
@@ -79,11 +63,6 @@
           this.$store.commit("module/setCurrentComponent", {
             columnId: this.columnId,
             componentId: this.componentId
-          });
-
-          this.$store.commit('module/setChangeSettingComponent',{
-            style: this.component.style || {},
-            attribute: this.component.attribute || {}
           });
         }  
       },

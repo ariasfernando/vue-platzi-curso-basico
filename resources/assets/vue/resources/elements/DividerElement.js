@@ -209,6 +209,7 @@ function dividerDefault() {
       align: 'center',
       bgcolor: { hex: 'transparent' },
       width: '100%',
+      hideElement: false,
     },
     plugins: {},
     data: {},
