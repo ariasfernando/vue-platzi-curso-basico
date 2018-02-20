@@ -94,6 +94,14 @@ function campaignStore() {
         state.modules.push(clone);
         state.dirty = true;
       },
+      updateCustomElement(state, payload) {
+        // This is necessary, since the clickaway function is executed.
+        if ( !_.isUndefined(payload.moduleId) ){ 
+          const update = { ...state.modules[payload.moduleId].data, ...payload.data };
+          state.modules[payload.moduleId].data = update;
+          state.dirty = true;
+        }
+      },
       updateElement(state, payload) {
         // This is necessary, since the clickaway function is executed.
         if ( !_.isUndefined(payload.moduleId) ){ 
@@ -119,7 +127,7 @@ function campaignStore() {
         state.currentComponent = data;
       },
       unsetCurrentComponent(state) {
-        state.currentComponent = undefined;
+        state.currentComponent = {};
       },
       setActiveModule(state, moduleId) {
         state.activeModule = moduleId;

@@ -117,7 +117,6 @@ class CampaignController extends Controller
     public function getData(Request $request, $campaign_id = null)
     {
         if (!is_null($campaign_id)) {
-
             $params = Campaign::find($campaign_id);
             $saved_tags = Tag::all();
 

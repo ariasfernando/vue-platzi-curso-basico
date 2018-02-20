@@ -262,6 +262,7 @@
   }
 
   #emailCanvas{
+    -ms-user-select: none !important;
     &:empty {
       min-height: 40px;
     }

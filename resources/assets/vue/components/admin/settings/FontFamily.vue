@@ -30,9 +30,13 @@
         options() {
           const options = [];
 
-          _.each(this.$_app.config.fonts, (group) => {
-            _.each(group, (font) => {
-              options.push(font);
+          _.each(this.$_app.config.fonts, (group, index) => {
+            group.map(font => {
+              if (index === 'custom') {
+                options.push(font.name);
+              } else {
+                options.push(font);
+              }
             });
           });
 
