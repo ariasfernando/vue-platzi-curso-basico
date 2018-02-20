@@ -73,6 +73,13 @@
       items () {
         return this.$store.state.campaign.campaign.menu_list;
       },
+      modules() {
+        return this.$store.getters["campaign/modules"];
+      },
+      activeModule() {
+        const activeModuleId = this.$store.getters["campaign/activeModule"];
+        return this.modules[activeModuleId] || undefined;
+      }
     },
     created() {
       _.each(this.items, (item) => {
@@ -91,6 +98,20 @@
 
         // Set active on last module added
         this.$store.commit('campaign/setActiveLastModule');
+
+        if (this.activeModule.type === 'studio') {
+          // Save current component if module type is studio
+          this.$store.commit('campaign/setCurrentComponent', {
+            moduleId: this.modules.length - 1,
+            columnId: 0,
+            componentId: 0,
+          });
+          this.$store.commit('campaign/unsetCustomModule');
+        } else {
+          // Save customModule if module type is custom
+          this.$store.commit('campaign/setCustomModule', this.modules.length - 1);
+          this.$store.commit('campaign/unsetCurrentComponent');
+        }
 
         setTimeout(() => {
           this.autoScroll();

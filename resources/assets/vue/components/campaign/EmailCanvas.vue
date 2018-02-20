@@ -72,6 +72,13 @@
       },
       baseUrl (){
         return this.$_app.config.baseUrl;
+      },
+      modules() {
+        return this.$store.getters["campaign/modules"];
+      },
+      activeModule() {
+        const activeModuleId = this.$store.getters["campaign/activeModule"];
+        return this.modules[activeModuleId] || undefined;
       }
     },
     data () {
@@ -142,11 +149,20 @@
         e.clone.style.opacity = "1";
       },
       onSort(e){
-        this.$store.commit('campaign/setCurrentComponent', {
-          moduleId: e.newIndex,
-          columnId: 0,
-          componentId: 0,
-        });
+        if (this.activeModule.type === 'studio') {
+          // Save current component if module type is studio
+          this.$store.commit('campaign/setCurrentComponent', {
+            moduleId: e.newIndex,
+            columnId: 0,
+            componentId: 0,
+          });
+          this.$store.commit('campaign/unsetCustomModule');
+        } else {
+          // Save customModule if module type is custom
+          this.$store.commit('campaign/setCustomModule', e.newIndex);
+          this.$store.commit('campaign/unsetCurrentComponent');
+        }
+        
         this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
       },
