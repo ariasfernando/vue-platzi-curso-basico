@@ -68,7 +68,7 @@
         return this.$store.getters["campaign/buildingMode"];
       },
       items () {
-        return this.$store.state.campaign.campaign.menu_list;
+        return this.$store.getters["library/modules"];
       },
       baseUrl (){
         return this.$_app.config.baseUrl;
@@ -141,7 +141,7 @@
         const module = this.items[e.oldIndex];
         const mod = clone(module);
         mod.data = {};
-        
+
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
         // Set active on last module inserted
         this.$store.commit('campaign/setActiveModule', e.newIndex);
@@ -281,6 +281,7 @@
   }
 
   #emailCanvas{
+    -ms-user-select: none !important;
     &:empty {
       min-height: 40px;
     }

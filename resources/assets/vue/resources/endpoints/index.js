@@ -12,6 +12,7 @@ module.exports = {
     searchLibraries: { method: 'post', path: `${baseUrl}/admin/library/list` },
     fetchLibraries: { method: 'get', path: `${baseUrl}/dashboard/libraries` },
     espProviders: { method: 'post', path: `${baseUrl}/admin/library/esp` },
+    getMenuItems: { method: 'get', path: `${baseUrl}/campaign/menu-items/:libraryId` },
   },
   module: {
     getModule: { method: 'get', path: `${baseUrl}/admin/module/edit?moduleId=:moduleId` },
@@ -22,8 +23,8 @@ module.exports = {
     uploadImage: { method: 'post', path: `${baseUrl}/admin/module/upload-image` },
   },
   campaign: {
-    getCampaign: { method: 'get', path: `${baseUrl}/campaign/edit/:campaignId?json` },
-    getCampaignPublic: { method: 'get', path: `${baseUrl}/public/get/:campaignId?json` },
+    getCampaign: { method: 'get', path: `${baseUrl}/campaign/data/:campaignId` },
+    getCampaignPublic: { method: 'get', path: `${baseUrl}/public/get/:campaignId` },
     processCampaign: { method: 'post', path: `${baseUrl}/campaign/process` },
     saveCampaign: { method: 'post', path: `${baseUrl}/campaign/save` },
     cloneCampaign: { method: 'post', path: `${baseUrl}/campaign/clone` },

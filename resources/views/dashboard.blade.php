@@ -15,7 +15,10 @@
 @endsection
 
 @section('footer-script')
-    <script src="{{ cdn(elixir('js/library-v2.js')) }}"></script>
+    <script src="{{ cdn(elixir('js/jquery.js')) }}"></script>
+    <script src="{{ cdn(elixir('js/bootstrap.js')) }}"></script>
+    <script src="{{ cdn(elixir('js/tinymce.js')) }}"></script>
+    <script src="{{ cdn(elixir('js/application-utils-v2.js')) }}"></script>
 	<script src="{{ cdn(elixir('js/dashboard-components.js')) }}"></script>
 	<script src="{{ cdn(elixir('js/dashboard-proof.js')) }}"></script>
 @stop

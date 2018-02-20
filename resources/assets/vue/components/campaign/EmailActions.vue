@@ -69,7 +69,6 @@
 <script>
   import VueSticky from 'vue-sticky';
   import campaignService from '../../services/campaign';
-  import configService from '../../services/config';
   import campaignCleaner from '../../utils/campaignCleaner';
   import { html_beautify } from 'js-beautify';
 
@@ -286,7 +285,7 @@
     },
     created () {
       this.autoSave();
-      configService.getConfig('campaign').then((response) => this.campaignConfig = response);
+      this.campaignConfig = this.$store.getters["config/config"].campaign;
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;
 
