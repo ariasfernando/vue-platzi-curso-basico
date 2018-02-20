@@ -8,7 +8,7 @@
         class="width-full"
         multiple
         placeholder="Font Family"
-        v-model="fontFamily"
+        v-model="fontFamilyData"
         @change="saveValue"
         size="mini"
         >
@@ -51,9 +51,9 @@ export default {
         });
 
         return options;
-      }
+      },
+      fontFamilyData: this.fontFamily
     };
-    fontFamilyData: this.fontFamily;
   },
   computed: {
     currentComponent() {
@@ -82,6 +82,9 @@ export default {
         value: val.join(", ")
       });
     }
+  },
+  mounted () {
+    this.fontFamilyData = this.fontFamily;
   },
   watch: {
     fontFamily(value) {
