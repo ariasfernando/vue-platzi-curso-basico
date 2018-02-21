@@ -149,7 +149,8 @@ class ProofController extends Controller
 
         $params['campaign'] = [
             'body_html' => $proof->campaign->body_html,
-            'template_width' => $proof->campaign->getLibraryConfig('template_width'),
+            'template_width' => $proof->campaign->getLibraryConfig('templateWidth'),
+            'template_mobile_width' => $proof->campaign->getLibraryConfig('templateMobileWidth')
         ];
 
         $params['locales'] = \Config::get('locales');

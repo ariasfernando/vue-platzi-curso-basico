@@ -1002,6 +1002,43 @@ Application.utils = {
                 Application.utils.validate.setWarning(el,validationResult.message);
             }
         }
+    },
+
+    /**
+     * Returns an Object representation of the styles from the given String
+     * @param {string} css
+     * @example Application.utils.cssToObj(jqueryObject.attr('style'))
+     * @returns {object}
+     */
+    cssToObj: function (css) {
+        if(css.length === 0) {
+            return {};
+        }
+        var obj = {}, s = css.replace(/-(.)/g, function (m, g) {
+            return "-"+g.toLowerCase();
+        }).replace(/;\s?$/g,"").split(/:|;/g);
+        for (var i = 0; i < s.length; i += 2)
+            obj[s[i].replace(/\s/g,"")] = s[i+1].replace(/^\s+|\s+$/g,"");
+        return obj;
+    },
+
+    /**
+     * Returns a String representation of the styles from the given Object
+     * @param {object} obj
+     * @example Application.utils.objToCss($.extend(returnedCssToObj, { 'width': '10px' }))
+     * @returns {string}
+     */
+    objToCss: function(obj) {
+        var keys = Object.keys(obj)
+        if (!keys.length) return ''
+        var i, len = keys.length
+        var result = ''
+        for (i = 0; i < len; i++) {
+            var key = keys[i]
+            var val = obj[key]
+            result += key + ': ' + val + ';'
+        }
+        return result;
     }
 
 };

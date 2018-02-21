@@ -126,6 +126,18 @@ module.exports = {
         title: 'Validate Url',
         value: false,
       },
+      truncate: {
+        title: 'Characters Limit',
+        value: false,
+        type: Number,
+        content: undefined,
+      },
+      lines_limit: {
+        title: 'Lines Limit',
+        value: false,
+        type: Number,
+        content: undefined,
+      },
     },
   },
   render: false,

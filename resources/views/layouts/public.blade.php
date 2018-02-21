@@ -12,8 +12,7 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title>Email Creator</title>
 
-		<link href="{{  cdn(elixir('css/tool.css')) }}" rel="stylesheet">
-
+		<link href="{{ cdn(elixir('css/tool.css')) }}" rel="stylesheet">
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>

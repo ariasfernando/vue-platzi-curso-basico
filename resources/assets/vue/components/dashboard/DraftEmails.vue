@@ -72,7 +72,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="text-right actions icons">
+            <td class="text-left actions icons">
               <a href="#"
                 @click.prevent="goProof(campaign.proof_token)"
                 class="proof"
