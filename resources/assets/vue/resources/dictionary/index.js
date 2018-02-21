@@ -1,3 +1,5 @@
 import campaign from './campaign';
 
-export const campaignDictionary = campaign;
+export default {
+    campaign,
+}
