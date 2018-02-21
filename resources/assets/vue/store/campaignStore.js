@@ -33,6 +33,9 @@ function campaignStore() {
       campaign(state) {
         return state.campaign;
       },
+      fieldErrors(state){
+        return state.fieldErrors
+      },
       currentComponent(state) {
         return state.currentComponent;
       },

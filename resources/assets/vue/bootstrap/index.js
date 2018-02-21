@@ -4,7 +4,7 @@ import filters from '../filters';
 import directives from '../directives';
 import modules from '../modules';
 import fonts from './fonts';
-import utils from './utils';
+import utils from '../utils';
 
 export default {
   install(Vue) {
