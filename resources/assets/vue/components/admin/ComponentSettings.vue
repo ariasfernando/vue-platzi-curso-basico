@@ -17,7 +17,11 @@
             <form class="form-horizontal">
 
               <template v-for="setting in component.componentSettings" >
-                <component :is="'input-' + setting" :setting="setting" :key="setting"></component>
+                <component :is="'input-' + setting"
+                  v-on:attribute-setting-updated="attributeSettingUpdatedHandler"
+                  v-on:style-setting-updated="styleSettingUpdatedHandler"
+                  v-on:style-option-setting-updated="styleOptionSettingUpdatedHandler"
+                  :setting="setting" :key="setting"></component>
               </template>
 
               <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
@@ -212,7 +216,8 @@
       "input-image-size": elementSettings.ImageSize,
       "input-button-caret": elementSettings.ButtonCaret,
       "input-input-height": elementSettings.InputHeight,
-      "input-font-weight": elementSettings.FontWeight
+      "input-font-weight": elementSettings.FontWeight,
+      "input-letter-spacing": elementSettings.LetterSpacing
     },
     computed: {
       currentComponent() {
@@ -315,6 +320,39 @@
         }
       },
 
+      saveComponentStyle(name, value) {
+        const data = {
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          property: name,
+          value: value
+        };
+
+        this.$store.commit('module/saveComponentStyle', data);
+      },
+
+      saveComponentAttribute(name, value) {
+        const data = {
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          property: name,
+          value: value
+        };
+
+        this.$store.commit('module/saveComponentAttribute', data);
+      },
+
+      saveComponentStyleOption(name, value) {
+        const data = {
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          property: name,
+          value: value
+        };
+
+        this.$store.commit('module/saveComponentStyleOption', data);
+      },
+
       // TODO Update date used mutation.
       updateColorPickerSetting( name, link , isGroup ){
         _.each(this.component.settings, (option, index) => {
@@ -345,6 +383,15 @@
       },
       shouldRenderInStyles(plugin) {
         return _.indexOf(plugin.target, "styles") >= 0;
+      },
+      attributeSettingUpdatedHandler(eventData) {
+        this.saveComponentAttribute(eventData.name, eventData.value);
+      },
+      styleSettingUpdatedHandler(eventData) {
+        this.saveComponentStyle(eventData.name, eventData.value);
+      },
+      styleOptionSettingUpdatedHandler(eventData) {
+        this.saveComponentStyleOption(eventData.name, eventData.value);
       }
     }
   };

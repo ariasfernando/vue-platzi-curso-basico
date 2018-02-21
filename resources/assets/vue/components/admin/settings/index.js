@@ -6,6 +6,7 @@ import ImageSize from './ImageSize.vue';
 import ButtonCaret from './ButtonCaret.vue';
 import InputHeight from './InputHeight.vue';
 import FontWeight from './FontWeight.vue';
+import LetterSpacing from './LetterSpacing.vue';
 
 const Settings = {
   FontFamily,
@@ -16,6 +17,7 @@ const Settings = {
   ButtonCaret,
   InputHeight,
   FontWeight,
+  LetterSpacing,
 };
 
 module.exports = Settings;

@@ -9,6 +9,7 @@ function textDefault() {
       fontSize: '12px',
       fontWeight: 'normal',
       lineHeight: '16px',
+      letterSpacing: 'normal',
       paddingTop: '0px',
       paddingBottom: '0px',
       paddingRight: '0px',
@@ -18,6 +19,7 @@ function textDefault() {
     styleOptions: {
       isBlockLineHeight: false,
       isCustomFontWeight: false,
+      isNormalLetterSpacing: true,
     },
     attribute: {
       valign: 'middle',
@@ -25,7 +27,7 @@ function textDefault() {
       bgcolor: 'transparent',
       hideElement: false,
     },
-    componentSettings: ['font-family', 'font-style', 'font-weight', 'text-align'],
+    componentSettings: ['font-family', 'font-style', 'font-weight', 'text-align', 'letter-spacing'],
     settings: [
       {
         link: 'style',
@@ -54,13 +56,6 @@ function textDefault() {
         name: 'letter-spacing',
         type: 'text',
         value: 'normal',
-      },
-      {
-        link: 'attribute',
-        label: 'Background color',
-        name: 'bgcolor',
-        type: 'color',
-        value: { hex: 'transparent' },
       },
       {
         link: 'style',

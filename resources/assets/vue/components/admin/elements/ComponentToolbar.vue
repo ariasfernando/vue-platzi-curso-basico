@@ -57,6 +57,7 @@
     height: 22px;
     line-height: 14px;
     font-size: 11px!important;
+    letter-spacing: normal;
     cursor: pointer;
     position: absolute;
     text-align: center;
