@@ -62,6 +62,7 @@
   import EmailActions from './EmailActions.vue'
   import VueSticky from 'vue-sticky'
   import _ from 'lodash'
+  import CampaignService from '../../services/campaign'
 
   export default {
     name: 'Campaign',
@@ -85,6 +86,7 @@
       return {
         campaignReady: false,
         campaignConfigReady: false,
+        logTimeInterval: 30000,
       }
     },
     computed: {
@@ -143,6 +145,8 @@
       this.$store.commit("global/setLoader", true);
       this.loadCampaign();
       this.loadConfig();
+      console.log('entro')
+      setInterval(CampaignService.logTime, this.logTimeInterval, this.campaignId, this.logTimeInterval / 1000);
     }
   };
 </script>
