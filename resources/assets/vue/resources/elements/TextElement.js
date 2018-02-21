@@ -25,22 +25,8 @@ function textDefault() {
       bgcolor: 'transparent',
       hideElement: false,
     },
-    componentSettings: ['font-family', 'font-style', 'font-weight', 'text-align'],
+    componentSettings: ['font-family', 'font-style', 'font-weight', 'text-align', 'background-color', 'font-color'],
     settings: [
-      {
-        link: 'style',
-        label: 'Color',
-        name: 'color',
-        type: 'color',
-        value: { hex: '#000000' },
-      },
-      {
-        link: 'attribute',
-        label: 'Background color',
-        name: 'bgcolor',
-        type: 'color',
-        value: { hex: 'transparent' },
-      },
       {
         link: 'attribute',
         label: 'Character Limit',
@@ -54,13 +40,6 @@ function textDefault() {
         name: 'letter-spacing',
         type: 'text',
         value: 'normal',
-      },
-      {
-        link: 'attribute',
-        label: 'Background color',
-        name: 'bgcolor',
-        type: 'color',
-        value: { hex: 'transparent' },
       },
       {
         link: 'style',
