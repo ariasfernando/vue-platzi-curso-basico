@@ -30,7 +30,7 @@
                             <thead>
                                 <tr>
                                   <th class='col-xs-5'>Email</th>
-                                  <th class='col-xs-2'>Required approval</th>
+                                  <th class='col-xs-2'>Approval Required?</th>
                                   <th class='col-xs-1'>Actions</th>
                                 </tr>
                             </thead>
