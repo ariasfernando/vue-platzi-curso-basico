@@ -35,7 +35,7 @@
                 <div class="form-group submit-row">
                     <div class="text-center">
                         <button type="button" class="login-btn">Login</button>
-                        @if ( env('USER_REGISTRATION', true) )
+                        @if ( env('USER_REGISTRATION', false) )
                             <span class="spacer"> &nbsp; </span>
                             <a href="{{ url('/auth/register') }}" class="register">Don't have a user? Register here.</a>
                         @endif
