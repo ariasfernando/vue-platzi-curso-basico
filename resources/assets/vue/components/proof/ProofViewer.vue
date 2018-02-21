@@ -47,6 +47,7 @@
                                 <table
                                     border="0"
                                     class="stx-email-canvas wrapper-table"
+                                    :class="'stx-' + buildingMode + '-mode'"
                                     id="emailCanvas"
                                     cellspacing="0"
                                     cellpadding="0"
@@ -163,10 +164,21 @@
     };
 </script>
 
-<style lang="sass">
+<style lang="less">
     .proof-viewer-container {
         width: 100%;
         display: table;
         min-height: 100%;
+    }
+    #emailCanvas{
+        &:empty {
+          min-height: 40px;
+        }
+        &.stx-mobile-mode {
+          width: 480px;
+          // Mobile Classes
+          @import '../../../less/base/commons/mobile/mobile_core_styles';
+          @import '../../../less/base/commons/mobile/mobile_client_styles';
+        }
     }
 </style>
