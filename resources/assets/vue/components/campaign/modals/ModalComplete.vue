@@ -12,7 +12,7 @@
           <div class="modal-body">
             <slot name="body">
               <b-tabs>
-                <b-tab title="Normal HTML" @click="changeTypeTextArea('normal_html')" >
+                <b-tab title="HTML" @click="changeTypeTextArea('normal_html')" >
                   <textarea ref="normal_html" v-html="html"></textarea>
                 </b-tab>
                 <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">

@@ -67,7 +67,7 @@
               ></campaign-tag>
             </td>
             <td class="actions links" width="150">
-              <a @click.prevent="code(campaign._id, 'html')" href="#" class="html-code">Normal HTML</a><br>
+              <a @click.prevent="code(campaign._id, 'html')" href="#" class="html-code">HTML</a><br>
               <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
             </td>
             <td class="text-right actions icons" width="250">
