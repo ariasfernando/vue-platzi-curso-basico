@@ -44,26 +44,24 @@ export default {
       isNormalLetterSpacingName: "isNormalLetterSpacing",
       defaultLetterSpacing: 0.2,
       letterSpacingInputValue: 0.2,
-      unit: "em"
+      unit: "em",
+      letterSpacingInputValue: this.letterSpacing
     };
   },
   mounted() {
-    this.updateLetterSpacingInputValue();
-  },
-  updated() {
-    this.updateLetterSpacingInputValue();
+    this.updateLetterSpacingInputValue(this.letterSpacing);
   },
   computed: {
     isNormalLetterSpacing() {
-      return this.component ? this.component.styleOptions[this.isNormalLetterSpacingName] : null;
+      return this.component.styleOptions[this.isNormalLetterSpacingName];
     },
     letterSpacing() {
-      return this.component ? this.inferLetterSpacing(this.component.style[this.name], this.isNormalLetterSpacing) : null;
+      return this.inferLetterSpacing(this.component.style[this.name], this.isNormalLetterSpacing);
     }
   },
   methods: {
-    updateLetterSpacingInputValue() {
-      this.letterSpacingInputValue = this.isNormalLetterSpacing ? this.defaultLetterSpacing : this.letterSpacing;
+    updateLetterSpacingInputValue(value) {
+       this.letterSpacingInputValue = this.isNormalLetterSpacing ? this.defaultLetterSpacing : value;
     },
     inferLetterSpacing(currentSpacing, isNormalLetterSpacing) {
       let newSpacing = this.defaultLetterSpacing;
@@ -80,10 +78,15 @@ export default {
       this.$emit("style-option-setting-updated", { name: this.isNormalLetterSpacingName, value: newValue });
     },
     toggleNormalLetterSpacing: function() {
-      newIsNormalLetterSpacing = !this.isNormalLetterSpacing;
-      this.saveStyleOption(newIsNormalLetterSpacing);
-      // Since isNormalLetterSpacing is updated async we need to calculate the new letterSpacing
-      this.saveStyle(this.inferLetterSpacing(this.letterSpacing, newIsNormalLetterSpacing));
+      this.saveStyleOption(!this.isNormalLetterSpacing);
+    }
+  },
+  watch: {
+    letterSpacing(value) {
+      this.updateLetterSpacingInputValue(value);
+    },
+    isNormalLetterSpacing(value) {
+      this.saveStyle(this.inferLetterSpacing(this.letterSpacing, value));
     }
   }
 };
@@ -110,6 +113,9 @@ export default {
 }
 .el-button {
   transition: unset;
+}
+.el-input-number--mini input.el-input__inner[type="text"] {
+  padding-left: 30px;
 }
 </style>
 <style>
