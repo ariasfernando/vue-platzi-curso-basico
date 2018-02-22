@@ -5,6 +5,7 @@ import directives from '../directives';
 import modules from '../modules';
 import fonts from './fonts';
 import utils from '../utils';
+import dictionary from '../resources/dictionary';
 
 export default {
   install(Vue) {
@@ -14,9 +15,12 @@ export default {
   bootstrap() {
     // Inject configs into main instance
     this.Vue.prototype.$_app = {
-      config: Application.globals,
+      config: Application.globals
     };
     this.Vue.prototype.$_customer = customer || {};
+
+    // Merge dictionaries
+    this.initDictionary();
 
     // Register custom global utilities
     this.initUtils();
@@ -36,6 +40,14 @@ export default {
     // Register plugins for studio modules ( module, column and components plugins )
     this.initPlugins();
   },
+  initDictionary() {
+    console.log('init');
+    if (customer.config.dictionary) {
+      _.merge(dictionary, customer.config.dictionary);
+    }
+
+    this.Vue.prototype.$_app.dictionary = dictionary;
+  },
   initUtils() {
     // Inject Util Functions into main instance
     if (customer.config && customer.config.utils) {
@@ -53,26 +65,26 @@ export default {
     // Fonts path
     const fontPath = `${this.Vue.prototype.$_app.config.baseUrl}/fonts/`;
 
-    let custom = [];
-
     fonts.custom.map(font => {
-      custom.push(font.name);
-
       const style = document.createElement('style');
 
       style.type = 'text/css';
 
-      let definition = `@font-face {font-family: '${font.name}';`;
+      let definition = '';
+
+      let ie = '';
 
       font.types.map(typeFont => {
         typeFont.files.map(fileFont => {
           if (fileFont.file === 'eot') {
-            definition += `src: url('${fontPath}${font.folder}/${fileFont.file}?#iefix');`;
+            ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}?#iefix');`;
           }
         });
       });
 
       font.types.map(typeFont => {
+        definition += `@font-face {font-family: '${font.name}';`;
+        definition += ie;
         definition += 'src: ';
 
         typeFont.files.map((fileFont, index) => {
@@ -92,8 +104,6 @@ export default {
 
       document.head.appendChild(style);
     });
-
-    fonts.custom = custom;
 
     this.Vue.prototype.$_app.config.fonts = fonts;
   },

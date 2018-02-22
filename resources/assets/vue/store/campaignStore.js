@@ -251,7 +251,6 @@ function campaignStore() {
         return campaignService.getCampaign(campaignId)
           .then((response) => {
             context.commit('loadCampaignData', response.campaign);
-            context.commit('setDirty', false);
           })
           .catch(error => context.commit('error', error));
       },
@@ -259,7 +258,6 @@ function campaignStore() {
         return campaignService.getCampaignPublic(campaignId)
           .then((response) => {
             context.commit('loadCampaignData', response.campaign);
-            context.commit('setDirty', false);
           })
           .catch(error => context.commit('error', error));
       },

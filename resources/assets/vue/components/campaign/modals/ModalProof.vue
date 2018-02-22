@@ -30,7 +30,7 @@
                             <thead>
                                 <tr>
                                   <th class='col-xs-5'>Email</th>
-                                  <th class='col-xs-2'>Required approval</th>
+                                  <th class='col-xs-2'>Approval Required?</th>
                                   <th class='col-xs-1'>Actions</th>
                                 </tr>
                             </thead>
@@ -106,7 +106,7 @@
           <div class="modal-footer">
             <slot name="footer">
               <button type="button" class="btn btn-default beta-btn-secondary" @click="close">Close</button>
-              <button class="btn btn-default beta-btn-primary" id="btn-send-proof" @click="send">Submit</button>
+              <button class="btn btn-default beta-btn-primary" :class="{'disabled': reviewers.length === 0}" id="btn-send-proof" @click="send">Submit</button>
             </slot>
           </div>
         </div>
