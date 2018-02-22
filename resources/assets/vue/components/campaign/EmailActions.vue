@@ -145,9 +145,7 @@
         });
       },
       _validate(message = undefined) {
-        if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.fieldErrors.length > 0  ) {
-          this.$_app.utils.validator.modulesErrors('#emailCanvas');
-
+        if ( this.fieldErrors.length > 0  ) {
           this.$root.$toast(
             message || 'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
@@ -169,7 +167,9 @@
       },
       complete() {
         // Do not save if there are missing or wrong fields
-        if (this.fieldErrors.length > 0 || campaignCleaner.imagesErrors('#emailCanvas') ) {
+        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.fieldErrors.length > 0 ) {
+          this.$_app.utils.validator.modulesErrors('#emailCanvas');
+          
           this.$root.$toast(
             'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
