@@ -9,13 +9,13 @@
   >
     <td class="stx-toolbar-content stx-position-relative" 
         :data-module-id="moduleId" 
-        :class="{ 'stx-show-error': showError(moduleId) }"  
+        :class="{ 'stx-show-error': module.data.errors && module.data.errors.length }"  
         @click.prevent="config"
     >
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
-      <div class="st-remove-element default-module-error" style="display:none"></div>
+      <div class="st-remove-element default-module-error"></div>
     </td>
   </tr>
 
@@ -23,12 +23,12 @@
       class="stx-module-wrapper"
       :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
       @click="setActiveModule"
-
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
       v-on-clickaway="unsetActiveModule"
   >
     <td class="stx-toolbar-content stx-position-relative"
+        :data-module-id="moduleId"
         :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
         :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 }">
@@ -112,7 +112,7 @@
       </table>
       <module-toolbar :module-id="moduleId"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
-      <div class="st-remove-element default-module-error" style="display:none"></div>
+       <div class="st-remove-element default-module-error" style="display:none"></div>
     </td>
   </tr>
 </template>
@@ -143,6 +143,9 @@
       },
       templateWidth() {
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
+      },
+      fieldErrors() {
+        return this.$store.getters["campaign/fieldErrors"];
       },
       msoStartingComment() {
         return "[if gte mso 9]>" +
@@ -258,12 +261,12 @@
         // Idea 2, using getters from the campaign's store
 
         let isTargetingComponentSettings  = $(e.target).closest(".component-settings").length > 0;
-        let isTargetingColumnSettings     = this.isWrappedIn(e, "column-settings");
-        let isTargetingAModule            = this.isWrappedIn(e, "stx-module-wrapper");
-        let isTargetingMenuModule         = this.isWrappedIn(e, "beta-subitem-single");
+        let isTargetingColumnSettings  = this.isWrappedIn(e, "column-settings");
+        let isTargetingAModule      = this.isWrappedIn(e, "stx-module-wrapper");
+        let isTargetingMenuModule   = this.isWrappedIn(e, "beta-subitem-single");
         let isTargetingTinyMCEModal       = $(".mce-window.mce-in").length > 0;
         let isTargetingTinyMCEModalButton = $(".mce-btn").length > 0;
-        let hasPluginsActivated           = $(".settings-wrapper, .plugin-wrapper").length > 0;
+        let hasPluginsActivated     = $(".settings-wrapper, .plugin-wrapper").length > 0;
 
         if(
           // Anything except 1rd column
@@ -284,9 +287,9 @@
               this.module.type === "custom"
                 ? this.$store.commit("campaign/unsetCustomModule")
                 : this.$store.commit("campaign/unsetCurrentModule");
-        }
+            }
         // Keep open 3rd column for active module
-        // Deactive only if it hasn't activated plugins
+          // Deactive only if it hasn't activated plugins
         else if (!hasPluginsActivated) {
           this.$store.commit("campaign/unsetActiveModule");
         }

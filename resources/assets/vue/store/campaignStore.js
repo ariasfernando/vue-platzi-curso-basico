@@ -11,6 +11,7 @@ function campaignStore() {
       campaign: {},
       modules: [],
       editedSettings: {},
+      campaignCompleted: false,
       currentModuleId: undefined,
       currentCustomModuleId: undefined,
       currentComponent: {},
@@ -70,6 +71,9 @@ function campaignStore() {
 
     },
     mutations: {
+      campaignCompleted(state, status) {
+        state.campaignCompleted = status;
+      },
       loadCampaignData(state, campaignData) {
         state.campaign = campaignData;
         state.modules = campaignData.campaign_data.modules_data;

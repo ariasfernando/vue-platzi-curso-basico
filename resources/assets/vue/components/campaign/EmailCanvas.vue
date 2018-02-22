@@ -5,7 +5,7 @@
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;">
+          <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;" :class="{ 'campaign-completed': campaignCompleted }">
               <draggable
                 id="emailCanvas"
                 :class="`stx-${buildingMode}-mode`"
@@ -47,6 +47,9 @@
       dragGhost: null
     },
     computed: {
+      campaignCompleted() {
+        return this.$store.state.campaign.campaignCompleted;
+      },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
       },
@@ -141,7 +144,7 @@
         const module = this.items[e.oldIndex];
         const mod = clone(module);
         mod.data = {};
-
+        
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
         // Set active on last module inserted
         this.$store.commit('campaign/setActiveModule', e.newIndex);
@@ -154,11 +157,11 @@
       onSort(e){
         if (this.activeModule.type === 'studio') {
           // Save current component if module type is studio
-          this.$store.commit('campaign/setCurrentComponent', {
-            moduleId: e.newIndex,
-            columnId: 0,
-            componentId: 0,
-          });
+        this.$store.commit('campaign/setCurrentComponent', {
+          moduleId: e.newIndex,
+          columnId: 0,
+          componentId: 0,
+        });
           this.$store.commit('campaign/unsetCustomModule');
         } else {
           // Save customModule if module type is custom
@@ -248,7 +251,7 @@
   }
 
   .applelinks{
-    color:#FFFFFF !important; 
+    color:#6b6b6b !important; 
     text-decoration: none !important; 
   }  
          
@@ -261,11 +264,12 @@
     background-color: #000000; 
   }
 
-  .stx-edit-text{
-    p{
+  p,ul,ol{
       margin: 0;
       padding: 0;
     }
+
+  .stx-edit-text{
 
     a:hover, 
     a:focus{
