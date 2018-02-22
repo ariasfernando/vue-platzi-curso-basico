@@ -42,33 +42,23 @@
 
 <script>
 import _ from "lodash";
+import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "ImageSize",
   props: ["setting"],
+  mixins: [ SettingMixin ],
   data() {
     return {
       min: 10
     };
   },
-  mounted() {},
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
-    component() {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent.columnId].components[
-          this.currentComponent.componentId
-        ];
-      return component;
-    },
     isBlockHeight() {
-      return this.getValue("isBlockHeight");
+      return this.component.styleOptions["isBlockHeight"];
     },
     isPxWidth() {
-      return this.getValue("isPxWidth");
+      return this.component.styleOptions["isPxWidth"];
     },
     imageSizeSettings() {
       return [
@@ -101,14 +91,14 @@ export default {
       return property === "width" && !this.isPxWidth ? "%" : "px";
     },
     maxValue(property) {
-      return property === "width" && !this.getValue("isPxWidth")
+      return property === "width" && !this.isPxWidth
         ? 100
         : undefined;
     },
     onTogglePxWidth() {
       let width = this.imageSizeSettings[0].value;
       // set isPxWidth
-      let isPxWidth = !this.getValue("isPxWidth");
+      let isPxWidth = !this.isPxWidth;
       if (isPxWidth) {
         // save width + px
         this.saveAttribute(width + "px", "width");
@@ -121,7 +111,7 @@ export default {
     },
     onToggleBlockheight() {
       // set isBlock
-      let isBlock = !this.getValue("isBlockHeight");
+      let isBlock = !this.isBlockHeight;
       if (isBlock) {
         // save and update height
         let height = "auto";
@@ -133,36 +123,18 @@ export default {
       // save and update isBlock
       this.saveStyleOption(isBlock, "isBlockHeight");
     },
-
     getValue(name) {
-      let value;
-      if (name === "isBlockHeight" || name === "isPxWidth") {
-        value = this.component.styleOptions[name];
-      } else {
-        value =
-          this.component.attribute[name] === "auto"
-            ? "auto"
-            : _.parseInt(this.component.attribute[name]);
-      }
-      return value;
+      return this.component.attribute[name] === "auto"
+                ? "auto"
+                : _.parseInt(this.component.attribute[name]);
     },
 
-    saveStyleOption(value, property) {
-      this.$store.commit("module/saveComponentStyleOption", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: property,
-        value: value
-      });
+    saveStyleOption(newValue, styleOptionName) {
+      this.$emit("style-option-setting-updated", { name: styleOptionName, value: newValue });
     },
 
-    saveAttribute(value, property) {
-      this.$store.commit("module/saveComponentAttribute", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: property,
-        value: value
-      });
+    saveAttribute(newValue, attributeName) {
+      this.$emit("attribute-setting-updated", { name: attributeName, value: newValue });
     }
   }
 };
