@@ -8,6 +8,7 @@ import InputHeight from './InputHeight.vue';
 import FontWeight from './FontWeight.vue';
 import BackgroundColor from './BackgroundColor.vue';
 import FontColor from './FontColor.vue';
+import LetterSpacing from './LetterSpacing.vue';
 
 const Settings = {
   FontFamily,
@@ -20,6 +21,7 @@ const Settings = {
   FontWeight,
   BackgroundColor,
   FontColor,
+  LetterSpacing,
 };
 
 module.exports = Settings;

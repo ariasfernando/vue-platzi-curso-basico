@@ -9,6 +9,7 @@ function textDefault() {
       fontSize: '12px',
       fontWeight: 'normal',
       lineHeight: '16px',
+      letterSpacing: 'normal',
       paddingTop: '0px',
       paddingBottom: '0px',
       paddingRight: '0px',
@@ -18,6 +19,7 @@ function textDefault() {
     styleOptions: {
       isBlockLineHeight: false,
       isCustomFontWeight: false,
+      isNormalLetterSpacing: true,
     },
     attribute: {
       valign: 'middle',
@@ -25,7 +27,7 @@ function textDefault() {
       bgcolor: 'transparent',
       hideElement: false,
     },
-    componentSettings: ['font-family', 'font-style', 'font-weight', 'text-align', 'background-color', 'font-color'],
+    componentSettings: ['font-family', 'font-style', 'font-weight', 'text-align', 'background-color', 'letter-spacing', 'font-color'],
     settings: [
       {
         link: 'attribute',
@@ -33,13 +35,6 @@ function textDefault() {
         name: 'truncate',
         type: 'text',
         value: '',
-      },
-      {
-        link: 'style',
-        label: 'Letter Spacing',
-        name: 'letter-spacing',
-        type: 'text',
-        value: 'normal',
       },
       {
         link: 'style',

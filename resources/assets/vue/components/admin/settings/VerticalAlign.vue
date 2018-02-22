@@ -53,9 +53,23 @@ export default {
   border-color: inherit;
   background-color: inherit;
 }
-.el-button.active{
+.el-button.active {
   color: #ffffff;
   border-color: rgb(120, 220, 214);
   background-color: rgb(120, 220, 214);
+}
+.el-button + .el-button {
+  margin-left: none;
+}
+.el-button {
+  width: 34px;
+  padding: 4px 4px;
+  margin: 2.5px 2.5px 2.5px 3.5px;
+  height: 32px;
+  display: block;
+  float: left;
+}
+.padding-zero {
+  padding: 0;
 }
 </style>
