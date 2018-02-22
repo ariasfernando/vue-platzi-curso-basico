@@ -17,7 +17,7 @@
 			</div>
 		@endif
 		<div class="text-center">
-            <a href="https://stensul.com" class="stensul-logo open-sans" target="_blank">stensul</a>
+            <a href="/" class="stensul-logo open-sans" target="_blank">stensul</a>
             <h4>
                 Register
             </h4>

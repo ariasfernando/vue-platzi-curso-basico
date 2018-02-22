@@ -7,13 +7,20 @@
       @mouseleave="setModulesMouseLeave"
       v-on-clickaway="unsetActiveModule"
   >
-    <td class="stx-toolbar-content stx-position-relative">
+    <td class="stx-toolbar-content stx-position-relative" 
+        :data-module-id="moduleId" 
+        :class="{ 'stx-show-error': showError(moduleId) }"  
+        @click.prevent="config"
+    >
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
+      <div class="st-remove-element module-overlay"></div>
+      <div class="st-remove-element default-module-error" style="display:none"></div>
     </td>
   </tr>
 
-  <tr v-else class="stx-module-wrapper"
+  <tr v-else 
+      class="stx-module-wrapper"
       :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
       @click="setActiveModule"
 
@@ -24,7 +31,7 @@
     <td class="stx-toolbar-content stx-position-relative"
         :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
-        :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
+        :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 }">
       <table
         width="100%"
         cellspacing="0"
@@ -105,6 +112,7 @@
       </table>
       <module-toolbar :module-id="moduleId"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
+      <div class="st-remove-element default-module-error" style="display:none"></div>
     </td>
   </tr>
 </template>
@@ -158,6 +166,22 @@
       }
     },
     methods: {
+      showError(moduleId){
+        let err = false;
+        _.each(this.fieldErrors, (error, key) => {
+           if (!_.isUndefined(error.scope.moduleId)){
+              if (error.scope.moduleId === moduleId){
+                err = true;
+              }
+           }
+        });
+
+        return err;
+      },
+      config() {
+        this.$store.commit("campaign/setCustomModule", this.moduleId);
+        this.$store.commit("campaign/unsetCurrentModule");
+      },
       setComponent(moduleId, columnId, componentId) {
         setTimeout(() => {
           // TODO: find better way to do this
@@ -234,29 +258,37 @@
         // Idea 2, using getters from the campaign's store
 
         let isTargetingComponentSettings  = $(e.target).closest(".component-settings").length > 0;
-        let isTargetingColumnSettings  = this.isWrappedIn(e, "column-settings");
-        let isTargetingAModule      = this.isWrappedIn(e, "stx-module-wrapper");
-        let isTargetingMenuModule   = this.isWrappedIn(e, "beta-subitem-single");
-        let hasPluginsActivated     = $(".settings-wrapper, .plugin-wrapper").length > 0;
+        let isTargetingColumnSettings     = this.isWrappedIn(e, "column-settings");
+        let isTargetingAModule            = this.isWrappedIn(e, "stx-module-wrapper");
+        let isTargetingMenuModule         = this.isWrappedIn(e, "beta-subitem-single");
+        let isTargetingTinyMCEModal       = $(".mce-window.mce-in").length > 0;
+        let isTargetingTinyMCEModalButton = $(".mce-btn").length > 0;
+        let hasPluginsActivated           = $(".settings-wrapper, .plugin-wrapper").length > 0;
 
-        // Treatment for anything except 3rd column
-        if(!isTargetingComponentSettings && !isTargetingColumnSettings) {
-          // Treatment for anything except a module
-          if(!isTargetingAModule) {
-            // Treatment for anything except the menu module
-            // Necesary filter to keep active state for last module added, triggered in EmailCanvas.vue::addModule()
-            if(!isTargetingMenuModule) {
+        if(
+          // Anything except 1rd column
+             !isTargetingColumnSettings
+          // Anything except 3rd column
+          && !isTargetingComponentSettings
+          // Anything except a module
+          && !isTargetingAModule
+          // Anything except the menu module
+          // Neccesary filter to keep active state for last module added, triggered in EmailCanvas.vue::addModule()
+          && !isTargetingMenuModule
+          // Anything except the tinyMCE modal
+          && !isTargetingTinyMCEModal
+          // Anything except the tinyMCE modal button
+          && !isTargetingTinyMCEModalButton
+        ) {
               this.$store.commit("campaign/unsetActiveModule");
-              this.$store.commit("campaign/unsetCurrentModule");
-            }
-          }
+              this.module.type === "custom"
+                ? this.$store.commit("campaign/unsetCustomModule")
+                : this.$store.commit("campaign/unsetCurrentModule");
         }
         // Keep open 3rd column for active module
-        else {
-          // Deactive only if it hasn't activated plugins
-          if(!hasPluginsActivated) {
-            this.$store.commit("campaign/setActiveModule", null);
-          }
+        // Deactive only if it hasn't activated plugins
+        else if (!hasPluginsActivated) {
+          this.$store.commit("campaign/unsetActiveModule");
         }
       }
 

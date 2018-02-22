@@ -69,7 +69,6 @@
 <script>
   import VueSticky from 'vue-sticky';
   import campaignService from '../../services/campaign';
-  import configService from '../../services/config';
   import campaignCleaner from '../../utils/campaignCleaner';
   import { html_beautify } from 'js-beautify';
 
@@ -122,11 +121,6 @@
         this.$store.commit("campaign/changeBuildingMode", mode);
       },
       save() {
-        // Do not save if there are missing or wrong fields
-        if (!this._validate()) {
-          return false;
-        }
-
         this.$store.commit("global/setLoader", true);
 
         const cleanHtml = campaignCleaner.clean('.section-canvas-container');
@@ -151,7 +145,7 @@
         });
       },
       _validate(message = undefined) {
-        if (this.fieldErrors.length > 0) {
+        if ( this.fieldErrors.length > 0  ) {
           this.$root.$toast(
             message || 'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
@@ -173,7 +167,9 @@
       },
       complete() {
         // Do not save if there are missing or wrong fields
-        if (this.fieldErrors.length > 0 || campaignCleaner.imagesErrors('#emailCanvas') ) {
+        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.fieldErrors.length > 0 ) {
+          this.$_app.utils.validator.modulesErrors('#emailCanvas');
+          
           this.$root.$toast(
             'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
@@ -291,7 +287,7 @@
     },
     created () {
       this.autoSave();
-      configService.getConfig('campaign').then((response) => this.campaignConfig = response);
+      this.campaignConfig = this.$store.getters["config/config"].campaign;
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;
 

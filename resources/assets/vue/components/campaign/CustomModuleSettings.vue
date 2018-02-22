@@ -1,6 +1,6 @@
 <template>
-  <div class="component-settings" v-if="module.settings">
-    <h2><i class="glyphicon glyphicon-tasks"></i> {{ toCamel(module.params.title) }} </h2>
+  <div class="component-settings" v-if="module ? module.settings : false">
+    <h2><i class="glyphicon glyphicon-tasks"></i> {{ toCamel(module.name) }} </h2>
     <div class="plugins">
       <div>
         <component :is="'custom-settings-' + module.name" :module-id="currentCustomModule" :module="module"></component>

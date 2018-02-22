@@ -4,11 +4,11 @@
             <div class="col-md-offset-3 col-md-2 col-xs-2">
                 <div class="switch">
                     <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-                    <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="mode = 'desktop'">
+                    <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="changeBuildingMode('desktop')">
                         <i class="fa fa-desktop"></i>
                     </label>
                     <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-                    <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="mode = 'mobile'">
+                    <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="changeBuildingMode('mobile')">
                         <i class="glyphicon glyphicon-phone"></i>
                     </label>
                     <span class="switch-selection"></span>
@@ -19,19 +19,10 @@
                      :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
                      :token="token"
                      v-if="showDecision ? true : false"
-                     v-on:update-alert="updateAlert"
                     v-on:decision="decisionMade()"
                 ></proof-decision>
             </div>
         </div>
-
-        <alert
-            :title="alert.title"
-            :message="alert.message"
-            :type="alert.type"
-            :show="alert.show"
-            v-on:hide-alert="alert.show = false"
-        ></alert>
 
         <div class="section-container-campaign">
             <section class="section-canvas-email section-box">
@@ -47,6 +38,7 @@
                                 <table
                                     border="0"
                                     class="stx-email-canvas wrapper-table"
+                                    :class="'stx-' + buildingMode + '-mode'"
                                     id="emailCanvas"
                                     cellspacing="0"
                                     cellpadding="0"
@@ -62,7 +54,6 @@
             <aside>
                 <proof-comments
                     :token="token"
-                    v-on:update-alert="updateAlert"
                 ></proof-comments>
             </aside>
         </div>
@@ -73,28 +64,22 @@
 <script>
     import ProofComments from './ProofComments.vue';
     import ProofDecision from './ProofDecision.vue';
-    import Alert from './Alert.vue';
     import VueSticky from 'vue-sticky';
 
     export default {
         name: 'proofViewer',
         components: {
-            Alert,
             ProofComments,
             ProofDecision
         },
         data() {
             return {
-                alert: {
-                    title: '',
-                    message: '',
-                    type: '',
-                    show: false
-                },
                 campaign: [],
                 showDecision: false,
                 reviewer: [],
-                mode: 'desktop'
+                desktopWidth: '600',
+                mobileWidth: '300',
+                buildingMode: 'desktop'
             };
         },
         props: ['token'],
@@ -104,13 +89,17 @@
                     // Yes, it's ugly, but this width value is set in the body_html and we need
                     // to remove it so the switch can work.
                     // @TODO: check why this value is in the body_html
-                    return this.campaign.body_html.replace('660', '');
+                    return this.campaign.body_html.replace('width="' + this.desktopWidth + '"', '');
                 } else {
                     return '';
                 }
             },
             templateWidth () {
-                return this.mode === 'desktop' ? 600 : 440;
+                if (this.buildingMode === 'desktop') {
+                    return this.desktopWidth;
+                } else {
+                    return this.mobileWidth;
+                }
             }
         },
         created: function() {
@@ -132,30 +121,40 @@
                             vm.campaign = resp.body.data.campaign;
                             vm.reviewer = resp.body.data.reviewer;
                             vm.showDecision = resp.body.data.show_decision;
+                            vm.desktopWidth = resp.body.data.campaign.template_width;
+                            vm.mobileWidth = resp.body.data.campaign.template_mobile_width;
                             if ('message' in resp.body.data) {
-                                vm.alert = {
-                                    message: resp.body.data.message,
-                                    show: true
-                                }
+                                vm.$root.$toast(resp.body.data.message, {className: 'et-success'});
                             }
                         }
                     });
             },
-            updateAlert: function(data) {
-                this.alert = data;
-            },
             decisionMade: function() {
                 // Ugly but works. @TODO: find a better way to do this (e.g. vuex)
                 this.$children[1].getComments();
+            },
+            changeBuildingMode(mode) {
+                this.buildingMode = mode;
             }
         }
     };
 </script>
 
-<style lang="sass">
+<style lang="less">
     .proof-viewer-container {
         width: 100%;
         display: table;
         min-height: 100%;
+    }
+    #emailCanvas{
+        &:empty {
+          min-height: 40px;
+        }
+        &.stx-mobile-mode {
+          width: 480px;
+          // Mobile Classes
+          @import '../../../less/base/commons/mobile/mobile_core_styles';
+          @import '../../../less/base/commons/mobile/mobile_client_styles';
+        }
     }
 </style>

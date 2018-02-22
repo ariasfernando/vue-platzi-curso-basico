@@ -43,7 +43,9 @@
               return component;
             }
 
-            component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
+            if ( _.has(this.$store.getters["campaign/modules"][moduleId], 'structure')){
+              component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
+            }
 
             if (component) {
               _.each(component.plugins, (plugin) => {

@@ -110,6 +110,11 @@ class DashboardController extends Controller
 
         // apply sort
         $sort = strlen($request->input('sort')) ? $request->input('sort', 'updated_at') : 'updated_at';
+
+        if ($sort === 'library_name') {
+            $sort = 'library';
+        }
+
         $direction = strlen($request->input('direction')) ? $request->input('direction', 'updated_at') : 'desc';
         $campaigns->orderBy($sort, $direction);
 

@@ -1,7 +1,7 @@
 <template>
   <div class="expand configuration-mod">
     <h2 class="show-configuration" v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-cog glyph-inline"></i> Email Settings <i class="glyphicon glyphicon-menu-up"></i></h2>
-    <div class="level-1 open-section-campaign"l v-bind:class="{'is-collapsed' : collapsed }">
+    <div class="level-1 open-section-campaign" v-bind:class="{'is-collapsed' : collapsed }">
       <form>
         <!-- Configuration Inputs -->
         <div class="configuration-field configuration-nomargin">
@@ -44,7 +44,7 @@
 
         <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave">Auto Save</label>
-          <toggle-button :value="form.autoSave" active-color="#78DCD6" @change="autoSaveChange"></toggle-button>
+          <toggle-button :value="form.autoSave" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange" :disabled="campaign.locked"></toggle-button>
         </div>
 
         <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
@@ -83,7 +83,6 @@
 
 <script>
   import _ from 'lodash'
-  import configService from '../../services/config'
   import Multiselect from 'vue-multiselect';
   import ToggleButton from '../../plugins/common/toggle-button'
 
@@ -100,12 +99,15 @@
         enableAutoSave: false,
         enableLocking: false,
         form: {
-          campaignName: 'Campaign Name',
+          campaignName: '',
           campaignProcess: false,
           autoSave: false,
           tags: []
         },
-        tagOptions: []
+        tagOptions: [],
+        globalConfig: {},
+        campaignConfig: {},
+        autoSaveTemp : false,
       }
     },
     computed: {
@@ -137,7 +139,7 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
-      this.form.campaignName = this.campaign.campaign_name || 'Campaign Name';
+      this.form.campaignName = this.campaign.campaign_name || '';
 
       let tagList = this.$store.getters["campaign/campaign"].tag_list;
       for (let n = 0; n < tagList.length; n++) {
@@ -163,13 +165,13 @@
           if (this.$validator.errors.items.length) {
             _.each(this.$validator.errors.items, (err) => {
               _.extend(err, {
-                scope: 'Campaign Name',
+                scope: '',
               });
             });
 
             this.$store.dispatch('campaign/addErrors', this.$validator.errors.items);
           } else {
-            this.$store.commit('campaign/clearErrorsByScope', 'Campaign Name');
+            this.$store.commit('campaign/clearErrorsByScope', '');
           }
 
         });
@@ -187,21 +189,21 @@
         });
       },
       loadConfig() {
-        configService.getConfig('global_settings')
-          .then((response) => {
-            this.enableAutoSave = response.auto_save === '1';
-            this.enablePreheader = response.enable_preheader === '1' && this.campaign.library_config.preheader;
-          })
-          .catch((error) => {
-            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+
+          this.$store.dispatch("config/getConfig", 'global_settings').then(response => {
+            this.globalConfig = this.$store.getters["config/config"].global_settings;
+            this.enableAutoSave = this.globalConfig.auto_save === '1';
+            this.enablePreheader = this.globalConfig.enable_preheader === '1' && this.campaign.library_config.preheader;
+          }, error => {
+            this.$store.commit("global/setLoader", false);
+            this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+              {className: 'et-error'}
+            );
           });
-          configService.getConfig('campaign')
-            .then((response) => {
-              this.enableLocking = response.locking === true;
-            })
-            .catch((error) => {
-              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
-            });
+
+          this.campaignConfig = this.$store.getters["config/config"].campaign;
+          this.enableLocking = this.campaignConfig.locking === true;
       },
       tagAdd(tag) {
 
@@ -245,6 +247,12 @@
         });
       },
       lockCampaign() {
+
+        //TODO: make reactive and remove click
+        this.autoSaveTemp = this.form.autoSave;
+        if (this.form.autoSave){
+          document.getElementById('autoSave').click();
+        }
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch("campaign/lockCampaign", this.campaign._id).then(response => {
           this.$root.$toast('This campaign is locked now. Only you can unlock it.', {className: 'et-info'});
@@ -260,6 +268,11 @@
         this.$store.dispatch("campaign/unlockCampaign", this.campaign._id).then(response => {
           this.$root.$toast('This campaign is unlocked now, and you can make changes on it', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
+
+          //TODO: make reactive and remove click
+          if(this.autoSaveTemp){
+            document.getElementById('autoSave').click();
+          }
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
@@ -301,6 +314,8 @@
 @stensul-gray-secondary: #DDDDDD;
 
 .menu-campaign {
+   -ms-user-select: none !important;
+
   ::-webkit-input-placeholder {
     color: #CCCCCC;
   }

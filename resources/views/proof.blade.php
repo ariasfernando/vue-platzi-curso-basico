@@ -1,5 +1,9 @@
 @extends('layouts.master')
 
+@section('header')
+    @include('partials.proof.header')
+@endsection
+
 @section('content')
 
     <div class="col-xs-12" id="proof">

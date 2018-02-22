@@ -51,7 +51,10 @@
         {{-- Global Application JS object --}}
         @include('partials/application_script')
 
-        <script src="{{ cdn(elixir('js/library-v2.js')) }}"></script>
+        <script src="{{ cdn(elixir('js/jquery.js')) }}"></script>
+        <script src="{{ cdn(elixir('js/bootstrap.js')) }}"></script>
+        <script src="{{ cdn(elixir('js/tinymce.js')) }}"></script>
+        <script src="{{ cdn(elixir('js/application-utils-v2.js')) }}"></script>
         <script src="{{ cdn(elixir('js/customer.js')) }}"></script>
         @section('footer-script')
 

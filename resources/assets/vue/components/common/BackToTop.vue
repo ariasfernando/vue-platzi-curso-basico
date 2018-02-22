@@ -73,4 +73,11 @@
     z-index: 4000;
     transition: all .4s ease-in;
   }
+
+  @media only screen and (max-width : 1280px) {
+    .go-to-top {
+      right: auto;
+      margin-left: 720px;
+    } 
+  }
 </style>

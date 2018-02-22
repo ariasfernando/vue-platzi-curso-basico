@@ -1,13 +1,10 @@
 <template>
     <el-switch
       v-model="toggled"
-      @change="toggle"
       :active-color="activeColor"
       :inactive-color="inactiveColor"
       :width="width"
-      :disabled="disabled"
-      >
-
+      :disabled="disabled">
     </el-switch>
 </template>
 
@@ -34,17 +31,17 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    }
+    },
   },
-  data() {
-    return {
-      toggled: this.value
-    };
+  computed: {
+    toggled: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.$emit('change', val);
+      },
+    } 
   },
-  methods: {
-    toggle(value) {
-      this.$emit('change', value);
-    }
-  }
 };
 </script>

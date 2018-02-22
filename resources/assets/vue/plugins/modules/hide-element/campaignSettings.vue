@@ -4,7 +4,7 @@
     <form class="form-horizontal">
       <div class="form-group">
         <div class="col-sm-5">
-          <span>
+          <span class="st-toogle">
             <toggle-button :value="component.attribute.hideElement" color="#78DCD6" :sync="true" :labels="true" @change="toggleChange"></toggle-button>
           </span>
         </div>
@@ -59,7 +59,7 @@ export default {
 
     margin-bottom: 0px !important;
 
-    span{
+    .st-toogle{
       width: 34px !important;
     }
   }
