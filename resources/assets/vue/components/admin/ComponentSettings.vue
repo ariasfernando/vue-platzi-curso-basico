@@ -36,6 +36,7 @@
                     <!-- Input Text -->
                     <el-input
                       v-if="setting.type === 'text'"
+                      size="mini"
                       v-model="setting.value"
                       :placeholder="setting.label"
                       @change="(val)=>saveComponent(val, setting)"
@@ -151,11 +152,11 @@
           <!-- Mobile Styles -->
           <b-tab title="Mobile">
             <div
-                    v-for="(plugin, key) in component.plugins"
-                    v-if="shouldRenderInStyles(plugin)"
-                    class="plugin-wrapper"
-                    :class="'plugin-' + plugin.name"
-                    :key="plugin.name"
+              v-for="(plugin, key) in component.plugins"
+              v-if="shouldRenderInStyles(plugin)"
+              class="plugin-wrapper"
+              :class="'plugin-' + plugin.name"
+              :key="plugin.name"
             >
               <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
             </div>
