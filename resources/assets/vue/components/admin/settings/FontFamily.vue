@@ -30,15 +30,18 @@
 import _ from "lodash";
 import clone from "clone";
 import Multiselect from "vue-multiselect";
+import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "FontFamily",
   props: ["setting"],
+  mixins: [ SettingMixin ],
   components: {
     Multiselect
   },
   data() {
     return {
+      name: "fontFamily",
       options() {
         const options = [];
         _.each(this.$_app.config.fonts, group => {
@@ -55,16 +58,14 @@ export default {
       fontFamilyData: this.fontFamily
     };
   },
+  mounted() {
+    this.fontFamilyData = this.fontFamily;
+  },
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
     fontFamily() {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent.columnId].components[
-          this.currentComponent.componentId
-        ];
+      const component = this.module.structure
+                                    .columns[this.currentComponent.columnId]
+                                    .components[this.currentComponent.componentId];
 
       if (!component.style.fontFamily) {
         return [];
@@ -73,22 +74,14 @@ export default {
       return component.style.fontFamily.split(", ");
     }
   },
-  methods: {
-    saveValue(val) {
-      this.$store.commit("module/saveComponentStyle", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: "fontFamily",
-        value: val.join(", ")
-      });
-    }
-  },
-  mounted() {
-    this.fontFamilyData = this.fontFamily;
-  },
   watch: {
     fontFamily(value) {
       this.fontFamilyData = value;
+    }
+  },
+  methods: {
+    saveValue(newValue) {
+      this.$emit("style-setting-updated", { name: this.name, value: newValue.join(", ") });
     }
   }
 };
