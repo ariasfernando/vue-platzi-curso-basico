@@ -22,10 +22,12 @@
 
 <script>
 import _ from "lodash";
+import SettingMixin from '../mixins/SettingMixin.js';
 
 export default {
   name: "font-style",
   props: ["setting"],
+  mixins: [ SettingMixin ],
   computed: {
     isBlockLineHeight() {
       return this.getStyleOptionValue("isBlockLineHeight");
@@ -49,21 +51,8 @@ export default {
           max: 60
         }
       ];
-    },
-
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
-    component() {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent.columnId].components[
-          this.currentComponent.componentId
-        ];
-      return component;
     }
   },
-
   methods: {
     changeValue(val, setting) {
       if (setting.name === "fontSize" && this.isBlockLineHeight) {
@@ -95,23 +84,11 @@ export default {
     getStyleOptionValue(name) {
       return this.component.styleOptions[name];
     },
-
-    saveStyleOptionValue(val, name) {
-      this.$store.commit("module/saveComponentStyleOption", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: name,
-        value: val
-      });
+    saveStyleOptionValue(newValue, name) {
+      this.$emit('style-option-setting-updated', { name: name, value: newValue });
     },
-
-    saveStyleValue(val, name) {
-      this.$store.commit("module/saveComponentStyle", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: name,
-        value: val + "px"
-      });
+    saveStyleValue(newValue, name) {
+      this.$emit('style-setting-updated', { name: name, value: newValue + "px" });
     }
   }
 };
