@@ -5,7 +5,12 @@
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;">
+          <td
+            align="center"
+            style="vertical-align:top;"
+            class="stx-draggable-wrapper"
+            :bgcolor="templateBackgroundColor()"
+            @click.stop="handleActive">
               <draggable
                 id="emailCanvas"
                 :class="`stx-${buildingMode}-mode`"
@@ -208,6 +213,23 @@
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
+      },
+      handleActive(e) {
+        const target = $( e.target );
+        const moduleId = target.closest(".stx-module-wrapper").find("td").data("module-id");
+        if( target.is( "td.stx-draggable-wrapper" )) {
+          // Clear Current module state
+          this.$store.commit("campaign/unsetActiveModule");
+          this.$store.commit("campaign/unsetCurrentModule");
+          this.$store.commit("campaign/unsetCurrentComponent");
+          this.$store.commit("campaign/unsetCustomModule");
+        }
+        else {
+          // Set active Module
+          this.$store.commit("campaign/setActiveModule", moduleId);
+          // Clear 3rd column
+          this.$store.commit("campaign/setCurrentComponent", {});
+        }
       }
     },
     created () {
