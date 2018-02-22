@@ -7,7 +7,7 @@
         class="custom-col"
         size="mini"
         :value="fontWeight"
-        v-model="fontWeightData"
+        v-model="fontWeightInputValue"
         placeholder="Font Weight"
         @change="(val)=>saveStyle(val,'fontWeight')"
         >
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       options: [],
-      fontWeightData: this.fontWeight
+      fontWeightInputValue: this.fontWeight
     };
   },
   mounted() {
@@ -57,6 +57,7 @@ export default {
       return options;
     }
     this.options = getOptions();
+    this.fontWeightInputValue = this.fontWeight;
   },
   computed: {
     isCustomFontWeight() {
@@ -115,7 +116,7 @@ export default {
   },
   watch: {
     fontWeight (value) {
-      this.fontWeightData= value
+      this.fontWeightInputValue = value;
     }
   },
 };
