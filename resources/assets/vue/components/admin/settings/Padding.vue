@@ -15,7 +15,7 @@
           v-validate="'required'"
           v-model="padding.value"
           @change="(val)=>changeValue(val, padding.name)"
-          :min="0"
+          :min="min"
           :controls="false"
         ></el-input-number>
         <el-button
@@ -29,28 +29,19 @@
 
 <script>
 import _ from "lodash";
+import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "padding",
   props: ["setting"],
+  mixins: [ SettingMixin ],
   data() {
     return {
-      min: 10
+      min: 0
     };
   },
   mounted() {},
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
-    component() {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent.columnId].components[
-          this.currentComponent.componentId
-        ];
-      return component;
-    },
     paddings() {
       return [
         {
@@ -77,21 +68,12 @@ export default {
     }
   },
   methods: {
-    changeValue(val, property) {
+    changeValue(val, styleName) {
       val = isNaN(val) || val < this.min ? this.min : val;
-      this.saveStyle(`${val}px`, property);
+      this.$emit("style-setting-updated", { name: styleName, value: `${val}px` });
     },
-    getValue(name) {
-      return  _.parseInt(this.component.attribute[name]);
-    },
-
-    saveStyle(val, name) {
-      this.$store.commit("module/saveComponentStyle", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: name,
-        value: val
-      });
+    getValue(styleName) {
+      return _.parseInt(this.component.style[styleName]);
     }
   }
 };
