@@ -68,10 +68,17 @@
         return this.$store.getters["campaign/buildingMode"];
       },
       items () {
-        return this.$store.state.campaign.campaign.menu_list;
+        return this.$store.getters["library/modules"];
       },
       baseUrl (){
         return this.$_app.config.baseUrl;
+      },
+      modules() {
+        return this.$store.getters["campaign/modules"];
+      },
+      activeModule() {
+        const activeModuleId = this.$store.getters["campaign/activeModule"];
+        return this.modules[activeModuleId] || undefined;
       }
     },
     data () {
@@ -81,7 +88,10 @@
             name: 'componentsEmailCanvas'
           },
           handle:'.icon-move',
+          // Ignore the HTML5 DnD behaviour and force the fallback to kick in (used only for MS Edge)
           forceFallback: (/Edge/.test(navigator.userAgent)) ? true : false,
+          // Class name for the fallback behaviour (only MS Edge)
+          fallbackClass: "sortable-fallback",
           // Class name for the drop placeholder
           ghostClass: "ghost-component", 
           // Class name for the chosen item
@@ -131,7 +141,7 @@
         const module = this.items[e.oldIndex];
         const mod = clone(module);
         mod.data = {};
-        
+
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
         // Set active on last module inserted
         this.$store.commit('campaign/setActiveModule', e.newIndex);
@@ -142,11 +152,20 @@
         e.clone.style.opacity = "1";
       },
       onSort(e){
-        this.$store.commit('campaign/setCurrentComponent', {
-          moduleId: e.newIndex,
-          columnId: 0,
-          componentId: 0,
-        });
+        if (this.activeModule.type === 'studio') {
+          // Save current component if module type is studio
+          this.$store.commit('campaign/setCurrentComponent', {
+            moduleId: e.newIndex,
+            columnId: 0,
+            componentId: 0,
+          });
+          this.$store.commit('campaign/unsetCustomModule');
+        } else {
+          // Save customModule if module type is custom
+          this.$store.commit('campaign/setCustomModule', e.newIndex);
+          this.$store.commit('campaign/unsetCurrentComponent');
+        }
+        
         this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
       },
@@ -262,6 +281,7 @@
   }
 
   #emailCanvas{
+    -ms-user-select: none !important;
     &:empty {
       min-height: 40px;
     }

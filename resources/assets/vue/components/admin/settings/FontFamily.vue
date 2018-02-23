@@ -1,9 +1,7 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
     <label class="typo__label col-sm-12 control-label">Font Family</label>
-
     <div class="col-sm-12">
-      
         <el-select
         class="width-full"
         multiple
@@ -20,16 +18,13 @@
             >
           </el-option>
         </el-select>
-  
     </div>
-
   </div>
 </template>
 
 <script>
 import _ from "lodash";
 import clone from "clone";
-import Multiselect from "vue-multiselect";
 import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
@@ -37,7 +32,6 @@ export default {
   props: ["setting"],
   mixins: [ SettingMixin ],
   components: {
-    Multiselect
   },
   data() {
     return {
@@ -64,8 +58,8 @@ export default {
   computed: {
     fontFamily() {
       const component = this.module.structure
-                                    .columns[this.currentComponent.columnId]
-                                    .components[this.currentComponent.componentId];
+        .columns[this.currentComponent.columnId]
+        .components[this.currentComponent.componentId];
 
       if (!component.style.fontFamily) {
         return [];

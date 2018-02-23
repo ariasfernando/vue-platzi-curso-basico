@@ -221,7 +221,7 @@
       "input-background-color": elementSettings.BackgroundColor,
       "input-font-color": elementSettings.FontColor,
       "input-letter-spacing": elementSettings.LetterSpacing,
-      "input-padding": elementSettings.padding
+      "input-padding": elementSettings.Padding
     },
     computed: {
       currentComponent() {

@@ -115,19 +115,83 @@ class StaticProcessor
     public function copyAssetsFrom(\Stensul\Models\Campaign $from)
     {
         $storage = Storage::disk('local:campaigns');
-        $files = $storage->allFiles($from->fsRelativePath());
+        $assets = [];
 
-        foreach ($files as $file) {
+        //Get used assets from the body
+        if ($from->body_html !== "") {
+            $html = new Html($this->getCampaign());
+
+            foreach ($html->imagesRegex($from->body_html) as $item) {
+                if (is_array($item) && isset($item[2])) {
+                    $assets[parse_url($item[2], PHP_URL_PATH)] = null;
+                }
+            }
+
+            foreach ($html->assetsRegex($from->body_html)[0] as $item) {
+                if (is_array($item) && isset($item[2])) {
+                    $assets[parse_url($item[2], PHP_URL_PATH)] = null;
+                }
+            }
+        }
+
+        // Get assets used from the modules data.
+        $modules_data = $from->modules_data;
+        foreach ($from->modules_data as $key => $module) {
+            if (isset($module['structure']) && isset($module['structure']['columns'])) {
+                foreach ($module['structure']['columns'] as $column_key => $column_value) {
+                    if (isset($column_value['components'])) {
+                        foreach ($column_value['components'] as $component_key => $component_value) {
+                            if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
+                                if (isset($component_value['attribute'])
+                                    && isset($component_value['attribute']['placeholder'])) {
+                                    $filename = DS . 'images' . DS . trim($component_value['attribute']['placeholder']);
+                                    $assets[$filename] = null;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $assets = array_keys($assets);
+
+        foreach ($assets as $path) {
+            if (!preg_match("/^\/images\/campaigns\//", $path)) {
+                continue;
+            }
+
             Log::info(
                 sprintf(
                     "copying asset %s to campaign [%s] from [%s]",
-                    $file,
+                    $path,
                     $this->getCampaign()->id,
                     $from->id
                 )
             );
+            $filename = basename($path);
 
-            $storage->put($this->getCampaign()->fsRelativePath() . DS . basename($file), $storage->get($file));
+            // Remove "/images/campaigns/" from $path.
+            $path = substr($path, 18);
+            $destination = $this->getCampaign()->fsRelativePath() . DS . $filename;
+
+            try {
+                if (!$storage->put($destination, $storage->get($path))) {
+                    Log::info(
+                        sprintf(
+                            'Error copying %s to %s',
+                            $path,
+                            $destination
+                        )
+                    );
+                }
+            } catch (\League\Flysystem\FileNotFoundException $exception) {
+                Log::info('ErrorException copying file from: ' . $path);
+            } catch (\Illuminate\Contracts\Filesystem\FileNotFoundException $exception) {
+                Log::info('ErrorException copying file from: ' . $path);
+            } catch (\FileNotFoundException $exception) {
+                Log::info('FileNotFoundException: ' . $path);
+            }
         }
 
         $this->replaceReferenceId($from);
@@ -140,23 +204,30 @@ class StaticProcessor
      */
     public function replaceReferenceId(\Stensul\Models\Campaign $from)
     {
-        $modules = $this->getCampaign()->modules_data;
-
-        $key = 0;
-        // iterate trought all modules
-        foreach ($modules as $module) {
-            if (isset($module['data']) && is_array($module['data'])) {
-                // iterate trought all data
-                foreach ($module['data'] as $name => $data) {
-                    if (is_array($data) && isset($data['path'])) {
-                        $modules[$key]['data'][$name]['path'] =
-                            str_replace($from->id, $this->getCampaign()->id, $data['path']);
+        $modules_data = $this->getCampaign()->modules_data;
+        foreach ($from->modules_data as $key => $module) {
+            if (isset($module['structure']) && isset($module['structure']['columns'])) {
+                foreach ($module['structure']['columns'] as $column_key => $column_value) {
+                    if (isset($column_value['components'])) {
+                        foreach ($column_value['components'] as $component_key => $component_value) {
+                            if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
+                                if (isset($component_value['attribute'])
+                                    && isset($component_value['attribute']['placeholder'])) {
+                                    $modules_data[$key]['structure']['columns'][$column_key]['components']
+                                        [$component_key]['attribute']['placeholder'] = str_replace(
+                                            $from->id,
+                                            $this->getCampaign()->id,
+                                            $component_value['attribute']['placeholder']
+                                        );
+                                }
+                            }
+                        }
                     }
                 }
             }
-            ++$key;
         }
-        $this->getCampaign()->modules_data = $modules;
+
+        $this->getCampaign()->modules_data = $modules_data;
         $this->getCampaign()->save();
     }
 

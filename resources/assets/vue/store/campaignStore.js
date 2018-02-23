@@ -33,6 +33,9 @@ function campaignStore() {
       campaign(state) {
         return state.campaign;
       },
+      fieldErrors(state){
+        return state.fieldErrors
+      },
       currentComponent(state) {
         return state.currentComponent;
       },
@@ -94,6 +97,14 @@ function campaignStore() {
         state.modules.push(clone);
         state.dirty = true;
       },
+      updateCustomElement(state, payload) {
+        // This is necessary, since the clickaway function is executed.
+        if ( !_.isUndefined(payload.moduleId) ){ 
+          const update = { ...state.modules[payload.moduleId].data, ...payload.data };
+          state.modules[payload.moduleId].data = update;
+          state.dirty = true;
+        }
+      },
       updateElement(state, payload) {
         // This is necessary, since the clickaway function is executed.
         if ( !_.isUndefined(payload.moduleId) ){ 
@@ -119,7 +130,7 @@ function campaignStore() {
         state.currentComponent = data;
       },
       unsetCurrentComponent(state) {
-        state.currentComponent = undefined;
+        state.currentComponent = {};
       },
       setActiveModule(state, moduleId) {
         state.activeModule = moduleId;
@@ -164,12 +175,22 @@ function campaignStore() {
         state.dirty = true;
       },
       saveCustomModuleData(state, data) {
+        // Prevent empty arrays returned by php-mongo
+        if (_.isArray(state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data = {};
+        }
+
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
         const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
         state.modules[data.moduleId].data = newData;
         state.dirty = true;
       },
       saveCustomModuleDataField(state, data) {
+        // Prevent empty arrays returned by php-mongo
+        if (_.isArray(state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data = {};
+        }
+
         state.modules[data.moduleId].data[data.field] = data.value;
         state.dirty = true;
       },
@@ -230,7 +251,6 @@ function campaignStore() {
         return campaignService.getCampaign(campaignId)
           .then((response) => {
             context.commit('loadCampaignData', response.campaign);
-            context.commit('setDirty', false);
           })
           .catch(error => context.commit('error', error));
       },
@@ -238,7 +258,6 @@ function campaignStore() {
         return campaignService.getCampaignPublic(campaignId)
           .then((response) => {
             context.commit('loadCampaignData', response.campaign);
-            context.commit('setDirty', false);
           })
           .catch(error => context.commit('error', error));
       },

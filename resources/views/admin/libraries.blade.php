@@ -18,7 +18,6 @@
 @endsection
 
 @section('footer-script')
-    <script src="{{ cdn( elixir('js/library-v2.js') ) }}"></script>
     <script src="{{ cdn( elixir('js/admin.js') ) }}"></script>
     <script src="{{ cdn( elixir('js/studio-library.js') ) }}"></script>
 @stop

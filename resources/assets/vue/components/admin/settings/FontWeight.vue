@@ -39,7 +39,7 @@ import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
-  name: "font-weight",
+  name: "FontWeight",
   props: ["setting"],
   mixins: [ SettingMixin ],
   data() {

@@ -9,7 +9,7 @@ import FontWeight from './FontWeight.vue';
 import BackgroundColor from './BackgroundColor.vue';
 import FontColor from './FontColor.vue';
 import LetterSpacing from './LetterSpacing.vue';
-import padding from './padding.vue';
+import Padding from './Padding.vue';
 
 const Settings = {
   FontFamily,
@@ -23,7 +23,7 @@ const Settings = {
   BackgroundColor,
   FontColor,
   LetterSpacing,
-  padding,
+  Padding,
 };
 
 module.exports = Settings;

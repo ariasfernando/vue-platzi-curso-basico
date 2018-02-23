@@ -6,17 +6,17 @@ import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
 import BootstrapVue from 'bootstrap-vue';
 import Croppa from 'vue-croppa';
+import 'url-search-params-polyfill';
 import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
 import store from './store';
 import Campaign from './components/campaign/Campaign.vue';
-import { campaignDictionary } from './resources/dictionary';
-import 'url-search-params-polyfill';
 
 Vue.use(Bootstrap);
 Vue.use(VueResource);
 Vue.use(VeeValidate);
-VeeValidate.Validator.localize('en', campaignDictionary);
+
+VeeValidate.Validator.localize('en', Vue.prototype.$_app.dictionary.campaign);
 
 Vue.use(Toast, {
   horizontalPosition: 'center',
@@ -41,7 +41,7 @@ if (processed === 'true') {
   window.location.href = '/#finished-campaign';
 }
 
-const app = new Vue({
+new Vue({
   store,
   components: {
     Campaign,

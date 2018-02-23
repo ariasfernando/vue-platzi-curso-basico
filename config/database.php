@@ -53,6 +53,7 @@ return [
             'username' => env('DB_USERNAME', ''),
             'password' => env('DB_PASSWORD', ''),
             'database' => env('DB_DATABASE', 'email_creator'),
+            'dsn'      => env('DB_DSN', ''),
         ),
         'mongodb_testing' => array(
             'driver'   => 'mongodb',
@@ -61,6 +62,8 @@ return [
             'username' => env('DB_USERNAME', ''),
             'password' => env('DB_PASSWORD', ''),
             'database' => env('DB_DATABASE_TESTING', 'stensul_base_testing'),
+            'dsn'      => env('DB_DSN', ''),
+
         )
     ],
 
