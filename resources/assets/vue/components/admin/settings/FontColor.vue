@@ -15,38 +15,28 @@
 </template>
 <script>
 import _ from "lodash";
+import SettingMixin from "../mixins/SettingMixin.js";
+
 export default {
   name: "FontColor",
   props: ["setting"],
+  mixins: [ SettingMixin ],
+  data() {
+    return {
+      name: "color"
+    };
+  },
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
-    component() {
-      const module = this.$store.getters["module/module"];
-      const component = module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
-      return component;
-    },
     color: {
       get() {
-        return this.component.style["color"];
+        return this.component.style[this.name];
       },
-      set(val) {
-        this.saveStyle(val);
+      set(color) {
+        if (!Application.utils.validateHexVal(color)) {
+          color = color === null ? "transparent" : Application.utils.rgbToHex(color);
+        }
+        this.$emit("style-setting-updated", { name: this.name, value: color });
       }
-    }
-  },
-  methods: {
-    saveStyle(color) {
-      if (!Application.utils.validateHexVal(color)) {
-        color = color === null ? "transparent" : Application.utils.rgbToHex(color);
-      }
-      this.$store.commit("module/saveComponentStyle", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: "color",
-        value: color
-      });
     }
   }
 };
