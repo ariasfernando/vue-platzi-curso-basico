@@ -80,6 +80,14 @@
         html: '',
       }
     },
+    watch: {
+      modalComplete(val) {
+        if (val) {
+          // Hide loader
+          this.$store.commit("global/setLoader", false);
+        }
+      }
+    },
     methods: {
       getPlainText() {
         campaignService.processPlainText(this.campaign.campaign_id)

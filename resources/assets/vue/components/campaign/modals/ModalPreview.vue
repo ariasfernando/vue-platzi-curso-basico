@@ -114,6 +114,14 @@
         emailError: null
       }
     },
+    watch: {
+      modalPreview(val) {
+        if (val) {
+          // Hide loader
+          this.$store.commit("global/setLoader", false);
+        }
+      }
+    },
     computed: {
       modalPreview () {
         return this.$store.state.campaign.modalPreview;
@@ -214,7 +222,6 @@
       }
     },
     created () {
-
       if (this.campaign.campaign_data) {
         this.updateDimensions();
       }
