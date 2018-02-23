@@ -18,7 +18,7 @@
         :min="-5"
         :max="5"
         v-model="letterSpacingInputValue"
-        @change="(newValue)=>saveStyle(newValue)"
+        @change="(newValue)=>updateLetterSpacing(newValue)"
         ></el-input-number>
 
       <el-button
@@ -52,11 +52,24 @@ export default {
     this.updateLetterSpacingInputValue(this.letterSpacing);
   },
   computed: {
-    isNormalLetterSpacing() {
-      return this.component.styleOptions[this.isNormalLetterSpacingName];
+    isNormalLetterSpacing: {
+      get: function() {
+        return this.component.styleOptions[this.isNormalLetterSpacingName];
+      },
+      set: function(newValue) {
+        this.$emit("style-option-setting-updated", { name: this.isNormalLetterSpacingName, value: newValue });
+        this.letterSpacing = this.inferLetterSpacing(this.letterSpacing, newValue);
+      }
     },
-    letterSpacing() {
-      return this.inferLetterSpacing(this.component.style[this.name], this.isNormalLetterSpacing);
+    letterSpacing: {
+      get: function() {
+        return this.inferLetterSpacing(this.component.style[this.name], this.isNormalLetterSpacing);
+      },
+      set: function(value) {
+        let newValue = value === "normal" ? value : value+this.unit;
+        this.$emit("style-setting-updated", { name: this.name, value: newValue });
+        this.updateLetterSpacingInputValue(value);
+      }
     }
   },
   methods: {
@@ -70,23 +83,11 @@ export default {
       }
       return newSpacing;
     },
-    saveStyle(value) {
-      let newValue = value === "normal" ? value : value+this.unit;
-      this.$emit("style-setting-updated", { name: this.name, value: newValue });
-    },
-    saveStyleOption(newValue) {
-      this.$emit("style-option-setting-updated", { name: this.isNormalLetterSpacingName, value: newValue });
+    updateLetterSpacing(newValue) {
+      this.letterSpacing = newValue;
     },
     toggleNormalLetterSpacing: function() {
-      this.saveStyleOption(!this.isNormalLetterSpacing);
-    }
-  },
-  watch: {
-    letterSpacing(value) {
-      this.updateLetterSpacingInputValue(value);
-    },
-    isNormalLetterSpacing(value) {
-      this.saveStyle(this.inferLetterSpacing(this.letterSpacing, value));
+      this.isNormalLetterSpacing = !this.isNormalLetterSpacing;
     }
   }
 };
@@ -114,22 +115,24 @@ export default {
 .el-button {
   transition: unset;
 }
-.el-input-number--mini input.el-input__inner[type="text"] {
-  padding-left: 30px;
-}
 </style>
-<style>
-/* not scoped */
-.field-letter-spacing .el-input--mini .el-input__inner {
-  text-align: center;
-  border-right: 0;
-}
-
-.field-letter-spacing .el-button.is-disabled,
-.field-letter-spacing .el-button.is-disabled:focus,
-.field-letter-spacing .el-button.is-disabled:hover {
-  color: #606266;
-  cursor: auto;
+<style lang="less">
+  /* not scoped */
+.field-letter-spacing {
+  .el-input-number--mini input.el-input__inner[type="text"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .el-input--mini .el-input__inner {
+    text-align: center;
+    border-right: 0;
+  }
+  .el-button.is-disabled,
+  .el-button.is-disabled:focus,
+  .el-button.is-disabled:hover {
+    color: #606266;
+    cursor: auto;
+  }
 }
 </style>
 
