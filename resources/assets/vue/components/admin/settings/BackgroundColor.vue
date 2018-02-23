@@ -14,42 +14,28 @@
 </template>
 <script>
 import _ from "lodash";
+import SettingMixin from "../mixins/SettingMixin.js";
+
 export default {
   name: "BackgroundColor",
   props: ["setting"],
+  mixins: [ SettingMixin ],
+  data() {
+    return {
+      name: "bgcolor"
+    };
+  },
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
-    component() {
-      const module = this.$store.getters["module/module"];
-      const component = module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
-      return component;
-    },
     color: {
       get() {
-        let value =
-          this.component.attribute["bgcolor"] === "transparent"
-            ? ""
-            : this.component.attribute["bgcolor"];
-        return value;
+        return this.component.attribute[this.name] === "transparent" ? "" : this.component.attribute[this.name];
       },
-      set(val) {
-        this.saveAttribute(val);
+      set(color) {
+        if (!Application.utils.validateHexVal(color)) {
+          color = color === null ? "transparent" : Application.utils.rgbToHex(color);
+        }
+        this.$emit("attribute-setting-updated", { name: this.name, value: color });
       }
-    }
-  },
-  methods: {
-    saveAttribute(color) {
-      if (!Application.utils.validateHexVal(color)) {
-        color = color === null ? "transparent" : Application.utils.rgbToHex(color);
-      }
-      this.$store.commit("module/saveComponentAttribute", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: "bgcolor",
-        value: color
-      });
     }
   }
 };
