@@ -30,7 +30,7 @@
   >
     <td class="stx-toolbar-content stx-position-relative"
         :style="module.structure.style"
-        :bgcolor="module.structure.attribute.bgcolor.hex"
+        :bgcolor="module.structure.attribute.bgcolor"
         :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 }">
       <table
         width="100%"

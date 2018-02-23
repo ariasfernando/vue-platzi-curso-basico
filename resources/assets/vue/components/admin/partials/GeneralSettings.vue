@@ -37,8 +37,7 @@
              :key="generalSetting.name"
              >
           <div v-if="!generalSetting.group" >
-            <label class="col-sm-7 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
-            <div class="col-sm-5 position-relative content-colorpicker">
+            <label class="col-xs-6 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
             <!-- Input Text -->
               <input v-if="generalSetting.type === 'text'"
                      :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
@@ -50,41 +49,8 @@
                      @change="saveModuleStyle">
               
               <!-- Input color -->
-                 <input v-if="generalSetting.type === 'color'"
-                     v-validate="'required'"
-                     type="text"
-                     :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
-                     :name="generalSetting.name"
-                     :placeholder="generalSetting.label"
-                     :value="(generalSetting.transparentChecked)? 'transparent' : generalSetting.sketchPickerValue.hex"
-                     @click.prevent="toggleSketch"
-                     @change="saveModuleAttribute">
-
-              <div v-if="generalSetting.type === 'color'"
-                   class="icon-remove st-remove-sketch"
-                   @click.prevent="toggleSketch">
-
-                <i class="glyphicon glyphicon-remove"></i>
-              </div>
-
-              <div v-if="generalSetting.type === 'color'"
-                   class="checkbox-transparent"
-              >
-                <span>Transparent</span>
-                <input type="checkbox"
-                       v-model="generalSetting.transparentChecked"
-                       :name="generalSetting.name +'-transparent'"
-                       :value="generalSetting.transparentChecked"
-                       @click="triggerInputColor(generalSetting.sketchPickerValue.hex, generalSetting.name, !generalSetting.transparentChecked, generalSetting.link)"
-                >
-              </div>
-              
-              <sketch-picker v-if="generalSetting.type === 'color'"
-                             v-model="generalSetting.sketchPickerValue"
-                             class="sketch-picker"
-                             @click.native="triggerInputColor(generalSetting.sketchPickerValue.hex, generalSetting.name, generalSetting.transparentChecked, generalSetting.link)"
-              ></sketch-picker>
-            </div>
+              <background-color v-if="generalSetting.type === 'color'"></background-color>
+                 
             <!-- Span General Error -->
             <span v-show="errors.has(generalSetting.name)"
                     class="help is-danger">{{ errors.first(generalSetting.name) }}
@@ -207,11 +173,13 @@
 
   import { Sketch } from 'vue-color';
   import BootstrapVue from 'bootstrap-vue';
+  import backgroundColor from '../generalSettings/BackgroundColor.vue';
 
   export default {
     components: {
       BootstrapVue,
       'sketch-picker': Sketch,
+      'background-color': backgroundColor,
     },
     computed: {
       module() {
