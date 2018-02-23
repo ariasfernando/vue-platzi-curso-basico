@@ -9,7 +9,7 @@
         :value="fontWeight"
         v-model="fontWeightInputValue"
         placeholder="Font Weight"
-        @change="(val)=>saveStyle(val)"
+        @change="(val)=>updateFontWeight(val)"
         >
         <el-option
           v-for="item in options"
@@ -25,6 +25,7 @@
         size="mini"
         @click.native="toggleNormalBold"
       >{{fontWeight}}</el-button>
+
       <el-button
         size="mini"
         :class="{'el-icon-setting': true ,'active': isCustomFontWeight}"
@@ -64,35 +65,44 @@ export default {
     this.fontWeightInputValue = this.fontWeight;
   },
   computed: {
-    isCustomFontWeight() {
-      return this.component.styleOptions[this.isCustomFontWeightName];
+    isCustomFontWeight: {
+      get() {
+        return this.component.styleOptions[this.isCustomFontWeightName];
+      },
+      set(newValue) {
+        this.$emit("style-option-setting-updated", { name: this.isCustomFontWeightName, value: newValue });
+      }
     },
-    fontWeight() {
-      return this.component.style[this.name];
-    }
-  },
-  methods: {
-    saveStyle(newValue) {
-      this.$emit("style-setting-updated", { name: this.name, value: newValue });
-    },
-    saveStyleOption(newValue) {
-      this.$emit("style-option-setting-updated", { name: this.isCustomFontWeightName, value: newValue });
-    },
-    toggleCustomFontWeight: function() {
-      let fontWeight = this.isCustomFontWeight ? "normal" : "500";
-      this.saveStyleOption(!this.isCustomFontWeight, "isCustomFontWeight");
-      this.saveStyle(fontWeight);
-    },
-    toggleNormalBold: function() {
-      let fontWeight = this.fontWeight === "normal" ? "bold" : "normal";
-      this.saveStyle(fontWeight);
+    fontWeight: {
+      get() {
+        return this.component.style[this.name];
+      },
+      set(newValue) {
+        this.$emit("style-setting-updated", { name: this.name, value: newValue });
+      }
     }
   },
   watch: {
-    fontWeight (value) {
+    fontWeight(value) {
       this.fontWeightInputValue = value;
     }
   },
+  methods: {
+    updateFontWeight(newValue) {
+      this.fontWeight = newValue;
+    },
+    toggleCustomFontWeight() {
+      // Saving value to temp variable because setter call to store is async
+      let newValue = !this.isCustomFontWeight;
+      this.isCustomFontWeight = newValue;
+
+      let fontWeight = !newValue ? "normal" : "500";
+      this.fontWeight = fontWeight;
+    },
+    toggleNormalBold() {
+      this.fontWeight = this.fontWeight === "normal" ? "bold" : "normal";
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
