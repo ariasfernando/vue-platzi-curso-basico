@@ -7,9 +7,9 @@
         class="custom-col"
         size="mini"
         :value="fontWeight"
-        v-model="fontWeightData"
+        v-model="fontWeightInputValue"
         placeholder="Font Weight"
-        @change="(val)=>saveStyle(val,'fontWeight')"
+        @change="(val)=>saveStyle(val)"
         >
         <el-option
           v-for="item in options"
@@ -23,7 +23,7 @@
         class="custom-col"
         v-else
         size="mini"
-        @click.native="toggleNormaBold"
+        @click.native="toggleNormalBold"
       >{{fontWeight}}</el-button>
       <el-button
         size="mini"
@@ -36,14 +36,18 @@
 
 <script>
 import _ from "lodash";
+import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "font-weight",
   props: ["setting"],
+  mixins: [ SettingMixin ],
   data() {
     return {
+      name: "fontWeight",
+      isCustomFontWeightName: "isCustomFontWeight",
       options: [],
-      fontWeightData: this.fontWeight
+      fontWeightInputValue: this.fontWeight
     };
   },
   mounted() {
@@ -57,65 +61,36 @@ export default {
       return options;
     }
     this.options = getOptions();
+    this.fontWeightInputValue = this.fontWeight;
   },
   computed: {
     isCustomFontWeight() {
-      return this.getValue("isCustomFontWeight");
+      return this.component.styleOptions[this.isCustomFontWeightName];
     },
     fontWeight() {
-      return this.getValue("fontWeight");
-    },
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
-    component() {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent.columnId].components[
-          this.currentComponent.componentId
-        ];
-      return component;
+      return this.component.style[this.name];
     }
   },
   methods: {
-    getValue(name) {
-      let value;
-      if (name === "isCustomFontWeight") {
-        value = this.component.styleOptions[name];
-      } else {
-        value = this.component.style[name];
-      }
-      return value;
+    saveStyle(newValue) {
+      this.$emit("style-setting-updated", { name: this.name, value: newValue });
     },
-    saveStyle(val, name) {
-      this.$store.commit("module/saveComponentStyle", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: name,
-        value: val
-      });
-    },
-    saveStyleOption(value, property) {
-      this.$store.commit("module/saveComponentStyleOption", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: property,
-        value: value
-      });
+    saveStyleOption(newValue) {
+      this.$emit("style-option-setting-updated", { name: this.isCustomFontWeightName, value: newValue });
     },
     toggleCustomFontWeight: function() {
       let fontWeight = this.isCustomFontWeight ? "normal" : "500";
       this.saveStyleOption(!this.isCustomFontWeight, "isCustomFontWeight");
-      this.saveStyle(fontWeight, "fontWeight");
+      this.saveStyle(fontWeight);
     },
-    toggleNormaBold: function() {
+    toggleNormalBold: function() {
       let fontWeight = this.fontWeight === "normal" ? "bold" : "normal";
-      this.saveStyle(fontWeight, "fontWeight");
+      this.saveStyle(fontWeight);
     }
   },
   watch: {
     fontWeight (value) {
-      this.fontWeightData= value
+      this.fontWeightInputValue = value;
     }
   },
 };

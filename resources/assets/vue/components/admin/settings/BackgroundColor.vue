@@ -23,6 +23,9 @@ export default {
       backgroundData: this.background
     };
   },
+  mounted(){
+      this.backgroundData = this.background;
+  },
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
