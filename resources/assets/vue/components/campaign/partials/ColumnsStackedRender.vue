@@ -18,7 +18,7 @@
           <td
             width="100%"
             :style="styles"
-            :bgcolor="column.attribute.bgcolor.hex"
+            :bgcolor="column.attribute.bgcolor"
             :valign="column.attribute.valign"
             :align="component.attribute.align || 'center'"
           >

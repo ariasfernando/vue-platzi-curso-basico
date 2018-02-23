@@ -30,7 +30,7 @@ function Module(data = {}) {
     columnsFixed: (data.structure && data.structure.columnsFixed) ? data.structure.columnsFixed : false,
     invertedStacking: (data.structure && data.structure.invertedStacking) ? data.structure.invertedStacking : false,
     attribute: {
-      bgcolor: attribute.bgcolor || { hex: 'transparent' },
+      bgcolor: attribute.bgcolor || 'transparent',
     },
     mobileClasses,
     style: {
@@ -58,18 +58,9 @@ function Module(data = {}) {
     },
     settings: [
       {
-        link: 'attribute',
-        label: 'Background Color',
-        name: 'bgcolor',
-        type: 'color',
-        transparentChecked: true,
-        value: 'transparent',
-        sketchPickerValue: { hex: '#FFFFFF' },
-      },
-      {
         link: 'style',
         label: 'Padding',
-        name:'padding',
+        name: 'padding',
         group: [
           {
             link: 'style',
@@ -137,9 +128,7 @@ function Module(data = {}) {
             label: 'Border Top Color',
             name: 'borderTopColor',
             type: 'color',
-            transparentChecked: false,
             value: '#000000',
-            sketchPickerValue: { hex: '#000000' },
           },
         ],
       },  
@@ -179,9 +168,7 @@ function Module(data = {}) {
             label: 'Border Right Color',
             name: 'borderRightColor',
             type: 'color',
-            transparentChecked: false,
             value: '#000000',
-            sketchPickerValue: { hex: '#000000' },
           },
         ],
       }, 
@@ -221,9 +208,7 @@ function Module(data = {}) {
             label: 'Border Bottomm Color',
             name: 'borderBottomColor',
             type: 'color',
-            transparentChecked: false,
             value: '#000000',
-            sketchPickerValue: { hex: '#000000' },
           },
         ],
       },
@@ -263,9 +248,7 @@ function Module(data = {}) {
             label: 'Border Left Color',
             name: 'borderLeftColor',
             type: 'color',
-            transparentChecked: false,
             value: '#000000',
-            sketchPickerValue: { hex: '#000000' },
           },
         ],
       }, 

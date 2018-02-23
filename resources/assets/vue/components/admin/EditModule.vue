@@ -501,10 +501,10 @@
       label{
         text-align: left;
         color: #666666;
-        padding-top: 2px;
+        padding-top: 10px;
+        padding-bottom: 10px;
         font-weight: 300;
-        font-size: 13px;
-        margin-bottom: 0px;
+        padding-right: 0px;
       }
 
       label.vue-js-switch{
