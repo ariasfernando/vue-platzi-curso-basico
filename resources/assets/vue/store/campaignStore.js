@@ -24,6 +24,7 @@ function campaignStore() {
       buildingMode: 'desktop',
       editorToolbar: '',
       dirty: false,
+      showImageEditor: false,
       fieldErrors: [],
     },
     getters: {
@@ -61,6 +62,9 @@ function campaignStore() {
       dirty(state) {
         return state.dirty;
       },
+      showImageEditor(state) {
+        return state.showImageEditor;
+      },
       locked(state) {
         if (!_.isEmpty(state.campaign)) {
           return state.campaign.campaign_data.locked;
@@ -83,6 +87,9 @@ function campaignStore() {
       },
       setDirty(state, dirty) {
         state.dirty = dirty;
+      },
+      setToggleImageEditor(state, stateModal) {
+        state.showImageEditor = stateModal;
       },
       addModule(state, moduleData) {
         state.modules.push(moduleData);
