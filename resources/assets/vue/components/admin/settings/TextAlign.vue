@@ -22,13 +22,18 @@ export default {
     };
   },
   computed: {
-    align() {
-      return this.component.attribute[this.name];
+    align: {
+      get: function() {
+        return this.component.attribute[this.name];
+      },
+      set: function(newValue) {
+        this.$emit("attribute-setting-updated", { name: this.name, value: newValue });
+      }
     }
   },
   methods: {
     changeAlignment(newValue) {
-      this.$emit("attribute-setting-updated", { name: this.name, value: newValue });
+      this.align = newValue;
     }
   }
 };
