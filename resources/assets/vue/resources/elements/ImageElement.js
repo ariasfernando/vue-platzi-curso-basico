@@ -14,7 +14,7 @@ function imageDefault() {
     },
     attribute: {
       placeholder: 'default/placeholder-square.jpg',
-      bgcolor: { hex: 'transparent' },
+      bgcolor: 'transparent',
       href: 'http://stensul.com',
       alt: 'Image',
       title: 'Image',
@@ -25,7 +25,7 @@ function imageDefault() {
       height: 'auto',
       hideElement: false,
     },
-    componentSettings: ['image-size', 'text-align', 'vertical-align'],
+    componentSettings: ['image-size', 'text-align', 'vertical-align', 'background-color', 'padding'],
     settings: [
       {
         link: 'attribute',
@@ -61,52 +61,10 @@ function imageDefault() {
         name: 'target',
         type: 'select',
         value: '_blank',
-        options:[
+        options: [
           { value: '_blank', text: '_blank' },
           { value: '_self', text: '_self' },
           { value: '_top', text: '_top' },
-        ],
-      },
-      {
-        link: 'attribute',
-        label: 'Background color',
-        name: 'bgcolor',
-        type: 'color',
-        value: { hex: 'transparent' },
-      },
-      {
-        link: 'style',
-        label: 'Padding',
-        name: 'padding',
-        group: [
-          {
-            link: 'style',
-            label: 'Padding Top',
-            name: 'paddingTop',
-            type: 'text',
-            value: '0px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Right',
-            name: 'paddingRight',
-            type: 'text',
-            value: '0px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Bottom',
-            name: 'paddingBottom',
-            type: 'text',
-            value: '0px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Left',
-            name: 'paddingLeft',
-            type: 'text',
-            value: '0px',
-          },
         ],
       },
     ],

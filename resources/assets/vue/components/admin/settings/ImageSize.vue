@@ -7,7 +7,6 @@
           size="mini" 
           v-validate="'required'"
           v-model="imageSizeSetting.value"
-          :class="{'clearfix': true,'input-number-size': true, 'is-danger': errors.has(imageSizeSetting.name) }"
           :name="imageSizeSetting.name"
           @change="(val)=>changeValue(val, imageSizeSetting.name)"
           :max="maxValue(imageSizeSetting.name)"
@@ -31,7 +30,7 @@
           :class="{'icon-disable': imageSizeSetting.name === 'height'}"
           :disabled="imageSizeSetting.name === 'height'"
           @click="onTogglePxWidth"
-        >{{pixelOrPercentage(imageSizeSetting.name)}}</el-button>
+        >{{getUnit(imageSizeSetting.name)}}</el-button>
         <span class='height-icon-auto' v-if="imageSizeSetting.name === 'width'" @click="onToggleBlockheight">
           <i v-if="isBlockHeight" class="fa fa-arrow-right"></i>
           <i v-else class="fa fa-minus"></i>
@@ -88,7 +87,7 @@ export default {
   },
   methods: {
     changeValue(val, property) {
-      isNaN(val) || val < this.min ? this.min : val;
+      val = (isNaN(val) || val < this.min) ? this.min : val;
       if (property === "width" && !this.isPxWidth) {
         // is width+%
         this.saveAttribute(`${val}%`, property);
@@ -97,7 +96,7 @@ export default {
         this.saveAttribute(`${val}`, property);
       }
     },
-    pixelOrPercentage(property) {
+    getUnit(property) {
       return property === "width" && !this.isPxWidth ? "%" : "px";
     },
     maxValue(property) {
@@ -106,18 +105,17 @@ export default {
         : undefined;
     },
     onTogglePxWidth() {
-      let width = this.imageSizeSettings[0].value;
       // set isPxWidth
       let isPxWidth = !this.getValue("isPxWidth");
-      if (isPxWidth) {
-        // save width + px
-        this.saveAttribute(width + "px", "width");
-      } else {
+      // set width
+      let width = this.imageSizeSettings[0].value;
+      if (!isPxWidth) {
         width = Math.min(100, width);
-        this.saveAttribute(width + "%", "width");
+        width = width + "%";
       }
-      // save and update isPxWidth
+      // save
       this.saveStyleOption(isPxWidth, "isPxWidth");
+      this.saveAttribute(`${width}`, "width");
     },
     onToggleBlockheight() {
       // set isBlock

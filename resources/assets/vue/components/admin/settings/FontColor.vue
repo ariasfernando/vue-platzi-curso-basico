@@ -24,6 +24,9 @@ export default {
       colorData: this.color
     };
   },
+  mounted(){
+      this.colorData = this.color;
+  },
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
@@ -36,8 +39,8 @@ export default {
         ];
       return component;
     },
-    currentValue() {
-      return this.component.attribute["color"];
+    color() {
+      return this.component.style["color"];
     }
   },
   methods: {
@@ -46,7 +49,7 @@ export default {
     },
     saveStyle(val) {
       if (!Application.utils.validateHexVal(val)) {
-        val = Application.utils.rgbToHex(val);
+        val = val === null ? "transparent" : Application.utils.rgbToHex(val);
       }
       this.$store.commit("module/saveComponentStyle", {
         columnId: this.currentComponent.columnId,

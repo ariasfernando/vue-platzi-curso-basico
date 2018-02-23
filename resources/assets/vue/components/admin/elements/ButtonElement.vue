@@ -24,13 +24,13 @@
           border="0"
           :width="component.attribute.width"
           :height="component.attribute.height"
-          :bgcolor="component.attribute.bgcolor.hex"
+          :bgcolor="component.attribute.bgcolor"
           :style="`width:${component.attribute.width}px`"
         >
           <tr>
             <td width="100%" 
                 align="center"
-                :bgcolor="component.attribute.bgcolor.hex"
+                :bgcolor="component.attribute.bgcolor"
                 :height="component.attribute.height"
                 :style="component.style"
             >

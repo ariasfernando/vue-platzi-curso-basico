@@ -35,24 +35,27 @@ export default {
         ];
       return component;
     },
-    currentValue() {
-      return this.component.attribute["bgcolor"];
+    background() {
+      let value =
+        this.component.attribute["bgcolor"] === "transparent"
+          ? ""
+          : this.component.attribute["bgcolor"];
+      return value;
     }
   },
   methods: {
     changeColor(color) {
       this.saveAttribute(color);
     },
-    saveAttribute(newValue) {
-      if (!Application.utils.validateHexVal(newValue)) {
-        newValue = newValue.replace(", 1)", ")").replace("rgba", "rgb");
-        newValue = Application.utils.rgbToHex(newValue);
+    saveAttribute(val) {
+      if (!Application.utils.validateHexVal(val)) {
+        val = val === null ? "transparent" :Application.utils.rgbToHex(val);
       }
       this.$store.commit("module/saveComponentAttribute", {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         property: "bgcolor",
-        value: newValue
+        value: val
       });
     }
   },

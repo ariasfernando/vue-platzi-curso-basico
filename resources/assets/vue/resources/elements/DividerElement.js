@@ -22,15 +22,14 @@ function dividerDefault() {
       borderLeftStyle: 'none',
       borderLeftColor: '#000000',
     },
-    componentSettings: ['input-height'],
+    attribute: {
+      align: 'center',
+      bgcolor: 'transparent',
+      width: '100%',
+      hideElement: false,
+    },
+    componentSettings: ['input-height', 'background-color'],
     settings: [
-      {
-        link: 'style',
-        label: 'Background Color',
-        name: 'backgroundColor',
-        type: 'color',
-        value: { hex: 'transparent' },
-      },
       {
         link: 'style',
         label: 'Border Top',
@@ -192,12 +191,6 @@ function dividerDefault() {
         ],
       },
     ],
-    attribute: {
-      align: 'center',
-      bgcolor: { hex: 'transparent' },
-      width: '100%',
-      hideElement: false,
-    },
     plugins: {},
     data: {},
   };

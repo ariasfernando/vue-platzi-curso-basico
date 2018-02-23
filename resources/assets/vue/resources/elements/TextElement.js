@@ -27,51 +27,8 @@ function textDefault() {
       bgcolor: 'transparent',
       hideElement: false,
     },
-    componentSettings: ['font-family', 'font-style', 'font-weight', 'text-align', 'background-color', 'letter-spacing', 'font-color'],
-    settings: [
-      {
-        link: 'attribute',
-        label: 'Character Limit',
-        name: 'truncate',
-        type: 'text',
-        value: '',
-      },
-      {
-        link: 'style',
-        label: 'Padding',
-        name: 'padding',
-        group: [
-          {
-            link: 'style',
-            label: 'Padding Top',
-            name: 'paddingTop',
-            type: 'text',
-            value: '0px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Right',
-            name: 'paddingRight',
-            type: 'text',
-            value: '0px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Bottom',
-            name: 'paddingBottom',
-            type: 'text',
-            value: '0px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Left',
-            name: 'paddingLeft',
-            type: 'text',
-            value: '0px',
-          },
-        ],
-      },
-    ],
+    componentSettings: ['font-family', 'font-style', 'font-weight', 'text-align', 'background-color', 'letter-spacing', 'font-color', 'padding'],
+    settings: {},
     plugins: {},
   };
 }

@@ -123,6 +123,7 @@ export default {
 .field-letter-spacing .el-button.is-disabled:focus,
 .field-letter-spacing .el-button.is-disabled:hover {
   color: #606266;
+  cursor: auto;
 }
 </style>
 

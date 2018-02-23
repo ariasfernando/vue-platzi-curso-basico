@@ -11,15 +11,14 @@ function separatorDefault() {
       paddingRight: '10px',
       paddingLeft: '10px',
     },
-    componentSettings: ['input-height'],
+    attribute: {
+      align: 'center',
+      bgcolor: 'transparent',
+      width: '100%',
+      hideElement: false,
+    },
+    componentSettings: ['input-height', 'background-color', 'padding'],
     settings: [
-      {
-        link: 'style',
-        label: 'Background Color',
-        name: 'backgroundColor',
-        type: 'color',
-        value: { hex: 'transparent' },
-      },
       {
         link: 'style',
         label: 'Border Color',
@@ -27,48 +26,7 @@ function separatorDefault() {
         type: 'color',
         value: { hex: 'transparent' },
       },
-      {
-        link: 'style',
-        label: 'Padding',
-        name: 'padding',
-        group: [
-          {
-            link: 'style',
-            label: 'Padding Top',
-            name: 'paddingTop',
-            type: 'text',
-            value: '10px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Right',
-            name: 'paddingRight',
-            type: 'text',
-            value: '10px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Bottom',
-            name: 'paddingBottom',
-            type: 'text',
-            value: '10px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Left',
-            name: 'paddingLeft',
-            type: 'text',
-            value: '10px',
-          },
-        ],
-      },
     ],
-    attribute: {
-      align: 'center',
-      bgcolor: { hex: 'transparent' },
-      width: '100%',
-      hideElement: false,
-    },
     plugins: {},
     data: {},
   };

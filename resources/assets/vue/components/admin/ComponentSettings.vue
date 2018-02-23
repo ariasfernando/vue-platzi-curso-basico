@@ -98,7 +98,7 @@
                   </div>
                 </div>
 
-                <div v-else-if="setting.name === 'padding'">
+                <div v-else>
                   <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
                   <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker"
                        v-for="(settingGroup, keyGroup) in setting.group" :key="settingGroup.name">
@@ -220,7 +220,8 @@
       "input-font-weight": elementSettings.FontWeight,
       "input-background-color": elementSettings.BackgroundColor,
       "input-font-color": elementSettings.FontColor,
-      "input-letter-spacing": elementSettings.LetterSpacing
+      "input-letter-spacing": elementSettings.LetterSpacing,
+      "input-padding": elementSettings.padding
     },
     computed: {
       currentComponent() {
