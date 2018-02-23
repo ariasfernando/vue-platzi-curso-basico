@@ -2,44 +2,33 @@
   <div class="form-group" :class="'field-' + setting">
     <label class="typo__label col-sm-6 control-label">Horizontal align</label>
     <div class="col-sm-6 padding-zero">
-      <el-button plain size="mini" @click="changeAlignment('left')" class="fa fa-align-left" :class="{ active: currentValue == 'left' }"></el-button>
-      <el-button plain size="mini" @click="changeAlignment('center')" class="fa fa-align-center" :class="{ active: currentValue == 'center' }"></el-button>
-      <el-button plain size="mini" @click="changeAlignment('right')" class="fa fa-align-right" :class="{ active: currentValue == 'right' }"></el-button>
+      <el-button plain size="mini" @click="changeAlignment('left')" class="fa fa-align-left" :class="{ active: align === 'left' }"></el-button>
+      <el-button plain size="mini" @click="changeAlignment('center')" class="fa fa-align-center" :class="{ active: align === 'center' }"></el-button>
+      <el-button plain size="mini" @click="changeAlignment('right')" class="fa fa-align-right" :class="{ active: align === 'right' }"></el-button>
     </div>
   </div>
 </template>
 
 <script>
+import SettingMixin from "../mixins/SettingMixin.js";
+
 export default {
   name: "TextAlign",
   props: ["setting"],
+  mixins: [ SettingMixin ],
+  data() {
+    return {
+      name: "align"
+    };
+  },
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
-    component() {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent.columnId].components[
-          this.currentComponent.componentId
-        ];
-      return component;
-    },
-    currentValue() {
-      return this.component.attribute["align"];
+    align() {
+      return this.component.attribute[this.name];
     }
   },
   methods: {
-    changeAlignment(align) {
-      this.saveAttribute(align);
-    },
-    saveAttribute(newValue) {
-      this.$store.commit("module/saveComponentAttribute", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: "align",
-        value: newValue
-      });
+    changeAlignment(newValue) {
+      this.$emit("attribute-setting-updated", { name: this.name, value: newValue });
     }
   }
 };
