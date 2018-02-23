@@ -2,12 +2,11 @@
   <div class="form-group" :class="'field-' + setting">
     <label class="typo__label col-sm-6 control-label">Color</label>
 
-    <el-color-picker v-model="colorData" @active-change="changeColor" @change="changeColor" color-format="hex"></el-color-picker>
+    <el-color-picker v-model="color" color-format="hex"></el-color-picker>
     <el-input
       size="mini"
-      v-model="colorData"
+      v-model="color"
       placeholder="transparent"
-      @change="changeColor"
       class="col-sm-4" 
       disabled="disabled"
     >
@@ -19,49 +18,35 @@ import _ from "lodash";
 export default {
   name: "FontColor",
   props: ["setting"],
-  data() {
-    return {
-      colorData: this.color
-    };
-  },
-  mounted(){
-      this.colorData = this.color;
-  },
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
     },
     component() {
       const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent.columnId].components[
-          this.currentComponent.componentId
-        ];
+      const component = module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
       return component;
     },
-    color() {
-      return this.component.style["color"];
+    color: {
+      get() {
+        return this.component.style["color"];
+      },
+      set(val) {
+        this.saveStyle(val);
+      }
     }
   },
   methods: {
-    changeColor(color) {
-      this.saveStyle(color);
-    },
-    saveStyle(val) {
-      if (!Application.utils.validateHexVal(val)) {
-        val = val === null ? "transparent" : Application.utils.rgbToHex(val);
+    saveStyle(color) {
+      if (!Application.utils.validateHexVal(color)) {
+        color = color === null ? "transparent" : Application.utils.rgbToHex(color);
       }
       this.$store.commit("module/saveComponentStyle", {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         property: "color",
-        value: val
+        value: color
       });
-    }
-  },
-  watch: {
-    color(value) {
-      this.colorData = value;
     }
   }
 };

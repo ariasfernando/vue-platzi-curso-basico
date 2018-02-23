@@ -1,16 +1,15 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
     <label class="typo__label col-sm-6 control-label">Background color</label>
-
-    <el-color-picker v-model="backgroundData" @active-change="changeColor" @change="changeColor" color-format="hex"></el-color-picker>
+    <el-color-picker v-model="color" color-format="hex"></el-color-picker>
     <el-input
       size="mini"
-      v-model="backgroundData"
+      v-model="color"
       placeholder="transparent"
-      @change="changeColor"
       class="col-sm-4" 
       disabled="disabled"
-    ></el-input>
+    >
+    </el-input>
   </div>
 </template>
 <script>
@@ -18,53 +17,39 @@ import _ from "lodash";
 export default {
   name: "BackgroundColor",
   props: ["setting"],
-  data() {
-    return {
-      backgroundData: this.background
-    };
-  },
-  mounted(){
-      this.backgroundData = this.background;
-  },
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
     },
     component() {
       const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent.columnId].components[
-          this.currentComponent.componentId
-        ];
+      const component = module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
       return component;
     },
-    background() {
-      let value =
-        this.component.attribute["bgcolor"] === "transparent"
-          ? ""
-          : this.component.attribute["bgcolor"];
-      return value;
+    color: {
+      get() {
+        let value =
+          this.component.attribute["bgcolor"] === "transparent"
+            ? ""
+            : this.component.attribute["bgcolor"];
+        return value;
+      },
+      set(val) {
+        this.saveAttribute(val);
+      }
     }
   },
   methods: {
-    changeColor(color) {
-      this.saveAttribute(color);
-    },
-    saveAttribute(val) {
-      if (!Application.utils.validateHexVal(val)) {
-        val = val === null ? "transparent" :Application.utils.rgbToHex(val);
+    saveAttribute(color) {
+      if (!Application.utils.validateHexVal(color)) {
+        color = color === null ? "transparent" : Application.utils.rgbToHex(color);
       }
       this.$store.commit("module/saveComponentAttribute", {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         property: "bgcolor",
-        value: val
+        value: color
       });
-    }
-  },
-  watch: {
-    background(value) {
-      this.backgroundData = value;
     }
   }
 };
