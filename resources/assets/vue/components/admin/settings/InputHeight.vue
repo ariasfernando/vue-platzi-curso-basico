@@ -5,9 +5,9 @@
         <el-input-number
           size="mini" 
           v-validate="'required'"
-          v-model="height"
+          v-model="heightInputData"
           :class="{'clearfix': true, 'is-danger': errors.has('height') }"
-          @change="(val)=>saveStyle(val,'height')"
+          @change="(value)=>updateHeight(value)"
           :min="1"
         ></el-input-number>
     </div>
@@ -15,43 +15,34 @@
 </template>
 
 <script>
+import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "input-height",
   props: ["setting"],
+  mixins: [ SettingMixin ],
   data() {
     return {
-      height: ''
+      name: "height",
+      heightInputData: ''
     };
   },
   mounted() {
-    this.height = this.getValue("height");
+    this.heightInputData = this.height;
   },
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
+    height: {
+      get: function() {
+        return this.component.style[this.name].replace("px", "");
+      },
+      set: function(newValue) {
+        this.$emit("style-setting-updated", { name: this.name, value: newValue });
+      }
     },
-    component() {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent.columnId].components[
-          this.currentComponent.componentId
-        ];
-      return component;
-    }
   },
   methods: {
-    getValue(name) {
-      return this.component.style[name].replace("px", "");
-    },
-
-    saveStyle(val, name) {
-      this.$store.commit("module/saveComponentStyle", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: name,
-        value: val + "px"
-      });
+    updateHeight(newValue) {
+      this.height = newValue;
     }
   }
 };
