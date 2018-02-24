@@ -33,6 +33,8 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    'scheme' => env('APP_SCHEME', 'http'),
+
     /*
     | Application Version
     |--------------------------------------------------------------------------
