@@ -1,6 +1,7 @@
 <?php
 
 namespace Stensul\Http\Middleware;
+
 use Closure;
 
 class HttpScheme
@@ -16,11 +17,12 @@ class HttpScheme
      */
     public function handle($request, Closure $next)
     {
-        if (\Config::get('app.scheme') === 'https') {
-            $request->setTrustedProxies([$request->getClientIp()]); 
+        $request->setTrustedProxies([$request->getClientIp()]);
+
+        if (!$request->secure() && \Config::get('app.scheme') === 'https') {
             return redirect()->secure($request->getRequestUri());
         }
 
-        return $next($request); 
+        return $next($request);
     }
 }
