@@ -434,6 +434,14 @@
       background: @stensul-gray-secondary;
       padding: 4px 23px 4px 4px;
 
+      span{
+        max-width: 140px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: inline-block;
+      }
+
       .multiselect__tag-icon{
 
         &:hover,
