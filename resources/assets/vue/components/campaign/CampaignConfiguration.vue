@@ -146,11 +146,6 @@
         this.tagOptions.push(tagList[n].name);
       }
 
-      // Not sure what's the purpose of this block but it triggers a save event
-      // this.$store.commit('campaign/saveSetting', {
-      //   name: 'tags',
-      //   value: this.form.tags
-      // });
       this.loadConfig();
     },
     mounted (){
