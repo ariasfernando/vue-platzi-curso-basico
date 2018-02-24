@@ -118,7 +118,9 @@
       modalPreview(val) {
         if (val) {
           // Hide loader
-          this.$store.commit("global/setLoader", false);
+          setTimeout(() => {
+            this.$store.commit("global/setLoader", false);
+          }, 250);
         }
       }
     },
