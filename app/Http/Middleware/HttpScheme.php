@@ -17,7 +17,7 @@ class HttpScheme
     public function handle($request, Closure $next)
     {
         if (!$request->secure() && \Config::get('app.scheme') === 'https') {
-
+            $request->setTrustedProxies([$request->getClientIp()]); 
             return redirect()->secure($request->getRequestUri());
         }
 
