@@ -7,10 +7,15 @@
       @mouseleave="setModulesMouseLeave"
       v-on-clickaway="unsetActiveModule"
   >
-    <td class="stx-toolbar-content stx-position-relative" @click.prevent="config">
+    <td class="stx-toolbar-content stx-position-relative" 
+        :data-module-id="moduleId" 
+        :class="{ 'stx-show-error': showError(moduleId) }"  
+        @click.prevent="config"
+    >
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
+      <div class="st-remove-element default-module-error" style="display:none"></div>
     </td>
   </tr>
 
@@ -26,7 +31,7 @@
     <td class="stx-toolbar-content stx-position-relative"
         :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
-        :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
+        :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 }">
       <table
         width="100%"
         cellspacing="0"
@@ -107,6 +112,7 @@
       </table>
       <module-toolbar :module-id="moduleId"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
+      <div class="st-remove-element default-module-error" style="display:none"></div>
     </td>
   </tr>
 </template>
@@ -160,6 +166,18 @@
       }
     },
     methods: {
+      showError(moduleId){
+        let err = false;
+        _.each(this.fieldErrors, (error, key) => {
+           if (!_.isUndefined(error.scope.moduleId)){
+              if (error.scope.moduleId === moduleId){
+                err = true;
+              }
+           }
+        });
+
+        return err;
+      },
       config() {
         this.$store.commit("campaign/setCustomModule", this.moduleId);
         this.$store.commit("campaign/unsetCurrentModule");

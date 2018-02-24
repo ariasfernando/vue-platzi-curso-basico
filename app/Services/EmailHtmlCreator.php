@@ -68,11 +68,10 @@ class EmailHtmlCreator
      */
     public function getEmailLayout()
     {
-        $email_layout = Helper::validateView(self::$EMAIL_LAYOUT);
         $library = Library::find($this->getCampaign()->library);
 
         return \View::make(
-            $email_layout
+            self::$EMAIL_LAYOUT
         )
                 ->with(
                     'params',
@@ -159,13 +158,7 @@ class EmailHtmlCreator
      */
     public function replaceImageTagSrc($body = null)
     {
-        if (is_null($body)) {
-            $body = $this->body;
-        }
-
-        $regexp = "<img\s[^>]*src=([\"\']??)([^\" >]*?)\\1[^>]*>";
-        preg_match_all("/$regexp/siU", $body, $matches, PREG_SET_ORDER);
-
+        $matches = $this->imagesRegex($body);
         $cdn_path = $this->getCampaign()->getCdnPath(true);
 
         if ($matches) {
@@ -273,11 +266,26 @@ class EmailHtmlCreator
     }
 
     /**
+     * Create a regex for search images in the campaign body
+     *
+     * @return array
+     */
+    public function imagesRegex($body = null)
+    {
+        if (is_null($body)) {
+            $body = $this->body;
+        }
+        $regexp = "<img\s[^>]*src=([\"\']??)([^\" >]*?)\\1[^>]*>";
+        preg_match_all("/$regexp/siU", $body, $matches, PREG_SET_ORDER);
+        return $matches;
+    }
+
+    /**
      * Create a regex for search url in css
      *
      * @return array
      */
-    protected function assetsRegex($body = null)
+    public function assetsRegex($body = null)
     {
         if (is_null($body)) {
             $body = $this->body;
