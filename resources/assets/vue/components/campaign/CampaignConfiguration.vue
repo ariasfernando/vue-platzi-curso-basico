@@ -44,7 +44,7 @@
 
         <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave">Auto Save</label>
-          <toggle-button :value="form.autoSave" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange" :disabled="campaign.locked"></toggle-button>
+          <toggle-button :value="campaign.auto_save === true" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange" :disabled="campaign.locked"></toggle-button>
         </div>
 
         <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
@@ -101,7 +101,6 @@
         form: {
           campaignName: '',
           campaignProcess: false,
-          autoSave: false,
           tags: []
         },
         tagOptions: [],
@@ -135,7 +134,6 @@
       this.enablePreheader = this.campaign.library_config.preheader;
       this.preheaderMaxLength = Application.globals.preheaderConfig.max_length;
       this.enableTagging = this.campaign.library_config.tagging;
-      this.form.autoSave = this.campaign.auto_save;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
 
@@ -183,20 +181,20 @@
         });
       },
       loadConfig() {
-          this.$store.dispatch("config/getConfig", 'global_settings').then(response => {
-            this.globalConfig = this.$store.getters["config/config"].global_settings;
-            this.enableAutoSave = this.globalConfig.auto_save === '1';
-            this.enablePreheader = this.globalConfig.enable_preheader === '1' && this.campaign.library_config.preheader;
-          }, error => {
-            this.$store.commit("global/setLoader", false);
-            this.$root.$toast(
-              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-              {className: 'et-error'}
-            );
-          });
+        this.$store.dispatch("config/getConfig", 'global_settings').then(response => {
+          this.globalConfig = this.$store.getters["config/config"].global_settings;
+          this.enableAutoSave = this.globalConfig.auto_save === '1';
+          this.enablePreheader = this.globalConfig.enable_preheader === '1' && this.campaign.library_config.preheader;
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
+        });
 
-          this.campaignConfig = this.$store.getters["config/config"].campaign;
-          this.enableLocking = this.campaignConfig.locking === true;
+        this.campaignConfig = this.$store.getters["config/config"].campaign;
+        this.enableLocking = this.campaignConfig.locking === true;
       },
       tagAdd(tag) {
 
@@ -216,13 +214,11 @@
           value: this.form.tags
         });
       },
-      autoSaveChange() {
-        this.form.autoSave = !this.form.autoSave;
-        this.$store.commit('campaign/saveSetting', {
-          name: 'autoSave',
-          value: this.form.autoSave
+      autoSaveChange(value) {
+        this.$store.commit('campaign/saveCampaignData', {
+          name: 'auto_save',
+          value
         });
-        this.save();
       },
       save() {
         this.$store.commit("global/setLoader", true);
@@ -299,173 +295,173 @@
   }
 </script>
 <style lang="less">
-@stensul-purple: #514960;
-@stensul-secondary: #625876;
-@stensul-white: #FFFFFF;
-@stensul-highlight: #78DCD6;
-@stensul-gray: #666666;
-@stensul-gray-secondary: #DDDDDD;
+  @stensul-purple: #514960;
+  @stensul-secondary: #625876;
+  @stensul-white: #FFFFFF;
+  @stensul-highlight: #78DCD6;
+  @stensul-gray: #666666;
+  @stensul-gray-secondary: #DDDDDD;
 
-.menu-campaign {
-   -ms-user-select: none !important;
+  .menu-campaign {
+    -ms-user-select: none !important;
 
-  ::-webkit-input-placeholder {
-    color: #CCCCCC;
-  }
-  ::-moz-placeholder {
-    color: #CCCCCC;
-  }
-  :-ms-input-placeholder {
-    color: #CCCCCC;
-  }
-  :-moz-placeholder {
-    color: #CCCCCC;
-  }
-
-  .vue-input-tag-wrapper {
-    border: 0;
-    background: none;
-    padding: 0px;
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .configuration-tag{
-    label{
-      z-index: 1000!important;
-      top: 14px!important;
+    ::-webkit-input-placeholder {
+      color: #CCCCCC;
     }
-  }
-  .input-tag {
-    background-color: #e4e4e4 !important;
-    color: #888888 !important;
-    border: none !important;
-    border-radius: 10px !important;
-    padding: 2px 7px 2px 9px !important;
-    margin: 0 5px 5px 0 !important;
-    font-weight: normal !important;
-    order: 2;
-    font-size: 11px !important;
-    font-weight: 300 !important;
-  }
-  .remove {
-    color: #888888 !important;
-    border-left: 1px solid #FFFFFF;
-    padding: 0 0 0 5px;
-    font-weight: 300 !important;
-    margin-left: 3px;
-    font-size: 10px;
-  }
-  .multiselect {
-    z-index: 999;
-
-    .multiselect__select{
-      display: none;
+    ::-moz-placeholder {
+      color: #CCCCCC;
+    }
+    :-ms-input-placeholder {
+      color: #CCCCCC;
+    }
+    :-moz-placeholder {
+      color: #CCCCCC;
     }
 
-    .multiselect__input{
-      margin-top: 1px!important;
-      clear: both;
-      margin-bottom: 0px;
-    }
-
-    .multiselect__option--selected.multiselect__option--highlight:after {
-      background: #F4F4F4;
-    }
-
-    .multiselect__tags{
-      border-radius: 2px;
-      border: none;
+    .vue-input-tag-wrapper {
+      border: 0;
+      background: none;
       padding: 0px;
       display: flex;
-      flex-flow: column;
-
-      .multiselect__input {
-        position: relative !important;
-        display: block!important;
-        order: 1;
-      }
-
-      .multiselect__tags-wrap{
-        order: 2;
-        margin-top: 7px;
+      flex-wrap: wrap;
+    }
+    .configuration-tag{
+      label{
+        z-index: 1000!important;
+        top: 14px!important;
       }
     }
-
-    .multiselect__content-wrapper{
-      top: 41px;
-      box-shadow: 0px 2px 3px #cccccc;
+    .input-tag {
+      background-color: #e4e4e4 !important;
+      color: #888888 !important;
+      border: none !important;
+      border-radius: 10px !important;
+      padding: 2px 7px 2px 9px !important;
+      margin: 0 5px 5px 0 !important;
+      font-weight: normal !important;
+      order: 2;
+      font-size: 11px !important;
+      font-weight: 300 !important;
     }
+    .remove {
+      color: #888888 !important;
+      border-left: 1px solid #FFFFFF;
+      padding: 0 0 0 5px;
+      font-weight: 300 !important;
+      margin-left: 3px;
+      font-size: 10px;
+    }
+    .multiselect {
+      z-index: 999;
 
-    .multiselect__option{
-      font-size: 13px;
-      color: @stensul-gray;
-      padding: 9px;
-      line-height: 24px;
-      font-weight:300;
-
-      &:hover{
-        color: @stensul-gray;
+      .multiselect__select{
+        display: none;
       }
-    }
 
-    .multiselect__option--highlight{
-      background: #F4F4F4;
-      color: @stensul-gray;
-    }
+      .multiselect__input{
+        margin-top: 1px!important;
+        clear: both;
+        margin-bottom: 0px;
+      }
 
-    .multiselect__option--highlight:after {
-      background: #F4F4F4;
-      color: @stensul-gray;
-    }
+      .multiselect__option--selected.multiselect__option--highlight:after {
+        background: #F4F4F4;
+      }
 
-    .multiselect__tag{
-      border-radius: 2px;
-      margin-top: 1px;
-      font-size: 13px;
-      font-weight: 300;
-      color: @stensul-gray;
-      background: @stensul-gray-secondary;
-      padding: 4px 23px 4px 4px;
+      .multiselect__tags{
+        border-radius: 2px;
+        border: none;
+        padding: 0px;
+        display: flex;
+        flex-flow: column;
 
-      .multiselect__tag-icon{
+        .multiselect__input {
+          position: relative !important;
+          display: block!important;
+          order: 1;
+        }
 
-        &:hover,
-        &:focus{
-          background: none;
+        .multiselect__tags-wrap{
+          order: 2;
+          margin-top: 7px;
         }
       }
 
-      .multiselect__tag-icon:after {
+      .multiselect__content-wrapper{
+        top: 41px;
+        box-shadow: 0px 2px 3px #cccccc;
+      }
+
+      .multiselect__option{
+        font-size: 13px;
+        color: @stensul-gray;
+        padding: 9px;
+        line-height: 24px;
+        font-weight:300;
+
+        &:hover{
+          color: @stensul-gray;
+        }
+      }
+
+      .multiselect__option--highlight{
+        background: #F4F4F4;
         color: @stensul-gray;
       }
 
-      .multiselect__tag-icon:focus:after,
-      .multiselect__tag-icon:hover:after {
+      .multiselect__option--highlight:after {
+        background: #F4F4F4;
         color: @stensul-gray;
       }
 
-      .multiselect__tag-icon:focus,
-      .multiselect__tag-icon:hover{
-        background: none;
+      .multiselect__tag{
+        border-radius: 2px;
+        margin-top: 1px;
+        font-size: 13px;
+        font-weight: 300;
+        color: @stensul-gray;
+        background: @stensul-gray-secondary;
+        padding: 4px 23px 4px 4px;
+
+        .multiselect__tag-icon{
+
+          &:hover,
+          &:focus{
+            background: none;
+          }
+        }
+
+        .multiselect__tag-icon:after {
+          color: @stensul-gray;
+        }
+
+        .multiselect__tag-icon:focus:after,
+        .multiselect__tag-icon:hover:after {
+          color: @stensul-gray;
+        }
+
+        .multiselect__tag-icon:focus,
+        .multiselect__tag-icon:hover{
+          background: none;
+        }
       }
     }
+    label {
+      font-weight: 300;
+      color: #666666;
+    }
+    .vue-js-switch {
+      float: right;
+    }
+    .v-switch-core {
+      background: #dddddd;
+      border: 1px solid #dddddd;
+    }
+    .glyphicon-star-empty {
+      color: #999999;
+    }
+    .glyphicon-star {
+      color: #eac827;
+    }
   }
-  label {
-    font-weight: 300;
-    color: #666666;
-  }
-  .vue-js-switch {
-    float: right;
-  }
-  .v-switch-core {
-    background: #dddddd;
-    border: 1px solid #dddddd;
-  }
-  .glyphicon-star-empty {
-    color: #999999;
-  }
-  .glyphicon-star {
-    color: #eac827;
-  }
-}
 </style>

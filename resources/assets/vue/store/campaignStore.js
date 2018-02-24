@@ -11,6 +11,7 @@ function campaignStore() {
       campaign: {},
       modules: [],
       editedSettings: {},
+      campaignCompleted: false,
       currentModuleId: undefined,
       currentCustomModuleId: undefined,
       currentComponent: {},
@@ -24,6 +25,7 @@ function campaignStore() {
       buildingMode: 'desktop',
       editorToolbar: '',
       dirty: false,
+      showImageEditor: false,
       fieldErrors: [],
     },
     getters: {
@@ -61,6 +63,9 @@ function campaignStore() {
       dirty(state) {
         return state.dirty;
       },
+      showImageEditor(state) {
+        return state.showImageEditor;
+      },
       locked(state) {
         if (!_.isEmpty(state.campaign)) {
           return state.campaign.campaign_data.locked;
@@ -70,10 +75,12 @@ function campaignStore() {
 
     },
     mutations: {
+      campaignCompleted(state, status) {
+        state.campaignCompleted = status;
+      },
       loadCampaignData(state, campaignData) {
         state.campaign = campaignData;
         state.modules = campaignData.campaign_data.modules_data;
-        state.editedSettings.autoSave = campaignData.campaign_data.auto_save;
       },
       updateEmailCanvas(state, modules_data) {
         state.modules = modules_data;
@@ -83,6 +90,9 @@ function campaignStore() {
       },
       setDirty(state, dirty) {
         state.dirty = dirty;
+      },
+      setToggleImageEditor(state, stateModal) {
+        state.showImageEditor = stateModal;
       },
       addModule(state, moduleData) {
         state.modules.push(moduleData);
@@ -115,6 +125,9 @@ function campaignStore() {
       },
       saveSetting(state, setting) {
         state.editedSettings[setting.name] = setting.value;
+      },
+      saveCampaignData(state, payload) {
+        state.campaign.campaign_data[payload.name] = payload.value;
       },
       toggleModal(state, modalName) {
         state[modalName] = !state[modalName];
