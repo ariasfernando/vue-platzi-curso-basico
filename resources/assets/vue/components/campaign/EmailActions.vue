@@ -167,7 +167,7 @@
       },
       complete() {
         // Do not save if there are missing or wrong fields
-        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.fieldErrors.length > 0 ) {
+        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.fieldErrors.length > 0) {
           this.$_app.utils.validator.modulesErrors('#emailCanvas');
           
           this.$root.$toast(
@@ -199,8 +199,6 @@
             .then(completeResponse => {
 
               let finishedProcessing = () => {
-                // Hide Loader
-                this.$store.commit("global/setLoader", false);
                 // Set campaign as processed
                 this.$store.commit('campaign/setProcessStatus');
                 // Show complete after campaign is completely processed
@@ -237,9 +235,8 @@
         setInterval(() => {
           if (this.dirty && this.campaign.campaign_data.auto_save) {
             this._save().then(response => {
-              this.$store.commit("global/setLoader", false);
+              // this.$store.commit("global/setLoader", false);
             }, error => {
-              this.$store.commit("global/setLoader", false);
               this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
             });
           }
@@ -254,7 +251,6 @@
           'wrap_line_length': 120,
         });
         this._save(bodyHtml).then(response => {
-          this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalPreview');
         }, error => {
           this.$store.commit("global/setLoader", false);
