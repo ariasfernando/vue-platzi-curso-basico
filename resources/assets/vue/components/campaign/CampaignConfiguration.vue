@@ -132,8 +132,6 @@
     },
 
     created () {
-      this.validate();
-
       this.enablePreheader = this.campaign.library_config.preheader;
       this.preheaderMaxLength = Application.globals.preheaderConfig.max_length;
       this.enableTagging = this.campaign.library_config.tagging;
@@ -146,10 +144,6 @@
         this.tagOptions.push(tagList[n].name);
       }
 
-      this.$store.commit('campaign/saveSetting', {
-        name: 'tags',
-        value: this.form.tags
-      });
       this.loadConfig();
     },
     mounted (){
@@ -189,7 +183,6 @@
         });
       },
       loadConfig() {
-
           this.$store.dispatch("config/getConfig", 'global_settings').then(response => {
             this.globalConfig = this.$store.getters["config/config"].global_settings;
             this.enableAutoSave = this.globalConfig.auto_save === '1';
