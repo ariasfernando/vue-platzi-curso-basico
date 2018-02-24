@@ -263,6 +263,9 @@ function campaignStore() {
       getCampaignData(context, campaignId) {
         return campaignService.getCampaign(campaignId)
           .then((response) => {
+            let campaign = response.campaign;
+            // TODO: use a model
+            campaign.campaign_data.auto_save = campaign.campaign_data.auto_save !== false;
             context.commit('loadCampaignData', response.campaign);
           })
           .catch(error => context.commit('error', error));
