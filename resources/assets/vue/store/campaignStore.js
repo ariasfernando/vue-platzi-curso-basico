@@ -278,6 +278,7 @@ function campaignStore() {
         const deferred = Q.defer();
         campaignService.saveCampaign(data)
           .then(res => {
+            context.commit('setDirty', false);
             context.dispatch('getCampaignData', res.campaignId);
             deferred.resolve(res.campaignId);
           })
@@ -291,6 +292,7 @@ function campaignStore() {
         const deferred = Q.defer();
         campaignService.completeCampaign(campaign)
           .then(response => {
+            context.commit('setDirty', false);
             context.dispatch('getCampaignData', response.campaignId);
             deferred.resolve(response);
           })
