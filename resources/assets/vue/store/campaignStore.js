@@ -26,6 +26,7 @@ function campaignStore() {
       editorToolbar: '',
       dirty: false,
       showImageEditor: false,
+      moduleErrors: [],
       fieldErrors: [],
     },
     getters: {
@@ -35,8 +36,14 @@ function campaignStore() {
       campaign(state) {
         return state.campaign;
       },
-      fieldErrors(state){
-        return state.fieldErrors
+      moduleErrors(state) {
+        const modules = state.modules;
+        const errors = _.filter(modules, m => m.data.errors && m.data.errors.length);
+
+        return errors.length || state.fieldErrors.length;
+      },
+      fieldErrors(state) {
+        return state.fieldErrors;
       },
       currentComponent(state) {
         return state.currentComponent;

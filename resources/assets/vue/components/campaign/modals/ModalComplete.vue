@@ -7,7 +7,7 @@
             <button type="button" class="close hidden" @click="close"><span>&times;</span></button>
           </slot>
 
-          <h4>Processed Campaign</h4>
+          <h4>Finished Email</h4>
 
           <div class="modal-body">
             <slot name="body">

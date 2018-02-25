@@ -84,8 +84,11 @@
       locked() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked
       },
-      fieldErrors() {
-        return this.$store.state.campaign.fieldErrors;
+      modules() {
+        return this.$store.getters["campaign/modules"];
+      },
+      moduleErrors() {
+        return this.$store.getters["campaign/moduleErrors"];
       },
     },
     data () {
@@ -145,7 +148,7 @@
         });
       },
       _validate(message = undefined) {
-        if (this.fieldErrors.length > 0) {
+        if (this.moduleErrors) {
           this.$root.$toast(
             message || 'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
@@ -166,8 +169,20 @@
         return campaignService.checkProcessStatus(processId);
       },
       complete() {
+        if (this.modules.length === 0) {
+          this.$root.$toast(
+            'You cannot finish an empty email.',
+            {
+              className: 'et-error',
+              closeable: true
+            }
+          );
+
+          return false;
+        }
+
         // Do not save if there are missing or wrong fields
-        if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.fieldErrors.length > 0  ) {
+        if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors  ) {
           this.$_app.utils.validator.modulesErrors('#emailCanvas');
 
           this.$root.$toast(

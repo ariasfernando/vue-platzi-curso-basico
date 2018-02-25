@@ -48,6 +48,9 @@
       dragGhost: null
     },
     computed: {
+      campaignCompleted() {
+        return this.$store.state.campaign.campaignCompleted;
+      },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
       },

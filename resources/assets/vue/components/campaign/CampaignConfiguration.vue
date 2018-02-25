@@ -15,7 +15,7 @@
           </label>
           <p>
             <input type="text"
-                 placeholder="Campaign Name"
+                 placeholder="Email Name"
                  name="campaignName"
                  id="campaignName"
                  v-validate.initial="'required'"
