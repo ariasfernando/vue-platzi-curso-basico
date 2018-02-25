@@ -69,21 +69,23 @@ class PasswordPolicyServiceProvider extends ZxcvbnServiceProvider
 
 
         $generator
-          ->setLength(\Config::get('auth.password_policy.default_length'))
-          ->setOptionValue(RequirementPasswordGenerator::OPTION_UPPER_CASE, true)
-          ->setOptionValue(RequirementPasswordGenerator::OPTION_LOWER_CASE, true)
-          ->setOptionValue(RequirementPasswordGenerator::OPTION_NUMBERS, true)
-          ->setOptionValue(RequirementPasswordGenerator::OPTION_SYMBOLS, true)
+            ->setLength(\Config::get('auth.password_policy.default_length'))
+            ->setOptionValue(RequirementPasswordGenerator::OPTION_UPPER_CASE, true)
+            ->setOptionValue(RequirementPasswordGenerator::OPTION_LOWER_CASE, true)
+            ->setOptionValue(RequirementPasswordGenerator::OPTION_NUMBERS, true)
+            ->setOptionValue(RequirementPasswordGenerator::OPTION_SYMBOLS, true)
 
-          ->setMinimumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 2)
-          ->setMinimumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 2)
-          ->setMinimumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 2)
-          ->setMinimumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 1)
+            ->setMinimumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 2)
+            ->setMinimumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 2)
+            ->setMinimumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 2)
+            ->setMinimumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 2)
 
-          ->setMaximumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 8)
-          ->setMaximumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 8)
-          ->setMaximumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 8)
-          ->setMaximumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 1)
+            ->setMaximumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 8)
+            ->setMaximumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 8)
+            ->setMaximumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 8)
+            ->setMaximumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 2)
+
+            ->setParameter(RequirementPasswordGenerator::PARAMETER_SYMBOLS, '!@$%^*()<>/[]{}-=');
 
         return $generator->generatePassword();
     }
