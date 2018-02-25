@@ -140,7 +140,7 @@ return [
         'default_length' => 10,
 
         // Password requirements
-        'min_length' => 10,
+        'min_length' => 8,
         'max_length' => 100,
         'min_score'  => (int) env('PASSWORD_POLICY_MIN_SCORE', 2)
     ]
