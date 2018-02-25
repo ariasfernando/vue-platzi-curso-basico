@@ -137,7 +137,7 @@ return [
         'force_update' => 90,
 
         // Default length for generated passwords
-        'default_length' => 20,
+        'default_length' => 10,
 
         // Password requirements
         'min_length' => 10,
