@@ -42,7 +42,7 @@
     "readdir": "0.0.13",
     "run-sequence": "1.1.0",
     "stackup": "1.0.1",
-    "stensul-image-editor": "^1.0.18",
+    "stensul-image-editor": "^1.0.22",
     "stringify": "^5.1.0",
     "tinymce-vue-2": "0.0.2",
     "underscore": "1.8.3",
