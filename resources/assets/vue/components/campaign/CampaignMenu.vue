@@ -192,10 +192,10 @@
       background-color: @bg-color;
       height: 65px;
       font-family: 'Open Sans', Arial, serif;
-      font-size: 14px;
+      font-size: 12px;
 
       &:before{
-        content: "Drag a module here or click one from the menu to add it to the bottom of the email";
+        content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
         width: 100%;
         display: table-cell;
         vertical-align: middle;
@@ -210,7 +210,7 @@
         }
 
         &:after{
-          content: "Drag a module here or click one from the menu to add it to the bottom of the email";
+          content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
           width: 100%;
           display: table-cell;
           vertical-align: middle;
