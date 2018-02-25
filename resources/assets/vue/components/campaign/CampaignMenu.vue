@@ -13,7 +13,7 @@
                     <draggable :element="'div'" :options="options" @clone="onClone">
                       <div class="add single">
                         <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
-                          {{ subitem.title }} <i class="glyphicon glyphicon-plus"></i>
+                          {{ subitem.title || subitem.name }} <i class="glyphicon glyphicon-plus"></i>
                         </h2>
                       </div>
                     </draggable>
@@ -25,7 +25,7 @@
             <draggable v-else :element="'div'" :options="options" @clone="onClone">
               <div class="add single">
                 <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">
-                  {{ item.title }} <i class="glyphicon glyphicon-plus"></i>
+                  {{ item.title || item.name }} <i class="glyphicon glyphicon-plus"></i>
                 </h2>
               </div>
             </draggable>
