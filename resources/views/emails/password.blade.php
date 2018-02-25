@@ -1,4 +1,4 @@
-Hi {{ $name }},<br /><br/>
+Hi {{ $name }},<br /><br/> 
 
 We received a request to reset the password for your stensul account (<a href="{{ url('/') }}" target="_blank">{{ url('/') }}</a>). <br/><br/>
 
