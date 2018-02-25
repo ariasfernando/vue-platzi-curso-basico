@@ -84,6 +84,9 @@
       locked() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked
       },
+      modules() {
+        return this.$store.getters["campaign/modules"];
+      },
       moduleErrors() {
         return this.$store.getters["campaign/moduleErrors"];
       },
@@ -166,6 +169,18 @@
         return campaignService.checkProcessStatus(processId);
       },
       complete() {
+        if (this.modules.length === 0) {
+          this.$root.$toast(
+            'You cannot finish an empty email.',
+            {
+              className: 'et-error',
+              closeable: true
+            }
+          );
+
+          return false;
+        }
+
         // Do not save if there are missing or wrong fields
         if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors  ) {
           this.$_app.utils.validator.modulesErrors('#emailCanvas');
