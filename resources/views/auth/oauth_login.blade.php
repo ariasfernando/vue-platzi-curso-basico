@@ -50,7 +50,7 @@
     </section>
 <!-- Scripts -->
 @endsection
-@include('partials/application_script')
+
 @section('footer-script')
     <script src="{{ cdn(elixir('js/library.js')) }}"></script>
 @stop
