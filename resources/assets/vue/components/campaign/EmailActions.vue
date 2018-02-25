@@ -242,7 +242,7 @@
               this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
             });
           }
-        }, 5000);
+        }, 20000);
       },
       preview() {
         this.$store.commit("global/setLoader", true);
