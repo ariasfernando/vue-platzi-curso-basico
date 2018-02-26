@@ -2,36 +2,37 @@
   <div class="expand st-module-menu-wrapper">
       <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
 
-      <draggable class="beta-subitem"
-                 :element="'div'"
-                 :options="options"
-                 :class="{'is-collapsed' : collapsed }"
-                 @clone="onClone">
-        <div v-if="ready" v-for="item in items" class="beta-subitem-single">
+      <div class="beta-subitem" :class="{'is-collapsed' : collapsed }">
+          <div v-if="ready" v-for="item in items" class="beta-subitem-single">
 
-          <div v-if="item.sub_menu" class="expand">
-            <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
+            <div v-if="item.sub_menu" class="expand">
+              <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
 
-              <div class="beta-submodules">
-                <div v-for="subitem in item.sub_menu">
-                  <div class="add single">
-                    <h2 class="draggable-item" @click="addModule(subitem)" :module="JSON.stringify(subitem)">
-                      {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
-                    </h2>
+                <div class="beta-submodules">
+                  <div v-for="subitem in item.sub_menu">
+                    <draggable :element="'div'" :options="options" @clone="onClone">
+                      <div class="add single">
+                        <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
+                          {{ subitem.title || subitem.name }} <i class="glyphicon glyphicon-plus"></i>
+                        </h2>
+                      </div>
+                    </draggable>
                   </div>
                 </div>
+
+            </div>
+
+            <draggable v-else :element="'div'" :options="options" @clone="onClone">
+              <div class="add single">
+                <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">
+                  {{ item.title || item.name }} <i class="glyphicon glyphicon-plus"></i>
+                </h2>
               </div>
+            </draggable>
 
           </div>
+      </div>
 
-          <div v-else class="add single">
-            <h2 class="draggable-item" @click="addModule(item)" :module="JSON.stringify(item)">
-              {{ item.name }} <i class="glyphicon glyphicon-plus"></i>
-            </h2>
-          </div>
-
-        </div>
-      </draggable>
   </div>
 </template>
 
@@ -111,10 +112,27 @@
       getLibrary () {
         return this.$store.dispatch("library/getModulesData", this.libraryId);
       },
-      addModule (module) {
-        const mod = clone(module);
+      getSubitemsAsArray () {
+        return _.reduce(this.items, (result, value) => {
+          if(_.has(value, 'level')) {
+            result = _.union(result, value.sub_menu);
+          }
+          return result;
+        }, []);
+      },
+      addModuleByName (moduleName, type) {
+        // Find module in items by type: item or subitem
+        const found = type === 'item'
+          ? _.find(this.items, (m) => m.name === moduleName)
+          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
+
+        const mod = Object.assign({}, found);
         mod.data = {};
 
+        this.addModule(mod);
+
+      },
+      addModule (mod) {
         // Add module
         this.$store.commit('campaign/addModule', mod);
 
@@ -166,12 +184,20 @@
         }
       },
       onClone: function (evt) {
+        let cloneEl = evt.clone;
+        let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
+        let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
+        // Find module into items as item or subitem
+        const found = moduleType === 'item'
+          ? _.find(this.items, (m) => m.name === moduleName)
+          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
+
+        const mod = Object.assign({}, found);
+        //this.addModule(mod);
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop
         // an element into email canvas
-        let cloneEl = evt.clone;
         cloneEl.addEventListener('click', (e) => {
-          let module = JSON.parse($(cloneEl).find('.draggable-item').attr('module'));
-          this.addModule(module);
+          this.addModule(mod);
         });
       }
     }
