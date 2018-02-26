@@ -1,6 +1,6 @@
 <template>
   <li
-    :class="{'dropdown-submenu': hasSubmenu()}">
+    :class="{'dropdown-submenu': hasSubmenu(), 'dropdown-submenu-item': true}">
     <a
       class="open-submenu"
       tabindex="-1"

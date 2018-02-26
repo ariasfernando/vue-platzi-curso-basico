@@ -143,8 +143,18 @@
 
 .dropdown-submenu {
   position: relative;
+  & a {
+    margin-right: 20px;
+  }
   & a:focus, & a:hover {
     color: @input-color !important;
+  }
+}
+
+.dropdown-submenu-item {
+  padding: 3px 0 !important;
+  &:hover {
+    background: lighten( @stensul-highlight, 20%) !important;
   }
 }
 

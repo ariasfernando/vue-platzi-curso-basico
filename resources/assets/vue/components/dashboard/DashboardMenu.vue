@@ -41,7 +41,7 @@
         this.$root.$toast(error, {className: 'et-error'});
       });
       // As we use bootstrap-dropdown, we need to toggle the submenu with this
-      $(document).on('click', '.dropdown-submenu .open-submenu', function(e){
+      $(document).on('click mouseover', '.dropdown-submenu .open-submenu', function(e){
         $(this).closest('.dropdown-menu').find('ul').each(function() {
           $(this).removeClass('open').hide();
         });
