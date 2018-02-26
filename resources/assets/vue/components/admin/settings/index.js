@@ -10,6 +10,7 @@ import BackgroundColor from './BackgroundColor.vue';
 import FontColor from './FontColor.vue';
 import LetterSpacing from './LetterSpacing.vue';
 import Padding from './Padding.vue';
+import BorderGroup from './BorderGroup.vue';
 
 const Settings = {
   FontFamily,
@@ -24,6 +25,7 @@ const Settings = {
   FontColor,
   LetterSpacing,
   Padding,
+  BorderGroup,
 };
 
 module.exports = Settings;

@@ -17,10 +17,11 @@
             <form class="form-horizontal">
 
               <template v-for="setting in component.componentSettings" >
-                <component :is="'input-' + setting"
-                  v-on:attribute-setting-updated="attributeSettingUpdatedHandler"
-                  v-on:style-setting-updated="styleSettingUpdatedHandler"
-                  v-on:style-option-setting-updated="styleOptionSettingUpdatedHandler"
+                <component
+                  :is="'input-' + setting"
+                  @attribute-setting-updated="attributeSettingUpdatedHandler"
+                  @style-setting-updated="styleSettingUpdatedHandler"
+                  @style-option-setting-updated="styleOptionSettingUpdatedHandler"
                   :setting="setting"
                   :element="component"
                   :key="setting"></component>
@@ -223,7 +224,8 @@
       "input-background-color": elementSettings.BackgroundColor,
       "input-font-color": elementSettings.FontColor,
       "input-letter-spacing": elementSettings.LetterSpacing,
-      "input-padding": elementSettings.Padding
+      "input-padding": elementSettings.Padding,
+      "input-border-group": elementSettings.BorderGroup,
     },
     computed: {
       currentComponent() {

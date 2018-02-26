@@ -231,10 +231,6 @@
   @hover: @focus-light;
   @icon-option: #78DCD6;
 
-  .st-col{
-    border: none!important;
-  }
-
   .empty-col {
     background-color: @focus-light;
   }

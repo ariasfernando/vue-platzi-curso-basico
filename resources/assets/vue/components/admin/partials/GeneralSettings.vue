@@ -146,13 +146,15 @@
 import { Sketch } from "vue-color";
 import BootstrapVue from "bootstrap-vue";
 import backgroundColor from "../settings/BackgroundColor.vue";
-import padding from "../settings/padding.vue";
+import Padding from "../settings/Padding.vue";
+import BorderGroup from "../settings/BorderGroup.vue";
 
 export default {
   components: {
     BootstrapVue,
     "input-background-color": backgroundColor,
-    "input-padding": padding
+    "input-padding": Padding,
+    "input-border-group": BorderGroup
   },
   computed: {
     module() {
