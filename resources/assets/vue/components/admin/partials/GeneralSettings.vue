@@ -31,6 +31,16 @@
             </div>
           </div>
         </div>
+        <template v-for="setting in module.structure.componentSettings" class="row">
+          <component :is="'input-' + setting"
+            v-on:attribute-setting-updated="attributeSettingUpdatedHandler"
+            v-on:style-setting-updated="styleSettingUpdatedHandler"
+            :setting="setting"
+            :element="module.structure"
+            class="row"
+            :key="setting">
+          </component>
+        </template>
         <div class="row"
              :class="'field-' + generalSetting.name"
              v-for="(generalSetting, keyGeneral) in module.structure.settings"
@@ -48,9 +58,6 @@
                      v-validate="'required'"
                      @change="saveModuleStyle">
               
-              <!-- Input color -->
-              <background-color v-if="generalSetting.type === 'color'"></background-color>
-                 
             <!-- Span General Error -->
             <span v-show="errors.has(generalSetting.name)"
                     class="help is-danger">{{ errors.first(generalSetting.name) }}
@@ -82,40 +89,6 @@
                     @change.native="saveModuleStyleByEvent">
                 </b-form-select>
               </div>
-
-              <!-- Input color -->
-              <input v-if="generalSettingGroup.type === 'color'"
-                     v-validate="'required'"
-                     type="text"
-                     :class="{'input': true, 'is-danger': errors.has(generalSettingGroup.name) }"
-                     :name="generalSettingGroup.name"
-                     :placeholder="generalSettingGroup.label"
-                     :value="(generalSettingGroup.transparentChecked)? 'transparent' : generalSettingGroup.sketchPickerValue.hex"
-                     @click.prevent="toggleSketch"
-                     @change="saveModuleAttribute">
-
-              <div v-if="generalSettingGroup.type === 'color'"
-                   class="icon-remove st-remove-sketch"
-                   @click.prevent="toggleSketch" >
-                <i class="glyphicon glyphicon-remove"></i>
-              </div>
-
-              <div v-if="generalSettingGroup.type === 'color'"
-                   class="checkbox-transparent"
-              >
-                <span>Transparent</span>
-                <input type="checkbox"
-                       v-model="generalSettingGroup.transparentChecked"
-                       :value="generalSettingGroup.transparentChecked"
-                       :name="generalSettingGroup.name +'-transparent'"
-                       @click="triggerInputColor(generalSettingGroup.sketchPickerValue.hex, generalSettingGroup.name, generalSettingGroup.transparentChecked, generalSettingGroup.link)"
-                >
-              </div>
-
-              <sketch-picker v-if="generalSettingGroup.type === 'color'"
-                             v-model="generalSettingGroup.sketchPickerValue"
-                             class="sketch-picker"
-                             @click.native="triggerInputColor(generalSettingGroup.sketchPickerValue.hex, generalSettingGroup.name, generalSettingGroup.transparentChecked, generalSettingGroup.link)"></sketch-picker>
               <!-- Span General Error -->
               <span v-show="errors.has(generalSettingGroup.name)"
                     class="help is-danger">{{ errors.first(generalSettingGroup.name) }}
@@ -170,123 +143,113 @@
 </template>
 
 <script>
+import { Sketch } from "vue-color";
+import BootstrapVue from "bootstrap-vue";
+import backgroundColor from "../settings/BackgroundColor.vue";
+import padding from "../settings/padding.vue";
 
-  import { Sketch } from 'vue-color';
-  import BootstrapVue from 'bootstrap-vue';
-  import backgroundColor from '../generalSettings/BackgroundColor.vue';
-
-  export default {
-    components: {
-      BootstrapVue,
-      'sketch-picker': Sketch,
-      'background-color': backgroundColor,
+export default {
+  components: {
+    BootstrapVue,
+    "input-background-color": backgroundColor,
+    "input-padding": padding
+  },
+  computed: {
+    module() {
+      return this.$store.getters["module/module"];
     },
-    computed: {
-      module() {
-        return this.$store.getters["module/module"];
-      },
-      numColumns() {
-        return this.$store.getters["module/module"].structure.columns.length;
+    numColumns() {
+      return this.$store.getters["module/module"].structure.columns.length;
+    }
+  },
+  data() {
+    return {
+      maxCols: 8,
+      optionsSelected: [
+        { value: "1", text: "1" },
+        { value: "2", text: "2" },
+        { value: "3", text: "3" },
+        { value: "4", text: "4" },
+        { value: "5", text: "5" },
+        { value: "6", text: "6" },
+        { value: "7", text: "7" },
+        { value: "8", text: "8" }
+      ]
+    };
+  },
+  methods: {
+    attributeSettingUpdatedHandler(eventData) {
+      this.saveModuleAttribute(eventData.name, eventData.value);
+    },
+    styleSettingUpdatedHandler(eventData) {
+      this.saveModuleStyle(eventData.name, eventData.value);
+    },
+    setModuleField(data) {
+      this.$store.commit("module/setModuleFields", data);
+    },
+    updateName(e) {
+      this.setModuleField({ name: e.target.value });
+    },
+    saveModuleStyle(name, value) {
+      this.$store.commit("module/saveModuleStyle", {
+        property: name,
+        value: value
+      });
+    },
+    saveModuleStyleByEvent(e) {
+      this.$store.commit("module/saveModuleStyle", {
+        property: e.target.name,
+        value: e.target.value
+      });
+    },
+    saveModuleAttributeByEvent(e) {
+      this.saveModuleAttributee(e.target.name, e.target.value);
+    },
+    saveModuleAttribute(name, value) {
+      this.$store.commit("module/saveModuleAttribute", {
+        property: name,
+        value: value
+      });
+    },
+    toggle(value) {
+      this.$store.commit("module/setColumnsFixed", value);
+    },
+    toggleStacking(value) {
+      this.$store.commit("module/setInvertedStacking", value);
+    },
+    setColumns(value) {
+      let cols = value;
+      let numCols = this.module.structure.columns.length;
+
+      if (numCols === cols) {
+        return true;
       }
-    },
-    data () {
-      return {
-        maxCols: 8,
-        optionsSelected: [
-          { value: '1', text: '1' },
-          { value: '2', text: '2' },
-          { value: '3', text: '3' },
-          { value: '4', text: '4' },
-          { value: '5', text: '5' },
-          { value: '6', text: '6' },
-          { value: '7', text: '7' },
-          { value: '8', text: '8' },
-        ],
+
+      if (numCols > cols && confirm("Are you sure?")) {
+        this.$store.commit("campaign/unsetActiveModule");
+        this.$store.commit("campaign/unsetCurrentModule");
+        this.$store.commit("campaign/unsetCurrentComponent");
+        this.$store.commit("module/removeColumns", {
+          index: cols,
+          number: numCols - cols
+        });
       }
-    },
-    methods: {
-      setModuleField(data) {
-        this.$store.commit("module/setModuleFields", data);
-      },
-      updateName(e) {
-        this.setModuleField({ name: e.target.value });
-      },
-      toggleSketch(e){
-        const inputElement = e.toElement;
-        $(inputElement).closest('.content-colorpicker').find('.sketch-picker, .st-remove-sketch, .checkbox-transparent')
-                                                       .toggleClass('st-show-element');
-      },
-      triggerInputColor(valueColor, typeName, checked, link){
-        if (checked){
-          valueColor = 'transparent';
+
+      if (numCols < cols) {
+        for (let i = numCols; i < cols; i++) {
+          this.$store.dispatch("module/addColumn");
         }
+      }
 
-        const ObjectTarget = { target:{ name : typeName,value : valueColor} }
+      this.$store.dispatch(
+        "module/normalizeColumns",
+        this.module.structure.columns
+      );
 
-        if ( link === "attribute"){
-          this.saveModuleAttribute(ObjectTarget);
-        }else{
-          this.saveModuleStyleByEvent(ObjectTarget);
-        }
-
-      },
-      saveModuleStyle(name, value) {
-         this.$store.commit('module/saveModuleStyle',{
-          property: name,
-          value: value,
-        });
-      },
-      saveModuleStyleByEvent(e) {
-         this.$store.commit('module/saveModuleStyle',{
-          property: e.target.name,
-          value: e.target.value,
-        });
-      },
-      saveModuleAttribute(e) {
-         this.$store.commit('module/saveModuleAttribute',{
-          property: e.target.name,
-          value: e.target.value,
-        });
-      },
-      toggle(value) {
-        this.$store.commit("module/setColumnsFixed", value);
-      },
-      toggleStacking(value) {
-        this.$store.commit("module/setInvertedStacking", value);
-      },
-      setColumns(value) {
-        let cols = value;
-        let numCols = this.module.structure.columns.length;
-
-        if ( numCols === cols ) {
-          return true;
-        }
-
-        if ( (numCols > cols ) && confirm("Are you sure?") ) {
-
-          this.$store.commit("campaign/unsetActiveModule");
-          this.$store.commit("campaign/unsetCurrentModule");
-          this.$store.commit("campaign/unsetCurrentComponent");
-          this.$store.commit("module/removeColumns", {
-            index: cols,
-            number: numCols - cols
-          });
-        }
-
-        if ( numCols < cols ) {
-          for ( let i = numCols; i < cols; i++ ) {
-            this.$store.dispatch("module/addColumn");
-          }
-        }
-
-        this.$store.dispatch("module/normalizeColumns", this.module.structure.columns);
-
-        if ( value > 0 && value <= this.maxCols ){
-          this.$store.commit("module/setActiveColumn", value - 1);
-        }
-
-      },
-
+      if (value > 0 && value <= this.maxCols) {
+        this.$store.commit("module/setActiveColumn", value - 1);
+      }
     }
   }
+};
 </script>

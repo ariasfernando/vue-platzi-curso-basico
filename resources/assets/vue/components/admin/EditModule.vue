@@ -255,18 +255,6 @@
         margin: 0px -10px 15px -10px;
       }
 
-      .field-padding{
-        padding-right: 15px;
-
-        .col-sm-3{
-          width: 70px;
-
-          input{
-            width: 37px;
-          }
-        }
-      }
-
     }
 
     .header {

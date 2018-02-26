@@ -21,7 +21,9 @@
                   v-on:attribute-setting-updated="attributeSettingUpdatedHandler"
                   v-on:style-setting-updated="styleSettingUpdatedHandler"
                   v-on:style-option-setting-updated="styleOptionSettingUpdatedHandler"
-                  :setting="setting" :key="setting"></component>
+                  :setting="setting"
+                  :element="component"
+                  :key="setting"></component>
               </template>
 
               <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
@@ -114,7 +116,7 @@
 
                     <!-- Input select -->
                     <span v-if="settingGroup.type === 'select'">
-                  <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponentByEvent" >
+                    <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponentByEvent" >
                       </b-form-select>
                     </span>
 

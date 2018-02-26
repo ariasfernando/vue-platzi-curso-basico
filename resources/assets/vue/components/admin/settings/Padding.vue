@@ -33,8 +33,8 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "padding",
-  props: ["setting"],
-  mixins: [ SettingMixin ],
+  props: ["setting", "element"],
+  mixins: [SettingMixin],
   data() {
     return {
       min: 0
@@ -70,10 +70,13 @@ export default {
   methods: {
     changeValue(val, styleName) {
       val = isNaN(val) || val < this.min ? this.min : val;
-      this.$emit("style-setting-updated", { name: styleName, value: `${val}px` });
+      this.$emit("style-setting-updated", {
+        name: styleName,
+        value: `${val}px`
+      });
     },
     getValue(styleName) {
-      return _.parseInt(this.component.style[styleName]);
+      return _.parseInt(this.element.style[styleName]);
     }
   }
 };
@@ -108,11 +111,15 @@ button.el-button {
   }
 }
 .padding-custom {
-    padding: 5px 0;
+  padding: 5px 0;
 }
 .el-input-number--mini {
-    width: 86px;
-    margin-right: 26px;
+  width: 86px;
+  margin-right: 26px;
+  float: right;
+}
+.field-padding {
+  padding-right: 15px;
 }
 </style>
 <style lang="less" >

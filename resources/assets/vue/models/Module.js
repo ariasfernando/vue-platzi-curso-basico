@@ -56,42 +56,8 @@ function Module(data = {}) {
       borderLeftStyle: style.borderLeftStyle || 'none',
       borderLeftColor: style.borderLeftColor || '#000000',
     },
+    componentSettings: ['background-color', 'padding'],
     settings: [
-      {
-        link: 'style',
-        label: 'Padding',
-        name: 'padding',
-        group: [
-          {
-            link: 'style',
-            label: 'Padding Top',
-            name: 'paddingTop',
-            type: 'text',
-            value: '0px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Right',
-            name: 'paddingRight',
-            type: 'text',
-            value: '0px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Bottom',
-            name: 'paddingBottom',
-            type: 'text',
-            value: '0px',
-          },
-          {
-            link: 'style',
-            label: 'Padding Left',
-            name: 'paddingLeft',
-            type: 'text',
-            value: '0px',
-          },
-        ],
-      },
       {
         link: 'style',
         label: 'Border Top',
