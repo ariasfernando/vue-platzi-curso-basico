@@ -5,7 +5,7 @@
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;">
+          <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;" :class="{ 'campaign-completed': campaignCompleted }">
               <draggable
                 id="emailCanvas"
                 :class="`stx-${buildingMode}-mode`"
@@ -30,6 +30,7 @@
 
 <script>
   import clone from 'clone';
+  import _ from 'lodash';
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';
@@ -47,6 +48,9 @@
       dragGhost: null
     },
     computed: {
+      campaignCompleted() {
+        return this.$store.state.campaign.campaignCompleted;
+      },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
       },
@@ -137,15 +141,31 @@
       }
     },
     methods: {
+      getSubitemsAsArray () {
+        return _.reduce(this.items, (result, value) => {
+          if(_.has(value, 'level')) {
+            result = _.union(result, value.sub_menu);
+          }
+          return result;
+        }, []);
+      },
       onAdd(e) {
-        const module = this.items[e.oldIndex];
-        const mod = clone(module);
+        let cloneEl = e.clone;
+        let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
+        let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
+
+        // Find module in items by type: item or subitem
+        const found = moduleType === 'item'
+          ? _.find(this.items, (m) => m.name === moduleName)
+          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
+
+        const mod = Object.assign({}, found);
         mod.data = {};
 
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
         // Set active on last module inserted
         this.$store.commit('campaign/setActiveModule', e.newIndex);
-        
+
          // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
