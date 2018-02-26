@@ -5,6 +5,10 @@ namespace Stensul\Providers;
 use Stensul\Models\Setting;
 use Illuminate\Support\ServiceProvider;
 
+// Prevent error if config files are cached.
+defined('DS')
+    or define('DS', DIRECTORY_SEPARATOR);
+
 class ConfigServiceProvider extends ServiceProvider
 {
 
