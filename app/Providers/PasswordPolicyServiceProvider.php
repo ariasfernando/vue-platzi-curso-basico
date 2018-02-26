@@ -85,7 +85,7 @@ class PasswordPolicyServiceProvider extends ZxcvbnServiceProvider
             ->setMaximumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 8)
             ->setMaximumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 2)
 
-            ->setParameter(RequirementPasswordGenerator::PARAMETER_SYMBOLS, '!@$%^*()<>/[]{}-=');
+            ->setParameter(RequirementPasswordGenerator::PARAMETER_SYMBOLS, '!@$*/()[]-=');
 
         return $generator->generatePassword();
     }
