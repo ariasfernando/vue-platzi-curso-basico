@@ -289,7 +289,6 @@ function campaignStore() {
         campaignService.saveCampaign(data)
           .then(res => {
             context.commit('setDirty', false);
-            context.dispatch('getCampaignData', res.campaignId);
             deferred.resolve(res.campaignId);
           })
           .catch(error => {
