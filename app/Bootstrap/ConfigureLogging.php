@@ -5,6 +5,7 @@ namespace Stensul\Bootstrap;
 use Gelf\Publisher;
 use Gelf\Transport\UdpTransport;
 use Gelf\Transport\HttpTransport;
+use Gelf\Transport\IgnoreErrorTransportWrapper;
 use Stensul\Handlers\Log\GelfHandler;
 use Illuminate\Log\Writer;
 use Monolog\Logger as Monolog;
@@ -31,11 +32,16 @@ class ConfigureLogging extends DefaultConfigureLogging
 
             if (env('LOG_SERVER_TRANSPORT', 'udp') == 'http') {
                 // HTTP transport for distributed
-                $transport = HttpTransport::fromUrl(env('LOG_SERVER_HOST') . ':' . env('LOG_SERVER_PORT', null) . env('LOG_SERVER_HTTP_PATH'));
+                $transport = new IgnoreErrorTransportWrapper(
+                    HttpTransport::fromUrl(env('LOG_SERVER_HOST') . ':' . env('LOG_SERVER_PORT', null) . env('LOG_SERVER_HTTP_PATH'))
+                );
+
             }
             else {
                 // use the UDP transport to fire and forget
-                $transport = new UdpTransport(env('LOG_SERVER_HOST'), env('LOG_SERVER_PORT'), UdpTransport::CHUNK_SIZE_LAN);
+                $transport = new IgnoreErrorTransportWrapper(
+                    new UdpTransport(env('LOG_SERVER_HOST'), env('LOG_SERVER_PORT'), UdpTransport::CHUNK_SIZE_LAN)
+                );
             }
 
             $log->getMonolog()->pushHandler(new GelfHandler(new Publisher($transport)));                     
