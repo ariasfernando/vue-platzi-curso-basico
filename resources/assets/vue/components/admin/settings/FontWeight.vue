@@ -7,9 +7,8 @@
         class="custom-col"
         size="mini"
         :value="fontWeight"
-        v-model="fontWeightInputValue"
+        v-model="fontWeight"
         placeholder="Font Weight"
-        @change="(val)=>updateFontWeight(val)"
         >
         <el-option
           v-for="item in options"
@@ -23,13 +22,13 @@
         class="custom-col"
         v-else
         size="mini"
-        @click.native="toggleNormalBold"
+        @click="toggleNormalBold"
       >{{fontWeight}}</el-button>
 
       <el-button
         size="mini"
         :class="{'el-icon-setting': true ,'active': isCustomFontWeight}"
-        @click.native="toggleCustomFontWeight"
+        @click="toggleCustomFontWeight"
       ></el-button>
     </div>
   </div>
@@ -48,7 +47,6 @@ export default {
       name: "fontWeight",
       isCustomFontWeightName: "isCustomFontWeight",
       options: [],
-      fontWeightInputValue: this.fontWeight
     };
   },
   mounted() {
@@ -62,7 +60,6 @@ export default {
       return options;
     }
     this.options = getOptions();
-    this.fontWeightInputValue = this.fontWeight;
   },
   computed: {
     isCustomFontWeight: {
@@ -82,22 +79,13 @@ export default {
       }
     }
   },
-  watch: {
-    fontWeight(value) {
-      this.fontWeightInputValue = value;
-    }
-  },
   methods: {
-    updateFontWeight(newValue) {
-      this.fontWeight = newValue;
-    },
     toggleCustomFontWeight() {
       // Saving value to temp variable because setter call to store is async
       let newValue = !this.isCustomFontWeight;
       this.isCustomFontWeight = newValue;
 
-      let fontWeight = !newValue ? "normal" : "500";
-      this.fontWeight = fontWeight;
+      this.fontWeight = !newValue ? "normal" : "500";
     },
     toggleNormalBold() {
       this.fontWeight = this.fontWeight === "normal" ? "bold" : "normal";
