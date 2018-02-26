@@ -1,47 +1,37 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
     <label class="typo__label col-sm-6 control-label">Vertical align</label>
-    <el-button plain size="mini" @click="changeAlignment('top')" class="fa fa-arrow-up" :class="{ active: currentValue == 'top' }"></el-button>
-    <el-button plain size="mini" @click="changeAlignment('middle')" class="fa fa-minus" :class="{ active: currentValue == 'middle' }"></el-button>
-    <el-button plain size="mini" @click="changeAlignment('bottom')" class="fa fa-arrow-down" :class="{ active: currentValue == 'bottom' }"></el-button>
+    <el-button plain size="mini" @click="changeAlignment('top')" class="fa fa-arrow-up" :class="{ active: valign === 'top' }"></el-button>
+    <el-button plain size="mini" @click="changeAlignment('middle')" class="fa fa-minus" :class="{ active: valign === 'middle' }"></el-button>
+    <el-button plain size="mini" @click="changeAlignment('bottom')" class="fa fa-arrow-down" :class="{ active: valign === 'bottom' }"></el-button>
   </div>
 </template>
 
 <script>
+import SettingMixin from "../mixins/SettingMixin.js";
+
 export default {
   name: "VerticalAlign",
   props: ["setting"],
+  mixins: [ SettingMixin ],
   data() {
     return {
+      name: "valign"
     };
   },
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
-    component() {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent.columnId].components[
-          this.currentComponent.componentId
-        ];
-      return component;
-    },
-    currentValue() {
-      return this.component.attribute['valign'];
+    valign: {
+      get: function() {
+        return this.component.attribute[this.name];
+      },
+      set: function(newValue) {
+        this.$emit("attribute-setting-updated", { name: this.name, value: newValue });
+      }
     }
   },
   methods: {
-    changeAlignment(align) {
-      this.saveAttribute(align);
-    },
-    saveAttribute(newValue) {
-      this.$store.commit("module/saveComponentAttribute", {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: 'valign',
-        value: newValue
-      });
+    changeAlignment(newValue) {
+      this.valign = newValue;
     }
   }
 };
