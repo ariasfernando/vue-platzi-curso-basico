@@ -29,7 +29,7 @@ class ConfigureLogging extends DefaultConfigureLogging
     {
         if (strlen(env('LOG_SERVER_HOST'))) {
 
-            if (env('LOG_SERVER_TRANSPORT', 'http')) {
+            if (env('LOG_SERVER_TRANSPORT', 'udp') == 'http') {
                 // HTTP transport for distributed
                 $transport = HttpTransport::fromUrl(env('LOG_SERVER_HOST') . ':' . env('LOG_SERVER_PORT', null) . env('LOG_SERVER_HTTP_PATH'));
             }
