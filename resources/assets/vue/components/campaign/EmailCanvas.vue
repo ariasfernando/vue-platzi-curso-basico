@@ -13,12 +13,15 @@
                 cellspacing="0"
                 cellpadding="0"
                 border="0"
-                v-model="dragList"
+                :list="dragList"
                 :width="templateWidth"
                 :options="options"
                 :element="'table'"
                 @add="onAdd"
-                @sort="onSort">
+                @sort="onSort"
+                @start="onStart"
+                @move="onMove"
+                >
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
           </td>
@@ -171,7 +174,34 @@
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = "1";
       },
+      onStart: function (/**Event*/evt) {
+
+        console.log('evt.oldIndex', evt.oldIndex)
+        let bounds = $(".section-canvas-container").outerHeight();
+
+        console.log('START MOVE ::: $(.section-canvas-email).scrollTop()', $('.section-canvas-email').scrollTop());
+        
+        // $('html,  .section-canvas-email').animate({
+        //     scrollTop: bounds
+        // }, 100);
+      },
+      onMove: function (/**Event*/evt) {
+
+        console.log('evt.oldIndex', evt.oldIndex)
+        let bounds = $(".section-canvas-container").outerHeight();
+
+        console.log('MOVE ::: $(.section-canvas-email).scrollTop()', $('.section-canvas-email').scrollTop());
+        
+        // $('html,  .section-canvas-email').animate({
+        //     scrollTop: bounds
+        // }, 100);
+      },
+
       onSort(e){
+
+        console.log('SORT ::: e.newIndex', e.newIndex)
+        console.log('this.activeModule', this.activeModule)
+
         if (this.activeModule.type === 'studio') {
           // Save current component if module type is studio
           this.$store.commit('campaign/setCurrentComponent', {
@@ -185,19 +215,13 @@
           this.$store.commit('campaign/setCustomModule', e.newIndex);
           this.$store.commit('campaign/unsetCurrentComponent');
         }
-        
+
         this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
+        console.log('e.newIndex', e.newIndex)
+        
       },
-      onEnd (evt) {
-        // moduleId is a reactive prop, and it matches the index
-        const moduleId = evt.newIndex;
-        // Set active Module
-        this.$store.commit("campaign/setActiveModule", moduleId);
-        // Don't forget to remove the ghost DOM object when done dragging
-        document.getElementById('drag-image').remove();
-      },
-      remove(moduleId) {
+      move(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
       },
       save() {
