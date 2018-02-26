@@ -13,7 +13,7 @@
                     <draggable :element="'div'" :options="options" @clone="onClone">
                       <div class="add single">
                         <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
-                          {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
+                          {{ subitem.title || subitem.name }} <i class="glyphicon glyphicon-plus"></i>
                         </h2>
                       </div>
                     </draggable>
@@ -25,7 +25,7 @@
             <draggable v-else :element="'div'" :options="options" @clone="onClone">
               <div class="add single">
                 <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">
-                  {{ item.name }} <i class="glyphicon glyphicon-plus"></i>
+                  {{ item.title || item.name }} <i class="glyphicon glyphicon-plus"></i>
                 </h2>
               </div>
             </draggable>
@@ -218,10 +218,10 @@
       background-color: @bg-color;
       height: 65px;
       font-family: 'Open Sans', Arial, serif;
-      font-size: 14px;
+      font-size: 12px;
 
       &:before{
-        content: "Drag a module here or click one from the menu to add it to the bottom of the email";
+        content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
         width: 100%;
         display: table-cell;
         vertical-align: middle;
@@ -236,7 +236,7 @@
         }
 
         &:after{
-          content: "Drag a module here or click one from the menu to add it to the bottom of the email";
+          content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
           width: 100%;
           display: table-cell;
           vertical-align: middle;

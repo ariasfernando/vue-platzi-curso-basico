@@ -5,7 +5,7 @@
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;">
+          <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;" :class="{ 'campaign-completed': campaignCompleted }">
               <draggable
                 id="emailCanvas"
                 :class="`stx-${buildingMode}-mode`"
@@ -48,6 +48,9 @@
       dragGhost: null
     },
     computed: {
+      campaignCompleted() {
+        return this.$store.state.campaign.campaignCompleted;
+      },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
       },

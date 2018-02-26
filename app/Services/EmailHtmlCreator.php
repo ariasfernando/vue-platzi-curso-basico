@@ -68,11 +68,10 @@ class EmailHtmlCreator
      */
     public function getEmailLayout()
     {
-        $email_layout = Helper::validateView(self::$EMAIL_LAYOUT);
         $library = Library::find($this->getCampaign()->library);
 
         return \View::make(
-            $email_layout
+            self::$EMAIL_LAYOUT
         )
                 ->with(
                     'params',
