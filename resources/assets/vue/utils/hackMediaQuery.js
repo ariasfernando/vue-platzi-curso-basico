@@ -4,7 +4,7 @@ export default function (selector, width) {
     $canvas = document.querySelector(selector);
 
     if ($canvas.querySelector('td').querySelector('table').querySelector('td.st-hide-hack') === null) {
-        let $hack = $(`<tr>
+        const $hack = $(`<tr>
             <td class="st-hide-hack">
                 <table cellpadding="0" cellspacing="0" border="0" align="center" width="${width}">
                     <tr>
@@ -14,8 +14,10 @@ export default function (selector, width) {
                     </tr>
                 </table>
             </td>
-        </tr>`)[0]; 
+        </tr>`)[0];
 
-        $canvas.querySelector('td').querySelector('table').prepend($hack);
+        const $parent = $canvas.querySelector('td').querySelector('table'); 
+
+        $parent.insertBefore($hack, $parent.firstChild);
     }
 }
