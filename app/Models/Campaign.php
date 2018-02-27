@@ -24,6 +24,7 @@ class Campaign extends Eloquent
      */
     protected $fillable = [
         'campaign_name',
+        'lower_campaign_name',
         'locale',
         'modules_data',
         'body_html',
@@ -62,6 +63,7 @@ class Campaign extends Eloquent
 
     protected $defaults = array(
         'campaign_name' => '',
+        'lower_campaign_name' => '',
         'locale' => 'en_us',
         'modules_data' => [],
         'body_html' => '',

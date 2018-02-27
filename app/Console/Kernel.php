@@ -31,6 +31,7 @@ class Kernel extends ConsoleKernel
         'Stensul\Console\Commands\Permission\Delete',
         'Stensul\Console\Commands\Task\GroupToRoles',
         'Stensul\Console\Commands\Task\EmailToLower',
+        'Stensul\Console\Commands\Task\UpdateCampaignNameLowercase',
         'Stensul\Console\Commands\Module\Create',
         'Stensul\Console\Commands\Tool\Scraper',
         'Stensul\Console\Commands\Setting\Show',
