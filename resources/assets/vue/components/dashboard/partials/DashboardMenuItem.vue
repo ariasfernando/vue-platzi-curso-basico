@@ -6,7 +6,7 @@
       tabindex="-1"
       href="#"
       v-if="hasSubmenu()"
-    >{{item.title}} <i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+    ><i class="glyphicon glyphicon-chevron-right pull-right"></i>{{item.title}}</a>
     <ul class="dropdown-menu" v-if="hasSubmenu()">
       <dashboard-menu-item
         v-for="i in item.items"
