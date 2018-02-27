@@ -13,15 +13,13 @@
                 cellspacing="0"
                 cellpadding="0"
                 border="0"
-                :list="dragList"
+                v-model="dragList"
                 :width="templateWidth"
                 :options="options"
                 :element="'table'"
+                :move="onMove"
                 @add="onAdd"
-                @sort="onSort"
-                @start="onStart"
-                @move="onMove"
-                >
+                @sort="onSort">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
           </td>
@@ -174,34 +172,22 @@
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = "1";
       },
-      onStart: function (/**Event*/evt) {
+      onMove (evt, originalEvent) {
+        const h = $(".section-canvas-email").height();
+        const target = $(".section-canvas-email");
 
-        console.log('evt.oldIndex', evt.oldIndex)
-        let bounds = $(".section-canvas-container").outerHeight();
+        let mousePosition = originalEvent.clientY - $(window).scrollTop();
+        let topRegion = 320;
+        let bottomRegion = h - topRegion;
 
-        console.log('START MOVE ::: $(.section-canvas-email).scrollTop()', $('.section-canvas-email').scrollTop());
-        
-        // $('html,  .section-canvas-email').animate({
-        //     scrollTop: bounds
-        // }, 100);
+        // Scroll when user drag down
+        if(mousePosition < topRegion || mousePosition > bottomRegion){
+            let distance = originalEvent.clientY - h / 1.5;
+            distance = distance * 0.15; // <- velocity
+            $(target).scrollTop( distance + $(target).scrollTop());
+        }
       },
-      onMove: function (/**Event*/evt) {
-
-        console.log('evt.oldIndex', evt.oldIndex)
-        let bounds = $(".section-canvas-container").outerHeight();
-
-        console.log('MOVE ::: $(.section-canvas-email).scrollTop()', $('.section-canvas-email').scrollTop());
-        
-        // $('html,  .section-canvas-email').animate({
-        //     scrollTop: bounds
-        // }, 100);
-      },
-
       onSort(e){
-
-        console.log('SORT ::: e.newIndex', e.newIndex)
-        console.log('this.activeModule', this.activeModule)
-
         if (this.activeModule.type === 'studio') {
           // Save current component if module type is studio
           this.$store.commit('campaign/setCurrentComponent', {
@@ -218,10 +204,9 @@
 
         this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
-        console.log('e.newIndex', e.newIndex)
         
       },
-      move(moduleId) {
+      remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
       },
       save() {
