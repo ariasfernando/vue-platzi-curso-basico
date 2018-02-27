@@ -96,7 +96,7 @@ export default {
     },
     onTogglePxWidth() {
       // set isPxWidth
-      let isPxWidth = !this.getValue("isPxWidth");
+      let isPxWidth = !this.isPxWidth;
       // set width
       let width = this.imageSizeSettings[0].value;
       if (!isPxWidth) {
