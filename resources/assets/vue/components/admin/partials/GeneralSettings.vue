@@ -7,14 +7,19 @@
 
     <b-collapse id="module-settings-left" visible accordion="module-settings-accordion">
       <b-card class="control" >
-        <div class="row module-name" :class="{'has-error': errors.has('name') }">
-          <input :value="module.name"
-                 :class="{'input': true, 'is-danger': errors.has('name') }"
-                 v-validate.initial="'required'"
-                 name="name"
-                 type="text"
-                 placeholder="Module name"
-                 @input="updateName">
+        <div class="form-group row module-name" :class="{'has-error': errors.has('name') }">
+          <div class="field-name">
+            <div class="col-sm-12 control-label">
+              <el-input
+                :value="module.name"
+                :class="{'input': true, 'is-danger': errors.has('name') }"
+                v-validate.initial="'required'"
+                name="name"
+                placeholder="Module name"
+                @input="updateName"
+                size="mini"></el-input>
+            </div>
+          </div>
         </div>
         <div class="row">
           <label class="col-sm-6 control-label" for="set-column">Columns</label>
@@ -49,15 +54,15 @@
           <div v-if="!generalSetting.group" >
             <label class="col-xs-6 control-label" :for="generalSetting.name">{{ generalSetting.label }}</label>
             <!-- Input Text -->
-              <input v-if="generalSetting.type === 'text'"
-                     :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
-                     :name="generalSetting.name"
-                     :placeholder="generalSetting.label"
-                     v-model="generalSetting.value"
-                     type="text"
-                     v-validate="'required'"
-                     @change="saveModuleStyle">
-              
+              <input
+                v-if="generalSetting.type === 'text'"
+                :class="{'input': true, 'is-danger': errors.has(generalSetting.name) }"
+                :name="generalSetting.name"
+                :placeholder="generalSetting.label"
+                v-model="generalSetting.value"
+                type="text"
+                v-validate="'required'"
+                @change="saveModuleStyle">
             <!-- Span General Error -->
             <span v-show="errors.has(generalSetting.name)"
                     class="help is-danger">{{ errors.first(generalSetting.name) }}

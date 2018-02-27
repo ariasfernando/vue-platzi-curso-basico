@@ -8,19 +8,19 @@ function dividerDefault() {
       // Border Top
       borderTopWidth: '10px',
       borderTopStyle: 'solid',
-      borderTopColor: '#ff0000',
+      borderTopColor: '',
       // Border Right
       borderRightWidth: '10px',
       borderRightStyle: 'none',
-      borderRightColor: '#000000',
+      borderRightColor: '',
       // Border Bottom
       borderBottomWidth: '10px',
       borderBottomStyle: 'none',
-      borderBottomColor: '#000000',
+      borderBottomColor: '',
       // Border Left
       borderLeftWidth: '10px',
       borderLeftStyle: 'none',
-      borderLeftColor: '#000000',
+      borderLeftColor: '',
     },
     attribute: {
       align: 'center',

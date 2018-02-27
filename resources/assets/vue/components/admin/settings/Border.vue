@@ -8,7 +8,7 @@
         class="float-left margin-right"
       ></el-color-picker>
       <el-select
-      :placeholder="`${label} style`"
+      :placeholder="`Border ${this.side} style`"
       v-model="style"
       size="mini"
       class="float-left margin-right"
@@ -46,9 +46,8 @@ export default {
   data() {
     return {
       min: 0,
-      label: `Border ${this.side}`,
-      name: `border${this.side}`,
       optionsBorderStyle: [
+        { value: "none", label: "none" },
         { value: "solid", label: "solid" },
         { value: "inherit", label: "inherit" },
         { value: "initial", label: "initial" },
@@ -57,8 +56,7 @@ export default {
         { value: "double", label: "double" },
         { value: "dashed", label: "dashed" },
         { value: "dotted", label: "dotted" },
-        { value: "hidden", label: "hidden" },
-        { value: "none", label: "none" }
+        { value: "hidden", label: "hidden" }
       ]
     };
   },
@@ -70,6 +68,22 @@ export default {
       },
       set(width) {
         width = isNaN(width) || width < this.min ? this.min : width;
+        if (width > 0) {
+          if (this.style == "none") {
+            this.style = "solid";
+          }
+          if (this.color == "") {
+            this.color = "#000000";
+          }
+        }else{
+          if (this.style !== "none") {
+            this.style = "none";
+          }
+          if (this.color !== "") {
+            this.color = "";
+          }
+
+        }
         this.$emit("style-setting-updated", {
           name: `border${this.side}Width`,
           value: `${width}px`

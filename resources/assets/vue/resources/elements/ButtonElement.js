@@ -20,19 +20,19 @@ function buttonDefault() {
       // Border Top
       borderTopWidth: '0px',
       borderTopStyle: 'none',
-      borderTopColor: '#000000',
+      borderTopColor: '',
       // Border Right
       borderRightWidth: '0px',
       borderRightStyle: 'none',
-      borderRightColor: '#000000',
+      borderRightColor: '',
       // Border Bottom
       borderBottomWidth: '0px',
       borderBottomStyle: 'none',
-      borderBottomColor: '#000000',
+      borderBottomColor: '',
       // Border Left
       borderLeftWidth: '0px',
       borderLeftStyle: 'none',
-      borderLeftColor: '#000000',
+      borderLeftColor: '',
     },
     attribute: {
       width: '150',

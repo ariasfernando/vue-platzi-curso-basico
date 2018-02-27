@@ -422,313 +422,60 @@
       table-layout: fixed;
     }
 
-    .left-bar {
-      .row{
-        &:extend(.row-style-left);
-      }
-
+    .right-bar,.left-bar {
       width: 260px;
-      color: #666666;
       display: block;
       float: left;
       padding: 0px;
-      background-color: #FFFFFF;
-
-      button[aria-expanded="false"]{
-       opacity: 0.5;
-       transition: all 0.3s linear;
-
-       &:hover{
-        opacity: 1;
-       }
-      }
-
-      li.ghost-component-menu{
-        outline: 1px dashed @focus;
-        
-        &:before{
-          content: '';
-        }
-      }
-
-      button[aria-expanded="true"]{
-       opacity: 1;
-
-       p{
-        font-weight: 600!important;
-       }
-       i{
-          transform: rotate(180deg);
-        }
-      }
-
-      .field-border{
-
-        .row:nth-child(2){
-          width: 28%;
-        }
-        .row:nth-child(3){
-          width: 33%;
-        }
-        .row:nth-child(4){
-          width: 33%;
-        }
-
-      }
-
-      select{
-          height: 22px;
-          font-size: 11px;
+      .btn.btn-secondary.btn-block{
+        &:hover,
+        &:visited,
+        &:focus,
+        &:active,
+        &:active:focus {
           color: #666666;
-          border: none;
-          background: #f4f4f4;
-          box-shadow: none;
-          font-weight: 300;
-      }
-
-      label{
-        text-align: left;
-        color: #666666;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        font-weight: 300;
-        padding-right: 0px;
-      }
-
-      label.vue-js-switch{
-        float: right;
-      }
-
-      .text-no-columns{
-        font-size: 13px;
-        font-weight: 300;
-      }
-
-      .tabs{
-        margin-top: 15px;
-      }
-
-      .fields {
-        span.is-danger{
-          display: none!important;
         }
-
-        .card-block .row{
-          margin-bottom: 10px;
-
-          .row{
-            margin-bottom: 0px;
-          }
-        }
-
+      }
         .fa.pull-left{
           margin-right: 12px; 
         }
 
-        button.module-settings-item{
-          line-height: 13px;
-          box-shadow: none;
-          border-bottom: 1px solid #F0F0F0;
-          border-top: 0;
-          border-left: 0;
-          border-right: 0;
-          padding: 15px 10px 13px 10px; 
+      button.module-settings-item {
+        line-height: 13px;
+        box-shadow: none;
+        border-bottom: 1px solid #f0f0f0;
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        padding: 15px 10px 13px 10px;
 
-          &:hover, &:visited,
-          &:focus, &:active{
-            color: #666666;
-            outline: none;
-          }
-          p{
-            font-size: 13px;
-            margin: 0;
-            padding: 0;
-            font-weight: 300;
-
-            i{
-              color: #666666;
-              vertical-align: baseline;
-              transform: rotate(0deg);
-              margin-right: 2px;
-            }
-          }
-          i{
-            color:#CCCCCC;
-            line-height: 12px;
-          }
-        }
-        
-        #module-settings-left{
-          .input-group-setting{
-            margin-right: -12px !important;
-          }
-          .module-name{
-            text-align: center;  
-            input{
-              font-size: 14px;
-              padding: 15px 7px;
-              margin-bottom: 10px;
-              width: 90%;
-              height: 40px;
-            }
-          }  
-        }
-
-        #column-settings{
-          .input-group-setting{
-            margin-right: -12px !important;
-          }
-        }
-
-        #element{
-          border-top: 1px solid #FFFFFF;
-          margin-top: -1px;
-        }
-
-        #column-settings{
-          border-top: 1px solid #FFFFFF;
-          margin-top: -1px;
-
-          input{
-            text-align: left;
-            border-radius: 2px;
-            background: #f4f4f4;
-            border: 0px;
-            padding: 7px;
-            height: 22px;
-            font-size: 11px;
-            color: #666666;
-            
-          }
-
-          .card-header{
-            padding-bottom: 20px;
-
-            ul{
-              margin-left: -10px;
-              margin-right: -10px;
-              border-bottom: 1px solid #DDDDDD;
-
-              .nav-item{
-                border-top: 1px solid #DDDDDD;
-                border-left: 1px solid #DDDDDD;
-                margin-bottom: -2px;
-
-                &:first-child{
-                  margin-left: 10px;
-                }
-
-                &:last-of-type{
-                  border-right: 1px solid #DDDDDD;
-                }
-                .nav-link{
-                  margin-right:0;
-                  padding: 4px 7px;
-                  border: 0;
-                  border-radius:0;
-                  font-weight: 300;
-                  color: #666666;
-                  &.active{
-                    border-bottom: 2px solid @focus;
-                    background: @focus-light;
-                  }
-                  &:focus{
-                    background-color: transparent;
-                  }
-                  &:hover{
-                    background-color:@focus-light;
-                  }
-                } 
-              }
-            }
-          }
-        }
-
-        input:focus {
+        &:hover,
+        &:visited,
+        &:focus,
+        &:active,
+        &:active:focus {
+          color: #666666;
           outline: none;
-          background: #e4e4e4;
+          box-shadow: none;
         }
-
-        .control {
-          border-bottom: 1px solid #f0f0f0;
-          padding: 15px 10px 15px 12px;
-          display: table;
-
-          .module-name{
-            padding-bottom: 7px;
-          }
-
-          .row.field-undefined .col-sm-3{
-            width: 67px;
-
-            input{
-              width: 100%;
-            }
-          }
-
-          input[name="paddingTop"],
-          input[name="paddingLeft"],
-          input[name="paddingBottom"],
-          input[name="paddingRight"]{
-            width: 32px;
-          }
-
-          .field-paddingTop input,
-          .field-paddingLeft input,
-          .field-paddingBottom input,
-          .field-paddingRight input{
-            width: 100%;
-          }
-
-        }
-
-        .list-inline{
+        p {
+          font-size: 13px;
+          margin: 0;
           padding: 0;
-          margin:0;
+          font-weight: 300;
 
-          li {
-            border: 1px solid #ccc;
-            padding: 2px 24px;
-            cursor: pointer;
-
-            &.selected {
-              border: 1px solid @focus;
-            }
+          i {
+            color: #666666;
+            vertical-align: baseline !important;
+            transform: rotate(0deg);
+            margin-right: 2px;
           }
-        } 
-      }
-
-      .content-colorpicker{
-        .sketch-picker{
-          position: absolute!important;
-          display: none;
-          padding: 30px 10px 0px 10px;
-          z-index: 300;
         }
-        .icon-remove{
-          color: #999999;
-          background: #FFFFFF;
-          border: 1px solid #CCCCCC;
-          margin-top: -20px;
-          margin-left: -20px;
-          padding-top: 4px;
-        }
-        .checkbox-transparent{
-          position: absolute!important;
-          display: none;
-          left: 25px;
-          top: 30px;
-          width: 195px;
-          z-index: 400;
-          font-size: 11px;
-
-          input{
-            margin: 0!important;
-            height: 19px!important;
-          } 
+        i {
+          color: #cccccc;
+          line-height: 12px !important;
         }
       }
-
       .components-list {
         padding: 0;
         margin: 0;
@@ -773,36 +520,7 @@
           }
         }
       }
-
-      .json-preview {
-        margin-top: 25px;
-
-        pre {
-          font-size: 50px;
-          font-family: Monaco;
-        }
-      }
-    }
-
-    .right-bar {
-      width: 260px;
-      display: block;
-      float: left;
-      padding: 0px;
-
-      .field-border{
-
-        .row:nth-child(2){
-          width: 37%;
-        }
-        .row:nth-child(3){
-          width: 23%;
-        }
-        .row:nth-child(4){
-          width: 34%;
-        }
-
-      }
+      
 
       .form-group{
         margin-bottom: 10px;

@@ -17,8 +17,8 @@
         >
           <td
             width="100%"
-            :style="styles"
-            :bgcolor="column.style.backgroundColor" 
+            :style="[column.styles, {'background-color' : column.attribute.bgcolor}]"
+            :bgcolor="column.attribute.bgcolor"
             :valign="column.attribute.valign"
             :align="component.attribute.align || 'center'"
           >

@@ -2,7 +2,7 @@
   <div class="component-settings" v-if="ready">
 
     <!-- START: Style -->
-    <b-btn block v-b-toggle.style class="module-settings-item-right">
+    <b-btn block v-b-toggle.style class="module-settings-item">
       <p class="pull-left"><i class="glyphicon glyphicon-pencil"></i> STYLES</p>
       <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
     </b-btn>
@@ -175,7 +175,7 @@
     <!-- END: Style -->
 
     <!-- START: Funcionalities -->
-    <b-btn block v-b-toggle.funcionalities class="module-settings-item-right">
+    <b-btn block v-b-toggle.funcionalities class="module-settings-item">
       <p class="pull-left"><i class="glyphicon glyphicon-tasks"></i> FUNCTIONALITIES</p>
       <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
     </b-btn>
@@ -466,42 +466,6 @@
   }
 }
 
-button.module-settings-item-right {
-  line-height: 13px;
-  box-shadow: none;
-  border-bottom: 1px solid #f0f0f0;
-  border-top: 0;
-  border-left: 0;
-  border-right: 0;
-  padding: 15px 10px 13px 10px;
-
-  &:hover,
-  &:visited,
-  &:focus,
-  &:active,
-  &:active:focus {
-    color: #666666;
-    outline: none;
-    box-shadow: none;
-  }
-  p {
-    font-size: 13px;
-    margin: 0;
-    padding: 0;
-    font-weight: 300;
-
-    i {
-      color: #666666;
-      vertical-align: baseline !important;
-      transform: rotate(0deg);
-      margin-right: 2px;
-    }
-  }
-  i {
-    color: #cccccc;
-    line-height: 12px !important;
-  }
-}
 button[aria-expanded="false"] {
   opacity: 0.5;
   transition: all 0.3s linear;

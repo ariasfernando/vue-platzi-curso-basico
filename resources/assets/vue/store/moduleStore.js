@@ -99,6 +99,18 @@ const mutations = {
     const key = _.findKey(column.settings, { name: 'width' });
     column.settings[key].value = `${data.width}%`;
   },
+  saveColumnStyle(state, data) {
+    const styles = state.module.structure.columns[data.colId].style;
+    const newStyles = {};
+    newStyles[data.property] = data.value;
+    _.merge(styles, newStyles);
+  },
+  saveColumnAttribute(state, data) {
+    const attribute = state.module.structure.columns[data.colId].attribute;
+    const newAttribute = {};
+    newAttribute[data.property] = data.value;
+    _.merge(attribute, newAttribute);
+  },
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);
   },
@@ -130,8 +142,10 @@ const mutations = {
     _.merge(style, newStyle);
   },
   saveComponentStyleOption(state, data) {
-    const component = state.module.structure.columns[data.columnId].components[data.componentId];
-    component.styleOptions[data.property] = data.value;
+    const styleOptions = state.module.structure.columns[data.columnId].components[data.componentId].styleOptions;
+    const newStyleOptions = {};
+    newStyleOptions[data.property] = data.value;
+    _.merge(styleOptions, newStyleOptions);
   },
   saveComponentAttribute(state, data) {
     const attribute = state.module.structure.columns[data.columnId].components[data.componentId].attribute;

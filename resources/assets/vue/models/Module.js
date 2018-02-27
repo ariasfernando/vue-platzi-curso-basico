@@ -42,19 +42,19 @@ function Module(data = {}) {
       // Border Top
       borderTopWidth: style.borderTopWidth || '0px',
       borderTopStyle: style.borderTopStyle || 'none',
-      borderTopColor: style.borderTopColor || '#000000',
+      borderTopColor: style.borderTopColor || 'transparent',
       // Border Right
       borderRightWidth: style.borderRightWidth || '0px',
       borderRightStyle: style.borderRightStyle || 'none',
-      borderRightColor: style.borderRightColor || '#000000',
+      borderRightColor: style.borderRightColor || 'transparent',
       // Border Bottom
       borderBottomWidth: style.borderBottomWidth || '0px',
       borderBottomStyle: style.borderBottomStyle || 'none',
-      borderBottomColor: style.borderBottomColor || '#000000',
+      borderBottomColor: style.borderBottomColor || 'transparent',
       // Border Left
       borderLeftWidth: style.borderLeftWidth || '0px',
       borderLeftStyle: style.borderLeftStyle || 'none',
-      borderLeftColor: style.borderLeftColor || '#000000',
+      borderLeftColor: style.borderLeftColor || 'transparent',
     },
     componentSettings: ['background-color', 'padding', 'border-group'],
     settings: [],

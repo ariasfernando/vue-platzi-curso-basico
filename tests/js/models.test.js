@@ -51,6 +51,7 @@ describe('== Models ==', () => {
           'style',
           'attribute',
           'settings',
+          'componentSettings',
           'plugins',
           'components',
         ]);
