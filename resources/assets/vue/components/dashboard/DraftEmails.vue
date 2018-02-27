@@ -72,7 +72,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="text-right actions icons">
+            <td class="text-left actions icons">
               <a href="#"
                 @click.prevent="goProof(campaign.proof_token)"
                 class="proof"
@@ -90,7 +90,7 @@
                 href="#"
                 data-tooltip="Send for review"
                 v-if="proof.allow && proof.status"
-                ><i class="glyphicon glyphicon-search"></i></a>
+                ><i class="glyphicon glyphicon-check"></i></a>
 
               <a
                 :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"

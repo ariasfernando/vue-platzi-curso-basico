@@ -74,7 +74,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="text-right actions icons">
+            <td class="text-left actions icons">
                 <a
                   href="#"
                   class="lock-campaign"
