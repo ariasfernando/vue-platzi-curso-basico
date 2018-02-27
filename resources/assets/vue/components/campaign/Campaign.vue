@@ -117,6 +117,13 @@
     },
     methods: {
       loadCampaign() {
+
+        /*
+         * Replace url when creating a new campaign to avoid redirect.
+         * Add necessary logic if using more parameters in the future.
+         */
+        window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
+
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
           this.campaignReady = true;
