@@ -1,4 +1,4 @@
-#emailCanvas{
+#emailCanvas {
   .stx-edit-text{
     a{
       &:hover,
@@ -15,8 +15,24 @@
         opacity: 0.7;
     }
   }
-  .stx-show-error{
-    .default-module-error{
+
+  .stx-module-wrapper-active {
+    .stx-show-error {
+      .default-module-error {
+        display: none!important;
+      }
+    }  
+  }
+  
+  .stx-hide-element{
+    background: #808080;
+    opacity: 0.5;
+  }
+}
+
+.campaign-completed {
+  .stx-show-error {
+    .default-module-error {
       pointer-events: none;
       position: absolute;
       background: none;
@@ -25,12 +41,8 @@
       width: 100%;
       height: 100%;
       display: block;
-      outline: 2px solid red;
+      outline: 1px solid red;
       outline-offset: -2px;
     }
-  } 
-  .stx-hide-element{
-    background: #808080;
-    opacity: 0.5;
   }
 }

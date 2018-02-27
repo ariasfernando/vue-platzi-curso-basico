@@ -144,6 +144,9 @@
       moduleErrors() {
         return this.$store.getters["campaign/moduleErrors"];
       },
+      fieldErrors() {
+        return this.$store.getters["campaign/fieldErrors"];
+      },
       msoStartingComment() {
         return "[if gte mso 9]>" +
           "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center'>" +
