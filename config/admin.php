@@ -13,7 +13,7 @@ $default = [
     | Admin should only be allowed to have this amount of users.
     |
     */
-    "users_limit" => env('APP_USER_LIMIT') ?? 20,
+    "users_limit" => env('APP_USER_LIMIT') ?? 1000,
 
     /*
     |--------------------------------------------------------------------------

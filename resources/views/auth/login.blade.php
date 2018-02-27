@@ -12,7 +12,7 @@
         <div class="text-center">
             <a href="/" class="stensul-logo open-sans" target="_blank">stensul</a>
             <h4>
-                {{$is_admin or false ? 'Administration Panel' : 'Email Creator'}}
+                {{$is_admin or false ? 'Administration Panel' : 'Email Creation Platform'}}
             </h4>
         </div>
 
@@ -55,7 +55,7 @@
                 <div class="form-group submit-row">
                     <div class="text-center">
                         <button type="submit" class="btn">Login</button>
-                        @if ( env('USER_REGISTRATION', true) )
+                        @if ( env('USER_REGISTRATION', false) )
                             <a href="{{ url('/auth/register') }}" class="register">Don't have a user? Register here.</a>
                         @endif
                     </div>

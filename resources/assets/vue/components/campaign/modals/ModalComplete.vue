@@ -7,7 +7,7 @@
             <button type="button" class="close hidden" @click="close"><span>&times;</span></button>
           </slot>
 
-          <h4>Processed Campaign</h4>
+          <h4>Finished Email</h4>
 
           <div class="modal-body">
             <slot name="body">
@@ -68,17 +68,28 @@
         return this.$_app.config.baseUrl + '/campaign/public-path/' + this.campaign.campaign_id;
       },
     },
-    watch:{
-      campaign(value) {
-        this.html = value.campaign_data.body_html;
-      },
-    },
     data () {
       return {
         plainText: '',
         textareaType: 'normal_html',
         html: '',
       }
+    },
+    watch: {
+      modalComplete(val) {
+        if (val) {
+          // Hide loader
+          setTimeout(() => {
+            this.$store.commit("global/setLoader", false);
+          }, 250);
+        }
+      },
+      campaign: {
+        handler: function(value) {
+          this.html = value.campaign_data.body_html;
+        },
+        deep: true
+      },
     },
     methods: {
       getPlainText() {

@@ -228,14 +228,14 @@ Application.utils = {
             compareTo: "The field not match.",
             minLength: "The field minimum size is [min].",
             maxLength: "The best practice is to limit preheaders to 50 characters.",
-            url: "Please, enter a valid url.",
+            url: "Please, enter a valid URL.",
             invalidFileType: "Please, upload a valid file.",
             invalidFileSize: "The file exceeds the size limit.",
             validateUrl: {
                 error: "The destination for this URL does not appear to exist. Please doublecheck the link. If this is expected, please ignore.",
-                success: "The url exists.",
-                fail: "The system cannot validate if the url exists. Please, try again.",
-                verifying: "Verifying if the given url exists..."
+                success: "The URL exists.",
+                fail: "The system cannot validate if the URL exists. Please, try again.",
+                verifying: "Verifying if the given URL exists..."
             }
         },
         // Validate if a field is filled.

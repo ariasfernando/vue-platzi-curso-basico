@@ -23,8 +23,7 @@ abstract class Controller extends BaseController
      */
     protected function renderView($view, $params = array(), $use_force = true)
     {
-        $params['params'] = (isset($params['params']))? $params['params'] : [];
-        $view_render = Helper::validateView($view, $use_force);
-        return view($view_render)->with($params);
+        $params['params'] = isset($params['params']) ? $params['params'] : [];
+        return view($view)->with($params);
     }
 }
