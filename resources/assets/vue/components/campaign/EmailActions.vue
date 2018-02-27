@@ -201,6 +201,8 @@
         // Show Loader
         this.$store.commit("global/setLoader", true);
 
+        this.$_app.utils.hackMediaQuery('.section-canvas-container');
+
         // Obtain current html
         const cleanHtml = campaignCleaner.clean('.section-canvas-container');
 

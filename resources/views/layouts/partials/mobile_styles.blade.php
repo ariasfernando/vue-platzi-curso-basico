@@ -29,5 +29,6 @@
                 }
             ?>
         @show
+        .st-hide-hack { display: none !important; }
     }
 @show
