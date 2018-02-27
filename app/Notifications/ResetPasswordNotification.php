@@ -11,15 +11,19 @@ class ResetPasswordNotification extends Notification
 {
     use Queueable;
 
+
+    protected $name;
+
     /**
      * Create a notification instance.
      *
      * @param  string  $token
      * @return void
      */
-    public function __construct($token)
+    public function __construct($token, $name)
     {
         $this->token = $token;
+        $this->name = $name;
     }
 
     /**
@@ -40,7 +44,7 @@ class ResetPasswordNotification extends Notification
     public function toMail()
     {
         return (new MailMessage)
-            ->view('emails.password', ['token' => $this->token]);
+            ->view('emails.password', ['token' => $this->token, 'name' => $this->name]);
     }
 
     /**

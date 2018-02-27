@@ -101,6 +101,16 @@
 		overflow: hidden;
 	}
 
+	.dash-code-option{
+		display: inline-block;
+		margin: 0px;
+
+		a{
+			font-weight: bold;
+			margin: 0px!important;
+		}
+	}
+
 	.dash-header{
 		background: @stensul-white;
 		height: 45px;
@@ -113,6 +123,7 @@
     	z-index: 2;
     	position: fixed;
     	top: 45px;
+    	min-width: 1280px;
 
     	.dash-tabs{
     		list-style-type: none;
@@ -156,6 +167,14 @@
 		top: 100px;
 		position: relative;
 		-ms-overflow-style: none;
+		min-width: 1280px;
+
+		.text-overflow{
+			text-overflow: ellipsis;
+			max-width: 160px;
+			overflow: hidden;
+			white-space: nowrap;
+		}
 	}
 
 	.no-gutters{

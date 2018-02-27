@@ -268,7 +268,7 @@
   }
 
   .applelinks{
-    color:#FFFFFF !important; 
+    color:#6b6b6b !important; 
     text-decoration: none !important; 
   }  
          
@@ -281,11 +281,12 @@
     background-color: #000000; 
   }
 
-  .stx-edit-text{
-    p{
+  p,ul,ol{
       margin: 0;
       padding: 0;
     }
+
+  .stx-edit-text{
 
     a:hover, 
     a:focus{
