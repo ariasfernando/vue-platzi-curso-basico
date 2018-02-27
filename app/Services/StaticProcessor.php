@@ -14,7 +14,7 @@ class StaticProcessor
 {
     protected $campaign;
 
-    private $files = [];
+    private $files = []; 
 
     /**
      * Constructor.
@@ -137,21 +137,39 @@ class StaticProcessor
         // Get assets used from the modules data.
         $modules_data = $from->modules_data;
         foreach ($from->modules_data as $key => $module) {
-            if (isset($module['structure']) && isset($module['structure']['columns'])) {
-                foreach ($module['structure']['columns'] as $column_key => $column_value) {
-                    if (isset($column_value['components'])) {
-                        foreach ($column_value['components'] as $component_key => $component_value) {
-                            if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
-                                if (isset($component_value['attribute'])
-                                    && isset($component_value['attribute']['placeholder'])) {
-                                    $filename = DS . 'images' . DS . trim($component_value['attribute']['placeholder']);
-                                    $assets[$filename] = null;
+         
+            // custom modules
+            if ($module['type'] == 'custom') {
+                if (isset($module['data']['imageSrc'])) {
+                    $filename = DS . 'images' . DS . trim($module['data']['imageSrc']);
+                    $assets[$filename] = null;
+                }
+
+                if (isset($module['data']['rawImage'])) {
+                    $filename = DS . 'images' . DS . trim($module['data']['rawImage']);
+                    $assets[$filename] = null;
+
+                }
+            }
+            // studio modules
+            else {
+                if (isset($module['structure']) && isset($module['structure']['columns'])) {
+                    foreach ($module['structure']['columns'] as $column_key => $column_value) {
+                        if (isset($column_value['components'])) {
+                            foreach ($column_value['components'] as $component_key => $component_value) {
+                                if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
+                                    if (isset($component_value['attribute'])
+                                        && isset($component_value['attribute']['placeholder'])) {
+                                        $filename = DS . 'images' . DS . trim($component_value['attribute']['placeholder']);
+                                        $assets[$filename] = null;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+
         }
 
         $assets = array_keys($assets);
@@ -206,19 +224,38 @@ class StaticProcessor
     {
         $modules_data = $this->getCampaign()->modules_data;
         foreach ($from->modules_data as $key => $module) {
-            if (isset($module['structure']) && isset($module['structure']['columns'])) {
-                foreach ($module['structure']['columns'] as $column_key => $column_value) {
-                    if (isset($column_value['components'])) {
-                        foreach ($column_value['components'] as $component_key => $component_value) {
-                            if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
-                                if (isset($component_value['attribute'])
-                                    && isset($component_value['attribute']['placeholder'])) {
-                                    $modules_data[$key]['structure']['columns'][$column_key]['components']
-                                        [$component_key]['attribute']['placeholder'] = str_replace(
-                                            $from->id,
-                                            $this->getCampaign()->id,
-                                            $component_value['attribute']['placeholder']
-                                        );
+
+            // custom modules
+            if ($module['type'] == 'custom') {
+                if (isset($module['data']['imageSrc'])) {
+                    $modules_data[$key]['data']['imageSrc'] = str_replace(
+                                                $from->id,
+                                                $this->getCampaign()->id,
+                                                $module['data']['imageSrc']);
+                }
+                if (isset($module['data']['rawImage'])) {
+                    $modules_data[$key]['data']['rawImage'] = str_replace(
+                                                $from->id,
+                                                $this->getCampaign()->id,
+                                                $module['data']['imageSrc']);
+                }
+            }
+            // studio modules
+            else {
+                if (isset($module['structure']) && isset($module['structure']['columns'])) {
+                    foreach ($module['structure']['columns'] as $column_key => $column_value) {
+                        if (isset($column_value['components'])) {
+                            foreach ($column_value['components'] as $component_key => $component_value) {
+                                if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
+                                    if (isset($component_value['attribute'])
+                                        && isset($component_value['attribute']['placeholder'])) {
+                                        $modules_data[$key]['structure']['columns'][$column_key]['components']
+                                            [$component_key]['attribute']['placeholder'] = str_replace(
+                                                $from->id,
+                                                $this->getCampaign()->id,
+                                                $component_value['attribute']['placeholder']
+                                            );
+                                    }
                                 }
                             }
                         }
