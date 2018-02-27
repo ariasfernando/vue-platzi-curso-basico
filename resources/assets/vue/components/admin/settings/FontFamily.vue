@@ -6,8 +6,8 @@
         class="width-full"
         multiple
         placeholder="Font Family"
-        v-model="fontFamilyData"
-        @change="saveValue"
+        :value="fontFamily"
+        v-model="fontFamily"
         size="mini"
         >
           <el-option
@@ -24,7 +24,6 @@
 
 <script>
 import _ from "lodash";
-import clone from "clone";
 import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
@@ -48,34 +47,24 @@ export default {
         });
 
         return options;
-      },
-      fontFamilyData: this.fontFamily
+      }
     };
   },
   mounted() {
     this.fontFamilyData = this.fontFamily;
   },
   computed: {
-    fontFamily() {
-      const component = this.module.structure
-        .columns[this.currentComponent.columnId]
-        .components[this.currentComponent.componentId];
+    fontFamily: {
+      get() {
+        if (!this.component.style.fontFamily) {
+          return [];
+        }
 
-      if (!component.style.fontFamily) {
-        return [];
+        return this.component.style.fontFamily.split(", ");
+      },
+      set(newValue) {
+        this.$emit("style-setting-updated", { name: this.name, value: newValue.join(", ") });
       }
-
-      return component.style.fontFamily.split(", ");
-    }
-  },
-  watch: {
-    fontFamily(value) {
-      this.fontFamilyData = value;
-    }
-  },
-  methods: {
-    saveValue(newValue) {
-      this.$emit("style-setting-updated", { name: this.name, value: newValue.join(", ") });
     }
   }
 };
