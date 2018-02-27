@@ -113,6 +113,8 @@ class DashboardController extends Controller
 
         if ($sort === 'library_name') {
             $sort = 'library';
+        } else if ($sort == 'campaign_name') {
+            $sort = 'lower_campaign_name';
         }
 
         $direction = strlen($request->input('direction')) ? $request->input('direction', 'updated_at') : 'desc';
@@ -215,6 +217,9 @@ class DashboardController extends Controller
             if ($favorite_type === "global") {
                 $campaigns->orderBy('favorite', 'desc');
                 $sort = strlen($request->input('sort')) ? $request->input('sort', 'updated_at') : 'updated_at';
+                if ($sort == 'campaign_name') {
+                    $sort = 'lower_campaign_name';
+                }
                 $direction = strlen($request->input('direction')) ? $request->input('direction', 'updated_at') : 'desc';
                 $campaigns->orderBy($sort, $direction);
             } elseif ($favorite_type === "user") {
@@ -236,6 +241,9 @@ class DashboardController extends Controller
                 });
                 if (strlen($request->input('sort'))) {
                     $sort = $request->input('sort', 'updated_at');
+                    if ($sort == 'campaign_name') {
+                        $sort = 'lower_campaign_name';
+                    }
                     if (!strlen($request->input('direction')) ||  $request->input('direction') == 'asc') {
                         $campaigns_array = $campaigns_array->sortBy($sort);
                     } else {
