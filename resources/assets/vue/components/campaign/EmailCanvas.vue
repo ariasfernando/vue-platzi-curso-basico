@@ -8,7 +8,7 @@
           <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;" :class="{ 'campaign-completed': campaignCompleted }">
               <draggable
                 id="emailCanvas"
-                :class="`stx-${buildingMode}-mode`"
+                :class="`stx-${buildingMode}-mode ${this.dragList.length === 0 ? 'empty': ''}`"
                 class="stx-email-canvas st-wrapper-table"
                 cellspacing="0"
                 cellpadding="0"
@@ -17,8 +17,11 @@
                 :width="templateWidth"
                 :options="options"
                 :element="'table'"
+                :move="onMove"
                 @add="onAdd"
-                @sort="onSort">
+                @sort="onSort"
+                @mouseover="onMouseOver()"
+                @mouseleave="onMouseLeave()">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
           </td>
@@ -171,6 +174,21 @@
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = "1";
       },
+      onMove (evt, originalEvent) {
+        const h = $(".section-canvas-email").height();
+        const target = $(".section-canvas-email");
+
+        let mousePosition = originalEvent.clientY - $(window).scrollTop();
+        let topRegion = 320;
+        let bottomRegion = h - topRegion;
+
+        // Scroll when user drag down
+        if(mousePosition < topRegion || mousePosition > bottomRegion){
+            let distance = originalEvent.clientY - h / 1.5;
+            distance = distance * 0.15; // <- velocity
+            $(target).scrollTop( distance + $(target).scrollTop());
+        }
+      },
       onSort(e){
         if (this.activeModule.type === 'studio') {
           // Save current component if module type is studio
@@ -185,17 +203,15 @@
           this.$store.commit('campaign/setCustomModule', e.newIndex);
           this.$store.commit('campaign/unsetCurrentComponent');
         }
-        
+
         this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
       },
-      onEnd (evt) {
-        // moduleId is a reactive prop, and it matches the index
-        const moduleId = evt.newIndex;
-        // Set active Module
-        this.$store.commit("campaign/setActiveModule", moduleId);
-        // Don't forget to remove the ghost DOM object when done dragging
-        document.getElementById('drag-image').remove();
+      onMouseOver () {
+        $("#emailCanvas").addClass("hovered");
+      },
+      onMouseLeave () {
+        $("#emailCanvas").removeClass("hovered");
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
@@ -258,6 +274,8 @@
   @focus: #69dac8;
   @focus-light: lighten(@focus, 30%);
   @hover: @focus-light;
+  @font-color: #999999;
+  @bg-color: #f0f0f0;
 
   /* COMMON STYLES */
   span{
@@ -340,6 +358,39 @@
       }
       *{
         display: none;
+      }
+    }
+
+    &.empty{
+      border: none;
+      color:@font-color;
+      background-color: @bg-color;
+      height: 65px;
+      font-family: 'Open Sans', Arial, serif;
+      font-size: 12px;
+
+      &:before, &::before{
+        content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
+        width: 100%;
+        display: table-cell;
+        vertical-align: middle;
+        opacity: 0.7;
+        text-align: center;
+        padding: 0 10px;
+      }
+
+      &.hovered{
+        &:before, &::before{
+          content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
+          width: 100%;
+          display: table-cell;
+          vertical-align: middle;
+          opacity: 1;
+          outline: 2px dashed @font-color;
+          outline-offset: -10px;
+          text-align: center;
+          padding: 0 10px;
+        }
       }
     }
   }
