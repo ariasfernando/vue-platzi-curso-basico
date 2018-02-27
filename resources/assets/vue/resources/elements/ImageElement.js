@@ -55,18 +55,6 @@ function imageDefault() {
         type: 'text',
         value: 'Image',
       },
-      {
-        link: 'attribute',
-        label: 'Target',
-        name: 'target',
-        type: 'select',
-        value: '_blank',
-        options: [
-          { value: '_blank', text: '_blank' },
-          { value: '_self', text: '_self' },
-          { value: '_top', text: '_top' },
-        ],
-      },
     ],
     plugins: {},
     data: {},

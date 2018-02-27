@@ -18,7 +18,7 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "BackgroundColor",
-  props: ["setting"],
+  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   data() {
     return {
@@ -28,7 +28,7 @@ export default {
   computed: {
     color: {
       get() {
-        return this.component.attribute[this.name] === "transparent" ? "" : this.component.attribute[this.name];
+        return this.element.attribute[this.name] === "transparent" ? "" : this.element.attribute[this.name];
       },
       set(color) {
         if (!Application.utils.validateHexVal(color)) {
