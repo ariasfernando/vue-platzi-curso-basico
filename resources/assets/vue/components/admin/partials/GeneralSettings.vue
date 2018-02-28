@@ -1,5 +1,5 @@
 <template>
-  <div class="form-horizontal">
+  <div class="form-horizontal height-custom">
     <b-btn block v-b-toggle.module-settings-left class="module-settings-item">
       <p class="pull-left"><i class="glyphicon glyphicon-cog"></i> GENERAL SETTINGS</p>
       <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
@@ -31,7 +31,7 @@
             ></el-input-number>
           </div>
         </div>
-        <div v-for="(settingGroup, groupKey) in module.structure.componentSettings" style="border: 1px solid #ccc; padding: 5px; margin: 5px 0;" :key="groupKey">
+        <div v-for="(settingGroup, groupKey) in module.structure.componentSettings" class="group-container" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
             v-on:attribute-setting-updated="attributeSettingUpdatedHandler"

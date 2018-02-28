@@ -1,6 +1,7 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
     <label class="half">Vertical align</label>
+    <div class="half-style-setting padding-top">
     <el-button plain size="mini" @click="changeAlignment('top')" class="fa fa-arrow-up" :class="{ active: valign === 'top' }"></el-button>
     <el-button plain size="mini" @click="changeAlignment('middle')" class="fa fa-minus" :class="{ active: valign === 'middle' }"></el-button>
     <el-button plain size="mini" @click="changeAlignment('bottom')" class="fa fa-arrow-down" :class="{ active: valign === 'bottom' }"></el-button>
@@ -54,10 +55,13 @@ export default {
 .el-button {
   width: 34px;
   padding: 4px 4px;
-  margin: 2.5px 9px 2.5px 3.5px;
-  height: 32px;
+  margin-right: 9px;
+  height: 26px;
   display: block;
   float: left;
+  &:last-of-type {
+    margin: 0;
+  }
 }
 .padding-zero {
   padding: 0;

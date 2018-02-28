@@ -127,7 +127,7 @@ button.el-button {
     margin-right: 15px;
   }
   .half-style-setting:nth-child(2n + 2) {
-    margin-left: 10px;
+    margin-left: 15px;
     margin-right: 0;
     padding-left: 0;
   }

@@ -17,7 +17,7 @@
             v-for="(column, key) in module.structure.columns"
           >
             <div class="form-horizontal">
-              <div v-for="(settingGroup, groupKey) in column.componentSettings" style="border: 1px solid #ccc; padding: 5px; margin: 5px 0;" :key="groupKey">
+              <div v-for="(settingGroup, groupKey) in column.componentSettings" class="group-container" :key="groupKey">
                 <component v-for="setting in settingGroup"
                   :is="'input-' + setting.type"
                   v-on:attribute-setting-updated="(eventData)=>attributeSettingUpdatedHandler(eventData, key)"

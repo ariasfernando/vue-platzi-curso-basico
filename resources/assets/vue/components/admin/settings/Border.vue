@@ -75,14 +75,13 @@ export default {
           if (this.color == "") {
             this.color = "#000000";
           }
-        }else{
+        } else {
           if (this.style !== "none") {
             this.style = "none";
           }
           if (this.color !== "") {
             this.color = "";
           }
-
         }
         this.$emit("style-setting-updated", {
           name: `border${this.side}Width`,
@@ -159,7 +158,11 @@ button.el-button {
   margin-right: 5px;
 }
 .el-input-number {
-  width: 64px;
+  width: 67px;
+}
+#edit-container .right-bar .form-group,
+#edit-container .left-bar .form-group {
+  margin-bottom: 0;
 }
 </style>
 <style lang="less" >

@@ -98,9 +98,6 @@ export default {
     color: #666666;
   }
 }
-.padding-zero{
-  padding: 0;
-}
 .el-input-number {
     width: 105px;
 }

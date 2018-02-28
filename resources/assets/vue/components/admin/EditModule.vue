@@ -425,12 +425,19 @@ export default {
     display: block;
     float: left;
     height: calc(~"100vh - 53px");
-    width: calc(~"100% - 520px");
-    min-width: 680px;
+    width: calc(~"100% - 540px");
+    min-width: 640px;
     overflow-x: hidden;
     overflow-y: visible;
   }
 
+  .group-container {
+    border: 1px solid #e6e6e6;
+    padding: 4px 6px;
+    margin: 5px 0;
+    background: #f9f9f9;
+    border-radius: 3px;
+  }
   .module-table {
     min-height: 100px;
   }
@@ -509,7 +516,9 @@ export default {
   }
   .right-bar,
   .left-bar {
-    width: 260px;
+    height: calc(~"100vh - 105px");
+    overflow: auto;
+    width: 270px;
     display: block;
     float: left;
     padding: 0px;
@@ -521,6 +530,7 @@ export default {
       font-size: 12px;
       width: 100%;
       float: left;
+      margin-bottom: 0;
       &.half {
         width: 50%;
       }
@@ -640,7 +650,7 @@ export default {
     }
 
     .card {
-      padding: 15px 10px 15px 10px;
+      padding: 0 8px 15px 8px;
       border-bottom: 1px solid #f0f0f0;
       border-top: 1px solid #ffffff;
       margin-top: -1px;
