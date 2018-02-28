@@ -1,7 +1,7 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <div class="col-xs-6" :key="'fontSize'">
-        <label class="clearfix control-label" :for="'fontSize'">Font Size</label>
+    <div class="half-style-setting">
+        <label class="control-label" :for="'fontSize'">Font Size</label>
         <el-input-number
           size="mini" 
           v-validate="'required'"
@@ -12,12 +12,12 @@
           :max="50"
         ></el-input-number>
         <span class='icon-block-line-height' @click="toggleLineHeight">
-          <i v-if="isBlockLineHeight" class="fa fa-arrow-right"></i>
-          <i v-else class="fa fa-minus"></i>
+          <i v-if="isBlockLineHeight" class="fa fa-lock"></i>
+          <i v-else class="fa fa-unlock"></i>
           </span>
     </div>
-    <div class="col-xs-6" :key="'lineHeight'">
-        <label class="clearfix control-label" :for="'lineHeight'">Line Height</label>
+    <div class="half-style-setting">
+        <label class="control-label" :for="'lineHeight'">Line Height</label>
         <el-input-number
           size="mini" 
           v-validate="'required'"
@@ -88,13 +88,20 @@ export default {
   margin-top: 0px;
   padding: 0px;
   height: 28px;
-  width: 36px;
+  width: 30px;
   text-align: center;
   padding-top: 4px;
   z-index: 2;
+  bottom: 0px;
   cursor: pointer;
   i {
     color: #666666;
   }
+}
+.padding-zero{
+  padding: 0;
+}
+.el-input-number {
+    width: 105px;
 }
 </style>

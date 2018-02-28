@@ -1,24 +1,22 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <label class="typo__label col-sm-12 control-label">Font Family</label>
-    <div class="col-sm-12">
-        <el-select
-        class="width-full"
-        multiple
-        placeholder="Font Family"
-        :value="fontFamily"
-        v-model="fontFamily"
-        size="mini"
+    <label class="control-label">Font Family</label>
+    <el-select
+    class="width-full"
+    multiple
+    placeholder="Font Family"
+    :value="fontFamily"
+    v-model="fontFamily"
+    size="mini"
+    >
+      <el-option
+        v-for="item in options()"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
         >
-          <el-option
-            v-for="item in options()"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            >
-          </el-option>
-        </el-select>
-    </div>
+      </el-option>
+    </el-select>
   </div>
 </template>
 
