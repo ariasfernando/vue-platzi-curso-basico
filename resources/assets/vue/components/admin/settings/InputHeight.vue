@@ -33,7 +33,7 @@ export default {
         return _.parseInt(this.component.style[this.name]);
       },
       set: function(newValue) {
-        this.$emit("style-setting-updated", { name: this.name, value: newValue });
+        this.$emit("style-setting-updated", { name: this.name, value: `${newValue}px` });
       }
     },
   }
