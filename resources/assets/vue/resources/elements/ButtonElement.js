@@ -49,7 +49,62 @@ function buttonDefault() {
       target: '_blank',
       buttonCaret: undefined,
     },
-    componentSettings: ['font-family', 'font-style', 'button-caret', 'font-weight', 'text-align', 'vertical-align', 'background-color', 'padding', 'font-color', 'border-group'],
+    componentSettings: [
+      [
+        {
+          name: 'font-family',
+          type: 'font-family',
+        },
+        {
+          name: 'font-style',
+          type: 'font-style',
+        },
+        {
+          name: 'letter-spacing',
+          type: 'letter-spacing',
+        },
+        {
+          name: 'font-weight',
+          type: 'font-weight',
+        },
+      ],
+      [
+        {
+          name: 'text-align',
+          type: 'text-align',
+        },
+        {
+          name: 'vertical-align',
+          type: 'vertical-align',
+        },
+      ],
+      [
+        {
+          name: 'button-caret',
+          type: 'button-caret',
+        },
+      ],
+      [
+        {
+          name: 'background-color',
+          type: 'background-color',
+        },
+        {
+          name: 'font-color',
+          type: 'font-color',
+        },
+      ],
+      [
+        {
+          name: 'padding',
+          type: 'padding',
+        },
+        {
+          name: 'border-group',
+          type: 'border-group',
+        },
+      ],
+    ],
     settings: [
       {
         link: 'attribute',

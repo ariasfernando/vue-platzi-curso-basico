@@ -6,19 +6,19 @@ function dividerDefault() {
       height: '5px',
       width: '100%',
       // Border Top
-      borderTopWidth: '10px',
-      borderTopStyle: 'solid',
+      borderTopWidth: '0',
+      borderTopStyle: 'none',
       borderTopColor: '',
       // Border Right
-      borderRightWidth: '10px',
+      borderRightWidth: '0',
       borderRightStyle: 'none',
       borderRightColor: '',
       // Border Bottom
-      borderBottomWidth: '10px',
+      borderBottomWidth: '0',
       borderBottomStyle: 'none',
       borderBottomColor: '',
       // Border Left
-      borderLeftWidth: '10px',
+      borderLeftWidth: '0',
       borderLeftStyle: 'none',
       borderLeftColor: '',
     },
@@ -28,7 +28,24 @@ function dividerDefault() {
       width: '100%',
       hideElement: false,
     },
-    componentSettings: ['input-height', 'background-color', 'border-group'],
+    componentSettings: [
+      [
+        {
+          name: 'input-height',
+          type: 'input-height',
+        },
+      ],
+      [
+        {
+          name: 'background-color',
+          type: 'background-color',
+        },
+        {
+          name: 'border-group',
+          type: 'border-group',
+        },
+      ],
+    ],
     settings: [],
     plugins: {},
     data: {},

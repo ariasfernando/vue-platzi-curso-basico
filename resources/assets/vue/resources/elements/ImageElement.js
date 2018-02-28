@@ -25,15 +25,37 @@ function imageDefault() {
       height: 'auto',
       hideElement: false,
     },
-    componentSettings: ['image-size', 'text-align', 'vertical-align', 'background-color', 'padding'],
+    componentSettings: [
+      [
+        {
+          name: 'image-size',
+          type: 'image-size',
+        },
+      ],
+      [
+        {
+          name: 'text-align',
+          type: 'text-align',
+        },
+        {
+          name: 'vertical-align',
+          type: 'vertical-align',
+        },
+      ],
+      [
+        {
+          name: 'background-color',
+          type: 'background-color',
+        },
+      ],
+      [
+        {
+          name: 'padding',
+          type: 'padding',
+        },
+      ],
+    ],
     settings: [
-      {
-        link: 'attribute',
-        label: 'Select an image',
-        name: 'placeholder',
-        type: 'file',
-        value: 'default/placeholder-square.jpg',
-      },
       {
         link: 'attribute',
         label: 'Default URL',

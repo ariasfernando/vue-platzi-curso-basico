@@ -10,10 +10,10 @@ function textDefault() {
       fontWeight: 'normal',
       lineHeight: '16px',
       letterSpacing: 'normal',
-      paddingTop: '0px',
-      paddingBottom: '0px',
-      paddingRight: '0px',
-      paddingLeft: '0px',
+      paddingTop: '5px',
+      paddingBottom: '5px',
+      paddingRight: '5px',
+      paddingLeft: '5px',
       color: '#000000',
     },
     styleOptions: {
@@ -27,7 +27,48 @@ function textDefault() {
       bgcolor: 'transparent',
       hideElement: false,
     },
-    componentSettings: ['font-family', 'font-style', 'font-weight', 'text-align', 'background-color', 'letter-spacing', 'font-color', 'padding'],
+    componentSettings: [
+      [
+        {
+          name: 'font-family',
+          type: 'font-family',
+        },
+      ],
+      [
+        {
+          name: 'font-style',
+          type: 'font-style',
+        },
+        {
+          name: 'letter-spacing',
+          type: 'letter-spacing',
+        },
+        {
+          name: 'font-weight',
+          type: 'font-weight',
+        },
+        {
+          name: 'text-align',
+          type: 'text-align',
+        },
+      ],
+      [
+        {
+          name: 'background-color',
+          type: 'background-color',
+        },
+        {
+          name: 'font-color',
+          type: 'font-color',
+        },
+      ],
+      [
+        {
+          name: 'padding',
+          type: 'padding',
+        },
+      ],
+    ],
     settings: {},
     plugins: {},
   };

@@ -17,7 +17,22 @@ function separatorDefault() {
       width: '100%',
       hideElement: false,
     },
-    componentSettings: ['input-height', 'background-color', 'padding'],
+    componentSettings: [
+      [
+        {
+          name: 'input-height',
+          type: 'input-height',
+        },
+        {
+          name: 'background-color',
+          type: 'background-color',
+        },
+        {
+          name: 'padding',
+          type: 'padding',
+        },
+      ],
+    ],
     settings: [
       {
         link: 'style',

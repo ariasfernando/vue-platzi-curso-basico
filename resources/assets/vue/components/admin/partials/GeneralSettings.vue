@@ -31,15 +31,23 @@
             ></el-input-number>
           </div>
         </div>
-          <component
-            v-for="setting in module.structure.componentSettings"
-            :is="'input-' + setting"
-            @attribute-setting-updated="attributeSettingUpdatedHandler"
-            @style-setting-updated="styleSettingUpdatedHandler"
-            :setting="setting"
+        <div v-for="(settingGroup, groupKey) in module.structure.componentSettings" style="border: 1px solid #ccc; padding: 5px; margin: 5px 0;" :key="groupKey">
+          <component v-for="setting in settingGroup"
+            :is="'input-' + setting.type"
+            v-on:attribute-setting-updated="attributeSettingUpdatedHandler"
+            v-on:style-setting-updated="styleSettingUpdatedHandler"
+            :setting="setting.type"
+            :name="setting.name"
+            :type="setting.type"
+            :link="setting.link"
+            :label="setting.label"
+            :default-value="setting.value"
+            :min-value="setting.minValue"
+            :max-value="setting.maxValue"
             :element="module.structure"
-            :key="setting">
+            :key="setting.name">
           </component>
+        </div>
         <div class="row"
              :class="'field-' + generalSetting.name"
              v-for="(generalSetting, keyGeneral) in module.structure.settings"
@@ -244,7 +252,7 @@ export default {
       });
     },
     saveModuleAttributeByEvent(e) {
-      this.saveModuleAttributee(e.target.name, e.target.value);
+      this.saveModuleAttribute(e.target.name, e.target.value);
     },
     saveModuleAttribute(name, value) {
       this.$store.commit("module/saveModuleAttribute", {

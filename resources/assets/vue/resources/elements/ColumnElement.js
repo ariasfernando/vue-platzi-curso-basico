@@ -29,16 +29,36 @@ function columnDefault() {
       bgcolor: '',
       hideElement: false,
     },
-    componentSettings: ['background-color', 'padding', 'border-group'],
-    settings: [
-      {
-        link: 'attribute',
-        label: 'Width',
-        name: 'width',
-        type: 'text',
-        value: '100%',
-      },
+    componentSettings: [
+      [
+        {
+          name: 'background-color',
+          type: 'background-color',
+        },
+      ],
+      [
+        {
+          name: 'padding',
+          type: 'padding',
+        },
+        {
+          name: 'border-group',
+          type: 'border-group',
+        },
+      ],
+      [
+        {
+          link: 'attribute',
+          label: 'Width',
+          name: 'width',
+          type: 'width',
+          value: '100%',
+          minValue: 1,
+          maxValue: 100,
+        },
+      ],
     ],
+    settings: [],
     components: [],
     plugins: {},
   };

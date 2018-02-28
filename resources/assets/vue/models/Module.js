@@ -56,7 +56,24 @@ function Module(data = {}) {
       borderLeftStyle: style.borderLeftStyle || 'none',
       borderLeftColor: style.borderLeftColor || 'transparent',
     },
-    componentSettings: ['background-color', 'padding', 'border-group'],
+    componentSettings: [
+      [
+        {
+          name: 'background-color',
+          type: 'background-color',
+        },
+      ],
+      [
+        {
+          name: 'padding',
+          type: 'padding',
+        },
+        {
+          name: 'border-group',
+          type: 'border-group',
+        },
+      ],
+    ],
     settings: [],
 
     columns: data.structure && data.structure.columns ? data.structure.columns : [],

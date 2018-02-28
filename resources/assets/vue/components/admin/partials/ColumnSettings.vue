@@ -17,16 +17,23 @@
             v-for="(column, key) in module.structure.columns"
           >
             <div class="form-horizontal">
-              <template v-for="setting in column.componentSettings" >
-                <component
-                  :is="'input-' + setting"
+              <div v-for="(settingGroup, groupKey) in column.componentSettings" style="border: 1px solid #ccc; padding: 5px; margin: 5px 0;" :key="groupKey">
+                <component v-for="setting in settingGroup"
+                  :is="'input-' + setting.type"
                   v-on:attribute-setting-updated="(eventData)=>attributeSettingUpdatedHandler(eventData, key)"
                   v-on:style-setting-updated="(eventData)=>styleSettingUpdatedHandler(eventData, key)"
-                  :setting="setting"
+                  :setting="setting.type"
+                  :name="setting.name"
+                  :type="setting.type"
+                  :link="setting.link"
+                  :label="setting.label"
+                  :default-value="setting.value"
+                  :min-value="setting.minValue"
+                  :max-value="setting.maxValue"
                   :element="column"
-                  :key="setting">
+                  :key="setting.name">
                 </component>
-              </template>
+              </div>
 
               <!-- Column Settings -->
               <div :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings" :key="columnSetting.name">
