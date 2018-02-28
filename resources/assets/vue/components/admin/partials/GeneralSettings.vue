@@ -194,8 +194,8 @@ export default {
     setModuleField(data) {
       this.$store.commit("module/setModuleFields", data);
     },
-    updateName(e) {
-      this.setModuleField({ name: e.target.value });
+    updateName(newValue) {
+      this.setModuleField({ name: newValue });
     },
     saveModuleStyle(name, value) {
       this.$store.commit("module/saveModuleStyle", {
