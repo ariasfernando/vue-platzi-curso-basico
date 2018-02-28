@@ -3,8 +3,8 @@
 
     <form class="form-horizontal">
       <div class="form-group">
-        <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
-        <div class="col-sm-5">
+        <label class="half"><b>{{ plugin.title }}</b></label>
+        <div class="half-style-setting padding-top">
           <span>
             <toggle-button :value="enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
           </span>
@@ -12,8 +12,8 @@
       </div>
 
       <div v-if="plugin.enabled" class="form-group">
-        <label class="col-sm-7 control-label" data-name="validations.required"><b>Required</b></label>
-        <div class="col-sm-5">
+        <label class="half" data-name="validations.required"><b>Required</b></label>
+        <div class="half-style-setting padding-top">
           <span>
             <toggle-button :value="plugin.config.validations.required" active-color="#78DCD6" @change="(newValue)=>updateField(newValue, 'validations.required')"></toggle-button>
           </span>
@@ -21,8 +21,8 @@
       </div>
 
       <div v-if="plugin.enabled" class="form-group">
-        <label class="col-sm-7 control-label" data-name="validations.url"><b>Validate URL</b></label>
-        <div class="col-sm-5">
+        <label class="half" data-name="validations.url"><b>Validate URL</b></label>
+        <div class="half-style-setting padding-top">
           <span>
             <toggle-button :value="plugin.config.validations.url" active-color="#78DCD6" @change="(newValue)=>updateField(newValue, 'validations.url')"></toggle-button>
           </span>
@@ -30,8 +30,8 @@
       </div>
 
       <div v-if="plugin.enabled" class="form-group">
-        <label class="col-sm-7 control-label" data-name="target"><b>Target</b></label>
-        <div class="col-sm-5">
+        <label class="half" data-name="target"><b>Target</b></label>
+        <div class="half-style-setting padding-top">
           <span>
             <toggle-button :value="plugin.config.target" name="target" active-color="#78DCD6" @change="(newValue)=>updateField(newValue, 'target')"></toggle-button>
           </span>

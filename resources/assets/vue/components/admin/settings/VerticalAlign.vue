@@ -1,6 +1,6 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <label class="typo__label col-sm-6 control-label">Vertical align</label>
+    <label class="half">Vertical align</label>
     <el-button plain size="mini" @click="changeAlignment('top')" class="fa fa-arrow-up" :class="{ active: valign === 'top' }"></el-button>
     <el-button plain size="mini" @click="changeAlignment('middle')" class="fa fa-minus" :class="{ active: valign === 'middle' }"></el-button>
     <el-button plain size="mini" @click="changeAlignment('bottom')" class="fa fa-arrow-down" :class="{ active: valign === 'bottom' }"></el-button>

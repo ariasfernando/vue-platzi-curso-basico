@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form-horizontal">
     <b-btn block v-b-toggle.module-settings-left class="module-settings-item">
       <p class="pull-left"><i class="glyphicon glyphicon-cog"></i> GENERAL SETTINGS</p>
       <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
@@ -7,10 +7,10 @@
 
     <b-collapse id="module-settings-left" visible accordion="module-settings-accordion">
       <b-card class="control" >
-        <div class="form-group row module-name" :class="{'has-error': errors.has('name') }">
+        <div class="form-group" :class="{'has-error': errors.has('name') }">
           <div class="field-name">
-            <div class="col-sm-12 control-label">
-              <el-input
+            <label for="name">Name</label>
+            <el-input
                 :value="module.name"
                 :class="{'input': true, 'is-danger': errors.has('name') }"
                 v-validate.initial="'required'"
@@ -18,31 +18,26 @@
                 placeholder="Module name"
                 @input="updateName"
                 size="mini"></el-input>
-            </div>
           </div>
         </div>
-        <div class="row">
-          <label class="col-sm-6 control-label" for="set-column">Columns</label>
-          <div class="col-sm-6">
-            <div>
-
-              <el-input-number
+        <div class="form-group" :class="{'has-error': errors.has('set-column') }">
+          <label class="half" for="set-column">Columns</label>
+          <div class="half-style-setting padding-top float-right">
+            <el-input-number
                 size="mini" 
                 :value="numColumns"
                 @change="(newValue)=>setColumns(newValue)"
                 :min="1"
                 :max="8"
-              ></el-input-number>
-            </div>
+            ></el-input-number>
           </div>
         </div>
-        <template v-for="setting in module.structure.componentSettings" class="row">
+        <template v-for="setting in module.structure.componentSettings">
           <component :is="'input-' + setting"
             v-on:attribute-setting-updated="attributeSettingUpdatedHandler"
             v-on:style-setting-updated="styleSettingUpdatedHandler"
             :setting="setting"
             :element="module.structure"
-            class="row"
             :key="setting">
           </component>
         </template>
@@ -118,8 +113,8 @@
         <div v-if="module.structure.columns.length > 1" class="row-toggle">
           <form class="form-horizontal">
             <div class="form-group">
-              <label class="col-sm-7 control-label"><b>Fixed Columns</b></label>
-              <div class="col-sm-5">
+              <label class="half"><b>Fixed Columns</b></label>
+              <div class="half-style-setting padding-top">
                 <span>
                   <toggle-button :value="module.structure.columnsFixed" active-color="#78DCD6" @change="toggle"></toggle-button>
                 </span>
@@ -132,8 +127,8 @@
         <div v-if="module.structure.columns.length == 2" class="row-toggle">
           <form class="form-horizontal">
             <div class="form-group">
-              <label class="col-sm-7 control-label"><b>Inverted Stacking on Mobile</b></label>
-              <div class="col-sm-5">
+              <label class="half"><b>Inverted Stacking on Mobile</b></label>
+              <div class="half-style-setting padding-top">
                 <span>
                   <toggle-button :value="module.structure.invertedStacking" active-color="#78DCD6" @change="toggleStacking"></toggle-button>
                 </span>

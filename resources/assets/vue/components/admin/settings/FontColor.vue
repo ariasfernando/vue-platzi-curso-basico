@@ -1,6 +1,6 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <label class="control-label half">Color</label>
+    <label class="half">Color</label>
 
     <el-color-picker v-model="color" color-format="hex"></el-color-picker>
     <el-input

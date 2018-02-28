@@ -1,7 +1,7 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
     <div class="col-xs-6">
-        <label class="clearfix control-label" for="height">Height</label>
+        <label for="height">Height</label>
         <el-input-number
           size="mini" 
           v-validate="'required'"

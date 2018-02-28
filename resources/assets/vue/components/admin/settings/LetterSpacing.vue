@@ -1,6 +1,6 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <label class="control-label half" for="letter-spacing">Letter Spacing</label>
+    <label class="half" for="letter-spacing">Letter Spacing</label>
     <div class="half-style-setting">
 
       <el-button

@@ -2,8 +2,8 @@
   <div :class="'plugin-' + plugin.name">
     <form class="form-horizontal">
       <div class="form-group">
-        <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
-        <div class="col-sm-5">
+        <label class="half"><b>{{ plugin.title }}</b></label>
+        <div class="half-style-setting padding-top">
           <span>
             <toggle-button :value="plugin.enabled" color="#78DCD6" @change="toggle"></toggle-button>
           </span>
@@ -11,8 +11,8 @@
       </div>
 
       <div v-if="plugin.enabled" class="form-group" v-for="(option, name) in plugin.config" :key="name">
-        <label class="col-sm-7 control-label" :data-name="name"><b>{{ option.label }}</b></label>
-        <div class="col-sm-5">
+        <label class="half" :data-name="name"><b>{{ option.label }}</b></label>
+        <div class="half-style-setting padding-top">
           <span>
             <toggle-button v-if="option.type === 'switch'" :disabled="!enabled" :value="option.value" @change="(newValue)=>updateField(newValue, name)"></toggle-button>
             <el-input-number
@@ -30,8 +30,8 @@
         <div v-if="option.value && option.config">
           <br>
           <div v-for="(subopt, subname) in option.config" class="config-inner" :key="subname">
-            <label class="col-sm-7 control-label" :data-name="subname"><b>{{ subopt.label }}</b></label>
-            <div class="col-sm-5">
+            <label class="half" :data-name="subname"><b>{{ subopt.label }}</b></label>
+            <div class="half-style-setting padding-top">
               <span>
                 <toggle-button v-if="subopt.type === 'switch'" :value="subopt.value" active-color="#78DCD6" @change="(newValue)=>updateSubField(newValue, name, subname)"></toggle-button>
                 <input v-if="subopt.type === 'text'" type="text" :value="subopt.value" :parent="name" :name="subname" @change="updateSubFieldByEvent">

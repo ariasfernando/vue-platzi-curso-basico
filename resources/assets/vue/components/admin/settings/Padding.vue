@@ -1,7 +1,7 @@
 <template>
   <div :id="'field-' + setting" class="form-group" :class="'field-' + setting">
-    <label class="control-label">Padding</label>
-    <div class="">
+    <label>Padding</label>
+    <div>
       <div
         v-for="padding in paddings"
         :key="padding.name"

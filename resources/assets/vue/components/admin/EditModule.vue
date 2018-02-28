@@ -535,6 +535,9 @@ export default {
       &.padding-top{
         padding-top: 5px;
       }
+      &.float-right{
+        float: right;
+      }
     }
     .btn.btn-secondary.btn-block {
       &:hover,
