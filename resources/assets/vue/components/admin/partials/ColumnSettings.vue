@@ -29,7 +29,7 @@
               </template>
 
               <!-- Column Settings -->
-              <div class="row row-style" :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings" :key="columnSetting.name">
+              <div :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings" :key="columnSetting.name">
                 
                 <div v-if="!columnSetting.group" >
                   <column-setting-group :column-setting="columnSetting" 

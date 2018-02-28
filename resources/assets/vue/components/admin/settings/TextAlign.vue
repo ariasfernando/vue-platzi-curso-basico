@@ -1,6 +1,6 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <label class="control-label half">Horizontal align</label>
+    <label class="half">Horizontal align</label>
     <div class="half-style-setting padding-top">
       <el-button plain size="mini" @click="changeAlignment('left')" class="fa fa-align-left" :class="{ active: align === 'left' }"></el-button>
       <el-button plain size="mini" @click="changeAlignment('center')" class="fa fa-align-center" :class="{ active: align === 'center' }"></el-button>

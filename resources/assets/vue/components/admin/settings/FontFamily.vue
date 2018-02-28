@@ -1,6 +1,6 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <label class="control-label">Font Family</label>
+    <label>Font Family</label>
     <el-select
     class="width-full"
     multiple

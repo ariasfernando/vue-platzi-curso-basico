@@ -3,7 +3,7 @@
     <label>{{ plugin.title }}</label>
     <form class="form-horizontal">
       <div class="form-group">
-        <div class="col-sm-5">
+        <div class="half-style-setting padding-top">
           <span class="st-toogle">
             <toggle-button :value="component.attribute.hideElement" color="#78DCD6" :sync="true" :labels="true" @change="toggleChange"></toggle-button>
           </span>

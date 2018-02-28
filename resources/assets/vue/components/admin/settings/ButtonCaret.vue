@@ -1,6 +1,6 @@
 <template>
   <div class="form-group field-font-style">
-    <label class="col-sm-6 control-label">Button caret</label>
+    <label class="half">Button caret</label>
     <div class="col-sm-6 position-relative">
       <i v-if="buttonCaret" class="glyphicon glyphicon-trash st-remove" @click="resetImage"></i>
       <input class="input" name="buttonCaret" type="file" @change="onFileChange">

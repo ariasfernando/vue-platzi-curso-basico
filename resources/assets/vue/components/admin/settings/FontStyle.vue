@@ -1,7 +1,7 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
     <div class="half-style-setting">
-        <label class="control-label" :for="'fontSize'">Font Size</label>
+        <label :for="'fontSize'">Font Size</label>
         <el-input-number
           size="mini" 
           v-validate="'required'"
@@ -17,7 +17,7 @@
           </span>
     </div>
     <div class="half-style-setting">
-        <label class="control-label" :for="'lineHeight'">Line Height</label>
+        <label :for="'lineHeight'">Line Height</label>
         <el-input-number
           size="mini" 
           v-validate="'required'"

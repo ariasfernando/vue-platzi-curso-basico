@@ -2,8 +2,8 @@
   <div :class="'plugin-' + plugin.name">
     <form class="form-horizontal">
       <div class="form-group">
-        <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
-        <div class="col-sm-5">
+        <label class="half"><b>{{ plugin.title }}</b></label>
+        <div class="half-style-setting padding-top">
           <span>
             <toggle-button :value="plugin.enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
           </span>
@@ -24,8 +24,8 @@
       </div>
 
       <div v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" class="form-group" :key="key">
-        <label class="col-sm-7 control-label"><b>{{ tinySetting.title }}</b></label>
-        <div class="col-sm-5 control-label">
+        <label class="half"><b>{{ tinySetting.title }}</b></label>
+        <div class="half-style-setting padding-top control-label">
           <span>
             <toggle-button :value="tinySetting.value" active-color="#78DCD6"  @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
           </span>

@@ -1,7 +1,7 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
     <div class="col-xs-6" v-for="imageSizeSetting in imageSizeSettings" :key="imageSizeSetting.name">
-        <label class="clearfix control-label" :for="imageSizeSetting.name">{{imageSizeSetting.label}}</label>
+        <label :for="imageSizeSetting.name">{{imageSizeSetting.label}}</label>
         <el-input-number
           v-if="imageSizeSetting.name === 'width' || !isBlockHeight" 
           size="mini" 

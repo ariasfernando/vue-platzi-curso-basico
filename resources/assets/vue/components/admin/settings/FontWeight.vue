@@ -1,6 +1,6 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <label class="control-label half" for="font-weight">Font Weight</label>
+    <label class="half" for="font-weight">Font Weight</label>
     <div class="half-style-setting padding-top">
       <el-select
         v-if="isCustomFontWeight"

@@ -2,8 +2,8 @@
   <div :class="'plugin-' + plugin.name">
     <form class="form-horizontal">
       <div v-for="(mobileSetting, key) in plugin.config.settings" class="form-group" :key="key">
-        <label class="col-sm-7 control-label"><b>{{ mobileSetting.title }}</b></label>
-        <div class="col-sm-5">
+        <label class="half"><b>{{ mobileSetting.title }}</b></label>
+        <div class="half-style-setting padding-top">
           <span>
             <toggle-button 
               active-color="#78DCD6" 

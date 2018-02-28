@@ -1,7 +1,7 @@
 <template>
   <div class="form-group" :class="'field-border'">
-    <label class="typo__label col-sm-12 control-label">{{`Border ${side}`}}</label>
-    <div class="padding-custom">
+    <label>{{`Border ${side}`}}</label>
+    <div class="clearfixalign-element">
       <el-color-picker
         v-model="color"
         color-format="hex"
@@ -148,12 +148,6 @@ button.el-button {
 }
 .el-color-picker {
   height: 30px;
-}
-.padding-custom {
-  padding: 0 0 0 15px;
-}
-.field-border {
-  padding-right: 15px;
 }
 .float-left {
   float: left;

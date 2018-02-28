@@ -64,7 +64,11 @@ export default {
     // Fonts path
     const fontPath = `${this.Vue.prototype.$_app.config.baseUrl}/fonts/`;
 
+    let custom = {};
+
     fonts.custom.map(font => {
+      custom[font.name] = true;
+
       const style = document.createElement('style');
 
       style.type = 'text/css';
