@@ -20,7 +20,7 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "input-height",
-  props: ["setting"],
+  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   data() {
     return {
@@ -30,7 +30,7 @@ export default {
   computed: {
     height: {
       get: function() {
-        return _.parseInt(this.component.style[this.name]);
+        return _.parseInt(this.element.style[this.name]);
       },
       set: function(newValue) {
         this.$emit("style-setting-updated", { name: this.name, value: `${newValue}px` });

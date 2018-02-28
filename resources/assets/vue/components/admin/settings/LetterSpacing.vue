@@ -36,7 +36,7 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "letter-spacing",
-  props: ["setting"],
+  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   data() {
     return {
@@ -54,7 +54,7 @@ export default {
   computed: {
     isNormalLetterSpacing: {
       get: function() {
-        return this.component.styleOptions[this.isNormalLetterSpacingName];
+        return this.element.styleOptions[this.isNormalLetterSpacingName];
       },
       set: function(newValue) {
         this.$emit("style-option-setting-updated", { name: this.isNormalLetterSpacingName, value: newValue });
@@ -63,7 +63,7 @@ export default {
     },
     letterSpacing: {
       get: function() {
-        return this.inferLetterSpacing(this.component.style[this.name], this.isNormalLetterSpacing);
+        return this.inferLetterSpacing(this.element.style[this.name], this.isNormalLetterSpacing);
       },
       set: function(value) {
         let newValue = value === "normal" ? value : value+this.unit;

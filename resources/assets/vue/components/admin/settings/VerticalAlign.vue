@@ -12,7 +12,7 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "VerticalAlign",
-  props: ["setting"],
+  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   data() {
     return {
@@ -22,7 +22,7 @@ export default {
   computed: {
     valign: {
       get: function() {
-        return this.component.attribute[this.name];
+        return this.element.attribute[this.name];
       },
       set: function(newValue) {
         this.$emit("attribute-setting-updated", { name: this.name, value: newValue });

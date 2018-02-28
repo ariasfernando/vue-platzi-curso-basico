@@ -45,7 +45,7 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "ImageSize",
-  props: ["setting"],
+  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   data() {
     return {
@@ -54,10 +54,10 @@ export default {
   },
   computed: {
     isBlockHeight() {
-      return this.component.styleOptions["isBlockHeight"];
+      return this.element.styleOptions["isBlockHeight"];
     },
     isPxWidth() {
-      return this.component.styleOptions["isPxWidth"];
+      return this.element.styleOptions["isPxWidth"];
     },
     imageSizeSettings() {
       return [
@@ -122,9 +122,9 @@ export default {
       this.saveStyleOption(isBlock, "isBlockHeight");
     },
     getValue(name) {
-      return this.component.attribute[name] === "auto"
+      return this.element.attribute[name] === "auto"
                 ? "auto"
-                : _.parseInt(this.component.attribute[name]);
+                : _.parseInt(this.element.attribute[name]);
     },
 
     saveStyleOption(newValue, styleOptionName) {

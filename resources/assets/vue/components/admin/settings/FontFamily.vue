@@ -26,7 +26,7 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "FontFamily",
-  props: ["setting"],
+  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   components: {
   },
@@ -54,11 +54,11 @@ export default {
   computed: {
     fontFamily: {
       get() {
-        if (!this.component.style.fontFamily) {
+        if (!this.element.style.fontFamily) {
           return [];
         }
 
-        return this.component.style.fontFamily.split(", ");
+        return this.element.style.fontFamily.split(", ");
       },
       set(newValue) {
         this.$emit("style-setting-updated", { name: this.name, value: newValue.join(", ") });

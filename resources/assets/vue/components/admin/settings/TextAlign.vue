@@ -14,7 +14,7 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "TextAlign",
-  props: ["setting"],
+  props: ["setting", "element"],
   mixins: [SettingMixin],
   data() {
     return {
@@ -24,7 +24,7 @@ export default {
   computed: {
     align: {
       get: function() {
-        return this.component.attribute[this.name];
+        return this.element.attribute[this.name];
       },
       set: function(newValue) {
         this.$emit("attribute-setting-updated", {
