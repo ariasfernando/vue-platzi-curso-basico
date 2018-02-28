@@ -1,7 +1,7 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <label class="col-xs-5 control-label" for="letter-spacing">Letter Spacing</label>
-    <div class="col-xs-7 control-label">
+    <label class="control-label half" for="letter-spacing">Letter Spacing</label>
+    <div class="half-style-setting">
 
       <el-button
         v-if="isNormalLetterSpacing"

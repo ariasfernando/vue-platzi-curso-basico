@@ -1,6 +1,6 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
-    <label class="typo__label col-sm-6 control-label">Color</label>
+    <label class="control-label half">Color</label>
 
     <el-color-picker v-model="color" color-format="hex"></el-color-picker>
     <el-input
@@ -44,7 +44,7 @@ export default {
 <style lang="less">
 .field-font-color {
   .el-input--mini {
-    width: 31.3%;
+    width: 86px;
     padding: 7px 0 0 0;
   }
   .el-color-picker__trigger {

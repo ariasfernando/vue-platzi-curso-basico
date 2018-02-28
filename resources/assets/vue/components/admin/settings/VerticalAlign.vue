@@ -49,12 +49,12 @@ export default {
   background-color: rgb(120, 220, 214);
 }
 .el-button + .el-button {
-  margin-left: none;
+  margin-left: 0;
 }
 .el-button {
   width: 34px;
   padding: 4px 4px;
-  margin: 2.5px 2.5px 2.5px 3.5px;
+  margin: 2.5px 9px 2.5px 3.5px;
   height: 32px;
   display: block;
   float: left;

@@ -1,11 +1,11 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
-    <label class="typo__label col-sm-12 control-label">Padding</label>
-    <div class="clearfix control-label">
+  <div :id="'field-' + setting" class="form-group" :class="'field-' + setting">
+    <label class="control-label">Padding</label>
+    <div class="">
       <div
         v-for="padding in paddings"
         :key="padding.name"
-        class="col-xs-6 padding-custom align-element"
+        class="half-style-setting padding-custom align-element"
         :title="padding.label"
         v-b-tooltip.hover
         :data-tooltip="padding.label"
@@ -19,7 +19,7 @@
           :controls="false"
         ></el-input-number>
         <el-button
-        class="button"
+          class="button"
           disabled="disabled"
         >px</el-button>
       </div>
@@ -110,19 +110,30 @@ button.el-button {
     color: #606266;
   }
 }
-.padding-custom {
-  padding: 5px 0;
-}
-.el-input-number--mini {
-  width: 86px;
-  margin-right: 26px;
-  float: right;
-}
-.field-padding {
-  padding-right: 15px;
+#field-padding.form-group.field-padding {
+  .padding-custom {
+    padding: 5px 0;
+  }
+  .el-input-number--mini {
+    width: 80px;
+    margin-right: 25px;
+    float: right;
+  }
+  .field-padding {
+    padding-right: 15px;
+  }
+  .half-style-setting {
+    width: calc(~"50% - 15px");
+    margin-right: 15px;
+  }
+  .half-style-setting:nth-child(2n + 2) {
+    margin-left: 10px;
+    margin-right: 0;
+    padding-left: 0;
+  }
 }
 </style>
-<style lang="less" >
+  <style lang="less" >
 .field-padding {
   input[type="text"] {
     text-align: center;
