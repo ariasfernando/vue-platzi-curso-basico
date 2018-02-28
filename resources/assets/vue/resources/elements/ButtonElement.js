@@ -10,13 +10,14 @@ function buttonDefault() {
       fontFamily: 'Helvetica, arial, sans-serif',
       color: '#FFFFFF',
       fontSize: '12px',
+      fontWeight: 'normal',
+      letterSpacing: 'normal',
       // Warning: line-height affects vertical alignment
       lineHeight: '14px',
       paddingTop: '0px',
       paddingBottom: '0px',
       paddingRight: '0px',
       paddingLeft: '0px',
-      fontWeight: 'normal',
       // Border Top
       borderTopWidth: '0px',
       borderTopStyle: 'none',
@@ -34,6 +35,11 @@ function buttonDefault() {
       borderLeftStyle: 'none',
       borderLeftColor: '',
     },
+    styleOptions: {
+      isBlockLineHeight: false,
+      isCustomFontWeight: false,
+      isNormalLetterSpacing: true,
+    },
     attribute: {
       width: '150',
       height: '40',
@@ -44,9 +50,6 @@ function buttonDefault() {
       buttonCaret: undefined,
     },
     componentSettings: ['font-family', 'font-style', 'button-caret', 'font-weight', 'text-align', 'vertical-align', 'background-color', 'padding', 'font-color', 'border-group'],
-    styleOptions: {
-      isBlockLineHeight: false,
-    },
     settings: [
       {
         link: 'attribute',
