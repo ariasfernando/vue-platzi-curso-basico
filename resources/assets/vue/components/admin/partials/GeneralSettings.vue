@@ -231,6 +231,12 @@ export default {
     setModuleField(data) {
       this.$store.commit("module/setModuleFields", data);
     },
+<<<<<<< HEAD
+=======
+    updateName(newValue) {
+      this.setModuleField({ name: newValue });
+    },
+>>>>>>> a066f21f1a2154b14e2696c6552f3d9a2534fe7e
     saveModuleStyle(name, value) {
       this.$store.commit("module/saveModuleStyle", {
         property: name,

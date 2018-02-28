@@ -5,9 +5,9 @@
         <el-input-number
           size="mini" 
           v-validate="'required'"
-          v-model="heightInputData"
+          v-model="height"
+          :value="height"
           :class="{'clearfix': true, 'is-danger': errors.has('height') }"
-          @change="(value)=>updateHeight(value)"
           :min="1"
         ></el-input-number>
     </div>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
@@ -23,27 +24,18 @@ export default {
   mixins: [ SettingMixin ],
   data() {
     return {
-      name: "height",
-      heightInputData: ''
+      name: "height"
     };
-  },
-  mounted() {
-    this.heightInputData = this.height;
   },
   computed: {
     height: {
       get: function() {
-        return this.component.style[this.name].replace("px", "");
+        return _.parseInt(this.component.style[this.name]);
       },
       set: function(newValue) {
         this.$emit("style-setting-updated", { name: this.name, value: newValue });
       }
     },
-  },
-  methods: {
-    updateHeight(newValue) {
-      this.height = newValue;
-    }
   }
 };
 </script>
