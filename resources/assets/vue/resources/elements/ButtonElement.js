@@ -104,30 +104,35 @@ function buttonDefault() {
           type: 'border-group',
         },
       ],
+      [
+        {
+          link: 'attribute',
+          label: 'Width',
+          name: 'width',
+          type: 'generic-number',
+          value: 150,
+          minValue: 5,
+        },
+        {
+          link: 'attribute',
+          label: 'Height',
+          name: 'height',
+          type: 'generic-number',
+          value: 40,
+          minValue: 5,
+        },
+      ],
+      [
+        {
+          link: 'attribute',
+          label: 'Default URL',
+          name: 'href',
+          type: 'generic-text',
+          value: 'http://stensul.com',
+        },
+      ],
     ],
-    settings: [
-      {
-        link: 'attribute',
-        label: 'Width',
-        name: 'width',
-        type: 'number',
-        value: '150',
-      },
-      {
-        link: 'attribute',
-        label: 'Height',
-        name: 'height',
-        type: 'number',
-        value: '40',
-      },
-      {
-        link: 'attribute',
-        label: 'Default URL',
-        name: 'href',
-        type: 'text',
-        value: 'http://stensul.com',
-      },
-    ],
+    settings: [],
     plugins: {},
   };
 }

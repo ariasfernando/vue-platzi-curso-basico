@@ -11,6 +11,10 @@ import FontColor from './FontColor.vue';
 import LetterSpacing from './LetterSpacing.vue';
 import Padding from './Padding.vue';
 import BorderGroup from './BorderGroup.vue';
+import GenericText from './GenericText.vue';
+import GenericNumber from './GenericNumber.vue';
+import GenericFile from './GenericFile.vue';
+import Width from './Width.vue';
 
 const Settings = {
   FontFamily,
@@ -26,6 +30,10 @@ const Settings = {
   LetterSpacing,
   Padding,
   BorderGroup,
+  GenericText,
+  GenericNumber,
+  GenericFile,
+  Width,
 };
 
 module.exports = Settings;

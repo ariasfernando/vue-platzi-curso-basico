@@ -10,16 +10,23 @@
     <b-collapse id="style" visible accordion="module-settings-accordion-right">
       <b-card class="default-settings">
         <form class="form-horizontal">
-          <template v-for="setting in component.componentSettings" >
-            <component
-              :is="'input-' + setting"
+          <div v-for="(settingGroup, groupKey) in component.componentSettings" style="border: 1px solid #ccc; padding: 5px; margin: 5px 0;" :key="groupKey">
+            <component v-for="setting in settingGroup"
+              :is="'input-' + setting.type"
               @attribute-setting-updated="attributeSettingUpdatedHandler"
               @style-setting-updated="styleSettingUpdatedHandler"
               @style-option-setting-updated="styleOptionSettingUpdatedHandler"
-              :setting="setting"
+              :setting="setting.type"
+              :name="setting.name"
+              :type="setting.type"
+              :link="setting.link"
+              :label="setting.label"
+              :default-value="setting.value"
+              :min-value="setting.minValue"
+              :max-value="setting.maxValue"
               :element="component"
-              :key="setting"></component>
-          </template>
+              :key="setting.name"></component>
+          </div>
 
           <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
 
@@ -226,6 +233,9 @@
       "input-letter-spacing": elementSettings.LetterSpacing,
       "input-padding": elementSettings.Padding,
       "input-border-group": elementSettings.BorderGroup,
+      "input-generic-text": elementSettings.GenericText,
+      "input-generic-number": elementSettings.GenericNumber,
+      "input-generic-file": elementSettings.GenericFile,
     },
     computed: {
       currentComponent() {

@@ -76,6 +76,7 @@ export default {
     "input-background-color": elementSettings.BackgroundColor,
     "input-padding": elementSettings.Padding,
     "input-border-group": elementSettings.BorderGroup,
+    "input-width": elementSettings.Width,
     ColumnSettingGroup,
     ColumnSettingElement
   },

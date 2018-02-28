@@ -54,30 +54,40 @@ function imageDefault() {
           type: 'padding',
         },
       ],
+      [
+        {
+          link: 'attribute',
+          label: 'Default URL',
+          name: 'href',
+          type: 'generic-text',
+          value: 'http://stensul.com',
+        },
+        {
+          link: 'attribute',
+          label: 'Alt',
+          name: 'alt',
+          type: 'generic-text',
+          value: 'Image',
+        },
+        {
+          link: 'attribute',
+          label: 'Title',
+          name: 'title',
+          type: 'generic-text',
+          value: 'Image',
+        },
+      ],
+      [
+        {
+          link: 'attribute',
+          label: 'Select an image placeholder',
+          name: 'placeholder',
+          type: 'generic-file',
+          value: 'default/placeholder-square.jpg',
+        },
+      ],
     ],
-    settings: [
-      {
-        link: 'attribute',
-        label: 'Default URL',
-        name: 'href',
-        type: 'text',
-        value: 'http://stensul.com',
-      },
-      {
-        link: 'attribute',
-        label: 'Alt',
-        name: 'alt',
-        type: 'text',
-        value: 'Image',
-      },
-      {
-        link: 'attribute',
-        label: 'Title',
-        name: 'title',
-        type: 'text',
-        value: 'Image',
-      },
-    ],
+    settings: [],
     plugins: {},
     data: {},
   };

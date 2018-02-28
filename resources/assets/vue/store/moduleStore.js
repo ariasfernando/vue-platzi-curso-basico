@@ -95,9 +95,6 @@ const mutations = {
     const column = state.module.structure.columns[data.colId];
     // Set attribute
     column.attribute.width = `${data.width}%`;
-    // Find and set setting
-    const key = _.findKey(column.settings, { name: 'width' });
-    column.settings[key].value = `${data.width}%`;
   },
   saveColumnStyle(state, data) {
     const styles = state.module.structure.columns[data.colId].style;
