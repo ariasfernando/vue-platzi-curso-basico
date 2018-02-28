@@ -11,36 +11,35 @@
           <div class="field-name">
             <label for="name">Name</label>
             <el-input
-                :value="module.name"
-                :class="{'input': true, 'is-danger': errors.has('name') }"
-                v-validate.initial="'required'"
-                name="name"
-                placeholder="Module name"
-                @input="updateName"
-                size="mini"></el-input>
+              :class="{'input': true, 'is-danger': errors.has('name') }"
+              v-validate.initial="'required'"
+              name="name"
+              placeholder="Module name"
+              v-model="moduleName"
+              size="mini"></el-input>
           </div>
         </div>
         <div class="form-group" :class="{'has-error': errors.has('set-column') }">
           <label class="half" for="set-column">Columns</label>
           <div class="half-style-setting padding-top float-right">
             <el-input-number
-                size="mini" 
-                :value="numColumns"
-                @change="(newValue)=>setColumns(newValue)"
-                :min="1"
-                :max="8"
+              size="mini" 
+              v-model="numColumns"
+              name="set-column"
+              :min="1"
+              :max="8"
             ></el-input-number>
           </div>
         </div>
-        <template v-for="setting in module.structure.componentSettings">
-          <component :is="'input-' + setting"
-            v-on:attribute-setting-updated="attributeSettingUpdatedHandler"
-            v-on:style-setting-updated="styleSettingUpdatedHandler"
+          <component
+            v-for="setting in module.structure.componentSettings"
+            :is="'input-' + setting"
+            @attribute-setting-updated="attributeSettingUpdatedHandler"
+            @style-setting-updated="styleSettingUpdatedHandler"
             :setting="setting"
             :element="module.structure"
             :key="setting">
           </component>
-        </template>
         <div class="row"
              :class="'field-' + generalSetting.name"
              v-for="(generalSetting, keyGeneral) in module.structure.settings"
@@ -156,14 +155,6 @@ export default {
     "input-padding": Padding,
     "input-border-group": BorderGroup
   },
-  computed: {
-    module() {
-      return this.$store.getters["module/module"];
-    },
-    numColumns() {
-      return this.$store.getters["module/module"].structure.columns.length;
-    }
-  },
   data() {
     return {
       maxCols: 8,
@@ -179,6 +170,57 @@ export default {
       ]
     };
   },
+  computed: {
+    module() {
+      return this.$store.getters["module/module"];
+    },
+    numColumns: {
+      get() {
+        return this.module.structure.columns.length;
+      },
+      set(value) {
+        let cols = value;
+        let numCols = this.module.structure.columns.length;
+
+        if (numCols === cols) {
+          return true;
+        }
+
+        if (numCols > cols && confirm("Are you sure?")) {
+          this.$store.commit("campaign/unsetActiveModule");
+          this.$store.commit("campaign/unsetCurrentModule");
+          this.$store.commit("campaign/unsetCurrentComponent");
+          this.$store.commit("module/removeColumns", {
+            index: cols,
+            number: numCols - cols
+          });
+        }
+
+        if (numCols < cols) {
+          for (let i = numCols; i < cols; i++) {
+            this.$store.dispatch("module/addColumn");
+          }
+        }
+
+        this.$store.dispatch(
+          "module/normalizeColumns",
+          this.module.structure.columns
+        );
+
+        if (value > 0 && value <= this.maxCols) {
+          this.$store.commit("module/setActiveColumn", value - 1);
+        }
+      }
+    },
+    moduleName: {
+      get() {
+        return this.module.name;
+      },
+      set(name) {
+        this.$store.commit("module/setModuleFields", { name: name });
+      }
+    }
+  },
   methods: {
     attributeSettingUpdatedHandler(eventData) {
       this.saveModuleAttribute(eventData.name, eventData.value);
@@ -188,9 +230,6 @@ export default {
     },
     setModuleField(data) {
       this.$store.commit("module/setModuleFields", data);
-    },
-    updateName(e) {
-      this.setModuleField({ name: e.target.value });
     },
     saveModuleStyle(name, value) {
       this.$store.commit("module/saveModuleStyle", {
@@ -218,39 +257,6 @@ export default {
     },
     toggleStacking(value) {
       this.$store.commit("module/setInvertedStacking", value);
-    },
-    setColumns(value) {
-      let cols = value;
-      let numCols = this.module.structure.columns.length;
-
-      if (numCols === cols) {
-        return true;
-      }
-
-      if (numCols > cols && confirm("Are you sure?")) {
-        this.$store.commit("campaign/unsetActiveModule");
-        this.$store.commit("campaign/unsetCurrentModule");
-        this.$store.commit("campaign/unsetCurrentComponent");
-        this.$store.commit("module/removeColumns", {
-          index: cols,
-          number: numCols - cols
-        });
-      }
-
-      if (numCols < cols) {
-        for (let i = numCols; i < cols; i++) {
-          this.$store.dispatch("module/addColumn");
-        }
-      }
-
-      this.$store.dispatch(
-        "module/normalizeColumns",
-        this.module.structure.columns
-      );
-
-      if (value > 0 && value <= this.maxCols) {
-        this.$store.commit("module/setActiveColumn", value - 1);
-      }
     }
   }
 };
