@@ -63,6 +63,7 @@ class CampaignManager
         $campaign_settings = $inputs['campaign_settings'] ?? [];
 
         $campaign->campaign_name = $campaign_name;
+        $campaign->lower_campaign_name = strtolower($campaign_name);
         $campaign->modules_data = $modules_data;
         $campaign->processed = 0;
         $campaign->updated_by = [
@@ -278,6 +279,7 @@ class CampaignManager
         }
 
         $new_campaign_attr['campaign_name'] = 'Copy of ' . $new_campaign_attr['campaign_name'];
+        $new_campaign_attr['lower_campaign_name'] = strtolower($new_campaign_attr['campaign_name']);
         $new_campaign_attr['processed'] = 0;
         $new_campaign_attr['body_html'] = '';
         $new_campaign_attr['plain_text'] = '';
