@@ -12,7 +12,7 @@
         <div class="text-center">
             <a href="/" class="stensul-logo open-sans" target="_blank">stensul</a>
             <h4>
-                {{$is_admin or false ? 'Administration Panel' : 'Email Creator'}}
+                {{$is_admin or false ? 'Administration Panel' : 'Email Creation Platform'}}
             </h4>
         </div>
 

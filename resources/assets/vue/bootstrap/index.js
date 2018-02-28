@@ -41,7 +41,6 @@ export default {
     this.initPlugins();
   },
   initDictionary() {
-    console.log('init');
     if (customer.config.dictionary) {
       _.merge(dictionary, customer.config.dictionary);
     }

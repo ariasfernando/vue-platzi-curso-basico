@@ -12,7 +12,7 @@
         <div class="text-center">
             <a href="/" class="stensul-logo open-sans" target="_blank">stensul</a>
             <h4>
-                Email Creator
+                Email Creation Platform
             </h4>
         </div>
 

@@ -44,10 +44,10 @@
         <tbody>
           <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
             <td class="last-modified">
-              <span>{{campaign.created_at}}</span><br><span>by {{campaign.created_by.email}}</span>
+              <span>{{campaign.created_at}}</span><br><span class="text-overflow">by {{campaign.created_by.email}}</span>
             </td>
             <td class="last-modified">
-              <span>{{campaign.updated_at}}</span><br><span>by {{campaign.updated_by.email}}</span>
+              <span>{{campaign.updated_at}}</span><br><span class="text-overflow">by {{campaign.updated_by.email}}</span>
             </td>
             <td :title="campaign.campaign_name">
               <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
@@ -72,7 +72,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="text-right actions icons">
+            <td class="text-left actions icons">
               <a href="#"
                 @click.prevent="goProof(campaign.proof_token)"
                 class="proof"
@@ -90,7 +90,7 @@
                 href="#"
                 data-tooltip="Send for review"
                 v-if="proof.allow && proof.status"
-                ><i class="glyphicon glyphicon-search"></i></a>
+                ><i class="glyphicon glyphicon-check"></i></a>
 
               <a
                 :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
