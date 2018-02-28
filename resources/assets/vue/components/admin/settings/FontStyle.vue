@@ -38,12 +38,12 @@ import SettingMixin from '../mixins/SettingMixin.js';
 
 export default {
   name: "font-style",
-  props: ["setting"],
+  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   computed: {
     isBlockLineHeight: {
       get() {
-        return this.component.styleOptions["isBlockLineHeight"];
+        return this.element.styleOptions["isBlockLineHeight"];
       },
       set(newValue) {
         this.$emit('style-option-setting-updated', { name: "isBlockLineHeight", value: newValue });
@@ -51,7 +51,7 @@ export default {
     },
     fontSize: {
       get() {
-        return _.parseInt(this.component.style["fontSize"]);
+        return _.parseInt(this.element.style["fontSize"]);
       },
       set(newValue) {
         this.$emit('style-setting-updated', { name: "fontSize", value: newValue + "px" });
@@ -63,7 +63,7 @@ export default {
     },
     lineHeight: {
       get() {
-        return _.parseInt(this.component.style["lineHeight"]);
+        return _.parseInt(this.element.style["lineHeight"]);
       },
       set(newValue) {
         this.$emit('style-setting-updated', { name: "lineHeight", value: newValue + "px" });

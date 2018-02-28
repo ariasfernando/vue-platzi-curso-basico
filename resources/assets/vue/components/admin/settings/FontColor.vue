@@ -19,7 +19,7 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "FontColor",
-  props: ["setting"],
+  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   data() {
     return {
@@ -29,7 +29,7 @@ export default {
   computed: {
     color: {
       get() {
-        return this.component.style[this.name];
+        return this.element.style[this.name];
       },
       set(color) {
         if (!Application.utils.validateHexVal(color)) {

@@ -13,7 +13,7 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "ButtonCaret",
-  props: ["setting"],
+  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   data() {
     return {
@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     buttonCaret() {
-      return this.component.attribute[this.name];
+      return this.element.attribute[this.name];
     }
   },
   methods: {
