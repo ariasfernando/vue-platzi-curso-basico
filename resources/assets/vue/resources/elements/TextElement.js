@@ -30,8 +30,10 @@ function textDefault() {
     componentSettings: [
       [
         {
-          name: 'font-family',
+          name: 'fontFamily',
           type: 'font-family',
+          link: 'style',
+          label: 'Font Family',
         },
       ],
       [
@@ -40,25 +42,25 @@ function textDefault() {
           type: 'font-style',
         },
         {
-          name: 'letter-spacing',
+          name: 'letterSpacing',
           type: 'letter-spacing',
         },
         {
-          name: 'font-weight',
+          name: 'fontWeight',
           type: 'font-weight',
         },
         {
-          name: 'text-align',
+          name: 'align',
           type: 'text-align',
         },
       ],
       [
         {
-          name: 'background-color',
+          name: 'bgcolor',
           type: 'background-color',
         },
         {
-          name: 'font-color',
+          name: 'color',
           type: 'font-color',
         },
       ],

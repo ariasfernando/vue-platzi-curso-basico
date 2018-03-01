@@ -181,13 +181,15 @@
 
                       <!-- Field font-family -->
                       <div class="col-md-3">
-                        <label for="fontFamily">Font Family</label>
-                        <p class="control">
-                          <input v-model="library.config.fontFamily" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('fontFamily') }" name="fontFamily" type="text"
-                                 placeholder="Arial, sans-serif">
-                          <span v-show="errors.has('fontFamily')" class="help is-danger">{{ errors.first('fontFamily') }}</span>
-                        </p>
+                        <component
+                          :is="'input-font-family'"
+                          @config-setting-updated="configSettingUpdatedHandler"
+                          :name="'fontFamily'"
+                          :type="'font-family'"
+                          :link="'config'"
+                          :label="'Font Family'"
+                          :default-value="library.config.fontFamily"
+                          :element="library"></component>
                       </div>
 
                       <!-- Field font-color -->
@@ -378,12 +380,14 @@
   import Tabs from '../common/Tabs.vue'
   import Tab from '../common/Tab.vue'
   import VueSticky from 'vue-sticky'
+  import * as elementSettings from "./settings";
 
   export default {
     name: 'EditLibrary',
     components: {
     Tabs,
-    Tab
+    Tab,
+    "input-font-family": elementSettings.FontFamily,
   },
   data() {
     return {
@@ -416,104 +420,107 @@
         this.library.config.linkDecoration === "none" ? "underline" : "none";
     },
     loadLibrary() {
-        libraryService.espProviders()
+      libraryService.espProviders()
+        .then((response) => {
+          this.espList = response;
+        })
+        .catch((error) => {
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+        });
+      let libraryId = this.$route.params.id;
+
+      if (libraryId) {
+        libraryService.getLibrary(libraryId)
           .then((response) => {
-            this.espList = response;
+            this.library = response.library;
+            this.modules = response.modules;
+            this.ready = true;
           })
           .catch((error) => {
             this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
-        let libraryId = this.$route.params.id;
-
-        if (libraryId) {
-          libraryService.getLibrary(libraryId)
-            .then((response) => {
-              this.library = response.library;
-              this.modules = response.modules;
-              this.ready = true;
-            })
-            .catch((error) => {
-              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
-            });
-        } else {
-          libraryService.newLibrary()
-            .then((response) => {
-              this.library = response.library;
-              this.modules = response.modules;
-              this.ready = true;
-            })
-            .catch((error) => {
-              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
-            });
-        }
-      },
-      saveLibrary() {
-
-        let formData = {
-          name: this.library.name,
-          description: this.library.description,
-          config: this.library.config,
-          modules: this.library.modules
-        };
-
-        if (this.library.id) {
-          formData.libraryId = this.library.id;
-          libraryService.saveLibrary(formData)
-            .then((response) => {
-              if (response.message === 'SUCCESS') {
-                window.location.href = this.$_app.config.baseUrl + "/admin/library";
-              }
-            })
-            .catch((error) => {
-              this.$root.$toast('Oops! There was an error', {className: 'et-error'});
-            });
-        } else {
-          libraryService.createLibrary(formData)
-            .then((response) => {
-              if (response.message === 'SUCCESS') {
-                window.location.href = this.$_app.config.baseUrl + "/admin/library";
-              } else if ( response.message === 'ERROR_EXISTS' ) {
-                this.$root.$toast('Library already exists', {className: 'et-error'});
-              }
-            })
-            .catch((error) => {
-                this.$root.$toast('Oops! There was an error', {className: 'et-error'});
-            });
-        }
-      },
-      addGroup() {
-        this.temporal = this.temporal || 1;
-        let tmpName = 'Unnamed Group ' + this.temporal++;
-
-        this.library.modules.push({
-          name: tmpName,
-          modules: []
-        });
-      },
-      deleteGroup(idx) {
-        this.library.modules.splice(idx, 1);
-      },
-      toggleSidebar() {
-        const sidebar = document.getElementById('admin-sidebar');
-        sidebar.style.display = 'none';
-
-        var libMargin = document.getElementById('admin-library-container');
-        libMargin.className -= ('col-xs-12');
-
-        const container = document.getElementsByClassName('base-admin')[0];
-        container.style.paddingLeft = 0;
+      } else {
+        libraryService.newLibrary()
+          .then((response) => {
+            this.library = response.library;
+            this.modules = response.modules;
+            this.ready = true;
+          })
+          .catch((error) => {
+            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+          });
       }
     },
-    created () {
-      configService.getConfig('campaign').then((response) => {
-        this.campaignConfig = response;
-        this.loadLibrary();
+    saveLibrary() {
+
+      let formData = {
+        name: this.library.name,
+        description: this.library.description,
+        config: this.library.config,
+        modules: this.library.modules
+      };
+
+      if (this.library.id) {
+        formData.libraryId = this.library.id;
+        libraryService.saveLibrary(formData)
+          .then((response) => {
+            if (response.message === 'SUCCESS') {
+              window.location.href = this.$_app.config.baseUrl + "/admin/library";
+            }
+          })
+          .catch((error) => {
+            this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+          });
+      } else {
+        libraryService.createLibrary(formData)
+          .then((response) => {
+            if (response.message === 'SUCCESS') {
+              window.location.href = this.$_app.config.baseUrl + "/admin/library";
+            } else if ( response.message === 'ERROR_EXISTS' ) {
+              this.$root.$toast('Library already exists', {className: 'et-error'});
+            }
+          })
+          .catch((error) => {
+              this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+          });
+      }
+    },
+    addGroup() {
+      this.temporal = this.temporal || 1;
+      let tmpName = 'Unnamed Group ' + this.temporal++;
+
+      this.library.modules.push({
+        name: tmpName,
+        modules: []
       });
     },
-    mounted () {
-      this.toggleSidebar();
+    deleteGroup(idx) {
+      this.library.modules.splice(idx, 1);
+    },
+    toggleSidebar() {
+      const sidebar = document.getElementById('admin-sidebar');
+      sidebar.style.display = 'none';
+
+      var libMargin = document.getElementById('admin-library-container');
+      libMargin.className -= ('col-xs-12');
+
+      const container = document.getElementsByClassName('base-admin')[0];
+      container.style.paddingLeft = 0;
+    },
+    configSettingUpdatedHandler(eventData) {
+      this.library.config[eventData.name] = eventData.value;
     }
-  };
+  },
+  created () {
+    configService.getConfig('campaign').then((response) => {
+      this.campaignConfig = response;
+      this.loadLibrary();
+    });
+  },
+  mounted () {
+    this.toggleSidebar();
+  }
+};
 </script>
 
 
