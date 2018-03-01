@@ -17,7 +17,7 @@
 					@if (!Auth::guest())
 						<span>{{ Auth::user()->name }}</span>
 						<a href="{{ url('admin/logout') }}" class="logout">
-							<i class="glyphicon glyphicon-log-out"></i>
+							<i class="fa fa-sign-out"></i>
 							<span>Logout</span>
 						</a>
 					@endif
