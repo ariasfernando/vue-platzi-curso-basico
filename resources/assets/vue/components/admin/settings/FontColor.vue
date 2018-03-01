@@ -58,7 +58,7 @@ export default {
     border-bottom-left-radius: 4px;
   }
   .el-color-picker {
-    padding: 7px 0 0 0;
+    padding: 6px 0 0 0;
     float: left;
   }
   input.el-input__inner {

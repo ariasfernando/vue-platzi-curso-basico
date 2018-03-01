@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group" :class="'field-' + type">
+  <div class="form-group" :class="'field-' + setting">
     <label class="half">Height</label>
     <el-input-number
         size="mini" 

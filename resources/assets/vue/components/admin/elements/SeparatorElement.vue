@@ -11,7 +11,7 @@
       width="100%" 
       align="center" 
       :height="component.style.height" 
-      :bgcolor="component.style.backgroundColor" 
+      :bgcolor="component.attribute.bgcolor" 
       :style="[defaultFirstTdStyle, firstTdStyle]"
       :class="getMobileClasses(component,'td:first')"
     >

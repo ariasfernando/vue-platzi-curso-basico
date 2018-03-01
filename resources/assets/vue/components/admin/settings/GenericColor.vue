@@ -1,10 +1,11 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
-    <label class="half-style-setting">Background color</label>
-    <el-color-picker v-model="color" color-format="hex"></el-color-picker>
+  <div class="form-group" :class="'field-' + type">
+    <label class="half-style-setting">{{ label }}</label>
+    <el-color-picker v-model="mainSettingColor" color-format="hex"></el-color-picker>
     <el-input
       size="mini"
-      v-model="color"
+      v-validate="'required'"
+      v-model="mainSettingColor"
       placeholder="transparent"
       class="col-sm-4" 
       disabled="disabled"
@@ -18,30 +19,25 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "BackgroundColor",
-  props: ["setting", "element"],
+  props: ["element", "name", "type", "link", "label"],
   mixins: [ SettingMixin ],
-  data() {
-    return {
-      name: "bgcolor"
-    };
-  },
   computed: {
-    color: {
+    mainSettingColor: {
       get() {
-        return this.element.attribute[this.name] === "transparent" ? "" : this.element.attribute[this.name];
+        return this.mainSetting === "transparent" ? "" : this.mainSetting;
       },
       set(color) {
         if (!Application.utils.validateHexVal(color)) {
           color = color === null ? "transparent" : Application.utils.rgbToHex(color);
         }
-        this.$emit("attribute-setting-updated", { name: this.name, value: color });
+        this.mainSetting = color;
       }
     }
   }
 };
 </script>
 <style lang="less">
-.field-background-color {
+.field-generic-color {
   .el-input--mini {
     width: 86px;
     padding: 6px 0 0 0;

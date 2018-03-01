@@ -2,7 +2,6 @@ function separatorDefault() {
   return {
     type: 'separator-element',
     style: {
-      backgroundColor: 'transparent',
       height: '1px',
       width: '100%',
       borderColor: '#cccccc',
@@ -32,16 +31,16 @@ function separatorDefault() {
           type: 'padding',
         },
       ],
+      [
+        {
+          link: 'style',
+          label: 'Border Color',
+          name: 'borderColor',
+          type: 'generic-color',
+        },
+      ],
     ],
-    settings: [
-      {
-        link: 'style',
-        label: 'Border Color',
-        name: 'borderColor',
-        type: 'color',
-        value: { hex: 'transparent' },
-      },
-    ],
+    settings: [],
     plugins: {},
     data: {},
   };

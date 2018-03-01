@@ -2,7 +2,6 @@ function dividerDefault() {
   return {
     type: 'divider-element',
     style: {
-      backgroundColor: 'transparent',
       height: '5px',
       width: '100%',
       // Border Top
