@@ -28,6 +28,8 @@ export default {
           return this.element.styleOption[this.name];
         } else if (this.link === "attribute") {
           return this.element.attribute[this.name];
+        } else if (this.link === "config") {
+          return this.element.config[this.name];
         }
         return this.defaultValue;
       },
@@ -38,6 +40,8 @@ export default {
           this.$emit("style-option-setting-updated", { name: this.name, value: newValue });
         } else if (this.link === "attribute") {
           this.$emit("attribute-setting-updated", { name: this.name, value: newValue });
+        } else if (this.link === "config") {
+          this.$emit("config-setting-updated", { name: this.name, value: newValue });
         }
       },
     },

@@ -4,7 +4,7 @@
     <el-select
     class="width-full"
     multiple
-    placeholder="Font Family"
+    :placeholder="label"
     :value="fontFamily"
     v-model="fontFamily"
     size="mini"
@@ -26,13 +26,12 @@ import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "FontFamily",
-  props: ["setting", "element"],
+  props: ["setting", "element", "link", "name", "label"],
   mixins: [ SettingMixin ],
   components: {
   },
   data() {
     return {
-      name: "fontFamily",
       options() {
         const options = [];
         _.each(this.$_app.config.fonts, group => {
@@ -48,20 +47,17 @@ export default {
       }
     };
   },
-  mounted() {
-    this.fontFamilyData = this.fontFamily;
-  },
   computed: {
     fontFamily: {
       get() {
-        if (!this.element.style.fontFamily) {
+        if (!this.mainSetting) {
           return [];
         }
 
-        return this.element.style.fontFamily.split(", ");
+        return this.mainSetting.split(", ");
       },
       set(newValue) {
-        this.$emit("style-setting-updated", { name: this.name, value: newValue.join(", ") });
+        this.mainSetting = newValue.join(", ");
       }
     }
   }
