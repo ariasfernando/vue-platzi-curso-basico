@@ -301,7 +301,7 @@
                       <div class="col-md-12">
                         <div id="modules-container">
 
-                          <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name" :key="group.name">
+                          <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name">
 
                             <div :id="'group-container-' + group.name">
 
