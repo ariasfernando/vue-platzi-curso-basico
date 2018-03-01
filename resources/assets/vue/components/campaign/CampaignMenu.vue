@@ -212,7 +212,7 @@
   @bg-color: #f0f0f0;
 
    #emailCanvas{
-     &:empty{
+     &.empty{
       border: none;
       color:@font-color;
       background-color: @bg-color;
@@ -220,7 +220,7 @@
       font-family: 'Open Sans', Arial, serif;
       font-size: 12px;
 
-      &:before{
+      &:before, &::before{
         content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
         width: 100%;
         display: table-cell;
@@ -230,12 +230,8 @@
         padding: 0 10px;
       }
 
-      &:hover{
-        &:before{
-          display: none;
-        }
-
-        &:after{
+      &.hovered{
+        &:before, &::before{
           content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
           width: 100%;
           display: table-cell;

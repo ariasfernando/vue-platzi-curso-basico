@@ -8,7 +8,7 @@
           <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;" :class="{ 'campaign-completed': campaignCompleted }">
               <draggable
                 id="emailCanvas"
-                :class="`stx-${buildingMode}-mode`"
+                :class="`stx-${buildingMode}-mode ${this.dragList.length === 0 ? 'empty': ''}`"
                 class="stx-email-canvas st-wrapper-table"
                 cellspacing="0"
                 cellpadding="0"
@@ -19,7 +19,9 @@
                 :element="'table'"
                 :move="onMove"
                 @add="onAdd"
-                @sort="onSort">
+                @sort="onSort"
+                @mouseover="onMouseOver()"
+                @mouseleave="onMouseLeave()">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
           </td>
@@ -204,7 +206,12 @@
 
         this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
-        
+      },
+      onMouseOver () {
+        $("#emailCanvas").addClass("hovered");
+      },
+      onMouseLeave () {
+        $("#emailCanvas").removeClass("hovered");
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
@@ -267,6 +274,8 @@
   @focus: #69dac8;
   @focus-light: lighten(@focus, 30%);
   @hover: @focus-light;
+  @font-color: #999999;
+  @bg-color: #f0f0f0;
 
   /* COMMON STYLES */
   span{
@@ -350,6 +359,39 @@
       }
       *{
         display: none;
+      }
+    }
+
+    &.empty{
+      border: none;
+      color:@font-color;
+      background-color: @bg-color;
+      height: 65px;
+      font-family: 'Open Sans', Arial, serif;
+      font-size: 12px;
+
+      &:before, &::before{
+        content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
+        width: 100%;
+        display: table-cell;
+        vertical-align: middle;
+        opacity: 0.7;
+        text-align: center;
+        padding: 0 10px;
+      }
+
+      &.hovered{
+        &:before, &::before{
+          content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
+          width: 100%;
+          display: table-cell;
+          vertical-align: middle;
+          opacity: 1;
+          outline: 2px dashed @font-color;
+          outline-offset: -10px;
+          text-align: center;
+          padding: 0 10px;
+        }
       }
     }
   }
