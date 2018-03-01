@@ -151,29 +151,28 @@
 
                       <!-- Field background-color -->
                       <div class="col-md-3">
-                        <label for="templateBackgroundColor">Template Background Color</label>
-                        <div class="control">
-                          <div id="templateBackgroundColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.templateBackgroundColor" v-validate="'required'" name="templateBackgroundColor" :class="{'input': true, 'is-danger': errors.has('templateBackgroundColor') }" placeholder="#FFFFFF"/>
-                              <span class="input-group-addon"><i :style="'background-color:' + library.config.templateBackgroundColor"></i></span>
-                          </div>
-
-                          <span v-show="errors.has('templateBackgroundColor')" class="help is-danger">{{ errors.first('templateBackgroundColor') }}</span>
-                        </div>
+                        <component
+                          :is="'input-generic-color'"
+                          @config-setting-updated="configSettingUpdatedHandler"
+                          :name="'templateBackgroundColor'"
+                          :type="'generic-color'"
+                          :link="'config'"
+                          :label="'Template Background Color'"
+                          :default-value="library.config.templateBackgroundColor"
+                          :element="library"></component>
                       </div>
 
                       <!-- Field content-background-color -->
                       <div class="col-md-3">
-                        <label for="contentBackgroundColor">Content Background Color</label>
-                        <div class="control">
-                          <div id="contentBackgroundColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.contentBackgroundColor" v-validate="'required'" name="contentBackgroundColor" :class="{'input': true, 'is-danger': errors.has('contentBackgroundColor') }" placeholder="#FFFFFF"/>
-                              <span class="input-group-addon"><i :style="'background-color:' + library.config.contentBackgroundColor"></i></span>
-                          </div>
-
-                          <span v-show="errors.has('contentBackgroundColor')"
-                                class="help is-danger">{{ errors.first('contentBackgroundColor') }}</span>
-                        </div>
+                        <component
+                          :is="'input-generic-color'"
+                          @config-setting-updated="configSettingUpdatedHandler"
+                          :name="'contentBackgroundColor'"
+                          :type="'generic-color'"
+                          :link="'config'"
+                          :label="'Content Background Color'"
+                          :default-value="library.config.contentBackgroundColor"
+                          :element="library"></component>
                       </div>
                     </div>
 
@@ -194,15 +193,15 @@
 
                       <!-- Field font-color -->
                       <div class="col-md-3">
-                        <label for="fontColor">Font Color</label>
-                        <div class="control">
-                          <div id="fontColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.fontColor" v-validate="'required'" name="fontColor" :class="{'input': true, 'is-danger': errors.has('fontColor') }" placeholder="#000000"/>
-                              <span class="input-group-addon"><i :style="'background-color:' + library.config.fontColor"></i></span>
-                          </div>
-
-                          <span v-show="errors.has('fontColor')" class="help is-danger">{{ errors.first('fontColor') }}</span>
-                        </div>
+                        <component
+                          :is="'input-generic-color'"
+                          @config-setting-updated="configSettingUpdatedHandler"
+                          :name="'fontColor'"
+                          :type="'generic-color'"
+                          :link="'config'"
+                          :label="'Font Color'"
+                          :default-value="library.config.fontColor"
+                          :element="library"></component>
                       </div>
 
                       <!-- Field font-size -->
@@ -242,15 +241,15 @@
 
                       <!-- Field link-color -->
                       <div class="col-md-3">
-                        <label for="linkColor">Link Color</label>
-                        <div class="control">
-                          <div id="linkColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.linkColor" v-validate="'required'" name="linkColor" :class="{'input': true, 'is-danger': errors.has('linkColor') }" placeholder="#000000"/>
-                              <span class="input-group-addon"><i :style="'background-color:' + library.config.linkColor"></i></span>
-                          </div>
-
-                          <span v-show="errors.has('linkColor')" class="help is-danger">{{ errors.first('linkColor') }}</span>
-                        </div>
+                        <component
+                          :is="'input-generic-color'"
+                          @config-setting-updated="configSettingUpdatedHandler"
+                          :name="'linkColor'"
+                          :type="'generic-color'"
+                          :link="'config'"
+                          :label="'Link Color'"
+                          :default-value="library.config.linkColor"
+                          :element="library"></component>
                       </div>
 
                       <!-- Field link-decoration -->
@@ -388,6 +387,7 @@
     Tabs,
     Tab,
     "input-font-family": elementSettings.FontFamily,
+    "input-generic-color": elementSettings.GenericColor,
   },
   data() {
     return {
@@ -535,7 +535,20 @@
 
 .library {
   margin-top: -15px;
-
+  .half-style-setting {
+    width: 100%;
+    float: left;
+    position: relative;
+    &+.half-style-setting{
+      padding-left: 15px;
+    }
+    &.padding-top{
+      padding-top: 5px;
+    }
+    &.float-right{
+      float: right;
+    }
+  }
   .header {
     color: @stensul-purple;
     background-color: @stensul-white;
