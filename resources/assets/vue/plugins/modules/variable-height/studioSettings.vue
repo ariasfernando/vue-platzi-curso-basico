@@ -2,8 +2,8 @@
   <div :class="'plugin-' + plugin.name">
     <form class="form-horizontal">
       <div class="form-group">
-        <label class="half-style-setting padding-top control-label"><b>{{ plugin.title }}</b></label>
-        <div class="half-style-setting padding-top control-label">
+        <label class="half">{{ plugin.title }}</label>
+        <div class="half-style-setting padding-top">
           <span>
             <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
           </span>

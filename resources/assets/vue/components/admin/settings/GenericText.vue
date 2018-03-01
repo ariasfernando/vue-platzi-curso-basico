@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
+  <div class="form-group" :class="'field-' + type">
     <label for="font-weight">{{ label }}</label>
         <el-input
           size="mini" 
