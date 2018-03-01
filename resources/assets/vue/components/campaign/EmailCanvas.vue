@@ -17,6 +17,7 @@
                 :width="templateWidth"
                 :options="options"
                 :element="'table'"
+                :move="onMove"
                 @add="onAdd"
                 @sort="onSort">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
@@ -171,6 +172,21 @@
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = "1";
       },
+      onMove (evt, originalEvent) {
+        const h = $(".section-canvas-email").height();
+        const target = $(".section-canvas-email");
+
+        let mousePosition = originalEvent.clientY - $(window).scrollTop();
+        let topRegion = 320;
+        let bottomRegion = h - topRegion;
+
+        // Scroll when user drag down
+        if(mousePosition < topRegion || mousePosition > bottomRegion){
+            let distance = originalEvent.clientY - h / 1.5;
+            distance = distance * 0.15; // <- velocity
+            $(target).scrollTop( distance + $(target).scrollTop());
+        }
+      },
       onSort(e){
         if (this.activeModule.type === 'studio') {
           // Save current component if module type is studio
@@ -185,17 +201,10 @@
           this.$store.commit('campaign/setCustomModule', e.newIndex);
           this.$store.commit('campaign/unsetCurrentComponent');
         }
-        
+
         this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
-      },
-      onEnd (evt) {
-        // moduleId is a reactive prop, and it matches the index
-        const moduleId = evt.newIndex;
-        // Set active Module
-        this.$store.commit("campaign/setActiveModule", moduleId);
-        // Don't forget to remove the ghost DOM object when done dragging
-        document.getElementById('drag-image').remove();
+        
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
