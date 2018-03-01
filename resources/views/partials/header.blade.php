@@ -10,7 +10,6 @@
                         <a>
                     @endif
                         <span class="brand-logo"></span>
-                        <span class="by-stensul"><em>by</em> stensul</span>
                     </a>
                 </div>
             </div>
