@@ -1,9 +1,7 @@
 <template>
-  <div class="form-group" :class="'field-' + type">
-    <div class="col-xs-6">
-        <label class="clearfix control-label" for="name">{{ label }}</label>
-      <input class="input" :name="name" type="file" @change="onFileChange">
-    </div>
+  <div class="form-group" :class="'field-' + setting">
+    <label for="font-weight">{{ label }}</label>
+    <input class="input" :name="name" type="file" @change="onFileChange">
   </div>
 </template>
 

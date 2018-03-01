@@ -1,7 +1,6 @@
 <template>
-  <div class="form-group" :class="'field-' + type">
-    <div class="col-xs-6">
-        <label class="clearfix control-label" for="name">{{ label }}</label>
+  <div class="form-group" :class="'field-' + setting">
+    <label for="font-weight">{{ label }}</label>
         <el-input
           size="mini" 
           v-validate="'required'"
@@ -9,7 +8,6 @@
           :value="mainSetting"
           class="clearfix"
         ></el-input>
-    </div>
   </div>
 </template>
 

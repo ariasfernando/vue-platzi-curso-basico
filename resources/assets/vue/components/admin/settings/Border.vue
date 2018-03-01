@@ -163,6 +163,9 @@ button.el-button {
 #edit-container .right-bar .form-group,
 #edit-container .left-bar .form-group {
   margin-bottom: 0;
+  &:last-of-type {
+    margin-bottom: 6px;
+  }
 }
 </style>
 <style lang="less" >

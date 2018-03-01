@@ -433,7 +433,7 @@ export default {
 
   .group-container {
     border: 1px solid #e6e6e6;
-    padding: 4px 6px;
+    padding: 4px 6px 0 6px;
     margin: 5px 0;
     background: #f9f9f9;
     border-radius: 3px;
@@ -526,7 +526,7 @@ export default {
       text-align: left;
       color: #666666;
       font-weight: 300;
-      padding: 10px 0;
+      padding: 10px 0 5px;
       font-size: 12px;
       width: 100%;
       float: left;

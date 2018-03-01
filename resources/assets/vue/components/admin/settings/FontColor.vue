@@ -45,7 +45,7 @@ export default {
 .field-font-color {
   .el-input--mini {
     width: 86px;
-    padding: 7px 0 0 0;
+    padding: 6px 0 0 0;
   }
   .el-color-picker__trigger {
     padding: 3px;
