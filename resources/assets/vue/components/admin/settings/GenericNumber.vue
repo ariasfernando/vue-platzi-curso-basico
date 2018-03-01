@@ -1,12 +1,12 @@
 <template>
   <div class="form-group" :class="'field-' + type">
-  <label for="font-weight">{{ label }}</label>
+  <label class="half">{{ label }}</label>
       <el-input-number
         size="mini" 
         v-validate="'required'"
         v-model="mainSettingNumeric"
         :value="mainSettingNumeric"
-        class="clearfix"
+        class="clearfix padding-custom"
         :min="minValue"
         :max="maxValue"
       ></el-input-number>
@@ -27,8 +27,16 @@ export default {
       },
       set(newValue) {
         this.mainSetting = newValue;
-      },
-    },
+      }
+    }
   }
 };
 </script>
+<style lang="less" scoped>
+.el-input {
+  padding: 6px 0 0 0;
+}
+.padding-custom {
+    margin-top: 5px;
+}
+</style>

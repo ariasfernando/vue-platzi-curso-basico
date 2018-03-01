@@ -1,16 +1,14 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
-    <div class="col-xs-6">
-        <label for="height">Height</label>
-        <el-input-number
-          size="mini" 
-          v-validate="'required'"
-          v-model="height"
-          :value="height"
-          :class="{'clearfix': true, 'is-danger': errors.has('height') }"
-          :min="1"
-        ></el-input-number>
-    </div>
+  <div class="form-group" :class="'field-' + type">
+    <label class="half">Height</label>
+    <el-input-number
+        size="mini" 
+        v-validate="'required'"
+        v-model="height"
+        :value="height"
+        class="clearfix padding-custom"
+        :min="1"
+      ></el-input-number>
   </div>
 </template>
 
@@ -39,3 +37,11 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.el-input {
+  padding: 6px 0 0 0;
+}
+.padding-custom {
+    margin-top: 5px;
+}
+</style>

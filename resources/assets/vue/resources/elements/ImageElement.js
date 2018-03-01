@@ -28,6 +28,15 @@ function imageDefault() {
     componentSettings: [
       [
         {
+          link: 'attribute',
+          label: 'Select an image placeholder',
+          name: 'placeholder',
+          type: 'generic-file',
+          value: 'default/placeholder-square.jpg',
+        },
+      ],
+      [
+        {
           name: 'image-size',
           type: 'image-size',
         },
@@ -75,15 +84,6 @@ function imageDefault() {
           name: 'title',
           type: 'generic-text',
           value: 'Image',
-        },
-      ],
-      [
-        {
-          link: 'attribute',
-          label: 'Select an image placeholder',
-          name: 'placeholder',
-          type: 'generic-file',
-          value: 'default/placeholder-square.jpg',
         },
       ],
     ],

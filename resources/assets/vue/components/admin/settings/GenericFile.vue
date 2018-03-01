@@ -1,6 +1,6 @@
 <template>
   <div class="form-group" :class="'field-' + type">
-    <label for="font-weight">{{ label }}</label>
+    <label :for="name">{{ label }}</label>
     <input class="input" :name="name" type="file" @change="onFileChange">
   </div>
 </template>
@@ -17,7 +17,10 @@ export default {
       if (this.link === "style") {
         this.$emit("style-setting-updated", { name: this.name, value: "" });
       } else if (this.link === "styleOption") {
-        this.$emit("style-option-setting-updated", { name: this.name, value: "" });
+        this.$emit("style-option-setting-updated", {
+          name: this.name,
+          value: ""
+        });
       } else if (this.link === "attribute") {
         this.$emit("attribute-setting-updated", { name: this.name, value: "" });
       }
@@ -65,3 +68,8 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+input.input {
+  margin-top: 8px;
+}
+</style>
