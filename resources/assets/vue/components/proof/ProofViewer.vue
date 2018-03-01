@@ -15,12 +15,17 @@
                   </div>
              </div>
              <div class="col-md-7 col-xs-10 text-right" id="section-canvas-buttons-col">
-                 <proof-decision
-                     :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
-                     :token="token"
-                     v-if="showDecision ? true : false"
+                <proof-decision
+                    :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
+                    :token="token"
+                    v-if="showDecision ? true : false"
                     v-on:decision="decisionMade()"
                 ></proof-decision>
+                <a
+                    :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
+                    class="btn btn-default beta-btn-primary"
+                    v-if="canEdit"
+                ><i class="glyphicon glyphicon-pencil"></i> Edit campaign</a>
             </div>
         </div>
 
@@ -76,6 +81,7 @@
             return {
                 campaign: [],
                 showDecision: false,
+                canEdit: false,
                 reviewer: [],
                 desktopWidth: '600',
                 mobileWidth: '300',
@@ -121,6 +127,7 @@
                             vm.campaign = resp.body.data.campaign;
                             vm.reviewer = resp.body.data.reviewer;
                             vm.showDecision = resp.body.data.show_decision;
+                            vm.canEdit = resp.body.data.can_edit;
                             vm.desktopWidth = resp.body.data.campaign.template_width;
                             vm.mobileWidth = resp.body.data.campaign.template_mobile_width;
                             if ('message' in resp.body.data) {

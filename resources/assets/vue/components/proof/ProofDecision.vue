@@ -1,5 +1,5 @@
 <template id="proof-decision">
-    <div>
+    <div class="decision-container">
 
         <proof-decision-button
             decision="approve"
@@ -165,6 +165,8 @@
     };
 </script>
 
-<style lang="sass">
-
+<style lang="less">
+    .decision-container {
+        display: inline-block;
+    }
 </style>

@@ -106,7 +106,13 @@
           <div class="modal-footer">
             <slot name="footer">
               <button type="button" class="btn btn-default beta-btn-secondary" @click="close">Close</button>
-              <button class="btn btn-default beta-btn-primary" :class="{'disabled': reviewers.length === 0}" id="btn-send-proof" @click="send">Submit</button>
+              <button
+                class="btn btn-default beta-btn-primary"
+                :class="{'disabled': reviewers.length === 0}"
+                :disabled="reviewers.length === 0"
+                id="btn-send-proof"
+                @click="send"
+              >Submit</button>
             </slot>
           </div>
         </div>
