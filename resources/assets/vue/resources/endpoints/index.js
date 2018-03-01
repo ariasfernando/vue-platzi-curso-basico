@@ -48,5 +48,8 @@ module.exports = {
   api: {
     uploadEmail: { method: 'post', path: `${baseUrl}/api/upload-email` },
     uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId` }
+  },
+  dashboard: {
+    getMenu: { method: 'get', path: `${baseUrl}/dashboard/menu` }
   }
 };
