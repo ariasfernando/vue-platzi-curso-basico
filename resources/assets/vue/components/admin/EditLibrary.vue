@@ -80,11 +80,18 @@
                       </p>
                       <div v-if="library.config.esp" class="col-md-5">
                         <p class="control">
-                          <select v-model="library.config.espProvider">
-                            <option v-for="(esp, key) in this.espList" v-bind:value="key" :key="esp.title">
-                              {{ esp.title }}
-                            </option>
-                          </select>
+                          <el-select
+                            size="mini"
+                            v-model="espProvider"
+                            placeholder="Choose ESP"
+                            >
+                            <el-option
+                              v-for="(esp, key) in this.espList"
+                              :key="key"
+                              :label="esp.title"
+                              :value="key">
+                            </el-option>
+                          </el-select>
                         </p>
                       </div>
                     </div>
@@ -389,6 +396,16 @@
   },
   directives: {
     sticky: VueSticky
+  },
+  computed: {
+    espProvider: {
+      get() {
+        return this.library.config.espProvider ? this.library.config.espProvider : null;
+      },
+      set(espProvider) {
+        this.library.config.espProvider = espProvider;
+      }
+    }
   },
   methods: {
     updateToggle(element) {
