@@ -1,11 +1,11 @@
 <template>
   <div class="form-group" :class="'field-' + setting">
     <div class="half-style-setting" v-for="imageSizeSetting in imageSizeSettings" :key="imageSizeSetting.name">
-        <label :for="imageSizeSetting.name">{{imageSizeSetting.label}}</label>
+        <label class="clearfix" :for="imageSizeSetting.name">{{imageSizeSetting.label}}</label>
         <div>
           <el-input-number
             v-if="imageSizeSetting.name === 'width' || !isBlockHeight" 
-            class="half-style-setting padding-custom align-element"
+            class="padding-custom align-element"
             size="mini" 
             v-validate="'required'"
             v-model="imageSizeSetting.value"
@@ -30,12 +30,12 @@
             v-if="!(imageSizeSetting.name === 'height' && isBlockHeight)"
             slot="append"
             class="button"
-            :class="{'icon-disable': imageSizeSetting.name === 'height'}"
+            :class="{'icon-disable icon-height': imageSizeSetting.name === 'height'}"
             :disabled="imageSizeSetting.name === 'height'"
             @click="onTogglePxWidth"
           >{{getUnit(imageSizeSetting.name)}}</el-button>
           <span class='height-icon-auto' v-if="imageSizeSetting.name === 'width'" @click="onToggleBlockheight">
-            <i v-if="isBlockHeight" class="fa fa-fa-lock"></i>
+            <i v-if="isBlockHeight" class="fa fa-lock"></i>
             <i v-else class="fa fa-unlock"></i>
           </span>
         </div>
@@ -50,7 +50,7 @@ import SettingMixin from "../mixins/SettingMixin.js";
 export default {
   name: "ImageSize",
   props: ["setting", "element"],
-  mixins: [ SettingMixin ],
+  mixins: [SettingMixin],
   data() {
     return {
       min: 10
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     changeValue(val, property) {
-      val = (isNaN(val) || val < this.min) ? this.min : val;
+      val = isNaN(val) || val < this.min ? this.min : val;
       if (property === "width" && !this.isPxWidth) {
         // is width+%
         this.saveAttribute(`${val}%`, property);
@@ -94,9 +94,7 @@ export default {
       return property === "width" && !this.isPxWidth ? "%" : "px";
     },
     maxValue(property) {
-      return property === "width" && !this.isPxWidth
-        ? 100
-        : undefined;
+      return property === "width" && !this.isPxWidth ? 100 : undefined;
     },
     onTogglePxWidth() {
       // set isPxWidth
@@ -127,16 +125,22 @@ export default {
     },
     getValue(name) {
       return this.element.attribute[name] === "auto"
-                ? "auto"
-                : _.parseInt(this.element.attribute[name]);
+        ? "auto"
+        : _.parseInt(this.element.attribute[name]);
     },
 
     saveStyleOption(newValue, styleOptionName) {
-      this.$emit("style-option-setting-updated", { name: styleOptionName, value: newValue });
+      this.$emit("style-option-setting-updated", {
+        name: styleOptionName,
+        value: newValue
+      });
     },
 
     saveAttribute(newValue, attributeName) {
-      this.$emit("attribute-setting-updated", { name: attributeName, value: newValue });
+      this.$emit("attribute-setting-updated", {
+        name: attributeName,
+        value: newValue
+      });
     }
   }
 };
@@ -160,9 +164,9 @@ export default {
 .el-input__inner:focus {
   border: 1px solid #dcdfe6;
 }
-button.el-button {
+.el-button {
   position: absolute;
-  right: 0;
+  right: 15px;
   padding: 6px;
   &:active {
     background-color: #fff;
@@ -192,9 +196,39 @@ button.el-button {
     padding-left: 0;
   }
 }
-</style>
-<style>
-.field-image-size input[type="text"]{
+.height-icon-auto {
+  position: absolute;
+  right: -15px;
+  margin-top: 0px;
+  padding: 0px;
+  height: 28px;
+  width: 30px;
   text-align: center;
+  padding-top: 4px;
+  z-index: 2;
+  bottom: 0px;
+  cursor: pointer;
+  i {
+    color: #666666;
+  }
+}
+.icon-height {
+  right: 0;
+}
+.el-input-number {
+  width: 80px;
+}
+</style>
+<style  lang="less">
+.field-image-size {
+  input[type="text"] {
+    text-align: center;
+  }
+  .el-input-number .el-input__inner {
+    text-align: center;
+    border-right: 0;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
 }
 </style>
