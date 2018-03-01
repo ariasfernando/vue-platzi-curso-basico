@@ -115,6 +115,13 @@ export default {
 .el-button {
   transition: unset;
 }
+.el-button:not(.custom-col) {
+    width: 28px;
+    padding: 4px 0px;
+    height: 28px;
+    display: block;
+    float: left;
+}
 </style>
 <style lang="less">
   /* not scoped */

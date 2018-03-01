@@ -113,6 +113,13 @@ export default {
 .el-button + .el-button {
   margin-left: 0;
 }
+.el-button:not(.custom-col) {
+    width: 28px;
+    padding: 4px 0px;
+    height: 28px;
+    display: block;
+    float: left;
+}
 </style>
 <style>
 /* not scoped */

@@ -53,9 +53,9 @@ export default {
   margin-left: 0;
 }
 .el-button {
-  width: 34px;
-  padding: 4px 4px;
-  margin-right: 9px;
+  width: 28px;
+  padding: 4px 0px;
+  margin-right: 2.67px;
   height: 26px;
   display: block;
   float: left;
