@@ -75,8 +75,8 @@
     },
     created() {
       if (this.params.library) {
-        imageService.getLibrary(this.params.library).then(res => {
-          this.params.libraryImages = res.images;
+        imageService.getMedia(this.params.library).then(res => {
+          this.params.libraryImages = res.map(image => image.path);
         });
       }
     },

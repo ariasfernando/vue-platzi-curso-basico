@@ -11,14 +11,18 @@
       </div>
 
       <div v-if="plugin.enabled" class="form-group" v-for="(option, name) in plugin.config" :key="name">
-        <label class="col-sm-7 control-label" :data-name="name"><b>{{ option.label }}</b></label>
+        <label class="col-sm-7 control-label" :data-name="name">
+          <b>{{ option.label }}</b>
+        </label>
         <div class="col-sm-5">
           <span>
-            <toggle-button v-if="option.type === 'switch'" :disabled="!enabled" :value="option.value" active-color="#78DCD6" @change="(newValue)=>updateField(newValue, name)"></toggle-button>
-            <input v-if="option.type === 'text'" type="text" :disabled="!enabled" :value="option.value" @change="updateFieldByEvent">
+            <toggle-button v-if="option.type === 'switch'" :disabled="!enabled" :value="option.value" :name="name" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
+            <input v-if="option.type === 'text'" :type="option.type" :disabled="!enabled" :value="option.value" :name="name" @change="updateField">
+            <select v-if="option.type === 'select' || option.type === 'multi-select'" :name="name" v-model="option.value" :value="option.value" :multiple="option.type === 'multi-select'">
+              <option v-for="opt in option.options" :value="opt._id ? opt._id : opt">{{ opt.name ? opt.name : opt }}</option>
+            </select>
           </span>
         </div>
-
         <div v-if="option.value && option.config">
           <br>
           <div v-for="(subopt, subname) in option.config" class="config-inner" :key="subname">
@@ -151,6 +155,13 @@
 
         this.$store.commit('module/savePlugin', payload);
       }
+    },
+    mounted() {
+      this.$store.dispatch('module/getLibraries', {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId
+      });
     }
   }
 </script>

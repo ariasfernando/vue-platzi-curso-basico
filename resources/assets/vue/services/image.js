@@ -73,13 +73,15 @@ export default {
     return deferred.promise;
   },
 
-  getLibrary(library) {
+  getMedia(library) {
     const deferred = Q.defer();
-    const endpoint = endpoints.image.getLibrary;
+    const endpoint = endpoints.image.getMedia;
 
     const params = {
       endpoint,
-      search: { library },
+      search: { 
+        library
+      }
     };
 
     request[endpoint.method](params).then((response) => {
@@ -90,4 +92,21 @@ export default {
 
     return deferred.promise;
   },
+  getLibraries() {
+    const deferred = Q.defer();
+  
+    const endpoint = endpoints.image.getLibraries;
+  
+    const params = {
+      endpoint
+    };
+  
+    request[endpoint.method](params).then(response => {
+      deferred.resolve(response.body);
+    }).catch(error => {
+      deferred.reject(error);
+    });
+  
+    return deferred.promise;
+  }
 };
