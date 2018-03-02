@@ -31,18 +31,18 @@
           </span>
         </div>
         <!-- Input if config needs it -->
-        <div v-if="tinySetting.value === true" class="col-sm-12 control-label">
-          <div class="btn-group number-input">
-            <input
-              class="btn toggleable"
-              v-b-tooltip.hover
-              :title="key"
-              :name="key"
-              :value="tinySetting.content || 0"
-              type="number"
-              @input.prevent="changeOption"
-              min="0"
-            />
+        <div v-if="isAValidSetting(tinySetting ,key)" class="col-sm-12 control-label">
+          <div class="btn-group">
+            
+            <el-input-number
+            size="mini" 
+            v-b-tooltip.hover
+            :title="key"
+            :name="key"
+            @change="(value)=>changeOption(value, key)"
+            :value="tinySetting.content || 0"
+            :min="0"
+            ></el-input-number>
           </div>
         </div>
       </div>
@@ -153,10 +153,7 @@ export default {
       this.$store.commit("module/savePlugin", payload);
     },
 
-    changeOption(e) {
-      // Save input value
-      const value = e.target.value;
-      const setting = e.target.name;
+    changeOption(value,setting) {
       const options = {};
       // switch to other var because value saved toggle state.
       const content = value;
@@ -176,7 +173,10 @@ export default {
 
       // Save plugin data
       this.$store.commit("module/savePlugin", payload);
-    }
+    },
+    isAValidSetting(tinySetting, key){
+     return (key === 'truncate' || key === 'lines_limit') && tinySetting.value === true;
+     }
   }
 };
 </script>
