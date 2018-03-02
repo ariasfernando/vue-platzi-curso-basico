@@ -11,6 +11,7 @@ FROM registry.stensuldev.net/dockerfiles/web-2.0.0
 
 ARG DOCKER_BUILDING
 ARG APP_NAME
+ARG NODE_ENV=production
 
 # force cache for composer 
 COPY ./composer.json /usr/src/app/composer.json
