@@ -18,355 +18,368 @@
     </div>
 
     <div class="row">
-      <section v-if="ready" class="col-xs-12 section-container">
-        <div class="simple-text-config admin-library-form">  
-          <div v-if="$route.query.debug" class="col-xs-12">
-            <br><br>
-            <pre>{{ library.config }}</pre>
-          </div>
-          <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
-            <tabs>
-                <tab name="Settings" :selected="true">
-                    <div class="row">
-                      <!-- Field Name -->
-                      <div class="col-md-6">
-                        <label for="name">Name</label>
-                        <p class="control">
-                          <el-input
-                                v-validate="'required'"
-                                v-model="library.name"
-                                placeholder="Enter name here."
-                                :class="{'is-danger': errors.has('name') }"
-                          ></el-input>
-                          <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field Description -->
-                      <div class="col-md-6">
-                        <label for="description">Description</label>
-                        <p class="control">
-
-                          <el-input
-                                v-model="library.description"
-                                placeholder="Enter description here."
-                                name="description"
-                          ></el-input>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="row" v-if="campaignConfig.preview.show_preheader">
-                      <!-- Field Preheader -->
-                      <label for="preheader" class="col-sm-4 control-label">Preheader</label>
-                      <p class="control col-sm-8">
-                        <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')"></toggle-button>
-                      </p>
-                    </div>
-
-                    <!-- Field Plain text -->
-                    <div class="row" v-if="campaignConfig.process_plaintext">
-                      <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
-                      <p class="control col-sm-8">
-                        <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')"></toggle-button>
-                      </p>
-                    </div>
-
-                    <!-- Field ESP -->
-                    <div class="row">
-                      <label for="preheader" class="col-sm-4 control-label">ESP</label>
-                      <p class="control col-sm-1">
-                        <toggle-button :value="library.config.esp" @change="updateToggle('esp')"></toggle-button>
-                      </p>
-                      <div v-if="library.config.esp" class="col-md-5">
-                        <p class="control">
-                          <el-select
-                            size="mini"
-                            v-model="espProvider"
-                            placeholder="Choose ESP"
-                            >
-                            <el-option
-                              v-for="(esp, key) in this.espList"
-                              :key="key"
-                              :label="esp.title"
-                              :value="key">
-                            </el-option>
-                          </el-select>
-                        </p>
-                      </div>
-                    </div>
-
-                    <!-- Field Tagging -->
-                    <div class="row" v-if="campaignConfig.enable_tagging">
-                      <label for="tagging" class="col-sm-4 control-label">Tags</label>
-                      <p class="control col-sm-1">
-                        <toggle-button :value="library.config.tagging" @change="updateToggle('tagging')"></toggle-button>
-                      </p>
-                    </div>
-
-                    <!-- Field Templating -->
-                    <div class="row" v-if="campaignConfig.enable_templating">
-                      <label for="templating" class="col-sm-4 control-label">Enable templating</label>
-                      <p class="control col-sm-1">
-                        <toggle-button :value="library.config.templating" @change="updateToggle('templating')"></toggle-button>
-                      </p>
-                    </div>
-                </tab>
-
-                <tab name="Template">
-                    <div class="row">
-
-                      <!-- Field width -->
-                      <div class="col-md-3">
-                        <label for="templateWidth">Template width</label>
-                        <p class="control">
-
-                          <el-input-number
-                            size="mini" 
-                            v-validate="'required'"
-                            v-model="library.config.templateWidth"
-                            :class="{'is-danger': errors.has('templateWidth') }"
-                            :name="'templateWidth'"
-                          ></el-input-number>
-                          <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field mobile-width -->
-                      <div class="col-md-3">
-                        <label for="templateMobileWidth">Template Mobile Width</label>
-                        <p class="control">
-
-                          <el-input-number
-                            size="mini" 
-                            v-validate="'required'"
-                            v-model="library.config.templateMobileWidth"
-                            :class="{'is-danger': errors.has('templateMobileWidth') }"
-                            :name="'templateMobileWidth'"
-                          ></el-input-number>
-                          <span v-show="errors.has('templateMobileWidth')"
-                                class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field background-color -->
-                      <div class="col-md-3">
-                        <component
-                          :is="'input-generic-color'"
-                          @config-setting-updated="configSettingUpdatedHandler"
-                          :name="'templateBackgroundColor'"
-                          :type="'generic-color'"
-                          :link="'config'"
-                          :label="'Template Background Color'"
-                          :default-value="library.config.templateBackgroundColor"
-                          :element="library"></component>
-                      </div>
-
-                      <!-- Field content-background-color -->
-                      <div class="col-md-3">
-                        <component
-                          :is="'input-generic-color'"
-                          @config-setting-updated="configSettingUpdatedHandler"
-                          :name="'contentBackgroundColor'"
-                          :type="'generic-color'"
-                          :link="'config'"
-                          :label="'Content Background Color'"
-                          :default-value="library.config.contentBackgroundColor"
-                          :element="library"></component>
-                      </div>
-                    </div>
-
-                    <div class="row">
-
-                      <!-- Field font-family -->
-                      <div class="col-md-3">
-                        <component
-                          :is="'input-font-family'"
-                          @config-setting-updated="configSettingUpdatedHandler"
-                          :name="'fontFamily'"
-                          :type="'font-family'"
-                          :link="'config'"
-                          :label="'Font Family'"
-                          :default-value="library.config.fontFamily"
-                          :element="library"></component>
-                      </div>
-
-                      <!-- Field font-color -->
-                      <div class="col-md-3">
-                        <component
-                          :is="'input-generic-color'"
-                          @config-setting-updated="configSettingUpdatedHandler"
-                          :name="'fontColor'"
-                          :type="'generic-color'"
-                          :link="'config'"
-                          :label="'Font Color'"
-                          :default-value="library.config.fontColor"
-                          :element="library"></component>
-                      </div>
-
-                      <!-- Field font-size -->
-                      <div class="col-md-3">
-                        <label for="fontSize">Font Size</label>
-                        <p class="control">
-
-                          <el-input-number
-                            size="mini" 
-                            v-validate="'required'"
-                            v-model="library.config.fontSize"
-                            :class="{'is-danger': errors.has('fontSize') }"
-                            :name="'fontSize'"
-                          ></el-input-number>
-                          <span v-show="errors.has('fontSize')" class="help is-danger">{{ errors.first('fontSize') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field line-height -->
-                      <div class="col-md-3">
-                        <label for="lineHeight">Line Height</label>
-                        <p class="control">
-                          <el-input-number
-                            size="mini" 
-                            v-validate="'required'"
-                            v-model="library.config.lineHeight"
-                            :class="{'is-danger': errors.has('lineHeight') }"
-                            :name="'lineHeight'"
-                          ></el-input-number>
-                          <span v-show="errors.has('lineHeight')" class="help is-danger">{{ errors.first('lineHeight') }}</span>
-                        </p>
-                      </div>
-
-                    </div>
-
-                    <div class="row">
-
-                      <!-- Field link-color -->
-                      <div class="col-md-3">
-                        <component
-                          :is="'input-generic-color'"
-                          @config-setting-updated="configSettingUpdatedHandler"
-                          :name="'linkColor'"
-                          :type="'generic-color'"
-                          :link="'config'"
-                          :label="'Link Color'"
-                          :default-value="library.config.linkColor"
-                          :element="library"></component>
-                      </div>
-
-                      <!-- Field link-decoration -->
-                      <div class="col-md-3">
-                        <label for="linkDecoration">Link Decoration</label>
-                        <p class="control">
-                          <el-button
-                            :class="{'fa fa-underline':true,'active': library.config.linkDecoration === 'underline'}"
-                            size="mini"
-                            @click.native="toggleUnderline"
-                          ></el-button>
-                        </p>
-                      </div>
-
-                      <div class="col-md-3">
-                        <label for="padding">Padding</label>
-                        <p class="control">
-
-                          <el-input-number
-                            size="mini" 
-                            v-validate="'required'"
-                            v-model="library.config.padding"
-                            :class="{'is-danger': errors.has('padding') }"
-                            :name="'padding'"
-                          ></el-input-number>
-                          <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field external-link -->
-                      <div class="col-md-3">
-                        <label for="externalCssLink">External CSS Link</label>
-                        <p class="control">
-                          <el-input
-                            v-model="library.config.externalCssLink"
-                            name="linkColor" 
-                            placeholder="http://www.example.com/css/styles.css"
-                          ></el-input>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <!-- Field propietary styles -->
-                      <div class="col-md-12">
-                        <label for="propietaryCss">Propietary Styles</label>
-                        <p class="control">
-                          <textarea v-model="library.config.propietaryCss" rows="10" name="propietaryCss" type="text" placeholder=""></textarea>
-                        </p>
-                      </div>
-                    </div>
-                </tab>
-
-                <tab name="Menu">
-                    <!-- Select modules -->
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div id="modules-container">
-
-                          <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name">
-
-                            <div :id="'group-container-' + group.name">
-
-                              <label for="fontFamily">Group Name</label>
-                              <p :class="{ 'control': true }">
-
-                                <el-input
-                                  v-model="group.name"
-                                  v-validate="'required'"
-                                  :name="'modules[' + idx + '][name]'"
-                                  placeholder="Enter group name"
-                                  :class="{'is-danger': errors.has('groupName-' + idx) }"
-                                ></el-input>
-                                <span v-show="errors.has('groupName-' + idx)"
-                                      class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
-                              </p>
-
-                              <select v-model="group.modules" :name="'modules[' + idx + '][modules]'" class="form-control" multiple>
-                                <option v-for="module in modules" :value="module" :selected="group.modules.indexOf(module) >= 0" :key="module">
-                                  {{ module }}
-                                </option>
-                              </select>
-
-                              <div v-if="group.name === 'default'" class="sep">
-                                <br/><br/>
+      <section v-if="ready" class="container">
+        <div class="simple-text-config admin-library-form">
+          <div class="row">
+            <div class="col-xs-offset-1 col-xs-10">
+                  <div v-if="$route.query.debug" class="col-xs-12">
+                    <br><br>
+                    <pre>{{ library.config }}</pre>
+                  </div>
+                  <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
+                    <tabs>
+                        <tab name="Settings" :selected="true">
+                            <div class="row">
+                              <!-- Field Name -->
+                              <div class="col-md-6">
+                                <label for="name">Name</label>
+                                <p class="control">
+                                  <el-input
+                                        v-validate="'required'"
+                                        v-model="library.name"
+                                        placeholder="Enter name here."
+                                        :class="{'is-danger': errors.has('name') }"
+                                  ></el-input>
+                                  <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
+                                </p>
                               </div>
 
-                              <div v-else class="group-remove-container">
-                                <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)"></span>
-                                <hr/>
+                              <!-- Field Description -->
+                              <div class="col-md-6">
+                                <label for="description">Description</label>
+                                <p class="control">
+
+                                  <el-input
+                                        v-model="library.description"
+                                        placeholder="Enter description here."
+                                        name="description"
+                                  ></el-input>
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="row" v-if="campaignConfig.preview.show_preheader">
+                              <!-- Field Preheader -->
+                              <label for="preheader" class="col-sm-4 control-label">Preheader</label>
+                              <p class="control col-sm-8">
+                                <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')"></toggle-button>
+                              </p>
+                            </div>
+
+                            <!-- Field Plain text -->
+                            <div class="row" v-if="campaignConfig.process_plaintext">
+                              <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
+                              <p class="control col-sm-8">
+                                <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')"></toggle-button>
+                              </p>
+                            </div>
+
+                            <!-- Field ESP -->
+                            <div class="row">
+                              <label for="preheader" class="col-sm-4 control-label">ESP</label>
+                              <p class="control col-sm-1">
+                                <toggle-button :value="library.config.esp" @change="updateToggle('esp')"></toggle-button>
+                              </p>
+                              <div v-if="library.config.esp" class="col-md-5">
+                                <p class="control">
+                                  <el-select
+                                    size="mini"
+                                    v-model="espProvider"
+                                    placeholder="Choose ESP"
+                                    >
+                                    <el-option
+                                      v-for="(esp, key) in this.espList"
+                                      :key="key"
+                                      :label="esp.title"
+                                      :value="key">
+                                    </el-option>
+                                  </el-select>
+                                </p>
+                              </div>
+                            </div>
+
+                            <!-- Field Tagging -->
+                            <div class="row" v-if="campaignConfig.enable_tagging">
+                              <label for="tagging" class="col-sm-4 control-label">Tags</label>
+                              <p class="control col-sm-1">
+                                <toggle-button :value="library.config.tagging" @change="updateToggle('tagging')"></toggle-button>
+                              </p>
+                            </div>
+
+                            <!-- Field Templating -->
+                            <div class="row" v-if="campaignConfig.enable_templating">
+                              <label for="templating" class="col-sm-4 control-label">Enable templating</label>
+                              <p class="control col-sm-1">
+                                <toggle-button :value="library.config.templating" @change="updateToggle('templating')"></toggle-button>
+                              </p>
+                            </div>
+                        </tab>
+
+                        <tab name="Template">
+                            <div class="row">
+
+                              <!-- Field width -->
+                              <div class="col-md-3">
+                                <label for="templateWidth">Template width</label>
+                                <p class="control">
+
+                                  <el-input-number
+                                    size="mini" 
+                                    v-validate="'required'"
+                                    v-model="library.config.templateWidth"
+                                    :class="{'is-danger': errors.has('templateWidth') }"
+                                    :name="'templateWidth'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth') }}</span>
+                                </p>
+                              </div>
+
+                              <!-- Field mobile-width -->
+                              <div class="col-md-3">
+                                <label for="templateMobileWidth">Template Mobile Width</label>
+                                <p class="control">
+
+                                  <el-input-number
+                                    size="mini" 
+                                    v-validate="'required'"
+                                    v-model="library.config.templateMobileWidth"
+                                    :class="{'is-danger': errors.has('templateMobileWidth') }"
+                                    :name="'templateMobileWidth'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('templateMobileWidth')"
+                                        class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
+                                </p>
+                              </div>
+
+                              <!-- Field background-color -->
+                              <div class="col-md-3">
+                                <component
+                                  :is="'input-generic-color'"
+                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  :name="'templateBackgroundColor'"
+                                  :type="'generic-color'"
+                                  :link="'config'"
+                                  :label="'Template Background Color'"
+                                  :default-value="library.config.templateBackgroundColor"
+                                  :element="library"></component>
+                              </div>
+
+                              <!-- Field content-background-color -->
+                              <div class="col-md-3">
+                                <component
+                                  :is="'input-generic-color'"
+                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  :name="'contentBackgroundColor'"
+                                  :type="'generic-color'"
+                                  :link="'config'"
+                                  :label="'Content Background Color'"
+                                  :default-value="library.config.contentBackgroundColor"
+                                  :element="library"></component>
+                              </div>
+                            </div>
+
+                            <div class="row">
+
+                              <!-- Field font-family -->
+                              <div class="col-md-3">
+                                <component
+                                  :is="'input-font-family'"
+                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  :name="'fontFamily'"
+                                  :type="'font-family'"
+                                  :link="'config'"
+                                  :label="'Font Family'"
+                                  :default-value="library.config.fontFamily"
+                                  :element="library"></component>
+                              </div>
+
+                              <!-- Field font-color -->
+                              <div class="col-md-3">
+                                <component
+                                  :is="'input-generic-color'"
+                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  :name="'fontColor'"
+                                  :type="'generic-color'"
+                                  :link="'config'"
+                                  :label="'Font Color'"
+                                  :default-value="library.config.fontColor"
+                                  :element="library"></component>
+                              </div>
+
+                              <!-- Field font-size -->
+                              <div class="col-md-3">
+                                <label for="fontSize">Font Size</label>
+                                <p class="control">
+
+                                  <el-input-number
+                                    size="mini" 
+                                    v-validate="'required'"
+                                    v-model="library.config.fontSize"
+                                    :class="{'is-danger': errors.has('fontSize') }"
+                                    :name="'fontSize'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('fontSize')" class="help is-danger">{{ errors.first('fontSize') }}</span>
+                                </p>
+                              </div>
+
+                              <!-- Field line-height -->
+                              <div class="col-md-3">
+                                <label for="lineHeight">Line Height</label>
+                                <p class="control">
+                                  <el-input-number
+                                    size="mini" 
+                                    v-validate="'required'"
+                                    v-model="library.config.lineHeight"
+                                    :class="{'is-danger': errors.has('lineHeight') }"
+                                    :name="'lineHeight'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('lineHeight')" class="help is-danger">{{ errors.first('lineHeight') }}</span>
+                                </p>
                               </div>
 
                             </div>
-                          </div>
 
-                        </div>
-                      </div>
-                    </div>
+                            <div class="row">
 
-                    <div class="row">
-                      <div class="col-md-12">
-                        <button class="btn btn-success center-block btn-add-group" @click.prevent="addGroup">Add Group</button>
-                        <br>
-                      </div>
-                    </div>
+                              <!-- Field link-color -->
+                              <div class="col-md-3">
+                                <component
+                                  :is="'input-generic-color'"
+                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  :name="'linkColor'"
+                                  :type="'generic-color'"
+                                  :link="'config'"
+                                  :label="'Link Color'"
+                                  :default-value="library.config.linkColor"
+                                  :element="library"></component>
+                              </div>
 
-                    <!-- Input submit  -->
-                    <div class="row">
-                      <div class="col-md-12">
-                        <button type="submit" class="btn btn-success pull-right submit-config hidden" :disabled="errors.any()">Submit
-                        </button>
-                      </div>
-                    </div>
-                </tab>
-            </tabs>
+                              <!-- Field link-decoration -->
+                              <div class="col-md-3">
+                                <label for="linkDecoration">Link Decoration</label>
+                                <p class="control">
+                                  <el-button
+                                    :class="{'fa fa-underline':true,'active': library.config.linkDecoration === 'underline'}"
+                                    size="mini"
+                                    @click.native="toggleUnderline"
+                                  ></el-button>
+                                </p>
+                              </div>
 
-          </form>
+                              <div class="col-md-3">
+                                <label for="padding">Padding</label>
+                                <p class="control">
+
+                                  <el-input-number
+                                    size="mini" 
+                                    v-validate="'required'"
+                                    v-model="library.config.padding"
+                                    :class="{'is-danger': errors.has('padding') }"
+                                    :name="'padding'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
+                                </p>
+                              </div>
+
+                              <!-- Field external-link -->
+                              <div class="col-md-3">
+                                <label for="externalCssLink">External CSS Link</label>
+                                <p class="control">
+                                  <el-input
+                                    v-model="library.config.externalCssLink"
+                                    name="linkColor" 
+                                    placeholder="http://www.example.com/css/styles.css"
+                                  ></el-input>
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <!-- Field propietary styles -->
+                              <div class="col-md-12">
+                                <label for="propietaryCss">Propietary Styles</label>
+                                <p class="control">
+                                  <textarea v-model="library.config.propietaryCss" rows="10" name="propietaryCss" type="text" placeholder=""></textarea>
+                                </p>
+                              </div>
+                            </div>
+                        </tab>
+
+                        <tab name="Menu">
+                            <!-- Select modules -->
+                            <div class="row">
+                              <div class="col-md-8 col-md-offset-2">
+                                <div id="modules-container">
+
+                                  <div v-for="(group, idx) in library.modules" :id="'modules-' + idx">
+
+                                    <div :id="'group-container-' + idx">
+                                      <label>Group Name</label>
+                                      <p :class="{ 'control': true }">
+
+                                        <el-input
+                                          v-model="group.name"
+                                          v-validate="'required'"
+                                          :name="'modules[' + idx + '][name]'"
+                                          placeholder="Enter group name"
+                                          :class="{'is-danger': errors.has('groupName-' + idx) }"
+                                        ></el-input>
+                                        <span v-show="errors.has('groupName-' + idx)"
+                                              class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
+                                      </p>
+
+                                      <el-select
+                                        v-model="group.modules"
+                                        :name="'modules[' + idx + '][modules]'"
+                                        multiple
+                                        placeholder="Choose modules"
+                                        size="mini"
+                                        >
+                                          <el-option
+                                            v-for="module in modules"
+                                            :key="module"
+                                            :label="module"
+                                            :value="module"
+                                            :selected="group.modules.indexOf(module) >= 0"
+                                            >{{module}}
+                                          </el-option>
+                                      </el-select>
+                                      <div v-if="group.name === 'default'" class="sep">
+                                        <br/><br/>
+                                      </div>
+
+                                      <div v-else class="group-remove-container">
+                                        <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)"></span>
+                                        <hr/>
+                                      </div>
+
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-12">
+                                <button class="btn btn-success center-block btn-add-group" @click.prevent="addGroup">Add Group</button>
+                                <br>
+                              </div>
+                            </div>
+
+                            <!-- Input submit  -->
+                            <div class="row">
+                              <div class="col-md-12">
+                                <button type="submit" class="btn btn-success pull-right submit-config hidden" :disabled="errors.any()">Submit
+                                </button>
+                              </div>
+                            </div>
+                    </tab>
+                </tabs>
+
+              </form>
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -535,6 +548,12 @@
 
 .library {
   margin-top: -15px;
+  #modules-container {
+    .el-input,
+    .el-select {
+      width: 300px;  
+    }
+  }
   .half-style-setting {
     width: 100%;
     float: left;
