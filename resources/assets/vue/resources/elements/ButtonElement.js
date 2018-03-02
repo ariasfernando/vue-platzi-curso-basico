@@ -52,8 +52,10 @@ function buttonDefault() {
     componentSettings: [
       [
         {
-          name: 'font-family',
+          name: 'fontFamily',
           type: 'font-family',
+          link: 'style',
+          label: 'Font Family',
         },
         {
           name: 'font-style',
