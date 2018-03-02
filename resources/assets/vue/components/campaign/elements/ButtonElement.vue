@@ -33,7 +33,7 @@
                 align="center"
                 :bgcolor="component.attribute.bgcolor"
                 :height="component.attribute.height"
-                :style="styles"
+                :style="[styles, {'vertical-align' : component.attribute.valign}]"
               >
                 <div
                     class="stx-edit-text stx-wrapper"

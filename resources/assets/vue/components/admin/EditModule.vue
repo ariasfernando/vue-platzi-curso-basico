@@ -516,7 +516,7 @@ export default {
   }
   .right-bar,
   .left-bar {
-    height: calc(~"100vh - 105px");
+    height: calc(~"100vh - 55px");
     overflow: auto;
     width: 270px;
     display: block;

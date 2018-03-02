@@ -32,7 +32,7 @@
                 align="center"
                 :bgcolor="component.attribute.bgcolor"
                 :height="component.attribute.height"
-                :style="component.style"
+                :style="[component.style, {'vertical-align' : component.attribute.valign}]"
             >
                 <tiny-mce :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
                 <img v-if="component.attribute.buttonCaret"

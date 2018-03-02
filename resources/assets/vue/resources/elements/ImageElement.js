@@ -46,10 +46,6 @@ function imageDefault() {
           name: 'text-align',
           type: 'text-align',
         },
-        {
-          name: 'vertical-align',
-          type: 'vertical-align',
-        },
       ],
       [
         {

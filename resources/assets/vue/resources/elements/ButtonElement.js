@@ -5,7 +5,6 @@ function buttonDefault() {
       text: 'Lorem ipsum',
     },
     style: {
-      verticalAlign: 'middle',
       textAlign: 'center',
       fontFamily: 'Helvetica, arial, sans-serif',
       color: '#FFFFFF',
@@ -44,6 +43,7 @@ function buttonDefault() {
       width: '150',
       height: '40',
       align: 'center',
+      valign: 'middle',
       bgcolor: '#514960',
       href: 'http://stensul.com',
       target: '_blank',

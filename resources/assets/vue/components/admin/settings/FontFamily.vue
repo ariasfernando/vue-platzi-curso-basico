@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
+  <div class="form-group" :class="'field-font-family'">
     <label>Font Family</label>
     <el-select
     class="width-full"
