@@ -15,6 +15,10 @@
 			padding: 7px 0;
 			border-top: 1px solid #FFFFFF;
 
+      &:hover{
+        background: @body-bg;
+      }
+
 			&:first-child{
 				border-top: none;
 			}
@@ -141,6 +145,29 @@
   }
 }
 
+.dropdown-submenu {
+  position: relative;
+  & a {
+    margin-right: 20px;
+  }
+  & a:focus, & a:hover {
+    color: @input-color !important;
+  }
+}
+
+.dropdown-submenu-item {
+  padding: 3px 0 !important;
+  &:hover {
+    background: lighten( @stensul-highlight, 20%) !important;
+  }
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+
 .dropdown-menu{
   font-family: 'Open Sans', Arial, sans-serif;
   border-radius: 0px 0px 2px 2px;
@@ -156,7 +183,7 @@
     padding: 6px;
 
     input{
-      box-shadow: none; 
+      box-shadow: none;
       border-radius: 2px;
       font-size: 13px;
       color: @stensul-gray;

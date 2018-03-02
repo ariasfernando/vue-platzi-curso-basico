@@ -23,7 +23,7 @@
       </div>
       <div class="col-xs-12 col-sm-2 pull-right no-gutters">
         <div class="dropdown default-dropdown pull-right">
-          <dashboard-menu :config="config"></dashboard-menu>
+          <dashboard-menu></dashboard-menu>
         </div>
       </div>
     </div>
@@ -31,10 +31,10 @@
     <div class="dash-campaigns">
       <div class="row" id="draft-emails-campaign">
         <div class="col-xs-12">
-          <search-result 
+          <search-result
             :tags="tags"
             :terms="terms"
-            @remove-search-tag="removeSearchTag" 
+            @remove-search-tag="removeSearchTag"
             @remove-search-term="removeSearchTerm"
           ></search-result>
           <draft-emails
@@ -56,10 +56,10 @@
       </div>
       <div class="row" id="finished-campaign">
         <div class="col-xs-12">
-          <search-result 
+          <search-result
             :tags="tags"
             :terms="terms"
-            @remove-search-tag="removeSearchTag" 
+            @remove-search-tag="removeSearchTag"
             @remove-search-term="removeSearchTerm"
           ></search-result>
           <finished-emails
@@ -82,10 +82,10 @@
       </div>
       <div class="row" v-if="config.enable_templating" id="templates-campaign">
         <div class="col-xs-12">
-          <search-result 
+          <search-result
             :tags="tags"
             :terms="terms"
-            @remove-search-tag="removeSearchTag" 
+            @remove-search-tag="removeSearchTag"
             @remove-search-term="removeSearchTerm"
           ></search-result>
           <template-campaigns

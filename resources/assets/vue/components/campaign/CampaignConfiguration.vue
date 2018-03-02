@@ -21,7 +21,9 @@
                  v-validate.initial="'required'"
                  :value="form.campaignName"
                  :class="{'input': true, 'is-danger': errors.has('campaignName') }"
-                 @input="saveCampaignName"/>
+                 @input="saveCampaignName"
+                 @focus="checkName"
+                 />
 
             <span v-show="errors.has('campaignName')" class="help is-danger">{{ errors.first('campaignName') }}</span>
           </p>
@@ -291,6 +293,11 @@
 
         this.validate();
       },
+      checkName(event) {
+        if (this.form.campaignName === 'Untitled Email') {
+          this.form.campaignName = '';
+        }
+      }
     }
   }
 </script>

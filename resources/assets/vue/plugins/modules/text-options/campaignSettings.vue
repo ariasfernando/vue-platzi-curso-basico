@@ -29,7 +29,29 @@
     mounted() {
       this.initTinyMCE();
     },
+    $timer: null,
     methods: {
+      // sets the cursor position to the defined node
+      // ed: editor, start: defines if the cursor is to be placed at the start or end of the node
+      // return node: boolean, if set returns the caretnode instead of deleting it
+      setCursor(ed, node, start){
+
+        const tn = ed.getDoc().createTextNode(".");
+        if (start){
+          node.insertBefore(tn, node.firstChild);
+        }
+        else node.appendChild(tn);
+
+        const rng = ed.selection.getRng();
+        rng.selectNode(tn);
+        rng.setStartBefore(tn);
+        rng.setStartAfter(tn);
+
+        ed.selection.setRng(rng);
+
+        node.removeChild(tn);
+      },
+
       initTinyMCE() {
         const _this = this;
         const options = _.filter(this.plugin.config.options, 'value');
@@ -77,18 +99,32 @@
           max_lines: this.plugin.config.settings.lines_limit ? this.plugin.config.settings.lines_limit.content : undefined,
 
           init_instance_callback: (editor) => {
-
             editor.on('blur', (e) => {
-              this.$store.commit('campaign/updateElement', {
-                moduleId: this.currentComponent.moduleId,
-                columnId: this.currentComponent.columnId,
-                componentId: this.currentComponent.componentId,
-                data: {
-                  text: editor.getContent()
-                } 
-              });
+                tinymce.get(editorId).destroy();
+            }),
 
-              tinymce.get(editorId).destroy();
+            editor.on('keyup', (e) => {
+              if (this.$timer) {
+                clearTimeout(this.$timer);
+              }
+
+              this.$timer = setTimeout(() => {
+                const bm = editor.selection.getBookmark(2, true);
+
+                this.$store.commit('campaign/updateElement', {
+                  moduleId: this.currentComponent.moduleId,
+                  columnId: this.currentComponent.columnId,
+                  componentId: this.currentComponent.componentId,
+                  data: {
+                    text: editor.getContent()
+                  }
+                });
+
+                // Hack to restore cursor at the time of saving
+                setTimeout(() => {
+                  editor.selection.moveToBookmark(bm);
+                }, 10);
+              }, 1000);
             });
           },
 
