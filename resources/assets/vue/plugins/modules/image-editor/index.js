@@ -120,6 +120,7 @@ module.exports = {
       value: false,
       type: 'switch',
     },
+    // commented for presentation becase it's not use Element-ui
     // library: {
     //   label: 'Library',
     //   key: 'library',
