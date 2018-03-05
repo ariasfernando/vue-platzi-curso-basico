@@ -6,7 +6,6 @@
 				<div class="logo">
 					<a href="{{ url('/admin') }}">
 						<span class="brand-logo"></span>
-						<span class="by-stensul"><em>by</em> stensul</span>
 					</a>
 				</div>
 			</div>
