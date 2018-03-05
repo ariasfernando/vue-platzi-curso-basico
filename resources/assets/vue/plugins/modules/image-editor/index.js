@@ -120,13 +120,13 @@ module.exports = {
       value: false,
       type: 'switch',
     },
-    library: {
-      label: 'Library',
-      key: 'library',
-      value: '',
-      type: 'select',
-      options: []
-    },
+    // library: {
+    //   label: 'Library',
+    //   key: 'library',
+    //   value: '',
+    //   type: 'select',
+    //   options: []
+    // },
     sticker: {
       label: 'Sticker',
       key: 'sticker',
