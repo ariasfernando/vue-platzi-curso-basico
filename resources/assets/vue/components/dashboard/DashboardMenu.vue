@@ -1,112 +1,60 @@
 <template>
-  <div>
-    <a v-if="showDefaultButton"
-      @click="checkLibrary"
-      class="btn btn-default btn-create beta-btn-primary" :href="$_app.config.baseUrl + '/campaign/edit/' + '?locale=en_us'">
+  <div v-if="menu.length">
+    <a v-show="menu.length === 1"
+      class="btn btn-default btn-create beta-btn-primary" :href="$_app.config.baseUrl + '/campaign/edit/?locale=en_us'">
       <i class="glyphicon glyphicon-plus-sign"></i> Create a new email
     </a>
 
-    <div v-if="showLanguagesButton">
+    <div v-show="menu.length > 1">
       <button class="btn btn-default dropdown-toggle beta-btn-primary" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
-        <i class="glyphicon glyphicon-plus-sign"></i> Create a new email<span class="caret"></span>
+        <i class="glyphicon glyphicon-plus-sign"></i> Create a new email <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-          <li v-for="(locale, key, index) in localeConfig.langs" :key="key" :name="camel(locale.name)" role="presentation">
-            <a :href="$_app.config.baseUrl + '/campaign/edit?locale=' + key">{{locale.name}}</a>
-          </li>
+        <dashboard-menu-item
+          v-for="item in menu"
+          :item="item"
+          :key="item.key"
+        ></dashboard-menu-item>
       </ul>
     </div>
-
-    <div v-if="showLibrariesButton">
-      <button class="btn btn-default dropdown-toggle beta-btn-primary" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
-        <i class="glyphicon glyphicon-plus-sign"></i> Create a new email<span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-        <li v-for="library in libraries" :key="library._id" :name="camel(library.name)" role="presentation">
-          <a :href="$_app.config.baseUrl + '/campaign/edit?locale=en_us&library=' + library._id">
-            {{library.name}}
-          </a>
-        </li>
-      </ul>
-    </div>
-
   </div>
 </template>
 
 <script>
-  import _ from 'lodash';
-  import configService from '../../services/config';
-  import libraryService from '../../services/library';
+  import DashboardMenuItem from './partials/DashboardMenuItem.vue';
+  import dashboardService from '../../services/dashboard';
 
   export default {
+    components: {
+      DashboardMenuItem
+    },
     data: function() {
       return {
-        viewConfig: {},
-        localeConfig: {},
-        libraries: {}
-      }
-    },
-    computed: {
-      showDefaultButton: function() {
-        if (this.viewConfig.campaign_format === 'languages') {
-          return false;
-        }
-        return this.libraries.length < 2;
-      },
-      showLanguagesButton: function() {
-        return this.viewConfig.campaign_format === 'languages'
-      },
-      showLibrariesButton: function() {
-        if (this.viewConfig.campaign_format === 'libraries') {
-          return this.libraries.length > 1;
-        }
-        return false;
-      }
-    },
-    props: {
-      config: {
-        type: Object,
-        required: true
+        menu: {}
       }
     },
     created: function() {
-      configService.getConfig('view').then((response) => {
-        this.viewConfig = response;
-      });
-
-      configService.getConfig('locale').then((response) => {
-        this.localeConfig = response;
-      });
-
-      let data = {
-        limit: -1
-      };
-
-      libraryService.fetchLibraries(data).then((response) => {
-        this.libraries = response;
-        if (response.data) {
-          this.libraries = response.data;
-        }
+      dashboardService.getMenu().then((response) => {
+        this.menu = response;
       })
       .catch((error) => {
         this.$root.$toast(error, {className: 'et-error'});
       });
-
+      // As we use bootstrap-dropdown, we need to toggle the submenu with this
+      $(document).on('click mouseover', '.dropdown-submenu .open-submenu', function(e){
+        $(this).closest('.dropdown-menu').find('ul').each(function() {
+          $(this).removeClass('open').hide();
+        });
+        $(this).next('ul').toggle();
+        e.stopPropagation();
+        e.preventDefault();
+      });
+      // This will toggle any opened submenu before show the dropdown
+      $(document).on('click', '.dropdown-toggle', function(e) {
+        $(this).next('ul').find('ul').each(function() {
+          $(this).removeClass('open').hide();
+        });
+      });
     },
-    methods: {
-      checkLibrary (event) {
-        if (!this.libraries.length) {
-          event.preventDefault();
-          this.$root.$toast('Oops! There are no libraries available, please contact our support team.', {className: 'et-error'});
-        }
-      },
-      camel(str) {
-        return _.camelCase(str);
-      }
-    }
   }
 </script>
-
-<li role="presentation" name="AIG pilot">
-  <a href="#">AIG pilot</a>
-</li>

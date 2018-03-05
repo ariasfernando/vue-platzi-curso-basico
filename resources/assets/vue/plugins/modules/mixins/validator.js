@@ -20,6 +20,8 @@ export default {
             name: this.name,
             ...this.currentComponent,
           });
+
+          this.$_app.utils.validator.modulesErrors('#emailCanvas');
         }
       });
     },

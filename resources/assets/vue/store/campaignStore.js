@@ -11,6 +11,7 @@ function campaignStore() {
       campaign: {},
       modules: [],
       editedSettings: {},
+      campaignCompleted: false,
       currentModuleId: undefined,
       currentCustomModuleId: undefined,
       currentComponent: {},
@@ -24,6 +25,8 @@ function campaignStore() {
       buildingMode: 'desktop',
       editorToolbar: '',
       dirty: false,
+      showImageEditor: false,
+      moduleErrors: [],
       fieldErrors: [],
     },
     getters: {
@@ -32,6 +35,15 @@ function campaignStore() {
       },
       campaign(state) {
         return state.campaign;
+      },
+      moduleErrors(state) {
+        const modules = state.modules;
+        const errors = _.filter(modules, m => m.data.errors && m.data.errors.length);
+
+        return errors.length || state.fieldErrors.length;
+      },
+      fieldErrors(state) {
+        return state.fieldErrors;
       },
       currentComponent(state) {
         return state.currentComponent;
@@ -50,20 +62,16 @@ function campaignStore() {
       },
       templateWidth(state) {
         const templateWidth = 600;
-        const templateMobileWidth = 480;
-        if (_.isEmpty(state.campaign)) {
-          return state.buildingMode === 'desktop' ? templateWidth : templateMobileWidth;
-        }
-        if (state.buildingMode === 'mobile') {
-          return state.campaign.library_config.templateMobileWidth || templateMobileWidth;
-        }
-        return state.campaign.library_config.templateWidth || templateWidth;
+        return (state.campaign.library_config && state.campaign.library_config.templateWidth) || templateWidth;
       },
       editorToolbar(state) {
         return state.editorToolbar;
       },
       dirty(state) {
         return state.dirty;
+      },
+      showImageEditor(state) {
+        return state.showImageEditor;
       },
       locked(state) {
         if (!_.isEmpty(state.campaign)) {
@@ -74,10 +82,12 @@ function campaignStore() {
 
     },
     mutations: {
+      campaignCompleted(state, status) {
+        state.campaignCompleted = status;
+      },
       loadCampaignData(state, campaignData) {
         state.campaign = campaignData;
         state.modules = campaignData.campaign_data.modules_data;
-        state.editedSettings.autoSave = campaignData.campaign_data.auto_save;
       },
       updateEmailCanvas(state, modules_data) {
         state.modules = modules_data;
@@ -87,6 +97,9 @@ function campaignStore() {
       },
       setDirty(state, dirty) {
         state.dirty = dirty;
+      },
+      setToggleImageEditor(state, stateModal) {
+        state.showImageEditor = stateModal;
       },
       addModule(state, moduleData) {
         state.modules.push(moduleData);
@@ -101,6 +114,14 @@ function campaignStore() {
         state.modules.push(clone);
         state.dirty = true;
       },
+      updateCustomElement(state, payload) {
+        // This is necessary, since the clickaway function is executed.
+        if ( !_.isUndefined(payload.moduleId) ){ 
+          const update = { ...state.modules[payload.moduleId].data, ...payload.data };
+          state.modules[payload.moduleId].data = update;
+          state.dirty = true;
+        }
+      },
       updateElement(state, payload) {
         // This is necessary, since the clickaway function is executed.
         if ( !_.isUndefined(payload.moduleId) ){ 
@@ -111,6 +132,9 @@ function campaignStore() {
       },
       saveSetting(state, setting) {
         state.editedSettings[setting.name] = setting.value;
+      },
+      saveCampaignData(state, payload) {
+        state.campaign.campaign_data[payload.name] = payload.value;
       },
       toggleModal(state, modalName) {
         state[modalName] = !state[modalName];
@@ -124,6 +148,9 @@ function campaignStore() {
       },
       setCurrentComponent(state, data) {
         state.currentComponent = data;
+      },
+      unsetCurrentComponent(state) {
+        state.currentComponent = {};
       },
       setActiveModule(state, moduleId) {
         state.activeModule = moduleId;
@@ -168,12 +195,22 @@ function campaignStore() {
         state.dirty = true;
       },
       saveCustomModuleData(state, data) {
+        // Prevent empty arrays returned by php-mongo
+        if (_.isArray(state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data = {};
+        }
+
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
         const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
         state.modules[data.moduleId].data = newData;
         state.dirty = true;
       },
       saveCustomModuleDataField(state, data) {
+        // Prevent empty arrays returned by php-mongo
+        if (_.isArray(state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data = {};
+        }
+
         state.modules[data.moduleId].data[data.field] = data.value;
         state.dirty = true;
       },
@@ -212,6 +249,10 @@ function campaignStore() {
       },
     },
     actions: {
+			updateCustomElement(context, payload) {
+        context.commit('updateCustomElement', payload);
+        return Promise.resolve();
+      },
       addErrors(context, errors) {
         _.each(errors, (error) => {
           context.commit('clearErrorsByScope', error.scope);
@@ -233,8 +274,10 @@ function campaignStore() {
       getCampaignData(context, campaignId) {
         return campaignService.getCampaign(campaignId)
           .then((response) => {
+            let campaign = response.campaign;
+            // TODO: use a model
+            campaign.campaign_data.auto_save = campaign.campaign_data.auto_save !== false;
             context.commit('loadCampaignData', response.campaign);
-            context.commit('setDirty', false);
           })
           .catch(error => context.commit('error', error));
       },
@@ -242,7 +285,6 @@ function campaignStore() {
         return campaignService.getCampaignPublic(campaignId)
           .then((response) => {
             context.commit('loadCampaignData', response.campaign);
-            context.commit('setDirty', false);
           })
           .catch(error => context.commit('error', error));
       },
@@ -250,7 +292,7 @@ function campaignStore() {
         const deferred = Q.defer();
         campaignService.saveCampaign(data)
           .then(res => {
-            context.dispatch('getCampaignData', res.campaignId);
+            context.commit('setDirty', false);
             deferred.resolve(res.campaignId);
           })
           .catch(error => {
@@ -263,6 +305,7 @@ function campaignStore() {
         const deferred = Q.defer();
         campaignService.completeCampaign(campaign)
           .then(response => {
+            context.commit('setDirty', false);
             context.dispatch('getCampaignData', response.campaignId);
             deferred.resolve(response);
           })

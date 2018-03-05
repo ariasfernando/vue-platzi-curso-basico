@@ -29,7 +29,6 @@
 </template>
 
 <script>
-  import configService from '../../../services/config';
 
   export default {
     computed: {
@@ -46,7 +45,7 @@
       }
     },
     created () {
-      configService.getConfig('campaign').then((response) => this.campaignConfig = response);
+      this.campaignConfig = this.$store.getters["config/config"].campaign;
     },
     methods: {
       confirmSave(e) {
@@ -73,9 +72,3 @@
     }
   }
 </script>
-
-<style lang="less" scoped>
-  .modal-templating{
-    width: 400px!important;
-  }
-</style>

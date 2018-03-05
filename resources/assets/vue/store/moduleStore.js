@@ -128,12 +128,20 @@ const mutations = {
     }
   },
   saveComponentStyle(state, data) {
+    const style = state.module.structure.columns[data.columnId].components[data.componentId].style;
+    const newStyle = {};
+    newStyle[data.property] = data.value;
+    _.merge(style, newStyle);
+  },
+  saveComponentStyleOption(state, data) {
     const component = state.module.structure.columns[data.columnId].components[data.componentId];
-    component.style[data.property] = data.value;
+    component.styleOptions[data.property] = data.value;
   },
   saveComponentAttribute(state, data) {
-    const attributes = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
-    attributes[data.attribute] = data.attributeValue;
+    const attribute = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
+    const newAttr = {};
+    newAttr[data.property] = data.value;
+    _.merge(attribute, newAttr);
   },
   setActiveColumn(state, columnId) {
     state.activeColumn = columnId;
@@ -144,12 +152,18 @@ const mutations = {
   setColumnsFixed(state, data) {
     state.module.structure.columnsFixed = data;
   },
+  setInvertedStacking(state, data) {
+    state.module.structure.invertedStacking = data;
+  },
   toggleRaw(state) {
     state.showRaw = !state.showRaw;
   },
   error(state, err) {
     console.log(err);
   },
+  setListLibraries(state, data) {
+    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.options = data.response;
+  }
 };
 
 const actions = {
@@ -216,6 +230,16 @@ const actions = {
 
     return deferred.promise;
   },
+  getLibraries(context, data) {
+    imageService.getLibraries().then(response => {
+      response.data.push('');
+      
+      context.commit('setListLibraries', {
+        ...data,
+        response: response.data
+      });
+    });
+  }
 };
 
 module.exports = {

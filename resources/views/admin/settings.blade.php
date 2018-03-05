@@ -16,24 +16,26 @@
 				<div class="col-xs-12" style="width: 30%;">
 					@if(count($global_settings))
 						@foreach ($global_settings as $setting)
-							<div class="table-responsive">
-								<div class="list-action-container log-action-container">
-									<div class="admin-log-tail">
-										<label for="onoffswitch" class="clear-label">
-											<i class="glyphicon glyphicon-menu-right"></i> {{ ($setting['name'] != '') ? $setting['name'] : $setting['key'] }}
-										</label>
-										<div class="log-switch">
-											<div class="onoffswitch">
-												<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" data-setting-key="{{ $setting['key'] }}" id="{{ $setting['key'] }}_switch" {{ $setting['value'] ? 'checked' : '' }}>
-												<label class="onoffswitch-label" for="{{ $setting['key'] }}_switch">
-													<span class="onoffswitch-inner"></span>
-													<span class="onoffswitch-switch"></span>
-												</label>
+							@if (gettype($setting['value']) !== 'array')
+								<div class="table-responsive">
+									<div class="list-action-container log-action-container">
+										<div class="admin-log-tail">
+											<label for="onoffswitch" class="clear-label">
+												<i class="glyphicon glyphicon-menu-right"></i> {{ ($setting['name'] != '') ? $setting['name'] : $setting['key'] }}
+											</label>
+											<div class="log-switch">
+												<div class="onoffswitch">
+													<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" data-setting-key="{{ $setting['key'] }}" id="{{ $setting['key'] }}_switch" {{ $setting['value'] ? 'checked' : '' }}>
+													<label class="onoffswitch-label" for="{{ $setting['key'] }}_switch">
+														<span class="onoffswitch-inner"></span>
+														<span class="onoffswitch-switch"></span>
+													</label>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+							@endif
 						@endforeach
 					@else
 						There are no settings to configure.

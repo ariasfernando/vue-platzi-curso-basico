@@ -47,6 +47,10 @@
     height: 40px;
     text-align: center;
     font-size: 10px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 
   .spinner > div {

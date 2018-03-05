@@ -132,6 +132,7 @@ class ProofController extends Controller
 
         $current_reviewer = [];
         $params['show_decision'] = true;
+        $params['can_edit'] = false;
 
         // Validate if current logged user is a reviewer
         foreach ($proof->reviewers as $reviewer) {
@@ -145,11 +146,18 @@ class ProofController extends Controller
             $params['show_decision'] = false;
         }
 
+        // Validate if the user can edit the campaign
+        if (Auth::user()->can('edit_campaign')) {
+            $params['can_edit'] = true;
+        }
+
         $params['reviewer'] = $current_reviewer;
 
         $params['campaign'] = [
+            '_id' => $proof->campaign->_id,
             'body_html' => $proof->campaign->body_html,
-            'template_width' => $proof->campaign->getLibraryConfig('template_width'),
+            'template_width' => $proof->campaign->getLibraryConfig('templateWidth'),
+            'template_mobile_width' => $proof->campaign->getLibraryConfig('templateMobileWidth')
         ];
 
         $params['locales'] = \Config::get('locales');
@@ -460,7 +468,7 @@ class ProofController extends Controller
                         }
                         unset($current_reviewer['notification_message']);
                         $reviewers[$key] = array_merge($reviewers[$key], $current_reviewer);
-                        
+
                         if (isset($reviewer['required']) && $reviewer['required'] == 1) {
                             $reviewers[$key]['required'] = 1;
                         } else {
@@ -560,7 +568,7 @@ class ProofController extends Controller
     public function getUsers()
     {
         $users = [];
-        $data = User::where('email', '!=', Auth::user()->email)->get(['email'])->toArray();
+        $data = User::where('email', '!=', Auth::user()->email)->where('roles', '!=', 'stensul-internal')->get(['email'])->toArray();
         if (count($data)) {
             foreach ($data as $user) {
                 $users[] = $user['email'];

@@ -1,39 +1,33 @@
 <template id="proof-viewer">
     <div class="proof-viewer-container">
-
         <div class="proof-top-bar" v-sticky="{ zIndex: 999, stickyTop: 0 }">
-            <div class="col-xs-5"></div>
-            <div class="col-xs-2">
+            <div class="col-md-offset-3 col-md-2 col-xs-2">
                 <div class="switch">
                     <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-                    <label for="desktop" class="switch-label switch-label-off campaign-switch-view">
+                    <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="changeBuildingMode('desktop')">
                         <i class="fa fa-desktop"></i>
                     </label>
-                       <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-                       <label for="mobile" class="switch-label switch-label-on campaign-switch-view">
+                    <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
+                    <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="changeBuildingMode('mobile')">
                         <i class="glyphicon glyphicon-phone"></i>
                     </label>
-                     <span class="switch-selection"></span>
+                    <span class="switch-selection"></span>
                   </div>
              </div>
-             <div class="col-xs-5 text-right" id="section-canvas-buttons-col">
-                 <proof-decision
-                     :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
-                     :token="token"
-                     v-if="showDecision ? true : false"
-                     v-on:update-alert="updateAlert"
+             <div class="col-md-7 col-xs-10 text-right" id="section-canvas-buttons-col">
+                <proof-decision
+                    :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
+                    :token="token"
+                    v-if="showDecision ? true : false"
                     v-on:decision="decisionMade()"
                 ></proof-decision>
+                <a
+                    :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
+                    class="btn btn-default beta-btn-primary"
+                    v-if="canEdit"
+                ><i class="glyphicon glyphicon-pencil"></i> Edit campaign</a>
             </div>
         </div>
-
-        <alert
-            :title="alert.title"
-            :message="alert.message"
-            :type="alert.type"
-            :show="alert.show"
-            v-on:hide-alert="alert.show = false"
-        ></alert>
 
         <div class="section-container-campaign">
             <section class="section-canvas-email section-box">
@@ -46,8 +40,15 @@
                         </tr>
                         <tr>
                             <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
-                                <table id="emailCanvas" class="stx-email-canvas wrapper-table" :width="campaign.template_width" cellspacing="0" cellpadding="0" border="0">
-                                    <tbody v-html="campaign.body_html"></tbody>
+                                <table
+                                    border="0"
+                                    class="stx-email-canvas wrapper-table"
+                                    :class="'stx-' + buildingMode + '-mode'"
+                                    id="emailCanvas"
+                                    cellspacing="0"
+                                    cellpadding="0"
+                                    :width="templateWidth">
+                                    <tbody v-html="campaignHtml"></tbody>
                                 </table>
                             </td>
                         </tr>
@@ -58,7 +59,6 @@
             <aside>
                 <proof-comments
                     :token="token"
-                    v-on:update-alert="updateAlert"
                 ></proof-comments>
             </aside>
         </div>
@@ -69,37 +69,52 @@
 <script>
     import ProofComments from './ProofComments.vue';
     import ProofDecision from './ProofDecision.vue';
-    import Alert from './Alert.vue';
     import VueSticky from 'vue-sticky';
 
-    module.exports = {
+    export default {
         name: 'proofViewer',
         components: {
-            Alert,
             ProofComments,
             ProofDecision
         },
         data() {
             return {
-                alert: {
-                    title: '',
-                    message: '',
-                    type: '',
-                    show: false
-                },
                 campaign: [],
                 showDecision: false,
-                reviewer: []
+                canEdit: false,
+                reviewer: [],
+                desktopWidth: '600',
+                mobileWidth: '300',
+                buildingMode: 'desktop'
             };
         },
         props: ['token'],
+        computed: {
+            campaignHtml () {
+                if ('body_html' in this.campaign) {
+                    // Yes, it's ugly, but this width value is set in the body_html and we need
+                    // to remove it so the switch can work.
+                    // @TODO: check why this value is in the body_html
+                    return this.campaign.body_html.replace('width="' + this.desktopWidth + '"', '');
+                } else {
+                    return '';
+                }
+            },
+            templateWidth () {
+                if (this.buildingMode === 'desktop') {
+                    return this.desktopWidth;
+                } else {
+                    return this.mobileWidth;
+                }
+            }
+        },
         created: function() {
             // TODO: find a way to define this in the vue instance
             Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             // Get campaign data
             this.getProofData();
-        },       
+        },
         directives: {
           'sticky': VueSticky,
         },
@@ -112,30 +127,41 @@
                             vm.campaign = resp.body.data.campaign;
                             vm.reviewer = resp.body.data.reviewer;
                             vm.showDecision = resp.body.data.show_decision;
+                            vm.canEdit = resp.body.data.can_edit;
+                            vm.desktopWidth = resp.body.data.campaign.template_width;
+                            vm.mobileWidth = resp.body.data.campaign.template_mobile_width;
                             if ('message' in resp.body.data) {
-                                vm.alert = {
-                                    message: resp.body.data.message,
-                                    show: true
-                                }
+                                vm.$root.$toast(resp.body.data.message, {className: 'et-success'});
                             }
                         }
                     });
             },
-            updateAlert: function(data) {
-                this.alert = data;
-            },
             decisionMade: function() {
                 // Ugly but works. @TODO: find a better way to do this (e.g. vuex)
                 this.$children[1].getComments();
+            },
+            changeBuildingMode(mode) {
+                this.buildingMode = mode;
             }
         }
     };
 </script>
 
-<style lang="scss">
+<style lang="less">
     .proof-viewer-container {
         width: 100%;
         display: table;
         min-height: 100%;
+    }
+    #emailCanvas{
+        &:empty {
+          min-height: 40px;
+        }
+        &.stx-mobile-mode {
+          width: 480px;
+          // Mobile Classes
+          @import '../../../less/base/commons/mobile/mobile_core_styles';
+          @import '../../../less/base/commons/mobile/mobile_client_styles';
+        }
     }
 </style>

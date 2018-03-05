@@ -5,10 +5,16 @@
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;">
+          <td
+            align="center"
+            style="vertical-align:top;"
+            class="stx-draggable-wrapper"
+            :class="{ 'campaign-completed': campaignCompleted }"
+            :bgcolor="templateBackgroundColor()"
+            @click.stop="handleActive">
               <draggable
                 id="emailCanvas"
-                :class="`stx-${buildingMode}-mode`"
+                :class="`stx-${buildingMode}-mode ${this.dragList.length === 0 ? 'empty': ''}`"
                 class="stx-email-canvas st-wrapper-table"
                 cellspacing="0"
                 cellpadding="0"
@@ -17,8 +23,11 @@
                 :width="templateWidth"
                 :options="options"
                 :element="'table'"
+                :move="onMove"
                 @add="onAdd"
-                @sort="onSort">
+                @sort="onSort"
+                @mouseover="onMouseOver()"
+                @mouseleave="onMouseLeave()">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
               </draggable>
           </td>
@@ -29,8 +38,8 @@
 </template>
 
 <script>
-  import _ from 'lodash';
   import clone from 'clone';
+  import _ from 'lodash';
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';
@@ -48,6 +57,12 @@
       dragGhost: null
     },
     computed: {
+      campaignCompleted() {
+        return this.$store.state.campaign.campaignCompleted;
+      },
+      currentComponent() {
+        return this.$store.getters["campaign/currentComponent"];
+      },
       dragList: {
         get() {
           return this.$store.getters['campaign/modules'];
@@ -66,10 +81,17 @@
         return this.$store.getters["campaign/buildingMode"];
       },
       items () {
-        return this.$store.state.campaign.campaign.menu_list;
+        return this.$store.getters["library/modules"];
       },
       baseUrl (){
         return this.$_app.config.baseUrl;
+      },
+      modules() {
+        return this.$store.getters["campaign/modules"];
+      },
+      activeModule() {
+        const activeModuleId = this.$store.getters["campaign/activeModule"];
+        return this.modules[activeModuleId] || undefined;
       }
     },
     data () {
@@ -79,13 +101,16 @@
             name: 'componentsEmailCanvas'
           },
           handle:'.icon-move',
+          // Ignore the HTML5 DnD behaviour and force the fallback to kick in (used only for MS Edge)
+          forceFallback: (/Edge/.test(navigator.userAgent)) ? true : false,
+          // Class name for the fallback behaviour (only MS Edge)
+          fallbackClass: "sortable-fallback",
           // Class name for the drop placeholder
           ghostClass: "ghost-component", 
           // Class name for the chosen item
           chosenClass: "chosen-component",
           // Class name for the dragging item
           dragClass: "drag-component",
-<<<<<<< HEAD
           setData: (dataTransfer, dragEl) => {
             // Is Firefox?
             const isFirefox = /firefox/i.test(navigator.userAgent);
@@ -96,50 +121,12 @@
             if(isFirefox) {
               // Place it into the DOM tree
               document.body.appendChild(img);
-=======
-          setData: function (dataTransfer, dragEl) {
-            // Get the element type
-            const type = $(dragEl).find('tr[data-type]').data('type');
-
-            // Create the content & Stylize it
-            dragGhost = document.createElement("div");
-            dragGhost.classList.add('custom-drag-ghost');
-
-            // Icon
-            let icon = document.createElement("i");
-            icon.classList.add('fa');
-            let iconClass = '';
-            let text = '';
-
-            // Text
-            let paragraph = document.createElement("p");
-            
-            // Get the class for given icon
-            switch(type) {
-              case 'image-element':
-                iconClass = 'fa-picture-o';
-                text = 'Image';
-                break;
-              case 'text-element':
-                iconClass = 'fa-align-justify';
-                text = 'Text';
-                break;
-              case 'button-element':
-                iconClass = 'fa-square';
-                text = 'CTA';
-                break;
-              case 'divider-element':
-                iconClass = 'fa-minus-square';
-                text = 'Divider';
-                break;
-              default:
-                iconClass = '';
->>>>>>> 5ebdc53b2c57598854080296326380a3d4e618d5
             }
             // Stylize it
             img.classList.add('custom-drag-ghost');
             // Set the new stylized "drag image" of the dragged element
-            dataTransfer.setDragImage(img, 0, 0);
+            // The placeholder image is 170x52, this positioning forces the placeholder image: top-right
+            dataTransfer.setDragImage(img, 130, 16);
           }
         },
         templateBackgroundColor(){
@@ -163,30 +150,74 @@
       }
     },
     methods: {
+      getSubitemsAsArray () {
+        return _.reduce(this.items, (result, value) => {
+          if(_.has(value, 'level')) {
+            result = _.union(result, value.sub_menu);
+          }
+          return result;
+        }, []);
+      },
       onAdd(e) {
-        const module = this.items[e.oldIndex];
-        const mod = clone(module);
+        let cloneEl = e.clone;
+        let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
+        let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
+
+        // Find module in items by type: item or subitem
+        const found = moduleType === 'item'
+          ? _.find(this.items, (m) => m.name === moduleName)
+          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
+
+        const mod = Object.assign({}, found);
         mod.data = {};
-        
+
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
         // Set active on last module inserted
         this.$store.commit('campaign/setActiveModule', e.newIndex);
-        
+
          // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = "1";
       },
+      onMove (evt, originalEvent) {
+        const h = $(".section-canvas-email").height();
+        const target = $(".section-canvas-email");
+
+        let mousePosition = originalEvent.clientY - $(window).scrollTop();
+        let topRegion = 320;
+        let bottomRegion = h - topRegion;
+
+        // Scroll when user drag down
+        if(mousePosition < topRegion || mousePosition > bottomRegion){
+            let distance = originalEvent.clientY - h / 1.5;
+            distance = distance * 0.15; // <- velocity
+            $(target).scrollTop( distance + $(target).scrollTop());
+        }
+      },
       onSort(e){
+        if (this.activeModule.type === 'studio') {
+          // Save current component if module type is studio
+          this.$store.commit('campaign/setCurrentComponent', {
+            moduleId: e.newIndex,
+            columnId: 0,
+            componentId: 0,
+          });
+          this.$store.commit('campaign/unsetCustomModule');
+        } else {
+          // Save customModule if module type is custom
+          this.$store.commit('campaign/setCustomModule', e.newIndex);
+          this.$store.commit('campaign/unsetCurrentComponent');
+        }
+
+        this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
       },
-      onEnd (evt) {
-        // moduleId is a reactive prop, and it matches the index
-        const moduleId = evt.newIndex;
-        // Set active Module
-        this.$store.commit("campaign/setActiveModule", moduleId);
-        // Don't forget to remove the ghost DOM object when done dragging
-        document.getElementById('drag-image').remove();
+      onMouseOver () {
+        $("#emailCanvas").addClass("hovered");
+      },
+      onMouseLeave () {
+        $("#emailCanvas").removeClass("hovered");
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
@@ -219,6 +250,23 @@
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
+      },
+      handleActive(e) {
+        const target = $( e.target );
+        const moduleId = target.closest(".stx-module-wrapper").find("td").data("module-id");
+        if( target.is( "td.stx-draggable-wrapper" )) {
+          // Clear Current module state
+          this.$store.commit("campaign/unsetActiveModule");
+          this.$store.commit("campaign/unsetCurrentModule");
+          this.$store.commit("campaign/unsetCurrentComponent");
+          this.$store.commit("campaign/unsetCustomModule");
+        }
+        else {
+          // Set active Module
+          this.$store.commit("campaign/setActiveModule", moduleId);
+          // Clear 3rd column
+          this.$store.commit("campaign/setCurrentComponent", {});
+        }
       }
     },
     created () {
@@ -249,6 +297,8 @@
   @focus: #69dac8;
   @focus-light: lighten(@focus, 30%);
   @hover: @focus-light;
+  @font-color: #999999;
+  @bg-color: #f0f0f0;
 
   /* COMMON STYLES */
   span{
@@ -259,7 +309,7 @@
   }
 
   .applelinks{
-    color:#FFFFFF !important; 
+    color:#6b6b6b !important; 
     text-decoration: none !important; 
   }  
          
@@ -272,11 +322,12 @@
     background-color: #000000; 
   }
 
-  .stx-edit-text{
-    p{
+  p,ul,ol{
       margin: 0;
       padding: 0;
     }
+
+  .stx-edit-text{
 
     a:hover, 
     a:focus{
@@ -292,25 +343,15 @@
   }
 
   #emailCanvas{
-    min-height: 40px;
+    -ms-user-select: none !important;
+    &:empty {
+      min-height: 40px;
+    }
     &.stx-mobile-mode {
-      /*BASE-LAYOUT*/
-      .st-wrapper{
-        width: 100% !important;
-      }
-      .st-wrapper-content{ 
-        padding: 0px !important;
-      }
-      .st-col{ 
-        display: block!important; 
-        width: 100%!important; 
-        padding: 0px !important;
-      }
-      .st-resize{ 
-        width: 100%!important;
-        display: block!important; 
-        height: auto !important;
-      }
+      width: 480px;
+      // Mobile Classes
+      @import '../../../less/base/commons/mobile/mobile_core_styles';
+      @import '../../../less/base/commons/mobile/mobile_client_styles';
     }
 
     tr.ghost-component{
@@ -341,6 +382,39 @@
       }
       *{
         display: none;
+      }
+    }
+
+    &.empty{
+      border: none;
+      color:@font-color;
+      background-color: @bg-color;
+      height: 65px;
+      font-family: 'Open Sans', Arial, serif;
+      font-size: 12px;
+
+      &:before, &::before{
+        content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
+        width: 100%;
+        display: table-cell;
+        vertical-align: middle;
+        opacity: 0.7;
+        text-align: center;
+        padding: 0 10px;
+      }
+
+      &.hovered{
+        &:before, &::before{
+          content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
+          width: 100%;
+          display: table-cell;
+          vertical-align: middle;
+          opacity: 1;
+          outline: 2px dashed @font-color;
+          outline-offset: -10px;
+          text-align: center;
+          padding: 0 10px;
+        }
       }
     }
   }

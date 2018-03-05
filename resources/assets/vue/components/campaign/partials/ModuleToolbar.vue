@@ -61,6 +61,8 @@
       remove() {
         this.$store.dispatch("campaign/removeModule", this.moduleId);
         this.$store.commit("campaign/unsetActiveModule");
+        this.$store.commit("campaign/unsetCurrentComponent");
+        this.$store.commit("campaign/unsetCustomModule");
         this.$store.commit("campaign/unsetCurrentModule");
       },
     },

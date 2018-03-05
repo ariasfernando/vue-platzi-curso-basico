@@ -17,6 +17,7 @@ export default {
       'data-params',
       'data-modal',
       'data-medium-element',
+      'data-module-id',
       'data-placeholder',
       'contenteditable',
       'spellcheck',
@@ -53,7 +54,7 @@ export default {
     if ($removeAttr !== false) {
       $cleanedHtml = $removeAttr;
     }
-    
+
     // Remove class tags
     const $removeClass = this.removeDataHtml($cleanedHtml, this.cleanOptions.classSelectors, 'class');
     // Function removeDataHtml fail attributes
@@ -94,6 +95,22 @@ export default {
       });
     }
 
+    // Replace data-tag-before
+    if ($cleanedHtml.find('[data-tag-before]').length) {
+      const $targetDataTag = $cleanedHtml.find('[data-tag-before]');
+
+      $.each($targetDataTag, (key, element) => {
+        const tempDataTag = $(element).data('tag-before');
+        const $element = $(element);
+        
+        // Add tag
+        $element.before(tempDataTag);
+        
+        // Remove data-tag-before
+        $element.removeAttr('data-tag-before');
+      });
+    };
+
     // Remove wrappers
     const $wrapperElementRemove = $cleanedHtml.find('.stx-wrapper');
 
@@ -107,6 +124,20 @@ export default {
         $element.replaceWith($element.html());
       }
     });
+
+    // Convert and add data-persist-styles to css property inline in styles attribute
+    if ($cleanedHtml.find('[data-persist-styles]').length) {
+      const $toPersistArray = $cleanedHtml.find("[data-persist-styles]");
+      $.each($toPersistArray, (i, element) => {
+        const $element = $(element);
+        // Add inline data-saved CSS hacks
+        this.addCSSHacks(
+          $element,
+          Application.utils.objToCss($element.data('persist-styles'))
+        );
+        $element.removeAttr('data-persist-styles');
+      });
+    }
 
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
@@ -135,6 +166,26 @@ export default {
     }
     
     return $editedHtml;
+  },
+
+  addCSSHacks($target, newStyles) {
+      newStyles.replace(';','');
+      var originalStyles = $target.attr('style');
+      var originalStylesArray = originalStyles.split(';');
+
+      if(!originalStyles.includes(newStyles)){
+          originalStylesArray.push(newStyles);
+      }
+
+      for (var i = 0; i < originalStylesArray.length; i++) {
+          originalStylesArray[i] = originalStylesArray[i].replace(' ','');
+      }
+
+      originalStylesArray = originalStylesArray.filter(function(item) {
+          return item !== '';
+      })
+      newStyles = originalStylesArray.join('; ');
+      $target.attr('style', newStyles);
   },
   
   encodeHtmlEntities($cleanedHtml) {
@@ -408,29 +459,6 @@ export default {
     });
     
     return str;
-  },
-
-  imagesErrors(selector){
-    let errorFound = false;
-
-    // Check if all images are uploaded.
-    let nonEditedImages = $(selector).find("img[src*='/default/']:visible");
-
-    if (nonEditedImages.length) {
-        $.each(nonEditedImages, function (index, img) {
-            $(img).parent().addClass("default-image-error");
-        });
-
-        errorFound = true;
-    }
-
-
-    if (errorFound) {
-      return true;
-    }else{
-      return false
-    }
-    
   }
-  
+
 };

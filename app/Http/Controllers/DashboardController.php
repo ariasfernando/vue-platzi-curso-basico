@@ -5,6 +5,7 @@ namespace Stensul\Http\Controllers;
 use Auth;
 use Stensul\Models\Campaign;
 use Stensul\Models\Library;
+use Stensul\Models\Setting;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Services\TagManager as Tag;
@@ -110,6 +111,13 @@ class DashboardController extends Controller
 
         // apply sort
         $sort = strlen($request->input('sort')) ? $request->input('sort', 'updated_at') : 'updated_at';
+
+        if ($sort === 'library_name') {
+            $sort = 'library';
+        } else if ($sort == 'campaign_name') {
+            $sort = 'lower_campaign_name';
+        }
+
         $direction = strlen($request->input('direction')) ? $request->input('direction', 'updated_at') : 'desc';
         $campaigns->orderBy($sort, $direction);
 
@@ -210,6 +218,9 @@ class DashboardController extends Controller
             if ($favorite_type === "global") {
                 $campaigns->orderBy('favorite', 'desc');
                 $sort = strlen($request->input('sort')) ? $request->input('sort', 'updated_at') : 'updated_at';
+                if ($sort == 'campaign_name') {
+                    $sort = 'lower_campaign_name';
+                }
                 $direction = strlen($request->input('direction')) ? $request->input('direction', 'updated_at') : 'desc';
                 $campaigns->orderBy($sort, $direction);
             } elseif ($favorite_type === "user") {
@@ -231,6 +242,9 @@ class DashboardController extends Controller
                 });
                 if (strlen($request->input('sort'))) {
                     $sort = $request->input('sort', 'updated_at');
+                    if ($sort == 'campaign_name') {
+                        $sort = 'lower_campaign_name';
+                    }
                     if (!strlen($request->input('direction')) ||  $request->input('direction') == 'asc') {
                         $campaigns_array = $campaigns_array->sortBy($sort);
                     } else {
@@ -275,5 +289,105 @@ class DashboardController extends Controller
             }
             return $result;
         }
+    }
+
+    /**
+     * Get a list of options to show in the "Create a new email" button in the dashboard
+     */
+    public function getMenu()
+    {
+        $menu = [];
+
+        $campaign_format = config('view.campaign_format');
+
+        switch ($campaign_format) {
+            case 'languages':
+                $menu = $this->getMenuByLanguages();
+                break;
+            case 'libraries':
+                $menu = $this->getMenuByLibraries();
+                break;
+        }
+
+        return $menu;
+    }
+
+    /**
+     * Get a list of options according to languages
+     */
+    protected function getMenuByLanguages()
+    {
+        $menu = [];
+        $languages = config('locale.langs');
+        foreach ($languages as $language_key => $language) {
+            $menu[] = [
+                'title' => $language['name'],
+                'key' => $language['key'],
+                'type' => 'item',
+                'link' => '/campaign/edit?locale=' . $language_key
+            ];
+        }
+        return $menu;
+    }
+
+    /**
+     * Get a list of options according to libraries
+     */
+    protected function getMenuByLibraries()
+    {
+        $menu = [];
+        $libraries = Auth::user()->getLibraries();
+        if (count($libraries)) {
+            $campaign_menu = Setting::whereKey('campaign_menu')->first();
+            if ($campaign_menu) {
+                $menu = $this->getMenuBySettings($campaign_menu['value']);
+            } else {
+                foreach ($libraries as $library_key => $library) {
+                    $menu[] = [
+                        'title' => $library['name'],
+                        'key' => $library['key'],
+                        'type' => 'item',
+                        'link' => '/campaign/edit?locale=en_us&library=' . $library['_id']
+                    ];
+                }
+            }
+        }
+
+        return $menu;
+    }
+
+    /**
+     * Get a list of options according to a predefined menu in settings
+     */
+    protected function getMenuBySettings($campaign_menu)
+    {
+        $menu = [];
+
+        if (count($campaign_menu)) {
+            foreach ($campaign_menu as $item) {
+                if ($item['type'] === 'item') {
+                    $library = Library::whereKey($item['key'])->first();
+                    if ($library && Auth::user()->can('access_library_' . $item['key'])) {
+                        $menu[] = [
+                            'title' => isset($item['title']) ? $item['title'] : $library->name,
+                            'key' => $item['key'],
+                            'type' => 'item',
+                            'link' => '/campaign/edit?locale=en_us&library=' . $library['_id']
+                        ];
+                    }
+                } elseif ($item['type'] === 'submenu') {
+                    $submenu = $this->getMenuBySettings($item['items']);
+                    if (count($submenu)) {
+                        $menu[] = [
+                            'title' => $item['title'],
+                            'type' => 'submenu',
+                            'items' => $submenu
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $menu;
     }
 }

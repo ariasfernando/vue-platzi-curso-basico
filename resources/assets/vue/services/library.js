@@ -125,6 +125,27 @@ export default {
     return deferred.promise;
   },
 
+  getMenuItems(libraryId) {
+
+    const endpoint = endpoints.library.getMenuItems;
+    const deferred = Q.defer();
+    const params = {
+      path: 'library.getMenuItems',
+      search: { libraryId },
+      endpoint,
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve({
+        modules: response.body,
+      });
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+
   fetchLibraries(data) {
     const endpoint = endpoints.library.fetchLibraries;
     const deferred = Q.defer();

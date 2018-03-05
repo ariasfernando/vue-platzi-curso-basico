@@ -309,7 +309,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     size: 40,
                     autofocus: true,
                     label: 'Url',
-                    tooltip: 'Insert a valid url',
+                    tooltip: 'Insert a valid URL',
                     onchange: urlChange,
                     onkeyup: updateText,
                     onfocusout: function (e) {
@@ -492,7 +492,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                                     }
                                 }
                             });
-                            
+
                             return false;
                         }
 

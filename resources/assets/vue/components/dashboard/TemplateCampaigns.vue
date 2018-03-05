@@ -25,7 +25,7 @@
               <th>
                 <column-sort
                   field="campaign_name"
-                  title="Campaign Name"
+                  title="Email Name"
                   :sort="sortKey"
                   :reverse="reverse"
                   v-on:change-sort="sortBy"></column-sort>
@@ -39,7 +39,7 @@
                 v-on:change-sort="sortBy"></column-sort>
             </th>
             <th v-if="showTags == 1" class="col-200">Tags</th>
-            <th  width="180" class="bold">Actions</th>
+            <th  width="200" class="bold">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -53,10 +53,10 @@
                   v-html="isFavorite(campaign)"></a>
               </td>
             <td class="last-modified" :title="campaign.created_by.email">
-              <span>{{campaign.created_at}}</span><br><span>by {{campaign.created_by.email}}</span>
+              <span>{{campaign.created_at}}</span><br><span class="text-overflow">by {{campaign.created_by.email}}</span>
             </td>
             <td class="last-modified" :title="campaign.updated_by.email">
-              <span>{{campaign.updated_at}}</span><br><span>by {{campaign.updated_by.email}}</span>
+              <span>{{campaign.updated_at}}</span><br><span class="text-overflow">by {{campaign.updated_by.email}}</span>
             </td>
             <td :title="campaign.campaign_name">
               <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
@@ -74,7 +74,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="actions icons text-right">
+            <td class="text-left actions icons">
                 <a
                   href="#"
                   class="lock-campaign"
@@ -82,12 +82,7 @@
                   @click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                   data-toggle="tooltip"
                   data-placement="bottom"
-<<<<<<< HEAD
-                  data-tooltip="Lock"
-                  @click.prevent
-=======
-                  title="Lock Campaign"
->>>>>>> 5ebdc53b2c57598854080296326380a3d4e618d5
+                  data-tooltip="Lock this email for editing"
                 >
                   <i class="glyphicon fa fa-lock"></i>
                 </a>

@@ -7,10 +7,14 @@
     border="0"
     style="width: 100%;"
   >
-    <tr data-type="text-element">
+    <tr
+      data-type="text-element"
+      :class="getMobileClasses(component,'tr')"
+    >
       <td width="100%" 
           style="width: 100%;"
           :bgcolor="component.attribute.bgcolor.hex || 'transparent'"
+          :class="getMobileClasses(component,'td:first')"
       >
         <table 
           width="100%" 
@@ -38,20 +42,25 @@
 </template>
 
 <script>
+  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import _ from 'lodash';
+
   export default {
     name: 'TextElement',
     props: [
       'module-id',
       'column-id',
       'component-id',
-      'component'
+      'component',
+      'column'
     ],
+    mixins: [ MobileStylesMixin ],
     data(){
       return {
         editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-'),
         toolbar: ' ',
         fixed: false,
       }
-    },
+    }
   };
 </script>

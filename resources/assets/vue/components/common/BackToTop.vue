@@ -14,7 +14,7 @@
     },
     methods: {
       initToTopButton: function() {
-        
+
         const $parent = $('.section-canvas-email');
 
         $parent.bind('scroll', function() {
@@ -32,7 +32,7 @@
       backToTop: function() {
         $('html, body, .section-canvas-email').stop().animate({
           scrollTop: 0
-        }, 1500);
+        }, 500);
       }
     },
     mounted: function() {
@@ -72,5 +72,12 @@
     opacity: .8;
     z-index: 4000;
     transition: all .4s ease-in;
+  }
+
+  @media only screen and (max-width : 1280px) {
+    .go-to-top {
+      right: auto;
+      margin-left: 720px;
+    } 
   }
 </style>

@@ -51,10 +51,23 @@ mix
     assetsPath + 'js/library/custom-plugins/st-pagination-bar.jquery.js'
   ], `${jsDestinationPath}dashboard-components.js`)
   .scripts([
+    `node_modules/magnific-popup/dist/jquery.magnific-popup.js`,
+    'js/library/application-utils.js',
+    // 'js/library/master-image-editor.v2.js',
+    // 'js/library/modal-manager.js',
+    // 'js/library/image-manager.js',
+    // 'js/library/modals/*.js',
+    // 'js/library/helpers/*.js',
+  ], `${jsDestinationPath}/application-utils-v2.js`)
+  .scripts([
     `node_modules/jquery/dist/jquery.min.js`,
     `node_modules/jquery-ui/jquery-ui.min.js`,
+  ], `${jsDestinationPath}/jquery.js`)
+  .scripts([
     `node_modules/bootstrap/dist/js/bootstrap.min.js`,
     `node_modules/bootstrap-select/dist/js/bootstrap-select.min.js`,
+  ], `${jsDestinationPath}/bootstrap.js`)
+  .scripts([
     // -- TinyMCE editor --
     `node_modules/tinymce/tinymce.js`,
     `node_modules/tinymce/themes/modern/theme.js`,
@@ -67,15 +80,8 @@ mix
     `node_modules/tinymce/plugins/autolink/plugin.js`,
     `node_modules/tinymce/plugins/link/plugin.js`,
     `node_modules/tinymce/plugins/advlist/plugin.js`,
-    `node_modules/magnific-popup/dist/jquery.magnific-popup.js`,
-    `node_modules/cropit/dist/jquery.cropit.js`,
-    'js/library/application-utils.js',
-    'js/library/master-image-editor.v2.js',
-    'js/library/modal-manager.js',
-    'js/library/image-manager.js',
-    'js/library/modals/*.js',
-    'js/plugins/tinymce/**/plugin.js'
-  ], `${jsDestinationPath}/library-v2.js`)
+    `${assetsPath}js/plugins/**/*.js`,
+  ],`${jsDestinationPath}/tinymce.js`)
   .scripts([
     `node_modules/underscore/underscore.js`,
     `node_modules/jquery/dist/jquery.min.js`,
@@ -172,10 +178,11 @@ mix
   .copyDirectory(`node_modules/tinymce/skins`, 'public/css/tinymce')
   .copyDirectory(`node_modules/tinymce/plugins/textcolor`, 'public/js/plugins/tinymce/plugins/textcolor')
   // Customer Assets if needed
-  //.copyDirectory(`${customerAssetsPath}/images`, 'public/images/customer')
-  //.copyDirectory(`${customerAssetsPath}/fonts`, 'public/fonts')
+  // .copyDirectory(`${customerAssetsPath}/images`, 'public/images/customer')
+  // .copyDirectory(`${customerAssetsPath}/fonts`, 'public/fonts')
   .copyDirectory(`public/fonts`, 'public/build/fonts')
   //.copyDirectory(`public/images`, 'public/build/images')
+  .copyDirectory('node_modules/element-ui/lib/theme-chalk/fonts', 'public/build/css/fonts')
   .then(function () {
     const fileToEdit = './public/build/rev-manifest.json';
     fs.readFile(fileToEdit, 'utf8', function (err,data) {

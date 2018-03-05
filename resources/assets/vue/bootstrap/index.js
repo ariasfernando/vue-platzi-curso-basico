@@ -4,7 +4,8 @@ import filters from '../filters';
 import directives from '../directives';
 import modules from '../modules';
 import fonts from './fonts';
-import utils from './utils';
+import utils from '../utils';
+import dictionary from '../resources/dictionary';
 
 export default {
   install(Vue) {
@@ -14,9 +15,12 @@ export default {
   bootstrap() {
     // Inject configs into main instance
     this.Vue.prototype.$_app = {
-      config: Application.globals,
+      config: Application.globals
     };
     this.Vue.prototype.$_customer = customer || {};
+
+    // Merge dictionaries
+    this.initDictionary();
 
     // Register custom global utilities
     this.initUtils();
@@ -36,6 +40,13 @@ export default {
     // Register plugins for studio modules ( module, column and components plugins )
     this.initPlugins();
   },
+  initDictionary() {
+    if (customer.config.dictionary) {
+      _.merge(dictionary, customer.config.dictionary);
+    }
+
+    this.Vue.prototype.$_app.dictionary = dictionary;
+  },
   initUtils() {
     // Inject Util Functions into main instance
     if (customer.config && customer.config.utils) {
@@ -53,21 +64,46 @@ export default {
     // Fonts path
     const fontPath = `${this.Vue.prototype.$_app.config.baseUrl}/fonts/`;
 
-    // Register custom fonts
-    _.each(fonts.custom, (fontFace) => {
-      const style = document.createElement('style');
-      const fontFile = fontFace.replace(' ', '');
+    let custom = {};
 
-      style.appendChild(document.createTextNode(`\
-        @font-face {\
-            font-family: ${fontFace};\
-            src: url('${fontPath}${fontFile}.eot') format('eot');\
-            src: url('${fontPath}${fontFile}.eot?#iefix') format('embedded-opentype'),
-            src: url('${fontPath}${fontFile}.woff') format('woff'),\
-            src: url('${fontPath}${fontFile}.ttf') format('truetype'),\
-            src: url('${fontPath}${fontFile}.svg') format('svg');\
-        }\
-      `));
+    fonts.custom.map(font => {
+      custom[font.name] = true;
+
+      const style = document.createElement('style');
+
+      style.type = 'text/css';
+
+      let definition = '';
+
+      let ie = '';
+
+      font.types.map(typeFont => {
+        typeFont.files.map(fileFont => {
+          if (fileFont.file === 'eot') {
+            ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}?#iefix');`;
+          }
+        });
+      });
+
+      font.types.map(typeFont => {
+        definition += `@font-face {font-family: '${font.name}';`;
+        definition += ie;
+        definition += 'src: ';
+
+        typeFont.files.map((fileFont, index) => {
+          definition += `url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}') format('${fileFont.file}')`;
+
+          if (index < typeFont.files.length - 1) {
+            definition += ',';
+          } else {
+            definition += ';';
+          }
+        });
+
+        definition += `font-weight: ${typeFont.weight};}`;
+      });
+
+      style.appendChild(document.createTextNode(definition));
 
       document.head.appendChild(style);
     });

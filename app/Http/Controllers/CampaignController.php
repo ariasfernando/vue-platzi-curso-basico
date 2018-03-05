@@ -39,43 +39,15 @@ class CampaignController extends Controller
     /**
      * Show the edit campaign.
      *
+     * @param Request $request
+     * @param String $campaign_id
      * @return \Illuminate\Http\RedirectResponse Object | \Illuminate\View\View
      * @throws \Exception
      */
     public function getEdit(Request $request, $campaign_id = null)
     {
         if (!is_null($campaign_id)) {
-            if (Cache::has('lock:'.$campaign_id) && Cache::get('lock:'.$campaign_id) !== Auth::id()) {
-                Activity::log(
-                    'Campaign edit deny',
-                    array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
-                );
-
-                return redirect(env('APP_BASE_URL', '/'))->with('campaign_lock', $campaign_id);
-            } else {
-                $params = Campaign::find($campaign_id);
-                $saved_tags = Tag::all();
-
-                if ($params) {
-                    $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
-                        ? $params['campaign_data']['library']
-                        : "default";
-                    $library = Library::find($library_id);
-                    $params['menu_list'] = $library->getModules();
-                    $params['library_config'] = $library->config;
-                    $params['campaign_data']['library_name'] = $library->name;
-                    uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
-                        if ($menu_item_a['name'] == $menu_item_b['name']) {
-                            return 0;
-                        }
-                        return ($menu_item_a['name'] < $menu_item_b['name']) ? -1 : 1;
-                    });
-
-                    $params['tag_list'] = $saved_tags;
-                } else {
-                    return redirect(env('APP_BASE_URL', '/'))->with('campaign_not_found', $campaign_id);
-                }
-            }
+            $params = $this->loadCampaign($campaign_id);
         } else {
             $params = [];
 
@@ -90,25 +62,86 @@ class CampaignController extends Controller
                 if (count($libraries)) {
                     $params['library'] = new ObjectID($libraries[0]['_id']);
                 } else {
-                    throw new \Exception('You don\'t have available libraries to create a new email 
+                    throw new \Exception('You don\'t have available libraries to create a new email
                         please contact our support team.');
                 }
             }
 
-            $params['campaign_name'] = 'Untitled Campaign';
+            $params['campaign_name'] = 'Untitled Email';
 
             $campaign = Campaign::create($params);
-
-            return redirect('campaign/edit/'.$campaign->id);
+            $params = $this->loadCampaign($campaign->_id);
         }
 
         if (\Config::get('api.scraper.status')
             && \Config::get('api.scraper.settings.campaign_preload')) {
             Campaign::scraperPreloader(
                 $params['campaign_data']['library'],
-                ['flush_cache' => true,
-                'only_update' => true]
+                [
+                    'flush_cache' => true,
+                    'only_update' => true
+                ]
             );
+        }
+
+        return $this->renderView('campaign', array('params' => $params));
+    }
+
+    /**
+     * Load campaign
+     *
+     * @param String $campaign_id
+     * @return Array $params
+     */
+    private function loadCampaign($campaign_id) {
+
+        if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:' . $campaign_id) !== Auth::id()) {
+            Activity::log(
+                'Campaign edit deny',
+                array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
+            );
+
+            return redirect(env('APP_BASE_URL', '/'))->with('campaign_lock', $campaign_id);
+        }
+
+        if ($params = Campaign::find($campaign_id)) {
+            $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
+                ? $params['campaign_data']['library']
+                : "default";
+            $params['library_id'] = $library_id;
+
+            return $params;
+        }
+
+        return redirect(env('APP_BASE_URL', '/'))->with('campaign_not_found', $campaign_id);
+    }
+
+    /**
+     * Get campaign data.
+     *
+     * @param Request $request
+     * @param String $campaign_id
+     * @return mixed array|json string
+     * @throws \Exception
+     */
+    public function getData(Request $request, $campaign_id = null)
+    {
+        if (!is_null($campaign_id)) {
+            $params = Campaign::find($campaign_id);
+            $saved_tags = Tag::all();
+
+            if (!$params) {
+                throw new \Exception('campaign_not_found');
+            }
+
+            $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
+                ? $params['campaign_data']['library']
+                : "default";
+            $library = Library::find($library_id);
+            $params['library_config'] = $library->config;
+            $params['campaign_data']['library_name'] = $library->name;
+
+            $params['tag_list'] = $saved_tags;
         }
 
         if (\Config::get('campaign.enable_favorite_template')) {
@@ -138,13 +171,30 @@ class CampaignController extends Controller
             $params['header_title'] .= " (" . \Config::get('locale.langs.' . $locale . '.name') . ")";
         }
 
-        if (!is_null($request->input("json"))) {
-            return [
-                'campaign' => $params
-            ];
-        }
+        return [
+            'campaign' => $params
+        ];
+    }
 
-        return $this->renderView('campaign', array('params' => $params));
+    /**
+     * Get module data for the campaign menu.
+     *
+     * @param Request $request
+     * @param String $library_id
+     * @return array
+     */
+    public function getMenuItems(Request $request, $library_id)
+    {
+        $library = Library::find($library_id);
+        $params = [];
+        $params['menu_list'] = $library->getModules();
+        uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
+            if ($menu_item_a['name'] == $menu_item_b['name']) {
+                return 0;
+            }
+            return ($menu_item_a['name'] < $menu_item_b['name']) ? -1 : 1;
+        });
+        return $params['menu_list'];
     }
 
     /**

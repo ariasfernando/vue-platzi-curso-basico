@@ -1,5 +1,5 @@
 <template>
-  <div class="component-settings">
+  <div class="component-settings" v-if="component">
     <h2 v-if="ready && component.plugins && Object.keys(component.plugins).length !== 0">
       <i class="glyphicon glyphicon-tasks"></i>
       {{ toCamel(component.type.replace('-element', '')) }}
@@ -14,7 +14,6 @@
 
 <script>
   import _ from 'lodash'
-  import uc from 'underscore-contrib'
 
   export default {
     data () {
@@ -28,21 +27,34 @@
       },
       component() {
         let component = {};
+        this.ready = false;
+
         if (Object.keys(this.currentComponent).length !== 0) {
-          const moduleId = this.currentComponent.moduleId;
-          const columnId = this.currentComponent.columnId;
-          const componentId = this.currentComponent.componentId;
 
-          component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
+          const modules = this.$store.getters["campaign/modules"];
 
-          _.each(component.plugins, (plugin) => {
-            if ( plugin.enabled && plugin.render !== false) {
-              this.ready = true;
+          if (modules.length !== 0 && Object.keys(this.currentComponent).length !== 0) {
+            const moduleId = this.currentComponent.moduleId;
+            const columnId = this.currentComponent.columnId;
+            const componentId = this.currentComponent.componentId;
+
+            if (!modules[moduleId]) {
+              this.ready = false;
+              return component;
             }
-          });
-        }
-        else {
-          this.ready = false;
+
+            if ( _.has(this.$store.getters["campaign/modules"][moduleId], 'structure')){
+              component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
+            }
+
+            if (component) {
+              _.each(component.plugins, (plugin) => {
+                if (plugin.enabled && plugin.render !== false) {
+                  this.ready = true;
+                }
+              });
+            }
+          }
         }
         return component;
       },

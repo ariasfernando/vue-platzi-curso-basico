@@ -5,30 +5,34 @@
         <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
         <div class="col-sm-5">
           <span>
-            <toggle-button :value="plugin.enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
+            <toggle-button :value="plugin.enabled" color="#78DCD6" @change="toggle"></toggle-button>
           </span>
         </div>
       </div>
 
-      <div v-if="plugin.enabled" class="form-group" v-for="(option, name) in plugin.config">
-        <label class="col-sm-7 control-label" :data-name="name"><b>{{ option.label }}</b></label>
+      <div v-if="plugin.enabled" class="form-group" v-for="(option, name) in plugin.config" :key="name">
+        <label class="col-sm-7 control-label" :data-name="name">
+          <b>{{ option.label }}</b>
+        </label>
         <div class="col-sm-5">
           <span>
             <toggle-button v-if="option.type === 'switch'" :disabled="!enabled" :value="option.value" :name="name" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
-            <input v-if="option.type === 'text'" type="text" :disabled="!enabled" :value="option.value" :name="name" @change="updateField">
+            <input v-if="option.type === 'text'" :type="option.type" :disabled="!enabled" :value="option.value" :name="name" @change="updateField">
+            <select v-if="option.type === 'select' || option.type === 'multi-select'" :name="name" v-model="option.value" :value="option.value" :multiple="option.type === 'multi-select'">
+              <option v-for="opt in option.options" :value="opt._id ? opt._id : opt">{{ opt.name ? opt.name : opt }}</option>
+            </select>
           </span>
         </div>
-
         <div v-if="option.value && option.config">
           <br>
-          <div v-for="(subopt, subname) in option.config" class="config-inner">
+          <div v-for="(subopt, subname) in option.config" class="config-inner" :key="subname">
             <label class="col-sm-7 control-label" :data-name="subname"><b>{{ subopt.label }}</b></label>
             <div class="col-sm-5">
               <span>
-                <toggle-button v-if="subopt.type === 'switch'" :value="subopt.value" :parent="name" :name="subname" color="#78DCD6" :sync="true" :labels="true" @change="updateSubField"></toggle-button>
-                <input v-if="subopt.type === 'text'" type="text" :value="subopt.value" :parent="name" :name="subname" @change="updateSubField">
+                <toggle-button v-if="subopt.type === 'switch'" :value="subopt.value" active-color="#78DCD6"  @change="(newValue)=>updateSubField(newValue, name, subname)"></toggle-button>
+                <input v-if="subopt.type === 'text'" type="text" :value="subopt.value" :parent="name" :name="subname" @change="updateSubFieldByEvent">
                 <select v-model="subopt.value" multiple v-if="subopt.type === 'multi-select'" :value="subopt.value" :parent="name" :name="subname">
-                  <option v-for="opt in subopt.options">{{ opt }}</option>
+                  <option v-for="opt in subopt.options" :key="opt">{{ opt }}</option>
                 </select>
               </span>
             </div>
@@ -70,12 +74,12 @@
       }
     },
     methods: {
-      toggle(e) {
+      toggle(value) {
         const payload = {
           plugin: this.name,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          enabled: e.value,
+          enabled: value,
         };
         // Update state of the component
         this.$store.commit('module/togglePlugin', payload);
@@ -91,7 +95,7 @@
           attribute: this.module.structure.columns[payload.columnId].components[payload.componentId].attribute || {}
         });
       },
-      updateField(e) {
+      updateFieldByEvent(e){
         let option = '';
         let value = '';
 
@@ -103,7 +107,9 @@
           option = parentElement.attributes.getNamedItem('name').value;
           value = e.value;
         }
-
+        this.updateField(value, option)
+      },
+      updateField(value, option) {
         const config = {};
         config[option] = {
           value
@@ -118,8 +124,9 @@
 
         this.$store.commit('module/savePlugin', payload);
       },
-      updateSubField(e) {
+      updateSubFieldByEvent(e) {
         let option = '';
+        let subOption = '';
         let value = '';
 
         if ( e.target ) {
@@ -132,7 +139,10 @@
           subOption = parentElement.attributes.getNamedItem('name').value;
           value = e.value;
         }
+          updateSubField(value, option, subOption)
+        },
 
+        updateSubField(value, option, subOption) {
         const config = clone(this.plugin.config);
         config[option].config[subOption].value = value;
 
@@ -145,6 +155,13 @@
 
         this.$store.commit('module/savePlugin', payload);
       }
+    },
+    mounted() {
+      this.$store.dispatch('module/getLibraries', {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId
+      });
     }
   }
 </script>

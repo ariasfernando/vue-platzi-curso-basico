@@ -4,7 +4,7 @@ const campaignSettings = require('./campaignSettings.vue');
 module.exports = {
   name: 'image-editor',
   title: 'Image Editor',
-  version: '0.0.1',
+  version: '1.0.15',
   author: 'emiliano@stensul.com',
   target: ['image'],
   studioSettings,
@@ -68,6 +68,12 @@ module.exports = {
       value: false,
       type: 'switch',
     },
+    circleCropping: {
+      label: 'Circle cropping',
+      key: 'circleCropping',
+      value: false,
+      type: 'switch',
+    },
     adjustableWidth: {
       label: 'Width Control',
       key: 'adjustableWidth',
@@ -118,7 +124,8 @@ module.exports = {
       label: 'Library',
       key: 'library',
       value: '',
-      type: 'text',
+      type: 'select',
+      options: []
     },
     sticker: {
       label: 'Sticker',
@@ -159,15 +166,15 @@ module.exports = {
         horizontalAlignment: {
           label: 'Align X',
           key: 'horizontalAlignment',
-          value: ['left', 'right'],
-          options: ['left', 'right'],
+          value: ['left', 'center', 'right'],
+          options: ['left', 'center', 'right'],
           type: 'multi-select',
         },
         verticalAlignment: {
           label: 'Align Y',
           key: 'verticalAlignment',
-          value: ['top', 'bottom'],
-          options: ['top', 'bottom'],
+          value: ['top', 'middle', 'bottom'],
+          options: ['top', 'middle', 'bottom'],
           type: 'multi-select',
         },
       },

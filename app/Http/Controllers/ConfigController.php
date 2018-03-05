@@ -2,6 +2,8 @@
 
 namespace Stensul\Http\Controllers;
 
+use Stensul\Http\Middleware\Expose;
+
 class ConfigController extends Controller
 {
     /*
@@ -13,25 +15,13 @@ class ConfigController extends Controller
     |
     */
 
-    private static $whitelist = [
-        'admin',
-        'global_settings',
-        'campaign',
-        'locale',
-        'menu',
-        'modals',
-        'modules',
-        'proof',
-        'view',
-        'api.eloqua'
-    ];
-
     /**
      * Create a new controller instance.
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware(Expose::class, ['only' => 'getGet']);
     }
 
     /**
@@ -43,8 +33,8 @@ class ConfigController extends Controller
      */
     public function getGet($key)
     {
-        if (preg_match("/^global_settings\./", $key) || in_array($key, self::$whitelist)) {
-            return config($key);
+        if (config('exposed', false)) {
+            return config('exposed.'.$key);
         }
 
         abort(404);

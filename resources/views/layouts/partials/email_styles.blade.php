@@ -13,6 +13,10 @@
         text-decoration:none!important
     }
 
+    table{
+        border-collapse: collapse;
+    }
+
     #backgroundTable{
         margin:0;
         padding:0;
@@ -58,46 +62,64 @@
         isset($params['campaign_data']['library_config']['linkColor'])
     )
        a{
-            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
         }
         a *{ 
-            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+            color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
         }         
         a:link{ 
-             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }}!important;
+             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
         }  
     @endif
 
-    @media  screen and (max-width: 480px) {
-        /*BASE-LAYOUT*/
-        .st-wrapper {width: 100% !important;}
-        .st-wrapper-content{ padding: 0px !important;}
-        .st-wrapper-table { width: 100% !important; }
-        .st-col{ display: block!important; width: 100%!important; padding: 0px !important;}
-        .st-resize{ width: 100%!important; display: block!important; height: auto !important;}
-    }
+    {{-- Mobile Styles --}}
+    @include('layouts.partials.mobile_styles')
 
     @if(isset($params['campaign_data']['library_config']['propietaryCss']))
         {{ $params['campaign_data']->getLibraryConfig('propietaryCss') }}
     @endif
 
-    @if(isset($params['campaign_data']['campaign_fonts']))
-        @foreach ($params['campaign_data']['campaign_fonts'] as $font_group => $fonts)
-            @if($font_group === 'custom')
-                @foreach ($fonts as $font)
-                    @font-face {
-                        font-family: "{{ $font }}";
-                        src: url('{{ url("/") }}/images/{{str_replace(' ', '', $font) }}.eot') format('eot');
-                        src: url('{{ url("/") }}/images/{{str_replace(' ', '', $font) }}.eot?#iefix') format('embedded-opentype'),
-                        src: url('{{ url("/") }}/images/{{str_replace(' ', '', $font) }}.woff') format('woff'),
-                        src: url('{{ url("/") }}/images/{{str_replace(' ', '', $font) }}.ttf') format('truetype'),
-                        src: url('{{ url("/") }}/images/{{str_replace(' ', '', $font) }}.svg') format('svg');
-                    }
-                @endforeach
-            @endif
-        @endforeach
-    @endif
+    <?php
+        if (isset($params['campaign_data']['campaign_fonts'])) {
+            if (isset($params['campaign_data']['campaign_fonts']['custom'])) {
+                $fonts = $params['campaign_data']['campaign_fonts']['custom'];
 
+                $fontPath = url('/') . "/fonts/";
+
+                foreach ($fonts as $a => $font) {
+                    $definition = "";
+                    $ie = "";
+
+                    foreach ($font['types'] as $b => $type) {
+                        foreach ($type['files'] as $c => $file) {
+                            if ($file['file'] === 'eot') {
+                                $ie = "src: url('" . $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "?#iefix');";
+                            }
+                        }
+                    }
+
+                    foreach ($font['types'] as $b => $type) {
+                        $definition .= "@font-face {font-family: '" . $font['name'] . "';";
+                        $definition .= $ie;
+                        $definition .= "src: ";
+
+                        foreach ($type['files'] as $c => $file) {
+                            $definition .= "url('". $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "') format('" . $file['file'] . "')";
+
+                            if ($c < count($type['files']) - 1) {
+                                $definition .= ",";
+                            } else {
+                                $definition .= ";";
+                            }
+                        }
+
+                        $definition .= "font-weight: " . $type['weight'] . ";}";
+                    }
+                    echo $definition;
+                }
+            }
+        }
+    ?>
 </style>
 
 <!--[if mso]>

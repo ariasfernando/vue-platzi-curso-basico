@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form-group" :class="'field-' + setting">
     <label class="typo__label col-sm-12 control-label">Font Family</label>
 
     <div class="col-sm-12">
@@ -30,9 +30,13 @@
         options() {
           const options = [];
 
-          _.each(this.$_app.config.fonts, (group) => {
-            _.each(group, (font) => {
-              options.push(font);
+          _.each(this.$_app.config.fonts, (group, index) => {
+            group.map(font => {
+              if (index === 'custom') {
+                options.push(font.name);
+              } else {
+                options.push(font);
+              }
             });
           });
 

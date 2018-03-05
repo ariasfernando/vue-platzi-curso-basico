@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Models\Campaign;
+use Stensul\Models\Library;
 use Stensul\Services\EmailHtmlCreator as Html;
 use Stensul\Services\StaticProcessor as Assets;
 use Activity;
@@ -52,7 +53,12 @@ class ProcessCampaign implements ShouldQueue
             $assets->storeAssetsInCdn();
         }
 
-        $campaign->plain_text = $html->createTextVersion();
+        $library = Library::findOrFail($campaign->library);
+
+        if ($library->config['plainText']) {
+            $campaign->plain_text = $html->createTextVersion();
+        }
+
         $campaign->processed = 1;
         $campaign->published_at = strtotime(date('c'));
         $campaign->save();

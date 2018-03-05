@@ -9,7 +9,7 @@ function Campaign(data) {
   this.campaign_process = data.settings.campaignProcess || false;
   this.modules_data = data.modules;
   this.body_html = data.campaign.bodyHtml;
-  this.auto_save = data.settings.autoSave;
+  this.auto_save = data.campaign.campaign_data.auto_save;
   this.favorite = data.campaign.isFavorite;
   this.template = data.campaign.campaign_data.template;
   this.campaign_settings = data.campaign.campaign_data.campaign_settings || {};
@@ -20,10 +20,4 @@ function Campaign(data) {
   return this;
 }
 
-module.exports = Campaign;
-
-export default function (data) {
-  this.name = data.name || undefined;
-
-  return this;
-};
+export default Campaign;

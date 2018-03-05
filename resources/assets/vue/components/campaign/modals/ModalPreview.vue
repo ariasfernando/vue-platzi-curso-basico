@@ -1,8 +1,8 @@
 <template>
   <transition name="modal" v-if="modalPreview">
     <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container modal-preview">
+      <div class="modal-wrapper modal-preview">
+        <div class="modal-container">
           <div class="share-preview pull-right" v-if="!isPublic">
             <form class="form-inline">
               <div class="form-group">
@@ -26,53 +26,57 @@
               <h4>
                 Preview
               </h4>
-              <div class="row">
-                <div class="send-preview" v-if="!isPublic">
-                  <div class="form-group" v-if="!isPublic">
-                    <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
-                      email is not suitable for deployment. To access the production-ready HTML, please click
-                      "Complete" to publish your campaign.
-                    </p>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="input-group">
-                          <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
-                              placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
-                        </div>
-                        <label class="error" v-if="emailError">{{emailError}}</label>
-                        <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="input-group">
-                          <input type="text" class="form-optional form-control" name="send-preview-subject" value="" id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
-                        </div>
-                      </div>
-                      <div class="col-md-12" v-if="campaign.campaign_data.library_config.preheader">
-                        <div class="input-group">
-                          <input type="text" class="form optional form-control" name="send-preview-preheader" value=""
-                              id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
-                        </div>
-                        <p class="info">The best practice is to limit preheaders to 50 characters.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-                <div class="preview-body" :class="previewBodyClass">
-                  <div class="preview-container">
-                    <div class="mobile-frame"></div>
-                    <slot name="body">
-                      <b-tabs>
-                        <b-tab title="Desktop" @click="togglePreview('desktop')" active>
-                        </b-tab>
-                        <b-tab title="Mobile" @click="togglePreview('mobile')">
-                        </b-tab>
-                      </b-tabs>
-                    </slot>
-                    <div class="iframe-container" :data-template-width="widthPreview">
-                      <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
+              <div class="modal-container-inner">
+                <div class="row">
+                  <div class="send-preview" v-if="!isPublic">
+                    <div class="form-group" v-if="!isPublic">
+                      <p class="alert alert-info upload-warning beta-alert-neutral beta-alert">Please note this preview
+                        email is not suitable for deployment. To access the production-ready HTML, please click
+                        "Complete" to publish your campaign.
+                      </p>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="input-group">
+                            <input type="text" class="form-control" name="send-preview-to" id="send-preview-to" value="" 
+                                placeholder="Enter your email address to preview your campaign" data-validation='{ "required":"true" }'/>
+                          </div>
+                          <label class="error" v-if="emailError">{{emailError}}</label>
+                          <p class="info">Use a comma or a semicolon to separate multiple email addresses</p>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="input-group">
+                            <input type="text" class="form-optional form-control" name="send-preview-subject" value="" id="send-preview-subject" placeholder="Subject Line (Optional)" data-validation='{ "required":"false" }'/>
+                          </div>
+                        </div>
+                        <div class="col-md-12" v-if="campaign.campaign_data.library_config.preheader">
+                          <div class="input-group">
+                            <input type="text" class="form optional form-control" name="send-preview-preheader" value=""
+                                id="send-preview-preheader" placeholder="Preheader (Optional)" data-validation='{ "required":"false" }'/>
+                          </div>
+                          <p class="info">The best practice is to limit preheaders to 50 characters.</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
+                  <div class="preview-body" :class="previewBodyClass">
+                    <div class="preview-container">
+                      <div class="mobile-frame"></div>
+                      <slot name="body">
+                        <b-tabs>
+                          <b-tab title="Desktop" @click="togglePreview('desktop')" active>
+                          </b-tab>
+                          <b-tab title="Mobile" @click="togglePreview('mobile')">
+                          </b-tab>
+                        </b-tabs>
+                      </slot>
+                      <div class="iframe-container" :data-template-width="widthPreview">
+                        <iframe id="email-preview-iframe" :width="widthPreview" :src="previewUrl" @load="resizePreviewFrame" :height="previewFrameHeight" scrolling="no" frameborder="0"></iframe>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </slot>
@@ -108,6 +112,16 @@
         widthPreview: null,
         previewFrameHeight: null,
         emailError: null
+      }
+    },
+    watch: {
+      modalPreview(val) {
+        if (val) {
+          // Hide loader
+          setTimeout(() => {
+            this.$store.commit("global/setLoader", false);
+          }, 250);
+        }
       }
     },
     computed: {
@@ -210,181 +224,9 @@
       }
     },
     created () {
-
       if (this.campaign.campaign_data) {
         this.updateDimensions();
       }
     }
   };
 </script>
-
-<style lang="less" scoped>
-  .modal-mask {
-    position: fixed;
-    z-index: 9998;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, .5);
-    display: table;
-    transition: opacity .3s ease;
-  }
-  .modal-confirm{
-    .modal-content{
-      border-radius: 0px;
-      padding: 15px;
-
-      .modal-footer{
-        border-top: 1px solid #dddddd;
-        padding: 25px 0px 0px 0px;
-      }
-
-      .modal-body{
-        padding: 10px 0px 15px;
-        font-weight: 300;
-        font-family: 'Open Sans', Arial, sans-serif;
-      }
-    }
-  }
-  .modal-footer{
-    margin-top: 30px;
-    position: absolute;
-    width: 1110px;
-    bottom: 25px;
-  }
-  .modal-container {
-    width: 1160px!important;
-    height: 80vh;
-    min-height: 450px;
-    overflow: auto;
-    margin: -20px auto;
-    background-color: #fff;
-    border-radius: 0;
-    box-shadow: none;
-    transition: all .3s ease;
-    position: relative;
-
-    .send-preview{
-      margin-top: 10px;
-      width: 360px;
-      float: left;
-      margin-left: 15px;
-      margin-right: 15px;
-    }
-
-    .share-preview{
-      position: absolute;
-      bottom: 30px;
-      height: 30px;
-
-      label{
-        font-weight: 600;
-      }
-
-      input{
-        position: static;
-      }
-      
-    }
-
-    textarea {
-      width: 100%;
-      height: 500px;
-      border: 1px solid #ccc;
-      font-family: monospace, serif;
-    }
-
-    #send-preview-form .input-group {
-      width: 100%;
-      margin-top: 10px;
-
-      .btn-group {
-        padding: 0px;
-      }
-
-    }
-    .btn-copy {
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
-    }
-    #send-preview-to,
-    #send-preview-subject,
-    #send-preview-preheader {
-      font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-      font-size: 13px;
-      font-weight: 300;
-      color: #666666;
-      box-shadow: none;
-      border-radius: 2px;
-      height: 36px;
-
-      &:focus {
-        border: 1px solid #DDDDDD;
-      }
-    }
-
-    p.alert-info{
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
-
-    p.info {
-      font-weight: 300;
-      color: #999999;
-      font-size: 11px;
-      margin-top: 5px;
-      margin-bottom: 0px;
-    }
-    label.info {
-      margin-left: 4px;
-    }
-    .preview-body {
-      margin: 0 15px 15px 15px;
-      float: left;
-      width: 720px;
-
-      .preview-container {
-        padding-top: 0px;
-      }
-      .iframe-container {
-        height: 45vh;
-        overflow-y: auto;
-        text-align: center;
-        background: #F4F4F4;
-        padding-top: 10px;
-        margin-top: -15px;
-        min-height: 215px;
-      }
-    }
-    .preview-body.col-md-12{
-      margin: 0 0 15px 0!important;
-      width: 100%!important;
-    }
-    .preview-body.col-md-8{
-      padding: 0px!important;
-    }
-
-    input.share-preview {
-      width: 250px;
-    }
-  }
-
-  .modal-divider{
-    width: 100%;
-    border-top: 1px solid #dddddd;
-    margin-bottom: 10px;
-    margin-top: 20px;
-  }
-
-  .modal-preview {
-
-    .close{
-
-      &:focus{
-        outline: none;
-        background: none;
-      }
-    }
-  }
-</style>

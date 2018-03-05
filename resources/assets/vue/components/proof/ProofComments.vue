@@ -87,7 +87,7 @@
 <style lang="scss">
     .proof-comments-container {
         width: 100%;
-        padding-left: 35px;
+        padding-left: 15px;
 
         .proof-comment {
             background: #ffffff;

@@ -1,38 +1,83 @@
 <template>
-  <tr v-if="module.type === 'custom'" 
-      class="stx-module-wrapper" 
-      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }" 
-      @click="setActiveModule"
+  <tr v-if="module.type === 'custom'"
+      class="stx-module-wrapper"
+      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
-      v-on-clickaway="unsetActiveModule"
   >
-    <td class="stx-toolbar-content stx-position-relative">
+    <td class="stx-toolbar-content stx-position-relative"
+        :data-module-id="moduleId"
+        :class="{ 'stx-show-error': module.data.errors && module.data.errors.length }"
+        @click.prevent="config"
+    >
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
+      <div class="st-remove-element module-overlay"></div>
+      <div class="st-remove-element default-module-error"></div>
     </td>
   </tr>
 
-  <tr v-else class="stx-module-wrapper" 
-      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }" 
-      @click="setActiveModule"
-
+  <tr v-else
+      class="stx-module-wrapper"
+      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
-      v-on-clickaway="unsetActiveModule"
   >
     <td class="stx-toolbar-content stx-position-relative"
+        :data-module-id="moduleId"
         :style="module.structure.style"
         :bgcolor="module.structure.attribute.bgcolor.hex"
-        :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
-      <table width="100%" cellspacing="0" cellpadding="0" border="0" :class="{ 'stx-wrapper': module.structure.columns.length === 1 }">
+        :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 }">
+      <table
+        width="100%"
+        cellspacing="0"
+        cellpadding="0"
+        border="0"
+        :class="{ 'stx-wrapper': module.structure.columns.length === 1 }"
+        >
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
-          <td width="100%" v-if="!module.structure.columnsFixed">
+
+          <!--2 COLUMNS STACKING -->
+          <td width="100%" v-if="!module.structure.columnsFixed && !module.structure.invertedStacking">
             <comment :content="msoStartingComment"></comment>
             <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
           </td>
 
+          <!--2 COLUMNS INVERTED STACKING ONLY FOR 2 COLUMNS-->
+          <td width="100%" v-else-if="!module.structure.columnsFixed && module.structure.invertedStacking">
+            <table
+              width="100%"
+              cellspacing="0"
+              cellpadding="0"
+              border="0"
+              dir="rtl"
+              >
+              <tr>
+                <td width="100%">
+                  <comment :content="msoStartingCommentInverted"></comment>
+
+                  <columns-inverted-stacking-render
+                    :module-id="moduleId"
+                    :column="module.structure.columns[1]"
+                    :column-id="1"
+                    :column-width-padding="columnWidthPadding"
+                    >
+                  </columns-inverted-stacking-render>
+                  <columns-inverted-stacking-render
+                    :module-id="moduleId"
+                    :column="module.structure.columns[0]"
+                    :column-id="0"
+                    :column-width-padding="columnWidthPadding"
+                    >
+                  </columns-inverted-stacking-render>
+
+                </td>
+              </tr>
+            </table>
+          </td>
+
+          <!--2 COLUMNS FIXED -->
           <td v-else
               v-for="(column, columnId) in module.structure.columns"
               :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
@@ -44,7 +89,11 @@
         <!--2 COLUMNS -->
 
         <!--1 COLUMN -->
-        <tr v-else v-for="(component, componentId) in module.structure.columns[0].components" @click.prevent="setComponent(moduleId, 0, componentId)">
+        <tr v-else
+          v-for="(component, componentId) in module.structure.columns[0].components"
+          @click.prevent="setComponent(moduleId, 0, componentId)"
+          :class="component.attribute.hideElement ? 'stx-hide-element st-remove-element' : '' "
+        >
           <td :valign="component.attribute.valign" :align="component.attribute.align || 'left'">
             <component
               :is="component.type"
@@ -59,6 +108,7 @@
       </table>
       <module-toolbar :module-id="moduleId"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
+      <div class="st-remove-element default-module-error" style="display:none"></div>
     </td>
   </tr>
 </template>
@@ -73,7 +123,9 @@
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
+  import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
   import { mixin as clickaway } from 'vue-clickaway';
+  import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
@@ -88,6 +140,12 @@
       templateWidth() {
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
+      moduleErrors() {
+        return this.$store.getters["campaign/moduleErrors"];
+      },
+      fieldErrors() {
+        return this.$store.getters["campaign/fieldErrors"];
+      },
       msoStartingComment() {
         return "[if gte mso 9]>" +
           "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center'>" +
@@ -95,11 +153,37 @@
           "<td style='width: " + this.templateWidth / this.module.structure.columns.length + "px !important'>" +
           "<![endif]";
       },
+      msoStartingCommentInverted() {
+        return "[if gte mso 9]>" +
+          "<table width='" + this.columnWidthPadding + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center' dir='rtl'>" +
+          "<tr>" +
+          "<td style='width: " + this.columnWidthPadding / this.module.structure.columns.length + "px !important' dir='ltr'>" +
+          "<![endif]";
+      },
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
       },
+      columnWidthPadding(){
+        return this.templateWidth - (_.parseInt(this.module.structure.style.paddingLeft) + _.parseInt(this.module.structure.style.paddingRight));
+      }
     },
     methods: {
+      showError(moduleId){
+        let err = false;
+        _.each(this.moduleErrors, (error, key) => {
+           if (!_.isUndefined(error.scope.moduleId)){
+              if (error.scope.moduleId === moduleId){
+                err = true;
+              }
+           }
+        });
+
+        return err;
+      },
+      config() {
+        this.$store.commit("campaign/setCustomModule", this.moduleId);
+        this.$store.commit("campaign/unsetCurrentModule");
+      },
       setComponent(moduleId, columnId, componentId) {
         setTimeout(() => {
           // TODO: find better way to do this
@@ -111,7 +195,7 @@
         }, 50);
       },
       getModuleRow( event ){
-        let $row = null; 
+        let $row = null;
 
         if( $(event.target).hasClass('stx-module-wrapper') ){
           $row = $(event.target);
@@ -148,60 +232,14 @@
 
           }, 50);
         }
-        
+
       },
       setModulesMouseLeave(e){
         let $row = this.getModuleRow(e);
 
         // Remove module highlight element
         $row.find("#moduleHighlight").remove();
-      },
-      setActiveModule(e) {
-        // Set active Module
-        this.$store.commit("campaign/setActiveModule", this.moduleId);
-        // Clear 3rd column
-        this.$store.commit("campaign/setCurrentComponent", {});
-
-        const isTargetingAModule = this.isWrappedIn(e, "module-toolbar");
-        if (!isTargetingAModule) {
-          this.$store.commit("campaign/setCurrentModule", null);
-        }
-      },
-      isWrappedIn(e,className) {
-        return $(e.target).hasClass(className) || $(e.target).closest(`.${className}`).length > 0;
-      },
-      unsetActiveModule(e) {
-        // TODO: improve this code (related to v-on-clickaway directive) avoiding using UI selectors
-        // Idea 1, using Automata Theory, defining states and event transitions
-        // Idea 2, using getters from the campaign's store
-
-        let isTargetingComponentSettings  = $(e.target).closest(".component-settings").length > 0;
-        let isTargetingColumnSettings  = this.isWrappedIn(e, "column-settings");
-        let isTargetingAModule      = this.isWrappedIn(e, "stx-module-wrapper");
-        let isTargetingMenuModule   = this.isWrappedIn(e, "beta-subitem-single");
-        let hasPluginsActivated     = $(".settings-wrapper, .plugin-wrapper").length > 0;
-
-        // Treatment for anything except 3rd column
-        if(!isTargetingComponentSettings && !isTargetingColumnSettings) {
-          // Treatment for anything except a module
-          if(!isTargetingAModule) {
-            // Treatment for anything except the menu module
-            // Necesary filter to keep active state for last module added, triggered in EmailCanvas.vue::addModule()
-            if(!isTargetingMenuModule) {
-              this.$store.commit("campaign/unsetActiveModule");
-              this.$store.commit("campaign/unsetCurrentModule");
             }
-          }
-        }
-        // Keep open 3rd column for active module
-        else {
-          // Deactive only if it hasn't activated plugins
-          if(!hasPluginsActivated) {
-            this.$store.commit("campaign/setActiveModule", null);
-          }
-        }
-      }
-
     },
     components: {
       TextElement,
@@ -211,7 +249,8 @@
       SeparatorElement,
       ModuleToolbar,
       ColumnsStackedRender,
-      ColumnsFixedRender
+      ColumnsFixedRender,
+      ColumnsInvertedStackingRender,
     }
   };
 </script>

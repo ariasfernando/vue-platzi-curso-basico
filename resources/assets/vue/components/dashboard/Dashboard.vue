@@ -23,87 +23,91 @@
       </div>
       <div class="col-xs-12 col-sm-2 pull-right no-gutters">
         <div class="dropdown default-dropdown pull-right">
-          <dashboard-menu :config="config"></dashboard-menu>
+          <dashboard-menu></dashboard-menu>
         </div>
       </div>
     </div>
-    <div class="row" id="draft-emails-campaign">
-      <div class="col-xs-12">
-        <search-result 
-          :tags="tags"
-          :terms="terms"
-          @remove-search-tag="removeSearchTag" 
-          @remove-search-term="removeSearchTerm"
-        ></search-result>
-        <draft-emails
-          v-if="ready.current"
-          :campaigns="campaigns.current"
-          :config="config"
-          :loading="showLoading.current"
-          :tags="tags"
-          :terms="terms"
-          :type="'current'"
-          :enable-locking="config.locking"
-          :show-created-by="config.created_by_dashboard"
-          @add-search-tag="addSearchTag"
-          @apply-sort="applySort"
-          @change-page="changePage"
-          @refresh-campaigns="fetchCampaigns"
-        ></draft-emails>
+
+    <div class="dash-campaigns">
+      <div class="row" id="draft-emails-campaign">
+        <div class="col-xs-12">
+          <search-result
+            :tags="tags"
+            :terms="terms"
+            @remove-search-tag="removeSearchTag"
+            @remove-search-term="removeSearchTerm"
+          ></search-result>
+          <draft-emails
+            v-if="ready.current"
+            :campaigns="campaigns.current"
+            :config="config"
+            :loading="showLoading.current"
+            :tags="tags"
+            :terms="terms"
+            :type="'current'"
+            :enable-locking="config.locking"
+            :show-created-by="config.created_by_dashboard"
+            @add-search-tag="addSearchTag"
+            @apply-sort="applySort"
+            @change-page="changePage"
+            @refresh-campaigns="fetchCampaigns"
+          ></draft-emails>
+        </div>
       </div>
-    </div>
-    <div class="row" id="finished-campaign">
-      <div class="col-xs-12">
-        <search-result 
-          :tags="tags"
-          :terms="terms"
-          @remove-search-tag="removeSearchTag" 
-          @remove-search-term="removeSearchTerm"
-        ></search-result>
-        <finished-emails
-          v-if="ready.finished"
-          :campaigns="campaigns.finished"
-          :config="config"
-          :enable-download="config.download_html"
-          :loading="showLoading.finished"
-          :tags="tags"
-          :terms="terms"
-          :type="'finished'"
-          :enable-locking="config.locking"
-          :show-created-by="config.created_by_dashboard"
-          @add-search-tag="addSearchTag"
-          @apply-sort="applySort"
-          @change-page="changePage"
-          @refresh-campaigns="fetchCampaigns"
-        ></finished-emails>
+      <div class="row" id="finished-campaign">
+        <div class="col-xs-12">
+          <search-result
+            :tags="tags"
+            :terms="terms"
+            @remove-search-tag="removeSearchTag"
+            @remove-search-term="removeSearchTerm"
+          ></search-result>
+          <finished-emails
+            v-if="ready.finished"
+            :campaigns="campaigns.finished"
+            :config="config"
+            :enable-download="config.download_html"
+            :loading="showLoading.finished"
+            :tags="tags"
+            :terms="terms"
+            :type="'finished'"
+            :enable-locking="config.locking"
+            :show-created-by="config.created_by_dashboard"
+            @add-search-tag="addSearchTag"
+            @apply-sort="applySort"
+            @change-page="changePage"
+            @refresh-campaigns="fetchCampaigns"
+          ></finished-emails>
+        </div>
       </div>
-    </div>
-    <div class="row" v-if="config.enable_templating" id="templates-campaign">
-      <div class="col-xs-12">
-        <search-result 
-          :tags="tags"
-          :terms="terms"
-          @remove-search-tag="removeSearchTag" 
-          @remove-search-term="removeSearchTerm"
-        ></search-result>
-        <template-campaigns
-          v-if="ready.template"
-          :campaigns="campaigns.template"
-          :config="config"
-          :loading="showLoading.template"
-          :tags="tags"
-          :terms="terms"
-          :type="'template'"
-          :enable-locking="config.locking"
-          :show-created-by="config.created_by_dashboard"
-          @add-search-tag="addSearchTag"
-          @apply-sort="applySort"
-          @change-page="changePage"
-          @refresh-campaigns="fetchCampaigns"
-        ></template-campaigns>
+      <div class="row" v-if="config.enable_templating" id="templates-campaign">
+        <div class="col-xs-12">
+          <search-result
+            :tags="tags"
+            :terms="terms"
+            @remove-search-tag="removeSearchTag"
+            @remove-search-term="removeSearchTerm"
+          ></search-result>
+          <template-campaigns
+            v-if="ready.template"
+            :campaigns="campaigns.template"
+            :config="config"
+            :loading="showLoading.template"
+            :tags="tags"
+            :terms="terms"
+            :type="'template'"
+            :enable-locking="config.locking"
+            :show-created-by="config.created_by_dashboard"
+            @add-search-tag="addSearchTag"
+            @apply-sort="applySort"
+            @change-page="changePage"
+            @refresh-campaigns="fetchCampaigns"
+          ></template-campaigns>
+        </div>
       </div>
+      <spinner></spinner>
+
     </div>
-    <spinner></spinner>
   </section>
 </template>
 

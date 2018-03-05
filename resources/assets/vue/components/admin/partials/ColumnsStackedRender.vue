@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="module.structure.invertedStacking ? 'st-inverted-stacking' : ''">
     <table v-if="column.components.length"
            v-for="(column, columnId) in module.structure.columns"
            :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
