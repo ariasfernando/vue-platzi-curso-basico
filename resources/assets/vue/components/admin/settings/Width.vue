@@ -1,18 +1,16 @@
 <template>
-  <div class="form-group" :class="'field-' + type">
-    <div class="col-xs-6">
-        <label class="clearfix control-label" for="name">{{ label }}</label>
-        <el-input-number
-          size="mini" 
-          v-validate="'required'"
-          v-model="mainSettingNumeric"
-          :value="mainSettingNumeric"
-          class="clearfix"
-          :min="minValue"
-          :max="maxValue"
-        ></el-input-number>
+  <div class="form-group" :class="'field-' + setting">
+    <label class="half">{{ label }}</label>
+    <el-input-number
+        size="mini" 
+        v-validate="'required'"
+        v-model="mainSettingNumeric"
+        :value="mainSettingNumeric"
+        class="clearfix padding-custom"
+        :min="minValue"
+        :max="maxValue"
+      ></el-input-number>
     </div>
-  </div>
 </template>
 
 <script>
@@ -34,3 +32,11 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.el-input {
+  padding: 6px 0 0 0;
+}
+.padding-custom {
+    margin-top: 5px;
+}
+</style>
