@@ -168,6 +168,9 @@ const mutations = {
   error(state, err) {
     console.log(err);
   },
+  setListLibraries(state, data) {
+    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.options = data.response;
+  }
 };
 
 const actions = {
@@ -234,6 +237,16 @@ const actions = {
 
     return deferred.promise;
   },
+  getLibraries(context, data) {
+    imageService.getLibraries().then(response => {
+      response.data.push('');
+      
+      context.commit('setListLibraries', {
+        ...data,
+        response: response.data
+      });
+    });
+  }
 };
 
 module.exports = {

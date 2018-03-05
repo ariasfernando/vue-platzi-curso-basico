@@ -124,7 +124,8 @@ module.exports = {
       label: 'Library',
       key: 'library',
       value: '',
-      type: 'text',
+      type: 'select',
+      options: []
     },
     sticker: {
       label: 'Sticker',

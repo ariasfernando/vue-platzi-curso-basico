@@ -249,6 +249,10 @@ function campaignStore() {
       },
     },
     actions: {
+			updateCustomElement(context, payload) {
+        context.commit('updateCustomElement', payload);
+        return Promise.resolve();
+      },
       addErrors(context, errors) {
         _.each(errors, (error) => {
           context.commit('clearErrorsByScope', error.scope);

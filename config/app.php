@@ -225,6 +225,7 @@ return [
         Stensul\Providers\ChallengeServiceProvider::class,
         Stensul\Providers\ModuleServiceProvider::class,
         Olssonm\Zxcvbn\ZxcvbnServiceProvider::class,
+        Stensul\MediaGallery\MediaGalleryServiceProvider::class
     ],
 
     /*

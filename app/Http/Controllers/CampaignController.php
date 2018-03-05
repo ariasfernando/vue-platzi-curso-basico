@@ -47,25 +47,7 @@ class CampaignController extends Controller
     public function getEdit(Request $request, $campaign_id = null)
     {
         if (!is_null($campaign_id)) {
-            if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:' . $campaign_id) !== Auth::id()) {
-                Activity::log(
-                    'Campaign edit deny',
-                    array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
-                );
-
-                return redirect(env('APP_BASE_URL', '/'))->with('campaign_lock', $campaign_id);
-            } else {
-                $params = Campaign::find($campaign_id);
-
-                if ($params) {
-                    $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
-                        ? $params['campaign_data']['library']
-                        : "default";
-                    $params['library_id'] = $library_id;
-                } else {
-                    return redirect(env('APP_BASE_URL', '/'))->with('campaign_not_found', $campaign_id);
-                }
-            }
+            $params = $this->loadCampaign($campaign_id);
         } else {
             $params = [];
 
@@ -88,8 +70,7 @@ class CampaignController extends Controller
             $params['campaign_name'] = 'Untitled Email';
 
             $campaign = Campaign::create($params);
-
-            return redirect('campaign/edit/'.$campaign->id);
+            $params = $this->loadCampaign($campaign->_id);
         }
 
         if (\Config::get('api.scraper.status')
@@ -104,6 +85,35 @@ class CampaignController extends Controller
         }
 
         return $this->renderView('campaign', array('params' => $params));
+    }
+
+    /**
+     * Load campaign
+     *
+     * @param String $campaign_id
+     * @return Array $params
+     */
+    private function loadCampaign($campaign_id) {
+
+        if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:' . $campaign_id) !== Auth::id()) {
+            Activity::log(
+                'Campaign edit deny',
+                array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
+            );
+
+            return redirect(env('APP_BASE_URL', '/'))->with('campaign_lock', $campaign_id);
+        }
+
+        if ($params = Campaign::find($campaign_id)) {
+            $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
+                ? $params['campaign_data']['library']
+                : "default";
+            $params['library_id'] = $library_id;
+
+            return $params;
+        }
+
+        return redirect(env('APP_BASE_URL', '/'))->with('campaign_not_found', $campaign_id);
     }
 
     /**

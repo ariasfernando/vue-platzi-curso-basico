@@ -23,10 +23,12 @@
               @change="(newValue)=>updateField(newValue, name)"
               :min="0"
             ></el-input-number>
-            <input v-if="option.type === 'text'" type="text" :disabled="!enabled" :value="option.value" @change="updateFieldByEvent">
+            <input v-if="option.type === 'text'" :disabled="!enabled" :type="option.type" :value="option.value" :name="name"  @change="updateFieldByEvent">
+            <select v-if="option.type === 'select' || option.type === 'multi-select'" :name="name" v-model="option.value" :value="option.value" :multiple="option.type === 'multi-select'">
+              <option v-for="(opt, key) in option.options" :value="opt._id ? opt._id : opt"  :key="key">{{ opt.name ? opt.name : opt }}</option>
+            </select>
           </span>
         </div>
-
         <div v-if="option.value && option.config">
           <br>
           <div v-for="(subopt, subname) in option.config" class="config-inner" :key="subname">
@@ -173,6 +175,13 @@ export default {
       };
 
       this.$store.commit("module/savePlugin", payload);
+    },
+    mounted() {
+      this.$store.dispatch('module/getLibraries', {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId
+      });
     }
   }
 };

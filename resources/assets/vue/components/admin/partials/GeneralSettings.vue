@@ -16,6 +16,7 @@
               name="name"
               placeholder="Module name"
               v-model="moduleName"
+              max="60"
               size="mini"></el-input>
           </div>
         </div>
