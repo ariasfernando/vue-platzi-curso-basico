@@ -52,13 +52,13 @@
 
                 <!-- Column Settings -->
     
-                <!-- Column Plugins -->
-                <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name" :key="plugin.name">
-                  <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="key"></component>
-                </div>
               </div>
-              <!-- /Column Plugins -->
             </div>
+            <!-- Column Plugins -->
+            <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name" :key="plugin.name">
+              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="key"></component>
+            </div>
+            <!-- /Column Plugins -->
           </b-tab>
         </b-tabs>
       </b-card>
