@@ -1,22 +1,24 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
-    <label class="half">Horizontal align</label>
-    <div class="half-style-setting padding-top">
-      <el-button plain size="mini" @click="changeAlignment('left')" class="fa fa-align-left" :class="{ active: align === 'left' }"></el-button>
-      <el-button plain size="mini" @click="changeAlignment('center')" class="fa fa-align-center" :class="{ active: align === 'center' }"></el-button>
-      <el-button plain size="mini" @click="changeAlignment('right')" class="fa fa-align-right" :class="{ active: align === 'right' }"></el-button>
-      <el-button plain size="mini" @click="changeAlignment('justify')" class="fa fa-align-justify" :class="{ active: align === 'justify' }"></el-button>
-    </div>
-  </div>
+    <settings-container label="Horizontal align">
+      <template slot="setting-left">
+        <el-button plain size="mini" @click="changeAlignment('left')" class="fa fa-align-left" :class="{ active: align === 'left' }"></el-button>
+        <el-button plain size="mini" @click="changeAlignment('center')" class="fa fa-align-center" :class="{ active: align === 'center' }"></el-button>
+        <el-button plain size="mini" @click="changeAlignment('right')" class="fa fa-align-right" :class="{ active: align === 'right' }"></el-button>
+        <el-button plain size="mini" @click="changeAlignment('justify')" class="fa fa-align-justify" :class="{ active: align === 'justify' }"></el-button>
+      </template>
+    </settings-container>
 </template>
+
 
 <script>
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "TextAlign",
   props: ["setting", "element"],
   mixins: [SettingMixin],
+  components: { SettingsContainer },
   data() {
     return {
       name: "align"

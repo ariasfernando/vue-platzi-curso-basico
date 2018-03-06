@@ -1,47 +1,48 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
-    <label class="half" for="font-weight">Font Weight</label>
-    <div class="half-style-setting padding-top">
-      <el-select
-        v-if="isCustomFontWeight"
-        class="custom-col"
-        size="mini"
-        :value="fontWeight"
-        v-model="fontWeight"
-        placeholder="Font Weight"
-        >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
+    <settings-container custom-class="input-font-weight" label="Font Weight">
+      <template slot="setting-left">
+        <el-select
+          v-if="isCustomFontWeight"
+          class="custom-col"
+          size="mini"
+          :value="fontWeight"
+          v-model="fontWeight"
+          placeholder="Font Weight"
+          >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
 
-      <el-button
-        class="custom-col"
-        v-else
-        size="mini"
-        @click="toggleNormalBold"
-      >{{fontWeight}}</el-button>
+        <el-button
+          class="custom-col"
+          v-else
+          size="mini"
+          @click="toggleNormalBold"
+        >{{fontWeight}}</el-button>
 
-      <el-button
-        size="mini"
-        :class="{'el-icon-setting': true ,'active': isCustomFontWeight}"
-        @click="toggleCustomFontWeight"
-      ></el-button>
-    </div>
-  </div>
+        <el-button
+          size="mini"
+          :class="{'el-icon-setting': true ,'active': isCustomFontWeight}"
+          @click="toggleCustomFontWeight"
+        ></el-button>
+      </template>
+    </settings-container>
 </template>
 
 <script>
 import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "FontWeight",
   props: ["setting", "element"],
   mixins: [ SettingMixin ],
+  components: { SettingsContainer },
   data() {
     return {
       name: "fontWeight",

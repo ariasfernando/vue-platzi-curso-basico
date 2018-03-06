@@ -1,43 +1,42 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
-    <label class="half" for="letter-spacing">Letter Spacing</label>
-    <div class="half-style-setting padding-top">
+    <settings-container custom-class="field-letter-spacing" label="Letter Spacing">
+      <template slot="setting-left">
+        <el-button
+          v-if="isNormalLetterSpacing"
+          class="custom-col"
+          size="mini"
+          disabled
+        >normal</el-button>
 
-      <el-button
-        v-if="isNormalLetterSpacing"
-        class="custom-col"
-        size="mini"
-        disabled
-      >normal</el-button>
+        <el-input-number
+          v-else
+          class="custom-col"
+          size="mini"
+          :step="0.05"
+          :min="-5"
+          :max="5"
+          v-model="letterSpacingInputValue"
+          @change="(newValue)=>updateLetterSpacing(newValue)"
+          ></el-input-number>
 
-      <el-input-number
-        v-else
-        class="custom-col"
-        size="mini"
-        :step="0.05"
-        :min="-5"
-        :max="5"
-        v-model="letterSpacingInputValue"
-        @change="(newValue)=>updateLetterSpacing(newValue)"
-        ></el-input-number>
-
-      <el-button
-        size="mini"
-        :class="{'el-icon-setting': isNormalLetterSpacing,'active': !isNormalLetterSpacing}"
-        @click="toggleNormalLetterSpacing"
-      ><span v-if="!isNormalLetterSpacing">{{ this.unit }}</span></el-button>
-    </div>
-  </div>
+        <el-button
+          size="mini"
+          :class="{'el-icon-setting': isNormalLetterSpacing,'active': !isNormalLetterSpacing}"
+          @click="toggleNormalLetterSpacing"
+        ><span v-if="!isNormalLetterSpacing">{{ this.unit }}</span></el-button>
+      </template>
+    </settings-container>
 </template>
 
 <script>
-import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "letter-spacing",
   props: ["setting", "element"],
   mixins: [ SettingMixin ],
+  components: { SettingsContainer },
   data() {
     return {
       name: "letterSpacing",

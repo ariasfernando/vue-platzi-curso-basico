@@ -1,20 +1,22 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
-    <label class="half">Vertical align</label>
-    <div class="half-style-setting padding-top">
-    <el-button plain size="mini" @click="changeAlignment('top')" class="fa fa-arrow-up" :class="{ active: valign === 'top' }"></el-button>
-    <el-button plain size="mini" @click="changeAlignment('middle')" class="fa fa-minus" :class="{ active: valign === 'middle' }"></el-button>
-    <el-button plain size="mini" @click="changeAlignment('bottom')" class="fa fa-arrow-down" :class="{ active: valign === 'bottom' }"></el-button>
-  </div>
+    <settings-container label="Vertical align">
+      <template slot="setting-left">
+        <el-button plain size="mini" @click="changeAlignment('top')" class="fa fa-arrow-up" :class="{ active: valign === 'top' }"></el-button>
+        <el-button plain size="mini" @click="changeAlignment('middle')" class="fa fa-minus" :class="{ active: valign === 'middle' }"></el-button>
+        <el-button plain size="mini" @click="changeAlignment('bottom')" class="fa fa-arrow-down" :class="{ active: valign === 'bottom' }"></el-button>
+      </template>
+    </settings-container>
 </template>
 
 <script>
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "VerticalAlign",
   props: ["setting", "element"],
   mixins: [ SettingMixin ],
+  components: { SettingsContainer },
   data() {
     return {
       name: "valign"

@@ -1,25 +1,26 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
-    <label class="half">Height</label>
-    <el-input-number
-        size="mini" 
-        v-validate="'required'"
-        v-model="height"
-        :value="height"
-        class="clearfix padding-custom"
-        :min="1"
-      ></el-input-number>
-  </div>
+    <settings-container label="Height">
+      <template slot="setting-left">
+        <el-input-number
+            size="mini" 
+            v-validate="'required'"
+            v-model="height"
+            :value="height"
+            :min="1"
+        ></el-input-number>
+      </template>
+    </settings-container>
 </template>
 
 <script>
-import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "input-height",
   props: ["setting", "element"],
   mixins: [ SettingMixin ],
+  components: { SettingsContainer },
   data() {
     return {
       name: "height"
@@ -40,8 +41,5 @@ export default {
 <style lang="less" scoped>
 .el-input {
   padding: 6px 0 0 0;
-}
-.padding-custom {
-    margin-top: 5px;
 }
 </style>

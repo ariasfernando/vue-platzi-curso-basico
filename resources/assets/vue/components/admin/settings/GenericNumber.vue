@@ -1,21 +1,20 @@
 <template>
-  <div class="form-group" :class="'field-' + type">
-  <label class="half">{{ label }}</label>
+  <settings-container :label="label">
+    <template slot="setting-left">
       <el-input-number
         size="mini" 
         v-validate="'required'"
         v-model="mainSettingNumeric"
         :value="mainSettingNumeric"
-        class="clearfix padding-custom"
         :min="minValue"
         :max="maxValue"
       ></el-input-number>
-  </div>
+    </template>
+  </settings-container>
 </template>
-
 <script>
 import SettingMixin from "../mixins/SettingMixin.js";
-
+import SettingsContainer from "./SettingsContainer.vue";
 export default {
   name: "generic-number",
   props: ["element", "name", "type", "link", "label", "default-value", "minValue", "maxValue"],
@@ -35,8 +34,5 @@ export default {
 <style lang="less" scoped>
 .el-input {
   padding: 6px 0 0 0;
-}
-.padding-custom {
-    margin-top: 5px;
 }
 </style>

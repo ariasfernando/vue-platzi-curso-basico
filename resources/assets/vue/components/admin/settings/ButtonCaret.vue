@@ -1,20 +1,20 @@
 <template>
-  <div class="form-group field-font-style">
-    <label class="half">Button caret</label>
-    <div class="col-sm-6 position-relative">
+  <settings-container label="Button caret">
+    <template slot="setting-left">
       <i v-if="buttonCaret" class="glyphicon glyphicon-trash st-remove" @click="resetImage"></i>
       <input class="input" name="buttonCaret" type="file" @change="onFileChange">
-    </div>
-  </div>
+    </template>
+  </settings-container>
 </template>
-
 <script>
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "ButtonCaret",
   props: ["setting", "element"],
   mixins: [ SettingMixin ],
+  components: { SettingsContainer },
   data() {
     return {
       name: "buttonCaret"
@@ -74,14 +74,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.field-button-caret {
-  input {
-    display: inline;
-    width: 80px !important;
-  }
+input {
+  display: inline;
+  width: 80px !important;
+}
 
-  i.st-remove {
-    cursor: pointer;
-  }
+i.st-remove {
+  cursor: pointer;
 }
 </style>
