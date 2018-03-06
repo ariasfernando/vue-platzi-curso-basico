@@ -171,6 +171,7 @@ mix
     `node_modules/bootstrap/dist/js/bootstrap.min.js`,
     assetsPath + jsAppFilePath('preview.js')
   ], `${jsDestinationPath}/preview.js`)
+  .scripts(`${assetsPath}vendor/stensul/media-gallery/media-gallery.js`, 'public/js/media-gallery.js')
   .version()
   //.sourceMaps()
   .copyDirectory(`node_modules/tinymce/plugins/textcolor`, './public/build/js/plugins/tinymce/plugins/textcolor')
