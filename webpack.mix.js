@@ -26,8 +26,11 @@ mix
     $: "jquery",
     jQuery: "jquery"
   })
-  .less(assetsPath + 'less/base/tool/tool.less', `public/css/tool.css`)
-  .less(assetsPath + 'less/base/base-v2/admin.less', `public/css/admin.css`)
+  .less(assetsPath + 'less/vendor/stensul/media-gallery/media-gallery.less', 'public/css/media-gallery.css')
+  .less(assetsPath + 'less/base/commons/mobile/mobile_core_styles.less', 'public/css/mobile_core_styles.css')
+  .less(assetsPath + 'less/base/commons/mobile/mobile_client_styles.less', 'public/css/mobile_client_styles.css')
+  .less(assetsPath + 'less/base/tool/tool.less', 'public/css/tool.css')
+  .less(assetsPath + 'less/base/base-v2/admin.less', 'public/css/admin.css')
   .js([
     customerAssetsPath + '/vue/main.js'
   ], `${jsDestinationPath}customer.js`)
@@ -51,8 +54,8 @@ mix
     assetsPath + 'js/library/custom-plugins/st-pagination-bar.jquery.js'
   ], `${jsDestinationPath}dashboard-components.js`)
   .scripts([
-    `node_modules/magnific-popup/dist/jquery.magnific-popup.js`,
-    'js/library/application-utils.js',
+    'node_modules/magnific-popup/dist/jquery.magnific-popup.js',
+    `${assetsPath}js/library/application-utils.js`,
     // 'js/library/master-image-editor.v2.js',
     // 'js/library/modal-manager.js',
     // 'js/library/image-manager.js',
@@ -139,7 +142,7 @@ mix
     assetsPath + jsAppFilePath('admin.js'),
   ], `${jsDestinationPath}/admin.js`)
   .scripts([
-  	// Transformers
+    // Transformers
     `${assetsPath}js/library/transformers.js`,
     // Custom Plugins
     `${assetsPath}js/library/custom-plugins/st-pagination-bar.jquery.js`,
