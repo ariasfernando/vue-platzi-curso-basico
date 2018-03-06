@@ -194,7 +194,7 @@
 </script>
 
 <style lang="less">
-  .st-edit-text {
+  .stx-edit-text {
     cursor: text;
   }
 </style>
