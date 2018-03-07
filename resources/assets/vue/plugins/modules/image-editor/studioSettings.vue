@@ -16,8 +16,8 @@
         </label>
         <div class="col-sm-5">
           <span>
-            <toggle-button v-if="option.type === 'switch'" :disabled="!enabled" :value="option.value" :name="name" color="#78DCD6" :sync="true" :labels="true" @change="updateField"></toggle-button>
-            <input v-if="option.type === 'text'" :type="option.type" :disabled="!enabled" :value="option.value" :name="name" @change="updateField">
+            <toggle-button v-if="option.type === 'switch'" :disabled="!enabled" :value="option.value" :name="name" color="#78DCD6" :sync="true" :labels="true" @change="(newValue)=>updateField(newValue, name)"></toggle-button>
+            <el-input v-if="option.type === 'text'" :type="option.type" :disabled="!enabled" :value="option.value" :name="name" @change="(newValue)=>updateField(newValue, name)">
             <select v-if="option.type === 'select' || option.type === 'multi-select'" :name="name" v-model="option.value" :value="option.value" :multiple="option.type === 'multi-select'">
               <option v-for="opt in option.options" :value="opt._id ? opt._id : opt">{{ opt.name ? opt.name : opt }}</option>
             </select>
@@ -30,7 +30,7 @@
             <div class="col-sm-5">
               <span>
                 <toggle-button v-if="subopt.type === 'switch'" :value="subopt.value" active-color="#78DCD6"  @change="(newValue)=>updateSubField(newValue, name, subname)"></toggle-button>
-                <input v-if="subopt.type === 'text'" type="text" :value="subopt.value" :parent="name" :name="subname" @change="updateSubFieldByEvent">
+                <el-input v-if="subopt.type === 'text'" type="text" :value="subopt.value" :parent="name" :name="subname" @change="(newValue)=>updateSubField(newValue, name, subname)">
                 <select v-model="subopt.value" multiple v-if="subopt.type === 'multi-select'" :value="subopt.value" :parent="name" :name="subname">
                   <option v-for="opt in subopt.options" :key="opt">{{ opt }}</option>
                 </select>
@@ -114,7 +114,6 @@
         config[option] = {
           value
         };
-
         const payload = {
           plugin: this.name,
           columnId: this.currentComponent.columnId,
