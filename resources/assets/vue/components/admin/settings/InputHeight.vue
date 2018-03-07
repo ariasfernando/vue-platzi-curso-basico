@@ -1,6 +1,6 @@
 <template>
     <settings-container label="Height">
-      <template slot="setting-left">
+      <template slot="setting-right">
         <el-input-number
             size="mini" 
             v-validate="'required'"
@@ -40,6 +40,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .el-input {
-  padding: 6px 0 0 0;
+  padding: 6px 0 0;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <settings-container label="Button caret">
-    <template slot="setting-left">
+    <template slot="setting-right">
       <i v-if="buttonCaret" class="glyphicon glyphicon-trash st-remove" @click="resetImage"></i>
       <input class="input" name="buttonCaret" type="file" @change="onFileChange">
     </template>
@@ -75,8 +75,7 @@ export default {
 
 <style lang="less" scoped>
 input {
-  display: inline;
-  width: 80px !important;
+  width: 80px;
 }
 
 i.st-remove {

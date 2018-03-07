@@ -1,35 +1,46 @@
 <template>
-    <div class="form-group settings-container" :class="customClassName">
-        <label :class="labelClass">{{label}}</label>
+    <div class="form-group settings-container" :class="customClass || ''">
+
+      <template v-if="hasSettingRight">
+        <label class="half">{{label}}</label>
         <div class="half-setting padding-top">
-            <slot name="setting-left" ></slot>
-            <slot ></slot>
+            <slot name="setting-right"></slot>
         </div>
+      </template>
+
+      <template v-if="hasSettingSideBySide">
+        <div class="half-setting">
+          <label>{{labelLeft}}</label>
+          <slot name="setting-half-left"></slot>
+        </div>
+        <div class="half-setting">
+          <label>{{labelRight}}</label>
+          <slot name="setting-half-right"></slot>
+        </div>
+      </template>
+    
     </div>
 </template>
 <script>
 import _ from "lodash";
 export default {
   name: "SettingsContainers",
-  props: ["label", "customClass"],
+  props: ["customClass", "label", "label-right", "label-left"],
   computed: {
-    hasSettingLeftSlot() {
-      return !!this.$slots["setting-left"];
+    hasSettingRight() {
+      return !!this.$slots["setting-right"];
     },
-    customClassName() {
-      return this.customClass || "";
-    },
-    labelClass() {
-      return this.hasSettingLeftSlot ? "half" : "";
+    hasSettingSideBySide() {
+      return !!this.$slots["setting-half-left"] && !!this.$slots["setting-half-right"];
     }
   }
 };
 </script>
 <style lang="less" scoped>
 .half-setting {
-    width: 50%;
-    float: left;
-    position: relative;
+  width: 50%;
+  float: left;
+  position: relative;
   & + .half-setting {
     padding-left: 15px;
   }

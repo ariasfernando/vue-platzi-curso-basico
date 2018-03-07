@@ -1,6 +1,6 @@
 <template>
     <settings-container custom-class="input-font-weight" label="Font Weight">
-      <template slot="setting-left">
+      <template slot="setting-right">
         <el-select
           v-if="isCustomFontWeight"
           class="custom-col"
@@ -100,7 +100,7 @@ export default {
 }
 .el-button--mini,
 .el-button--mini.is-round {
-  padding: 7px 7px;
+  padding: 7px;
 }
 .el-select {
   padding: 0;
@@ -115,11 +115,11 @@ export default {
   margin-left: 0;
 }
 .el-button:not(.custom-col) {
-    width: 28px;
-    padding: 4px 0px;
-    height: 28px;
-    display: block;
-    float: left;
+  width: 28px;
+  padding: 4px 0;
+  height: 28px;
+  display: block;
+  float: left;
 }
 </style>
 <style>

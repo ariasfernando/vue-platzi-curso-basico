@@ -1,6 +1,6 @@
 <template>
     <settings-container custom-class="field-letter-spacing" label="Letter Spacing">
-      <template slot="setting-left">
+      <template slot="setting-right">
         <el-button
           v-if="isNormalLetterSpacing"
           class="custom-col"
@@ -94,10 +94,11 @@ export default {
 <style lang="less" scoped>
 .el-button.active {
   background-color: #78dcd6;
+  padding: 7px 4px;
 }
 .el-button--mini,
 .el-button--mini.is-round {
-  padding: 7px 7px;
+  padding: 7px;
 }
 .custom-col {
   width: calc(~"100% - 28px");
@@ -108,22 +109,19 @@ export default {
 .el-button + .el-button {
   margin-left: 0;
 }
-.el-button.active {
-  padding: 7px 4px;
-}
 .el-button {
   transition: unset;
 }
 .el-button:not(.custom-col) {
-    width: 28px;
-    padding: 4px 0px;
-    height: 28px;
-    display: block;
-    float: left;
+  width: 28px;
+  padding: 4px 0;
+  height: 28px;
+  display: block;
+  float: left;
 }
 </style>
 <style lang="less">
-  /* not scoped */
+/* not scoped */
 .field-letter-spacing {
   .el-input-number--mini input.el-input__inner[type="text"] {
     padding-left: 0;

@@ -1,6 +1,6 @@
 <template>
     <settings-container label="Horizontal align">
-      <template slot="setting-left">
+      <template slot="setting-right">
         <el-button plain size="mini" @click="changeAlignment('left')" class="fa fa-align-left" :class="{ active: align === 'left' }"></el-button>
         <el-button plain size="mini" @click="changeAlignment('center')" class="fa fa-align-center" :class="{ active: align === 'center' }"></el-button>
         <el-button plain size="mini" @click="changeAlignment('right')" class="fa fa-align-right" :class="{ active: align === 'right' }"></el-button>
@@ -61,7 +61,7 @@ export default {
 }
 .el-button {
   width: 28px;
-  padding: 4px 0px;
+  padding: 4px 0;
   margin-right: 2.67px;
   height: 26px;
   display: block;
