@@ -8,13 +8,13 @@
     style="width:100%;"
     :style="tableStyle"
   >
-    <tr 
+    <tr
       data-type="divider-element"
       :class="getMobileClasses(component,'tr')"
     >
       <td
         class="stx-position-relative stx-line-height-reset"
-        :bgcolor="component.style.backgroundColor"
+        :bgcolor="component.attribute.bgcolor.hex"
         :height="heightAsInt"
         :width="component.style.width || '100%'"
         :style="styles"
@@ -55,7 +55,7 @@
       styles(){
         let inlineStyle = `height:${this.component.style.height};
                           width:${this.component.style.width };
-                          border-top-width:${this.component.style.borderTopWidth};  
+                          border-top-width:${this.component.style.borderTopWidth};
                           border-right-width:${this.component.style.borderRightWidth};
                           border-bottom-width:${this.component.style.borderBottomWidth};
                           border-left-width:${this.component.style.borderLeftWidth};

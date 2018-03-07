@@ -30,7 +30,7 @@
       },
       colors: {
         get() {
-          return { hex: this.component.attribute ? this.component.attribute.bgcolor : this.plugin.config.defaultValue }
+          return { hex: this.component.attribute ? this.component.attribute.bgcolor.hex : this.plugin.config.defaultValue }
         },
         set(value) {
           this.updateValue('bgcolor', value);
