@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cbd589ff72f40c4e297945444cb4665",
+    "content-hash": "1429ca088c49d6cb3714f95083d4a94d",
     "packages": [
         {
             "name": "akamai-open/edgegrid-auth",
@@ -119,16 +119,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.20",
+            "version": "3.52.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "299ac47ff5171d6a25f788dc333c0a3c8db40f69"
+                "reference": "d0c292e94d53bb131b4ec5d751d76363722d8afc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/299ac47ff5171d6a25f788dc333c0a3c8db40f69",
-                "reference": "299ac47ff5171d6a25f788dc333c0a3c8db40f69",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d0c292e94d53bb131b4ec5d751d76363722d8afc",
+                "reference": "d0c292e94d53bb131b4ec5d751d76363722d8afc",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-01T20:18:42+00:00"
+            "time": "2018-02-23T18:27:59+00:00"
         },
         {
             "name": "bjeavons/zxcvbn-php",
@@ -489,30 +489,31 @@
         },
         {
             "name": "folklore/image",
-            "version": "v0.3.22",
+            "version": "v0.3.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Folkloreatelier/laravel-image.git",
-                "reference": "06a7e5ced5cd6eb5b7f7da6b5af84715d77beb82"
+                "reference": "40b7a11fdf54ef81087280a73fcfc82719bbcbec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Folkloreatelier/laravel-image/zipball/06a7e5ced5cd6eb5b7f7da6b5af84715d77beb82",
-                "reference": "06a7e5ced5cd6eb5b7f7da6b5af84715d77beb82",
+                "url": "https://api.github.com/repos/Folkloreatelier/laravel-image/zipball/40b7a11fdf54ef81087280a73fcfc82719bbcbec",
+                "reference": "40b7a11fdf54ef81087280a73fcfc82719bbcbec",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "5.3|~6.0",
-                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*",
+                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
                 "imagine/imagine": "0.6.*",
                 "php": ">=5.5.9"
             },
             "require-dev": {
                 "fzaninotto/faker": "~1.4",
                 "mockery/mockery": "0.9.*",
-                "orchestra/testbench": "3.1.*|3.2.*|3.3.*|3.4.*|3.5.*|3.6.*",
-                "phpunit/phpunit": "~4.0|~5.0|~5.7|~6.0",
-                "satooshi/php-coveralls": "^1.0"
+                "orchestra/testbench": "3.1.*|3.2.*|3.3.*|3.4.*",
+                "phpunit/phpunit": "~4.0|~5.0",
+                "symfony/css-selector": "2.7.*|2.8.*|3.0.*|3.1.*|3.2.*",
+                "symfony/dom-crawler": "2.7.*|2.8.*|3.0.*|3.1.*|3.2.*"
             },
             "type": "library",
             "autoload": {
@@ -550,7 +551,7 @@
                 "thumbnail",
                 "watermark"
             ],
-            "time": "2018-03-01T15:15:04+00:00"
+            "time": "2018-01-02T00:33:55+00:00"
         },
         {
             "name": "google/recaptcha",
@@ -1420,16 +1421,16 @@
         },
         {
             "name": "league/climate",
-            "version": "3.2.4",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/climate.git",
-                "reference": "ca70f67f7739cca823eba0ad98f8130bca226bf0"
+                "reference": "b103fc8faa3780c802cc507d5f0ff534ecc94fb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/climate/zipball/ca70f67f7739cca823eba0ad98f8130bca226bf0",
-                "reference": "ca70f67f7739cca823eba0ad98f8130bca226bf0",
+                "url": "https://api.github.com/repos/thephpleague/climate/zipball/b103fc8faa3780c802cc507d5f0ff534ecc94fb5",
+                "reference": "b103fc8faa3780c802cc507d5f0ff534ecc94fb5",
                 "shasum": ""
             },
             "require": {
@@ -1467,20 +1468,20 @@
                 "php",
                 "terminal"
             ],
-            "time": "2016-10-30T22:18:25+00:00"
+            "time": "2016-04-04T20:24:59+00:00"
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.43",
+            "version": "1.0.42",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "1ce7cc142d906ba58dc54c82915d355a9191c8a8"
+                "reference": "09eabc54e199950041aef258a85847676496fe8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/1ce7cc142d906ba58dc54c82915d355a9191c8a8",
-                "reference": "1ce7cc142d906ba58dc54c82915d355a9191c8a8",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/09eabc54e199950041aef258a85847676496fe8e",
+                "reference": "09eabc54e199950041aef258a85847676496fe8e",
                 "shasum": ""
             },
             "require": {
@@ -1551,7 +1552,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2018-03-01T10:27:04+00:00"
+            "time": "2018-01-27T16:03:56+00:00"
         },
         {
             "name": "league/flysystem-aws-s3-v3",
@@ -2008,25 +2009,25 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.23.0",
+            "version": "1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "4a874a39b2b00d7e0146cd46fab6f47c41ce9e65"
+                "reference": "7cdf42c0b1cc763ab7e4c33c47a24e27c66bfccc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/4a874a39b2b00d7e0146cd46fab6f47c41ce9e65",
-                "reference": "4a874a39b2b00d7e0146cd46fab6f47c41ce9e65",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/7cdf42c0b1cc763ab7e4c33c47a24e27c66bfccc",
+                "reference": "7cdf42c0b1cc763ab7e4c33c47a24e27c66bfccc",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
-                "symfony/translation": "~2.6 || ~3.0 || ~4.0"
+                "symfony/translation": "~2.6 || ~3.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "~2",
-                "phpunit/phpunit": "^4.8.35 || ^5.7"
+                "phpunit/phpunit": "~4.0 || ~5.0"
             },
             "type": "library",
             "extra": {
@@ -2057,20 +2058,20 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-02-28T09:22:05+00:00"
+            "time": "2017-01-16T07:55:07+00:00"
         },
         {
             "name": "nikic/php-parser",
-            "version": "v3.1.5",
+            "version": "v3.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "bb87e28e7d7b8d9a7fda231d37457c9210faf6ce"
+                "reference": "e57b3a09784f846411aa7ed664eedb73e3399078"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/bb87e28e7d7b8d9a7fda231d37457c9210faf6ce",
-                "reference": "bb87e28e7d7b8d9a7fda231d37457c9210faf6ce",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/e57b3a09784f846411aa7ed664eedb73e3399078",
+                "reference": "e57b3a09784f846411aa7ed664eedb73e3399078",
                 "shasum": ""
             },
             "require": {
@@ -2108,7 +2109,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2018-02-28T20:30:58+00:00"
+            "time": "2018-01-25T21:31:33+00:00"
         },
         {
             "name": "olssonm/l5-zxcvbn",
@@ -2565,6 +2566,48 @@
             "time": "2017-03-18T11:32:45+00:00"
         },
         {
+            "name": "stensul/media-gallery",
+            "version": "dev-v2.1-SV2-264_media_gallery_integration",
+            "source": {
+                "type": "git",
+                "url": "git@git.stensuldev.net:composer/media-gallery.git",
+                "reference": "0d954c80733a6f55bdbf90fa36bf811b5b661a8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-dev-v2.1-SV2-264_media_gallery_integration-7f0acd.zip",
+                "reference": "0d954c80733a6f55bdbf90fa36bf811b5b661a8c",
+                "shasum": "707975257a1c5c06309c344ae6fad5a21b634734"
+            },
+            "require": {
+                "illuminate/support": "5.3.*",
+                "jenssegers/mongodb": "^3.2",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stensul\\MediaGallery\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Stensul\\MediaGallery\\Tests\\": "tests"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Manuel Zambrano",
+                    "email": "manuel.zambrano@stensul.com"
+                }
+            ],
+            "description": "Media gallery for admin",
+            "time": "2018-02-02T20:45:08+00:00"
+        },
+        {
             "name": "stensul/filesystem",
             "version": "v1.0.0",
             "source": {
@@ -2599,48 +2642,6 @@
             ],
             "description": "Improved functionalities for existing flysystem packages",
             "time": "2018-01-18T00:45:59+00:00"
-        },
-        {
-            "name": "stensul/media-gallery",
-            "version": "dev-v2.1-SV2-264_media_gallery_integration",
-            "source": {
-                "type": "git",
-                "url": "git@git.stensuldev.net:composer/media-gallery.git",
-                "reference": "ac28bec9c3bc66a8deb2cca62b5a3c7d4973b18e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-dev-v2.1-SV2-264_media_gallery_integration-acb319.zip",
-                "reference": "ac28bec9c3bc66a8deb2cca62b5a3c7d4973b18e",
-                "shasum": "720d0c4f8dfc5aff2387481c5eec0a64204fb682"
-            },
-            "require": {
-                "illuminate/support": "5.3.*",
-                "jenssegers/mongodb": "^3.2",
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~5.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Stensul\\MediaGallery\\": "src"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Stensul\\MediaGallery\\Tests\\": "tests"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Manuel Zambrano",
-                    "email": "manuel.zambrano@stensul.com"
-                }
-            ],
-            "description": "Media gallery for admin",
-            "time": "2018-02-25T15:28:57+00:00"
         },
         {
             "name": "stensul/php-imageproxy",
@@ -2854,16 +2855,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v3.4.6",
+            "version": "v3.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "58990682ac3fdc1f563b7e705452921372aad11d"
+                "reference": "26b87b6bca8f8f797331a30b76fdae5342dc26ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/58990682ac3fdc1f563b7e705452921372aad11d",
-                "reference": "58990682ac3fdc1f563b7e705452921372aad11d",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/26b87b6bca8f8f797331a30b76fdae5342dc26ca",
+                "reference": "26b87b6bca8f8f797331a30b76fdae5342dc26ca",
                 "shasum": ""
             },
             "require": {
@@ -2913,7 +2914,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2018-02-14T10:03:57+00:00"
+            "time": "2018-01-03T07:37:34+00:00"
         },
         {
             "name": "symfony/finder",
@@ -4231,8 +4232,7 @@
             "authors": [
                 {
                     "name": "Chris Boulton",
-                    "homepage": "http://github.com/chrisboulton",
-                    "role": "Original developer"
+                    "homepage": "http://github.com/chrisboulton"
                 }
             ],
             "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
@@ -5376,7 +5376,7 @@
         },
         {
             "name": "symfony/class-loader",
-            "version": "v3.4.6",
+            "version": "v3.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/class-loader.git",
