@@ -1,148 +1,143 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
-    <div class="half-style-setting" v-for="imageSizeSetting in imageSizeSettings" :key="imageSizeSetting.name">
-        <label class="clearfix" :for="imageSizeSetting.name">{{imageSizeSetting.label}}</label>
-        <div>
-          <el-input-number
-            v-if="imageSizeSetting.name === 'width' || !isBlockHeight" 
-            class="padding-custom align-element"
-            size="mini" 
-            v-validate="'required'"
-            v-model="imageSizeSetting.value"
-            :name="imageSizeSetting.name"
-            @change="(val)=>changeValue(val, imageSizeSetting.name)"
-            :max="maxValue(imageSizeSetting.name)"
-            :min="min"
-            :disabled="imageSizeSetting.name === 'height' ? isBlockHeight : false"
-            :controls="false"
-          ></el-input-number>
-            <el-input
-              v-else
-              size="mini" 
-              v-model="imageSizeSetting.value"
-              :class="{'clearfix': true, 'height-auto': true, 'is-danger': errors.has(imageSizeSetting.name) }"
-              :name="imageSizeSetting.name"
-              placeholder="auto"
-              disabled="disabled"
-              @change="(val)=>changeValue(val,imageSizeSetting.name)"
-            ></el-input>
-          <el-button
-            v-if="!(imageSizeSetting.name === 'height' && isBlockHeight)"
-            slot="append"
-            class="button"
-            :class="{'icon-disable icon-height': imageSizeSetting.name === 'height'}"
-            :disabled="imageSizeSetting.name === 'height'"
-            @click="onTogglePxWidth"
-          >{{getUnit(imageSizeSetting.name)}}</el-button>
-          <span class='height-icon-auto' v-if="imageSizeSetting.name === 'width'" @click="onToggleBlockheight">
-            <i v-if="isBlockHeight" class="fa fa-lock"></i>
-            <i v-else class="fa fa-unlock"></i>
-          </span>
-        </div>
-    </div>
-  </div>
-</template>
+  <settings-container label-right="Height" label-left="Width" custom-class="field-image-size">
+    <template slot="setting-half-left">
 
+      <el-input-number
+        class="padding-custom align-element"
+        size="mini" 
+        v-model="width"
+        :max="maxValueWidth"
+        :min="min"
+        :controls="false"
+      ></el-input-number>
+      <el-button
+        slot="append"
+        class="button icon-disable"
+        @click="onTogglePxWidth"
+      >{{this.isPxWidth ? "px": "%"}}</el-button>
+
+      <span class='height-icon-auto' @click="onToggleBlockheight">
+        <i v-if="isBlockHeight" class="fa fa-lock"></i>
+        <i v-else class="fa fa-unlock"></i>
+      </span>
+
+    </template>
+    <template slot="setting-half-right">
+
+      <el-input-number
+        v-if="!isBlockHeight"
+        class="padding-custom align-element"
+        size="mini" 
+        v-model="height"
+        :min="min"
+        :controls="false"
+      ></el-input-number>
+      <el-button
+        v-if="!isBlockHeight"
+        slot="append"
+        class="button icon-disable icon-height"
+        :disabled="true"
+      >px</el-button>
+      <el-input
+        v-else
+        size="mini" 
+        v-model="height"
+        class="clearfix"
+        disabled="disabled"
+      ></el-input>
+
+    </template>
+  </settings-container>
+</template>
 <script>
 import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "ImageSize",
   props: ["setting", "element"],
   mixins: [SettingMixin],
+  components: { SettingsContainer },
   data() {
     return {
       min: 10
     };
   },
   computed: {
-    isBlockHeight() {
-      return this.element.styleOptions["isBlockHeight"];
+    isBlockHeight: {
+      get(){
+        return this.element.styleOptions["isBlockHeight"];
+      },
+      set(value){
+        this.$emit("style-option-setting-updated", {
+          name: 'isBlockHeight',
+          value: value
+        });
+      }
     },
-    isPxWidth() {
-      return this.element.styleOptions["isPxWidth"];
+    isPxWidth: {
+      get(){
+        return this.element.styleOptions["isPxWidth"];
+      },
+      set(value){
+        this.$emit("style-option-setting-updated", {
+          name: 'isPxWidth',
+          value: value
+        });
+      }
     },
-    imageSizeSettings() {
-      return [
-        {
-          label: "Width",
-          name: "width",
-          value: this.getValue("width")
-        },
-        {
-          label: "Height",
-          name: "height",
-          value: this.getValue("height"),
-          max: undefined
-        }
-      ];
-    }
+    width: {
+      get() {
+        return _.parseInt(this.element.attribute['width']);
+      },
+      set(value){
+        value = isNaN(value) || value < this.min ? this.min : value;
+        value = this.isPxWidth ? `${value}` :`${value}%`;
+        this.$emit("attribute-setting-updated", {
+          name: 'width',
+          value: value
+        });
+      }
+    },
+    height: {
+      get() {
+          return this.element.attribute['height'] === "auto" ? "auto" : _.parseInt(this.element.attribute['height']);        
+      },
+      set(value){
+        value = isNaN(value) || value < this.min ? this.min : value;
+        value = this.isPxWidth ? `${value}%`: `${value}`;
+        this.$emit("attribute-setting-updated", {
+          name: 'height',
+          value: value
+        });
+      }
+    },
+    maxValueWidth() {
+      return this.isPxWidth ? undefined : 100;
+    },
   },
   methods: {
-    changeValue(val, property) {
-      val = isNaN(val) || val < this.min ? this.min : val;
-      if (property === "width" && !this.isPxWidth) {
-        // is width+%
-        this.saveAttribute(`${val}%`, property);
-      } else {
-        // is width or height
-        this.saveAttribute(`${val}`, property);
-      }
-    },
-    getUnit(property) {
-      return property === "width" && !this.isPxWidth ? "%" : "px";
-    },
-    maxValue(property) {
-      return property === "width" && !this.isPxWidth ? 100 : undefined;
-    },
     onTogglePxWidth() {
-      // set isPxWidth
       let isPxWidth = !this.isPxWidth;
-      // set width
-      let width = this.imageSizeSettings[0].value;
+      let width;
       if (!isPxWidth) {
-        width = Math.min(100, width);
-        width = width + "%";
+        width = Math.min(100, this.width);
       }
-      // save
-      this.saveStyleOption(isPxWidth, "isPxWidth");
-      this.saveAttribute(`${width}`, "width");
+
+      this.isPxWidth = isPxWidth;
+      this.width = width;
     },
     onToggleBlockheight() {
-      // set isBlock
-      let isBlock = !this.isBlockHeight;
-      if (isBlock) {
-        // save and update height
-        let height = "auto";
-        this.saveAttribute(height, "height");
+      let isBlockHeight = !this.isBlockHeight;
+      if (isBlockHeight) {
+        this.height = "auto";
       } else {
-        let height = 100;
-        this.saveAttribute(height, "height");
+        this.height = '100';
       }
-      // save and update isBlock
-      this.saveStyleOption(isBlock, "isBlockHeight");
+      this.isBlockHeight = isBlockHeight;
     },
-    getValue(name) {
-      return this.element.attribute[name] === "auto"
-        ? "auto"
-        : _.parseInt(this.element.attribute[name]);
-    },
-
-    saveStyleOption(newValue, styleOptionName) {
-      this.$emit("style-option-setting-updated", {
-        name: styleOptionName,
-        value: newValue
-      });
-    },
-
-    saveAttribute(newValue, attributeName) {
-      this.$emit("attribute-setting-updated", {
-        name: attributeName,
-        value: newValue
-      });
-    }
-  }
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -199,14 +194,14 @@ export default {
 .height-icon-auto {
   position: absolute;
   right: -15px;
-  margin-top: 0px;
-  padding: 0px;
+  margin-top: 0;
+  padding: 0;
   height: 28px;
   width: 30px;
   text-align: center;
   padding-top: 4px;
   z-index: 2;
-  bottom: 0px;
+  bottom: 0;
   cursor: pointer;
   i {
     color: #666666;

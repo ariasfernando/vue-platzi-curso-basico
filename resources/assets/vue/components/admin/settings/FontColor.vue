@@ -29,7 +29,7 @@ export default {
   computed: {
     color: {
       get() {
-        return this.element.style[this.name];
+        return this.element.style[this.name] === "transparent" ? '' : this.element.style[this.name];
       },
       set(color) {
         if (!Application.utils.validateHexVal(color)) {

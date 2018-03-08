@@ -30,13 +30,14 @@ import Border from "./Border.vue";
 export default {
   name: "BorderGroup",
   props: ["setting", "element"],
-  components: {
-    "border": Border,
-  },
-  methods:{
+  components: { Border },
+  methods: {
     styleSettingUpdatedHandler(eventData) {
-      this.$emit("style-setting-updated", { name: eventData.name, value: eventData.value });
-    },
+      this.$emit("style-setting-updated", {
+        name: eventData.name,
+        value: eventData.value
+      });
+    }
   }
 };
 </script>
