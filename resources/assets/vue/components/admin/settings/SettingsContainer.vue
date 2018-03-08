@@ -1,6 +1,5 @@
 <template>
-    <div class="form-group settings-container" :class="customClass || ''">
-
+    <div class="clearfix settings-container" :class="customClass || ''">
       <template v-if="hasSettingRight">
         <label class="half">{{label}}</label>
         <div class="half-setting padding-top">
@@ -19,6 +18,11 @@
         </div>
       </template>
     
+      <template v-if="hasSettingBottom">
+        <label>{{label}}</label>
+        <slot name="setting-bottom"></slot>
+      </template>
+    
     </div>
 </template>
 <script>
@@ -32,11 +36,19 @@ export default {
     },
     hasSettingSideBySide() {
       return !!this.$slots["setting-half-left"] && !!this.$slots["setting-half-right"];
+    },
+    hasSettingBottom() {
+      return  !!this.$slots["setting-bottom"];
     }
   }
 };
 </script>
 <style lang="less" scoped>
+.settings-container{
+    margin-bottom: 6px;
+    margin-left: 0;
+    margin-right: 0;
+  }
 .half-setting {
   width: 50%;
   float: left;

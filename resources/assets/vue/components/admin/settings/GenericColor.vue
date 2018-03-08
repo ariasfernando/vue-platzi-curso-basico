@@ -1,26 +1,29 @@
 <template>
-  <div class="form-group" :class="'field-' + type">
-    <label class="half-style-setting">{{ label }}</label>
-    <el-color-picker v-model="mainSettingColor" color-format="hex"></el-color-picker>
-    <el-input
-      size="mini"
-      v-validate="'required'"
-      v-model="mainSettingColor"
-      placeholder="transparent"
-      class="col-sm-4" 
-      disabled="disabled"
-    >
-    </el-input>
-  </div>
+  <settings-container :label="label">
+    <template slot="setting-half-left">
+      <el-color-picker v-model="mainSettingColor" color-format="hex"></el-color-picker>
+      <el-input
+        size="mini"
+        v-validate="'required'"
+        v-model="mainSettingColor"
+        placeholder="transparent"
+        class="col-sm-4" 
+        disabled="disabled"
+      >
+      </el-input>
+    </template>
+  </settings-container>
 </template>
 <script>
 import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "BackgroundColor",
   props: ["element", "name", "type", "link", "label"],
   mixins: [ SettingMixin ],
+  components: { SettingsContainer },
   computed: {
     mainSettingColor: {
       get() {

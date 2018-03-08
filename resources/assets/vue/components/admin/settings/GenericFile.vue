@@ -1,17 +1,19 @@
 <template>
-  <div class="form-group" :class="'field-' + type">
-    <label :for="name">{{ label }}</label>
-    <input class="input" :name="name" type="file" @change="onFileChange">
-  </div>
+  <settings-container :label="label">
+    <template slot="setting-right">
+      <input class="input" :name="name" type="file" @change="onFileChange">
+    </template>
+  </settings-container>
 </template>
-
 <script>
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "generic-file",
   props: ["element", "name", "type", "link", "label", "default-value"],
   mixins: [SettingMixin],
+  components: { SettingsContainer },
   methods: {
     resetImage() {
       if (this.link === "style") {

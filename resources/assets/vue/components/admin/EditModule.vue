@@ -643,12 +643,6 @@ export default {
       }
     }
 
-    .form-group {
-      margin-bottom: 6px;
-      margin-left: 0;
-      margin-right: 0;
-    }
-
     .card {
       padding: 0 8px 15px 8px;
       border-bottom: 1px solid #f0f0f0;

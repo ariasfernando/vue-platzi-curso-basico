@@ -1,46 +1,46 @@
 <template>
-  <div :id="'field-' + setting" class="form-group" :class="'field-' + setting">
-    <label>Padding</label>
-    <div>
-      <div
-        v-for="padding in paddings"
-        :key="padding.name"
-        class="half-style-setting padding-custom align-element"
-        :title="padding.label"
-        v-b-tooltip.hover
-        :data-tooltip="padding.label"
-          >
-        <el-input-number
-          size="mini" 
-          v-validate="'required'"
-          v-model="padding.value"
-          @change="(val)=>changeValue(val, padding.name)"
-          :min="min"
-          :controls="false"
-        ></el-input-number>
-        <el-button
-          class="button"
-          disabled="disabled"
-        >px</el-button>
-      </div>
-    </div>
-  </div>
+    <settings-container custom-class="field-padding" label="Padding">
+      <template slot="setting-bottom">
+        <div
+          v-for="padding in paddings"
+          :key="padding.name"
+          class="half-style-setting-padding align-element"
+          :title="padding.label"
+          v-b-tooltip.hover
+          :data-tooltip="padding.label"
+            >
+          <el-input-number
+            size="mini" 
+            v-validate="'required'"
+            v-model="padding.value"
+            @change="(val)=>changeValue(val, padding.name)"
+            :min="min"
+            :controls="false"
+          ></el-input-number>
+          <el-button
+            class="button"
+            disabled="disabled"
+          >px</el-button>
+        </div>
+      </template>
+    </settings-container>
 </template>
 
 <script>
 import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "padding",
   props: ["setting", "element"],
   mixins: [SettingMixin],
+  components: { SettingsContainer },
   data() {
     return {
       min: 0
     };
   },
-  mounted() {},
   computed: {
     paddings() {
       return [
@@ -100,7 +100,7 @@ export default {
 .el-input__inner:focus {
   border: 1px solid #dcdfe6;
 }
-button.el-button {
+.el-button {
   position: absolute;
   right: 0;
   padding: 6px;
@@ -110,27 +110,22 @@ button.el-button {
     color: #606266;
   }
 }
-#field-padding.form-group.field-padding {
-  .padding-custom {
-    padding: 5px 0;
-  }
-  .el-input-number--mini {
-    width: 80px;
-    margin-right: 25px;
-    float: right;
-  }
-  .field-padding {
-    padding-right: 15px;
-  }
-  .half-style-setting {
-    width: calc(~"50% - 15px");
-    margin-right: 15px;
-  }
-  .half-style-setting:nth-child(2n + 2) {
-    margin-left: 15px;
-    margin-right: 0;
-    padding-left: 0;
-  }
+.el-input-number--mini {
+  width: 80px;
+  margin-right: 25px;
+  float: right;
+}
+.half-style-setting-padding {
+  width: calc(~"50% - 15px");
+  margin-right: 15px;
+  padding: 5px 0;
+  float: left;
+  position: relative;
+}
+.half-style-setting-padding:nth-of-type(2n + 2) {
+  margin-left: 15px;
+  margin-right: 0;
+  padding-left: 0;
 }
 </style>
   <style lang="less" >
@@ -138,7 +133,7 @@ button.el-button {
   input[type="text"] {
     text-align: center;
   }
-  .el-input-number.is-without-controls .el-input__inner {
+  .el-input-number .el-input__inner {
     padding: 0;
   }
 }

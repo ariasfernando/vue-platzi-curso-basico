@@ -1,35 +1,35 @@
 <template>
-  <div class="form-group" :class="'field-font-family'">
-    <label>Font Family</label>
-    <el-select
-    class="width-full"
-    multiple
-    :placeholder="label"
-    :value="fontFamily"
-    v-model="fontFamily"
-    size="mini"
-    >
-      <el-option
-        v-for="item in options()"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-        >
-      </el-option>
-    </el-select>
-  </div>
+  <settings-container label="Font Family">
+    <template slot="setting-bottom">
+      <el-select
+      class="width-full"
+      multiple
+      :placeholder="label"
+      :value="fontFamily"
+      v-model="fontFamily"
+      size="mini"
+      >
+        <el-option
+          v-for="item in options()"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          >
+        </el-option>
+      </el-select>
+    </template>
+  </settings-container>
 </template>
-
 <script>
 import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "FontFamily",
   props: ["setting", "element", "link", "name", "label"],
-  mixins: [ SettingMixin ],
-  components: {
-  },
+  mixins: [SettingMixin],
+  components: { SettingsContainer },
   data() {
     return {
       options() {
@@ -74,8 +74,8 @@ export default {
   span > span.el-tag.el-tag--info {
     counter-increment: step-counter;
     & span::before {
-    content: counter(step-counter);
-    margin-right: 5px;
+      content: counter(step-counter);
+      margin-right: 5px;
     }
   }
 }

@@ -1,48 +1,50 @@
 <template>
-  <div class="form-group" :class="'field-border'">
-    <label>{{`Border ${side}`}}</label>
-    <div class="clearfixalign-element">
-      <el-color-picker
-        v-model="color"
-        color-format="hex"
+  <settings-container :label="`Border ${side}`" custom-class="field-border">
+    <template slot="setting-bottom">
+      <div class="clearfixalign-element">
+        <el-color-picker
+          v-model="color"
+          color-format="hex"
+          class="float-left margin-right"
+        ></el-color-picker>
+        <el-select
+        :placeholder="`Border ${this.side} style`"
+        v-model="style"
+        size="mini"
         class="float-left margin-right"
-      ></el-color-picker>
-      <el-select
-      :placeholder="`Border ${this.side} style`"
-      v-model="style"
-      size="mini"
-      class="float-left margin-right"
-      >
-        <el-option
-          v-for="item in optionsBorderStyle"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          >
-        </el-option>
-      </el-select>
-      <el-input-number
-        size="mini" 
-        v-validate="'required'"
-        v-model="width"
-        :min="min"
-        :controls="false"
-        class="float-left"
-      ></el-input-number>
-      <el-button
-      class="button float-left"
-        disabled="disabled"
-      >px</el-button>
-    </div>
-  </div>
+        >
+          <el-option
+            v-for="item in optionsBorderStyle"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            >
+          </el-option>
+        </el-select>
+        <el-input-number
+          size="mini" 
+          v-validate="'required'"
+          v-model="width"
+          :min="min"
+          :controls="false"
+          class="float-left"
+        ></el-input-number>
+        <el-button
+        class="button float-left"
+          disabled="disabled"
+        >px</el-button>
+      </div>
+    </template>
+  </settings-container>
 </template>
-
 <script>
 import _ from "lodash";
+import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "border",
   props: ["side", "element"],
+  components: { SettingsContainer },
   data() {
     return {
       min: 0,
