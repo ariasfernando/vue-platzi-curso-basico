@@ -59,8 +59,10 @@ function Module(data = {}) {
     componentSettings: [
       [
         {
-          name: 'background-color',
-          type: 'background-color',
+          name: 'bgcolor',
+          type: 'generic-color',
+          link: 'attribute',
+          label: 'Background Color',
         },
       ],
       [

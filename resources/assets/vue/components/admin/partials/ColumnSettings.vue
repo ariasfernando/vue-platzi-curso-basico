@@ -73,10 +73,10 @@ import ColumnSettingElement from "./ColumnSettingElement.vue";
 import * as elementSettings from "../settings";
 export default {
   components: {
-    "input-background-color": elementSettings.BackgroundColor,
     "input-padding": elementSettings.Padding,
     "input-border-group": elementSettings.BorderGroup,
     "input-width": elementSettings.Width,
+    "input-generic-color": elementSettings.GenericColor,
     ColumnSettingGroup,
     ColumnSettingElement
   },
