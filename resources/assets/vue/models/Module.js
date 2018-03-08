@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import clone from 'clone';
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 
 function getPlugins() {
   const plugins = {};

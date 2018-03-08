@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource/dist/vue-resource';
 import VeeValidate from 'vee-validate';

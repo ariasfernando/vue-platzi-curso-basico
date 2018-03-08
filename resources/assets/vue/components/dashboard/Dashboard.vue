@@ -112,7 +112,7 @@
 </template>
 
 <script>
-  import Vue from 'vue/dist/vue';
+  import Vue from 'vue';
   import VueResource from 'vue-resource/dist/vue-resource';
   import CampaignSearch from './CampaignSearch.vue';
   import CampaignTabs from './CampaignTabs.vue';
