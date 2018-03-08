@@ -16,7 +16,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Email Creation Platform</title>
 
-        <link href="{{  cdn(elixir('css/tool.css')) }}" rel="stylesheet">
+        <link href="{{  cdn(mix('css/tool.css')) }}" rel="stylesheet">
 
         @section('master-head')
             {{--  --}}
@@ -128,7 +128,7 @@
         @show
 
         {{-- Scripts --}}
-        <script src="{{ cdn(elixir('js/customer.js')) }}"></script>
+        <script src="{{ cdn(mix('js/customer.js')) }}"></script>
 
         @section('master-application-scripts')
             {{-- Global Application JS object --}}
