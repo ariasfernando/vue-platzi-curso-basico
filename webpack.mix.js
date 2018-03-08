@@ -177,15 +177,16 @@ mix
   .copyDirectory('node_modules/element-ui/lib/theme-chalk/fonts', 'public/build/css/fonts')
   .version()
   .then(() => {
-    const mixManifest = './public/build/rev-manifest.json';
+    const revManifest = './public/build/rev-manifest.json';
+    // For some reason laravel expects it in public directory
+    const mixManifest = './public/mix-manifest.json';
 
-    jsonFile.readFile(mixManifest, (err, obj) => {
+    jsonFile.readFile(revManifest, (err, obj) => {
       const newJson = {};
       _.forIn(obj, (value, key) => {
         const newFilename = value.replace(/([^\.]+)\.([^\?]+)\?id=(.+)$/g, '$1-$3.$2');
         const oldAsGlob = value.replace(/([^\.]+)\.([^\?]+)\?id=(.+)$/g, '$1.*.$2');
         // delete old versioned file
-        console.log(`public${oldAsGlob}`);
         del.sync([`public${oldAsGlob}`]);
         // copy as new versioned
         fs.copyFile(`public${key}`, `public/${newFilename}`, (copyError) => {
