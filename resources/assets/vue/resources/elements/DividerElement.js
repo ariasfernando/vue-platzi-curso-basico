@@ -212,6 +212,7 @@ function dividerDefault() {
       bgcolor: { hex: 'transparent' },
       width: '100%',
       hideElement: false,
+      classes: [],
     },
     plugins: {},
     data: {},
