@@ -7,19 +7,13 @@
 
     <b-collapse id="module-settings-left" visible accordion="module-settings-accordion">
       <b-card class="control" >
-        <div class="form-group" :class="{'has-error': errors.has('name') }">
-          <div class="field-name">
-            <label for="name">Name</label>
-            <el-input
-              :class="{'input': true, 'is-danger': errors.has('name') }"
-              v-validate.initial="'required'"
-              name="name"
-              placeholder="Module name"
-              v-model="moduleName"
-              max="60"
-              size="mini"></el-input>
-          </div>
-        </div>
+          <input-generic-text
+            label='Module name'
+            :element="module"
+            @setting-updated="settingUpdatedHandler"
+            placeholder="Module name"
+            name='name'>
+          </input-generic-text>
         <div class="form-group" :class="{'has-error': errors.has('set-column') }">
           <label class="half" for="set-column">Columns</label>
           <div class="half-style-setting padding-top float-right">
@@ -153,16 +147,15 @@
 <script>
 import { Sketch } from "vue-color";
 import BootstrapVue from "bootstrap-vue";
-import backgroundColor from "../settings/BackgroundColor.vue";
-import Padding from "../settings/Padding.vue";
-import BorderGroup from "../settings/BorderGroup.vue";
+import * as elementSettings from "../settings";
 
 export default {
   components: {
     BootstrapVue,
-    "input-background-color": backgroundColor,
-    "input-padding": Padding,
-    "input-border-group": BorderGroup
+    "input-generic-color": elementSettings.GenericColor,
+    "input-generic-text": elementSettings.GenericText,
+    "input-padding":  elementSettings.Padding,
+    "input-border-group":  elementSettings.BorderGroup
   },
   data() {
     return {
@@ -220,17 +213,12 @@ export default {
           this.$store.commit("module/setActiveColumn", value - 1);
         }
       }
-    },
-    moduleName: {
-      get() {
-        return this.module.name;
-      },
-      set(name) {
-        this.$store.commit("module/setModuleFields", { name: name });
-      }
     }
   },
   methods: {
+    settingUpdatedHandler(eventData) {
+      this.setModuleField(eventData);
+    },
     attributeSettingUpdatedHandler(eventData) {
       this.saveModuleAttribute(eventData.name, eventData.value);
     },
