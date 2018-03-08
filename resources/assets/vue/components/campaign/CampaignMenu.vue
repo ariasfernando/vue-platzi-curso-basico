@@ -191,7 +191,6 @@
             event.target.className = "menu-active";
             event.target.nextElementSibling.classList.remove("beta-submodules-expanded");
           }
-
         }
       },
       onClone: function (evt) {
