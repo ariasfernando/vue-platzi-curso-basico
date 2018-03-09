@@ -184,7 +184,7 @@ export default {
         return true;
       }
 
-      if (numCols > cols && confirm("Are you sure?")) {
+      if (numCols > cols) {
         this.$store.commit("campaign/unsetActiveModule");
         this.$store.commit("campaign/unsetCurrentModule");
         this.$store.commit("campaign/unsetCurrentComponent");
