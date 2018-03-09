@@ -10,7 +10,7 @@
 
                 <div class="beta-submodules">
                   <div v-for="subitem in item.sub_menu">
-                    <draggable :element="'div'" :options="options" @clone="onClone">
+                    <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd">
                       <div class="add single">
                         <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
                           {{ subitem.title || subitem.name }} <i class="glyphicon glyphicon-plus"></i>
@@ -22,7 +22,7 @@
 
             </div>
 
-            <draggable v-else :element="'div'" :options="options" @clone="onClone">
+            <draggable v-else :element="'div'" :options="options" @clone="onClone" @end="onEnd">
               <div class="add single">
                 <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">
                   {{ item.title || item.name }} <i class="glyphicon glyphicon-plus"></i>
@@ -157,7 +157,7 @@
           this.autoScroll();
         }, 25);
       },
-      autoScroll(){
+      autoScroll (){
         let bounds = $(".section-canvas-container").outerHeight();
         let isVisible = bounds < window.innerHeight && bounds > 0;
 
@@ -194,7 +194,7 @@
 
         }
       },
-      onClone: function (evt) {
+      onClone (evt) {
         let cloneEl = evt.clone;
         let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
@@ -204,13 +204,21 @@
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
         const mod = Object.assign({}, found);
-        //this.addModule(mod);
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop
         // an element into email canvas
         cloneEl.addEventListener('click', (e) => {
           this.addModule(mod);
         });
-      }
+      },
+      onEnd (evt) {
+        this.handleEmptyMessage();
+      },
+      handleEmptyMessage () {
+        // If is dragging and the list is empty, hide empty message
+        $(".empty-message").is(":visible") && $(".ghost-component").is(":visible")
+          ? $(".empty-message").hide("fast")
+          : $(".empty-message").show()
+      },
     }
   };
 </script>
@@ -230,20 +238,16 @@
       height: 65px;
       font-family: 'Open Sans', Arial, serif;
       font-size: 12px;
+      padding: 0 20px;
 
-      &:before, &::before{
-        content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
+      .empty-message {
         width: 100%;
         display: table-cell;
         vertical-align: middle;
         opacity: 0.7;
         text-align: center;
-        padding: 0 10px;
-      }
 
-      &.hovered{
-        &:before, &::before{
-          content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
+        &:hover {
           width: 100%;
           display: table-cell;
           vertical-align: middle;
@@ -251,7 +255,6 @@
           outline: 2px dashed @font-color;
           outline-offset: -10px;
           text-align: center;
-          padding: 0 10px;
         }
       }
     }
