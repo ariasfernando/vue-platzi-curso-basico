@@ -22,4 +22,5 @@ module.exports = {
   imageEditor,
   variableHeight,
   mobileStyles,
+  hideElement
 };
