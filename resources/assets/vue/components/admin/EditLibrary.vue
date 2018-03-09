@@ -153,28 +153,26 @@
 
                               <!-- Field background-color -->
                               <div class="col-md-3">
-                                <component
-                                  :is="'input-generic-color'"
+                                <input-generic-color
                                   @config-setting-updated="configSettingUpdatedHandler"
                                   :name="'templateBackgroundColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
                                   :label="'Template Background Color'"
                                   :default-value="library.config.templateBackgroundColor"
-                                  :element="library"></component>
+                                  :element="library"></input-generic-color>
                               </div>
 
                               <!-- Field content-background-color -->
                               <div class="col-md-3">
-                                <component
-                                  :is="'input-generic-color'"
+                                <input-generic-color
                                   @config-setting-updated="configSettingUpdatedHandler"
                                   :name="'contentBackgroundColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
                                   :label="'Content Background Color'"
                                   :default-value="library.config.contentBackgroundColor"
-                                  :element="library"></component>
+                                  :element="library"></input-generic-color>
                               </div>
                             </div>
 
@@ -182,28 +180,26 @@
 
                               <!-- Field font-family -->
                               <div class="col-md-3">
-                                <component
-                                  :is="'input-font-family'"
+                                <input-font-family
                                   @config-setting-updated="configSettingUpdatedHandler"
                                   :name="'fontFamily'"
                                   :type="'font-family'"
                                   :link="'config'"
                                   :label="'Font Family'"
                                   :default-value="library.config.fontFamily"
-                                  :element="library"></component>
+                                  :element="library"></input-font-family>
                               </div>
 
                               <!-- Field font-color -->
                               <div class="col-md-3">
-                                <component
-                                  :is="'input-generic-color'"
+                                <input-generic-color
                                   @config-setting-updated="configSettingUpdatedHandler"
                                   :name="'fontColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
                                   :label="'Font Color'"
                                   :default-value="library.config.fontColor"
-                                  :element="library"></component>
+                                  :element="library"></input-generic-color>
                               </div>
 
                               <!-- Field font-size -->
@@ -243,15 +239,14 @@
 
                               <!-- Field link-color -->
                               <div class="col-md-3">
-                                <component
-                                  :is="'input-generic-color'"
+                                <input-generic-color
                                   @config-setting-updated="configSettingUpdatedHandler"
                                   :name="'linkColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
                                   :label="'Link Color'"
                                   :default-value="library.config.linkColor"
-                                  :element="library"></component>
+                                  :element="library"></input-generic-color>
                               </div>
 
                               <!-- Field link-decoration -->
