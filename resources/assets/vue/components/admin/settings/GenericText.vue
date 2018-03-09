@@ -6,6 +6,7 @@
           v-validate="'required'"
           v-model="mainSetting"
           :value="mainSetting"
+          :placeholder="placeholder || ''"
           class="clearfix"
         ></el-input>
     </template>
@@ -17,7 +18,7 @@ import SettingsContainer from "./SettingsContainer.vue";
 
 export default {
   name: "generic-text",
-  props: ["element", "name", "type", "link", "label", "default-value"],
+  props: ["element", "name", "type", "link", "label", "default-value", "placeholder"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
 };

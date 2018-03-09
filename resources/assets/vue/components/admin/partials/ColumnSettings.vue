@@ -27,6 +27,7 @@
                   :type="setting.type"
                   :link="setting.link"
                   :label="setting.label"
+                  :placeholder="setting.placeholder"
                   :default-value="setting.value"
                   :min-value="setting.minValue"
                   :max-value="setting.maxValue"

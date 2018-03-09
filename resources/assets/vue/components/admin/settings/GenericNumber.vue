@@ -19,6 +19,7 @@ export default {
   name: "generic-number",
   props: ["element", "name", "type", "link", "label", "default-value", "minValue", "maxValue"],
   mixins: [SettingMixin],
+  components:{SettingsContainer},
   computed: {
     mainSettingNumeric: {
       get() {
