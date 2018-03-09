@@ -57,6 +57,7 @@ mix
     `${assetsPath}/js/library/custom-plugins/st-pagination-bar.jquery.js`,
   ], `${jsDestinationPath}/dashboard-components.js`)
   .scripts([
+    `${assetsPath}/js/library/helpers/*.js`,
     `${assetsPath}/js/library/application-utils.js`,
   ], `${jsDestinationPath}/application-utils-v2.js`)
   .scripts([
