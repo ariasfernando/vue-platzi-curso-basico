@@ -125,14 +125,10 @@
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
-  import { mixin as clickaway } from 'vue-clickaway';
   import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
-    mixins: [
-      clickaway
-    ],
     props: ['moduleId'],
     computed: {
       module() {
