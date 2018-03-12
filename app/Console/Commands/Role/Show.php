@@ -24,7 +24,7 @@ class Show extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $roles = Role::all(['name', 'description', 'permissions'])->toArray();
         if (count($roles) === 0) {

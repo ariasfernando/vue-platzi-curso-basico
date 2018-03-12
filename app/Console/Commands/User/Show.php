@@ -24,7 +24,7 @@ class Show extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $users = User::all(['name', 'email', 'roles', 'deleted_at']);
         $user_array = array();

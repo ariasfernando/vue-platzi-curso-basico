@@ -21,7 +21,7 @@ return [
             'cache_key'             => 'blacklist_ip_',
             'adapter'               => 'ReCaptchaAdapter',
             'max_failed_attemtps'   => '3',
-            'max_timeout'           => '1', // in minutes
+            'max_timeout'           => 1, // in minutes
             'key'                   =>  env('RECAPTCHA_KEY', ''),
             'secret'                =>  env('RECAPTCHA_SECRET', ''),
         ],

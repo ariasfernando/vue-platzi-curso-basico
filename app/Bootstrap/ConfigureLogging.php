@@ -7,7 +7,7 @@ use Gelf\Transport\UdpTransport;
 use Gelf\Transport\HttpTransport;
 use Gelf\Transport\IgnoreErrorTransportWrapper;
 use Stensul\Handlers\Log\GelfHandler;
-use Illuminate\Log\Writer;
+use Illuminate\Log\Logger;
 use Monolog\Logger as Monolog;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Bootstrap\ConfigureLogging as DefaultConfigureLogging;
@@ -23,10 +23,10 @@ class ConfigureLogging extends DefaultConfigureLogging
      *
      * @SuppressWarnings("UnusedFormalParameter")
      * @param  \Illuminate\Contracts\Foundation\Application  $app
-     * @param  \Illuminate\Log\Writer  $log
+     * @param  \Illuminate\Log\Logger  $log
      * @return void
      */
-    protected function configureCentralizedLogger(Application $app, Writer $log)
+    protected function configureCentralizedLogger(Application $app, Logger $log)
     {
         if (strlen(env('LOG_SERVER_HOST'))) {
 
@@ -54,10 +54,10 @@ class ConfigureLogging extends DefaultConfigureLogging
      * First the ones in the parent and after the created here.
      *
      * @param  \Illuminate\Contracts\Foundation\Application  $app
-     * @param  \Illuminate\Log\Writer  $log
+     * @param  \Illuminate\Log\Logger  $log
      * @return void
      */
-    protected function configureHandlers(Application $app, Writer $log)
+    protected function configureHandlers(Application $app, Logger $log)
     {
 
         parent::configureHandlers($app, $log);

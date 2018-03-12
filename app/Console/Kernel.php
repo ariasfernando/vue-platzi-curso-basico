@@ -7,37 +7,15 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+
     /**
-     * The Artisan commands provided by your application.
+     * Automatically load commands.
      *
-     * @var array
+     * @return void
      */
-    protected $commands = [
-        'Stensul\Console\Commands\User\Create',
-        'Stensul\Console\Commands\User\Roles',
-        'Stensul\Console\Commands\User\Delete',
-        'Stensul\Console\Commands\User\Show',
-        'Stensul\Console\Commands\User\Restore',
-        'Stensul\Console\Commands\User\ResetPassword',
-        'Stensul\Console\Commands\Role\Show',
-        'Stensul\Console\Commands\Role\PermissionAllow',
-        'Stensul\Console\Commands\Role\PermissionDeny',
-        'Stensul\Console\Commands\Role\Create',
-        'Stensul\Console\Commands\Role\Delete',
-        'Stensul\Console\Commands\Role\LibraryAllow',
-        'Stensul\Console\Commands\Role\LibraryDeny',
-        'Stensul\Console\Commands\Permission\Create',
-        'Stensul\Console\Commands\Permission\Show',
-        'Stensul\Console\Commands\Permission\Delete',
-        'Stensul\Console\Commands\Task\GroupToRoles',
-        'Stensul\Console\Commands\Task\EmailToLower',
-        'Stensul\Console\Commands\Task\UpdateCampaignNameLowercase',
-        'Stensul\Console\Commands\Module\Create',
-        'Stensul\Console\Commands\Tool\Scraper',
-        'Stensul\Console\Commands\Setting\Show',
-        'Stensul\Console\Commands\Setting\Create',
-        'Stensul\Console\Commands\Setting\Delete',
-    ];
+    protected function commands() {
+        $this->load(__DIR__ . '/Commands');
+    }
 
     /**
      * Define the application's command schedule.

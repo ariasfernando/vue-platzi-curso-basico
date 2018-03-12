@@ -324,7 +324,9 @@ class CampaignManager
     public static function process($campaign_id = null)
     {
 
-        $job_id = dispatch(new ProcessCampaign($campaign_id));
+        // dispatch helper no longer returns job id.
+        $job_id = app(\Illuminate\Contracts\Bus\Dispatcher::class)
+            ->dispatch(new ProcessCampaign($campaign_id));
 
         Worker::queue($job_id, 'process');
 
@@ -436,8 +438,8 @@ class CampaignManager
     {
 
         if (Auth::check()) {
-            Cache::add('lock:' . $campaign_id, Auth::id(), Carbon::now()->addMinutes(1));
-            Cache::add('user_lock:' . $campaign_id, Auth::user()->email, Carbon::now()->addMinutes(1));
+            Cache::add('lock:' . $campaign_id, Auth::id(), 1); // 1 minute
+            Cache::add('user_lock:' . $campaign_id, Auth::user()->email, 1); // 1 minute
         }
 
         return array('locked' => $campaign_id);
@@ -635,7 +637,11 @@ class CampaignManager
                     $scraper_options = array_merge($scraper_options, $options);
                     $driver_name = 'Scraper\\' . ucfirst($scraper_type);
                     $scraper_driver = Api::driver($driver_name, $scraper_options);
-                    $job_id = dispatch(new \Stensul\Jobs\ScraperPreloader($scraper_driver));
+
+                    // dispatch helper no longer returns job id.
+                    $job_id = app(\Illuminate\Contracts\Bus\Dispatcher::class)
+                        ->dispatch(new \Stensul\Jobs\ScraperPreloader($scraper_driver));
+
                     Worker::queue($job_id, 'scraper');
                 }
             }
