@@ -1,39 +1,39 @@
 <template>
-  <div :class="'plugin-' + plugin.name">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="half">{{ plugin.title }}</label>
-        <div class="half-style-setting padding-top">
-          <span>
-            <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
-          </span>
-        </div>
-      </div>
-      <div v-if="plugin.enabled" class="form-group">
-        <div class="col-xs-6" v-for="(value, name) in plugin.config.options" :key="name">
-          <label class="'clearfix control-label label-center" :for="name">{{name}}</label>
-          <div class="btn-group control-label">        
-            <el-input-number
-              size="mini" 
-              :value="value"
-              :class="{'clearfix': true, 'is-danger': errors.has(name) }"
-              @change="(val)=>changeOption(val, name)"
-              :max="maxValue(name)"
-              :min="minValue(name)"
-              :key="name"
-            ></el-input-number>
-          </div>
-        </div>
-      </div>
-    </form>
-
+  <div>
+    <settings-container :label="plugin.title">
+      <template slot="setting-right">
+          <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
+      </template>
+    </settings-container>
+    <settings-container  v-if="plugin.enabled" label-left="MIN" label-right="MAX">
+      <template slot="setting-half-left">
+        <el-input-number
+          size="mini" 
+          :value="plugin.config.options.min"
+          @change="(val)=>changeOption(val, 'min')"
+          :max="maxValue('min')"
+          :min="minValue('min')"
+        ></el-input-number>
+      </template>
+      <template slot="setting-half-right">   
+        <el-input-number
+          size="mini" 
+          :value="plugin.config.options.max"
+          @change="(val)=>changeOption(val, 'max')"
+          :max="maxValue('max')"
+          :min="minValue('max')"
+        ></el-input-number>
+      </template>
+    </settings-container>
   </div>
 </template>
 
 <script>
 
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 export default {
   props: ["name"],
+  components: { SettingsContainer },
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
