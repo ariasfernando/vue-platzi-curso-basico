@@ -23,7 +23,7 @@
           <tr>
             <td 
               width="100%" 
-              :bgcolor="component.attribute.bgcolor.hex" 
+              :bgcolor="component.attribute.bgcolor" 
               :align="component.attribute.align" 
               :valign="component.attribute.valign"
             >

@@ -3,7 +3,7 @@
     <table v-if="column.components.length"
            v-for="(column, columnId) in module.structure.columns"
            :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
-           :style="column.style || ''" 
+           :style="[column.style, {'background-color' : column.attribute.bgcolor}] || ''" 
            :data-col="columnId"
            :class="!column.components.length ? 'empty-col' : ''"
            align="left"
@@ -11,6 +11,7 @@
            cellspacing="0" 
            border="0" 
            class="st-content-component st-col"
+          :bgcolor="column.attribute.bgcolor"
     >
       <tr>
         <td width="100%" 

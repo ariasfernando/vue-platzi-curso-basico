@@ -51,6 +51,7 @@ describe('== Models ==', () => {
           'style',
           'attribute',
           'settings',
+          'componentSettings',
           'plugins',
           'components',
         ]);
@@ -107,6 +108,7 @@ describe('== Models ==', () => {
         expect(properties).to.have.keys([
           'type',
           'style',
+          'styleOptions',
           'attribute',
           'settings',
           'plugins',

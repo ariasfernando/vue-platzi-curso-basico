@@ -13,7 +13,7 @@
     >
       <td width="100%" 
           style="width: 100%;"
-          :bgcolor="component.attribute.bgcolor.hex || 'transparent'"
+          :bgcolor="component.attribute.bgcolor || 'transparent'"
           :class="getMobileClasses(component,'td:first')"
       >
         <table 

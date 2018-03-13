@@ -25,7 +25,7 @@
             width="100%" 
             class="stx-edit-text stx-position-relative" 
             :align="component.attribute.align"
-            :bgcolor="component.attribute.bgcolor.hex"
+            :bgcolor="component.attribute.bgcolor"
             :style="component.style"
           >
             <tiny-mce :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label class="col-sm-7 control-label" :for="columnSetting.name">{{ columnSetting.label }}</label>
+        <label class="half" :for="columnSetting.name">{{ columnSetting.label }}</label>
         <div class="col-sm-5 position-relative content-colorpicker">
 
           <!-- Input Text -->

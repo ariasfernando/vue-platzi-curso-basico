@@ -16,7 +16,7 @@
         align="center"
         class="stx-position-relative"
         :style="component.style"
-        :bgcolor="component.attribute.bgcolor.hex"
+        :bgcolor="component.attribute.bgcolor"
         :class="getMobileClasses(component,'td:first')"
       >
         <table 

@@ -1,0 +1,77 @@
+<template>
+  <settings-container :label="label">
+    <template slot="setting-right">
+      <input class="input" :name="name" type="file" @change="onFileChange">
+    </template>
+  </settings-container>
+</template>
+<script>
+import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
+
+export default {
+  name: "generic-file",
+  props: ["element", "name", "type", "link", "label", "default-value"],
+  mixins: [SettingMixin],
+  components: { SettingsContainer },
+  methods: {
+    resetImage() {
+      if (this.link === "style") {
+        this.$emit("style-setting-updated", { name: this.name, value: "" });
+      } else if (this.link === "styleOption") {
+        this.$emit("style-option-setting-updated", {
+          name: this.name,
+          value: ""
+        });
+      } else if (this.link === "attribute") {
+        this.$emit("attribute-setting-updated", { name: this.name, value: "" });
+      }
+    },
+    onFileChange(e) {
+      const files = e.target.files || e.dataTransfer.files;
+
+      if (!files.length) return;
+
+      this.createImage(files[0]);
+    },
+    createImage(file) {
+      const reader = new FileReader();
+      const vm = this;
+
+      reader.onload = e => {
+        vm.image = e.target.result;
+
+        // Upload Image
+        this.$store
+          .dispatch("module/uploadImages", {
+            images: [vm.image]
+          })
+          .then(res => {
+            this.updateAttributePlaceholder("customer/modules" + res[0]);
+          });
+      };
+
+      reader.readAsDataURL(file);
+    },
+    updateAttributePlaceholder(e) {
+      // Set the src after we have loaded the new image
+      const tmp = new Image();
+      tmp.src = this.$_app.config.imageUrl + e;
+
+      tmp.onload = () => {
+        this.mainSetting = e;
+      };
+
+      tmp.onerror = () => {
+        // Retry to load image
+        this.updateAttributePlaceholder(e);
+      };
+    }
+  }
+};
+</script>
+<style lang="less" scoped>
+input.input {
+  margin-top: 8px;
+}
+</style>

@@ -1,139 +1,105 @@
 <template>
-  <div class="form-group" :class="'field-' + setting">
-    <div class="col-xs-6" v-for="fontStyleSetting in fontStyleSettings" :key="fontStyleSetting.name">
-        <label class="clearfix control-label" :for="fontStyleSetting.name">{{fontStyleSetting.label}}</label>
-        <el-input-number
-          size="mini" 
-          v-validate="'required'"
-          v-model="fontStyleSetting.value"
-          :class="{'input clearfix': true, 'is-danger': errors.has(fontStyleSetting.name) }"
-          :name="fontStyleSetting.name"
-          :ref="fontStyleSetting.name"
-          @change="(newValue)=>clangeValue(newValue,fontStyleSetting.name)"
-          :min="fontStyleSetting.min"
-          :max="fontStyleSetting.max"
-          :disabled="fontStyleSetting.name === 'lineHeight' ? isBlockLineHeight : false"
-        ></el-input-number>
-        <span class='icon-block-line-height' v-if="fontStyleSetting.name === 'fontSize'" @click="onBlockLineHeight">
-          <i v-if="isBlockLineHeight" class="fa fa-arrow-right"></i>
-          <i v-else class="fa fa-minus"></i>
-          </span>
-    </div>
-  </div>
+  <settings-container label-left="Font Size" label-right="Line Height">
+    <template slot="setting-half-left">
+      <el-input-number
+        size="mini" 
+        v-validate="'required'"
+        v-model="fontSize"
+        :value="fontSize"
+        :class="{'clearfix': true, 'is-danger': errors.has('fontSize') }"
+        :min="5"
+        :max="50"
+      ></el-input-number>
+      <span class='icon-block-line-height' @click="toggleLineHeight">
+        <i v-if="isBlockLineHeight" class="fa fa-lock"></i>
+        <i v-else class="fa fa-unlock"></i>
+      </span>
+    </template>
+    <template slot="setting-half-right">
+      <el-input-number
+        size="mini" 
+        v-validate="'required'"
+        v-model="lineHeight"
+        :value="lineHeight"
+        :class="{'clearfix': true, 'is-danger': errors.has('lineHeight') }"
+        :min="6"
+        :max="60"
+        :disabled="isBlockLineHeight"
+      ></el-input-number>
+    </template>
+  </settings-container>
 </template>
-
 <script>
 import _ from "lodash";
+import SettingMixin from "../mixins/SettingMixin.js";
+import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
 
 export default {
-  name: "FontStyle",
-  props: ["setting"],
-  data() {
-    return {
-      isBlockLineHeight: true,
-      fontStyleSettings: []
-    };
-  },
-  mounted() {
-    this.isBlockLineHeight = this.getValue("isBlockLineHeight");
-    this.fontStyleSettings = [
-      {
-        label: "Font size",
-        name: "fontSize",
-        value: this.getValue("fontSize"),
-        min: 5,
-        max: 50
+  name: "font-style",
+  props: ["setting", "element"],
+  mixins: [ SettingMixin ],
+  components: { SettingsContainer },
+  computed: {
+    isBlockLineHeight: {
+      get() {
+        return this.element.styleOptions["isBlockLineHeight"];
       },
-      {
-        label: "Line Height",
-        name: "lineHeight",
-        value: this.getValue("isBlockLineHeight")
-          ? calculeLineHeight()
-          : this.getValue("lineHeight"),
-        min: 6,
-        max: 60
+      set(newValue) {
+        this.$emit('style-option-setting-updated', { name: "isBlockLineHeight", value: newValue });
       }
-    ];
+    },
+    fontSize: {
+      get() {
+        return _.parseInt(this.element.style["fontSize"]);
+      },
+      set(newValue) {
+        this.$emit('style-setting-updated', { name: "fontSize", value: newValue + "px" });
+        
+        if (this.isBlockLineHeight) {
+          this.lineHeight = this.calculateLineHeight(newValue);
+        }
+      }
+    },
+    lineHeight: {
+      get() {
+        return _.parseInt(this.element.style["lineHeight"]);
+      },
+      set(newValue) {
+        this.$emit('style-setting-updated', { name: "lineHeight", value: newValue + "px" });
+      }
+    }
   },
   methods: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
+    calculateLineHeight(fontSize) {
+      return Math.round(fontSize * 1.2);
     },
-
-    clangeValue(newValue, property) {
-      if (property === "fontSize" && this.isBlockLineHeight) {
-        // if isBlockLineHeight then update lineHeight
-        let lineHeightCalculated = this.calculeLineHeight();
-        this.fontStyleSettings[1].value = lineHeightCalculated;
-        this.saveStyle(lineHeightCalculated, "lineHeight");
-      }
-      this.saveStyle(newValue, property);
-    },
-
-    calculeLineHeight() {
-      return Math.round(this.getValue("fontSize") * 1.2);
-    },
-
-    onBlockLineHeight() {
-      // set date
-      let isBlock = !this.getValue("isBlockLineHeight");
-      let lineHeight = this.calculeLineHeight();
-      // save and update date
-      this.saveStyleOption(isBlock, "isBlockLineHeight");
-      this.saveStyle(lineHeight, "lineHeight");
-      this.isBlockLineHeight = isBlock;
-      this.fontStyleSettings[1].value = lineHeight;
-    },
-
-    getValue(name) {
-      const module = this.$store.getters["module/module"];
-      const component =
-        module.structure.columns[this.currentComponent().columnId].components[
-          this.currentComponent().componentId
-        ];
-      let value;
-      if (name === "isBlockLineHeight") {
-        value = component.styleOptions[name];
-      } else {
-        value = component.style[name].replace("px", "");
-      }
-      return value;
-    },
-
-    saveStyleOption(newValue, property) {
-      this.$store.commit("module/saveComponentStyleOption", {
-        columnId: this.currentComponent().columnId,
-        componentId: this.currentComponent().componentId,
-        property: property,
-        value: newValue
-      });
-    },
-
-    saveStyle(newValue, property) {
-      this.$store.commit("module/saveComponentStyle", {
-        columnId: this.currentComponent().columnId,
-        componentId: this.currentComponent().componentId,
-        property: property,
-        value: newValue + "px"
-      });
+    toggleLineHeight() {
+      this.isBlockLineHeight = !this.isBlockLineHeight;
+      this.lineHeight = this.calculateLineHeight(this.fontSize);
     }
   }
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .icon-block-line-height {
   position: absolute;
   right: -15px;
-  margin-top: 0px;
-  padding: 0px;
+  margin-top: 0;
+  padding: 0;
   height: 28px;
-  width: 36px;
+  width: 30px;
   text-align: center;
   padding-top: 4px;
-    z-index: 2;
+  z-index: 2;
+  bottom: 0;
   cursor: pointer;
+
   i {
     color: #666666;
   }
+}
+
+.el-input-number {
+  width: 105px;
 }
 </style>

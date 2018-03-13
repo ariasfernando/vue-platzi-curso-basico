@@ -76,11 +76,7 @@ const mutations = {
     state.module.structure.style[data.property] = data.value;
   },
   saveModuleAttribute(state, data) {
-    if (data.property === 'bgcolor') {
-      state.module.structure.attribute[data.property] = data.value.hex ? data.value : { hex: data.value };
-    } else {
-      state.module.structure.attribute[data.property] = data.value;
-    }
+    state.module.structure.attribute[data.property] = data.value;
   },
   saveModule(state, moduleId) {
     state.module.moduleId = moduleId;
@@ -99,9 +95,18 @@ const mutations = {
     const column = state.module.structure.columns[data.colId];
     // Set attribute
     column.attribute.width = `${data.width}%`;
-    // Find and set setting
-    const key = _.findKey(column.settings, { name: 'width' });
-    column.settings[key].value = `${data.width}%`;
+  },
+  saveColumnStyle(state, data) {
+    const styles = state.module.structure.columns[data.colId].style;
+    const newStyles = {};
+    newStyles[data.property] = data.value;
+    _.merge(styles, newStyles);
+  },
+  saveColumnAttribute(state, data) {
+    const attribute = state.module.structure.columns[data.colId].attribute;
+    const newAttribute = {};
+    newAttribute[data.property] = data.value;
+    _.merge(attribute, newAttribute);
   },
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);
@@ -134,8 +139,10 @@ const mutations = {
     _.merge(style, newStyle);
   },
   saveComponentStyleOption(state, data) {
-    const component = state.module.structure.columns[data.columnId].components[data.componentId];
-    component.styleOptions[data.property] = data.value;
+    const styleOptions = state.module.structure.columns[data.columnId].components[data.componentId].styleOptions;
+    const newStyleOptions = {};
+    newStyleOptions[data.property] = data.value;
+    _.merge(styleOptions, newStyleOptions);
   },
   saveComponentAttribute(state, data) {
     const attribute = state.module.structure.columns[data.columnId].components[data.componentId].attribute;

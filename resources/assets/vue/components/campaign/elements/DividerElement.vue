@@ -14,7 +14,7 @@
     >
       <td
         class="stx-position-relative stx-line-height-reset"
-        :bgcolor="component.style.backgroundColor"
+        :bgcolor="component.attribute.bgcolor"
         :height="heightAsInt"
         :width="component.style.width || '100%'"
         :style="styles"

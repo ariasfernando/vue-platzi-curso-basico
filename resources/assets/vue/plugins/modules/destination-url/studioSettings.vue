@@ -1,51 +1,34 @@
 <template>
-  <div :class="'plugin-' + plugin.name">
-
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
-        <div class="col-sm-5">
-          <span>
-            <toggle-button :value="enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
-          </span>
-        </div>
-      </div>
-
-      <div v-if="plugin.enabled" class="form-group">
-        <label class="col-sm-7 control-label" data-name="validations.required"><b>Required</b></label>
-        <div class="col-sm-5">
-          <span>
-            <toggle-button :value="plugin.config.validations.required" active-color="#78DCD6" @change="(newValue)=>updateField(newValue, 'validations.required')"></toggle-button>
-          </span>
-        </div>
-      </div>
-
-      <div v-if="plugin.enabled" class="form-group">
-        <label class="col-sm-7 control-label" data-name="validations.url"><b>Validate URL</b></label>
-        <div class="col-sm-5">
-          <span>
-            <toggle-button :value="plugin.config.validations.url" active-color="#78DCD6" @change="(newValue)=>updateField(newValue, 'validations.url')"></toggle-button>
-          </span>
-        </div>
-      </div>
-
-      <div v-if="plugin.enabled" class="form-group">
-        <label class="col-sm-7 control-label" data-name="target"><b>Target</b></label>
-        <div class="col-sm-5">
-          <span>
-            <toggle-button :value="plugin.config.target" name="target" active-color="#78DCD6" @change="(newValue)=>updateField(newValue, 'target')"></toggle-button>
-          </span>
-        </div>
-      </div>
-
-    </form>
-
+  <div>
+  <settings-container :label="plugin.title">
+    <template slot="setting-right">
+        <toggle-button :value="enabled" @change="toggle"></toggle-button>
+    </template>
+  </settings-container>
+  <template v-if="plugin.enabled">
+      <settings-container label="Required">
+        <template slot="setting-right">
+            <toggle-button :value="plugin.config.validations.required" @change="(newValue)=>updateField(newValue, 'validations.required')"></toggle-button>
+        </template>
+      </settings-container>
+      <settings-container label="Validate URL">
+        <template slot="setting-right">
+            <toggle-button :value="plugin.config.validations.url" @change="(newValue)=>updateField(newValue, 'validations.url')"></toggle-button>
+        </template>
+      </settings-container>
+      <settings-container label="Target">
+        <template slot="setting-right">
+            <toggle-button :value="plugin.config.target" @change="(newValue)=>updateField(newValue, 'target')"></toggle-button>
+        </template>
+      </settings-container>
+  </template>
   </div>
 </template>
 
 <script>
 
   import _ from 'lodash';
+  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
   export default {
     props: {
@@ -54,6 +37,7 @@
         required: true,
       },
     },
+    components: { SettingsContainer },
     computed: {
       currentComponent() {
         return this.$store.getters["module/currentComponent"];

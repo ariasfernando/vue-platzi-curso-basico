@@ -7,7 +7,8 @@
         cellspacing="0"
         border="0"
         :width="column.attribute && column.attribute.width ? column.attribute.width : 100/numColumns + '%'"
-        :style="column.style"
+        :style="[column.style, {'background-color' : column.attribute.bgcolor}]"
+        :bgcolor="column.attribute.bgcolor"
       >
         <tr
           v-for="(component, componentId) in column.components"
@@ -18,7 +19,7 @@
           <td
             width="100%"
             :style="styles"
-            :bgcolor="column.attribute.bgcolor.hex"
+            :bgcolor="column.attribute.bgcolor"
             :valign="column.attribute.valign"
             :align="component.attribute.align || 'center'"
           >

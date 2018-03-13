@@ -1,53 +1,41 @@
 <template>
-  <div :class="'plugin-' + plugin.name">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
-        <div class="col-sm-5">
-          <span>
-            <toggle-button :value="plugin.enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
-          </span>
-        </div>
-      </div>
+  <div>
+    <settings-container :label="plugin.title">
+      <template slot="setting-right">
+            <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
+      </template>
+    </settings-container>
 
       <div class="btn-group" v-if="plugin.enabled">
-       <button v-for="(option, name) in plugin.config.options"
-         class="btn toggleable"
-         v-b-tooltip.hover
+        <el-button
+          v-for="(option, name) in plugin.config.options"
+          :class="[option.icon , {'active': option.value}]"
          :title="option.label"
-         :name="name"
-         :value="option.value"
-         :class="{active: option.value}"
-         @click.prevent="toggleOption"
-         type="button"
-         :key="name"
-        >
-          <i :class="option.icon"
-             :data-tooltip="option.label"
-          ></i>
-        </button>
+          v-b-tooltip.hover
+          :data-tooltip="option.label"
+          size="mini"
+          @click.prevent="toggleOption(name,option.value)"
+          :key="name"
+        ></el-button>
       </div>
 
-      <div v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" class="form-group" :key="key">
-        <label class="col-sm-7 control-label"><b>{{ tinySetting.title }}</b></label>
-        <div class="col-sm-5 control-label">
-          <span>
-            <toggle-button :value="tinySetting.value" active-color="#78DCD6"  @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
-          </span>
-        </div>
+      <settings-container v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" :label="tinySetting.title" :key="key">
+        <template slot="setting-right">
+              <toggle-button :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
+        </template>
         <!-- Input if config needs it -->
-        <div v-if=" tinySetting.value === true && tinySetting.type !== undefined" class="col-sm-12 control-label">
-          <div class="btn-group number-input">
-            <input
-              class="btn toggleable"
-              v-b-tooltip.hover
-              :title="key"
-              :name="key"
-              :value="tinySetting.content || 0"
-              type="number"
-              @input.prevent="changeOption"
-              min="0"
-            />
+        <div v-if="isAValidSetting(tinySetting ,key)" class="col-sm-12 control-label">
+          <div class="btn-group">
+            
+            <el-input-number
+            size="mini" 
+            v-b-tooltip.hover
+            :title="key"
+            :name="key"
+            @change="(value)=>changeOption(value, key)"
+            :value="tinySetting.content || 0"
+            :min="0"
+            ></el-input-number>
           </div>
         </div>
       </div>
@@ -57,170 +45,171 @@
 </template>
 
 <script>
+import _ from "lodash";
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
-  import _ from 'lodash';
-  
-  export default {
-    props: ['name'],
-    computed: {
-      currentComponent() {
-        return this.$store.getters["module/currentComponent"];
-      },
-      module() {
-        return this.$store.getters["module/module"];
-      },
-      plugin() {
-        const module = this.module,
-              columnId = this.currentComponent.columnId,
-              componentId = this.currentComponent.componentId;
-
-        const plugin = module.structure.columns[columnId].components[componentId].plugins[this.name];
-        this.enabled = plugin.enabled;
-        this.options = plugin.config.options;
-
-        return plugin;
-      }
+export default {
+  props: ["name"],
+  components: { SettingsContainer },
+  computed: {
+    currentComponent() {
+      return this.$store.getters["module/currentComponent"];
     },
-    data() {
-      return {
-        enabled: false,
-        options: {},
-      }
+    module() {
+      return this.$store.getters["module/module"];
     },
-    methods: {
-      toggle(value) {
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          enabled: value,
-        };
-        // Update state of the component
-        this.$store.commit('module/togglePlugin', payload);
+    plugin() {
+      const module = this.module,
+        columnId = this.currentComponent.columnId,
+        componentId = this.currentComponent.componentId;
 
-        // Set current component
-        this.$store.commit("module/setCurrentComponent", {
-          columnId: payload.columnId,
-          componentId: payload.componentId
-        });
-        // Update component view in the third column
-        this.$store.commit('module/setChangeSettingComponent',{
+      const plugin =
+        module.structure.columns[columnId].components[componentId].plugins[
+          this.name
+        ];
+      this.enabled = plugin.enabled;
+      this.options = plugin.config.options;
+
+      return plugin;
+    }
+  },
+  data() {
+    return {
+      enabled: false,
+      options: {}
+    };
+  },
+  methods: {
+    toggle(value) {
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        enabled: value
+      };
+      // Update state of the component
+      this.$store.commit("module/togglePlugin", payload);
+
+      // Set current component
+      this.$store.commit("module/setCurrentComponent", {
+        columnId: payload.columnId,
+        componentId: payload.componentId
+      });
+      // Update component view in the third column
+      this.$store.commit("module/setChangeSettingComponent", {
           style: this.module.structure.columns[payload.columnId].components[payload.componentId].style || {},
           attribute: this.module.structure.columns[payload.columnId].components[payload.componentId].attribute || {}
-        });
-      },
-      toggleOption(e) {
-        // Get button, user can clicks the button or the icon
-        const parentElement = $(e.target).hasClass("mce-ico") || $(e.target).hasClass("mce-ico-adapter")
-          ? e.target.parentElement 
-          : e.target;
+      });
+    },
 
-        // Toggle class active
-        $(parentElement).toggleClass('active');
-        parentElement.value = $(parentElement).hasClass('active');
-        const value = parentElement.value;
-        const option = parentElement.attributes.getNamedItem('name').value;
+    toggleOption(name, oldValue) {
+      const value = !oldValue;
+      const options = {};
+      options[name] = {
+        value: value
+      };
 
-        const options = {};
-        options[option] = {
-          value: (value == 'true')
-        };
-
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          config: {
-            options,
-          },
-        };
-
-        // Save plugin data
-        this.$store.commit('module/savePlugin', payload);
-      },
-      toggleSetting(value, setting) {
-        const options = {};
-        let content;
-
-        // if toogle is disabled the inputs value will be 0
-        if( value == false){
-          content = 0;
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        config: {
+          options
         }
-        options[setting] = {
-            value,
-            content
-          };
+      };
 
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          config: {
-            settings: options,
-          },
-        };
+      // Save plugin data
+      this.$store.commit("module/savePlugin", payload);
+    },
 
-        // Save plugin data
-        this.$store.commit('module/savePlugin', payload);
-      },
-      changeOption(e){
-        // Save input value
-        const value = e.target.value;
-        const setting = e.target.name;
-        const options = {};
-        // switch to other var because value saved toggle state.
-        const content = value;
-          
-        options[setting] = {
-          content
-        };  
+    toggleSetting(value, setting) {
+      const options = {};
+      let content;
 
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          config: {
-            settings: options,
-          },
-        };
-
-        // Save plugin data
-        this.$store.commit('module/savePlugin', payload);
-
+      // if toogle is disabled the inputs value will be 0
+      if (value == false) {
+        content = 0;
       }
-    }
+      options[setting] = {
+        value,
+        content
+      };
+
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        config: {
+          settings: options
+        }
+      };
+
+      // Save plugin data
+      this.$store.commit("module/savePlugin", payload);
+    },
+
+    changeOption(value,setting) {
+      const options = {};
+      // switch to other var because value saved toggle state.
+      const content = value;
+
+      options[setting] = {
+        content
+      };
+
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        config: {
+          settings: options
+        }
+      };
+
+      // Save plugin data
+      this.$store.commit("module/savePlugin", payload);
+    },
+    isAValidSetting(tinySetting, key){
+     return (key === 'truncate' || key === 'lines_limit') && tinySetting.value === true;
+     }
   }
+};
 </script>
-<style lang="less">
-  .btn-group {
-    text-align: left;
-    padding: 5px 5px 10px;
-    .btn {
-      &.toggleable {
-        background: #E9E9E9;
-        padding: 4px 8px;
-        margin: 2px;
-        border-color: transparent;
-
-        &.active {
-          background: #78DCD6 !important;
-          color: #FFFFFF !important;
-        }
-
-        &:hover {
-          background: #78DCD6 !important;
-        }
-      }
-
-      i.mce-ico-adapter {
-        font-size: 12px;
-        width: 16px;
-      }
-    }
-  }
-
-  .btn-group.number-input{
-    text-align: right;
-    padding: 10px 0;
-  }
+<style lang="less" scoped>
+.font-mce-ico {
+  font-family: tinymce, Arial;
+}
+.mce-i-forecolor:before {
+  border-bottom: 2px solid #333;
+  margin-top: 2px;
+}
+.mce-i-backcolor:before {
+  padding: 4px;
+  background: #bbb;
+}
+.btn-group {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.el-button:focus,
+.el-button:hover {
+  color: inherit;
+  border-color: inherit;
+  background-color: inherit;
+}
+.el-button.active {
+  color: #ffffff;
+  border-color: rgb(120, 220, 214);
+  background-color: rgb(120, 220, 214);
+}
+.btn-group.number-input {
+  text-align: right;
+  padding: 10px 0;
+}
+.el-button {
+  width: 34px;
+  padding: 4px 4px;
+  margin: 2.5px;
+  height: 32px;
+}
 </style>
