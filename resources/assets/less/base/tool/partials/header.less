@@ -136,7 +136,23 @@ header{
 		position: fixed;
 		top: 0px;
 		z-index: 3;
-		overflow: hidden;
+		overflow: visible;
+		nav {
+			.help{
+				&[aria-expanded="true"] {
+    			width: 125px;
+				}
+			}
+			.dropdown-menu{
+				margin-top: -2px; 
+				li{
+					opacity: 0.6;
+					&:hover{
+						opacity: 1;
+					}
+				}
+			}			
+		}
 	}
 }
 
