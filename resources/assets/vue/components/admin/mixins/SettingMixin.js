@@ -1,8 +1,6 @@
+import _ from "lodash";
 
 export default {
-  props: [],
-  components: {
-  },
   computed: {
     module() {
       return this.$store.getters["module/module"];
@@ -14,42 +12,26 @@ export default {
       if (this.module.structure.columns[this.currentComponent.columnId]) {
         const component =
           this.module.structure
-            .columns[this.currentComponent.columnId]
-            .components[this.currentComponent.componentId];
+          .columns[this.currentComponent.columnId]
+          .components[this.currentComponent.componentId];
         return component;
       }
       return null;
     },
     mainSetting: {
       get() {
-        if (this.link === "style") {
-          return this.element.style[this.name];
-        } else if (this.link === "styleOption") {
-          return this.element.styleOption[this.name];
-        } else if (this.link === "attribute") {
-          return this.element.attribute[this.name];
-        } else if (this.link === "config") {
-          return this.element.config[this.name];
+        if (this.link) {
+          return this.element[_.kebabCase(this.link)][this.name];
         }
-        return this.defaultValue;
+        return this.element[this.name];
       },
       set(newValue) {
-        if (this.link === "style") {
-          this.$emit("style-setting-updated", { name: this.name, value: newValue });
-        } else if (this.link === "styleOption") {
-          this.$emit("style-option-setting-updated", { name: this.name, value: newValue });
-        } else if (this.link === "attribute") {
-          this.$emit("attribute-setting-updated", { name: this.name, value: newValue });
-        } else if (this.link === "config") {
-          this.$emit("config-setting-updated", { name: this.name, value: newValue });
-        }
+        const type = this.link ? `${this.link}-` : '';
+        this.$emit(`${type}setting-updated`, {
+          name: this.name,
+          value: newValue,
+        });
       },
     },
-  },
-  data() {
-    return {
-    };
-  },
-  methods: {
   },
 };

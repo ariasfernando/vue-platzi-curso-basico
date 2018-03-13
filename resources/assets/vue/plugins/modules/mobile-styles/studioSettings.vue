@@ -1,27 +1,19 @@
 <template>
-  <div :class="'plugin-' + plugin.name">
-    <form class="form-horizontal">
-      <div v-for="(mobileSetting, key) in plugin.config.settings" class="form-group" :key="key">
-        <label class="half"><b>{{ mobileSetting.title }}</b></label>
-        <div class="half-style-setting padding-top">
-          <span>
-            <toggle-button 
-              active-color="#78DCD6" 
-              ref="key"
-              :value="mobileSetting.value" 
-              @change="(newValue)=>toggleSetting(newValue,key)">
-            </toggle-button>
-          </span>
-        </div>
-      </div>
-    </form>
+  <div>
+    <settings-container  v-for="(mobileSetting, key) in plugin.config.settings" :label="mobileSetting.title" :key="key">
+      <template slot="setting-right">
+          <toggle-button :value="mobileSetting.value" @change="(newValue)=>toggleSetting(newValue,key)"></toggle-button>
+      </template>
+    </settings-container>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
-export default {
+  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  export default {
     props: ['name'],
+    components: { SettingsContainer },
     computed: {
       currentComponent() {
         return this.$store.getters["module/currentComponent"];

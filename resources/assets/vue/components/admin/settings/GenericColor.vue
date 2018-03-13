@@ -1,6 +1,6 @@
 <template>
-  <settings-container :label="label">
-    <template slot="setting-half-left">
+  <settings-container custom-class="generic-color" :label="label">
+    <template slot="setting-right">
       <el-color-picker v-model="mainSettingColor" color-format="hex"></el-color-picker>
       <el-input
         size="mini"
@@ -17,12 +17,12 @@
 <script>
 import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
-import SettingsContainer from "./SettingsContainer.vue";
+import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
 
 export default {
-  name: "BackgroundColor",
+  name: "GenericColor",
   props: ["element", "name", "type", "link", "label"],
-  mixins: [ SettingMixin ],
+  mixins: [SettingMixin],
   components: { SettingsContainer },
   computed: {
     mainSettingColor: {
@@ -39,12 +39,18 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.el-input {
+  width: 86px;
+  padding: 0;
+}
+.el-color-picker {
+  float: left;
+  height: 28px;
+}
+</style>
 <style lang="less">
-.field-generic-color {
-  .el-input--mini {
-    width: 86px;
-    padding: 6px 0 0 0;
-  }
+.generic-color {
   .el-color-picker__trigger {
     padding: 3px;
     height: 28px;
@@ -54,10 +60,6 @@ export default {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 4px;
-  }
-  .el-color-picker {
-    padding: 6px 0 0 0;
-    float: left;
   }
   input.el-input__inner {
     text-align: center;

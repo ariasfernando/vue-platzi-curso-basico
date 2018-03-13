@@ -34,7 +34,7 @@
                 :height="heightAsInt"
                 :style="[defaultInnerTdStyle, innerTdStyle]"
                 :data-persist-styles="JSON.stringify(dataPersistStyles)"
-              >2</td>
+              >&nbsp;</td>
             </tr>
           </tbody>
         </table>

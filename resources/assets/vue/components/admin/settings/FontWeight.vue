@@ -36,7 +36,7 @@
 <script>
 import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
-import SettingsContainer from "./SettingsContainer.vue";
+import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
 
 export default {
   name: "FontWeight",

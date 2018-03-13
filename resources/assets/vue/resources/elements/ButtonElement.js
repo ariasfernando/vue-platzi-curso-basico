@@ -88,12 +88,16 @@ function buttonDefault() {
       ],
       [
         {
-          name: 'background-color',
-          type: 'background-color',
+          name: 'bgcolor',
+          type: 'generic-color',
+          link: 'attribute',
+          label: 'Background Color',
         },
         {
-          name: 'font-color',
-          type: 'font-color',
+          name: 'color',
+          type: 'generic-color',
+          link: 'style',
+          label: 'Color',
         },
       ],
       [

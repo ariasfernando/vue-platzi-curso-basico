@@ -38,17 +38,17 @@ export default {
       return !!this.$slots["setting-half-left"] && !!this.$slots["setting-half-right"];
     },
     hasSettingBottom() {
-      return  !!this.$slots["setting-bottom"];
+      return !!this.$slots["setting-bottom"];
     }
   }
 };
 </script>
 <style lang="less" scoped>
-.settings-container{
-    margin-bottom: 6px;
-    margin-left: 0;
-    margin-right: 0;
-  }
+.settings-container {
+  margin-bottom: 6px;
+  margin-left: 0;
+  margin-right: 0;
+}
 .half-setting {
   width: 50%;
   float: left;

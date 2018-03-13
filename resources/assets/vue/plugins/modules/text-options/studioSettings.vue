@@ -1,14 +1,10 @@
 <template>
-  <div :class="'plugin-' + plugin.name">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="half"><b>{{ plugin.title }}</b></label>
-        <div class="half-style-setting padding-top">
-          <span>
-            <toggle-button :value="plugin.enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
-          </span>
-        </div>
-      </div>
+  <div>
+    <settings-container :label="plugin.title">
+      <template slot="setting-right">
+            <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
+      </template>
+    </settings-container>
 
       <div class="btn-group" v-if="plugin.enabled">
         <el-button
@@ -23,13 +19,10 @@
         ></el-button>
       </div>
 
-      <div v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" class="form-group" :key="key">
-        <label class="half"><b>{{ tinySetting.title }}</b></label>
-        <div class="half-style-setting padding-top control-label">
-          <span>
-            <toggle-button :value="tinySetting.value" active-color="#78DCD6"  @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
-          </span>
-        </div>
+      <settings-container v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" :label="tinySetting.title" :key="key">
+        <template slot="setting-right">
+              <toggle-button :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
+        </template>
         <!-- Input if config needs it -->
         <div v-if="isAValidSetting(tinySetting ,key)" class="col-sm-12 control-label">
           <div class="btn-group">
@@ -53,9 +46,11 @@
 
 <script>
 import _ from "lodash";
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
 export default {
   props: ["name"],
+  components: { SettingsContainer },
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];

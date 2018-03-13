@@ -21,6 +21,7 @@
               :type="setting.type"
               :link="setting.link"
               :label="setting.label"
+              :placeholder="setting.placeholder"
               :default-value="setting.value"
               :min-value="setting.minValue"
               :max-value="setting.maxValue"
@@ -219,10 +220,8 @@ export default {
   components: {
     BootstrapVue,
     "sketch-picker": Sketch,
-    "input-background-color": elementSettings.BackgroundColor,
     "input-border-group": elementSettings.BorderGroup,
     "input-button-caret": elementSettings.ButtonCaret,
-    "input-font-color": elementSettings.FontColor,
     "input-font-family": elementSettings.FontFamily,
     "input-font-style": elementSettings.FontStyle,
     "input-font-weight": elementSettings.FontWeight,

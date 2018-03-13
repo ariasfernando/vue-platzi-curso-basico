@@ -23,8 +23,10 @@ function separatorDefault() {
           type: 'input-height',
         },
         {
-          name: 'background-color',
-          type: 'background-color',
+          name: 'bgcolor',
+          type: 'generic-color',
+          link: 'attribute',
+          label: 'Background Color',
         },
         {
           name: 'padding',

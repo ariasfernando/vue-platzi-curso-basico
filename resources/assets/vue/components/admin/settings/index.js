@@ -1,7 +1,5 @@
-import BackgroundColor from './BackgroundColor.vue';
 import BorderGroup from './BorderGroup.vue';
 import ButtonCaret from './ButtonCaret.vue';
-import FontColor from './FontColor.vue';
 import FontFamily from './FontFamily.vue';
 import FontStyle from './FontStyle.vue';
 import FontWeight from './FontWeight.vue';
@@ -18,10 +16,8 @@ import VerticalAlign from './VerticalAlign.vue';
 import Width from './Width.vue';
 
 const Settings = {
-  BackgroundColor,
   BorderGroup,
   ButtonCaret,
-  FontColor,
   FontFamily,
   FontStyle,
   FontWeight,

@@ -7,31 +7,21 @@
 
     <b-collapse id="module-settings-left" visible accordion="module-settings-accordion">
       <b-card class="control" >
-        <div class="form-group" :class="{'has-error': errors.has('name') }">
-          <div class="field-name">
-            <label for="name">Name</label>
-            <el-input
-              :class="{'input': true, 'is-danger': errors.has('name') }"
-              v-validate.initial="'required'"
-              name="name"
-              placeholder="Module name"
-              v-model="moduleName"
-              max="60"
-              size="mini"></el-input>
-          </div>
-        </div>
-        <div class="form-group" :class="{'has-error': errors.has('set-column') }">
-          <label class="half" for="set-column">Columns</label>
-          <div class="half-style-setting padding-top float-right">
-            <el-input-number
-              size="mini" 
-              v-model="numColumns"
-              name="set-column"
-              :min="1"
-              :max="8"
-            ></el-input-number>
-          </div>
-        </div>
+        <input-generic-text
+          label='Module name'
+          :element="module"
+          @setting-updated="settingUpdatedHandler"
+          placeholder="Module name"
+          name='name'>
+        </input-generic-text>
+        <input-generic-number
+          label='Columns'
+          :element="module.structure.columns"
+          @setting-updated="settingColumnsHandler"
+          :min-value="1"
+          :max-value="8"
+          name='length'>
+        </input-generic-number>
         <div v-for="(settingGroup, groupKey) in module.structure.componentSettings" class="group-container" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
@@ -42,6 +32,7 @@
             :type="setting.type"
             :link="setting.link"
             :label="setting.label"
+            :placeholder="setting.placeholder"
             :default-value="setting.value"
             :min-value="setting.minValue"
             :max-value="setting.maxValue"
@@ -153,16 +144,16 @@
 <script>
 import { Sketch } from "vue-color";
 import BootstrapVue from "bootstrap-vue";
-import backgroundColor from "../settings/BackgroundColor.vue";
-import Padding from "../settings/Padding.vue";
-import BorderGroup from "../settings/BorderGroup.vue";
+import * as elementSettings from "../settings";
 
 export default {
   components: {
     BootstrapVue,
-    "input-background-color": backgroundColor,
-    "input-padding": Padding,
-    "input-border-group": BorderGroup
+    "input-generic-color": elementSettings.GenericColor,
+    "input-generic-text": elementSettings.GenericText,
+    "input-generic-number": elementSettings.GenericNumber,
+    "input-padding": elementSettings.Padding,
+    "input-border-group": elementSettings.BorderGroup
   },
   data() {
     return {
@@ -182,55 +173,45 @@ export default {
   computed: {
     module() {
       return this.$store.getters["module/module"];
-    },
-    numColumns: {
-      get() {
-        return this.module.structure.columns.length;
-      },
-      set(value) {
-        let cols = value;
-        let numCols = this.module.structure.columns.length;
-
-        if (numCols === cols) {
-          return true;
-        }
-
-        if (numCols > cols && confirm("Are you sure?")) {
-          this.$store.commit("campaign/unsetActiveModule");
-          this.$store.commit("campaign/unsetCurrentModule");
-          this.$store.commit("campaign/unsetCurrentComponent");
-          this.$store.commit("module/removeColumns", {
-            index: cols,
-            number: numCols - cols
-          });
-        }
-
-        if (numCols < cols) {
-          for (let i = numCols; i < cols; i++) {
-            this.$store.dispatch("module/addColumn");
-          }
-        }
-
-        this.$store.dispatch(
-          "module/normalizeColumns",
-          this.module.structure.columns
-        );
-
-        if (value > 0 && value <= this.maxCols) {
-          this.$store.commit("module/setActiveColumn", value - 1);
-        }
-      }
-    },
-    moduleName: {
-      get() {
-        return this.module.name;
-      },
-      set(name) {
-        this.$store.commit("module/setModuleFields", { name: name });
-      }
     }
   },
   methods: {
+    settingColumnsHandler(eventData) {
+      let cols = eventData.value;
+      let numCols = this.module.structure.columns.length;
+
+      if (numCols === cols) {
+        return true;
+      }
+
+      if (numCols > cols) {
+        this.$store.commit("campaign/unsetActiveModule");
+        this.$store.commit("campaign/unsetCurrentModule");
+        this.$store.commit("campaign/unsetCurrentComponent");
+        this.$store.commit("module/removeColumns", {
+          index: cols,
+          number: numCols - cols
+        });
+      }
+
+      if (numCols < cols) {
+        for (let i = numCols; i < cols; i++) {
+          this.$store.dispatch("module/addColumn");
+        }
+      }
+
+      this.$store.dispatch(
+        "module/normalizeColumns",
+        this.module.structure.columns
+      );
+
+      if (cols > 0 && cols <= this.maxCols) {
+        this.$store.commit("module/setActiveColumn", cols - 1);
+      }
+    },
+    settingUpdatedHandler(eventData) {
+      this.setModuleField(eventData);
+    },
     attributeSettingUpdatedHandler(eventData) {
       this.saveModuleAttribute(eventData.name, eventData.value);
     },

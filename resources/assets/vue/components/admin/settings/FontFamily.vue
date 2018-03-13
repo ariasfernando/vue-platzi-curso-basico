@@ -1,5 +1,5 @@
 <template>
-  <settings-container label="Font Family">
+  <settings-container class="field-font-family" label="Font Family">
     <template slot="setting-bottom">
       <el-select
       class="width-full"
@@ -23,7 +23,7 @@
 <script>
 import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
-import SettingsContainer from "./SettingsContainer.vue";
+import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
 
 export default {
   name: "FontFamily",

@@ -57,11 +57,15 @@ function textDefault() {
       [
         {
           name: 'bgcolor',
-          type: 'background-color',
+          type: 'generic-color',
+          link: 'attribute',
+          label: 'Background Color',
         },
         {
           name: 'color',
-          type: 'font-color',
+          type: 'generic-color',
+          link: 'style',
+          label: 'Color',
         },
       ],
       [
