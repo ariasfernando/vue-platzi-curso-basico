@@ -10,7 +10,7 @@ const jsDestinationPath = 'public/js';
 const customerAssetsPath = 'stensul/customer/resources/assets';
 
 function jsAppFilePath(file) {
-  return `js/base/${file}`;
+  return `/js/base/${file}`;
 }
 
 mix.webpackConfig({
