@@ -73,5 +73,6 @@ export default {
 <style lang="less" scoped>
 input.input {
   margin-top: 8px;
+  width: 100%;
 }
 </style>

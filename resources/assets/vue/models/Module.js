@@ -31,6 +31,7 @@ function Module(data = {}) {
     invertedStacking: (data.structure && data.structure.invertedStacking) ? data.structure.invertedStacking : false,
     attribute: {
       bgcolor: attribute.bgcolor || 'transparent',
+      classes: '',
     },
     mobileClasses,
     style: {
