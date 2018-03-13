@@ -9,154 +9,152 @@
 
     <b-collapse id="style" visible accordion="module-settings-accordion-right">
       <b-card class="default-settings">
-        <form class="form-horizontal">
-          <div v-for="(settingGroup, groupKey) in component.componentSettings" class="group-container" :key="groupKey">
-            <component v-for="setting in settingGroup"
-              :is="'input-' + setting.type"
-              @attribute-setting-updated="attributeSettingUpdatedHandler"
-              @style-setting-updated="styleSettingUpdatedHandler"
-              @style-option-setting-updated="styleOptionSettingUpdatedHandler"
-              :setting="setting.type"
-              :name="setting.name"
-              :type="setting.type"
-              :link="setting.link"
-              :label="setting.label"
-              :placeholder="setting.placeholder"
-              :default-value="setting.value"
-              :min-value="setting.minValue"
-              :max-value="setting.maxValue"
-              :element="component"
-              :key="setting.name"></component>
+        <div v-for="(settingGroup, groupKey) in component.componentSettings" class="group-container" :key="groupKey">
+          <component v-for="setting in settingGroup"
+            :is="'input-' + setting.type"
+            @attribute-setting-updated="attributeSettingUpdatedHandler"
+            @style-setting-updated="styleSettingUpdatedHandler"
+            @style-option-setting-updated="styleOptionSettingUpdatedHandler"
+            :setting="setting.type"
+            :name="setting.name"
+            :type="setting.type"
+            :link="setting.link"
+            :label="setting.label"
+            :placeholder="setting.placeholder"
+            :default-value="setting.value"
+            :min-value="setting.minValue"
+            :max-value="setting.maxValue"
+            :element="component"
+            :key="setting.name"></component>
+        </div>
+
+        <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
+
+          <div v-if="!setting.group" >
+            <label class="col-sm-6 control-label" :for="setting.name">{{ setting.label }}</label>
+            <div class="col-sm-6 position-relative content-colorpicker">
+              <!-- Input File -->
+              <input v-if="setting.type === 'file'"
+                      v-validate="'required'"
+                      :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                      :name="setting.name"
+                      type="file"
+                      @change="onFileChange">
+
+              <!-- Input Text -->
+              <el-input
+                v-if="setting.type === 'text'"
+                size="mini"
+                v-model="setting.value"
+                :placeholder="setting.label"
+                @change="(val)=>saveComponent(val, setting)"
+                :class="{'is-danger': errors.has(setting.name) }"
+              ></el-input>
+
+              <el-input-number
+                size="mini" 
+                v-if="setting.type === 'number'"
+                v-model="setting.value"
+                :placeholder="setting.label"
+                @change="(val)=>saveComponent(val, setting)"
+                :class="{'is-danger': errors.has(setting.name) }"
+                :min="0"
+              ></el-input-number>
+
+              <!-- Input select -->
+              <span v-if="setting.type === 'select'">
+                <b-form-select
+                  v-model="setting.value"
+                  :options="setting.options"
+                  @change.native="(evt)=>saveComponentByEvent(evt, setting)">
+                </b-form-select>
+              </span>
+
+              <!-- Input color -->
+              <div @click.prevent="toggleSketch">
+                <input v-if="setting.type === 'color'"
+                        v-validate="'required'"
+                        v-model="setting.value.hex"
+                        type="text"
+                        class="sketchbackground"
+                        :class="{'input': true, 'is-danger': errors.has(setting.name) }"
+                        :placeholder="setting.label"
+                        @click.prevent="toggleSketch"
+                        disabled
+                        @change="(evt)=>saveComponentByEvent(evt, setting)">
+              </div>
+
+              <div v-if="setting.type === 'color'"
+                    class="icon-remove st-remove-sketch"
+                    @click.prevent="toggleSketch"
+              >
+                <i class="glyphicon glyphicon-remove"></i>
+              </div>
+              <sketch-picker v-if="setting.type === 'color'"
+                              v-model="setting.value"
+                              class="sketch-picker"
+                              @click.native="updateColorPickerSetting(setting.name, setting.link, false )"></sketch-picker>
+
+              <!-- Span General Error -->
+              <span v-show="errors.has(setting.name)"
+                    class="help is-danger">{{ errors.first(setting.name) }}
+              </span>
+            </div>
           </div>
 
-          <div class="form-group" :class="'field-' + setting.name" v-for="(setting, key) in component.settings" :key="setting.name">
+          <div v-else>
+            <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
+            <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker"
+                  v-for="(settingGroup, keyGroup) in setting.group" :key="settingGroup.name">
+              <!-- Input Text -->
+              <input v-if="settingGroup.type === 'text'"
+                      :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
+                      :name="settingGroup.name"
+                      :placeholder="settingGroup.label"
+                      v-model="settingGroup.value"
+                      type="text"
+                      v-validate="'required'"
+                      @change="(evt)=>saveComponentByEvent(evt, settingGroup)">
 
-            <div v-if="!setting.group" >
-              <label class="col-sm-6 control-label" :for="setting.name">{{ setting.label }}</label>
-              <div class="col-sm-6 position-relative content-colorpicker">
-                <!-- Input File -->
-                <input v-if="setting.type === 'file'"
+              <!-- Input select -->
+              <span v-if="settingGroup.type === 'select'">
+              <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponentByEvent" >
+                </b-form-select>
+              </span>
+
+              <!-- Input color -->
+              <div @click.prevent="toggleSketch">
+                <input v-if="settingGroup.type === 'color'"
+                        v-model="settingGroup.value.hex"
                         v-validate="'required'"
-                        :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                        :name="setting.name"
-                        type="file"
-                        @change="onFileChange">
-
-                <!-- Input Text -->
-                <el-input
-                  v-if="setting.type === 'text'"
-                  size="mini"
-                  v-model="setting.value"
-                  :placeholder="setting.label"
-                  @change="(val)=>saveComponent(val, setting)"
-                  :class="{'is-danger': errors.has(setting.name) }"
-                ></el-input>
-
-                <el-input-number
-                  size="mini" 
-                  v-if="setting.type === 'number'"
-                  v-model="setting.value"
-                  :placeholder="setting.label"
-                  @change="(val)=>saveComponent(val, setting)"
-                  :class="{'is-danger': errors.has(setting.name) }"
-                  :min="0"
-                ></el-input-number>
-
-                <!-- Input select -->
-                <span v-if="setting.type === 'select'">
-                  <b-form-select
-                    v-model="setting.value"
-                    :options="setting.options"
-                    @change.native="(evt)=>saveComponentByEvent(evt, setting)">
-                  </b-form-select>
-                </span>
-
-                <!-- Input color -->
-                <div @click.prevent="toggleSketch">
-                  <input v-if="setting.type === 'color'"
-                          v-validate="'required'"
-                          v-model="setting.value.hex"
-                          type="text"
-                          class="sketchbackground"
-                          :class="{'input': true, 'is-danger': errors.has(setting.name) }"
-                          :placeholder="setting.label"
-                          @click.prevent="toggleSketch"
-                          disabled
-                          @change="(evt)=>saveComponentByEvent(evt, setting)">
-                </div>
-
-                <div v-if="setting.type === 'color'"
-                      class="icon-remove st-remove-sketch"
-                      @click.prevent="toggleSketch"
-                >
-                  <i class="glyphicon glyphicon-remove"></i>
-                </div>
-                <sketch-picker v-if="setting.type === 'color'"
-                                v-model="setting.value"
-                                class="sketch-picker"
-                                @click.native="updateColorPickerSetting(setting.name, setting.link, false )"></sketch-picker>
-
-                <!-- Span General Error -->
-                <span v-show="errors.has(setting.name)"
-                      class="help is-danger">{{ errors.first(setting.name) }}
-                </span>
-              </div>
-            </div>
-
-            <div v-else>
-              <label class="col-sm-4 control-label" :for="setting.name">{{ setting.label }}</label>
-              <div class="col-sm-3 pull-left row no-gutters input-group-setting position-relative content-colorpicker"
-                    v-for="(settingGroup, keyGroup) in setting.group" :key="settingGroup.name">
-                <!-- Input Text -->
-                <input v-if="settingGroup.type === 'text'"
+                        type="text"
+                        class="sketchbackground"
                         :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
                         :name="settingGroup.name"
                         :placeholder="settingGroup.label"
-                        v-model="settingGroup.value"
-                        type="text"
-                        v-validate="'required'"
-                        @change="(evt)=>saveComponentByEvent(evt, settingGroup)">
-
-                <!-- Input select -->
-                <span v-if="settingGroup.type === 'select'">
-                <b-form-select v-model="settingGroup.value" :name="settingGroup.name" :options="settingGroup.options" @change.native="saveComponentByEvent" >
-                  </b-form-select>
-                </span>
-
-                <!-- Input color -->
-                <div @click.prevent="toggleSketch">
-                  <input v-if="settingGroup.type === 'color'"
-                          v-model="settingGroup.value.hex"
-                          v-validate="'required'"
-                          type="text"
-                          class="sketchbackground"
-                          :class="{'input': true, 'is-danger': errors.has(settingGroup.name) }"
-                          :name="settingGroup.name"
-                          :placeholder="settingGroup.label"
-                          @click.prevent="toggleSketch"
-                          @input="(evt)=>saveComponentByEvent(evt, settingGroup)"
-                          disabled>
-                </div>
-                <div v-if="settingGroup.type === 'color'"
-                      class="icon-remove st-remove-sketch"
-                      @click.prevent="toggleSketch"
-                >
-                  <i class="glyphicon glyphicon-remove"></i>
-                </div>
-                <sketch-picker v-if="settingGroup.type === 'color'"
-                                v-model="settingGroup.value"
-                                class="sketch-picker"
-                                @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
-
-                <!-- Span General Error -->
-                <span v-show="errors.has(settingGroup.name)"
-                      class="help is-danger">{{ errors.first(settingGroup.name) }}
-                </span>
-
+                        @click.prevent="toggleSketch"
+                        @input="(evt)=>saveComponentByEvent(evt, settingGroup)"
+                        disabled>
               </div>
+              <div v-if="settingGroup.type === 'color'"
+                    class="icon-remove st-remove-sketch"
+                    @click.prevent="toggleSketch"
+              >
+                <i class="glyphicon glyphicon-remove"></i>
+              </div>
+              <sketch-picker v-if="settingGroup.type === 'color'"
+                              v-model="settingGroup.value"
+                              class="sketch-picker"
+                              @click.native="updateColorPickerSetting(settingGroup.name, settingGroup.link, true )"></sketch-picker>
+
+              <!-- Span General Error -->
+              <span v-show="errors.has(settingGroup.name)"
+                    class="help is-danger">{{ errors.first(settingGroup.name) }}
+              </span>
+
             </div>
           </div>
-        </form>
+        </div>
       </b-card>
     </b-collapse>
     <!-- END: Style -->
@@ -235,6 +233,7 @@ export default {
     "input-padding": elementSettings.Padding,
     "input-text-align": elementSettings.TextAlign,
     "input-vertical-align": elementSettings.VerticalAlign,
+    "input-class-input": elementSettings.ClassInput,
   },
   computed: {
     currentComponent() {

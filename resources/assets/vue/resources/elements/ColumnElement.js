@@ -28,6 +28,7 @@ function columnDefault() {
       valign: 'middle',
       bgcolor: '',
       hideElement: false,
+      classes: '',
     },
     componentSettings: [
       [
@@ -57,6 +58,11 @@ function columnDefault() {
           value: '100%',
           minValue: 1,
           maxValue: 100,
+        },
+        {
+          name: 'classes',
+          type: 'class-input',
+          link: 'attribute',
         },
       ],
     ],
