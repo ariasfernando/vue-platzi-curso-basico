@@ -111,10 +111,11 @@
 							</tbody>
 						</table>
 					</div>
-
-
-					@if( $logs->lastPage() > 1 && count($logs->lastPage()) )
-						<div class="pagination" data-pages="<?php echo $logs->lastPage(); ?>" <?php echo (isset($defaultDataPagination["view_name"]))? 'data-view="'.$defaultDataPagination["view_name"].'"':''; ?>></div>
+					@if ($logs->lastPage() > 1)
+						<div class="pagination" data-pages="<?php echo $logs->lastPage(); ?>"
+                            <?php echo isset($defaultDataPagination["view_name"])
+                                ? 'data-view="' . $defaultDataPagination["view_name"] . '"' : ''; ?>>
+                        </div>
 					@endif
 				</div>
 			</div>
