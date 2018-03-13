@@ -10,7 +10,7 @@
   >
     <tr 
       data-type="divider-element"
-      :class="getMobileClasses(component,'tr')"
+      :class="getMobileClasses(component,'tr') + component.attribute.classes"
     >
       <td
         class="stx-position-relative stx-line-height-reset"

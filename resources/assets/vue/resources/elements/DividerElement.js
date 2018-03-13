@@ -26,6 +26,7 @@ function dividerDefault() {
       bgcolor: 'transparent',
       width: '100%',
       hideElement: false,
+      classes: '',
     },
     componentSettings: [
       [
@@ -40,6 +41,11 @@ function dividerDefault() {
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
+        },
+        {
+          name: 'classes',
+          type: 'class-input',
+          link: 'attribute',
         },
         {
           name: 'border-group',

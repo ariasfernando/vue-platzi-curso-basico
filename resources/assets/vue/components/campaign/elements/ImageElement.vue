@@ -9,7 +9,7 @@
   >
     <tr 
       data-type="image-element"
-      :class="getMobileClasses(component,'tr')"
+      :class="getMobileClasses(component,'tr') + component.attribute.classes"
     >
       <td 
         width="100%" 

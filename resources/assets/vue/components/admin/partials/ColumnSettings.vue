@@ -16,44 +16,42 @@
             :key="key"
             v-for="(column, key) in module.structure.columns"
           >
-            <div class="form-horizontal">
-              <div v-for="(settingGroup, groupKey) in column.componentSettings" class="group-container" :key="groupKey">
-                <component v-for="setting in settingGroup"
-                  :is="'input-' + setting.type"
-                  v-on:attribute-setting-updated="(eventData)=>attributeSettingUpdatedHandler(eventData, key)"
-                  v-on:style-setting-updated="(eventData)=>styleSettingUpdatedHandler(eventData, key)"
-                  :setting="setting.type"
-                  :name="setting.name"
-                  :type="setting.type"
-                  :link="setting.link"
-                  :label="setting.label"
-                  :placeholder="setting.placeholder"
-                  :default-value="setting.value"
-                  :min-value="setting.minValue"
-                  :max-value="setting.maxValue"
-                  :element="column"
-                  :key="setting.name">
-                </component>
+            <div v-for="(settingGroup, groupKey) in column.componentSettings" class="group-container" :key="groupKey">
+              <component v-for="setting in settingGroup"
+                :is="'input-' + setting.type"
+                v-on:attribute-setting-updated="(eventData)=>attributeSettingUpdatedHandler(eventData, key)"
+                v-on:style-setting-updated="(eventData)=>styleSettingUpdatedHandler(eventData, key)"
+                :setting="setting.type"
+                :name="setting.name"
+                :type="setting.type"
+                :link="setting.link"
+                :label="setting.label"
+                :placeholder="setting.placeholder"
+                :default-value="setting.value"
+                :min-value="setting.minValue"
+                :max-value="setting.maxValue"
+                :element="column"
+                :key="setting.name">
+              </component>
+            </div>
+
+            <!-- Column Settings -->
+            <div :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings" :key="columnSetting.name">
+              
+              <div v-if="!columnSetting.group" >
+                <column-setting-group :column-setting="columnSetting" 
+                                      :column-key="key">
+                </column-setting-group>
+              </div>
+
+              <div v-else>
+                <column-setting-element :column-setting="columnSetting"
+                                        :column-key="key">
+                </column-setting-element>
               </div>
 
               <!-- Column Settings -->
-              <div :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings" :key="columnSetting.name">
-                
-                <div v-if="!columnSetting.group" >
-                  <column-setting-group :column-setting="columnSetting" 
-                                        :column-key="key">
-                  </column-setting-group>
-                </div>
-
-                <div v-else>
-                  <column-setting-element :column-setting="columnSetting"
-                                          :column-key="key">
-                  </column-setting-element>
-                </div>
-
-                <!-- Column Settings -->
-    
-              </div>
+  
             </div>
             <!-- Column Plugins -->
             <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name" :key="plugin.name">
@@ -78,6 +76,7 @@ export default {
     "input-border-group": elementSettings.BorderGroup,
     "input-width": elementSettings.Width,
     "input-generic-color": elementSettings.GenericColor,
+    "input-class-input": elementSettings.ClassInput,
     ColumnSettingGroup,
     ColumnSettingElement
   },
