@@ -83,14 +83,14 @@ module.exports = {
     maxWidth: {
       label: 'Max width',
       key: 'maxWidth',
-      value: '600',
+      value: 600,
       type: 'number',
       hint: 'Applies when width control is enabled',
     },
     minWidth: {
       label: 'Min width',
       key: 'minWidth',
-      value: '20',
+      value: 20,
       type: 'number',
       hint: 'Applies when width control is enabled',
     },
@@ -103,14 +103,14 @@ module.exports = {
     maxHeight: {
       label: 'Max Height',
       key: 'maxHeight',
-      value: '600',
+      value: 600,
       type: 'number',
       hint: 'Applies when height control is enabled',
     },
     minHeight: {
       label: 'Min Height',
       key: 'minHeight',
-      value: '20',
+      value: 20,
       type: 'number',
       hint: 'Applies when width control is enabled',
     },
@@ -148,19 +148,19 @@ module.exports = {
         width: {
           label: 'Width',
           key: 'width',
-          value: '',
+          value: undefined,
           type: 'number',
         },
         height: {
           label: 'Height',
           key: 'height',
-          value: '',
+          value: undefined,
           type: 'number',
         },
         padding: {
           label: 'Padding',
           key: 'padding',
-          value: '',
+          value: undefined,
           type: 'number',
         },
         horizontalAlignment: {

@@ -1,5 +1,5 @@
 <template>
-  <settings-container label="Font Family">
+  <settings-container class="field-font-family" label="Font Family">
     <template slot="setting-bottom">
       <el-select
       class="width-full"
