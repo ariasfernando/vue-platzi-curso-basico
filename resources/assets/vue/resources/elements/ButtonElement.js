@@ -6,7 +6,7 @@ function buttonDefault() {
     },
     style: {
       textAlign: 'center',
-      fontFamily: 'Helvetica, arial, sans-serif',
+      fontFamily: 'Helvetica, Arial, Sans-serif',
       color: '#FFFFFF',
       fontSize: '12px',
       fontWeight: 'normal',

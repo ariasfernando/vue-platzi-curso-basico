@@ -34,12 +34,19 @@ export default {
     return {
       options() {
         const options = [];
-        _.each(this.$_app.config.fonts, group => {
-          _.each(group, font => {
-            options.push({
-              value: font,
-              label: font
-            });
+        _.each(this.$_app.config.fonts, (group, index) => {
+          group.map(font => {
+            if (index === 'custom') {
+              options.push({
+                value: font.name,
+                label: font.name
+              });
+            } else {
+              options.push({
+                value: font,
+                label: font
+              });
+            }
           });
         });
 
