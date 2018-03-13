@@ -4,6 +4,7 @@
          cellpadding="0" 
          border="0"
          align="center"
+        :class="module.structure.attribute.classes" 
   >
     <!-- START: 2 COLUMNS -->
     <tr v-if="module.structure.columns.length > 1">

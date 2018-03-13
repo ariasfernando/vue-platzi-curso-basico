@@ -153,7 +153,8 @@ export default {
     "input-generic-text": elementSettings.GenericText,
     "input-generic-number": elementSettings.GenericNumber,
     "input-padding": elementSettings.Padding,
-    "input-border-group": elementSettings.BorderGroup
+    "input-border-group": elementSettings.BorderGroup,
+    "input-class-input": elementSettings.ClassInput
   },
   data() {
     return {

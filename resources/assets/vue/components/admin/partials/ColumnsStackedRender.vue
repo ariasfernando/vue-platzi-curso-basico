@@ -62,7 +62,7 @@
           :width="column.style && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
     >
       <tr>
-        <td>
+        <td :class="column.attribute.classes">
           <draggable @add="onAdd"
                      :element="'div'" 
                      :options="options" 

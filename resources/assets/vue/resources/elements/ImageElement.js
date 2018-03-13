@@ -24,6 +24,7 @@ function imageDefault() {
       width: '100%',
       height: 'auto',
       hideElement: false,
+      classes: '',
     },
     componentSettings: [
       [
@@ -33,6 +34,11 @@ function imageDefault() {
           name: 'placeholder',
           type: 'generic-file',
           value: 'default/placeholder-square.jpg',
+        },
+        {
+          name: 'classes',
+          type: 'class-input',
+          link: 'attribute',
         },
       ],
       [

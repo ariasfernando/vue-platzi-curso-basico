@@ -26,6 +26,7 @@ function textDefault() {
       align: 'left',
       bgcolor: 'transparent',
       hideElement: false,
+      classes: '',
     },
     componentSettings: [
       [
@@ -52,6 +53,11 @@ function textDefault() {
         {
           name: 'align',
           type: 'text-align',
+        },
+        {
+          name: 'classes',
+          type: 'class-input',
+          link: 'attribute',
         },
       ],
       [

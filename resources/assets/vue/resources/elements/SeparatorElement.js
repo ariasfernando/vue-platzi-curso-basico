@@ -15,12 +15,18 @@ function separatorDefault() {
       bgcolor: 'transparent',
       width: '100%',
       hideElement: false,
+      classes: '',
     },
     componentSettings: [
       [
         {
           name: 'input-height',
           type: 'input-height',
+        },
+        {
+          name: 'classes',
+          type: 'class-input',
+          link: 'attribute',
         },
         {
           name: 'bgcolor',

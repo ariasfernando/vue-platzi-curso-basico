@@ -1,5 +1,6 @@
 import BorderGroup from './BorderGroup.vue';
 import ButtonCaret from './ButtonCaret.vue';
+import ClassInput from './ClassInput.vue';
 import FontFamily from './FontFamily.vue';
 import FontStyle from './FontStyle.vue';
 import FontWeight from './FontWeight.vue';
@@ -18,6 +19,7 @@ import Width from './Width.vue';
 const Settings = {
   BorderGroup,
   ButtonCaret,
+  ClassInput,
   FontFamily,
   FontStyle,
   FontWeight,

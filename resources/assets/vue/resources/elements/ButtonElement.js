@@ -48,6 +48,7 @@ function buttonDefault() {
       href: 'http://stensul.com',
       target: '_blank',
       buttonCaret: undefined,
+      classes: '',
     },
     componentSettings: [
       [
@@ -84,6 +85,11 @@ function buttonDefault() {
         {
           name: 'button-caret',
           type: 'button-caret',
+        },
+        {
+          name: 'classes',
+          type: 'class-input',
+          link: 'attribute',
         },
       ],
       [
