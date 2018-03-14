@@ -51,7 +51,6 @@ describe('== Models ==', () => {
           'style',
           'attribute',
           'settings',
-          'componentSettings',
           'plugins',
           'components',
         ]);
@@ -82,7 +81,6 @@ describe('== Models ==', () => {
           'attribute',
           'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -112,7 +110,6 @@ describe('== Models ==', () => {
           'attribute',
           'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -141,7 +138,6 @@ describe('== Models ==', () => {
           'attribute',
           'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -170,7 +166,6 @@ describe('== Models ==', () => {
           'attribute',
           'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -200,7 +195,6 @@ describe('== Models ==', () => {
           'attribute',
           'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 

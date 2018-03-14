@@ -9,7 +9,7 @@
 
     <b-collapse id="style" visible accordion="module-settings-accordion-right">
       <b-card class="default-settings">
-        <div v-for="(settingGroup, groupKey) in component.componentSettings" class="group-container" :key="groupKey">
+        <div v-for="(settingGroup, groupKey) in settings" class="group-container" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
             @attribute-setting-updated="attributeSettingUpdatedHandler"
@@ -208,6 +208,7 @@ import _ from "lodash";
 import BootstrapVue from "bootstrap-vue";
 import { Sketch } from "vue-color";
 import * as elementSettings from "./settings";
+import settingsDefault from './settingsDefault';
 export default {
   data() {
     return {
@@ -238,6 +239,9 @@ export default {
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
+    },
+    settings() {
+      return settingsDefault[this.component.type]().componentSettings;
     }
   },
   watch: {
