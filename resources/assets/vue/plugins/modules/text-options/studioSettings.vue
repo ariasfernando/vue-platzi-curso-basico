@@ -6,40 +6,37 @@
       </template>
     </settings-container>
 
-      <div class="btn-group" v-if="plugin.enabled">
-        <el-button
-          v-for="(option, name) in plugin.config.options"
-          :class="[option.icon , {'active': option.value}]"
-         :title="option.label"
-          v-b-tooltip.hover
-          :data-tooltip="option.label"
-          size="mini"
-          @click.prevent="toggleOption(name,option.value)"
-          :key="name"
-        ></el-button>
-      </div>
-
-      <settings-container v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" :label="tinySetting.title" :key="key">
+    <div class="btn-group" v-if="plugin.enabled">
+      <el-button
+        v-for="(option, name) in plugin.config.options"
+        :class="[option.icon , {'active': option.value}]"
+        :title="option.label"
+        v-b-tooltip.hover
+        :data-tooltip="option.label"
+        size="mini"
+        @click.prevent="toggleOption(name,option.value)"
+        :key="name"
+      ></el-button>
+    </div>
+    <div class="clearfix" v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" :key="key">
+      <settings-container :label="tinySetting.title" >
         <template slot="setting-right">
               <toggle-button :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
         </template>
-        <!-- Input if config needs it -->
-        <div v-if="isAValidSetting(tinySetting ,key)" class="col-sm-12 control-label">
-          <div class="btn-group">
-            
-            <el-input-number
-            size="mini" 
-            v-b-tooltip.hover
-            :title="key"
-            :name="key"
-            @change="(value)=>changeOption(value, key)"
-            :value="tinySetting.content || 0"
-            :min="0"
-            ></el-input-number>
-          </div>
-        </div>
+      </settings-container>
+      <!-- Input if config needs it -->
+      <div v-if="isAValidSetting(tinySetting ,key)">
+          <el-input-number
+          size="mini" 
+          v-b-tooltip.hover
+          :title="key"
+          :name="key"
+          @change="(value)=>changeOption(value, key)"
+          :value="tinySetting.content || 0"
+          :min="0"
+          ></el-input-number>
       </div>
-    </form>
+    </div>
 
   </div>
 </template>
