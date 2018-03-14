@@ -10,7 +10,7 @@
         <input-generic-text
           label='Module name'
           :element="module"
-          @setting-updated="settingUpdatedHandler"
+          @setting-updated="nameUpdatedHandler"
           placeholder="Module name"
           name='name'>
         </input-generic-text>
@@ -209,6 +209,9 @@ export default {
       if (cols > 0 && cols <= this.maxCols) {
         this.$store.commit("module/setActiveColumn", cols - 1);
       }
+    },
+    nameUpdatedHandler(eventData) {
+      this.setModuleField({ name: eventData.value });
     },
     settingUpdatedHandler(eventData) {
       this.setModuleField(eventData);
