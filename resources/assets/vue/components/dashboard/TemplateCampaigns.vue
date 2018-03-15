@@ -52,11 +52,11 @@
                   title="Favorite"
                   v-html="isFavorite(campaign)"></a>
               </td>
-            <td class="last-modified" :title="campaign.created_by.email">
-              <span>{{campaign.created_at}}</span><br><span class="text-overflow">by {{campaign.created_by.email}}</span>
+            <td class="last-modified">
+              <span>{{campaign.created_at}}</span><br><span class="text-overflow" :title="campaign.created_by.email">by {{campaign.created_by.email}}</span>
             </td>
-            <td class="last-modified" :title="campaign.updated_by.email">
-              <span>{{campaign.updated_at}}</span><br><span class="text-overflow">by {{campaign.updated_by.email}}</span>
+            <td class="last-modified">
+              <span>{{campaign.updated_at}}</span><br><span class="text-overflow" :title="campaign.updated_by.email">by {{campaign.updated_by.email}}</span>
             </td>
             <td :title="campaign.campaign_name">
               <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
