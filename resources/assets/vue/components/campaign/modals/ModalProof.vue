@@ -204,7 +204,7 @@
           if (response.status === 'success') {
             this.campaignData = response.data;
 
-            if (campaignData.proof_id !== null) {
+            if (this.campaignData.proof_id !== null) {
               // If a proof already exists, set the "Start proof from scratch" off
               this.startProof = false;
             }
