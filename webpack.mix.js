@@ -1,3 +1,9 @@
+/*
+ NOTES: .scripts() doesn't work with watch you'll have to run watch again if you're editing legacy 
+ files (E.g. application-globals.js).
+*/
+
+
 const mix = require('laravel-mix');
 const fs = require('fs');
 const _ = require('lodash');
@@ -56,6 +62,9 @@ mix
     `${assetsVuePath}/dashboard.js`,
     `${assetsPath}/js/library/custom-plugins/st-pagination-bar.jquery.js`,
   ], `${jsDestinationPath}/dashboard-components.js`)
+  .js(
+    `${assetsPath}/js/vendor/stensul/media-gallery/media-gallery.js`, 'public/js/media-gallery.js',
+  )
   .scripts([
     `${assetsPath}/js/library/helpers/*.js`,
     `${assetsPath}/js/library/application-utils.js`,
@@ -120,48 +129,14 @@ mix
     `${assetsPath}/js/library/login.js`,
   ], `${jsDestinationPath}/library.js`)
   .scripts([
-    `${assetsPath}js/library/application-proof.js`,
+    `${assetsPath}/js/library/application-proof.js`,
   ], `${jsDestinationPath}/dashboard-proof.js`)
-  .scripts([
-    `${assetsPath}/js/library/custom-plugins/st-pagination-bar.jquery.js`,
-    `${assetsPath}/js/library/campaign-preview.js`,
-    `${assetsPath}/js/library/campaign-manager.js`,
-    `${assetsPath}/js/library/campaign-controller.js`,
-    `${assetsPath}/js/library/dashboard-controller.js`,
-    assetsPath + jsAppFilePath('vue/dashboard.js'),
-    assetsPath + jsAppFilePath('dashboard.js'),
-  ], `${jsDestinationPath}/dashboard.js`)
-  .scripts([
-    assetsPath + jsAppFilePath('proof.js'),
-  ], `${jsDestinationPath}/proof.js`)
   .scripts([
     'node_modules/magnific-popup/dist/jquery.magnific-popup.js',
     `${assetsPath}/js/library/custom-plugins/st-pagination-bar.jquery.js`,
     `${assetsPath}/js/library/admin/*.js`,
     assetsPath + jsAppFilePath('admin.js'),
   ], `${jsDestinationPath}/admin.js`)
-  .scripts([
-    // Transformers
-    `${assetsPath}/js/library/transformers.js`,
-    // Custom Plugins
-    `${assetsPath}/js/library/custom-plugins/st-pagination-bar.jquery.js`,
-    `${assetsPath}/js/library/custom-plugins/st-color-picker.js`,
-    // Configuration Modals [ Deprecated ]
-    `${assetsPath}/js/library/modals/*`,
-    // Library
-    `${assetsPath}/js/library/image-library.js`,
-    `${assetsPath}/js/library/master-image-editor.js`,
-    `${assetsPath}/js/library/master-image-editor.v2.js`,
-    `${assetsPath}/js/library/master-button-editor.js`,
-    `${assetsPath}/js/library/campaign-preview.js`,
-    `${assetsPath}/js/library/module-manager.js`,
-    `${assetsPath}/js/library/modal-manager.js`,
-    `${assetsPath}/js/library/campaign-menu.js`,
-    `${assetsPath}/js/library/image-manager.js`,
-  ], `${jsDestinationPath}/campaign.js`)
-  .scripts(
-    `${assetsPath}/vendor/stensul/media-gallery/media-gallery.js`, 'public/js/media-gallery.js',
-  )
   // .sourceMaps()
   .copyDirectory('node_modules/tinymce/plugins/textcolor', './public/build/js/plugins/tinymce/plugins/textcolor')
   // Bootstrap colorpicker
