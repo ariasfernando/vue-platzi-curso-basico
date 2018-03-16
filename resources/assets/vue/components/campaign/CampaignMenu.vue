@@ -126,13 +126,15 @@
           ? _.find(this.items, (m) => m.name === moduleName)
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
-        const mod = Object.assign({}, found);
+        const mod = clone(found);
         mod.data = {};
 
         this.addModule(mod);
 
       },
-      addModule (mod) {
+      addModule (m) {
+        const mod = clone(m);
+
         // Add module
         this.$store.commit('campaign/addModule', mod);
 
@@ -192,7 +194,7 @@
           ? _.find(this.items, (m) => m.name === moduleName)
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
-        const mod = Object.assign({}, found);
+        const mod = clone(found);
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop
         // an element into email canvas
         cloneEl.addEventListener('click', (e) => {

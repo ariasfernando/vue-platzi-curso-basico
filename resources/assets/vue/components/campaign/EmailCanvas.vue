@@ -190,7 +190,7 @@
           ? _.find(this.items, (m) => m.name === moduleName)
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
-        const mod = Object.assign({}, found);
+        const mod = clone(found);
         mod.data = {};
 
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
