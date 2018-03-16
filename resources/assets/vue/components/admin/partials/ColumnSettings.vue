@@ -67,8 +67,6 @@
 
 
 <script>
-import ColumnSettingGroup from "./ColumnSettingGroup.vue";
-import ColumnSettingElement from "./ColumnSettingElement.vue";
 import * as elementSettings from "../settings";
 export default {
   components: {
@@ -77,8 +75,6 @@ export default {
     "input-width": elementSettings.Width,
     "input-generic-color": elementSettings.GenericColor,
     "input-class-input": elementSettings.ClassInput,
-    ColumnSettingGroup,
-    ColumnSettingElement
   },
   computed: {
     module() {
