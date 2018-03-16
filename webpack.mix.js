@@ -65,6 +65,9 @@ mix
   .js(
     `${assetsPath}/js/vendor/stensul/media-gallery/media-gallery.js`, 'public/js/media-gallery.js',
   )
+  .js(
+    assetsPath + jsAppFilePath('proof.js'), `${jsDestinationPath}/proof.js`,
+  )
   .scripts([
     `${assetsPath}/js/library/helpers/*.js`,
     `${assetsPath}/js/library/application-utils.js`,
