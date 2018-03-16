@@ -4,8 +4,14 @@
     <form class="form-horizontal">
       <div class="form-group">
         <div class="col-sm-5">
-          <span class="st-toogle">
-            <toggle-button :value="component.attribute.hideElement" color="#78DCD6" :sync="true" :labels="true" @change="toggleChange"></toggle-button>
+          <span>
+            <toggle-button
+              color="#78DCD6"
+              :value="component.attribute.hideElement"
+              :sync="true"
+              :labels="true"
+              @change="toggleChange">
+            </toggle-button>
           </span>
         </div>
       </div>
@@ -34,14 +40,14 @@ export default {
       },
     },
     methods: {
-      toggleChange(e) {
+      toggleChange(value) {
         const payload = {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
           attribute: 'hideElement',
-          attributeValue: e.value,
+          attributeValue: value,
         };
 
         this.$store.commit('campaign/saveComponentAttribute', payload);
@@ -55,14 +61,10 @@ export default {
 <style lang="less">
 
 .plugin-wrapper-inner{
-  .form-group{
-
-    margin-bottom: 0px !important;
-
-    .st-toogle{
-      width: 34px !important;
+    span.el-switch__button {
+      display: inherit !important;
+      width: 16px !important;
     }
-  }
 }
 
 </style>

@@ -28,6 +28,7 @@ function campaignStore() {
       showImageEditor: false,
       moduleErrors: [],
       fieldErrors: [],
+      showModuleSettings: false,
     },
     getters: {
       modules(state) {
@@ -73,6 +74,9 @@ function campaignStore() {
       showImageEditor(state) {
         return state.showImageEditor;
       },
+      showModuleSettings(state) {
+        return state.showModuleSettings;
+      },
       locked(state) {
         if (!_.isEmpty(state.campaign)) {
           return state.campaign.campaign_data.locked;
@@ -100,6 +104,9 @@ function campaignStore() {
       },
       setToggleImageEditor(state, stateModal) {
         state.showImageEditor = stateModal;
+      },
+      setToggleModuleSettings(state, toggleValue) {
+        state.showModuleSettings = toggleValue;
       },
       addModule(state, moduleData) {
         state.modules.push(moduleData);

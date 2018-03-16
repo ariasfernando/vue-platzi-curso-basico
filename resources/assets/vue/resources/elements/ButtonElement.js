@@ -42,6 +42,7 @@ function buttonDefault() {
       href: 'http://stensul.com',
       target: '_blank',
       buttonCaret: undefined,
+      hideElement: false,
     },
     componentSettings: ['font-family', 'font-style', 'button-caret'],
     styleOptions: {

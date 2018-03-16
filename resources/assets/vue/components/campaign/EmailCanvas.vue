@@ -282,21 +282,34 @@
         });
       },
       handleActive(e) {
-        const target = $( e.target );
-        if( target.is( "td.stx-draggable-wrapper" )) {
+        const $target = $( e.target );
+        // If it's the email-canvas wrapper
+        if( $target.is( "td.stx-draggable-wrapper" )) {
           // Clear Current module state
           this.$store.commit("campaign/unsetActiveModule");
           this.$store.commit("campaign/unsetCurrentModule");
           this.$store.commit("campaign/unsetCurrentComponent");
           this.$store.commit("campaign/unsetCustomModule");
+          this.$store.commit("campaign/setToggleModuleSettings", false);
         }
         else {
           // Get module ID
-          const moduleId = target.closest(".stx-module-wrapper").find("td").data("module-id");
-          // Set active Module
-          this.$store.commit("campaign/setActiveModule", moduleId);
-          // Clear 3rd column
-          this.$store.commit("campaign/unsetCurrentComponent");
+          const moduleId = $target.closest(".stx-module-wrapper").find("td").data("module-id");
+          // If it's the config gear icon
+          if( $target.hasClass('icon-config') || $target.hasClass("fa-cogs") ) {
+            // Show module settings
+            this.$store.commit("campaign/setToggleModuleSettings", true);
+            // Set current Module
+            this.$store.commit("campaign/setCurrentModule", moduleId);
+          }
+          else {
+            // Hide module settings
+            this.$store.commit("campaign/setToggleModuleSettings", false);
+            // Set active Module
+            this.$store.commit("campaign/setActiveModule", moduleId);
+            // Clear 3rd column
+            this.$store.commit("campaign/unsetCurrentComponent");
+          }
         }
       }
     },
