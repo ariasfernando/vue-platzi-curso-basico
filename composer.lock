@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f7b7c83e836f8c32260d3c87aa5c723f",
+    "content-hash": "db15bb1c7ef5f5bc779718e7c2d9bcca",
     "packages": [
         {
             "name": "akamai-open/edgegrid-auth",
@@ -119,16 +119,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.23",
+            "version": "3.52.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3ce95b96c217a699168d937c4ed700e6a27ec783"
+                "reference": "2ff982460d5c5eb0a57b7c38bd9ad4e9c2f05c86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3ce95b96c217a699168d937c4ed700e6a27ec783",
-                "reference": "3ce95b96c217a699168d937c4ed700e6a27ec783",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2ff982460d5c5eb0a57b7c38bd9ad4e9c2f05c86",
+                "reference": "2ff982460d5c5eb0a57b7c38bd9ad4e9c2f05c86",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-08T22:51:35+00:00"
+            "time": "2018-03-15T19:43:26+00:00"
         },
         {
             "name": "bjeavons/zxcvbn-php",
@@ -1156,16 +1156,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.6.11",
+            "version": "v5.6.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "195ba6a67bdad2a23105c7ab410cd43e0f20bb73"
+                "reference": "82d8165d1ea86bdd81ddfa1db9343fa19e7d1450"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/195ba6a67bdad2a23105c7ab410cd43e0f20bb73",
-                "reference": "195ba6a67bdad2a23105c7ab410cd43e0f20bb73",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/82d8165d1ea86bdd81ddfa1db9343fa19e7d1450",
+                "reference": "82d8165d1ea86bdd81ddfa1db9343fa19e7d1450",
                 "shasum": ""
             },
             "require": {
@@ -1174,7 +1174,7 @@
                 "erusev/parsedown": "~1.7",
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
-                "league/flysystem": "~1.0",
+                "league/flysystem": "^1.0.8",
                 "monolog/monolog": "~1.12",
                 "nesbot/carbon": "^1.24.1",
                 "php": "^7.1.3",
@@ -1290,7 +1290,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-03-09T16:53:27+00:00"
+            "time": "2018-03-14T17:29:38+00:00"
         },
         {
             "name": "laravel/socialite",
@@ -2542,6 +2542,48 @@
             ],
             "description": "Improved functionalities for existing flysystem packages",
             "time": "2018-01-18T00:45:59+00:00"
+        },
+        {
+            "name": "stensul/media-gallery",
+            "version": "2.2",
+            "source": {
+                "type": "git",
+                "url": "git@git.stensuldev.net:composer/media-gallery.git",
+                "reference": "3901aa28d4640a66adadc92a983ee0faf1799516"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.2-952890.zip",
+                "reference": "3901aa28d4640a66adadc92a983ee0faf1799516",
+                "shasum": "d37ddde85a0433a4177745f45ae717acacbe8d58"
+            },
+            "require": {
+                "illuminate/support": "5.6.*",
+                "jenssegers/mongodb": "^3.4",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stensul\\MediaGallery\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Stensul\\MediaGallery\\Tests\\": "tests"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Manuel Zambrano",
+                    "email": "manuel.zambrano@stensul.com"
+                }
+            ],
+            "description": "Media gallery for admin",
+            "time": "2018-03-16T18:10:07+00:00"
         },
         {
             "name": "stensul/php-imageproxy",
@@ -5678,7 +5720,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7"
+        "php": "^7.2"
     },
     "platform-dev": []
 }
