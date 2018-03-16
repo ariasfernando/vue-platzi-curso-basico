@@ -198,6 +198,7 @@ describe('== Models ==', () => {
           'style',
           'styleOptions',
           'attribute',
+          'buttonCaret',
           'settings',
           'plugins',
           'componentSettings',

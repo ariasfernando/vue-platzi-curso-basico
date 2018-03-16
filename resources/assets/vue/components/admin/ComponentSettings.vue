@@ -24,7 +24,8 @@
             :default-value="setting.value"
             :min-value="setting.minValue"
             :max-value="setting.maxValue"
-            :element="component"
+            :sub-component="setting.subComponent"
+            :element="setting.subComponent ? component[setting.subComponent] : component"
             :key="setting.name"></component>
         </div>
 
@@ -335,37 +336,16 @@ export default {
       }
     },
 
-    saveComponentStyle(name, value) {
-      const data = {
+    saveComponentProperty(type, subComponent, name, value) {
+      let data = {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
+        subComponent: subComponent,
+        type: type,
         property: name,
         value: value
       };
-
-      this.$store.commit("module/saveComponentStyle", data);
-    },
-
-    saveComponentAttribute(name, value) {
-      const data = {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: name,
-        value: value
-      };
-
-      this.$store.commit("module/saveComponentAttribute", data);
-    },
-
-    saveComponentStyleOption(name, value) {
-      const data = {
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        property: name,
-        value: value
-      };
-
-      this.$store.commit("module/saveComponentStyleOption", data);
+      this.$store.commit('module/saveComponentProperty', data);
     },
 
     // TODO Update date used mutation.
@@ -400,13 +380,13 @@ export default {
       return _.indexOf(plugin.target, "styles") >= 0;
     },
     attributeSettingUpdatedHandler(eventData) {
-      this.saveComponentAttribute(eventData.name, eventData.value);
+      this.saveComponentProperty('attribute', eventData.subComponent, eventData.name, eventData.value);
     },
     styleSettingUpdatedHandler(eventData) {
-      this.saveComponentStyle(eventData.name, eventData.value);
+      this.saveComponentProperty('style', eventData.subComponent, eventData.name, eventData.value);
     },
     styleOptionSettingUpdatedHandler(eventData) {
-      this.saveComponentStyleOption(eventData.name, eventData.value);
+      this.saveComponentProperty('styleOptions', eventData.subComponent, eventData.name, eventData.value);
     }
   }
 };

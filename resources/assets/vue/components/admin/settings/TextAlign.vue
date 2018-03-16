@@ -16,7 +16,7 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "TextAlign",
-  props: ["setting", "element"],
+  props: ["setting", "element", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
@@ -31,6 +31,7 @@ export default {
       },
       set: function(newValue) {
         this.$emit("attribute-setting-updated", {
+          subComponent: this.subComponent,
           name: this.name,
           value: newValue
         });

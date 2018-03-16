@@ -35,10 +35,18 @@
                 :style="[component.style, {'vertical-align' : component.attribute.valign}]"
             >
                 <tiny-mce :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
-                <img v-if="component.attribute.buttonCaret"
-                   :src="$_app.config.imageUrl + component.attribute.buttonCaret"
-                   width="10"
-                   height="10">
+                <img
+                  v-if="component.buttonCaret.attribute.url"
+                  :src="$_app.config.imageUrl + component.buttonCaret.attribute.url"
+                  :style="[component.buttonCaret.style, { 'vertical-align': component.buttonCaret.style.valign}]"
+                  :bgcolor="component.buttonCaret.attribute.bgcolor"
+                  :width="component.buttonCaret.attribute.width"
+                  :height="component.buttonCaret.attribute.height"
+                  :valign="component.buttonCaret.attribute.valign"
+                  :align="component.buttonCaret.attribute.align"
+                  :class="component.buttonCaret.attribute.classes"
+                  style="display: inline-block !important;"
+                  >
                 <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
             </td>
           </tr>

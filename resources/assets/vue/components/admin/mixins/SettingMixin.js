@@ -28,6 +28,7 @@ export default {
       set(newValue) {
         const type = this.link ? `${this.link}-` : '';
         this.$emit(`${type}setting-updated`, {
+          subComponent: this.subComponent,
           name: this.name,
           value: newValue,
         });

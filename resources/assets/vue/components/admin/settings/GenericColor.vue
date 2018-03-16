@@ -21,7 +21,7 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "GenericColor",
-  props: ["element", "name", "type", "link", "label"],
+  props: ["element", "name", "type", "link", "label", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   computed: {

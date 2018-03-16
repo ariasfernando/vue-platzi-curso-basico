@@ -33,7 +33,7 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "padding",
-  props: ["setting", "element"],
+  props: ["setting", "element", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
@@ -71,6 +71,7 @@ export default {
     changeValue(val, styleName) {
       val = isNaN(val) || val < this.min ? this.min : val;
       this.$emit("style-setting-updated", {
+        subComponent: this.subComponent,
         name: styleName,
         value: `${val}px`
       });

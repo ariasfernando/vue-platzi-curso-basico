@@ -47,8 +47,28 @@ function buttonDefault() {
       bgcolor: '#514960',
       href: 'http://stensul.com',
       target: '_blank',
-      buttonCaret: undefined,
       classes: '',
+    },
+    buttonCaret: {
+      attribute: {
+        url: undefined,
+        width: '10',
+        height: '10',
+        align: undefined,
+        valign: 'middle',
+        bgcolor: '',
+        classes: '',
+      },
+      style: {
+        paddingTop: '0',
+        paddingBottom: '0',
+        paddingRight: '0',
+        paddingLeft: '0',
+      },
+      styleOptions: {
+        isBlockHeight: false,
+        isPxWidth: true,
+      },
     },
     componentSettings: [
       [
@@ -87,12 +107,46 @@ function buttonDefault() {
           type: 'button-caret',
         },
         {
+          name: 'image-size',
+          type: 'image-size',
+          subComponent: 'buttonCaret',
+          minValue: 5,
+        },
+        {
+          name: 'text-align',
+          type: 'text-align',
+          subComponent: 'buttonCaret',
+        },
+        {
+          name: 'vertical-align',
+          type: 'vertical-align',
+          subComponent: 'buttonCaret',
+        },
+        {
+          name: 'classes',
+          type: 'class-input',
+          link: 'attribute',
+          subComponent: 'buttonCaret',
+        },
+        {
+          name: 'bgcolor',
+          type: 'generic-color',
+          link: 'attribute',
+          label: 'Background Color',
+          subComponent: 'buttonCaret',
+        },
+        {
+          name: 'padding',
+          type: 'padding',
+          subComponent: 'buttonCaret',
+        },
+      ],
+      [
+        {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
         },
-      ],
-      [
         {
           name: 'bgcolor',
           type: 'generic-color',

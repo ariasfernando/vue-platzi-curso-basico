@@ -66,9 +66,6 @@ const mutations = {
     const update = { ...state.module.structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
     state.module.structure.columns[payload.columnId].components[payload.componentId].data = update;
   },
-  saveComponent(state, data) {
-    state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
-  },
   saveModuleSetting(state, data) {
     state.module.structure.style = data.style;
   },
@@ -132,23 +129,12 @@ const mutations = {
       state.module.plugins[data.plugin].enabled = data.enabled;
     }
   },
-  saveComponentStyle(state, data) {
-    const style = state.module.structure.columns[data.columnId].components[data.componentId].style;
-    const newStyle = {};
-    newStyle[data.property] = data.value;
-    _.merge(style, newStyle);
-  },
-  saveComponentStyleOption(state, data) {
-    const styleOptions = state.module.structure.columns[data.columnId].components[data.componentId].styleOptions;
-    const newStyleOptions = {};
-    newStyleOptions[data.property] = data.value;
-    _.merge(styleOptions, newStyleOptions);
-  },
-  saveComponentAttribute(state, data) {
-    const attribute = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
+  saveComponentProperty(state, data) {
+    const component = state.module.structure.columns[data.columnId].components[data.componentId];
+    const property = data.subComponent ? component[data.subComponent][data.type] : component[data.type];
     const newAttr = {};
     newAttr[data.property] = data.value;
-    _.merge(attribute, newAttr);
+    _.merge(property, newAttr);
   },
   setActiveColumn(state, columnId) {
     state.activeColumn = columnId;

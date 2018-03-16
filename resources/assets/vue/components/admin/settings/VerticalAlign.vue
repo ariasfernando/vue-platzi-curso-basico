@@ -14,7 +14,7 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "VerticalAlign",
-  props: ["setting", "element"],
+  props: ["setting", "element", "subComponent"],
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
   data() {
@@ -28,7 +28,7 @@ export default {
         return this.element.attribute[this.name];
       },
       set: function(newValue) {
-        this.$emit("attribute-setting-updated", { name: this.name, value: newValue });
+        this.$emit("attribute-setting-updated", { subComponent: this.subComponent, name: this.name, value: newValue });
       }
     }
   },

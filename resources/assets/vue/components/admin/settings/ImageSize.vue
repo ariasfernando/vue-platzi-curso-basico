@@ -56,12 +56,12 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "ImageSize",
-  props: ["setting", "element"],
+  props: ["setting", "element", "subComponent","minValue"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
-      min: 10
+      min: this.minValue ? this.minValue : 10
     };
   },
   computed: {
@@ -71,6 +71,7 @@ export default {
       },
       set(value){
         this.$emit("style-option-setting-updated", {
+          subComponent: this.subComponent,
           name: 'isBlockHeight',
           value: value
         });
@@ -82,6 +83,7 @@ export default {
       },
       set(value){
         this.$emit("style-option-setting-updated", {
+          subComponent: this.subComponent,
           name: 'isPxWidth',
           value: value
         });
@@ -95,6 +97,7 @@ export default {
         value = isNaN(value) || value < this.min ? this.min : value;
         value = this.isPxWidth ? `${value}` :`${value}%`;
         this.$emit("attribute-setting-updated", {
+          subComponent: this.subComponent,
           name: 'width',
           value: value
         });
@@ -105,9 +108,10 @@ export default {
           return this.element.attribute['height'] === "auto" ? "auto" : _.parseInt(this.element.attribute['height']);        
       },
       set(value){
-        value = isNaN(value) || value < this.min ? this.min : value;
-        value = this.isPxWidth ? `${value}%`: `${value}`;
+        value = (isNaN(value) || value < this.min) && value !== "auto" ? this.min : value;
+        value = `${value}`;
         this.$emit("attribute-setting-updated", {
+          subComponent: this.subComponent,
           name: 'height',
           value: value
         });

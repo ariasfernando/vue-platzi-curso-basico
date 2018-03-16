@@ -17,17 +17,18 @@ export default {
   components: { SettingsContainer },
   data() {
     return {
-      name: "buttonCaret"
+      name: "url",
+      subComponent: "buttonCaret"
     };
   },
   computed: {
     buttonCaret() {
-      return this.element.attribute[this.name];
+      return this.element.buttonCaret.attribute[this.name];
     }
   },
   methods: {
     resetImage() {
-      this.$emit("attribute-setting-updated", { name: this.name, value: "" });
+      this.$emit("attribute-setting-updated", {subComponent: this.subComponent, name: this.name, value: undefined });
     },
     onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files;
@@ -61,7 +62,7 @@ export default {
       tmp.src = this.$_app.config.imageUrl + e;
 
       tmp.onload = () => {
-        this.$emit("attribute-setting-updated", { name: this.name, value: e });
+        this.$emit("attribute-setting-updated", { subComponent: this.subComponent, name: this.name, value: e });
       };
 
       tmp.onerror = () => {
