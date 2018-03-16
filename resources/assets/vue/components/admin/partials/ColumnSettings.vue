@@ -16,7 +16,7 @@
             :key="key"
             v-for="(column, key) in module.structure.columns"
           >
-            <div v-for="(settingGroup, groupKey) in column.componentSettings" class="group-container" :key="groupKey">
+            <group-container v-for="(settingGroup, groupKey) in column.componentSettings" :key="groupKey">
               <component v-for="setting in settingGroup"
                 :is="'input-' + setting.type"
                 v-on:attribute-setting-updated="(eventData)=>attributeSettingUpdatedHandler(eventData, key)"
@@ -33,7 +33,7 @@
                 :element="column"
                 :key="setting.name">
               </component>
-            </div>
+            </group-container>
 
             <!-- Column Settings -->
             <div :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings" :key="columnSetting.name">
@@ -68,8 +68,10 @@
 
 <script>
 import * as elementSettings from "../settings";
+import GroupContainer from "../containers/GroupContainer.vue";
 export default {
   components: {
+    GroupContainer,
     "input-padding": elementSettings.Padding,
     "input-border-group": elementSettings.BorderGroup,
     "input-width": elementSettings.Width,

@@ -9,7 +9,7 @@
 
     <b-collapse id="style" visible accordion="module-settings-accordion-right">
       <b-card class="default-settings">
-        <div v-for="(settingGroup, groupKey) in component.componentSettings" class="group-container" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in component.componentSettings" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
             @attribute-setting-updated="attributeSettingUpdatedHandler"
@@ -27,7 +27,7 @@
             :sub-component="setting.subComponent"
             :element="setting.subComponent ? component[setting.subComponent] : component"
             :key="setting.name"></component>
-        </div>
+        </group-container>
       </b-card>
     </b-collapse>
     <!-- END: Style -->
@@ -79,6 +79,7 @@
 <script>
 import _ from "lodash";
 import * as elementSettings from "./settings";
+import GroupContainer from "./containers/GroupContainer.vue";
 export default {
   data() {
     return {
@@ -87,6 +88,7 @@ export default {
     };
   },
   components: {
+    GroupContainer,
     "input-border-group": elementSettings.BorderGroup,
     "input-button-caret": elementSettings.ButtonCaret,
     "input-font-family": elementSettings.FontFamily,

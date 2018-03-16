@@ -22,7 +22,7 @@
           :max-value="8"
           name='length'>
         </input-generic-number>
-        <div v-for="(settingGroup, groupKey) in module.structure.componentSettings" class="group-container" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in module.structure.componentSettings" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
             v-on:attribute-setting-updated="attributeSettingUpdatedHandler"
@@ -39,7 +39,7 @@
             :element="module.structure"
             :key="setting.name">
           </component>
-        </div>
+        </group-container>
         <div class="row" v-if="module.plugins && Object.keys(module.plugins).length !== 0">
           <div class="col-sm-12">
             <div>
@@ -86,13 +86,12 @@
 </template>
 
 <script>
-import { Sketch } from "vue-color";
-import BootstrapVue from "bootstrap-vue";
 import * as elementSettings from "../settings";
+import GroupContainer from "../containers/GroupContainer.vue";
 
 export default {
   components: {
-    BootstrapVue,
+    GroupContainer,
     "input-generic-color": elementSettings.GenericColor,
     "input-generic-text": elementSettings.GenericText,
     "input-generic-number": elementSettings.GenericNumber,

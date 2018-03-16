@@ -431,13 +431,6 @@ export default {
     overflow-y: visible;
   }
 
-  .group-container {
-    border: 1px solid #e6e6e6;
-    padding: 4px 6px 0 6px;
-    margin: 5px 0;
-    background: #f9f9f9;
-    border-radius: 3px;
-  }
   .module-table {
     min-height: 100px;
   }
