@@ -149,7 +149,6 @@ mix
   .copyDirectory(`${customerAssetsPath}/fonts`, 'public/fonts')
   .copyDirectory('public/fonts', 'public/build/fonts')
   // .copyDirectory('public/images', 'public/build/images')
-  .copyDirectory('node_modules/element-ui/lib/theme-chalk/fonts', 'public/build/css/fonts')
   .version()
   .then(() => {
     const revManifest = './public/build/rev-manifest.json';

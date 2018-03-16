@@ -18,7 +18,7 @@
     "cropit": "~0.5.1",
     "del": "^3.0.0",
     "dotenv": "^4.0.0",
-    "element-ui": "^2.0.11",
+    "element-ui": "^2.2.2",
     "elixir-jshint": "^1.2.3",
     "font-awesome": "^4.7.0",
     "fs": "0.0.1-security",
