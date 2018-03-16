@@ -62,12 +62,8 @@ mix
     `${assetsVuePath}/dashboard.js`,
     `${assetsPath}/js/library/custom-plugins/st-pagination-bar.jquery.js`,
   ], `${jsDestinationPath}/dashboard-components.js`)
-  .js(
-    `${assetsPath}/js/vendor/stensul/media-gallery/media-gallery.js`, 'public/js/media-gallery.js',
-  )
-  .js(
-    assetsPath + jsAppFilePath('proof.js'), `${jsDestinationPath}/proof.js`,
-  )
+  .js(`${assetsPath}/js/vendor/stensul/media-gallery/media-gallery.js`, 'public/js/media-gallery.js')
+  .js(assetsPath + jsAppFilePath('proof.js'), `${jsDestinationPath}/proof.js`)
   .scripts([
     `${assetsPath}/js/library/helpers/*.js`,
     `${assetsPath}/js/library/application-utils.js`,
