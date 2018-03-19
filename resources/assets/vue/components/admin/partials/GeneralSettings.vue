@@ -18,7 +18,7 @@
           :max-value="8"
           name='length'>
         </input-generic-number>
-        <group-container v-for="(settingGroup, groupKey) in module.structure.componentSettings" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
             v-on:attribute-setting-updated="attributeSettingUpdatedHandler"
@@ -70,6 +70,7 @@ import * as elementSettings from "../settings";
 import GroupContainer from "../containers/GroupContainer.vue";
 import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
 import LabelItemContainer from "../containers/LabelItemContainer.vue";
+import settingsDefault from '../settingsDefault';
 
 export default {
   components: {
@@ -91,6 +92,9 @@ export default {
   computed: {
     module() {
       return this.$store.getters["module/module"];
+    },
+    settings() {
+      return settingsDefault.Module().componentSettings;
     }
   },
   methods: {

@@ -57,27 +57,6 @@ function Module(data = {}) {
       borderLeftStyle: style.borderLeftStyle || 'none',
       borderLeftColor: style.borderLeftColor || 'transparent',
     },
-    componentSettings: [
-      [
-        {
-          name: 'bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Background Color',
-        },
-      ],
-      [
-        {
-          name: 'padding',
-          type: 'padding',
-        },
-        {
-          name: 'border-group',
-          type: 'border-group',
-        },
-      ],
-    ],
-    settings: [],
 
     columns: data.structure && data.structure.columns ? data.structure.columns : [],
   };

@@ -13,7 +13,7 @@
             :key="key"
             v-for="(column, key) in module.structure.columns"
           >
-            <group-container v-for="(settingGroup, groupKey) in column.componentSettings" :key="groupKey">
+            <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
               <component v-for="setting in settingGroup"
                 :is="'input-' + setting.type"
                 v-on:attribute-setting-updated="(eventData)=>attributeSettingUpdatedHandler(eventData, key)"
@@ -67,6 +67,7 @@
 import * as elementSettings from "../settings";
 import GroupContainer from "../containers/GroupContainer.vue";
 import LabelItemContainer from "../containers/LabelItemContainer.vue";
+import settingsDefault from '../settingsDefault';
 export default {
   components: {
     GroupContainer,
@@ -83,6 +84,9 @@ export default {
     },
     activeColumn() {
       return this.$store.getters["module/activeColumn"];
+    },
+    settings() {
+      return settingsDefault[this.component.type]().componentSettings;
     }
   },
   methods: {

@@ -6,7 +6,7 @@
     <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
     <b-collapse id="style" visible accordion="module-settings-accordion-right">
       <b-card class="default-settings">
-        <group-container v-for="(settingGroup, groupKey) in component.componentSettings" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
             @attribute-setting-updated="attributeSettingUpdatedHandler"
@@ -70,6 +70,7 @@ import _ from "lodash";
 import * as elementSettings from "./settings";
 import GroupContainer from "./containers/GroupContainer.vue";
 import LabelItemContainer from "./containers/LabelItemContainer.vue";
+import settingsDefault from './settingsDefault';
 export default {
   data() {
     return {
@@ -100,6 +101,9 @@ export default {
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
+    },
+    settings() {
+      return settingsDefault[this.component.type]().componentSettings;
     }
   },
   watch: {

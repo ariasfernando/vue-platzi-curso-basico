@@ -50,8 +50,6 @@ describe('== Models ==', () => {
           'type',
           'style',
           'attribute',
-          'settings',
-          'componentSettings',
           'plugins',
           'components',
         ]);
@@ -80,9 +78,7 @@ describe('== Models ==', () => {
           'style',
           'styleOptions',
           'attribute',
-          'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -110,9 +106,7 @@ describe('== Models ==', () => {
           'style',
           'styleOptions',
           'attribute',
-          'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -139,9 +133,7 @@ describe('== Models ==', () => {
           'type',
           'style',
           'attribute',
-          'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -168,9 +160,7 @@ describe('== Models ==', () => {
           'type',
           'style',
           'attribute',
-          'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -199,9 +189,7 @@ describe('== Models ==', () => {
           'styleOptions',
           'attribute',
           'buttonCaret',
-          'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
