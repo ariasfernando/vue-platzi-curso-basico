@@ -19,6 +19,10 @@ export default {
   border-left: 0;
   border-right: 0;
   padding: 15px 10px 13px 10px;
+  p,i{
+    transition: color 0.3s, transform 0.3s;
+  }
+  
   p {
     font-size: 13px;
     margin: 0;

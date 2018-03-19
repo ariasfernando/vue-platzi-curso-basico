@@ -515,33 +515,6 @@ export default {
     display: block;
     float: left;
     padding: 0px;
-    label {
-      text-align: left;
-      color: #666666;
-      font-weight: 300;
-      padding: 10px 0 5px;
-      font-size: 12px;
-      width: 100%;
-      float: left;
-      margin-bottom: 0;
-      &.half {
-        width: 50%;
-      }
-    }
-    .half-style-setting {
-      width: 50%;
-      float: left;
-      position: relative;
-      &+.half-style-setting{
-        padding-left: 15px;
-      }
-      &.padding-top{
-        padding-top: 5px;
-      }
-      &.float-right{
-        float: right;
-      }
-    }
     .btn.btn-secondary.btn-block {
       &:hover,
       &:visited,
