@@ -47,6 +47,8 @@
         <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave">Auto Save</label>
           <toggle-button :value="campaign.auto_save" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange" :disabled="campaign.locked"></toggle-button>
+          <label v-if="!secondaryLoading" class="autosave-message">last saved: {{this.campaign.updated_at}}</label>
+          <secondary-spinner></secondary-spinner>
         </div>
 
         <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
@@ -87,10 +89,12 @@
   import _ from 'lodash'
   import Multiselect from 'vue-multiselect';
   import ToggleButton from '../../plugins/common/toggle-button'
+  import secondarySpinner from '../common/secondarySpinner.vue'
 
   export default {
     components: {
-      Multiselect
+      Multiselect,
+      secondarySpinner
     },
     name: 'CampaignConfiguration',
     data () {
@@ -129,7 +133,10 @@
       },
       enableFavorite() {
         return this.campaign.template && Application.globals.permissions.indexOf('access_favorites') >= 0;
-      }
+      },
+      secondaryLoading() {
+        return this.$store.state.global.secondaryLoading
+      },
     },
 
     created () {
@@ -311,6 +318,15 @@
 
   .menu-campaign {
     -ms-user-select: none !important;
+
+    .autosave-message{
+      font-size: 10px;
+      font-style: italic;
+      float: right;
+      vertical-align: middle;
+      line-height: 18px;
+      margin: 0
+    }
 
     ::-webkit-input-placeholder {
       color: #CCCCCC;
