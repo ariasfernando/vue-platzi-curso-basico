@@ -29,22 +29,19 @@ class ConfigureLogging extends DefaultConfigureLogging
     protected function configureCentralizedLogger(Application $app, Logger $log)
     {
         if (strlen(env('LOG_SERVER_HOST'))) {
-
             if (env('LOG_SERVER_TRANSPORT', 'udp') == 'http') {
                 // HTTP transport for distributed
                 $transport = new IgnoreErrorTransportWrapper(
                     HttpTransport::fromUrl(env('LOG_SERVER_HOST') . ':' . env('LOG_SERVER_PORT', null) . env('LOG_SERVER_HTTP_PATH'))
                 );
-
-            }
-            else {
+            } else {
                 // use the UDP transport to fire and forget
                 $transport = new IgnoreErrorTransportWrapper(
                     new UdpTransport(env('LOG_SERVER_HOST'), env('LOG_SERVER_PORT'), UdpTransport::CHUNK_SIZE_LAN)
                 );
             }
 
-            $log->getMonolog()->pushHandler(new GelfHandler(new Publisher($transport)));                     
+            $log->getMonolog()->pushHandler(new GelfHandler(new Publisher($transport)));
         }
     }
 
