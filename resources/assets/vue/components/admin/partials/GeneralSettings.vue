@@ -1,10 +1,6 @@
 <template>
   <div class="form-horizontal height-custom">
-    <b-btn block v-b-toggle.module-settings-left class="module-settings-item">
-      <p class="pull-left"><i class="glyphicon glyphicon-cog"></i> GENERAL SETTINGS</p>
-      <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
-    </b-btn>
-
+    <label-item-container label="GENERAL SETTINGS" icon="glyphicon-cog" v-b-toggle.module-settings-left></label-item-container>
     <b-collapse id="module-settings-left" visible accordion="module-settings-accordion">
       <b-card class="control" >
         <input-generic-text
@@ -88,10 +84,12 @@
 <script>
 import * as elementSettings from "../settings";
 import GroupContainer from "../containers/GroupContainer.vue";
+import labelItemContainer from "../containers/labelItemContainer.vue";
 
 export default {
   components: {
     GroupContainer,
+    labelItemContainer,
     "input-generic-color": elementSettings.GenericColor,
     "input-generic-text": elementSettings.GenericText,
     "input-generic-number": elementSettings.GenericNumber,

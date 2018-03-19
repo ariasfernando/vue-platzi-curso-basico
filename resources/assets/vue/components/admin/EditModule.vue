@@ -555,42 +555,6 @@ export default {
       margin-right: 12px;
     }
 
-    button.module-settings-item {
-      line-height: 13px;
-      box-shadow: none;
-      border-bottom: 1px solid #f0f0f0;
-      border-top: 0;
-      border-left: 0;
-      border-right: 0;
-      padding: 15px 10px 13px 10px;
-
-      &:hover,
-      &:visited,
-      &:focus,
-      &:active,
-      &:active:focus {
-        color: #666666;
-        outline: none;
-        box-shadow: none;
-      }
-      p {
-        font-size: 13px;
-        margin: 0;
-        padding: 0;
-        font-weight: 300;
-
-        i {
-          color: #666666;
-          vertical-align: baseline !important;
-          transform: rotate(0deg);
-          margin-right: 2px;
-        }
-      }
-      i {
-        color: #cccccc;
-        line-height: 12px !important;
-      }
-    }
     .components-list {
       padding: 0;
       margin: 0;

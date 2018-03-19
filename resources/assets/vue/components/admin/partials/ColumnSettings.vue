@@ -1,9 +1,6 @@
 <template>
   <div>
-    <b-btn block v-b-toggle.column-settings class="module-settings-item">
-      <p class="pull-left"><i class="glyphicon glyphicon-pause"></i> COLUMN SETTINGS</p>
-      <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
-    </b-btn>
+    <label-item-container label="COLUMN SETTINGS" icon="glyphicon-pause"  v-b-toggle.column-settings></label-item-container>
 
     <b-collapse id="column-settings" accordion="module-settings-accordion">
       <b-card class="control" no-block>
@@ -69,9 +66,11 @@
 <script>
 import * as elementSettings from "../settings";
 import GroupContainer from "../containers/GroupContainer.vue";
+import labelItemContainer from "../containers/labelItemContainer.vue";
 export default {
   components: {
     GroupContainer,
+    labelItemContainer,
     "input-padding": elementSettings.Padding,
     "input-border-group": elementSettings.BorderGroup,
     "input-width": elementSettings.Width,

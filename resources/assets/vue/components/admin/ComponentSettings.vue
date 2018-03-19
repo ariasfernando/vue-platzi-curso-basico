@@ -2,11 +2,8 @@
   <div class="component-settings height-custom" v-if="ready">
 
     <!-- START: Style -->
-    <b-btn block v-b-toggle.style class="module-settings-item">
-      <p class="pull-left"><i class="glyphicon glyphicon-pencil"></i> STYLES</p>
-      <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
-    </b-btn>
 
+    <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
     <b-collapse id="style" visible accordion="module-settings-accordion-right">
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in component.componentSettings" :key="groupKey">
@@ -33,11 +30,7 @@
     <!-- END: Style -->
 
     <!-- START: Funcionalities -->
-    <b-btn block v-b-toggle.funcionalities class="module-settings-item">
-      <p class="pull-left"><i class="glyphicon glyphicon-tasks"></i> FUNCTIONALITIES</p>
-      <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
-    </b-btn>
-
+    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.funcionalities></label-item-container>
     <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
         <div
@@ -54,11 +47,7 @@
     <!-- END: Funcionalities -->
 
     <!-- START: Mobile Settings -->    
-    <b-btn block v-b-toggle.mobile class="module-settings-item">
-      <p class="pull-left"><i class="glyphicon glyphicon-tasks"></i> MOBILE</p>
-      <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
-    </b-btn>
-
+    <label-item-container label="MOBILE" icon="glyphicon-tasks" v-b-toggle.mobile></label-item-container>
     <b-collapse id="mobile" accordion="module-settings-accordion-right">
       <b-card class="plugins">
         <div
@@ -80,6 +69,7 @@
 import _ from "lodash";
 import * as elementSettings from "./settings";
 import GroupContainer from "./containers/GroupContainer.vue";
+import labelItemContainer from "./containers/labelItemContainer.vue";
 export default {
   data() {
     return {
@@ -89,6 +79,7 @@ export default {
   },
   components: {
     GroupContainer,
+    labelItemContainer,
     "input-border-group": elementSettings.BorderGroup,
     "input-button-caret": elementSettings.ButtonCaret,
     "input-font-family": elementSettings.FontFamily,

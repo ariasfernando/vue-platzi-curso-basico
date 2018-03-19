@@ -49,6 +49,7 @@
                   :width="component.buttonCaret.attribute.width"
                   :height="component.buttonCaret.attribute.height"
                   :valign="component.buttonCaret.attribute.valign"
+                  :align="component.buttonCaret.attribute.align"
                   :class="component.buttonCaret.attribute.classes"
                   style="display: inline-block !important;"
                   >
