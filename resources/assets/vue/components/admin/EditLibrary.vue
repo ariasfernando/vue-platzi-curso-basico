@@ -21,7 +21,7 @@
       <section v-if="ready" class="container">
         <div class="simple-text-config admin-library-form">
           <div class="row">
-            <div class="col-xs-offset-1 col-xs-10">
+            <div class="col-xs-12">
                   <div v-if="$route.query.debug" class="col-xs-12">
                     <br><br>
                     <pre>{{ library.config }}</pre>

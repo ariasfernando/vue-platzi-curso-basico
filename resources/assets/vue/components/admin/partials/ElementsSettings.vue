@@ -39,11 +39,11 @@
 
 <script>
   import Draggable from 'vuedraggable';
-  import labelItemContainer from "../containers/labelItemContainer.vue";
+  import LabelItemContainer from "../containers/LabelItemContainer.vue";
   
   export default {
     components: {
-      labelItemContainer,
+      LabelItemContainer,
       Draggable
     },
 

@@ -6,7 +6,7 @@
 </template>
 <script>
 export default {
-  name: "labelItemContainer",
+  name: "LabelItemContainer",
   props: ["customClass", "icon", "label"]
 };
 </script>

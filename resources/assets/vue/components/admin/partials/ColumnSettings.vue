@@ -66,11 +66,11 @@
 <script>
 import * as elementSettings from "../settings";
 import GroupContainer from "../containers/GroupContainer.vue";
-import labelItemContainer from "../containers/labelItemContainer.vue";
+import LabelItemContainer from "../containers/LabelItemContainer.vue";
 export default {
   components: {
     GroupContainer,
-    labelItemContainer,
+    LabelItemContainer,
     "input-padding": elementSettings.Padding,
     "input-border-group": elementSettings.BorderGroup,
     "input-width": elementSettings.Width,

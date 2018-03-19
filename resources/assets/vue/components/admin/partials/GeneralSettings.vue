@@ -49,33 +49,17 @@
         </div>
 
         <!-- Fixed Columns  -->
-        <div v-if="module.structure.columns.length > 1" class="row-toggle">
-          <form class="form-horizontal">
-            <div class="form-group">
-              <label class="half"><b>Fixed Columns</b></label>
-              <div class="half-style-setting padding-top">
-                <span>
-                  <toggle-button :value="module.structure.columnsFixed" active-color="#78DCD6" @change="toggle"></toggle-button>
-                </span>
-              </div>
-            </div>
-          </form>
-        </div>
-
+        <settings-container v-if="module.structure.columns.length > 1" label="Fixed Columns">
+          <template slot="setting-right">
+            <toggle-button :value="module.structure.columnsFixed" active-color="#78DCD6" @change="toggle"></toggle-button>
+          </template>
+        </settings-container>
         <!-- Invert Stack on Mobile  -->
-        <div v-if="module.structure.columns.length == 2" class="row-toggle">
-          <form class="form-horizontal">
-            <div class="form-group">
-              <label class="half"><b>Inverted Stacking on Mobile</b></label>
-              <div class="half-style-setting padding-top">
-                <span>
-                  <toggle-button :value="module.structure.invertedStacking" active-color="#78DCD6" @change="toggleStacking"></toggle-button>
-                </span>
-              </div>
-            </div>
-          </form>
-        </div>
-
+        <settings-container v-if="module.structure.columns.length == 2" label="Inverted Stacking on Mobile">
+          <template slot="setting-right">
+            <toggle-button :value="module.structure.invertedStacking" @change="toggleStacking"></toggle-button>
+          </template>
+        </settings-container>
       </b-card>
     </b-collapse>
   </div>
@@ -84,12 +68,14 @@
 <script>
 import * as elementSettings from "../settings";
 import GroupContainer from "../containers/GroupContainer.vue";
-import labelItemContainer from "../containers/labelItemContainer.vue";
+import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
+import LabelItemContainer from "../containers/LabelItemContainer.vue";
 
 export default {
   components: {
     GroupContainer,
-    labelItemContainer,
+    SettingsContainer,
+    LabelItemContainer,
     "input-generic-color": elementSettings.GenericColor,
     "input-generic-text": elementSettings.GenericText,
     "input-generic-number": elementSettings.GenericNumber,

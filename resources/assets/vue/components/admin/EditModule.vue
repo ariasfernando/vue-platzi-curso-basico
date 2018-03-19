@@ -224,38 +224,6 @@ export default {
     margin-left: 7px !important;
   }
 
-  .module-settings {
-    h4 {
-      font-size: 13px;
-      text-transform: uppercase;
-      color: #666666;
-      font-weight: 300;
-      padding: 10px 10px;
-      border-bottom: 1px solid #f0f0f0;
-      margin: 0px -10px;
-    }
-
-    h5 {
-      font-size: 12px;
-      text-transform: uppercase;
-      color: #666666;
-      font-weight: 300;
-      padding: 5px 0px 0px 0px;
-    }
-  }
-
-  .component-settings {
-    h4 {
-      font-size: 13px;
-      text-transform: uppercase;
-      color: #666666;
-      font-weight: 300;
-      padding: 10px 10px;
-      border-bottom: 1px solid #d4d4d4;
-      margin: 0px -10px 15px -10px;
-    }
-  }
-
   .beta-btn-primary {
     font-family: "Open Sans", Arial, sans-serif;
     font-size: 13px;
