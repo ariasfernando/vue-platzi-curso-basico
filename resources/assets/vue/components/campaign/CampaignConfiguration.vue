@@ -47,7 +47,7 @@
         <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave">Auto Save</label>
           <toggle-button :value="campaign.auto_save" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange" :disabled="campaign.locked"></toggle-button>
-          <label v-if="!secondaryLoading" class="autosave-message">last saved: {{this.campaign.updated_at}}</label>
+          <label v-if="!secondaryLoading" class="autosave-message">last saved: {{this.campaign.updated_at.substring(0,16)}}</label>
           <secondary-spinner></secondary-spinner>
         </div>
 
@@ -322,10 +322,6 @@
     .autosave-message{
       font-size: 10px;
       font-style: italic;
-      float: right;
-      vertical-align: middle;
-      line-height: 18px;
-      margin: 0
     }
 
     ::-webkit-input-placeholder {

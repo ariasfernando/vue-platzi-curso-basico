@@ -65,7 +65,7 @@ export default {
       deferred.resolve({
         campaignId: response.body.campaign_id,
         campaign: dataCampaign,
-        updatedAt: response.body.updated_at.date.substring(0, 19),
+        updatedAt: response.body.updated_at.date,
       });
     }).catch((err) => {
       deferred.reject(err);
