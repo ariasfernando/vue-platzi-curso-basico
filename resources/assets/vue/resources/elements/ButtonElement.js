@@ -48,6 +48,7 @@ function buttonDefault() {
       href: 'http://stensul.com',
       target: '_blank',
       classes: '',
+      hideElement: false,
     },
     buttonCaret: {
       attribute: {

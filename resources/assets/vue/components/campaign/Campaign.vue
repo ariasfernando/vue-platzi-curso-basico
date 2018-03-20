@@ -22,10 +22,10 @@
       <aside class="component-settings-wrapper">
         <div class="aside-inner section-box">
           <transition name="slide-fade">
-            <module-settings v-if="Object.keys(currentComponent).length > 0"></module-settings>
+            <module-settings v-if="showModuleSettings"></module-settings>
           </transition>
           <transition name="slide-fade">
-            <component-settings v-if="Object.keys(currentComponent).length > 0"></component-settings>
+            <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
           </transition>
           <transition name="slide-fade">
             <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
@@ -99,6 +99,9 @@
       },
       dirty() {
         return this.$store.getters["campaign/dirty"];
+      },
+      showModuleSettings() {
+        return this.$store.getters["campaign/showModuleSettings"];
       }
     },
     watch:{

@@ -34,12 +34,12 @@
       }
     },
     methods: {
-      toggle(e) {
+      toggle(value) {
         const payload = {
           plugin: this.name,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          enabled: e.value,
+          enabled: value,
         };
 
         this.$store.commit('module/togglePlugin', payload);
