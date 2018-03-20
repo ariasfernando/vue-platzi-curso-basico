@@ -93,17 +93,11 @@ const mutations = {
     // Set attribute
     column.attribute.width = `${data.width}%`;
   },
-  saveColumnStyle(state, data) {
-    const styles = state.module.structure.columns[data.colId].style;
-    const newStyles = {};
-    newStyles[data.property] = data.value;
-    _.merge(styles, newStyles);
-  },
-  saveColumnAttribute(state, data) {
-    const attribute = state.module.structure.columns[data.colId].attribute;
-    const newAttribute = {};
-    newAttribute[data.property] = data.value;
-    _.merge(attribute, newAttribute);
+  saveColumnProperty(state, data) {
+    const property = state.module.structure.columns[data.colId][data.type];
+    const newProperty = {};
+    newProperty[data.property] = data.value;
+    _.merge(property, newProperty);
   },
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);

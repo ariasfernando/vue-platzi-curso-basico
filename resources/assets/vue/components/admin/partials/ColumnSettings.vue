@@ -16,8 +16,9 @@
             <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
               <component v-for="setting in settingGroup"
                 :is="'input-' + setting.type"
-                v-on:attribute-setting-updated="(eventData)=>attributeSettingUpdatedHandler(eventData, key)"
-                v-on:style-setting-updated="(eventData)=>styleSettingUpdatedHandler(eventData, key)"
+                @attribute-setting-updated="(eventData)=>attributeSettingUpdatedHandler(eventData, key)"
+                @style-setting-updated="(eventData)=>styleSettingUpdatedHandler(eventData, key)"
+                @style-option-setting-updated="(eventData)=>styleOptionSettingUpdatedHandler(eventData, key)"
                 :setting="setting.type"
                 :name="setting.name"
                 :type="setting.type"
@@ -86,32 +87,28 @@ export default {
       return this.$store.getters["module/activeColumn"];
     },
     settings() {
-      return settingsDefault[this.component.type]().componentSettings;
+      return settingsDefault['column-element']().componentSettings;
     }
   },
   methods: {
     attributeSettingUpdatedHandler(eventData, key) {
-      this.saveColumnAttribute(eventData.name, eventData.value, key);
+      this.saveColumnProperty('attribute', eventData.name, eventData.value, key);
     },
     styleSettingUpdatedHandler(eventData, key) {
-      this.saveColumnStyle(eventData.name, eventData.value, key);
+      this.saveColumnProperty('style', eventData.name, eventData.value, key);
     },
-    saveColumnStyle(name, value, colId) {
+    styleOptionSettingUpdatedHandler(eventData, key) {
+      this.saveColumnProperty('styleOptions', eventData.name, eventData.value, key);
+    },
+    saveColumnProperty(type, name, value, colId) {
       const data = {
         colId: colId,
+        type: type,
         property: name,
         value: value
       };
-      this.$store.commit("module/saveColumnStyle", data);
+      this.$store.commit("module/saveColumnProperty", data);
     },
-    saveColumnAttribute(name, value, colId) {
-      const data = {
-        colId: colId,
-        property: name,
-        value: value
-      };
-      this.$store.commit("module/saveColumnAttribute", data);
-    }
   },
   watch: {
     activeColumn(val) {

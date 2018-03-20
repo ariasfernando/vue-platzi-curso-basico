@@ -25,9 +25,6 @@ function columnDefault() {
           label: 'Width',
           name: 'width',
           type: 'width',
-          value: '100%',
-          minValue: 1,
-          maxValue: 100,
         },
         {
           name: 'classes',

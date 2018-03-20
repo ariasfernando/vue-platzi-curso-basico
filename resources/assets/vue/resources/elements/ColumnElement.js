@@ -30,6 +30,9 @@ function columnDefault() {
       hideElement: false,
       classes: '',
     },
+    styleOptions: {
+      isPxWidth: false,
+    },
     components: [],
     plugins: {},
   };
