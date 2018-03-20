@@ -1,7 +1,7 @@
 <template>
   <settings-container :label="plugin.title">
     <template slot="setting-right">
-        <toggle-button :value="enabled" @change="toggle"></toggle-button>
+      <toggle-button :value="enabled" color="#78DCD6" @change="toggle"></toggle-button>
     </template>
   </settings-container>
 </template>
