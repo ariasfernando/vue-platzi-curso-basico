@@ -39,7 +39,10 @@ function campaignStore() {
       },
       moduleErrors(state) {
         const modules = state.modules;
-        const errors = _.filter(modules, m => m.data.errors && m.data.errors.length);
+
+        const errors = _.filter(modules, (m) => {
+          return !_.isEmpty(m.data) && m.data.errors && m.data.errors.length
+        });
 
         return errors.length || state.fieldErrors.length;
       },
