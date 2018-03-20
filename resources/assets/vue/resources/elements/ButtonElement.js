@@ -33,6 +33,8 @@ function buttonDefault() {
       borderLeftWidth: '0px',
       borderLeftStyle: 'none',
       borderLeftColor: '#000000',
+      // Border Radius
+      borderRadius: 'initial',
     },
     attribute: {
       width: '150',

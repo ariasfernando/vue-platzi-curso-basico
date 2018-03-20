@@ -3,7 +3,7 @@ const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
   name: 'variable-height',
-  title: 'Variable Height',
+  title: 'Height',
   version: '0.0.1',
   author: 'andres@stensul.com',
   target: ['divider'],
