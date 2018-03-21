@@ -44,7 +44,7 @@
                 >
                   <tr>
                     <td 
-                      :width="component.buttonCaret.attribute.url ? '80%' : '100%'"
+                      :width="component.buttonCaret.attribute.url ? '85%' : '100%'"
                       :style="`color:${component.style.color}`"
                       >
                       <div
@@ -56,7 +56,7 @@
                     </td>
                     <td
                       v-if="component.buttonCaret.attribute.url"
-                      width="20%"
+                      width="15%"
                       >
                       <img
                         :src="$_app.config.imageUrl + component.buttonCaret.attribute.url"

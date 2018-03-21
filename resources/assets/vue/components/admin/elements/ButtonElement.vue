@@ -43,13 +43,13 @@
               >
                 <tr>
                   <td 
-                    :width="component.buttonCaret.attribute.url ? '80%' : '100%'"
+                    :width="component.buttonCaret.attribute.url ? '85%' : '100%'"
                     >
                     <tiny-mce :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
                   </td>
                   <td
                     v-if="component.buttonCaret.attribute.url"
-                    width="20%"
+                    width="15%"
                     >
                     <img
                       :src="$_app.config.imageUrl + component.buttonCaret.attribute.url"
