@@ -2,7 +2,7 @@
   <div>
     <label-item-container label="COLUMN SETTINGS" icon="glyphicon-pause"  v-b-toggle.column-settings></label-item-container>
 
-    <b-collapse id="column-settings" accordion="module-settings-accordion">
+    <b-collapse id="column-settings" accordion="module-right">
       <b-card class="control" no-block>
         <b-tabs card ref="tabs" v-model="tabIndex">
           <!-- Render Tabs -->

@@ -4,7 +4,7 @@
     <!-- START: Style -->
 
     <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
-    <b-collapse id="style" visible accordion="module-settings-accordion-right">
+    <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component v-for="setting in settingGroup"

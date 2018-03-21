@@ -7,11 +7,6 @@
         <!-- START: Left Bar -->
         <aside class="col-xs-2 left-bar">
             <div class="fields">
-              <!-- START: General Settings -->
-              <general-settings v-if="ready"></general-settings>
-
-              <column-settings v-if="ready && module.structure.columns.length > 1 "></column-settings>
-
               <elements-settings v-if="ready"></elements-settings>
               <!-- END: Elements -->
             </div>
@@ -31,6 +26,11 @@
         <aside class="col-xs-3 right-bar">
           <div class="module-settings" v-if="currentComponent">
             <div class="fields">
+
+              <general-settings v-if="ready"></general-settings>
+
+              <column-settings v-if="ready && module.structure.columns.length > 1 "></column-settings>
+
               <component-settings></component-settings>
             </div>
           </div>

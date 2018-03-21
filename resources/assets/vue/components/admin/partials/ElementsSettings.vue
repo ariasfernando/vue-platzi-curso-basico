@@ -3,7 +3,7 @@
     <!-- START: Elements -->
     <label-item-container label="ELEMENTS" icon="glyphicon-th-large" v-b-toggle.element></label-item-container>
 
-      <b-collapse id="element" accordion="module-settings-accordion">
+      <b-collapse id="element" visible accordion="module-left">
         <b-card class="control">
           <draggable :element="'ul'"
                      :options="options"
