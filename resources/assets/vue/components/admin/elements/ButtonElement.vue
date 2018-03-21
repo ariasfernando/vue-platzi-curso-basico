@@ -34,20 +34,38 @@
                 :height="component.attribute.height"
                 :style="[component.style, {'vertical-align' : component.attribute.valign}]"
             >
-                <tiny-mce :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
-                <img
-                  v-if="component.buttonCaret.attribute.url"
-                  :src="$_app.config.imageUrl + component.buttonCaret.attribute.url"
-                  :style="[component.buttonCaret.style, { 'vertical-align': component.buttonCaret.style.valign}]"
-                  :bgcolor="component.buttonCaret.attribute.bgcolor"
-                  :width="component.buttonCaret.attribute.width"
-                  :height="component.buttonCaret.attribute.height"
-                  :valign="component.buttonCaret.attribute.valign"
-                  :align="component.buttonCaret.attribute.align"
-                  :class="component.buttonCaret.attribute.classes"
-                  style="display: inline-block !important;"
-                  >
-                <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
+              <table
+                cellpadding="0"
+                cellspacing="0"
+                border="0"
+                width="100%"
+                style="width:100%"
+              >
+                <tr>
+                  <td 
+                    :width="component.buttonCaret.attribute.url ? '80%' : '100%'"
+                    >
+                    <tiny-mce :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
+                  </td>
+                  <td
+                    v-if="component.buttonCaret.attribute.url"
+                    width="20%"
+                    >
+                    <img
+                      :src="$_app.config.imageUrl + component.buttonCaret.attribute.url"
+                      :style="[component.buttonCaret.style, { 'vertical-align': component.buttonCaret.style.valign}]"
+                      :bgcolor="component.buttonCaret.attribute.bgcolor"
+                      :width="component.buttonCaret.attribute.width"
+                      :height="component.buttonCaret.attribute.height"
+                      :valign="component.buttonCaret.attribute.valign"
+                      :align="component.buttonCaret.attribute.align"
+                      :class="component.buttonCaret.attribute.classes"
+                      style="display: inline-block !important;"
+                      >
+                  </td>
+                </tr>
+              </table>
+              <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
             </td>
           </tr>
         </table>
