@@ -30,7 +30,7 @@ export default {
   components: { SettingsContainer },
   data() {
     return {
-      minValue: this.minValue ? this.minValue : 10
+      minValue: this.minValue ? this.minValue : 1
     };
   },
   computed: {
