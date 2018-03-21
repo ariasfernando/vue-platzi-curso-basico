@@ -26,10 +26,6 @@ function buttonDefault() {
           name: 'text-align',
           type: 'text-align',
         },
-        {
-          name: 'vertical-align',
-          type: 'vertical-align',
-        },
       ],
       [
         {
@@ -45,11 +41,6 @@ function buttonDefault() {
         {
           name: 'text-align',
           type: 'text-align',
-          subComponent: 'buttonCaret',
-        },
-        {
-          name: 'vertical-align',
-          type: 'vertical-align',
           subComponent: 'buttonCaret',
         },
         {
