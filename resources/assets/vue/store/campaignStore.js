@@ -259,7 +259,7 @@ function campaignStore() {
       },
     },
     actions: {
-			updateCustomElement(context, payload) {
+      updateCustomElement(context, payload) {
         context.commit('updateCustomElement', payload);
         return Promise.resolve();
       },

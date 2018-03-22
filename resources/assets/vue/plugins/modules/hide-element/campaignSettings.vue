@@ -1,22 +1,9 @@
 <template>
-  <div class="plugin-wrapper-inner">
-    <label>{{ plugin.title }}</label>
-    <form class="form-horizontal">
-      <div class="form-group">
-        <div class="col-sm-5">
-          <span>
-            <toggle-button
-              color="#78DCD6"
-              :value="component.attribute.hideElement"
-              :sync="true"
-              :labels="true"
-              @change="toggleChange">
-            </toggle-button>
-          </span>
-        </div>
-      </div>
-    </form>
-  </div>
+  <settings-container :label="plugin.title">
+    <template slot="setting-right">
+      <toggle-button :value="component.attribute.hideElement" @change="toggleChange"></toggle-button>
+    </template>
+  </settings-container>
 </template>
 
 <script>

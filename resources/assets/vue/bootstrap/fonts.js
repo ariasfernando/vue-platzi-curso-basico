@@ -1,6 +1,8 @@
 module.exports = {
   system: [
-    'sans-serif',
+    'Helvetica',
+    'Arial',
+    'Sans-serif',
   ],
   web: [
     'Open Sans',

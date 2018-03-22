@@ -46,6 +46,7 @@
     border-radius: 100%;
     line-height: 25px;
     font-size: 11px!important;
+    letter-spacing: normal;
     background-color: @icon-option;
     opacity: 1;
     margin-top: -11px;
@@ -57,6 +58,7 @@
     height: 22px;
     line-height: 14px;
     font-size: 11px!important;
+    letter-spacing: normal;
     cursor: pointer;
     position: absolute;
     text-align: center;

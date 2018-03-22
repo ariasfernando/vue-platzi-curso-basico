@@ -3,7 +3,7 @@
   <tr 
     data-type="separator-element"
     :data-component="JSON.stringify(component)"
-    :class="getMobileClasses(component,'tr')"
+    :class="getMobileClasses(component,'tr') + component.attribute.classes"
     @click.prevent="setComponent"
   >
     <td 
@@ -11,7 +11,7 @@
       width="100%" 
       align="center" 
       :height="component.style.height" 
-      :bgcolor="component.style.backgroundColor" 
+      :bgcolor="component.attribute.bgcolor" 
       :style="[defaultFirstTdStyle, firstTdStyle]"
       :class="getMobileClasses(component,'td:first')"
     >

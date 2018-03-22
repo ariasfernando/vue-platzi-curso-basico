@@ -12,7 +12,7 @@
       :data-col="columnId"
     >
       <tr>
-        <td width="100%" valign="top" :style="styles">
+        <td width="100%" valign="top" :style="styles" :class="column.attribute.classes">
           <draggable 
             cellpadding="0" 
             cellspacing="0" 

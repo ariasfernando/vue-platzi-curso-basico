@@ -2,7 +2,8 @@ import Vue from 'vue/dist/vue';
 import VueResource from 'vue-resource/dist/vue-resource';
 import VeeValidate from 'vee-validate';
 import Toast from 'vue-easy-toast';
-import elementUi from 'element-ui';
+import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en';
 import BootstrapVue from 'bootstrap-vue';
 import Croppa from 'vue-croppa';
 import 'url-search-params-polyfill';
@@ -28,7 +29,7 @@ Vue.use(Toast, {
 Vue.use(BootstrapVue);
 Vue.use(Croppa);
 Vue.use(interceptors);
-Vue.use(elementUi);
+Vue.use(ElementUI, { locale });
 
 /**
  * If the campaign has just been processed redirect to the dashboard
