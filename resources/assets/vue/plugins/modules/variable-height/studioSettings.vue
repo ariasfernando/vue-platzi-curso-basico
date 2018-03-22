@@ -1,123 +1,138 @@
 <template>
-  <div :class="'plugin-' + plugin.name">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
-        <div class="col-sm-5">
-          <span>
-            <toggle-button :value="plugin.enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
-          </span>
-        </div>
-      </div>
-
-      <div class="btn-group">
-        <input v-if="plugin.enabled" v-for="(value, name) in plugin.config.options"
-          class="btn toggleable"
-          v-b-tooltip.hover
-          :title="name"
-          :name="name"
-          :value="value"
-          type="number"
-          @input.prevent="changeOption"
-          :key="name"
-        />
-      </div>
-    </form>
-
+  <div>
+    <settings-container :label="plugin.title">
+      <template slot="setting-right">
+          <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
+      </template>
+    </settings-container>
+    <settings-container  v-if="plugin.enabled" label-left="MIN" label-right="MAX">
+      <template slot="setting-half-left">
+        <el-input-number
+          size="mini" 
+          :value="plugin.config.options.min"
+          @change="(val)=>changeOption(val, 'min')"
+          :max="maxValue('min')"
+          :min="minValue('min')"
+        ></el-input-number>
+      </template>
+      <template slot="setting-half-right">   
+        <el-input-number
+          size="mini" 
+          :value="plugin.config.options.max"
+          @change="(val)=>changeOption(val, 'max')"
+          :max="maxValue('max')"
+          :min="minValue('max')"
+        ></el-input-number>
+      </template>
+    </settings-container>
   </div>
 </template>
 
 <script>
 
-  import _ from 'lodash';
-  
-  export default {
-    props: ['name'],
-    computed: {
-      currentComponent() {
-        return this.$store.getters["module/currentComponent"];
-      },
-      module() {
-        return this.$store.getters["module/module"];
-      },
-      plugin() {
-        const module = this.module,
-              columnId = this.currentComponent.columnId,
-              componentId = this.currentComponent.componentId;
-
-        const plugin = module.structure.columns[columnId].components[componentId].plugins[this.name];
-        this.enabled = plugin.enabled;
-        this.options = plugin.config.options;
-
-        return plugin;
-      }
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+export default {
+  props: ["name"],
+  components: { SettingsContainer },
+  computed: {
+    currentComponent() {
+      return this.$store.getters["module/currentComponent"];
     },
-    data() {
-      return {
-        enabled: false,
-        options: {},
-      }
+    module() {
+      return this.$store.getters["module/module"];
     },
-    methods: {
-      toggle(value) {
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          enabled: value,
-        };
-        // Update state of the component
-        this.$store.commit('module/togglePlugin', payload);
+    plugin() {
+      const module = this.module,
+        columnId = this.currentComponent.columnId,
+        componentId = this.currentComponent.componentId;
 
-        // Set current component
-        this.$store.commit("module/setCurrentComponent", {
-          columnId: payload.columnId,
-          componentId: payload.componentId
-        });
-        // Update component view in the third column
-        this.$store.commit('module/setChangeSettingComponent',{
+      const plugin =
+        module.structure.columns[columnId].components[componentId].plugins[
+          this.name
+        ];
+      this.enabled = plugin.enabled;
+      this.options = plugin.config.options;
+
+      return plugin;
+    }
+  },
+  data() {
+    return {
+      enabled: false,
+      options: {}
+    };
+  },
+  methods: {
+    maxValue(name) {
+      return name === "min" ? this.options.max -1 : undefined;
+    },
+    minValue(name) {
+      return name === "max" ? this.options.min + 1: undefined;
+    },
+    toggle(value) {
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        enabled: value
+      };
+      // Update state of the component
+      this.$store.commit("module/togglePlugin", payload);
+
+      // Set current component
+      this.$store.commit("module/setCurrentComponent", {
+        columnId: payload.columnId,
+        componentId: payload.componentId
+      });
+      // Update component view in the third column
+      this.$store.commit("module/setChangeSettingComponent", {
           style: this.module.structure.columns[payload.columnId].components[payload.componentId].style || {},
           attribute: this.module.structure.columns[payload.columnId].components[payload.componentId].attribute || {}
         });
-      },
-      changeOption(e) {
-        let nameHeight = e.target.name;
-        let valueHeight = e.target.value;
-        let maxHeight = this.plugin.config.options.max;
-        let minHeight = this.plugin.config.options.min;
-        let options = {};
+    },
+    changeOption(valueHeight, nameHeight) {
+      let maxHeight = this.plugin.config.options.max;
+      let minHeight = this.plugin.config.options.min;
+      let options = {};
 
-        if (nameHeight === 'max'){
-          maxHeight = valueHeight;
-        }  
-        
-        if (nameHeight === 'min'){
-          minHeight = valueHeight;
-        }
-
-        options = {
-          max : maxHeight,
-          min: minHeight
-        };
-
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          config: {
-            options,
-          },
-        };
-
-        // Save plugin data
-        this.$store.commit('module/savePlugin', payload);
+      if (nameHeight === "max") {
+        maxHeight = valueHeight;
       }
+
+      if (nameHeight === "min") {
+        minHeight = valueHeight;
+      }
+
+      options = {
+        max: maxHeight,
+        min: minHeight
+      };
+
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        config: {
+          options
+        }
+      };
+
+      // Save plugin data
+      this.$store.commit("module/savePlugin", payload);
     }
   }
+};
 </script>
-<style lang="less">
-  .btn-group {
-    text-align: left;
-    padding: 5px 5px 10px;
-  }
+<style lang="less" scoped>
+.btn-group {
+  text-align: left;
+  padding: 5px 5px 10px;
+}
+.label-center {
+  display: block;
+  text-align: center !important;
+  padding-bottom: 0px !important;
+  padding-top: 0 !important;
+  text-transform: uppercase;
+}
 </style>

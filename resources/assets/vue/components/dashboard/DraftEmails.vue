@@ -84,11 +84,11 @@
               <a href="#" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
 
               <a :data-campaign-id="campaign._id"
-                class="proof-open-modal"
                 data-toggle="tooltip"
                 data-placement="top"
                 href="#"
                 data-tooltip="Send for review"
+                @click.prevent="openProofModal(campaign._id)"
                 v-if="proof.allow && proof.status"
                 ><i class="glyphicon glyphicon-check"></i></a>
 
@@ -171,12 +171,24 @@
       }
     },
     methods: {
-      goProof: function(token) {
-
+      goProof (token) {
         if (token) {
             const win = window.open(this.$_app.config.baseUrl + "/proof/review/" + token, '_blank');
             win.focus();
         }
+      },
+      openProofModal (campaignId) {
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/getCampaignData", campaignId).then(response => {
+          this.$store.commit("global/setLoader", false);
+          this.$store.commit("campaign/toggleModal", 'modalProof');
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
+        });
       }
     }
   }

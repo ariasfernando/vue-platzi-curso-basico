@@ -2,12 +2,12 @@
   <!-- DIVIDER ELEMENT -->
   <tr @click.prevent="setComponent"
       :data-component="JSON.stringify(component)"
-      :class="getMobileClasses(component,'tr')"
+      :class="getMobileClasses(component,'tr') + component.attribute.classes"
       data-type="divider-element"
   >
     <td 
       class="stx-line-height-reset stx-position-relative"
-      :bgcolor="component.style.backgroundColor" 
+      :bgcolor="component.attribute.bgcolor" 
       :height="component.style.height"
       :width="component.style.width || '100%'"
       :style="styles"

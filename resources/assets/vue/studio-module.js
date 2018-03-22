@@ -6,6 +6,7 @@ import Toast from 'vue-easy-toast';
 import BootstrapVue from 'bootstrap-vue';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import locale from 'element-ui/lib/locale/lang/en';
 import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
 import { studioModuleRoutes } from './router';
@@ -25,7 +26,7 @@ Vue.use(interceptors);
 Vue.use(VueRouter);
 Vue.use(VeeValidate);
 Vue.use(BootstrapVue);
-Vue.use(ElementUI);
+Vue.use(ElementUI, { locale });
 
 // Pointing routes to the components they should use
 const router = new VueRouter({

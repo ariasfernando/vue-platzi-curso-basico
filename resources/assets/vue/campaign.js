@@ -4,6 +4,7 @@ import VeeValidate from 'vee-validate';
 import Toast from 'vue-easy-toast';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import locale from 'element-ui/lib/locale/lang/en';
 import BootstrapVue from 'bootstrap-vue';
 import Croppa from 'vue-croppa';
 import 'url-search-params-polyfill';
@@ -29,7 +30,7 @@ Vue.use(Toast, {
 Vue.use(BootstrapVue);
 Vue.use(Croppa);
 Vue.use(interceptors);
-Vue.use(ElementUI);
+Vue.use(ElementUI, { locale });
 
 /**
  * If the campaign has just been processed redirect to the dashboard
