@@ -19,7 +19,7 @@
           <tr>
             <!-- If columnsFixed is false, show Columns staked render -->
             <td width="100%"
-                v-if="!columnsFixed"
+                v-if="module.structure.columnsStacking !== 'columnsFixed'"
             >
               <columns-stacked-render @add="onAdd"></columns-stacked-render>
             </td> 
@@ -144,15 +144,6 @@
     computed: {
       module() {
         return this.$store.getters["module/module"];
-      },
-      columnsFixed: {
-        get() {
-          return this.module.structure.columnsFixed;
-        },
-        set(value) {
-          this.columnsFixed = value;
-        },
-  
       },
     },   
     methods: {

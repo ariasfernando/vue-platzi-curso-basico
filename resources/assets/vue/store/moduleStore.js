@@ -66,14 +66,14 @@ const mutations = {
     const update = { ...state.module.structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
     state.module.structure.columns[payload.columnId].components[payload.componentId].data = update;
   },
-  saveModuleSetting(state, data) {
-    state.module.structure.style = data.style;
-  },
-  saveModuleStyle(state, data) {
-    state.module.structure.style[data.property] = data.value;
-  },
-  saveModuleAttribute(state, data) {
-    state.module.structure.attribute[data.property] = data.value;
+
+  saveModuleProperty(state, data) {
+    const structure = state.module.structure;
+    const subComponent = data.subComponent ? structure[data.subComponent] : structure;
+    const properties = data.link ? subComponent[data.link] : subComponent;
+    const newProperty = {};
+    newProperty[data.property] = data.value;
+    _.merge(properties, newProperty);
   },
   saveModule(state, moduleId) {
     state.module.moduleId = moduleId;
@@ -94,10 +94,11 @@ const mutations = {
     column.attribute.width = `${data.width}%`;
   },
   saveColumnProperty(state, data) {
-    const property = state.module.structure.columns[data.colId][data.type];
+    const column = state.module.structure.columns[data.colId];
+    const properties = data.subComponent ? column[data.subComponent][data.link] : column[data.link];
     const newProperty = {};
     newProperty[data.property] = data.value;
-    _.merge(property, newProperty);
+    _.merge(properties, newProperty);
   },
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);
@@ -125,10 +126,10 @@ const mutations = {
   },
   saveComponentProperty(state, data) {
     const component = state.module.structure.columns[data.columnId].components[data.componentId];
-    const property = data.subComponent ? component[data.subComponent][data.type] : component[data.type];
-    const newAttr = {};
-    newAttr[data.property] = data.value;
-    _.merge(property, newAttr);
+    const properties = data.subComponent ? component[data.subComponent][data.link] : component[data.link];
+    const newProperty = {};
+    newProperty[data.property] = data.value;
+    _.merge(properties, newProperty);
   },
   setActiveColumn(state, columnId) {
     state.activeColumn = columnId;

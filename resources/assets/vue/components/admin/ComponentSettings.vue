@@ -22,6 +22,7 @@
             :min-value="setting.minValue"
             :max-value="setting.maxValue"
             :sub-component="setting.subComponent"
+            :options="setting.options"
             :element="setting.subComponent ? component[setting.subComponent] : component"
             :key="setting.name"></component>
         </group-container>
@@ -124,12 +125,12 @@ export default {
     }
   },
   methods: {
-    saveComponentProperty(type, subComponent, name, value) {
+    saveComponentProperty(link, subComponent, name, value) {
       let data = {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         subComponent: subComponent,
-        type: type,
+        link: link,
         property: name,
         value: value
       };

@@ -28,6 +28,7 @@
                 :default-value="setting.value"
                 :min-value="setting.minValue"
                 :max-value="setting.maxValue"
+                :options="setting.options"
                 :element="column"
                 :key="setting.name">
               </component>
@@ -100,10 +101,10 @@ export default {
     styleOptionSettingUpdatedHandler(eventData, key) {
       this.saveColumnProperty('styleOptions', eventData.name, eventData.value, key);
     },
-    saveColumnProperty(type, name, value, colId) {
+    saveColumnProperty(link, name, value, colId) {
       const data = {
         colId: colId,
-        type: type,
+        link: link,
         property: name,
         value: value
       };
