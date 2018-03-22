@@ -181,6 +181,6 @@ class ModuleController extends Controller
     public function postUploadImage(Request $request)
     {
         $image = new Imagine;
-        return $image->saveImage($request->input('data_image'), 'local:modules');
+        return $image->saveImage($request->input('data_image'), 'local:modules:studio');
     }
 }
