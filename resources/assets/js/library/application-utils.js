@@ -228,14 +228,14 @@ Application.utils = {
             compareTo: "The field not match.",
             minLength: "The field minimum size is [min].",
             maxLength: "The best practice is to limit preheaders to 50 characters.",
-            url: "Please, enter a valid url.",
+            url: "Please, enter a valid URL.",
             invalidFileType: "Please, upload a valid file.",
             invalidFileSize: "The file exceeds the size limit.",
             validateUrl: {
                 error: "The destination for this URL does not appear to exist. Please doublecheck the link. If this is expected, please ignore.",
-                success: "The url exists.",
-                fail: "The system cannot validate if the url exists. Please, try again.",
-                verifying: "Verifying if the given url exists..."
+                success: "The URL exists.",
+                fail: "The system cannot validate if the URL exists. Please, try again.",
+                verifying: "Verifying if the given URL exists..."
             }
         },
         // Validate if a field is filled.
@@ -877,6 +877,51 @@ Application.utils = {
             }
         });
 
+    },
+
+    componentFromStr: function (numStr, percent) {
+        var num = Math.max(0, parseInt(numStr, 10));
+        return percent ?
+            Math.floor(255 * Math.min(100, num) / 100) : Math.min(255, num);
+    },
+
+    /* Convert RGB to Hexa */
+
+    rgbToHex: function (rgb) {
+        var rgbRegex = /^rgb\(\s*(-?\d+)(%?)\s*,\s*(-?\d+)(%?)\s*,\s*(-?\d+)(%?)\s*\)$/;
+        var result, r, g, b, hex = "";
+        if ((result = rgbRegex.exec(rgb))) {
+            r = Application.utils.componentFromStr(result[1], result[2]);
+            g = Application.utils.componentFromStr(result[3], result[4]);
+            b = Application.utils.componentFromStr(result[5], result[6]);
+
+            hex = "#" + (0x1000000 + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+        return hex;
+    },
+
+    replaceRgbWithHex: function ($cleanedHtml) {
+        var all = $cleanedHtml.find('*');
+        var rgbRegex = /^rgb\(\s*(-?\d+)(%?)\s*,\s*(-?\d+)(%?)\s*,\s*(-?\d+)(%?)\s*\)$/;
+        $.map(all, function (el, index) {
+            //Check if the color property is set, and if it's rgb.
+            if (el.style.color && el.style.color.indexOf('#') === -1 || el.style.backgroundColor && el.style.backgroundColor.indexOf('#') === -1) {
+                if (rgbRegex.test(el.style.color) || rgbRegex.test(el.style.backgroundColor)) {
+                    var rgb_style = $(el).attr('style');
+                    //Update style attr
+                    $(el)
+                        .attr('style',
+                            rgb_style
+                            .replace(
+                                /\brgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/g,
+                                function ($0, $1, $2, $3) {
+                                    return "#" + ("0" + Number($1).toString(16)).substr(-2) + ("0" + Number($2).toString(16)).substr(-2) + ("0" + Number($3).toString(16)).substr(-2);
+                                })
+                        )
+                }
+            }
+        });
+        return $cleanedHtml;
     },
 
     validateHexVal: function(hexVal){

@@ -33,6 +33,7 @@ $default = [
             '/dashboard/templates/{type}'            => 'DashboardController@getTemplates',
             '/dashboard/libraries'                   => 'DashboardController@getLibraries',
             '/dashboard/tags'                        => 'DashboardController@getTags',
+            '/dashboard/menu'                        => 'DashboardController@getMenu',
             '/public/view/{id}'                      => 'PublicController@view',
             '/public/html/{id}'                      => 'PublicController@html',
             '/public/get/{id}'                       => 'PublicController@getCampaign',

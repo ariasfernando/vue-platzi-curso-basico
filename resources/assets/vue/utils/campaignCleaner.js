@@ -17,6 +17,7 @@ export default {
       'data-params',
       'data-modal',
       'data-medium-element',
+      'data-module-id',
       'data-placeholder',
       'contenteditable',
       'spellcheck',
@@ -93,6 +94,22 @@ export default {
         $(element).removeAttr('data-contenteditable-href'); 
       });
     }
+
+    // Replace data-tag-before
+    if ($cleanedHtml.find('[data-tag-before]').length) {
+      const $targetDataTag = $cleanedHtml.find('[data-tag-before]');
+
+      $.each($targetDataTag, (key, element) => {
+        const tempDataTag = $(element).data('tag-before');
+        const $element = $(element);
+        
+        // Add tag
+        $element.before(tempDataTag);
+        
+        // Remove data-tag-before
+        $element.removeAttr('data-tag-before');
+      });
+    };
 
     // Remove wrappers
     const $wrapperElementRemove = $cleanedHtml.find('.stx-wrapper');
@@ -442,29 +459,6 @@ export default {
     });
     
     return str;
-  },
-
-  imagesErrors(selector){
-    let errorFound = false;
-
-    // Check if all images are uploaded.
-    let nonEditedImages = $(selector).find("img[src*='/default/']:visible");
-
-    if (nonEditedImages.length) {
-        $.each(nonEditedImages, function (index, img) {
-            $(img).parent().addClass("default-image-error");
-        });
-
-        errorFound = true;
-    }
-
-
-    if (errorFound) {
-      return true;
-    }else{
-      return false
-    }
-    
   }
-  
+
 };

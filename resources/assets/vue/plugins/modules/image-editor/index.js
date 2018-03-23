@@ -14,13 +14,13 @@ module.exports = {
       label: 'Width',
       key: 'width',
       value: 600,
-      type: 'text',
+      type: 'number',
     },
     height: {
       label: 'Height',
       key: 'height',
       value: 200,
-      type: 'text',
+      type: 'number',
     },
     quality: {
       label: 'Retina Display',
@@ -83,15 +83,15 @@ module.exports = {
     maxWidth: {
       label: 'Max width',
       key: 'maxWidth',
-      value: '600',
-      type: 'text',
+      value: 600,
+      type: 'number',
       hint: 'Applies when width control is enabled',
     },
     minWidth: {
       label: 'Min width',
       key: 'minWidth',
-      value: '20',
-      type: 'text',
+      value: 20,
+      type: 'number',
       hint: 'Applies when width control is enabled',
     },
     adjustableHeight: {
@@ -103,15 +103,15 @@ module.exports = {
     maxHeight: {
       label: 'Max Height',
       key: 'maxHeight',
-      value: '600',
-      type: 'text',
+      value: 600,
+      type: 'number',
       hint: 'Applies when height control is enabled',
     },
     minHeight: {
       label: 'Min Height',
       key: 'minHeight',
-      value: '20',
-      type: 'text',
+      value: 20,
+      type: 'number',
       hint: 'Applies when width control is enabled',
     },
     disableZoom: {
@@ -124,7 +124,8 @@ module.exports = {
       label: 'Library',
       key: 'library',
       value: '',
-      type: 'text',
+      type: 'select',
+      options: []
     },
     sticker: {
       label: 'Sticker',
@@ -147,20 +148,20 @@ module.exports = {
         width: {
           label: 'Width',
           key: 'width',
-          value: '',
-          type: 'text',
+          value: undefined,
+          type: 'number',
         },
         height: {
           label: 'Height',
           key: 'height',
-          value: '',
-          type: 'text',
+          value: undefined,
+          type: 'number',
         },
         padding: {
           label: 'Padding',
           key: 'padding',
-          value: '',
-          type: 'text',
+          value: undefined,
+          type: 'number',
         },
         horizontalAlignment: {
           label: 'Align X',

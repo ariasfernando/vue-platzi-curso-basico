@@ -162,6 +162,7 @@ gulp.task('elixir-scripts', function () {
           jsDestinationPath + "dashboard-components.js",
           assetsPath
         )
+        .browserify('vendor/stensul/media-gallery/media-gallery.js', 'public/js/media-gallery.js')
         // === Compile Vendor and Application scripts to library.js ===
         .scripts(
           [
@@ -235,16 +236,6 @@ gulp.task('elixir-scripts', function () {
           assetsPath
         )
 
-        // === Dashboard page ===
-        .scripts(
-          [
-            // @TODO turn the rest of the modals into Vue components like ModalProof.vue
-            'js/library/application-proof.js',
-          ],
-          jsDestinationPath + 'dashboard-proof.js',
-          assetsPath
-        )
-
         // === Proof page ===
         .scripts(
           'js/base/proof.js',
@@ -273,10 +264,12 @@ gulp.task('elixir-scripts', function () {
  */
 gulp.task('elixir-less', () => {
   return elixir((mix) => {
-    mix.less( 'base/tool/tool.less');
-    mix.less( 'base/base-v2/admin.less');
-    mix.less( 'base/commons/mobile/mobile_core_styles.less');
-    mix.less( 'base/commons/mobile/mobile_client_styles.less');
+    mix
+      .less('base/tool/tool.less')
+      .less('base/base-v2/admin.less')
+      .less('base/commons/mobile/mobile_core_styles.less')
+      .less('base/commons/mobile/mobile_client_styles.less')
+      .less('vendor/stensul/media-gallery/media-gallery.less', 'public/css/media-gallery.css');
   });
 });
 

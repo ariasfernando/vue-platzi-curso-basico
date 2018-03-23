@@ -170,6 +170,17 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
     */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPasswordNotification($token));
+        $this->notify(new ResetPasswordNotification($token, $this->name));
+    }
+
+    /**
+     * Scope a query to only include active users
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('status', '!=', 'deleted');
     }
 }

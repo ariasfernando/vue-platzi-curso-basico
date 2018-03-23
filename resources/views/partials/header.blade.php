@@ -10,7 +10,6 @@
                         <a>
                     @endif
                         <span class="brand-logo"></span>
-                        <span class="by-stensul"><em>by</em> stensul</span>
                     </a>
                 </div>
             </div>
@@ -20,19 +19,19 @@
                 <nav>
                     @if (config('app.help.enabled'))
                         <a href="{{ url(config('app.help.url')) }}" class="help" target="_blank">
-                            <i class="glyphicon glyphicon-question-sign"></i>
+                            <i class="fa fa-question-circle"></i>
                             <span>Help Center</span>
                         </a>
                     @endif
                     @if (config('app.home.enabled') && (!Auth::check() || Auth::user()->can('access_dashboard')))
                         <a href="{{ url('/') }}" class="home">
-                            <i class="glyphicon glyphicon-home"></i>
+                            <i class="fa fa-home"></i>
                             <span>Home</span>
                         </a>
                     @endif
                     @if (!Auth::guest())
                         <a href="{{ url('/auth/logout') }}" class="logout">
-                            <i class="glyphicon glyphicon-log-out"></i>
+                            <i class="fa fa-sign-out"></i>
                             <span>Logout</span>
                         </a>
                     @endif

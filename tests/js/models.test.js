@@ -50,7 +50,7 @@ describe('== Models ==', () => {
           'type',
           'style',
           'attribute',
-          'settings',
+          'styleOptions',
           'plugins',
           'components',
         ]);
@@ -79,9 +79,7 @@ describe('== Models ==', () => {
           'style',
           'styleOptions',
           'attribute',
-          'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -107,10 +105,9 @@ describe('== Models ==', () => {
         expect(properties).to.have.keys([
           'type',
           'style',
+          'styleOptions',
           'attribute',
-          'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -137,9 +134,7 @@ describe('== Models ==', () => {
           'type',
           'style',
           'attribute',
-          'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -166,9 +161,7 @@ describe('== Models ==', () => {
           'type',
           'style',
           'attribute',
-          'settings',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 
@@ -196,9 +189,8 @@ describe('== Models ==', () => {
           'style',
           'styleOptions',
           'attribute',
-          'settings',
+          'buttonCaret',
           'plugins',
-          'componentSettings',
           'data',
         ]);
 

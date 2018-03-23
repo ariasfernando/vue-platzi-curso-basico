@@ -23,7 +23,7 @@
       </div>
       <div class="col-xs-12 col-sm-2 pull-right no-gutters">
         <div class="dropdown default-dropdown pull-right">
-          <dashboard-menu :config="config"></dashboard-menu>
+          <dashboard-menu></dashboard-menu>
         </div>
       </div>
     </div>
@@ -31,10 +31,10 @@
     <div class="dash-campaigns">
       <div class="row" id="draft-emails-campaign">
         <div class="col-xs-12">
-          <search-result 
+          <search-result
             :tags="tags"
             :terms="terms"
-            @remove-search-tag="removeSearchTag" 
+            @remove-search-tag="removeSearchTag"
             @remove-search-term="removeSearchTerm"
           ></search-result>
           <draft-emails
@@ -56,10 +56,10 @@
       </div>
       <div class="row" id="finished-campaign">
         <div class="col-xs-12">
-          <search-result 
+          <search-result
             :tags="tags"
             :terms="terms"
-            @remove-search-tag="removeSearchTag" 
+            @remove-search-tag="removeSearchTag"
             @remove-search-term="removeSearchTerm"
           ></search-result>
           <finished-emails
@@ -82,10 +82,10 @@
       </div>
       <div class="row" v-if="config.enable_templating" id="templates-campaign">
         <div class="col-xs-12">
-          <search-result 
+          <search-result
             :tags="tags"
             :terms="terms"
-            @remove-search-tag="removeSearchTag" 
+            @remove-search-tag="removeSearchTag"
             @remove-search-term="removeSearchTerm"
           ></search-result>
           <template-campaigns
@@ -105,6 +105,9 @@
           ></template-campaigns>
         </div>
       </div>
+
+      <modal-proof v-if="dashboardReady"></modal-proof>
+
       <spinner></spinner>
 
     </div>
@@ -122,6 +125,7 @@
   import DashboardMenu from './DashboardMenu.vue';
   import SearchResult from './partials/SearchResult.vue';
   import Spinner from '../common/Spinner.vue';
+  import ModalProof from '../campaign/modals/ModalProof.vue';
 
   export default {
     components: {
@@ -132,13 +136,15 @@
       TemplateCampaigns,
       DashboardMenu,
       Spinner,
-      SearchResult
+      SearchResult,
+      ModalProof
     },
     created: function() {
       this.updateCampaigns();
     },
     data: function() {
       return {
+        dashboardReady: false,
         campaigns: {
           current: [],
           finished: [],
@@ -235,6 +241,7 @@
           this.campaigns[type] = campaigns;
           this.showLoading[type] = false;
           this.ready[type] = true;
+          this.dashboardReady = true;
         }.bind(this));
       },
       getIndex: function(data, value) {

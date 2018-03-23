@@ -1,32 +1,33 @@
 <template>
   <tr v-if="module.type === 'custom'"
       class="stx-module-wrapper"
-      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
-      @click="setActiveModule"
+      :class="{'stx-module-wrapper-active': activeModule === moduleId }"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
-      v-on-clickaway="unsetActiveModule"
   >
-    <td class="stx-toolbar-content stx-position-relative" @click.prevent="config">
+    <td class="stx-toolbar-content stx-position-relative"
+        :data-module-id="moduleId"
+        :class="{ 'stx-show-error': module.data.errors && module.data.errors.length }"
+        @click.prevent="config"
+    >
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
+      <div class="st-remove-element default-module-error"></div>
     </td>
   </tr>
 
-  <tr v-else 
+  <tr v-else
       class="stx-module-wrapper"
-      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
-      @click="setActiveModule"
-
+      :class="[module.structure.attribute.classes, {'stx-module-wrapper-active': activeModule === moduleId }]"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
-      v-on-clickaway="unsetActiveModule"
   >
     <td class="stx-toolbar-content stx-position-relative"
+        :data-module-id="moduleId"
         :style="module.structure.style"
-        :bgcolor="module.structure.attribute.bgcolor.hex"
-        :class="[module.structure.columns.length > 1 ? 'st-wrapper-content' : '']">
+        :bgcolor="module.structure.attribute.bgcolor"
+        :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 }">
       <table
         width="100%"
         cellspacing="0"
@@ -107,6 +108,7 @@
       </table>
       <module-toolbar :module-id="moduleId"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
+      <div class="st-remove-element default-module-error" style="display:none"></div>
     </td>
   </tr>
 </template>
@@ -122,14 +124,10 @@
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
-  import { mixin as clickaway } from 'vue-clickaway';
   import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
-    mixins: [
-      clickaway
-    ],
     props: ['moduleId'],
     computed: {
       module() {
@@ -137,6 +135,12 @@
       },
       templateWidth() {
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
+      },
+      moduleErrors() {
+        return this.$store.getters["campaign/moduleErrors"];
+      },
+      fieldErrors() {
+        return this.$store.getters["campaign/fieldErrors"];
       },
       msoStartingComment() {
         return "[if gte mso 9]>" +
@@ -160,6 +164,18 @@
       }
     },
     methods: {
+      showError(moduleId){
+        let err = false;
+        _.each(this.moduleErrors, (error, key) => {
+           if (!_.isUndefined(error.scope.moduleId)){
+              if (error.scope.moduleId === moduleId){
+                err = true;
+              }
+           }
+        });
+
+        return err;
+      },
       config() {
         this.$store.commit("campaign/setCustomModule", this.moduleId);
         this.$store.commit("campaign/unsetCurrentModule");
@@ -219,61 +235,7 @@
 
         // Remove module highlight element
         $row.find("#moduleHighlight").remove();
-      },
-      setActiveModule(e) {
-        // Set active Module
-        this.$store.commit("campaign/setActiveModule", this.moduleId);
-        // Clear 3rd column
-        this.$store.commit("campaign/setCurrentComponent", {});
-
-        const isTargetingAModule = this.isWrappedIn(e, "module-toolbar");
-        if (!isTargetingAModule) {
-          this.$store.commit("campaign/setCurrentModule", null);
-        }
-      },
-      isWrappedIn(e,className) {
-        return $(e.target).hasClass(className) || $(e.target).closest(`.${className}`).length > 0;
-      },
-      unsetActiveModule(e) {
-        // TODO: improve this code (related to v-on-clickaway directive) avoiding using UI selectors
-        // Idea 1, using Automata Theory, defining states and event transitions
-        // Idea 2, using getters from the campaign's store
-
-        let isTargetingComponentSettings  = $(e.target).closest(".component-settings").length > 0;
-        let isTargetingColumnSettings     = this.isWrappedIn(e, "column-settings");
-        let isTargetingAModule            = this.isWrappedIn(e, "stx-module-wrapper");
-        let isTargetingMenuModule         = this.isWrappedIn(e, "beta-subitem-single");
-        let isTargetingTinyMCEModal       = $(".mce-window.mce-in").length > 0;
-        let isTargetingTinyMCEModalButton = $(".mce-btn").length > 0;
-        let hasPluginsActivated           = $(".settings-wrapper, .plugin-wrapper").length > 0;
-
-        if(
-          // Anything except 1rd column
-             !isTargetingColumnSettings
-          // Anything except 3rd column
-          && !isTargetingComponentSettings
-          // Anything except a module
-          && !isTargetingAModule
-          // Anything except the menu module
-          // Neccesary filter to keep active state for last module added, triggered in EmailCanvas.vue::addModule()
-          && !isTargetingMenuModule
-          // Anything except the tinyMCE modal
-          && !isTargetingTinyMCEModal
-          // Anything except the tinyMCE modal button
-          && !isTargetingTinyMCEModalButton
-        ) {
-              this.$store.commit("campaign/unsetActiveModule");
-              this.module.type === "custom"
-                ? this.$store.commit("campaign/unsetCustomModule")
-                : this.$store.commit("campaign/unsetCurrentModule");
-        }
-        // Keep open 3rd column for active module
-        // Deactive only if it hasn't activated plugins
-        else if (!hasPluginsActivated) {
-          this.$store.commit("campaign/unsetActiveModule");
-        }
-      }
-
+            }
     },
     components: {
       TextElement,

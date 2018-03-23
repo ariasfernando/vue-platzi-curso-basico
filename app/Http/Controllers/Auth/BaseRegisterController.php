@@ -63,7 +63,7 @@ class BaseRegisterController extends Controller
      */
     public function getRegister()
     {
-        $is_registration = env('USER_REGISTRATION', true);
+        $is_registration = env('USER_REGISTRATION', false);
 
         if (!$is_registration) {
             return redirect(env('APP_BASE_URL', '/'));
@@ -81,7 +81,7 @@ class BaseRegisterController extends Controller
     public function postRegister(Request $request)
     {
 
-        $is_registration = env('USER_REGISTRATION', true);
+        $is_registration = env('USER_REGISTRATION', false);
 
         if (!$is_registration) {
             return redirect(env('APP_BASE_URL', '/'));

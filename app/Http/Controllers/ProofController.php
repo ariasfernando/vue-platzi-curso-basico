@@ -5,6 +5,7 @@ namespace Stensul\Http\Controllers;
 use Auth;
 use Activity;
 use Carbon\Carbon;
+use Stensul\Models\Role;
 use Stensul\Models\User;
 use Stensul\Models\Proof;
 use Stensul\Models\Comment;
@@ -132,6 +133,7 @@ class ProofController extends Controller
 
         $current_reviewer = [];
         $params['show_decision'] = true;
+        $params['can_edit'] = false;
 
         // Validate if current logged user is a reviewer
         foreach ($proof->reviewers as $reviewer) {
@@ -145,9 +147,15 @@ class ProofController extends Controller
             $params['show_decision'] = false;
         }
 
+        // Validate if the user can edit the campaign
+        if (Auth::user()->can('edit_campaign')) {
+            $params['can_edit'] = true;
+        }
+
         $params['reviewer'] = $current_reviewer;
 
         $params['campaign'] = [
+            '_id' => $proof->campaign->_id,
             'body_html' => $proof->campaign->body_html,
             'template_width' => $proof->campaign->getLibraryConfig('templateWidth'),
             'template_mobile_width' => $proof->campaign->getLibraryConfig('templateMobileWidth')
@@ -560,14 +568,19 @@ class ProofController extends Controller
      */
     public function getUsers()
     {
-        $users = [];
-        $data = User::where('email', '!=', Auth::user()->email)->where('roles', '!=', 'stensul-internal')->get(['email'])->toArray();
-        if (count($data)) {
-            foreach ($data as $user) {
-                $users[] = $user['email'];
-            }
+        // Ignore current user and deleted users
+        $users = User::where('email', '!=', Auth::user()->email)->active();
+
+        // Get roles that has access to approvals page (so users with these roles can be added as reviewers)
+        $roles = Role::wherePermissions('access_proof')->get()->pluck(['name']);
+        $users->whereIn('roles', $roles);
+
+        if (!Auth::user()->hasRole('stensul-internal')) {
+            // If logged user does not have stensul-internal role, we need to exclude users with this role
+            $users->where('roles', '!=', 'stensul-internal');
         }
-        return $users;
+
+        return $users->get()->pluck('email');
     }
 
     /**

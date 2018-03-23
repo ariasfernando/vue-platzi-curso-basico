@@ -4,7 +4,7 @@
     data-type="text-element"
     :data-component="JSON.stringify(component)"
     :data-column="columnId"
-    :class="getMobileClasses(component,'tr')"
+    :class="getMobileClasses(component,'tr') + component.attribute.classes"
     @click.prevent="setComponent"
   >
     <td
@@ -25,7 +25,7 @@
             width="100%" 
             class="stx-edit-text stx-position-relative" 
             :align="component.attribute.align"
-            :bgcolor="component.attribute.bgcolor.hex"
+            :bgcolor="component.attribute.bgcolor"
             :style="component.style"
           >
             <tiny-mce :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>

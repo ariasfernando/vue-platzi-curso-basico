@@ -84,8 +84,11 @@
       locked() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked
       },
-      fieldErrors() {
-        return this.$store.state.campaign.fieldErrors;
+      modules() {
+        return this.$store.getters["campaign/modules"];
+      },
+      moduleErrors() {
+        return this.$store.getters["campaign/moduleErrors"];
       },
     },
     data () {
@@ -126,8 +129,7 @@
         const cleanHtml = campaignCleaner.clean('.section-canvas-container');
 
         const bodyHtml = html_beautify(cleanHtml, {
-          'indent_size': 2,
-          'wrap_line_length': 120,
+          'indent_size': 2
         });
 
         this._save(bodyHtml).then(response => {
@@ -145,7 +147,7 @@
         });
       },
       _validate(message = undefined) {
-        if (this.fieldErrors.length > 0) {
+        if (this.moduleErrors) {
           this.$root.$toast(
             message || 'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
@@ -166,8 +168,22 @@
         return campaignService.checkProcessStatus(processId);
       },
       complete() {
+        if (this.modules.length === 0) {
+          this.$root.$toast(
+            'You cannot finish an empty email.',
+            {
+              className: 'et-error',
+              closeable: true
+            }
+          );
+
+          return false;
+        }
+
         // Do not save if there are missing or wrong fields
-        if (this.fieldErrors.length > 0 || campaignCleaner.imagesErrors('#emailCanvas') ) {
+        if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors  ) {
+          this.$_app.utils.validator.modulesErrors('#emailCanvas');
+
           this.$root.$toast(
             'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
@@ -176,18 +192,21 @@
               closeable: true
             }
           );
+
+          this.$store.commit('campaign/campaignCompleted', true);
           return false;
         }
 
         // Show Loader
         this.$store.commit("global/setLoader", true);
 
+        this.$_app.utils.hackMediaQuery('.section-canvas-container', this.campaign.campaign_data.library_config.templateWidth);
+
         // Obtain current html
         const cleanHtml = campaignCleaner.clean('.section-canvas-container');
 
         const bodyHtml = html_beautify(cleanHtml, {
-          'indent_size': 2,
-          'wrap_line_length': 120,
+          'indent_size': 2
         });
 
         // Save Request
@@ -197,8 +216,6 @@
             .then(completeResponse => {
 
               let finishedProcessing = () => {
-                // Hide Loader
-                this.$store.commit("global/setLoader", false);
                 // Set campaign as processed
                 this.$store.commit('campaign/setProcessStatus');
                 // Show complete after campaign is completely processed
@@ -233,11 +250,10 @@
       },
       autoSave() {
         setInterval(() => {
-          if (this.dirty && this.campaign.campaign_data.auto_save) {
+          if (this.dirty && this.campaign.campaign_data.auto_save !== false) {
             this._save().then(response => {
-              this.$store.commit("global/setLoader", false);
+              this.$root.$toast('Email saved', {className: 'et-info'});
             }, error => {
-              this.$store.commit("global/setLoader", false);
               this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
             });
           }
@@ -248,11 +264,9 @@
         const cleanHtml = campaignCleaner.clean('.section-canvas-container');
 
         const bodyHtml = html_beautify(cleanHtml, {
-          'indent_size': 2,
-          'wrap_line_length': 120,
+          'indent_size': 2
         });
         this._save(bodyHtml).then(response => {
-          this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalPreview');
         }, error => {
           this.$store.commit("global/setLoader", false);
@@ -270,8 +284,7 @@
         const cleanHtml = campaignCleaner.clean('.section-canvas-container');
 
         const bodyHtml = html_beautify(cleanHtml, {
-          'indent_size': 2,
-          'wrap_line_length': 120,
+          'indent_size': 2
         });
 
         this._save(bodyHtml).then(response => {

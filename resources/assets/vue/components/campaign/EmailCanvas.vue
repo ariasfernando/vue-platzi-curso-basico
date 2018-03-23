@@ -5,7 +5,15 @@
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td align="center" :bgcolor="templateBackgroundColor()" style="vertical-align:top;">
+          <td
+            align="center"
+            style="vertical-align:top;"
+            class="stx-draggable-wrapper"
+            :class="{ 'campaign-completed': campaignCompleted }"
+            :bgcolor="templateBackgroundColor()"
+            @click.stop="handleActive"
+            @mouseover="onMouseOver"
+            @mouseleave="onMouseLeave">
               <draggable
                 id="emailCanvas"
                 :class="`stx-${buildingMode}-mode`"
@@ -17,9 +25,27 @@
                 :width="templateWidth"
                 :options="options"
                 :element="'table'"
+                :move="onMove"
                 @add="onAdd"
-                @sort="onSort">
+                @sort="onSort"
+                 v-if="isNotEmptyList">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
+              </draggable>
+              <draggable
+                id="emailCanvas"
+                :class="`stx-${buildingMode}-mode empty`"
+                class="stx-email-canvas st-wrapper-table"
+                cellspacing="0"
+                cellpadding="0"
+                border="0"
+                v-model="dragList"
+                :width="templateWidth"
+                :options="options"
+                :element="'table'"
+                @add="onAdd"
+                @sort="onSort"
+                v-else>
+                  <div class="empty-message">From the module menu on the left, please click or drag a module here to add it to the email workspace.</div>
               </draggable>
           </td>
         </tr>
@@ -30,6 +56,7 @@
 
 <script>
   import clone from 'clone';
+  import _ from 'lodash';
   import Draggable from 'vuedraggable';
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';
@@ -44,9 +71,14 @@
       BackToTop
     },
     data: {
-      dragGhost: null
+      dragGhost: null,
+      onMouseOver: () => {},
+      onMouseLeave:() => {}
     },
     computed: {
+      campaignCompleted() {
+        return this.$store.state.campaign.campaignCompleted;
+      },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
       },
@@ -57,6 +89,9 @@
         set(value) {
           this.$store.commit('campaign/updateEmailCanvas', value);
         }
+      },
+      isNotEmptyList() {
+        return this.dragList.length > 0;
       },
       campaign () {
         return this.$store.state.campaign.campaign;
@@ -137,19 +172,50 @@
       }
     },
     methods: {
+      getSubitemsAsArray () {
+        return _.reduce(this.items, (result, value) => {
+          if(_.has(value, 'level')) {
+            result = _.union(result, value.sub_menu);
+          }
+          return result;
+        }, []);
+      },
       onAdd(e) {
-        const module = this.items[e.oldIndex];
-        const mod = clone(module);
+        let cloneEl = e.clone;
+        let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
+        let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
+
+        // Find module in items by type: item or subitem
+        const found = moduleType === 'item'
+          ? _.find(this.items, (m) => m.name === moduleName)
+          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
+
+        const mod = clone(found);
         mod.data = {};
 
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
         // Set active on last module inserted
         this.$store.commit('campaign/setActiveModule', e.newIndex);
-        
+
          // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = "1";
+      },
+      onMove (evt, originalEvent) {
+        const h = $(".section-canvas-email").height();
+        const target = $(".section-canvas-email");
+
+        let mousePosition = originalEvent.clientY - $(window).scrollTop();
+        let topRegion = 320;
+        let bottomRegion = h - topRegion;
+
+        // Scroll when user drag down
+        if(mousePosition < topRegion || mousePosition > bottomRegion){
+            let distance = originalEvent.clientY - h / 1.5;
+            distance = distance * 0.15; // <- velocity
+            $(target).scrollTop( distance + $(target).scrollTop());
+        }
       },
       onSort(e){
         if (this.activeModule.type === 'studio') {
@@ -165,17 +231,23 @@
           this.$store.commit('campaign/setCustomModule', e.newIndex);
           this.$store.commit('campaign/unsetCurrentComponent');
         }
-        
+
         this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
       },
-      onEnd (evt) {
-        // moduleId is a reactive prop, and it matches the index
-        const moduleId = evt.newIndex;
-        // Set active Module
-        this.$store.commit("campaign/setActiveModule", moduleId);
-        // Don't forget to remove the ghost DOM object when done dragging
-        document.getElementById('drag-image').remove();
+      onMouseOver () {
+        $("#emailCanvas").addClass("hovered");
+        this.handleEmptyMessage();
+      },
+      onMouseLeave () {
+        $("#emailCanvas").removeClass("hovered");
+        this.handleEmptyMessage();
+      },
+      handleEmptyMessage () {
+        // If is dragging and the list is empty, hide empty message
+        $(".empty-message").is(":visible") && $(".ghost-component").is(":visible")
+          ? $(".empty-message").hide("fast")
+          : $(".empty-message").show()
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
@@ -208,6 +280,37 @@
           this.$store.commit("global/setLoader", false);
           this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
+      },
+      handleActive(e) {
+        const $target = $( e.target );
+        // If it's the email-canvas wrapper
+        if( $target.is( "td.stx-draggable-wrapper" )) {
+          // Clear Current module state
+          this.$store.commit("campaign/unsetActiveModule");
+          this.$store.commit("campaign/unsetCurrentModule");
+          this.$store.commit("campaign/unsetCurrentComponent");
+          this.$store.commit("campaign/unsetCustomModule");
+          this.$store.commit("campaign/setToggleModuleSettings", false);
+        }
+        else {
+          // Get module ID
+          const moduleId = $target.closest(".stx-module-wrapper").find("td").data("module-id");
+          // If it's the config gear icon
+          if( $target.hasClass('icon-config') || $target.hasClass("fa-cogs") ) {
+            // Show module settings
+            this.$store.commit("campaign/setToggleModuleSettings", true);
+            // Set current Module
+            this.$store.commit("campaign/setCurrentModule", moduleId);
+          }
+          else {
+            // Hide module settings
+            this.$store.commit("campaign/setToggleModuleSettings", false);
+            // Set active Module
+            this.$store.commit("campaign/setActiveModule", moduleId);
+            // Clear 3rd column
+            this.$store.commit("campaign/unsetCurrentComponent");
+          }
+        }
       }
     },
     created () {
@@ -238,6 +341,8 @@
   @focus: #69dac8;
   @focus-light: lighten(@focus, 30%);
   @hover: @focus-light;
+  @font-color: #999999;
+  @bg-color: #f0f0f0;
 
   /* COMMON STYLES */
   span{
@@ -248,7 +353,7 @@
   }
 
   .applelinks{
-    color:#FFFFFF !important; 
+    color:#6b6b6b !important; 
     text-decoration: none !important; 
   }  
          
@@ -261,11 +366,12 @@
     background-color: #000000; 
   }
 
-  .stx-edit-text{
-    p{
+  p,ul,ol{
       margin: 0;
       padding: 0;
     }
+
+  .stx-edit-text{
 
     a:hover, 
     a:focus{
@@ -320,6 +426,34 @@
       }
       *{
         display: none;
+      }
+    }
+
+    &.empty{
+      border: none;
+      color:@font-color;
+      background-color: @bg-color;
+      height: 65px;
+      font-family: 'Open Sans', Arial, serif;
+      font-size: 12px;
+      padding: 0 20px;
+
+      .empty-message {
+        width: 100%;
+        display: table-cell;
+        vertical-align: middle;
+        opacity: 0.7;
+        text-align: center;
+
+        &:hover {
+          width: 100%;
+          display: table-cell;
+          vertical-align: middle;
+          opacity: 1;
+          outline: 2px dashed @font-color;
+          outline-offset: -10px;
+          text-align: center;
+        }
       }
     }
   }

@@ -38,6 +38,10 @@ class GelfMessageFormatter extends MonologGelfMessageFormatter
             $record['extra']['com.stensul.user.id'] = Auth::id();
         }
 
+        if (!empty($_SERVER['HTTP_X_ST_REQUEST_ID'])) {
+            $record['extra']['com.stensul.http.request.id'] = $_SERVER['HTTP_X_ST_REQUEST_ID'];
+        }
+
         return parent::format($record);
     }
 }

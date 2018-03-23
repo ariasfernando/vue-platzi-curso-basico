@@ -9,14 +9,19 @@
 
 FROM registry.stensuldev.net/dockerfiles/web-2.0.0
 
+# enable opcache heavily
+COPY ./conf.d/php/10-opcache.ini /etc/php.d/
+
 ARG DOCKER_BUILDING
 ARG APP_NAME
+ARG NODE_ENV=production
 
 # force cache for composer 
 COPY ./composer.json /usr/src/app/composer.json
 COPY ./composer.lock /usr/src/app/composer.lock
 COPY ./database /usr/src/app/database
 COPY ./tests /usr/src/app/tests
+COPY ./artisan /usr/src/app/artisan
 RUN cd /usr/src/app/ && composer install --no-scripts
 
 # force cache for npm 
@@ -34,6 +39,8 @@ RUN cd /usr/src/app/ && bower install --allow-root && bower cache clean --allow-
 WORKDIR /usr/src/app/
 
 COPY . /usr/src/app/
+
+RUN cd /usr/src/app/ && php artisan vendor:publish
 
 RUN cd /usr/src/app/ && gulp --production
 RUN chown -R fbridge.fbridge /usr/src/app

@@ -2,7 +2,8 @@ import Vue from 'vue/dist/vue';
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource/dist/vue-resource';
 import Toast from 'vue-easy-toast';
-import elementUi from 'element-ui';
+import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en';
 import VeeValidate from 'vee-validate';
 import Bootstrap from './bootstrap';
 import interceptors from './interceptors';
@@ -20,7 +21,7 @@ Vue.use(Toast, {
 });
 Vue.use(VueResource);
 Vue.use(interceptors);
-Vue.use(elementUi);
+Vue.use(ElementUI, { locale });
 Vue.use(VueRouter);
 Vue.use(VeeValidate);
 

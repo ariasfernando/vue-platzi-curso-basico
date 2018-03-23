@@ -38,7 +38,14 @@ module.exports = {
   },
   image: {
     uploadImage: { method: 'post', path: `${baseUrl}/campaign/upload-image` },
-    getLibrary: { method: 'get', path: `${baseUrl}/template/library/:library` },
+    getMedia: {
+      method: 'get',
+      path: `${baseUrl}/package/api/media?libraries[]=:library`,
+    },
+    getLibraries: {
+      method: 'get',
+      path: `${baseUrl}/package/api/library`,
+    },
   },
   config: {
     getConfig: { method: 'get', path: `${baseUrl}/config/:key` },
@@ -49,5 +56,8 @@ module.exports = {
   api: {
     uploadEmail: { method: 'post', path: `${baseUrl}/api/upload-email` },
     uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId` },
+  },
+  dashboard: {
+    getMenu: { method: 'get', path: `${baseUrl}/dashboard/menu` },
   },
 };

@@ -30,7 +30,7 @@
                             <thead>
                                 <tr>
                                   <th class='col-xs-5'>Email</th>
-                                  <th class='col-xs-2'>Required approval</th>
+                                  <th class='col-xs-2'>Approval Required?</th>
                                   <th class='col-xs-1'>Actions</th>
                                 </tr>
                             </thead>
@@ -106,7 +106,13 @@
           <div class="modal-footer">
             <slot name="footer">
               <button type="button" class="btn btn-default beta-btn-secondary" @click="close">Close</button>
-              <button class="btn btn-default beta-btn-primary" id="btn-send-proof" @click="send">Submit</button>
+              <button
+                class="btn btn-default beta-btn-primary"
+                :class="{'disabled': reviewers.length === 0}"
+                :disabled="reviewers.length === 0"
+                id="btn-send-proof"
+                @click="send"
+              >Submit</button>
             </slot>
           </div>
         </div>
@@ -139,9 +145,17 @@
         return this.$store.getters["campaign/campaign"];
       }
     },
+    watch: {
+      modalProof (value) {
+        if (value) {
+          this.checkCampaign();
+          this.fetchReviewers();
+        }
+      }
+    },
     methods: {
       close () {
-        this.fetched = false;
+        this.reviewers = [];
         this.$store.commit("campaign/toggleModal", 'modalProof');
       },
       send () {
@@ -189,6 +203,11 @@
         $.getJSON(this.$_app.config.baseUrl + '/proof/campaign/' + this.campaign.campaign_data._id, {}, function(response) {
           if (response.status === 'success') {
             this.campaignData = response.data;
+
+            if (this.campaignData.proof_id !== null) {
+              // If a proof already exists, set the "Start proof from scratch" off
+              this.startProof = false;
+            }
 
             if ('can_be_processed' in this.campaignData && this.campaignData.can_be_processed === false) {
               this.$root.$toast(
@@ -334,25 +353,14 @@
       }
 
       this.fetchUsers();
-      this.checkCampaign();
-
-      if (this.campaign.campaign_data.proof_id !== null) {
-        // If a proof already exists, set the "Start proof from scratch" off
-        this.startProof = false;
-      }
     },
     updated () {
-      if (!this.fetched) {
-        this.fetched = true;
-        this.fetchReviewers();
-      }
       if ($('.proof-users-picker').length) {
           $('.proof-users-picker').selectpicker();
       }
     },
     data: function() {
       return {
-        fetched: false,
         campaignData: {},
         users: [],
         reviewers: [],

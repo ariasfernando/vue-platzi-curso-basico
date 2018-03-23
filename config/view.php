@@ -56,7 +56,7 @@ $default = [
     |--------------------------------------------------------------------------
     |
     |  If max_length exists, enables the recomendable length warning validation
-    | 
+    |
     */
     'preheader' => [
         'enabled'   => true,

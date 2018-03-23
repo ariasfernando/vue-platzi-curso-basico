@@ -1,5 +1,5 @@
 <template id="proof-decision">
-    <div>
+    <div class="decision-container">
 
         <proof-decision-button
             decision="approve"
@@ -113,19 +113,11 @@
                         if (resp.status == 200) {
                             vm.selectedDecision = decision;
                             // Show an alert
-                            vm.$emit('update-alert', {
-                                type: 'success',
-                                message: resp.message || 'Thank you! Your feedback has been successfully collected.',
-                                show: true
-                            });
+                            vm.$root.$toast(resp.message || 'Thank you! Your feedback has been successfully collected.', {className: 'et-success'});
                             vm.$emit('decision');
                         } else {
                             // Show an alert
-                            vm.$emit('update-alert', {
-                                type: 'error',
-                                message: resp.message,
-                                show: true
-                            });
+                            vm.$root.$toast(resp.message, {className: 'et-error'});
                         }
                         vm.loadingDecision = '';
                     });
@@ -160,19 +152,11 @@
                         if (resp.status == 200) {
                             vm.selectedDecision = '';
                             // Show an alert
-                            vm.$emit('update-alert', {
-                                type: 'success',
-                                message: resp.body.message || 'Your decision has been undone.',
-                                show: true
-                            });
+                            vm.$root.$toast(resp.body.message || 'Your decision has been undone.', {className: 'et-success'});
                             vm.$emit('decision');
                         } else {
                             // Show an alert
-                            vm.$emit('update-alert', {
-                                type: 'error',
-                                message: resp.body.message,
-                                show: true
-                            });
+                            vm.$root.$toast(resp.body.message, {className: 'et-error'});
                         }
                         vm.loadingDecision = '';
                     });
@@ -181,6 +165,8 @@
     };
 </script>
 
-<style lang="sass">
-
+<style lang="less">
+    .decision-container {
+        display: inline-block;
+    }
 </style>

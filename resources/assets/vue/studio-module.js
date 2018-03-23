@@ -4,7 +4,8 @@ import VueResource from 'vue-resource/dist/vue-resource';
 import VeeValidate from 'vee-validate';
 import Toast from 'vue-easy-toast';
 import BootstrapVue from 'bootstrap-vue';
-import elementUi from 'element-ui';
+import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en';
 import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
 import { studioModuleRoutes } from './router';
@@ -24,7 +25,7 @@ Vue.use(interceptors);
 Vue.use(VueRouter);
 Vue.use(VeeValidate);
 Vue.use(BootstrapVue);
-Vue.use(elementUi);
+Vue.use(ElementUI, { locale });
 
 // Pointing routes to the components they should use
 const router = new VueRouter({

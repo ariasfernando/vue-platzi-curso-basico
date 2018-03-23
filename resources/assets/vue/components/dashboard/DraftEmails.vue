@@ -44,10 +44,10 @@
         <tbody>
           <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
             <td class="last-modified">
-              <span>{{campaign.created_at}}</span><br><span>by {{campaign.created_by.email}}</span>
+              <span>{{campaign.created_at}}</span><br><span class="text-overflow" :title="campaign.created_by.email">by {{campaign.created_by.email}}</span>
             </td>
             <td class="last-modified">
-              <span>{{campaign.updated_at}}</span><br><span>by {{campaign.updated_by.email}}</span>
+              <span>{{campaign.updated_at}}</span><br><span class="text-overflow" :title="campaign.updated_by.email">by {{campaign.updated_by.email}}</span>
             </td>
             <td :title="campaign.campaign_name">
               <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
@@ -84,13 +84,13 @@
               <a href="#" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
 
               <a :data-campaign-id="campaign._id"
-                class="proof-open-modal"
                 data-toggle="tooltip"
                 data-placement="top"
                 href="#"
                 data-tooltip="Send for review"
+                @click.prevent="openProofModal(campaign._id)"
                 v-if="proof.allow && proof.status"
-                ><i class="glyphicon glyphicon-search"></i></a>
+                ><i class="glyphicon glyphicon-check"></i></a>
 
               <a
                 :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
@@ -171,12 +171,24 @@
       }
     },
     methods: {
-      goProof: function(token) {
-
+      goProof (token) {
         if (token) {
             const win = window.open(this.$_app.config.baseUrl + "/proof/review/" + token, '_blank');
             win.focus();
         }
+      },
+      openProofModal (campaignId) {
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/getCampaignData", campaignId).then(response => {
+          this.$store.commit("global/setLoader", false);
+          this.$store.commit("campaign/toggleModal", 'modalProof');
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
+        });
       }
     }
   }

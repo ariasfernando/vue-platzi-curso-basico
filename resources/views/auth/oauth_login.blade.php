@@ -12,7 +12,7 @@
         <div class="text-center">
             <a href="/" class="stensul-logo open-sans" target="_blank">stensul</a>
             <h4>
-                Email Creator
+                Email Creation Platform
             </h4>
         </div>
 
@@ -35,7 +35,7 @@
                 <div class="form-group submit-row">
                     <div class="text-center">
                         <button type="button" class="login-btn">Login</button>
-                        @if ( env('USER_REGISTRATION', true) )
+                        @if ( env('USER_REGISTRATION', false) )
                             <span class="spacer"> &nbsp; </span>
                             <a href="{{ url('/auth/register') }}" class="register">Don't have a user? Register here.</a>
                         @endif
@@ -50,7 +50,7 @@
     </section>
 <!-- Scripts -->
 @endsection
-@include('partials/application_script')
+
 @section('footer-script')
     <script src="{{ cdn(elixir('js/library.js')) }}"></script>
 @stop

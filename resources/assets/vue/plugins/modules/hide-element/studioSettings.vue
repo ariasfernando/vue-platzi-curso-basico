@@ -1,21 +1,15 @@
 <template>
-  <div :class="'plugin-' + plugin.name">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
-        <div class="col-sm-5">
-          <span>
-            <toggle-button :value="enabled" color="#78DCD6" :sync="true" :labels="true" @change="toggle"></toggle-button>
-          </span>
-        </div>
-      </div>
-    </form>
-  </div>
+  <settings-container :label="plugin.title">
+    <template slot="setting-right">
+      <toggle-button :value="enabled" color="#78DCD6" @change="toggle"></toggle-button>
+    </template>
+  </settings-container>
 </template>
-
 <script>
+  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
   export default {
     props: ['name'],
+    components: { SettingsContainer },
     computed: {
       currentComponent() {
         return this.$store.getters["module/currentComponent"];
@@ -40,12 +34,12 @@
       }
     },
     methods: {
-      toggle(e) {
+      toggle(value) {
         const payload = {
           plugin: this.name,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          enabled: e.value,
+          enabled: value,
         };
 
         this.$store.commit('module/togglePlugin', payload);
