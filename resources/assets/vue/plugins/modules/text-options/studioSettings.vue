@@ -31,13 +31,25 @@
           v-b-tooltip.hover
           :title="key"
           :name="key"
-          @change="(value)=>changeOption(value, key)"
+          @change="(value)=>changeSetting(value, key)"
           :value="tinySetting.content || 0"
           :min="0"
           ></el-input-number>
       </div>
     </div>
-
+    <div class="clearfix" v-if="plugin.config.options.forecolor.value">
+      <settings-container label="textcolor_map">
+        <template slot="setting-right">
+            <el-input
+              size="mini" 
+              v-validate="'required'"
+              v-model="textColorMap"
+              placeholder="000000,Black,474646,Gray,79a8c9,Blue,cd202c,Red"
+              class="clearfix"
+            ></el-input>
+        </template>
+      </settings-container>
+    </div>
   </div>
 </template>
 
@@ -68,7 +80,15 @@ export default {
       this.options = plugin.config.options;
 
       return plugin;
-    }
+    },
+    textColorMap: {
+      get() {
+        return this.plugin.config.options.forecolor.textcolor_map.join(',');
+      },
+      set(value) {
+        this.changeOption(value.split(","),'textcolor_map','forecolor');
+      }
+    },
   },
   data() {
     return {
@@ -145,12 +165,12 @@ export default {
       this.$store.commit("module/savePlugin", payload);
     },
 
-    changeOption(value,setting) {
+    changeSetting(value,setting) {
       const options = {};
       // switch to other var because value saved toggle state.
       const content = value;
 
-      options[setting] = {
+      setting[setting] = {
         content
       };
 
@@ -159,7 +179,22 @@ export default {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         config: {
-          settings: options
+          settings: setting
+        }
+      };
+    },
+
+    changeOption(value,setting,subOption) {
+      const option = {};
+      option[subOption] = {};
+      option[subOption][setting] = value;
+
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        config: {
+          options: option
         }
       };
 

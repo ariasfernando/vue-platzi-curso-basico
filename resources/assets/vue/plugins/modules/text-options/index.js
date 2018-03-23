@@ -138,6 +138,11 @@ module.exports = {
         type: Number,
         content: undefined,
       },
+      font_colors: {
+        title: 'font colors',
+        type: 'text',
+        content: undefined,
+      },
     },
   },
   render: false,
