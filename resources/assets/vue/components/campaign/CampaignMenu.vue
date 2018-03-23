@@ -6,7 +6,7 @@
           <div v-if="ready" v-for="item in items" class="beta-subitem-single">
 
             <div v-if="item.sub_menu" class="expand">
-              <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
+              <h2 class="menu-active" :class="{ active: isActive }" @click="(e) => expand(e, item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
 
                 <div class="beta-submodules">
                   <div v-for="subitem in item.sub_menu">
@@ -169,7 +169,7 @@
             }, 100);
         }
       },
-      expand (item) {
+      expand (event, item) {
         const index = this.expanded.indexOf(item);
         if (index !== -1) {
           this.expanded.splice(index, 1);
@@ -193,7 +193,6 @@
             event.target.className = "menu-active";
             event.target.nextElementSibling.classList.remove("beta-submodules-expanded");
           }
-
         }
       },
       onClone (evt) {
