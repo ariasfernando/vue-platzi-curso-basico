@@ -36,18 +36,13 @@
             :key="setting.name">
           </component>
         </group-container>
-        <div class="row" v-if="module.plugins && Object.keys(module.plugins).length !== 0">
-          <div class="col-sm-12">
-            <div>
-              <!-- Module Plugins -->
-              <div v-for="(plugin, moduleKey) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name" :key="plugin.name">
-                <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin"></component>
-              </div>
-              <!-- /Module Plugins -->
+        <template v-if="module.plugins && Object.keys(module.plugins).length !== 0">
+            <!-- Module Plugins -->
+            <div v-for="(plugin, moduleKey) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name" :key="plugin.name">
+              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin"></component>
             </div>
-          </div>
-        </div>
-
+            <!-- /Module Plugins -->
+        </template>
         <!-- Fixed Columns  -->
         <settings-container v-if="module.structure.columns.length > 1" label="Fixed Columns">
           <template slot="setting-right">

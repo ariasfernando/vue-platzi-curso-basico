@@ -1,9 +1,8 @@
 <template>
-  <settings-container :label="plugin.title">
-    <template slot="setting-right">
-      <toggle-button :value="component.attribute.hideElement" @change="toggleChange"></toggle-button>
-    </template>
-  </settings-container>
+  <div class="plugin-wrapper-inner">
+    <label>{{ plugin.title }}</label>
+    <toggle-button :value="component.attribute.hideElement" color="#78DCD6" :sync="true" :labels="true" @change="toggleChange"></toggle-button>
+  </div>
 </template>
 
 <script>
