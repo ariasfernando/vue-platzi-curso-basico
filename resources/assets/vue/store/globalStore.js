@@ -1,5 +1,6 @@
 const state = {
   loading: false,
+  secondaryLoading: false,
 };
 
 const getters = {};
@@ -7,6 +8,9 @@ const getters = {};
 const mutations = {
   setLoader(state, data) {
     state.loading = data;
+  },
+  setSecondaryLoader(state, data) {
+    state.secondaryLoading = data;
   },
 };
 

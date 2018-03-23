@@ -177,12 +177,23 @@
           this.expanded.push(item);
         }
 
-        if(event.target.className === "menu-active") {
-          event.target.className = "selected";
-          event.target.nextElementSibling.className += " beta-submodules-expanded";
-        } else {
-          event.target.className = "menu-active";
-          event.target.nextElementSibling.classList.remove("beta-submodules-expanded");
+        if(event.target.className === "menu-active" || event.target.parentElement.className === "menu-active") {
+          if (event.target.tagName === 'I'){
+            event.target.parentElement.className = "selected";
+            event.target.parentElement.nextElementSibling.className += " beta-submodules-expanded";
+          }else{
+            event.target.className = "selected";
+            event.target.nextElementSibling.className += " beta-submodules-expanded";
+          }
+        } else{
+          if (event.target.tagName === 'I'){
+            event.target.parentElement.className = "menu-active";
+            event.target.parentElement.nextElementSibling.classList.remove("beta-submodules-expanded");
+          }else{
+            event.target.className = "menu-active";
+            event.target.nextElementSibling.classList.remove("beta-submodules-expanded");
+          }
+
         }
       },
       onClone (evt) {
