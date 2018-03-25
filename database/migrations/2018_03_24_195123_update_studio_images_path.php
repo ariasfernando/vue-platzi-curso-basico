@@ -49,14 +49,10 @@ class UpdateStudioImagesPath extends Migration
                                                 }
                                                 break;
                                             case 'image-element':
-                                                if (isset($component_value['settings'])) {
-                                                    foreach ($component_value['settings'] as $setting_key => $setting) {
-                                                        if (isset($setting['name']) && $setting['name'] === 'placeholder') {
-                                                            if (strpos($setting['value'], 'customer/modules/') !== false) {
-                                                                $new_value = str_replace('customer/modules/', 'customer/modules/studio/', $setting['value']);
-                                                                $modules_data[$module_key]['structure']['columns'][$column_key]['components'][$component_key]['settings'][$setting_key]['value'] = $new_value;
-                                                            }
-                                                        }
+                                                if (isset($component_value['attribute']) && $component_value['attribute']['placeholder']) {
+                                                    if (strpos($component_value['attribute']['placeholder'], 'customer/modules/') !== false) {
+                                                        $new_value = str_replace('customer/modules/', 'customer/modules/studio/', $component_value['attribute']['placeholder']);
+                                                        $modules_data[$module_key]['structure']['columns'][$column_key]['components'][$component_key]['attribute']['placeholder'] = $new_value;
                                                     }
                                                 }
                                                 break;
