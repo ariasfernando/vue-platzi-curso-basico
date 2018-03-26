@@ -1,21 +1,15 @@
 <template>
-  <div :class="'plugin-' + plugin.name">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-7 control-label"><b>{{ plugin.title }}</b></label>
-        <div class="col-sm-5">
-          <span>
-            <toggle-button :value="enabled" active-color="#78DCD6" @change="toggle"></toggle-button>
-          </span>
-        </div>
-      </div>
-    </form>
-  </div>
+  <settings-container :label="plugin.title">
+    <template slot="setting-right">
+        <toggle-button :value="enabled" @change="toggle"></toggle-button>
+    </template>
+  </settings-container>
 </template>
-
 <script>
+  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
   export default {
     props: ['name'],
+    components: { SettingsContainer },
     computed: {
       currentComponent() {
         return this.$store.getters["module/currentComponent"];

@@ -17,6 +17,7 @@ const state = {
     attribute: {},
   },
   loading: false,
+  secondaryLoading: false,
 };
 
 const getters = {
@@ -44,6 +45,9 @@ const mutations = {
   setLoader(state, data) {
     state.loading = data;
   },
+  setSecondaryLoader(state, data) {
+    state.secondaryLoading = data;
+  },
   setModuleData(state, data) {
     state.module = data;
   },
@@ -66,9 +70,6 @@ const mutations = {
     const update = { ...state.module.structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
     state.module.structure.columns[payload.columnId].components[payload.componentId].data = update;
   },
-  saveComponent(state, data) {
-    state.module.structure.columns[data.columnId].components[data.componentId] = data.component;
-  },
   saveModuleSetting(state, data) {
     state.module.structure.style = data.style;
   },
@@ -76,11 +77,7 @@ const mutations = {
     state.module.structure.style[data.property] = data.value;
   },
   saveModuleAttribute(state, data) {
-    if (data.property === 'bgcolor') {
-      state.module.structure.attribute[data.property] = data.value.hex ? data.value : { hex: data.value };
-    } else {
-      state.module.structure.attribute[data.property] = data.value;
-    }
+    state.module.structure.attribute[data.property] = data.value;
   },
   saveModule(state, moduleId) {
     state.module.moduleId = moduleId;
@@ -99,9 +96,12 @@ const mutations = {
     const column = state.module.structure.columns[data.colId];
     // Set attribute
     column.attribute.width = `${data.width}%`;
-    // Find and set setting
-    const key = _.findKey(column.settings, { name: 'width' });
-    column.settings[key].value = `${data.width}%`;
+  },
+  saveColumnProperty(state, data) {
+    const property = state.module.structure.columns[data.colId][data.type];
+    const newProperty = {};
+    newProperty[data.property] = data.value;
+    _.merge(property, newProperty);
   },
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);
@@ -127,21 +127,12 @@ const mutations = {
       state.module.plugins[data.plugin].enabled = data.enabled;
     }
   },
-  saveComponentStyle(state, data) {
-    const style = state.module.structure.columns[data.columnId].components[data.componentId].style;
-    const newStyle = {};
-    newStyle[data.property] = data.value;
-    _.merge(style, newStyle);
-  },
-  saveComponentStyleOption(state, data) {
+  saveComponentProperty(state, data) {
     const component = state.module.structure.columns[data.columnId].components[data.componentId];
-    component.styleOptions[data.property] = data.value;
-  },
-  saveComponentAttribute(state, data) {
-    const attribute = state.module.structure.columns[data.columnId].components[data.componentId].attribute;
+    const property = data.subComponent ? component[data.subComponent][data.type] : component[data.type];
     const newAttr = {};
     newAttr[data.property] = data.value;
-    _.merge(attribute, newAttr);
+    _.merge(property, newAttr);
   },
   setActiveColumn(state, columnId) {
     state.activeColumn = columnId;
