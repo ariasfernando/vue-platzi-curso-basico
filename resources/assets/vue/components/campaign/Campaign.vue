@@ -155,7 +155,6 @@
       this.$store.commit("global/setLoader", true);
       this.loadCampaign();
       this.loadConfig();
-      console.log('entro')
       setInterval(CampaignService.logTime, this.logTimeInterval, this.campaignId, this.logTimeInterval / 1000);
     }
   };
