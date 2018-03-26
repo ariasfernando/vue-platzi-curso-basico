@@ -161,7 +161,11 @@
   @import '../../less/campaign';
   @stensul-white: #FFFFFF;
   @stensul-purple: #514960;
-
+  .section-canvas-email{
+    .mce-content-body{
+      line-height: inherit;
+    }
+  }
   .beta-subheader{
     display: table-caption;
     width: 100%;
