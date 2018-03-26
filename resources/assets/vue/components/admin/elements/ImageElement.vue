@@ -3,7 +3,7 @@
     <tr
       data-type="image-element"
       :data-component="JSON.stringify(component)"
-      :class="getMobileClasses(component,'tr')"
+      :class="getMobileClasses(component,'tr') + component.attribute.classes"
       @click.prevent="setComponent"
     >
       <td 
@@ -13,7 +13,7 @@
         :style="component.style" 
         :class="getMobileClasses(component,'td:first')"
       >
-        <table 
+        <table
           width="100%" 
           cellspacing="0" 
           cellpadding="0" 
@@ -23,7 +23,7 @@
           <tr>
             <td 
               width="100%" 
-              :bgcolor="component.attribute.bgcolor.hex" 
+              :bgcolor="component.attribute.bgcolor" 
               :align="component.attribute.align" 
               :valign="component.attribute.valign"
             >

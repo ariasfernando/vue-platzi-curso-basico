@@ -1,10 +1,7 @@
 <template>
   <div>
     <!-- START: Elements -->
-      <b-btn block v-b-toggle.element class="module-settings-item">
-        <p class="pull-left"><i class="glyphicon glyphicon-th-large"></i> ELEMENTS</p>
-        <i class="glyphicon glyphicon-menu-down menu-dropdown pull-right"></i>
-      </b-btn>
+    <label-item-container label="ELEMENTS" icon="glyphicon-th-large" v-b-toggle.element></label-item-container>
 
       <b-collapse id="element" accordion="module-settings-accordion">
         <b-card class="control">
@@ -41,12 +38,12 @@
 </template>
 
 <script>
-  import BootstrapVue from 'bootstrap-vue';
   import Draggable from 'vuedraggable';
+  import LabelItemContainer from "../containers/LabelItemContainer.vue";
   
   export default {
     components: {
-      BootstrapVue,
+      LabelItemContainer,
       Draggable
     },
 

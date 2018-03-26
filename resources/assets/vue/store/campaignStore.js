@@ -28,6 +28,7 @@ function campaignStore() {
       showImageEditor: false,
       moduleErrors: [],
       fieldErrors: [],
+      showModuleSettings: false,
     },
     getters: {
       modules(state) {
@@ -38,7 +39,10 @@ function campaignStore() {
       },
       moduleErrors(state) {
         const modules = state.modules;
-        const errors = _.filter(modules, m => m.data.errors && m.data.errors.length);
+
+        const errors = _.filter(modules, (m) => {
+          return !_.isEmpty(m.data) && m.data.errors && m.data.errors.length
+        });
 
         return errors.length || state.fieldErrors.length;
       },
@@ -73,6 +77,9 @@ function campaignStore() {
       showImageEditor(state) {
         return state.showImageEditor;
       },
+      showModuleSettings(state) {
+        return state.showModuleSettings;
+      },
       locked(state) {
         if (!_.isEmpty(state.campaign)) {
           return state.campaign.campaign_data.locked;
@@ -98,8 +105,14 @@ function campaignStore() {
       setDirty(state, dirty) {
         state.dirty = dirty;
       },
+      setUpdatedAt(state, updatedAt) {
+        state.campaign.campaign_data.updated_at = updatedAt;
+      },
       setToggleImageEditor(state, stateModal) {
         state.showImageEditor = stateModal;
+      },
+      setToggleModuleSettings(state, toggleValue) {
+        state.showModuleSettings = toggleValue;
       },
       addModule(state, moduleData) {
         state.modules.push(moduleData);
@@ -249,7 +262,7 @@ function campaignStore() {
       },
     },
     actions: {
-			updateCustomElement(context, payload) {
+      updateCustomElement(context, payload) {
         context.commit('updateCustomElement', payload);
         return Promise.resolve();
       },
@@ -293,6 +306,7 @@ function campaignStore() {
         campaignService.saveCampaign(data)
           .then(res => {
             context.commit('setDirty', false);
+            context.commit('setUpdatedAt', res.updatedAt);
             deferred.resolve(res.campaignId);
           })
           .catch(error => {

@@ -18,321 +18,363 @@
     </div>
 
     <div class="row">
-      <section v-if="ready" class="col-xs-12 section-container">
-        <div class="simple-text-config admin-library-form">  
-          <div v-if="$route.query.debug" class="col-xs-12">
-            <br><br>
-            <pre>{{ library.config }}</pre>
-          </div>
-          <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
-            <tabs>
-                <tab name="Settings" :selected="true">
-                    <div class="row">
-                      <!-- Field Name -->
-                      <div class="col-md-6">
-                        <label for="name">Name</label>
-                        <p class="control">
-                          <el-input
-                                v-validate="'required'"
-                                v-model="library.name"
-                                placeholder="Enter name here."
-                                :class="{'is-danger': errors.has('name') }"
-                          ></el-input>
-                          <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field Description -->
-                      <div class="col-md-6">
-                        <label for="description">Description</label>
-                        <p class="control">
-
-                          <el-input
-                                v-model="library.description"
-                                placeholder="Enter description here."
-                                :class="{'is-danger': errors.has('name') }"
-                                name="description"
-                          ></el-input>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="row" v-if="campaignConfig.preview.show_preheader">
-                      <!-- Field Preheader -->
-                      <label for="preheader" class="col-sm-4 control-label">Preheader</label>
-                      <p class="control col-sm-8">
-                        <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')"></toggle-button>
-                      </p>
-                    </div>
-
-                    <!-- Field Plain text -->
-                    <div class="row" v-if="campaignConfig.process_plaintext">
-                      <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
-                      <p class="control col-sm-8">
-                        <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')"></toggle-button>
-                      </p>
-                    </div>
-
-                    <!-- Field ESP -->
-                    <div class="row">
-                      <label for="preheader" class="col-sm-4 control-label">ESP</label>
-                      <p class="control col-sm-1">
-                        <toggle-button :value="library.config.esp" @change="updateToggle('esp')"></toggle-button>
-                      </p>
-                      <div v-if="library.config.esp" class="col-md-5">
-                        <p class="control">
-                          <select v-model="library.config.espProvider">
-                            <option v-for="(esp, key) in this.espList" v-bind:value="key" :key="esp.title">
-                              {{ esp.title }}
-                            </option>
-                          </select>
-                        </p>
-                      </div>
-                    </div>
-
-                    <!-- Field Tagging -->
-                    <div class="row" v-if="campaignConfig.enable_tagging">
-                      <label for="tagging" class="col-sm-4 control-label">Tags</label>
-                      <p class="control col-sm-1">
-                        <toggle-button :value="library.config.tagging" @change="updateToggle('tagging')"></toggle-button>
-                      </p>
-                    </div>
-
-                    <!-- Field Templating -->
-                    <div class="row" v-if="campaignConfig.enable_templating">
-                      <label for="templating" class="col-sm-4 control-label">Enable templating</label>
-                      <p class="control col-sm-1">
-                        <toggle-button :value="library.config.templating" @change="updateToggle('templating')"></toggle-button>
-                      </p>
-                    </div>
-                </tab>
-
-                <tab name="Template">
-                    <div class="row">
-
-                      <!-- Field width -->
-                      <div class="col-md-3">
-                        <label for="templateWidth">Template width</label>
-                        <p class="control">
-                          <input v-model="library.config.templateWidth" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('templateWidth') }" name="templateWidth"
-                                 type="text" placeholder="660">
-                          <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field mobile-width -->
-                      <div class="col-md-3">
-                        <label for="templateMobileWidth">Template Mobile Width</label>
-                        <p class="control">
-                          <input v-model="library.config.templateMobileWidth" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('templateMobileWidth') }"
-                                 name="templateMobileWidth" type="text" placeholder="480">
-                          <span v-show="errors.has('templateMobileWidth')"
-                                class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field background-color -->
-                      <div class="col-md-3">
-                        <label for="templateBackgroundColor">Template Background Color</label>
-                        <div class="control">
-                          <div id="templateBackgroundColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.templateBackgroundColor" v-validate="'required'" name="templateBackgroundColor" :class="{'input': true, 'is-danger': errors.has('templateBackgroundColor') }" placeholder="#FFFFFF"/>
-                              <span class="input-group-addon"><i :style="'background-color:' + library.config.templateBackgroundColor"></i></span>
-                          </div>
-
-                          <span v-show="errors.has('templateBackgroundColor')" class="help is-danger">{{ errors.first('templateBackgroundColor') }}</span>
-                        </div>
-                      </div>
-
-                      <!-- Field content-background-color -->
-                      <div class="col-md-3">
-                        <label for="contentBackgroundColor">Content Background Color</label>
-                        <div class="control">
-                          <div id="contentBackgroundColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.contentBackgroundColor" v-validate="'required'" name="contentBackgroundColor" :class="{'input': true, 'is-danger': errors.has('contentBackgroundColor') }" placeholder="#FFFFFF"/>
-                              <span class="input-group-addon"><i :style="'background-color:' + library.config.contentBackgroundColor"></i></span>
-                          </div>
-
-                          <span v-show="errors.has('contentBackgroundColor')"
-                                class="help is-danger">{{ errors.first('contentBackgroundColor') }}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
-
-                      <!-- Field font-family -->
-                      <div class="col-md-3">
-                        <label for="fontFamily">Font Family</label>
-                        <p class="control">
-                          <input v-model="library.config.fontFamily" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('fontFamily') }" name="fontFamily" type="text"
-                                 placeholder="Arial, sans-serif">
-                          <span v-show="errors.has('fontFamily')" class="help is-danger">{{ errors.first('fontFamily') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field font-color -->
-                      <div class="col-md-3">
-                        <label for="fontColor">Font Color</label>
-                        <div class="control">
-                          <div id="fontColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.fontColor" v-validate="'required'" name="fontColor" :class="{'input': true, 'is-danger': errors.has('fontColor') }" placeholder="#000000"/>
-                              <span class="input-group-addon"><i :style="'background-color:' + library.config.fontColor"></i></span>
-                          </div>
-
-                          <span v-show="errors.has('fontColor')" class="help is-danger">{{ errors.first('fontColor') }}</span>
-                        </div>
-                      </div>
-
-                      <!-- Field font-size -->
-                      <div class="col-md-3">
-                        <label for="fontSize">Font Size</label>
-                        <p class="control">
-                          <input v-model="library.config.fontSize" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('fontSize') }" name="fontSize" type="text"
-                                 placeholder="12">
-                          <span v-show="errors.has('fontSize')" class="help is-danger">{{ errors.first('fontSize') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field line-height -->
-                      <div class="col-md-3">
-                        <label for="lineHeight">Line Height</label>
-                        <p class="control">
-                          <input v-model="library.config.lineHeight" v-validate="'required'"
-                                 :class="{'input': true, 'is-danger': errors.has('lineHeight') }" name="lineHeight" type="text"
-                                 placeholder="14">
-                          <span v-show="errors.has('lineHeight')" class="help is-danger">{{ errors.first('lineHeight') }}</span>
-                        </p>
-                      </div>
-
-                    </div>
-
-                    <div class="row">
-
-                      <!-- Field link-color -->
-                      <div class="col-md-3">
-                        <label for="linkColor">Link Color</label>
-                        <div class="control">
-                          <div id="linkColor" class="input-group colorpicker-component cp">
-                              <input type="text" class="" v-model="library.config.linkColor" v-validate="'required'" name="linkColor" :class="{'input': true, 'is-danger': errors.has('linkColor') }" placeholder="#000000"/>
-                              <span class="input-group-addon"><i :style="'background-color:' + library.config.linkColor"></i></span>
-                          </div>
-
-                          <span v-show="errors.has('linkColor')" class="help is-danger">{{ errors.first('linkColor') }}</span>
-                        </div>
-                      </div>
-
-                      <!-- Field link-decoration -->
-                      <div class="col-md-3">
-                        <label for="linkDecoration">Link Decoration</label>
-                        <p class="control">
-                          <select v-model="library.config.linkDecoration">
-                            <option>none</option>
-                            <option>underline</option>
-                          </select>
-                        </p>
-                      </div>
-
-                      <div class="col-md-3">
-                        <label for="padding">Padding</label>
-                        <p class="control">
-                          <input type="text" class="" v-model="library.config.padding" v-validate="'required'" name="padding" :class="{'input': true, 'is-danger': errors.has('padding') }" placeholder="10px"/>
-                          <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
-                        </p>
-                      </div>
-
-                      <!-- Field external-link -->
-                      <div class="col-md-3">
-                        <label for="externalCssLink">External CSS Link</label>
-                        <p class="control">
-                          <el-input
-                            v-model="library.config.externalCssLink"
-                            name="linkColor" 
-                            placeholder="http://www.example.com/css/styles.css"
-                          ></el-input>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <!-- Field propietary styles -->
-                      <div class="col-md-12">
-                        <label for="propietaryCss">Propietary Styles</label>
-                        <p class="control">
-                          <textarea v-model="library.config.propietaryCss" rows="10" name="propietaryCss" type="text" placeholder=""></textarea>
-                        </p>
-                      </div>
-                    </div>
-                </tab>
-
-                <tab name="Menu">
-                    <!-- Select modules -->
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div id="modules-container">
-
-                          <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name" :key="group.name">
-
-                            <div :id="'group-container-' + group.name">
-
-                              <label for="fontFamily">Group Name</label>
-                              <p :class="{ 'control': true }">
-
-                                <el-input
-                                  v-model="group.name"
-                                  v-validate="'required'"
-                                  :name="'modules[' + idx + '][name]'"
-                                  placeholder="Enter group name"
-                                  :class="{'is-danger': errors.has('groupName-' + idx) }"
-                                ></el-input>
-                                <span v-show="errors.has('groupName-' + idx)"
-                                      class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
-                              </p>
-
-                              <select v-model="group.modules" :name="'modules[' + idx + '][modules]'" class="form-control" multiple>
-                                <option v-for="module in modules" :value="module" :selected="group.modules.indexOf(module) >= 0" :key="module">
-                                  {{ module }}
-                                </option>
-                              </select>
-
-                              <div v-if="group.name === 'default'" class="sep">
-                                <br/><br/>
+      <section v-if="ready" class="container">
+        <div class="simple-text-config admin-library-form">
+          <div class="row">
+            <div class="col-xs-12">
+                  <div v-if="$route.query.debug" class="col-xs-12">
+                    <br><br>
+                    <pre>{{ library.config }}</pre>
+                  </div>
+                  <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
+                    <tabs>
+                        <tab name="Settings" :selected="true">
+                            <div class="row">
+                              <!-- Field Name -->
+                              <div class="col-md-6">
+                                <label for="name">Name</label>
+                                <p class="control">
+                                  <el-input
+                                        v-validate="'required'"
+                                        v-model="library.name"
+                                        placeholder="Enter name here."
+                                        :class="{'is-danger': errors.has('name') }"
+                                  ></el-input>
+                                  <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
+                                </p>
                               </div>
 
-                              <div v-else class="group-remove-container">
-                                <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)"></span>
-                                <hr/>
+                              <!-- Field Description -->
+                              <div class="col-md-6">
+                                <label for="description">Description</label>
+                                <p class="control">
+
+                                  <el-input
+                                        v-model="library.description"
+                                        placeholder="Enter description here."
+                                        name="description"
+                                  ></el-input>
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="row" v-if="campaignConfig.preview.show_preheader">
+                              <!-- Field Preheader -->
+                              <label for="preheader" class="col-sm-4 control-label">Preheader</label>
+                              <p class="control col-sm-8">
+                                <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')"></toggle-button>
+                              </p>
+                            </div>
+
+                            <!-- Field Plain text -->
+                            <div class="row" v-if="campaignConfig.process_plaintext">
+                              <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
+                              <p class="control col-sm-8">
+                                <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')"></toggle-button>
+                              </p>
+                            </div>
+
+                            <!-- Field ESP -->
+                            <div class="row">
+                              <label for="preheader" class="col-sm-4 control-label">ESP</label>
+                              <p class="control col-sm-1">
+                                <toggle-button :value="library.config.esp" @change="updateToggle('esp')"></toggle-button>
+                              </p>
+                              <div v-if="library.config.esp" class="col-md-5">
+                                <p class="control">
+                                  <el-select
+                                    size="mini"
+                                    v-model="espProvider"
+                                    placeholder="Choose ESP"
+                                    >
+                                    <el-option
+                                      v-for="(esp, key) in this.espList"
+                                      :key="key"
+                                      :label="esp.title"
+                                      :value="key">
+                                    </el-option>
+                                  </el-select>
+                                </p>
+                              </div>
+                            </div>
+
+                            <!-- Field Tagging -->
+                            <div class="row" v-if="campaignConfig.enable_tagging">
+                              <label for="tagging" class="col-sm-4 control-label">Tags</label>
+                              <p class="control col-sm-1">
+                                <toggle-button :value="library.config.tagging" @change="updateToggle('tagging')"></toggle-button>
+                              </p>
+                            </div>
+
+                            <!-- Field Templating -->
+                            <div class="row" v-if="campaignConfig.enable_templating">
+                              <label for="templating" class="col-sm-4 control-label">Enable templating</label>
+                              <p class="control col-sm-1">
+                                <toggle-button :value="library.config.templating" @change="updateToggle('templating')"></toggle-button>
+                              </p>
+                            </div>
+                        </tab>
+
+                        <tab name="Template">
+                            <div class="row">
+
+                              <!-- Field width -->
+                              <div class="col-md-3">
+                                <label for="templateWidth">Template width</label>
+                                <p class="control">
+
+                                  <el-input-number
+                                    size="mini" 
+                                    v-validate="'required'"
+                                    v-model="library.config.templateWidth"
+                                    :class="{'is-danger': errors.has('templateWidth') }"
+                                    :name="'templateWidth'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth') }}</span>
+                                </p>
+                              </div>
+
+                              <!-- Field mobile-width -->
+                              <div class="col-md-3">
+                                <label for="templateMobileWidth">Template Mobile Width</label>
+                                <p class="control">
+
+                                  <el-input-number
+                                    size="mini" 
+                                    v-validate="'required'"
+                                    v-model="library.config.templateMobileWidth"
+                                    :class="{'is-danger': errors.has('templateMobileWidth') }"
+                                    :name="'templateMobileWidth'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('templateMobileWidth')"
+                                        class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
+                                </p>
+                              </div>
+
+                              <!-- Field background-color -->
+                              <div class="col-md-3">
+                                <input-generic-color
+                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  :name="'templateBackgroundColor'"
+                                  :type="'generic-color'"
+                                  :link="'config'"
+                                  :label="'Template Background Color'"
+                                  :default-value="library.config.templateBackgroundColor"
+                                  :element="library"></input-generic-color>
+                              </div>
+
+                              <!-- Field content-background-color -->
+                              <div class="col-md-3">
+                                <input-generic-color
+                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  :name="'contentBackgroundColor'"
+                                  :type="'generic-color'"
+                                  :link="'config'"
+                                  :label="'Content Background Color'"
+                                  :default-value="library.config.contentBackgroundColor"
+                                  :element="library"></input-generic-color>
+                              </div>
+                            </div>
+
+                            <div class="row">
+
+                              <!-- Field font-family -->
+                              <div class="col-md-3">
+                                <input-font-family
+                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  :name="'fontFamily'"
+                                  :type="'font-family'"
+                                  :link="'config'"
+                                  :label="'Font Family'"
+                                  :default-value="library.config.fontFamily"
+                                  :element="library"></input-font-family>
+                              </div>
+
+                              <!-- Field font-color -->
+                              <div class="col-md-3">
+                                <input-generic-color
+                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  :name="'fontColor'"
+                                  :type="'generic-color'"
+                                  :link="'config'"
+                                  :label="'Font Color'"
+                                  :default-value="library.config.fontColor"
+                                  :element="library"></input-generic-color>
+                              </div>
+
+                              <!-- Field font-size -->
+                              <div class="col-md-3">
+                                <label for="fontSize">Font Size</label>
+                                <p class="control">
+
+                                  <el-input-number
+                                    size="mini" 
+                                    v-validate="'required'"
+                                    v-model="library.config.fontSize"
+                                    :class="{'is-danger': errors.has('fontSize') }"
+                                    :name="'fontSize'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('fontSize')" class="help is-danger">{{ errors.first('fontSize') }}</span>
+                                </p>
+                              </div>
+
+                              <!-- Field line-height -->
+                              <div class="col-md-3">
+                                <label for="lineHeight">Line Height</label>
+                                <p class="control">
+                                  <el-input-number
+                                    size="mini" 
+                                    v-validate="'required'"
+                                    v-model="library.config.lineHeight"
+                                    :class="{'is-danger': errors.has('lineHeight') }"
+                                    :name="'lineHeight'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('lineHeight')" class="help is-danger">{{ errors.first('lineHeight') }}</span>
+                                </p>
                               </div>
 
                             </div>
-                          </div>
 
-                        </div>
-                      </div>
-                    </div>
+                            <div class="row">
 
-                    <div class="row">
-                      <div class="col-md-12">
-                        <button class="btn btn-success center-block btn-add-group" @click.prevent="addGroup">Add Group</button>
-                        <br>
-                      </div>
-                    </div>
+                              <!-- Field link-color -->
+                              <div class="col-md-3">
+                                <input-generic-color
+                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  :name="'linkColor'"
+                                  :type="'generic-color'"
+                                  :link="'config'"
+                                  :label="'Link Color'"
+                                  :default-value="library.config.linkColor"
+                                  :element="library"></input-generic-color>
+                              </div>
 
-                    <!-- Input submit  -->
-                    <div class="row">
-                      <div class="col-md-12">
-                        <button type="submit" class="btn btn-success pull-right submit-config hidden" :disabled="errors.any()">Submit
-                        </button>
-                      </div>
-                    </div>
-                </tab>
-            </tabs>
+                              <!-- Field link-decoration -->
+                              <div class="col-md-3">
+                                <label for="linkDecoration">Link Decoration</label>
+                                <p class="control">
+                                  <el-button
+                                    :class="{'fa fa-underline':true,'active': library.config.linkDecoration === 'underline'}"
+                                    size="mini"
+                                    @click.native="toggleUnderline"
+                                  ></el-button>
+                                </p>
+                              </div>
 
-          </form>
+                              <div class="col-md-3">
+                                <label for="padding">Padding</label>
+                                <p class="control">
+
+                                  <el-input-number
+                                    size="mini" 
+                                    v-validate="'required'"
+                                    v-model="library.config.padding"
+                                    :class="{'is-danger': errors.has('padding') }"
+                                    :name="'padding'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
+                                </p>
+                              </div>
+
+                              <!-- Field external-link -->
+                              <div class="col-md-3">
+                                <label for="externalCssLink">External CSS Link</label>
+                                <p class="control">
+                                  <el-input
+                                    v-model="library.config.externalCssLink"
+                                    name="linkColor" 
+                                    placeholder="http://www.example.com/css/styles.css"
+                                  ></el-input>
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <!-- Field propietary styles -->
+                              <div class="col-md-12">
+                                <label for="propietaryCss">Propietary Styles</label>
+                                <p class="control">
+                                  <textarea v-model="library.config.propietaryCss" rows="10" name="propietaryCss" type="text" placeholder=""></textarea>
+                                </p>
+                              </div>
+                            </div>
+                        </tab>
+
+                        <tab name="Menu">
+                            <!-- Select modules -->
+                            <div class="row">
+                              <div class="col-md-8 col-md-offset-2">
+                                <div id="modules-container">
+
+                                  <div v-for="(group, idx) in library.modules" :id="'modules-' + idx">
+
+                                    <div :id="'group-container-' + idx">
+                                      <label>Group Name</label>
+                                      <p :class="{ 'control': true }">
+
+                                        <el-input
+                                          v-model="group.name"
+                                          v-validate="'required'"
+                                          :name="'modules[' + idx + '][name]'"
+                                          placeholder="Enter group name"
+                                          :class="{'is-danger': errors.has('groupName-' + idx) }"
+                                        ></el-input>
+                                        <span v-show="errors.has('groupName-' + idx)"
+                                              class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
+                                      </p>
+
+                                      <el-select
+                                        v-model="group.modules"
+                                        :name="'modules[' + idx + '][modules]'"
+                                        multiple
+                                        placeholder="Choose modules"
+                                        size="mini"
+                                        >
+                                          <el-option
+                                            v-for="module in modules"
+                                            :key="module"
+                                            :label="module"
+                                            :value="module"
+                                            :selected="group.modules.indexOf(module) >= 0"
+                                            >{{module}}
+                                          </el-option>
+                                      </el-select>
+                                      <div v-if="group.name === 'default'" class="sep">
+                                        <br/><br/>
+                                      </div>
+
+                                      <div v-else class="group-remove-container">
+                                        <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)"></span>
+                                        <hr/>
+                                      </div>
+
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-12">
+                                <button class="btn btn-success center-block btn-add-group" @click.prevent="addGroup">Add Group</button>
+                                <br>
+                              </div>
+                            </div>
+
+                            <!-- Input submit  -->
+                            <div class="row">
+                              <div class="col-md-12">
+                                <button type="submit" class="btn btn-success pull-right submit-config hidden" :disabled="errors.any()">Submit
+                                </button>
+                              </div>
+                            </div>
+                    </tab>
+                </tabs>
+
+              </form>
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -345,394 +387,444 @@
   import Tabs from '../common/Tabs.vue'
   import Tab from '../common/Tab.vue'
   import VueSticky from 'vue-sticky'
+  import * as elementSettings from "./settings";
 
   export default {
     name: 'EditLibrary',
     components: {
-      Tabs,
-      Tab
-    },
-    data () {
-      return {
-        library: {},
-        modules: {},
-        espList: {},
-        ready: false,
-        campaignConfig: {}
-      }
-    },
-    directives: {
-      'sticky': VueSticky,
-    },
-    methods: {
-      updateToggle(element) {
-        this.library.config[element] = !this.library.config[element];
+    Tabs,
+    Tab,
+    "input-font-family": elementSettings.FontFamily,
+    "input-generic-color": elementSettings.GenericColor,
+  },
+  data() {
+    return {
+      library: {},
+      modules: {},
+      espList: {},
+      ready: false,
+      campaignConfig: {}
+    };
+  },
+  directives: {
+    sticky: VueSticky
+  },
+  computed: {
+    espProvider: {
+      get() {
+        return this.library.config.espProvider ? this.library.config.espProvider : null;
       },
-      loadLibrary() {
-        libraryService.espProviders()
+      set(espProvider) {
+        this.library.config.espProvider = espProvider;
+      }
+    }
+  },
+  methods: {
+    updateToggle(element) {
+      this.library.config[element] = !this.library.config[element];
+    },
+    toggleUnderline() {
+      this.library.config.linkDecoration =
+        this.library.config.linkDecoration === "none" ? "underline" : "none";
+    },
+    loadLibrary() {
+      libraryService.espProviders()
+        .then((response) => {
+          this.espList = response;
+        })
+        .catch((error) => {
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+        });
+      let libraryId = this.$route.params.id;
+
+      if (libraryId) {
+        libraryService.getLibrary(libraryId)
           .then((response) => {
-            this.espList = response;
+            this.library = response.library;
+            this.modules = response.modules;
+            this.ready = true;
           })
           .catch((error) => {
             this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
-        let libraryId = this.$route.params.id;
-
-        if (libraryId) {
-          libraryService.getLibrary(libraryId)
-            .then((response) => {
-              this.library = response.library;
-              this.modules = response.modules;
-              this.ready = true;
-            })
-            .catch((error) => {
-              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
-            });
-        } else {
-          libraryService.newLibrary()
-            .then((response) => {
-              this.library = response.library;
-              this.modules = response.modules;
-              this.ready = true;
-            })
-            .catch((error) => {
-              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
-            });
-        }
-      },
-      saveLibrary() {
-
-        let formData = {
-          name: this.library.name,
-          description: this.library.description,
-          config: this.library.config,
-          modules: this.library.modules
-        };
-
-        if (this.library.id) {
-          formData.libraryId = this.library.id;
-          libraryService.saveLibrary(formData)
-            .then((response) => {
-              if (response.message === 'SUCCESS') {
-                window.location.href = this.$_app.config.baseUrl + "/admin/library";
-              }
-            })
-            .catch((error) => {
-              this.$root.$toast('Oops! There was an error', {className: 'et-error'});
-            });
-        } else {
-          libraryService.createLibrary(formData)
-            .then((response) => {
-              if (response.message === 'SUCCESS') {
-                window.location.href = this.$_app.config.baseUrl + "/admin/library";
-              } else if ( response.message === 'ERROR_EXISTS' ) {
-                this.$root.$toast('Library already exists', {className: 'et-error'});
-              }
-            })
-            .catch((error) => {
-                this.$root.$toast('Oops! There was an error', {className: 'et-error'});
-            });
-        }
-      },
-      addGroup() {
-        this.temporal = this.temporal || 1;
-        let tmpName = 'Unnamed Group ' + this.temporal++;
-
-        this.library.modules.push({
-          name: tmpName,
-          modules: []
-        });
-      },
-      deleteGroup(idx) {
-        this.library.modules.splice(idx, 1);
-      },
-      toggleSidebar() {
-        const sidebar = document.getElementById('admin-sidebar');
-        sidebar.style.display = 'none';
-
-        var libMargin = document.getElementById('admin-library-container');
-        libMargin.className -= ('col-xs-12');
-
-        const container = document.getElementsByClassName('base-admin')[0];
-        container.style.paddingLeft = 0;
+      } else {
+        libraryService.newLibrary()
+          .then((response) => {
+            this.library = response.library;
+            this.modules = response.modules;
+            this.ready = true;
+          })
+          .catch((error) => {
+            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+          });
       }
     },
-    created () {
-      configService.getConfig('campaign').then((response) => {
-        this.campaignConfig = response;
-        this.loadLibrary();
+    saveLibrary() {
+
+      let formData = {
+        name: this.library.name,
+        description: this.library.description,
+        config: this.library.config,
+        modules: this.library.modules
+      };
+
+      if (this.library.id) {
+        formData.libraryId = this.library.id;
+        libraryService.saveLibrary(formData)
+          .then((response) => {
+            if (response.message === 'SUCCESS') {
+              window.location.href = this.$_app.config.baseUrl + "/admin/library";
+            }
+          })
+          .catch((error) => {
+            this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+          });
+      } else {
+        libraryService.createLibrary(formData)
+          .then((response) => {
+            if (response.message === 'SUCCESS') {
+              window.location.href = this.$_app.config.baseUrl + "/admin/library";
+            } else if ( response.message === 'ERROR_EXISTS' ) {
+              this.$root.$toast('Library already exists', {className: 'et-error'});
+            }
+          })
+          .catch((error) => {
+              this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+          });
+      }
+    },
+    addGroup() {
+      this.temporal = this.temporal || 1;
+      let tmpName = 'Unnamed Group ' + this.temporal++;
+
+      this.library.modules.push({
+        name: tmpName,
+        modules: []
       });
     },
-    mounted () {
-      this.toggleSidebar();
+    deleteGroup(idx) {
+      this.library.modules.splice(idx, 1);
+    },
+    toggleSidebar() {
+      const sidebar = document.getElementById('admin-sidebar');
+      sidebar.style.display = 'none';
+
+      var libMargin = document.getElementById('admin-library-container');
+      libMargin.className -= ('col-xs-12');
+
+      const container = document.getElementsByClassName('base-admin')[0];
+      container.style.paddingLeft = 0;
+    },
+    configSettingUpdatedHandler(eventData) {
+      this.library.config[eventData.name] = eventData.value;
     }
-  };
+  },
+  created () {
+    configService.getConfig('campaign').then((response) => {
+      this.campaignConfig = response;
+      this.loadLibrary();
+    });
+  },
+  mounted () {
+    this.toggleSidebar();
+  }
+};
 </script>
 
+
 <style lang="less">
-  @stensul-purple: #514960;
-  @stensul-white: #FFFFFF;
-  @stensul-purple-light: lighten(@stensul-purple, 20%);
-  @focus: #69dac8;
+@stensul-purple: #514960;
+@stensul-white: #ffffff;
+@stensul-purple-light: lighten(@stensul-purple, 20%);
+@focus: #69dac8;
 
-  @brand-primary: lighten(@stensul-purple, 35%);
-  @brand-secondary: @stensul-purple-light;
+@brand-primary: lighten(@stensul-purple, 35%);
+@brand-secondary: @stensul-purple-light;
 
-  .library {
-    margin-top: -15px;
+.library {
+  margin-top: -15px;
+  #modules-container {
+    .el-input,
+    .el-select {
+      width: 300px;  
+    }
+  }
+  .half-style-setting {
+    width: 100%;
+    float: left;
+    position: relative;
+    &+.half-style-setting{
+      padding-left: 15px;
+    }
+    &.padding-top{
+      padding-top: 5px;
+    }
+    &.float-right{
+      float: right;
+    }
+  }
+  .header {
+    color: @stensul-purple;
+    background-color: @stensul-white;
+    height: 53px;
+    margin-bottom: 20px;
+    padding: 17px 0;
+    box-shadow: 0px 0px 4px #999999;
+    margin-top: -3px;
 
-    .header {
-      color: @stensul-purple;
-      background-color: @stensul-white;
-      height: 53px;
-      margin-bottom: 20px;
-      padding: 17px 0;
-      box-shadow: 0px 0px 4px #999999;
-      margin-top: -3px;
+    .header-col {
+      height: 100%;
+    }
 
-      .header-col {
-        height: 100%;
+    .vertical-center {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .switch {
+      position: relative;
+      height: 27px;
+      width: 100px;
+      background: #c8c8c8;
+      border-radius: 3px;
+      -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+      margin: 0 auto;
+    }
+
+    .switch-label {
+      position: relative;
+      z-index: 2;
+      float: left;
+      width: 50px;
+      line-height: 23px;
+      font-size: 16px;
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+      cursor: pointer;
+      margin: 0 !important;
+
+      i {
+        display: inline-block;
+        vertical-align: sub;
       }
+    }
 
-      .vertical-center {
-        min-height: 100%;
-        display: flex;
-        align-items: center;
-      }
+    .switch-label:active {
+      font-weight: bold;
+    }
 
-      .switch {
-        position: relative;
-        height: 27px;
-        width: 100px;
-        background: #C8C8C8;
-        border-radius: 3px;
-        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-        margin: 0 auto;
-      }
+    .switch-label-off {
+      padding-left: 2px;
+    }
 
-      .switch-label {
-        position: relative;
-        z-index: 2;
-        float: left;
-        width: 50px;
-        line-height: 23px;
-        font-size: 16px;
-        color: #fff;
-        text-align: center;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
-        cursor: pointer;
-        margin: 0 !important;
+    .switch-label-on {
+      padding-right: 2px;
+    }
 
-        i {
-          display: inline-block;
-          vertical-align: sub;
-        }
-      }
+    .switch-input {
+      display: none;
+    }
 
-      .switch-label:active {
-        font-weight: bold;
-      }
+    .switch-input:checked + .switch-label {
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+      -webkit-transition: 0.15s ease-out;
+      -moz-transition: 0.15s ease-out;
+      -o-transition: 0.15s ease-out;
+      transition: 0.15s ease-out;
+    }
 
-      .switch-label-off {
-        padding-left: 2px;
-      }
+    .switch-input:checked + .switch-label-on ~ .switch-selection {
+      left: 50px;
+      /* Note: left: 50% doesn't transition in WebKit */
+    }
 
-      .switch-label-on {
-        padding-right: 2px;
-      }
-
-      .switch-input {
-        display: none;
-      }
-
-      .switch-input:checked + .switch-label {
-        font-weight: bold;
-        color: #fff;
-        text-shadow: 0 1px rgba(255, 255, 255, 0.25);
-        -webkit-transition: 0.15s ease-out;
-        -moz-transition: 0.15s ease-out;
-        -o-transition: 0.15s ease-out;
-        transition: 0.15s ease-out;
-      }
-
-      .switch-input:checked + .switch-label-on ~ .switch-selection {
-        left: 50px;
-        /* Note: left: 50% doesn't transition in WebKit */
-      }
-
-      .switch-selection {
-        display: block;
-        position: absolute;
-        z-index: 1;
-        top: 2px;
-        left: 2px;
-        width: 48px;
-        height: 24px;
-        background: @brand-secondary;
-        border-radius: 3px;
+    .switch-selection {
+      display: block;
+      position: absolute;
+      z-index: 1;
+      top: 2px;
+      left: 2px;
+      width: 48px;
+      height: 24px;
+      background: @brand-secondary;
+      border-radius: 3px;
         background-image: -webkit-linear-gradient(top, @brand-primary, @brand-secondary);
         background-image: -moz-linear-gradient(top, @brand-primary, @brand-secondary);
         background-image: -o-linear-gradient(top, @brand-primary, @brand-secondary);
         background-image: linear-gradient(to bottom, @brand-primary, @brand-secondary);
         -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-        -webkit-transition: left 0.15s ease-out;
-        -moz-transition: left 0.15s ease-out;
-        -o-transition: left 0.15s ease-out;
-        transition: left 0.15s ease-out;
-      }
-
-      .section-title {
-        font-size: 18px;
-        font-family: 'Open Sans', Arial, sans-serif;
-        font-weight: 300;
-        margin-top: -1px;
-      }
-
+      -webkit-transition: left 0.15s ease-out;
+      -moz-transition: left 0.15s ease-out;
+      -o-transition: left 0.15s ease-out;
+      transition: left 0.15s ease-out;
     }
 
-    .section-container {
-      background-color: #FFFFFF;
-      padding-left: 15px;
-    }
-
-    .admin-library-form {
-      box-sizing: border-box;
-      position: relative;
-      padding: 15px;
-      margin: 0 auto;
-      background-color: #ffffff;
-      border-radius: 10px;
-    }
-    select[multiple] {
-      height: 100px !important;
-    }
-
-    .group-remove-container {
-      text-align: right;
-    }
-
-    .group-remove {
-      float: none !important;
-      margin-top: 10px;
-    }
-
-    .is-danger {
-      color: red;
-    }
-
-    .input-group-addon i {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      vertical-align: text-top;
-    }
-
-    .beta-btn-primary{
-      font-family: 'Open Sans', Arial, sans-serif;
-      font-size: 13px;
-      margin-top: -6px;
-      background: @stensul-purple;
-      border: none;
-      padding: 5px 7px;
-
-      &:hover{
-        border: none;
-      }
-    }
-
-    .beta-btn-secondary{
-      font-family: 'Open Sans', Arial, sans-serif;
-      font-size: 13px;
-      font-weight: 400;
-      color: #666666;
-      padding: 5px 7px;
-      border: 1px solid #666666;
-      background: @stensul-white;
-      border: 1px solid #dddddd;
-      transition: all 0.3s linear;
-      margin: 0px;
-      margin-top: -6px;
-      border-radius: 2px;
-      cursor: pointer;
-
-      a{
-        color: #666666;
-
-        &:hover{
-          text-decoration: none;
-        }
-      }
-
-      &:hover{
-        background: @stensul-white;
-        color: #666666;
-        border: 1px solid @stensul-purple;
-      }
-    }
-
-    label{
-      font-family: 'Open Sans', Arial, serif;
-    }
-
-    select{
-      border: 1px solid #dddddd;
-      height: 41px;
-      border-radius: 2px;
-      font-family: 'Open Sans', Arial, serif;
+    .section-title {
+      font-size: 18px;
+      font-family: "Open Sans", Arial, sans-serif;
       font-weight: 300;
+      margin-top: -1px;
     }
+  }
 
-    textarea{
-      box-shadow: none;
-      height: 150px;
+  .el-button:focus,
+  .el-button:hover {
+    color: inherit;
+    border-color: inherit;
+    background-color: inherit;
+  }
+  .el-button.active{
+    color: #ffffff;
+    border-color: rgb(120, 220, 214);
+    background-color: rgb(120, 220, 214);
+  }
+  .section-container {
+    background-color: #ffffff;
+    padding-left: 15px;
+  }
 
-      &:focus{
-        outline: 0;
+  .admin-library-form {
+    box-sizing: border-box;
+    position: relative;
+    padding: 15px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+  }
+  select[multiple] {
+    height: 100px !important;
+  }
+
+  .group-remove-container {
+    text-align: right;
+  }
+
+  .group-remove {
+    float: none !important;
+    margin-top: 10px;
+  }
+
+  .is-danger {
+    color: red;
+  }
+
+  .input-group-addon i {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: text-top;
+  }
+
+  .beta-btn-primary {
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 13px;
+    margin-top: -6px;
+    background: @stensul-purple;
+    border: none;
+    padding: 5px 7px;
+
+    &:hover {
+      border: none;
+    }
+  }
+
+  .beta-btn-secondary {
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #666666;
+    padding: 5px 7px;
+    border: 1px solid #666666;
+    background: @stensul-white;
+    border: 1px solid #dddddd;
+    transition: all 0.3s linear;
+    margin: 0px;
+    margin-top: -6px;
+    border-radius: 2px;
+    cursor: pointer;
+
+    a {
+      color: #666666;
+
+      &:hover {
+        text-decoration: none;
       }
     }
 
-    .tabs{
-      display: table;
-      width: 100%;
-      border-bottom: 1px solid #DDDDDD;
-      font-family: 'Open Sans', Arial, sans-serif;
-      margin-bottom: 30px;
+    &:hover {
+      background: @stensul-white;
+      color: #666666;
+      border: 1px solid @stensul-purple;
+    }
+  }
 
-      ul{
-        padding: 0px;
-        list-style-type: none;
+  label {
+    font-family: "Open Sans", Arial, serif;
+  }
 
-        li{
-          float: left;
+  select {
+    border: 1px solid #dddddd;
+    height: 41px;
+    border-radius: 2px;
+    font-family: "Open Sans", Arial, serif;
+    font-weight: 300;
+  }
 
-          a{
-            display: inline-block;
-            padding: 15px 0px;
-            margin-right: 40px;
-            color: #666666;
-            font-weight: 300;
-            opacity: 0.6;
-            font-size: 16px;
-            transition: all 0.3s linear;
+  textarea {
+    box-shadow: none;
+    height: 150px;
 
-            &:hover{
-              opacity: 1;
-              text-decoration: none;
-            }
-          }
+    &:focus {
+      outline: 0;
+    }
+  }
 
-        }
+  .tabs {
+    display: table;
+    width: 100%;
+    border-bottom: 1px solid #dddddd;
+    font-family: "Open Sans", Arial, sans-serif;
+    margin-bottom: 30px;
 
-        li.is-active{
-          a{
-            border-bottom: 2px solid @stensul-purple;
+    ul {
+      padding: 0px;
+      list-style-type: none;
+
+      li {
+        float: left;
+
+        a {
+          display: inline-block;
+          padding: 15px 0px;
+          margin-right: 40px;
+          color: #666666;
+          font-weight: 300;
+          opacity: 0.6;
+          font-size: 16px;
+          transition: all 0.3s linear;
+
+          &:hover {
             opacity: 1;
             text-decoration: none;
           }
         }
+
+      }
+
+      li.is-active {
+        a {
+          border-bottom: 2px solid @stensul-purple;
+          opacity: 1;
+          text-decoration: none;
+        }
       }
     }
   }
+}
 </style>

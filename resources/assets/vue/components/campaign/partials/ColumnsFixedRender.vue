@@ -5,16 +5,17 @@
          cellspacing="0"
          cellpadding="0"
          border="0"
-         :style="column.style"
+         :style="[column.style, {'background-color' : column.attribute.bgcolor}]"
+         :bgcolor="column.attribute.bgcolor"
   >
       <tr v-for="(component, componentId) in column.components"
           @click="setComponent(moduleId, columnId, componentId)"
-          :class="component.attribute.hideElement ? 'stx-hide-element st-remove-element' : '' "
+          :class="[component.attribute.classes, {'stx-hide-element st-remove-element' : component.attribute.hideElement}]"
       >
         <td width="100%"
             :valign="column.attribute.valign"
             :align="component.attribute.align || 'center'"
-            :bgcolor="column.attribute.bgcolor.hex"
+            :bgcolor="column.attribute.bgcolor"
             :style="styles"
         >
           <component :is="component.type"

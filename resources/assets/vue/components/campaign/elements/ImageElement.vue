@@ -9,14 +9,14 @@
   >
     <tr 
       data-type="image-element"
-      :class="getMobileClasses(component,'tr')"
+      :class="getMobileClasses(component,'tr') + component.attribute.classes"
     >
       <td 
         width="100%" 
         align="center"
         class="stx-position-relative"
         :style="component.style"
-        :bgcolor="component.attribute.bgcolor.hex"
+        :bgcolor="component.attribute.bgcolor"
         :class="getMobileClasses(component,'td:first')"
       >
         <table 

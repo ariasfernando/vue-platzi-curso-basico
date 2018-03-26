@@ -1,7 +1,7 @@
 <template>
   <tr v-if="module.type === 'custom'"
       class="stx-module-wrapper"
-      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
+      :class="{'stx-module-wrapper-active': activeModule === moduleId }"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
   >
@@ -19,15 +19,14 @@
 
   <tr v-else
       class="stx-module-wrapper"
-      :class="{ 'stx-module-wrapper-active': activeModule === moduleId }"
+      :class="[module.structure.attribute.classes, {'stx-module-wrapper-active': activeModule === moduleId }]"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
   >
     <td class="stx-toolbar-content stx-position-relative"
         :data-module-id="moduleId"
         :style="module.structure.style"
-        :data-module-id="moduleId"
-        :bgcolor="module.structure.attribute.bgcolor.hex"
+        :bgcolor="module.structure.attribute.bgcolor"
         :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 }">
       <table
         width="100%"
@@ -125,14 +124,10 @@
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
-  import { mixin as clickaway } from 'vue-clickaway';
   import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
-    mixins: [
-      clickaway
-    ],
     props: ['moduleId'],
     computed: {
       module() {

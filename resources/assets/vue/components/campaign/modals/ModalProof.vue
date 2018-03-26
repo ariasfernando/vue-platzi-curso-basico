@@ -148,6 +148,7 @@
     watch: {
       modalProof (value) {
         if (value) {
+          this.checkCampaign();
           this.fetchReviewers();
         }
       }
@@ -202,6 +203,11 @@
         $.getJSON(this.$_app.config.baseUrl + '/proof/campaign/' + this.campaign.campaign_data._id, {}, function(response) {
           if (response.status === 'success') {
             this.campaignData = response.data;
+
+            if (this.campaignData.proof_id !== null) {
+              // If a proof already exists, set the "Start proof from scratch" off
+              this.startProof = false;
+            }
 
             if ('can_be_processed' in this.campaignData && this.campaignData.can_be_processed === false) {
               this.$root.$toast(
@@ -347,12 +353,6 @@
       }
 
       this.fetchUsers();
-      this.checkCampaign();
-
-      if (this.campaign.campaign_data.proof_id !== null) {
-        // If a proof already exists, set the "Start proof from scratch" off
-        this.startProof = false;
-      }
     },
     updated () {
       if ($('.proof-users-picker').length) {

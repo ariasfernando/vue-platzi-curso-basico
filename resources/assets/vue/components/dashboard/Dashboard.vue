@@ -105,6 +105,9 @@
           ></template-campaigns>
         </div>
       </div>
+
+      <modal-proof v-if="dashboardReady"></modal-proof>
+
       <spinner></spinner>
 
     </div>
@@ -122,6 +125,7 @@
   import DashboardMenu from './DashboardMenu.vue';
   import SearchResult from './partials/SearchResult.vue';
   import Spinner from '../common/Spinner.vue';
+  import ModalProof from '../campaign/modals/ModalProof.vue';
 
   export default {
     components: {
@@ -132,13 +136,15 @@
       TemplateCampaigns,
       DashboardMenu,
       Spinner,
-      SearchResult
+      SearchResult,
+      ModalProof
     },
     created: function() {
       this.updateCampaigns();
     },
     data: function() {
       return {
+        dashboardReady: false,
         campaigns: {
           current: [],
           finished: [],
@@ -235,6 +241,7 @@
           this.campaigns[type] = campaigns;
           this.showLoading[type] = false;
           this.ready[type] = true;
+          this.dashboardReady = true;
         }.bind(this));
       },
       getIndex: function(data, value) {

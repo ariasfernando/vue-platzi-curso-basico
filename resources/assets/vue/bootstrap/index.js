@@ -58,7 +58,7 @@ export default {
   initFonts() {
     // Merge custom Fonts
     if (customer.config && customer.config.fonts) {
-      _.merge(fonts, customer.config.fonts);
+      _.assign(fonts, customer.config.fonts);
     }
 
     // Fonts path

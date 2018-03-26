@@ -11,10 +11,12 @@
             class="stx-draggable-wrapper"
             :class="{ 'campaign-completed': campaignCompleted }"
             :bgcolor="templateBackgroundColor()"
-            @click.stop="handleActive">
+            @click.stop="handleActive"
+            @mouseover="onMouseOver"
+            @mouseleave="onMouseLeave">
               <draggable
                 id="emailCanvas"
-                :class="`stx-${buildingMode}-mode ${this.dragList.length === 0 ? 'empty': ''}`"
+                :class="`stx-${buildingMode}-mode`"
                 class="stx-email-canvas st-wrapper-table"
                 cellspacing="0"
                 cellpadding="0"
@@ -26,9 +28,24 @@
                 :move="onMove"
                 @add="onAdd"
                 @sort="onSort"
-                @mouseover="onMouseOver()"
-                @mouseleave="onMouseLeave()">
+                 v-if="isNotEmptyList">
                   <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
+              </draggable>
+              <draggable
+                id="emailCanvas"
+                :class="`stx-${buildingMode}-mode empty`"
+                class="stx-email-canvas st-wrapper-table"
+                cellspacing="0"
+                cellpadding="0"
+                border="0"
+                v-model="dragList"
+                :width="templateWidth"
+                :options="options"
+                :element="'table'"
+                @add="onAdd"
+                @sort="onSort"
+                v-else>
+                  <div class="empty-message">From the module menu on the left, please click or drag a module here to add it to the email workspace.</div>
               </draggable>
           </td>
         </tr>
@@ -54,7 +71,9 @@
       BackToTop
     },
     data: {
-      dragGhost: null
+      dragGhost: null,
+      onMouseOver: () => {},
+      onMouseLeave:() => {}
     },
     computed: {
       campaignCompleted() {
@@ -70,6 +89,9 @@
         set(value) {
           this.$store.commit('campaign/updateEmailCanvas', value);
         }
+      },
+      isNotEmptyList() {
+        return this.dragList.length > 0;
       },
       campaign () {
         return this.$store.state.campaign.campaign;
@@ -168,7 +190,7 @@
           ? _.find(this.items, (m) => m.name === moduleName)
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
-        const mod = Object.assign({}, found);
+        const mod = clone(found);
         mod.data = {};
 
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
@@ -215,9 +237,17 @@
       },
       onMouseOver () {
         $("#emailCanvas").addClass("hovered");
+        this.handleEmptyMessage();
       },
       onMouseLeave () {
         $("#emailCanvas").removeClass("hovered");
+        this.handleEmptyMessage();
+      },
+      handleEmptyMessage () {
+        // If is dragging and the list is empty, hide empty message
+        $(".empty-message").is(":visible") && $(".ghost-component").is(":visible")
+          ? $(".empty-message").hide("fast")
+          : $(".empty-message").show()
       },
       remove(moduleId) {
         this.$store.commit("campaign/removeModule", moduleId);
@@ -252,20 +282,34 @@
         });
       },
       handleActive(e) {
-        const target = $( e.target );
-        const moduleId = target.closest(".stx-module-wrapper").find("td").data("module-id");
-        if( target.is( "td.stx-draggable-wrapper" )) {
+        const $target = $( e.target );
+        // If it's the email-canvas wrapper
+        if( $target.is( "td.stx-draggable-wrapper" )) {
           // Clear Current module state
           this.$store.commit("campaign/unsetActiveModule");
           this.$store.commit("campaign/unsetCurrentModule");
           this.$store.commit("campaign/unsetCurrentComponent");
           this.$store.commit("campaign/unsetCustomModule");
+          this.$store.commit("campaign/setToggleModuleSettings", false);
         }
         else {
-          // Set active Module
-          this.$store.commit("campaign/setActiveModule", moduleId);
-          // Clear 3rd column
-          this.$store.commit("campaign/setCurrentComponent", {});
+          // Get module ID
+          const moduleId = $target.closest(".stx-module-wrapper").find("td").data("module-id");
+          // If it's the config gear icon
+          if( $target.hasClass('icon-config') || $target.hasClass("fa-cogs") ) {
+            // Show module settings
+            this.$store.commit("campaign/setToggleModuleSettings", true);
+            // Set current Module
+            this.$store.commit("campaign/setCurrentModule", moduleId);
+          }
+          else {
+            // Hide module settings
+            this.$store.commit("campaign/setToggleModuleSettings", false);
+            // Set active Module
+            this.$store.commit("campaign/setActiveModule", moduleId);
+            // Clear 3rd column
+            this.$store.commit("campaign/unsetCurrentComponent");
+          }
         }
       }
     },
@@ -392,20 +436,16 @@
       height: 65px;
       font-family: 'Open Sans', Arial, serif;
       font-size: 12px;
+      padding: 0 20px;
 
-      &:before, &::before{
-        content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
+      .empty-message {
         width: 100%;
         display: table-cell;
         vertical-align: middle;
         opacity: 0.7;
         text-align: center;
-        padding: 0 10px;
-      }
 
-      &.hovered{
-        &:before, &::before{
-          content: "From the module menu on the left, please click or drag a module here to add it to the email workspace.";
+        &:hover {
           width: 100%;
           display: table-cell;
           vertical-align: middle;
@@ -413,7 +453,6 @@
           outline: 2px dashed @font-color;
           outline-offset: -10px;
           text-align: center;
-          padding: 0 10px;
         }
       }
     }
