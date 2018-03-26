@@ -33,7 +33,7 @@ WORKDIR /usr/src/app/
 
 COPY . /usr/src/app/
 
-RUN cd /usr/src/app/ && php artisan vendor:publish
+RUN cd /usr/src/app/ && php artisan vendor:publish --all
 
 RUN cd /usr/src/app/ && npm run production
 RUN chown -R fbridge.fbridge /usr/src/app
