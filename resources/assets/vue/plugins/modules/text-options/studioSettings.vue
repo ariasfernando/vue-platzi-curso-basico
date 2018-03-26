@@ -165,12 +165,12 @@ export default {
       this.$store.commit("module/savePlugin", payload);
     },
 
-    changeSetting(value,setting) {
-      const options = {};
+    changeSetting(value,settingName) {
+      const setting = {};
       // switch to other var because value saved toggle state.
       const content = value;
 
-      setting[setting] = {
+      setting[settingName] = {
         content
       };
 
@@ -182,6 +182,8 @@ export default {
           settings: setting
         }
       };
+
+      this.$store.commit("module/savePlugin", payload);
     },
 
     changeOption(value,setting,subOption) {
