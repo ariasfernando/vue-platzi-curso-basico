@@ -7,7 +7,7 @@
 ##
 
 
-FROM registry.stensuldev.net/dockerfiles/web-2.0.0
+FROM registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0
 
 # enable opcache heavily
 COPY ./conf.d/php/10-opcache.ini /etc/php.d/
