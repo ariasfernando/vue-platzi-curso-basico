@@ -96,7 +96,7 @@
           campaignId: this.campaign.campaign_id
         }).then((images) => {
           const tmp = new Image();
-          tmp.src = this.$_app.config.imageUrl + res[0];
+          tmp.src = this.$_app.config.imageUrl + images[0];
           tmp.onload = () => {
             this.updateAttribute(images[0]);
             this.updatePluginData(images, data);
