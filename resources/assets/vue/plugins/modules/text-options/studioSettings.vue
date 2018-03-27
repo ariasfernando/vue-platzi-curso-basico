@@ -18,6 +18,19 @@
         :key="name"
       ></el-button>
     </div>
+    <div class="clearfix" v-if="plugin.config.options.forecolor.value">
+      <settings-container label="textcolor_map">
+        <template slot="setting-right">
+            <el-input
+              size="mini" 
+              v-validate="'required'"
+              v-model="textColorMap"
+              placeholder="000000,Black,474646,Gray,79a8c9,Blue,cd202c,Red"
+              class="clearfix"
+            ></el-input>
+        </template>
+      </settings-container>
+    </div>
     <div class="clearfix" v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" :key="key">
       <settings-container :label="tinySetting.title" >
         <template slot="setting-right">
@@ -36,19 +49,6 @@
           :min="0"
           ></el-input-number>
       </div>
-    </div>
-    <div class="clearfix" v-if="plugin.config.options.forecolor.value">
-      <settings-container label="textcolor_map">
-        <template slot="setting-right">
-            <el-input
-              size="mini" 
-              v-validate="'required'"
-              v-model="textColorMap"
-              placeholder="000000,Black,474646,Gray,79a8c9,Blue,cd202c,Red"
-              class="clearfix"
-            ></el-input>
-        </template>
-      </settings-container>
     </div>
   </div>
 </template>

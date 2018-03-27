@@ -106,7 +106,6 @@ module.exports = {
           '79a8c9', 'Blue',
           'cd202c', 'Red',
         ],
-
       },
       backcolor: {
         label: 'Background color',
@@ -136,11 +135,6 @@ module.exports = {
         title: 'Lines Limit',
         value: false,
         type: Number,
-        content: undefined,
-      },
-      font_colors: {
-        title: 'font colors',
-        type: 'text',
         content: undefined,
       },
     },
