@@ -17,6 +17,7 @@ const state = {
     attribute: {},
   },
   loading: false,
+  secondaryLoading: false,
 };
 
 const getters = {
@@ -43,6 +44,9 @@ const getters = {
 const mutations = {
   setLoader(state, data) {
     state.loading = data;
+  },
+  setSecondaryLoader(state, data) {
+    state.secondaryLoading = data;
   },
   setModuleData(state, data) {
     state.module = data;

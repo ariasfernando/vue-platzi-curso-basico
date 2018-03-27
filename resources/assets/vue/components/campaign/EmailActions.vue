@@ -251,10 +251,12 @@
       autoSave() {
         setInterval(() => {
           if (this.dirty && this.campaign.campaign_data.auto_save !== false) {
+            this.$store.commit("global/setSecondaryLoader", true);
             this._save().then(response => {
-              this.$root.$toast('Email saved', {className: 'et-info'});
+              this.$store.commit("global/setSecondaryLoader", false);
             }, error => {
               this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
+              this.$store.commit("global/setSecondaryLoader", false);
             });
           }
         }, 20000);

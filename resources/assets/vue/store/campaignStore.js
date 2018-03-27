@@ -105,6 +105,9 @@ function campaignStore() {
       setDirty(state, dirty) {
         state.dirty = dirty;
       },
+      setUpdatedAt(state, updatedAt) {
+        state.campaign.campaign_data.updated_at = updatedAt;
+      },
       setToggleImageEditor(state, stateModal) {
         state.showImageEditor = stateModal;
       },
@@ -303,6 +306,7 @@ function campaignStore() {
         campaignService.saveCampaign(data)
           .then(res => {
             context.commit('setDirty', false);
+            context.commit('setUpdatedAt', res.updatedAt);
             deferred.resolve(res.campaignId);
           })
           .catch(error => {

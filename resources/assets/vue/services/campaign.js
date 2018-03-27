@@ -63,8 +63,9 @@ export default {
 
     request[endpoint.method](params).then((response) => {
       deferred.resolve({
-        campaignId: response.body,
+        campaignId: response.body.campaign_id,
         campaign: dataCampaign,
+        updatedAt: response.body.updated_at.date,
       });
     }).catch((err) => {
       deferred.reject(err);

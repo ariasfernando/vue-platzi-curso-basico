@@ -116,7 +116,10 @@ class CampaignManager
 
         Activity::log('Campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
 
-        return $campaign_id;
+        return [
+            'campaign_id' => $campaign_id,
+            'updated_at' => $campaign->updated_at
+        ];
     }
 
     /**
