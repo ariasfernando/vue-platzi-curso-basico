@@ -199,9 +199,12 @@
                   return;
                 }
 
-                if (tinyLength > (tinyMax + 1)){
+                const isFirefox = /firefox/i.test(navigator.userAgent);
+                const browserDifferencial = isFirefox ? 0 : 1;
+
+                if (tinyLength > (tinyMax + browserDifferencial)) {
                   // Prevent insertion of typed character
-                  //tinymax + 1 because is needed to show alert and force the user to delete a character
+                  //tinymax + browserDifferencial because is needed to show alert and force the user to delete a character
                   _this.$root.$toast("You've reached the maximum number of characters (" + (tinyMax) +")",{
                     className: 'et-error',
                     horizontalPosition: 'right',
