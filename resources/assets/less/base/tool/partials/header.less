@@ -5,7 +5,6 @@ header{
 	font-family: 'Open Sans', Arial, sans-serif;
 	width: 100%;
 	min-width: 1280px;
-	overflow: hidden;
 
 	div.logButton{
 		margin: 0px;
@@ -98,7 +97,21 @@ header{
 			&:hover{
 				width: 125px;
 			}		
+			&[aria-expanded="true"] {
+				width: 125px;
+			}
 		}
+
+		.dropdown-menu{
+			z-index: 9999;
+			margin-top: -1px !important; 
+			li{
+				opacity: 0.6;
+				&:hover{
+					opacity: 1;
+				}
+			}
+		}	
 		.home{
 			width: 38px;
 			height: 38px;
@@ -137,23 +150,6 @@ header{
 		position: fixed;
 		top: 0px;
 		z-index: 3;
-		overflow: visible;
-		nav {
-			.help{
-				&[aria-expanded="true"] {
-    			width: 125px;
-				}
-			}
-			.dropdown-menu{
-				margin-top: -2px; 
-				li{
-					opacity: 0.6;
-					&:hover{
-						opacity: 1;
-					}
-				}
-			}			
-		}
 	}
 }
 
