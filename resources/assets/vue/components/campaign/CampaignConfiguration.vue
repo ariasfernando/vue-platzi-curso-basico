@@ -155,7 +155,7 @@
           tagOptions.push(tagList[n].name);
         }
 
-        _.merge(tagOptions, this.form.tags);
+        tagOptions = _.union(tagOptions, this.form.tags);
         return tagOptions;
       },
       secondaryLoading() {
