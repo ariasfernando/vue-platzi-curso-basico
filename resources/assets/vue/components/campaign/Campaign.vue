@@ -85,6 +85,7 @@
       return {
         campaignReady: false,
         campaignConfigReady: false,
+        pingLockInterval: 30000,
       }
     },
     computed: {
@@ -158,7 +159,7 @@
             );
           });
 
-        }, 3000); // change this.
+        }, this.pingLockInterval);
       }
     },
     created: function () {
