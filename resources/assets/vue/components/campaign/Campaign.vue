@@ -147,12 +147,25 @@
             {className: 'et-error'}
           );
         });
+      },
+      lockPing() {
+        setInterval(() => {
+          this.$store.dispatch('campaign/pingLockCampaign', this.campaignId).then(response => {
+          }, error => {
+            this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+              {className: 'et-error'}
+            );
+          });
+
+        }, 3000); // change this.
       }
     },
     created: function () {
       this.$store.commit("global/setLoader", true);
       this.loadCampaign();
       this.loadConfig();
+      this.lockPing();
     }
   };
 </script>

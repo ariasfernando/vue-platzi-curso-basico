@@ -141,6 +141,27 @@
     },
     created: function() {
       this.updateCampaigns();
+  
+      switch(this.flashMessage) {
+        case 'campaign_lock':
+          this.$root.$toast(
+            'Sorry, ' + this.lockedBy + ' is editing this campaign',
+            {className: 'et-error'}
+          );
+          break;
+        case 'campaign_not_found':
+          this.$root.$toast(
+            'Sorry, we couldn\'t find the requested campaign',
+            {className: 'et-error'}
+          );
+          break;
+        case 'campaign_permission':
+          this.$root.$toast(
+            'Sorry, you are not allowed to open this campaign.',
+            {className: 'et-error'}
+          );
+          break;
+      };
     },
     data: function() {
       return {
@@ -180,10 +201,10 @@
           current: false,
           template: false,
           finished: false
-        }
+        },
       }
     },
-    props: ['config'],
+    props: ['config', 'flashMessage', 'lockedBy'],
     computed: {
       canSearch: function() {
         return this.checkTagLimit();

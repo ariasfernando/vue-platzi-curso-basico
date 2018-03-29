@@ -5,7 +5,9 @@
 	<div class="col-xs-12" id="dashboard">
 		<dashboard
 			:config="{{ htmlentities( json_encode(config('campaign')), ENT_QUOTES, 'UTF-8' ) }}"
-			:proof-config="{{ htmlentities( json_encode(array_merge(config('proof'), [ 'allow' => (Auth::user()->can('edit_proof') || Auth::user()->can('access_proof')) ])), ENT_QUOTES, 'UTF-8' ) }}"
+            :proof-config="{{ htmlentities( json_encode(array_merge(config('proof'), [ 'allow' => (Auth::user()->can('edit_proof') || Auth::user()->can('access_proof')) ])), ENT_QUOTES, 'UTF-8' ) }}"
+            :flash-message="'{{$params['flash']}}'"
+            :locked-by="'{{$params['locked_by']}}'"
 		></dashboard>
 	</div>
 

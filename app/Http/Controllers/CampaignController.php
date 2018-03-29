@@ -73,6 +73,10 @@ class CampaignController extends Controller
             $params = $this->loadCampaign($campaign->_id);
         }
 
+        if (is_a($params, 'Illuminate\Http\RedirectResponse')) {
+            return $params;
+        }
+
         if (\Config::get('api.scraper.status')
             && \Config::get('api.scraper.settings.campaign_preload')) {
             Campaign::scraperPreloader(
