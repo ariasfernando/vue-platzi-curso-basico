@@ -1,0 +1,228 @@
+const studioSettings = require('./studioSettings.vue');
+const campaignSettings = require('./campaignSettings.vue');
+
+module.exports = {
+  name: 'style-image-editor',
+  title: 'Image Editor',
+  version: '0.0.1',
+  author: 'ximena.garcia@stensul.com',
+  target: ['image'],
+  studioSettings,
+  campaignSettings,
+  config: {
+    width: {
+      label: 'Width',
+      key: 'width',
+      value: 600,
+      type: 'number',
+    },
+    height: {
+      label: 'Height',
+      key: 'height',
+      value: 200,
+      type: 'number',
+    },
+    upload: {
+      label: 'Image upload',
+      key: 'upload',
+      type: 'switch',
+      value: true,
+    },
+    default: {
+      label: 'Default image',
+      key: 'url',
+      value: '',
+      type: 'text',
+    },
+    fill: {
+      label: 'Background color',
+      key: 'fillColor',
+      value: '#000000',
+      type: 'text',
+    },
+    cropper: {
+      label: 'Cropper',
+      key: 'cropper',
+      type: 'switch',
+      value: true,
+      config: {
+        zoomOnWheel: {
+          label: 'Enable Zoom',
+          key: 'zoomOnWheel',
+          value: true,
+          type: 'switch',
+        },
+        movable: {
+          label: 'Enable Drag',
+          key: 'movable',
+          value: true,
+          type: 'switch',
+        },
+        rotatable: {
+          label: 'Enable rotation',
+          key: 'rotatable',
+          value: false,
+          type: 'switch',
+        },
+        zoomable: {
+          label: 'Enable zoom',
+          key: 'zoomable',
+          value: true,
+          type: 'switch',
+        },
+      },
+    },
+    text: {
+      label: 'Text',
+      key: 'text',
+      value: false,
+      type: 'switch',
+      config: {
+        visible: {
+          label: 'Visible',
+          key: 'visible',
+          value: true,
+          type: 'switch',
+        },
+        default: {
+          label: 'Default text',
+          key: 'default',
+          value: '',
+          type: 'text',
+        },
+        description: {
+          label: 'Description',
+          key: 'description',
+          value: 'Text',
+          type: 'text',
+        },
+        top: {
+          label: 'Top',
+          key: 'top',
+          value: '0px',
+          type: 'text',
+        },
+        left: {
+          label: 'Left',
+          key: 'left',
+          value: '0px',
+          type: 'text',
+        },
+      },
+    },
+    overlay: {
+      label: 'Image Overlay',
+      key: 'image',
+      value: false,
+      type: 'switch',
+      config: {
+        visible: {
+          label: 'Visible',
+          key: 'visible',
+          value: true,
+          type: 'switch',
+        },
+        default: {
+          label: 'Default image',
+          key: 'url',
+          value: '',
+          type: 'text',
+        },
+        width: {
+          label: 'Width',
+          key: 'width',
+          value: undefined,
+          type: 'number',
+        },
+        height: {
+          label: 'Height',
+          key: 'height',
+          value: undefined,
+          type: 'number',
+        },
+        top: {
+          label: 'Top',
+          key: 'top',
+          value: 0,
+          type: 'number',
+        },
+        left: {
+          label: 'Left',
+          key: 'left',
+          value: 0,
+          type: 'number',
+        },
+      },
+    },
+    shapemask: {
+      label: 'Shapemask',
+      key: 'shapemask',
+      value: false,
+      type: 'switch',
+      config: {
+        visible: {
+          label: 'Visible',
+          key: 'visible',
+          value: true,
+          type: 'switch',
+        },
+        fill: {
+          label: 'Fill color',
+          key: 'transparencyColor',
+          value: '#000000',
+          type: 'text',
+        },
+        transparency: {
+          label: 'Transparency',
+          key: 'transparency',
+          value: 1,
+          type: 'number',
+        },
+        'square-width': {
+          label: 'Width',
+          key: 'width',
+          value: undefined,
+          type: 'number',
+        },
+        'square-height': {
+          label: 'Height',
+          key: 'height',
+          value: undefined,
+          type: 'number',
+        },
+        'square-top': {
+          label: 'Top',
+          key: 'top',
+          value: 0,
+          type: 'number',
+        },
+        'square-left': {
+          label: 'Left',
+          key: 'left',
+          value: 0,
+          type: 'number',
+        },
+        'circle-radius': {
+          label: 'Radius',
+          key: 'radius',
+          value: undefined,
+          type: 'number',
+        },
+        'circle-top': {
+          label: 'Top',
+          key: 'top',
+          value: 0,
+          type: 'number',
+        },
+        'circle-left': {
+          label: 'Left',
+          key: 'left',
+          value: 0,
+          type: 'number',
+        },
+      },
+    },
+  },
+  data: {},
+  enabled: false,
+};
