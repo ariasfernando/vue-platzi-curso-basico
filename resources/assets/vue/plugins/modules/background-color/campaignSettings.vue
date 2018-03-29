@@ -38,7 +38,7 @@
       },
       colors: {
         get() {
-          let value = this.component.attribute ? this.component.attribute.bgcolor : this.plugin.config.defaultValue;
+          let value = this.component.attribute ? this.component.attribute.bgcolor.hex : this.plugin.config.defaultValue;
           value = value === "transparent" ? '' : value;
           return value;
         },
