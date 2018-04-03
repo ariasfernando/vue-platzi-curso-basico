@@ -8,7 +8,6 @@ use StensulLocale;
 use Activity;
 use Campaign;
 use EmailSender;
-use Stensul\Models\User;
 use Stensul\Models\Library;
 use Stensul\Services\TagManager as Tag;
 use Illuminate\Http\Request;
@@ -214,7 +213,7 @@ class CampaignController extends Controller
     public function postDelete(Request $request)
     {
         if (Cache::has('lock:' . $request->input('campaign_id'))
-            && ($locked_by = Cache::get('lock:' . $request->input('campaign_id'))) !== Auth::id()
+            && Cache::get('lock:' . $request->input('campaign_id')) !== Auth::id()
         ) {
             Activity::log(
                 'Campaign edit deny',
@@ -223,7 +222,7 @@ class CampaignController extends Controller
 
             return [
                 'campaign_lock' => $request->input('campaign_id'),
-                'locked_by' => User::find($locked_by)->email
+                'locked_by' => Campaign::whoIsLocking($request->input('campaign_id'))
             ];
         } else {
             return Campaign::delete($request->input('campaign_id'));
