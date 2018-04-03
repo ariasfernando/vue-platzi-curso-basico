@@ -150,6 +150,7 @@
         });
       },
       lockPing() {
+        this.$store.dispatch('campaign/pingLockCampaign', this.campaignId);
         setInterval(() => {
           this.$store.dispatch('campaign/pingLockCampaign', this.campaignId).then(response => {
           }, error => {
