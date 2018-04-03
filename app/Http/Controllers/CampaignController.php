@@ -221,7 +221,6 @@ class CampaignController extends Controller
                 array('properties' => ['campaign_id' => new ObjectID($request->input('campaign_id'))])
             );
 
-            \Log::info('locked by: ' . $locked_by);
             return [
                 'campaign_lock' => $request->input('campaign_id'),
                 'locked_by' => User::find($locked_by)->email
