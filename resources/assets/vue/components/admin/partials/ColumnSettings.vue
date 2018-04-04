@@ -16,9 +16,7 @@
             <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
               <component v-for="setting in settingGroup"
                 :is="'input-' + setting.type"
-                @attribute-setting-updated="(eventData)=>attributeSettingUpdatedHandler(eventData, key)"
-                @style-setting-updated="(eventData)=>styleSettingUpdatedHandler(eventData, key)"
-                @style-option-setting-updated="(eventData)=>styleOptionSettingUpdatedHandler(eventData, key)"
+                @setting-updated="(eventData)=>settingUpdatedHandler(eventData, key)"
                 :setting="setting.type"
                 :name="setting.name"
                 :type="setting.type"
@@ -92,14 +90,8 @@ export default {
     }
   },
   methods: {
-    attributeSettingUpdatedHandler(eventData, key) {
-      this.saveColumnProperty('attribute', eventData.name, eventData.value, key);
-    },
-    styleSettingUpdatedHandler(eventData, key) {
-      this.saveColumnProperty('style', eventData.name, eventData.value, key);
-    },
-    styleOptionSettingUpdatedHandler(eventData, key) {
-      this.saveColumnProperty('styleOptions', eventData.name, eventData.value, key);
+    settingUpdatedHandler(eventData, key) {
+      this.saveColumnProperty(eventData.link, eventData.name, eventData.value, key);
     },
     saveColumnProperty(link, name, value, colId) {
       const data = {

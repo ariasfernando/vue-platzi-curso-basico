@@ -39,7 +39,8 @@ export default {
         return this.element.styleOptions["isPxWidth"];
       },
       set(value) {
-        this.$emit("style-option-setting-updated", {
+        this.$emit("setting-updated", {
+          link:'styleOptions',
           subComponent: this.subComponent,
           name: "isPxWidth",
           value: value

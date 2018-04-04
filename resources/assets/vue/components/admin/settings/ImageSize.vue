@@ -70,7 +70,8 @@ export default {
         return this.element.styleOptions["isBlockHeight"];
       },
       set(value){
-        this.$emit("style-option-setting-updated", {
+        this.$emit("setting-updated", {
+          link:'styleOptions',
           subComponent: this.subComponent,
           name: 'isBlockHeight',
           value: value
@@ -82,7 +83,8 @@ export default {
         return this.element.styleOptions["isPxWidth"];
       },
       set(value){
-        this.$emit("style-option-setting-updated", {
+        this.$emit("setting-updated", {
+          link:'styleOptions',
           subComponent: this.subComponent,
           name: 'isPxWidth',
           value: value
@@ -96,7 +98,8 @@ export default {
       set(value){
         value = isNaN(value) || value < this.min ? this.min : value;
         value = this.isPxWidth ? `${value}` :`${value}%`;
-        this.$emit("attribute-setting-updated", {
+        this.$emit("setting-updated", {
+          link:'attribute',
           subComponent: this.subComponent,
           name: 'width',
           value: value
@@ -110,7 +113,8 @@ export default {
       set(value){
         value = (isNaN(value) || value < this.min) && value !== "auto" ? this.min : value;
         value = `${value}`;
-        this.$emit("attribute-setting-updated", {
+        this.$emit("setting-updated", {
+          link:'attribute',
           subComponent: this.subComponent,
           name: 'height',
           value: value

@@ -85,7 +85,8 @@ export default {
             this.color = "";
           }
         }
-        this.$emit("style-setting-updated", {
+        this.$emit("setting-updated", {
+          link: 'style',
           name: `border${this.side}Width`,
           value: `${width}px`
         });
@@ -96,7 +97,8 @@ export default {
         return this.element.style[`border${this.side}Style`];
       },
       set(style) {
-        this.$emit("style-setting-updated", {
+        this.$emit("setting-updated", {
+          link: 'style',
           name: `border${this.side}Style`,
           value: style
         });
@@ -113,7 +115,8 @@ export default {
           color =
             color === null ? "transparent" : Application.utils.rgbToHex(color);
         }
-        this.$emit("style-setting-updated", {
+        this.$emit("setting-updated", {
+          link: 'style',
           name: `border${this.side}Color`,
           value: color
         });

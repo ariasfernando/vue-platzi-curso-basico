@@ -9,9 +9,7 @@
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
-            @attribute-setting-updated="attributeSettingUpdatedHandler"
-            @style-setting-updated="styleSettingUpdatedHandler"
-            @style-option-setting-updated="styleOptionSettingUpdatedHandler"
+            @setting-updated="settingUpdatedHandler"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
@@ -139,15 +137,9 @@ export default {
     shouldRenderInStyles(plugin) {
       return _.indexOf(plugin.target, "styles") >= 0;
     },
-    attributeSettingUpdatedHandler(eventData) {
-      this.saveComponentProperty('attribute', eventData.subComponent, eventData.name, eventData.value);
+    settingUpdatedHandler(eventData) {
+      this.saveComponentProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value);
     },
-    styleSettingUpdatedHandler(eventData) {
-      this.saveComponentProperty('style', eventData.subComponent, eventData.name, eventData.value);
-    },
-    styleOptionSettingUpdatedHandler(eventData) {
-      this.saveComponentProperty('styleOptions', eventData.subComponent, eventData.name, eventData.value);
-    }
   }
 };
 </script>

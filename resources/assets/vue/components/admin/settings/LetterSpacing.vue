@@ -56,7 +56,11 @@ export default {
         return this.element.styleOptions[this.isNormalLetterSpacingName];
       },
       set: function(newValue) {
-        this.$emit("style-option-setting-updated", { name: this.isNormalLetterSpacingName, value: newValue });
+        this.$emit("setting-updated", {
+          link:'styleOptions',
+          name: this.isNormalLetterSpacingName,
+          value: newValue
+        });
         this.letterSpacing = this.inferLetterSpacing(this.letterSpacing, newValue);
       }
     },
@@ -66,7 +70,11 @@ export default {
       },
       set: function(value) {
         let newValue = value === "normal" ? value : value+this.unit;
-        this.$emit("style-setting-updated", { name: this.name, value: newValue });
+        this.$emit("setting-updated", {
+          link:'style',
+          name: this.name,
+          value: newValue
+        });
         this.updateLetterSpacingInputValue(value);
       }
     }

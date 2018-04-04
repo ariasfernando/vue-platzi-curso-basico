@@ -28,7 +28,12 @@ export default {
         return this.element.attribute[this.name];
       },
       set: function(newValue) {
-        this.$emit("attribute-setting-updated", { subComponent: this.subComponent, name: this.name, value: newValue });
+        this.$emit("setting-updated", {
+          link:'attribute',
+          subComponent: this.subComponent,
+          name: this.name,
+          value: newValue
+        });
       }
     }
   },

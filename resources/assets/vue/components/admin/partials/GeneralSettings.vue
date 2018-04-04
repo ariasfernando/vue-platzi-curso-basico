@@ -21,10 +21,7 @@
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
-            @attribute-setting-updated="attributeSettingUpdatedHandler"
-            @style-setting-updated="styleSettingUpdatedHandler"
-            @style-option-setting-updated="styleOptionSettingUpdatedHandler"
-            @setting-updated="settingUpdatedHandler"
+            @setting-updated="SettingUpdatedHandler"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
@@ -123,17 +120,8 @@ export default {
     nameUpdatedHandler(eventData) {
       this.setModuleField({ name: eventData.value });
     },
-    attributeSettingUpdatedHandler(eventData) {
-      this.saveModuleProperty('attribute', eventData.subComponent, eventData.name, eventData.value);
-    },
-    styleSettingUpdatedHandler(eventData) {
-      this.saveModuleProperty('style', eventData.subComponent, eventData.name, eventData.value);
-    },
-    styleOptionSettingUpdatedHandler(eventData) {
-      this.saveModuleProperty('styleOptions', eventData.subComponent, eventData.name, eventData.value);
-    },
-    settingUpdatedHandler(eventData) {
-      this.saveModuleProperty(undefined, eventData.subComponent, eventData.name, eventData.value);
+    SettingUpdatedHandler(eventData) {
+      this.saveModuleProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value);
     },
 
     saveModuleProperty(link, subComponent, name, value) {

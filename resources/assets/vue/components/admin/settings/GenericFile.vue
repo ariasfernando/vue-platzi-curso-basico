@@ -16,16 +16,7 @@ export default {
   components: { SettingsContainer },
   methods: {
     resetImage() {
-      if (this.link === "style") {
-        this.$emit("style-setting-updated", { name: this.name, value: "" });
-      } else if (this.link === "styleOption") {
-        this.$emit("style-option-setting-updated", {
-          name: this.name,
-          value: ""
-        });
-      } else if (this.link === "attribute") {
-        this.$emit("attribute-setting-updated", { name: this.name, value: "" });
-      }
+      this.$emit("setting-updated", { link: this.link, name: this.name, value: "" });
     },
     onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files;
