@@ -123,6 +123,7 @@ export default {
     confirmDeleteCampaign() {
       $.post(Application.globals.baseUrl + '/campaign/delete', {
         campaign_id: this.selectedCampaignId,
+        window_id: this.sessionWindowId,
       }, (response) => {
 
         if (response.campaign_lock) {

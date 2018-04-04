@@ -97,7 +97,8 @@ class CampaignController extends Controller
      * @param String $campaign_id
      * @return Array $params
      */
-    private function loadCampaign($campaign_id) {
+    private function loadCampaign($campaign_id)
+    {
 
         if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:' . $campaign_id) !== Auth::id()) {
             Activity::log(
@@ -108,11 +109,16 @@ class CampaignController extends Controller
             return redirect(env('APP_BASE_URL', '/'))->with('campaign_lock', $campaign_id);
         }
 
+        $window_id = Cache::get('window_lock:' . $campaign_id);
+
         if ($params = Campaign::find($campaign_id)) {
             $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
                 ? $params['campaign_data']['library']
                 : "default";
             $params['library_id'] = $library_id;
+
+            $params['cached_window_id'] = Cache::has('window_lock:' . $campaign_id)
+                ? Cache::get('window_lock:' . $campaign_id) : false;
 
             return $params;
         }
@@ -212,8 +218,11 @@ class CampaignController extends Controller
      */
     public function postDelete(Request $request)
     {
+        $window_id = Cache::get('window_id:' . $request->input('campaign_id')) ?? false;
+
         if (Cache::has('lock:' . $request->input('campaign_id'))
             && Cache::get('lock:' . $request->input('campaign_id')) !== Auth::id()
+            || $request->input('window_id') != $window_id
         ) {
             Activity::log(
                 'Campaign edit deny',
@@ -377,7 +386,7 @@ class CampaignController extends Controller
      */
     public function postLock(Request $request)
     {
-        return Campaign::lock($request->input('campaign_id'));
+        return Campaign::lock($request->input('campaign_id'), $request->input('window_id'));
     }
 
     /**

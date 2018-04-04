@@ -357,10 +357,10 @@ function campaignStore() {
         });
         return deferred.promise;
       },
-      pingLockCampaign(context, campaignId) {
+      pingLockCampaign(context, data) {
         const deferred = Q.defer();
 
-        campaignService.pingLock(campaignId)
+        campaignService.pingLock({ campaignId: data.campaignId, windowId: data.windowId })
           .then(response => {
           })
           .catch(error => {

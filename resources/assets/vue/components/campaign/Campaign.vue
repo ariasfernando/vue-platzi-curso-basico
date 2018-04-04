@@ -65,7 +65,7 @@
 
   export default {
     name: 'Campaign',
-    props: ['campaignId', 'libraryId'],
+    props: ['campaignId', 'libraryId', 'windowId', 'cachedWindowId'],
     components: {
       CampaignConfiguration,
       CampaignMenu,
@@ -103,6 +103,12 @@
       },
       showModuleSettings() {
         return this.$store.getters["campaign/showModuleSettings"];
+      },
+      sessionWindowId() {
+        if (!window.sessionStorage.getItem('windowId')) {
+          window.sessionStorage.setItem('windowId', this.windowId);
+        }
+        return window.sessionStorage.getItem('windowId');
       }
     },
     watch:{
@@ -150,9 +156,11 @@
         });
       },
       lockPing() {
-        this.$store.dispatch('campaign/pingLockCampaign', this.campaignId);
+        this.$store.dispatch('campaign/pingLockCampaign',
+          {campaignId: this.campaignId, windowId: this.sessionWindowId});
         setInterval(() => {
-          this.$store.dispatch('campaign/pingLockCampaign', this.campaignId).then(response => {
+          this.$store.dispatch('campaign/pingLockCampaign',
+            {campaignId: this.campaignId, windowId: this.sessionWindowId}).then(response => {
           }, error => {
             this.$root.$toast(
               'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
@@ -168,6 +176,12 @@
       this.loadCampaign();
       this.loadConfig();
       this.lockPing();
+      if (this.cachedWindowId && this.cachedWindowId !== this.sessionWindowId) {
+        this.$root.$toast(
+          'Warning! this campaign is already open on another window.',
+          {className: 'et-info'}
+        );
+      }
     }
   };
 </script>

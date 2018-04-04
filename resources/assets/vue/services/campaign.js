@@ -130,14 +130,14 @@ export default {
 
     return deferred.promise;
   },
-  pingLock(campaignId) {
+  pingLock(data) {
     const endpoint = endpoints.campaign.pingLock;
     const deferred = Q.defer();
-
     const params = {
       endpoint,
       json: {
-        campaign_id: campaignId,
+        campaign_id: data.campaignId,
+        window_id: data.windowId,
       },
     };
 
