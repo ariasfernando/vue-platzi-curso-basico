@@ -10,6 +10,9 @@
 /tmp/
 /public/tmp/
 /public/vendor/
+/resources/assets/js/vendor
+/resources/assets/less/vendor
+/resources/views/vendor
 /bower_components
 /bootstrap/cache/
 npm-debug.log
