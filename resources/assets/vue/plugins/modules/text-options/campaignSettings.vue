@@ -177,13 +177,14 @@
 
             editor
               .on('keydown',(e) => {
+
                 if(!tinyMax){
                   //if truncate is NAN, returns and avoid validations
                   return
                 }
 
-                tinyLength = editor.getContent({format: 'text'}).length;
                 let $textElement = $('#'+tinyMCE.activeEditor.id);
+                tinyLength = $textElement.text().length;
                         
                 const allowKeys = [
                   //  key      keyCode
@@ -213,9 +214,9 @@
                   return;
                 }
 
-                if (tinyLength > (tinyMax + 1)){
+                //Check for Characters Limit
+                if ((tinyLength + 1) > tinyMax) {
                   // Prevent insertion of typed character
-                  //tinymax + 1 because is needed to show alert and force the user to delete a character
                   _this.$root.$toast("You've reached the maximum number of characters (" + (tinyMax) +")",{
                     className: 'et-error',
                     horizontalPosition: 'right',
@@ -232,15 +233,19 @@
                   return
                 }
 
-                tinyLength = editor.getContent({format: 'text'}).trim().length;
                 let $textElement = $('#'+tinyMCE.activeEditor.id);
+                tinyLength = $textElement.text().length;
 
-                //Check for Characters Limit            
-                if (tinyLength > tinyMax) {
+                //Check for Characters Limit
+                if ((tinyLength + 1) > tinyMax) {
+                  // Prevent insertion of typed character
                   _this.$root.$toast("You've reached the maximum number of characters (" + (tinyMax) +")",{
                     className: 'et-error',
                     horizontalPosition: 'right',
                   });
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
                 }
 
                 //Check for Lines Limit
