@@ -67,7 +67,6 @@ class DashboardController extends Controller
         ];
         $flash = '';
         foreach ($flash_messages as $message) {
-
             if (session()->has($message)) {
                 $flash = $message;
             }
@@ -130,7 +129,7 @@ class DashboardController extends Controller
 
         if ($sort === 'library_name') {
             $sort = 'library';
-        } else if ($sort == 'campaign_name') {
+        } elseif ($sort == 'campaign_name') {
             $sort = 'lower_campaign_name';
         }
 
