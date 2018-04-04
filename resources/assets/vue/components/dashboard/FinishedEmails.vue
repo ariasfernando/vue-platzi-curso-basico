@@ -38,7 +38,7 @@
                 v-on:change-sort="sortBy"></column-sort>
             </th>
             <th v-if="showTags == 1" class="col-200">Tags</th>
-            <th  width="400" class="bold">Actions</th>
+            <th  width="400" class="bold actions-thead">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -66,7 +66,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="text-left actions icons" width="250">
+            <td class="actions icons" width="250">
               <p class="dash-code-option">
                 <a @click.prevent="code(campaign._id, 'html')" href="#" class="html-code">HTML</a><br>
                 <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
