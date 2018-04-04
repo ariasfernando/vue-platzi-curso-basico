@@ -11,6 +11,9 @@
 /public/tmp/
 /public/vendor/
 /bower_components
+/resources/assets/js/vendor
+/resources/assets/less/vendor
+/resources/views/vendor
 /bootstrap/cache/
 npm-debug.log
 .buildpath

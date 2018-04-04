@@ -106,7 +106,6 @@ module.exports = {
           '79a8c9', 'Blue',
           'cd202c', 'Red',
         ],
-
       },
       backcolor: {
         label: 'Background color',
