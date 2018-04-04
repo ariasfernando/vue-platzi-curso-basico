@@ -94,7 +94,6 @@
           data_description:true,
           paste_as_text:true,
           relative_urls: false,
-          textcolor_rows: 1,
           max_chars: this.plugin.config.settings.truncate ? this.plugin.config.settings.truncate.content : undefined,
           max_lines: this.plugin.config.settings.lines_limit ? this.plugin.config.settings.lines_limit.content : undefined,
 

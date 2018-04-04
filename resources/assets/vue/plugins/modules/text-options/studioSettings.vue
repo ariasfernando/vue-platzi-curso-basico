@@ -197,11 +197,12 @@ export default {
         componentId: this.currentComponent.componentId,
         config: {
           options: option
-        }
+        },
+        subOption: subOption
       };
 
       // Save plugin data
-      this.$store.commit("module/savePlugin", payload);
+      this.$store.commit("module/savePluginSuboption", payload);
     },
     isAValidSetting(tinySetting, key){
      return (key === 'truncate' || key === 'lines_limit') && tinySetting.value === true;
