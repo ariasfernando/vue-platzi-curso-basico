@@ -65,11 +65,11 @@ export default {
   computed: {
     isCustomFontWeight: {
       get() {
-        return this.element.styleOptions[this.isCustomFontWeightName];
+        return this.element.styleOption[this.isCustomFontWeightName];
       },
       set(newValue) {
         this.$emit("setting-updated", {
-          link:'styleOptions',
+          link:'styleOption',
           name: this.isCustomFontWeightName,
           value: newValue
         });

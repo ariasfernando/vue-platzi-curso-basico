@@ -9,7 +9,7 @@ function imageDefault() {
       paddingRight: '0px',
       paddingLeft: '0px',
     },
-    styleOptions: {
+    styleOption: {
       isBlockHeight: true,
       isPxWidth: false,
     },

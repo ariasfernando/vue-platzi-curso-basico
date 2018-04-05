@@ -35,7 +35,7 @@ function buttonDefault() {
       borderLeftStyle: 'none',
       borderLeftColor: '',
     },
-    styleOptions: {
+    styleOption: {
       isBlockLineHeight: false,
       isCustomFontWeight: false,
       isNormalLetterSpacing: true,
@@ -67,7 +67,7 @@ function buttonDefault() {
         paddingRight: '0',
         paddingLeft: '0',
       },
-      styleOptions: {
+      styleOption: {
         isBlockHeight: false,
         isPxWidth: true,
       },

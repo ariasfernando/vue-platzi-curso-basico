@@ -42,11 +42,11 @@ export default {
   computed: {
     isBlockLineHeight: {
       get() {
-        return this.element.styleOptions["isBlockLineHeight"];
+        return this.element.styleOption["isBlockLineHeight"];
       },
       set(newValue) {
         this.$emit('setting-updated', {
-          link: 'styleOptions',
+          link: 'styleOption',
           name: "isBlockLineHeight",
           value: newValue
         });

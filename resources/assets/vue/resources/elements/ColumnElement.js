@@ -31,7 +31,7 @@ function columnDefault() {
       hideElement: false,
       classes: '',
     },
-    styleOptions: {
+    styleOption: {
       isPxWidth: false,
     },
     components: [],

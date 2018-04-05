@@ -53,11 +53,11 @@ export default {
   computed: {
     isNormalLetterSpacing: {
       get: function() {
-        return this.element.styleOptions[this.isNormalLetterSpacingName];
+        return this.element.styleOption[this.isNormalLetterSpacingName];
       },
       set: function(newValue) {
         this.$emit("setting-updated", {
-          link:'styleOptions',
+          link:'styleOption',
           name: this.isNormalLetterSpacingName,
           value: newValue
         });

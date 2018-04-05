@@ -17,7 +17,7 @@ function textDefault() {
       paddingLeft: '5px',
       color: '#000000',
     },
-    styleOptions: {
+    styleOption: {
       isBlockLineHeight: false,
       isCustomFontWeight: false,
       isNormalLetterSpacing: true,

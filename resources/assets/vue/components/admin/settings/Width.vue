@@ -36,11 +36,11 @@ export default {
   computed: {
     isPxWidth: {
       get() {
-        return this.element.styleOptions["isPxWidth"];
+        return this.element.styleOption["isPxWidth"];
       },
       set(value) {
         this.$emit("setting-updated", {
-          link:'styleOptions',
+          link:'styleOption',
           subComponent: this.subComponent,
           name: "isPxWidth",
           value: value
