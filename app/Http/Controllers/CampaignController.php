@@ -93,8 +93,8 @@ class CampaignController extends Controller
      * @param String $campaign_id
      * @return Array $params
      */
-    private function loadCampaign($campaign_id) {
-
+    private function loadCampaign($campaign_id)
+    {
         if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:' . $campaign_id) !== Auth::id()) {
             Activity::log(
                 'Campaign edit deny',
