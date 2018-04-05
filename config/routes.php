@@ -45,6 +45,7 @@ $default = [
             '/proof/comments/{token}'                => 'ProofController@getComments',
             '/proof/reviewers/{id}'                  => 'ProofController@getReviewers',
             '/proof/users'                           => 'ProofController@getUsers',
+            '/support/{section}'                     => 'SupportController@support',
         ],
 
         'post' => [
