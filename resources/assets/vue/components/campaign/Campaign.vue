@@ -202,7 +202,7 @@
     overflow: hidden;
     position: sticky;
     top: 45px;
-    z-index: 1000;
+    z-index: 999;
     border-bottom: 1px solid #f4f4f4;
   }
 
