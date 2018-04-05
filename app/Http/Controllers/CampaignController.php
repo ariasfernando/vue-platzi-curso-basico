@@ -218,11 +218,11 @@ class CampaignController extends Controller
      */
     public function postDelete(Request $request)
     {
-        $window_id = Cache::get('window_id:' . $request->input('campaign_id')) ?? false;
+        $window_id = Cache::get('window_lock:' . $request->input('campaign_id')) ?? false;
 
         if (Cache::has('lock:' . $request->input('campaign_id'))
             && Cache::get('lock:' . $request->input('campaign_id')) !== Auth::id()
-            || $request->input('window_id') != $window_id
+            || ($window_id && $window_id !=$request->input('window_id'))
         ) {
             Activity::log(
                 'Campaign edit deny',

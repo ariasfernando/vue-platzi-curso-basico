@@ -51,6 +51,10 @@ export default {
       type: String,
       required: true
     },
+    windowId: {
+      type: String,
+      required: true,
+    },
   },
   computed: {
     showTags: function() {
@@ -123,7 +127,7 @@ export default {
     confirmDeleteCampaign() {
       $.post(Application.globals.baseUrl + '/campaign/delete', {
         campaign_id: this.selectedCampaignId,
-        window_id: this.sessionWindowId,
+        window_id: this.windowId,
       }, (response) => {
 
         if (response.campaign_lock) {

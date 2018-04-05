@@ -48,6 +48,7 @@
             :enable-locking="config.locking"
             :show-created-by="config.created_by_dashboard"
             :locked-by="lockedBy"
+            :window-id="sessionWindowId"
             @add-search-tag="addSearchTag"
             @apply-sort="applySort"
             @change-page="changePage"
@@ -75,6 +76,7 @@
             :enable-locking="config.locking"
             :show-created-by="config.created_by_dashboard"
             :locked-by="lockedBy"
+            :window-id="sessionWindowId"
             @add-search-tag="addSearchTag"
             @apply-sort="applySort"
             @change-page="changePage"
@@ -101,6 +103,7 @@
             :enable-locking="config.locking"
             :show-created-by="config.created_by_dashboard"
             :locked-by="lockedBy"
+            :window-id="sessionWindowId"
             @add-search-tag="addSearchTag"
             @apply-sort="applySort"
             @change-page="changePage"
@@ -211,6 +214,12 @@
     computed: {
       canSearch: function() {
         return this.checkTagLimit();
+      },
+      sessionWindowId() {
+        if (!window.sessionStorage.getItem('windowId')) {
+          window.sessionStorage.setItem('windowId', this.windowId);
+        }
+        return window.sessionStorage.getItem('windowId');
       }
     },
     methods: {
