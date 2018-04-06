@@ -25,7 +25,8 @@
         "akamai-open/edgegrid-client": "^1.0",
         "stensul/php-imageproxy": "0.*",
         "stensul/filesystem": "1.*",
-        "stensul/media-gallery": "^2.2"
+        "stensul/media-gallery": "^2.2",
+        "firebase/php-jwt": "^5.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -50,4 +50,9 @@ return [
         'client_secret' => env('OAUTH_FACEBOOK_SECRET'),
         'redirect'      => env('OAUTH_FACEBOOK_REDIRECT_URI'),
     ],
+    'zendesk' => [
+        'shared_key'   => env('ZENDESK_SHARED_KEY'),
+        'login_url'    => env('ZENDESK_LOGIN_URL'),
+        'organization' => env('ZENDESK_ORGANIZATION')
+    ],
 ];
