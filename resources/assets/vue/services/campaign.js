@@ -130,6 +130,25 @@ export default {
 
     return deferred.promise;
   },
+  pingLock(data) {
+    const endpoint = endpoints.campaign.pingLock;
+    const deferred = Q.defer();
+    const params = {
+      endpoint,
+      json: {
+        campaign_id: data.campaignId,
+        window_id: data.windowId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
   favoriteCampaign(campaignId) {
     const endpoint = endpoints.campaign.favoriteCampaign;
     const deferred = Q.defer();

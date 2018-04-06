@@ -47,6 +47,8 @@
             :type="'current'"
             :enable-locking="config.locking"
             :show-created-by="config.created_by_dashboard"
+            :locked-by="lockedBy"
+            :window-id="sessionWindowId"
             @add-search-tag="addSearchTag"
             @apply-sort="applySort"
             @change-page="changePage"
@@ -73,6 +75,8 @@
             :type="'finished'"
             :enable-locking="config.locking"
             :show-created-by="config.created_by_dashboard"
+            :locked-by="lockedBy"
+            :window-id="sessionWindowId"
             @add-search-tag="addSearchTag"
             @apply-sort="applySort"
             @change-page="changePage"
@@ -98,6 +102,8 @@
             :type="'template'"
             :enable-locking="config.locking"
             :show-created-by="config.created_by_dashboard"
+            :locked-by="lockedBy"
+            :window-id="sessionWindowId"
             @add-search-tag="addSearchTag"
             @apply-sort="applySort"
             @change-page="changePage"
@@ -141,6 +147,27 @@
     },
     created: function() {
       this.updateCampaigns();
+  
+      switch(this.flashMessage) {
+        case 'campaign_lock':
+          this.$root.$toast(
+            'Sorry, ' + this.lockedBy + ' is editing this campaign',
+            {className: 'et-error'}
+          );
+          break;
+        case 'campaign_not_found':
+          this.$root.$toast(
+            'Sorry, we couldn\'t find the requested campaign',
+            {className: 'et-error'}
+          );
+          break;
+        case 'campaign_permission':
+          this.$root.$toast(
+            'Sorry, you are not allowed to open this campaign.',
+            {className: 'et-error'}
+          );
+          break;
+      };
     },
     data: function() {
       return {
@@ -180,13 +207,19 @@
           current: false,
           template: false,
           finished: false
-        }
+        },
       }
     },
-    props: ['config'],
+    props: ['config', 'flashMessage', 'lockedBy'],
     computed: {
       canSearch: function() {
         return this.checkTagLimit();
+      },
+      sessionWindowId() {
+        if (!window.sessionStorage.getItem('windowId')) {
+          window.sessionStorage.setItem('windowId', this.windowId);
+        }
+        return window.sessionStorage.getItem('windowId');
       }
     },
     methods: {

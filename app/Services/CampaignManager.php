@@ -437,15 +437,18 @@ class CampaignManager
      *
      * @return array
      */
-    public static function lock($campaign_id = null)
+    public static function lock($campaign_id, $window_id)
     {
 
         if (Auth::check()) {
-            Cache::add('lock:' . $campaign_id, Auth::id(), 1); // 1 minute
-            Cache::add('user_lock:' . $campaign_id, Auth::user()->email, 1); // 1 minute
+            if (!Cache::has('lock:' . $campaign_id) || Cache::get('window_lock:' . $campaign_id) === $window_id) {
+                Cache::put('lock:' . $campaign_id, Auth::id(), 1); // 1 minute
+                Cache::put('window_lock:' . $campaign_id, $window_id, 1); // 1 minute
+                Cache::put('user_lock:' . $campaign_id, Auth::user()->email, 1); // 1 minute
+            }
         }
 
-        return array('locked' => $campaign_id);
+        return ['locked' => $campaign_id];
     }
 
     /**

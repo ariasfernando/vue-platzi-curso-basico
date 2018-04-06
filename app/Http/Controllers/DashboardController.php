@@ -3,6 +3,7 @@
 namespace Stensul\Http\Controllers;
 
 use Auth;
+use Campaign as CampaignManager;
 use Stensul\Models\Campaign;
 use Stensul\Models\Library;
 use Stensul\Models\Setting;
@@ -59,9 +60,23 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $flash_messages = [
+            'campaign_lock',
+            'campaign_not_found',
+            'campaign_permission'
+        ];
+        $flash = '';
+        foreach ($flash_messages as $message) {
+            if (session()->has($message)) {
+                $flash = $message;
+            }
+        }
+
         $params = [
             'locales' => \Config::get('locales'),
-            'libraries' => Auth::user()->getLibraries()
+            'libraries' => Auth::user()->getLibraries(),
+            'flash' => $flash,
+            'locked_by' => CampaignManager::whoIsLocking(session()->get('campaign_lock'))
         ];
 
         return $this->renderView('dashboard', ['params' => $params]);
