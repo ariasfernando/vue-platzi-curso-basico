@@ -326,7 +326,14 @@ class CampaignController extends Controller
      */
     public function postUploadImage(Request $request)
     {
-        return Campaign::upload($request->input('campaign_id'), $request->input('data_image'));
+        $data_image = $request->input('data_image');
+
+        // Convert local urls to local path.
+        if (substr($data_image, 0, strlen(config('app.url'))) === config('app.url')) {
+            $data_image = public_path() . str_replace(config('app.url'), '', $data_image);
+        }
+
+        return Campaign::upload($request->input('campaign_id'), $data_image);
     }
 
     /**
