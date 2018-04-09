@@ -284,7 +284,7 @@ class StaticProcessor
                     $image = Imagine::load($blob);
                 } else {
                     $storage = Storage::disk('local:campaigns');
-                    $image = (strpos($blob, public_path()) === false)?
+                    $image = (strpos($blob, public_path()) === false) ?
                         Imagine::load($storage->get($blob)) :
                         Imagine::open($blob);
                     $extension = pathinfo($blob)["extension"];
@@ -300,7 +300,7 @@ class StaticProcessor
                 $blob
             );
             Log::warning($error_msg);
-            throw new \Exception($error_msg);
+            throw $e;
         }
 
         switch ($extension) {
