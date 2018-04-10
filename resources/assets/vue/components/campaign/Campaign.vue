@@ -62,6 +62,7 @@
   import EmailActions from './EmailActions.vue'
   import VueSticky from 'vue-sticky'
   import _ from 'lodash'
+  import CampaignService from '../../services/campaign'
 
   export default {
     name: 'Campaign',
@@ -86,6 +87,7 @@
         campaignReady: false,
         campaignConfigReady: false,
         pingLockInterval: 30000,
+        logTimeInterval: 30000,
       }
     },
     computed: {
@@ -182,6 +184,7 @@
           {className: 'et-info'}
         );
       }
+      setInterval(CampaignService.logTime, this.logTimeInterval, this.campaignId, this.logTimeInterval / 1000);
     }
   };
 </script>

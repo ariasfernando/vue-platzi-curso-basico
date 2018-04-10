@@ -47,4 +47,30 @@ class Logger
 
         return $response;
     }
+
+    public static function logCampaignSpentTime($campaign_id, $user_id, $time = 0)
+    {
+        $log = DBLog::where('description', 'Campaign Edit Spent Time')
+            ->where('properties.campaign_id', new ObjectID($campaign_id))
+            ->where('properties.user_id', new ObjectID($user_id))
+            ->first();
+
+        $params = [
+            'description' => 'Campaign Edit Spent Time',
+            'ip' => 'NA',
+            'user_agent' => 'NA',
+            'controller' => 'CampaignController',
+            'action' => 'getEdit',
+            'properties' => [
+                'campaign_id' => new ObjectID($campaign_id),
+                'user_id' => new ObjectID($user_id),
+                'time' => ($log) ?  $log->properties['time'] + $time : (int)$time,
+            ]
+        ];
+        if (!$log) {
+            return DbLog::create($params);
+        }
+        $log->update($params);
+        return $log;
+    }
 }
