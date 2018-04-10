@@ -32,7 +32,9 @@ function buttonDefault() {
       // Border Left
       borderLeftWidth: '0px',
       borderLeftStyle: 'none',
-      borderLeftColor: '',
+      borderLeftColor: '#000000',
+      // Border Radius
+      borderRadius: 'initial',
     },
     styleOptions: {
       isBlockLineHeight: false,
