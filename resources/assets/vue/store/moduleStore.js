@@ -129,7 +129,7 @@ const mutations = {
     const properties = data.subComponent ? component[data.subComponent][data.link] : component[data.link];
     const newProperty = {};
     newProperty[data.property] = data.value;
-    _.merge(properties, newProperty);
+    Vue.set(properties, data.property, data.value);
   },
   setActiveColumn(state, columnId) {
     state.activeColumn = columnId;

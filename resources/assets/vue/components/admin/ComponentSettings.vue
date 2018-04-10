@@ -21,6 +21,7 @@
             :max-value="setting.maxValue"
             :sub-component="setting.subComponent"
             :options="setting.options"
+            :is-disable-percentage="setting.isDisablePercentage"
             :element="setting.subComponent ? component[setting.subComponent] : component"
             :key="setting.name"></component>
         </group-container>
@@ -81,7 +82,7 @@ export default {
     GroupContainer,
     LabelItemContainer,
     "input-border-group": elementSettings.BorderGroup,
-    "input-button-caret": elementSettings.ButtonCaret,
+    "input-caret": elementSettings.ButtonCaret,
     "input-font-family": elementSettings.FontFamily,
     "input-font-style": elementSettings.FontStyle,
     "input-font-weight": elementSettings.FontWeight,
@@ -110,10 +111,7 @@ export default {
       handler: function(currentComponent) {
         let module = this.$store.getters["module/module"];
         if (!_.isEmpty(currentComponent) && currentComponent.componentId >= 0) {
-          this.component =
-            module.structure.columns[currentComponent.columnId].components[
-              currentComponent.componentId
-            ];
+          this.component = module.structure.columns[currentComponent.columnId].components[currentComponent.componentId];
           this.ready = true;
         } else {
           this.ready = false;

@@ -192,10 +192,9 @@ describe('== Models ==', () => {
         expect(properties).to.have.keys([
           'id',
           'type',
-          'style',
-          'styleOption',
-          'attribute',
-          'buttonCaret',
+          'container',
+          'button',
+          'caret',
           'plugins',
           'data',
         ]);

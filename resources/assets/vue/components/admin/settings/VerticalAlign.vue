@@ -29,8 +29,8 @@ export default {
       },
       set: function(newValue) {
         this.$emit("setting-updated", {
-          link:'attribute',
           subComponent: this.subComponent,
+          link:'attribute',
           name: this.name,
           value: newValue
         });

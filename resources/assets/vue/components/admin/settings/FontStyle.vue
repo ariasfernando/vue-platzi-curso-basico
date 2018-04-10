@@ -36,9 +36,13 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "font-style",
-  props: ["setting", "element"],
+  props: ["setting", "element", "subComponent"],
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
+  mounted() {
+    // set styleOption to default if is undefined
+    this.element.styleOption["isBlockLineHeight"] === undefined ? this.isBlockLineHeight = false : '';
+  },
   computed: {
     isBlockLineHeight: {
       get() {
@@ -46,6 +50,7 @@ export default {
       },
       set(newValue) {
         this.$emit('setting-updated', {
+          subComponent: this.subComponent,
           link: 'styleOption',
           name: "isBlockLineHeight",
           value: newValue
@@ -58,6 +63,7 @@ export default {
       },
       set(newValue) {
         this.$emit('setting-updated', {
+          subComponent: this.subComponent,
           link: 'style',
           name: "fontSize",
           value: newValue + "px"
@@ -74,6 +80,7 @@ export default {
       },
       set(newValue) {
         this.$emit('setting-updated', {
+          subComponent: this.subComponent,
           link: 'style',
           name: "lineHeight",
           value: newValue + "px"

@@ -1,8 +1,8 @@
 <template>
   <settings-container label="Button caret">
     <template slot="setting-right">
-      <i v-if="buttonCaret" class="glyphicon glyphicon-trash st-remove" @click="resetImage"></i>
-      <input class="input" name="buttonCaret" type="file" @change="onFileChange">
+      <i v-if="caret" class="glyphicon glyphicon-trash st-remove" @click="resetImage"></i>
+      <input class="input" name="caret" type="file" @change="onFileChange">
     </template>
   </settings-container>
 </template>
@@ -18,12 +18,12 @@ export default {
   data() {
     return {
       name: "url",
-      subComponent: "buttonCaret"
+      subComponent: "caret"
     };
   },
   computed: {
-    buttonCaret() {
-      return this.element.buttonCaret.attribute[this.name];
+    caret() {
+      return this.element.caret.attribute[this.name];
     }
   },
   methods: {

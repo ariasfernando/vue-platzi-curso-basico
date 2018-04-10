@@ -33,6 +33,12 @@ export default {
       minValue: this.minValue ? this.minValue : 1
     };
   },
+  mounted() {
+    // set styleOption to default if is undefined
+    if (this.element.styleOption["isPxWidth"] === undefined) {
+      this.isPxWidth = false;
+    }
+  },
   computed: {
     isPxWidth: {
       get() {
@@ -40,8 +46,8 @@ export default {
       },
       set(value) {
         this.$emit("setting-updated", {
-          link:'styleOption',
           subComponent: this.subComponent,
+          link: "styleOption",
           name: "isPxWidth",
           value: value
         });
@@ -54,7 +60,7 @@ export default {
       set(value) {
         value = isNaN(value) || value < this.minValue ? this.minValue : value;
         value = this.isPxWidth ? `${value}` : `${value}%`;
-        this.mainSetting = value
+        this.mainSetting = value;
       }
     },
     maxValue() {

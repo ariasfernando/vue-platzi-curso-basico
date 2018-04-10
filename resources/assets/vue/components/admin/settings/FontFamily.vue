@@ -27,7 +27,7 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "FontFamily",
-  props: ["setting", "element", "link", "name", "label"],
+  props: ["setting", "element", "link", "name", "label", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {

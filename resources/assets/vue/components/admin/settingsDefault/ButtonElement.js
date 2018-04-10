@@ -7,59 +7,60 @@ function buttonDefault() {
           type: 'font-family',
           link: 'style',
           label: 'Font Family',
+          subComponent: 'button',
         },
         {
           name: 'font-style',
           type: 'font-style',
+          subComponent: 'button',
         },
         {
           name: 'letter-spacing',
           type: 'letter-spacing',
+          subComponent: 'button',
         },
         {
           name: 'font-weight',
           type: 'font-weight',
+          subComponent: 'button',
         },
       ],
       [
         {
           name: 'text-align',
           type: 'text-align',
+          subComponent: 'container',
         },
       ],
       [
         {
-          name: 'button-caret',
-          type: 'button-caret',
+          name: 'caret',
+          type: 'caret',
         },
         {
           name: 'image-size',
           type: 'image-size',
-          subComponent: 'buttonCaret',
           minValue: 5,
-        },
-        {
-          name: 'text-align',
-          type: 'text-align',
-          subComponent: 'buttonCaret',
+          subComponent: 'caret',
+          isDisablePercentage: true,
         },
         {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
-          subComponent: 'buttonCaret',
+          subComponent: 'caret',
         },
         {
           name: 'bgcolor',
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
-          subComponent: 'buttonCaret',
+          subComponent: 'caret',
         },
         {
           name: 'padding',
           type: 'padding',
-          subComponent: 'buttonCaret',
+          subComponent: 'caret',
         },
       ],
       [
@@ -67,28 +68,33 @@ function buttonDefault() {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
+          subComponent: 'container',
         },
         {
           name: 'bgcolor',
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
+          subComponent: 'button',
         },
         {
           name: 'color',
           type: 'generic-color',
           link: 'style',
           label: 'Color',
+          subComponent: 'button',
         },
       ],
       [
         {
           name: 'padding',
           type: 'padding',
+          subComponent: 'container',
         },
         {
           name: 'border-group',
           type: 'border-group',
+          subComponent: 'button',
         },
       ],
       [
@@ -99,6 +105,7 @@ function buttonDefault() {
           type: 'generic-number',
           value: 150,
           minValue: 5,
+          subComponent: 'button',
         },
         {
           link: 'attribute',
@@ -107,6 +114,7 @@ function buttonDefault() {
           type: 'generic-number',
           value: 40,
           minValue: 5,
+          subComponent: 'button',
         },
       ],
       [
@@ -116,6 +124,7 @@ function buttonDefault() {
           name: 'href',
           type: 'generic-text',
           value: 'http://stensul.com',
+          subComponent: 'button',
         },
       ],
     ],

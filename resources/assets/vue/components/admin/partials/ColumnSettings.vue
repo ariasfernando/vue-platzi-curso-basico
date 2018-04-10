@@ -27,6 +27,7 @@
                 :min-value="setting.minValue"
                 :max-value="setting.maxValue"
                 :options="setting.options"
+                :is-disable-percentage="setting.isDisablePercentage"
                 :element="column"
                 :key="setting.name">
               </component>

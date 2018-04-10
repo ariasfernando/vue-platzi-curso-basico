@@ -13,6 +13,7 @@
       <el-button
         slot="append"
         class="button icon-disable"
+         :style="!isDisablePercentage ? 'cursor: pointer' : 'cursor: default'"
         @click="onTogglePxWidth"
       >{{this.isPxWidth ? "px": "%"}}</el-button>
 
@@ -56,7 +57,7 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "ImageSize",
-  props: ["setting", "element", "subComponent","minValue"],
+  props: ["setting", "element", "subComponent", "minValue", "subComponent", "isDisablePercentage"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
@@ -64,88 +65,103 @@ export default {
       min: this.minValue ? this.minValue : 10
     };
   },
+  mounted() {
+    // set styleOption to default if is undefined
+    if (this.element.styleOption["isBlockHeight"] === undefined) {
+      this.isBlockHeight = false;
+    }
+    if (this.element.styleOption["isPxWidth"] === undefined) {
+      if(this.isDisablePercentage){
+        this.isPxWidth = true;
+      }else{
+        this.isPxWidth = false;
+      }
+    }
+  },
   computed: {
     isBlockHeight: {
-      get(){
+      get() {
         return this.element.styleOption["isBlockHeight"];
       },
-      set(value){
+      set(value) {
         this.$emit("setting-updated", {
-          link:'styleOption',
           subComponent: this.subComponent,
-          name: 'isBlockHeight',
+          link: "styleOption",
+          name: "isBlockHeight",
           value: value
         });
       }
     },
     isPxWidth: {
-      get(){
+      get() {
         return this.element.styleOption["isPxWidth"];
       },
-      set(value){
+      set(value) {
         this.$emit("setting-updated", {
-          link:'styleOption',
           subComponent: this.subComponent,
-          name: 'isPxWidth',
+          link: "styleOption",
+          name: "isPxWidth",
           value: value
         });
       }
     },
     width: {
       get() {
-        return _.parseInt(this.element.attribute['width']);
+        return _.parseInt(this.element.attribute["width"]);
       },
-      set(value){
+      set(value) {
         value = isNaN(value) || value < this.min ? this.min : value;
-        value = this.isPxWidth ? `${value}` :`${value}%`;
+        value = this.isDisablePercentage || this.isPxWidth ? `${value}` : `${value}%`;
         this.$emit("setting-updated", {
-          link:'attribute',
+          link: "attribute",
           subComponent: this.subComponent,
-          name: 'width',
+          name: "width",
           value: value
         });
       }
     },
     height: {
       get() {
-          return this.element.attribute['height'] === "auto" ? "auto" : _.parseInt(this.element.attribute['height']);        
+        return this.element.attribute["height"] === "auto" ? "auto" : _.parseInt(this.element.attribute["height"]);
       },
-      set(value){
+      set(value) {
         value = (isNaN(value) || value < this.min) && value !== "auto" ? this.min : value;
         value = `${value}`;
         this.$emit("setting-updated", {
-          link:'attribute',
           subComponent: this.subComponent,
-          name: 'height',
+          link: "attribute",
+          name: "height",
           value: value
         });
       }
     },
     maxValueWidth() {
       return this.isPxWidth ? undefined : 100;
-    },
+    }
   },
   methods: {
     onTogglePxWidth() {
-      let isPxWidth = !this.isPxWidth;
-      let width;
-      if (!isPxWidth) {
-        width = Math.min(100, this.width);
-      }
+      if(!this.isDisablePercentage){
+        let isPxWidth = !this.isPxWidth;
+        let width;
+        if (!isPxWidth) {
+          width = Math.min(100, this.width);
+        }
 
-      this.isPxWidth = isPxWidth;
-      this.width = width;
+        this.isPxWidth = isPxWidth;
+        this.width = width;
+      }
     },
     onToggleBlockheight() {
       let isBlockHeight = !this.isBlockHeight;
       if (isBlockHeight) {
         this.height = "auto";
       } else {
-        this.height = '100';
+        this.height = "100";
       }
       this.isBlockHeight = isBlockHeight;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less" scoped>

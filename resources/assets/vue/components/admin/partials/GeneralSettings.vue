@@ -32,6 +32,7 @@
             :min-value="setting.minValue"
             :max-value="setting.maxValue"
             :options="setting.options"
+            :is-disable-percentage="setting.isDisablePercentage"
             :element="module.structure"
             :key="setting.name">
           </component>

@@ -18,7 +18,7 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "generic-text",
-  props: ["element", "name", "type", "link", "label", "default-value", "placeholder"],
+  props: ["element", "name", "type", "link", "label", "default-value", "placeholder", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
 };

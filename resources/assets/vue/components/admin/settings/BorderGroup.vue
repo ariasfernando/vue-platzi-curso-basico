@@ -29,11 +29,12 @@ import Border from "./Border.vue";
 
 export default {
   name: "BorderGroup",
-  props: ["setting", "element"],
+  props: ["setting", "element","subComponent"],
   components: { Border },
   methods: {
     settingUpdatedHandler(eventData) {
       this.$emit("setting-updated", {
+        subComponent: this.subComponent,
         link: 'style',
         name: eventData.name,
         value: eventData.value

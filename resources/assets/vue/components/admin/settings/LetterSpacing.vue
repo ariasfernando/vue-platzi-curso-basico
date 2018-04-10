@@ -34,8 +34,8 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "letter-spacing",
-  props: ["setting", "element"],
-  mixins: [ SettingMixin ],
+  props: ["setting", "element", "subComponent"],
+  mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
@@ -49,6 +49,10 @@ export default {
   },
   mounted() {
     this.updateLetterSpacingInputValue(this.letterSpacing);
+    // set styleOption to default if is undefined
+    if (this.isNormalLetterSpacing === undefined) {
+      this.isNormalLetterSpacing = true;
+    }
   },
   computed: {
     isNormalLetterSpacing: {
@@ -57,21 +61,27 @@ export default {
       },
       set: function(newValue) {
         this.$emit("setting-updated", {
-          link:'styleOption',
+          subComponent: this.subComponent,
+          link: "styleOption",
           name: this.isNormalLetterSpacingName,
           value: newValue
         });
-        this.letterSpacing = this.inferLetterSpacing(this.letterSpacing, newValue);
+        this.letterSpacing = this.inferLetterSpacing(
+          this.letterSpacing,
+          newValue
+        );
       }
     },
     letterSpacing: {
       get: function() {
-        return this.inferLetterSpacing(this.element.style[this.name], this.isNormalLetterSpacing);
+        return this.inferLetterSpacing(this.element.style[this.name], this.isNormalLetterSpacing
+        );
       },
       set: function(value) {
-        let newValue = value === "normal" ? value : value+this.unit;
+        let newValue = value === "normal" ? value : value + this.unit;
         this.$emit("setting-updated", {
-          link:'style',
+          subComponent: this.subComponent,
+          link: "style",
           name: this.name,
           value: newValue
         });
@@ -81,12 +91,16 @@ export default {
   },
   methods: {
     updateLetterSpacingInputValue(value) {
-       this.letterSpacingInputValue = this.isNormalLetterSpacing ? this.defaultLetterSpacing : value;
+      this.letterSpacingInputValue = this.isNormalLetterSpacing
+        ? this.defaultLetterSpacing
+        : value;
     },
     inferLetterSpacing(currentSpacing, isNormalLetterSpacing) {
       let newSpacing = this.defaultLetterSpacing;
-      if(currentSpacing) {
-        newSpacing = isNormalLetterSpacing ? "normal" : parseFloat(currentSpacing);
+      if (currentSpacing) {
+        newSpacing = isNormalLetterSpacing
+          ? "normal"
+          : parseFloat(currentSpacing);
       }
       return newSpacing;
     },

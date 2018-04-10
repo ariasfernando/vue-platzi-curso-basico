@@ -40,14 +40,14 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "FontWeight",
-  props: ["setting", "element"],
-  mixins: [ SettingMixin ],
+  props: ["setting", "element", "subComponent"],
+  mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
       name: "fontWeight",
       isCustomFontWeightName: "isCustomFontWeight",
-      options: [],
+      options: []
     };
   },
   mounted() {
@@ -61,15 +61,22 @@ export default {
       return options;
     }
     this.options = getOptions();
+    // set styleOption to default if is undefined
+    if (this.element.styleOption["isCustomFontWeight"] === undefined) {
+      this.isCustomFontWeight = false;
+    }
   },
   computed: {
     isCustomFontWeight: {
       get() {
-        return this.element.styleOption[this.isCustomFontWeightName];
+        return (
+          this.element.styleOption[this.isCustomFontWeightName]
+        );
       },
       set(newValue) {
         this.$emit("setting-updated", {
-          link:'styleOption',
+          subComponent: this.subComponent,
+          link: "styleOption",
           name: this.isCustomFontWeightName,
           value: newValue
         });
@@ -81,7 +88,8 @@ export default {
       },
       set(newValue) {
         this.$emit("setting-updated", {
-          link:'style',
+          subComponent: this.subComponent,
+          link: "style",
           name: this.name,
           value: newValue
         });
