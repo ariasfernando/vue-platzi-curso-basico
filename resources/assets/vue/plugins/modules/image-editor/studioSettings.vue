@@ -135,13 +135,13 @@ export default {
 
       this.$store.commit("module/savePlugin", payload);
     },
-    mounted() {
-      this.$store.dispatch('module/getLibraries', {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId
-      });
-    }
+  },
+  mounted() {
+    this.$store.dispatch('module/getLibraries', {
+      plugin: this.name,
+      columnId: this.currentComponent.columnId,
+      componentId: this.currentComponent.componentId
+    });
   }
 };
 </script>
