@@ -95,10 +95,14 @@
           images: [ data.imageUrl, data.rawImage ],
           campaignId: this.campaign.campaign_id
         }).then((images) => {
-          this.updateAttribute(images[0]);
-          this.updatePluginData(images, data);
-          this.$store.commit("global/setLoader", false);
-          this.showImageEditor = false;
+          const tmp = new Image();
+          tmp.src = this.$_app.config.imageUrl + images[0];
+          tmp.onload = () => {
+            this.updateAttribute(images[0]);
+            this.updatePluginData(images, data);
+            this.$store.commit("global/setLoader", false);
+            this.showImageEditor = false;
+          };
         });
       },
       updatePluginData(images, data) {
