@@ -1,5 +1,5 @@
 <template>
-  <settings-container class="field-class-input" label="Class Input">
+  <settings-container label="Class Input">
     <template slot="setting-bottom">
       <el-select
       class="width-full"
