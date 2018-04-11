@@ -56,5 +56,5 @@
 @endsection
 
 @section('footer-script')
-	<script src="{{ url( elixir('js/library.js') ) }}"></script>
+	<script src="{{ url(mix('js/library.js')) }}"></script>
 @stop

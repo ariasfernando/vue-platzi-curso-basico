@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 
 function Campaign(data) {
   this.campaign_name = data.settings.campaignName || data.campaign.campaign_name;

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 export default {
+  props: ["subComponent"],
   computed: {
     module() {
       return this.$store.getters['module/module'];

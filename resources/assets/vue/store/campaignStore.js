@@ -357,6 +357,18 @@ function campaignStore() {
         });
         return deferred.promise;
       },
+      pingLockCampaign(context, data) {
+        const deferred = Q.defer();
+
+        campaignService.pingLock({ campaignId: data.campaignId, windowId: data.windowId })
+          .then(response => {
+          })
+          .catch(error => {
+            context.commit('error', error);
+            deferred.reject(error);
+          });
+        return deferred.promise;
+      },
       favoriteCampaign(context, campaignId) {
         const deferred = Q.defer();
 

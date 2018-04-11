@@ -73,6 +73,10 @@ class CampaignController extends Controller
             $params = $this->loadCampaign($campaign->_id);
         }
 
+        if (is_a($params, 'Illuminate\Http\RedirectResponse')) {
+            return $params;
+        }
+
         if (\Config::get('api.scraper.status')
             && \Config::get('api.scraper.settings.campaign_preload')) {
             Campaign::scraperPreloader(
@@ -104,11 +108,16 @@ class CampaignController extends Controller
             return redirect(env('APP_BASE_URL', '/'))->with('campaign_lock', $campaign_id);
         }
 
+        $window_id = Cache::get('window_lock:' . $campaign_id);
+
         if ($params = Campaign::find($campaign_id)) {
             $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
                 ? $params['campaign_data']['library']
                 : "default";
             $params['library_id'] = $library_id;
+
+            $params['cached_window_id'] = Cache::has('window_lock:' . $campaign_id)
+                ? Cache::get('window_lock:' . $campaign_id) : false;
 
             return $params;
         }
@@ -208,15 +217,21 @@ class CampaignController extends Controller
      */
     public function postDelete(Request $request)
     {
-        if (Cache::has('lock:'.$request->input('campaign_id'))
-            && Cache::get('lock:'.$request->input('campaign_id')) !== Auth::id()
+        $window_id = Cache::get('window_lock:' . $request->input('campaign_id')) ?? false;
+
+        if (Cache::has('lock:' . $request->input('campaign_id'))
+            && Cache::get('lock:' . $request->input('campaign_id')) !== Auth::id()
+            || ($window_id && $window_id !=$request->input('window_id'))
         ) {
             Activity::log(
                 'Campaign edit deny',
                 array('properties' => ['campaign_id' => new ObjectID($request->input('campaign_id'))])
             );
 
-            return array('campaign_lock' => $request->input('campaign_id'));
+            return [
+                'campaign_lock' => $request->input('campaign_id'),
+                'locked_by' => Campaign::whoIsLocking($request->input('campaign_id'))
+            ];
         } else {
             return Campaign::delete($request->input('campaign_id'));
         }
@@ -310,7 +325,14 @@ class CampaignController extends Controller
      */
     public function postUploadImage(Request $request)
     {
-        return Campaign::upload($request->input('campaign_id'), $request->input('data_image'));
+        $data_image = $request->input('data_image');
+
+        // Convert local urls to local path.
+        if (substr($data_image, 0, strlen(config('app.url'))) === config('app.url')) {
+            $data_image = public_path() . str_replace(config('app.url'), '', $data_image);
+        }
+
+        return Campaign::upload($request->input('campaign_id'), $data_image);
     }
 
     /**
@@ -370,7 +392,7 @@ class CampaignController extends Controller
      */
     public function postLock(Request $request)
     {
-        return Campaign::lock($request->input('campaign_id'));
+        return Campaign::lock($request->input('campaign_id'), $request->input('window_id'));
     }
 
     /**

@@ -18,7 +18,7 @@ class ModulesTest extends TestCase
     {
         /*
         ***********************************************************
-        WIP - Rebuild test to new modules structure (Stedio/Custom)
+        WIP - Rebuild test to new modules structure (Studio/Custom)
         ***********************************************************
 
         $url = '/template/module?app_name=base' . '&campaign_id=' . $this->campaign->id;

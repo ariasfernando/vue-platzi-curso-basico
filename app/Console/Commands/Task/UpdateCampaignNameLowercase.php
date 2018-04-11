@@ -33,7 +33,7 @@ class UpdateCampaignNameLowercase extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $this->info('>>> Update campaign name to lowercase for better sorting..');
         $campaigns = Campaign::withTrashed()->get();
