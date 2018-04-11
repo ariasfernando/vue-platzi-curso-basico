@@ -1,18 +1,17 @@
 <template>
     <table 
-      v-if="column.components.length"
       width="100%"
       align="left"
       cellspacing="0" 
       cellpadding="0" 
       border="0" 
       class="st-content-component"
-      :class="!column.components.length ? 'empty-col' : ''"
+      :class="!column.components.length ? 'empty-table' : ''"
       :style="column.style || ''" 
       :data-col="columnId"
     >
       <tr>
-        <td width="100%" valign="top" :style="styles" :class="column.attribute.classes">
+        <td width="100%" valign="top" :style="styles" :class="column.components.length ? column.attribute.classes : 'empty-table'">
           <draggable 
             cellpadding="0" 
             cellspacing="0" 
@@ -24,6 +23,7 @@
             :data-col="columnId"
             @add="onAdd"
           >
+          <template v-if="column.components.length">
             <component 
               class="st-component"
               v-for="(component, componentId) in column.components"
@@ -31,29 +31,10 @@
               :component="component" 
               :module-id="module.id"
               :column-id="columnId"
-              :component-id="componentId" 
-              :key="componentId"></component>
-          </draggable>
-        </td>
-      </tr>  
-    </table>
-
-    <!-- Empty Col -->
-    <table v-else width="100%" align="left" :style="column.style || 'width:100%'">
-      <tr>
-        <td width="100%" style="widht:100%">
-          <draggable 
-            cellpadding="0" 
-            cellspacing="0" 
-            border="0"
-            width="100%"
-            class="empty-table"
-            :element="'div'" 
-            :options="options" 
-            :data-col="columnId"
-            @add="onAdd"
-          >
-            <div style="display:table-row;"> 
+              :component-id="componentId"
+              :key="component.id"></component>
+            </template>
+            <div v-else style="display:table-row;"> 
               <div 
                 align="center"
                 class="empty-cell"

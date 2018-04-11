@@ -7,7 +7,6 @@
         v-validate="'required'"
         v-model="mainSettingColor"
         placeholder="transparent"
-        class="col-sm-4" 
         disabled="disabled"
       >
       </el-input>
@@ -40,10 +39,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.el-input {
-  width: 86px;
-  padding: 0;
-}
 .el-color-picker {
   float: left;
   height: 28px;
@@ -51,6 +46,10 @@ export default {
 </style>
 <style lang="less">
 .generic-color {
+  .el-input {
+    padding: 0;
+    width: calc(~'100% - 34px');
+  }
   .el-color-picker__trigger {
     padding: 3px;
     height: 28px;

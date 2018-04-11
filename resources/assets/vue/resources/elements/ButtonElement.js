@@ -1,5 +1,6 @@
 function buttonDefault() {
   return {
+    id: Math.floor(100000 + (Math.random() * 900000)),
     type: 'button-element',
     data: {
       text: 'Lorem ipsum',

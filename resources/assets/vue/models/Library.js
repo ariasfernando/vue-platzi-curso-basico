@@ -34,14 +34,7 @@ function Library(data = {}) {
 
   const groups = [];
 
-  _.each(data.modules, (modules, group) => {
-    groups.push({
-      name: group,
-      modules,
-    });
-  });
-
-  this.modules = groups;
+  this.modules = data.modules || [];
 
   return this;
 }

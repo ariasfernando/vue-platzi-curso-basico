@@ -5,6 +5,7 @@ function separatorDefault() {
         {
           name: 'input-height',
           type: 'input-height',
+          link: 'style',
         },
         {
           name: 'classes',

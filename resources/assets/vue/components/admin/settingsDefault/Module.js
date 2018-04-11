@@ -23,6 +23,10 @@ function moduleDefault() {
           type: 'class-input',
           link: 'attribute',
         },
+        {
+          name: 'columnsStacking',
+          type: 'columns-stacking',
+        },
       ],
     ],
   };

@@ -9,29 +9,36 @@
     <!-- START: 2 COLUMNS -->
     <tr v-if="module.structure.columns.length > 1">
       <td width="100%" :bgcolor="module.structure.attribute.bgcolor" :style="module.structure.style">
-        <table width="100%"
-               class="st-wrapper" 
-               cellspacing="0" 
-               cellpadding="0" 
-               border="0" 
-               align="center"
+        <table
+          width="100%"
+          class="st-wrapper" 
+          cellspacing="0" 
+          cellpadding="0" 
+          border="0" 
+          align="center"
         >
           <tr>
+            <template v-if="module.structure.columnsStacking === 'columnsFixed'">
+
+              <!-- If columnsFixed is true, show Columns fixed render -->
+              <td
+                v-for="(column, columnId) in module.structure.columns"
+                :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+                valign="top" 
+                :key="column.id"
+              >
+                <columns-fixed-render @add="onAdd" :column="column" :column-id="columnId"></columns-fixed-render>
+              </td>
+            </template>
+
             <!-- If columnsFixed is false, show Columns staked render -->
-            <td width="100%"
-                v-if="!columnsFixed"
+            <td
+              v-else
+              width="100%"
             >
               <columns-stacked-render @add="onAdd"></columns-stacked-render>
             </td> 
 
-            <!-- If columnsFixed is true, show Columns fixed render -->
-            <td v-else 
-                v-for="(column, columnId) in module.structure.columns"
-                :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
-                valign="top" 
-            >
-              <columns-fixed-render @add="onAdd" :column="column" :column-id="columnId"></columns-fixed-render>
-            </td>
           </tr>
         </table>  
 
@@ -41,57 +48,50 @@
 
     <!-- START 1 COLUMNS -->
     <tr v-else>
-      <td class="st-col" 
-          v-for="(column, columnId) in module.structure.columns"
-          :class="!column.components.length ? 'empty-col' : ''" 
-          :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
-          :style="module.structure.style || ''"
-          :bgcolor="module.structure.attribute.bgcolor"
-          :data-col="columnId"
+      <td
+        class="st-col" 
+        v-for="(column, columnId) in module.structure.columns"
+        :class="!column.components.length ? 'empty-col' : ''" 
+        :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
+        :style="module.structure.style || ''"
+        :bgcolor="module.structure.attribute.bgcolor"
+        :data-col="columnId"
+        :key="column.id"
       >
-        <draggable v-if="column.components.length"
-                   class="st-content-component"
-                   border="0"
-                   width="100%"
-                   cellpadding="0"
-                   cellspacing="0"
-                   @add="onAdd"
-                   :element="'table'"
-                   :options="options"
-                   :data-col="columnId"
+        <draggable
+          class="st-content-component"
+          border="0"
+          width="100%"
+          cellpadding="0"
+          cellspacing="0"
+          @add="onAdd"
+          :element="'table'"
+          :options="options"
+          :data-col="columnId"
+          :class="{'empty-table':!column.components.length}"
         >
-          <component v-for="(component, componentId) in column.components"
-                     :is="component.type" 
-                     :component="component" 
-                     :module-id="module.id" 
-                     :column-id="columnId"
-                     :component-id="componentId" 
-                     :key="componentId"
-                     :data-component="component"
-                     class="st-component"></component>
-        </draggable>  
-
-        <!-- Empty Col -->
-        <div v-else >
-          <draggable @add="onAdd"
-                     :element="'div'" 
-                     :options="options" 
-                     :data-col="columnId"
-                     cellpadding="0" 
-                     cellspacing="0" 
-                     border="0"
-                     width="100%"
-                     class="empty-table"
-          >
-            <div style="display:table-row;"> 
-              <div align="center" 
-                  class="empty-cell"
-                  height="80" 
-                  :data-col="columnId">Drag content here</div>
+          <template v-if="column.components.length">
+            <component
+              v-for="(component, componentId) in column.components"
+              :is="component.type" 
+              :component="component" 
+              :module-id="module.id" 
+              :column-id="columnId"
+              :component-id="componentId" 
+              :key="component.id"
+              :data-component="component"
+              class="st-component"
+            ></component>
+          </template>
+          <div v-else style="display:table-row;"> 
+            <div
+              align="center" 
+              class="empty-cell"
+              height="80"
+              :data-col="columnId">Drag content here
             </div>
-          </draggable>
-        </div>
-
+          </div>
+        </draggable>
       </td>
     </tr>
     <!-- END 1 COLUMNS -->
@@ -144,15 +144,6 @@
     computed: {
       module() {
         return this.$store.getters["module/module"];
-      },
-      columnsFixed: {
-        get() {
-          return this.module.structure.columnsFixed;
-        },
-        set(value) {
-          this.columnsFixed = value;
-        },
-  
       },
     },   
     methods: {
@@ -254,7 +245,7 @@
     }
   }
 
-  div.empty-table {
+  .empty-table {
     outline: 1px dashed @icon-option;
     background-color: @hover;
     display: table;

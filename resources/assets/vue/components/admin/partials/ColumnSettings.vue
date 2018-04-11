@@ -2,7 +2,7 @@
   <div>
     <label-item-container label="COLUMN SETTINGS" icon="glyphicon-pause"  v-b-toggle.column-settings></label-item-container>
 
-    <b-collapse id="column-settings" accordion="module-settings-accordion">
+    <b-collapse id="column-settings" accordion="module-right">
       <b-card class="control" no-block>
         <b-tabs card ref="tabs" v-model="tabIndex">
           <!-- Render Tabs -->
@@ -16,9 +16,7 @@
             <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
               <component v-for="setting in settingGroup"
                 :is="'input-' + setting.type"
-                @attribute-setting-updated="(eventData)=>attributeSettingUpdatedHandler(eventData, key)"
-                @style-setting-updated="(eventData)=>styleSettingUpdatedHandler(eventData, key)"
-                @style-option-setting-updated="(eventData)=>styleOptionSettingUpdatedHandler(eventData, key)"
+                @setting-updated="(eventData)=>settingUpdatedHandler(eventData, key)"
                 :setting="setting.type"
                 :name="setting.name"
                 :type="setting.type"
@@ -28,6 +26,7 @@
                 :default-value="setting.value"
                 :min-value="setting.minValue"
                 :max-value="setting.maxValue"
+                :options="setting.options"
                 :element="column"
                 :key="setting.name">
               </component>
@@ -91,19 +90,13 @@ export default {
     }
   },
   methods: {
-    attributeSettingUpdatedHandler(eventData, key) {
-      this.saveColumnProperty('attribute', eventData.name, eventData.value, key);
+    settingUpdatedHandler(eventData, key) {
+      this.saveColumnProperty(eventData.link, eventData.name, eventData.value, key);
     },
-    styleSettingUpdatedHandler(eventData, key) {
-      this.saveColumnProperty('style', eventData.name, eventData.value, key);
-    },
-    styleOptionSettingUpdatedHandler(eventData, key) {
-      this.saveColumnProperty('styleOptions', eventData.name, eventData.value, key);
-    },
-    saveColumnProperty(type, name, value, colId) {
+    saveColumnProperty(link, name, value, colId) {
       const data = {
         colId: colId,
-        type: type,
+        link: link,
         property: name,
         value: value
       };

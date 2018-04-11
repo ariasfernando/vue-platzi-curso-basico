@@ -1,7 +1,15 @@
 <template>
   <div class="plugin-wrapper-inner">
     <label>{{ plugin.title }}</label>
-    <toggle-button :value="component.attribute.hideElement" color="#78DCD6" :sync="true" :labels="true" @change="toggleChange"></toggle-button>
+    <form class="form-horizontal">
+      <div class="form-group">
+        <div class="half-style-setting padding-top">
+          <span class="st-toogle">
+            <toggle-button :value="component.attribute.hideElement" color="#78DCD6" :sync="true" :labels="true" @change="toggleChange"></toggle-button>
+          </span>
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 

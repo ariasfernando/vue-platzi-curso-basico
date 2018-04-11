@@ -68,7 +68,11 @@ export default {
         return this.element.styleOptions[this.isCustomFontWeightName];
       },
       set(newValue) {
-        this.$emit("style-option-setting-updated", { name: this.isCustomFontWeightName, value: newValue });
+        this.$emit("setting-updated", {
+          link:'styleOptions',
+          name: this.isCustomFontWeightName,
+          value: newValue
+        });
       }
     },
     fontWeight: {
@@ -76,7 +80,11 @@ export default {
         return this.element.style[this.name];
       },
       set(newValue) {
-        this.$emit("style-setting-updated", { name: this.name, value: newValue });
+        this.$emit("setting-updated", {
+          link:'style',
+          name: this.name,
+          value: newValue
+        });
       }
     }
   },

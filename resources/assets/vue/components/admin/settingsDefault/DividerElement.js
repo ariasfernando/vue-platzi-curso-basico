@@ -5,6 +5,7 @@ function dividerDefault() {
         {
           name: 'input-height',
           type: 'input-height',
+          link: 'style',
         },
       ],
       [

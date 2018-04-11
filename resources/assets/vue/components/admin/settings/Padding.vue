@@ -70,7 +70,8 @@ export default {
   methods: {
     changeValue(val, styleName) {
       val = isNaN(val) || val < this.min ? this.min : val;
-      this.$emit("style-setting-updated", {
+      this.$emit("setting-updated", {
+        link:'style',
         subComponent: this.subComponent,
         name: styleName,
         value: `${val}px`

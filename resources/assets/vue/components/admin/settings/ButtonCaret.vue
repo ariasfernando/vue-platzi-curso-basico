@@ -28,7 +28,12 @@ export default {
   },
   methods: {
     resetImage() {
-      this.$emit("attribute-setting-updated", {subComponent: this.subComponent, name: this.name, value: undefined });
+      this.$emit("setting-updated", {
+        link: 'attribute',
+        subComponent: this.subComponent,
+        name: this.name,
+        value: undefined
+      });
     },
     onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files;
@@ -62,7 +67,11 @@ export default {
       tmp.src = this.$_app.config.imageUrl + e;
 
       tmp.onload = () => {
-        this.$emit("attribute-setting-updated", { subComponent: this.subComponent, name: this.name, value: e });
+        this.$emit("setting-updated", {
+        link: 'attribute',
+        subComponent: this.subComponent,
+        name: this.name,
+        value: e });
       };
 
       tmp.onerror = () => {

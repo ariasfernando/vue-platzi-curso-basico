@@ -148,18 +148,6 @@ class LibraryController extends Controller
         $library_data = Library::findOrFail($request->input("libraryId"))->toArray();
         $modules = array_keys(\StensulModule::getModuleList('publish'));
 
-        $library_modules = [];
-        if (count($library_data['modules'])) {
-            foreach ($library_data['modules'] as $title => $module) {
-                if (is_array($module)) { // Grouped modules
-                    $library_modules[$title] = $module;
-                } else { // Ungrouped modules
-                    $library_modules['default'][] = $module;
-                }
-            }
-        }
-
-        $library_data['modules'] = $library_modules;
         $params = [
             "title" => "Edit Library",
             "modules" => $modules,
@@ -181,17 +169,7 @@ class LibraryController extends Controller
         $library->description = $request->input("description");
         $library->modules = $modules = [];
         $library->config = $request->input("config");
-
-        $modules = [];
-        foreach ($request->input('modules') as $group) {
-            if (strtolower($group['name']) == 'default') {
-                $modules = array_merge($modules, $group['modules']);
-            } else {
-                $modules[$group['name']] = $group['modules'];
-            }
-        }
-
-        $library->modules = $modules;
+        $library->modules = $request->input('modules');
 
         if (is_null($library->config)) {
             return array("message" => "ERROR_CONFIG");
@@ -218,16 +196,8 @@ class LibraryController extends Controller
             "key" => ModelKeyManager::getStandardKey(new Library, $request->input('name')),
             "description" => $request->input("description"),
             "config" => $request->input("config"),
-            "modules" => []
+            "modules" => $request->input('modules')
         ];
-
-        foreach ($request->input('modules') as $group) {
-            if (strtolower($group['name']) == 'default') {
-                $params['modules'] = $group['modules'];
-            } else {
-                $params['modules'][$group['name']] = $group['modules'];
-            }
-        }
 
         if (Library::where('name', '=', $params['key'])->exists()) {
             $response_message = array("message"=> "ERROR_EXISTS");

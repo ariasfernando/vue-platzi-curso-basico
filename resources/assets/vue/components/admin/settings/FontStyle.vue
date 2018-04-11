@@ -45,7 +45,11 @@ export default {
         return this.element.styleOptions["isBlockLineHeight"];
       },
       set(newValue) {
-        this.$emit('style-option-setting-updated', { name: "isBlockLineHeight", value: newValue });
+        this.$emit('setting-updated', {
+          link: 'styleOptions',
+          name: "isBlockLineHeight",
+          value: newValue
+        });
       }
     },
     fontSize: {
@@ -53,7 +57,11 @@ export default {
         return _.parseInt(this.element.style["fontSize"]);
       },
       set(newValue) {
-        this.$emit('style-setting-updated', { name: "fontSize", value: newValue + "px" });
+        this.$emit('setting-updated', {
+          link: 'style',
+          name: "fontSize",
+          value: newValue + "px"
+        });
         
         if (this.isBlockLineHeight) {
           this.lineHeight = this.calculateLineHeight(newValue);
@@ -65,7 +73,11 @@ export default {
         return _.parseInt(this.element.style["lineHeight"]);
       },
       set(newValue) {
-        this.$emit('style-setting-updated', { name: "lineHeight", value: newValue + "px" });
+        this.$emit('setting-updated', {
+          link: 'style',
+          name: "lineHeight",
+          value: newValue + "px"
+        });
       }
     }
   },

@@ -47,6 +47,7 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
           'style',
           'attribute',
@@ -75,6 +76,7 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
           'style',
           'styleOptions',
@@ -103,6 +105,7 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
           'style',
           'styleOptions',
@@ -131,6 +134,7 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
           'style',
           'attribute',
@@ -158,6 +162,7 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
           'style',
           'attribute',
@@ -185,6 +190,7 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
           'style',
           'styleOptions',

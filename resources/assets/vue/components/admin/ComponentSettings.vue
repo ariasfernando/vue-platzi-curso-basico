@@ -4,14 +4,12 @@
     <!-- START: Style -->
 
     <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
-    <b-collapse id="style" visible accordion="module-settings-accordion-right">
+    <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
-            @attribute-setting-updated="attributeSettingUpdatedHandler"
-            @style-setting-updated="styleSettingUpdatedHandler"
-            @style-option-setting-updated="styleOptionSettingUpdatedHandler"
+            @setting-updated="settingUpdatedHandler"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
@@ -22,6 +20,7 @@
             :min-value="setting.minValue"
             :max-value="setting.maxValue"
             :sub-component="setting.subComponent"
+            :options="setting.options"
             :element="setting.subComponent ? component[setting.subComponent] : component"
             :key="setting.name"></component>
         </group-container>
@@ -124,12 +123,12 @@ export default {
     }
   },
   methods: {
-    saveComponentProperty(type, subComponent, name, value) {
+    saveComponentProperty(link, subComponent, name, value) {
       let data = {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         subComponent: subComponent,
-        type: type,
+        link: link,
         property: name,
         value: value
       };
@@ -138,15 +137,9 @@ export default {
     shouldRenderInStyles(plugin) {
       return _.indexOf(plugin.target, "styles") >= 0;
     },
-    attributeSettingUpdatedHandler(eventData) {
-      this.saveComponentProperty('attribute', eventData.subComponent, eventData.name, eventData.value);
+    settingUpdatedHandler(eventData) {
+      this.saveComponentProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value);
     },
-    styleSettingUpdatedHandler(eventData) {
-      this.saveComponentProperty('style', eventData.subComponent, eventData.name, eventData.value);
-    },
-    styleOptionSettingUpdatedHandler(eventData) {
-      this.saveComponentProperty('styleOptions', eventData.subComponent, eventData.name, eventData.value);
-    }
   }
 };
 </script>

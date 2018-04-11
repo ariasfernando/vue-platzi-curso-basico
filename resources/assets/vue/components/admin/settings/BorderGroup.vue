@@ -2,23 +2,23 @@
   <div>
     <border
     :element="element"
-    @style-setting-updated="styleSettingUpdatedHandler"
+    @setting-updated="settingUpdatedHandler"
     :side="'Top'"
     ></border>
     <border
     :element="element"
     :side="'Right'"
-    @style-setting-updated="styleSettingUpdatedHandler"
+    @setting-updated="settingUpdatedHandler"
     ></border>
     <border
     :element="element"
     :side="'Bottom'"
-    @style-setting-updated="styleSettingUpdatedHandler"
+    @setting-updated="settingUpdatedHandler"
     ></border>
     <border
     :element="element"
     :side="'Left'"
-    @style-setting-updated="styleSettingUpdatedHandler"
+    @setting-updated="settingUpdatedHandler"
     ></border>
   </div>
 </template>
@@ -32,8 +32,9 @@ export default {
   props: ["setting", "element"],
   components: { Border },
   methods: {
-    styleSettingUpdatedHandler(eventData) {
-      this.$emit("style-setting-updated", {
+    settingUpdatedHandler(eventData) {
+      this.$emit("setting-updated", {
+        link: 'style',
         name: eventData.name,
         value: eventData.value
       });
