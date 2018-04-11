@@ -43,7 +43,7 @@ $app->singleton(
 
 $app->singleton(
     Illuminate\Foundation\Bootstrap\ConfigureLogging::class,
-    Stensul\Bootstrap\ConfigureLogging::class
+    Stensul\Logging\Bootstrap\ConfigureLogging::class
 );
 
 /*
