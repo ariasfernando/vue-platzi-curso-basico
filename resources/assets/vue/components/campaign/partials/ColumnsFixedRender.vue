@@ -8,21 +8,29 @@
          :style="[column.style, {'background-color' : column.attribute.bgcolor}]"
          :bgcolor="column.attribute.bgcolor"
   >
-      <tr v-for="(component, componentId) in column.components"
-          @click="setComponent(moduleId, columnId, componentId)"
-          :class="[component.attribute.classes, {'stx-hide-element st-remove-element' : component.attribute.hideElement}]"
+      <tr
+        v-for="(component, componentId) in column.components"
+        @click="setComponent(moduleId, columnId, componentId)"
+        :class="component.attribute.classes"
+        :key="component.id"
       >
-        <td width="100%"
-            :valign="column.attribute.valign"
-            :align="component.attribute.align || 'center'"
-            :bgcolor="column.attribute.bgcolor"
-            :style="styles"
+        <td
+          width="100%"
+          :valign="column.attribute.valign"
+          :bgcolor="column.attribute.bgcolor"
+          :align="column.attribute.align || 'center'"
+          :style="styles"
         >
-          <component :is="component.type"
-                     :component="component"
-                     :module-id="moduleId"
-                     :column-id="columnId"
-                     :component-id="componentId"></component>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+            <template>
+              <component
+                :is="component.type"
+                :component="component"
+                :module-id="moduleId"
+                :column-id="columnId"
+                :component-id="componentId"></component>
+            </template>
+          </table>
         </td>
       </tr>
   </table>

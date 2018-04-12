@@ -9,30 +9,32 @@
         border="0"
         :width="columnWidthPadding / numColumns"
       >
-        <tr
-          v-for="(component, componentId) in column.components"
-          :key="componentId"
-          @click="setComponent(moduleId, columnId, componentId)"
-          :class="[component.attribute.classes, {'stx-hide-element st-remove-element' : component.attribute.hideElement}]"
-        >
+        <tr>
           <td
             width="100%"
             :style="[column.styles, {'background-color' : column.attribute.bgcolor}]"
             :bgcolor="column.attribute.bgcolor"
             :valign="column.attribute.valign"
-            :align="component.attribute.align || 'center'"
+            :align="column.attribute.align || 'center'"
           >
-            <component
-              :is="component.type"
-              :component="component"
-              :module-id="moduleId"
-              :column-id="columnId"
-              :component-id="componentId"
-              :number-required="true"
-              :column-width="columnWidthPadding / numColumns"
-              :column="column"
-              >
-            </component>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+              <template>
+                <component
+                  v-for="(component, componentId) in column.components"
+                  :key="componentId"
+                  @click="setComponent(moduleId, columnId, componentId)"
+                  :class="component.attribute.classes"
+                  :is="component.type"
+                  :component="component"
+                  :module-id="moduleId"
+                  :column-id="columnId"
+                  :component-id="componentId"
+                  :number-required="true"
+                  :column-width="columnWidthPadding / numColumns"
+                  :column="column"
+                ></component>
+              </template>
+            </table>
           </td>
         </tr>
       </table>

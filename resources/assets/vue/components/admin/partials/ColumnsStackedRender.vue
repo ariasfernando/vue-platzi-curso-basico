@@ -1,5 +1,5 @@
 <template>
-  <div :class="module.structure.columnsStacking == 'invertedStacking' ? 'st-inverted-stacking' : ''">
+  <div :class="module.structure.columnsStacking === 'invertedStacking' ? 'st-inverted-stacking' : ''">
     <table
       v-if="column.components.length"
       v-for="(column, columnId) in module.structure.columns"
@@ -17,23 +17,7 @@
       <tr>
         <td
           width="100%" 
-          :style="
-            `padding-top:${column.style.paddingTop};
-            padding-left:${column.style.paddingLeft};
-            padding-bottom:${column.style.paddingBottom};
-            padding-right:${column.style.paddingRight};
-            border-top-width:${column.style.borderTopWidth};
-            border-right-width:${column.style.borderRightWidth};
-            border-bottom-width:${column.style.borderBottomWidth};
-            border-left-width:${column.style.borderLeftWidth};
-            border-top-style:${column.style.borderTopStyle};
-            border-right-style:${column.style.borderRightStyle};
-            border-bottom-style:${column.style.borderBottomStyle};
-            border-left-style:${column.style.borderLeftStyle};
-            border-top-color:${column.style.borderTopColor};
-            border-right-color:${column.style.borderRightColor};
-            border-bottom-color:${column.style.borderBottomColor};
-            border-left-color:${column.style.borderLeftColor};`"
+          :style="columnBorderAndPadding(columnId)"
         >
           <draggable
             v-model="column.components"
@@ -46,14 +30,15 @@
             border="0"
             width="100%"
           >
-            <component v-for="(component, componentId) in column.components"
-                      :is="component.type" 
-                      :component="component" 
-                      :module-id="module.id" 
-                      :column-id="columnId"
-                      :component-id="componentId" 
-                      :key="componentId"
-                      class="st-component"></component>
+            <component
+              v-for="(component, componentId) in column.components"
+              :is="component.type"
+              :component="component"
+              :module-id="module.id"
+              :column-id="columnId"
+              :component-id="componentId"
+              :key="componentId"
+              class="st-component"></component>
           </draggable>
         </td>
       </tr>  
@@ -97,49 +82,73 @@
 </template>
 
 <script>
+import _ from "lodash";
+import Draggable from "vuedraggable";
+import TextElement from "../elements/TextElement.vue";
+import ButtonElement from "../elements/ButtonElement.vue";
+import ImageElement from "../elements/ImageElement.vue";
+import DividerElement from "../elements/DividerElement.vue";
+import SeparatorElement from "../elements/SeparatorElement.vue";
 
-  import Draggable from 'vuedraggable';
-  import TextElement from '../elements/TextElement.vue';
-  import ButtonElement from '../elements/ButtonElement.vue';
-  import ImageElement from '../elements/ImageElement.vue';
-  import DividerElement from '../elements/DividerElement.vue';
-  import SeparatorElement from '../elements/SeparatorElement.vue';
+export default {
+  name: "ColumnsStackedRender",
 
-  export default {
-    name: 'ColumnsStackedRender',
-
-    components: {
-      Draggable,
-      TextElement,
-      ButtonElement,
-      ImageElement,
-      DividerElement,
-      SeparatorElement
-    },
-    data () {
-      return {
-        options: {
-          group:{
-            name:'componentsBox',
-            put:['componentsList', "componentsBox"]
-          },
-          handle:'.icon-move',
-          ghostClass: "ghost-component",  // Class name for the drop placeholder
-          chosenClass: "chosen-component",  // Class name for the chosen item
-          dragClass: "drag-component"  // Class name for the dragging item
-        }
+  components: {
+    Draggable,
+    TextElement,
+    ButtonElement,
+    ImageElement,
+    DividerElement,
+    SeparatorElement
+  },
+  data() {
+    return {
+      options: {
+        group: {
+          name: "componentsBox",
+          put: ["componentsList", "componentsBox"]
+        },
+        handle: ".icon-move",
+        ghostClass: "ghost-component", // Class name for the drop placeholder
+        chosenClass: "chosen-component", // Class name for the chosen item
+        dragClass: "drag-component" // Class name for the dragging item
       }
+    };
+  },
+  computed: {
+    module() {
+      return this.$store.getters["module/module"];
+    }
+  },
+  methods: {
+    onAdd(e) {
+      this.$emit("add", e);
     },
-    computed: {
-      module() {
-        return this.$store.getters["module/module"];
-      }
-    },
-    methods: {
-      onAdd(e){
-        this.$emit('add', e);
-      }    
-    }    
-    
-  };
+    columnBorderAndPadding(columnId) {
+      let properties = [
+        "padding-top",
+        "padding-left",
+        "padding-bottom",
+        "padding-right",
+        "border-top-width",
+        "border-right-width",
+        "border-bottom-width",
+        "border-left-width",
+        "border-top-style",
+        "border-right-style",
+        "border-bottom-style",
+        "border-left-style",
+        "border-top-color",
+        "border-right-color",
+        "border-bottom-color",
+        "border-left-color"
+      ];
+      return properties.map(p => {
+        return {
+          [p]: this.module.structure.columns[columnId].style[_.camelCase(p)]
+        };
+      });
+    }
+  }
+};
 </script>

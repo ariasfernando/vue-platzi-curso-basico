@@ -49,7 +49,7 @@
                     width="100%"
                     :align="component.button.attribute.align"
                     :style="buttonFontStyles"
-                    :valign="component.button.attribute.valign"
+                    :valign="component.button.attribute.valign || ''"
                     >
                     <tiny-mce :style="buttonFontStyles" :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
                   </td>
