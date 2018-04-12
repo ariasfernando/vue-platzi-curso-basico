@@ -495,7 +495,7 @@
         });
       },
       addItem(moduleId) {
-        itemData = {
+        let itemData = {
           name: moduleId,
           moduleId: moduleId, 
           type: 'item',

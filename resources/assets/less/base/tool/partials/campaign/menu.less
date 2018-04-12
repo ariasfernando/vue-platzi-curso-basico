@@ -1,7 +1,6 @@
 aside{
 	width: 260px!important;
 	min-width: 260px!important;
-	vertical-align: top;
 	display: block;
 	background: @stensul-white;
 	font-family: 'Open Sans', Arial, sans-serif;
@@ -321,6 +320,11 @@ aside{
 		}
 		.configuration-nomargin{
 			margin-top: -17px!important;
+			&.configuration-tag {
+				span.multiselect__single{
+					display: none;
+				}
+			}
 		}
 	}
 
@@ -337,7 +341,7 @@ aside{
 		form{
 			padding: 10px;
 
-			input[type="text"]{
+			input[type="text"]:not(.el-input__inner):not(.el-select__input) {
 				margin-top: 5px;
 				box-shadow: none;
 				border: none;

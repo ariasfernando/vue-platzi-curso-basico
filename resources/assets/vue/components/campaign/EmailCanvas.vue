@@ -190,7 +190,7 @@
           ? _.find(this.items, (m) => m.name === moduleName)
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
-        const mod = Object.assign({}, found);
+        const mod = clone(found);
         mod.data = {};
 
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
@@ -309,6 +309,10 @@
             this.$store.commit("campaign/setActiveModule", moduleId);
             // Clear 3rd column
             this.$store.commit("campaign/unsetCurrentComponent");
+
+            if (this.activeModule.type === 'studio') {
+              this.$store.commit("campaign/unsetCustomModule");
+            }
           }
         }
       }

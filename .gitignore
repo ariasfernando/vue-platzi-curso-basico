@@ -6,11 +6,14 @@
 /public/images/campaigns
 /public/build
 /public/images/customer
-/resources/assets/bower/
+/public/mix-manifest.json
+/public/media
 /tmp/
 /public/tmp/
 /public/vendor/
-/bower_components
+/resources/assets/js/vendor
+/resources/assets/less/vendor
+/resources/views/vendor
 /bootstrap/cache/
 npm-debug.log
 .buildpath

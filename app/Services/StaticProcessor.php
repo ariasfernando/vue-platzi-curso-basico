@@ -14,7 +14,7 @@ class StaticProcessor
 {
     protected $campaign;
 
-    private $files = []; 
+    private $files = [];
 
     /**
      * Constructor.
@@ -56,12 +56,15 @@ class StaticProcessor
         $files['font'] = $public->allFiles('fonts');
         $files['module'] = $module->allFiles();
 
+        $campaignPath = trim($this->getCampaign()->getCdnPath(), DS) . DS;
+        $emailLayout = $html->getEmailLayout();
+
         foreach ($files as $fileType => $fileGroup) {
             foreach ($fileGroup as $file) {
-                $path = trim($this->getCampaign()->getCdnPath(), DS) . DS;
+                $path = $campaignPath;
                 $path .= ($fileType == 'font') ? $file : 'images' . DS . basename($file);
 
-                if (strpos($html->getEmailLayout(), basename($file)) !== false) {
+                if (strpos($emailLayout, basename($file)) !== false) {
                     if (!$cloud->exists($path)) {
                         Log::info(sprintf('[%s] uploading %s: %s', $this->getCampaign()->id, $file, $path));
 
@@ -137,7 +140,6 @@ class StaticProcessor
         // Get assets used from the modules data.
         $modules_data = $from->modules_data;
         foreach ($from->modules_data as $key => $module) {
-         
             // custom modules
             if ($module['type'] == 'custom') {
                 if (isset($module['data']['imageSrc'])) {
@@ -148,10 +150,8 @@ class StaticProcessor
                 if (isset($module['data']['rawImage'])) {
                     $filename = DS . 'images' . DS . trim($module['data']['rawImage']);
                     $assets[$filename] = null;
-
                 }
-            }
-            // studio modules
+            } // studio modules
             else {
                 if (isset($module['structure']) && isset($module['structure']['columns'])) {
                     foreach ($module['structure']['columns'] as $column_key => $column_value) {
@@ -169,7 +169,6 @@ class StaticProcessor
                     }
                 }
             }
-
         }
 
         $assets = array_keys($assets);
@@ -224,23 +223,23 @@ class StaticProcessor
     {
         $modules_data = $this->getCampaign()->modules_data;
         foreach ($from->modules_data as $key => $module) {
-
             // custom modules
             if ($module['type'] == 'custom') {
                 if (isset($module['data']['imageSrc'])) {
                     $modules_data[$key]['data']['imageSrc'] = str_replace(
-                                                $from->id,
-                                                $this->getCampaign()->id,
-                                                $module['data']['imageSrc']);
+                        $from->id,
+                        $this->getCampaign()->id,
+                        $module['data']['imageSrc']
+                    );
                 }
                 if (isset($module['data']['rawImage'])) {
                     $modules_data[$key]['data']['rawImage'] = str_replace(
-                                                $from->id,
-                                                $this->getCampaign()->id,
-                                                $module['data']['imageSrc']);
+                        $from->id,
+                        $this->getCampaign()->id,
+                        $module['data']['imageSrc']
+                    );
                 }
-            }
-            // studio modules
+            } // studio modules
             else {
                 if (isset($module['structure']) && isset($module['structure']['columns'])) {
                     foreach ($module['structure']['columns'] as $column_key => $column_value) {
@@ -288,7 +287,7 @@ class StaticProcessor
                     $image = Imagine::load($blob);
                 } else {
                     $storage = Storage::disk('local:campaigns');
-                    $image = (strpos($blob, public_path()) === false)?
+                    $image = (strpos($blob, public_path()) === false) ?
                         Imagine::load($storage->get($blob)) :
                         Imagine::open($blob);
                     $extension = pathinfo($blob)["extension"];
@@ -304,7 +303,7 @@ class StaticProcessor
                 $blob
             );
             Log::warning($error_msg);
-            throw new \Exception($error_msg);
+            throw $e;
         }
 
         switch ($extension) {

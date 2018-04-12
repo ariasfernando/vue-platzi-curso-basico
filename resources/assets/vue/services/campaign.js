@@ -63,8 +63,9 @@ export default {
 
     request[endpoint.method](params).then((response) => {
       deferred.resolve({
-        campaignId: response.body,
+        campaignId: response.body.campaign_id,
         campaign: dataCampaign,
+        updatedAt: response.body.updated_at.date,
       });
     }).catch((err) => {
       deferred.reject(err);
@@ -118,6 +119,25 @@ export default {
       endpoint,
       json: {
         campaign_id: campaignId,
+      },
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  },
+  pingLock(data) {
+    const endpoint = endpoints.campaign.pingLock;
+    const deferred = Q.defer();
+    const params = {
+      endpoint,
+      json: {
+        campaign_id: data.campaignId,
+        window_id: data.windowId,
       },
     };
 
@@ -219,7 +239,7 @@ export default {
         campaign_id: data.campaignId,
         mail: data.emailAddress,
         subject: data.subject || '',
-        preheader: data.preheader || ''
+        preheader: data.preheader || '',
       },
       endpoint: endpoints.campaign.sendPreview,
     };
@@ -249,5 +269,15 @@ export default {
 
     return deferred.promise;
   },
-
+  logTime(campaignId, time) {
+    const endpoint = endpoints.campaign.logTime;
+    const params = { 
+      endpoint,
+      json: {
+        campaign_id: campaignId,
+        time,
+      },
+    };
+    request[endpoint.method](params);
+  },
 };

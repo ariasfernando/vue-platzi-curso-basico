@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import Q from 'q';
 import _ from 'lodash';
 import clone from 'clone';
@@ -17,6 +17,7 @@ const state = {
     attribute: {},
   },
   loading: false,
+  secondaryLoading: false,
 };
 
 const getters = {
@@ -43,6 +44,9 @@ const getters = {
 const mutations = {
   setLoader(state, data) {
     state.loading = data;
+  },
+  setSecondaryLoader(state, data) {
+    state.secondaryLoading = data;
   },
   setModuleData(state, data) {
     state.module = data;
@@ -112,6 +116,10 @@ const mutations = {
   savePlugin(state, payload) {
     const pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
     _.merge(pluginData, payload.config);
+  },
+  savePluginSuboption(state, payload) {
+    const pluginOptions = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
+    _.assign(pluginOptions[payload.subOption], payload.config.options[payload.subOption]);
   },
   togglePlugin(state, data) {
     if (data.columnId >= 0 || data.componentId >= 0) {

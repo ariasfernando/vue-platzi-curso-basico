@@ -5,6 +5,7 @@ namespace Stensul\Services;
 use Auth;
 use Log as FileLog;
 use MongoDB\BSON\ObjectID as ObjectID;
+use MongoDB\BSON\UTCDateTime;
 
 use Stensul\Models\Log as DBLog;
 
@@ -46,5 +47,77 @@ class Logger
         }
 
         return $response;
+    }
+
+    public static function logCampaignSpentTime($campaign_id, $user_id, $time = 0)
+    {
+        $log = DBLog::where('description', 'Campaign Edit Spent Time')
+            ->where('properties.campaign_id', new ObjectID($campaign_id))
+            ->where('properties.user_id', new ObjectID($user_id))
+            ->first();
+
+        $params = [
+            'description' => 'Campaign Edit Spent Time',
+            'ip' => 'NA',
+            'user_agent' => 'NA',
+            'controller' => 'CampaignController',
+            'action' => 'getEdit',
+            'properties' => [
+                'campaign_id' => new ObjectID($campaign_id),
+                'user_id' => new ObjectID($user_id),
+                'time' => ($log) ? $log->properties['time'] + $time : (int) $time,
+            ]
+        ];
+        if (!$log) {
+            return DbLog::create($params);
+        }
+        $log->update($params);
+        return $log;
+    }
+
+    /**
+     * Log campaign process time.
+     *
+     * @param string $campaign_id
+     * @param string $user_id
+     * @param string $stage start|finish
+     * @return void
+     */
+    public static function logCampaignProcessTime($campaign_id, $user_id = null)
+    {
+        $log = DBLog::where('description', 'Campaign Process Spent Time')
+            ->where('properties.campaign_id', new ObjectID($campaign_id))
+            ->first();
+
+        $date = new UTCDateTime();
+
+        $params = [
+            'description' => 'Campaign Process Spent Time',
+            'ip' => 'NA',
+            'user_agent' => 'NA',
+            'controller' => '',
+            'action' => '',
+            'properties' => [
+                'campaign_id' => new ObjectID($campaign_id),
+                'user_id' => new ObjectID($user_id),
+                'start' => $date,
+                'finish' => null,
+                'elapsed' => null
+            ]
+        ];
+
+        if (!$log) {
+            return DbLog::create($params);
+        }
+
+        $properties = $log->properties;
+
+        $properties['finish'] = $date;
+        $properties['elapsed'] = ((int) $date->__toString() - (int) $log->properties['start']->__toString()) / 1000;
+        $log->properties = $properties;
+
+        $log->save();
+
+        return $log;
     }
 }

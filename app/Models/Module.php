@@ -24,6 +24,15 @@ class Module extends Eloquent
     protected $fillable = ['name', 'key', 'structure', 'status', 'type'];
 
     /**
+     * Default attributes
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'type' => 'studio'
+    ];
+
+    /**
      * Scope a query to only include documents with
      * `status` eq 'publish'.
      *

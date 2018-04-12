@@ -25,7 +25,7 @@ class GroupToRoles extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $users = User::all();
         $processCount = 0;

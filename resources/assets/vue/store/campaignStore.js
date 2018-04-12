@@ -40,7 +40,10 @@ function campaignStore() {
       },
       moduleErrors(state) {
         const modules = state.modules;
-        const errors = _.filter(modules, m => m.data.errors && m.data.errors.length);
+
+        const errors = _.filter(modules, (m) => {
+          return !_.isEmpty(m.data) && m.data.errors && m.data.errors.length
+        });
 
         return errors.length || state.fieldErrors.length;
       },
@@ -102,6 +105,9 @@ function campaignStore() {
       },
       setDirty(state, dirty) {
         state.dirty = dirty;
+      },
+      setUpdatedAt(state, updatedAt) {
+        state.campaign.campaign_data.updated_at = updatedAt;
       },
       setToggleImageEditor(state, stateModal) {
         state.showImageEditor = stateModal;
@@ -303,6 +309,7 @@ function campaignStore() {
         campaignService.saveCampaign(data)
           .then(res => {
             context.commit('setDirty', false);
+            context.commit('setUpdatedAt', res.updatedAt);
             deferred.resolve(res.campaignId);
           })
           .catch(error => {
@@ -351,6 +358,18 @@ function campaignStore() {
           context.commit('error', error);
           deferred.reject(error);
         });
+        return deferred.promise;
+      },
+      pingLockCampaign(context, data) {
+        const deferred = Q.defer();
+
+        campaignService.pingLock({ campaignId: data.campaignId, windowId: data.windowId })
+          .then(response => {
+          })
+          .catch(error => {
+            context.commit('error', error);
+            deferred.reject(error);
+          });
         return deferred.promise;
       },
       favoriteCampaign(context, campaignId) {

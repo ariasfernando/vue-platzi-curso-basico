@@ -24,7 +24,7 @@ class Show extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $settings = Setting::all(['name', 'key', 'value'])->toArray();
         if (count($settings) === 0) {

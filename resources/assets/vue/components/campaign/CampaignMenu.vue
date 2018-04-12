@@ -6,7 +6,7 @@
           <div v-if="ready" v-for="item in items" class="beta-subitem-single">
 
             <div v-if="item.sub_menu" class="expand">
-              <h2 class="menu-active" :class="{ active: isActive }" @click="expand(item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
+              <h2 class="menu-active" :class="{ active: isActive }" @click="(e) => expand(e, item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
 
                 <div class="beta-submodules">
                   <div v-for="subitem in item.sub_menu">
@@ -126,13 +126,15 @@
           ? _.find(this.items, (m) => m.name === moduleName)
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
-        const mod = Object.assign({}, found);
+        const mod = clone(found);
         mod.data = {};
 
         this.addModule(mod);
 
       },
-      addModule (mod) {
+      addModule (m) {
+        const mod = clone(m);
+
         // Add module
         this.$store.commit('campaign/addModule', mod);
 
@@ -167,7 +169,7 @@
             }, 100);
         }
       },
-      expand (item) {
+      expand (event, item) {
         const index = this.expanded.indexOf(item);
         if (index !== -1) {
           this.expanded.splice(index, 1);
@@ -175,12 +177,22 @@
           this.expanded.push(item);
         }
 
-        if(event.target.className === "menu-active") {
-          event.target.className = "selected";
-          event.target.nextElementSibling.className += " beta-submodules-expanded";
-        } else {
-          event.target.className = "menu-active";
-          event.target.nextElementSibling.classList.remove("beta-submodules-expanded");
+        if(event.target.className === "menu-active" || event.target.parentElement.className === "menu-active") {
+          if (event.target.tagName === 'I'){
+            event.target.parentElement.className = "selected";
+            event.target.parentElement.nextElementSibling.className += " beta-submodules-expanded";
+          }else{
+            event.target.className = "selected";
+            event.target.nextElementSibling.className += " beta-submodules-expanded";
+          }
+        } else{
+          if (event.target.tagName === 'I'){
+            event.target.parentElement.className = "menu-active";
+            event.target.parentElement.nextElementSibling.classList.remove("beta-submodules-expanded");
+          }else{
+            event.target.className = "menu-active";
+            event.target.nextElementSibling.classList.remove("beta-submodules-expanded");
+          }
         }
       },
       onClone (evt) {
@@ -192,7 +204,7 @@
           ? _.find(this.items, (m) => m.name === moduleName)
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
-        const mod = Object.assign({}, found);
+        const mod = clone(found);
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop
         // an element into email canvas
         cloneEl.addEventListener('click', (e) => {

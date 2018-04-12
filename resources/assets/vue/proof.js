@@ -8,7 +8,7 @@
  | ------------------------------------------------------------------
  */
 
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import VueResource from 'vue-resource/dist/vue-resource';
 import Toast from 'vue-easy-toast';
 import Bootstrap from './bootstrap';
