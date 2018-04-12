@@ -321,6 +321,9 @@ export default {
 // New and refacted
 
 #edit-container {
+  .mce-content-body{
+    line-height: inherit;
+  }
   .card-header {
     padding-bottom: 10px;
     ul {

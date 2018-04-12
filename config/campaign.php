@@ -189,5 +189,17 @@ return [
     | Clean empty tag without link - will be replaced with span tag
     |--------------------------------------------------------------------------
      */
-    'clean_empty_links' => false
+    'clean_empty_links' => false,
+
+    /*
+    | Ignore domains from image url changes into cdn
+    |--------------------------------------------------------------------------
+    |
+    | Include here an array of domains that should be ignored from the
+    | process of turn image url into cdn url.
+    |
+    */
+
+    'ignored_image_domains' => [],
+
 ];

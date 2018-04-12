@@ -34,29 +34,30 @@ module.exports = {
     lockCampaign: { method: 'post', path: `${baseUrl}/campaign/force-lock` },
     unlockCampaign: { method: 'post', path: `${baseUrl}/campaign/unlock-forced` },
     favoriteCampaign: { method: 'post', path: `${baseUrl}/campaign/favorite` },
+    logTime: { method: 'post', path: `${baseUrl}/campaign/spent-time` },
   },
   image: {
     uploadImage: { method: 'post', path: `${baseUrl}/campaign/upload-image` },
     getMedia: {
       method: 'get',
-      path: `${baseUrl}/package/api/media?libraries[]=:library`
+      path: `${baseUrl}/package/api/media?libraries[]=:library`,
     },
     getLibraries: {
       method: 'get',
-      path: `${baseUrl}/package/api/library`
-    }
+      path: `${baseUrl}/package/api/library`,
+    },
   },
   config: {
     getConfig: { method: 'get', path: `${baseUrl}/config/:key` },
   },
   tag: {
-    fetchTags: { method: 'get', path: `${baseUrl}/dashboard/tags` }
+    fetchTags: { method: 'get', path: `${baseUrl}/dashboard/tags` },
   },
   api: {
     uploadEmail: { method: 'post', path: `${baseUrl}/api/upload-email` },
-    uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId` }
+    uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId` },
   },
   dashboard: {
-    getMenu: { method: 'get', path: `${baseUrl}/dashboard/menu` }
-  }
+    getMenu: { method: 'get', path: `${baseUrl}/dashboard/menu` },
+  },
 };

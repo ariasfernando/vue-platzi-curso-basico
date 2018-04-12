@@ -63,6 +63,7 @@ $default = [
             '/campaign/gif-layer'          => 'CampaignController@postGifLayer',
             '/campaign/email-sent-history' => 'CampaignController@postEmailSentHistory',
             '/campaign/favorite'           => 'CampaignController@postFavorite',
+            '/campaign/spent-time'         => 'MetricController@postSpentTime',
             '/template/move-library'       => 'TemplateController@postMoveLibrary',
             '/template/modal'              => 'TemplateController@postModal',
             '/proof/comment/{token}'       => 'ProofController@postComment',

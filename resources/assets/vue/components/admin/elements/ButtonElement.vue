@@ -24,7 +24,6 @@
           border="0"
           :width="component.attribute.width"
           :height="component.attribute.height"
-          :bgcolor="component.attribute.bgcolor"
           :style="`width:${component.attribute.width}px`"
         >
           <tr>

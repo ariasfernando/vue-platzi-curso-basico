@@ -94,13 +94,25 @@
           data_description:true,
           paste_as_text:true,
           relative_urls: false,
-          textcolor_rows: 1,
           max_chars: this.plugin.config.settings.truncate ? this.plugin.config.settings.truncate.content : undefined,
           max_lines: this.plugin.config.settings.lines_limit ? this.plugin.config.settings.lines_limit.content : undefined,
 
           init_instance_callback: (editor) => {
             editor.on('blur', (e) => {
-                tinymce.get(editorId).destroy();
+              if (this.$timer) {
+                clearTimeout(this.$timer);
+              }
+
+              this.$store.commit('campaign/updateElement', {
+                moduleId: this.currentComponent.moduleId,
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                data: {
+                  text: editor.getContent()
+                }
+              });
+
+              tinymce.get(editorId).destroy();
             }),
 
             editor.on('keyup', (e) => {
@@ -122,9 +134,11 @@
 
                 // Hack to restore cursor at the time of saving
                 setTimeout(() => {
-                  editor.selection.moveToBookmark(bm);
+                  if (editor) {
+                    editor.selection.moveToBookmark(bm);
+                  }
                 }, 10);
-              }, 1000);
+              }, 500);
             });
           },
 
@@ -163,13 +177,14 @@
 
             editor
               .on('keydown',(e) => {
+
                 if(!tinyMax){
                   //if truncate is NAN, returns and avoid validations
                   return
                 }
 
-                tinyLength = editor.getContent({format: 'text'}).length;
                 let $textElement = $('#'+tinyMCE.activeEditor.id);
+                tinyLength = $textElement.text().length;
                         
                 const allowKeys = [
                   //  key      keyCode
@@ -199,9 +214,9 @@
                   return;
                 }
 
-                if (tinyLength > (tinyMax + 1)){
+                //Check for Characters Limit
+                if ((tinyLength + 1) > tinyMax) {
                   // Prevent insertion of typed character
-                  //tinymax + 1 because is needed to show alert and force the user to delete a character
                   _this.$root.$toast("You've reached the maximum number of characters (" + (tinyMax) +")",{
                     className: 'et-error',
                     horizontalPosition: 'right',
@@ -218,15 +233,19 @@
                   return
                 }
 
-                tinyLength = editor.getContent({format: 'text'}).trim().length;
                 let $textElement = $('#'+tinyMCE.activeEditor.id);
+                tinyLength = $textElement.text().length;
 
-                //Check for Characters Limit            
-                if (tinyLength > tinyMax) {
+                //Check for Characters Limit
+                if ((tinyLength + 1) > tinyMax) {
+                  // Prevent insertion of typed character
                   _this.$root.$toast("You've reached the maximum number of characters (" + (tinyMax) +")",{
                     className: 'et-error',
                     horizontalPosition: 'right',
                   });
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
                 }
 
                 //Check for Lines Limit
@@ -268,7 +287,7 @@
             let tinyLength = editor.getContent({format: 'text'}).length - 1;            
             let charsToPaste = tinyMax - tinyLength;
             args.content = args.content.trim().substring(0, charsToPaste);
-            
+
 
           }
 

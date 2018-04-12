@@ -34,15 +34,29 @@
           <input type="text" placeholder="Preheader Text" name="campaignPreheader" class="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
         </div>
 
-        <div class="config-box-divider configuration-field configuration-nomargin configuration-tag" v-if="enableTagging">
-          <label>Tags</label>
-          <multiselect v-model="form.tags" :options="tagOptions" :multiple="true"
-            :select-label="'Select'" :close-on-select="true" :taggable="true"
-            :hide-selected="true" :preserve-search="true"
-            @remove="tagRemove" @tag="tagAdd" @select="tagAdd" placeholder="Choose tag">
-            <slot name="noResult"></slot>
-          </multiselect>
-        </div>
+        <settings-container custom-class="field-Tags" label="Tags" v-if="enableTagging">
+          <template slot="setting-bottom">
+            <el-select
+            class="width-full"
+            multiple
+            filterable
+            default-first-option
+            allow-create
+            placeholder="Choose tag"
+            v-model="form.tags"
+            @change="changeTags"
+            size="mini"
+            >
+              <el-option
+                v-for="item in tagOptions"
+                :key="item"
+                :label="item"
+                :value="item"
+                >
+              </el-option>
+            </el-select>
+          </template>
+        </settings-container>
 
         <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave">Auto Save</label>
@@ -86,14 +100,14 @@
 </template>
 
 <script>
-  import _ from 'lodash'
-  import Multiselect from 'vue-multiselect';
+  import _ from 'lodash';
   import ToggleButton from '../../plugins/common/toggle-button'
-  import secondarySpinner from '../common/secondarySpinner.vue'
+  import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
+  import secondarySpinner from '../common/secondarySpinner.vue';
 
   export default {
     components: {
-      Multiselect,
+      SettingsContainer,
       secondarySpinner
     },
     name: 'CampaignConfiguration',
@@ -109,7 +123,6 @@
           campaignProcess: false,
           tags: []
         },
-        tagOptions: [],
         globalConfig: {},
         campaignConfig: {},
         autoSaveTemp : false,
@@ -134,6 +147,17 @@
       enableFavorite() {
         return this.campaign.template && Application.globals.permissions.indexOf('access_favorites') >= 0;
       },
+      tagOptions() {
+        let tagOptions = [];
+        let tagList = this.$store.getters["campaign/campaign"].tag_list;
+        
+        for (let n = 0; n < tagList.length; n++) {
+          tagOptions.push(tagList[n].name);
+        }
+
+        tagOptions = _.union(tagOptions, this.form.tags);
+        return tagOptions;
+      },
       secondaryLoading() {
         return this.$store.state.global.secondaryLoading
       },
@@ -146,11 +170,6 @@
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
 
-      let tagList = this.$store.getters["campaign/campaign"].tag_list;
-      for (let n = 0; n < tagList.length; n++) {
-        this.tagOptions.push(tagList[n].name);
-      }
-
       this.loadConfig();
     },
     mounted (){
@@ -161,6 +180,21 @@
       }
     },
     methods: {
+      changeTags(values) {
+        let tags = [];
+        for (let n = 0; n < values.length; n++) {
+          if (values[n].match(/[^a-z0-9-_]+/i)) {
+            this.$root.$toast('Only alphanumeric characters, hyphens and underscores are allowed.', {className: 'et-error'});
+          } else {
+            tags.push(values[n].toLowerCase());
+          }
+        }
+        this.form.tags = tags;
+        this.$store.commit('campaign/saveSetting', {
+          name: 'tags',
+          value: tags
+        });
+      },
       validate() {
         this.$validator.validateAll().then(() => {
           if (this.$validator.errors.items.length) {
@@ -204,24 +238,6 @@
 
         this.campaignConfig = this.$store.getters["config/config"].campaign;
         this.enableLocking = this.campaignConfig.locking === true;
-      },
-      tagAdd(tag) {
-
-        if (tag.match(/[^a-z0-9-_]+/i)) {
-          this.$root.$toast('Only alphanumeric characters, hyphens and underscores are allowed.', {className: 'et-error'});
-          return false;
-        }
-        this.form.tags.push(tag.toLowerCase());
-        this.$store.commit('campaign/saveSetting', {
-          name: 'tags',
-          value: this.form.tags
-        });
-      },
-      tagRemove(tag) {
-        this.$store.commit('campaign/saveSetting', {
-          name: 'tags',
-          value: this.form.tags
-        });
       },
       autoSaveChange(value) {
         this.$store.commit('campaign/saveCampaignData', {
@@ -305,10 +321,34 @@
           this.form.campaignName = '';
         }
       }
-    }
+    },
   }
 </script>
+<style lang="less" scoped>
+.width-full {
+  width: 100%;
+}
+</style>
+
 <style lang="less">
+  .field-Tags .el-select {
+    .el-select__input.is-mini {
+      height: 24px;
+    }
+    .el-tag__close.el-icon-close {
+      right: -2px;
+      top: -5px;
+    }
+    span.el-select__tags-text {
+      overflow: hidden;
+      max-width: 177px;
+      text-overflow: ellipsis;
+      display: inline-block;
+    }
+  }
+  .el-select-dropdown__item span {
+    margin-right: 20px;
+  }
   @stensul-purple: #514960;
   @stensul-secondary: #625876;
   @stensul-white: #FFFFFF;
