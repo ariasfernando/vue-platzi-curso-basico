@@ -52,6 +52,7 @@
                     <div
                         class="stx-edit-text stx-wrapper"
                         style="display: inline-block !important; vertical-align: middle"
+                        :style="buttonFontStyles"
                         v-html="setColorContent(component.data.text, component.button.style.color)"
                         :id="editorId" >
                     </div>
@@ -132,7 +133,7 @@
           'font-size':this.component.button.style.fontSize,
           'font-weight':this.component.button.style.fontWeight,
           'letter-spacing':this.component.button.style.letterSpacing,
-          'line-height':this.component.button.style.lineHeigh,
+          'line-height':this.component.button.style.lineHeight,
         }
       },
       caretPaddingAndWidth() {
