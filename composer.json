@@ -19,13 +19,13 @@
         "folklore/image": "^0.3.16",
         "exacttarget/fuel-sdk-php": "^0.9.0",
         "google/recaptcha": "^1.1",
-        "graylog2/gelf-php": "^1.5",
         "olssonm/l5-zxcvbn": "^3.1",
         "hackzilla/password-generator": "^1.3",
         "akamai-open/edgegrid-client": "^1.0",
         "stensul/php-imageproxy": "0.*",
         "stensul/filesystem": "1.*",
         "stensul/media-gallery": "^2.2",
+        "stensul/logging": "1.*",
         "firebase/php-jwt": "^5.0"
     },
     "require-dev": {
@@ -51,8 +51,7 @@
             "database"
         ],
         "psr-4": {
-            "Stensul\\": "app/",
-            "Stensul\\ImageProxy\\": "vendor/stensul/php-imageproxy/src/Stensul/ImageProxy"
+            "Stensul\\": "app/"
         }
     },
     "autoload-dev": {
