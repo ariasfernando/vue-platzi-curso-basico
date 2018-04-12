@@ -10,48 +10,52 @@ module.exports = {
   studioSettings,
   campaignSettings,
   config: {
-    width: {
-      label: 'Width',
-      key: 'width',
-      value: 600,
-      type: 'number',
-    },
-    height: {
-      label: 'Height',
-      key: 'height',
-      value: 200,
-      type: 'number',
-    },
-    upload: {
-      label: 'Image upload',
-      key: 'upload',
-      type: 'switch',
+    size: {
+      label: 'Size',
+      key: 'size',
+      type: 'label',
       value: true,
+      config: {
+        size_width: {
+          label: 'Width',
+          key: 'width',
+          value: 600,
+          type: 'number',
+        },
+        size_height: {
+          label: 'Height',
+          key: 'height',
+          value: 200,
+          type: 'number',
+        },
+      },
     },
-    default: {
-      label: 'Default image',
-      key: 'url',
-      value: '',
-      type: 'text',
+    'sie-plugin-image_upload': {
+      label: 'Upload',
+      key: 'upload',
+      type: 'label',
+      value: true,
+      config: {
+        uploaddefault: {
+          label: 'Default image',
+          key: 'url',
+          value: '',
+          type: 'text',
+        },
+        fillcolor: {
+          label: 'Background color',
+          key: 'fillColor',
+          value: '#000000',
+          type: 'text',
+        },
+      },
     },
-    fill: {
-      label: 'Background color',
-      key: 'fillColor',
-      value: '#000000',
-      type: 'text',
-    },
-    cropper: {
+    'sie-plugin-image_cropper': {
       label: 'Cropper',
       key: 'cropper',
       type: 'switch',
       value: true,
       config: {
-        zoomOnWheel: {
-          label: 'Enable Zoom',
-          key: 'zoomOnWheel',
-          value: true,
-          type: 'switch',
-        },
         movable: {
           label: 'Enable Drag',
           key: 'movable',
@@ -72,81 +76,81 @@ module.exports = {
         },
       },
     },
-    text: {
+    'sie-plugin-text_text': {
       label: 'Text',
       key: 'text',
       value: false,
       type: 'switch',
       config: {
-        visible: {
+        text_visible: {
           label: 'Visible',
           key: 'visible',
           value: true,
           type: 'switch',
         },
-        default: {
+        text_default: {
           label: 'Default text',
           key: 'default',
-          value: '',
+          value: 'Lorem ipsum sit dolom',
           type: 'text',
         },
-        description: {
+        text_description: {
           label: 'Description',
           key: 'description',
           value: 'Text',
           type: 'text',
         },
-        top: {
+        text_top: {
           label: 'Top',
           key: 'top',
-          value: '0px',
-          type: 'text',
+          value: 0,
+          type: 'number',
         },
-        left: {
+        text_left: {
           label: 'Left',
           key: 'left',
-          value: '0px',
-          type: 'text',
+          value: 0,
+          type: 'number',
         },
       },
     },
-    overlay: {
+    'sie-plugin-image-overlay_image': {
       label: 'Image Overlay',
       key: 'image',
       value: false,
       type: 'switch',
       config: {
-        visible: {
+        overlay_visible: {
           label: 'Visible',
           key: 'visible',
           value: true,
           type: 'switch',
         },
-        default: {
+        overlay_default: {
           label: 'Default image',
           key: 'url',
           value: '',
           type: 'text',
         },
-        width: {
+        overlay_width: {
           label: 'Width',
           key: 'width',
-          value: undefined,
+          value: 100,
           type: 'number',
         },
-        height: {
+        overlay_height: {
           label: 'Height',
           key: 'height',
-          value: undefined,
+          value: 100,
           type: 'number',
         },
-        top: {
+        overlay_top: {
           label: 'Top',
           key: 'top',
           value: 0,
           type: 'number',
         },
-        left: {
+        overlay_left: {
           label: 'Left',
           key: 'left',
           value: 0,
@@ -154,19 +158,19 @@ module.exports = {
         },
       },
     },
-    shapemask: {
+    'sie-plugin-shapemask_options': {
       label: 'Shapemask',
       key: 'shapemask',
-      value: false,
+      value: true,
       type: 'switch',
       config: {
-        visible: {
+        shapemask_visible: {
           label: 'Visible',
           key: 'visible',
           value: true,
           type: 'switch',
         },
-        fill: {
+        transparencycolor: {
           label: 'Fill color',
           key: 'transparencyColor',
           value: '#000000',
@@ -178,47 +182,87 @@ module.exports = {
           value: 1,
           type: 'number',
         },
-        'square-width': {
-          label: 'Width',
-          key: 'width',
-          value: undefined,
-          type: 'number',
+        shapemask_square: {
+          label: 'Square',
+          key: 'shapes_square',
+          type: 'switch',
+          value: true,
+          config: {
+            square_width: {
+              label: 'Width',
+              key: 'width',
+              value: undefined,
+              type: 'number',
+            },
+            square_height: {
+              label: 'Height',
+              key: 'height',
+              value: undefined,
+              type: 'number',
+            },
+            square_top: {
+              label: 'Top',
+              key: 'top',
+              value: 0,
+              type: 'number',
+            },
+            square_left: {
+              label: 'Left',
+              key: 'left',
+              value: 0,
+              type: 'number',
+            },
+            square_description: {
+              label: 'Description',
+              key: 'description',
+              type: 'text',
+              value: 'Square',
+            },
+            square_icon: {
+              label: 'Icon',
+              key: 'icon',
+              type: 'text',
+              value: 'far fa-square',
+            },
+          },
         },
-        'square-height': {
-          label: 'Height',
-          key: 'height',
-          value: undefined,
-          type: 'number',
-        },
-        'square-top': {
-          label: 'Top',
-          key: 'top',
-          value: 0,
-          type: 'number',
-        },
-        'square-left': {
-          label: 'Left',
-          key: 'left',
-          value: 0,
-          type: 'number',
-        },
-        'circle-radius': {
-          label: 'Radius',
-          key: 'radius',
-          value: undefined,
-          type: 'number',
-        },
-        'circle-top': {
-          label: 'Top',
-          key: 'top',
-          value: 0,
-          type: 'number',
-        },
-        'circle-left': {
-          label: 'Left',
-          key: 'left',
-          value: 0,
-          type: 'number',
+        shapemask_circle: {
+          label: 'Circle',
+          key: 'shapes_circle',
+          type: 'switch',
+          value: true,
+          config: {
+            circle_radius: {
+              label: 'Radius',
+              key: 'radius',
+              value: undefined,
+              type: 'number',
+            },
+            circle_top: {
+              label: 'Top',
+              key: 'top',
+              value: 0,
+              type: 'number',
+            },
+            circle_left: {
+              label: 'Left',
+              key: 'left',
+              value: 0,
+              type: 'number',
+            },
+            circle_description: {
+              label: 'Description',
+              key: 'description',
+              type: 'text',
+              value: 'Circle',
+            },
+            circle_icon: {
+              label: 'Icon',
+              key: 'icon',
+              type: 'text',
+              value: 'far fa-circle',
+            },
+          },
         },
       },
     },

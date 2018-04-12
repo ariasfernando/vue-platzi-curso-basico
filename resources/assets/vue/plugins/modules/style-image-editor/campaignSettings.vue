@@ -91,33 +91,100 @@ export default {
                 $contentImgError.removeClass('default-image-error');
             }
         },
+        searchImage(data, keys) {
+            let subData = data;
+            keys.forEach(key => {
+                subData = subData[key];
+            });
+            return subData;
+        },
+        getObjectKeys(data, prefix = '') {
+            return Object.keys(data).reduce((result, element) => {
+                if (Array.isArray(data[element])) {
+                    return result;
+                } else if (
+                    data[element] !== null &&
+                    typeof data[element] === 'object'
+                ) {
+                    return [
+                        ...result,
+                        ...this.getObjectKeys(
+                            data[element],
+                            prefix + element + '.'
+                        )
+                    ];
+                } else {
+                    return [...result, prefix + element];
+                }
+            }, []);
+        },
+        isDataUrl(url) {
+            const regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
+            return !!RegExp(regex).test(url);
+        },
+        searchStateImages(data) {
+            const urlKeys = this.getObjectKeys(data.preset).filter(key => {
+                return key.includes('url');
+            });
+            const images = [];
+            urlKeys.forEach(url => {
+                const keys = url.split('.');
+                const img = this.searchImage(data.preset, keys);
+                //I only want to upload images that are base64
+                if (
+                    typeof img !== 'undefined' &&
+                    img !== '' &&
+                    this.isDataUrl(img)
+                ) {
+                    images.push({
+                        key: url,
+                        image: img
+                    });
+                }
+            });
+            return images;
+        },
         submitImage(data) {
             this.$store.commit('global/setLoader', true);
+            const images = this.searchStateImages(data.state);
+            images.push({ key: 'img', image: data.img });
+            const imgs = [];
+            images.forEach(image => {
+                imgs.push(image.image);
+            });
             this.$store
                 .dispatch('campaign/uploadImages', {
-                    images: [data.imageUrl, data.rawImage],
+                    images: imgs,
                     campaignId: this.campaign.campaign_id
                 })
-                .then(images => {
-                    this.updateAttribute(images[0]);
-                    this.updatePluginData(images, data);
+                .then(uploadedImgs => {
+                    this.updateAttribute(uploadedImgs[imgs.length - 1]);
+                    this.updatePluginData(uploadedImgs, images, data);
                     this.$store.commit('global/setLoader', false);
                     this.showImageEditor = false;
                 });
         },
-        updatePluginData(images, data) {
-            const newData = {
-                ...data,
-                imageUrl: images[0],
-                rawImage: images[1]
-            };
-
+        updatePluginData(uploadedImgs, images, data) {
+            images.slice(0, images.length - 1).forEach(image => {
+                const i = images.indexOf(image);
+                const keys = image.key.split('.');
+                const img = uploadedImgs[i];
+                let subData = data.state.preset;
+                keys.forEach(key => {
+                    if (keys.indexOf(key) === keys.length - 1) {
+                        subData[key] = img;
+                    } else {
+                        subData = subData[key];
+                    }
+                });
+            });
+            data.img = uploadedImgs[images.length - 1];
             this.$store.commit('campaign/savePlugin', {
                 plugin: this.name,
                 moduleId: this.currentComponent.moduleId,
                 columnId: this.currentComponent.columnId,
                 componentId: this.currentComponent.componentId,
-                data: newData
+                data: data
             });
         },
         updateAttribute(image) {

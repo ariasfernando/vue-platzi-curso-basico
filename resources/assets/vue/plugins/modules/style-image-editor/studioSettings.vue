@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <settings-container :label="plugin.title">
       <template slot="setting-right">
           <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
@@ -22,25 +21,47 @@
           <el-select size="mini" v-if="option.type === 'select' || option.type === 'multi-select'" @change="(newValue)=>updateField(newValue, name)" :value="option.value" :multiple="option.type === 'multi-select'">
             <el-option v-for="(opt, key) in option.options" :value="opt._id ? opt._id : opt"  :key="key" :label="opt.name ? opt.name : opt "></el-option>
           </el-select>
+          <label v-if="option.type === 'label'" :value="option.label"></label>
         </template>
       </settings-container>
-      <settings-container v-if="option.value && option.config" v-for="(subopt, subname) in option.config" :label="subopt.label" :key="subname">
-        <template slot="setting-right">
-          <toggle-button v-if="subopt.type === 'switch'" :value="subopt.value" active-color="#78DCD6" @change="(newValue)=>updateSubField(newValue, name, subname)"></toggle-button>
-          <el-input size="mini"  v-if="subopt.type === 'text'" :value="subopt.value" @change="(newValue)=>updateSubField(newValue, name, subname)"></el-input>
-          <el-input-number
-            v-if="subopt.type === 'number'" 
-            size="mini" 
-            v-validate="'required'"
-            :value="subopt.value" 
-            @change="(newValue)=>updateSubField(newValue, name, subname)"
-            :min="subname === 'padding' ? 0 : 10"
-          ></el-input-number>
-          <el-select v-model="subopt.value" multiple v-if="subopt.type === 'multi-select'" :value="subopt.value" :parent="name" :name="subname">
-            <el-option v-for="opt in subopt.options" :key="opt" :label="opt" :value="opt"></el-option>
-          </el-select>
+      <template  v-if="option.value && option.config" v-for="(subopt, subname) in option.config">
+        <settings-container :label="subopt.label" :key="subname">
+            <template slot="setting-right">
+            <toggle-button v-if="subopt.type === 'switch'" :value="subopt.value" active-color="#78DCD6" @change="(newValue)=>updateSubField(newValue, name, subname)"></toggle-button>
+            <el-input size="mini"  v-if="subopt.type === 'text'" :value="subopt.value" @change="(newValue)=>updateSubField(newValue, name, subname)"></el-input>
+            <el-input-number
+                v-if="subopt.type === 'number'" 
+                size="mini" 
+                v-validate="'required'"
+                :value="subopt.value" 
+                @change="(newValue)=>updateSubField(newValue, name, subname)"
+                :min="subname === 'padding' ? 0 : 10"
+            ></el-input-number>
+            <el-select v-model="subopt.value" multiple v-if="subopt.type === 'multi-select'" :value="subopt.value" :parent="name" :name="subname">
+                <el-option v-for="opt in subopt.options" :key="opt" :label="opt" :value="opt"></el-option>
+            </el-select>
+            </template>
+        </settings-container>
+        <template v-if="subopt.value && subopt.config" v-for="(interop, intername) in subopt.config">
+             <settings-container :label="interop.label" :key="intername">
+                <template slot="setting-right">
+                <toggle-button v-if="interop.type === 'switch'" :value="interop.value" active-color="#78DCD6" @change="(newValue)=>updateInterField(newValue, name, subname, intername)"></toggle-button>
+                <el-input size="mini"  v-if="interop.type === 'text'" :value="interop.value" @change="(newValue)=>updateInterField(newValue, name, subname, subninternameame)"></el-input>
+                <el-input-number
+                    v-if="interop.type === 'number'" 
+                    size="mini" 
+                    v-validate="'required'"
+                    :value="interop.value" 
+                    @change="(newValue)=>updateInterField(newValue,name, subname, intername)"
+                    :min="intername === 'padding' ? 0 : 10"
+                ></el-input-number>
+                <el-select v-model="interop.value" multiple v-if="interop.type === 'multi-select'" :value="interop.value" :parent="name" :name="intername">
+                    <el-option v-for="opt in interop.options" :key="opt" :label="opt" :value="opt"></el-option>
+                </el-select>
+                </template>
+            </settings-container>
         </template>
-      </settings-container>
+      </template>
     </template>
   </div>
 </template>
@@ -125,6 +146,19 @@ export default {
     updateSubField(value, option, subOption) {
       const config = clone(this.plugin.config);
       config[option].config[subOption].value = value;
+
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        config
+      };
+
+      this.$store.commit("module/savePlugin", payload);
+    },
+    updateInterField(value, option, subOption, interOption) {
+      const config = clone(this.plugin.config);
+      config[option].config[subOption].config[interOption].value = value;
 
       const payload = {
         plugin: this.name,
