@@ -309,6 +309,10 @@
             this.$store.commit("campaign/setActiveModule", moduleId);
             // Clear 3rd column
             this.$store.commit("campaign/unsetCurrentComponent");
+
+            if (this.activeModule.type === 'studio') {
+              this.$store.commit("campaign/unsetCustomModule");
+            }
           }
         }
       }

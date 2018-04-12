@@ -162,8 +162,19 @@ class EmailHtmlCreator
         $cdn_path = $this->getCampaign()->getCdnPath(true);
 
         if ($matches) {
+            $ignored_image_domains = config('campaign.ignored_image_domains', []);
+
             foreach ($matches as $match) {
                 $url = trim($match[2]);
+
+                if ($ignored_image_domains) {
+                    // If we need to ignore certain domains, we will need to check each image against them.
+                    foreach ($ignored_image_domains as $i) {
+                        if (strpos($url, $i) !== false) {
+                            continue 2;
+                        }
+                    }
+                }
 
                 // get the image basename
                 $basename = basename(parse_url($url, PHP_URL_PATH));
