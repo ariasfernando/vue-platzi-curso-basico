@@ -8,7 +8,6 @@ const uploadImage = require('./upload-image');
 const imageEditor = require('./image-editor');
 const variableHeight = require('./variable-height');
 const mobileStyles = require('./mobile-styles');
-const hideElement = require('./hide-element');
 
 
 module.exports = {
@@ -22,5 +21,4 @@ module.exports = {
   imageEditor,
   variableHeight,
   mobileStyles,
-  hideElement
 };

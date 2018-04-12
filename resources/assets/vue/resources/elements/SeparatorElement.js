@@ -15,7 +15,6 @@ function separatorDefault() {
       align: 'center',
       bgcolor: 'transparent',
       width: '100%',
-      hideElement: false,
       classes: '',
     },
 

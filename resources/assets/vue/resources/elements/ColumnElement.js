@@ -28,7 +28,6 @@ function columnDefault() {
       width: '100%',
       valign: 'middle',
       bgcolor: '',
-      hideElement: false,
       classes: '',
     },
     styleOption: {

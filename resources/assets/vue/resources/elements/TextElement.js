@@ -26,7 +26,6 @@ function textDefault() {
       valign: 'middle',
       align: 'left',
       bgcolor: 'transparent',
-      hideElement: false,
       classes: '',
     },
     plugins: {},

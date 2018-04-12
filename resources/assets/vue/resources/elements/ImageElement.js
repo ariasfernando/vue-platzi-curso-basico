@@ -24,7 +24,6 @@ function imageDefault() {
       target: '_blank',
       width: '100%',
       height: 'auto',
-      hideElement: false,
       classes: '',
     },
     plugins: {},
