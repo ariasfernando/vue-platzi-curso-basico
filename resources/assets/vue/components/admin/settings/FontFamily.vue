@@ -10,7 +10,7 @@
       size="mini"
       >
         <el-option
-          v-for="item in options()"
+          v-for="item in fontsOptions()"
           :key="item.value"
           :label="item.label"
           :value="item.value"
@@ -27,22 +27,21 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "FontFamily",
-  props: ["setting", "element", "link", "name", "label", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
-      options() {
-        const options = [];
+      fontsOptions() {
+        const fontsOptions = [];
         _.each(this.$_app.config.fonts, (group, index) => {
           group.map(font => {
             if (index === 'custom') {
-              options.push({
+                fontsOptions.push({
                 value: font.name,
                 label: font.name
               });
             } else {
-              options.push({
+                fontsOptions.push({
                 value: font,
                 label: font
               });
@@ -50,7 +49,7 @@ export default {
           });
         });
 
-        return options;
+        return fontsOptions;
       }
     };
   },

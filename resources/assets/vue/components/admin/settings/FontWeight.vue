@@ -10,7 +10,7 @@
           placeholder="Font Weight"
           >
           <el-option
-            v-for="item in options"
+            v-for="item in weightOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -40,27 +40,26 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "FontWeight",
-  props: ["setting", "element", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
-      name: "fontWeight",
+      linkName: "fontWeight",
       isCustomFontWeightName: "isCustomFontWeight",
-      options: []
+      weightOptions: []
     };
   },
   mounted() {
-    function getOptions() {
-      let options = [];
+    function getweightOptions() {
+      let weightOptions = [];
       let val = 100;
       for (; val < 901; ) {
-        options.push({ value: val, label: val });
+        weightOptions.push({ value: val, label: val });
         val += 100;
       }
-      return options;
+      return weightOptions;
     }
-    this.options = getOptions();
+    this.weightOptions = getweightOptions();
     // set styleOption to default if is undefined
     if (this.element.styleOption["isCustomFontWeight"] === undefined) {
       this.isCustomFontWeight = false;
@@ -84,13 +83,13 @@ export default {
     },
     fontWeight: {
       get() {
-        return this.element.style[this.name];
+        return this.element.style[this.linkName];
       },
       set(newValue) {
         this.$emit("setting-updated", {
           subComponent: this.subComponent,
           link: "style",
-          name: this.name,
+          name: this.linkName,
           value: newValue
         });
       }

@@ -33,7 +33,6 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "padding",
-  props: ["setting", "element", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {

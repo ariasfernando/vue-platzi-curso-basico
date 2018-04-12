@@ -29,7 +29,6 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "ClassInput",
-  props: ["setting", "element", "link", "name", "label", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   computed: {

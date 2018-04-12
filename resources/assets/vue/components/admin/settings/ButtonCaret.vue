@@ -12,18 +12,16 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "ButtonCaret",
-  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
   data() {
     return {
-      name: "url",
-      subComponent: "caret"
+      linkName: "url",
     };
   },
   computed: {
     caret() {
-      return this.element.caret.attribute[this.name];
+      return this.element.caret.attribute[this.linkName];
     }
   },
   methods: {
@@ -31,7 +29,7 @@ export default {
       this.$emit("setting-updated", {
         link: 'attribute',
         subComponent: this.subComponent,
-        name: this.name,
+        name: this.linkName,
         value: undefined
       });
     },
@@ -70,7 +68,7 @@ export default {
         this.$emit("setting-updated", {
         link: 'attribute',
         subComponent: this.subComponent,
-        name: this.name,
+        name: this.linkName,
         value: e });
       };
 

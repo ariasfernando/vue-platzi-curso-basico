@@ -34,12 +34,11 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "letter-spacing",
-  props: ["setting", "element", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
-      name: "letterSpacing",
+      linkName: "letterSpacing",
       isNormalLetterSpacingName: "isNormalLetterSpacing",
       defaultLetterSpacing: 0.2,
       letterSpacingInputValue: 0.2,
@@ -74,7 +73,7 @@ export default {
     },
     letterSpacing: {
       get: function() {
-        return this.inferLetterSpacing(this.element.style[this.name], this.isNormalLetterSpacing
+        return this.inferLetterSpacing(this.element.style[this.linkName], this.isNormalLetterSpacing
         );
       },
       set: function(value) {
@@ -82,7 +81,7 @@ export default {
         this.$emit("setting-updated", {
           subComponent: this.subComponent,
           link: "style",
-          name: this.name,
+          name: this.linkName,
           value: newValue
         });
         this.updateLetterSpacingInputValue(value);

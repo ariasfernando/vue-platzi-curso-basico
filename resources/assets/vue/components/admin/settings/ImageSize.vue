@@ -57,7 +57,6 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "ImageSize",
-  props: ["setting", "element", "subComponent", "minValue", "subComponent", "isDisablePercentage"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {

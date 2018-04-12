@@ -25,7 +25,6 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "width",
-  props: ["element", "name", "type", "link", "label", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {

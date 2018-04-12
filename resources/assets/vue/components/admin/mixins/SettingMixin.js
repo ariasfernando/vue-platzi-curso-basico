@@ -1,7 +1,21 @@
 import _ from 'lodash';
 
 export default {
-  props: ["subComponent"],
+  props: [
+    'name',
+    'type',
+    'link',
+    'label',
+    'placeholder',
+    'default-value',
+    'min-value',
+    'max-value',
+    'sub-component',
+    'is-disable',
+    'options',
+    'element',
+    'isDisablePercentage',
+  ],
   computed: {
     module() {
       return this.$store.getters['module/module'];

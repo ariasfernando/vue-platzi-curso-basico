@@ -11,7 +11,6 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "generic-file",
-  props: ["element", "name", "type", "link", "label", "default-value", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   methods: {

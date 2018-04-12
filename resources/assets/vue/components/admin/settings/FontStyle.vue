@@ -36,7 +36,6 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "font-style",
-  props: ["setting", "element", "subComponent"],
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
   mounted() {

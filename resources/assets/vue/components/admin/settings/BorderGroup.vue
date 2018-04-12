@@ -26,10 +26,11 @@
 <script>
 import _ from "lodash";
 import Border from "./Border.vue";
+import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "BorderGroup",
-  props: ["setting", "element","subComponent"],
+  mixins: [ SettingMixin ],
   components: { Border },
   methods: {
     settingUpdatedHandler(eventData) {
