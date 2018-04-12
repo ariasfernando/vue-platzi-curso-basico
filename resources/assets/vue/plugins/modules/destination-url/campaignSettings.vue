@@ -67,7 +67,7 @@
       },
       href: {
         get() {
-          return this.component.attribute.href;
+          return this.component[this.plugin.subComponent].attribute.href;
         },
         set(value) {
           this.saveComponentAttribute('href', value);
@@ -102,16 +102,18 @@
       },
       saveComponentAttribute(attribute, value) {
         const payload = {
-          plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          attribute,
-          attributeValue: value,
+          subComponent: this.plugin.subComponent,
+          link:'attribute',
+          property: 'href',
+          value: value,
         };
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.$store.commit('campaign/saveComponentProperty', payload);
       },
+      
     },
   }
 </script>

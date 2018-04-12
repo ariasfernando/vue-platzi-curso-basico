@@ -1,3 +1,4 @@
+import Vue from 'vue/dist/vue';
 import _ from 'lodash';
 import Q from 'q';
 import clone from 'clone';
@@ -181,9 +182,11 @@ function campaignStore() {
         state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data = updated;
         state.dirty = true;
       },
-      saveComponentStyle(state, data) {
+
+      saveComponentProperty(state, data) {
         const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
-        component.style[data.property] = data.value;
+        const properties = data.subComponent ? component[data.subComponent][data.link] : component[data.link];
+        Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
       saveComponentAttribute(state, data) {
