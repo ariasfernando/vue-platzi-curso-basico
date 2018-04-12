@@ -53,7 +53,7 @@
                         class="stx-edit-text stx-wrapper"
                         style="display: inline-block !important; vertical-align: middle"
                         :style="buttonFontStyles"
-                        v-html="setColorContent(component.data.text, component.button.style.color)"
+                        v-html="content"
                         :id="editorId" >
                     </div>
                   </td>
@@ -105,6 +105,9 @@
       }
     },
     computed: {
+      libraryConfig(){
+        return this.$store.state.campaign.campaign.library_config;
+      },
       buttonBorderAndPadding(){
         return{
           'padding-top':this.component.button.style.paddingTop,
@@ -147,13 +150,13 @@
       },
       widthCaret() {
         return _.parseInt(this.component.caret.attribute.width) + _.parseInt(this.component.caret.style.paddingLeft) || 0 + _.parseInt(this.component.caret.style.paddingRight) || 0;
+      },
+      content(){
+        return this.component.data.text.replace("<p>", `<p style='color:${this.component.button.style.color || this.libraryConfig.linkColor} !important'>`);
       }
     },
     methods: {
-      setColorContent(text, color) {
-        return text.replace("<p>", `<p style='color:${color || inherit} !important'>`);
       }
-    }
   };
 </script>
 

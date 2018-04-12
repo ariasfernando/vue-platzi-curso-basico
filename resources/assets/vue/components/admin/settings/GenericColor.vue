@@ -26,11 +26,11 @@ export default {
   computed: {
     mainSettingColor: {
       get() {
-        return this.mainSetting === "transparent" ? "" : this.mainSetting;
+        return this.mainSetting;
       },
       set(color) {
         if (!Application.utils.validateHexVal(color)) {
-          color = color === null ? "transparent" : Application.utils.rgbToHex(color);
+          color = color === null ? "" : Application.utils.rgbToHex(color);
         }
         this.mainSetting = color;
       }
