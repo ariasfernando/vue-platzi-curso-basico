@@ -7,26 +7,18 @@
 </template>
 <script>
   import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import pluginMixin from '../mixins/pluginMixin';
   export default {
     props: ['name'],
     components: { SettingsContainer },
-    computed: {
-      currentComponent() {
-        return this.$store.getters["module/currentComponent"];
+    mixins: [pluginMixin],
+    watch: {
+      component: {
+        handler: function() {
+          this.plugin.subComponent = 'container';
+        },
+        deep: true,
       },
-      module() {
-        return this.$store.getters["module/module"];
-      },
-      plugin() {
-        const module = this.module,
-              columnId = this.currentComponent.columnId,
-              componentId = this.currentComponent.componentId;
-
-        const plugin = module.structure.columns[columnId].components[componentId].plugins[this.name];
-        this.enabled = plugin.enabled;
-
-        return plugin;
-      }
     },
     data() {
       return {

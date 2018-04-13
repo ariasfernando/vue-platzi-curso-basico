@@ -320,6 +320,11 @@ export default {
 
 // New and refacted
 
+p,ul,ol{
+    margin: 0;
+    padding: 0;
+  }
+
 #edit-container {
   .mce-content-body{
     line-height: inherit;
@@ -367,11 +372,18 @@ export default {
   .right-bar,
   .left-bar {
     height: calc(~"100vh - 55px");
-    overflow: auto;
+    overflow: overlay;
     width: 270px;
     display: block;
     float: left;
     padding: 0px;
+    &::-webkit-scrollbar {
+        width: 2px; 
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: @brand-secondary;
+    }
     .btn.btn-secondary.btn-block {
       &:hover,
       &:visited,

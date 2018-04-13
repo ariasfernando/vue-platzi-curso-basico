@@ -29,7 +29,7 @@ function Module(data = {}) {
   this.structure = {
     columnsStacking: (data.structure && data.structure.columnsType) ? data.structure.columnsType : 'normal',
     attribute: {
-      bgcolor: attribute.bgcolor || 'transparent',
+      bgcolor: attribute.bgcolor || '',
       classes: '',
     },
     mobileClasses,
