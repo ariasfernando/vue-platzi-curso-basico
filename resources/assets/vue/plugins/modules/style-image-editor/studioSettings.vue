@@ -15,7 +15,9 @@
             v-validate="'required'"
             :value="option.value" 
             @change="(newValue)=>updateField(newValue, name)"
-            :min="0"
+            :min="option.min || 0"
+            :max="option.max || Infinity"
+            :step="option.step || 1"
           ></el-input-number>
           <el-input size="mini" v-if="option.type === 'text'" :disabled="!enabled" :value="option.value" @change="(newValue)=>updateField(newValue, name)"></el-input>
           <el-select size="mini" v-if="option.type === 'select' || option.type === 'multi-select'" @change="(newValue)=>updateField(newValue, name)" :value="option.value" :multiple="option.type === 'multi-select'">
@@ -35,7 +37,9 @@
                 v-validate="'required'"
                 :value="subopt.value" 
                 @change="(newValue)=>updateSubField(newValue, name, subname)"
-                :min="subname === 'padding' ? 0 : 10"
+                :min="subopt.min || 0"
+                :max="subopt.max || Infinity"
+                :step="subopt.step || 1"
             ></el-input-number>
             <el-select v-model="subopt.value" multiple v-if="subopt.type === 'multi-select'" :value="subopt.value" :parent="name" :name="subname">
                 <el-option v-for="opt in subopt.options" :key="opt" :label="opt" :value="opt"></el-option>
@@ -53,7 +57,9 @@
                     v-validate="'required'"
                     :value="interop.value" 
                     @change="(newValue)=>updateInterField(newValue,name, subname, intername)"
-                    :min="intername === 'padding' ? 0 : 10"
+                    :min="interop.min || 0"
+                    :max="interop.max || Infinity"
+                    :step="interop.step || 1"
                 ></el-input-number>
                 <el-select v-model="interop.value" multiple v-if="interop.type === 'multi-select'" :value="interop.value" :parent="name" :name="intername">
                     <el-option v-for="opt in interop.options" :key="opt" :label="opt" :value="opt"></el-option>

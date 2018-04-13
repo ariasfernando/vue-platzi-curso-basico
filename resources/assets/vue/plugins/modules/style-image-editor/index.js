@@ -180,6 +180,9 @@ module.exports = {
           label: 'Transparency',
           key: 'transparency',
           value: 1,
+          max: 1, 
+          min: 0,
+          step: '0.1',
           type: 'number',
         },
         shapemask_square: {
