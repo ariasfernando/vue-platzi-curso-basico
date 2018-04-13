@@ -34,37 +34,6 @@ function buttonDefault() {
       ],
       [
         {
-          name: 'caret',
-          type: 'caret',
-        },
-        {
-          name: 'image-size',
-          type: 'image-size',
-          minValue: 5,
-          subComponent: 'caret',
-          isDisablePercentage: true,
-        },
-        {
-          name: 'classes',
-          type: 'class-input',
-          link: 'attribute',
-          subComponent: 'caret',
-        },
-        {
-          name: 'bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Background Color',
-          subComponent: 'caret',
-        },
-        {
-          name: 'padding',
-          type: 'padding',
-          subComponent: 'caret',
-        },
-      ],
-      [
-        {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
@@ -125,6 +94,37 @@ function buttonDefault() {
           type: 'generic-text',
           value: 'http://stensul.com',
           subComponent: 'button',
+        },
+      ],
+      [
+        {
+          name: 'caret',
+          type: 'caret',
+        },
+        {
+          name: 'image-size',
+          type: 'image-size',
+          minValue: 5,
+          subComponent: 'caret',
+          isDisablePercentage: true,
+        },
+        {
+          name: 'classes',
+          type: 'class-input',
+          link: 'attribute',
+          subComponent: 'caret',
+        },
+        {
+          name: 'bgcolor',
+          type: 'generic-color',
+          link: 'attribute',
+          label: 'Background Color',
+          subComponent: 'caret',
+        },
+        {
+          name: 'padding',
+          type: 'padding',
+          subComponent: 'caret',
         },
       ],
     ],

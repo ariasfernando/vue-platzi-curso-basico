@@ -31,7 +31,7 @@
               </td>
             </template>
 
-            <!-- If columnsFixed is false, show Columns staked render -->
+            <!-- show Columns staked render -->
             <td
               v-else
               width="100%"

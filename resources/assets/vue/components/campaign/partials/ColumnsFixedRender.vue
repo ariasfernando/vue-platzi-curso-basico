@@ -11,7 +11,6 @@
       <tr
         v-for="(component, componentId) in column.components"
         @click="setComponent(moduleId, columnId, componentId)"
-        :class="component.attribute.classes"
         :key="component.id"
       >
         <td

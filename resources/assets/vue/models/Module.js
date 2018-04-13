@@ -42,19 +42,19 @@ function Module(data = {}) {
       // Border Top
       borderTopWidth: style.borderTopWidth || '0px',
       borderTopStyle: style.borderTopStyle || 'none',
-      borderTopColor: style.borderTopColor || 'transparent',
+      borderTopColor: style.borderTopColor || '',
       // Border Right
       borderRightWidth: style.borderRightWidth || '0px',
       borderRightStyle: style.borderRightStyle || 'none',
-      borderRightColor: style.borderRightColor || 'transparent',
+      borderRightColor: style.borderRightColor || '',
       // Border Bottom
       borderBottomWidth: style.borderBottomWidth || '0px',
       borderBottomStyle: style.borderBottomStyle || 'none',
-      borderBottomColor: style.borderBottomColor || 'transparent',
+      borderBottomColor: style.borderBottomColor || '',
       // Border Left
       borderLeftWidth: style.borderLeftWidth || '0px',
       borderLeftStyle: style.borderLeftStyle || 'none',
-      borderLeftColor: style.borderLeftColor || 'transparent',
+      borderLeftColor: style.borderLeftColor || '',
     },
 
     columns: data.structure && data.structure.columns ? data.structure.columns : [],

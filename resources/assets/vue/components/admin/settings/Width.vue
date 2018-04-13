@@ -5,8 +5,8 @@
             size="mini" 
             v-validate="'required'"
             v-model="mainSettingNumeric"
-            :min="minValue"
-            :max="maxValue"
+            :min="minValueCalculated"
+            :max="maxValueCalculated"
             class="padding-custom align-element"
             :controls="false"
           ></el-input-number>
@@ -29,7 +29,6 @@ export default {
   components: { SettingsContainer },
   data() {
     return {
-      minValue: this.minValue ? this.minValue : 1
     };
   },
   mounted() {
@@ -57,12 +56,15 @@ export default {
         return parseFloat(this.mainSetting);
       },
       set(value) {
-        value = isNaN(value) || value < this.minValue ? this.minValue : value;
+        value = isNaN(value) || value < this.minValueCalculated ? this.minValueCalculated : value;
         value = this.isPxWidth ? `${value}` : `${value}%`;
         this.mainSetting = value;
       }
     },
-    maxValue() {
+    minValueCalculated() {
+    return  this.minValue ? this.minValue : 1;
+    },
+    maxValueCalculated() {
       return this.isPxWidth ? undefined : 100;
     }
   },
@@ -73,7 +75,7 @@ export default {
       if (!isPxWidth) {
         width = Math.min(100, parseFloat(this.mainSettingNumeric));
       }
-      width = isNaN(width) || width < this.minValue ? this.minValue : width;
+      width = isNaN(width) || width < this.minValueCalculated ? this.minValueCalculated : width;
       width = isPxWidth ? `${width}` : `${width}%`;
       this.isPxWidth = isPxWidth;
       this.mainSetting = width;
