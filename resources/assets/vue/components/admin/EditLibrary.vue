@@ -154,7 +154,7 @@
                               <!-- Field background-color -->
                               <div class="col-md-3">
                                 <input-generic-color
-                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  @setting-updated="configSettingUpdatedHandler"
                                   :name="'templateBackgroundColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
@@ -166,7 +166,7 @@
                               <!-- Field content-background-color -->
                               <div class="col-md-3">
                                 <input-generic-color
-                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  @setting-updated="configSettingUpdatedHandler"
                                   :name="'contentBackgroundColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
@@ -181,7 +181,7 @@
                               <!-- Field font-family -->
                               <div class="col-md-3">
                                 <input-font-family
-                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  @setting-updated="configSettingUpdatedHandler"
                                   :name="'fontFamily'"
                                   :type="'font-family'"
                                   :link="'config'"
@@ -193,7 +193,7 @@
                               <!-- Field font-color -->
                               <div class="col-md-3">
                                 <input-generic-color
-                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  @setting-updated="configSettingUpdatedHandler"
                                   :name="'fontColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
@@ -240,7 +240,7 @@
                               <!-- Field link-color -->
                               <div class="col-md-3">
                                 <input-generic-color
-                                  @config-setting-updated="configSettingUpdatedHandler"
+                                  @setting-updated="configSettingUpdatedHandler"
                                   :name="'linkColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
@@ -366,7 +366,7 @@
 
                   </form>
                 </div>
-                </div>
+              </div>
         </div>
       </section>
     </div>
