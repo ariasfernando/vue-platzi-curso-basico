@@ -21,33 +21,44 @@
     <div class="clearfix" v-if="plugin.config.options.forecolor.value">
       <settings-container label="textcolor_map">
         <template slot="setting-right">
-            <el-input
-              size="mini" 
-              v-validate="'required'"
-              v-model="textColorMap"
-              placeholder="000000,Black,474646,Gray,79a8c9,Blue,cd202c,Red"
-              class="clearfix"
-            ></el-input>
+          <el-input
+            size="mini"
+            v-validate="'required'"
+            v-model="textColorMap"
+            placeholder="000000,Black,474646,Gray,79a8c9,Blue,cd202c,Red"
+            class="clearfix"
+          ></el-input>
         </template>
       </settings-container>
     </div>
     <div class="clearfix" v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" :key="key">
       <settings-container :label="tinySetting.title" >
         <template slot="setting-right">
-              <toggle-button :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
+          <toggle-button :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
         </template>
       </settings-container>
+
       <!-- Input if config needs it -->
       <div v-if="isAValidSetting(tinySetting ,key)">
           <el-input-number
-          size="mini" 
-          v-b-tooltip.hover
-          :title="key"
-          :name="key"
-          @change="(value)=>changeSetting(value, key)"
-          :value="tinySetting.content || 0"
-          :min="0"
+            v-if="tinySetting.type === 'number'"
+            size="mini"
+            v-b-tooltip.hover
+            :title="key"
+            :name="key"
+            @change="(value)=>changeSetting(value, key)"
+            :value="tinySetting.content || 0"
+            :min="0"
           ></el-input-number>
+          <el-input
+            v-if="tinySetting.type === 'text'"
+            size="mini"
+            v-b-tooltip.hover
+            :title="key"
+            :name="key"
+            @change="(value)=>changeSetting(value, key)"
+            :value="tinySetting.content || 0"
+          ></el-input>
       </div>
     </div>
   </div>
@@ -204,9 +215,9 @@ export default {
       // Save plugin data
       this.$store.commit("module/savePluginSuboption", payload);
     },
-    isAValidSetting(tinySetting, key){
-     return (key === 'truncate' || key === 'lines_limit') && tinySetting.value === true;
-     }
+    isAValidSetting(tinySetting, key) {
+      return (['truncate', 'lines_limit', 'fontsize_formats', 'lineheight_formats'].indexOf(key) !== -1) && tinySetting.value === true;
+    }
   }
 };
 </script>

@@ -128,15 +128,28 @@ module.exports = {
       truncate: {
         title: 'Characters Limit',
         value: false,
-        type: Number,
+        type: 'number',
         content: undefined,
       },
       lines_limit: {
         title: 'Lines Limit',
         value: false,
-        type: Number,
-        content: undefined,
+        type: 'text',
+        content: "{ \"27px\": 5, \"29px\": 4, \"34px\": 3 }",
       },
+      fontsize_formats: {
+        title: 'Font size',
+        value: false,
+        type: 'text',
+        content: '12px 14px 16px 18px',
+      },
+      lineheight_formats: {
+        title: 'Line height',
+        value: false,
+        type: 'text',
+        content: "{ \"27px\": \"30px\", \"29px\": \"32px\", \"34px\": \"36px\" }",
+      },
+
     },
   },
   render: false,
