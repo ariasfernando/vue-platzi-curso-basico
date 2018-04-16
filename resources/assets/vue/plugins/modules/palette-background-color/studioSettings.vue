@@ -12,7 +12,6 @@
             v-validate="'required'"
             v-model="bgColorMap"
             placeholder="000000,474646,79A8C9,CD202C"
-            class="clearfix"
           ></el-input>
       </template>
     </settings-container>
@@ -20,26 +19,32 @@
 </template>
 <script>
   import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import pluginMixin from '../mixins/pluginMixin';
   export default {
     props: ['name'],
     components: { SettingsContainer },
+    mixins: [pluginMixin],
+    watch: {
+      component: {
+        handler: function() {
+          switch (this.component.type) {
+            case 'button-element':
+              this.plugin.subComponent ='button';
+              break;
+            case 'image-element':
+              this.plugin.subComponent ='image';
+              break;
+            case 'text-element':
+              this.plugin.subComponent ='text';
+              break;
+            default:
+              break;
+          }
+        },
+        deep: true,
+      },
+    },
     computed: {
-      currentComponent() {
-        return this.$store.getters["module/currentComponent"];
-      },
-      module() {
-        return this.$store.getters["module/module"];
-      },
-      plugin() {
-        const module = this.module,
-              columnId = this.currentComponent.columnId,
-              componentId = this.currentComponent.componentId;
-
-        const plugin = module.structure.columns[columnId].components[componentId].plugins[this.name];
-        this.enabled = plugin.enabled;
-
-        return plugin;
-      },
       bgColorMap: {
         get() {
           return this.plugin.config.options.bgcolor.palette.join(',');

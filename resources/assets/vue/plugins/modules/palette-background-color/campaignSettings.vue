@@ -33,7 +33,7 @@
       },
       color: {
         get() {
-          return { hex: this.component.attribute.bgcolor ? this.component.attribute.bgcolor : this.plugin.config.options.bgcolor.defaultValue }
+          return { hex: this.component[this.plugin.subComponent].attribute ? this.component[this.plugin.subComponent].attribute.bgcolor : this.component.attribute.bgcolor};
         },
         set(value) {
           this.updateValue('bgcolor', value.hex);
@@ -46,17 +46,19 @@
       }
     },
     methods: {
-      updateValue(attribute, value) {
+      updateValue(property, value) {
         const payload = {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          attribute,
-          attributeValue: value,
+          subComponent:this.plugin.subComponent,
+          link:'attribute',
+          property,
+          value,
         };
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.$store.commit('campaign/saveComponentProperty', payload);
       }
     }
   }

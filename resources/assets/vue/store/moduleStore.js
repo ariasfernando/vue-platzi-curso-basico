@@ -75,9 +75,7 @@ const mutations = {
     const structure = state.module.structure;
     const subComponent = data.subComponent ? structure[data.subComponent] : structure;
     const properties = data.link ? subComponent[data.link] : subComponent;
-    const newProperty = {};
-    newProperty[data.property] = data.value;
-    _.merge(properties, newProperty);
+    Vue.set(properties, data.property, data.value);
   },
   saveModule(state, moduleId) {
     state.module.moduleId = moduleId;
@@ -100,9 +98,7 @@ const mutations = {
   saveColumnProperty(state, data) {
     const column = state.module.structure.columns[data.colId];
     const properties = data.subComponent ? column[data.subComponent][data.link] : column[data.link];
-    const newProperty = {};
-    newProperty[data.property] = data.value;
-    _.merge(properties, newProperty);
+    Vue.set(properties, data.property, data.value);
   },
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);
