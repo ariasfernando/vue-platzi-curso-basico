@@ -173,6 +173,24 @@ class Campaign extends Eloquent
     }
 
     /**
+     * Get Library Property.
+     *
+     * @param string $property
+     *
+     * @return mixed Array or scalar value.
+     */
+    public function getLibraryProperty($property)
+    {
+        $library = Library::find($this->library);
+
+        if (isset($library->$property)) {
+            return $library->$property;
+        }
+
+        return '';
+    }
+
+    /**
      * Get Library Config.
      *
      * @param string $property
