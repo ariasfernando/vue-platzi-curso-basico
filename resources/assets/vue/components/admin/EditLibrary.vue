@@ -414,6 +414,16 @@
     directives: {
       'sticky': VueSticky,
     },
+    computed: {
+      espProvider: {
+        get() {
+          return this.library.config.espProvider ? this.library.config.espProvider : null;
+        },
+        set(espProvider) {
+          this.library.config.espProvider = espProvider;
+        }
+      }
+    },
     methods: {
       updateToggle(element) {
         this.library.config[element] = !this.library.config[element];
