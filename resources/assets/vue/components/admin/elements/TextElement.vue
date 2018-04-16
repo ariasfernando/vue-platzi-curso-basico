@@ -3,19 +3,21 @@
   <tr 
     data-type="text-element"
     :data-component="JSON.stringify(component)"
-    :data-column="columnId"
-    :class="getMobileClasses(component,'tr') + component.attribute.classes"
+    :class="getMobileClasses(component,'tr') + component.container.attribute.classes || ''"
     @click.prevent="setComponent"
   >
     <td
       width="100%"
       style="width: 100%;"
+      :style="component.container.style"
+      :align="component.container.attribute.align"
+      :bgcolor="component.container.attribute.bgcolor"
       :class="getMobileClasses(component,'td:first')"
     >
       <table 
-        width="100%" 
         cellpadding="0" 
         cellspacing="0" 
+        width="100%" 
         border="0" 
         align="center" 
         style="width: 100%;"
@@ -23,12 +25,13 @@
         <tr>
           <td
             width="100%" 
+            style="vertical-align: middle; width:100%;"
             class="stx-edit-text stx-position-relative" 
-            :align="component.attribute.align"
-            :bgcolor="component.attribute.bgcolor"
-            :style="component.style"
+            :align="component.text.attribute.align"
+            :bgcolor="component.text.attribute.bgcolor"
+            :style="[textFontStyles, textBorderAndPadding]"
           >
-            <tiny-mce :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
+            <tiny-mce :style="textFontStyles" :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
             <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
           </td>
         </tr> 
@@ -63,6 +66,39 @@
         dirty: false
       }
     },
+    computed:{
+      textFontStyles() {
+        return {
+          'text-align':this.component.text.style.textAlign,
+          'font-family':this.component.text.style.fontFamily,
+          'color':this.component.text.style.color,
+          'font-size':this.component.text.style.fontSize,
+          'font-weight':this.component.text.style.fontWeight,
+          'letter-spacing':this.component.text.style.letterSpacing,
+          'line-height':this.component.text.style.lineHeight,
+        }
+      },
+      textBorderAndPadding(){
+        return{
+          'padding-top':this.component.text.style.paddingTop,
+          'padding-bottom':this.component.text.style.paddingBottom,
+          'padding-right':this.component.text.style.paddingRight,
+          'padding-left':this.component.text.style.paddingLeft,
+          'border-top-width':this.component.text.style.borderTopWidth,
+          'border-right-width':this.component.text.style.borderRightWidth,
+          'border-bottom-width':this.component.text.style.borderBottomWidth,
+          'border-left-width':this.component.text.style.borderLeftWidth,
+          'border-top-style':this.component.text.style.borderTopStyle,
+          'border-right-style':this.component.text.style.borderRightStyle,
+          'border-bottom-style':this.component.text.style.borderBottomStyle,
+          'border-left-style':this.component.text.style.borderLeftStyle,
+          'border-top-color':this.component.text.style.borderTopColor,
+          'border-right-color':this.component.text.style.borderRightColor,
+          'border-bottom-color':this.component.text.style.borderBottomColor,
+          'border-left-color':this.component.text.style.borderLeftColor
+        }
+      },
+    },
     methods: {
       setComponent(e) {
         if (!$(e.target).hasClass("st-remove")){
@@ -71,7 +107,7 @@
             componentId: this.componentId
           });
         }  
-      }
+      },
     }
   };
 </script>
