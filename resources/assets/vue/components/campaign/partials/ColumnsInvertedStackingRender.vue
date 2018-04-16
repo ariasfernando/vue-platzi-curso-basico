@@ -7,12 +7,12 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :width="columnWidthPadding / numColumns"
+        :width="column.attribute && column.attribute.width ? column.attribute.width : 100/numColumns"
       >
         <tr>
           <td
             width="100%"
-            :style="[column.styles, {'background-color' : column.attribute.bgcolor}]"
+            :style="[column.style, {'background-color' : column.attribute.bgcolor}]"
             :bgcolor="column.attribute.bgcolor"
             :valign="column.attribute.valign"
             :align="column.attribute.align || 'center'"

@@ -20,10 +20,10 @@
               this.plugin.subComponent ='button';
               break;
             case 'image-element':
-              this.plugin.subComponent ='image';
+              this.plugin.subComponent ='container';
               break;
             case 'text-element':
-              this.plugin.subComponent ='text';
+              this.plugin.subComponent ='container';
               break;
             default:
               break;

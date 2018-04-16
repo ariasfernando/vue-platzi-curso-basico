@@ -15,7 +15,19 @@
     watch: {
       component: {
         handler: function() {
-          this.plugin.subComponent = 'container';
+          switch (this.component.type) {
+            case 'button-element':
+              this.plugin.subComponent ='container';
+              break;
+            case 'image-element':
+              this.plugin.subComponent ='image';
+              break;
+            case 'text-element':
+              this.plugin.subComponent ='text';
+              break;
+            default:
+              break;
+          }
         },
         deep: true,
       },
