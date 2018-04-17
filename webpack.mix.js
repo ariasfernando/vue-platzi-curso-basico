@@ -76,7 +76,7 @@ mix
     'node_modules/bootstrap/dist/js/bootstrap.min.js',
     'node_modules/bootstrap-select/dist/js/bootstrap-select.min.js',
   ], `${jsDestinationPath}/bootstrap.js`)
-  .babel([
+  .scripts([
     // -- TinyMCE editor --
     'node_modules/tinymce/tinymce.js',
     'node_modules/tinymce/themes/modern/theme.js',
@@ -91,7 +91,7 @@ mix
     'node_modules/tinymce/plugins/advlist/plugin.js',
     `${assetsPath}/js/plugins/**/*.js`,
   ], `${jsDestinationPath}/tinymce.js`)
-  .babel([
+  .scripts([
     'node_modules/underscore/underscore.js',
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-ui/jquery-ui.min.js',
