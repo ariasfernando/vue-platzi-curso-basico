@@ -7,7 +7,7 @@
     <td
       :width="component.container.attribute.width"
       :style="containerBorderAndPadding, component.container.attribute.width ? widthStyle(component.container.attribute.width) : '100%'"
-      :align="component.container.attribute.align"
+      :align="component.container.attribute.align || 'center'"
       :bgcolor="component.container.attribute.bgcolor"
       :class="getMobileClasses(component,'td:first')"
     >
