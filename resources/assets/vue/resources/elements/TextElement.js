@@ -15,7 +15,6 @@ function textDefault() {
       styleOption: {
       },
       attribute: {
-        align: 'center',
       },
     },
     text: {

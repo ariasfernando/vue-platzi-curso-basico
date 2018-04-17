@@ -10,7 +10,11 @@ function columnDefault() {
       },
       styleOption: {},
     },
-    content: {},
+    content: {
+      style: {},
+      attribute: {},
+      styleOption: {},
+    },
     components: [],
     plugins: {},
   };

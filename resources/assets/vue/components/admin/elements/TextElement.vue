@@ -7,29 +7,29 @@
     @click.prevent="setComponent"
   >
     <td
-      width="100%"
-      style="width: 100%;"
-      :style="component.container.style"
-      :align="component.container.attribute.align"
+      :width="component.container.attribute.width||'100%'"
+      :style="[containerBorderAndPadding, widthContainer]"
+      :align="component.container.attribute.align || 'center'"
       :bgcolor="component.container.attribute.bgcolor"
       :class="getMobileClasses(component,'td:first')"
     >
-      <table 
-        cellpadding="0" 
-        cellspacing="0" 
-        width="100%" 
-        border="0" 
-        align="center" 
+      <table
+        width="100%"
         style="width: 100%;"
+        :align="component.container.attribute.align"
+        border="0"
+        cellpadding="0"
+        cellspacing="0"
       >
         <tr>
           <td
-            width="100%" 
             style="vertical-align: middle; width:100%;"
-            class="stx-edit-text stx-position-relative" 
+            class="stx-edit-text stx-position-relative"
+            :width="component.text.attribute.width"
+            :valign="component.text.attribute.valign || 'top'"
             :align="component.text.attribute.align"
             :bgcolor="component.text.attribute.bgcolor"
-            :style="[textFontStyles, textBorderAndPadding]"
+            :style="[textFontStyles, textBorderAndPadding,{width:widthStyle(component.text.attribute.width)}]"
           >
             <tiny-mce :style="textFontStyles" :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
             <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
@@ -98,8 +98,38 @@
           'border-left-color':this.component.text.style.borderLeftColor
         }
       },
+      containerBorderAndPadding() {
+        return {
+          "padding-top": this.component.container.style.paddingTop,
+          "padding-bottom": this.component.container.style.paddingBottom,
+          "padding-right": this.component.container.style.paddingRight,
+          "padding-left": this.component.container.style.paddingLeft,
+          "border-top-width": this.component.container.style.borderTopWidth,
+          "border-right-width": this.component.container.style.borderRightWidth,
+          "border-bottom-width": this.component.container.style.borderBottomWidth,
+          "border-left-width": this.component.container.style.borderLeftWidth,
+          "border-top-style": this.component.container.style.borderTopStyle,
+          "border-right-style": this.component.container.style.borderRightStyle,
+          "border-bottom-style": this.component.container.style.borderBottomStyle,
+          "border-left-style": this.component.container.style.borderLeftStyle,
+          "border-top-color": this.component.container.style.borderTopColor,
+          "border-right-color": this.component.container.style.borderRightColor,
+          "border-bottom-color": this.component.container.style.borderBottomColor,
+          "border-left-color": this.component.container.style.borderLeftColor
+        };
+      },
+      widthContainer() {
+        return {
+          width: this.component.container.attribute.width
+            ? this.widthStyle(this.component.container.attribute.width)
+            : "100%"
+        };
+      }
     },
     methods: {
+      widthStyle(width) {
+        return _.endsWith(width, "%") ? width : width + "px";
+      },
       setComponent(e) {
         if (!$(e.target).hasClass("st-remove")){
           this.$store.commit("module/setCurrentComponent", {
@@ -113,14 +143,14 @@
 </script>
 
 <style lang="less">
-  .stx-position-relative{
-    position: relative;
-  }
+.stx-position-relative {
+  position: relative;
+}
 
-  .stx-edit-text{
-    p{
-      margin: 0;
-      padding: 0;
-    }
+.stx-edit-text {
+  p {
+    margin: 0;
+    padding: 0;
   }
+}
 </style>
