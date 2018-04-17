@@ -60,10 +60,7 @@ export default {
       return weightOptions;
     }
     this.weightOptions = getweightOptions();
-    // set styleOption to default if is undefined
-    if (this.element.styleOption["isCustomFontWeight"] === undefined) {
-      this.isCustomFontWeight = false;
-    }
+    this.defineStyleOption();
   },
   computed: {
     isCustomFontWeight: {
@@ -105,8 +102,22 @@ export default {
     },
     toggleNormalBold() {
       this.fontWeight = this.fontWeight === "normal" ? "bold" : "normal";
+    },
+    defineStyleOption(){
+      // set styleOption to default if is undefined
+      if (this.element.styleOption["isBlockLineHeight"] === undefined) {
+        this.isCustomFontWeight = false;
+      }
     }
-  }
+  },
+  watch: {
+    element: {
+      handler: function(){
+        this.defineStyleOption();
+      },
+      deep: true
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

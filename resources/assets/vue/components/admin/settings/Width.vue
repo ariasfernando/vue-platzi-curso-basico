@@ -32,10 +32,7 @@ export default {
     };
   },
   mounted() {
-    // set styleOption to default if is undefined
-    if (this.element.styleOption["isPxWidth"] === undefined) {
-      this.isPxWidth = false;
-    }
+    this.defineStyleOption();
   },
   computed: {
     isPxWidth: {
@@ -79,8 +76,22 @@ export default {
       width = isPxWidth ? `${width}` : `${width}%`;
       this.isPxWidth = isPxWidth;
       this.mainSetting = width;
-    }
-  }
+    },
+    defineStyleOption() {
+        // set styleOption to default if is undefined
+        if (this.element.styleOption["isPxWidth"] === undefined) {
+          this.isPxWidth = false;
+        }
+      }
+  },
+  watch: {
+    element: {
+      handler: function(){
+        this.defineStyleOption();
+      },
+      deep: true
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

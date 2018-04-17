@@ -48,10 +48,7 @@ export default {
   },
   mounted() {
     this.updateLetterSpacingInputValue(this.letterSpacing);
-    // set styleOption to default if is undefined
-    if (this.isNormalLetterSpacing === undefined) {
-      this.isNormalLetterSpacing = true;
-    }
+    this.defineStyleOption();
   },
   computed: {
     isNormalLetterSpacing: {
@@ -108,8 +105,22 @@ export default {
     },
     toggleNormalLetterSpacing: function() {
       this.isNormalLetterSpacing = !this.isNormalLetterSpacing;
+    },
+    defineStyleOption(){
+      // set styleOption to default if is undefined
+      if (this.isNormalLetterSpacing === undefined) {
+        this.isNormalLetterSpacing = true;
+      }
     }
-  }
+  },
+  watch: {
+    element: {
+      handler: function(){
+        this.defineStyleOption();
+      },
+      deep: true
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

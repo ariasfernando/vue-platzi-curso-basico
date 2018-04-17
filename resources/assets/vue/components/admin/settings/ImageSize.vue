@@ -65,17 +65,7 @@ export default {
     };
   },
   mounted() {
-    // set styleOption to default if is undefined
-    if (this.element.styleOption["isBlockHeight"] === undefined) {
-      this.isBlockHeight = false;
-    }
-    if (this.element.styleOption["isPxWidth"] === undefined) {
-      if(this.isDisablePercentage){
-        this.isPxWidth = true;
-      }else{
-        this.isPxWidth = false;
-      }
-    }
+    this.defineStyleOption();
   },
   computed: {
     isBlockHeight: {
@@ -159,8 +149,29 @@ export default {
         this.height = "100";
       }
       this.isBlockHeight = isBlockHeight;
+    },
+    defineStyleOption(){
+      // set styleOption to default if is undefined
+      if (this.element.styleOption["isBlockHeight"] === undefined) {
+        this.isBlockHeight = false;
+      }
+      if (this.element.styleOption["isPxWidth"] === undefined) {
+        if(this.isDisablePercentage){
+          this.isPxWidth = true;
+        }else{
+          this.isPxWidth = false;
+        }
+      }
     }
-  }
+  },
+  watch: {
+    element: {
+      handler: function(){
+        this.defineStyleOption
+      },
+      deep: true
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

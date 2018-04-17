@@ -39,8 +39,7 @@ export default {
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
   mounted() {
-    // set styleOption to default if is undefined
-    this.element.styleOption["isBlockLineHeight"] === undefined ? this.isBlockLineHeight = false : '';
+    this.defineStyleOption();
   },
   computed: {
     isBlockLineHeight: {
@@ -94,8 +93,22 @@ export default {
     toggleLineHeight() {
       this.isBlockLineHeight = !this.isBlockLineHeight;
       this.lineHeight = this.calculateLineHeight(this.fontSize);
+    },
+    defineStyleOption(){
+      // set styleOption to default if is undefined
+      if (this.element.styleOption["isBlockLineHeight"] === undefined) {
+        this.isCustomFontWeight = false;
+      }
     }
-  }
+  },
+  watch: {
+    element: {
+      handler: function(){
+        this.defineStyleOption();
+        },
+      deep: true
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
