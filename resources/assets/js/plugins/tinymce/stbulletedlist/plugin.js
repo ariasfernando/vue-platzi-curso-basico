@@ -19,6 +19,7 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
             editor.settings.force_br_newline = false;
             editor.settings.force_p_newline = false;
             editor.settings.editableElements = "td,a,b,i,span,u,strong";
+            editor.settings.tableClassName = "stx-bulleted-list";
         }
 
         var cleanChildNodes = function() {
@@ -34,7 +35,7 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
         var onDelete = function(event) {
             if (event.which === 8 || event.which === 48) {
                 var node = getNode();
-                $table = $(node).parents('table.st-bulleted-list');
+                $table = $(node).parents('table.'+editor.settings.tableClassName);
 
                 if (!$(node).is(editor.settings.editableElements) && !$(node).hasClass("mceNonEditable")) {
                     event.preventDefault();
@@ -52,13 +53,13 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
 
         };
         var getRowAttr = function() {
-            $td = $(editor.targetElm).find('table.st-bulleted-list tr td:eq(1)');
+            $td = $(editor.targetElm).find('table.'+editor.settings.tableClassName+' tr td:eq(1)');
             return $td[0].attributes;
         };
         // Build row element, return jQuery element.
         var buildRow = function() {
             var $row = $('<tr>');
-            $row.append($(editor.targetElm).find('table.st-bulleted-list tr td.mceNonEditable:eq(0)').clone());
+            $row.append($(editor.targetElm).find('table.'+editor.settings.tableClassName+' tr td.mceNonEditable:eq(0)').clone());
             var $td = $('<td>');
             $td.text("Nunc volutpat sem vitae sagittis a laoreet urna. Quisquw derehce menos.");
             $.each(getRowAttr(), function(index, attr) {
@@ -72,11 +73,11 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
         // Add a new row in table
         var addRow = function() {
             var node = getNode();
-            $table = $(editor.targetElm).find('table.st-bulleted-list');
+            $table = $(editor.targetElm).find('table.'+editor.settings.tableClassName);
             var $newRow = buildRow();
             addRowRemoveIcon($newRow);
 
-            if (validateNode() && $(node).is($(editor.targetElm).find("table.st-bulleted-list *"))) {
+            if (validateNode() && $(node).is($(editor.targetElm).find("table."+editor.settings.tableClassName+" *"))) {
                 $(node).closest("tr").after($newRow);
             } else {
                 $table.append($newRow);
@@ -90,7 +91,7 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
         };
 
         var addRowRemoveIcon = function($row) {
-            var $removeIcon = $('<td class="delete-row mceNonEditable"><i class="fa fa-times" aria-hidden="true"></i></td>');
+            var $removeIcon = $('<td class="delete-row mceNonEditable st-remove-element"><i class="fa fa-times" aria-hidden="true"></i></td>');
 
             $removeIcon.click(function() {
                 removeRow($(this).parent());
@@ -138,7 +139,7 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
         };
 
         // Add CSS Class to table element.
-        $(editor.targetElm).find("table").addClass("st-bulleted-list");
+        $(editor.targetElm).find("table").addClass(editor.settings.tableClassName);
 
 
         editor
