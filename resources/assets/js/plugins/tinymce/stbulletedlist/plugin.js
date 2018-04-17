@@ -200,10 +200,10 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
 
                 });
             })
-            .on('click change', function(e) {
-                    // Fix remove icon when a link was added.
-                    $.each($(this.targetElm).find("tr"), function(index, row) {
-                        if (!$(row).find(".delete-row").length) {
+            .on('click', function(e) {
+                // Fix remove icon when a link was added.
+                $.each($(this.targetElm).find("tr"), function(index, row) {
+                    if (!$(row).find(".delete-row").length) {
                         addRowRemoveIcon($(row));
                     }
                 });
