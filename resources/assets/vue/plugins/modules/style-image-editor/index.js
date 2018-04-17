@@ -74,6 +74,26 @@ module.exports = {
           value: true,
           type: 'switch',
         },
+        round: {
+          label: 'Circle Cropping',
+          key: 'roundCrop',
+          value: false,
+          type: 'switch',
+          config: {
+            only: {
+              label: 'Only circle cropping',
+              key: 'only',
+              value: false,
+              type: 'switch',
+            },
+            circle_diameter: {
+              label: 'Diameter',
+              key: 'diameter',
+              value: 0,
+              type: 'number',
+            },
+          },
+        },
       },
     },
     'sie-plugin-text_text': {
@@ -180,7 +200,7 @@ module.exports = {
           label: 'Transparency',
           key: 'transparency',
           value: 1,
-          max: 1, 
+          max: 1,
           min: 0,
           step: '0.1',
           type: 'number',
