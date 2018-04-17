@@ -59,13 +59,15 @@ class StaticProcessor
         $campaignPath = trim($this->getCampaign()->getCdnPath(), DS) . DS;
         $emailLayout = $html->getEmailLayout();
 
+        $uploadedFiles = $cloud->allFiles($campaignPath);
+
         foreach ($files as $fileType => $fileGroup) {
             foreach ($fileGroup as $file) {
                 $path = $campaignPath;
                 $path .= ($fileType == 'font') ? $file : 'images' . DS . basename($file);
 
                 if (strpos($emailLayout, basename($file)) !== false) {
-                    if (!$cloud->exists($path)) {
+                    if (!in_array($path, $uploadedFiles)) {
                         Log::info(sprintf('[%s] uploading %s: %s', $this->getCampaign()->id, $file, $path));
 
                         if ($fileType == 'image') {
