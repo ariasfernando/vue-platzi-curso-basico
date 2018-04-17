@@ -23,7 +23,7 @@
               <!-- If columnsFixed is true, show Columns fixed render -->
               <td
                 v-for="(column, columnId) in module.structure.columns"
-                :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+                :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
                 valign="top" 
                 :key="column.id"
               >
