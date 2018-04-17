@@ -30,7 +30,7 @@
       },
       colors: {
         get(){
-          let value = this.column.attribute.bgcolor || this.plugin.config.defaultValue ;
+          let value = this.column.container.attribute.bgcolor || this.plugin.config.defaultValue ;
           value = value === "transparent" ? '' : value;
           return value;
      },
