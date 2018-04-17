@@ -27,8 +27,9 @@
                 :min-value="setting.minValue"
                 :max-value="setting.maxValue"
                 :options="setting.options"
+                :sub-component="setting.subComponent"
+                :element="setting.subComponent ? column[setting.subComponent] : column"
                 :is-disable-percentage="setting.isDisablePercentage"
-                :element="column"
                 :key="setting.name">
               </component>
             </group-container>
@@ -92,11 +93,12 @@ export default {
   },
   methods: {
     settingUpdatedHandler(eventData, key) {
-      this.saveColumnProperty(eventData.link, eventData.name, eventData.value, key);
+      this.saveColumnProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value, key);
     },
-    saveColumnProperty(link, name, value, colId) {
+    saveColumnProperty(link, subComponent, name, value, colId) {
       const data = {
         colId: colId,
+        subComponent: subComponent,
         link: link,
         property: name,
         value: value

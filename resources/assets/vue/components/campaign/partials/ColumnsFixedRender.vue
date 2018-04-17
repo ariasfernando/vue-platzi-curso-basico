@@ -5,8 +5,8 @@
          cellspacing="0"
          cellpadding="0"
          border="0"
-         :style="[column.style, {'background-color' : column.attribute.bgcolor}]"
-         :bgcolor="column.attribute.bgcolor"
+         :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}]"
+         :bgcolor="column.container.attribute.bgcolor"
   >
       <tr
         v-for="(component, componentId) in column.components"
@@ -15,9 +15,9 @@
       >
         <td
           width="100%"
-          :valign="column.attribute.valign"
-          :bgcolor="column.attribute.bgcolor"
-          :align="column.attribute.align || 'center'"
+          :valign="column.container.attribute.valign"
+          :bgcolor="column.container.attribute.bgcolor"
+          :align="column.container.attribute.align || 'center'"
           :style="styles"
         >
           <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
@@ -72,10 +72,10 @@
          return this.$store.getters["campaign/modules"][this.moduleId];
       },
       styles() {
-        let padding = `padding-top:${this.column.style.paddingTop};
-                       padding-left:${this.column.style.paddingLeft};
-                       padding-bottom:${this.column.style.paddingBottom};
-                       padding-right:${this.column.style.paddingRight};`;
+        let padding = `padding-top:${this.column.container.style.paddingTop};
+                       padding-left:${this.column.container.style.paddingLeft};
+                       padding-bottom:${this.column.container.style.paddingBottom};
+                       padding-right:${this.column.container.style.paddingRight};`;
 
         return padding;
       }

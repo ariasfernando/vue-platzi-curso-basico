@@ -3,15 +3,15 @@
     <table
       v-if="column.components.length"
       v-for="(column, columnId) in module.structure.columns"
-      :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
-      :style="[column.style, {'background-color' : column.attribute.bgcolor}] || ''" 
+      :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
+      :style="[column.container.style,{'background-color' : column.container.attribute.bgcolor} || '']" 
       :data-col="columnId"
       align="left"
       cellpadding="0" 
       cellspacing="0" 
       border="0" 
       class="st-content-component st-col"
-      :bgcolor="column.attribute.bgcolor"
+      :bgcolor="column.container.attribute.bgcolor"
       :key="column.id"
     >
       <tr>
@@ -48,11 +48,11 @@
     <table
       v-else 
       align="left"
-      :style="column.style || ''"
-      :width="column.style && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
+      :style="column.container.style || ''"
+      :width="column.container.style && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
     >
       <tr>
-        <td :class="column.attribute.classes">
+        <td :class="column.container.attribute.classes ||''">
           <draggable
             @add="onAdd"
             :element="'div'" 
@@ -145,7 +145,7 @@ export default {
       ];
       return properties.map(p => {
         return {
-          [p]: this.module.structure.columns[columnId].style[_.camelCase(p)]
+          [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
         };
       });
     }

@@ -93,7 +93,7 @@ const mutations = {
   setColumnWidth(state, data) {
     const column = state.module.structure.columns[data.colId];
     // Set attribute
-    column.attribute.width = `${data.width}%`;
+    column.container.attribute.width = `${data.width}%`;
   },
   saveColumnProperty(state, data) {
     const column = state.module.structure.columns[data.colId];

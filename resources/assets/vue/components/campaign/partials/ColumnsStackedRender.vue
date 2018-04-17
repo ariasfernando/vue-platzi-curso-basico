@@ -6,10 +6,10 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :width="column.attribute && column.attribute.width ? column.attribute.width : 100/numColumns + '%'"
-        :style="[column.style, {'background-color' : column.attribute.bgcolor}]"
-        :bgcolor="column.attribute.bgcolor"
-        :class="column.attribute.classes || ''"
+        :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/numColumns + '%'"
+        :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}]"
+        :bgcolor="column.container.attribute.bgcolor"
+        :class="column.container.attribute.classes ||''"
       >
         <tr
           v-for="(component, componentId) in column.components"
@@ -19,9 +19,9 @@
           <td
             width="100%"
             :style="styles"
-            :bgcolor="column.attribute.bgcolor"
-            :valign="column.attribute.valign"
-            :align="column.attribute.align || 'center'"
+            :bgcolor="column.container.attribute.bgcolor"
+            :valign="column.container.attribute.valign"
+            :align="column.container.attribute.align || 'center'"
           >
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
               <template>
@@ -98,7 +98,7 @@
           "<![endif]";
       },
       styles() {
-        let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`;
+        let padding = `padding-top:${this.column.container.style.paddingTop};padding-left:${this.column.container.style.paddingLeft};padding-bottom:${this.column.container.style.paddingBottom};padding-right:${this.column.container.style.paddingRight};`;
 
         return padding;
       }

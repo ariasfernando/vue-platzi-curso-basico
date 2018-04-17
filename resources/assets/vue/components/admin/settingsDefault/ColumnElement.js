@@ -7,16 +7,19 @@ function columnDefault() {
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
+          subComponent: 'container',
         },
       ],
       [
         {
           name: 'padding',
           type: 'padding',
+          subComponent: 'container',
         },
         {
           name: 'border-group',
           type: 'border-group',
+          subComponent: 'container',
         },
       ],
       [
@@ -25,11 +28,13 @@ function columnDefault() {
           label: 'Width',
           name: 'width',
           type: 'width',
+          subComponent: 'container',
         },
         {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
+          subComponent: 'container',
         },
       ],
     ],
