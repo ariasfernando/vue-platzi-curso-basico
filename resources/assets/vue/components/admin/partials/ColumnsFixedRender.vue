@@ -12,7 +12,7 @@
       :data-col="columnId"
     >
       <tr>
-        <td width="100%" valign="top" :style="styles" :class="column.components.length ? column.container.attribute.classes : 'empty-table'">
+        <td width="100%" valign="top" :style="styles" :class="[getClassEmpty , getAttributeClasses(column)]">
           <draggable 
             cellpadding="0" 
             cellspacing="0" 
@@ -99,6 +99,9 @@
     computed: {
       module() {
         return this.$store.getters["module/module"];
+      },
+      getClassEmpty(){
+        return this.column.components.length ? '' : 'empty-table';
       },
       styles(){
         let inlineStyle = `padding-top:${this.column.container.style.paddingTop};

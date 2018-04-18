@@ -6,7 +6,6 @@ function columnDefault() {
       style: {},
       attribute: {
         width: '100%',
-        valign: 'middle',
       },
       styleOption: {},
     },

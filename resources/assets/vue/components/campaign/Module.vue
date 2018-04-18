@@ -21,7 +21,7 @@
   <tr
     v-else
     class="stx-module-wrapper"
-    :class="[`stx-${module.key}`, module.structure.attribute.classes, {'stx-module-wrapper-active': activeModule === moduleId }]"
+    :class="[`stx-${module.key}`, {'stx-module-wrapper-active': activeModule === moduleId }]"
     @mouseover="setModulesMouseOver"
     @mouseleave="setModulesMouseLeave"
   >
@@ -30,7 +30,7 @@
       :data-module-id="moduleId"
       :style="module.structure.style"
       :bgcolor="module.structure.attribute.bgcolor"
-      :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 }"
+      :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}"
     >
 
       <table
@@ -140,11 +140,13 @@
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
+  import ComponentAttributeMixin from '../common/mixins/ComponentAttributeMixin.js';
   import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
     props: ['moduleId'],
+    mixins: [ ComponentAttributeMixin ],
     computed: {
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
@@ -159,18 +161,20 @@
         return this.$store.getters["campaign/fieldErrors"];
       },
       msoStartingComment() {
-        return "[if gte mso 9]>" +
-          "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center'>" +
-          "<tr>" +
-          "<td style='width: " + this.templateWidth / this.module.structure.columns.length + "px !important'>" +
-          "<![endif]";
+        return `
+        [if gte mso 9]>
+          <table width="${this.templateWidth}" cellpading="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
+            <tr>
+              <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important">
+              <![endif]`;
       },
       msoStartingCommentInverted() {
-        return "[if gte mso 9]>" +
-          "<table width='" + this.columnWidthPadding + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center' dir='rtl'>" +
-          "<tr>" +
-          "<td style='width: " + this.columnWidthPadding / this.module.structure.columns.length + "px !important' dir='ltr'>" +
-          "<![endif]";
+        return `
+        [if gte mso 9]>
+          <table width="${this.columnWidthPadding}" cellpading="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
+            <tr>
+              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr">
+              <![endif]`;
       },
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
@@ -180,6 +184,14 @@
       }
     },
     methods: {
+
+      calculeWidthColumnPx(columnId){
+        let width = this.module.structure.columns[columnId].container.attribute.width;
+        if(_.endsWith(width, "%")){
+          return this.templateWidthWithoutPadding / 100 * _.parseInt(width);
+        }
+        return width;
+      },
       showError(moduleId){
         let err = false;
         _.each(this.moduleErrors, (error, key) => {

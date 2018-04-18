@@ -3,7 +3,7 @@
   <tr 
     data-type="text-element"
     :data-component="JSON.stringify(component)"
-    :class="getMobileClasses(component,'tr') + component.container.attribute.classes || ''"
+    :class="getMobileClasses(component,'tr')"
     @click.prevent="setComponent"
   >
     <td
@@ -11,7 +11,7 @@
       :style="[containerBorderAndPadding, widthContainer]"
       :align="component.container.attribute.align || 'center'"
       :bgcolor="component.container.attribute.bgcolor"
-      :class="getMobileClasses(component,'td:first')"
+      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
     >
       <table
         width="100%"
@@ -45,6 +45,7 @@
   import TinyMCE from './TinyMce.vue';
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
   import _ from 'lodash';
 
   export default {
@@ -59,7 +60,7 @@
       'tiny-mce': TinyMCE,
       ComponentToolbar,
     },
-    mixins: [ MobileStylesMixin ],
+    mixins: [ MobileStylesMixin, ComponentAttributeMixin ],
     data(){
       return {
         editorId: ['editor', this.columnId, this.componentId].join('-'),

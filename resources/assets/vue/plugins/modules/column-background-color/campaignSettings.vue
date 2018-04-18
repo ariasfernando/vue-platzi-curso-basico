@@ -31,7 +31,6 @@
       colors: {
         get(){
           let value = this.column.container.attribute.bgcolor || this.plugin.config.defaultValue ;
-          value = value === "transparent" ? '' : value;
           return value;
      },
      set(value){

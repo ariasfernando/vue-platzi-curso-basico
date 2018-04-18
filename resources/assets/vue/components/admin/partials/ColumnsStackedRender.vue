@@ -3,7 +3,7 @@
     <table
       v-if="column.components.length"
       v-for="(column, columnId) in module.structure.columns"
-      :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
+      :width="column.container.attribute.width"
       :style="[column.container.style,{'background-color' : column.container.attribute.bgcolor} || '']" 
       :data-col="columnId"
       align="left"
@@ -18,6 +18,7 @@
         <td
           width="100%" 
           :style="columnBorderAndPadding(columnId)"
+          :class="column.container.attribute.classes ||''"
         >
           <draggable
             v-model="column.components"
@@ -52,7 +53,7 @@
       :width="column.container.style && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
     >
       <tr>
-        <td :class="column.container.attribute.classes ||''">
+        <td>
           <draggable
             @add="onAdd"
             :element="'div'" 

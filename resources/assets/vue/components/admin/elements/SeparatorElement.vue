@@ -3,7 +3,7 @@
   <tr 
     data-type="separator-element"
     :data-component="JSON.stringify(component)"
-    :class="getMobileClasses(component,'tr') + component.attribute.classes"
+    :class="getMobileClasses(component,'tr')"
     @click.prevent="setComponent"
   >
     <td 
@@ -13,7 +13,7 @@
       :height="component.style.height" 
       :bgcolor="component.attribute.bgcolor" 
       :style="[defaultFirstTdStyle, firstTdStyle]"
-      :class="getMobileClasses(component,'td:first')"
+      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
     >
       <table 
         width="100%" 
@@ -43,6 +43,7 @@
   import _ from 'lodash';
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin';
   
   export default {
     name: 'SeparatorElement',
@@ -55,7 +56,7 @@
       'component-id',
       'component'
     ],
-    mixins: [ MobileStylesMixin ],
+    mixins: [ MobileStylesMixin, ComponentAttributeMixin ],
     data(){
       return{
         defaultFirstTdStyle: {

@@ -3,7 +3,7 @@
   <tr
     data-type="button-element"
     :data-component="JSON.stringify(component)"
-    :class="getMobileClasses(component,'tr') + getAttributeClasses(component)"
+    :class="getMobileClasses(component,'tr')"
     @click.prevent="setComponent"
   >
     <td
@@ -12,7 +12,7 @@
       style="width: 100%;"
       :style="component.container.style"
       :align="component.container.attribute.align"
-      :class="getMobileClasses(component,'td:first')"
+      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
     >
       <a
         :href="component.button.attribute.href || ''"

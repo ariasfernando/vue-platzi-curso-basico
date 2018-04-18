@@ -2,14 +2,14 @@
   <!-- TEXT ELEMENT -->
   <tr
     data-type="text-element"
-    :class="getMobileClasses(component,'tr') + component.container.attribute.classes || ''"
+    :class="getMobileClasses(component,'tr')"
   >
     <td
       :width="component.container.attribute.width"
       :style="containerBorderAndPadding, component.container.attribute.width ? widthStyle(component.container.attribute.width) : '100%'"
       :align="component.container.attribute.align || 'center'"
       :bgcolor="component.container.attribute.bgcolor"
-      :class="getMobileClasses(component,'td:first')"
+      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
     >
       <table
         width="100%"
@@ -40,12 +40,13 @@
 
 <script>
 import MobileStylesMixin from "../../common/mixins/MobileStylesMixin.js";
+  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
 import _ from "lodash";
 
 export default {
   name: "TextElement",
   props: ["module-id", "column-id", "component-id", "component", "column"],
-  mixins: [MobileStylesMixin],
+  mixins: [MobileStylesMixin,ComponentAttributeMixin],
   data() {
     return {
       editorId: ["editor", this.moduleId, this.columnId, this.componentId].join(

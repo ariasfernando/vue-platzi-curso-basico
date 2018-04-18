@@ -2,7 +2,7 @@
   <!-- DIVIDER ELEMENT -->
   <tr @click.prevent="setComponent"
       :data-component="JSON.stringify(component)"
-      :class="getMobileClasses(component,'tr') + component.attribute.classes"
+      :class="getMobileClasses(component,'tr')"
       data-type="divider-element"
   >
     <td 
@@ -11,7 +11,7 @@
       :height="component.style.height"
       :width="component.style.width || '100%'"
       :style="styles"
-      :class="getMobileClasses(component,'td:first')"
+      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
     >
       <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
     </td>
