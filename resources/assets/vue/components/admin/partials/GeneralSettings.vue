@@ -65,7 +65,7 @@ export default {
     "input-generic-color": elementSettings.GenericColor,
     "input-generic-text": elementSettings.GenericText,
     "input-generic-number": elementSettings.GenericNumber,
-    "input-padding": elementSettings.Padding,
+    "input-padding-group": elementSettings.PaddingGroup,
     "input-border-group": elementSettings.BorderGroup,
     "input-class-input": elementSettings.ClassInput,
     "input-generic-select": elementSettings.GenericSelect,

@@ -74,7 +74,7 @@ export default {
   components: {
     GroupContainer,
     LabelItemContainer,
-    "input-padding": elementSettings.Padding,
+    "input-padding-group": elementSettings.PaddingGroup,
     "input-border-group": elementSettings.BorderGroup,
     "input-width": elementSettings.Width,
     "input-generic-color": elementSettings.GenericColor,
@@ -98,8 +98,8 @@ export default {
     saveColumnProperty(link, subComponent, name, value, colId) {
       const data = {
         colId: colId,
-        subComponent: subComponent,
-        link: link,
+        subComponent,
+        link,
         property: name,
         value: value
       };
