@@ -157,9 +157,9 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
                 });
                 cleanChildNodes();
             })
-            .on('keydown', (e) => {
-                let $textElement = $('#' + tinyMCE.activeEditor.id);
-                const allowKeys = [
+            .on('keydown', function(e) {
+                var $textElement = $('#' + tinyMCE.activeEditor.id);
+                var allowKeys = [
                     //  key      keyCode
                     'Backspace', 8,
                     'Delete', 46,
@@ -173,7 +173,7 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
                     'ArrowDown', 40
                 ];
 
-                let code = null;
+                var code = null;
                 if (e.key !== undefined) {
                     code = e.key;
                 } else if (e.keyCode !== undefined) {
