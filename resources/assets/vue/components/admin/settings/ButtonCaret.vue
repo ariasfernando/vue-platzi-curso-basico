@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     caret() {
-      return this.element.caret.attribute[this.linkName];
+      return this.element.attribute[this.linkName];
     }
   },
   methods: {

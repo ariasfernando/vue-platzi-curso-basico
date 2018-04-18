@@ -100,6 +100,7 @@ function buttonDefault() {
         {
           name: 'caret',
           type: 'caret',
+          subComponent: 'caret',
         },
         {
           name: 'image-size',
