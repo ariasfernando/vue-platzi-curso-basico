@@ -4,11 +4,14 @@
          cellpadding="0" 
          border="0"
          align="center"
-        :class="module.structure.attribute.classes" 
   >
     <!-- START: 2 COLUMNS -->
     <tr v-if="module.structure.columns.length > 1">
-      <td width="100%" :bgcolor="module.structure.attribute.bgcolor" :style="module.structure.style">
+      <td
+        width="100%"
+        :bgcolor="module.structure.attribute.bgcolor"
+        :style="module.structure.style"
+        :class="module.structure.attribute.classes ||''" >
         <table
           width="100%"
           class="st-wrapper" 

@@ -67,9 +67,6 @@ export default {
       $cleanedHtml.find(selector).remove();
     });
 
-    // Remove every class starting with "stx-"
-    $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
-    
     // Remove attr class if it's empty.
     $cleanedHtml.find("[class='']").removeAttr('class');
     
@@ -141,6 +138,9 @@ export default {
 
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
+    
+    // Remove every class starting with "stx-"
+    $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
     
     return this.charConvert($cleanedHtml.html());
   },

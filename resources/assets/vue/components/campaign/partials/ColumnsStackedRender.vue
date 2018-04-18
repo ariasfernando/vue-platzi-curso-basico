@@ -6,39 +6,35 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/numColumns + '%'"
-        :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}]"
+        :style="{'background-color' : column.container.attribute.bgcolor}"
         :bgcolor="column.container.attribute.bgcolor"
-        :class="column.container.attribute.classes ||''"
       >
-        <tr
-          v-for="(component, componentId) in column.components"
-          :key="componentId"
-          @click="setComponent(moduleId, columnId, componentId)"
-        >
+        <tr>
           <td
-            width="100%"
-            :style="styles"
+            :width="calculeWidthColumnPx(columnId)"
+            :style="styles(columnId)"
             :bgcolor="column.container.attribute.bgcolor"
-            :valign="column.container.attribute.valign"
+            :valign="column.container.attribute.valign|| 'top'"
             :align="column.container.attribute.align || 'center'"
+            :class="column.container.attribute.classes ||''"
           >
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-              <template>
-                <component
-                  :is="component.type"
-                  :component="component"
-                  :module-id="moduleId"
-                  :column-id="columnId"
-                  :component-id="componentId">
-                </component>
-              </template>
+                  <component
+                    v-for="(component, componentId) in column.components"
+                    :key="component.id"
+                    @click="setComponent(moduleId, columnId, componentId)"
+                    :is="component.type"
+                    :component="component"
+                    :module-id="moduleId"
+                    :column-id="columnId"
+                    :component-id="componentId">
+                  </component>
             </table>
           </td>
         </tr>
       </table>
       <comment v-if="numColumns === columnId + 1" :content="msoEndingComment"></comment>
-      <comment v-else :content="msoBetweenComment"></comment>
+      <comment v-else :content="msoBetweenComment(columnId)"></comment>
     </div>
 </template>
 
@@ -81,29 +77,66 @@
       templateWidth() {
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
+      templateWidthWithoutPadding(){
+        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft) - _.parseInt(this.module.structure.style.paddingRight);
+      },
       numColumns() {
         return this.module.structure.columns.length;
       },
-      msoBetweenComment() {
-        return "[if gte mso 9]>" +
-          "</td>" +
-          "<td width='width: " + this.templateWidth / this.numColumns + "px !important' align='left' valign='top'>" +
-          "<![endif]";
-      },
       msoEndingComment() {
-        return "[if gte mso 9]>" +
-          "</td>" +
-          "</tr>" +
-          "</table>" +
-          "<![endif]";
+        return `
+                [if gte mso 9]>
+              </td>
+            </tr>
+          </table>
+        <![endif]`;
       },
-      styles() {
-        let padding = `padding-top:${this.column.container.style.paddingTop};padding-left:${this.column.container.style.paddingLeft};padding-bottom:${this.column.container.style.paddingBottom};padding-right:${this.column.container.style.paddingRight};`;
-
-        return padding;
-      }
     },
     methods: {
+      styles(columnId) {
+        let properties = [
+          "padding-top",
+          "padding-left",
+          "padding-bottom",
+          "padding-right",
+          "border-top-width",
+          "border-right-width",
+          "border-bottom-width",
+          "border-left-width",
+          "border-top-style",
+          "border-right-style",
+          "border-bottom-style",
+          "border-left-style",
+          "border-top-color",
+          "border-right-color",
+          "border-bottom-color",
+          "border-left-color"
+        ];
+        let styles = properties.map(p => {
+          return {
+            [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
+          };
+        });
+        styles.push({'width': this.calculeStyleWidthColumnPx(columnId)}) 
+        return styles;
+      },
+      msoBetweenComment(columnId) {
+        return `
+        [if gte mso 9]>
+          </td>
+          <td width="${this.calculeWidthColumnPx(columnId+1)}" style='width:${this.calculeWidthColumnPx(columnId+1)}px !important' align='left' valign='top'>
+        <![endif]`;
+      },
+      calculeWidthColumnPx(columnId){
+        let width = this.module.structure.columns[columnId].container.attribute.width;
+        if(_.endsWith(width, "%")){
+          return this.templateWidthWithoutPadding / 100 * _.parseInt(width);
+        }
+        return width;
+      },
+      calculeStyleWidthColumnPx(columnId){
+        return this.calculeWidthColumnPx(columnId) +'px';
+      },
       setComponent(moduleId, columnId, componentId) {
         setTimeout(() => {
           // TODO: find better way to do this
