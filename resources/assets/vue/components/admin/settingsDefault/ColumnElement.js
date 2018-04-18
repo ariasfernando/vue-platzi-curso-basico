@@ -13,7 +13,7 @@ function columnDefault() {
       [
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
           subComponent: 'container',
         },
         {

@@ -20,7 +20,7 @@ function separatorDefault() {
         },
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
         },
       ],
       [

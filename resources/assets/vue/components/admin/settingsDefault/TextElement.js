@@ -57,7 +57,7 @@ function textDefault() {
       [
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
           subComponent: 'container',
         },
       ],

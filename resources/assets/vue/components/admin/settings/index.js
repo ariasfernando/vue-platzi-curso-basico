@@ -13,7 +13,7 @@ import GenericText from './GenericText.vue';
 import ImageSize from './ImageSize.vue';
 import InputHeight from './InputHeight.vue';
 import LetterSpacing from './LetterSpacing.vue';
-import Padding from './Padding.vue';
+import PaddingGroup from './PaddingGroup.vue';
 import TextAlign from './TextAlign.vue';
 import VerticalAlign from './VerticalAlign.vue';
 import Width from './Width.vue';
@@ -34,7 +34,7 @@ const Settings = {
   ImageSize,
   InputHeight,
   LetterSpacing,
-  Padding,
+  PaddingGroup,
   TextAlign,
   VerticalAlign,
   Width,

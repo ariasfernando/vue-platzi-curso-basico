@@ -93,7 +93,7 @@ export default {
     "input-image-size": elementSettings.ImageSize,
     "input-input-height": elementSettings.InputHeight,
     "input-letter-spacing": elementSettings.LetterSpacing,
-    "input-padding": elementSettings.Padding,
+    "input-padding-group": elementSettings.PaddingGroup,
     "input-text-align": elementSettings.TextAlign,
     "input-vertical-align": elementSettings.VerticalAlign,
     "input-class-input": elementSettings.ClassInput,

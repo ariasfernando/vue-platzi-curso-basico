@@ -57,7 +57,7 @@ function buttonDefault() {
       [
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
           subComponent: 'container',
         },
         {
@@ -123,7 +123,7 @@ function buttonDefault() {
         },
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
           subComponent: 'caret',
         },
       ],

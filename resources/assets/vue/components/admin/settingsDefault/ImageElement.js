@@ -38,7 +38,7 @@ function imageDefault() {
       [
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
         },
       ],
       [
