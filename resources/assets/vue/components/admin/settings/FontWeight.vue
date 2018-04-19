@@ -105,7 +105,7 @@ export default {
     },
     defineStyleOption(){
       // set styleOption to default if is undefined
-      if (this.element.styleOption["isBlockLineHeight"] === undefined) {
+      if (this.element.styleOption["isCustomFontWeight"] === undefined) {
         this.isCustomFontWeight = false;
       }
     }
