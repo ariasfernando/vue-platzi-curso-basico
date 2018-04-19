@@ -58,7 +58,13 @@
         const customSettings = {};
 
         _.each(this.plugin.config.settings, (e, k) => {
-          customSettings[k] = e.content || e.value;
+          let content;
+
+          try {
+            customSettings[k] = JSON.parse(e.content);
+          } catch(e) {
+            customSettings[k] = e.content || e.value;
+          }
         });
 
         let toolbar = [];
@@ -167,31 +173,13 @@
             editor.on('init', (e) => {
               // Set focus on first click
               editor.focus();
-
-              tinyMCE.activeEditor.formatter.register({
-                lineheight: {inline: 'span', styles: {'line-height': '%value'}}
-              });
-            });
-
-            editor.on('ExecCommand', (e) => {
-              if (e.command === 'FontSize') {
-                // Set line-height depending on font size
-                const lineheightFormats = (typeof customSettings.lineheight_formats === "string") ? JSON.parse(customSettings.lineheight_formats) : customSettings.lineheight_formats;
-                const linesLimit = (typeof customSettings.lines_limit === "string") ? JSON.parse(customSettings.lines_limit) : customSettings.lines_limit;
-
-                const lineHeight = lineheightFormats[e.value];
-                tinyMCE.activeEditor.formatter.apply('lineheight', {value : lineHeight});
-
-                // Set max-lines depending on font size
-                editor.settings.max_lines = linesLimit[e.value];
-              }
             });
 
             editor
               .on('keydown',(e) => {
 
-                let tinyMax = parseInt(tinyMCE.activeEditor.settings.max_chars);
-                let tinyMaxLines = parseInt(tinyMCE.activeEditor.settings.max_lines);
+                let tinyMax = parseInt(editor.settings.max_chars);
+                let tinyMaxLines = parseInt(editor.settings.max_lines);
                 let tinyLength, tinyText;
 
                 if(!tinyMax){
@@ -199,7 +187,7 @@
                   return
                 }
 
-                let $textElement = $('#'+tinyMCE.activeEditor.id);
+                let $textElement = $('#'+editor.id);
                 tinyLength = $textElement.text().length;
                         
                 const allowKeys = [
@@ -250,7 +238,7 @@
 
                 let maxLines, tinyMaxLines;
 
-                if (_.isObject(JSON.parse(editor.settings.max_lines))) {
+                if (typeof editor.settings.max_lines === "string") {
                   const node = editor.selection.getNode();
                   const fontSize = document.defaultView.getComputedStyle(node).getPropertyValue("font-size");
                   tinyMaxLines = JSON.parse(editor.settings.max_lines)[fontSize];
@@ -265,7 +253,7 @@
                   return
                 }
 
-                let $textElement = $('#'+tinyMCE.activeEditor.id);
+                let $textElement = $('#'+editor.id);
                 tinyLength = $textElement.text().length;
 
                 //Check for Characters Limit
@@ -287,7 +275,6 @@
                 let actualLines = parseInt(divHeight / lineHeight);
 
                 if (actualLines > tinyMaxLines) {
-
                   _this.$root.$toast("You've reached the maximum number of lines (" + (tinyMaxLines) +")",{
                     className: 'et-error',
                     horizontalPosition: 'right',
@@ -344,3 +331,11 @@
     }
   }
 </script>
+
+<style lang="less">
+  .mce-menu-item-preview {
+    .mce-text {
+      font-size: 14px !important;
+    }
+  }
+</style>

@@ -119,6 +119,12 @@ module.exports = {
         value: false,
         icon: 'fa fa-link',
       },
+      styleselect: {
+        label: 'Style Format',
+        key: 'styleselect',
+        value: false,
+        icon: 'fa fa-edit',
+      },
     },
     settings: {
       link_validate_url: {
@@ -143,11 +149,11 @@ module.exports = {
         type: 'text',
         content: '12px 14px 16px 18px',
       },
-      lineheight_formats: {
-        title: 'Line height',
+      style_formats: {
+        title: 'Style format',
         value: false,
         type: 'text',
-        content: "{ \"27px\": \"30px\", \"29px\": \"32px\", \"34px\": \"36px\" }",
+        content: "[{\"title\":\"27px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"27px\",\"lineHeight\":\"30px\"}},{\"title\":\"29px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"29px\",\"lineHeight\":\"32px\"}},{\"title\":\"34px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"34px\",\"lineHeight\":\"36px\"}}]",
       },
 
     },

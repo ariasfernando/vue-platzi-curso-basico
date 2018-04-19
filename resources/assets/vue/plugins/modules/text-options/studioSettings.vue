@@ -216,7 +216,7 @@ export default {
       this.$store.commit("module/savePluginSuboption", payload);
     },
     isAValidSetting(tinySetting, key) {
-      return (['truncate', 'lines_limit', 'fontsize_formats', 'lineheight_formats'].indexOf(key) !== -1) && tinySetting.value === true;
+      return (['truncate', 'lines_limit', 'fontsize_formats', 'style_formats'].indexOf(key) !== -1) && tinySetting.value === true;
     }
   }
 };
