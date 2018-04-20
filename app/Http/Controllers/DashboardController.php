@@ -338,8 +338,9 @@ class DashboardController extends Controller
         $menu = [];
         $libraries = Auth::user()->getLibraries();
         if (count($libraries)) {
-            $campaign_menu = Setting::whereKey('campaign_menu')->first();
+            $campaign_menu = Setting::where('key', '=', 'campaign_menu')->first();
             if ($campaign_menu) {
+                $campaign_menu = $campaign_menu->toArray();
                 $menu = $this->getMenuBySettings($campaign_menu['value']);
             } else {
                 foreach ($libraries as $library_key => $library) {
@@ -366,7 +367,7 @@ class DashboardController extends Controller
         if (count($campaign_menu)) {
             foreach ($campaign_menu as $item) {
                 if ($item['type'] === 'item') {
-                    $library = Library::whereKey($item['key'])->first();
+                    $library = Library::where('key', '=', $item['key'])->first();
                     if ($library && Auth::user()->can('access_library_' . $item['key'])) {
                         $menu[] = [
                             'title' => isset($item['title']) ? $item['title'] : $library->name,
