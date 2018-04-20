@@ -152,7 +152,7 @@ const mutations = {
     console.log(err);
   },
   setListLibraries(state, data) {
-    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.options = data.response;
+    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options = data.response;
   }
 };
 

@@ -74,9 +74,9 @@
     created () {
       this.setupModule();
       if(this.numberRequired) {
-        let tempWidth = _.toString(this.component.attribute.width);
-        let paddingLeft = _.parseInt(this.component.style.paddingLeft.replace(/px$/, ''));
-        let paddingRight = _.parseInt(this.component.style.paddingRight.replace(/px$/, ''));
+        let tempWidth = _.toString(this.component.image.attribute.width);
+        let paddingLeft = _.parseInt(this.component.image.style.paddingLeft.replace(/px$/, ''));
+        let paddingRight = _.parseInt(this.component.image.style.paddingRight.replace(/px$/, ''));
         let paddingColumLeft = _.parseInt(this.column.container.style.paddingLeft.replace(/px$/, ''));
         let paddingColumRight = _.parseInt(this.column.container.style.paddingRight.replace(/px$/, ''));
         

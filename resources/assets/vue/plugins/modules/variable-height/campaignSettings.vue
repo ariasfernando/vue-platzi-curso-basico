@@ -56,7 +56,7 @@
       },
       height: {
         get() {
-          return _.parseInt(this.component.style.height);
+          return _.parseInt(this.component.image.style.height);
         },
         set(value) {
           this.validate();

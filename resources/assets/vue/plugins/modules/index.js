@@ -1,26 +1,25 @@
-const alignment = require('./alignment');
-const destinationUrl = require('./destination-url');
-const textOptions = require('./text-options');
-const backgroundColor = require('./background-color');
-const columnBackgroundColor = require('./column-background-color');
-const moduleBackgroundColor = require('./module-background-color');
-const paletteBackgroundColor = require('./palette-background-color');
-const uploadImage = require('./upload-image');
-const imageEditor = require('./image-editor');
-const variableHeight = require('./variable-height');
-const mobileStyles = require('./mobile-styles');
+import alignment from './alignment';
+import backgroundColor from './background-color';
+import columnBackgroundColor from './column-background-color';
+import destinationUrl from './destination-url';
+import mobileStyles from './mobile-styles';
+import moduleBackgroundColor from './module-background-color';
+import paletteBackgroundColor from './palette-background-color';
+import styleImageEditor from './style-image-editor';
+import textOptions from './text-options';
+import variableHeight from './variable-height';
+import verticalAlignment from './vertical-alignment';
 
-
-module.exports = {
+export default {
   alignment,
-  destinationUrl,
-  textOptions,
-  uploadImage,
   backgroundColor,
   columnBackgroundColor,
+  destinationUrl,
+  mobileStyles,
   moduleBackgroundColor,
   paletteBackgroundColor,
-  imageEditor,
+  styleImageEditor,
+  textOptions,
   variableHeight,
-  mobileStyles,
+  verticalAlignment
 };
