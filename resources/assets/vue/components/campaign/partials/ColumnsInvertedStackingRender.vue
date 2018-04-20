@@ -23,7 +23,7 @@
                 <component
                   v-for="(component, componentId) in column.components"
                   :key="componentId"
-                  @click="setComponent(moduleId, columnId, componentId)"
+                  @select-component="selectComponent"
                   :is="component.type"
                   :component="component"
                   :module-id="moduleId"
@@ -110,13 +110,13 @@
       },
     },
     methods: {
-      setComponent(moduleId, columnId, componentId) {
+      selectComponent(data) {
         setTimeout(() => {
           // TODO: find better way to do this
           this.$store.commit("campaign/setCurrentComponent", {
-            moduleId,
-            columnId,
-            componentId,
+            moduleId:data.moduleId,
+            columnId:data.columnId,
+            componentId:data.componentId,
           });
         }, 50);
       },

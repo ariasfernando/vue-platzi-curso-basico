@@ -1,6 +1,7 @@
 <template>
   <!-- IMAGE ELEMENT -->
   <tr 
+    @click="selectComponent"
     data-type="image-element"
     :class="[getMobileClasses(component,'tr'), getAttributeClasses(component)]"
   >
@@ -74,9 +75,9 @@
     created () {
       this.setupModule();
       if(this.numberRequired) {
-        let tempWidth = _.toString(this.component.attribute.width);
-        let paddingLeft = _.parseInt(this.component.style.paddingLeft.replace(/px$/, ''));
-        let paddingRight = _.parseInt(this.component.style.paddingRight.replace(/px$/, ''));
+        let tempWidth = _.toString(this.component.container.attribute.width);
+        let paddingLeft = _.parseInt(this.component.container.style.paddingLeft.replace(/px$/, ''));
+        let paddingRight = _.parseInt(this.component.container.style.paddingRight.replace(/px$/, ''));
         let paddingColumLeft = _.parseInt(this.column.container.style.paddingLeft.replace(/px$/, ''));
         let paddingColumRight = _.parseInt(this.column.container.style.paddingRight.replace(/px$/, ''));
         
@@ -92,11 +93,13 @@
           moduleId: this.moduleId,
           columnId: this.columnId,
           componentId: 0,
-          attribute: 'width',
-          attributeValue: ( tempWidth - (paddingLeft + paddingRight) - (paddingColumLeft + paddingColumRight)),
+          subComponent: 'container',
+          link: 'attribute',
+          property: 'width',
+          value: ( tempWidth - (paddingLeft + paddingRight) - (paddingColumLeft + paddingColumRight)),
         };
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.$store.commit('campaign/saveComponentProperty', payload);
       }
     },
     data(){
@@ -146,7 +149,7 @@
           {"border-bottom-color": this.component.container.style.borderBottomColor},
           {"border-left-color": this.component.container.style.borderLeftColor}
         ];
-      }
+      },
     },
     methods: {
       setupModule () {
@@ -159,6 +162,13 @@
       widthStyle(width) {
         return _.endsWith(width, "%") ? width : width + "px";
       },
+      selectComponent() {
+        this.$emit("select-component", {
+            moduleId:this.moduleId,
+            columnId:this.columnId,
+            componentId:this.componentId
+        });
+      }
     }
   };
 </script>

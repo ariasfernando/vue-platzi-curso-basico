@@ -33,7 +33,9 @@
               :module-id="module.id"
               :column-id="columnId"
               :component-id="componentId"
-              :key="component.id"></component>
+              :key="component.id"
+              @select-component="selectComponent"
+            ></component>
             </template>
             <div v-else style="display:table-row;"> 
               <div 
@@ -60,10 +62,11 @@
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
   import SeparatorElement from '../elements/SeparatorElement.vue';
+  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
 
   export default {
     name: 'ColumnsFixedRender',
-
+    mixins: [ ComponentAttributeMixin ],
     components: {
       Draggable,
       TextElement,
@@ -127,7 +130,17 @@
     methods: {
       onAdd(e){
         this.$emit('add', e);
-      }    
+      },
+      setComponent(data) {
+        setTimeout(() => {
+          // TODO: find better way to do this
+          this.$store.commit("campaign/setCurrentComponent", {
+            moduleId:data.moduleId,
+            columnId:data.columnId,
+            componentId:data.componentId,
+          });
+        }, 50);
+      },
     }    
     
   };

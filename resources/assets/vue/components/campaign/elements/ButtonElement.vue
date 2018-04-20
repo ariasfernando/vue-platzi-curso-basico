@@ -1,6 +1,7 @@
 <template>
   <!-- CALL TO ACTION ELEMENT -->
   <tr
+    @click="selectComponent"
     data-type="button-element"
     :class="getMobileClasses(component,'tr') + getAttributeClasses(component)"
   >
@@ -153,10 +154,17 @@
       },
       content(){
         return this.component.data.text.replace("<p>", `<p style='color:${this.component.button.style.color || this.libraryConfig.linkColor} !important'>`);
-      }
+      },
     },
     methods: {
+      selectComponent() {
+        this.$emit("select-component", {
+            moduleId:this.moduleId,
+            columnId:this.columnId,
+            componentId:this.componentId
+        });
       }
+    }
   };
 </script>
 
