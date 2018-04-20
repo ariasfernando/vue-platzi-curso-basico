@@ -93,11 +93,6 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
         var addRowRemoveIcon = function($row) {
             var $removeIcon = $('<td class="delete-row mceNonEditable st-remove-element"><i class="fa fa-times" aria-hidden="true"></i></td>');
 
-            $removeIcon.click(function() {
-                removeRow($(this).parent());
-                return false;
-            });
-
             if (!$row.find(".delete-row").length) {
                 $row.append($removeIcon);
             }
@@ -141,6 +136,11 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
         // Add CSS Class to table element.
         $(editor.targetElm).find("table").addClass(editor.settings.tableClassName);
 
+        // Delete row
+        $(editor.targetElm).on('click','.delete-row',function(){
+            removeRow($(this).parent());
+            return false;
+        });
 
         editor
             .on("focus", function() {
