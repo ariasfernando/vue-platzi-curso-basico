@@ -22,6 +22,12 @@ module.exports = {
           value: 600,
           type: 'number',
         },
+        size_auto: {
+          label: 'Flexible height',
+          key: 'auto',
+          value: 0,
+          type: 'switch',
+        },
         size_height: {
           label: 'Height',
           key: 'height',
@@ -72,6 +78,12 @@ module.exports = {
           label: 'Enable zoom',
           key: 'zoomable',
           value: true,
+          type: 'switch',
+        },
+        vertical: {
+          label: 'Vertical crop',
+          key: 'cropBoxResizable',
+          value: false,
           type: 'switch',
         },
         round: {
