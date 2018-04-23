@@ -2,12 +2,28 @@
   <div class="settings-wrapper plugin-wrapper" v-if="component">
     <div class="plugin-wrapper-inner">
       <span>
-        <button @click="showImageEditor = true">
+        <button @click="showModal('desktop')">
           <i class="glyphicon glyphicon-cloud-upload"></i> Update Image
         </button>
       </span>
     </div>
-    <div class="plugin-wrapper-inner">
+    <div
+      class="plugin-wrapper-inner"
+      v-if="params.mobile"
+      >
+      <span>
+        <button
+          @click="showModal('mobile')"
+          >
+          <i
+            class="glyphicon glyphicon-cloud-upload"
+            ></i> Update Image Mobile
+        </button>
+      </span>
+    </div>
+    <div
+      class="plugin-wrapper-inner"
+      >
       <span>
         <label>Alt</label>
         <el-input v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
@@ -123,46 +139,44 @@ export default {
         },
         component() {
             let component = {};
+
             if (Object.keys(this.currentComponent).length !== 0) {
                 const moduleId = this.currentComponent.moduleId;
+
                 const columnId = this.currentComponent.columnId;
+
                 const componentId = this.currentComponent.componentId;
 
                 component = this.$store.getters['campaign/modules'][moduleId]
                     .structure.columns[columnId].components[componentId];
             }
+
             return component;
         },
         params() {
             const params = {};
 
-            // TODO: CHECK THIS
-            // _.each(this.plugin.config, (option, key) => {
-            //     if (option.value === true && option.config) {
-            //         params[key] = option.config;
-            //     } else {
-            //         params[key] = option.value;
-            // const config = this.plugin.config;
+            const config = this.plugin.config;
 
-            // Object.keys(config).forEach(name => {
-            //     const local = config[name];
+            Object.keys(config).forEach(name => {
+                const local = config[name];
 
-            //     if (name === 'sie-plugin-image_upload') {
-            //         if (local.config) {
-            //             if (local.config.uploaddefault) {
-            //                 if (this.currentImage !== null) {
-            //                     local.config.uploaddefault.value = this.currentImage;
-            //                 }
-            //             }
-            //         }
-            //     }
+                if (name === 'sie-plugin-image_upload') {
+                    if (local.config) {
+                        if (local.config.uploaddefault) {
+                            if (this.currentImage !== null) {
+                                local.config.uploaddefault.value = this.currentImage;
+                            }
+                        }
+                    }
+                }
 
-            //     if (local.value === true && local.config) {
-            //         params[name] = local.config;
-            //     } else {
-            //         params[name] = local.value;
-            //     }
-            // });
+                if (local.value === true && local.config) {
+                    params[name] = local.config;
+                } else {
+                    params[name] = local.value;
+                }
+            });
 
             return params;
         },
@@ -196,14 +210,18 @@ export default {
             },
             currentImage: null,
             url: '',
-            disabled: true
+            disabled: true,
+            type: 'desktop',
+            dynamic: false
         };
     },
     created() {
-        if (this.params.library) {
-            imageService.getMedia(this.params.library).then(res => {
-                this.libraryImages = res.map(image => image.path);
-            });
+        if (this.params.library.set_images && this.params.library.set_images.value) {
+            imageService
+                .getMedia(this.params.library.set_images.value)
+                .then(res => {
+                    this.libraryImages = res.map(image => image.path);
+                });
         }
     },
     methods: {
@@ -318,7 +336,9 @@ export default {
                 componentId: this.currentComponent.componentId,
                 subComponent: 'image',
                 link: 'attribute',
-                property: 'placeholder',
+                property: `placeholder${
+                    this.type === 'mobile' ? 'Mobile' : ''
+                }`,
                 value: image
             };
 
@@ -385,6 +405,13 @@ export default {
         isDataUrl(url) {
             const regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
             return !!RegExp(regex).test(url);
+        },
+        showModal(type) {
+            if (type !== null && type !== '') {
+                this.type = type;
+            }
+
+            this.showImageEditor = true;
         }
     },
     mounted() {
