@@ -1,5 +1,5 @@
 <template>
-  <settings-container :label="label">
+  <settings-container :label="label" v-if="showSetting">
     <template slot="setting-right">
       <input class="input" :name="name" type="file" @change="onFileChange">
     </template>

@@ -51,9 +51,6 @@ export default {
       }
       return columnsOptions;
     },
-    settings() {
-      return settingsDefault.Module().componentSettings;
-    }
   },
   watch: {
     element: {
