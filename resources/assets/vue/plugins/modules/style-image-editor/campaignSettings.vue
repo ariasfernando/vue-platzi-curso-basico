@@ -1,74 +1,197 @@
 <template>
-  <div class="settings-wrapper plugin-wrapper" v-if="component">
-    <div class="plugin-wrapper-inner">
+  <div
+    class="settings-wrapper plugin-wrapper"
+    v-if="component"
+    >
+    <div
+      class="plugin-wrapper-inner"
+      >
       <span>
-        <button @click="showImageEditor = true">
-          <i class="glyphicon glyphicon-cloud-upload"></i> Update Image
+        <button
+          @click="showModal('desktop')"
+          >
+          <i
+            class="glyphicon glyphicon-cloud-upload"
+            ></i> Update Image 
         </button>
       </span>
     </div>
-    <div class="plugin-wrapper-inner">
+    <div
+      class="plugin-wrapper-inner"
+      v-if="params.mobile"
+      >
       <span>
-        <label>Alt</label>
-        <el-input v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
+        <button
+          @click="showModal('mobile')"
+          >
+          <i
+            class="glyphicon glyphicon-cloud-upload"
+            ></i> Update Image Mobile
+        </button>
       </span>
     </div>
-    <transition name="style">
-      <div id="master-image-editor" class="modal-mask" v-show="showImageEditor">
-        <div class="modal-wrapper">
-          <div class="modal-container" v-bind:class="{ 'page-1': page.one, 'media-gallery' : page.two === 'media', 'url' : page.two === 'url' }">
-            <div class="modal-header">
-              <slot name="header">
-                <button type="button" class="close" @click="close">
+    <div
+      class="plugin-wrapper-inner"
+      >
+      <span>
+        <label>Alt</label>
+        <el-input
+          v-model="alt"
+          class="image-alt-text"
+          placeholder="Alt text"
+          ></el-input>
+      </span>
+    </div>
+    <transition
+      name="style"
+      >
+      <div
+        id="master-image-editor"
+        class="modal-mask"
+        v-show="showImageEditor"
+        >
+        <div
+          class="modal-wrapper"
+          >
+          <div
+            class="modal-container"
+            v-bind:class="{ 'page-1': page.one, 'media-gallery' : page.two === 'media', 'url' : page.two === 'url' }"
+            >
+            <div
+              class="modal-header"
+              >
+              <slot
+                name="header"
+                >
+                <button
+                  type="button"
+                  class="close"
+                  @click="close"
+                  >
                   <span>&times;</span>
                 </button>
-                <h3 v-if="page.three">{{ params.title || 'Image Editor' }}</h3>
+                <h3
+                  v-if="page.three"
+                  >{{ params.title || 'Image Editor' }}</h3>
               </slot>
             </div>
-            <div class="modal-body">
-              <slot name="body">
-                <div v-show="page.one">
-                  <div style="display: flex; flex-direction: row; justify-content: space-between;">
+            <div
+              class="modal-body"
+              >
+              <slot
+                name="body"
+                >
+                <div
+                  v-show="page.one"
+                  >
+                  <div
+                    style="display: flex; flex-direction: row; justify-content: space-between;"
+                    >
                     <div>
-                      <button type="button" @click="clickUpload">
-                        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                      <button
+                        type="button"
+                        @click="clickUpload"
+                        >
+                        <i
+                          class="fa fa-cloud-upload"
+                          aria-hidden="true"
+                          ></i>
                         <p>Upload</p>
                       </button>
-                      <input ref="input" type="file" name="file" style="display: none;"/>
+                      <input
+                        ref="input"
+                        type="file"
+                        name="file" 
+                        style="display: none;"
+                        />
                     </div>
-                    <div>
-                      <button type="button" @click="clickGallery">
-                        <i class="fa fa-picture-o" aria-hidden="true"></i>
+                    <div
+                      v-if="params.library.set_images && params.library.set_images.value"
+                      >
+                      <button
+                        type="button"
+                        @click="clickGallery"
+                        >
+                        <i
+                          class="fa fa-picture-o"
+                          aria-hidden="true"
+                          ></i>
                         <p>Media Gallery</p>
                       </button>
                     </div>
-                    <div>
-                      <button type="button" @click="clickUrl">
-                        <i class="fa fa-link" aria-hidden="true"></i>
+                    <div
+                      v-if="params.url"
+                      >
+                      <button
+                        type="button"
+                        @click="clickUrl"
+                        >
+                        <i
+                          class="fa fa-link"
+                          aria-hidden="true"
+                          ></i>
                         <p>URL</p>
                       </button>
                     </div>
                   </div>
                 </div>
-                <div v-show="page.two === 'media'" style="display: flex;">
-                  <div class="wrapper-image" v-for="(image, index) in libraryImages" :key="index" @click="setImage(image)">
-                    <div style="width: 100%; padding-bottom: 100%; background-size: cover;" v-bind:style="{ backgroundImage: `url(${image})` }"></div>
+                <div
+                  v-show="page.two === 'media'"
+                  style="display: flex;"
+                  >
+                  <div
+                    class="wrapper-image"
+                    v-for="(image, index) in libraryImages"
+                    :key="index"
+                    @click="setImage(image)"
+                    >
+                    <div
+                      style="width: 100%; padding-bottom: 100%; background-size: cover;"
+                      v-bind:style="{ backgroundImage: `url(${image})` }"
+                      ></div>
                   </div>
                 </div>
-                <div v-show="page.two === 'url'">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <label for="url">URL</label>
-                      <p class="control">
-                        <div class="el-input" aria-required="true" aria-invalid="false">
-                          <input v-model="url" type="text" autocomplete="off" placeholder="" style="font-family: 'Open Sans', Arial, serif; width: 100%; padding: 8px; font-size: 13px; font-weight: 300; color: #666666; border: 1px solid #dddddd; background: #fff; box-sizing: border-box; border-top-right-radius: 2px; border-top-left-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px;" />
+                <div
+                  v-show="page.two === 'url'"
+                  >
+                  <div
+                    class="row"
+                    >
+                    <div
+                      class="col-md-12"
+                      >
+                      <label
+                        for="url"
+                        >URL</label>
+                      <p
+                        class="control"
+                        >
+                        <div
+                          class="el-input"
+                          aria-required="true"
+                          aria-invalid="false"
+                          >
+                          <input
+                            v-model="url"
+                            type="text"
+                            autocomplete="off"
+                            placeholder=""
+                            style="font-family: 'Open Sans', Arial, serif; width: 100%; padding: 8px; font-size: 13px; font-weight: 300; color: #666666; border: 1px solid #dddddd; background: #fff; box-sizing: border-box; border-top-right-radius: 2px; border-top-left-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px;"
+                            />
                         </div>
-                        <span class="help is-danger" style="display: none;"></span>
+                        <span
+                          class="help is-danger"
+                          style="display: none;"
+                          ></span>
                       </p>
                     </div>
                   </div>
                 </div>
-                <div v-show="page.three" style="overflow-y: auto; max-height: calc(100vh - 187px); min-height: 300px;" ref="wrapperSie">
+                <div
+                  v-show="page.three"
+                  style="overflow-y: auto; max-height: calc(100vh - 187px); min-height: 300px;"
+                  ref="wrapperSie"
+                  >
                   <stensul-sie-vue
                     v-if="page.three"
                     :params="params"
@@ -79,20 +202,61 @@
                 </div>
               </slot>
             </div>
-            <div class="modal-footer" v-show="page.one !== true">
-              <slot name="footer">
+            <div
+              class="modal-footer"
+              v-show="page.one !== true"
+              >
+              <slot
+                name="footer"
+                >
                 <!-- Input submit -->
-                <div class="modal-mpf-submit">
-                  <button type="button" class="btn btn-success pull-left submit-config beta-btn-primary" v-if="page.two" @click="back">
-                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                <div
+                  class="modal-mpf-submit"
+                  >
+                  <button
+                    type="button"
+                    class="btn btn-success pull-left submit-config beta-btn-primary"
+                    v-if="page.two"
+                    @click="back"
+                    >
+                    <i
+                      class="fa fa-chevron-left"
+                      aria-hidden="true"
+                      ></i> Back
                   </button>
-                  <button type="button" class="btn btn-success pull-left submit-config beta-btn-primary" v-if="page.three" @click="clear">
-                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Reset
+                  <button
+                    type="button"
+                    class="btn btn-success pull-left submit-config beta-btn-primary"
+                    v-if="page.three"
+                    @click="clear"
+                    >
+                    <i
+                      class="fa fa-chevron-left"
+                      aria-hidden="true"
+                      ></i> Reset
                   </button>
-                  <button type="button" class="btn btn-success pull-right submit-config beta-btn-primary" v-if="page.two === 'url'" v-on:click.prevent="saveUrl">Save</button>
-                  <input type="submit" value="Submit" class="btn btn-success pull-right submit-config beta-btn-primary" @click="submit" v-if="page.three">
-                  <button type="button" class="btn btn-success pull-right submit-config beta-btn-primary" v-if="page.two === 'media'">
-                    <i class="fa fa-refresh" aria-hidden="true"></i> Refresh Gallery
+                  <button
+                    type="button"
+                    class="btn btn-success pull-right submit-config beta-btn-primary"
+                    v-if="page.two === 'url'"
+                    v-on:click.prevent="saveUrl"
+                    >Save</button>
+                  <input
+                    type="submit"
+                    value="Submit"
+                    class="btn btn-success pull-right submit-config beta-btn-primary"
+                    @click="submit"
+                    v-if="page.three"
+                    >
+                  <button
+                    type="button"
+                    class="btn btn-success pull-right submit-config beta-btn-primary"
+                    v-if="page.two === 'media' && dynamic"
+                    >
+                    <i
+                      class="fa fa-refresh"
+                      aria-hidden="true"
+                      ></i> Refresh Gallery
                   </button>
                 </div>
               </slot>
@@ -193,12 +357,14 @@ export default {
       },
       currentImage: null,
       url: '',
-      disabled: true
+      disabled: true,
+      type: 'desktop',
+      dynamic: false
     };
   },
   created() {
-    if (this.params.library) {
-      imageService.getMedia(this.params.library).then(res => {
+    if (this.params.library.set_images && this.params.library.set_images.value) {
+      imageService.getMedia(this.params.library.set_images.value).then(res => {
         this.libraryImages = res.map(image => image.path);
       });
     }
@@ -315,7 +481,7 @@ export default {
         componentId: this.currentComponent.componentId,
         subComponent: 'image',
         link: 'attribute',
-        property: 'placeholder',
+        property: `placeholder${this.type === 'mobile' ? 'Mobile' : ''}`,
         value: image
       };
 
@@ -383,6 +549,13 @@ export default {
       const regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
       return !!RegExp(regex).test(url);
     },
+    showModal(type) {
+      if (type !== null && type !== '') {
+        this.type = type;
+      }
+
+      this.showImageEditor = true;
+    }
   },
   mounted() {
     if (Object.keys(this.plugin.data).length > 0) {

@@ -31,6 +31,12 @@ export default {
       value: false,
       type: 'switch'
     },
+    url: {
+      label: 'Url Upload',
+      key: 'url_upload',
+      value: false,
+      type: 'switch'
+    },
     size: {
       label: 'Size',
       key: 'size',
