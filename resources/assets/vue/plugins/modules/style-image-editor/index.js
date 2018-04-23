@@ -21,15 +21,15 @@ export default {
           key: 'set_images',
           value: null,
           type: 'select',
-          options: []
-        }
-      }
+          options: [],
+        },
+      },
     },
     mobile: {
       label: 'Mobile Upload',
       key: 'mobile_upload',
       value: false,
-      type: 'switch'
+      type: 'switch',
     },
     size: {
       label: 'Size',
@@ -48,7 +48,7 @@ export default {
           key: 'height',
           value: 200,
           type: 'number',
-          step: 1
+          step: 1,
         },
       },
     },
@@ -127,14 +127,14 @@ export default {
           key: 'top',
           value: 0,
           type: 'number',
-          step: 1
+          step: 1,
         },
         text_left: {
           label: 'Left',
           key: 'left',
           value: 0,
           type: 'number',
-          step: 1
+          step: 1,
         },
       },
     },
@@ -161,28 +161,28 @@ export default {
           key: 'width',
           value: 100,
           type: 'number',
-          step: 1
+          step: 1,
         },
         overlay_height: {
           label: 'Height',
           key: 'height',
           value: 100,
           type: 'number',
-          step: 1
+          step: 1,
         },
         overlay_top: {
           label: 'Top',
           key: 'top',
           value: 0,
           type: 'number',
-          step: 1
+          step: 1,
         },
         overlay_left: {
           label: 'Left',
           key: 'left',
           value: 0,
           type: 'number',
-          step: 1
+          step: 1,
         },
       },
     },
@@ -224,28 +224,28 @@ export default {
               key: 'width',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             square_height: {
               label: 'Height',
               key: 'height',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             square_top: {
               label: 'Top',
               key: 'top',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             square_left: {
               label: 'Left',
               key: 'left',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             square_description: {
               label: 'Description',
@@ -272,21 +272,21 @@ export default {
               key: 'radius',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             circle_top: {
               label: 'Top',
               key: 'top',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             circle_left: {
               label: 'Left',
               key: 'left',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             circle_description: {
               label: 'Description',
@@ -307,5 +307,5 @@ export default {
   },
   data: {},
   enabled: false,
-  settings: true
+  settings: true,
 };

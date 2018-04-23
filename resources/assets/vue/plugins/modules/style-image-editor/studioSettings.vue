@@ -172,122 +172,124 @@
 </template>
 
 <script>
-import clone from "clone";  
-import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
-import GroupContainer from '../../../components/admin/containers/GroupContainer.vue';
+import clone from 'clone';
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
 export default {
-  props: ["name"],
-  components: {
-    SettingsContainer,
-    GroupContainer
-  },
-  computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
+    props: ['name'],
+    components: { SettingsContainer },
+    computed: {
+        currentComponent() {
+            return this.$store.getters['module/currentComponent'];
+        },
+        module() {
+            return this.$store.getters['module/module'];
+        },
+        plugin() {
+            const module = this.module,
+                columnId = this.currentComponent.columnId,
+                componentId = this.currentComponent.componentId;
+
+            const plugin =
+                module.structure.columns[columnId].components[componentId]
+                    .plugins[this.name];
+            this.enabled = plugin.enabled;
+
+            return plugin;
+        }
     },
-    module() {
-      return this.$store.getters["module/module"];
+    data() {
+        return {
+            enabled: false
+        };
     },
-    plugin() {
-      const module = this.module,
-        columnId = this.currentComponent.columnId,
-        componentId = this.currentComponent.componentId;
+    methods: {
+        toggle(value) {
+            const payload = {
+                plugin: this.name,
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                enabled: value
+            };
+            // Update state of the component
+            this.$store.commit('module/togglePlugin', payload);
 
-      const plugin = module.structure.columns[columnId].components[componentId].plugins[
-        this.name
-      ];
+            // Set current component
+            this.$store.commit('module/setCurrentComponent', {
+                columnId: payload.columnId,
+                componentId: payload.componentId
+            });
+            // Update component view in the third column
+            this.$store.commit('module/setChangeSettingComponent', {
+                style:
+                    this.module.structure.columns[payload.columnId].components[
+                        payload.componentId
+                    ].style || {},
+                attribute:
+                    this.module.structure.columns[payload.columnId].components[
+                        payload.componentId
+                    ].attribute || {}
+            });
+        },
+        updateField(value, option) {
+            const config = {};
+            config[option] = {
+                value
+            };
 
-      this.enabled = plugin.enabled;
+            const payload = {
+                plugin: this.name,
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                config
+            };
 
-      return plugin;
+            this.$store.commit('module/savePlugin', payload);
+        },
+
+        updateSubField(value, option, subOption) {
+            const config = clone(this.plugin.config);
+            config[option].config[subOption].value = value;
+
+            const payload = {
+                plugin: this.name,
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                config
+            };
+
+            this.$store.commit('module/savePlugin', payload);
+        },
+        updateInterField(value, option, subOption, interOption) {
+            const config = clone(this.plugin.config);
+            config[option].config[subOption].config[interOption].value = value;
+
+            const payload = {
+                plugin: this.name,
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                config
+            };
+
+            this.$store.commit('module/savePlugin', payload);
+        },
+        mounted() {
+            this.$store.dispatch('module/getLibraries', {
+                plugin: this.name,
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId
+            });
+        }
     }
-  },
-  data() {
-    return {
-      enabled: false
-    };
-  },
-  methods: {
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value
-      };
-      // Update state of the component
-      this.$store.commit("module/togglePlugin", payload);
-
-      // Set current component
-      this.$store.commit("module/setCurrentComponent", {
-        columnId: payload.columnId,
-        componentId: payload.componentId
-      });
-      // Update component view in the third column
-      this.$store.commit("module/setChangeSettingComponent", {
-        style:
-          this.module.structure.columns[payload.columnId].components[
-            payload.componentId
-          ].style || {},
-        attribute:
-          this.module.structure.columns[payload.columnId].components[
-            payload.componentId
-          ].attribute || {}
-      });
-    },
-    updateField(value, option) {
-      const config = {};
-      config[option] = {
-        value
-      };
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        config
-      };
-      this.$store.commit("module/savePlugin", payload);
-    },
-    updateSubField(value, option, subOption) {
-      const config = clone(this.plugin.config);
-      config[option].config[subOption].value = value;
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        config
-      };
-      this.$store.commit("module/savePlugin", payload);
-    },
-    updateInterField(value, option, subOption, interOption) {
-      const config = clone(this.plugin.config);
-      config[option].config[subOption].config[interOption].value = value;
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        config
-      };
-      this.$store.commit("module/savePlugin", payload);
-    },
-  },
-  mounted() {
-    this.$store.dispatch('module/getLibraries', {
-      plugin: this.name,
-      columnId: this.currentComponent.columnId,
-      componentId: this.currentComponent.componentId
-    });
-  }
 };
 </script>
 
 <style>
 .config-inner {
-  padding-left: 10px;
+    padding-left: 10px;
 }
 
 .config-inner > * {
-  padding-bottom: 5px;
+    padding-bottom: 5px;
 }
 </style>
