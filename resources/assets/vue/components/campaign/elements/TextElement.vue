@@ -3,6 +3,7 @@
   <tr
     data-type="text-element"
     :class="getMobileClasses(component,'tr')"
+    @click="selectComponent"
   >
     <td
       :width="component.container.attribute.width"
@@ -107,12 +108,19 @@ export default {
         "border-bottom-color": this.component.container.style.borderBottomColor,
         "border-left-color": this.component.container.style.borderLeftColor
       };
-    }
+    },
   },
   methods: {
     widthStyle(width) {
       return _.endsWith(width, "%") ? width : width + "px";
     },
+    selectComponent() {
+      this.$emit("select-component", {
+          moduleId:this.moduleId,
+          columnId:this.columnId,
+          componentId:this.componentId
+      });
+    }
   }
 };
 </script>

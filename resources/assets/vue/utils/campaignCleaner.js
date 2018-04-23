@@ -67,6 +67,23 @@ export default {
       $cleanedHtml.find(selector).remove();
     });
 
+    // Remove wrappers
+    const $wrapperElementRemove = $cleanedHtml.find('.stx-wrapper');
+
+    $.each($wrapperElementRemove, (i, element) => {
+      const $element = $(element);
+
+        // Replace element with the content element.
+      if ($element.is('table')) {
+        $element.replaceWith($element.find('td:first').html());
+      } else {
+        $element.replaceWith($element.html());
+      }
+    });
+
+    // Remove every class starting with "stx-"
+    $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
+    
     // Remove attr class if it's empty.
     $cleanedHtml.find("[class='']").removeAttr('class');
     
@@ -108,20 +125,6 @@ export default {
       });
     };
 
-    // Remove wrappers
-    const $wrapperElementRemove = $cleanedHtml.find('.stx-wrapper');
-
-    $.each($wrapperElementRemove, (i, element) => {
-      const $element = $(element);
-
-        // Replace element with the content element.
-      if ($element.is('table')) {
-        $element.replaceWith($element.find('td:first').html());
-      } else {
-        $element.replaceWith($element.html());
-      }
-    });
-
     // Convert and add data-persist-styles to css property inline in styles attribute
     if ($cleanedHtml.find('[data-persist-styles]').length) {
       const $toPersistArray = $cleanedHtml.find("[data-persist-styles]");
@@ -135,13 +138,8 @@ export default {
         $element.removeAttr('data-persist-styles');
       });
     }
-
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
-    
-    // Remove every class starting with "stx-"
-    $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
-    
     return this.charConvert($cleanedHtml.html());
   },
   
