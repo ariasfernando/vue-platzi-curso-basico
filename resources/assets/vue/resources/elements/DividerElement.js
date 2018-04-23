@@ -1,5 +1,6 @@
 function dividerDefault() {
   return {
+    id: Math.floor(100000 + (Math.random() * 900000)),
     type: 'divider-element',
     style: {
       height: '5px',
@@ -25,7 +26,6 @@ function dividerDefault() {
       align: 'center',
       bgcolor: 'transparent',
       width: '100%',
-      hideElement: false,
       classes: '',
     },
 

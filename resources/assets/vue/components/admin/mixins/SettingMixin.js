@@ -1,12 +1,27 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 export default {
+  props: [
+    'name',
+    'type',
+    'link',
+    'label',
+    'placeholder',
+    'default-value',
+    'min-value',
+    'max-value',
+    'sub-component',
+    'is-disable',
+    'options',
+    'element',
+    'isDisablePercentage',
+  ],
   computed: {
     module() {
-      return this.$store.getters["module/module"];
+      return this.$store.getters['module/module'];
     },
     currentComponent() {
-      return this.$store.getters["module/currentComponent"];
+      return this.$store.getters['module/currentComponent'];
     },
     component() {
       if (this.module.structure.columns[this.currentComponent.columnId]) {
@@ -26,9 +41,9 @@ export default {
         return this.element[this.name];
       },
       set(newValue) {
-        const type = this.link ? `${this.link}-` : '';
-        this.$emit(`${type}setting-updated`, {
+        this.$emit('setting-updated', {
           subComponent: this.subComponent,
+          link: this.link,
           name: this.name,
           value: newValue,
         });

@@ -51,7 +51,7 @@ class MarketingCloud extends Scraper implements ApiImageConnector
             $current_time = $this->formattedDate();
             $response_array[] = ['last_updated' => $current_time];
             Cache::forget($cache_key);
-            Cache::add($cache_key, $response_array, Carbon::now()->addMonth(1));
+            Cache::add($cache_key, $response_array, 43200); // ~1 Month in minutes
             Activity::log(
                 'Api images Request [scraper]',
                 [

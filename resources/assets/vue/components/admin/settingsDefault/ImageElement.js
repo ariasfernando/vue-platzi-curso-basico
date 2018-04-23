@@ -8,23 +8,27 @@ function imageDefault() {
           name: 'placeholder',
           type: 'generic-file',
           value: 'default/placeholder-square.jpg',
+          subComponent: 'image',
         },
         {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
+          subComponent: 'container',
         },
       ],
       [
         {
           name: 'image-size',
           type: 'image-size',
+          subComponent: 'image',
         },
       ],
       [
         {
           name: 'text-align',
           type: 'text-align',
+          subComponent: 'image',
         },
       ],
       [
@@ -33,12 +37,14 @@ function imageDefault() {
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
+          subComponent: 'container',
         },
       ],
       [
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
+          subComponent: 'container',
         },
       ],
       [
@@ -48,6 +54,7 @@ function imageDefault() {
           name: 'href',
           type: 'generic-text',
           value: 'http://stensul.com',
+          subComponent: 'image',
         },
         {
           link: 'attribute',
@@ -55,6 +62,7 @@ function imageDefault() {
           name: 'alt',
           type: 'generic-text',
           value: 'Image',
+          subComponent: 'image',
         },
         {
           link: 'attribute',
@@ -62,6 +70,7 @@ function imageDefault() {
           name: 'title',
           type: 'generic-text',
           value: 'Image',
+          subComponent: 'image',
         },
       ],
     ],

@@ -8,7 +8,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title>Email Creation Platform</title>
-		<link href="{{ cdn(elixir('css/admin.css')) }}" rel="stylesheet">
+		<link href="{{ cdn(mix('css/admin.css')) }}" rel="stylesheet">
 		@section('master-head')
 		@show
 
@@ -47,7 +47,7 @@
 			@include('partials.modal_confirm')
 
 			{{-- Scripts --}}
-			<script src="{{ cdn(elixir('js/library.js')) }}"></script>
+			<script src="{{ cdn(mix('js/library.js')) }}"></script>
 
 			{{-- Global Application JS object --}}
 			@include('partials/application_script')

@@ -39,7 +39,6 @@ class UpdateDestinationUrlPluginCampaign extends Migration
                                         if (isset($component_value['plugins'])) {
                                             foreach ($component_value['plugins'] as $plugin_name => $plugin) {
                                                 if ($plugin_name === 'destinationUrl') {
-
                                                     if (isset($plugin['config']['required'])) {
                                                         if (isset($plugin['config']['validations'])) {
                                                             $modules_data[$key]['structure']['columns'][$column_key]['components'][$component_key]
@@ -52,7 +51,6 @@ class UpdateDestinationUrlPluginCampaign extends Migration
 
                                                             $modules_data[$key]['structure']['columns'][$column_key]['components'][$component_key]
                                                                                ['plugins'][$plugin_name]['config']['validations'] = $validations;
-
                                                         }
                                                         unset($modules_data[$key]['structure']['columns'][$column_key]['components'][$component_key]
                                                                                  ['plugins'][$plugin_name]['config']['required']);

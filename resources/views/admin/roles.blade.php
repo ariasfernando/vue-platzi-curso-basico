@@ -56,10 +56,13 @@
 							</tbody>
 						</table>
 					</div>
-
-					@if( $roles->lastPage() > 1 && count($roles->lastPage()) )
-						<div class="pagination" data-pages="<?php echo $roles->lastPage(); ?>" <?php echo (isset($defaultDataPagination["view_name"]))? 'data-view="'.$defaultDataPagination["view_name"].'"':''; ?>></div>
+					@if ($roles->lastPage() > 1)
+						<div class="pagination" data-pages="<?php echo $roles->lastPage(); ?>"
+                            <?php echo isset($defaultDataPagination["view_name"])
+                                ? 'data-view="' . $defaultDataPagination["view_name"] . '"' : ''; ?>>
+                        </div>
 					@endif
+
 				</div>
 			</div>
 
@@ -69,5 +72,5 @@
 @endsection
 
 @section('footer-script')
-	<script src="{{ cdn(elixir('js/admin.js')) }}"></script>
+	<script src="{{ cdn(mix('js/admin.js')) }}"></script>
 @stop

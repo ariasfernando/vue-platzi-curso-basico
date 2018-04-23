@@ -5,6 +5,7 @@ function separatorDefault() {
         {
           name: 'input-height',
           type: 'input-height',
+          link: 'style',
         },
         {
           name: 'classes',
@@ -19,7 +20,7 @@ function separatorDefault() {
         },
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
         },
       ],
       [

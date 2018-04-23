@@ -8,7 +8,7 @@
     style="width: 100%;">
     <tr 
       data-type="separator-element"
-      :class="getMobileClasses(component,'tr') + component.attribute.classes"
+      :class="[getMobileClasses(component,'tr'), getAttributeClasses(component)]"
     >
       <td
         class="stx-position-relative" 
@@ -17,7 +17,7 @@
         :height="heightAsInt"
         :bgcolor="component.attribute.bgcolor" 
         :style="[defaultFirstTdStyle, firstTdStyle]"
-        :class="getMobileClasses(component,'td:first')"
+        :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
       >
         <table 
           width="100%"
@@ -46,6 +46,7 @@
 
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
   import _ from 'lodash';
 
   export default {
@@ -57,7 +58,7 @@
       'component',
       'column'
     ],
-    mixins: [ MobileStylesMixin ],
+    mixins: [ MobileStylesMixin, ComponentAttributeMixin ],
     data(){
       return{
         defaultFirstTdStyle: {

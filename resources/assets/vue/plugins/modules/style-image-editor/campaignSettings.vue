@@ -1,39 +1,118 @@
 <template>
   <div class="settings-wrapper plugin-wrapper" v-if="component">
-
     <div class="plugin-wrapper-inner">
       <span>
-        <button @click="showImageEditor = true"><i class="glyphicon glyphicon-cloud-upload"></i> Update Image</button>
+        <button @click="showImageEditor = true">
+          <i class="glyphicon glyphicon-cloud-upload"></i> Update Image
+        </button>
       </span>
     </div>
-
     <div class="plugin-wrapper-inner">
       <span>
         <label>Alt</label>
-        <input :value="component.attribute.alt" ref="imageAlt" type="text" class="image-alt-text" placeholder="Alt text" @input="updateField('imageAlt')">
+        <el-input v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
       </span>
     </div>
-
-    <image-editor-modal
-      v-if="showImageEditor"
-      :params="params"
-      :data="plugin.data"
-      @update-data="updatePluginData"
-      @image-submit="submitImage"
-      @close="showImageEditor = false">
-    </image-editor-modal>
+    <transition name="style">
+      <div id="style-image-editor" class="modal-mask" v-show="showImageEditor">
+        <div class="modal-wrapper">
+          <div class="modal-container" v-bind:class="{ 'page-1': page.one, 'media-gallery' : page.two === 'media', 'url' : page.two === 'url' }">
+            <div class="modal-header">
+              <slot name="header">
+                <button type="button" class="close" @click="close">
+                  <span>&times;</span>
+                </button>
+                <h3 v-if="page.three">{{ params.title || 'Image Editor' }}</h3>
+              </slot>
+            </div>
+            <div class="modal-body">
+              <slot name="body">
+                <div v-show="page.one">
+                  <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                    <div>
+                      <button type="button" @click="clickUpload">
+                        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                        <p>Upload</p>
+                      </button>
+                      <input ref="input" type="file" name="file" style="display: none;"/>
+                    </div>
+                    <div>
+                      <button type="button" @click="clickGallery">
+                        <i class="fa fa-picture-o" aria-hidden="true"></i>
+                        <p>Media Gallery</p>
+                      </button>
+                    </div>
+                    <div>
+                      <button type="button" @click="clickUrl">
+                        <i class="fa fa-link" aria-hidden="true"></i>
+                        <p>URL</p>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div v-show="page.two === 'media'" style="display: flex;">
+                  <div class="wrapper-image" v-for="(image, index) in libraryImages" :key="index" @click="setImage(image)">
+                    <div style="width: 100%; padding-bottom: 100%; background-size: cover;" v-bind:style="{ backgroundImage: `url(${image})` }"></div>
+                  </div>
+                </div>
+                <div v-show="page.two === 'url'">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label for="url">URL</label>
+                      <p class="control">
+                        <div class="el-input" aria-required="true" aria-invalid="false">
+                          <input v-model="url" type="text" autocomplete="off" placeholder="" style="font-family: 'Open Sans', Arial, serif; width: 100%; padding: 8px; font-size: 13px; font-weight: 300; color: #666666; border: 1px solid #dddddd; background: #fff; box-sizing: border-box; border-top-right-radius: 2px; border-top-left-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px;" />
+                        </div>
+                        <span class="help is-danger" style="display: none;"></span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div v-show="page.three" style="overflow-y: auto; max-height: calc(100vh - 187px); min-height: 300px;" ref="wrapperSie">
+                  <style-image-editor
+                    v-if="page.three"
+                    :params="params"
+                    ref="sie"
+                    :data="plugin.data"
+                    @image-submit="submitImage"
+                    ></style-image-editor>
+                </div>
+              </slot>
+            </div>
+            <div class="modal-footer" v-show="page.one !== true">
+              <slot name="footer">
+                <!-- Input submit -->
+                <div class="modal-mpf-submit">
+                  <button type="button" class="btn btn-success pull-left submit-config beta-btn-primary" v-if="page.two" @click="back">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                  </button>
+                  <button type="button" class="btn btn-success pull-left submit-config beta-btn-primary" v-if="page.three" @click="clear">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Reset
+                  </button>
+                  <button type="button" class="btn btn-success pull-right submit-config beta-btn-primary" v-if="page.two === 'url'" v-on:click.prevent="saveUrl">Save</button>
+                  <input type="submit" value="Submit" class="btn btn-success pull-right submit-config beta-btn-primary" @click="submit" v-if="page.three">
+                  <button type="button" class="btn btn-success pull-right submit-config beta-btn-primary" v-if="page.two === 'media'">
+                    <i class="fa fa-refresh" aria-hidden="true"></i> Refresh Gallery
+                  </button>
+                </div>
+              </slot>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import _ from 'lodash';
-import ImageEditorModal from 'stensul-sie-vue';
+import each from 'lodash/each';
 import imageService from '../../../services/image';
+import styleImageEditor from 'stensul-sie-vue';
 
 export default {
     props: ['name', 'plugin'],
     components: {
-        ImageEditorModal
+        styleImageEditor
     },
     computed: {
         campaign() {
@@ -57,92 +136,131 @@ export default {
         params() {
             const params = {};
 
-            _.each(this.plugin.config, (option, key) => {
-                if (option.value === true && option.config) {
-                    params[key] = option.config;
-                } else {
-                    params[key] = option.value;
-                }
-            });
+            // TODO: CHECK THIS
+            // _.each(this.plugin.config, (option, key) => {
+            //     if (option.value === true && option.config) {
+            //         params[key] = option.config;
+            //     } else {
+            //         params[key] = option.value;
+            // const config = this.plugin.config;
+
+            // Object.keys(config).forEach(name => {
+            //     const local = config[name];
+
+            //     if (name === 'sie-plugin-image_upload') {
+            //         if (local.config) {
+            //             if (local.config.uploaddefault) {
+            //                 if (this.currentImage !== null) {
+            //                     local.config.uploaddefault.value = this.currentImage;
+            //                 }
+            //             }
+            //         }
+            //     }
+
+            //     if (local.value === true && local.config) {
+            //         params[name] = local.config;
+            //     } else {
+            //         params[name] = local.value;
+            //     }
+            // });
 
             return params;
+        },
+        alt: {
+            get() {
+                return this.component.image.attribute.alt;
+            },
+            set(value) {
+                const payload = {
+                    plugin: this.name,
+                    moduleId: this.currentComponent.moduleId,
+                    columnId: this.currentComponent.columnId,
+                    componentId: this.currentComponent.componentId,
+                    subComponent: 'image',
+                    link: 'attribute',
+                    property: 'alt',
+                    value
+                };
+                this.$store.commit('campaign/saveComponentProperty', payload);
+            }
         }
     },
     data() {
         return {
             showImageEditor: false,
-            libraryImages: []
+            libraryImages: [],
+            page: {
+                one: true,
+                two: false,
+                three: false
+            },
+            currentImage: null,
+            url: '',
+            disabled: true
         };
     },
     created() {
         if (this.params.library) {
             imageService.getMedia(this.params.library).then(res => {
-                this.params.libraryImages = res.map(image => image.path);
+                this.libraryImages = res.map(image => image.path);
             });
         }
     },
     methods: {
-        removeErrorsImages() {
-            let $contentImgError = $('.stx-module-wrapper-active').find(
-                '.default-image-error'
-            );
+        clickUpload() {
+            this.$refs.input.click();
+        },
+        clickGallery() {
+            this.page.one = false;
+            this.page.two = 'media';
+        },
+        clickUrl() {
+            this.page.one = false;
+            this.page.two = 'url';
+        },
+        close() {
+            this.showImageEditor = false;
+        },
+        back() {
+            this.page = {
+                one: true,
+                two: false,
+                three: false
+            };
+        },
+        clear() {
+            this.page = {
+                one: true,
+                two: false,
+                three: false
+            };
 
-            if ($contentImgError.length > 0) {
-                $contentImgError.removeClass('default-image-error');
+            this.currentImage = null;
+        },
+        setImage(url) {
+            if (this.plugin.flexible) {
+                this.heightImg(url);
             }
+
+            this.currentImage = url;
+
+            this.page = {
+                one: false,
+                two: false,
+                three: true
+            };
         },
-        searchImage(data, keys) {
-            let subData = data;
-            keys.forEach(key => {
-                subData = subData[key];
-            });
-            return subData;
+        heightImg(url) {
+            let img = document.createElement('IMG');
+
+            img.onload = () => {
+                this.$refs.wrapperSie.style.height = `${img.height}px`;
+            };
+
+            img.src = url;
         },
-        getObjectKeys(data, prefix = '') {
-            return Object.keys(data).reduce((result, element) => {
-                if (Array.isArray(data[element])) {
-                    return result;
-                } else if (
-                    data[element] !== null &&
-                    typeof data[element] === 'object'
-                ) {
-                    return [
-                        ...result,
-                        ...this.getObjectKeys(
-                            data[element],
-                            prefix + element + '.'
-                        )
-                    ];
-                } else {
-                    return [...result, prefix + element];
-                }
-            }, []);
-        },
-        isDataUrl(url) {
-            const regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
-            return !!RegExp(regex).test(url);
-        },
-        searchStateImages(data) {
-            const urlKeys = this.getObjectKeys(data.preset).filter(key => {
-                return key.includes('url');
-            });
-            const images = [];
-            urlKeys.forEach(url => {
-                const keys = url.split('.');
-                const img = this.searchImage(data.preset, keys);
-                //I only want to upload images that are base64
-                if (
-                    typeof img !== 'undefined' &&
-                    img !== '' &&
-                    this.isDataUrl(img)
-                ) {
-                    images.push({
-                        key: url,
-                        image: img
-                    });
-                }
-            });
-            return images;
+        saveUrl(event) {
+            this.setImage(this.url);
         },
         submitImage(data) {
             this.$store.commit('global/setLoader', true);
@@ -163,6 +281,9 @@ export default {
                     this.$store.commit('global/setLoader', false);
                     this.showImageEditor = false;
                 });
+        },
+        submit() {
+            this.$refs.sie.save();
         },
         updatePluginData(uploadedImgs, images, data) {
             images.slice(0, images.length - 1).forEach(image => {
@@ -195,26 +316,161 @@ export default {
                 moduleId: this.currentComponent.moduleId,
                 columnId: this.currentComponent.columnId,
                 componentId: this.currentComponent.componentId,
-                attribute: 'placeholder',
-                attributeValue: image
+                subComponent: 'image',
+                link: 'attribute',
+                property: 'placeholder',
+                value: image
             };
 
-            this.$store.commit('campaign/saveComponentAttribute', payload);
+            this.$store.commit('campaign/saveComponentProperty', payload);
         },
-        updateField(field) {
-            const value = this.$refs[field].value;
+        removeErrorsImages() {
+            let $contentImgError = $('.stx-module-wrapper-active').find(
+                '.default-image-error'
+            );
 
-            const payload = {
-                plugin: this.name,
-                moduleId: this.currentComponent.moduleId,
-                columnId: this.currentComponent.columnId,
-                componentId: this.currentComponent.componentId,
-                attribute: 'alt',
-                attributeValue: value
-            };
-
-            this.$store.commit('campaign/saveComponentAttribute', payload);
+            if ($contentImgError.length > 0) {
+                $contentImgError.removeClass('default-image-error');
+            }
+        },
+        searchStateImages(data) {
+            const urlKeys = this.getObjectKeys(data.preset).filter(key => {
+                return key.includes('url');
+            });
+            const images = [];
+            urlKeys.forEach(url => {
+                const keys = url.split('.');
+                const img = this.searchImage(data.preset, keys);
+                //I only want to upload images that are base64
+                if (
+                    typeof img !== 'undefined' &&
+                    img !== '' &&
+                    this.isDataUrl(img)
+                ) {
+                    images.push({
+                        key: url,
+                        image: img
+                    });
+                }
+            });
+            return images;
+        },
+        getObjectKeys(data, prefix = '') {
+            return Object.keys(data).reduce((result, element) => {
+                if (Array.isArray(data[element])) {
+                    return result;
+                } else if (
+                    data[element] !== null &&
+                    typeof data[element] === 'object'
+                ) {
+                    return [
+                        ...result,
+                        ...this.getObjectKeys(
+                            data[element],
+                            prefix + element + '.'
+                        )
+                    ];
+                } else {
+                    return [...result, prefix + element];
+                }
+            }, []);
+        },
+        searchImage(data, keys) {
+            let subData = data;
+            keys.forEach(key => {
+                subData = subData[key];
+            });
+            return subData;
+        },
+        isDataUrl(url) {
+            const regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
+            return !!RegExp(regex).test(url);
         }
+    },
+    mounted() {
+        if (Object.keys(this.plugin.data).length > 0) {
+            this.page = {
+                one: false,
+                two: false,
+                three: true
+            };
+        }
+        this.$refs.input.addEventListener('change', event => {
+            this.setImage(window.URL.createObjectURL(event.target.files[0]));
+        });
     }
 };
 </script>
+<style lang="less" scoped>
+#style-image-editor {
+    padding-top: 0px !important;
+    .modal-wrapper {
+        top: 50%;
+        left: 50%;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        .modal-body {
+            height: auto;
+            max-height: none;
+        }
+    }
+}
+.page-1 {
+    max-width: 680px;
+    .modal-body {
+        padding: 50px 70px !important;
+        margin-bottom: 0px;
+        button {
+            margin-bottom: 0px;
+            border: 1px solid #f4f4f4;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            min-width: 130px;
+            background-color: #e9e9e9;
+            transition: all 0.3s linear;
+            &:hover {
+                border: 1px solid #514960;
+                box-shadow: 0px 0px 4px #888888;
+            }
+        }
+    }
+}
+.media-gallery {
+    max-width: 900px;
+    padding-top: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    overflow-y: scroll;
+    .wrapper-image {
+        width: 180px;
+        height: 180px;
+        padding: 5px;
+        border: 1px solid #f4f4f4;
+        margin-bottom: 20px;
+        margin-right: 20px;
+        transition: all 0.3s linear;
+        cursor: pointer;
+        &:hover {
+            border: 1px solid #514960;
+            box-shadow: 0px 0px 4px #888888;
+        }
+    }
+}
+.url {
+    max-width: 700px;
+    padding-top: 30px;
+    padding-left: 25px;
+    padding-right: 25px;
+    label {
+        font-weight: bold !important;
+    }
+}
+.style-enter-active,
+.style-leave-active {
+    transition: opacity 0.5s;
+}
+.style-enter,
+.style-leave-to {
+    opacity: 0;
+}
+</style>

@@ -53,14 +53,10 @@ class ApiServiceProvider extends ServiceProvider
      */
     public static function driver($api_provider, $options = [])
     {
-        $class_name = 'Stensul\\Services\\Api\\'.ucwords($api_provider);
+        $class_name = 'Stensul\\Services\\Api\\' . ucwords($api_provider);
 
         if (class_exists($class_name)) {
-            try {
-                return \App::make($class_name, ['options' => $options]);
-            } catch (Exception $e) {
-                throw $e;
-            }
+            return \App::make($class_name, ['options' => $options]);
         }
     }
 }

@@ -1,5 +1,6 @@
 function separatorDefault() {
   return {
+    id: Math.floor(100000 + (Math.random() * 900000)),
     type: 'separator-element',
     style: {
       height: '1px',
@@ -14,7 +15,6 @@ function separatorDefault() {
       align: 'center',
       bgcolor: 'transparent',
       width: '100%',
-      hideElement: false,
       classes: '',
     },
 

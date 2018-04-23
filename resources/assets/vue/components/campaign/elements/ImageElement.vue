@@ -1,68 +1,63 @@
 <template>
   <!-- IMAGE ELEMENT -->
-  <table 
-    width="100%" 
-    cellpadding="0" 
-    cellspacing="0" 
-    border="0"
-    style="width: 100%;"
+  <tr 
+    data-type="image-element"
+    :class="[getMobileClasses(component,'tr'), getAttributeClasses(component)]"
   >
-    <tr 
-      data-type="image-element"
-      :class="getMobileClasses(component,'tr') + component.attribute.classes"
+    <td 
+      :width="component.container.attribute.width"
+      :style="[containerBorderAndPadding, widthStyle(component.container.attribute.width)]"
+      :align="component.container.attribute.align"
+      class="stx-position-relative"
+      :bgcolor="component.container.attribute.bgcolor"
+      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
     >
-      <td 
-        width="100%" 
-        align="center"
-        class="stx-position-relative"
-        :style="component.style"
-        :bgcolor="component.attribute.bgcolor"
-        :class="getMobileClasses(component,'td:first')"
+      <table
+        width="100%"
+        style="width: 100%;"
+        :align="component.container.attribute.align"
+        border="0"
+        cellpadding="0"
+        cellspacing="0"
       >
-        <table 
-          width="100%" 
-          cellspacing="0" 
-          cellpadding="0" 
-          border="0"
-          style="width: 100%;"
-        >
-          <tr>
-            <td 
-              width="100%" 
-              style="width: 100%;"
-              :align="component.attribute.align" 
-              :valign="component.attribute.valign"
+        <tr>
+          <td 
+            :width="component.image.attribute.width"
+            :valign="component.image.attribute.valign"
+            :align="component.image.attribute.align"
+            :bgcolor="component.image.attribute.bgcolor"
+            :style="[imageBorderAndPadding,{width:widthStyle(component.image.attribute.width)}]"
+          >
+            <a 
+              @click.prevent
+              :href="component.image.attribute.href"
+              :alt="component.image.attribute.alt"
+              :title="component.image.attribute.title"
+              :target="component.image.attribute.target"
             >
-              <a 
-                @click.prevent
-                :href="component.attribute.href"
-                :alt="component.attribute.alt"
-                :title="component.attribute.title"
-                :target="component.attribute.target"
+              <img
+                class="st-resize"
+                style="border: 0; display: block;"
+                border="0"
+                :src="imageUrl(component.image.attribute.placeholder)"
+                :width="component.image.attribute.width" 
+                :height="component.image.attribute.height"
+                :alt="component.image.attribute.alt"
+                :title="component.image.attribute.title"
               >
-                <img
-                  class="st-resize"
-                  style="border: 0; display: block;"
-                  border="0"
-                  :src="imageUrl(component.attribute.placeholder)"
-                  :width="component.attribute.width" 
-                  :height="component.attribute.height"
-                  :alt="component.attribute.alt"
-                  :title="component.attribute.title"
-                >
-              </a>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
   <!-- IMAGE ELEMENT ENDS -->
 </template>
 
 <script>
   import _ from 'lodash';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
 
   export default {
     name: 'ImageElement',
@@ -75,15 +70,15 @@
       'column-width',
       'column'
     ],
-    mixins: [ MobileStylesMixin ],
+    mixins: [ MobileStylesMixin, ComponentAttributeMixin ],
     created () {
       this.setupModule();
       if(this.numberRequired) {
-        let tempWidth = _.toString(this.component.attribute.width);
-        let paddingLeft = _.parseInt(this.component.style.paddingLeft.replace(/px$/, ''));
-        let paddingRight = _.parseInt(this.component.style.paddingRight.replace(/px$/, ''));
-        let paddingColumLeft = _.parseInt(this.column.style.paddingLeft.replace(/px$/, ''));
-        let paddingColumRight = _.parseInt(this.column.style.paddingRight.replace(/px$/, ''));
+        let tempWidth = _.toString(this.component.image.attribute.width);
+        let paddingLeft = _.parseInt(this.component.image.style.paddingLeft.replace(/px$/, ''));
+        let paddingRight = _.parseInt(this.component.image.style.paddingRight.replace(/px$/, ''));
+        let paddingColumLeft = _.parseInt(this.column.container.style.paddingLeft.replace(/px$/, ''));
+        let paddingColumRight = _.parseInt(this.column.container.style.paddingRight.replace(/px$/, ''));
         
         if ( tempWidth.indexOf('%') > 1){
 
@@ -111,6 +106,48 @@
         }
       }
     },
+    computed:{
+      imageBorderAndPadding() {
+        return [
+          {"padding-top": this.component.image.style.paddingTop},
+          {"padding-bottom": this.component.image.style.paddingBottom},
+          {"padding-right": this.component.image.style.paddingRight},
+          {"padding-left": this.component.image.style.paddingLeft},
+          {"border-top-width": this.component.image.style.borderTopWidth},
+          {"border-right-width": this.component.image.style.borderRightWidth},
+          {"border-bottom-width": this.component.image.style.borderBottomWidth},
+          {"border-left-width": this.component.image.style.borderLeftWidth},
+          {"border-top-style": this.component.image.style.borderTopStyle},
+          {"border-right-style": this.component.image.style.borderRightStyle},
+          {"border-bottom-style": this.component.image.style.borderBottomStyle},
+          {"border-left-style": this.component.image.style.borderLeftStyle},
+          {"border-top-color": this.component.image.style.borderTopColor},
+          {"border-right-color": this.component.image.style.borderRightColor},
+          {"border-bottom-color": this.component.image.style.borderBottomColor},
+          {"border-left-color": this.component.image.style.borderLeftColor}
+        ];
+      },
+      containerBorderAndPadding() {
+        return [
+          {"padding-top": this.component.container.style.paddingTop},
+          {"padding-bottom": this.component.container.style.paddingBottom},
+          {"padding-right": this.component.container.style.paddingRight},
+          {"padding-left": this.component.container.style.paddingLeft},
+          {"border-top-width": this.component.container.style.borderTopWidth},
+          {"border-right-width": this.component.container.style.borderRightWidth},
+          {"border-bottom-width": this.component.container.style.borderBottomWidth},
+          {"border-left-width": this.component.container.style.borderLeftWidth},
+          {"border-top-style": this.component.container.style.borderTopStyle},
+          {"border-right-style": this.component.container.style.borderRightStyle},
+          {"border-bottom-style": this.component.container.style.borderBottomStyle},
+          {"border-left-style": this.component.container.style.borderLeftStyle},
+          {"border-top-color": this.component.container.style.borderTopColor},
+          {"border-right-color": this.component.container.style.borderRightColor},
+          {"border-bottom-color": this.component.container.style.borderBottomColor},
+          {"border-left-color": this.component.container.style.borderLeftColor}
+        ];
+      }
+    },
     methods: {
       setupModule () {
         this.elementConfig = null;
@@ -118,6 +155,9 @@
         if (this.component.directives && this.component.directives.elementConfig) {
           this.elementConfig = this.component.directives.elementConfig;
         }
+      },
+      widthStyle(width) {
+        return _.endsWith(width, "%") ? width : width + "px";
       },
     }
   };

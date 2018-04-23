@@ -20,8 +20,17 @@
             :step="option.step || 1"
           ></el-input-number>
           <el-input size="mini" v-if="option.type === 'text'" :disabled="!enabled" :value="option.value" @change="(newValue)=>updateField(newValue, name)"></el-input>
-          <el-select size="mini" v-if="option.type === 'select' || option.type === 'multi-select'" @change="(newValue)=>updateField(newValue, name)" :value="option.value" :multiple="option.type === 'multi-select'">
-            <el-option v-for="(opt, key) in option.options" :value="opt._id ? opt._id : opt"  :key="key" :label="opt.name ? opt.name : opt "></el-option>
+          <el-select
+            size="mini"
+            v-if="option.type === 'select' || option.type === 'multi-select'"
+            @change="(newValue) => updateField(newValue, name)"
+            :value="option.value"
+            :multiple="option.type === 'multi-select'">
+            <el-option
+              v-for="(opt, key) in option.options"
+              :value="opt._id ? opt._id : opt"
+              :key="key"
+              :label="opt.name ? opt.name : opt"></el-option>
           </el-select>
           <label v-if="option.type === 'label'" :value="option.label"></label>
         </template>
@@ -39,10 +48,18 @@
                 @change="(newValue)=>updateSubField(newValue, name, subname)"
                 :min="subopt.min || 0"
                 :max="subopt.max || Infinity"
-                :step="subopt.step || 1"
-            ></el-input-number>
-            <el-select v-model="subopt.value" multiple v-if="subopt.type === 'multi-select'" :value="subopt.value" :parent="name" :name="subname">
-                <el-option v-for="opt in subopt.options" :key="opt" :label="opt" :value="opt"></el-option>
+                :step="subopt.step || 1"></el-input-number>
+            <el-select
+              size="mini"
+              v-if="subopt.type === 'select' || subopt.type === 'multi-select'"
+              @change="(newValue) => updateSubField(newValue, name, subname)"
+              :value="subopt.value"
+              :multiple="subopt.type === 'multi-select'">
+              <el-option
+                v-for="(opt, key) in subopt.options"
+                :value="opt._id ? opt._id : opt"
+                :key="key"
+                :label="opt.name ? opt.name : opt"></el-option>
             </el-select>
             </template>
         </settings-container>
@@ -59,10 +76,19 @@
                     @change="(newValue)=>updateInterField(newValue,name, subname, intername)"
                     :min="interop.min || 0"
                     :max="interop.max || Infinity"
-                    :step="interop.step || 1"
-                ></el-input-number>
-                <el-select v-model="interop.value" multiple v-if="interop.type === 'multi-select'" :value="interop.value" :parent="name" :name="intername">
-                    <el-option v-for="opt in interop.options" :key="opt" :label="opt" :value="opt"></el-option>
+                    :step="interop.step || 1"></el-input-number>
+                <el-select
+                v-model="interop.value"
+                multiple
+                v-if="interop.type === 'multi-select'"
+                :value="interop.value"
+                :parent="name"
+                :name="intername">
+                    <el-option
+                      v-for="opt in interop.options"
+                      :key="opt"
+                      :label="opt"
+                      :value="opt"></el-option>
                 </el-select>
                 </template>
             </settings-container>
@@ -73,125 +99,124 @@
 </template>
 
 <script>
-import clone from "clone";
-import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+import clone from 'clone';
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
 export default {
-  props: ["name"],
-  components: { SettingsContainer },
-  computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
+    props: ['name'],
+    components: { SettingsContainer },
+    computed: {
+        currentComponent() {
+            return this.$store.getters['module/currentComponent'];
+        },
+        module() {
+            return this.$store.getters['module/module'];
+        },
+        plugin() {
+            const module = this.module,
+                columnId = this.currentComponent.columnId,
+                componentId = this.currentComponent.componentId;
+
+            const plugin =
+                module.structure.columns[columnId].components[componentId]
+                    .plugins[this.name];
+            this.enabled = plugin.enabled;
+
+            return plugin;
+        }
     },
-    module() {
-      return this.$store.getters["module/module"];
+    data() {
+        return {
+            enabled: false
+        };
     },
-    plugin() {
-      const module = this.module,
-        columnId = this.currentComponent.columnId,
-        componentId = this.currentComponent.componentId;
+    methods: {
+        toggle(value) {
+            const payload = {
+                plugin: this.name,
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                enabled: value
+            };
+            // Update state of the component
+            this.$store.commit('module/togglePlugin', payload);
 
-      const plugin =
-        module.structure.columns[columnId].components[componentId].plugins[
-          this.name
-        ];
-      this.enabled = plugin.enabled;
+            // Set current component
+            this.$store.commit('module/setCurrentComponent', {
+                columnId: payload.columnId,
+                componentId: payload.componentId
+            });
+            // Update component view in the third column
+            this.$store.commit('module/setChangeSettingComponent', {
+                style:
+                    this.module.structure.columns[payload.columnId].components[
+                        payload.componentId
+                    ].style || {},
+                attribute:
+                    this.module.structure.columns[payload.columnId].components[
+                        payload.componentId
+                    ].attribute || {}
+            });
+        },
+        updateField(value, option) {
+            const config = {};
+            config[option] = {
+                value
+            };
 
-      return plugin;
-    }
-  },
-  data() {
-    return {
-      enabled: false
-    };
-  },
-  methods: {
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value
-      };
-      // Update state of the component
-      this.$store.commit("module/togglePlugin", payload);
+            const payload = {
+                plugin: this.name,
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                config
+            };
 
-      // Set current component
-      this.$store.commit("module/setCurrentComponent", {
-        columnId: payload.columnId,
-        componentId: payload.componentId
-      });
-      // Update component view in the third column
-      this.$store.commit("module/setChangeSettingComponent", {
-        style:
-          this.module.structure.columns[payload.columnId].components[
-            payload.componentId
-          ].style || {},
-        attribute:
-          this.module.structure.columns[payload.columnId].components[
-            payload.componentId
-          ].attribute || {}
-      });
-    },
-    updateField(value, option) {
-      const config = {};
-      config[option] = {
-        value
-      };
+            this.$store.commit('module/savePlugin', payload);
+        },
 
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        config
-      };
+        updateSubField(value, option, subOption) {
+            const config = clone(this.plugin.config);
+            config[option].config[subOption].value = value;
 
-      this.$store.commit("module/savePlugin", payload);
-    },
+            const payload = {
+                plugin: this.name,
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                config
+            };
 
-    updateSubField(value, option, subOption) {
-      const config = clone(this.plugin.config);
-      config[option].config[subOption].value = value;
+            this.$store.commit('module/savePlugin', payload);
+        },
+        updateInterField(value, option, subOption, interOption) {
+            const config = clone(this.plugin.config);
+            config[option].config[subOption].config[interOption].value = value;
 
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        config
-      };
+            const payload = {
+                plugin: this.name,
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                config
+            };
 
-      this.$store.commit("module/savePlugin", payload);
-    },
-    updateInterField(value, option, subOption, interOption) {
-      const config = clone(this.plugin.config);
-      config[option].config[subOption].config[interOption].value = value;
-
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        config
-      };
-
-      this.$store.commit("module/savePlugin", payload);
+            this.$store.commit('module/savePlugin', payload);
+        }
     },
     mounted() {
-      this.$store.dispatch('module/getLibraries', {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId
-      });
+        this.$store.dispatch('module/getLibraries', {
+            plugin: this.name,
+            columnId: this.currentComponent.columnId,
+            componentId: this.currentComponent.componentId
+        });
     }
-  }
 };
 </script>
 
 <style>
 .config-inner {
-  padding-left: 10px;
+    padding-left: 10px;
 }
 
 .config-inner > * {
-  padding-bottom: 5px;
+    padding-bottom: 5px;
 }
 </style>

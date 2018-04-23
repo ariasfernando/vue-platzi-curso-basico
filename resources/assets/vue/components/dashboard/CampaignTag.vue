@@ -1,7 +1,7 @@
 <template>
   <span class="st-tag"
     v-on:click="addTag(tag)"
-    v-bind:class="this.highlighted ? 'tag-highlight' : ''"
+    v-bind:class="highlighted ? 'tag-highlight' : ''"
   >{{tag}}</span>
 </template>
 
@@ -15,7 +15,7 @@ export default {
     tag: {
       type: String,
       required: true
-    }
+    },
   },
   methods: {
     addTag: function(tag) {
@@ -25,3 +25,4 @@ export default {
     }
   }
 }
+</script>

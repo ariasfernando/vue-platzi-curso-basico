@@ -7,32 +7,34 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :width="columnWidthPadding / numColumns"
+        :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/numColumns"
       >
-        <tr
-          v-for="(component, componentId) in column.components"
-          :key="componentId"
-          @click="setComponent(moduleId, columnId, componentId)"
-          :class="[component.attribute.classes, {'stx-hide-element st-remove-element' : component.attribute.hideElement}]"
-        >
+        <tr>
           <td
             width="100%"
-            :style="[column.styles, {'background-color' : column.attribute.bgcolor}]"
-            :bgcolor="column.attribute.bgcolor"
-            :valign="column.attribute.valign"
-            :align="component.attribute.align || 'center'"
+            :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}]"
+            :bgcolor="column.container.attribute.bgcolor"
+            :valign="column.container.attribute.valign"
+            :align="column.container.attribute.align || 'center'"
+            :class="column.container.attribute.classes ||''"
           >
-            <component
-              :is="component.type"
-              :component="component"
-              :module-id="moduleId"
-              :column-id="columnId"
-              :component-id="componentId"
-              :number-required="true"
-              :column-width="columnWidthPadding / numColumns"
-              :column="column"
-              >
-            </component>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+              <template>
+                <component
+                  v-for="(component, componentId) in column.components"
+                  :key="componentId"
+                  @click="setComponent(moduleId, columnId, componentId)"
+                  :is="component.type"
+                  :component="component"
+                  :module-id="moduleId"
+                  :column-id="columnId"
+                  :component-id="componentId"
+                  :number-required="true"
+                  :column-width="columnWidthPadding / numColumns"
+                  :column="column"
+                ></component>
+              </template>
+            </table>
           </td>
         </tr>
       </table>
@@ -102,7 +104,7 @@
           "<![endif]";
       },
       styles() {
-        let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`;
+        let padding = `padding-top:${this.column.container.style.paddingTop};padding-left:${this.column.container.style.paddingLeft};padding-bottom:${this.column.container.style.paddingBottom};padding-right:${this.column.container.style.paddingRight};`;
 
         return padding;
       },

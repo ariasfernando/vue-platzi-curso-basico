@@ -3,6 +3,7 @@
 namespace Stensul\Http\Controllers;
 
 use Auth;
+use Campaign as CampaignManager;
 use Stensul\Models\Campaign;
 use Stensul\Models\Library;
 use Stensul\Models\Setting;
@@ -59,9 +60,23 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $flash_messages = [
+            'campaign_lock',
+            'campaign_not_found',
+            'campaign_permission'
+        ];
+        $flash = '';
+        foreach ($flash_messages as $message) {
+            if (session()->has($message)) {
+                $flash = $message;
+            }
+        }
+
         $params = [
             'locales' => \Config::get('locales'),
-            'libraries' => Auth::user()->getLibraries()
+            'libraries' => Auth::user()->getLibraries(),
+            'flash' => $flash,
+            'locked_by' => CampaignManager::whoIsLocking(session()->get('campaign_lock'))
         ];
 
         return $this->renderView('dashboard', ['params' => $params]);
@@ -114,7 +129,7 @@ class DashboardController extends Controller
 
         if ($sort === 'library_name') {
             $sort = 'library';
-        } else if ($sort == 'campaign_name') {
+        } elseif ($sort == 'campaign_name') {
             $sort = 'lower_campaign_name';
         }
 
@@ -338,7 +353,7 @@ class DashboardController extends Controller
         $menu = [];
         $libraries = Auth::user()->getLibraries();
         if (count($libraries)) {
-            $campaign_menu = Setting::where('key', '=', 'campaign_menu')->first();
+            $campaign_menu = Setting::where('key', '=', 'campaign_menu')->first()->toArray();
             if ($campaign_menu) {
                 $campaign_menu = $campaign_menu->toArray();
                 $menu = $this->getMenuBySettings($campaign_menu['value']);

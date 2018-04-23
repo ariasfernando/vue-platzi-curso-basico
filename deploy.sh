@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 
-RUN_GULP=false
+RUN_WEBPACK=false
 RUN_COMPOSER=false
-RUN_BOWER=false
 RUN_NPM=false
 GIT_DIFF=`git diff --name-only HEAD@{0} HEAD@{1}`
 
 while read srcfile
 do
-	REGEX_GULP="\.js$|\.less|resources|public|gulpfile"
+	REGEX_WEBPACK="\.js$|\.less|resources|public|webpack.mix"
 	echo $srcfile;
-	#Check if you need to run gulp
-	if [[ $srcfile =~ $REGEX_GULP ]]; then
-		RUN_GULP=true
+	#Check if you need to run webpack
+	if [[ $srcfile =~ $REGEX_WEBPACK ]]; then
+		RUN_WEBPACK=true
 	fi
 
 	#Check if you need to run composer
@@ -20,16 +19,10 @@ do
 		RUN_COMPOSER=true
 	fi
 
-	#Check if you need to run bower
-	if [[ $srcfile = "bower.json" ]] ; then
-		RUN_BOWER=true
-		RUN_GULP=true
-	fi
-
 	#Check if you need to run npm
 	if [[ $srcfile = "package.json" ]] ; then
 		RUN_NPM=true
-		RUN_GULP=true
+		RUN_WEBPACK=true
 	fi
 done <<< "$(echo -e "$GIT_DIFF")"
 
@@ -49,25 +42,20 @@ function deploy_composer {
 
 }
 
-function deploy_bower {
-	echo "updating bower dependencies..."
-	bower install
-}
 function deploy_npm {
 	echo "updating npm dependencies..."
     npm install
 }
 
-function deploy_gulp {
-	echo "optimzing assets using gulp..."
-	gulp --production
+function deploy_webpack {
+	echo "optimzing assets using webpack..."
+	npm run production
 }
 
 if [ -z "$GIT_DIFF" ]; then
 	RUN_COMPOSER=true
-	RUN_BOWER=true
 	RUN_NPM=true
-	RUN_GULP=true
+	RUN_WEBPACK=true
 fi
 
 case "$1" in
@@ -76,37 +64,29 @@ case "$1" in
 	deploy_composer
   ;;
 
-  "--bower")
-	deploy_bower
-  ;;
-
   "--npm")
 	deploy_npm
   ;;
 
-  "--gulp")
-	deploy_gulp
+  "--webpack")
+	deploy_webpack
   ;;
 
   "--force-all")
 	deploy_composer
 	deploy_npm
-	deploy_bower
-	deploy_gulp
+	deploy_webpack
   ;;
 
   *)
 	if $RUN_COMPOSER ; then
 		deploy_composer
 	fi
-	if  $RUN_BOWER ; then
-		deploy_bower
-	fi
 	if  $RUN_NPM ; then
 		deploy_npm
 	fi
-	if  $RUN_GULP ; then
-		deploy_gulp
+	if  $RUN_WEBPACK ; then
+		deploy_webpack
 	fi
 
   esac

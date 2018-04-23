@@ -1,15 +1,36 @@
-const studioSettings = require('./studioSettings.vue');
-const campaignSettings = require('./campaignSettings.vue');
+import studioSettings from './studioSettings.vue';
+import campaignSettings from './campaignSettings.vue';
 
-module.exports = {
+export default {
   name: 'style-image-editor',
-  title: 'Image Editor',
-  version: '0.0.1',
+  title: 'style Image Editor',
+  version: '0.0.2',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
   campaignSettings,
   config: {
+    library: {
+      label: 'Media Gallery',
+      key: 'media_gallery',
+      type: 'switch',
+      value: false,
+      config: {
+        set_images: {
+          label: 'Image Set',
+          key: 'set_images',
+          value: null,
+          type: 'select',
+          options: [],
+        },
+      },
+    },
+    mobile: {
+      label: 'Mobile Upload',
+      key: 'mobile_upload',
+      value: false,
+      type: 'switch',
+    },
     size: {
       label: 'Size',
       key: 'size',
@@ -21,11 +42,12 @@ module.exports = {
           key: 'width',
           value: 600,
           type: 'number',
+          step: 1,
         },
         size_auto: {
           label: 'Flexible height',
           key: 'auto',
-          value: 0,
+          value: false,
           type: 'switch',
         },
         size_height: {
@@ -33,6 +55,7 @@ module.exports = {
           key: 'height',
           value: 200,
           type: 'number',
+          step: 1,
         },
       },
     },
@@ -103,6 +126,7 @@ module.exports = {
               key: 'diameter',
               value: 0,
               type: 'number',
+              step: 1,          
             },
           },
         },
@@ -137,12 +161,14 @@ module.exports = {
           key: 'top',
           value: 0,
           type: 'number',
+          step: 1,
         },
         text_left: {
           label: 'Left',
           key: 'left',
           value: 0,
           type: 'number',
+          step: 1,
         },
       },
     },
@@ -169,37 +195,41 @@ module.exports = {
           key: 'width',
           value: 100,
           type: 'number',
+          step: 1,
         },
         overlay_height: {
           label: 'Height',
           key: 'height',
           value: 100,
           type: 'number',
+          step: 1,
         },
         overlay_top: {
           label: 'Top',
           key: 'top',
           value: 0,
           type: 'number',
+          step: 1,
         },
         overlay_left: {
           label: 'Left',
           key: 'left',
           value: 0,
           type: 'number',
+          step: 1,
         },
       },
     },
     'sie-plugin-shapemask_options': {
       label: 'Shapemask',
       key: 'shapemask',
-      value: true,
+      value: false,
       type: 'switch',
       config: {
         shapemask_visible: {
           label: 'Visible',
           key: 'visible',
-          value: true,
+          value: false,
           type: 'switch',
         },
         transparencycolor: {
@@ -226,26 +256,30 @@ module.exports = {
             square_width: {
               label: 'Width',
               key: 'width',
-              value: undefined,
+              value: 0,
               type: 'number',
+              step: 1,
             },
             square_height: {
               label: 'Height',
               key: 'height',
-              value: undefined,
+              value: 0,
               type: 'number',
+              step: 1,              
             },
             square_top: {
               label: 'Top',
               key: 'top',
               value: 0,
               type: 'number',
+              step: 1,
             },
             square_left: {
               label: 'Left',
               key: 'left',
               value: 0,
               type: 'number',
+              step: 1,
             },
             square_description: {
               label: 'Description',
@@ -257,7 +291,7 @@ module.exports = {
               label: 'Icon',
               key: 'icon',
               type: 'text',
-              value: 'far fa-square',
+              value: 'fa fa-square-o',
             },
           },
         },
@@ -270,20 +304,23 @@ module.exports = {
             circle_radius: {
               label: 'Radius',
               key: 'radius',
-              value: undefined,
+              value: 0,
               type: 'number',
+              step: 1,
             },
             circle_top: {
               label: 'Top',
               key: 'top',
               value: 0,
               type: 'number',
+              step: 1,
             },
             circle_left: {
               label: 'Left',
               key: 'left',
               value: 0,
               type: 'number',
+              step: 1,
             },
             circle_description: {
               label: 'Description',
@@ -295,7 +332,7 @@ module.exports = {
               label: 'Icon',
               key: 'icon',
               type: 'text',
-              value: 'far fa-circle',
+              value: 'fa fa-circle-o',
             },
           },
         },
@@ -304,4 +341,5 @@ module.exports = {
   },
   data: {},
   enabled: false,
+  settings: true,
 };

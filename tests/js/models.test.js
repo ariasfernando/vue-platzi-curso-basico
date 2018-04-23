@@ -47,10 +47,10 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
-          'style',
-          'attribute',
-          'styleOptions',
+          'container',
+          'content',
           'plugins',
           'components',
         ]);
@@ -75,10 +75,10 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
-          'style',
-          'styleOptions',
-          'attribute',
+          'container',
+          'text',
           'plugins',
           'data',
         ]);
@@ -103,10 +103,10 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
-          'style',
-          'styleOptions',
-          'attribute',
+          'container',
+          'image',
           'plugins',
           'data',
         ]);
@@ -131,6 +131,7 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
           'style',
           'attribute',
@@ -158,6 +159,7 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
           'style',
           'attribute',
@@ -185,11 +187,11 @@ describe('== Models ==', () => {
 
       it('Should only have a specific set of properties', (done) => {
         expect(properties).to.have.keys([
+          'id',
           'type',
-          'style',
-          'styleOptions',
-          'attribute',
-          'buttonCaret',
+          'container',
+          'button',
+          'caret',
           'plugins',
           'data',
         ]);

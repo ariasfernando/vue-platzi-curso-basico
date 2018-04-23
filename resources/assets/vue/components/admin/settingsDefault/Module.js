@@ -12,7 +12,7 @@ function moduleDefault() {
       [
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
         },
         {
           name: 'border-group',
@@ -22,6 +22,10 @@ function moduleDefault() {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
+        },
+        {
+          name: 'columnsStacking',
+          type: 'columns-stacking',
         },
       ],
     ],

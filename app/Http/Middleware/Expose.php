@@ -39,5 +39,4 @@ class Expose
         }
         return $next($request);
     }
-
 }

@@ -3,44 +3,49 @@
     <tr
       data-type="image-element"
       :data-component="JSON.stringify(component)"
-      :class="getMobileClasses(component,'tr') + component.attribute.classes"
+      :class="getMobileClasses(component,'tr')"
       @click.prevent="setComponent"
     >
       <td 
-        width="100%" 
-        align="center"
+        :width="component.container.attribute.width"
+        :style="[containerBorderAndPadding, widthStyle(component.container.attribute.width)]"
+        :align="component.container.attribute.align"
         class="stx-position-relative"
-        :style="component.style" 
-        :class="getMobileClasses(component,'td:first')"
+        :bgcolor="component.container.attribute.bgcolor"
+        :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
       >
         <table
-          width="100%" 
-          cellspacing="0" 
-          cellpadding="0" 
-          border="0" 
-          style="width: 100%;"
+        width="100%"
+        style="width: 100%;"
+        :align="component.container.attribute.align"
+        border="0"
+        cellpadding="0"
+        cellspacing="0"
         >
           <tr>
             <td 
-              width="100%" 
-              :bgcolor="component.attribute.bgcolor" 
-              :align="component.attribute.align" 
-              :valign="component.attribute.valign"
+              :width="component.image.attribute.width"
+              :valign="component.image.attribute.valign"
+              :align="component.image.attribute.align"
+              :bgcolor="component.image.attribute.bgcolor"
+              :style="[imageBorderAndPadding,{width:widthStyle(component.image.attribute.width)}]"
             >
               <a 
                 @click.prevent
-                :href="component.attribute.href" 
-                :alt="component.attribute.alt"
-                :title="component.attribute.title"
-                :target="component.attribute.target"
+                :href="component.image.attribute.href" 
+                :alt="component.image.attribute.alt"
+                :title="component.image.attribute.title"
+                :target="component.image.attribute.target"
               >
                 <img
                   class="st-resize"
+                  style="border: 0; display: block;"
                   border="0"
-                  :style="styleComputed"
-                  :src="imageUrl(component.attribute.placeholder)" 
-                  :width="widthInline"
-                  :height="component.attribute.height"
+                  :width="component.image.attribute.width" 
+                  :src="imageUrl(component.image.attribute.placeholder)"
+                  :height="component.image.attribute.height"
+                  :alt="component.image.attribute.alt"
+                  :title="component.image.attribute.title"
                   :data-open-element-config="elementConfig"
                 >
               </a>
@@ -57,6 +62,7 @@
   import _ from 'lodash';
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
   
   export default {
     name: 'ImageElement',
@@ -69,7 +75,7 @@
     components: {
       ComponentToolbar,
     },
-    mixins: [ MobileStylesMixin ],
+    mixins: [ MobileStylesMixin, ComponentAttributeMixin ],
     created () {
       this.setupModule();
     },
@@ -81,14 +87,45 @@
       }
     },
     computed: {
-      styleComputed() {
-        const widthStyleInline = this.component.attribute.width.indexOf("%") !== -1
-          ? this.component.attribute.width
-          : `${_.parseInt(this.component.attribute.width)}px`
-        return `border: 0; display: block; width: ${widthStyleInline}`;
+      imageBorderAndPadding() {
+        return [
+          {"padding-top": this.component.image.style.paddingTop},
+          {"padding-bottom": this.component.image.style.paddingBottom},
+          {"padding-right": this.component.image.style.paddingRight},
+          {"padding-left": this.component.image.style.paddingLeft},
+          {"border-top-width": this.component.image.style.borderTopWidth},
+          {"border-right-width": this.component.image.style.borderRightWidth},
+          {"border-bottom-width": this.component.image.style.borderBottomWidth},
+          {"border-left-width": this.component.image.style.borderLeftWidth},
+          {"border-top-style": this.component.image.style.borderTopStyle},
+          {"border-right-style": this.component.image.style.borderRightStyle},
+          {"border-bottom-style": this.component.image.style.borderBottomStyle},
+          {"border-left-style": this.component.image.style.borderLeftStyle},
+          {"border-top-color": this.component.image.style.borderTopColor},
+          {"border-right-color": this.component.image.style.borderRightColor},
+          {"border-bottom-color": this.component.image.style.borderBottomColor},
+          {"border-left-color": this.component.image.style.borderLeftColor}
+        ];
       },
-      widthInline() {
-        return this.component.attribute.width.indexOf("%") !== -1 ? this.component.attribute.width : _.parseInt(this.component.attribute.width);
+      containerBorderAndPadding() {
+        return [
+          {"padding-top": this.component.container.style.paddingTop},
+          {"padding-bottom": this.component.container.style.paddingBottom},
+          {"padding-right": this.component.container.style.paddingRight},
+          {"padding-left": this.component.container.style.paddingLeft},
+          {"border-top-width": this.component.container.style.borderTopWidth},
+          {"border-right-width": this.component.container.style.borderRightWidth},
+          {"border-bottom-width": this.component.container.style.borderBottomWidth},
+          {"border-left-width": this.component.container.style.borderLeftWidth},
+          {"border-top-style": this.component.container.style.borderTopStyle},
+          {"border-right-style": this.component.container.style.borderRightStyle},
+          {"border-bottom-style": this.component.container.style.borderBottomStyle},
+          {"border-left-style": this.component.container.style.borderLeftStyle},
+          {"border-top-color": this.component.container.style.borderTopColor},
+          {"border-right-color": this.component.container.style.borderRightColor},
+          {"border-bottom-color": this.component.container.style.borderBottomColor},
+          {"border-left-color": this.component.container.style.borderLeftColor}
+        ];
       }
     },
     methods: {
@@ -100,6 +137,9 @@
         }
       },
 
+      widthStyle(width) {
+        return _.endsWith(width, "%") ? width : width + "px";
+      },
       setComponent(e) {
         if (!$(e.target).hasClass("st-remove")){
           this.$store.commit("module/setCurrentComponent", {

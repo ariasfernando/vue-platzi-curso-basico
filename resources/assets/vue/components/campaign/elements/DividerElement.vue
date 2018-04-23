@@ -10,7 +10,7 @@
   >
     <tr 
       data-type="divider-element"
-      :class="getMobileClasses(component,'tr') + component.attribute.classes"
+      :class="getMobileClasses(component,'tr')"
     >
       <td
         class="stx-position-relative stx-line-height-reset"
@@ -18,7 +18,7 @@
         :height="heightAsInt"
         :width="component.style.width || '100%'"
         :style="styles"
-        :class="getMobileClasses(component,'td:first')"
+        :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
         :data-persist-styles="JSON.stringify(dataPersistStyles)"
       >&nbsp;</td>
     </tr>
@@ -28,6 +28,7 @@
 
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
   import _ from 'lodash';
 
   export default {
@@ -39,7 +40,7 @@
       'component',
       'column'
     ],
-    mixins: [ MobileStylesMixin ],
+    mixins: [ MobileStylesMixin,ComponentAttributeMixin ],
     data(){
       return{
         dataPersistStyles: {

@@ -19,12 +19,11 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "input-height",
-  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
   data() {
     return {
-      name: "height"
+      linkName: "height"
     };
   },
   computed: {
@@ -33,7 +32,12 @@ export default {
         return _.parseInt(this.element.style[this.name]);
       },
       set: function(newValue) {
-        this.$emit("style-setting-updated", { name: this.name, value: `${newValue}px` });
+        this.$emit("setting-updated", {
+          subComponent: this.subComponent,
+          link: this.link,
+          name: this.linkName,
+          value: `${newValue}px`
+        });
       }
     },
   }

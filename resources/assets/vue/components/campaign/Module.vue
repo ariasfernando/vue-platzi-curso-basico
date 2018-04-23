@@ -1,9 +1,10 @@
 <template>
-  <tr v-if="module.type === 'custom'"
-      class="stx-module-wrapper"
-      :class="[`stx-${module.name}`, {'stx-module-wrapper-active': activeModule === moduleId }]"
-      @mouseover="setModulesMouseOver"
-      @mouseleave="setModulesMouseLeave"
+  <tr
+    v-if="module.type === 'custom'"
+    class="stx-module-wrapper"
+    :class="[`stx-${module.name}`, {'stx-module-wrapper-active': activeModule === moduleId }]"
+    @mouseover="setModulesMouseOver"
+    @mouseleave="setModulesMouseLeave"
   >
     <td class="stx-toolbar-content stx-position-relative"
         :data-module-id="moduleId"
@@ -17,35 +18,39 @@
     </td>
   </tr>
 
-  <tr v-else
-      class="stx-module-wrapper"
-        :class="[`stx-${module.key}`, module.structure.attribute.classes, {'stx-module-wrapper-active': activeModule === moduleId }]"
-      @mouseover="setModulesMouseOver"
-      @mouseleave="setModulesMouseLeave"
+  <tr
+    v-else
+    class="stx-module-wrapper"
+    :class="[`stx-${module.key}`, {'stx-module-wrapper-active': activeModule === moduleId }]"
+    @mouseover="setModulesMouseOver"
+    @mouseleave="setModulesMouseLeave"
   >
-    <td class="stx-toolbar-content stx-position-relative"
-        :data-module-id="moduleId"
-        :style="module.structure.style"
-        :bgcolor="module.structure.attribute.bgcolor"
-        :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 }">
+    <td 
+      class="stx-toolbar-content stx-position-relative"
+      :data-module-id="moduleId"
+      :style="module.structure.style"
+      :bgcolor="module.structure.attribute.bgcolor"
+      :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}"
+    >
+
       <table
         width="100%"
         cellspacing="0"
         cellpadding="0"
         border="0"
         :class="{ 'stx-wrapper': module.structure.columns.length === 1 }"
-        >
+      >
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
 
           <!--2 COLUMNS STACKING -->
-          <td width="100%" v-if="!module.structure.columnsFixed && !module.structure.invertedStacking">
+          <td width="100%" v-if="module.structure.columnsStacking === 'normal'">
             <comment :content="msoStartingComment"></comment>
             <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
           </td>
 
           <!--2 COLUMNS INVERTED STACKING ONLY FOR 2 COLUMNS-->
-          <td width="100%" v-else-if="!module.structure.columnsFixed && module.structure.invertedStacking">
+          <td width="100%" v-else-if="module.structure.columnsStacking === 'invertedStacking'">
             <table
               width="100%"
               cellspacing="0"
@@ -78,30 +83,41 @@
           </td>
 
           <!--2 COLUMNS FIXED -->
-          <td v-else
-              v-for="(column, columnId) in module.structure.columns"
-              :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
-              valign="top"
+          <td
+            v-else-if="module.structure.columnsStacking == 'columnsFixed'"
+            v-for="(column, columnId) in module.structure.columns"
+            :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
+            valign="top"
+            :key="column.id"
           >
-            <columns-fixed-render :column="column" :column-id="columnId" :module-id="moduleId"></columns-fixed-render>
+            <columns-fixed-render
+              :column="column"
+              :column-id="columnId"
+              :module-id="moduleId"
+            ></columns-fixed-render>
           </td>
         </tr>
         <!--2 COLUMNS -->
 
         <!--1 COLUMN -->
-        <tr v-else
+        <tr
+          v-else
           v-for="(component, componentId) in module.structure.columns[0].components"
           @click.prevent="setComponent(moduleId, 0, componentId)"
-          :class="component.attribute.hideElement ? 'stx-hide-element st-remove-element' : '' "
+          :key="component.id"
         >
-          <td :valign="component.attribute.valign" :align="component.attribute.align || 'left'">
-            <component
-              :is="component.type"
-              :component="component"
-              :module-id="moduleId"
-              :column-id="0"
-              :component-id="componentId">
-            </component>
+          <td width="100%" class="st-col" style="vertical-align: top; width: 100%;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+              <template>
+                  <component
+                    :is="component.type"
+                    :component="component"
+                    :module-id="moduleId"
+                    :column-id="0"
+                    :component-id="componentId"
+                  ></component>
+                </template>
+              </table>
           </td>
         </tr>
         <!--1 COLUMN -->
@@ -124,11 +140,13 @@
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
+  import ComponentAttributeMixin from '../common/mixins/ComponentAttributeMixin.js';
   import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
     props: ['moduleId'],
+    mixins: [ ComponentAttributeMixin ],
     computed: {
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
@@ -143,27 +161,37 @@
         return this.$store.getters["campaign/fieldErrors"];
       },
       msoStartingComment() {
-        return "[if gte mso 9]>" +
-          "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center'>" +
-          "<tr>" +
-          "<td style='width: " + this.templateWidth / this.module.structure.columns.length + "px !important'>" +
-          "<![endif]";
+        return `
+        [if gte mso 9]>
+          <table width="${this.templateWidth}" cellpading="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
+            <tr>
+              <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important">
+              <![endif]`;
       },
       msoStartingCommentInverted() {
-        return "[if gte mso 9]>" +
-          "<table width='" + this.columnWidthPadding + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center' dir='rtl'>" +
-          "<tr>" +
-          "<td style='width: " + this.columnWidthPadding / this.module.structure.columns.length + "px !important' dir='ltr'>" +
-          "<![endif]";
+        return `
+        [if gte mso 9]>
+          <table width="${this.columnWidthPadding}" cellpading="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
+            <tr>
+              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr">
+              <![endif]`;
       },
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
       },
       columnWidthPadding(){
-        return this.templateWidth - (_.parseInt(this.module.structure.style.paddingLeft) + _.parseInt(this.module.structure.style.paddingRight));
+        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft) - _.parseInt(this.module.structure.style.paddingRight);
       }
     },
     methods: {
+
+      calculeWidthColumnPx(columnId){
+        let width = this.module.structure.columns[columnId].container.attribute.width;
+        if(_.endsWith(width, "%")){
+          return this.templateWidthWithoutPadding / 100 * _.parseInt(width);
+        }
+        return width;
+      },
       showError(moduleId){
         let err = false;
         _.each(this.moduleErrors, (error, key) => {

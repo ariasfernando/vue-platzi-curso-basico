@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import clone from 'clone';
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 
 function getPlugins() {
   const plugins = {};
@@ -27,10 +27,9 @@ function Module(data = {}) {
   this.plugins = data.plugins || getPlugins();
 
   this.structure = {
-    columnsFixed: (data.structure && data.structure.columnsFixed) ? data.structure.columnsFixed : false,
-    invertedStacking: (data.structure && data.structure.invertedStacking) ? data.structure.invertedStacking : false,
+    columnsStacking: (data.structure && data.structure.columnsType) ? data.structure.columnsType : 'normal',
     attribute: {
-      bgcolor: attribute.bgcolor || 'transparent',
+      bgcolor: attribute.bgcolor || '',
       classes: '',
     },
     mobileClasses,
@@ -43,19 +42,19 @@ function Module(data = {}) {
       // Border Top
       borderTopWidth: style.borderTopWidth || '0px',
       borderTopStyle: style.borderTopStyle || 'none',
-      borderTopColor: style.borderTopColor || 'transparent',
+      borderTopColor: style.borderTopColor || '',
       // Border Right
       borderRightWidth: style.borderRightWidth || '0px',
       borderRightStyle: style.borderRightStyle || 'none',
-      borderRightColor: style.borderRightColor || 'transparent',
+      borderRightColor: style.borderRightColor || '',
       // Border Bottom
       borderBottomWidth: style.borderBottomWidth || '0px',
       borderBottomStyle: style.borderBottomStyle || 'none',
-      borderBottomColor: style.borderBottomColor || 'transparent',
+      borderBottomColor: style.borderBottomColor || '',
       // Border Left
       borderLeftWidth: style.borderLeftWidth || '0px',
       borderLeftStyle: style.borderLeftStyle || 'none',
-      borderLeftColor: style.borderLeftColor || 'transparent',
+      borderLeftColor: style.borderLeftColor || '',
     },
 
     columns: data.structure && data.structure.columns ? data.structure.columns : [],

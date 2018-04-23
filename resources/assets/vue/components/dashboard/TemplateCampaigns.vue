@@ -83,7 +83,6 @@
                   data-toggle="tooltip"
                   data-placement="bottom"
                   data-tooltip="Lock this email for editing"
-                  @click.prevent
                 >
                   <i class="glyphicon fa fa-lock"></i>
                 </a>
