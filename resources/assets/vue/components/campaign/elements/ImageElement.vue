@@ -3,7 +3,7 @@
   <tr 
     @click="selectComponent"
     data-type="image-element"
-    :class="[getMobileClasses(component,'tr'), getAttributeClasses(component)]"
+    :class="getMobileClasses(component,'tr')"
   >
     <td 
       :width="component.container.attribute.width"
@@ -29,24 +29,40 @@
             :bgcolor="component.image.attribute.bgcolor"
             :style="[imageBorderAndPadding,{width:widthStyle(component.image.attribute.width)}]"
           >
-            <a 
-              @click.prevent
-              :href="component.image.attribute.href"
-              :alt="component.image.attribute.alt"
-              :title="component.image.attribute.title"
-              :target="component.image.attribute.target"
-            >
-              <img
-                class="st-resize"
-                style="border: 0; display: block;"
-                border="0"
-                :src="imageUrl(component.image.attribute.placeholder)"
-                :width="component.image.attribute.width" 
-                :height="component.image.attribute.height"
+              <a 
+                @click.prevent
+                :href="component.image.attribute.href" 
                 :alt="component.image.attribute.alt"
                 :title="component.image.attribute.title"
-              >
-            </a>
+                :target="component.image.attribute.target"
+                >
+                <img
+                  class="st-resize"
+                  :class="{'st-hide-mobile' : component.image.styleOption.hasImageMobile}"
+                  style="border: 0; display: block;"
+                  border="0"
+                  :width="component.image.attribute.width" 
+                  :src="imageUrl(component.image.attribute.placeholder)"
+                  :height="component.image.attribute.height"
+                  :alt="component.image.attribute.alt"
+                  :title="component.image.attribute.title"
+                >
+                <template 
+                  v-if="component.image.styleOption.hasImageMobile">
+                  <div class="show-img-mobile" style="display:none;width:0;overflow:hidden;max-height:0!important;">
+                    <img
+                      :src="imageUrl(component.image.attribute.placeholderMobile)"
+                      border="0"
+                      class="st-resize"
+                      style="display:block;border:none;max-width:100%;height:auto;"
+                      :width="component.image.attribute.width" 
+                      :height="component.image.attribute.height"
+                      :alt="component.image.attribute.alt"
+                      :title="component.image.attribute.title"
+                    />
+                  </div>
+                </template>
+              </a>
           </td>
         </tr>
       </table>
