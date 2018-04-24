@@ -353,7 +353,7 @@ class DashboardController extends Controller
         $menu = [];
         $libraries = Auth::user()->getLibraries();
         if (count($libraries)) {
-            $campaign_menu = Setting::where('key', '=', 'campaign_menu')->first()->toArray();
+            $campaign_menu = Setting::where('key', '=', 'campaign_menu')->first();
             if ($campaign_menu) {
                 $campaign_menu = $campaign_menu->toArray();
                 $menu = $this->getMenuBySettings($campaign_menu['value']);
