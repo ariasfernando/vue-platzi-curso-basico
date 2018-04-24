@@ -30,12 +30,20 @@ export default {
       key: 'mobile_upload',
       value: false,
       type: 'switch',
+      config: {
+        separated: {
+          label: 'Use different image',
+          key: 'mobile_upload_separated',
+          value: false,
+          type: 'switch',
+        },
+      },
     },
     url: {
       label: 'Url Upload',
       key: 'url_upload',
       value: false,
-      type: 'switch'
+      type: 'switch',
     },
     size: {
       label: 'Size',
@@ -46,7 +54,7 @@ export default {
         size_width: {
           label: 'Width',
           key: 'width',
-          value: 600,
+          value: 300,
           type: 'number',
           step: 1,
         },
