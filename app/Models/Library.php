@@ -82,16 +82,21 @@ class Library extends Eloquent
         $modules_to_keep = [];
 
         // Recreate the modules array without the removed module.
-        foreach ($this->modules as $group => $mods) {
+        foreach ($this->modules as $key => $mods) {
             // Grouped modules.
-            if (is_array($mods)) {
-                foreach ($mods as $mod) {
-                    if ($mod !== $module_key) {
-                        $modules_to_keep[$group][] = $mod;
+            if ($mods['type'] == 'sub-menu') {
+                $sub_modules_to_keep = [];
+                foreach ($mods['modules'] as $mod) {
+                    if ($mod['moduleId'] !== $module_key) {
+                       $sub_modules_to_keep[] = $mod; 
                     }
                 }
+                if(!empty($sub_modules_to_keep)) {
+                    $mods['modules'] = $sub_modules_to_keep;
+                    $modules_to_keep[] = $mods;
+                }
             } else { // Ungrouped modules.
-                if ($mods !== $module_key) {
+                if ($mods['moduleId'] !== $module_key) {
                     $modules_to_keep[] = $mods;
                 }
             }
