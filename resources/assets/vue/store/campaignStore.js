@@ -191,7 +191,8 @@ function campaignStore() {
 
       saveComponentProperty(state, data) {
         const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
-        const properties = data.subComponent ? component[data.subComponent][data.link] : component[data.link];
+        const subComponent = data.subComponent ? component[data.subComponent] : component;
+        const properties = data.link ? subComponent[data.link] : subComponent;
         Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },

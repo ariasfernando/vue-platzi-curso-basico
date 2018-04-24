@@ -10,12 +10,16 @@ export default {
     'default-value',
     'min-value',
     'max-value',
+    'showSetting',
     'sub-component',
     'is-disable',
     'options',
     'element',
     'isDisablePercentage',
   ],
+  mounted() {
+    this.setDefaultValue();
+  },
   computed: {
     module() {
       return this.$store.getters['module/module'];
@@ -36,7 +40,7 @@ export default {
     mainSetting: {
       get() {
         if (this.link) {
-          return this.element[_.kebabCase(this.link)][this.name];
+          return this.element[this.link][this.name];
         }
         return this.element[this.name];
       },
@@ -48,6 +52,22 @@ export default {
           value: newValue,
         });
       },
+    },
+  },
+  methods: {
+    setDefaultValue() {
+      if (this.link !== undefined && this.defaultValue !== undefined && this.element[this.link][this.name] === undefined) {
+        // set styleOption to default if is undefined
+        this.mainSetting = this.defaultValue;
+      }
+    },
+  },
+  watch: {
+    element: {
+      handler() {
+        this.setDefaultValue();
+      },
+      deep: true,
     },
   },
 };
