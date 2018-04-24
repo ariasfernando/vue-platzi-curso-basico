@@ -21,5 +21,5 @@ export default {
   styleImageEditor,
   textOptions,
   variableHeight,
-  verticalAlignment
+  verticalAlignment,
 };

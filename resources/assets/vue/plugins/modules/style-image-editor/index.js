@@ -3,9 +3,9 @@ import campaignSettings from './campaignSettings.vue';
 
 export default {
   name: 'style-image-editor',
-  title: 'Style Image Editor',
-  version: '0.0.1',
-  author: 'manuel.zambrano@stensul.com',
+  title: 'style Image Editor',
+  version: '0.0.2',
+  author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
   campaignSettings,
@@ -21,21 +21,29 @@ export default {
           key: 'set_images',
           value: null,
           type: 'select',
-          options: []
-        }
-      }
+          options: [],
+        },
+      },
     },
     mobile: {
       label: 'Mobile Upload',
       key: 'mobile_upload',
       value: false,
-      type: 'switch'
+      type: 'switch',
+      config: {
+        separated: {
+          label: 'Use different image',
+          key: 'mobile_upload_separated',
+          value: false,
+          type: 'switch',
+        },
+      },
     },
     url: {
       label: 'Url Upload',
       key: 'url_upload',
       value: false,
-      type: 'switch'
+      type: 'switch',
     },
     size: {
       label: 'Size',
@@ -46,15 +54,22 @@ export default {
         size_width: {
           label: 'Width',
           key: 'width',
-          value: 600,
+          value: 300,
           type: 'number',
+          step: 1,
+        },
+        size_auto: {
+          label: 'Flexible height',
+          key: 'auto',
+          value: false,
+          type: 'switch',
         },
         size_height: {
           label: 'Height',
           key: 'height',
           value: 200,
           type: 'number',
-          step: 1
+          step: 1,
         },
       },
     },
@@ -82,7 +97,7 @@ export default {
       label: 'Cropper',
       key: 'cropper',
       type: 'switch',
-      value: false,
+      value: true,
       config: {
         movable: {
           label: 'Enable Drag',
@@ -101,6 +116,33 @@ export default {
           key: 'zoomable',
           value: true,
           type: 'switch',
+        },
+        vertical: {
+          label: 'Vertical crop',
+          key: 'cropBoxResizable',
+          value: false,
+          type: 'switch',
+        },
+        round: {
+          label: 'Circle Cropping',
+          key: 'roundCrop',
+          value: false,
+          type: 'switch',
+          config: {
+            only: {
+              label: 'Only circle cropping',
+              key: 'only',
+              value: false,
+              type: 'switch',
+            },
+            circle_diameter: {
+              label: 'Diameter',
+              key: 'diameter',
+              value: 0,
+              type: 'number',
+              step: 1,          
+            },
+          },
         },
       },
     },
@@ -133,14 +175,14 @@ export default {
           key: 'top',
           value: 0,
           type: 'number',
-          step: 1
+          step: 1,
         },
         text_left: {
           label: 'Left',
           key: 'left',
           value: 0,
           type: 'number',
-          step: 1
+          step: 1,
         },
       },
     },
@@ -167,35 +209,35 @@ export default {
           key: 'width',
           value: 100,
           type: 'number',
-          step: 1
+          step: 1,
         },
         overlay_height: {
           label: 'Height',
           key: 'height',
           value: 100,
           type: 'number',
-          step: 1
+          step: 1,
         },
         overlay_top: {
           label: 'Top',
           key: 'top',
           value: 0,
           type: 'number',
-          step: 1
+          step: 1,
         },
         overlay_left: {
           label: 'Left',
           key: 'left',
           value: 0,
           type: 'number',
-          step: 1
+          step: 1,
         },
       },
     },
     'sie-plugin-shapemask_options': {
       label: 'Shapemask',
       key: 'shapemask',
-      value: true,
+      value: false,
       type: 'switch',
       config: {
         shapemask_visible: {
@@ -214,44 +256,44 @@ export default {
           label: 'Transparency',
           key: 'transparency',
           value: 1,
-          max: 1, 
+          max: 1,
           min: 0,
-          step: 1,
+          step: '0.1',
           type: 'number',
         },
         shapemask_square: {
           label: 'Square',
           key: 'shapes_square',
           type: 'switch',
-          value: false,
+          value: true,
           config: {
             square_width: {
               label: 'Width',
               key: 'width',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             square_height: {
               label: 'Height',
               key: 'height',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,              
             },
             square_top: {
               label: 'Top',
               key: 'top',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             square_left: {
               label: 'Left',
               key: 'left',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             square_description: {
               label: 'Description',
@@ -263,7 +305,7 @@ export default {
               label: 'Icon',
               key: 'icon',
               type: 'text',
-              value: 'far fa-square',
+              value: 'fa fa-square-o',
             },
           },
         },
@@ -271,28 +313,28 @@ export default {
           label: 'Circle',
           key: 'shapes_circle',
           type: 'switch',
-          value: false,
+          value: true,
           config: {
             circle_radius: {
               label: 'Radius',
               key: 'radius',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             circle_top: {
               label: 'Top',
               key: 'top',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             circle_left: {
               label: 'Left',
               key: 'left',
               value: 0,
               type: 'number',
-              step: 1
+              step: 1,
             },
             circle_description: {
               label: 'Description',
@@ -304,7 +346,7 @@ export default {
               label: 'Icon',
               key: 'icon',
               type: 'text',
-              value: 'far fa-circle',
+              value: 'fa fa-circle-o',
             },
           },
         },
@@ -313,5 +355,5 @@ export default {
   },
   data: {},
   enabled: false,
-  settings: true
+  settings: true,
 };
