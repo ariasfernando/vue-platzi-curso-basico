@@ -1,7 +1,7 @@
 <template>
   <tr v-if="module.type === 'custom'"
       class="stx-module-wrapper"
-      :class="[`stx-${module.name}`, {'stx-module-wrapper-active': activeModule === moduleId }]"
+      :class="[`stx-${module.name}`, module.isFixed ? 'stx-fixed' : '', {'stx-module-wrapper-active': activeModule === moduleId }]"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
   >
@@ -11,7 +11,7 @@
         @click.prevent="config"
     >
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
-      <module-toolbar :module-id="moduleId"></module-toolbar>
+      <module-toolbar :module-id="moduleId" v-if="!module.data.hideToolbar"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
       <div class="st-remove-element default-module-error"></div>
     </td>
@@ -19,7 +19,7 @@
 
   <tr v-else
       class="stx-module-wrapper"
-        :class="[`stx-${module.key}`, module.structure.attribute.classes, {'stx-module-wrapper-active': activeModule === moduleId }]"
+        :class="[`stx-${module.key}`, module.isFixed ? 'stx-fixed' : '', module.structure.attribute.classes, {'stx-module-wrapper-active': activeModule === moduleId }]"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
   >

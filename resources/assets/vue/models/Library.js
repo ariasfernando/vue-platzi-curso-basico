@@ -23,6 +23,7 @@ function Library(data = {}) {
     linkDecoration: config.linkDecoration || 'underline',
     externalCssLink: config.externalCssLink || '',
     propietaryCss: config.propietaryCss || '',
+    fixedModules: config.fixedModules || '',
     padding: config.padding || '',
     esp: config.esp || false,
     espProvider: config.espProvider || false,

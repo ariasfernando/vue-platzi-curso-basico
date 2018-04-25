@@ -61,6 +61,7 @@
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';
   import BackToTop from '../common/BackToTop.vue';
+  import ModuleListMixin from './mixins/moduleListMixin';
 
   export default {
     name: 'EmailCanvas',
@@ -70,6 +71,7 @@
       'email-actions': EmailActions,
       BackToTop
     },
+    mixins: [ ModuleListMixin ],
     data: {
       dragGhost: null,
       onMouseOver: () => {},
@@ -172,14 +174,6 @@
       }
     },
     methods: {
-      getSubitemsAsArray () {
-        return _.reduce(this.items, (result, value) => {
-          if(_.has(value, 'level')) {
-            result = _.union(result, value.sub_menu);
-          }
-          return result;
-        }, []);
-      },
       onAdd(e) {
         let cloneEl = e.clone;
         let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
@@ -193,11 +187,14 @@
         const mod = clone(found);
         mod.data = {};
 
-        this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
-        // Set active on last module inserted
-        this.$store.commit('campaign/setActiveModule', e.newIndex);
+        if (!this.validateSortingToIndex({index: e.newIndex, moduleData: mod})){
+          this.$root.$toast('The position is occuped by a fixed module.', {className: 'et-info'});
+        }
+        else {
+          this.insertModule({index: e.newIndex, moduleData: mod});
+        }
 
-         // Remove ghost element
+        // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = "1";
@@ -216,9 +213,14 @@
             distance = distance * 0.15; // <- velocity
             $(target).scrollTop( distance + $(target).scrollTop());
         }
+
+        // Cannot sort to/from a fixed position
+        if (evt.related && evt.dragged){
+          return !evt.related.classList.contains('stx-fixed') && !evt.dragged.classList.contains('stx-fixed');
+        }
       },
       onSort(e){
-        if (this.activeModule.type === 'studio') {
+        if (_.has(this.activeModule, 'type') && this.activeModule.type === 'studio') {
           // Save current component if module type is studio
           this.$store.commit('campaign/setCurrentComponent', {
             moduleId: e.newIndex,
