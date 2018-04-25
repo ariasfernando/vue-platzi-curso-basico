@@ -87,6 +87,7 @@
           menubar: false,
           link_title: false,
           link_text_to_display: false,
+          link_fixed_color_hex: this.plugin.config.settings.link_fixed_color.value ? this.plugin.config.settings.link_fixed_color.content : undefined,
           forced_root_block :false,
           target_list: false,
           invalid_elements:'img',
@@ -271,6 +272,18 @@
                     .removeClass('bg-danger');
                 }
 
+              })
+              .on('change', (e) => {
+                const editor = tinymce.get(tinymce.activeEditor.id);
+                if( editor.settings.link_fixed_color && /^#[0-9A-F]{6}$/i.test(editor.settings.link_fixed_color_hex) ){
+                  let $targetElm = $(editor.targetElm);
+                  let editorLinks = $targetElm.find("a");
+                  if(editorLinks.length){
+                    for (var i = 0; i < editorLinks.length; i++) {
+                      $(editorLinks[i]).css("color",editor.settings.link_fixed_color_hex);
+                    }
+                  }
+                }
               });
           },
           paste_preprocess: function (plugin, args) {

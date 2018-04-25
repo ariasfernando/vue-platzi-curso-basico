@@ -40,14 +40,24 @@
       <!-- Input if config needs it -->
       <div v-if="isAValidSetting(tinySetting ,key)">
           <el-input-number
-          size="mini" 
-          v-b-tooltip.hover
-          :title="key"
-          :name="key"
-          @change="(value)=>changeSetting(value, key)"
-          :value="tinySetting.content || 0"
-          :min="0"
+            v-if="tinySetting.type === 'number'"
+            size="mini"
+            v-b-tooltip.hover
+            :title="key"
+            :name="key"
+            @change="(value)=>changeSetting(value, key)"
+            :value="tinySetting.content || 0"
+            :min="0"
           ></el-input-number>
+          <el-input
+            v-if="tinySetting.type === 'text'"
+            size="mini"
+            v-b-tooltip.hover
+            :title="key"
+            :name="key"
+            @change="(value)=>changeSetting(value, key)"
+            :value="tinySetting.content || 0"
+          ></el-input>
       </div>
     </div>
   </div>
@@ -205,7 +215,7 @@ export default {
       this.$store.commit("module/savePluginSuboption", payload);
     },
     isAValidSetting(tinySetting, key){
-     return (key === 'truncate' || key === 'lines_limit') && tinySetting.value === true;
+      return (['truncate', 'lines_limit', 'link_fixed_color'].indexOf(key) !== -1) && tinySetting.value === true;
      }
   }
 };
