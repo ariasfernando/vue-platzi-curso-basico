@@ -148,6 +148,7 @@ class CampaignController extends Controller
                 : "default";
             $library = Library::find($library_id);
             $params['library_config'] = $library->config;
+            $params['library_config']['key'] = $library->key;
             $params['campaign_data']['library_name'] = $library->name;
 
             $params['tag_list'] = $saved_tags;
