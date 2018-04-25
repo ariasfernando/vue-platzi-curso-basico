@@ -9,7 +9,7 @@
     </div>
     <div class="plugin-wrapper-inner" v-if="params.mobile">
       <span>
-        <button @click="showModal('mobile')">
+        <button @click="showModal('mobile')" :disabled="!plugin.data.img">
           <i class="glyphicon glyphicon-cloud-upload"></i> Update Image Mobile
         </button>
       </span>
@@ -77,8 +77,7 @@
                 </div>
                 <div v-show="page.three" style="overflow-y: auto; max-height: calc(100vh - 187px); min-height: 300px; height:100%" ref="wrapperSie">
                   <style-image-editor
-                    :key="sieKey"
-                    v-if="page.three"
+                    v-if="page.three && this.currentImage"
                     :sieoptions="sieoptions"
                     ref="sie"
                     @image-submit="submitImage"
@@ -228,38 +227,16 @@ export default {
     },
     submit() {
       this.$refs.sie.save();
-      this.sieKey++;
     },
     close() {
-      if (typeof this.$refs.sie !== 'undefined') {
-        this.$refs.sie.close();
-        this.sieKey++;
-      }
+      this.reset();
       this.showImageEditor = false;
     },
     back() {
-      this.page = {
-        one: true,
-        two: false,
-        three: false
-      };
-      if (typeof this.$refs.sie !== 'undefined') {
-        this.$refs.sie.close();
-        this.sieKey++;
-      }
+      this.reset();
     },
     clear() {
-      this.page = {
-        one: true,
-        two: false,
-        three: false
-      };
-      if (typeof this.$refs.sie !== 'undefined') {
-        this.$refs.sie.close();
-        this.sieKey++;
-      }
-
-      this.currentImage = null;
+      this.reset();
     },
     generateSieoptions(changeImage = false) {
       const sieoptions = {};
@@ -314,7 +291,7 @@ export default {
         data.state.preset
       );
       const images = sieHelper.searchStateImages(data.state);
-      images.push({ key: 'img', image: data.img });
+      images.push({ key: 'img', image: data[`img${this.type === 'mobile' ? 'Mobile' : ''}`] });
       const imgs = [];
       images.forEach(image => {
         imgs.push(image.image);
@@ -329,6 +306,7 @@ export default {
           this.updatePluginData(uploadedImgs, images, data);
           this.$store.commit('global/setLoader', false);
           this.showImageEditor = false;
+          this.reset();
         });
     },
     updatePluginData(uploadedImgs, images, data) {
@@ -345,7 +323,7 @@ export default {
           }
         });
       });
-      data.img = uploadedImgs[images.length - 1];
+      data[`img${this.type === 'mobile' ? 'Mobile' : ''}`] = uploadedImgs[images.length - 1];
       this.$store.commit('campaign/savePlugin', {
         plugin: this.name,
         moduleId: this.currentComponent.moduleId,
@@ -384,29 +362,30 @@ export default {
       if (type !== null && type !== '') {
         this.type = type;
       }
-
+      if (Object.keys(this.plugin.data).length > 0 && this.plugin.data[`img${type === 'mobile' ? 'Mobile' : ''}`]) {
+        this.currentImage = this.plugin.data[`img${type === 'mobile' ? 'Mobile' : ''}`];
+        this.page = {
+          one: false,
+          two: false,
+          three: true
+        };
+      }
+      this.showImageEditor = true;
+    },
+    reset() {
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
-        this.sieKey++;
       }
-
-      this.showImageEditor = true;
+      this.type = 'desktop';
+      this.currentImage = null;
+      this.page = {
+        one: true,
+        two: false,
+        three: false
+      };
     }
   },
   mounted() {
-    const urlDefault = this.params['sie-plugin-image_upload']['uploaddefault'][
-      'value'
-    ];
-    this.page.one = urlDefault === '';
-    this.page.three = urlDefault !== '';
-
-    if (Object.keys(this.plugin.data).length > 0) {
-      this.page = {
-        one: false,
-        two: false,
-        three: true
-      };
-    }
     this.$refs.input.addEventListener('change', event => {
       event.target.setCustomValidity('');
       return imageHelper
