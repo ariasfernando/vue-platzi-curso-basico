@@ -254,6 +254,9 @@ export default {
           sieoptions.preset
         );
       }
+
+      sieoptions.size.height = sieoptions.size.auto ? 0 : sieoptions.size.height;
+
       this.sieoptions = sieoptions;
 
       if (typeof this.$refs.sie !== 'undefined') {
