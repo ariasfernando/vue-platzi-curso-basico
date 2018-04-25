@@ -39,6 +39,7 @@
         cellpadding="0"
         border="0"
         class="st-wrapper" 
+        align="center"
         :class="{ 'stx-wrapper': module.structure.columns.length === 1 }"
       >
         <!--2 COLUMNS -->
