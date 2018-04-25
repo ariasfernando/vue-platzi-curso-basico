@@ -51,14 +51,27 @@
 
         node.removeChild(tn);
       },
-
+      isJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+      },
       initTinyMCE() {
         const _this = this;
         const options = _.filter(this.plugin.config.options, 'value');
         const customSettings = {};
 
         _.each(this.plugin.config.settings, (e, k) => {
-          customSettings[k] = e.value;
+
+          let content;
+          if (this.isJsonString(e.content)){
+            customSettings[k] = JSON.parse(e.content);
+          } else {
+            customSettings[k] = e.content || e.value;
+          };
         });
 
         let toolbar = [];
@@ -87,7 +100,7 @@
           menubar: false,
           link_title: false,
           link_text_to_display: false,
-          link_fixed_color_hex: this.plugin.config.settings.link_fixed_color.value ? this.plugin.config.settings.link_fixed_color.content : undefined,
+          link_fixed_color: false,
           forced_root_block :false,
           target_list: false,
           invalid_elements:'img',
@@ -275,12 +288,12 @@
               })
               .on('change', (e) => {
                 const editor = tinymce.get(tinymce.activeEditor.id);
-                if( editor.settings.link_fixed_color && /^#[0-9A-F]{6}$/i.test(editor.settings.link_fixed_color_hex) ){
+                if( editor.settings.link_fixed_color && /^#[0-9A-F]{6}$/i.test(editor.settings.link_fixed_color) ){
                   let $targetElm = $(editor.targetElm);
                   let editorLinks = $targetElm.find("a");
                   if(editorLinks.length){
                     for (var i = 0; i < editorLinks.length; i++) {
-                      $(editorLinks[i]).css("color",editor.settings.link_fixed_color_hex);
+                      $(editorLinks[i]).css("color",editor.settings.link_fixed_color);
                     }
                   }
                 }
