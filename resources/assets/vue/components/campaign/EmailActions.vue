@@ -239,6 +239,12 @@
                       // Reload campaign data
                       this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id);
                     }
+                    else if (response.status === 'failed') {
+                      clearInterval(processInterval);
+                      this.$store.commit("global/setLoader", false);
+                      this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, '
+                        + 'please contact our support team.', {className: 'et-error'});
+                    }
                   });
                 }, 1000);
               }
