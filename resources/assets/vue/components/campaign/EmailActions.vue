@@ -240,7 +240,7 @@
                       this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id);
                     }
                   });
-                }, 2000);
+                }, 1000);
               }
           }, error => {
             this.$store.commit("global/setLoader", false);

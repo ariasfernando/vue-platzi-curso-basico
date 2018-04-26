@@ -26,7 +26,8 @@
         "stensul/filesystem": "1.*",
         "stensul/media-gallery": "^2.2",
         "stensul/logging": "1.*",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "stensul/asset-manager": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
