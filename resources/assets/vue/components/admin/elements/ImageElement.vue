@@ -44,7 +44,7 @@
                   border="0"
                   :width="component.image.attribute.width" 
                   :src="imageUrl(component.image.attribute.placeholder)"
-                  :height="component.image.attribute.height"
+                  :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
                   :alt="component.image.attribute.alt"
                   :title="component.image.attribute.title"
                 >
@@ -57,7 +57,7 @@
                       class="st-resize"
                       style="display:block;border:none;max-width:100%;height:auto;"
                       :width="component.image.attribute.width" 
-                      :height="component.image.attribute.height"
+                      :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
                       :alt="component.image.attribute.alt"
                       :title="component.image.attribute.title"
                     />

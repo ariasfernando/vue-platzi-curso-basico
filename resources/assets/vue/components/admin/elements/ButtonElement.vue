@@ -33,7 +33,7 @@
             <td
               width="100%"
               :bgcolor="component.button.attribute.bgcolor"
-              :height="component.button.attribute.height"
+              :height="component.button.attribute.height === 'auto' ? undefined : component.button.attribute.height"
               style="vertical-align: middle; width:100%;"
               :style="buttonBorderAndPadding"
             >
@@ -62,7 +62,7 @@
                         :src="$_app.config.imageUrl + component.caret.attribute.url"
                         :bgcolor="component.caret.attribute.bgcolor"
                         :width="component.caret.attribute.width"
-                        :height="component.caret.attribute.height"
+                        :height="component.caret.attribute.height === 'auto' ? undefined : component.caret.attribute.height"
                         :valign="component.button.attribute.valign || 'middle'"
                         style="display: inline-block !important; border:0;"
                       >
