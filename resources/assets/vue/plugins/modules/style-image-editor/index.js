@@ -25,20 +25,6 @@ export default {
         },
       },
     },
-    mobile: {
-      label: 'Mobile Upload',
-      key: 'mobile_upload',
-      value: false,
-      type: 'switch',
-      config: {
-        separated: {
-          label: 'Use different image',
-          key: 'mobile_upload_separated',
-          value: false,
-          type: 'switch',
-        },
-      },
-    },
     url: {
       label: 'Url Upload',
       key: 'url_upload',

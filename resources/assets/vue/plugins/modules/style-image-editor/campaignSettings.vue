@@ -7,7 +7,7 @@
         </button>
       </span>
     </div>
-    <div class="plugin-wrapper-inner" v-if="params.mobile">
+    <div class="plugin-wrapper-inner" v-if="hasImageMobile">
       <span>
         <button @click="showModal('mobile')" :disabled="!plugin.data.img">
           <i class="glyphicon glyphicon-cloud-upload"></i> Update Image Mobile
@@ -34,7 +34,7 @@
             </div>
             <div class="modal-body">
               <slot name="body">
-                <div v-show="page.one">
+                <div v-show="page.one" class="wrapper-page-1">
                   <div style="display: flex; flex-direction: row; justify-content: space-between;">
                     <div>
                       <button type="button" @click="clickUpload">
@@ -172,6 +172,9 @@ export default {
         };
         this.$store.commit('campaign/saveComponentProperty', payload);
       }
+    },
+    hasImageMobile() {
+      return this.component.image.styleOption.hasImageMobile;
     }
   },
   data() {
@@ -452,18 +455,34 @@ export default {
   .modal-body {
     padding: 50px 70px !important;
     margin-bottom: 0px;
+    margin-top: 0px;
     height: auto;
-    button {
-      margin-bottom: 0px;
-      border: 1px solid #f4f4f4;
-      padding-top: 20px;
-      padding-bottom: 20px;
-      min-width: 130px;
-      background-color: #e9e9e9;
-      transition: all 0.3s linear;
-      &:hover {
-        border: 1px solid #514960;
-        box-shadow: 0px 0px 4px #888888;
+    text-align: center;
+    .wrapper-page-1 {
+      display: inline-block;
+      button {
+        margin-bottom: 0px;
+        border: 1px solid #f4f4f4;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        min-width: 130px;
+        background-color: #e9e9e9;
+        transition: all 0.3s linear;
+        &:hover {
+          border: 1px solid #514960;
+          box-shadow: 0px 0px 4px #888888;
+        }
+      }
+      div:first-child:nth-last-child(1) {
+        margin-right: 0px;
+      }
+      div:first-child:nth-last-child(2),
+      div:first-child:nth-last-child(2) ~ div {
+        margin-right: 70px;
+      }
+      div:first-child:nth-last-child(3),
+      div:first-child:nth-last-child(3) ~ div {
+        margin-right: 50px;
       }
     }
   }
