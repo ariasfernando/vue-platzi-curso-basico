@@ -6,8 +6,8 @@
     :class="getMobileClasses(component,'tr')"
   >
     <td 
-      :width="component.container.attribute.width|| '100%'"
-      :style="[containerBorderAndPadding,{'width':widthStyle(component.container.attribute.width || '100%')}]"
+      :width="component.container.attribute.width || containerImageWidth"
+      :style="[containerBorderAndPadding,{'width':widthStyle(component.container.attribute.width || containerImageWidth)}]"
       :align="component.container.attribute.align || 'top'"
       class="stx-position-relative"
       :bgcolor="component.container.attribute.bgcolor"
@@ -134,6 +134,11 @@
           {"border-bottom-color": this.component.container.style.borderBottomColor},
           {"border-left-color": this.component.container.style.borderLeftColor}
         ];
+      },
+      containerImageWidth(){
+        let paddingLeft = _.parseInt(this.component.image.style.paddingLeft) || 0
+        let paddingRight = _.parseInt(this.component.image.style.paddingRight) || 0
+        return _.parseInt(this.component.image.attribute.width) - paddingLeft - paddingRight ;
       },
     },
     methods: {
