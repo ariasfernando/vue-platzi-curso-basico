@@ -88,8 +88,7 @@ class StaticProcessor
 
                         $data['assets'][] = [
                             'from' => $from,
-                            'to' => $path,
-                            'visibility' => AdapterInterface::VISIBILITY_PUBLIC,
+                            'to' => $path
                         ];
 
                         Log::info(sprintf('[%s] queuing url to be flushed in cdn: %s', $this->getCampaign()->id, $path));
