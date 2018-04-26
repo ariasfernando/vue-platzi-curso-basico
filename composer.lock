@@ -119,16 +119,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.55.0",
+            "version": "3.55.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d130bba2e7cae7cabb118a4a912b80cb505e97ff"
+                "reference": "42fd0afe654b549d3353e82fe05bed1cd8c70b49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d130bba2e7cae7cabb118a4a912b80cb505e97ff",
-                "reference": "d130bba2e7cae7cabb118a4a912b80cb505e97ff",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/42fd0afe654b549d3353e82fe05bed1cd8c70b49",
+                "reference": "42fd0afe654b549d3353e82fe05bed1cd8c70b49",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-04-23T19:32:26+00:00"
+            "time": "2018-04-24T19:18:36+00:00"
         },
         {
             "name": "bjeavons/zxcvbn-php",
@@ -1133,17 +1133,17 @@
         },
         {
             "name": "jenssegers/mongodb",
-            "version": "v3.4.1",
+            "version": "v3.4.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jenssegers/laravel-mongodb.git",
-                "reference": "7445ea6cc0a139f40ac9cfe1b15952c961e58793"
+                "url": "git@git.stensuldev.net:composer/laravel-mongodb",
+                "reference": "ec87471839a1fa4864c07324e5ee36700e8a9533"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jenssegers/laravel-mongodb/zipball/7445ea6cc0a139f40ac9cfe1b15952c961e58793",
-                "reference": "7445ea6cc0a139f40ac9cfe1b15952c961e58793",
-                "shasum": ""
+                "url": "https://composer.stensuldev.net/dist/jenssegers/mongodb/jenssegers-mongodb-v3.4.2-26284a.zip",
+                "reference": "ec87471839a1fa4864c07324e5ee36700e8a9533",
+                "shasum": "bfd1f93144c7487f9523aeb0bf023e9c900fbc93"
             },
             "require": {
                 "illuminate/container": "^5.6",
@@ -1177,7 +1177,13 @@
                     "Jenssegers\\Mongodb": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "classmap": [
+                    "tests/TestCase.php",
+                    "tests/models",
+                    "tests/seeds"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -1198,7 +1204,7 @@
                 "mongo",
                 "mongodb"
             ],
-            "time": "2018-03-01T10:28:19+00:00"
+            "time": "2018-04-24T23:30:40+00:00"
         },
         {
             "name": "laravel/framework",
