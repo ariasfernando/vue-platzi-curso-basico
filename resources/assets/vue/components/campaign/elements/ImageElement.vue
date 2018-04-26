@@ -6,9 +6,9 @@
     :class="getMobileClasses(component,'tr')"
   >
     <td 
-      :width="component.container.attribute.width"
-      :style="[containerBorderAndPadding, widthStyle(component.container.attribute.width)]"
-      :align="component.container.attribute.align"
+      :width="component.container.attribute.width || containerImageWidth"
+      :style="[containerBorderAndPadding,{'width':widthStyle(component.container.attribute.width || containerImageWidth)}]"
+      :align="component.container.attribute.align || 'top'"
       class="stx-position-relative"
       :bgcolor="component.container.attribute.bgcolor"
       :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
@@ -27,7 +27,7 @@
             :valign="component.image.attribute.valign"
             :align="component.image.attribute.align"
             :bgcolor="component.image.attribute.bgcolor"
-            :style="[imageBorderAndPadding,{width:widthStyle(component.image.attribute.width)}]"
+            :style="[imageBorderAndPadding,{'width':widthStyle(component.image.attribute.width)}]"
           >
               <a 
                 @click.prevent
@@ -43,7 +43,7 @@
                   border="0"
                   :width="component.image.attribute.width" 
                   :src="imageUrl(component.image.attribute.placeholder)"
-                  :height="component.image.attribute.height"
+                  :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
                   :alt="component.image.attribute.alt"
                   :title="component.image.attribute.title"
                 >
@@ -56,7 +56,7 @@
                       class="st-resize"
                       style="display:block;border:none;max-width:100%;height:auto;"
                       :width="component.image.attribute.width" 
-                      :height="component.image.attribute.height"
+                      :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
                       :alt="component.image.attribute.alt"
                       :title="component.image.attribute.title"
                     />
@@ -83,41 +83,10 @@
       'column-id',
       'component-id',
       'component',
-      'number-required',
       'column-width',
       'column'
     ],
     mixins: [ MobileStylesMixin, ComponentAttributeMixin ],
-    created () {
-      this.setupModule();
-      if(this.numberRequired) {
-        let tempWidth = _.toString(this.component.container.attribute.width);
-        let paddingLeft = _.parseInt(this.component.container.style.paddingLeft.replace(/px$/, ''));
-        let paddingRight = _.parseInt(this.component.container.style.paddingRight.replace(/px$/, ''));
-        let paddingColumLeft = _.parseInt(this.column.container.style.paddingLeft.replace(/px$/, ''));
-        let paddingColumRight = _.parseInt(this.column.container.style.paddingRight.replace(/px$/, ''));
-        
-        if ( tempWidth.indexOf('%') > 1){
-
-          let widthPercent = _.parseInt(tempWidth.replace(/%$/, ''));
-          tempWidth = this.columnWidth * widthPercent / 100;
-        }else if ( tempWidth.indexOf('px') > 1){
-          tempWidth = _.parseInt(tempWidth.replace(/px$/, ''));
-        }
-        
-        const payload = {
-          moduleId: this.moduleId,
-          columnId: this.columnId,
-          componentId: 0,
-          subComponent: 'container',
-          link: 'attribute',
-          property: 'width',
-          value: ( tempWidth - (paddingLeft + paddingRight) - (paddingColumLeft + paddingColumRight)),
-        };
-
-        this.$store.commit('campaign/saveComponentProperty', payload);
-      }
-    },
     data(){
       return {
         imageUrl(imagePath) {
@@ -166,15 +135,13 @@
           {"border-left-color": this.component.container.style.borderLeftColor}
         ];
       },
+      containerImageWidth(){
+        let paddingLeft = _.parseInt(this.component.image.style.paddingLeft) || 0
+        let paddingRight = _.parseInt(this.component.image.style.paddingRight) || 0
+        return _.parseInt(this.component.image.attribute.width) - paddingLeft - paddingRight ;
+      },
     },
     methods: {
-      setupModule () {
-        this.elementConfig = null;
-
-        if (this.component.directives && this.component.directives.elementConfig) {
-          this.elementConfig = this.component.directives.elementConfig;
-        }
-      },
       widthStyle(width) {
         return _.endsWith(width, "%") ? width : width + "px";
       },

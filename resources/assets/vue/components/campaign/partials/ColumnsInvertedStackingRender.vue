@@ -29,7 +29,6 @@
                   :module-id="moduleId"
                   :column-id="columnId"
                   :component-id="componentId"
-                  :number-required="true"
                   :column-width="columnWidthPadding / numColumns"
                   :column="column"
                 ></component>
