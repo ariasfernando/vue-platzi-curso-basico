@@ -57,9 +57,27 @@
                     </div>
                   </div>
                 </div>
-                <div v-show="page.two === 'media'" style="display: flex;">
-                  <div class="wrapper-image" v-for="(image, index) in libraryImages" :key="index" @click="chooseImage(image)">
-                    <div style="width: 100%; padding-bottom: 100%; background-size: cover;" v-bind:style="{ backgroundImage: `url(${image})` }"></div>
+                <div v-show="page.two === 'media'">
+                  <div
+                    class="library-container"
+                    >
+                    <div
+                      class="row"
+                      v-for="(section, sectionIndex) in images"
+                      :key="sectionIndex"
+                      >
+                      <div
+                        v-for="(imageUrl, imageIndex) in section"
+                        class="col-md-2"
+                        v-if="imageUrl !== undefined"
+                        :key="imageIndex"
+                        >
+                        <img
+                          :src="imageUrl !== undefined && imageUrl.indexOf('http') === 0 ? imageUrl : $_app.config.baseUrl + imageUrl"
+                          @click="chooseImage(imageUrl)"
+                          >
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div v-show="page.two === 'url'">
@@ -175,7 +193,26 @@ export default {
     },
     hasImageMobile() {
       return this.component.image.styleOption.hasImageMobile;
-    }
+    },
+    images() {
+      const sections = [];
+
+      let i, j, chunk = 5;
+
+      const tempArray = this.libraryImages.filter(item => {
+        if (item) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      for (i = 0, j = tempArray.length; i < j; i += chunk) {
+        sections.push(tempArray.slice(i, i + chunk));
+      }
+
+      return sections;
+    },
   },
   data() {
     return {
@@ -493,21 +530,31 @@ export default {
   padding-left: 40px;
   padding-right: 40px;
   overflow-y: scroll;
-  .wrapper-image {
-    width: 180px;
-    height: 180px;
-    padding: 5px;
-    border: 1px solid #f4f4f4;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    transition: all 0.3s linear;
-    cursor: pointer;
-    &:hover {
-      border: 1px solid #514960;
-      box-shadow: 0px 0px 4px #888888;
+  .library-container {
+    width: 100%;
+    margin: 20px auto;
+    border: 1px solid #eaeaea;
+    padding: 20px;
+    .row {
+      .col-md-2 {
+        background-color: #f6f6f6;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 13px;
+        overflow: hidden;
+        img {
+          padding: 3px;
+          cursor: pointer;
+          width: 100%;
+          vertical-align: middle;
+        }
+      }
     }
   }
 }
+
 .url {
   max-width: 700px;
   padding-top: 30px;
