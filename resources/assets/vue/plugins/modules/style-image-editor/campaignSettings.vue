@@ -248,13 +248,12 @@ export default {
         const transformedOptions = sieHelper.transform(this.params);
         Object.assign(sieoptions, transformedOptions);
       } else {
-        Object.assign(sieoptions, this.plugin.data.state);
+        Object.assign(sieoptions, this.plugin.data[`state${this.type === 'mobile' ? 'Mobile' : ''}`]);
         sieoptions.preset = sieHelper.completeUrlPath(
           this.$_app.config.imageUrl,
           sieoptions.preset
         );
       }
-
       sieoptions.size.height = sieoptions.size.auto ? 0 : sieoptions.size.height;
 
       this.sieoptions = sieoptions;
@@ -266,11 +265,8 @@ export default {
     },
     setImage(imageSource) {
       this.currentImage = imageSource;
-
       this.changeImage(this.params);
-
       this.generateSieoptions(true);
-
       this.page = {
         one: false,
         two: false,
@@ -289,12 +285,12 @@ export default {
     },
     submitImage(data) {
       this.$store.commit('global/setLoader', true);
-      data.state.preset = sieHelper.removeUrlPath(
-        this.$_app.config.imageUrl,
-        data.state.preset
-      );
+      data.state.preset = sieHelper.removeUrlPath(this.$_app.config.imageUrl, data.state.preset);
       const images = sieHelper.searchStateImages(data.state);
-      images.push({ key: 'img', image: data[`img${this.type === 'mobile' ? 'Mobile' : ''}`] });
+      images.push({
+        key: 'img',
+        image: data.img
+      });
       const imgs = [];
       images.forEach(image => {
         imgs.push(image.image);
@@ -306,7 +302,13 @@ export default {
         })
         .then(uploadedImgs => {
           this.updateAttribute(uploadedImgs[imgs.length - 1]);
-          this.updatePluginData(uploadedImgs, images, data);
+          const temp = {};
+          temp[`img${this.type === 'mobile' ? 'Mobile' : ''}`] = data.img;
+          temp[`state${this.type === 'mobile' ? 'Mobile' : ''}`] = data.state;
+          this.updatePluginData(uploadedImgs, images, {
+            ...this.plugin.data,
+            ...temp
+          });
           this.$store.commit('global/setLoader', false);
           this.showImageEditor = false;
           this.reset();
@@ -317,7 +319,7 @@ export default {
         const i = images.indexOf(image);
         const keys = image.key.split('.');
         const img = uploadedImgs[i];
-        let subData = data.state.preset;
+        let subData = data[`state${this.type === 'mobile' ? 'Mobile' : ''}`].preset;
         keys.forEach(key => {
           if (keys.indexOf(key) === keys.length - 1) {
             subData[key] = img;
@@ -338,7 +340,6 @@ export default {
     },
     updateAttribute(image) {
       this.removeErrorsImages();
-
       const payload = {
         plugin: this.name,
         moduleId: this.currentComponent.moduleId,
@@ -349,14 +350,12 @@ export default {
         property: `placeholder${this.type === 'mobile' ? 'Mobile' : ''}`,
         value: image
       };
-
       this.$store.commit('campaign/saveComponentProperty', payload);
     },
     removeErrorsImages() {
       let $contentImgError = $('.stx-module-wrapper-active').find(
         '.default-image-error'
       );
-
       if ($contentImgError.length > 0) {
         $contentImgError.removeClass('default-image-error');
       }
@@ -367,6 +366,7 @@ export default {
       }
       if (Object.keys(this.plugin.data).length > 0 && this.plugin.data[`img${type === 'mobile' ? 'Mobile' : ''}`]) {
         this.currentImage = this.plugin.data[`img${type === 'mobile' ? 'Mobile' : ''}`];
+        this.generateSieoptions();
         this.page = {
           one: false,
           two: false,
@@ -401,6 +401,9 @@ export default {
         .catch(() => {
           // TODO: Show toast with error.
           event.target.reportValidity();
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+            className: 'et-error'
+          });
         });
     });
 
