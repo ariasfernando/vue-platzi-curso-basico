@@ -8,11 +8,11 @@ export default {
         if (_.has(component.container.attribute, 'classes')) {
           return component.container.attribute.classes;
         }
-        return '';
+        return [];
       } else if (_.has(component.attribute, 'classes')) {
         return component.attribute.classes;
       }
-      return '';
+      return [];
     },
   },
 };
