@@ -51,14 +51,6 @@
 
         node.removeChild(tn);
       },
-      isJsonString(str) {
-        try {
-            JSON.parse(str);
-        } catch (e) {
-            return false;
-        }
-        return true;
-      },
       initTinyMCE() {
         const _this = this;
         const options = _.filter(this.plugin.config.options, 'value');
@@ -67,7 +59,7 @@
         _.each(this.plugin.config.settings, (e, k) => {
 
           let content;
-          if (this.isJsonString(e.content)){
+          if (Application.utils.isJsonString(e.content)){
             customSettings[k] = JSON.parse(e.content);
           } else {
             customSettings[k] = e.content || e.value;
@@ -101,6 +93,9 @@
           link_title: false,
           link_text_to_display: false,
           link_fixed_color: false,
+          ul_fixed_style: '{"margin-bottom": "0px !important", "margin-top": "0px !important", "margin-left": "20px", "padding-left": "0px", "mso-list": "disc"}',
+          li_fixed_style: '{"margin":0}',
+          p_fixed_style: '{"margin":0}',
           forced_root_block :false,
           target_list: false,
           invalid_elements:'img',
@@ -288,14 +283,30 @@
               })
               .on('change', (e) => {
                 const editor = tinymce.get(tinymce.activeEditor.id);
-                if( editor.settings.link_fixed_color && /^#[0-9A-F]{6}$/i.test(editor.settings.link_fixed_color) ){
-                  let $targetElm = $(editor.targetElm);
-                  let editorLinks = $targetElm.find("a");
+                const link_fixed_color = editor.settings.link_fixed_color;
+                const ul_fixed_style = editor.settings.ul_fixed_style;
+                const li_fixed_style = editor.settings.li_fixed_style;
+                const p_fixed_style = editor.settings.p_fixed_style;
+
+                const changeStyles = (selector, styles) => {
+                  let editorLinks = $(editor.targetElm).find(selector);
                   if(editorLinks.length){
                     for (var i = 0; i < editorLinks.length; i++) {
-                      $(editorLinks[i]).css("color",editor.settings.link_fixed_color);
+                      $(editorLinks[i]).css(styles);
                     }
                   }
+                }
+                if( link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color) ){
+                  changeStyles('a',{'color':link_fixed_color})
+                }
+                if( ul_fixed_style && Application.utils.isJsonString(ul_fixed_style)){
+                    changeStyles('ul', JSON.parse(ul_fixed_style));
+                }
+                if( li_fixed_style && Application.utils.isJsonString(li_fixed_style)){
+                    changeStyles('li', JSON.parse(li_fixed_style));
+                }
+                if( p_fixed_style && Application.utils.isJsonString(p_fixed_style)){
+                    changeStyles('p', JSON.parse(p_fixed_style));
                 }
               });
           },
