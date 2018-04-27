@@ -93,7 +93,10 @@
           link_title: false,
           link_text_to_display: false,
           link_fixed_color: false,
-          ul_fixed_style: '{"margin-bottom": "0px !important", "margin-top": "0px !important", "margin-left": "20px", "padding-left": "0px", "mso-list": "disc"}',
+          //link_fixed_styles:'{"text-decoration": "underline"}',
+          // persist_styles: JSON.stringify([{"ul":'{"mso-list": "disc"}'}]),
+          ul_fixed_style: 'margin-bottom: 0px !important; margin-top: 0px !important; margin-left: 25px; padding-left: 0px;',
+          ol_fixed_style: 'margin-bottom: 0px !important; margin-top: 0px !important; margin-left: 25px; padding-left: 0px;',
           li_fixed_style: '{"margin":0}',
           p_fixed_style: '{"margin":0}',
           forced_root_block :false,
@@ -284,30 +287,55 @@
               .on('change', (e) => {
                 const editor = tinymce.get(tinymce.activeEditor.id);
                 const link_fixed_color = editor.settings.link_fixed_color;
+                const link_fixed_styles = editor.settings.link_fixed_styles;
                 const ul_fixed_style = editor.settings.ul_fixed_style;
+                const ol_fixed_style = editor.settings.ol_fixed_style;
                 const li_fixed_style = editor.settings.li_fixed_style;
                 const p_fixed_style = editor.settings.p_fixed_style;
+                const persist_styles = editor.settings.persist_styles;
 
                 const changeStyles = (selector, styles) => {
                   let editorLinks = $(editor.targetElm).find(selector);
                   if(editorLinks.length){
                     for (var i = 0; i < editorLinks.length; i++) {
-                      $(editorLinks[i]).css(styles);
+                      if(typeof styles === "string"){
+                        $(editorLinks[i]).css('cssText', styles);
+                      } else {
+                        $(editorLinks[i]).css(styles);
+                      }
                     }
                   }
                 }
                 if( link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color) ){
-                  changeStyles('a',{'color':link_fixed_color})
+                  changeStyles('a',{'color':link_fixed_color});
                 }
-                if( ul_fixed_style && Application.utils.isJsonString(ul_fixed_style)){
-                    changeStyles('ul', JSON.parse(ul_fixed_style));
+                if( link_fixed_styles  && Application.utils.isJsonString(li_fixed_style)){
+                  changeStyles('a', JSON.parse(link_fixed_styles));
+                }
+                if( ul_fixed_style){
+                    changeStyles('ul', ul_fixed_style);
+                }
+                if( ol_fixed_style){
+                    changeStyles('ol', ol_fixed_style);
                 }
                 if( li_fixed_style && Application.utils.isJsonString(li_fixed_style)){
                     changeStyles('li', JSON.parse(li_fixed_style));
                 }
                 if( p_fixed_style && Application.utils.isJsonString(p_fixed_style)){
-                    changeStyles('p', JSON.parse(p_fixed_style));
+                  changeStyles('p', JSON.parse(p_fixed_style));
                 }
+                if( persist_styles && Application.utils.isJsonString(persist_styles)){
+                  let persist_stylesJson = JSON.parse(persist_styles)
+                    for (var i = 0; i < persist_stylesJson.length; i++) {
+                      let selector = Object.keys(persist_stylesJson[i])[0]
+                      const editorLinks = $(editor.targetElm).find(selector);
+                        if(editorLinks.length){
+                        for (var i = 0; i < editorLinks.length; i++) {
+                          $(editorLinks[i]).attr('data-persist-styles', persist_stylesJson[i][selector]);
+                        }
+                      }
+                    }
+                  }
               });
           },
           paste_preprocess: function (plugin, args) {
