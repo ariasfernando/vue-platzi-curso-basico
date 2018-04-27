@@ -10,7 +10,7 @@
         :class="{ 'stx-show-error': module.data.errors && module.data.errors.length }"
         @click.prevent="config"
     >
-      <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
+      <component :is="'custom-' + module.key" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
       <div class="st-remove-element default-module-error"></div>
