@@ -25,9 +25,19 @@ return [
     |
     */
     'channels' => [
+
+        // production conf begins
+        'production' => [
+            'driver'  => 'custom',
+            'via' => Stensul\Logging\Bootstrap\ProductionLogger::class,
+            'path' => storage_path('logs/laravel.log'),
+            'level' => env('APP_LOG_LEVEL', 'debug'),
+        ],
+        // production conf ends
+        
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['daily'],
         ],
         'single' => [
             'driver' => 'single',
@@ -38,7 +48,7 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => env('APP_LOG_LEVEL', 'debug'),
-            'days' => 7,
+            'days' => 0,
         ],
         'slack' => [
             'driver' => 'slack',
