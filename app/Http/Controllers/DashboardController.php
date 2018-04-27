@@ -63,7 +63,8 @@ class DashboardController extends Controller
         $flash_messages = [
             'campaign_lock',
             'campaign_not_found',
-            'campaign_permission'
+            'campaign_permission',
+            'campaign_create'
         ];
         $flash = '';
         foreach ($flash_messages as $message) {

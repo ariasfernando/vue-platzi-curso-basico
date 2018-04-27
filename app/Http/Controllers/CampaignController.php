@@ -49,6 +49,11 @@ class CampaignController extends Controller
         if (!is_null($campaign_id)) {
             $params = $this->loadCampaign($campaign_id);
         } else {
+
+            if (!Auth::user()->can('create_campaign')) {
+                return redirect(env('APP_BASE_URL', '/'))->with('campaign_create', '');
+            }
+
             $params = [];
 
             if (!is_null($request->input("locale"))) {
