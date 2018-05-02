@@ -97,11 +97,11 @@
                 >
                   <i class="glyphicon fa fa-unlock"></i>
                 </a>
-                <a href="#" v-if="$can('clone_campaign')" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
+                <a href="#" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
                 <a :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
                   class="edit"
                   data-tooltip="Edit"
-                  v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"
+                  v-if="$can('fix_layout') && (!campaign.locked || campaign.locked_by === $_app.config.logged_user)"
                   ><i class="glyphicon glyphicon-pencil"></i></a>
                 <a href="#" data-tooltip="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
                   ><i class="glyphicon glyphicon-trash"></i></a>
