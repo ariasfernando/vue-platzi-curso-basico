@@ -91,11 +91,16 @@
       }
     },
     computed: {
-      locked() {
-        return this.$store.getters["campaign/campaign"].campaign_data.locked;
-      },
       campaign() {
         return this.$store.getters["campaign/campaign"];
+      },
+      locked() {
+        let locked = undefined;
+        if (this.campaign.campaign_data && this.campaign.campaign_data.locked) {
+          locked = this.campaign.campaign_data.locked;
+        }
+
+        return locked;
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];

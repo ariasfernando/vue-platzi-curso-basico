@@ -20,7 +20,7 @@
           -->
           <b-btn @click="template" class="btn btn-default save-as-template beta-btn-secondary"
             v-show="!locked"
-            v-if="$can('create_templates') && campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
+            v-if="$can('create_template') && campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
               && campaign.campaign_data.library_config.templating">
             Save as Template
           </b-btn>
