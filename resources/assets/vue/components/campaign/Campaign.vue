@@ -9,7 +9,7 @@
         <div class="aside-inner">
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
-            <campaign-menu v-if="campaignConfigReady" :library-id="libraryId"></campaign-menu>
+            <campaign-menu v-if="!locked && campaignConfigReady" :library-id="libraryId"></campaign-menu>
           </div>
         </div>
       </aside>
@@ -20,7 +20,7 @@
       </section>
 
       <aside class="component-settings-wrapper">
-        <div class="aside-inner section-box">
+        <div class="aside-inner section-box" v-if="!locked">
           <transition name="slide-fade">
             <module-settings v-if="showModuleSettings"></module-settings>
           </transition>
@@ -91,6 +91,9 @@
       }
     },
     computed: {
+      locked() {
+        return this.$store.getters["campaign/campaign"].campaign_data.locked;
+      },
       campaign() {
         return this.$store.getters["campaign/campaign"];
       },

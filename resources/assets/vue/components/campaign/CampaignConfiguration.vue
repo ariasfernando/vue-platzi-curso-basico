@@ -65,7 +65,7 @@
           <secondary-spinner></secondary-spinner>
         </div>
 
-        <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
+        <div v-if="enableLocking && $can('fix_layout')" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
           <label class="locking">
             <span>{{locked ? 'Unlock' : 'Lock'}}</span>
             <span class="locking_type">
@@ -101,7 +101,6 @@
 
 <script>
   import _ from 'lodash';
-  import ToggleButton from '../../plugins/common/toggle-button'
   import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
   import secondarySpinner from '../common/secondarySpinner.vue';
 

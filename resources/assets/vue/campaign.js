@@ -11,10 +11,12 @@ import 'url-search-params-polyfill';
 import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
 import store from './store';
+import acl from './resources/plugins/acl';
 import Campaign from './components/campaign/Campaign.vue';
 
 Vue.use(Bootstrap);
 Vue.use(VueResource);
+Vue.use(acl);
 Vue.use(VeeValidate);
 
 VeeValidate.Validator.localize('en', Vue.prototype.$_app.dictionary.campaign);
