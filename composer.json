@@ -25,7 +25,7 @@
         "stensul/php-imageproxy": "0.*",
         "stensul/filesystem": "1.*",
         "stensul/media-gallery": "^2.2",
-        "stensul/logging": "1.*",
+        "stensul/logging": "2.*",
         "firebase/php-jwt": "^5.0",
         "stensul/asset-manager": "^1.0"
     },
