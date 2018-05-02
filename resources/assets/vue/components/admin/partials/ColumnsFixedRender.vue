@@ -131,7 +131,7 @@
       onAdd(e){
         this.$emit('add', e);
       },
-      setComponent(data) {
+      selectComponent(data) {
         setTimeout(() => {
           // TODO: find better way to do this
           this.$store.commit("campaign/setCurrentComponent", {
