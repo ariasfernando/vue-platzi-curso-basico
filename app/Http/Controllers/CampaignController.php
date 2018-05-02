@@ -406,11 +406,6 @@ class CampaignController extends Controller
      */
     public function postLock(Request $request)
     {
-        if (!Auth::user()->can("fix_layout")) {
-            return response()->json([
-                'error'   => 'Forbidden'
-            ], 403);
-        }
         return Campaign::lock($request->input('campaign_id'), $request->input('window_id'));
     }
 
@@ -531,6 +526,13 @@ class CampaignController extends Controller
      */
     public function postForceLock(Request $request)
     {
+
+        if (!Auth::user()->can("fix_layout")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
+
         $campaign_id = $request->input('campaign_id');
         if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:'. $campaign_id) !== Auth::id()) {
             Activity::log(
