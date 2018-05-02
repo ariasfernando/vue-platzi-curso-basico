@@ -21,6 +21,7 @@ use Stensul\Models\Campaign;
 use Stensul\Jobs\StoreAssetsInCdn;
 use Stensul\Jobs\ProcessCampaign;
 use Stensul\Jobs\SendReviewersEmail;
+use Stensul\Exceptions\PermissionDeniedException;
 use HtmlCreator as Html;
 use TextCreator as Text;
 use Statics as Assets;
@@ -271,6 +272,10 @@ class CampaignManager
     public static function copy($campaign_id = null)
     {
         $campaign = Campaign::findOrFail($campaign_id);
+
+        if (!$campaign->template && !Auth::user()->can('clone_campaign')) {
+            throw new PermissionDeniedException("You're not allowed to clone campaigns.");
+        }
 
         $new_campaign_attr = [];
 

@@ -6,7 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 use Stensul\Models\Permission;
 use Stensul\Models\Role;
 
-
 class AddFixedLayoutPermissions extends Migration
 {
     private $permissions = [
@@ -29,9 +28,7 @@ class AddFixedLayoutPermissions extends Migration
         }
 
         if ($roles = Role::whereIn('name', $this->roles)->get()) {
-
             foreach ($roles as $role) {
-
                 $permissions = $role->permissions;
 
                 $new_permissions = array_map(function ($perm) {
@@ -59,7 +56,6 @@ class AddFixedLayoutPermissions extends Migration
         Permission::whereIn('name', $names_to_delete)->delete();
 
         if ($roles = Role::whereIn('name', $this->roles)->get()) {
-
             foreach ($roles as $role) {
                 $permissions = $role->permissions;
                 $permissions = array_diff($permissions, $names_to_delete);
@@ -68,5 +64,4 @@ class AddFixedLayoutPermissions extends Migration
             }
         }
     }
-
 }

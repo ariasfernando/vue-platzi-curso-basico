@@ -49,7 +49,6 @@ class CampaignController extends Controller
         if (!is_null($campaign_id)) {
             $params = $this->loadCampaign($campaign_id);
         } else {
-
             if (!Auth::user()->can('create_campaign')) {
                 return redirect(env('APP_BASE_URL', '/'))->with('campaign_create', '');
             }
@@ -283,7 +282,11 @@ class CampaignController extends Controller
      */
     public function postClone(Request $request)
     {
-        return Campaign::copy($request->input('campaign_id'));
+        try {
+            return Campaign::copy($request->input('campaign_id'));
+        } catch (\Stensul\Exceptions\PermissionDeniedException $exception) {
+            return response()->json(['error' => 'campaign_clone'], 403);
+        }
     }
 
     /**
