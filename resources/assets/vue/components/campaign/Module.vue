@@ -11,7 +11,7 @@
         @click.prevent="config"
     >
       <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
-      <module-toolbar :module-id="moduleId"></module-toolbar>
+      <module-toolbar :module-id="moduleId" v-if="!locked"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
       <div class="st-remove-element default-module-error"></div>
     </td>
@@ -106,7 +106,7 @@
         </tr>
         <!--1 COLUMN -->
       </table>
-      <module-toolbar :module-id="moduleId"></module-toolbar>
+      <module-toolbar :module-id="moduleId" v-if="!locked"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
       <div class="st-remove-element default-module-error" style="display:none"></div>
     </td>
@@ -130,6 +130,9 @@
     name: 'Module',
     props: ['moduleId'],
     computed: {
+      locked() {
+        return this.$store.getters["campaign/campaign"].campaign_data.locked;
+      },
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
       },

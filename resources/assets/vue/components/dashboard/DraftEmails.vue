@@ -81,7 +81,7 @@
                 data-tooltip="Open proof review"
                 v-if="proof.allow && proof.status && campaign.has_active_proof"
                 ><i class="glyphicon glyphicon-blackboard"></i></a>
-              <a href="#" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
+              <a href="#" v-if="$can('clone_campaign')" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
 
               <a :data-campaign-id="campaign._id"
                 data-toggle="tooltip"

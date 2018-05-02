@@ -97,7 +97,7 @@
                 >
                   <i class="glyphicon fa fa-unlock"></i>
                 </a>
-                <a href="#" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
+                <a href="#" v-if="$can('clone_campaign')" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
                 <a :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
                   class="edit"
                   data-tooltip="Edit"
