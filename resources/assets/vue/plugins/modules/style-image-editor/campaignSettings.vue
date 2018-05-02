@@ -7,9 +7,9 @@
         </button>
       </span>
     </div>
-    <div class="plugin-wrapper-inner" v-if="params.mobile">
+    <div class="plugin-wrapper-inner" v-if="hasImageMobile">
       <span>
-        <button @click="showModal('mobile')">
+        <button @click="showModal('mobile')" :disabled="!plugin.data.img">
           <i class="glyphicon glyphicon-cloud-upload"></i> Update Image Mobile
         </button>
       </span>
@@ -34,7 +34,7 @@
             </div>
             <div class="modal-body">
               <slot name="body">
-                <div v-show="page.one">
+                <div v-show="page.one" class="wrapper-page-1">
                   <div style="display: flex; flex-direction: row; justify-content: space-between;">
                     <div>
                       <button type="button" @click="clickUpload">
@@ -57,9 +57,27 @@
                     </div>
                   </div>
                 </div>
-                <div v-show="page.two === 'media'" style="display: flex;">
-                  <div class="wrapper-image" v-for="(image, index) in libraryImages" :key="index" @click="chooseImage(image)">
-                    <div style="width: 100%; padding-bottom: 100%; background-size: cover;" v-bind:style="{ backgroundImage: `url(${image})` }"></div>
+                <div v-show="page.two === 'media'">
+                  <div
+                    class="library-container"
+                    >
+                    <div
+                      class="row"
+                      v-for="(section, sectionIndex) in images"
+                      :key="sectionIndex"
+                      >
+                      <div
+                        v-for="(imageUrl, imageIndex) in section"
+                        class="col-md-2"
+                        v-if="imageUrl !== undefined"
+                        :key="imageIndex"
+                        >
+                        <img
+                          :src="imageUrl !== undefined && imageUrl.indexOf('http') === 0 ? imageUrl : $_app.config.baseUrl + imageUrl"
+                          @click="chooseImage(imageUrl)"
+                          >
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div v-show="page.two === 'url'">
@@ -77,8 +95,7 @@
                 </div>
                 <div v-show="page.three" style="overflow-y: auto; max-height: calc(100vh - 187px); min-height: 300px; height:100%" ref="wrapperSie">
                   <style-image-editor
-                    :key="sieKey"
-                    v-if="page.three"
+                    v-if="page.three && this.currentImage"
                     :sieoptions="sieoptions"
                     ref="sie"
                     @image-submit="submitImage"
@@ -173,7 +190,29 @@ export default {
         };
         this.$store.commit('campaign/saveComponentProperty', payload);
       }
-    }
+    },
+    hasImageMobile() {
+      return this.component.image.styleOption.hasImageMobile;
+    },
+    images() {
+      const sections = [];
+
+      let i, j, chunk = 5;
+
+      const tempArray = this.libraryImages.filter(item => {
+        if (item) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      for (i = 0, j = tempArray.length; i < j; i += chunk) {
+        sections.push(tempArray.slice(i, i + chunk));
+      }
+
+      return sections;
+    },
   },
   data() {
     return {
@@ -228,38 +267,16 @@ export default {
     },
     submit() {
       this.$refs.sie.save();
-      this.sieKey++;
     },
     close() {
-      if (typeof this.$refs.sie !== 'undefined') {
-        this.$refs.sie.close();
-        this.sieKey++;
-      }
+      this.reset();
       this.showImageEditor = false;
     },
     back() {
-      this.page = {
-        one: true,
-        two: false,
-        three: false
-      };
-      if (typeof this.$refs.sie !== 'undefined') {
-        this.$refs.sie.close();
-        this.sieKey++;
-      }
+      this.reset();
     },
     clear() {
-      this.page = {
-        one: true,
-        two: false,
-        three: false
-      };
-      if (typeof this.$refs.sie !== 'undefined') {
-        this.$refs.sie.close();
-        this.sieKey++;
-      }
-
-      this.currentImage = null;
+      this.reset();
     },
     generateSieoptions(changeImage = false) {
       const sieoptions = {};
@@ -271,13 +288,12 @@ export default {
         const transformedOptions = sieHelper.transform(this.params);
         Object.assign(sieoptions, transformedOptions);
       } else {
-        Object.assign(sieoptions, this.plugin.data.state);
+        Object.assign(sieoptions, this.plugin.data[`state${this.type === 'mobile' ? 'Mobile' : ''}`]);
         sieoptions.preset = sieHelper.completeUrlPath(
           this.$_app.config.imageUrl,
           sieoptions.preset
         );
       }
-
       sieoptions.size.height = sieoptions.size.auto ? 0 : sieoptions.size.height;
 
       this.sieoptions = sieoptions;
@@ -289,11 +305,8 @@ export default {
     },
     setImage(imageSource) {
       this.currentImage = imageSource;
-
       this.changeImage(this.params);
-
       this.generateSieoptions(true);
-
       this.page = {
         one: false,
         two: false,
@@ -312,12 +325,12 @@ export default {
     },
     submitImage(data) {
       this.$store.commit('global/setLoader', true);
-      data.state.preset = sieHelper.removeUrlPath(
-        this.$_app.config.imageUrl,
-        data.state.preset
-      );
+      data.state.preset = sieHelper.removeUrlPath(this.$_app.config.imageUrl, data.state.preset);
       const images = sieHelper.searchStateImages(data.state);
-      images.push({ key: 'img', image: data.img });
+      images.push({
+        key: 'img',
+        image: data.img
+      });
       const imgs = [];
       images.forEach(image => {
         imgs.push(image.image);
@@ -329,9 +342,16 @@ export default {
         })
         .then(uploadedImgs => {
           this.updateAttribute(uploadedImgs[imgs.length - 1]);
-          this.updatePluginData(uploadedImgs, images, data);
+          const temp = {};
+          temp[`img${this.type === 'mobile' ? 'Mobile' : ''}`] = data.img;
+          temp[`state${this.type === 'mobile' ? 'Mobile' : ''}`] = data.state;
+          this.updatePluginData(uploadedImgs, images, {
+            ...this.plugin.data,
+            ...temp
+          });
           this.$store.commit('global/setLoader', false);
           this.showImageEditor = false;
+          this.reset();
         });
     },
     updatePluginData(uploadedImgs, images, data) {
@@ -339,7 +359,7 @@ export default {
         const i = images.indexOf(image);
         const keys = image.key.split('.');
         const img = uploadedImgs[i];
-        let subData = data.state.preset;
+        let subData = data[`state${this.type === 'mobile' ? 'Mobile' : ''}`].preset;
         keys.forEach(key => {
           if (keys.indexOf(key) === keys.length - 1) {
             subData[key] = img;
@@ -348,7 +368,7 @@ export default {
           }
         });
       });
-      data.img = uploadedImgs[images.length - 1];
+      data[`img${this.type === 'mobile' ? 'Mobile' : ''}`] = uploadedImgs[images.length - 1];
       this.$store.commit('campaign/savePlugin', {
         plugin: this.name,
         moduleId: this.currentComponent.moduleId,
@@ -360,7 +380,6 @@ export default {
     },
     updateAttribute(image) {
       this.removeErrorsImages();
-
       const payload = {
         plugin: this.name,
         moduleId: this.currentComponent.moduleId,
@@ -371,14 +390,12 @@ export default {
         property: `placeholder${this.type === 'mobile' ? 'Mobile' : ''}`,
         value: image
       };
-
       this.$store.commit('campaign/saveComponentProperty', payload);
     },
     removeErrorsImages() {
       let $contentImgError = $('.stx-module-wrapper-active').find(
         '.default-image-error'
       );
-
       if ($contentImgError.length > 0) {
         $contentImgError.removeClass('default-image-error');
       }
@@ -387,29 +404,31 @@ export default {
       if (type !== null && type !== '') {
         this.type = type;
       }
-
+      if (Object.keys(this.plugin.data).length > 0 && this.plugin.data[`img${type === 'mobile' ? 'Mobile' : ''}`]) {
+        this.currentImage = this.plugin.data[`img${type === 'mobile' ? 'Mobile' : ''}`];
+        this.generateSieoptions();
+        this.page = {
+          one: false,
+          two: false,
+          three: true
+        };
+      }
+      this.showImageEditor = true;
+    },
+    reset() {
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
-        this.sieKey++;
       }
-
-      this.showImageEditor = true;
+      this.type = 'desktop';
+      this.currentImage = null;
+      this.page = {
+        one: true,
+        two: false,
+        three: false
+      };
     }
   },
   mounted() {
-    const urlDefault = this.params['sie-plugin-image_upload']['uploaddefault'][
-      'value'
-    ];
-    this.page.one = urlDefault === '';
-    this.page.three = urlDefault !== '';
-
-    if (Object.keys(this.plugin.data).length > 0) {
-      this.page = {
-        one: false,
-        two: false,
-        three: true
-      };
-    }
     this.$refs.input.addEventListener('change', event => {
       event.target.setCustomValidity('');
       return imageHelper
@@ -422,6 +441,9 @@ export default {
         .catch(() => {
           // TODO: Show toast with error.
           event.target.reportValidity();
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+            className: 'et-error'
+          });
         });
     });
 
@@ -470,18 +492,34 @@ export default {
   .modal-body {
     padding: 50px 70px !important;
     margin-bottom: 0px;
+    margin-top: 0px;
     height: auto;
-    button {
-      margin-bottom: 0px;
-      border: 1px solid #f4f4f4;
-      padding-top: 20px;
-      padding-bottom: 20px;
-      min-width: 130px;
-      background-color: #e9e9e9;
-      transition: all 0.3s linear;
-      &:hover {
-        border: 1px solid #514960;
-        box-shadow: 0px 0px 4px #888888;
+    text-align: center;
+    .wrapper-page-1 {
+      display: inline-block;
+      button {
+        margin-bottom: 0px;
+        border: 1px solid #f4f4f4;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        min-width: 130px;
+        background-color: #e9e9e9;
+        transition: all 0.3s linear;
+        &:hover {
+          border: 1px solid #514960;
+          box-shadow: 0px 0px 4px #888888;
+        }
+      }
+      div:first-child:nth-last-child(1) {
+        margin-right: 0px;
+      }
+      div:first-child:nth-last-child(2),
+      div:first-child:nth-last-child(2) ~ div {
+        margin-right: 70px;
+      }
+      div:first-child:nth-last-child(3),
+      div:first-child:nth-last-child(3) ~ div {
+        margin-right: 50px;
       }
     }
   }
@@ -492,21 +530,31 @@ export default {
   padding-left: 40px;
   padding-right: 40px;
   overflow-y: scroll;
-  .wrapper-image {
-    width: 180px;
-    height: 180px;
-    padding: 5px;
-    border: 1px solid #f4f4f4;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    transition: all 0.3s linear;
-    cursor: pointer;
-    &:hover {
-      border: 1px solid #514960;
-      box-shadow: 0px 0px 4px #888888;
+  .library-container {
+    width: 100%;
+    margin: 20px auto;
+    border: 1px solid #eaeaea;
+    padding: 20px;
+    .row {
+      .col-md-2 {
+        background-color: #f6f6f6;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 13px;
+        overflow: hidden;
+        img {
+          padding: 3px;
+          cursor: pointer;
+          width: 100%;
+          vertical-align: middle;
+        }
+      }
     }
   }
 }
+
 .url {
   max-width: 700px;
   padding-top: 30px;

@@ -25,22 +25,8 @@ export default {
         },
       },
     },
-    mobile: {
-      label: 'Mobile Upload',
-      key: 'mobile_upload',
-      value: false,
-      type: 'switch',
-      config: {
-        separated: {
-          label: 'Use different image',
-          key: 'mobile_upload_separated',
-          value: false,
-          type: 'switch',
-        },
-      },
-    },
     url: {
-      label: 'Url Upload',
+      label: 'URL Upload',
       key: 'url_upload',
       value: false,
       type: 'switch',
@@ -258,14 +244,14 @@ export default {
           value: 1,
           max: 1,
           min: 0,
-          step: '0.1',
+          step: 0.1,
           type: 'number',
         },
         shapemask_square: {
           label: 'Square',
           key: 'shapes_square',
           type: 'switch',
-          value: true,
+          value: false,
           config: {
             square_width: {
               label: 'Width',
@@ -313,7 +299,7 @@ export default {
           label: 'Circle',
           key: 'shapes_circle',
           type: 'switch',
-          value: true,
+          value: false,
           config: {
             circle_radius: {
               label: 'Radius',

@@ -87,7 +87,6 @@ function campaignStore() {
         }
         return false;
       },
-
     },
     mutations: {
       campaignCompleted(state, status) {
@@ -188,7 +187,6 @@ function campaignStore() {
         state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data = updated;
         state.dirty = true;
       },
-
       saveComponentProperty(state, data) {
         const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
         const subComponent = data.subComponent ? component[data.subComponent] : component;

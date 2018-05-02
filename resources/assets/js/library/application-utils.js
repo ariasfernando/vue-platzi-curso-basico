@@ -1084,6 +1084,14 @@ Application.utils = {
             result += key + ': ' + val + ';'
         }
         return result;
-    }
+    },
 
+    isJsonString: function(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    },
 };
