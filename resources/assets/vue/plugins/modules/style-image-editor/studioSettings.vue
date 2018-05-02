@@ -2,7 +2,7 @@
   <div>
     <settings-container :label="plugin.title">
       <template slot="setting-right">
-          <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
+        <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
       </template>
     </settings-container>
     <template v-if="plugin.enabled" v-for="(option, name) in plugin.config" >
@@ -17,7 +17,7 @@
             @change="(newValue)=>updateField(newValue, name)"
             :min="option.min || 0"
             :max="option.max || Infinity"
-            :step="option.step || 1"
+            :step="parseFloat(option.step)"
           ></el-input-number>
           <el-input size="mini" v-if="option.type === 'text'" :disabled="!enabled" :value="option.value" @change="(newValue)=>updateField(newValue, name)"></el-input>
           <el-select
@@ -37,18 +37,18 @@
       </settings-container>
       <template  v-if="option.value && option.config" v-for="(subopt, subname) in option.config">
         <settings-container :label="subopt.label" :key="subname">
-            <template slot="setting-right">
+          <template slot="setting-right">
             <toggle-button v-if="subopt.type === 'switch'" :value="subopt.value" active-color="#78DCD6" @change="(newValue)=>updateSubField(newValue, name, subname)"></toggle-button>
             <el-input size="mini"  v-if="subopt.type === 'text'" :value="subopt.value" @change="(newValue)=>updateSubField(newValue, name, subname)"></el-input>
             <el-input-number
-                v-if="subopt.type === 'number'" 
-                size="mini" 
-                v-validate="'required'"
-                :value="subopt.value" 
-                @change="(newValue)=>updateSubField(newValue, name, subname)"
-                :min="subopt.min || 0"
-                :max="subopt.max || Infinity"
-                :step="subopt.step || 1"></el-input-number>
+              v-if="subopt.type === 'number'" 
+              size="mini" 
+              v-validate="'required'"
+              :value="subopt.value" 
+              @change="(newValue)=>updateSubField(newValue, name, subname)"
+              :min="subopt.min || 0"
+              :max="subopt.max || Infinity"
+              :step="parseFloat(subopt.step)"></el-input-number>
             <el-select
               size="mini"
               v-if="subopt.type === 'select' || subopt.type === 'multi-select'"
@@ -64,34 +64,34 @@
             </template>
         </settings-container>
         <template v-if="subopt.value && subopt.config" v-for="(interop, intername) in subopt.config">
-             <settings-container :label="interop.label" :key="intername">
-                <template slot="setting-right">
-                <toggle-button v-if="interop.type === 'switch'" :value="interop.value" active-color="#78DCD6" @change="(newValue)=>updateInterField(newValue, name, subname, intername)"></toggle-button>
-                <el-input size="mini"  v-if="interop.type === 'text'" :value="interop.value" @change="(newValue)=>updateInterField(newValue, name, subname, subninternameame)"></el-input>
-                <el-input-number
-                    v-if="interop.type === 'number'" 
-                    size="mini" 
-                    v-validate="'required'"
-                    :value="interop.value" 
-                    @change="(newValue)=>updateInterField(newValue,name, subname, intername)"
-                    :min="interop.min || 0"
-                    :max="interop.max || Infinity"
-                    :step="interop.step || 1"></el-input-number>
-                <el-select
+          <settings-container :label="interop.label" :key="intername">
+            <template slot="setting-right">
+              <toggle-button v-if="interop.type === 'switch'" :value="interop.value" active-color="#78DCD6" @change="(newValue)=>updateInterField(newValue, name, subname, intername)"></toggle-button>
+              <el-input size="mini"  v-if="interop.type === 'text'" :value="interop.value" @change="(newValue)=>updateInterField(newValue, name, subname, subninternameame)"></el-input>
+              <el-input-number
+                v-if="interop.type === 'number'" 
+                size="mini" 
+                v-validate="'required'"
+                :value="interop.value" 
+                @change="(newValue)=>updateInterField(newValue,name, subname, intername)"
+                :min="interop.min || 0"
+                :max="interop.max || Infinity"
+                :step="parseFloat(interop.step)"></el-input-number>
+              <el-select
                 v-model="interop.value"
                 multiple
                 v-if="interop.type === 'multi-select'"
                 :value="interop.value"
                 :parent="name"
                 :name="intername">
-                    <el-option
-                      v-for="opt in interop.options"
-                      :key="opt"
-                      :label="opt"
-                      :value="opt"></el-option>
-                </el-select>
-                </template>
-            </settings-container>
+                <el-option
+                  v-for="opt in interop.options"
+                  :key="opt"
+                  :label="opt"
+                  :value="opt"></el-option>
+              </el-select>
+            </template>
+          </settings-container>
         </template>
       </template>
     </template>
