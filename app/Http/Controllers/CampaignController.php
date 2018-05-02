@@ -251,6 +251,11 @@ class CampaignController extends Controller
      */
     public function postSave(Request $request)
     {
+        if ($request->input('template') && !Auth::user()->can("create_template")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
         return Campaign::save($request->input());
     }
 
