@@ -309,7 +309,7 @@
                 if( link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color) ){
                   changeStyles('a',{'color':link_fixed_color});
                 }
-                if( link_fixed_styles  && Application.utils.isJsonString(li_fixed_style)){
+                if( link_fixed_styles  && Application.utils.isJsonString(link_fixed_styles)){
                   changeStyles('a', JSON.parse(link_fixed_styles));
                 }
                 if( ul_fixed_style){
