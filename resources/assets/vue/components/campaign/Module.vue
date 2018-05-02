@@ -165,7 +165,7 @@
       msoStartingComment() {
         return `
         [if gte mso 9]>
-          <table width="${this.templateWidth}" cellpading="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
+          <table width="${this.templateWidth}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
             <tr>
               <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important">
               <![endif]`;
@@ -173,7 +173,7 @@
       msoStartingCommentInverted() {
         return `
         [if gte mso 9]>
-          <table width="${this.columnWidthPadding}" cellpading="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
+          <table width="${this.columnWidthPadding}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
             <tr>
               <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr">
               <![endif]`;
