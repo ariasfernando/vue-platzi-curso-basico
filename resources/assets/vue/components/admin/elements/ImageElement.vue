@@ -8,7 +8,7 @@
     >
       <td 
         :width="component.container.attribute.width"
-        :style="[containerBorderAndPadding, widthStyle(component.container.attribute.width)]"
+        :style="stylesContainer"
         :align="component.container.attribute.align"
         class="stx-position-relative"
         :bgcolor="component.container.attribute.bgcolor"
@@ -28,7 +28,7 @@
               :valign="component.image.attribute.valign"
               :align="component.image.attribute.align"
               :bgcolor="component.image.attribute.bgcolor"
-              :style="[imageBorderAndPadding,{width:widthStyle(component.image.attribute.width)}]"
+              :style="stylesImage"
             >
               <a 
                 @click.prevent
@@ -36,18 +36,33 @@
                 :alt="component.image.attribute.alt"
                 :title="component.image.attribute.title"
                 :target="component.image.attribute.target"
-              >
+                >
                 <img
                   class="st-resize"
+                  :class="{'st-hide-mobile' : component.image.styleOption.hasImageMobile}"
                   style="border: 0; display: block;"
                   border="0"
                   :width="component.image.attribute.width" 
                   :src="imageUrl(component.image.attribute.placeholder)"
-                  :height="component.image.attribute.height"
+                  :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
                   :alt="component.image.attribute.alt"
                   :title="component.image.attribute.title"
-                  :data-open-element-config="elementConfig"
                 >
+                <template 
+                  v-if="component.image.styleOption.hasImageMobile">
+                  <div class="show-img-mobile" style="display:none;width:0;overflow:hidden;max-height:0!important;">
+                    <img
+                      :src="imageUrl(component.image.attribute.placeholderMobile)"
+                      border="0"
+                      class="st-resize"
+                      style="display:block;border:none;max-width:100%;height:auto;"
+                      :width="component.image.attribute.width" 
+                      :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
+                      :alt="component.image.attribute.alt"
+                      :title="component.image.attribute.title"
+                    />
+                  </div>
+                </template>
               </a>
               <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
             </td>
@@ -76,9 +91,6 @@
       ComponentToolbar,
     },
     mixins: [ MobileStylesMixin, ComponentAttributeMixin ],
-    created () {
-      this.setupModule();
-    },
     data(){
       return {
         imageUrl(imagePath) {
@@ -87,6 +99,30 @@
       }
     },
     computed: {
+      stylesImage(){
+        let stylesImage = this.imageBorderAndPadding;
+        stylesImage.push({width:this.widthStyle(this.component.image.attribute.width)});
+        return stylesImage;
+      },
+      widthContainer() {
+        return {
+          width: this.component.container.attribute.width
+            ? this.widthStyle(this.component.container.attribute.width)
+            : "100%"
+        };
+      },
+      stylesContainer(){
+        let stylesContainer = this.containerBorderAndPadding;
+        stylesContainer.push(this.widthContainer);
+        return stylesContainer;
+      },
+      widthContainer() {
+        return {
+          width: this.component.container.attribute.width
+            ? this.widthStyle(this.component.container.attribute.width)
+            : "100%"
+        };
+      },
       imageBorderAndPadding() {
         return [
           {"padding-top": this.component.image.style.paddingTop},
@@ -129,14 +165,6 @@
       }
     },
     methods: {
-      setupModule () {
-        this.elementConfig = null;
-
-        if (this.component.directives && this.component.directives.elementConfig) {
-          this.elementConfig = this.component.directives.elementConfig;
-        }
-      },
-
       widthStyle(width) {
         return _.endsWith(width, "%") ? width : width + "px";
       },
@@ -148,6 +176,25 @@
           });
         }
       },
+    },
+    mounted() {
+      const subcomponents = ['text', 'content', 'container', 'image'];
+      subcomponents.forEach((subcomponent) => {
+        const propertys = ['attribute', 'style', 'styleOption'];
+        const thisSubcomponent = subcomponent;
+        propertys.forEach((property) => {
+          if (this.component && this.component[thisSubcomponent] && Array.isArray(this.component[thisSubcomponent][property])) {
+            const data = {
+              columnId: this.columnId,
+              componentId: this.componentId,
+              subComponent: thisSubcomponent,
+              property,
+              value: new Object,
+            };
+            this.$store.commit('module/saveComponentProperty', data);
+          }
+        });
+      });
     }
   };
 </script>

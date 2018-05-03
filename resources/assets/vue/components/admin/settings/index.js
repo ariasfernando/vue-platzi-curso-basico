@@ -9,6 +9,7 @@ import GenericColor from './GenericColor.vue';
 import GenericFile from './GenericFile.vue';
 import GenericNumber from './GenericNumber.vue';
 import GenericSelect from './GenericSelect.vue';
+import GenericSwitch from './GenericSwitch.vue';
 import GenericText from './GenericText.vue';
 import ImageSize from './ImageSize.vue';
 import InputHeight from './InputHeight.vue';
@@ -30,6 +31,7 @@ const Settings = {
   GenericFile,
   GenericNumber,
   GenericSelect,
+  GenericSwitch,
   GenericText,
   ImageSize,
   InputHeight,

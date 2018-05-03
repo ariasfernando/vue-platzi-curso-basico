@@ -11,6 +11,27 @@ function imageDefault() {
           subComponent: 'image',
         },
         {
+          label: 'Image mobile',
+          link: 'styleOption',
+          name: 'hasImageMobile',
+          type: 'generic-switch',
+          value: false,
+          subComponent: 'image',
+        },
+        {
+          link: 'attribute',
+          label: 'Select an image placeholder mobile',
+          name: 'placeholderMobile',
+          type: 'generic-file',
+          value: 'default/placeholder-square.jpg',
+          subComponent: 'image',
+          dependsOn: {
+            link: 'styleOption',
+            name: 'hasImageMobile',
+            subComponent: 'image',
+          },
+        },
+        {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
@@ -53,7 +74,7 @@ function imageDefault() {
           label: 'Default URL',
           name: 'href',
           type: 'generic-text',
-          value: 'http://stensul.com',
+          value: '',
           subComponent: 'image',
         },
         {

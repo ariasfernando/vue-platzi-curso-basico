@@ -27,7 +27,7 @@ function Module(data = {}) {
   this.plugins = data.plugins || getPlugins();
 
   this.structure = {
-    columnsStacking: (data.structure && data.structure.columnsType) ? data.structure.columnsType : 'normal',
+    columnsStacking: (data.structure && data.structure.columnsStacking) ? data.structure.columnsStacking : 'normal',
     attribute: {
       bgcolor: attribute.bgcolor || '',
       classes: '',

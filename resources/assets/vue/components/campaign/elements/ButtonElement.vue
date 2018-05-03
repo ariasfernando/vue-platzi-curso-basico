@@ -3,7 +3,7 @@
   <tr
     @click="selectComponent"
     data-type="button-element"
-    :class="getMobileClasses(component,'tr') + getAttributeClasses(component)"
+    :class="getMobileClasses(component,'tr')"
   >
     <td
       class="stx-position-relative"
@@ -11,7 +11,7 @@
       style="width: 100%;"
       :style="component.container.style"
       :align="component.container.attribute.align"
-      :class="getMobileClasses(component,'td:first')"
+      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
     >
       <a
         @click.prevent
@@ -67,7 +67,7 @@
                       :src="$_app.config.imageUrl + component.caret.attribute.url"
                       :bgcolor="component.caret.attribute.bgcolor"
                       :width="component.caret.attribute.width"
-                      :height="component.caret.attribute.height"
+                      :height="component.caret.attribute.height === 'auto' ? undefined : component.caret.attribute.height"
                       :valign="component.caret.attribute.valign || 'middle'"
                       :class="component.caret.attribute.classes || ''"
                       style="display: inline-block !important; border:0;"

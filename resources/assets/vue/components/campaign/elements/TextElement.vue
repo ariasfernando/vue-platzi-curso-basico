@@ -7,7 +7,7 @@
   >
     <td
       :width="component.container.attribute.width"
-      :style="containerBorderAndPadding, component.container.attribute.width ? widthStyle(component.container.attribute.width) : '100%'"
+      :style="[containerBorderAndPadding, component.container.attribute.width ? widthStyle(component.container.attribute.width) : '100%']"
       :align="component.container.attribute.align || 'center'"
       :bgcolor="component.container.attribute.bgcolor"
       :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
@@ -41,7 +41,7 @@
 
 <script>
 import MobileStylesMixin from "../../common/mixins/MobileStylesMixin.js";
-  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
+import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
 import _ from "lodash";
 
 export default {
@@ -120,7 +120,7 @@ export default {
           columnId:this.columnId,
           componentId:this.componentId
       });
-    }
+    },
   }
 };
 </script>
