@@ -84,7 +84,7 @@
                 v-on:click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                data-tooltip="Lock this email for editing"
+                data-tooltip="Fix email layout"
                 @click.prevent
               >
                 <i class="glyphicon fa fa-lock"></i>
@@ -96,7 +96,7 @@
                 v-on:click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                data-tooltip="Unlock"
+                data-tooltip="Unfix email layout"
                 @click.prevent
               >
                 <i class="glyphicon fa fa-unlock"></i>
