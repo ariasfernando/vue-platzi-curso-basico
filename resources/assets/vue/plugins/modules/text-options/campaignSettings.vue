@@ -93,7 +93,7 @@
           link_title: false,
           link_text_to_display: false,
           link_fixed_color: false,
-          //link_fixed_styles:'{"text-decoration": "underline"}',
+          link_fixed_styles: false,//'{"text-decoration": "underline"}',
           // persist_styles: JSON.stringify([{"ul":'{"mso-list": "disc"}'}]),
           ul_fixed_style: 'margin-bottom: 0px !important; margin-top: 0px !important; margin-left: 25px; padding-left: 0px;',
           ol_fixed_style: 'margin-bottom: 0px !important; margin-top: 0px !important; margin-left: 25px; padding-left: 0px;',
@@ -108,6 +108,8 @@
           relative_urls: false,
           max_chars: this.plugin.config.settings.truncate ? this.plugin.config.settings.truncate.content : undefined,
           max_lines: this.plugin.config.settings.lines_limit ? this.plugin.config.settings.lines_limit.content : undefined,
+          advlist_bullet_styles: 'default',
+          advlist_number_styles: 'default',
 
           init_instance_callback: (editor) => {
             editor.on('blur', (e) => {
@@ -309,7 +311,7 @@
                 if( link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color) ){
                   changeStyles('a',{'color':link_fixed_color});
                 }
-                if( link_fixed_styles  && Application.utils.isJsonString(li_fixed_style)){
+                if( link_fixed_styles  && Application.utils.isJsonString(link_fixed_styles)){
                   changeStyles('a', JSON.parse(link_fixed_styles));
                 }
                 if( ul_fixed_style){
@@ -377,3 +379,12 @@
     }
   }
 </script>
+<style lang="less">
+  // hidde the sub menu of Numbered list and Bullet list
+  div[aria-label="Numbered list"],
+  div[aria-label="Bullet list"]{
+    button.mce-open{
+      display: none; 
+    }
+  }
+</style>

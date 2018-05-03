@@ -22,7 +22,7 @@
               <template>
                 <component
                   v-for="(component, componentId) in column.components"
-                  :key="componentId"
+                  :key="component.id"
                   @select-component="selectComponent"
                   :is="component.type"
                   :component="component"
