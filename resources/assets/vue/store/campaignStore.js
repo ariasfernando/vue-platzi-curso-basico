@@ -124,6 +124,7 @@ function campaignStore() {
       },
       cloneModule(state, moduleId) {
         const clone = _.cloneDeep(state.modules[moduleId]);
+        clone.idInstance = Math.floor(100000 + (Math.random() * 900000));
         state.modules.push(clone);
         state.dirty = true;
       },

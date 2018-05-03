@@ -8,7 +8,7 @@
     >
       <td 
         :width="component.container.attribute.width"
-        :style="[containerBorderAndPadding, widthStyle(component.container.attribute.width)]"
+        :style="stylesContainer"
         :align="component.container.attribute.align"
         class="stx-position-relative"
         :bgcolor="component.container.attribute.bgcolor"
@@ -28,7 +28,7 @@
               :valign="component.image.attribute.valign"
               :align="component.image.attribute.align"
               :bgcolor="component.image.attribute.bgcolor"
-              :style="[imageBorderAndPadding,{width:widthStyle(component.image.attribute.width)}]"
+              :style="stylesImage"
             >
               <a 
                 @click.prevent
@@ -99,6 +99,30 @@
       }
     },
     computed: {
+      stylesImage(){
+        let stylesImage = this.imageBorderAndPadding;
+        stylesImage.push({width:this.widthStyle(this.component.image.attribute.width)});
+        return stylesImage;
+      },
+      widthContainer() {
+        return {
+          width: this.component.container.attribute.width
+            ? this.widthStyle(this.component.container.attribute.width)
+            : "100%"
+        };
+      },
+      stylesContainer(){
+        let stylesContainer = this.containerBorderAndPadding;
+        stylesContainer.push(this.widthContainer);
+        return stylesContainer;
+      },
+      widthContainer() {
+        return {
+          width: this.component.container.attribute.width
+            ? this.widthStyle(this.component.container.attribute.width)
+            : "100%"
+        };
+      },
       imageBorderAndPadding() {
         return [
           {"padding-top": this.component.image.style.paddingTop},
