@@ -226,7 +226,6 @@ export default {
       currentImage: null,
       url: '',
       type: 'desktop',
-      sieKey: 1,
       sieoptions: {}
     };
   },
@@ -266,6 +265,7 @@ export default {
       this.page.two = 'url';
     },
     submit() {
+      this.$store.commit('global/setLoader', true);      
       this.$refs.sie.save();
     },
     close() {
@@ -279,12 +279,10 @@ export default {
       this.reset();
     },
     generateSieoptions(changeImage = false) {
-      const sieoptions = {};
-      if (
-        typeof this.plugin.data === 'undefined' ||
-        Array.isArray(this.plugin.data) ||
-        changeImage
-      ) {
+      const sieoptions = {
+        api: this.$_app.config.sieAPI
+      };
+      if (typeof this.plugin.data === 'undefined' || Array.isArray(this.plugin.data) || changeImage) {
         const transformedOptions = sieHelper.transform(this.params);
         Object.assign(sieoptions, transformedOptions);
       } else {
@@ -297,40 +295,39 @@ export default {
       sieoptions.size.height = sieoptions.size.auto ? 0 : sieoptions.size.height;
 
       this.sieoptions = sieoptions;
-
-      if (typeof this.$refs.sie !== 'undefined') {
-        this.$refs.sie.close();
-        this.sieKey++;
-      }
     },
     setImage(imageSource) {
-      this.currentImage = imageSource;
-      this.changeImage(this.params);
-      this.generateSieoptions(true);
-      this.page = {
-        one: false,
-        two: false,
-        three: true
-      };
+      return imageHelper.checkSize(imageSource, this.sieoptions.size)
+        .then(()=>{
+          this.currentImage = imageSource;
+          this.changeImage(this.params);
+          this.generateSieoptions(true);
+          this.page = {
+            one: false,
+            two: false,
+            three: true
+          }
+        })
+        .catch(error => {
+          this.$root.$toast(`${error}. Please try again.`, {
+              className: 'et-error'
+            })
+        });
     },
     chooseImage(url) {
-      return imageHelper.getBase64ImgFromURL(url).then(imgSrc => {
+      return imageHelper.getBase64Img(url).then(imgSrc => {
         this.setImage(imgSrc);
       });
     },
     saveUrl(event) {
-      return imageHelper.getBase64ImgFromURL(this.url).then(imgSrc => {
+      return imageHelper.getBase64Img(this.url).then(imgSrc => {
         this.setImage(imgSrc);
       });
     },
     submitImage(data) {
-      this.$store.commit('global/setLoader', true);
       data.state.preset = sieHelper.removeUrlPath(this.$_app.config.imageUrl, data.state.preset);
       const images = sieHelper.searchStateImages(data.state);
-      images.push({
-        key: 'img',
-        image: data.img
-      });
+      images.push({ key: 'img', image: data.img});
       const imgs = [];
       images.forEach(image => {
         imgs.push(image.image);
@@ -430,18 +427,16 @@ export default {
   },
   mounted() {
     this.$refs.input.addEventListener('change', event => {
-      event.target.setCustomValidity('');
       return imageHelper
         .checkFile(event.target)
         .then(image => {
-          return imageHelper.getBase64ImgFromFile(image).then(imgSrc => {
-            this.setImage(imgSrc);
-          });
+          return imageHelper.getBase64Img(image);
         })
-        .catch(() => {
-          // TODO: Show toast with error.
-          event.target.reportValidity();
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+        .then(imgSrc => {
+            this.setImage(imgSrc);
+        })
+        .catch((error) => {
+          this.$root.$toast(`Oops! Something went wrong! ${error}. Please try again.`, {
             className: 'et-error'
           });
         });

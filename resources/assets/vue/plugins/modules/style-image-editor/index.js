@@ -4,7 +4,7 @@ import campaignSettings from './campaignSettings.vue';
 export default {
   name: 'style-image-editor',
   title: 'style Image Editor',
-  version: '0.0.2',
+  version: '0.0.3',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
@@ -217,6 +217,18 @@ export default {
           value: 0,
           type: 'number',
           step: 1,
+        },
+        overlay_fixed: {
+          label: 'Fixed Position',
+          key: 'fixed',
+          value: false,
+          type: 'switch',
+        },
+        overlay_resizable: {
+          label: 'Fixed Size',
+          key: 'resizable',
+          value: false,
+          type: 'switch',
         },
       },
     },
