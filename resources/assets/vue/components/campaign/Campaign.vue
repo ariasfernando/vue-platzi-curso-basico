@@ -5,12 +5,12 @@
     <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
       <!-- column left (menu) -->
-      <aside>
+      <aside :style="locked ? 'overflow-y: hidden;' : undefined">
         <div class="aside-inner">
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
             <campaign-menu v-if="campaignConfigReady && !locked" :library-id="libraryId"></campaign-menu>
-            <div class="lock-warning" v-if="campaignConfigReady && locked">Unlock the campaign to add modules</div>
+            <div class="lock-warning-container" v-if="campaignConfigReady && locked">Unlock the campaign to add modules</div>
           </div>
         </div>
       </aside>
@@ -446,10 +446,14 @@
   .mce-edit-focus{
     outline: 1px dotted #333!important;
   }
+</style>
 
-  .lock-warning{
-    padding: 5px 0 0;
-    margin: 5px 0 0;
-    color: @stensul-gray;
+<style lang="less" scoped>
+  .lock-warning-container {
+    height: 1000px;
+    padding: 40px 60px 0;
+    background-color: #EDEDED;
+    color: #999999;
+    text-align: center;
   }
 </style>
