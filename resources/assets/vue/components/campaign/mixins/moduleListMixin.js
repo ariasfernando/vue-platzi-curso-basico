@@ -1,6 +1,12 @@
 import _ from 'lodash';
 
 export default {
+  computed: {
+    activeModule() {
+      const activeModuleId = this.$store.getters["campaign/activeModule"];
+      return this.modules[activeModuleId] || undefined;
+    }
+  },
   methods: {
     getSubitemsAsArray () {
       // Get subitems as array from modules menu
