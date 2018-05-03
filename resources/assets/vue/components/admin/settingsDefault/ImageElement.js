@@ -74,7 +74,7 @@ function imageDefault() {
           label: 'Default URL',
           name: 'href',
           type: 'generic-text',
-          value: 'http://stensul.com',
+          value: '',
           subComponent: 'image',
         },
         {
