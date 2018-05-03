@@ -9,7 +9,8 @@
         <div class="aside-inner">
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
-            <campaign-menu v-if="campaignConfigReady" :library-id="libraryId"></campaign-menu>
+            <campaign-menu v-if="campaignConfigReady && !locked" :library-id="libraryId"></campaign-menu>
+            <div class="lock-warning" v-if="campaignConfigReady && locked">Unlock the campaign to add modules</div>
           </div>
         </div>
       </aside>
@@ -93,6 +94,9 @@
       campaign() {
         return this.$store.getters["campaign/campaign"];
       },
+      locked() {
+        return this.$store.getters["campaign/campaign"].campaign_data.locked;
+      },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
       },
@@ -164,6 +168,7 @@
   @import '../../less/campaign';
   @stensul-white: #FFFFFF;
   @stensul-purple: #514960;
+  @stensul-gray: #666666;
   .section-canvas-email{
     .mce-content-body{
       line-height: inherit;
@@ -440,5 +445,11 @@
 
   .mce-edit-focus{
     outline: 1px dotted #333!important;
+  }
+
+  .lock-warning{
+    padding: 5px 0 0;
+    margin: 5px 0 0;
+    color: @stensul-gray;
   }
 </style>
