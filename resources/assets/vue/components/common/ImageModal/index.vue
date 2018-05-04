@@ -183,7 +183,7 @@
           };
         },
         saveUrl(event) {
-          return imageHelper.getBase64ImgFromURL(this.url).then(imgSrc => {
+          return imageHelper.getBase64Img(this.url).then(imgSrc => {
             this.setImage(imgSrc);
           });
         },
@@ -196,7 +196,9 @@
           this.page.two = 'url';
         },
         generateSieoptions(changeImage = false) {
-          const sieoptions = {};
+          const sieoptions = {
+            api: this.$_app.config.sieAPI
+          };
           if (Object.keys(this.data).length <= 0 || changeImage) {
             const transformedOptions = sieHelper.transform(this.params);
             Object.assign(sieoptions, transformedOptions);
@@ -214,19 +216,27 @@
           this.reset();
         },
         chooseImage(url) {
-          return imageHelper.getBase64ImgFromURL(url).then(imgSrc => {
+          return imageHelper.getBase64Img(url).then(imgSrc => {
             this.setImage(imgSrc);
           });
         },
         setImage(imageSource) {
-          this.currentImage = imageSource;
-          this.changeImage(this.params);
-          this.generateSieoptions(true);
-          this.page = {
-            one: false,
-            two: false,
-            three: true
-          };
+          return imageHelper.checkSize(imageSource, this.sieoptions.size)
+            .then(()=>{
+              this.currentImage = imageSource;
+              this.changeImage(this.params);
+              this.generateSieoptions(true);
+              this.page = {
+                one: false,
+                two: false,
+                three: true
+              }
+            })
+            .catch(error => {
+              this.$root.$toast(`${error}. Please try again.`, {
+                  className: 'et-error'
+                })
+            });
         },
         submitImage(data) {
           this.$emit('submitImage', data);
@@ -252,11 +262,11 @@
           return imageHelper
             .checkFile(event.target)
             .then(image => {
-              return imageHelper.getBase64ImgFromFile(image).then(imgSrc => {
+              return imageHelper.getBase64Img(image).then(imgSrc => {
                 this.setImage(imgSrc);
               });
             })
-            .catch(() => {
+            .catch((error) => {
               // TODO: Show toast with error.
               event.target.reportValidity();
               this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {

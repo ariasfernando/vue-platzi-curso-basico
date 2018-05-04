@@ -4,11 +4,11 @@ function checkFile(file) {
     const photo = file.files[0];
     if (typeof photo === 'undefined' || photo === null) {
       file.setCustomValidity('There was an error reading your file');
-      return reject();
+      return reject('There was an error reading your file');
     }
     if (fileTypes.indexOf(photo.type) === -1) {
       file.setCustomValidity('Not an accepted file type');
-      return reject();
+      return reject('Not an accepted file type');
     }
 
     const img = new Image();
@@ -21,7 +21,7 @@ function checkFile(file) {
     img.onerror = () => {
       file.setCustomValidity('There was an error reading your file');
       URL.revokeObjectURL(imgObj);
-      return reject();
+      return reject('There was an error reading your file');
     };
     img.src = imgObj;
   });
@@ -29,40 +29,69 @@ function checkFile(file) {
   return loadImage;
 }
 
-function getBase64ImgFromURL(url) {
+function loadImage(url) {
   return new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous';
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.height = img.naturalHeight;
-      canvas.width = img.naturalWidth;
-      ctx.drawImage(img, 0, 0);
-      return resolve(canvas.toDataURL());
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.onload = () => {
+      resolve(xhr.response);
     };
-    img.src = url;
+    xhr.send();
   });
 }
 
-function getBase64ImgFromFile(file) {
+function getBase64Img(image) {
   return new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous';
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.height = img.naturalHeight;
-      canvas.width = img.naturalWidth;
-      ctx.drawImage(img, 0, 0);
-      return resolve(canvas.toDataURL());
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      resolve(reader.result);
+    }, false);
+    if (typeof image !== 'object' && image.includes('http')) {
+      loadImage(image)
+        .then((img) => {
+          reader.readAsDataURL(img);
+        });
+    } else {
+      reader.readAsDataURL(image);
+    }
+  });
+}
+
+function checkSize(image, size) {
+  return new Promise((resolve, reject) => {
+    if (!image.includes('data:image/gif;base64')) {
+      return resolve();
+    }
+    const tmpImg = new Image();
+    let hasErr = false;
+    let msg = 'Image size should be ';
+    tmpImg.onload = () => {
+      const width = tmpImg.naturalWidth;
+      const height = tmpImg.naturalHeight;
+      if (width !== size.width) {
+        hasErr = true;
+        msg = msg.concat(`${size.width}px in width`);
+      }
+      if (!size.auto && height !== size.height) {
+        if (hasErr) {
+          msg = msg.concat(' and ');
+        }
+        hasErr = true;
+        msg = msg.concat(`${size.height}px in height`);
+      }
+
+      if (hasErr) {
+        return reject(msg);
+      }
+      return resolve();
     };
-    img.src = URL.createObjectURL(file);
+    tmpImg.src = image;
   });
 }
 
 export default {
-  getBase64ImgFromFile,
-  getBase64ImgFromURL,
+  getBase64Img,
   checkFile,
+  checkSize,
 };

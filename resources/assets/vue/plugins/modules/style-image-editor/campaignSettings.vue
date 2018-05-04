@@ -34,14 +34,12 @@
 <script>
 import each from 'lodash/each';
 import imageService from '../../../services/image';
-import styleImageEditor from 'stensul-sie-vue';
-import sieHelper from './sie-helper';
+import sieHelper from '../../../components/common/ImageModal/sie-helper';
 import imageModal from '../../../components/common/ImageModal';
 
 export default {
   props: ['name', 'plugin'],
   components: {
-    styleImageEditor,
     imageModal
   },
   computed: {
@@ -109,10 +107,7 @@ export default {
       this.$store.commit('global/setLoader', true);
       data.state.preset = sieHelper.removeUrlPath(this.$_app.config.imageUrl, data.state.preset);
       const images = sieHelper.searchStateImages(data.state);
-      images.push({
-        key: 'img',
-        image: data.img
-      });
+      images.push({ key: 'img', image: data.img});
       const imgs = [];
       images.forEach(image => {
         imgs.push(image.image);
