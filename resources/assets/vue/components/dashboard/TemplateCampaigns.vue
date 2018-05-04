@@ -78,7 +78,7 @@
                 <a
                   href="#"
                   class="lock-campaign"
-                  v-if="enableTemplateLocking && !campaign.locked"
+                  v-if="$can('fix_layout') && (enableTemplateLocking && !campaign.locked)"
                   @click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                   data-toggle="tooltip"
                   data-placement="bottom"
@@ -89,7 +89,7 @@
                 <a
                   href="#"
                   class="unlock-campaign"
-                  v-if="enableTemplateLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user"
+                  v-if="$can('fix_layout') && (enableTemplateLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user)"
                   @click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                   data-toggle="tooltip"
                   data-placement="bottom"
@@ -101,7 +101,7 @@
                 <a :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
                   class="edit"
                   data-tooltip="Edit"
-                  v-if="$can('fix_layout') && (!campaign.locked || campaign.locked_by === $_app.config.logged_user)"
+                  v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"
                   ><i class="glyphicon glyphicon-pencil"></i></a>
                 <a href="#" data-tooltip="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
                   ><i class="glyphicon glyphicon-trash"></i></a>
