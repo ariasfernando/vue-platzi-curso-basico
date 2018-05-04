@@ -80,7 +80,7 @@
               <a
                 href="#"
                 class="lock-campaign"
-                v-if="enableLocking && !campaign.locked"
+                v-if="$can('fix_layout') && (enableLocking && !campaign.locked)"
                 v-on:click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
