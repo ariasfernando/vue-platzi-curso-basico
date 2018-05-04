@@ -58,7 +58,7 @@
           </template>
         </settings-container>
 
-        <div class="config-box-divider" v-if="enableAutoSave">
+        <div class="config-box-divider" v-if="enableAutoSave && !campaign.locked">
           <label for="autoSave" class="pull-left">Auto Save</label>
           <toggle-button class="pull-right" :value="campaign.auto_save" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange" :disabled="campaign.locked"></toggle-button>
           <br>

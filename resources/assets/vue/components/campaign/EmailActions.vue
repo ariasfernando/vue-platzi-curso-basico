@@ -250,7 +250,7 @@
       },
       autoSave() {
         setInterval(() => {
-          if (this.dirty && this.campaign.campaign_data.auto_save !== false) {
+          if (this.dirty && this.campaign.campaign_data.auto_save !== false && !this.locked) {
             this.$store.commit("global/setSecondaryLoader", true);
             this._save().then(response => {
               this.$store.commit("global/setSecondaryLoader", false);
