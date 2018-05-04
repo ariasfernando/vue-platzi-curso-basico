@@ -183,9 +183,19 @@
           };
         },
         saveUrl(event) {
-          return imageHelper.getBase64Img(this.url).then(imgSrc => {
-            this.setImage(imgSrc);
-          });
+          return imageHelper
+            .checkUrl(this.url)
+            .then(image => {
+              return imageHelper.getBase64Img(image.url).then(imgSrc => {
+                this.setImage(imgSrc);
+              });
+            })
+            .catch((error) => {
+              event.target.reportValidity();
+              this.$root.$toast(error.message, {
+                className: 'et-error'
+              });
+            });
         },
         clickGallery() {
           this.page.one = false;

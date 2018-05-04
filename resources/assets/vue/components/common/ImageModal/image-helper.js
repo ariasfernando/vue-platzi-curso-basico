@@ -29,6 +29,10 @@ function checkFile(file) {
   return loadImage;
 }
 
+function checkUrl(url) {
+  return fetch(url);
+}
+
 function loadImage(url) {
   return new Promise((resolve) => {
     const xhr = new XMLHttpRequest();
@@ -94,4 +98,5 @@ export default {
   getBase64Img,
   checkFile,
   checkSize,
+  checkUrl
 };
