@@ -114,7 +114,7 @@
               <a
                 href="#"
                 class="unlock-campaign"
-                v-if="enableLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user"
+                v-if="$can('fix_layout') && (enableLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user)"
                 @click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
