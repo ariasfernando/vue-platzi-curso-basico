@@ -21,21 +21,16 @@ export default {
   name: "input-height",
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
-  data() {
-    return {
-      linkName: "height"
-    };
-  },
   computed: {
     height: {
       get: function() {
-        return _.parseInt(this.element.style[this.name]);
+        return _.parseInt(this.element[this.link][this.name]);
       },
       set: function(newValue) {
         this.$emit("setting-updated", {
           subComponent: this.subComponent,
           link: this.link,
-          name: this.linkName,
+          name: this.name,
           value: `${newValue}px`
         });
       }

@@ -89,7 +89,6 @@ import TextElement from "../elements/TextElement.vue";
 import ButtonElement from "../elements/ButtonElement.vue";
 import ImageElement from "../elements/ImageElement.vue";
 import DividerElement from "../elements/DividerElement.vue";
-import SeparatorElement from "../elements/SeparatorElement.vue";
 
 export default {
   name: "ColumnsStackedRender",
@@ -100,7 +99,6 @@ export default {
     ButtonElement,
     ImageElement,
     DividerElement,
-    SeparatorElement
   },
   data() {
     return {

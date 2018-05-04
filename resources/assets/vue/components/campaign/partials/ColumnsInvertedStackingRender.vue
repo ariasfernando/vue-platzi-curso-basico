@@ -48,7 +48,6 @@
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
-  import SeparatorElement from '../elements/SeparatorElement.vue';
   import _ from 'lodash';
 
   export default {
@@ -59,7 +58,6 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement
     },
     props: {
       moduleId:{

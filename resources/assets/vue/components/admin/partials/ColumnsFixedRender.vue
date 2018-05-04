@@ -61,7 +61,6 @@
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
-  import SeparatorElement from '../elements/SeparatorElement.vue';
   import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
 
   export default {
@@ -73,7 +72,6 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement
     },
     props: {
       column: { 
