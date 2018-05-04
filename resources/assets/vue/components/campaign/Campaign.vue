@@ -20,7 +20,7 @@
       </section>
 
       <aside class="component-settings-wrapper">
-        <div class="aside-inner section-box" v-if="!locked">
+        <div class="aside-inner section-box">
           <transition name="slide-fade">
             <module-settings v-if="showModuleSettings"></module-settings>
           </transition>

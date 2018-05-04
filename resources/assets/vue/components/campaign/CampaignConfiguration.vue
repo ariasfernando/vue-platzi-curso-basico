@@ -58,9 +58,9 @@
           </template>
         </settings-container>
 
-        <div class="config-box-divider" v-if="enableAutoSave && !campaign.locked">
+        <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave" class="pull-left">Auto Save</label>
-          <toggle-button class="pull-right" :value="campaign.auto_save" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange" :disabled="campaign.locked"></toggle-button>
+          <toggle-button class="pull-right" :value="campaign.auto_save" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange"></toggle-button>
           <br>
           <label v-if="!secondaryLoading" class="autosave-message pull-right">last saved: {{this.campaign.updated_at.substring(0,16)}}</label>
           <secondary-spinner></secondary-spinner>

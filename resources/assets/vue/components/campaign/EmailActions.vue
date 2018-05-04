@@ -6,11 +6,11 @@
 
         <div class="col-xs-7 col-md-5 col-lg-5 text-right pull-right" id="section-canvas-buttons-col">
 
-          <button v-show="!locked" class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
+          <button class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
             Preview
           </button>
 
-          <button v-show="!locked" class="btn btn-default save-as-draft beta-btn-secondary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
+          <button class="btn btn-default save-as-draft beta-btn-secondary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
             Save as Draft
           </button>
 
@@ -40,8 +40,7 @@
             v-show="!locked"
           >Send for Review</button>
 
-          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="!campaign.campaign_data.template" @click="complete"
-            v-show="!locked" >
+          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="!campaign.campaign_data.template" @click="complete">
             Complete
             <i class="glyphicon glyphicon-menu-right"></i>
           </a>
@@ -250,7 +249,7 @@
       },
       autoSave() {
         setInterval(() => {
-          if (this.dirty && this.campaign.campaign_data.auto_save !== false && !this.locked) {
+          if (this.dirty && this.campaign.campaign_data.auto_save !== false) {
             this.$store.commit("global/setSecondaryLoader", true);
             this._save().then(response => {
               this.$store.commit("global/setSecondaryLoader", false);
