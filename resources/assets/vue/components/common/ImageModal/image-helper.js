@@ -34,13 +34,16 @@ function checkUrl(url) {
 }
 
 function loadImage(url) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', url);
     xhr.responseType = 'blob';
     xhr.onload = () => {
       resolve(xhr.response);
     };
+    xhr.onerror = () => {
+      reject('Couldn\'t load resource');
+    }
     xhr.send();
   });
 }
@@ -55,6 +58,9 @@ function getBase64Img(image) {
       loadImage(image)
         .then((img) => {
           reader.readAsDataURL(img);
+        })
+        .catch(e => {
+          reject(e);
         });
     } else {
       reader.readAsDataURL(image);

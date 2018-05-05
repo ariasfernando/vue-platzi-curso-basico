@@ -20,27 +20,33 @@
         <el-input v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
       </span>
     </div>
-    <image-modal
-      :config="plugin.config"
-      v-if="showImageEditor"
-      :libraryImages="libraryImages"
-      :data="image"
-      @close="close"
-      @submitImage="submitImage"
-      ></image-modal>
+    <image-modal 
+    :config="plugin.config" 
+    v-if="showImageEditor" 
+    :libraryImages="libraryImages" 
+    :data="image" 
+    @close="close" 
+    @submitImage="submitImage">
+    </image-modal>
   </div>
 </template>
 
 <script>
-import each from 'lodash/each';
 import imageService from '../../../services/image';
-import sieHelper from '../../../components/common/ImageModal/sie-helper';
 import imageModal from '../../../components/common/ImageModal';
 
 export default {
   props: ['name', 'plugin'],
   components: {
     imageModal
+  },
+  data() {
+    return {
+      showImageEditor: false,
+      libraryImages: [],
+      type: 'desktop',
+      image: {}
+    };
   },
   computed: {
     campaign() {
@@ -51,13 +57,16 @@ export default {
     },
     component() {
       let component = {};
+
       if (Object.keys(this.currentComponent).length !== 0) {
         const moduleId = this.currentComponent.moduleId;
         const columnId = this.currentComponent.columnId;
         const componentId = this.currentComponent.componentId;
+
         component = this.$store.getters['campaign/modules'][moduleId].structure
           .columns[columnId].components[componentId];
       }
+
       return component;
     },
     alt: {
@@ -82,19 +91,12 @@ export default {
       return this.component.image.styleOption.hasImageMobile;
     },
   },
-  data() {
-    return {
-      showImageEditor: false,
-      libraryImages: [],
-      type: 'desktop',
-      image: {}
-    };
-  },
   created() {
     if (this.plugin.config.library.config.set_images && this.plugin.config.library.config.set_images.value) {
-      imageService.getMedia(this.plugin.config.library.config.set_images.value).then(res => {
-        this.libraryImages = res.map(image => image.path);
-      });
+      imageService.getMedia(this.plugin.config.library.config.set_images.value)
+        .then(res => {
+          this.libraryImages = res.map(image => image.path);
+        });
     }
   },
   methods: {
@@ -104,12 +106,8 @@ export default {
       this.image = {};
     },
     submitImage(data) {
-      this.$store.commit('global/setLoader', true);
-      data.state.preset = sieHelper.removeUrlPath(this.$_app.config.imageUrl, data.state.preset);
-      const images = sieHelper.searchStateImages(data.state);
-      images.push({ key: 'img', image: data.img});
       const imgs = [];
-      images.forEach(image => {
+      data.images.forEach(image => {
         imgs.push(image.image);
       });
       this.$store
@@ -122,7 +120,7 @@ export default {
           const temp = {};
           temp[`img${this.type === 'mobile' ? 'Mobile' : ''}`] = data.img;
           temp[`state${this.type === 'mobile' ? 'Mobile' : ''}`] = data.state;
-          this.updatePluginData(uploadedImgs, images, {
+          this.updatePluginData(uploadedImgs, data.images, {
             ...this.plugin.data,
             ...temp
           });
@@ -194,6 +192,3 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
-
-</style>
