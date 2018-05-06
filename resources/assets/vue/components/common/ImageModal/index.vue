@@ -274,14 +274,14 @@ export default {
           );
         });
     });
-        if (Object.keys(this.data).length > 0) {
-          this.currentImage = this.data.img;
-          this.page = {
-            one: false,
-            two: false,
-            three: true
-          };
-        }
+    if (Object.keys(this.data).length > 0) {
+      this.currentImage = this.data.img;
+      this.page = {
+        one: false,
+        two: false,
+        three: true
+      };
+    }
     this.generateSieoptions();
   },
 };

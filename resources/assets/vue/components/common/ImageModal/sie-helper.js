@@ -3,14 +3,22 @@ function transform(params) {
   transformedOptions.preset = [];
   const keys = Object.keys(params);
 
-  const plugins = keys.filter(key => key.includes('sie-plugin') && params[key]);
-  const core = keys.filter(key => !key.includes('sie-plugin'));
+  const plugins = keys.filter(key => {
+    const kp = key.split('_');
+    if (kp.length === 1) {
+      return false;
+    }
+    const count = keys.filter(k => k.includes(kp[0])).length;
+    return key.includes('sie-plugin') && (params[key] || count>1);
+  });
+  const core = keys.filter(key => key.includes('sie-') && !key.includes('sie-plugin'));
 
   core.forEach((key) => {
-    transformedOptions[key] = {};
+    const k = key.replace('sie-', '');
+    transformedOptions[k] = {};
     Object.keys(params[key]).forEach((itemkey) => {
       const item = params[key][itemkey];
-      transformedOptions[key][item.key] = item.value;
+      transformedOptions[k][item.key] = item.value;
     });
   });
 
@@ -31,32 +39,39 @@ function transform(params) {
 
     const plugin = {};
 
+    if (!opts) {
+      plugin['enable'] = false;
+      layer.options.plugin[pluginParts[1]] = plugin;
+    }
+
     Object.keys(opts).forEach((optsKey) => {
       const item = opts[optsKey];
-      if (item.value !== false) {
-        if (!item.key.includes('_')) {
-          plugin[item.key] = item.value;
-          layer.options.plugin[pluginParts[1]] = plugin;
-        } else {
-          const itemKeys = item.key.split('_');
-          const configs = [];
-          const tconfig = {};
-          tconfig.type = itemKeys[1];
-          layer.options.plugin[itemKeys[0]] = layer.options.plugin[itemKeys[0]] || [];
+      if (!item.key.includes('_')) {
+        plugin[item.key] = item.value;
+        layer.options.plugin[pluginParts[1]] = plugin;
+      } else {
+        const itemKeys = item.key.split('_');
+        layer.options.plugin[itemKeys[0]] = layer.options.plugin[itemKeys[0]] || {};
+        if (item.value) {
+          const tconfig = {
+            enable: true
+          };
 
           Object.keys(item.config).forEach((configKey) => {
             const config = item.config[configKey];
             tconfig[config.key] = config.value;
           });
-          configs.push(tconfig);
-          layer.options.plugin[itemKeys[0]].push(...configs);
+
+          layer.options.plugin[itemKeys[0]][itemKeys[1]] = tconfig;
+        } else {
+          layer.options.plugin[itemKeys[0]][itemKeys[1]] = {
+            enable: false
+          }
         }
       }
     });
 
-
     const eLayer = transformedOptions.preset.find(layer => layer.type === pluginParts[0]);
-
     if (eLayer) {
       const p = {};
       Object.assign(p, eLayer.options.plugin, layer.options.plugin);

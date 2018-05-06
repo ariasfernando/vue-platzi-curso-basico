@@ -4,7 +4,7 @@ import campaignSettings from './campaignSettings.vue';
 export default {
   name: 'style-image-editor',
   title: 'style Image Editor',
-  version: '0.0.3',
+  version: '0.0.4',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
@@ -31,7 +31,7 @@ export default {
       value: false,
       type: 'switch',
     },
-    size: {
+    'sie-size': {
       label: 'Size',
       key: 'size',
       type: 'label',
@@ -81,7 +81,7 @@ export default {
     },
     'sie-plugin-image_cropper': {
       label: 'Cropper',
-      key: 'cropper',
+      key: 'enable',
       type: 'switch',
       value: true,
       config: {
@@ -111,7 +111,7 @@ export default {
         },
         round: {
           label: 'Circle Cropping',
-          key: 'roundCrop',
+          key: 'cropper_roundCrop',
           value: false,
           type: 'switch',
           config: {
