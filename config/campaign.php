@@ -71,7 +71,7 @@ return [
         /*
          | List the fields where the search should be done.
          */
-        'fields_to_search' => ['campaign_name', 'created_by.email', 'updated_by.email'],
+        'fields_to_search' => ['campaign_name', 'created_by.email', 'updated_by.email', 'library_name'],
 
         /*
          | Show popular tags in the beginning of autocomplete.

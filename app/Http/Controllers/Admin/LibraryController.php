@@ -7,6 +7,7 @@ use Activity;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\Library;
+use Stensul\Models\Campaign;
 use Stensul\Models\Permission;
 use Stensul\Models\Role;
 use MongoDB\BSON\ObjectID as ObjectID;
@@ -177,6 +178,7 @@ class LibraryController extends Controller
     public function postEdit(Request $request)
     {
         $library = Library::findOrFail($request->input("libraryId"));
+        $old_name = $library->name;
         $library->name = $request->input("name");
         $library->description = $request->input("description");
         $library->modules = $modules = [];
@@ -202,6 +204,11 @@ class LibraryController extends Controller
         }
 
         $library->save();
+        
+        if($library->name !== $old_name) {
+            // Update library name in campaigns for library name search
+            Campaign::where('library', new ObjectID($library->id))->update(['library_name' => $library->name]);
+        }
 
         return array("message" => "SUCCESS");
     }
