@@ -9,8 +9,8 @@
         <div class="aside-inner">
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
-            <campaign-menu v-if="campaignConfigReady && !locked" :library-id="libraryId"></campaign-menu>
-            <div class="lock-warning-container" v-if="campaignConfigReady && locked">Unlock the email to add modules</div>
+            <campaign-menu v-if="!locked" :library-id="libraryId"></campaign-menu>
+            <div class="lock-warning-container" v-if="locked">Unlock the email to add modules</div>
           </div>
         </div>
       </aside>
@@ -95,7 +95,7 @@
         return this.$store.getters["campaign/campaign"];
       },
       locked() {
-        return this.$store.getters["campaign/campaign"].campaign_data.locked;
+        return this.campaign.campaign_data && this.campaign.campaign_data.locked;
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
