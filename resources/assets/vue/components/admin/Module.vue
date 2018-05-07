@@ -116,7 +116,6 @@
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
-  import SeparatorElement from './elements/SeparatorElement.vue';
 
   module.exports = {
     name: 'Module',
@@ -126,7 +125,6 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement,
       ColumnsFixedRender,
       ColumnsStackedRender
     },

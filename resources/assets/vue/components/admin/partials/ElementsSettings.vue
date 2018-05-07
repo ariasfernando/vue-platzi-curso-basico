@@ -26,10 +26,6 @@
               <i class="fa fa-minus-square" aria-hidden="true"></i>
               <p>Divider</p>
             </li>
-            <li class="component-item" data-type="separator-element">
-              <i class="fa fa-minus" aria-hidden="true"></i>
-              <p>Separator</p>
-            </li>
           </draggable>
         </b-card>
       </b-collapse>

@@ -8,7 +8,7 @@
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component
-            v-for="setting in settingGroup"
+            v-for="(setting,i) in settingGroup"
             :show-setting="showSetting(setting)"
             :is="'input-' + setting.type"
             @setting-updated="settingUpdatedHandler"
@@ -25,7 +25,7 @@
             :options="setting.options"
             :is-disable-percentage="setting.isDisablePercentage"
             :element="setting.subComponent ? component[setting.subComponent] : component"
-            :key="setting.name"></component>
+            :key="i"></component>
         </group-container>
       </b-card>
     </b-collapse>
