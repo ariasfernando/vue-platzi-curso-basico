@@ -32,6 +32,7 @@ class Campaign extends Eloquent
         'processed',
         'status',
         'library',
+        'library_name',
         'published_at',
         'cdn_path',
         'created_by',
