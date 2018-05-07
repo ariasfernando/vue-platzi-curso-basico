@@ -96,7 +96,7 @@
         return this.$store.getters["campaign/campaign"];
       },
       locked() {
-        return this.$store.getters["campaign/campaign"].campaign_data.locked;
+        return (this.campaign.campaign_data && this.campaign.campaign_data.locked) ? this.campaign.campaign_data.locked : false;
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
