@@ -107,6 +107,22 @@
     "check-coverage": "istanbul check-coverage --statements 10 --branches 10 --functions 10 --lines 10",
     "test": "mocha tests/js/*.js --compilers js:babel-register",
     "test:single": "istanbul cover --root resources/assets/js/vue ./node_modules/.bin/_mocha -- -R spec tests/js/*.test.js --compilers js:babel-register",
-    "cover": "nyc npm t"
+    "cover": "nyc npm t",
+    "test:jest": "jest"
+  },
+  "jest": {
+    "setupFiles": ["./.jestrc.js"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      ".*\\.(vue)$": "./node_modules/jest-vue-preprocessor",
+      "^.+\\.js$": "./node_modules/babel-jest"
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "./resources/assets/vue/$1"
+    }
   }
 }

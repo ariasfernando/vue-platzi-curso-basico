@@ -10,6 +10,7 @@ export default {
     const deferred = Q.defer();
     const endpoint = endpoints.campaign.getCampaign;
     const params = {
+      path: 'campaign.getCampaign',
       search: { campaignId },
       endpoint: endpoints.campaign.getCampaign,
     };
@@ -26,6 +27,7 @@ export default {
     const deferred = Q.defer();
     const endpoint = endpoints.campaign.getCampaignPublic;
     const params = {
+      path: 'campaign.getCampaignPublic',
       search: { campaignId },
       endpoint: endpoints.campaign.getCampaignPublic,
     };
@@ -57,6 +59,7 @@ export default {
     });
 
     const params = {
+      path: 'campaign.saveCampaign',
       endpoint: endpoints.campaign.saveCampaign,
       json: dataCampaign,
     };
@@ -78,6 +81,7 @@ export default {
     const deferred = Q.defer();
 
     const params = {
+      path: 'campaign.processCampaign',
       endpoint,
       json: {
         campaign_id: campaignId,
@@ -97,6 +101,7 @@ export default {
     const deferred = Q.defer();
 
     const params = {
+      path: 'campaign.lockCampaign',
       endpoint,
       json: {
         campaign_id: campaignId,
@@ -116,6 +121,7 @@ export default {
     const deferred = Q.defer();
 
     const params = {
+      path: 'campaign.unlockCampaign',
       endpoint,
       json: {
         campaign_id: campaignId,
@@ -134,6 +140,7 @@ export default {
     const endpoint = endpoints.campaign.pingLock;
     const deferred = Q.defer();
     const params = {
+      path: 'campaign.pingLock',
       endpoint,
       json: {
         campaign_id: data.campaignId,
@@ -154,6 +161,7 @@ export default {
     const deferred = Q.defer();
 
     const params = {
+      path: 'campaign.favoriteCampaign',
       endpoint,
       json: {
         campaign_id: campaignId,
@@ -173,6 +181,7 @@ export default {
     const deferred = Q.defer();
 
     const params = {
+      path: 'campaign.processStatus',
       endpoint,
       search: {
         processId,
@@ -207,6 +216,7 @@ export default {
     const endpoint = endpoints.campaign.cloneCampaign;
     const deferred = Q.defer();
     const params = {
+      path: 'campaign.cloneCampaign',
       endpoint: endpoints.campaign.cloneCampaign,
       data: {
         campaign_id: campaignId,
@@ -235,6 +245,7 @@ export default {
     const deferred = Q.defer();
     const endpoint = endpoints.campaign.sendPreview;
     const params = {
+      path: 'campaign.sendPreview',
       json: {
         campaign_id: data.campaignId,
         mail: data.emailAddress,
@@ -257,6 +268,7 @@ export default {
     const deferred = Q.defer();
     const endpoint = endpoints.campaign.processPlainText;
     const params = {
+      path: 'campaign.processPlainText',
       endpoint,
       search: { campaignId },
     };
@@ -271,7 +283,8 @@ export default {
   },
   logTime(campaignId, time) {
     const endpoint = endpoints.campaign.logTime;
-    const params = { 
+    const params = {
+      path: 'campaign.logTime',
       endpoint,
       json: {
         campaign_id: campaignId,

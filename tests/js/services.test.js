@@ -1,5 +1,5 @@
 import libraryService from '../../resources/assets/vue/services/library';
-import fixtures from '../../resources/assets/vue/resources/fixtures';
+import fixtures from '../../resources/assets/vue/resources/mocks';
 
 require('dotenv').config();
 
