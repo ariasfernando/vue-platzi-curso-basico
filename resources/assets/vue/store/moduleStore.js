@@ -116,6 +116,10 @@ const mutations = {
     const pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
     _.merge(pluginData, payload.config);
   },
+  savePluginSuboption(state, payload) {
+    const pluginOptions = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
+    _.assign(pluginOptions[payload.subOption], payload.config.options[payload.subOption]);
+  },
   togglePlugin(state, data) {
     if (data.columnId >= 0 || data.componentId >= 0) {
       if (data.componentId >= 0) {

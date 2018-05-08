@@ -220,7 +220,7 @@ export default {
         campaign_id: data.campaignId,
         mail: data.emailAddress,
         subject: data.subject || '',
-        preheader: data.preheader || ''
+        preheader: data.preheader || '',
       },
       endpoint: endpoints.campaign.sendPreview,
     };
@@ -250,5 +250,15 @@ export default {
 
     return deferred.promise;
   },
-
+  logTime(campaignId, time) {
+    const endpoint = endpoints.campaign.logTime;
+    const params = { 
+      endpoint,
+      json: {
+        campaign_id: campaignId,
+        time,
+      },
+    };
+    request[endpoint.method](params);
+  },
 };

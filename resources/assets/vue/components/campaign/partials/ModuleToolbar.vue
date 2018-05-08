@@ -102,7 +102,7 @@
       height: 100%;
       display: block;
       outline: 2px solid #c0dfda;
-      outline-offset: -2px;
+      outline-offset: -1px;
     }
 
     .module-toolbar{
@@ -119,7 +119,7 @@
       height: 100%;
       display: block;
       outline: 2px solid #c0dfda;
-      outline-offset: -2px;
+      outline-offset: -1px;
     }
 
     .icon-move{
@@ -141,7 +141,7 @@
       height: 100%;
       display: block;
       outline: 2px solid @focus;
-      outline-offset: -2px;
+      outline-offset: -1px;
     }
 
     .module-overlay{
@@ -154,7 +154,7 @@
       height: 100%;
       display: block;
       outline: 2px solid @focus;
-      outline-offset: -2px;
+      outline-offset: -1px;
     }
 
     .icon-move, .icon-remove,
@@ -165,7 +165,7 @@
     &:hover{
       .module-overlay{
         outline: 2px solid @focus;
-        outline-offset: -2px;
+        outline-offset: -1px;
         background: none;
       }
 

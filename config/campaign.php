@@ -71,7 +71,7 @@ return [
         /*
          | List the fields where the search should be done.
          */
-        'fields_to_search' => ['campaign_name', 'created_by.email', 'updated_by.email'],
+        'fields_to_search' => ['campaign_name', 'created_by.email', 'updated_by.email', 'library_name'],
 
         /*
          | Show popular tags in the beginning of autocomplete.
@@ -189,5 +189,17 @@ return [
     | Clean empty tag without link - will be replaced with span tag
     |--------------------------------------------------------------------------
      */
-    'clean_empty_links' => false
+    'clean_empty_links' => false,
+
+    /*
+    | Ignore domains from image url changes into cdn
+    |--------------------------------------------------------------------------
+    |
+    | Include here an array of domains that should be ignored from the
+    | process of turn image url into cdn url.
+    |
+    */
+
+    'ignored_image_domains' => [],
+
 ];

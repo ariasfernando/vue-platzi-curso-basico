@@ -54,19 +54,23 @@ class CampaignController extends Controller
             if (!is_null($request->input("locale"))) {
                 $params['locale'] = $request->input("locale");
             }
+
             if (!is_null($request->input("library"))) {
                 $params['library'] = new ObjectID($request->input("library"));
+                $library = Library::find($request->input("library"));
             } else {
-                $library = Library::orderBy('created_at')->first();
                 $libraries = Auth::user()->getLibraries();
-                if (count($libraries)) {
-                    $params['library'] = new ObjectID($libraries[0]['_id']);
-                } else {
+
+                if (!count($libraries)) {
                     throw new \Exception('You don\'t have available libraries to create a new email
                         please contact our support team.');
                 }
+
+                $params['library'] = new ObjectID($libraries[0]['_id']);
+                $library = Library::find($libraries[0]['_id']);
             }
 
+            $params['library_name'] = $library->name;
             $params['campaign_name'] = 'Untitled Email';
 
             $campaign = Campaign::create($params);
@@ -93,8 +97,8 @@ class CampaignController extends Controller
      * @param String $campaign_id
      * @return Array $params
      */
-    private function loadCampaign($campaign_id) {
-
+    private function loadCampaign($campaign_id)
+    {
         if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:' . $campaign_id) !== Auth::id()) {
             Activity::log(
                 'Campaign edit deny',
@@ -139,6 +143,7 @@ class CampaignController extends Controller
                 : "default";
             $library = Library::find($library_id);
             $params['library_config'] = $library->config;
+            $params['library_config']['key'] = $library->key;
             $params['campaign_data']['library_name'] = $library->name;
 
             $params['tag_list'] = $saved_tags;
