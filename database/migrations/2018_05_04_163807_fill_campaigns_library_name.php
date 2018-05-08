@@ -21,8 +21,9 @@ class FillCampaignsLibraryName extends Migration
 
         foreach ($libraries as $library) {
             Logging::info('Filling library_name attribute in campaigns for Library ' . $library->id . ' with name ' . $library->name);
-
-            $result = Campaign::where('library', new ObjectID($library->id))->update(['library_name' => $library->name]);
+            
+            // We do not use directly the Campaign model class to avoid touching the update_at attribute
+            $result = DB::table('campaigns')->where('library', new ObjectID($library->id))->update(['library_name' => $library->name]);
 
             Logging::info('Updated ' . $result . ' campaigns');
         }
