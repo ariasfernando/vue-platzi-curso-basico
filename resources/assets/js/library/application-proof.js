@@ -252,7 +252,7 @@ Application.proof = (function($) {
 
             var required = params.required ? 'style="font-weight:bold;"' : '';
 
-            var decision = '-';
+            var decision = 'Waiting for approval';
 
             if ("decision" in params) {
                 switch (params.decision) {
