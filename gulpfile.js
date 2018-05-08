@@ -236,6 +236,16 @@ gulp.task('elixir-scripts', function () {
           assetsPath
         )
 
+        // === Dashboard page ===
+        .scripts(
+          [
+            // @TODO turn the rest of the modals into Vue components like ModalProof.vue
+            'js/library/application-proof.js',
+          ],
+          jsDestinationPath + 'dashboard-proof.js',
+          assetsPath
+        )
+
         // === Proof page ===
         .scripts(
           'js/base/proof.js',
