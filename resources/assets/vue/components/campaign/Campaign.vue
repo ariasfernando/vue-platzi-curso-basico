@@ -5,11 +5,12 @@
     <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
       <!-- column left (menu) -->
-      <aside>
+      <aside :style="locked ? 'overflow-y: hidden;' : undefined">
         <div class="aside-inner">
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
-            <campaign-menu v-if="!locked && campaignConfigReady" :library-id="libraryId"></campaign-menu>
+            <campaign-menu v-if="!locked" :library-id="libraryId"></campaign-menu>
+            <div class="lock-warning-container" v-if="locked">Unlock the email to add modules</div>
           </div>
         </div>
       </aside>
@@ -95,12 +96,7 @@
         return this.$store.getters["campaign/campaign"];
       },
       locked() {
-        let locked = undefined;
-        if (this.campaign.campaign_data && this.campaign.campaign_data.locked) {
-          locked = this.campaign.campaign_data.locked;
-        }
-
-        return locked;
+        return this.campaign.campaign_data && this.campaign.campaign_data.locked;
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
@@ -201,6 +197,7 @@
   @import '../../less/campaign';
   @stensul-white: #FFFFFF;
   @stensul-purple: #514960;
+  @stensul-gray: #666666;
   .section-canvas-email{
     .mce-content-body{
       line-height: inherit;
@@ -477,5 +474,15 @@
 
   .mce-edit-focus{
     outline: 1px dotted #333!important;
+  }
+</style>
+
+<style lang="less" scoped>
+  .lock-warning-container {
+    height: 1000px;
+    padding: 40px 60px 0;
+    background-color: #EDEDED;
+    color: #999999;
+    text-align: center;
   }
 </style>
