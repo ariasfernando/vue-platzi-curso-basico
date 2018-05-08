@@ -300,7 +300,7 @@
         }
         else {
           // Get module ID
-          const moduleId = $target.closest(".stx-module-wrapper").find("td").data("module-id");
+          const moduleId = _.parseInt($target.closest(".stx-module-wrapper").find("td").attr("data-module-id"));
           // If it's the config gear icon
           if( $target.hasClass('icon-config') || $target.hasClass("fa-cogs") ) {
             // Show module settings

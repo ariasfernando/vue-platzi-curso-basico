@@ -100,12 +100,13 @@
       'component',
       'column'
     ],
-    data(){
-      return {
-        editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-'),
-      }
-    },
     computed: {
+        module() {
+          return this.$store.getters["campaign/modules"][this.moduleId];
+        },
+        editorId(){
+          return ["editor", this.module.idInstance, this.moduleId, this.columnId, this.componentId].join("-");
+        },
       libraryConfig(){
         return this.$store.state.campaign.campaign.library_config;
       },

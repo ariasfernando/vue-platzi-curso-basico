@@ -77,7 +77,11 @@
           toolbar = ' ';
         }
 
-        const editorId = ['editor', this.currentComponent.moduleId, this.currentComponent.columnId, this.currentComponent.componentId].join('-');
+        const idInstance = this.$store.getters["campaign/modules"][this.currentComponent.moduleId].idInstance
+        const moduleId = this.currentComponent.moduleId;
+        const columnId = this.currentComponent.columnId;
+        const componentId = this.currentComponent.componentId;
+        const editorId = ['editor', idInstance, moduleId, columnId, componentId].join('-');
 
         const settings = {
 
@@ -118,9 +122,9 @@
               }
 
               this.$store.commit('campaign/updateElement', {
-                moduleId: this.currentComponent.moduleId,
-                columnId: this.currentComponent.columnId,
-                componentId: this.currentComponent.componentId,
+                moduleId: moduleId,
+                columnId: columnId,
+                componentId: componentId,
                 data: {
                   text: editor.getContent()
                 }
@@ -138,9 +142,9 @@
                 const bm = editor.selection.getBookmark(2, true);
 
                 this.$store.commit('campaign/updateElement', {
-                  moduleId: this.currentComponent.moduleId,
-                  columnId: this.currentComponent.columnId,
-                  componentId: this.currentComponent.componentId,
+                  moduleId: moduleId,
+                  columnId: columnId,
+                  componentId: componentId,
                   data: {
                     text: editor.getContent()
                   }
