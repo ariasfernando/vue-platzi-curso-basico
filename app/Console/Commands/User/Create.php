@@ -76,9 +76,9 @@ class Create extends Command
         }
 
         $params = [
-            'name' => $name,
-            'last_name' => $last_name,
-            'email' => strtolower($email),
+            'name' => trim($name),
+            'last_name' => trim($last_name),
+            'email' => strtolower(trim($email)),
             'password' => bcrypt($password),
             'roles' => $selected_array
         ];
