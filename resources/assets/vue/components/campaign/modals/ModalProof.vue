@@ -35,7 +35,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="(reviewer, key) in reviewers">
+                               <tr v-for="(reviewer, key) in reviewers" v-bind:key="key">
                                   <td>
                                     <input type="hidden" :name="'reviewers[' + key + '][email]'"
                                       :value="reviewer.email">{{reviewer.email}}
@@ -50,7 +50,7 @@
                                   </td>
                                   <td>
                                     <input type="hidden" :name="'reviewers[' + key + '][notification_message]'"
-                                      :value="reviewer.notificationMessage" class="notification_message">
+                                      :value="reviewer.notification_message" class="notification_message">
                                     <a href="#" class="add-message" title="Add a message" @click="addNotificationMessage(reviewer)">
                                         <i class="glyphicon glyphicon-envelope"></i></a>
                                     <a href="#" class="remove-reviewer" title="Remove this email" @click="removeReviewer(reviewer)">
@@ -125,14 +125,7 @@
   import request from '../../../utils/request';
   import Q from 'q';
   import { Checkbox } from 'vue-checkbox-radio';
-
-  // @TODO remove jQuery dependencies.
-  $.ajaxSetup({
-      headers: {
-        'X-CSRF-token': Application.globals.csrfToken
-      }
-  });
-
+  import proofService from '../../../services/proof';
   export default {
     components: {
       Checkbox
@@ -161,24 +154,27 @@
       send () {
         this.$store.commit("global/setLoader", true);
 
-        let data = $(document.getElementById('send-proof-form')).serialize();
-
-        let jqXHR = $.ajax('/proof/create', {
-          method: 'post',
-          data: data
-        });
-
-        jqXHR.done((response) => {
+        let data = {
+          campaign_id: this.campaign.campaign_id,
+          reviewers: this.reviewers,
+        }
+        if(!this.campaign.campaign_data.proof_id || this.startProof){
+          data.create_new_proof = true;
+        }
+        if(this.campaign.campaign_data.proof_id){
+          data.proof_id = this.campaign.campaign_data.proof_id;
+        }
+        
+        proofService.create(data).then((response) => {
           this.$store.commit("global/setLoader", false);
           var $container = $('.modal-container').find('.send-proof');
-
           if (response.status === 'success') {
             // If the campaign can't be completed, hide the Continue button
             if ("can_be_completed" in response.data) {
               if (response.data.can_be_completed) {
-                $('.campaign-continue').show();
+                this.$store.commit("campaign/campaignCanBeProcessed", true);
               } else {
-                $('.campaign-continue').hide();
+                this.$store.commit("campaign/campaignCanBeProcessed", false);
               }
             }
             this.close();
@@ -189,8 +185,10 @@
           } else {
             this.showMessage($container, 'danger', response.message);
           }
+        })
+        .catch((error) => {
+          this.$root.$toast(error, {className: 'et-error'});
         });
-
       },
       fetchUsers () {
         $.getJSON(this.$_app.config.baseUrl + '/proof/users', {}, function(users) {
@@ -269,9 +267,9 @@
             this.reviewers.push({
               email: email,
               checked: params.required ? true : false,
-              requiredValue: requiredValue,
-              requiredDisable: requiredDisable,
-              notificationMessage: notification_message
+              required: requiredValue,
+              require_unabled: requiredDisable,
+              notification_message: notification_message
             });
 
         } else {
@@ -334,7 +332,7 @@
 
         $('#modal-proof-message').removeClass('fade');
         this.currentReviewer = reviewer;
-        this.currentNotificationMessage = this.currentReviewer.notificationMessage;
+        this.currentNotificationMessage = this.currentReviewer.notification_message;
         $('#modal-proof-message').show();
         $('#notification_message').focus();
       },
@@ -342,7 +340,7 @@
         $('#modal-proof-message').hide();
       },
       saveNotificationMessage () {
-        this.currentReviewer.notificationMessage = $('#notification_message').val();
+        this.currentReviewer.notification_message = $('#notification_message').val();
         $('#modal-proof-message').hide();
       }
 

@@ -60,4 +60,7 @@ module.exports = {
   dashboard: {
     getMenu: { method: 'get', path: `${baseUrl}/dashboard/menu` },
   },
+  proof: {
+    create: { method: 'post', path: `${baseUrl}/proof/create` },
+  },
 };
