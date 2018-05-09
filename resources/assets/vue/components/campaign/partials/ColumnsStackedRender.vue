@@ -76,7 +76,7 @@
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
       templateWidthWithoutPadding(){
-        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft) - _.parseInt(this.module.structure.style.paddingRight);
+        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
       },
       numColumns() {
         return this.module.structure.columns.length;

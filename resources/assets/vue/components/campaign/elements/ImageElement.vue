@@ -24,7 +24,7 @@
         <tr>
           <td 
             :width="component.image.attribute.width"
-            :valign="component.image.attribute.valign"
+            :valign="component.image.attribute.valign || 'top'"
             :align="component.image.attribute.align"
             :bgcolor="component.image.attribute.bgcolor"
             :style="stylesImage"
@@ -41,6 +41,7 @@
                   :class="{'st-hide-mobile' : component.image.styleOption.hasImageMobile}"
                   style="border: 0; display: block;"
                   border="0"
+                  :valign="component.image.attribute.valign || 'top'"
                   :width="component.image.attribute.width" 
                   :src="imageUrl(component.image.attribute.placeholder)"
                   :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
@@ -55,7 +56,8 @@
                       border="0"
                       class="st-resize"
                       style="display:block;border:none;max-width:100%;height:auto;"
-                      :width="component.image.attribute.width" 
+                      :width="component.image.attribute.width"
+                      :valign="component.image.attribute.valign || 'top'"
                       :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
                       :alt="component.image.attribute.alt"
                       :title="component.image.attribute.title"

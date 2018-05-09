@@ -181,7 +181,7 @@
         return this.$store.getters["campaign/activeModule"];
       },
       columnWidthPadding(){
-        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft) - _.parseInt(this.module.structure.style.paddingRight);
+        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
       }
     },
     methods: {

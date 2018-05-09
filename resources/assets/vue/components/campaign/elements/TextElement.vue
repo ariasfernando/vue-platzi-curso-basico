@@ -25,7 +25,7 @@
             class="stx-position-relative"
             :width="component.text.attribute.width"
             :valign="component.text.attribute.valign || 'top'"
-            :align="component.text.attribute.align"
+            :align="component.text.attribute.align || 'left'"
             :bgcolor="component.text.attribute.bgcolor"
             :style="[textFontStyles, textBorderAndPadding,{width:widthStyle(component.text.attribute.width)}]"
           >
@@ -60,7 +60,7 @@ export default {
   computed: {
     textFontStyles() {
       return {
-        "text-align": this.component.text.style.textAlign,
+        "text-align": this.component.text.style.textAlign || "left",
         "font-family": this.component.text.style.fontFamily,
         'color': this.component.text.style.color,
         "font-size": this.component.text.style.fontSize,
