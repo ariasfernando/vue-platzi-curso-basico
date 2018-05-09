@@ -38,7 +38,7 @@
                 v-on:change-sort="sortBy"></column-sort>
             </th>
             <th v-if="showTags == 1" class="col-200">Tags</th>
-            <th width="200" class="bold">Actions</th>
+            <th width="200" class="bold actions-thead">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -72,7 +72,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="text-left actions icons">
+            <td class="actions icons">
               <a href="#"
                 @click.prevent="goProof(campaign.proof_token)"
                 class="proof"

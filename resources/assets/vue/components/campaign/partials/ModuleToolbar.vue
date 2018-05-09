@@ -39,11 +39,6 @@
             });
           });
         }
-
-        if (this.module.settings) {
-          hasConfig = true;
-        }
-
         return hasConfig;
       },
     },
@@ -193,7 +188,7 @@
     height: 30px;
     top: -30px;
     right: 0px;
-    
+
     div {
       cursor: pointer;
       display: none;
