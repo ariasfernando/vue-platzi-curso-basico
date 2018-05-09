@@ -752,4 +752,21 @@ class CampaignManager
 
         return array('error' => $campaign_id);
     }
+
+    /**
+     * Trim an image verticaly.
+     *
+     * @param string campaign_id
+     * @param integer height
+     * @param string background_image
+     *
+     * @return array Path or error
+     */
+    public static function trimImage($options = [])
+    {
+        $campaign_id = (isset($options['campaign_id']))? $options['campaign_id'] : null;
+        $campaign = Campaign::findOrFail($campaign_id);
+        $assets = new Assets($campaign);
+        return $assets->trimImage($options);
+    }
 }

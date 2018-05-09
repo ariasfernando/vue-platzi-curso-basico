@@ -569,4 +569,16 @@ class CampaignController extends Controller
     {
         return Campaign::updateAutoSave($request->input('campaign_id'), $request->input('status'));
     }
+
+    /**
+    *  Trim an image verticaly.
+    *
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array Path or error
+    */
+    public function postTrimImage(Request $request)
+    {
+        return Campaign::trimImage($request->all());
+    }
 }

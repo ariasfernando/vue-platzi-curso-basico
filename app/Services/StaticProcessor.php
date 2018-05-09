@@ -634,4 +634,47 @@ class StaticProcessor
 
         return $data;
     }
+
+    /**
+     * Trim an image verticaly.
+     *
+     * @param integer height
+     * @param string background_image
+     *
+     * @return array Path or error
+     */
+    public function trimImage($params) {
+        $final_height = (isset($params['height']))? $params['height'] : 0;
+        $background_image = (isset($params['background_image']))? $params['background_image'] : null;
+
+        list($image, $extension, $options) = $this->getImageObject($background_image);
+        $image_width = $image->getSize()->getWidth();
+        $image_height = $image->getSize()->getHeight();
+
+        $trim_position = ($image_height - $final_height) / 2;
+
+        $start = new Imagine\Image\Point(0, $trim_position);
+        $size  = new Imagine\Image\Box($image_width, $final_height);
+
+        $file_path = $this->getImagePath($extension);
+
+        $storage = Storage::disk('local:campaigns');
+        try {
+            $storage->put($file_path, $image->crop($start, $size)->get($extension, $options));
+        } catch (\Exception $e) {
+            $error_msg = sprintf(
+                "[%s] image storage for file %s failed.",
+                $this->getCampaign()->id,
+                $file_path
+            );
+            Log::warning($error_msg);
+
+            usleep(50000);
+
+            if (!$storage->put($file_path, $image->crop($start, $size)->get($extension, $options))) {
+                throw new \Exception($error_msg);
+            }
+        }
+        return $file_path;
+    }
 }
