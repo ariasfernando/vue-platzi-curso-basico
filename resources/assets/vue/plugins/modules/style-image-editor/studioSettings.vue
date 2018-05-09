@@ -57,7 +57,7 @@
               :multiple="subopt.type === 'multi-select'">
               <el-option
                 v-for="(opt, key) in subopt.options"
-                :value="opt._id ? opt._id : opt"
+                :value="key"
                 :key="key"
                 :label="opt.name ? opt.name : opt"></el-option>
             </el-select>

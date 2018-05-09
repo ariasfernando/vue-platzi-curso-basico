@@ -4,7 +4,7 @@ import campaignSettings from './campaignSettings.vue';
 export default {
   name: 'style-image-editor',
   title: 'style Image Editor',
-  version: '0.0.4',
+  version: '0.0.5',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
@@ -57,6 +57,24 @@ export default {
           type: 'number',
           step: 1,
         },
+        size_minHeight: {
+          label: 'Min. Height',
+          key: 'minHeight',
+          value: 100,
+          type: 'number',
+          step: 1,
+        },
+        size_fit: {
+          label: 'Image Fit',
+          key: 'fit',
+          value: "1",
+          type: 'select',
+          options: {
+            0:'Contain',
+            1:'Cover',
+            2:'Max Size'
+          }
+        }
       },
     },
     'sie-plugin-image_upload': {
