@@ -13,6 +13,7 @@ class AddFixedLayoutPermissions extends Migration
         ['name' => 'clone_campaign', 'description' => 'Allow user to clone a regular campaign as opposed to clone only fixed layout templates.'],
         ['name' => 'create_template', 'description' => 'Allow users to create campaign templates.'],
         ['name' => 'fix_layout', 'description' => 'Allow users to create fixed layout campaigns.'],
+        ['name' => 'access_unfixed_templates', 'description' => 'Allow users to see "Unfixed Layout" templates.'],
     ];
 
     private $roles = ['admin', 'stensul-internal', 'user'];
