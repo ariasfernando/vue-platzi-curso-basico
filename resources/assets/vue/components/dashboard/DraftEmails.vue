@@ -95,9 +95,7 @@
               <a
                 :href="$_app.config.baseUrl + '/campaign/edit/' + campaign._id"
                 class="edit"
-                data-tooltip="Edit"
-                v-if="!enableLocking || (!campaign.locked || campaign.locked_by === $_app.config.logged_user)"
-              >
+                data-tooltip="Edit">
                 <i class="glyphicon glyphicon-pencil"></i>
               </a>
               <a
@@ -122,7 +120,7 @@
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
-              <a href="#" data-tooltip="Delete" v-if="!enableLocking || !campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
+              <a href="#" data-tooltip="Delete" @click.prevent="askToDeleteCampaign(campaign._id)"
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>

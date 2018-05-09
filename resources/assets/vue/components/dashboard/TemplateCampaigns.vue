@@ -103,7 +103,7 @@
                   data-tooltip="Edit"
                   v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"
                   ><i class="glyphicon glyphicon-pencil"></i></a>
-                <a href="#" data-tooltip="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
+                <a href="#" data-tooltip="Delete" v-if="!campaign.locked || (campaign.locked && campaign.locked_by === $_app.config.logged_user)" @click.prevent="askToDeleteCampaign(campaign._id)"
                   ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
