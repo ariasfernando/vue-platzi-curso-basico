@@ -345,8 +345,8 @@
     width: 700px
   }
 
-  .switch-container{
-    position: relative;
+ .switch-container{
+    position: absolute;
     left: 50%;
     margin-left: -50px;
     width: 100px;
