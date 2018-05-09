@@ -53,9 +53,6 @@ class CampaignManager
         $campaign_id = $inputs['campaign_id'];
 
         $campaign = Campaign::findOrFail($inputs['campaign_id']);
-        if ($campaign->locked) {
-            throw new AuthorizationException('The campaign is locked and you can not change it');
-        }
         $campaign_name = $inputs['campaign_name'] ?? '';
         $modules_data = $inputs['modules_data'] ?? [];
         if (!is_array($campaign->tags)) {
