@@ -106,15 +106,14 @@
                 class="edit"
                 data-tooltip="Edit"
                 @click.prevent="askToEditCampaign(campaign._id)"
-                ><i class="glyphicon glyphicon-pencil" v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"></i></a>
+                ><i class="glyphicon glyphicon-pencil"></i></a>
               <a href="#" :data-tooltip="'Upload to ' + lodash.capitalize(api.driver)" class="btn-upload-api"
                 v-for="api in campaign.api"
                 v-if="!campaign.locked && campaign.library_config.esp && campaign.library_config.espProvider"
                 :data-campaign-id="campaign._id"
                 :data-api-driver="api.driver"
                 @click="upload(campaign._id)"><i class="glyphicon glyphicon-cloud-upload"></i></a>
-              <a href="#" data-tooltip="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
-                ><i class="glyphicon glyphicon-trash"></i></a>
+              <a href="#" data-tooltip="Delete"><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
           <tr v-if="!campaigns.data.length">

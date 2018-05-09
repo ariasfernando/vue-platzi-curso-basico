@@ -19,7 +19,6 @@
             and templating is enabled on the tool.
           -->
           <b-btn @click="template" class="btn btn-default save-as-template beta-btn-secondary"
-            v-show="!locked"
             v-if="$can('create_template') && campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
               && campaign.campaign_data.library_config.templating">
             Save as Template
@@ -29,8 +28,7 @@
             Show if it's already a template, skip confirmation modal.
           -->
           <button class="btn btn-default save-as-template beta-btn-secondary" @click="template"
-            :class="hiddenClass()" v-if="campaign.campaign_data.template"
-            v-show="!locked">
+            :class="hiddenClass()" v-if="campaign.campaign_data.template">
             Save Template
           </button>
 
