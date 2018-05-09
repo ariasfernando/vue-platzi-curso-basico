@@ -40,7 +40,7 @@
             v-show="!locked"
           >Send for Review</button>
 
-          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="!campaign.campaign_data.template" @click="complete"
+          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="campaign.campaign_data.can_be_processed && !campaign.campaign_data.template" @click="complete"
             v-show="!locked" >
             Complete
             <i class="glyphicon glyphicon-menu-right"></i>
