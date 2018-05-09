@@ -289,8 +289,6 @@ class CampaignManager
         $new_campaign_attr['body_html'] = '';
         $new_campaign_attr['plain_text'] = '';
         $new_campaign_attr['template'] = false;
-        $new_campaign_attr['locked'] = false;
-        $new_campaign_attr['locked_by'] = null;
         $new_campaign_attr['parent_campaign_id'] = new ObjectID($campaign_id);
         $new_campaign_attr['created_by'] = [
             'id' => new ObjectId(Auth::id()),
