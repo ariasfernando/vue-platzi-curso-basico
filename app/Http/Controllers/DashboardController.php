@@ -201,6 +201,10 @@ class DashboardController extends Controller
             $campaigns->whereIn('library', $user_visibility);
         }
 
+        if (!Auth::user()->can('access_unfixed_templates')) {
+            $campaigns->where('locked', '=', true, 'AND');
+        }
+
         $total = $campaigns->count();
         $current_page = (int) $request->input('page');
         $per_page = self::RESULTS_X_PAGE;
