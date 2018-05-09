@@ -4,10 +4,10 @@ namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
 use Activity;
+use DB;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\Library;
-use Stensul\Models\Campaign;
 use Stensul\Models\Permission;
 use Stensul\Models\Role;
 use MongoDB\BSON\ObjectID as ObjectID;
@@ -207,7 +207,8 @@ class LibraryController extends Controller
         
         if($library->name !== $old_name) {
             // Update library name in campaigns for library name search
-            Campaign::where('library', new ObjectID($library->id))->update(['library_name' => $library->name]);
+            // We do not use directly the Campaign model class to avoid touching the updated_at attribute
+            DB::table('campaigns')->where('library', new ObjectID($library->id))->update(['library_name' => $library->name]);
         }
 
         return array("message" => "SUCCESS");
