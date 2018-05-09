@@ -14,7 +14,7 @@
             width="100%"
             :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}]"
             :bgcolor="column.container.attribute.bgcolor"
-            :valign="column.container.attribute.valign"
+            :valign="column.container.attribute.valign || 'top'"
             :align="column.container.attribute.align || 'center'"
             :class="column.container.attribute.classes ||''"
           >

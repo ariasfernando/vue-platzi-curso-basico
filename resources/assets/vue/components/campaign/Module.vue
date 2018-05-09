@@ -29,6 +29,7 @@
       class="stx-toolbar-content stx-position-relative"
       :data-module-id="moduleId"
       :style="module.structure.style"
+      :valign="module.structure.attribute.valign || 'top'"
       :bgcolor="module.structure.attribute.bgcolor"
       :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}"
     >
@@ -46,13 +47,21 @@
         <tr v-if="module.structure.columns.length > 1">
 
           <!--2 COLUMNS STACKING -->
-          <td width="100%" v-if="module.structure.columnsStacking === 'normal'">
+          <td
+            width="100%"
+            v-if="module.structure.columnsStacking === 'normal'"
+            :valign="module.structure.attribute.valign || 'top'"
+          >
             <comment :content="msoStartingComment"></comment>
             <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
           </td>
 
           <!--2 COLUMNS INVERTED STACKING ONLY FOR 2 COLUMNS-->
-          <td width="100%" v-else-if="module.structure.columnsStacking === 'invertedStacking'">
+          <td
+            width="100%"
+            v-else-if="module.structure.columnsStacking === 'invertedStacking'"
+            :valign="module.structure.attribute.valign || 'top'"
+          >
             <table
               width="100%"
               cellspacing="0"
@@ -61,7 +70,7 @@
               dir="rtl"
               >
               <tr>
-                <td width="100%">
+                <td width="100%" :valign="module.structure.attribute.valign || 'top'">
                   <comment :content="msoStartingCommentInverted"></comment>
 
                   <columns-inverted-stacking-render
@@ -89,7 +98,7 @@
             v-else-if="module.structure.columnsStacking == 'columnsFixed'"
             v-for="(column, columnId) in module.structure.columns"
             :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
-            valign="top"
+            :valign="column.container.attribute.valign || 'top'"
             :key="column.id"
           >
             <columns-fixed-render
