@@ -32,6 +32,7 @@ class Campaign extends Eloquent
         'processed',
         'status',
         'library',
+        'library_name',
         'published_at',
         'cdn_path',
         'created_by',
@@ -170,6 +171,24 @@ class Campaign extends Eloquent
         $parts[] = $this->locale;
 
         return implode('/', $parts);
+    }
+
+    /**
+     * Get Library Property.
+     *
+     * @param string $property
+     *
+     * @return mixed Array or scalar value.
+     */
+    public function getLibraryProperty($property)
+    {
+        $library = Library::find($this->library);
+
+        if (isset($library->$property)) {
+            return $library->$property;
+        }
+
+        return '';
     }
 
     /**

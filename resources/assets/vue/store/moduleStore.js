@@ -75,9 +75,7 @@ const mutations = {
     const structure = state.module.structure;
     const subComponent = data.subComponent ? structure[data.subComponent] : structure;
     const properties = data.link ? subComponent[data.link] : subComponent;
-    const newProperty = {};
-    newProperty[data.property] = data.value;
-    _.merge(properties, newProperty);
+    Vue.set(properties, data.property, data.value);
   },
   saveModule(state, moduleId) {
     state.module.moduleId = moduleId;
@@ -95,14 +93,12 @@ const mutations = {
   setColumnWidth(state, data) {
     const column = state.module.structure.columns[data.colId];
     // Set attribute
-    column.attribute.width = `${data.width}%`;
+    column.container.attribute.width = `${data.width}%`;
   },
   saveColumnProperty(state, data) {
     const column = state.module.structure.columns[data.colId];
     const properties = data.subComponent ? column[data.subComponent][data.link] : column[data.link];
-    const newProperty = {};
-    newProperty[data.property] = data.value;
-    _.merge(properties, newProperty);
+    Vue.set(properties, data.property, data.value);
   },
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);
@@ -134,10 +130,9 @@ const mutations = {
   },
   saveComponentProperty(state, data) {
     const component = state.module.structure.columns[data.columnId].components[data.componentId];
-    const properties = data.subComponent ? component[data.subComponent][data.link] : component[data.link];
-    const newProperty = {};
-    newProperty[data.property] = data.value;
-    _.merge(properties, newProperty);
+    const subComponent = data.subComponent ? component[data.subComponent] : component;
+    const properties = data.link ? subComponent[data.link] : subComponent;
+    Vue.set(properties, data.property, data.value);
   },
   setActiveColumn(state, columnId) {
     state.activeColumn = columnId;
@@ -158,7 +153,7 @@ const mutations = {
     console.log(err);
   },
   setListLibraries(state, data) {
-    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.options = data.response;
+    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options = data.response;
   }
 };
 

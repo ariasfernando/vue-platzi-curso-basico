@@ -12,7 +12,7 @@ function moduleDefault() {
       [
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
         },
         {
           name: 'border-group',

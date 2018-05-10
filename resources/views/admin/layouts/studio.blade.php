@@ -49,8 +49,10 @@
 		{{-- Scripts --}}
 
         {{-- Global Application JS object --}}
+        <script src="{{ cdn(mix('js/manifest.js')) }}"></script>
+        <script src="{{ cdn(mix('js/vendor.js')) }}"></script>
         @include('partials/application_script')
-
+        
         <script src="{{ cdn(mix('js/jquery.js')) }}"></script>
         <script src="{{ cdn(mix('js/bootstrap.js')) }}"></script>
         <script src="{{ cdn(mix('js/tinymce.js')) }}"></script>

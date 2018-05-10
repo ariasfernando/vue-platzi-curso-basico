@@ -14,62 +14,61 @@
 </template>
 
 <script>
-  import { Compact } from 'vue-color'
+import { Compact } from "vue-color";
 
-  export default {
-    props: ['name', 'plugin'],
-    components: {
-      'compact-picker': Compact
+export default {
+  props: ["name", "plugin"],
+  components: {
+    "compact-picker": Compact
+  },
+  computed: {
+    currentComponent() {
+      return this.$store.getters["campaign/currentComponent"];
     },
-    computed: {
-      currentComponent() {
-        return this.$store.getters["campaign/currentComponent"];
-      },
-      component() {
-        let component = {};
-        if (Object.keys(this.currentComponent).length !== 0) {
-          const moduleId = this.currentComponent.moduleId;
-          const columnId = this.currentComponent.columnId;
-          const componentId = this.currentComponent.componentId;
+    component() {
+      let component = {};
+      if (Object.keys(this.currentComponent).length !== 0) {
+        const moduleId = this.currentComponent.moduleId;
+        const columnId = this.currentComponent.columnId;
+        const componentId = this.currentComponent.componentId;
 
-          component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
-        }
-        return component;
-      },
-      colors: {
-        get() {
-          let value = this.component.attribute ? this.component.attribute.bgcolor.hex : this.plugin.config.defaultValue;
-          value = value === "transparent" ? '' : value;
-          return value;
-        },
-        set(value) {
-          if (!Application.utils.validateHexVal(value)) {
-            value = value === null ? "transparent" : Application.utils.rgbToHex(value);
-          }
-          this.updateValue('bgcolor', value);
-        },
-      },
-    },
-    data() {
-      return {
-        defaultColors: this.plugin.config.defaultColors,
+        component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
       }
+      return component;
     },
-    methods: {
-      updateValue(attribute, value) {
-        const payload = {
-          plugin: this.name,
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          attribute,
-          attributeValue: value,
-        };
-
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+    colors: {
+      get() {
+        return this.component[this.plugin.subComponent].attribute.bgcolor;
+      },
+      set(value) {
+        if (!Application.utils.validateHexVal(value)) {
+          value = value === null ? "" : Application.utils.rgbToHex(value);
+        }
+        this.saveComponentProperty("bgcolor", value);
       }
     }
+  },
+  data() {
+    return {
+      defaultColors: this.plugin.config.defaultColors
+    };
+  },
+  methods: {
+    saveComponentProperty(property, value) {
+      const payload = {
+        moduleId: this.currentComponent.moduleId,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        subComponent: this.plugin.subComponent,
+        link: "attribute",
+        property,
+        value: value
+      };
+
+      this.$store.commit("campaign/saveComponentProperty", payload);
+    }
   }
+};
 </script>
 <style lang="less">
 .plugin-wrapper-inner.plugin-background-color {
@@ -95,13 +94,13 @@
     text-align: center;
   }
   .el-input.is-disabled .el-input__inner {
-    background-color: transparent!important;
+    background-color: transparent !important;
     color: #666666;
     cursor: auto;
     padding: 0;
-    font-size: 12px!important;
-    width: 87px!important;
-    border: 1px solid #dcdfe6!important;
+    font-size: 12px !important;
+    width: 87px !important;
+    border: 1px solid #dcdfe6 !important;
   }
 }
 </style>

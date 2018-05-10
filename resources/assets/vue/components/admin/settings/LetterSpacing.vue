@@ -34,12 +34,11 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "letter-spacing",
-  props: ["setting", "element"],
-  mixins: [ SettingMixin ],
+  mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
-      name: "letterSpacing",
+      linkName: "letterSpacing",
       isNormalLetterSpacingName: "isNormalLetterSpacing",
       defaultLetterSpacing: 0.2,
       letterSpacingInputValue: 0.2,
@@ -49,30 +48,37 @@ export default {
   },
   mounted() {
     this.updateLetterSpacingInputValue(this.letterSpacing);
+    this.defineStyleOption();
   },
   computed: {
     isNormalLetterSpacing: {
       get: function() {
-        return this.element.styleOptions[this.isNormalLetterSpacingName];
+        return this.element.styleOption[this.isNormalLetterSpacingName];
       },
       set: function(newValue) {
         this.$emit("setting-updated", {
-          link:'styleOptions',
+          subComponent: this.subComponent,
+          link: "styleOption",
           name: this.isNormalLetterSpacingName,
           value: newValue
         });
-        this.letterSpacing = this.inferLetterSpacing(this.letterSpacing, newValue);
+        this.letterSpacing = this.inferLetterSpacing(
+          this.letterSpacing,
+          newValue
+        );
       }
     },
     letterSpacing: {
       get: function() {
-        return this.inferLetterSpacing(this.element.style[this.name], this.isNormalLetterSpacing);
+        return this.inferLetterSpacing(this.element.style[this.linkName], this.isNormalLetterSpacing
+        );
       },
       set: function(value) {
-        let newValue = value === "normal" ? value : value+this.unit;
+        let newValue = value === "normal" ? value : value + this.unit;
         this.$emit("setting-updated", {
-          link:'style',
-          name: this.name,
+          subComponent: this.subComponent,
+          link: "style",
+          name: this.linkName,
           value: newValue
         });
         this.updateLetterSpacingInputValue(value);
@@ -81,12 +87,16 @@ export default {
   },
   methods: {
     updateLetterSpacingInputValue(value) {
-       this.letterSpacingInputValue = this.isNormalLetterSpacing ? this.defaultLetterSpacing : value;
+      this.letterSpacingInputValue = this.isNormalLetterSpacing
+        ? this.defaultLetterSpacing
+        : value;
     },
     inferLetterSpacing(currentSpacing, isNormalLetterSpacing) {
       let newSpacing = this.defaultLetterSpacing;
-      if(currentSpacing) {
-        newSpacing = isNormalLetterSpacing ? "normal" : parseFloat(currentSpacing);
+      if (currentSpacing) {
+        newSpacing = isNormalLetterSpacing
+          ? "normal"
+          : parseFloat(currentSpacing);
       }
       return newSpacing;
     },
@@ -95,8 +105,22 @@ export default {
     },
     toggleNormalLetterSpacing: function() {
       this.isNormalLetterSpacing = !this.isNormalLetterSpacing;
+    },
+    defineStyleOption(){
+      // set styleOption to default if is undefined
+      if (this.isNormalLetterSpacing === undefined) {
+        this.isNormalLetterSpacing = true;
+      }
     }
-  }
+  },
+  watch: {
+    element: {
+      handler: function(){
+        this.defineStyleOption();
+      },
+      deep: true
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

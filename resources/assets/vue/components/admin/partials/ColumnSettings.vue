@@ -27,7 +27,9 @@
                 :min-value="setting.minValue"
                 :max-value="setting.maxValue"
                 :options="setting.options"
-                :element="column"
+                :sub-component="setting.subComponent"
+                :element="setting.subComponent ? column[setting.subComponent] : column"
+                :is-disable-percentage="setting.isDisablePercentage"
                 :key="setting.name">
               </component>
             </group-container>
@@ -72,7 +74,7 @@ export default {
   components: {
     GroupContainer,
     LabelItemContainer,
-    "input-padding": elementSettings.Padding,
+    "input-padding-group": elementSettings.PaddingGroup,
     "input-border-group": elementSettings.BorderGroup,
     "input-width": elementSettings.Width,
     "input-generic-color": elementSettings.GenericColor,
@@ -91,12 +93,13 @@ export default {
   },
   methods: {
     settingUpdatedHandler(eventData, key) {
-      this.saveColumnProperty(eventData.link, eventData.name, eventData.value, key);
+      this.saveColumnProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value, key);
     },
-    saveColumnProperty(link, name, value, colId) {
+    saveColumnProperty(link, subComponent, name, value, colId) {
       const data = {
         colId: colId,
-        link: link,
+        subComponent,
+        link,
         property: name,
         value: value
       };

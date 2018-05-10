@@ -54,19 +54,23 @@ class CampaignController extends Controller
             if (!is_null($request->input("locale"))) {
                 $params['locale'] = $request->input("locale");
             }
+
             if (!is_null($request->input("library"))) {
                 $params['library'] = new ObjectID($request->input("library"));
+                $library = Library::find($request->input("library"));
             } else {
-                $library = Library::orderBy('created_at')->first();
                 $libraries = Auth::user()->getLibraries();
-                if (count($libraries)) {
-                    $params['library'] = new ObjectID($libraries[0]['_id']);
-                } else {
+
+                if (!count($libraries)) {
                     throw new \Exception('You don\'t have available libraries to create a new email
                         please contact our support team.');
                 }
+
+                $params['library'] = new ObjectID($libraries[0]['_id']);
+                $library = Library::find($libraries[0]['_id']);
             }
 
+            $params['library_name'] = $library->name;
             $params['campaign_name'] = 'Untitled Email';
 
             $campaign = Campaign::create($params);
@@ -199,10 +203,10 @@ class CampaignController extends Controller
         $params = [];
         $params['menu_list'] = $library->getModules();
         uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
-            if ($menu_item_a['name'] == $menu_item_b['name']) {
+            if ($menu_item_a->name == $menu_item_b->name) {
                 return 0;
             }
-            return ($menu_item_a['name'] < $menu_item_b['name']) ? -1 : 1;
+            return ($menu_item_a->name < $menu_item_b->name) ? -1 : 1;
         });
         return $params['menu_list'];
     }

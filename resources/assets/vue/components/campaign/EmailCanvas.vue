@@ -23,13 +23,18 @@
                 border="0"
                 v-model="dragList"
                 :width="templateWidth"
+                :style="`width:${templateWidth}px`"
                 :options="options"
                 :element="'table'"
                 :move="onMove"
                 @add="onAdd"
                 @sort="onSort"
                  v-if="isNotEmptyList">
-                  <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
+                  <module
+                    v-for="(module, moduleId) in dragList"
+                    :key="module.idInstance"
+                    :module-id="moduleId"
+                  ></module>
               </draggable>
               <draggable
                 id="emailCanvas"
@@ -40,6 +45,7 @@
                 border="0"
                 v-model="dragList"
                 :width="templateWidth"
+                :style="`width:${templateWidth}px`"
                 :options="options"
                 :element="'table'"
                 @add="onAdd"
@@ -187,6 +193,16 @@
         const mod = clone(found);
         mod.data = {};
 
+
+        if (!this.validateSortingToIndex({index: e.newIndex, moduleData: mod})){
+          this.$root.$toast('The position is occuped by a fixed module.', {className: 'et-info'});
+        }
+        else {
+          mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
+          this.insertModule({index: e.newIndex, moduleData: mod});
+        }
+/*
+
         if (!this.validateSortingToIndex({index: e.newIndex, moduleData: mod})){
           this.$root.$toast('The position is occuped by a fixed module.', {className: 'et-info'});
         }
@@ -194,6 +210,12 @@
           this.insertModule({index: e.newIndex, moduleData: mod});
         }
 
+
+        mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
+        this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
+        // Set active on last module inserted
+        this.$store.commit('campaign/setActiveModule', e.newIndex);
+*/
         // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
@@ -296,7 +318,7 @@
         }
         else {
           // Get module ID
-          const moduleId = $target.closest(".stx-module-wrapper").find("td").data("module-id");
+          const moduleId = _.parseInt($target.closest(".stx-module-wrapper").find("td").attr("data-module-id"));
           // If it's the config gear icon
           if( $target.hasClass('icon-config') || $target.hasClass("fa-cogs") ) {
             // Show module settings
@@ -312,7 +334,7 @@
             // Clear 3rd column
             this.$store.commit("campaign/unsetCurrentComponent");
 
-            if (this.activeModule.type === 'studio') {
+            if (this.activeModule && this.activeModule.type === 'studio') {
               this.$store.commit("campaign/unsetCustomModule");
             }
           }
@@ -450,6 +472,7 @@
         vertical-align: middle;
         opacity: 0.7;
         text-align: center;
+        cursor: default;
 
         &:hover {
           width: 100%;

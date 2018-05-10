@@ -14,12 +14,11 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "VerticalAlign",
-  props: ["setting", "element", "subComponent"],
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
   data() {
     return {
-      name: "valign"
+      linkName: "valign"
     };
   },
   computed: {
@@ -29,9 +28,9 @@ export default {
       },
       set: function(newValue) {
         this.$emit("setting-updated", {
-          link:'attribute',
           subComponent: this.subComponent,
-          name: this.name,
+          link:'attribute',
+          name: this.linkName,
           value: newValue
         });
       }

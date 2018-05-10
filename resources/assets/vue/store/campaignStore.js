@@ -1,3 +1,4 @@
+import Vue from 'vue/dist/vue';
 import _ from 'lodash';
 import Q from 'q';
 import clone from 'clone';
@@ -86,7 +87,6 @@ function campaignStore() {
         }
         return false;
       },
-
     },
     mutations: {
       campaignCompleted(state, status) {
@@ -124,6 +124,7 @@ function campaignStore() {
       },
       cloneModule(state, moduleId) {
         const clone = _.cloneDeep(state.modules[moduleId]);
+        clone.idInstance = Math.floor(100000 + (Math.random() * 900000));
         state.modules.push(clone);
         state.dirty = true;
       },
@@ -187,9 +188,11 @@ function campaignStore() {
         state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data = updated;
         state.dirty = true;
       },
-      saveComponentStyle(state, data) {
+      saveComponentProperty(state, data) {
         const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
-        component.style[data.property] = data.value;
+        const subComponent = data.subComponent ? component[data.subComponent] : component;
+        const properties = data.link ? subComponent[data.link] : subComponent;
+        Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
       saveComponentAttribute(state, data) {

@@ -1,86 +1,52 @@
 <template>
-    <settings-container custom-class="field-padding" label="Padding">
-      <template slot="setting-bottom">
-        <div
-          v-for="padding in paddings"
-          :key="padding.name"
-          class="half-style-setting-padding align-element"
-          :title="padding.label"
-          v-b-tooltip.hover
-          :data-tooltip="padding.label"
-            >
-          <el-input-number
-            size="mini" 
-            v-validate="'required'"
-            v-model="padding.value"
-            @change="(val)=>changeValue(val, padding.name)"
-            :min="min"
-            :controls="false"
-          ></el-input-number>
-          <el-button
-            class="button"
-            disabled="disabled"
-          >px</el-button>
-        </div>
-      </template>
-    </settings-container>
+  <div
+    class="half-style-setting-padding align-element"
+    :title="`Padding ${this.side}`"
+    v-b-tooltip.hover
+    :data-tooltip="`Padding ${this.side}`"
+      >
+    <el-input-number
+      size="mini" 
+      v-validate="'required'"
+      v-model="padding"
+      :min="min"
+      :controls="false"
+    ></el-input-number>
+    <el-button
+      class="button"
+      disabled="disabled"
+    >px</el-button>
+  </div>
 </template>
 
 <script>
 import _ from "lodash";
 import SettingMixin from "../mixins/SettingMixin.js";
-import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
 
 export default {
-  name: "padding",
-  props: ["setting", "element", "subComponent"],
+  name: "Padding",
+  props: ["side", "element"],
   mixins: [SettingMixin],
-  components: { SettingsContainer },
   data() {
     return {
       min: 0
     };
   },
   computed: {
-    paddings() {
-      return [
-        {
-          label: "Padding Top",
-          name: "paddingTop",
-          value: this.getValue("paddingTop")
-        },
-        {
-          label: "Padding Right",
-          name: "paddingRight",
-          value: this.getValue("paddingRight")
-        },
-        {
-          label: "Padding Bottom",
-          name: "paddingBottom",
-          value: this.getValue("paddingBottom")
-        },
-        {
-          label: "Padding Left",
-          name: "paddingLeft",
-          value: this.getValue("paddingLeft")
-        }
-      ];
+    padding: {
+      get() {
+        return _.parseInt(this.element.style[`padding${this.side}`]) || 0;
+      },
+      set(value) {
+        this.$emit("setting-updated", {
+          subComponent: this.subComponent,
+          link: "style",
+          name: `padding${this.side}`,
+          value: `${value}px`
+        });
+      }
     }
   },
-  methods: {
-    changeValue(val, styleName) {
-      val = isNaN(val) || val < this.min ? this.min : val;
-      this.$emit("setting-updated", {
-        link:'style',
-        subComponent: this.subComponent,
-        name: styleName,
-        value: `${val}px`
-      });
-    },
-    getValue(styleName) {
-      return _.parseInt(this.element.style[styleName]);
-    }
-  }
 };
 </script>
 <style lang="less" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <settings-container :label="label">
+  <settings-container :label="label" v-if="showSetting">
     <template slot="setting-right">
       <input class="input" :name="name" type="file" @change="onFileChange">
     </template>
@@ -11,7 +11,6 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "generic-file",
-  props: ["element", "name", "type", "link", "label", "default-value"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   methods: {

@@ -20,17 +20,16 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "GenericColor",
-  props: ["element", "name", "type", "link", "label", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   computed: {
     mainSettingColor: {
       get() {
-        return this.mainSetting === "transparent" ? "" : this.mainSetting;
+        return this.mainSetting;
       },
       set(color) {
         if (!Application.utils.validateHexVal(color)) {
-          color = color === null ? "transparent" : Application.utils.rgbToHex(color);
+          color = color === null ? "" : Application.utils.rgbToHex(color);
         }
         this.mainSetting = color;
       }

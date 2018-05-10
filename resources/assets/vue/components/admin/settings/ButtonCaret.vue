@@ -1,8 +1,8 @@
 <template>
   <settings-container label="Button caret">
     <template slot="setting-right">
-      <i v-if="buttonCaret" class="glyphicon glyphicon-trash st-remove" @click="resetImage"></i>
-      <input class="input" name="buttonCaret" type="file" @change="onFileChange">
+      <i v-if="caret" class="glyphicon glyphicon-trash st-remove" @click="resetImage"></i>
+      <input class="input" name="caret" type="file" @change="onFileChange">
     </template>
   </settings-container>
 </template>
@@ -12,18 +12,16 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "ButtonCaret",
-  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
   data() {
     return {
-      name: "url",
-      subComponent: "buttonCaret"
+      linkName: "url",
     };
   },
   computed: {
-    buttonCaret() {
-      return this.element.buttonCaret.attribute[this.name];
+    caret() {
+      return this.element.attribute[this.linkName];
     }
   },
   methods: {
@@ -31,7 +29,7 @@ export default {
       this.$emit("setting-updated", {
         link: 'attribute',
         subComponent: this.subComponent,
-        name: this.name,
+        name: this.linkName,
         value: undefined
       });
     },
@@ -70,7 +68,7 @@ export default {
         this.$emit("setting-updated", {
         link: 'attribute',
         subComponent: this.subComponent,
-        name: this.name,
+        name: this.linkName,
         value: e });
       };
 

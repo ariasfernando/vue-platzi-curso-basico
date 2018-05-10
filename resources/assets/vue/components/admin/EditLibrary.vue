@@ -154,7 +154,7 @@
                               <!-- Field background-color -->
                               <div class="col-md-3">
                                 <input-generic-color
-                                  @setting-updated="configSettingUpdatedHandler"
+                                  @setting-updated="settingUpdatedHandler"
                                   :name="'templateBackgroundColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
@@ -166,7 +166,7 @@
                               <!-- Field content-background-color -->
                               <div class="col-md-3">
                                 <input-generic-color
-                                  @setting-updated="configSettingUpdatedHandler"
+                                  @setting-updated="settingUpdatedHandler"
                                   :name="'contentBackgroundColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
@@ -181,7 +181,7 @@
                               <!-- Field font-family -->
                               <div class="col-md-3">
                                 <input-font-family
-                                  @setting-updated="configSettingUpdatedHandler"
+                                  @setting-updated="settingUpdatedHandler"
                                   :name="'fontFamily'"
                                   :type="'font-family'"
                                   :link="'config'"
@@ -193,7 +193,7 @@
                               <!-- Field font-color -->
                               <div class="col-md-3">
                                 <input-generic-color
-                                  @setting-updated="configSettingUpdatedHandler"
+                                  @setting-updated="settingUpdatedHandler"
                                   :name="'fontColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
@@ -240,7 +240,7 @@
                               <!-- Field link-color -->
                               <div class="col-md-3">
                                 <input-generic-color
-                                  @setting-updated="configSettingUpdatedHandler"
+                                  @setting-updated="settingUpdatedHandler"
                                   :name="'linkColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
@@ -551,7 +551,7 @@
           cloneItem.parentNode.removeChild(cloneItem);
         }
       },
-      configSettingUpdatedHandler(eventData) {
+      settingUpdatedHandler(eventData) {
         this.library.config[eventData.name] = eventData.value;
       }
     },

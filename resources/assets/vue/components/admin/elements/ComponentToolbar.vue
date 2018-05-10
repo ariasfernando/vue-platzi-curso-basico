@@ -27,8 +27,7 @@
     }
   }
 </script>
-
-<style lang="less">
+<style lang="less" scoped>
   @icon-option: #69dac8;
 
   .icon-move {

@@ -25,7 +25,6 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "GenericSelect",
-  props: ["setting", "element", "link", "name", "label", "options"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
 };

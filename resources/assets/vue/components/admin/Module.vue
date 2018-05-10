@@ -4,11 +4,14 @@
          cellpadding="0" 
          border="0"
          align="center"
-        :class="module.structure.attribute.classes" 
   >
     <!-- START: 2 COLUMNS -->
     <tr v-if="module.structure.columns.length > 1">
-      <td width="100%" :bgcolor="module.structure.attribute.bgcolor" :style="module.structure.style">
+      <td
+        width="100%"
+        :bgcolor="module.structure.attribute.bgcolor"
+        :style="module.structure.style"
+        :class="module.structure.attribute.classes ||''" >
         <table
           width="100%"
           class="st-wrapper" 
@@ -23,15 +26,15 @@
               <!-- If columnsFixed is true, show Columns fixed render -->
               <td
                 v-for="(column, columnId) in module.structure.columns"
-                :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
-                valign="top" 
+                :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
+                :valign="column.container.attribute.valign || 'top'" 
                 :key="column.id"
               >
                 <columns-fixed-render @add="onAdd" :column="column" :column-id="columnId"></columns-fixed-render>
               </td>
             </template>
 
-            <!-- If columnsFixed is false, show Columns staked render -->
+            <!-- show Columns staked render -->
             <td
               v-else
               width="100%"
@@ -52,9 +55,10 @@
         class="st-col" 
         v-for="(column, columnId) in module.structure.columns"
         :class="!column.components.length ? 'empty-col' : ''" 
-        :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'" 
+        :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'" 
         :style="module.structure.style || ''"
         :bgcolor="module.structure.attribute.bgcolor"
+        :valign="module.structure.attribute.valign || 'top'" 
         :data-col="columnId"
         :key="column.id"
       >
@@ -113,7 +117,6 @@
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
-  import SeparatorElement from './elements/SeparatorElement.vue';
 
   module.exports = {
     name: 'Module',
@@ -123,7 +126,6 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement,
       ColumnsFixedRender,
       ColumnsStackedRender
     },

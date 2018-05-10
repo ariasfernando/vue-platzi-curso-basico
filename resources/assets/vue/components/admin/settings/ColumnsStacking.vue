@@ -8,7 +8,7 @@
       size="mini"
       >
         <el-option
-          v-for="item in options"
+          v-for="item in columnsOptions"
           :key="item.value"
           :label="item.label"
           :value="item.value"
@@ -25,15 +25,14 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "ColumnsStacking",
-  props: ["setting", "element", "link", "name", "label"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
 
   computed: {
-    options() {
-      let options = [];
+    columnsOptions() {
+      let columnsOptions = [];
       if (this.element.columns.length > 1) {
-        options.push(
+        columnsOptions.push(
           {
             value: "normal",
             label: "Normal"
@@ -45,16 +44,13 @@ export default {
         );
       }
       if (this.element.columns.length === 2) {
-        options.push({
+        columnsOptions.push({
           value: "invertedStacking",
           label: "Inverted stacking"
         });
       }
-      return options;
+      return columnsOptions;
     },
-    settings() {
-      return settingsDefault.Module().componentSettings;
-    }
   },
   watch: {
     element: {

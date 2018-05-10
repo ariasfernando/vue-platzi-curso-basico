@@ -49,9 +49,8 @@ describe('== Models ==', () => {
         expect(properties).to.have.keys([
           'id',
           'type',
-          'style',
-          'attribute',
-          'styleOptions',
+          'container',
+          'content',
           'plugins',
           'components',
         ]);
@@ -78,9 +77,8 @@ describe('== Models ==', () => {
         expect(properties).to.have.keys([
           'id',
           'type',
-          'style',
-          'styleOptions',
-          'attribute',
+          'container',
+          'text',
           'plugins',
           'data',
         ]);
@@ -107,9 +105,8 @@ describe('== Models ==', () => {
         expect(properties).to.have.keys([
           'id',
           'type',
-          'style',
-          'styleOptions',
-          'attribute',
+          'container',
+          'image',
           'plugins',
           'data',
         ]);
@@ -136,36 +133,8 @@ describe('== Models ==', () => {
         expect(properties).to.have.keys([
           'id',
           'type',
-          'style',
-          'attribute',
-          'plugins',
-          'data',
-        ]);
-
-        done();
-      });
-    });
-
-    describe('SeparatorElement', () => {
-      const element = new Element({type: 'separator-element'});
-      const properties = element.getProperties();
-
-      it('Should return a valid object', (done) => {
-        expect(element).to.be.an('object');
-        done();
-      });
-
-      it('Should return a valid object of type separator-element', (done) => {
-        expect(properties).to.have.property('type', 'separator-element');
-        done();
-      });
-
-      it('Should only have a specific set of properties', (done) => {
-        expect(properties).to.have.keys([
-          'id',
-          'type',
-          'style',
-          'attribute',
+          'container',
+          'divider',
           'plugins',
           'data',
         ]);
@@ -192,10 +161,9 @@ describe('== Models ==', () => {
         expect(properties).to.have.keys([
           'id',
           'type',
-          'style',
-          'styleOptions',
-          'attribute',
-          'buttonCaret',
+          'container',
+          'button',
+          'caret',
           'plugins',
           'data',
         ]);

@@ -71,10 +71,10 @@ export default {
       set(width) {
         width = isNaN(width) || width < this.min ? this.min : width;
         if (width > 0) {
-          if (this.style == "none") {
+          if (this.style === "none") {
             this.style = "solid";
           }
-          if (this.color == "") {
+          if (this.color === "") {
             this.color = "#000000";
           }
         } else {
@@ -86,7 +86,7 @@ export default {
           }
         }
         this.$emit("setting-updated", {
-          link: 'style',
+          link: "style",
           name: `border${this.side}Width`,
           value: `${width}px`
         });
@@ -94,11 +94,11 @@ export default {
     },
     style: {
       get() {
-        return this.element.style[`border${this.side}Style`];
+        return this.element.style[`border${this.side}Style`] || "none";
       },
       set(style) {
         this.$emit("setting-updated", {
-          link: 'style',
+          link: "style",
           name: `border${this.side}Style`,
           value: style
         });
@@ -106,17 +106,14 @@ export default {
     },
     color: {
       get() {
-        return this.element.style[`border${this.side}Color`] === "transparent"
-          ? ""
-          : this.element.style[`border${this.side}Color`];
+        return this.element.style[`border${this.side}Color`] ? this.element.style[`border${this.side}Color`] : "";
       },
       set(color) {
         if (!Application.utils.validateHexVal(color)) {
-          color =
-            color === null ? "transparent" : Application.utils.rgbToHex(color);
+          color = color === null ? "" : Application.utils.rgbToHex(color);
         }
         this.$emit("setting-updated", {
-          link: 'style',
+          link: "style",
           name: `border${this.side}Color`,
           value: color
         });

@@ -64,6 +64,18 @@ mix
   ], `${jsDestinationPath}/dashboard-components.js`)
   .js(`${assetsPath}/js/vendor/stensul/media-gallery/media-gallery.js`, 'public/js/media-gallery.js')
   .js(assetsPath + jsAppFilePath('proof.js'), `${jsDestinationPath}/proof.js`)
+  .extract([
+    'vue',
+    'vue-router',
+    'vue-resource/dist/vue-resource',
+    'vee-validate',
+    'vue-easy-toast',
+    'bootstrap-vue',
+    'element-ui',
+    'element-ui/lib/theme-chalk/index.css',
+    'element-ui/lib/locale/lang/en',
+    'lodash',
+  ])
   .scripts([
     `${assetsPath}/js/library/helpers/*.js`,
     `${assetsPath}/js/library/application-utils.js`,

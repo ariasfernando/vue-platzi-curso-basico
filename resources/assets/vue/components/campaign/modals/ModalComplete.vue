@@ -87,6 +87,7 @@
       campaign: {
         handler: function(value) {
           this.html = value.campaign_data.body_html;
+          this.plainText = value.campaign_data.plain_text;
         },
         deep: true
       },
