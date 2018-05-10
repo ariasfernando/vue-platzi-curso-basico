@@ -7,7 +7,6 @@ function imageDefault() {
           label: 'Select an image placeholder',
           name: 'placeholder',
           type: 'generic-file',
-          value: 'default/placeholder-square.jpg',
           subComponent: 'image',
         },
         {
@@ -23,7 +22,6 @@ function imageDefault() {
           label: 'Select an image placeholder mobile',
           name: 'placeholderMobile',
           type: 'generic-file',
-          value: 'default/placeholder-square.jpg',
           subComponent: 'image',
           dependsOn: {
             link: 'styleOption',
