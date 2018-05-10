@@ -20,13 +20,6 @@
 	}
 }
 
-/* Color button: Remove transparent option */
-.mce-colorbutton-grid{
-	.mce-grid-cell.mce-colorbtn-trans{
-		display: none!important;
-	}
-}
-
 /* Text Overlay */
 .text-overlay{
 
@@ -168,15 +161,27 @@
 		}
 	}
 }
-.mce-colorbtn-trans{
-	display: none;
-}
 
 /* Toolbar: Custom icons */
 .mce-tinymce .mce-btn{
     &[aria-label="Tags"]{
         .mce-caret{
             display: none;
+        }
+    }
+    &[aria-label="Font Sizes"]{
+        width: 45px;
+        button{
+            padding: 0 20px 0 8px;
+            i.text-size{
+                width: 20px;
+                height: 20px;
+                margin: 0;
+                padding: 7px 0 0 0;
+                border-right: 1px solid #bfbfbf;
+                .glyphicon(); 
+                .glyphicon-text-size();
+            }
         }
     }
     i.mce-ico.mce-i-custom-tags{
@@ -193,4 +198,7 @@
     i.mce-ico.mce-i-plus:before{
         &:extend(.fa-plus:before);
     }
+}
+.mce-menu-item .mce-text{
+    color: #333333!important;
 }
