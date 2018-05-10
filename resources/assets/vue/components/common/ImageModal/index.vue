@@ -79,7 +79,7 @@
                   <i class="fa fa-chevron-left" aria-hidden="true"></i> Reset
                 </button>
                 <button type="button" class="btn btn-success pull-right submit-config beta-btn-primary" v-if="page.two === 'url'" v-on:click.prevent="saveUrl">Save</button>
-                <input type="submit" value="Submit" class="btn btn-success pull-right submit-config beta-btn-primary" @click="submit" v-if="page.three">
+                <input :disabled="isDisabled" type="submit" value="Submit" class="btn btn-success pull-right submit-config beta-btn-primary" @click="submit" v-if="page.three">
                 <button type="button" class="btn btn-success pull-right submit-config beta-btn-primary" v-if="page.two === 'media'">
                   <i class="fa fa-refresh" aria-hidden="true"></i> Refresh Gallery
                 </button>
@@ -112,7 +112,8 @@ export default {
       },
       url: '',
       currentImage: null,
-      sieoptions: {}
+      sieoptions: {},
+      isDisabled: false
     };
   },
   computed: {
@@ -256,8 +257,18 @@ export default {
       this.$store.commit('global/setLoader', true);
       this.$refs.sie.save();
     },
+    disableSubmit(){
+      this.isDisabled = true;
+    },
+    enableSubmit(){
+      this.isDisabled = false;
+    }
   },
   mounted() {
+    addEventListener('showSubToolbar', this.disableSubmit);
+    addEventListener('saveEdit', this.enableSubmit)
+    addEventListener('cancelEdit', this.enableSubmit)
+
     this.$refs.input.addEventListener('change', event => {
       return imageHelper
         .checkFile(event.target)
