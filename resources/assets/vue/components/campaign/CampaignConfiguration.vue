@@ -237,11 +237,16 @@
         });
       },
       toggleLockCampaign(val) {
-        if (val) {
-          this.lockCampaign();
-        } else {
-          this.unlockCampaign();
-        }
+        this._save().then(response => {
+          if (val) {
+            this.lockCampaign();
+          } else {
+            this.unlockCampaign();
+          }
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+        });
       },
       lockCampaign() {
 
