@@ -21,6 +21,10 @@
 
         </div>
 
+        {{-- Global Application JS object --}}
+        <script src="{{ cdn(mix('js/manifest.js')) }}"></script>
+        <script src="{{ cdn(mix('js/vendor.js')) }}"></script>
+
         @section('master-application-scripts')
             {{-- Global Application JS object --}}
             @include('partials.application_script')

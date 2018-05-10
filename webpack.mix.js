@@ -74,7 +74,6 @@ mix
     'element-ui',
     'element-ui/lib/theme-chalk/index.css',
     'element-ui/lib/locale/lang/en',
-    'vue-croppa',
     'lodash',
   ])
   .scripts([
