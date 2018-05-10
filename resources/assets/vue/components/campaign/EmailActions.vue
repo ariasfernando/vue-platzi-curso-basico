@@ -336,9 +336,14 @@
   };
 </script>
 
-<style>
+<style lang="less" scoped>
   .button-disabled {
     cursor: not-allowed;
+  }
+  .save-as-draft:focus{
+    background: #fff;
+    outline: none;
+    border: 1px solid #dddddd;
   }
 </style>
 
