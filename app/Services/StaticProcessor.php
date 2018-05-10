@@ -675,6 +675,6 @@ class StaticProcessor
                 throw new \Exception($error_msg);
             }
         }
-        return $file_path;
+        return [ 'path' => $file_path ];
     }
 }
