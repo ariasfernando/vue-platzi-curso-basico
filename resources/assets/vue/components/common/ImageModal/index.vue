@@ -99,7 +99,7 @@ import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
 
 export default {
-  props: ['config', 'libraryImages', 'data'],
+  props: ['config', 'libraryImages', 'data', 'onSetImage'],
   components: {
     styleImageEditor
   },
@@ -175,7 +175,7 @@ export default {
       this.reset();
     },
     generateSieoptions(changeImage = false) {
-      const sieoptions = {
+      let sieoptions = {
         api: this.$_app.config.sieAPI
       };
       if (Object.keys(this.data).length <= 0 || changeImage) {
@@ -186,10 +186,32 @@ export default {
         sieoptions.preset = sieHelper.completeUrlPath(this.$_app.config.imageUrl, sieoptions.preset);
       }
       sieoptions.size.height = sieoptions.size.auto ? 0 : sieoptions.size.height;
-
-      this.sieoptions = sieoptions;
-      if (typeof this.$refs.sie !== 'undefined') {
+      if (this.onSetImage) {
+        if (this.currentImage !== null) {
+          const img = new Image();
+          img.onload = () => {
+            this.sieoptions = this.onSetImage(img, sieoptions);
+            this.page = {
+              one: false,
+              two: false,
+              three: true
+            };
+            if (typeof this.$refs.sie !== 'undefined') {
+              this.$refs.sie.close();
+            }
+          };
+          img.src = this.currentImage;
+        } else {
+          this.sieoptions = sieoptions;
+          if (typeof this.$refs.sie !== 'undefined') {
+            this.$refs.sie.close();
+          }
+        }
+      } else {
+        this.sieoptions = sieoptions;
+        if (typeof this.$refs.sie !== 'undefined') {
          this.$refs.sie.close();
+        }
       }
     },
     setImage(imageSource) {
@@ -198,11 +220,13 @@ export default {
           this.currentImage = imageSource;
           this.changeImage(this.params);
           this.generateSieoptions(true);
-          this.page = {
-            one: false,
-            two: false,
-            three: true
-          };
+          if (!this.onSetImage) {
+            this.page = {
+              one: false,
+              two: false,
+              three: true
+            };
+          }
         })
         .catch(error => {
           this.$root.$toast(`${error}. Please try again.`, {
