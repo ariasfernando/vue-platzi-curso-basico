@@ -1,5 +1,5 @@
 const plugins = require('./plugins');
-const modules = require('./modules');
+import * as modules from './modules';
 const fonts = require('./config/fonts');
 
 window.customer = {

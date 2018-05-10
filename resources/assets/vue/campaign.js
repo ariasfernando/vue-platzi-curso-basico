@@ -6,7 +6,6 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/en';
 import BootstrapVue from 'bootstrap-vue';
-import Croppa from 'vue-croppa';
 import 'url-search-params-polyfill';
 import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
@@ -28,7 +27,6 @@ Vue.use(Toast, {
   closeable: true,
 });
 Vue.use(BootstrapVue);
-Vue.use(Croppa);
 Vue.use(interceptors);
 Vue.use(ElementUI, { locale });
 
