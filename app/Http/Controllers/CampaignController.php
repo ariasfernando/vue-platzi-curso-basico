@@ -579,6 +579,11 @@ class CampaignController extends Controller
     */
     public function postTrimImage(Request $request)
     {
-        return Campaign::trimImage($request->all());
+        $params = $request->all();
+        // Convert local urls to local path.
+        if (substr($params['background_image'], 0, strlen(config('app.url'))) === config('app.url')) {
+            $params['background_image'] = public_path() . str_replace(config('app.url'), '', $params['background_image']);
+        }
+        return Campaign::trimImage($params);
     }
 }
