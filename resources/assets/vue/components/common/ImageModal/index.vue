@@ -99,7 +99,7 @@ import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
 
 export default {
-  props: ['config', 'libraryImages', 'data'],
+  props: ['config', 'libraryImages', 'data', 'onSetImage'],
   components: {
     styleImageEditor
   },
@@ -175,7 +175,7 @@ export default {
       this.reset();
     },
     generateSieoptions(changeImage = false) {
-      const sieoptions = {
+      let sieoptions = {
         api: this.$_app.config.sieAPI
       };
       if (Object.keys(this.data).length <= 0 || changeImage) {
@@ -220,11 +220,13 @@ export default {
           this.currentImage = imageSource;
           this.changeImage(this.params);
           this.generateSieoptions(true);
-          this.page = {
-            one: false,
-            two: false,
-            three: true
-          };
+          if (!this.onSetImage) {
+            this.page = {
+              one: false,
+              two: false,
+              three: true
+            };
+          }
         })
         .catch(error => {
           this.$root.$toast(`${error}. Please try again.`, {
