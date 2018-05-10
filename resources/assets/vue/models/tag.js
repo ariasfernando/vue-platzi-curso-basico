@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 
 function Tag(data) {
   this.name = data.name;

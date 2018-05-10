@@ -1,8 +1,8 @@
 <template>
   <transition name="modal" v-if="modalComplete">
     <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container modal-complete">
+      <div class="modal-wrapper modal-complete">
+        <div class="modal-container">
           <slot name="header">
             <button type="button" class="close hidden" @click="close"><span>&times;</span></button>
           </slot>

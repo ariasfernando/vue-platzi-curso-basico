@@ -1,6 +1,0 @@
-{
-    "registry": "https://registry.bower.io",
-    "analytics": false,
-    "directory": "resources/assets/bower",
-    "timeout": 120000
-}

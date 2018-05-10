@@ -175,17 +175,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Current user email who is editing the email
-    |--------------------------------------------------------------------------
-    |
-    | Show the email address who is editing the campaign in the warning message
-    |
-    */
-
-    'show_who_is_locking' => false,
-
-    /*
-    |--------------------------------------------------------------------------
     | Clean empty tag without link - will be replaced with span tag
     |--------------------------------------------------------------------------
      */

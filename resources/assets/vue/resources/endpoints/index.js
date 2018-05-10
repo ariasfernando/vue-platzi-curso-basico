@@ -34,6 +34,7 @@ module.exports = {
     lockCampaign: { method: 'post', path: `${baseUrl}/campaign/force-lock` },
     unlockCampaign: { method: 'post', path: `${baseUrl}/campaign/unlock-forced` },
     favoriteCampaign: { method: 'post', path: `${baseUrl}/campaign/favorite` },
+    pingLock: { method: 'post', path: `${baseUrl}/campaign/lock` },
     logTime: { method: 'post', path: `${baseUrl}/campaign/spent-time` },
   },
   image: {

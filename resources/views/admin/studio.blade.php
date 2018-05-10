@@ -7,5 +7,5 @@
 @endsection
 
 @section('footer-script')
-	<script src="{{ url( elixir('js/studio-components.js') ) }}"></script>
+	<script src="{{ url(mix('js/studio-components.js')) }}"></script>
 @stop

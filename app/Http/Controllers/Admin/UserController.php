@@ -4,11 +4,11 @@ namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
 use Activity;
-use Stensul\Http\Controllers\Controller as Controller;
-use Illuminate\Http\Request;
 use Stensul\Models\User;
 use Stensul\Models\Role;
-use MongoDB\BSON\ObjectID as ObjectID;
+use MongoDB\BSON\ObjectID;
+use Illuminate\Http\Request;
+use Stensul\Http\Controllers\Controller as Controller;
 use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
 
 class UserController extends Controller
@@ -117,7 +117,6 @@ class UserController extends Controller
      */
     public function getCreate()
     {
-
         $roles_data = Role::all(['name'])->toArray();
         $roles_array = [];
 
@@ -175,6 +174,8 @@ class UserController extends Controller
             $user->password = bcrypt($request->input("password"));
         }
 
+        Activity::log('User edited', array('properties' => ['user_id' => new ObjectID($user->_id)]));
+
         return ['status' => (int)$user->save()];
     }
 
@@ -211,7 +212,7 @@ class UserController extends Controller
         $user->status = "deleted";
         $user->save();
         $user->delete();
-        Activity::log('User deleted', array('properties' => ['user_id' => new ObjectId($request->input("userId"))]));
+        Activity::log('User deleted', array('properties' => ['user_id' => new ObjectID($request->input("userId"))]));
         return array("deleted" => $request->input("userId"));
     }
 
@@ -226,7 +227,7 @@ class UserController extends Controller
         $user = User::whereEmail($request->input("email"))->first();
         $user->unset('status');
         $user->restore();
-        Activity::log('User restored', array('properties' => ['user_id' => new ObjectId($user->_id)]));
+        Activity::log('User restored', array('properties' => ['user_id' => new ObjectID($user->_id)]));
         return ['restored' => $user->id];
     }
 }

@@ -20,7 +20,7 @@ if (strlen($base_url = Config::get('app.url')) > 0) {
 
     if (strpos($base_url, 'http') !== false) {
         list($schema, $_) = explode('://', $base_url);
-        URL::forceSchema($schema);
+        URL::forceScheme($schema);
     }
 }
 

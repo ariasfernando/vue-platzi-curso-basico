@@ -20,7 +20,7 @@
 @endsection
 
 @section('footer-script')
-    <script src="{{ cdn(elixir('js/library.js')) }}"></script>
-    <script src="{{ url( elixir('js/proof.js') ) }}"></script>
-    <script src="{{ url( elixir('js/vue-components.js') ) }}"></script>
+    <script src="{{ cdn(mix('js/library.js')) }}"></script>
+    <script src="{{ url(mix('js/proof.js')) }}"></script>
+    <script src="{{ url(mix('js/vue-components.js')) }}"></script>
 @stop
