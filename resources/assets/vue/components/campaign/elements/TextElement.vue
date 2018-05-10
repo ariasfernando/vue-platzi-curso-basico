@@ -50,14 +50,17 @@ export default {
   mixins: [MobileStylesMixin,ComponentAttributeMixin],
   data() {
     return {
-      editorId: ["editor", this.moduleId, this.columnId, this.componentId].join(
-        "-"
-      ),
       toolbar: " ",
       fixed: false
     };
   },
   computed: {
+    module() {
+      return this.$store.getters["campaign/modules"][this.moduleId];
+    },
+    editorId(){
+      return ["editor", this.module.idInstance, this.moduleId, this.columnId, this.componentId].join("-");
+    },
     textFontStyles() {
       return {
         "text-align": this.component.text.style.textAlign || "left",
