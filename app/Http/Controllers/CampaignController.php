@@ -569,4 +569,21 @@ class CampaignController extends Controller
     {
         return Campaign::updateAutoSave($request->input('campaign_id'), $request->input('status'));
     }
+
+    /**
+    *  Trim an image verticaly.
+    *
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array Path or error
+    */
+    public function postTrimImage(Request $request)
+    {
+        $params = $request->all();
+        // Convert local urls to local path.
+        if (substr($params['background_image'], 0, strlen(config('app.url'))) === config('app.url')) {
+            $params['background_image'] = public_path() . str_replace(config('app.url'), '', $params['background_image']);
+        }
+        return Campaign::trimImage($params);
+    }
 }
