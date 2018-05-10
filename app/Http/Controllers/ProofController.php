@@ -363,7 +363,7 @@ class ProofController extends Controller
                 // Remove decision data from this reviewer
                 $decision = $reviewer['decision'];
                 $decision_at = $reviewer['decision_at'];
-                $decision_comment = $reviewer['decision_comment'] ?? '';
+                $decision_comment = $reviewer['decision_comment'] ?: '';
                 unset($reviewer['decision'], $reviewer['decision_at'], $reviewer['decision_comment']);
                 $updated = true;
             }

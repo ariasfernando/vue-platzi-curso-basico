@@ -92,6 +92,9 @@ function campaignStore() {
       campaignCompleted(state, status) {
         state.campaignCompleted = status;
       },
+      campaignCanBeProcessed(state, status) {
+        state.campaign.campaign_data.can_be_processed = status;
+      },
       loadCampaignData(state, campaignData) {
         state.campaign = campaignData;
         state.modules = campaignData.campaign_data.modules_data;
