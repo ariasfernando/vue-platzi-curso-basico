@@ -1,7 +1,7 @@
 <template>
   <div class="form-horizontal height-custom">
     <label-item-container label="GENERAL SETTINGS" icon="glyphicon-cog" v-b-toggle.module-settings-left></label-item-container>
-    <b-collapse id="module-settings-left" visible accordion="module-settings-accordion">
+    <b-collapse id="module-settings-left" visible accordion="module-right">
       <b-card class="control" >
         <input-generic-text
           label='Module name'
@@ -21,8 +21,7 @@
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component v-for="setting in settingGroup"
             :is="'input-' + setting.type"
-            v-on:attribute-setting-updated="attributeSettingUpdatedHandler"
-            v-on:style-setting-updated="styleSettingUpdatedHandler"
+            @setting-updated="SettingUpdatedHandler"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
@@ -32,6 +31,8 @@
             :default-value="setting.value"
             :min-value="setting.minValue"
             :max-value="setting.maxValue"
+            :options="setting.options"
+            :is-disable-percentage="setting.isDisablePercentage"
             :element="module.structure"
             :key="setting.name">
           </component>
@@ -43,18 +44,6 @@
             </div>
             <!-- /Module Plugins -->
         </template>
-        <!-- Fixed Columns  -->
-        <settings-container v-if="module.structure.columns.length > 1" label="Fixed Columns">
-          <template slot="setting-right">
-            <toggle-button :value="module.structure.columnsFixed" active-color="#78DCD6" @change="toggle"></toggle-button>
-          </template>
-        </settings-container>
-        <!-- Invert Stack on Mobile  -->
-        <settings-container v-if="module.structure.columns.length == 2" label="Inverted Stacking on Mobile">
-          <template slot="setting-right">
-            <toggle-button :value="module.structure.invertedStacking" @change="toggleStacking"></toggle-button>
-          </template>
-        </settings-container>
       </b-card>
     </b-collapse>
   </div>
@@ -68,6 +57,7 @@ import LabelItemContainer from "../containers/LabelItemContainer.vue";
 import settingsDefault from '../settingsDefault';
 
 export default {
+  name: "GeneralSettings",
   components: {
     GroupContainer,
     SettingsContainer,
@@ -75,9 +65,11 @@ export default {
     "input-generic-color": elementSettings.GenericColor,
     "input-generic-text": elementSettings.GenericText,
     "input-generic-number": elementSettings.GenericNumber,
-    "input-padding": elementSettings.Padding,
+    "input-padding-group": elementSettings.PaddingGroup,
     "input-border-group": elementSettings.BorderGroup,
-    "input-class-input": elementSettings.ClassInput
+    "input-class-input": elementSettings.ClassInput,
+    "input-generic-select": elementSettings.GenericSelect,
+    "input-columns-stacking": elementSettings.ColumnsStacking
   },
   data() {
     return {
@@ -129,33 +121,22 @@ export default {
     nameUpdatedHandler(eventData) {
       this.setModuleField({ name: eventData.value });
     },
-    attributeSettingUpdatedHandler(eventData) {
-      this.saveModuleAttribute(eventData.name, eventData.value);
+    SettingUpdatedHandler(eventData) {
+      this.saveModuleProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value);
     },
-    styleSettingUpdatedHandler(eventData) {
-      this.saveModuleStyle(eventData.name, eventData.value);
+
+    saveModuleProperty(link, subComponent, name, value) {
+      let data = {
+        subComponent: subComponent,
+        link: link,
+        property: name,
+        value: value
+      };
+      this.$store.commit('module/saveModuleProperty', data);
     },
     setModuleField(data) {
       this.$store.commit("module/setModuleFields", data);
     },
-    saveModuleStyle(name, value) {
-      this.$store.commit("module/saveModuleStyle", {
-        property: name,
-        value: value
-      });
-    },
-    saveModuleAttribute(name, value) {
-      this.$store.commit("module/saveModuleAttribute", {
-        property: name,
-        value: value
-      });
-    },
-    toggle(value) {
-      this.$store.commit("module/setColumnsFixed", value);
-    },
-    toggleStacking(value) {
-      this.$store.commit("module/setInvertedStacking", value);
-    }
   }
 };
 </script>

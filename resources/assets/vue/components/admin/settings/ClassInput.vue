@@ -29,7 +29,6 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "ClassInput",
-  props: ["setting", "element", "link", "name", "label", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   computed: {
@@ -40,8 +39,18 @@ export default {
         }
         return this.mainSetting.split(" ");
       },
-      set(newValue) {
-        this.mainSetting = newValue.join(" ");
+      set(values) {
+
+        let newClasses = [];
+        for (let n = 0; n < values.length; n++) {
+          if (values[n].match(/[^a-z0-9-_]+/i)) {
+            this.$root.$toast('Only alphanumeric characters, hyphens and underscores are allowed.', {className: 'et-error'});
+          } else {
+            newClasses.push(values[n].toLowerCase());
+          }
+        }
+
+        this.mainSetting = newClasses.join(" ");
       }
     }
   }

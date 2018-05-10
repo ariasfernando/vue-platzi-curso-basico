@@ -4,14 +4,14 @@
     <!-- START: Style -->
 
     <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
-    <b-collapse id="style" visible accordion="module-settings-accordion-right">
+    <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
-          <component v-for="setting in settingGroup"
+          <component
+            v-for="(setting,i) in settingGroup"
+            :show-setting="showSetting(setting)"
             :is="'input-' + setting.type"
-            @attribute-setting-updated="attributeSettingUpdatedHandler"
-            @style-setting-updated="styleSettingUpdatedHandler"
-            @style-option-setting-updated="styleOptionSettingUpdatedHandler"
+            @setting-updated="settingUpdatedHandler"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
@@ -22,8 +22,10 @@
             :min-value="setting.minValue"
             :max-value="setting.maxValue"
             :sub-component="setting.subComponent"
+            :options="setting.options"
+            :is-disable-percentage="setting.isDisablePercentage"
             :element="setting.subComponent ? component[setting.subComponent] : component"
-            :key="setting.name"></component>
+            :key="i"></component>
         </group-container>
       </b-card>
     </b-collapse>
@@ -70,7 +72,7 @@ import _ from "lodash";
 import * as elementSettings from "./settings";
 import GroupContainer from "./containers/GroupContainer.vue";
 import LabelItemContainer from "./containers/LabelItemContainer.vue";
-import settingsDefault from './settingsDefault';
+import settingsDefault from "./settingsDefault";
 export default {
   data() {
     return {
@@ -82,21 +84,22 @@ export default {
     GroupContainer,
     LabelItemContainer,
     "input-border-group": elementSettings.BorderGroup,
-    "input-button-caret": elementSettings.ButtonCaret,
+    "input-caret": elementSettings.ButtonCaret,
+    "input-class-input": elementSettings.ClassInput,
     "input-font-family": elementSettings.FontFamily,
     "input-font-style": elementSettings.FontStyle,
     "input-font-weight": elementSettings.FontWeight,
     "input-generic-color": elementSettings.GenericColor,
     "input-generic-file": elementSettings.GenericFile,
     "input-generic-number": elementSettings.GenericNumber,
+    "input-generic-switch": elementSettings.GenericSwitch,
     "input-generic-text": elementSettings.GenericText,
     "input-image-size": elementSettings.ImageSize,
     "input-input-height": elementSettings.InputHeight,
     "input-letter-spacing": elementSettings.LetterSpacing,
-    "input-padding": elementSettings.Padding,
+    "input-padding-group": elementSettings.PaddingGroup,
     "input-text-align": elementSettings.TextAlign,
-    "input-vertical-align": elementSettings.VerticalAlign,
-    "input-class-input": elementSettings.ClassInput,
+    "input-vertical-align": elementSettings.VerticalAlign
   },
   computed: {
     currentComponent() {
@@ -111,10 +114,7 @@ export default {
       handler: function(currentComponent) {
         let module = this.$store.getters["module/module"];
         if (!_.isEmpty(currentComponent) && currentComponent.componentId >= 0) {
-          this.component =
-            module.structure.columns[currentComponent.columnId].components[
-              currentComponent.componentId
-            ];
+          this.component = module.structure.columns[currentComponent.columnId].components[currentComponent.componentId];
           this.ready = true;
         } else {
           this.ready = false;
@@ -124,28 +124,30 @@ export default {
     }
   },
   methods: {
-    saveComponentProperty(type, subComponent, name, value) {
+    saveComponentProperty(link, subComponent, name, value) {
       let data = {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         subComponent: subComponent,
-        type: type,
+        link: link,
         property: name,
         value: value
       };
-      this.$store.commit('module/saveComponentProperty', data);
+      this.$store.commit("module/saveComponentProperty", data);
     },
     shouldRenderInStyles(plugin) {
       return _.indexOf(plugin.target, "styles") >= 0;
     },
-    attributeSettingUpdatedHandler(eventData) {
-      this.saveComponentProperty('attribute', eventData.subComponent, eventData.name, eventData.value);
+    settingUpdatedHandler(eventData) {
+      this.saveComponentProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value);
     },
-    styleSettingUpdatedHandler(eventData) {
-      this.saveComponentProperty('style', eventData.subComponent, eventData.name, eventData.value);
-    },
-    styleOptionSettingUpdatedHandler(eventData) {
-      this.saveComponentProperty('styleOptions', eventData.subComponent, eventData.name, eventData.value);
+    showSetting(setting) {
+      if (setting.dependsOn) {
+        let element = setting.dependsOn.subComponent ? this.component[setting.dependsOn.subComponent] : this.component;
+        return element[setting.dependsOn.link][setting.dependsOn.name];
+      } else {
+        return true;
+      }
     }
   }
 };

@@ -134,6 +134,7 @@
       },
       addModule (m) {
         const mod = clone(m);
+        mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
 
         // Add module
         this.$store.commit('campaign/addModule', mod);

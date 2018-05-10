@@ -69,26 +69,28 @@
             images: [ vm.image ],
             campaignId: this.campaign.campaign_id
           }).then((res) => {
-            this.updateAttribute(res[0]);
+            this.saveComponentProperty(res[0]);
           });
         };
 
         reader.readAsDataURL(file);
 
       },
-      updateAttribute(e) {
+      saveComponentProperty(value) {
         const payload = {
           plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          attribute: 'placeholder',
-          attributeValue: e
+          link: 'attribute',
+          subComponent: 'image',
+          property: 'placeholder',
+          value
         };
 
         this.removeErrorsImages();
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.$store.commit('campaign/saveComponentProperty', payload);
       }
     }
   }

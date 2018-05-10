@@ -32,13 +32,13 @@ export default {
   props: ["customClass", "label", "label-right", "label-left"],
   computed: {
     hasSettingRight() {
-      return !!this.$slots["setting-right"];
+      return Boolean(this.$slots["setting-right"]);
     },
     hasSettingSideBySide() {
-      return !!this.$slots["setting-half-left"] && !!this.$slots["setting-half-right"];
+      return Boolean(this.$slots["setting-half-left"]) && Boolean(this.$slots["setting-half-right"]);
     },
     hasSettingBottom() {
-      return !!this.$slots["setting-bottom"];
+      return Boolean(this.$slots["setting-bottom"]);
     }
   }
 };

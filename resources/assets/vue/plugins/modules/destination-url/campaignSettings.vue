@@ -21,16 +21,16 @@
       <span v-if="plugin.config.target">
         <label>Target</label>
         <div class="alignment-options">
-          <a v-for="(icon, option) in options" 
-             name="target"
-             :data-tooltip="option"
-             :data-value="option"
-             :class="option === target  ? 'plugin-setting-active' : ''"
-             @click="change"
+          <a
+            v-for="(icon, option) in options"
+            :class="option === target  ? 'plugin-setting-active' : ''"
+            :data-tooltip="option"
+            @click="changeTarget(option)"
+            :key="option"
           >
             <i :class="'glyphicon glyphicon-'+ icon"
                :data-tooltip="option"
-               @click="change"
+               @click="changeTarget(option)"
             ></i>
           </a>
         </div>
@@ -63,14 +63,14 @@
         return component;
       },
       target() {
-        return this.component.attribute ? this.component.attribute.target : '';
+        return this.component[this.plugin.subComponent].attribute ? this.component[this.plugin.subComponent].attribute.target : '_blank';
       },
       href: {
         get() {
-          return this.component.attribute.href;
+          return this.component[this.plugin.subComponent].attribute.href;
         },
         set(value) {
-          this.saveComponentAttribute('href', value);
+          this.saveComponentProperty('href', value);
 
           if (this.validationRules) {
             this.validate();
@@ -94,24 +94,26 @@
       }
     },
     methods: {
-      change(e) {
-        const attribute = e.target.name;
-        const value = e.target.getAttribute('data-tooltip');
+      changeTarget(option) {
+        const property = 'target';
+        const value = option;
 
-        this.saveComponentAttribute(attribute, value);
+        this.saveComponentProperty(property, value);
       },
-      saveComponentAttribute(attribute, value) {
+      saveComponentProperty(property, value) {
         const payload = {
-          plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          attribute,
-          attributeValue: value,
+          subComponent: this.plugin.subComponent,
+          link:'attribute',
+          property,
+          value: value,
         };
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.$store.commit('campaign/saveComponentProperty', payload);
       },
+      
     },
   }
 </script>

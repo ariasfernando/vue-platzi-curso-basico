@@ -31,13 +31,11 @@ export default {
     colors: {
       get() {
         let value = this.module.structure.attribute && this.module.structure.attribute.bgcolor ? this.module.structure.attribute.bgcolor : this.plugin.config.defaultValue ;
-        value = value === "transparent" ? '' : value;
         return value;
       },
       set(value) {
         if (!Application.utils.validateHexVal(value)) {
-          value =
-            value === null ? "transparent" : Application.utils.rgbToHex(value);
+          value = value === null ? "" : Application.utils.rgbToHex(value);
         }
         const payload = {
           plugin: this.name,

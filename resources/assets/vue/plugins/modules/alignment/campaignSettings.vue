@@ -7,7 +7,8 @@
          :data-tooltip="option"
          :data-value="value"
          :class="option === value  ? 'plugin-setting-active' : ''"
-         @click="change"
+         @click="changeAlignment(option)"
+         :key="option"
       >
         <i :class="'glyphicon glyphicon-align-'+ option"
            :data-tooltip="option"
@@ -39,7 +40,7 @@
         return component;
       },
       value() {
-        return this.component.attribute ? this.component.attribute.align : '';
+        return this.component[this.plugin.subComponent].attribute.align;
       }
     },
     data() {
@@ -48,17 +49,24 @@
       }
     },
     methods: {
-      change(e) {
+      changeAlignment(option) {
+        const property = 'align';
+        const value = option;
+
+        this.saveComponentProperty(property, value);
+      },
+      saveComponentProperty(property, value) {
         const payload = {
-          plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          attribute: 'align',
-          attributeValue: e.target.getAttribute('data-tooltip'),
+          subComponent: this.plugin.subComponent,
+          link: "attribute",
+          property,
+          value: value
         };
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.$store.commit('campaign/saveComponentProperty', payload);
       }
     },
   }

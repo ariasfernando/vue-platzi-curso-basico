@@ -23,13 +23,18 @@
                 border="0"
                 v-model="dragList"
                 :width="templateWidth"
+                :style="`width:${templateWidth}px`"
                 :options="options"
                 :element="'table'"
                 :move="onMove"
                 @add="onAdd"
                 @sort="onSort"
                  v-if="isNotEmptyList">
-                  <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
+                  <module
+                    v-for="(module, moduleId) in dragList"
+                    :key="module.idInstance"
+                    :module-id="moduleId"
+                  ></module>
               </draggable>
               <draggable
                 id="emailCanvas"
@@ -40,6 +45,7 @@
                 border="0"
                 v-model="dragList"
                 :width="templateWidth"
+                :style="`width:${templateWidth}px`"
                 :options="options"
                 :element="'table'"
                 @add="onAdd"
@@ -192,7 +198,7 @@
 
         const mod = clone(found);
         mod.data = {};
-
+        mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
         this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
         // Set active on last module inserted
         this.$store.commit('campaign/setActiveModule', e.newIndex);

@@ -7,32 +7,33 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :width="columnWidthPadding / numColumns"
+        :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/numColumns"
       >
-        <tr
-          v-for="(component, componentId) in column.components"
-          :key="componentId"
-          @click="setComponent(moduleId, columnId, componentId)"
-          :class="[component.attribute.classes, {'stx-hide-element st-remove-element' : component.attribute.hideElement}]"
-        >
+        <tr>
           <td
             width="100%"
-            :style="[column.styles, {'background-color' : column.attribute.bgcolor}]"
-            :bgcolor="column.attribute.bgcolor"
-            :valign="column.attribute.valign"
-            :align="component.attribute.align || 'center'"
+            :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}]"
+            :bgcolor="column.container.attribute.bgcolor"
+            :valign="column.container.attribute.valign || 'top'"
+            :align="column.container.attribute.align || 'center'"
+            :class="column.container.attribute.classes ||''"
           >
-            <component
-              :is="component.type"
-              :component="component"
-              :module-id="moduleId"
-              :column-id="columnId"
-              :component-id="componentId"
-              :number-required="true"
-              :column-width="columnWidthPadding / numColumns"
-              :column="column"
-              >
-            </component>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+              <template>
+                <component
+                  v-for="(component, componentId) in column.components"
+                  :key="component.id"
+                  @select-component="selectComponent"
+                  :is="component.type"
+                  :component="component"
+                  :module-id="moduleId"
+                  :column-id="columnId"
+                  :component-id="componentId"
+                  :column-width="columnWidthPadding / numColumns"
+                  :column="column"
+                ></component>
+              </template>
+            </table>
           </td>
         </tr>
       </table>
@@ -47,7 +48,6 @@
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
-  import SeparatorElement from '../elements/SeparatorElement.vue';
   import _ from 'lodash';
 
   export default {
@@ -58,7 +58,6 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement
     },
     props: {
       moduleId:{
@@ -102,19 +101,19 @@
           "<![endif]";
       },
       styles() {
-        let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`;
+        let padding = `padding-top:${this.column.container.style.paddingTop};padding-left:${this.column.container.style.paddingLeft};padding-bottom:${this.column.container.style.paddingBottom};padding-right:${this.column.container.style.paddingRight};`;
 
         return padding;
       },
     },
     methods: {
-      setComponent(moduleId, columnId, componentId) {
+      selectComponent(data) {
         setTimeout(() => {
           // TODO: find better way to do this
           this.$store.commit("campaign/setCurrentComponent", {
-            moduleId,
-            columnId,
-            componentId,
+            moduleId:data.moduleId,
+            columnId:data.columnId,
+            componentId:data.componentId,
           });
         }, 50);
       },

@@ -56,7 +56,7 @@
       },
       height: {
         get() {
-          return _.parseInt(this.component.style.height);
+          return _.parseInt(this.component.container.style.height);
         },
         set(value) {
           this.validate();
@@ -77,11 +77,13 @@
             moduleId: this.currentComponent.moduleId,
             columnId: this.currentComponent.columnId,
             componentId: this.currentComponent.componentId,
+            link: 'style',
+            subComponent:"container",
             property,
             value: value +'px',
           };
 
-          this.$store.commit('campaign/saveComponentStyle', payload);
+          this.$store.commit('campaign/saveComponentProperty', payload);
       }
     }
   }

@@ -10,13 +10,13 @@ export default {
           // settings is an object, get properties as array
           _.values(component.plugins.mobileStyles.config.settings),
           (result, prop, key) => {
-            result.push((prop.value && prop.selector === selector) ? prop._class : '');
+            result.push((prop.value && prop.selector === selector) ? prop._class : []);
             return result;
           }, []
         );
-        return _.join(arrayClassesToApply, ' ');
+        return arrayClassesToApply;
       }
-      else return '';
+      else return [];
     }
   },
 }
