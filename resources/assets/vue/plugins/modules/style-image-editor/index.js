@@ -208,6 +208,12 @@ export default {
           value: '',
           type: 'text',
         },
+        overlay_change: {
+          label: 'Change Image',
+          key: 'changable',
+          value: true,
+          type: 'switch',
+        },        
         overlay_width: {
           label: 'Width',
           key: 'width',
