@@ -51,7 +51,7 @@ class Library extends Eloquent
                     $submenu_items[] = $mod_tmp;
                 }
 
-                $library_modules[] = [
+                $library_modules[] = (object) [
                     'name' => $mods['name'],
                     'sub_menu' => $submenu_items,
                     'level' => 'level-1'
