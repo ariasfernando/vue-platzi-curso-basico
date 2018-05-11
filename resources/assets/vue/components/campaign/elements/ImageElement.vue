@@ -38,7 +38,7 @@
                 >
                 <img
                   class="st-resize"
-                  :class="{'st-hide-mobile' : component.image.styleOption.hasImageMobile}"
+                  :class="{'st-hide-mobile' : component.image.attribute.placeholderMobile}"
                   style="border: 0; display: block;"
                   border="0"
                   :valign="component.image.attribute.valign || 'top'"
@@ -49,7 +49,7 @@
                   :title="component.image.attribute.title"
                 >
                 <template 
-                  v-if="component.image.styleOption.hasImageMobile">
+                  v-if="component.image.attribute.placeholderMobile">
                   <div class="show-img-mobile" style="display:none;width:0;overflow:hidden;max-height:0!important;">
                     <img
                       :src="imageUrl(component.image.attribute.placeholderMobile)"
