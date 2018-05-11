@@ -248,7 +248,7 @@
         var $table = this.getReviewersTable();
 
         if (typeof email === 'object') {
-          email = $('#proof_users option:selected').text();
+          email = $('#proof_users option:selected').text().trim();
         }
 
         // Check if the email already exists in the table
