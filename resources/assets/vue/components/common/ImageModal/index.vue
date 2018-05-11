@@ -1,88 +1,222 @@
 <template>
-  <transition name="style">
-    <div id="style-image-editor" class="modal-mask" :class="{'page-3': page.three}">
-      <div class="modal-wrapper">
-        <div class="modal-container" v-bind:class="{ 'page-1': page.one, 'media-gallery' : page.two === 'media', 'url' : page.two === 'url' }">
-          <div class="modal-header">
-            <slot name="header">
-              <button type="button" class="close" @click="close">
+  <transition
+    name="style"
+    >
+    <div
+      id="style-image-editor"
+      class="modal-mask"
+      :class="{'page-3': page.three}"
+      >
+      <div
+        class="modal-wrapper"
+        >
+        <div
+          class="modal-container"
+          v-bind:class="{ 'page-1': page.one, 'media-gallery' : page.two === 'media', 'url' : page.two === 'url' }"
+          >
+          <div
+            class="modal-header"
+            >
+            <slot
+              name="header"
+              >
+              <button
+                type="button"
+                class="close"
+                @click="close"
+                >
                 <span>&times;</span>
               </button>
-              <h3 v-if="page.three">{{ params.title || 'Image Editor' }}</h3>
+              <h3
+                v-if="page.three"
+                >{{ params.title || 'Image Editor' }}</h3>
             </slot>
           </div>
-          <div class="modal-body">
-            <slot name="body">
-              <div v-show="page.one" class="wrapper-page-1">
-                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+          <div
+            class="modal-body"
+            >
+            <slot
+              name="body"
+              >
+              <div
+                v-show="page.one"
+                class="wrapper-page-1"
+                >
+                <div
+                  style="display: flex; flex-direction: row; justify-content: space-around;"
+                  >
                   <div>
-                    <button type="button" @click="clickUpload">
-                      <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                    <button
+                      type="button"
+                      @click="clickUpload"
+                      >
+                      <i
+                        class="fa fa-cloud-upload"
+                        aria-hidden="true"
+                        ></i>
                       <p>Upload</p>
                     </button>
-                    <input ref="input" type="file" name="file" style="display: none;" />
+                    <input
+                      ref="input"
+                      type="file"
+                      name="file"
+                      style="display: none;"
+                      />
                   </div>
-                  <div v-if="params.library">
-                    <button type="button" @click="clickGallery">
-                      <i class="fa fa-picture-o" aria-hidden="true"></i>
+                  <div
+                    v-if="params.library"
+                    >
+                    <button
+                      type="button"
+                      @click="clickGallery"
+                      >
+                      <i
+                        class="fa fa-picture-o"
+                        aria-hidden="true"
+                        ></i>
                       <p>Media Gallery</p>
                     </button>
                   </div>
-                  <div v-if="params.url">
-                    <button type="button" @click="clickUrl">
-                      <i class="fa fa-link" aria-hidden="true"></i>
+                  <div
+                    v-if="params.url"
+                    >
+                    <button
+                      type="button"
+                      @click="clickUrl"
+                      >
+                      <i
+                        class="fa fa-link"
+                        aria-hidden="true"
+                        ></i>
                       <p>URL</p>
                     </button>
                   </div>
                 </div>
               </div>
-              <div v-show="page.two === 'media'">
-                <div class="library-container">
-                  <div class="row" v-for="(section, sectionIndex) in images" :key="sectionIndex">
-                    <div v-for="(imageUrl, imageIndex) in section" class="col-md-2" v-if="imageUrl !== undefined" :key="imageIndex">
-                      <img :src="imageUrl !== undefined && imageUrl.indexOf('http') === 0 ? imageUrl : $_app.config.baseUrl + imageUrl" @click="chooseImage(imageUrl)">
+              <div
+                v-show="page.two === 'media'"
+                >
+                <div
+                  class="library-container"
+                  >
+                  <div
+                    class="row"
+                    v-for="(section, sectionIndex) in images"
+                    :key="sectionIndex"
+                    >
+                    <div
+                      v-for="(imageUrl, imageIndex) in section"
+                      class="col-md-2"
+                      v-if="imageUrl !== undefined"
+                      :key="imageIndex"
+                      >
+                      <img
+                        :src="imageUrl !== undefined && imageUrl.indexOf('http') === 0 ? imageUrl : $_app.config.baseUrl + imageUrl"
+                        @click="chooseImage(imageUrl)"
+                        >
                     </div>
                   </div>
                 </div>
               </div>
-              <div v-show="page.two === 'url'">
-                <div class="row">
-                  <div class="col-md-12">
-                    <label for="url">URL</label>
-                    <p class="control">
-                      <div class="el-input" aria-required="true" aria-invalid="false">
-                        <input v-model="url" type="text" autocomplete="off" placeholder="" style="font-family: 'Open Sans', Arial, serif; width: 100%; padding: 8px; font-size: 13px; font-weight: 300; color: #666666; border: 1px solid #dddddd; background: #fff; box-sizing: border-box; border-top-right-radius: 2px; border-top-left-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px;" />
+              <div
+                v-show="page.two === 'url'"
+                >
+                <div
+                  class="row"
+                  >
+                  <div
+                    class="col-md-12"
+                    >
+                    <label
+                      for="url"
+                      >URL</label>
+                    <div
+                      class="control"
+                      >
+                      <div
+                        class="el-input"
+                        aria-required="true"
+                        aria-invalid="false"
+                        >
+                        <input
+                          v-model="url"
+                          type="text"
+                          autocomplete="off"
+                          placeholder=""
+                          style="font-family: 'Open Sans', Arial, serif; width: 100%; padding: 8px; font-size: 13px; font-weight: 300; color: #666666; border: 1px solid #dddddd; background: #fff; box-sizing: border-box; border-top-right-radius: 2px; border-top-left-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px;"
+                          />
                       </div>
-                      <span class="help is-danger" style="display: none;"></span>
-                    </p>
+                      <span
+                        class="help is-danger"
+                        style="display: none;"
+                        ></span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div v-show="page.three" style="overflow-y: auto; max-height: calc(100vh - 187px); min-height: 300px; height:100%" ref="wrapperSie">
-                <style-image-editor 
-                v-if="page.three && this.currentImage" 
-                :sieoptions="sieoptions" 
-                ref="sie" 
-                @image-submit="submitImage">
+              <div
+                v-show="page.three"
+                style="overflow-y: auto; max-height: calc(100vh - 187px); min-height: 300px; height:100%"
+                ref="wrapperSie"
+                >
+                <style-image-editor
+                  v-if="page.three && this.currentImage"
+                  :sieoptions="sieOptions"
+                  ref="sie"
+                  @image-submit="submitImage"
+                  >
                 </style-image-editor>
               </div>
             </slot>
           </div>
-          <div class="modal-footer" v-show="page.one !== true">
-            <slot name="footer">
+          <div
+            class="modal-footer"
+            v-show="page.one !== true"
+            >
+            <slot
+              name="footer"
+              >
               <!-- Input submit -->
-              <div class="modal-mpf-submit">
-                <button type="button" class="btn btn-success pull-left submit-config beta-btn-primary" v-if="page.two" @click="back">
-                  <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+              <div
+                class="modal-mpf-submit"
+                >
+                <button
+                  type="button"
+                  class="btn btn-success pull-left submit-config beta-btn-primary"
+                  v-if="page.two"
+                  @click="back"
+                  >
+                  <i
+                    class="fa fa-chevron-left"
+                    aria-hidden="true"
+                    ></i> Back
                 </button>
-                <button type="button" class="btn btn-success pull-left submit-config beta-btn-primary" v-if="page.three" @click="clear">
-                  <i class="fa fa-chevron-left" aria-hidden="true"></i> Reset
+                <button
+                  type="button"
+                  class="btn btn-success pull-left submit-config beta-btn-primary"
+                  v-if="page.three"
+                  @click="clear"
+                  style="min-width: 60px;"
+                  >
+                  <i
+                    class="fa fa-trash"
+                    aria-hidden="true"
+                    ></i>
                 </button>
-                <button type="button" class="btn btn-success pull-right submit-config beta-btn-primary" v-if="page.two === 'url'" v-on:click.prevent="saveUrl">Save</button>
-                <input :disabled="isDisabled" type="submit" value="Submit" class="btn btn-success pull-right submit-config beta-btn-primary" @click="submit" v-if="page.three">
-                <button type="button" class="btn btn-success pull-right submit-config beta-btn-primary" v-if="page.two === 'media'">
-                  <i class="fa fa-refresh" aria-hidden="true"></i> Refresh Gallery
-                </button>
+                <button
+                  type="button"
+                  class="btn btn-success pull-right submit-config beta-btn-primary"
+                  v-if="page.two === 'url'"
+                  v-on:click.prevent="saveUrl"
+                  >Save</button>
+                <input
+                  :disabled="isDisabled"
+                  type="submit"
+                  value="Submit"
+                  class="btn btn-success pull-right submit-config beta-btn-primary"
+                  @click="submit"
+                  v-if="page.three"
+                  >
               </div>
             </slot>
           </div>
@@ -112,7 +246,7 @@ export default {
       },
       url: '',
       currentImage: null,
-      sieoptions: {},
+      sieOptions: {},
       isDisabled: false
     };
   },
@@ -134,7 +268,6 @@ export default {
       const tempArray = this.libraryImages.filter(item => {
         return item ? true : false;
       });
-
       for (i = 0; i < tempArray.length; i += chunk) {
         sections.push(tempArray.slice(i, i + chunk));
       }
@@ -148,10 +281,10 @@ export default {
       if (urlDefault === '' && this.currentImage !== null) {
         options['sie-plugin-image_upload'].uploaddefault.value = this.currentImage;
       }
-          return {
-            ...params,
-            ...options
-          };
+      return {
+        ...params,
+        ...options
+      };
     },
     clickUpload() {
       this.$refs.input.click();
@@ -174,23 +307,28 @@ export default {
     clear() {
       this.reset();
     },
-    generateSieoptions(changeImage = false) {
-      let sieoptions = {
+    generateSieOptions(changeImage = false) {
+      let sieOptions = {
         api: this.$_app.config.sieAPI
       };
       if (Object.keys(this.data).length <= 0 || changeImage) {
-        const transformedOptions = sieHelper.transform(this.params);
-        Object.assign(sieoptions, transformedOptions);
+        sieOptions = {
+          ...sieOptions,
+          ...sieHelper.transform(this.params)
+        }
       } else {
-        Object.assign(sieoptions, this.data.state);
-        sieoptions.preset = sieHelper.completeUrlPath(this.$_app.config.imageUrl, sieoptions.preset);
+        sieOptions = {
+          ...sieOptions,
+          ...this.data.state
+        };
+        sieOptions.preset = sieHelper.completeUrlPath(this.$_app.config.imageUrl, sieOptions.preset);
       }
-      sieoptions.size.height = sieoptions.size.auto ? 0 : sieoptions.size.height;
+      sieOptions.size.height = sieOptions.size.auto ? 0 : sieOptions.size.height;
       if (this.onSetImage) {
         if (this.currentImage !== null) {
           const img = new Image();
           img.onload = () => {
-            this.sieoptions = this.onSetImage(img, sieoptions);
+            this.sieOptions = this.onSetImage(img, sieOptions);
             this.page = {
               one: false,
               two: false,
@@ -202,24 +340,24 @@ export default {
           };
           img.src = this.currentImage;
         } else {
-          this.sieoptions = sieoptions;
+          this.sieOptions = sieOptions;
           if (typeof this.$refs.sie !== 'undefined') {
             this.$refs.sie.close();
           }
         }
       } else {
-        this.sieoptions = sieoptions;
+        this.sieOptions = sieOptions;
         if (typeof this.$refs.sie !== 'undefined') {
          this.$refs.sie.close();
         }
       }
     },
     setImage(imageSource) {
-          return imageHelper.checkSize(imageSource, this.sieoptions.size)
+      return imageHelper.checkSize(imageSource, this.sieOptions.size)
         .then(() => {
           this.currentImage = imageSource;
           this.changeImage(this.params);
-          this.generateSieoptions(true);
+          this.generateSieOptions(true);
           if (!this.onSetImage) {
             this.page = {
               one: false,
@@ -236,25 +374,25 @@ export default {
     },
     chooseImage(url) {
       return imageHelper.getBase64Img(url)
-      .then(imgSrc => {
-        this.setImage(imgSrc);
-      })
-      .catch(error => {
-        this.$root.$toast(`${error}. Please try again.`, {
-          className: 'et-error'
+        .then(imgSrc => {
+          this.setImage(imgSrc);
+        })
+        .catch(error => {
+          this.$root.$toast(`${error}. Please try again.`, {
+            className: 'et-error'
+          });
         });
-      });
     },
     saveUrl(event) {
       return imageHelper.getBase64Img(this.url)
-      .then(imgSrc => {
-        this.setImage(imgSrc);
-      })
-      .catch(error => {
-        this.$root.$toast(`${error}. Please try again.`, {
-          className: 'et-error'
+        .then(imgSrc => {
+          this.setImage(imgSrc);
+        })
+        .catch(error => {
+          this.$root.$toast(`${error}. Please try again.`, {
+            className: 'et-error'
+          });
         });
-      });
     },
     reset() {
       if (typeof this.$refs.sie !== 'undefined') {
@@ -273,7 +411,10 @@ export default {
         data.state.preset
       );
       const images = sieHelper.searchStateImages(data.state);
-      images.push({ key: 'img', image: data.img });
+      images.push({
+        key: 'img',
+        image: data.img
+      });
       data.images = images;
       this.$emit('submitImage', data);
     },
@@ -292,7 +433,6 @@ export default {
     addEventListener('showSubToolbar', this.disableSubmit);
     addEventListener('saveEdit', this.enableSubmit)
     addEventListener('cancelEdit', this.enableSubmit)
-
     this.$refs.input.addEventListener('change', event => {
       return imageHelper
         .checkFile(event.target)
@@ -303,10 +443,9 @@ export default {
           this.setImage(imgSrc);
         })
         .catch(error => {
-          this.$root.$toast(
-            `Oops! Something went wrong! ${error}. Please try again.`, 
-            { className: 'et-error' }
-          );
+          this.$root.$toast(`Oops! Something went wrong! ${error}. Please try again.`, {
+            className: 'et-error'
+          });
         });
     });
     if (Object.keys(this.data).length > 0) {
@@ -317,7 +456,7 @@ export default {
         three: true
       };
     }
-    this.generateSieoptions();
+    this.generateSieOptions();
   },
 };
 </script>
