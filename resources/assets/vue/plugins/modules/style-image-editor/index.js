@@ -4,7 +4,7 @@ import campaignSettings from './campaignSettings.vue';
 export default {
   name: 'style-image-editor',
   title: 'style Image Editor',
-  version: '0.0.5',
+  version: '0.0.6',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
@@ -253,6 +253,12 @@ export default {
           key: 'resizable',
           value: false,
           type: 'switch',
+        },
+        overlay_description: {
+          label: 'Description',
+          key: 'description',
+          value: 'Text',
+          type: 'text',
         },
       },
     },
