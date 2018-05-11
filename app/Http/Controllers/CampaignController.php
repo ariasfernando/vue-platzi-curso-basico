@@ -49,6 +49,10 @@ class CampaignController extends Controller
         if (!is_null($campaign_id)) {
             $params = $this->loadCampaign($campaign_id);
         } else {
+            if (!Auth::user()->can('create_campaign')) {
+                return redirect(env('APP_BASE_URL', '/'))->with('campaign_create', '');
+            }
+
             $params = [];
 
             if (!is_null($request->input("locale"))) {
@@ -251,6 +255,11 @@ class CampaignController extends Controller
      */
     public function postSave(Request $request)
     {
+        if ($request->input('template') && !Auth::user()->can("create_template")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
         return Campaign::save($request->input());
     }
 
@@ -282,7 +291,11 @@ class CampaignController extends Controller
      */
     public function postClone(Request $request)
     {
-        return Campaign::copy($request->input('campaign_id'));
+        try {
+            return Campaign::copy($request->input('campaign_id'));
+        } catch (\Stensul\Exceptions\PermissionDeniedException $exception) {
+            return response()->json(['error' => 'campaign_clone'], 403);
+        }
     }
 
     /**
@@ -517,6 +530,13 @@ class CampaignController extends Controller
      */
     public function postForceLock(Request $request)
     {
+
+        if (!Auth::user()->can("fix_layout")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
+
         $campaign_id = $request->input('campaign_id');
         if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:'. $campaign_id) !== Auth::id()) {
             Activity::log(

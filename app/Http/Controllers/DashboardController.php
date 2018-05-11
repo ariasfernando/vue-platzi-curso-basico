@@ -63,7 +63,8 @@ class DashboardController extends Controller
         $flash_messages = [
             'campaign_lock',
             'campaign_not_found',
-            'campaign_permission'
+            'campaign_permission',
+            'campaign_create'
         ];
         $flash = '';
         foreach ($flash_messages as $message) {
@@ -198,6 +199,10 @@ class DashboardController extends Controller
 
         if (count($user_visibility) !== 0) {
             $campaigns->whereIn('library', $user_visibility);
+        }
+
+        if (!Auth::user()->can('access_unfixed_templates')) {
+            $campaigns->where('locked', '=', true, 'AND');
         }
 
         $total = $campaigns->count();
