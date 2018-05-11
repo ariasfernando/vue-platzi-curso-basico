@@ -38,7 +38,7 @@
                 v-on:change-sort="sortBy"></column-sort>
             </th>
             <th v-if="showTags == 1" class="col-200">Tags</th>
-            <th  width="400" class="bold">Actions</th>
+            <th  width="400" class="bold actions-thead">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -66,7 +66,7 @@
                 v-on:add-search-tag="addSearchTag"
               ></campaign-tag>
             </td>
-            <td class="text-left actions icons" width="250">
+            <td class="actions icons" width="250">
               <p class="dash-code-option">
                 <a @click.prevent="code(campaign._id, 'html')" href="#" class="html-code">HTML</a><br>
                 <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
@@ -80,11 +80,11 @@
               <a
                 href="#"
                 class="lock-campaign"
-                v-if="enableLocking && !campaign.locked"
+                v-if="$can('fix_layout') && (enableLocking && !campaign.locked)"
                 v-on:click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                data-tooltip="Lock this email for editing"
+                data-tooltip="Fix email layout"
                 @click.prevent
               >
                 <i class="glyphicon fa fa-lock"></i>
@@ -92,29 +92,28 @@
               <a
                 href="#"
                 class="unlock-campaign"
-                v-if="enableLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user"
+                v-if="$can('fix_layout') && (enableLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user)"
                 v-on:click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                data-tooltip="Unlock"
+                data-tooltip="Unfix email layout"
                 @click.prevent
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
-              <a href="#" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
+              <a href="#" v-if="$can('clone_campaign')" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
               <a href="#"
                 class="edit"
                 data-tooltip="Edit"
                 @click.prevent="askToEditCampaign(campaign._id)"
-                ><i class="glyphicon glyphicon-pencil" v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"></i></a>
+                ><i class="glyphicon glyphicon-pencil"></i></a>
               <a href="#" :data-tooltip="'Upload to ' + lodash.capitalize(api.driver)" class="btn-upload-api"
                 v-for="api in campaign.api"
                 v-if="!campaign.locked && campaign.library_config.esp && campaign.library_config.espProvider"
                 :data-campaign-id="campaign._id"
                 :data-api-driver="api.driver"
                 @click="upload(campaign._id)"><i class="glyphicon glyphicon-cloud-upload"></i></a>
-              <a href="#" data-tooltip="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
-                ><i class="glyphicon glyphicon-trash"></i></a>
+              <a href="#" data-tooltip="Delete"><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
           <tr v-if="!campaigns.data.length">

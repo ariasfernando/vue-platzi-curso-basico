@@ -21,6 +21,7 @@ use Stensul\Models\Campaign;
 use Stensul\Jobs\StoreAssetsInCdn;
 use Stensul\Jobs\ProcessCampaign;
 use Stensul\Jobs\SendReviewersEmail;
+use Stensul\Exceptions\PermissionDeniedException;
 use HtmlCreator as Html;
 use TextCreator as Text;
 use Statics as Assets;
@@ -52,9 +53,6 @@ class CampaignManager
         $campaign_id = $inputs['campaign_id'];
 
         $campaign = Campaign::findOrFail($inputs['campaign_id']);
-        if ($campaign->locked) {
-            throw new AuthorizationException('The campaign is locked and you can not change it');
-        }
         $campaign_name = $inputs['campaign_name'] ?? '';
         $modules_data = $inputs['modules_data'] ?? [];
         if (!is_array($campaign->tags)) {
@@ -272,6 +270,10 @@ class CampaignManager
     {
         $campaign = Campaign::findOrFail($campaign_id);
 
+        if (!$campaign->template && !Auth::user()->can('clone_campaign')) {
+            throw new PermissionDeniedException("You're not allowed to clone campaigns.");
+        }
+
         $new_campaign_attr = [];
 
         $value = null;
@@ -287,8 +289,6 @@ class CampaignManager
         $new_campaign_attr['body_html'] = '';
         $new_campaign_attr['plain_text'] = '';
         $new_campaign_attr['template'] = false;
-        $new_campaign_attr['locked'] = false;
-        $new_campaign_attr['locked_by'] = null;
         $new_campaign_attr['parent_campaign_id'] = new ObjectID($campaign_id);
         $new_campaign_attr['created_by'] = [
             'id' => new ObjectId(Auth::id()),
@@ -751,5 +751,22 @@ class CampaignManager
         }
 
         return array('error' => $campaign_id);
+    }
+
+    /**
+     * Trim an image verticaly.
+     *
+     * @param string campaign_id
+     * @param integer height
+     * @param string background_image
+     *
+     * @return array Path or error
+     */
+    public static function trimImage($options = [])
+    {
+        $campaign_id = (isset($options['campaign_id']))? $options['campaign_id'] : null;
+        $campaign = Campaign::findOrFail($campaign_id);
+        $assets = new Assets($campaign);
+        return $assets->trimImage($options);
     }
 }

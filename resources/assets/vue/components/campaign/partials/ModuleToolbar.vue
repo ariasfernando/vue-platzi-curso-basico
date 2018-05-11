@@ -1,9 +1,9 @@
 <template>
   <div class="module-toolbar">
-    <div class="icon-remove" @click.stop="remove"><i class="fa fa-trash-o"></i></div>
+    <div class="icon-remove" @click.stop="remove" v-if="!campaign.locked"><i class="fa fa-trash-o"></i></div>
     <div class="icon-config" v-if="hasConfig" @click="config"><i class="fa fa-cogs"></i></div>
-    <div class="icon-clone" @click="clone"><i class="fa fa-clone"></i></div>
-    <div class="icon-move"><i class="fa fa-arrows"></i></div>
+    <div class="icon-clone" @click="clone" v-if="!campaign.locked"><i class="fa fa-clone" ></i></div>
+    <div class="icon-move" v-if="!campaign.locked"><i class="fa fa-arrows"></i></div>
   </div>
 </template>
 
@@ -15,6 +15,9 @@
     name: 'ModuleToolbar',
     props: ['moduleId'],
     computed: {
+      campaign() {
+        return this.$store.getters["campaign/campaign"].campaign_data;
+      },
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
       },
@@ -36,11 +39,6 @@
             });
           });
         }
-
-        if (this.module.settings) {
-          hasConfig = true;
-        }
-
         return hasConfig;
       },
     },
@@ -190,7 +188,7 @@
     height: 30px;
     top: -30px;
     right: 0px;
-    
+
     div {
       cursor: pointer;
       display: none;

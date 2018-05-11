@@ -24,6 +24,7 @@ module.exports = {
       linkDecoration: 'underline',
       externalCssLink: '',
       propietaryCss: '',
+      fixedModules: '',
       padding: '20px',
       esp: true,
       plainText: true,

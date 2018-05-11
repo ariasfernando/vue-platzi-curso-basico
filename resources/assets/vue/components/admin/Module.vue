@@ -27,7 +27,7 @@
               <td
                 v-for="(column, columnId) in module.structure.columns"
                 :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
-                valign="top" 
+                :valign="column.container.attribute.valign || 'top'" 
                 :key="column.id"
               >
                 <columns-fixed-render @add="onAdd" :column="column" :column-id="columnId"></columns-fixed-render>
@@ -58,6 +58,7 @@
         :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'" 
         :style="module.structure.style || ''"
         :bgcolor="module.structure.attribute.bgcolor"
+        :valign="module.structure.attribute.valign || 'top'" 
         :data-col="columnId"
         :key="column.id"
       >
@@ -116,7 +117,6 @@
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
-  import SeparatorElement from './elements/SeparatorElement.vue';
 
   module.exports = {
     name: 'Module',
@@ -126,7 +126,6 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement,
       ColumnsFixedRender,
       ColumnsStackedRender
     },

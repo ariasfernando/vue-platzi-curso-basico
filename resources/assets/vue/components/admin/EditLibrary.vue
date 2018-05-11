@@ -354,6 +354,15 @@
                                 </div>
                               </div>
                             </div>
+                            <div class="row">
+                              <!-- Field fixed modules" -->
+                              <div class="col-md-12">
+                                <label for="fixedModules">Fixed modules config:</label>
+                                <p class="control">
+                                  <textarea v-model="library.config.fixedModules" rows="10" name="fixedModules" type="text" placeholder=""></textarea>
+                                </p>
+                              </div>
+                            </div>
                             <!-- Input submit  -->
                             <div class="row">
                               <div class="col-md-12">
@@ -421,6 +430,14 @@
         },
         set(espProvider) {
           this.library.config.espProvider = espProvider;
+        }
+      },
+      fixedModules: {
+        get() {
+          return this.library.config.fixedModules ? this.library.config.fixedModules : "";
+        },
+        set(fixedModules) {
+          this.library.config.fixedModules = JSON.stringify(fixedModules);
         }
       }
     },

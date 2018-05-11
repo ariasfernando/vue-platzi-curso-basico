@@ -14,7 +14,7 @@
             width="100%"
             :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}]"
             :bgcolor="column.container.attribute.bgcolor"
-            :valign="column.container.attribute.valign"
+            :valign="column.container.attribute.valign || 'top'"
             :align="column.container.attribute.align || 'center'"
             :class="column.container.attribute.classes ||''"
           >
@@ -48,7 +48,6 @@
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
-  import SeparatorElement from '../elements/SeparatorElement.vue';
   import _ from 'lodash';
 
   export default {
@@ -59,7 +58,6 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement
     },
     props: {
       moduleId:{

@@ -13,7 +13,7 @@
                     <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd">
                       <div class="add single">
                         <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
-                          {{ subitem.title || subitem.name }} <i class="glyphicon glyphicon-plus"></i>
+                          {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
                         </h2>
                       </div>
                     </draggable>
@@ -25,7 +25,7 @@
             <draggable v-else :element="'div'" :options="options" @clone="onClone" @end="onEnd">
               <div class="add single">
                 <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">
-                  {{ item.title || item.name }} <i class="glyphicon glyphicon-plus"></i>
+                  {{ item.name }} <i class="glyphicon glyphicon-plus"></i>
                 </h2>
               </div>
             </draggable>
@@ -41,6 +41,7 @@
   import clone from 'clone';
   import _ from 'lodash';
   import Draggable from 'vuedraggable';
+  import ModuleListMixin from './mixins/moduleListMixin';
 
   export default {
     name: 'CampaignMenu',
@@ -53,6 +54,7 @@
         required: true
       }
     },
+    mixins: [ ModuleListMixin ],
     data () {
       return {
         options: {
@@ -77,6 +79,9 @@
       }
     },
     computed: {
+      campaign () {
+        return this.$store.getters["campaign/campaign"];
+      },
       items () {
         return this.$store.getters["library/modules"];
       },
@@ -89,13 +94,33 @@
       }
     },
     created() {
-
+      // Set defaults for modules from menu
       this.getLibrary().then(response => {
+        // Get fixed modules from library config
+        const fixedModules = this.campaign.library_config.fixedModules ? JSON.parse(this.campaign.library_config.fixedModules) : [];
+
+        // Sanitize library's modules
         _.each(this.items, (item) => {
+          // Set expanded as false
           if (item.sub_menu) {
             this.expanded[item.name] = false;
           }
+          // Set fixed modules
+          else {
+            const found = _.filter(fixedModules, fixed => fixed.key === item.name);
+            item['isFixed'] = found.length > 0;
+            item['fixedPosition'] = found.length > 0 ? found[0].pos : undefined;
+          }
         });
+
+        // Sanitize campaign's modules
+        _.each(this.modules, (item) => {
+          // Set fixed modules
+          const found = _.filter(fixedModules, fixed => fixed.key === item.name);
+          item['isFixed'] = found.length > 0;
+          item['fixedPosition'] = found.length > 0 ? found[0].pos : undefined;
+        });
+
         this.ready = true;
       }, error => {
         this.$store.commit("global/setLoader", false);
@@ -112,14 +137,6 @@
       getLibrary () {
         return this.$store.dispatch("library/getModulesData", this.libraryId);
       },
-      getSubitemsAsArray () {
-        return _.reduce(this.items, (result, value) => {
-          if(_.has(value, 'level')) {
-            result = _.union(result, value.sub_menu);
-          }
-          return result;
-        }, []);
-      },
       addModuleByName (moduleName, type) {
         // Find module in items by type: item or subitem
         const found = type === 'item'
@@ -130,37 +147,53 @@
         mod.data = {};
 
         this.addModule(mod);
-
       },
       addModule (m) {
         const mod = clone(m);
         mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
 
-        // Add module
-        this.$store.commit('campaign/addModule', mod);
+        //TODO: handle fixed modules at non-header/non-footer position
 
-        // Set active on last module added
-        this.$store.commit('campaign/setActiveLastModule');
+        // Resolve fixed-header
+        if(this.isFixedHeader(mod)) {
+          this.removePreviousFixedHeader();
+          this.insertModule({index: 0, moduleData: mod});
 
-        if (this.activeModule.type === 'studio') {
-          // Save current component if module type is studio
-          this.$store.commit('campaign/setCurrentComponent', {
-            moduleId: this.modules.length - 1,
-            columnId: 0,
-            componentId: 0,
-          });
-          this.$store.commit('campaign/unsetCustomModule');
-        } else {
-          // Save customModule if module type is custom
-          this.$store.commit('campaign/setCustomModule', this.modules.length - 1);
-          this.$store.commit('campaign/unsetCurrentComponent');
+          setTimeout(() => {
+            this.autoScrollTop();
+          }, 25);
         }
+        // Resolve fixed-footer and others modules
+        else {
+          // If module to add is fixed footer, remove previous one
+          if(this.isFixedFooter(mod)) {
+            this.removePreviousFixedFooter();
+          }
+          // If fixed-footer already exists, adding a module mustn't go to end of the list
+          if(this.campaignHasFixedFooter()) {
+            this.insertModule({index: this.getLastIndex(), moduleData: mod});
+          }
+          else {
+            // Add module to the end of the list
+            this.addModuleLastPosition(mod);
+          }
 
-        setTimeout(() => {
-          this.autoScroll();
-        }, 25);
+          setTimeout(() => {
+            this.autoScrollBottom();
+          }, 25);
+        }
       },
-      autoScroll (){
+      autoScrollTop (){
+        let bounds = 0;
+        let isVisible = bounds < window.innerHeight && bounds > 0;
+
+        if (!isVisible) {
+            $('html,  .section-canvas-email').animate({
+                scrollTop: bounds
+            }, 100);
+        }
+      },
+      autoScrollBottom (){
         let bounds = $(".section-canvas-container").outerHeight();
         let isVisible = bounds < window.innerHeight && bounds > 0;
 

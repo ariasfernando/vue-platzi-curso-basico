@@ -1,18 +1,17 @@
 <template>
-  <tr
-    v-if="module.type === 'custom'"
-    class="stx-module-wrapper"
-    :class="[`stx-${module.name}`, {'stx-module-wrapper-active': activeModule === moduleId }]"
-    @mouseover="setModulesMouseOver"
-    @mouseleave="setModulesMouseLeave"
+  <tr v-if="module.type === 'custom'"
+      class="stx-module-wrapper"
+      :class="[`stx-${module.name}`, module.isFixed ? 'stx-fixed' : '', {'stx-module-wrapper-active': activeModule === moduleId }]"
+      @mouseover="setModulesMouseOver"
+      @mouseleave="setModulesMouseLeave"
   >
     <td class="stx-toolbar-content stx-position-relative"
         :data-module-id="moduleId"
         :class="{ 'stx-show-error': module.data.errors && module.data.errors.length }"
         @click.prevent="config"
     >
-      <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
-      <module-toolbar :module-id="moduleId"></module-toolbar>
+      <component :is="'custom-' + module.key" :module="module" :module-id="moduleId"></component>
+      <module-toolbar :module-id="moduleId" v-if="!module.data.hideToolbar"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
       <div class="st-remove-element default-module-error"></div>
     </td>
@@ -29,6 +28,7 @@
       class="stx-toolbar-content stx-position-relative"
       :data-module-id="moduleId"
       :style="module.structure.style"
+      :valign="module.structure.attribute.valign || 'top'"
       :bgcolor="module.structure.attribute.bgcolor"
       :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}"
     >
@@ -46,13 +46,21 @@
         <tr v-if="module.structure.columns.length > 1">
 
           <!--2 COLUMNS STACKING -->
-          <td width="100%" v-if="module.structure.columnsStacking === 'normal'">
+          <td
+            width="100%"
+            v-if="module.structure.columnsStacking === 'normal'"
+            :valign="module.structure.attribute.valign || 'top'"
+          >
             <comment :content="msoStartingComment"></comment>
             <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
           </td>
 
           <!--2 COLUMNS INVERTED STACKING ONLY FOR 2 COLUMNS-->
-          <td width="100%" v-else-if="module.structure.columnsStacking === 'invertedStacking'">
+          <td
+            width="100%"
+            v-else-if="module.structure.columnsStacking === 'invertedStacking'"
+            :valign="module.structure.attribute.valign || 'top'"
+          >
             <table
               width="100%"
               cellspacing="0"
@@ -61,7 +69,7 @@
               dir="rtl"
               >
               <tr>
-                <td width="100%">
+                <td width="100%" :valign="module.structure.attribute.valign || 'top'">
                   <comment :content="msoStartingCommentInverted"></comment>
 
                   <columns-inverted-stacking-render
@@ -89,7 +97,7 @@
             v-else-if="module.structure.columnsStacking == 'columnsFixed'"
             v-for="(column, columnId) in module.structure.columns"
             :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
-            valign="top"
+            :valign="column.container.attribute.valign || 'top'"
             :key="column.id"
           >
             <columns-fixed-render
@@ -137,7 +145,6 @@
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
-  import SeparatorElement from './elements/SeparatorElement.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
@@ -182,7 +189,7 @@
         return this.$store.getters["campaign/activeModule"];
       },
       columnWidthPadding(){
-        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft) - _.parseInt(this.module.structure.style.paddingRight);
+        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
       }
     },
     methods: {
@@ -272,7 +279,6 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement,
       ModuleToolbar,
       ColumnsStackedRender,
       ColumnsFixedRender,

@@ -167,6 +167,18 @@
             {className: 'et-error'}
           );
           break;
+        case 'campaign_create':
+          this.$root.$toast(
+            'Sorry, you are not allowed to create campaigns.',
+            {className: 'et-error'}
+          );
+          break;
+        case 'campaign_clone':
+          this.$root.$toast(
+            'Sorry, you are not allowed to clone campaigns.',
+            {className: 'et-error'}
+          );
+          break;
       };
     },
     data: function() {

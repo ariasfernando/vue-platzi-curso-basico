@@ -44,7 +44,6 @@
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
-  import SeparatorElement from '../elements/SeparatorElement.vue';
 
   export default {
     name: 'ColumnsStackedRender',
@@ -54,7 +53,6 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement
     },
     props: {
       moduleId:{
@@ -78,7 +76,7 @@
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
       templateWidthWithoutPadding(){
-        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft) - _.parseInt(this.module.structure.style.paddingRight);
+        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
       },
       numColumns() {
         return this.module.structure.columns.length;
