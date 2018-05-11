@@ -9,7 +9,7 @@
         <div class="aside-inner">
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
-            <campaign-menu v-if="!locked" :library-id="libraryId"></campaign-menu>
+            <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
             <div class="lock-warning-container" v-if="locked">Unlock the email to add modules</div>
           </div>
         </div>

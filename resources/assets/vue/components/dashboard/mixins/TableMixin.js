@@ -99,12 +99,20 @@ export default {
         });
 
         // Ajax: On Fail
-        request.fail(function(){
+        request.fail(function(jqXHR){
           _this.$store.commit("global/setLoader", false);
-          _this.$root.$toast(
-            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-            {className: 'et-error'}
-          );
+
+          if (jqXHR.status == 403) {
+            _this.$root.$toast(
+              'Sorry, you are not allowed to clone campaigns.',
+              {className: 'et-error'}
+            );
+          } else {
+            _this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+              {className: 'et-error'}
+            );
+          }
         });
       }
     },

@@ -6,9 +6,11 @@ import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
 import Dashboard from './components/dashboard/Dashboard.vue';
 import store from './store';
+import acl from './resources/plugins/acl';
 
 Vue.use(Bootstrap);
 Vue.use(VueResource);
+Vue.use(acl);
 Vue.use(Toast, {
   horizontalPosition: 'center',
   verticalPosition: 'top',
