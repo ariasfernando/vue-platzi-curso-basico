@@ -196,11 +196,12 @@
                   class="btn btn-success pull-left submit-config beta-btn-primary"
                   v-if="page.three"
                   @click="clear"
+                  style="min-width: 60px;"
                   >
                   <i
-                    class="fa fa-chevron-left"
+                    class="fa fa-trash"
                     aria-hidden="true"
-                    ></i> Reset
+                    ></i>
                 </button>
                 <button
                   type="button"
@@ -216,16 +217,6 @@
                   @click="submit"
                   v-if="page.three"
                   >
-                <button
-                  type="button"
-                  class="btn btn-success pull-right submit-config beta-btn-primary"
-                  v-if="page.two === 'media'"
-                  >
-                  <i
-                    class="fa fa-refresh"
-                    aria-hidden="true"
-                    ></i> Refresh Gallery
-                </button>
               </div>
             </slot>
           </div>
