@@ -326,19 +326,27 @@ export default {
       sieOptions.size.height = sieOptions.size.auto ? 0 : sieOptions.size.height;
       if (this.onSetImage) {
         if (this.currentImage !== null) {
+          this.sieOptions = sieOptions;
           const img = new Image();
           img.onload = () => {
-            this.sieOptions = this.onSetImage(img, sieOptions);
+            this.sieOptions = {
+              ...this.sieOptions,
+              ...this.onSetImage(img, sieOptions)
+            };
+            if (typeof this.$refs.sie !== 'undefined') {
+              this.$refs.sie.close();
+            }
             this.page = {
               one: false,
               two: false,
               three: true
             };
-            if (typeof this.$refs.sie !== 'undefined') {
-              this.$refs.sie.close();
-            }
           };
-          img.src = this.currentImage;
+          if (this.currentImage.includes('campaign')) {
+            img.src = this.$_app.config.imageUrl + this.currentImage;
+          } else {
+            img.src = this.currentImage;
+          }
         } else {
           this.sieOptions = sieOptions;
           if (typeof this.$refs.sie !== 'undefined') {
