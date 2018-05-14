@@ -18,7 +18,7 @@ export default {
       }, []);
     },
     getLastIndex() {
-      return this.modules.length-1;
+      return this.modules.length > 0 ? this.modules.length-1 : 0;
     },
     isFixedModule(module) {
       return _.has(module, 'isFixed') && module.isFixed;
@@ -36,7 +36,7 @@ export default {
       return this.isFixedHeader(this.modules[0]);
     },
     campaignHasFixedFooter() {
-      return this.isFixedFooter(this.modules[this.modules.length-1]);
+      return this.isFixedFooter(this.modules[this.getLastIndex()]);
     },
     removePreviousFixedInPosition(pos) {
       if(this.isFixedModule(this.modules[pos])) {
@@ -50,7 +50,7 @@ export default {
     },
     removePreviousFixedFooter() {
       if(this.campaignHasFixedFooter()) {
-        this.$store.commit('campaign/removeModule', this.modules.length-1);
+        this.$store.commit('campaign/removeModule', this.getLastIndex());
       }
     },
     validateSortingToIndex({index, moduleData}) {
