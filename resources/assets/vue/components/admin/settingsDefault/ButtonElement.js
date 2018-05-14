@@ -73,7 +73,22 @@ function buttonDefault() {
           name: 'width',
           type: 'generic-number',
           value: 150,
-          minValue: 5,
+          subComponent: 'button',
+        },
+        {
+          link: 'style',
+          label: 'max-width',
+          name: 'maxWidth',
+          isPixel: true,
+          type: 'generic-number',
+          subComponent: 'button',
+        },
+        {
+          link: 'style',
+          label: 'min-width',
+          name: 'minWidth',
+          isPixel: true,
+          type: 'generic-number',
           subComponent: 'button',
         },
         {
