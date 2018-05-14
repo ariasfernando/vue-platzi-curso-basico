@@ -105,7 +105,11 @@
         return this.$store.state.campaign.campaign;
       },
       templateWidth () {
-        return this.$store.getters['campaign/templateWidth'];
+        if(this.buildingMode ==='mobile'){
+          return this.$store.getters["campaign/campaign"].library_config.templateMobileWidth;
+        } else {
+          return this.$store.getters['campaign/templateWidth'];
+        }
       },
       buildingMode() {
         return this.$store.getters["campaign/buildingMode"];
