@@ -137,6 +137,12 @@ module.exports = {
         type: Number,
         content: undefined,
       },
+      link_fixed_color: {
+        title: 'Link fixed color',
+        value: false,
+        type: 'text',
+        content: '#514960',
+      },
     },
   },
   render: false,

@@ -70,14 +70,12 @@ const mutations = {
     const update = { ...state.module.structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
     state.module.structure.columns[payload.columnId].components[payload.componentId].data = update;
   },
-  saveModuleSetting(state, data) {
-    state.module.structure.style = data.style;
-  },
-  saveModuleStyle(state, data) {
-    state.module.structure.style[data.property] = data.value;
-  },
-  saveModuleAttribute(state, data) {
-    state.module.structure.attribute[data.property] = data.value;
+
+  saveModuleProperty(state, data) {
+    const structure = state.module.structure;
+    const subComponent = data.subComponent ? structure[data.subComponent] : structure;
+    const properties = data.link ? subComponent[data.link] : subComponent;
+    Vue.set(properties, data.property, data.value);
   },
   saveModule(state, moduleId) {
     state.module.moduleId = moduleId;
@@ -95,13 +93,12 @@ const mutations = {
   setColumnWidth(state, data) {
     const column = state.module.structure.columns[data.colId];
     // Set attribute
-    column.attribute.width = `${data.width}%`;
+    column.container.attribute.width = `${data.width}%`;
   },
   saveColumnProperty(state, data) {
-    const property = state.module.structure.columns[data.colId][data.type];
-    const newProperty = {};
-    newProperty[data.property] = data.value;
-    _.merge(property, newProperty);
+    const column = state.module.structure.columns[data.colId];
+    const properties = data.subComponent ? column[data.subComponent][data.link] : column[data.link];
+    Vue.set(properties, data.property, data.value);
   },
   addComponent(state, data) {
     state.module.structure.columns[data.colId].components.splice(data.index, 0, data.el);
@@ -133,10 +130,9 @@ const mutations = {
   },
   saveComponentProperty(state, data) {
     const component = state.module.structure.columns[data.columnId].components[data.componentId];
-    const property = data.subComponent ? component[data.subComponent][data.type] : component[data.type];
-    const newAttr = {};
-    newAttr[data.property] = data.value;
-    _.merge(property, newAttr);
+    const subComponent = data.subComponent ? component[data.subComponent] : component;
+    const properties = data.link ? subComponent[data.link] : subComponent;
+    Vue.set(properties, data.property, data.value);
   },
   setActiveColumn(state, columnId) {
     state.activeColumn = columnId;
@@ -157,7 +153,7 @@ const mutations = {
     console.log(err);
   },
   setListLibraries(state, data) {
-    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.options = data.response;
+    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options = data.response;
   }
 };
 

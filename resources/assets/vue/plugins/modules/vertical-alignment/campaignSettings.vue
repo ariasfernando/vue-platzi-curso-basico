@@ -22,7 +22,7 @@
         return this.modules[this.moduleId].structure.columns[this.columnId];
       },
       value() {
-        return this.column.attribute.valign;
+        return this.column.container.attribute.valign;
       }
     },
     data() {

@@ -34,6 +34,8 @@
 				@yield('content')
 			</div>
 		</div>
+		<script src="{{ cdn(mix('js/manifest.js')) }}"></script>
+        <script src="{{ cdn(mix('js/vendor.js')) }}"></script>
 		@section('footer-script')
 		@show
 	</body>

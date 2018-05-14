@@ -7,24 +7,47 @@ function imageDefault() {
           label: 'Select an image placeholder',
           name: 'placeholder',
           type: 'generic-file',
-          value: 'default/placeholder-square.jpg',
+          subComponent: 'image',
+        },
+        {
+          label: 'Image mobile',
+          link: 'styleOption',
+          name: 'hasImageMobile',
+          type: 'generic-switch',
+          value: false,
+          subComponent: 'image',
+        },
+        {
+          link: 'attribute',
+          label: 'Select an image placeholder mobile',
+          name: 'placeholderMobile',
+          type: 'generic-file',
+          subComponent: 'image',
+          dependsOn: {
+            link: 'styleOption',
+            name: 'hasImageMobile',
+            subComponent: 'image',
+          },
         },
         {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
+          subComponent: 'container',
         },
       ],
       [
         {
           name: 'image-size',
           type: 'image-size',
+          subComponent: 'image',
         },
       ],
       [
         {
           name: 'text-align',
           type: 'text-align',
+          subComponent: 'image',
         },
       ],
       [
@@ -33,12 +56,14 @@ function imageDefault() {
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
+          subComponent: 'container',
         },
       ],
       [
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
+          subComponent: 'container',
         },
       ],
       [
@@ -47,7 +72,8 @@ function imageDefault() {
           label: 'Default URL',
           name: 'href',
           type: 'generic-text',
-          value: 'http://stensul.com',
+          value: '',
+          subComponent: 'image',
         },
         {
           link: 'attribute',
@@ -55,6 +81,7 @@ function imageDefault() {
           name: 'alt',
           type: 'generic-text',
           value: 'Image',
+          subComponent: 'image',
         },
         {
           link: 'attribute',
@@ -62,6 +89,7 @@ function imageDefault() {
           name: 'title',
           type: 'generic-text',
           value: 'Image',
+          subComponent: 'image',
         },
       ],
     ],

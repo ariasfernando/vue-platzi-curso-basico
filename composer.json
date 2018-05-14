@@ -26,6 +26,7 @@
         "stensul/filesystem": "1.*",
         "stensul/media-gallery": "^2.2",
         "stensul/logging": "2.*",
+        "stensul/silverpop-provider": "2.0.*",
         "firebase/php-jwt": "^5.0",
         "stensul/asset-manager": "^1.0"
     },

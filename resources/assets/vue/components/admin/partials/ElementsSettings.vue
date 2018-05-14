@@ -3,7 +3,7 @@
     <!-- START: Elements -->
     <label-item-container label="ELEMENTS" icon="glyphicon-th-large" v-b-toggle.element></label-item-container>
 
-      <b-collapse id="element" accordion="module-settings-accordion">
+      <b-collapse id="element" visible accordion="module-left">
         <b-card class="control">
           <draggable :element="'ul'"
                      :options="options"
@@ -25,10 +25,6 @@
             <li class="component-item" data-type="divider-element">
               <i class="fa fa-minus-square" aria-hidden="true"></i>
               <p>Divider</p>
-            </li>
-            <li class="component-item" data-type="separator-element">
-              <i class="fa fa-minus" aria-hidden="true"></i>
-              <p>Separator</p>
             </li>
           </draggable>
         </b-card>

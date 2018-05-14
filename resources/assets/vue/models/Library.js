@@ -23,6 +23,7 @@ function Library(data = {}) {
     linkDecoration: config.linkDecoration || 'underline',
     externalCssLink: config.externalCssLink || '',
     propietaryCss: config.propietaryCss || '',
+    fixedModules: config.fixedModules || '',
     padding: config.padding || '',
     esp: config.esp || false,
     espProvider: config.espProvider || false,
@@ -34,14 +35,7 @@ function Library(data = {}) {
 
   const groups = [];
 
-  _.each(data.modules, (modules, group) => {
-    groups.push({
-      name: group,
-      modules,
-    });
-  });
-
-  this.modules = groups;
+  this.modules = data.modules || [];
 
   return this;
 }

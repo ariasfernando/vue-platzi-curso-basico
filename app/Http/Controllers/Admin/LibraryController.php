@@ -4,6 +4,7 @@ namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
 use Activity;
+use DB;
 use Stensul\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
 use Stensul\Models\Library;
@@ -148,18 +149,6 @@ class LibraryController extends Controller
         $library_data = Library::findOrFail($request->input("libraryId"))->toArray();
         $modules = array_keys(\StensulModule::getModuleList('publish'));
 
-        $library_modules = [];
-        if (count($library_data['modules'])) {
-            foreach ($library_data['modules'] as $title => $module) {
-                if (is_array($module)) { // Grouped modules
-                    $library_modules[$title] = $module;
-                } else { // Ungrouped modules
-                    $library_modules['default'][] = $module;
-                }
-            }
-        }
-
-        $library_data['modules'] = $library_modules;
         $params = [
             "title" => "Edit Library",
             "modules" => $modules,
@@ -177,21 +166,12 @@ class LibraryController extends Controller
     public function postEdit(Request $request)
     {
         $library = Library::findOrFail($request->input("libraryId"));
+        $old_name = $library->name;
         $library->name = $request->input("name");
         $library->description = $request->input("description");
         $library->modules = $modules = [];
         $library->config = $request->input("config");
-
-        $modules = [];
-        foreach ($request->input('modules') as $group) {
-            if (strtolower($group['name']) == 'default') {
-                $modules = array_merge($modules, $group['modules']);
-            } else {
-                $modules[$group['name']] = $group['modules'];
-            }
-        }
-
-        $library->modules = $modules;
+        $library->modules = $request->input('modules');
 
         if (is_null($library->config)) {
             return array("message" => "ERROR_CONFIG");
@@ -202,6 +182,12 @@ class LibraryController extends Controller
         }
 
         $library->save();
+        
+        if($library->name !== $old_name) {
+            // Update library name in campaigns for library name search
+            // We do not use directly the Campaign model class to avoid touching the updated_at attribute
+            DB::table('campaigns')->where('library', new ObjectID($library->id))->update(['library_name' => $library->name]);
+        }
 
         return array("message" => "SUCCESS");
     }
@@ -218,16 +204,8 @@ class LibraryController extends Controller
             "key" => ModelKeyManager::getStandardKey(new Library, $request->input('name')),
             "description" => $request->input("description"),
             "config" => $request->input("config"),
-            "modules" => []
+            "modules" => $request->input('modules')
         ];
-
-        foreach ($request->input('modules') as $group) {
-            if (strtolower($group['name']) == 'default') {
-                $params['modules'] = $group['modules'];
-            } else {
-                $params['modules'][$group['name']] = $group['modules'];
-            }
-        }
 
         if (Library::where('name', '=', $params['key'])->exists()) {
             $response_message = array("message"=> "ERROR_EXISTS");

@@ -36,16 +36,23 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "font-style",
-  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
+  mounted() {
+    this.defineStyleOption();
+  },
   computed: {
     isBlockLineHeight: {
       get() {
-        return this.element.styleOptions["isBlockLineHeight"];
+        return this.element.styleOption["isBlockLineHeight"];
       },
       set(newValue) {
-        this.$emit('style-option-setting-updated', { name: "isBlockLineHeight", value: newValue });
+        this.$emit('setting-updated', {
+          subComponent: this.subComponent,
+          link: 'styleOption',
+          name: "isBlockLineHeight",
+          value: newValue
+        });
       }
     },
     fontSize: {
@@ -53,7 +60,12 @@ export default {
         return _.parseInt(this.element.style["fontSize"]);
       },
       set(newValue) {
-        this.$emit('style-setting-updated', { name: "fontSize", value: newValue + "px" });
+        this.$emit('setting-updated', {
+          subComponent: this.subComponent,
+          link: 'style',
+          name: "fontSize",
+          value: newValue + "px"
+        });
         
         if (this.isBlockLineHeight) {
           this.lineHeight = this.calculateLineHeight(newValue);
@@ -65,7 +77,12 @@ export default {
         return _.parseInt(this.element.style["lineHeight"]);
       },
       set(newValue) {
-        this.$emit('style-setting-updated', { name: "lineHeight", value: newValue + "px" });
+        this.$emit('setting-updated', {
+          subComponent: this.subComponent,
+          link: 'style',
+          name: "lineHeight",
+          value: newValue + "px"
+        });
       }
     }
   },
@@ -76,8 +93,22 @@ export default {
     toggleLineHeight() {
       this.isBlockLineHeight = !this.isBlockLineHeight;
       this.lineHeight = this.calculateLineHeight(this.fontSize);
+    },
+    defineStyleOption(){
+      // set styleOption to default if is undefined
+      if (this.element.styleOption["isBlockLineHeight"] === undefined) {
+        this.isCustomFontWeight = false;
+      }
     }
-  }
+  },
+  watch: {
+    element: {
+      handler: function(){
+        this.defineStyleOption();
+        },
+      deep: true
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

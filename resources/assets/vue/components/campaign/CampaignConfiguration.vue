@@ -15,15 +15,15 @@
           </label>
           <p>
             <input type="text"
-                 placeholder="Email Name"
-                 name="campaignName"
-                 id="campaignName"
-                 v-validate.initial="'required'"
-                 :value="form.campaignName"
-                 :class="{'input': true, 'is-danger': errors.has('campaignName') }"
-                 @input="saveCampaignName"
-                 @focus="checkName"
-                 />
+              placeholder="Email Name"
+              name="campaignName"
+              id="campaignName"
+              v-validate.initial="'required'"
+              :value="form.campaignName"
+              :class="{'input': true, 'is-danger': errors.has('campaignName') }"
+              @input="saveCampaignName"
+              @focus="checkName"
+             />
 
             <span v-show="errors.has('campaignName')" class="help is-danger">{{ errors.first('campaignName') }}</span>
           </p>
@@ -37,15 +37,15 @@
         <settings-container custom-class="field-Tags" label="Tags" v-if="enableTagging">
           <template slot="setting-bottom">
             <el-select
-            class="width-full"
-            multiple
-            filterable
-            default-first-option
-            allow-create
-            placeholder="Choose tag"
-            v-model="form.tags"
-            @change="changeTags"
-            size="mini"
+              class="width-full"
+              multiple
+              filterable
+              default-first-option
+              allow-create
+              placeholder="Choose tag"
+              v-model="form.tags"
+              @change="changeTags"
+              size="mini"
             >
               <el-option
                 v-for="item in tagOptions"
@@ -59,39 +59,16 @@
         </settings-container>
 
         <div class="config-box-divider" v-if="enableAutoSave">
-          <label for="autoSave">Auto Save</label>
-          <toggle-button :value="campaign.auto_save" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange" :disabled="campaign.locked"></toggle-button>
-          <label v-if="!secondaryLoading" class="autosave-message">last saved: {{this.campaign.updated_at.substring(0,16)}}</label>
+          <label for="autoSave" class="pull-left">Auto Save</label>
+          <toggle-button class="pull-right" :value="campaign.auto_save" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange"></toggle-button>
+          <br>
+          <label v-if="!secondaryLoading" class="autosave-message pull-right">last saved: {{this.campaign.updated_at.substring(0,16)}}</label>
           <secondary-spinner></secondary-spinner>
         </div>
 
-        <div v-if="enableLocking" class="config-box-divider clearfix" id="locking" :data-status="campaign.locked ? 'locked' : 'unlocked'">
-          <label class="locking">
-            <span>{{locked ? 'Unlock' : 'Lock'}}</span>
-            <span class="locking_type">
-              {{campaign.template ? 'Template' : 'Email'}}
-            </span>
-          </label>
-          <button
-            class="lock-campaign-btn btn btn-default"
-            data-toogle="tooltip"
-            data-placement="botom"
-            title="Email is unlocked"
-            @click.prevent="lockCampaign"
-            v-show="!locked"
-          >
-            <i class="fa fa-unlock" aria-hidden="true"></i>
-          </button>
-          <button
-            class="unlock-campaign-btn btn btn-default"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="Email is locked"
-            :disabled="this.$_app.config.logged_user !== lockedBy"
-            @click.prevent="unlockCampaign"
-            v-show="locked">
-            <i class="fa fa-lock" aria-hidden="true"></i>
-          </button>
+        <div class="config-box-divider" v-if="enableAutoSave && $can('fix_layout')">
+          <label for="fixLayout" class="pull-left">Fix Layout</label>
+          <toggle-button class="pull-right" :value="campaign.locked" :sync="true" id="fixLayout" active-color="#78DCD6" @change="toggleLockCampaign"></toggle-button>
         </div>
 
       </form>
@@ -101,7 +78,6 @@
 
 <script>
   import _ from 'lodash';
-  import ToggleButton from '../../plugins/common/toggle-button'
   import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
   import secondarySpinner from '../common/secondarySpinner.vue';
 
@@ -260,6 +236,18 @@
           campaign: this.campaign
         });
       },
+      toggleLockCampaign(val) {
+        this._save().then(response => {
+          if (val) {
+            this.lockCampaign();
+          } else {
+            this.unlockCampaign();
+          }
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+        });
+      },
       lockCampaign() {
 
         //TODO: make reactive and remove click
@@ -269,7 +257,7 @@
         }
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch("campaign/lockCampaign", this.campaign._id).then(response => {
-          this.$root.$toast('This campaign is locked now. Only you can unlock it.', {className: 'et-info'});
+          this.$root.$toast('The campaign layout has been fixed.', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
           this.$store.commit("global/setLoader", false);
@@ -280,7 +268,7 @@
       unlockCampaign() {
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch("campaign/unlockCampaign", this.campaign._id).then(response => {
-          this.$root.$toast('This campaign is unlocked now, and you can make changes on it', {className: 'et-info'});
+          this.$root.$toast('The campaign layout has been unfixed.', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
 
           //TODO: make reactive and remove click

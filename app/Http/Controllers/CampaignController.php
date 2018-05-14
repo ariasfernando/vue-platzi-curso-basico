@@ -49,24 +49,32 @@ class CampaignController extends Controller
         if (!is_null($campaign_id)) {
             $params = $this->loadCampaign($campaign_id);
         } else {
+            if (!Auth::user()->can('create_campaign')) {
+                return redirect(env('APP_BASE_URL', '/'))->with('campaign_create', '');
+            }
+
             $params = [];
 
             if (!is_null($request->input("locale"))) {
                 $params['locale'] = $request->input("locale");
             }
+
             if (!is_null($request->input("library"))) {
                 $params['library'] = new ObjectID($request->input("library"));
+                $library = Library::find($request->input("library"));
             } else {
-                $library = Library::orderBy('created_at')->first();
                 $libraries = Auth::user()->getLibraries();
-                if (count($libraries)) {
-                    $params['library'] = new ObjectID($libraries[0]['_id']);
-                } else {
+
+                if (!count($libraries)) {
                     throw new \Exception('You don\'t have available libraries to create a new email
                         please contact our support team.');
                 }
+
+                $params['library'] = new ObjectID($libraries[0]['_id']);
+                $library = Library::find($libraries[0]['_id']);
             }
 
+            $params['library_name'] = $library->name;
             $params['campaign_name'] = 'Untitled Email';
 
             $campaign = Campaign::create($params);
@@ -199,10 +207,10 @@ class CampaignController extends Controller
         $params = [];
         $params['menu_list'] = $library->getModules();
         uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
-            if ($menu_item_a['name'] == $menu_item_b['name']) {
+            if ($menu_item_a->name == $menu_item_b->name) {
                 return 0;
             }
-            return ($menu_item_a['name'] < $menu_item_b['name']) ? -1 : 1;
+            return ($menu_item_a->name < $menu_item_b->name) ? -1 : 1;
         });
         return $params['menu_list'];
     }
@@ -247,6 +255,11 @@ class CampaignController extends Controller
      */
     public function postSave(Request $request)
     {
+        if ($request->input('template') && !Auth::user()->can("create_template")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
         return Campaign::save($request->input());
     }
 
@@ -278,7 +291,11 @@ class CampaignController extends Controller
      */
     public function postClone(Request $request)
     {
-        return Campaign::copy($request->input('campaign_id'));
+        try {
+            return Campaign::copy($request->input('campaign_id'));
+        } catch (\Stensul\Exceptions\PermissionDeniedException $exception) {
+            return response()->json(['error' => 'campaign_clone'], 403);
+        }
     }
 
     /**
@@ -513,6 +530,13 @@ class CampaignController extends Controller
      */
     public function postForceLock(Request $request)
     {
+
+        if (!Auth::user()->can("fix_layout")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
+
         $campaign_id = $request->input('campaign_id');
         if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:'. $campaign_id) !== Auth::id()) {
             Activity::log(
@@ -564,5 +588,22 @@ class CampaignController extends Controller
     public function postUpdateAutoSave(Request $request)
     {
         return Campaign::updateAutoSave($request->input('campaign_id'), $request->input('status'));
+    }
+
+    /**
+    *  Trim an image verticaly.
+    *
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array Path or error
+    */
+    public function postTrimImage(Request $request)
+    {
+        $params = $request->all();
+        // Convert local urls to local path.
+        if (substr($params['background_image'], 0, strlen(config('app.url'))) === config('app.url')) {
+            $params['background_image'] = public_path() . str_replace(config('app.url'), '', $params['background_image']);
+        }
+        return Campaign::trimImage($params);
     }
 }
