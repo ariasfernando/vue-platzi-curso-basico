@@ -113,7 +113,8 @@
                 :data-campaign-id="campaign._id"
                 :data-api-driver="api.driver"
                 @click="upload(campaign._id)"><i class="glyphicon glyphicon-cloud-upload"></i></a>
-              <a href="#" data-tooltip="Delete"><i class="glyphicon glyphicon-trash"></i></a>
+              <a href="#" data-tooltip="Delete" @click.prevent="askToDeleteCampaign(campaign._id)"
+                ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
           <tr v-if="!campaigns.data.length">
