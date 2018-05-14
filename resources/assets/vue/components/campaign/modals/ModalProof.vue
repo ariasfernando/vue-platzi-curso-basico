@@ -11,6 +11,9 @@
           <h4>
             Who would you like to send this email to for review?
           </h4>
+          <h5>
+            Campaign: {{campaign.campaign_name}}
+          </h5>
           <div class="modal-container-inner">
             <div class="send-proof">
               <form name="send-proof-form" id="send-proof-form" action="/proof/create" @submit.prevent="send">

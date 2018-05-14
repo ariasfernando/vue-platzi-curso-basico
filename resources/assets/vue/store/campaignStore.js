@@ -20,6 +20,7 @@ function campaignStore() {
       modalComplete: false,
       modalPreview: false,
       modalProof: false,
+      modalProofTrack: false,
       modalEnableTemplating: false,
       modalEsp: false,
       buildingMode: 'desktop',
