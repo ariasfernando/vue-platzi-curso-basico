@@ -310,7 +310,7 @@
             // Clear 3rd column
             this.$store.commit("campaign/unsetCurrentComponent");
 
-            if (this.activeModule.type === 'studio') {
+            if (this.activeModule && this.activeModule.type === 'studio') {
               this.$store.commit("campaign/unsetCustomModule");
             }
           }
@@ -448,6 +448,7 @@
         vertical-align: middle;
         opacity: 0.7;
         text-align: center;
+        cursor: default;
 
         &:hover {
           width: 100%;
