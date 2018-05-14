@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         require_once __DIR__ . '/../Http/helpers.php';
 
         $this->app->bind(
-            'Illuminate\Contracts\Auth\Registrar'
+            Illuminate\Contracts\Auth\Registrar::class
         );
     }
 }

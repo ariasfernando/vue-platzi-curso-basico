@@ -3,7 +3,7 @@
     <h2><i class="glyphicon glyphicon-tasks"></i> {{ module.title }} </h2>
     <div class="plugins">
       <div>
-        <component :is="'custom-settings-' + module.name" :module-id="currentCustomModule" :module="module"></component>
+        <component :is="'custom-settings-' + module.key" :module-id="currentCustomModule" :module="module"></component>
       </div>
     </div>
   </div>

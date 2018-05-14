@@ -2,15 +2,19 @@
   <div class="beta-subheader">
     <div class="section-box-header section-canvas-title">
       <div class="row">
-        <div class="col-xs-5 col-md-5 col-lg-5 hidden-sm hidden-xs"></div>
+        <div class="col-xs-5 col-md-5 col-lg-5">
+          <div v-if="showLibraryName" class="subheader-title">
+              {{ libraryName }}
+          </div>
+        </div>
 
         <div class="col-xs-7 col-md-5 col-lg-5 text-right pull-right" id="section-canvas-buttons-col">
 
-          <button v-show="!locked" class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
+          <button class="btn btn-default campaign-preview beta-btn-secondary" :class="hiddenClass()" @click="preview">
             Preview
           </button>
 
-          <button v-show="!locked" class="btn btn-default save-as-draft beta-btn-secondary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
+          <button class="btn btn-default save-as-draft beta-btn-secondary" :class="hiddenClass()" v-if="!campaign.campaign_data.template" @click="save">
             Save as Draft
           </button>
 
@@ -19,8 +23,7 @@
             and templating is enabled on the tool.
           -->
           <b-btn @click="template" class="btn btn-default save-as-template beta-btn-secondary"
-            v-show="!locked"
-            v-if="campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
+            v-if="$can('create_template') && campaignConfig.enable_templating && !campaign.campaign_data.template && !campaign.processed
               && campaign.campaign_data.library_config.templating">
             Save as Template
           </b-btn>
@@ -29,8 +32,7 @@
             Show if it's already a template, skip confirmation modal.
           -->
           <button class="btn btn-default save-as-template beta-btn-secondary" @click="template"
-            :class="hiddenClass()" v-if="campaign.campaign_data.template"
-            v-show="!locked">
+            :class="hiddenClass()" v-if="campaign.campaign_data.template">
             Save Template
           </button>
 
@@ -40,8 +42,7 @@
             v-show="!locked"
           >Send for Review</button>
 
-          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="!campaign.campaign_data.template" @click="complete"
-            v-show="!locked" >
+          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="!campaign.campaign_data.template" @click="complete">
             Complete
             <i class="glyphicon glyphicon-menu-right"></i>
           </a>
@@ -69,8 +70,10 @@
 <script>
   import VueSticky from 'vue-sticky';
   import campaignService from '../../services/campaign';
+  import dashboardService from '../../services/dashboard';
   import campaignCleaner from '../../utils/campaignCleaner';
   import { html_beautify } from 'js-beautify';
+  
 
   export default {
     name: 'EmailActions',
@@ -90,6 +93,13 @@
       moduleErrors() {
         return this.$store.getters["campaign/moduleErrors"];
       },
+      libraryName () {
+        if( this.campaign.campaign_data.library_name.length > 50 ){
+          return this.campaign.campaign_data.library_name.substring(0,50) + "...";
+        }else{
+          return this.campaign.campaign_data.library_name;
+        }
+      }
     },
     data () {
       return {
@@ -113,7 +123,8 @@
           status: this.$_app.config.proofConfig.status,
           allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
             && this.$_app.config.permissions.indexOf('access_proof') >= 0
-        }
+        },
+        showLibraryName: false
       }
     },
     directives: {
@@ -313,12 +324,35 @@
       } else {
         this.titleCols += 2;
       }
+      dashboardService.getMenu().then((response) => {
+        if(response.length > 1){
+          this.showLibraryName = true;
+        }
+      })
     },
   };
 </script>
 
-<style>
+<style lang="less" scoped>
   .button-disabled {
     cursor: not-allowed;
+  }
+  .save-as-draft:focus{
+    background: #fff;
+    outline: none;
+    border: 1px solid #dddddd;
+  }
+</style>
+
+<style lang="less" scoped>
+  .subheader-title{
+    line-height:30px;
+    color:#514960;
+    position:relative;
+    padding-left:10px;
+    font-size: 18px;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-weight: 300;
+    margin-top: -1px;
   }
 </style>

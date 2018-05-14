@@ -7,7 +7,6 @@
         v-validate="'required'"
         v-model="mainSettingColor"
         placeholder="transparent"
-        class="col-sm-4" 
         disabled="disabled"
       >
       </el-input>
@@ -21,17 +20,16 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "GenericColor",
-  props: ["element", "name", "type", "link", "label", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   computed: {
     mainSettingColor: {
       get() {
-        return this.mainSetting === "transparent" ? "" : this.mainSetting;
+        return this.mainSetting;
       },
       set(color) {
         if (!Application.utils.validateHexVal(color)) {
-          color = color === null ? "transparent" : Application.utils.rgbToHex(color);
+          color = color === null ? "" : Application.utils.rgbToHex(color);
         }
         this.mainSetting = color;
       }
@@ -40,10 +38,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.el-input {
-  width: 86px;
-  padding: 0;
-}
 .el-color-picker {
   float: left;
   height: 28px;
@@ -51,6 +45,10 @@ export default {
 </style>
 <style lang="less">
 .generic-color {
+  .el-input {
+    padding: 0;
+    width: calc(~'100% - 34px');
+  }
   .el-color-picker__trigger {
     padding: 3px;
     height: 28px;

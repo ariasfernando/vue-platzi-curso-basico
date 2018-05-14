@@ -26,7 +26,7 @@ class Roles extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $roles = Role::all();
         $options = $this->option();

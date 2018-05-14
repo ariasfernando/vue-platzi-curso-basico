@@ -7,7 +7,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Email Preview</title>
 
-        <link href="{{  url( elixir('css/tool.css') ) }}" rel="stylesheet">
+        <link href="{{ url(mix('css/tool.css')) }}" rel="stylesheet">
     </head>
     <body>
 
@@ -20,6 +20,10 @@
             </div>
 
         </div>
+
+        {{-- Global Application JS object --}}
+        <script src="{{ cdn(mix('js/manifest.js')) }}"></script>
+        <script src="{{ cdn(mix('js/vendor.js')) }}"></script>
 
         @section('master-application-scripts')
             {{-- Global Application JS object --}}

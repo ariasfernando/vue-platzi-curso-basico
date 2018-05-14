@@ -43,7 +43,7 @@
               return component;
             }
 
-            if ( _.has(this.$store.getters["campaign/modules"][moduleId], 'structure')){
+            if ( _.has(this.$store.getters["campaign/modules"][moduleId], 'structure') && this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId]){
               component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
             }
 

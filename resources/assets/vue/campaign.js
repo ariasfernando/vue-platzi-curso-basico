@@ -1,19 +1,21 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import VueResource from 'vue-resource/dist/vue-resource';
 import VeeValidate from 'vee-validate';
 import Toast from 'vue-easy-toast';
 import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/en';
 import BootstrapVue from 'bootstrap-vue';
-import Croppa from 'vue-croppa';
 import 'url-search-params-polyfill';
 import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
 import store from './store';
+import acl from './resources/plugins/acl';
 import Campaign from './components/campaign/Campaign.vue';
 
 Vue.use(Bootstrap);
 Vue.use(VueResource);
+Vue.use(acl);
 Vue.use(VeeValidate);
 
 VeeValidate.Validator.localize('en', Vue.prototype.$_app.dictionary.campaign);
@@ -27,7 +29,6 @@ Vue.use(Toast, {
   closeable: true,
 });
 Vue.use(BootstrapVue);
-Vue.use(Croppa);
 Vue.use(interceptors);
 Vue.use(ElementUI, { locale });
 

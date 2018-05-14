@@ -21,7 +21,7 @@ return [
     |
     */
 
-    'api_driver' => 'eloqua',
+    'api_driver' => 'silverpop',
 
     /*
     |--------------------------------------------------------------------------
@@ -138,9 +138,12 @@ return [
     'silverpop' => [
         'title' => 'Silverpop',
         'class' => 'Silverpop',
-        'api_path' => 'http://api.pilot.silverpop.com/XMLAPI',
-        'user_name' => env('API_SILVERPOP_USERNAME', ''),
-        'password' => env('API_SILVERPOP_PASSWORD', ''),
+        'token_endpoint' => 'https://api2.ibmmarketingcloud.com/oauth/token',
+        'endpoint' => 'https://api2.ibmmarketingcloud.com/XMLAPI',
+        'client_id' => env('API_SILVERPOP_USERNAME', ''),
+        'client_secret' => env('API_SILVERPOP_PASSWORD', ''),
+        'app_name' => env('API_SILVERPOP_APP_NAME', ''),
+        'refresh_token' => env('API_SILVERPOP_REFRESH_TOKEN', ''),
         'folder_path' => '',
         'libraries' => []
     ],

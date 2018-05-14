@@ -164,14 +164,14 @@ class Worker
             if (Cache::has('job:'.$task.':total')) {
                 Cache::increment('job:'.$task.':total');
             } else {
-                Cache::add('job:'.$task.':total', 1, Carbon::now()->addDays(1));
+                Cache::add('job:'.$task.':total', 1, 1440); // ~1 day
             }
         }
 
         if (Cache::has('job:'.$task.':'.$step)) {
             Cache::increment('job:'.$task.':'.$step);
         } else {
-            Cache::add('job:'.$task.':'.$step, 1, Carbon::now()->addDays(1));
+            Cache::add('job:'.$task.':'.$step, 1, 1440); // ~1 day
         }
 
         if ($decrement && Cache::has('job:'.$task.':'.$decrement)) {

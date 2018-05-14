@@ -2,9 +2,11 @@
 
 namespace Stensul\Console\Commands\User;
 
+use Activity;
 use PasswordPolicy;
 use Stensul\Models\User;
 use Stensul\Models\Role;
+use MongoDB\BSON\ObjectID;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -27,9 +29,8 @@ class Create extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
-
         //Amount of users validation
         if (config('admin.users_limit') <= User::count()) {
             $this->error('The maximum number of users has been reached.');
@@ -76,16 +77,18 @@ class Create extends Command
         }
 
         $params = [
-            'name' => $name,
-            'last_name' => $last_name,
-            'email' => strtolower($email),
+            'name' => trim($name),
+            'last_name' => trim($last_name),
+            'email' => strtolower(trim($email)),
             'password' => bcrypt($password),
             'roles' => $selected_array
         ];
 
         if ($email != "") {
             if (!User::where('email', '=', strtolower($email))->exists()) {
-                User::create($params);
+                $user = User::create($params);
+
+                Activity::log('User created', array('properties' => ['user_id' => new ObjectID($user->_id)]));
 
                 $this->info(
                     'The user <options=bold>' . $name . '</> was created! Password: <options=bold>' . $password . '</>'

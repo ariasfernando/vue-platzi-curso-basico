@@ -95,12 +95,9 @@ class Eloqua implements ApiConnector
             $credentials = $response;
             $eloqua_token = $credentials['access_token'];
             if (array_key_exists($this->library_name, $this->eloqua_config['libraries'])) {
-                Cache::add(
-                    'api:eloqua:' . $this->library_name . ':token',
-                    Carbon::now()->addHours(1)->toDateTimeString()
-                );
+                Cache::add('api:eloqua:' . $this->library_name . ':token', 60); // 1 hour
             } else {
-                Cache::add('api:eloqua:token', $eloqua_token, Carbon::now()->addHours(1)->toDateTimeString());
+                Cache::add('api:eloqua:token', $eloqua_token, 60); // 1 hour
             }
         }
 
@@ -208,12 +205,9 @@ class Eloqua implements ApiConnector
             $response = $this->call($options);
             $base_url = str_replace("{version}", $this->api_version, $response['urls']['apis']['rest']['standard']);
             if (array_key_exists($this->library_name, $this->eloqua_config['libraries'])) {
-                Cache::add(
-                    'api:eloqua:' . $this->library_name . ':url',
-                    Carbon::now()->addHours(1)->toDateTimeString()
-                );
+                Cache::add('api:eloqua:' . $this->library_name . ':url', 60); // 1 hour
             } else {
-                Cache::add('api:eloqua:url', $base_url, Carbon::now()->addHours(1)->toDateTimeString());
+                Cache::add('api:eloqua:url', $base_url, 60); // 1 hour
             }
         }
 
@@ -259,12 +253,12 @@ class Eloqua implements ApiConnector
     {
         $client = $this->client;
 
-        $params = (isset($options['params']))? $options['params'] : [];
-        $params['headers'] = (isset($params['headers']))? $params['headers'] : [];
+        $params = $options['params'] ?? [];
+        $params['headers'] = $params['headers'] ?? [];
 
         try {
             if (!isset($params['auth'])) {
-                $eloqua_token = "Bearer ".$this->getToken();
+                $eloqua_token = "Bearer " . $this->getToken();
                 $params['headers']["Authorization"] = $eloqua_token;
             }
 
@@ -272,7 +266,7 @@ class Eloqua implements ApiConnector
                 $options['base_url'] = $this->getBaseUrl();
             }
 
-            $response = $client->request($options['type'], $options['base_url'].$options['path'], $params);
+            $response = $client->request($options['type'], $options['base_url'] . $options['path'], $params);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $error = [
                 'status' => 'error_request',

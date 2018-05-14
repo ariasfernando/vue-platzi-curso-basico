@@ -7,7 +7,7 @@
 ##
 
 
-FROM registry.stensuldev.net/dockerfiles/web-2.0.0
+FROM registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0
 
 # enable opcache heavily
 COPY ./conf.d/php/10-opcache.ini /etc/php.d/
@@ -29,18 +29,11 @@ COPY ./package.json /usr/src/app/package.json
 COPY ./package-lock.json /usr/src/app/package-lock.json
 RUN cd /usr/src/app/ && npm install
 
-# force cache for bower
-COPY ./.bowerrc /usr/src/app/.bowerrc
-COPY ./bower.json /usr/src/app/bower.json
-RUN mkdir -p resources/assets/bower
-RUN cd /usr/src/app/ && bower install --allow-root && bower cache clean --allow-root
-
-
 WORKDIR /usr/src/app/
 
 COPY . /usr/src/app/
 
-RUN cd /usr/src/app/ && php artisan vendor:publish
+RUN cd /usr/src/app/ && php artisan vendor:publish --all
 
-RUN cd /usr/src/app/ && gulp --production
+RUN cd /usr/src/app/ && npm run production
 RUN chown -R fbridge.fbridge /usr/src/app

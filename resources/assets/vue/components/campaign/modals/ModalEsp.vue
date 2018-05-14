@@ -1,8 +1,8 @@
 <template>
   <transition name="modal" v-if="modalEsp">
     <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container modal-esp">
+      <div class="modal-wrapper modal-esp">
+        <div class="modal-container">
           <slot name="header">
             <button type="button" class="close" @click="close"><span>&times;</span></button>
           </slot>

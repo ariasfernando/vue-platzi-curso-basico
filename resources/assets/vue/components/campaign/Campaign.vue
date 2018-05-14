@@ -5,11 +5,12 @@
     <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
       <!-- column left (menu) -->
-      <aside>
+      <aside :style="locked ? 'overflow-y: hidden;' : undefined">
         <div class="aside-inner">
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
-            <campaign-menu v-if="campaignConfigReady" :library-id="libraryId"></campaign-menu>
+            <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
+            <div class="lock-warning-container" v-if="locked">Unlock the email to add modules</div>
           </div>
         </div>
       </aside>
@@ -66,7 +67,7 @@
 
   export default {
     name: 'Campaign',
-    props: ['campaignId', 'libraryId'],
+    props: ['campaignId', 'libraryId', 'windowId', 'cachedWindowId'],
     components: {
       CampaignConfiguration,
       CampaignMenu,
@@ -86,12 +87,16 @@
       return {
         campaignReady: false,
         campaignConfigReady: false,
+        pingLockInterval: 30000,
         logTimeInterval: 30000,
       }
     },
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"];
+      },
+      locked() {
+        return this.campaign.campaign_data && this.campaign.campaign_data.locked;
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
@@ -104,6 +109,12 @@
       },
       showModuleSettings() {
         return this.$store.getters["campaign/showModuleSettings"];
+      },
+      sessionWindowId() {
+        if (!window.sessionStorage.getItem('windowId')) {
+          window.sessionStorage.setItem('windowId', this.windowId);
+        }
+        return window.sessionStorage.getItem('windowId');
       }
     },
     watch:{
@@ -149,12 +160,34 @@
             {className: 'et-error'}
           );
         });
+      },
+      lockPing() {
+        this.$store.dispatch('campaign/pingLockCampaign',
+          {campaignId: this.campaignId, windowId: this.sessionWindowId});
+        setInterval(() => {
+          this.$store.dispatch('campaign/pingLockCampaign',
+            {campaignId: this.campaignId, windowId: this.sessionWindowId}).then(response => {
+          }, error => {
+            this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+              {className: 'et-error'}
+            );
+          });
+
+        }, this.pingLockInterval);
       }
     },
     created: function () {
       this.$store.commit("global/setLoader", true);
       this.loadCampaign();
       this.loadConfig();
+      this.lockPing();
+      if (this.cachedWindowId && this.cachedWindowId !== this.sessionWindowId) {
+        this.$root.$toast(
+          'Warning! this campaign is already open on another window.',
+          {className: 'et-info'}
+        );
+      }
       setInterval(CampaignService.logTime, this.logTimeInterval, this.campaignId, this.logTimeInterval / 1000);
     }
   };
@@ -164,6 +197,7 @@
   @import '../../less/campaign';
   @stensul-white: #FFFFFF;
   @stensul-purple: #514960;
+  @stensul-gray: #666666;
   .section-canvas-email{
     .mce-content-body{
       line-height: inherit;
@@ -340,8 +374,8 @@
     width: 700px
   }
 
-  .switch-container{
-    position: relative;
+ .switch-container{
+    position: absolute;
     left: 50%;
     margin-left: -50px;
     width: 100px;
@@ -440,5 +474,15 @@
 
   .mce-edit-focus{
     outline: 1px dotted #333!important;
+  }
+</style>
+
+<style lang="less" scoped>
+  .lock-warning-container {
+    height: 1000px;
+    padding: 40px 60px 0;
+    background-color: #EDEDED;
+    color: #999999;
+    text-align: center;
   }
 </style>

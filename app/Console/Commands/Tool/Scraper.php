@@ -36,7 +36,7 @@ class Scraper extends Command
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         if (\Config::get('api.scraper.status') === true) {
             $libraries = array_keys(\Config::get('api.scraper.sources.libraries'));

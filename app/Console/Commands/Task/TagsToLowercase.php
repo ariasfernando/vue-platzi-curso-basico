@@ -33,7 +33,7 @@ class TagsToLowercase extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $this->info('>>> Update tags in campaigns.');
         $campaigns = Campaign::withTrashed()->get();

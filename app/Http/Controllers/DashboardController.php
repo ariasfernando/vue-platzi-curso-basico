@@ -3,6 +3,7 @@
 namespace Stensul\Http\Controllers;
 
 use Auth;
+use Campaign as CampaignManager;
 use Stensul\Models\Campaign;
 use Stensul\Models\Library;
 use Stensul\Models\Setting;
@@ -59,9 +60,24 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $flash_messages = [
+            'campaign_lock',
+            'campaign_not_found',
+            'campaign_permission',
+            'campaign_create'
+        ];
+        $flash = '';
+        foreach ($flash_messages as $message) {
+            if (session()->has($message)) {
+                $flash = $message;
+            }
+        }
+
         $params = [
             'locales' => \Config::get('locales'),
-            'libraries' => Auth::user()->getLibraries()
+            'libraries' => Auth::user()->getLibraries(),
+            'flash' => $flash,
+            'locked_by' => CampaignManager::whoIsLocking(session()->get('campaign_lock'))
         ];
 
         return $this->renderView('dashboard', ['params' => $params]);
@@ -114,7 +130,7 @@ class DashboardController extends Controller
 
         if ($sort === 'library_name') {
             $sort = 'library';
-        } else if ($sort == 'campaign_name') {
+        } elseif ($sort == 'campaign_name') {
             $sort = 'lower_campaign_name';
         }
 
@@ -183,6 +199,10 @@ class DashboardController extends Controller
 
         if (count($user_visibility) !== 0) {
             $campaigns->whereIn('library', $user_visibility);
+        }
+
+        if (!Auth::user()->can('access_unfixed_templates')) {
+            $campaigns->where('locked', '=', true, 'AND');
         }
 
         $total = $campaigns->count();
@@ -338,8 +358,9 @@ class DashboardController extends Controller
         $menu = [];
         $libraries = Auth::user()->getLibraries();
         if (count($libraries)) {
-            $campaign_menu = Setting::whereKey('campaign_menu')->first();
+            $campaign_menu = Setting::where('key', '=', 'campaign_menu')->first();
             if ($campaign_menu) {
+                $campaign_menu = $campaign_menu->toArray();
                 $menu = $this->getMenuBySettings($campaign_menu['value']);
             } else {
                 foreach ($libraries as $library_key => $library) {
@@ -366,7 +387,7 @@ class DashboardController extends Controller
         if (count($campaign_menu)) {
             foreach ($campaign_menu as $item) {
                 if ($item['type'] === 'item') {
-                    $library = Library::whereKey($item['key'])->first();
+                    $library = Library::where('key', '=', $item['key'])->first();
                     if ($library && Auth::user()->can('access_library_' . $item['key'])) {
                         $menu[] = [
                             'title' => isset($item['title']) ? $item['title'] : $library->name,

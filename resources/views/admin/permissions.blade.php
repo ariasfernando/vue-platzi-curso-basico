@@ -61,9 +61,11 @@
 							</tbody>
 						</table>
 					</div>
-
-					@if( $permissions->lastPage() > 1 && count($permissions->lastPage()) )
-						<div class="pagination" data-pages="<?php echo $permissions->lastPage(); ?>" <?php echo (isset($defaultDataPagination["view_name"]))? 'data-view="'.$defaultDataPagination["view_name"].'"':''; ?>></div>
+					@if ($permissions->lastPage() > 1)
+						<div class="pagination" data-pages="<?php echo $permissions->lastPage(); ?>"
+                            <?php echo isset($defaultDataPagination["view_name"])
+                                ? 'data-view="' . $defaultDataPagination["view_name"] . '"' : ''; ?>>
+                        </div>
 					@endif
 				</div>
 			</div>
@@ -74,5 +76,5 @@
 @endsection
 
 @section('footer-script')
-	<script src="{{ cdn(elixir('js/admin.js')) }}"></script>
+	<script src="{{ cdn(mix('js/admin.js')) }}"></script>
 @stop

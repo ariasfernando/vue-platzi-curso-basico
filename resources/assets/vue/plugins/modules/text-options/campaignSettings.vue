@@ -51,20 +51,19 @@
 
         node.removeChild(tn);
       },
-
       initTinyMCE() {
         const _this = this;
         const options = _.filter(this.plugin.config.options, 'value');
         const customSettings = {};
 
         _.each(this.plugin.config.settings, (e, k) => {
-          let content;
 
-          try {
+          let content;
+          if (Application.utils.isJsonString(e.content)){
             customSettings[k] = JSON.parse(e.content);
-          } catch(e) {
+          } else {
             customSettings[k] = e.content || e.value;
-          }
+          };
         });
 
         let toolbar = [];
@@ -78,7 +77,11 @@
           toolbar = ' ';
         }
 
-        const editorId = ['editor', this.currentComponent.moduleId, this.currentComponent.columnId, this.currentComponent.componentId].join('-');
+        const idInstance = this.$store.getters["campaign/modules"][this.currentComponent.moduleId].idInstance
+        const moduleId = this.currentComponent.moduleId;
+        const columnId = this.currentComponent.columnId;
+        const componentId = this.currentComponent.componentId;
+        const editorId = ['editor', idInstance, moduleId, columnId, componentId].join('-');
 
         const settings = {
 
@@ -93,6 +96,13 @@
           menubar: false,
           link_title: false,
           link_text_to_display: false,
+          link_fixed_color: false,
+          link_fixed_styles: false,//'{"text-decoration": "underline"}',
+          // persist_styles: JSON.stringify([{"ul":'{"mso-list": "disc"}'}]),
+          ul_fixed_style: 'margin-bottom: 0px !important; margin-top: 0px !important; margin-left: 25px; padding-left: 0px;',
+          ol_fixed_style: 'margin-bottom: 0px !important; margin-top: 0px !important; margin-left: 25px; padding-left: 0px;',
+          li_fixed_style: '{"margin":0}',
+          p_fixed_style: '{"margin":0}',
           forced_root_block :false,
           target_list: false,
           invalid_elements:'img',
@@ -102,6 +112,8 @@
           relative_urls: false,
           max_chars: this.plugin.config.settings.truncate ? this.plugin.config.settings.truncate.content : undefined,
           max_lines: this.plugin.config.settings.lines_limit ? this.plugin.config.settings.lines_limit.content : undefined,
+          advlist_bullet_styles: 'default',
+          advlist_number_styles: 'default',
 
           init_instance_callback: (editor) => {
             editor.on('blur', (e) => {
@@ -110,9 +122,9 @@
               }
 
               this.$store.commit('campaign/updateElement', {
-                moduleId: this.currentComponent.moduleId,
-                columnId: this.currentComponent.columnId,
-                componentId: this.currentComponent.componentId,
+                moduleId: moduleId,
+                columnId: columnId,
+                componentId: componentId,
                 data: {
                   text: editor.getContent()
                 }
@@ -130,9 +142,9 @@
                 const bm = editor.selection.getBookmark(2, true);
 
                 this.$store.commit('campaign/updateElement', {
-                  moduleId: this.currentComponent.moduleId,
-                  columnId: this.currentComponent.columnId,
-                  componentId: this.currentComponent.componentId,
+                  moduleId: moduleId,
+                  columnId: columnId,
+                  componentId: componentId,
                   data: {
                     text: editor.getContent()
                   }
@@ -290,6 +302,59 @@
                     .removeClass('bg-danger');
                 }
 
+              })
+              .on('change', (e) => {
+                const editor = tinymce.get(tinymce.activeEditor.id);
+                const link_fixed_color = editor.settings.link_fixed_color;
+                const link_fixed_styles = editor.settings.link_fixed_styles;
+                const ul_fixed_style = editor.settings.ul_fixed_style;
+                const ol_fixed_style = editor.settings.ol_fixed_style;
+                const li_fixed_style = editor.settings.li_fixed_style;
+                const p_fixed_style = editor.settings.p_fixed_style;
+                const persist_styles = editor.settings.persist_styles;
+
+                const changeStyles = (selector, styles) => {
+                  let editorLinks = $(editor.targetElm).find(selector);
+                  if(editorLinks.length){
+                    for (var i = 0; i < editorLinks.length; i++) {
+                      if(typeof styles === "string"){
+                        $(editorLinks[i]).css('cssText', styles);
+                      } else {
+                        $(editorLinks[i]).css(styles);
+                      }
+                    }
+                  }
+                }
+                if( link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color) ){
+                  changeStyles('a',{'color':link_fixed_color});
+                }
+                if( link_fixed_styles  && Application.utils.isJsonString(link_fixed_styles)){
+                  changeStyles('a', JSON.parse(link_fixed_styles));
+                }
+                if( ul_fixed_style){
+                    changeStyles('ul', ul_fixed_style);
+                }
+                if( ol_fixed_style){
+                    changeStyles('ol', ol_fixed_style);
+                }
+                if( li_fixed_style && Application.utils.isJsonString(li_fixed_style)){
+                    changeStyles('li', JSON.parse(li_fixed_style));
+                }
+                if( p_fixed_style && Application.utils.isJsonString(p_fixed_style)){
+                  changeStyles('p', JSON.parse(p_fixed_style));
+                }
+                if( persist_styles && Application.utils.isJsonString(persist_styles)){
+                  let persist_stylesJson = JSON.parse(persist_styles)
+                    for (var i = 0; i < persist_stylesJson.length; i++) {
+                      let selector = Object.keys(persist_stylesJson[i])[0]
+                      const editorLinks = $(editor.targetElm).find(selector);
+                        if(editorLinks.length){
+                        for (var i = 0; i < editorLinks.length; i++) {
+                          $(editorLinks[i]).attr('data-persist-styles', persist_stylesJson[i][selector]);
+                        }
+                      }
+                    }
+                  }
               });
           },
           paste_preprocess: (plugin, args) => {
@@ -336,6 +401,14 @@
   .mce-menu-item-preview {
     .mce-text {
       font-size: 14px !important;
+    }
+  }
+
+  // hidde the sub menu of Numbered list and Bullet list
+  div[aria-label="Numbered list"],
+  div[aria-label="Bullet list"]{
+    button.mce-open{
+      display: none;
     }
   }
 </style>

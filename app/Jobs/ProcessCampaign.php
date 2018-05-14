@@ -65,6 +65,8 @@ class ProcessCampaign implements ShouldQueue
 
         Worker::finish($job_id, 'process');
 
+        Activity::logCampaignProcessTime($this->campaign_id);
+
         Activity::Log(
             'job finished [process]',
             Worker::metadata(

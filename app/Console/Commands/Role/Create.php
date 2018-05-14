@@ -25,7 +25,7 @@ class Create extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $options = $this->option();
         $name = (is_null($options["name"]))? $this->ask('What is the role name ?') : $options["name"];

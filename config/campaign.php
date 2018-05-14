@@ -71,7 +71,7 @@ return [
         /*
          | List the fields where the search should be done.
          */
-        'fields_to_search' => ['campaign_name', 'created_by.email', 'updated_by.email'],
+        'fields_to_search' => ['campaign_name', 'created_by.email', 'updated_by.email', 'library_name'],
 
         /*
          | Show popular tags in the beginning of autocomplete.
@@ -172,17 +172,6 @@ return [
          */
         'selector_class' => ['image-destination-url', 'url-format']
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Current user email who is editing the email
-    |--------------------------------------------------------------------------
-    |
-    | Show the email address who is editing the campaign in the warning message
-    |
-    */
-
-    'show_who_is_locking' => false,
 
     /*
     |--------------------------------------------------------------------------

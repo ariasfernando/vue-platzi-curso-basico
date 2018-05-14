@@ -155,7 +155,12 @@ module.exports = {
         type: 'text',
         content: "[{\"title\":\"27px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"27px\",\"lineHeight\":\"30px\"}},{\"title\":\"29px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"29px\",\"lineHeight\":\"32px\"}},{\"title\":\"34px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"34px\",\"lineHeight\":\"36px\"}}]",
       },
-
+      link_fixed_color: {
+        title: 'Link fixed color',
+        value: false,
+        type: 'text',
+        content: '#514960',
+      },
     },
   },
   render: false,

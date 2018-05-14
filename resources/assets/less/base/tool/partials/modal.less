@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400');
+@import (css) url('https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400');
 
 .modal-mpf-content-data {
 
@@ -554,10 +554,33 @@
 
   .modal-container {
     width: 1160px!important;
-    height: 76vh;
     min-height: 450px;
     overflow: hidden;
-    margin: -20px auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    bottom: 50px;
+    top: 50px;
+    height:auto;
+
+    .modal-container-inner {
+      height:70%; /* calc fallback */
+      height: calc(100% - 106px);
+      .row {
+        height:100%;
+      }
+      .preview-body {
+        height:100%;
+      }
+      .preview-container {
+        height:100%;
+      }
+      .iframe-container {
+        height:85%; /* calc fallback */
+        height:calc(100% - 33px);
+      }
+    }
 
     .send-preview {
       margin-top: 10px;
@@ -587,15 +610,18 @@
       border: 1px solid #ccc;
       font-family: monospace, serif;
     }
+    
+    #send-preview-form {
+      height:100%; 
 
-    #send-preview-form .input-group {
-      width: 100%;
-      margin-top: 10px;
+      .input-group {
+        width: 100%;
+        margin-top: 10px;
 
-      .btn-group {
-        padding: 0px;
+        .btn-group {
+          padding: 0px;
+        }
       }
-
     }
     .btn-copy {
       border-top-right-radius: 3px;
@@ -643,7 +669,7 @@
         padding-top: 0px;
       }
       .iframe-container {
-        height: 45vh;
+        /*height: 45vh;*/
         overflow-y: auto;
         text-align: center;
         background: #F4F4F4;
@@ -657,7 +683,7 @@
       width: 100%!important;
     }
     .preview-body.col-md-8{
-      padding: 0px!important;
+      padding: 0px;
     }
 
     input.share-preview {
@@ -738,6 +764,10 @@
 .modal-complete {
   width: 900px;
 
+  .modal-container {
+      width: 900px;
+  }
+
   .copy-to-clipboard{
     float: right;
     z-index: 300;
@@ -774,6 +804,10 @@
 .modal-esp {
   width: 750px;
   overflow: auto;
+
+  .modal-container {
+    width: 750px;
+  }
 
   .modal-container-inner{
     height: 55vh;
@@ -831,6 +865,13 @@
 }
 
 @media only screen and (max-width : 1200px) {
+  .modal-wrapper:not(.modal-preview){
+    .modal-container{
+      .row{
+        width: 100%;
+      }
+    }
+  }
   .modal-wrapper{
     .modal-container{
       width: 90%!important;
@@ -854,23 +895,35 @@
       .send-preview{
         width: 35%
       }
-
-      .row{
-        width: 100%;
-      }
-
     }
   }  
 
   .modal-preview{
-    .modal-footer{
-        bottom: 13px!important;
+    .modal-footer {
+      bottom: 31px!important;
+    }
+    .modal-container {
+      .share-preview {
+        bottom:32px!important;
+      }
+      .modal-container-inner{
+        height:70%;/* calc fallback */
+        /* 100h - footer height */
+        height: calc(100% - 106px);
+        /*.row {
+          width:100%;
+        }*/
+      }
+      .preview-body{
+        margin-right:15px;
+      }
     }
   }
+
 }
 
 @media only screen and (max-width : 900px) {
-  .modal-wrapper{
+  .modal-wrapper:not(.modal-preview){
     .modal-container{
       width: 95%!important;
       overflow: hidden;
@@ -910,11 +963,34 @@
 
   .modal-preview{
     .modal-container{
-      height: 450px;
       min-height: auto;
+
+      .modal-container-inner{
+        height:70%; /* calc fallback */
+        /* 100h - footer height */
+        height: calc(100% - 106px);
+        overflow-y: scroll;
+        overflow-x: hidden;
+        padding-right: 15px;
+        > .row {
+          height:98%;/* calc fallback */
+          /* 100h - 10px to keep the desktop and mobile tabs visible */
+          height: calc( 100% - 10px );
+        }
+        .send-preview {
+          width:auto;
+          float:none;
+        }
+  
+        .preview-body{
+          width:auto;
+          float:none;
+        }
+      }
 
       div.share-preview{
         bottom: 37px;
+        max-width: 217px;
       }
 
       input.share-preview{
@@ -924,9 +1000,94 @@
       .modal-footer{
         bottom: 6px;
       }
+      
+      .send-preview,
+      .preview-body{
+        width: 100%;
+      }
+
+      
+
     }
   }
+}
 
+@media only screen and (max-height:  540px) {
+  #campaign .modal-preview .modal-container {
+    top:15px;
+    bottom:15px;
+  }
 }
 
 
+/* 
+* =================
+* PREVIEW MODAL FIX
+* =================
+*/
+
+/* public view */
+#public-view .modal-preview{
+  .modal-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    bottom: 50px;
+    top: 50px;
+    height:auto;
+  }
+  #send-preview-form{
+    height:100%;
+  }
+  
+  .modal-container-inner {
+    height:70%; /* calc fallback */
+    /* 100h - preview title height */
+    height: calc(100% - 50px);
+    .row {
+      height:100%;
+    }
+    .preview-body {
+      height: 100%;
+      margin: 0;
+      float: none;
+      width: 100%;
+    }
+    .preview-container{
+      height:100%;
+    }
+    .iframe-container{
+      height:85%;/* calc fallback */
+      /* 100h - tabs height */
+      height: calc(100% - 33px)!important;
+    }
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  #public-view .modal-preview .modal-container-inner .row{
+    width:auto;
+  }
+}
+
+@media only screen and (max-width:  900px) {
+  #public-view .modal-preview{
+    .modal-container-inner{
+      overflow:unset;
+      padding-right:0px;
+    }
+  }
+}
+
+
+
+
+
+
+@media only screen and (max-height:  540px) {
+  #public-view .modal-preview .modal-container {
+    top:15px;
+    bottom:15px;
+  }
+}
