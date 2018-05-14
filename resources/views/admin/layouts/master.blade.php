@@ -47,11 +47,12 @@
 			@include('partials.modal_confirm')
 
 			{{-- Scripts --}}
+			<script src="{{ cdn(mix('js/manifest.js')) }}"></script>
+        	<script src="{{ cdn(mix('js/vendor.js')) }}"></script>
 			<script src="{{ cdn(mix('js/library.js')) }}"></script>
 
 			{{-- Global Application JS object --}}
 			@include('partials/application_script')
-
 			@section('footer-script')
 
 			@show
