@@ -29,10 +29,6 @@ function checkFile(file) {
   return loadImage;
 }
 
-function checkUrl(url) {
-  return fetch(url);
-}
-
 function loadImage(url) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -43,7 +39,7 @@ function loadImage(url) {
     };
     xhr.onerror = () => {
       reject('Couldn\'t load resource');
-    }
+    };
     xhr.send();
   });
 }
@@ -59,7 +55,7 @@ function getBase64Img(image) {
         .then((img) => {
           reader.readAsDataURL(img);
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e);
         });
     } else {
@@ -68,7 +64,7 @@ function getBase64Img(image) {
   });
 }
 
-function checkSize(image, size) {
+function checkGIFSize(image, size) {
   return new Promise((resolve, reject) => {
     if (!image.includes('data:image/gif;base64')) {
       return resolve();
@@ -100,9 +96,34 @@ function checkSize(image, size) {
   });
 }
 
+function adjustSize(resize, image, size) {
+  return new Promise((resolve, reject) => {
+    if (!resize) {
+      resolve();
+    }
+    const tmpImg = new Image();
+    const newSize = size;
+    tmpImg.onload = () => {
+      const width = tmpImg.naturalWidth;
+      const height = tmpImg.naturalHeight;
+      if (height < size.height) {
+        newSize.height = height;
+      }
+      if (width < size.width) {
+        newSize.width = width;
+      }
+      return resolve(newSize);
+    };
+
+    tmpImg.onerror = () => reject();
+
+    tmpImg.src = image;
+  });  
+}
+
 export default {
   getBase64Img,
   checkFile,
-  checkSize,
-  checkUrl
+  checkGIFSize,
+  adjustSize,
 };
