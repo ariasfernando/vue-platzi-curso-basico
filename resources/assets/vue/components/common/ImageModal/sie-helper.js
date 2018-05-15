@@ -117,7 +117,9 @@ function completeUrlPath(urlPath, ref) {
       const splitKeys = keys.split('.');
       splitKeys.forEach((key) => {
         if (splitKeys.indexOf(key) === splitKeys.length - 1 && subelem[key] !== '') {
-          const url = urlPath + subelem[key];
+          let url = subelem[key];
+          url = url.replace('/images/', '');
+          url = urlPath + url;
           subelem[key] = url;
         } else {
           subelem = subelem[key];

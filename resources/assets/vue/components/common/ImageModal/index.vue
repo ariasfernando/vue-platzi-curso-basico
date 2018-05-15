@@ -162,6 +162,7 @@ export default {
     },
     clear() {
       this.reset();
+      this.$emit('clean');      
     },
     generateSieOptions(changeImage = false, newSize = {}) {
       const sieOptions = {
@@ -175,7 +176,6 @@ export default {
       }
 
       Object.assign(sieOptions.size, newSize);
-      sieOptions.size.height = sieOptions.size.auto ? 0 : sieOptions.size.height;
 
       this.sieOptions = sieOptions;
       if (typeof this.$refs.sie !== 'undefined') {
@@ -228,6 +228,7 @@ export default {
         this.$refs.sie.close();
       }
       this.currentImage = null;
+      this.isDisabled = false;
       this.page = {
         one: true,
         two: false,
