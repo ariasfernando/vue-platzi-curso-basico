@@ -1,5 +1,5 @@
 <template>
-  <div class="cta-text-wrapper stx-edit-text" :id="id" v-html="value" style="display: inline-block; width:100%"></div>
+  <div class="cta-text-wrapper stx-edit-text" :id="id" v-html="value" style="display: inline-block;"></div>
 </template>
 
 <script>
