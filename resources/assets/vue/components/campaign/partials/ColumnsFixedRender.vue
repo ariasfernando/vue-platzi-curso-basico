@@ -1,5 +1,5 @@
 <template>
-  <table class="st-col"
+  <table
          align="left"
          width="100%"
          cellspacing="0"
