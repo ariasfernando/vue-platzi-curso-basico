@@ -521,6 +521,13 @@ class ProofController extends Controller
         ];
     }
 
+    protected function formatDate($utcdatetime)
+    {
+        $date = new \DateTime($utcdatetime['date'], new \DateTimeZone(isset($utcdatetime['timezone']) ? $utcdatetime['timezone'] : 'UTC'));
+        $date->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        return $date->format('Y-m-d H:i:s');
+    }
+
     /**
      * Get a list of reviewers by a given campaign id
      *
@@ -541,10 +548,10 @@ class ProofController extends Controller
                     if (isset($reviewer['decision_comment'])) {
                         $reviewer['comment'] = Comment::find($reviewer['decision_comment'])->content;
                     }
-                    $date = $reviewer['decision_at']->toDateTime()->format('Y-m-d H:i:s');
+                    $date = $this->formatDate($reviewer['decision_at']);
                 } else {
                     $date = isset($reviewer['notified_at'])
-                        ? $reviewer['notified_at']->toDateTime()->format('Y-m-d H:i:s')
+                        ? $this->formatDate($reviewer['notified_at'])
                         : $proof->created_at->format('Y-m-d H:i:s');
                 }
                 $reviewer['last_modified_date'] = $date;
