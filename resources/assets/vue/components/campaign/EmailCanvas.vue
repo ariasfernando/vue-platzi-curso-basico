@@ -2,6 +2,7 @@
   <div>
     <back-to-top></back-to-top>
     <!-- content canvas email -->
+    <div v-if="buildingMode ==='mobile'" v-html="templateWidthStyles"></div>
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
@@ -105,11 +106,15 @@
         return this.$store.state.campaign.campaign;
       },
       templateWidth () {
-        if(this.buildingMode ==='mobile'){
-          return this.$store.getters["campaign/campaign"].library_config.templateMobileWidth;
-        } else {
-          return this.$store.getters['campaign/templateWidth'];
-        }
+        return this.$store.getters['campaign/templateWidth'];
+      },
+      templateWidthStyles(){
+        return `
+        <style>
+          #emailCanvas.stx-mobile-mode {
+              width: ${this.$store.getters["campaign/campaign"].library_config.templateMobileWidth}px!important;
+          }
+        </style>`
       },
       buildingMode() {
         return this.$store.getters["campaign/buildingMode"];
@@ -424,7 +429,6 @@
       min-height: 40px;
     }
     &.stx-mobile-mode {
-      width: 480px;
       // Mobile Classes
       @import '../../../less/base/commons/mobile/mobile_core_styles';
       @import '../../../less/base/commons/mobile/mobile_client_styles';
