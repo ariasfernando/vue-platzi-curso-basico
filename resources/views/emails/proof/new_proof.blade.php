@@ -28,14 +28,8 @@
     @endif
     <tr>
         <td align="left" valign="top" style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">
-            Thanks,<br>
-            The stensul team
-        </td>
-    </tr>
-    <tr>
-        <td align="left" valign="top" style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">
             <br>
-            <p>To ensure that you continue receiving our emails, please add <a href="mailto:{{ $from_email }}">{{ $from_email }}</a> to your address book or safe list.</p>
+            <p>To ensure important emails like this one reach your inbox, please add <a href="mailto:{{ $from_email }}">{{ $from_email }}</a> to your address book or safe sender list.</p>
             <p>If you received this email in error, please contact stensul at <a href="mailto:{{ $app_config["app_mail_address"] }}">{{ $app_config["app_mail_address"] }}</a> immediately.</p>
         </td>
     </tr>

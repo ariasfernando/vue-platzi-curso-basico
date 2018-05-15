@@ -187,7 +187,7 @@ class EmailSender
         switch ($data['type']) {
             case 'new_proof':
                 $email_layout = 'emails.proof.new_proof';
-                $subject = sprintf('Review Request: %s, from %s', $data['campaign_name'], $data['requestor']);
+                $subject = sprintf('Review Request: %s (from %s)', $data['campaign_name'], $data['requestor']);
                 $data['notification_message'] =
                     isset($reviewer['notification_message']) ? $reviewer['notification_message'] : '';
                 break;

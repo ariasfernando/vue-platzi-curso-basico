@@ -110,7 +110,7 @@ class SendReviewersEmail extends Job implements ShouldQueue
 
         $params = [
             'proof_id' => $this->proof->id,
-            'requestor' => $requestor->name,
+            'requestor' => $requestor->name .' '. $requestor->last_name,
             'campaign_name' => $campaign->campaign_name,
             'proof_url' => url('proof/review', $this->proof->token),
             'type' => 'new_proof',
