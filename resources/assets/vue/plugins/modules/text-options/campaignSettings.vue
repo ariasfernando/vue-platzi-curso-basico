@@ -187,21 +187,19 @@
               editor.focus();
             });
 
-            //Check for Chars Limit
-
-            let tinyMax = parseInt(editor.settings.max_chars);
-            let tinyMaxLines = parseInt(editor.settings.max_lines);
-            let tinyLength, tinyText;
-
             editor
               .on('keydown',(e) => {
+
+                let tinyMax = parseInt(editor.settings.max_chars);
+                let tinyMaxLines = parseInt(editor.settings.max_lines);
+                let tinyLength, tinyText;
 
                 if(!tinyMax){
                   //if truncate is NAN, returns and avoid validations
                   return
                 }
 
-                let $textElement = $('#'+tinyMCE.activeEditor.id);
+                let $textElement = $('#'+editor.id);
                 tinyLength = $textElement.text().length;
                         
                 const allowKeys = [
@@ -246,12 +244,28 @@
 
               })
               .on('keyup change', (e) => {
+                const editor = tinyMCE.activeEditor;
+
+                const tinyMax = parseInt(editor.settings.max_chars) || undefined;
+
+                let maxLines, tinyMaxLines;
+
+                if (typeof editor.settings.max_lines === "string") {
+                  const node = editor.selection.getNode();
+                  const fontSize = document.defaultView.getComputedStyle(node).getPropertyValue("font-size");
+                  tinyMaxLines = JSON.parse(editor.settings.max_lines)[fontSize];
+                } else {
+                  tinyMaxLines = parseInt(editor.settings.max_lines) || undefined;
+                }
+
+                let tinyLength, tinyText;
+
                 if( !(tinyMax || tinyMaxLines) ){
                   //if truncate is NAN, returns and avoid validations
                   return
                 }
 
-                let $textElement = $('#'+tinyMCE.activeEditor.id);
+                let $textElement = $('#'+editor.id);
                 tinyLength = $textElement.text().length;
 
                 //Check for Characters Limit
@@ -270,10 +284,9 @@
 
                 let divHeight = $textElement.height();
                 let lineHeight = parseInt($textElement.css("lineHeight"));
-                let actualLines = divHeight / lineHeight;
+                let actualLines = parseInt(divHeight / lineHeight);
 
                 if (actualLines > tinyMaxLines) {
-
                   _this.$root.$toast("You've reached the maximum number of lines (" + (tinyMaxLines) +")",{
                     className: 'et-error',
                     horizontalPosition: 'right',
@@ -344,7 +357,7 @@
                   }
               });
           },
-          paste_preprocess: function (plugin, args) {
+          paste_preprocess: (plugin, args) => {
             
             let editor = tinymce.get(tinymce.activeEditor.id);
             let tinyMax = parseInt(editor.settings.max_chars);
@@ -383,12 +396,19 @@
     }
   }
 </script>
+
 <style lang="less">
+  .mce-menu-item-preview {
+    .mce-text {
+      font-size: 14px !important;
+    }
+  }
+
   // hidde the sub menu of Numbered list and Bullet list
   div[aria-label="Numbered list"],
   div[aria-label="Bullet list"]{
     button.mce-open{
-      display: none; 
+      display: none;
     }
   }
 </style>
