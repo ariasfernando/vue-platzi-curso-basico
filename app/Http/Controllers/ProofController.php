@@ -339,7 +339,7 @@ class ProofController extends Controller
      * @param  String  $token
      * @return Json
      */
-    public function deleteDecision($token)
+    public function postDeleteDecision($token)
     {
         // Get proof by given token
         $proof = Proof::whereToken($token)->first();

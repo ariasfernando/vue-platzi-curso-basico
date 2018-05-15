@@ -137,6 +137,7 @@
                     });
             },
             decisionMade: function() {
+                return false; // this will be commented until we finish all this implementation
                 // Ugly but works. @TODO: find a better way to do this (e.g. vuex)
                 this.$children[1].getComments();
             },
