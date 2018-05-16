@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import customer from 'customer';
 import plugins from '../plugins';
 import filters from '../filters';
 import directives from '../directives';
@@ -15,7 +16,7 @@ export default {
   bootstrap() {
     // Inject configs into main instance
     this.Vue.prototype.$_app = {
-      config: Application.globals
+      config: Application.globals,
     };
     this.Vue.prototype.$_customer = customer || {};
 

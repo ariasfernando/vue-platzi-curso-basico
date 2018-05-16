@@ -10,7 +10,6 @@
 @endsection
 
 @section('footer-script')
-    <script src="{{ cdn(mix('js/customer.js')) }}"></script>
     <script src="{{ cdn(mix('js/jquery.js')) }}"></script>
     <script src="{{ cdn(mix('js/public-view.js')) }}"></script>
 @stop

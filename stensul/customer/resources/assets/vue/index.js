@@ -2,10 +2,10 @@ const plugins = require('./plugins');
 import * as modules from './modules';
 const fonts = require('./config/fonts');
 
-window.customer = {
+module.exports = {
   modules,
   plugins,
   config: {
-    fonts
-  }
+    fonts,
+  },
 };
