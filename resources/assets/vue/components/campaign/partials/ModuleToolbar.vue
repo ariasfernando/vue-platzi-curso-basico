@@ -10,10 +10,12 @@
 <script>
 
   import _ from 'lodash';
+  import ModuleListMixin from '../mixins/moduleListMixin';
 
   export default {
     name: 'ModuleToolbar',
     props: ['moduleId'],
+    mixins: [ ModuleListMixin ],
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"].campaign_data;
@@ -54,7 +56,7 @@
 
       },
       clone(){
-        this.$store.commit("campaign/cloneModule", this.moduleId);
+        this.addModule(this.module, this.moduleId + 1);
       },
       remove() {
         this.$store.dispatch("campaign/removeModule", this.moduleId);

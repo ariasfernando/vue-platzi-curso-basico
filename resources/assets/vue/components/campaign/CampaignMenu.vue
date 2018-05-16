@@ -85,9 +85,6 @@
       items () {
         return this.$store.getters["library/modules"];
       },
-      modules() {
-        return this.$store.getters["campaign/modules"];
-      },
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
         return this.modules[activeModuleId] || undefined;
@@ -145,64 +142,6 @@
         mod.data = {};
 
         this.addModule(mod);
-      },
-      addModule (m) {
-        const mod = clone(m);
-        mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
-
-        //TODO: handle fixed modules at non-header/non-footer position
-
-        if(this.isFixedHeader(mod) && this.campaignHasFixedHeader()) {
-          this.$root.$toast('A header is already present. Please remove it to add a new one.', {className: 'et-error'});
-        }
-        else if (this.isFixedFooter(mod) && this.campaignHasFixedFooter()) {
-          this.$root.$toast('A footer is already present. Please remove it to add a new one.', {className: 'et-error'});
-        }
-        else {
-          // Resolve fixed-header
-          if(this.isFixedHeader(mod)) {
-            this.insertModule({index: 0, moduleData: mod});
-
-            setTimeout(() => {
-              this.autoScrollTop();
-            }, 25);
-          }
-          // Resolve fixed-footer and others modules
-          else {
-            // If fixed-footer already exists, adding a module mustn't go to end of the list
-            if(this.campaignHasFixedFooter()) {
-              this.insertModule({index: this.getLastIndex(), moduleData: mod});
-            }
-            else {
-              // Add module to the end of the list
-              this.addModuleLastPosition(mod);
-            }
-
-            setTimeout(() => {
-              this.autoScrollBottom();
-            }, 25);
-          }
-        }
-      },
-      autoScrollTop (){
-        let bounds = 0;
-        let isVisible = bounds < window.innerHeight && bounds > 0;
-
-        if (!isVisible) {
-            $('html,  .section-canvas-email').animate({
-                scrollTop: bounds
-            }, 100);
-        }
-      },
-      autoScrollBottom (){
-        let bounds = $(".section-canvas-container").outerHeight();
-        let isVisible = bounds < window.innerHeight && bounds > 0;
-
-        if (!isVisible) {
-            $('html,  .section-canvas-email').animate({
-                scrollTop: bounds
-            }, 100);
-        }
       },
       expand (event, item) {
         const index = this.expanded.indexOf(item);
