@@ -14,7 +14,7 @@ class LibrariesIndex extends Migration
     public function up()
     {
         Schema::table('libraries', function ($table) {
-            $table->unique('key');
+            $table->unique('key', 'libraries_key_unique');
         });
     }
 
@@ -26,7 +26,7 @@ class LibrariesIndex extends Migration
     public function down()
     {
         Schema::table('libraries', function ($table) {
-            $table->dropIndex('key');
+            $table->dropIndex('libraries_key_unique');
         });
     }
 }
