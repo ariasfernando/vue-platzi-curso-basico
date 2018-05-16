@@ -45,7 +45,7 @@
                 style="width:100%"
               >
                 <tr>
-                  <td 
+                  <td
                     width="100%"
                     :align="component.button.attribute.align"
                     :style="buttonFontStyles"
@@ -123,7 +123,8 @@
           'border-top-color':this.component.button.style.borderTopColor,
           'border-right-color':this.component.button.style.borderRightColor,
           'border-bottom-color':this.component.button.style.borderBottomColor,
-          'border-left-color':this.component.button.style.borderLeftColor
+          'border-left-color':this.component.button.style.borderLeftColor,
+          'border-radius':this.component.button.style.borderRadius
         }
       },
       buttonFontStyles() {

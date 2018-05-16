@@ -65,6 +65,14 @@ function buttonDefault() {
           type: 'border-group',
           subComponent: 'button',
         },
+        {
+          link: 'style',
+          label: 'Border radius',
+          name: 'borderRadius',
+          isPixel: true,
+          type: 'generic-number',
+          subComponent: 'button',
+        }
       ],
       [
         {
