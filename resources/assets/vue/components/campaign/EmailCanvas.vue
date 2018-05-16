@@ -202,9 +202,14 @@
         const mod = clone(found);
         mod.data = {};
 
-
-        if (!this.validateSortingToIndex({index: e.newIndex, moduleData: mod})){
-          this.$root.$toast('The position is occuped by a fixed module.', {className: 'et-info'});
+        if(this.isFixedHeader(mod) && this.campaignHasFixedHeader()) {
+          this.$root.$toast('A header is already present. Please remove it to add a new one.', {className: 'et-error'});
+        }
+        else if (this.isFixedFooter(mod) && this.campaignHasFixedFooter()) {
+          this.$root.$toast('A footer is already present. Please remove it to add a new one.', {className: 'et-error'});
+        }
+        else if (!this.validateSortingToIndex({index: e.newIndex, moduleData: mod})){
+          this.$root.$toast('The position is occupied by a fixed module.', {className: 'et-info'});
         }
         else {
           mod.idInstance = Math.floor(100000 + (Math.random() * 900000));

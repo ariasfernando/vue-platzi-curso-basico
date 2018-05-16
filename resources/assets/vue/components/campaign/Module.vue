@@ -1,7 +1,7 @@
 <template>
   <tr v-if="module.type === 'custom'"
       class="stx-module-wrapper"
-      :class="[`stx-${module.name}`, module.isFixed ? 'stx-fixed' : '', {'stx-module-wrapper-active': activeModule === moduleId }]"
+      :class="[`stx-${module.name}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': activeModule === moduleId }]"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
   >
@@ -20,7 +20,7 @@
   <tr
     v-else
     class="stx-module-wrapper"
-    :class="[`stx-${module.key}`, {'stx-module-wrapper-active': activeModule === moduleId }]"
+    :class="[`stx-${module.key}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': activeModule === moduleId }]"
     @mouseover="setModulesMouseOver"
     @mouseleave="setModulesMouseLeave"
   >
