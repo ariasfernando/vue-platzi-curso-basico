@@ -56,7 +56,7 @@
       },
       height: {
         get() {
-          return _.parseInt(this.component.container.style.height);
+          return _.parseInt(this.component.divider.style.height);
         },
         set(value) {
           this.validate();
@@ -78,7 +78,7 @@
             columnId: this.currentComponent.columnId,
             componentId: this.currentComponent.componentId,
             link: 'style',
-            subComponent:"container",
+            subComponent:"divider",
             property,
             value: value +'px',
           };
