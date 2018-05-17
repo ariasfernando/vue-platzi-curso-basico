@@ -333,21 +333,26 @@
                                                 class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
                                         </p>
                                         <draggable v-model="group.modules" class="drag-component-menu" @add="onAdd" :options="{group:'menuList'}">
-                                          <li class="component-item list-group-item" v-for="(module, idx) in group.modules">
-                                            <input v-model="module.name" v-validate="'required'"
-                                                    :class="{'input': true, 'menu-item' : true }" type="text" placeholder="Enter module name">
-                                            <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(group.modules,idx)"></span>
-                                          </li>
+                                          <template v-for="(module, idx) in group.modules">
+                                            <p class="module-id">{{ module.moduleId }}</p>
+                                            <li class="component-item list-group-item">
+                                              <input v-model="module.name" v-validate="'required'"
+                                                      :class="{'input': true, 'menu-item' : true }" type="text" placeholder="Enter module name">
+                                              <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(group.modules,idx)"></span>
+                                            </li>
+                                          </template>
                                         </draggable>
                                         <div class="group-remove-container">
                                           <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)"></span>
                                           <hr/>
                                         </div>
                                       </div>
+                                      <p class="module-id">{{ group.moduleId }}</p>
                                       <li v-if="group.type == 'item'" class="component-item list-group-item">
                                         <input v-model="group.name" v-validate="'required'"
                                                 :class="{'input': true , 'menu-item' : true }" type="text" placeholder="Enter module name">
                                         <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(library.modules,idx)"></span>
+                                        
                                       </li>
                                     </div>
                                   </draggable>
@@ -800,6 +805,13 @@
     .components-list {
       padding: 0;
       margin: 0;
+
+      p.module-id {
+        color: #DDDDDD;
+        font-size: 12px;
+        cursor: text;
+        margin: 0;
+      }
 
       .component-item{
         cursor: pointer;
