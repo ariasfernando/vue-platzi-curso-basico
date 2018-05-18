@@ -44,10 +44,10 @@
               <td :title="library.description">{{ library.description }}</td>
               <td title="Modules">
               <template v-for="(module, index) in library.modules">
-                <span class="modules-list" v-if="typeof module === 'string'">{{ module }}</span>
-                <span class="modules-list" v-if="typeof module === 'object'"><b>- {{ index }}</b></span>
-                <div v-if="typeof module === 'object'">
-                  <span class="modules-list" v-for="m in module">{{ m }}</span>
+                <span class="modules-list" v-if="module.type == 'item'">{{ module.name }}</span>
+                <span class="modules-list" v-if="module.type == 'sub-menu'"><b>- {{ module.name }}</b></span>
+                <div v-if="module.type == 'sub-menu'">
+                  <span class="modules-sub-list" v-for="m in module.modules">{{ m.name }}</span>
                 </div>
               </template>
               </td>
@@ -190,6 +190,10 @@
     color: #514960!important;
   }
   .modules-list {
+    display: block;
+  }
+  .modules-sub-list {
+    padding-left: 20px;
     display: block;
   }
 </style>

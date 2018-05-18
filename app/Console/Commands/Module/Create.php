@@ -2,9 +2,12 @@
 
 namespace Stensul\Console\Commands\Module;
 
+use Stensul\Models\Module;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
+use Stensul\Services\ModelKeyManager;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Console\Input\InputOption;
+
 
 class Create extends Command
 {
@@ -15,11 +18,8 @@ class Create extends Command
      *
      * @var string
      */
-    protected $signature = 'module:create {name?} {description?} {module_id?} {parent_module?} {config?}
+    protected $signature = 'module:create {name?} {config?}
         {--name= : Module name (This is how it will show on the menu)}
-        {--description= : Module description (Brief explanation of what this module does)}
-        {--module_id= : Must be all lowercase, replace spaces with underscores}
-        {--parent_module= : Id of the module we want as a template (Use "none" to use default template and config")}
         {--config=default : Module config JSON, not really intended to use from command line}';
 
     /**
@@ -33,14 +33,15 @@ class Create extends Command
     * Stensul App Name
     */
     private $app_name;
+    private static $module_dir;
 
-    const ERROR_INVALID_MODULE_ID = 1;
+    const ERROR_INVALID_MODULE_KEY = 1;
     const ERROR_CREATING_MODULE_DIR = 2;
     const ERROR_CONFIG_FILE = 3;
-    const ERROR_TEMPLATE_FILE = 4;
-    const ERROR_PARENT_TEMPLATE = 5;
-    const ERROR_DUPLICATE_MODULE_ID = 6;
-    const ERROR_INVALID_JSON = 7;
+    const ERROR_VIEW_FILE = 4;
+    const ERROR_DUPLICATE_MODULE_KEY = 5;
+    const ERROR_INVALID_JSON = 6;
+    const ERROR_INDEX_FILE = 7;
 
     /**
      * Create a new command instance.
@@ -51,6 +52,7 @@ class Create extends Command
     {
         parent::__construct();
         $this->app_name = app('config')->get('app.name');
+        self::$module_dir = base_path() . DS . 'stensul' . DS . 'customer' . DS . 'resources' . DS . 'assets' . DS . 'vue' . DS . 'modules';
     }
 
     /**
@@ -78,55 +80,30 @@ class Create extends Command
             $this->ask('What is the module name? (This is how it will show on the menu)')
             : $options['name'];
 
-        $description = is_null($options['description']) ?
-            $this->ask('What is the module description? (Brief explanation of what this module does)')
-            : $options['description'];
-
-        $module_id = is_null($options['module_id']) ?
-            $this->anticipate(
-                'What is the module id? (Must be all lowercase, replace spaces with underscores)',
-                // Autocomplete with the normalized module name.
-                [preg_replace(['/\s+/', '/[^a-z0-9\-\_]/i'], ['_', ''], strtolower($name))]
-            )
-            : $options['module_id'];
+        $module_key = ModelKeyManager::getStandardKey(new Module, $name);
 
         // Reserved module IDs.
-        if (empty($module_id) || in_array($module_id, ['default', 'none'])) {
-            $this->error("Invalid module ID.");
-            return self::ERROR_INVALID_MODULE_ID;
-        } elseif (isset($modules[$module_id])) {
-            $this->error("Duplicated module ID.");
+        if (empty($module_key) || in_array($module_key, ['default', 'none'])) {
+            $this->error("Invalid module KEY.");
+            return self::ERROR_INVALID_MODULE_KEY;
+        } elseif (isset($modules[$module_key])) {
+            $this->error("Duplicated module KEY.");
 
-            return self::ERROR_DUPLICATE_MODULE_ID;
+            return self::ERROR_DUPLICATE_MODULE_KEY;
         }
 
-        $parent_module = is_null($options['parent_module']) ?
-            $this->anticipate(
-                'What is the module parent id? (Use "none" to use default template and config")',
-                // Autocomplete with module IDs.
-                array_keys($modules)
-            )
-            : $options['parent_module'];
-
         if ($options['config'] === 'default') {
-            if ($parent_module !== 'none' && isset($modules[$parent_module])) {
-                $config = $modules[$parent_module];
-                $config['module_id'] = $module_id;
-                $config['title'] = $name;
-                $config['type'] = 'custom';
-                $config['description'] = $description;
-            } else {
-                $config = [
-                    'module_id' => $module_id,
-                    'title' => $name,
-                    'app_name' => $this->app_name,
-                    'action' => 'add',
-                    'level' => 'single',
-                    'file_parent' => 'base',
-                    'type' => 'custom',
-                    'description' => $description
-                ];
-            }
+            $config = [
+                    "key" => $module_key,
+                    "name" => $name,
+                    "version" => "0.0.1",
+                    "author" => "",
+                    "type" => "custom",
+                    "data" => [],
+                    "params" => [],
+                    "enabled" => true,
+                    "settings" => true
+            ];
         } else {
             $config = json_decode($options['config']);
 
@@ -136,7 +113,7 @@ class Create extends Command
             }
         }
 
-        $module_dir = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS . 'modules' . DS . $module_id;
+        $module_dir = self::$module_dir . DS . $module_key;
 
         try {
             mkdir($module_dir, 0755, true);
@@ -150,85 +127,135 @@ class Create extends Command
             return self::ERROR_CONFIG_FILE;
         }
 
-        if (!$this->saveTemplate($module_dir, $module_id, $parent_module)) {
+        if (!$this->saveIndexFile($module_dir)) {
+            $this->error("Couldn't create config file.");
+            return self::ERROR_INDEX_FILE;
+        }
+
+        if (!$this->saveViewFile($module_dir)) {
             $this->error("Couldn't create template file.");
-            return self::ERROR_TEMPLATE_FILE;
+            return self::ERROR_VIEW_FILE;
+        }
+
+        if (!$this->saveSettingsFile($module_dir)) {
+            $this->error("Couldn't create template file.");
+            return self::ERROR_VIEW_FILE;
         }
 
         $this->info('Module created!');
     }
 
+    /**
+    * Save config file for the module on disk.
+    *
+    * @param string $module_dir
+    * @param array $module_dir
+    * @return bolean
+    */
     private function saveConfig($module_dir, $config)
     {
         return file_put_contents($module_dir . DS . 'config.json', json_encode($config, JSON_PRETTY_PRINT));
     }
 
     /**
-    * Save template for the module on disk.
+    * Save view.vue file for the module on disk.
     *
     * @param string $module_dir
-    * @param string $module_id
-    * @param string $parent_module
     * @return bolean
     */
-    private function saveTemplate($module_dir, $module_id, $parent_module = null)
+    private function saveViewFile($module_dir)
     {
         $template = <<<EOF
-{{-- $module_id : Start --}}
-<tr data-params='{{json_encode(\$module_params)}}'>
-    <td bgcolor="#ffffff">
-        <table cellspacing="0" cellpadding="0" border="0" width="100%">
-            <tbody><tr>
-                <td style="padding: 40px; font-family: {{ \$params['campaign_data']->getLibraryConfig('font_family') }};
-                    font-size: 15px; mso-height-rule: exactly; line-height: 20px;
-                    color: {{ \$module_params['data']['color'] or "#555555" }};">
-                    <div class="text-overlay">
-                        <div class="prevent-overflow">
-                            <p id="text-editable" class="st-edit-text">
-                                {!! \$module_params['data']['text0'] or "Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit.
-                                Vestibulum tempus, lacus et vehicula congue, felis diam rhoncus enim, a scelerisque
-                                sapien nulla non tortor. Mauris aliquet accumsan lorem,
-                                eget blandit diam pretium at." !!}
-                            </p>
-                        </div>
-                        <div class="text-overlay-toolbox"></div>
-                    </div>
-                </td>
-            </tr></tbody>
-        </table>
-    </td>
-</tr>
-{{-- $module_id : End --}}
+<template>
+  <table width="660" align="center" class="st-wrapper" cellspacing="0" cellpadding="0" border="0" style="width: 600px;">
+    <tr>
+      <td width="100%" style="vertical-align: top; width: 100%;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+          <!-- ELEMENT -->
+          <tr>
+            <td width="100%" style="width: 100%;">
+                Lorem ipsum!
+            </td>
+          </tr>
+          <!-- ELEMENT ENDS -->
+        </table>                
+      </td>
+    </tr>
+  </table>
+</template>
+
+<script>
+  export default {
+    props: [],
+    computed: {},
+    data () {
+      return {},
+      }
+    },
+    methods: {},
+    },
+  }
+</script>
+
+<style>
+</style>
 EOF;
 
-        // Override default template if a parent module is specified.
-        if (!empty($parent_module) && $parent_module !== 'none') {
-            // @todo check if it's an old module.
-            $parent_dir = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS
-                . 'modules' . DS . $parent_module;
 
-            $template = false;
+        return file_put_contents($module_dir . DS . 'view.vue', $template);
+    }
 
-            try {
-                $template = file_get_contents($parent_dir . DS . 'template.blade.php');
-            } catch (\Exception $exception) {
-                try {
-                    // Try old module
-                    $template_file = app()->resourcePath() . DS . 'views' . DS . $this->app_name . DS . 'modules'
-                        . DS . $parent_module . '.blade.php';
+    /**
+    * Save settings.vue file for the module on disk.
+    *
+    * @param string $module_dir
+    * @return bolean
+    */
+    private function saveSettingsFile($module_dir)
+    {
+        $template = <<<EOF
+<template>
+  <div class="settings-wrapper plugin-wrapper">
+    <!-- Module settings here -->
+  </div>
+</template>
 
-                    $template = file_get_contents($template_file);
-                } catch (\Exception $exception) {
-                }
-            }
+<script>]
+  export default {
+    props: ['module', 'moduleId'],
+    components: {},
+    computed: {},
+    methods: {},
+  }
+</script>
 
-            if (!$template) {
-                $this->error("Couldn't fetch parent template file.");
-                return false;
-            }
-        }
+<style lang="less">
+</style>
+EOF;
 
-        return file_put_contents($module_dir . DS . 'template.blade.php', $template);
+
+        return file_put_contents($module_dir . DS . 'settings.vue', $template);
+    }
+
+    /**
+    * Save index.js file for the module on disk.
+    *
+    * @param string $module_dir
+    * @return bolean
+    */
+    private function saveIndexFile($module_dir){
+        $file_content = <<<EOF
+import view from './view.vue';
+import config from './config.json';
+import settings from './settings.vue';
+
+module.exports = {
+  ...config,
+  view,
+  settings
+};
+EOF;
+        return file_put_contents($module_dir . DS . 'index.js', $file_content);
+
     }
 }

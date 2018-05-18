@@ -13,7 +13,7 @@
                     <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd">
                       <div class="add single">
                         <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
-                          {{ subitem.title || subitem.name }} <i class="glyphicon glyphicon-plus"></i>
+                          {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
                         </h2>
                       </div>
                     </draggable>
@@ -25,7 +25,7 @@
             <draggable v-else :element="'div'" :options="options" @clone="onClone" @end="onEnd">
               <div class="add single">
                 <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">
-                  {{ item.title || item.name }} <i class="glyphicon glyphicon-plus"></i>
+                  {{ item.name }} <i class="glyphicon glyphicon-plus"></i>
                 </h2>
               </div>
             </draggable>
@@ -41,6 +41,7 @@
   import clone from 'clone';
   import _ from 'lodash';
   import Draggable from 'vuedraggable';
+  import ModuleListMixin from './mixins/moduleListMixin';
 
   export default {
     name: 'CampaignMenu',
@@ -53,6 +54,7 @@
         required: true
       }
     },
+    mixins: [ ModuleListMixin ],
     data () {
       return {
         options: {
@@ -77,11 +79,11 @@
       }
     },
     computed: {
+      campaign () {
+        return this.$store.getters["campaign/campaign"];
+      },
       items () {
         return this.$store.getters["library/modules"];
-      },
-      modules() {
-        return this.$store.getters["campaign/modules"];
       },
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
@@ -89,13 +91,31 @@
       }
     },
     created() {
-
+      // Set defaults for modules from menu
       this.getLibrary().then(response => {
+
+        // Sanitize library's modules
         _.each(this.items, (item) => {
           if (item.sub_menu) {
+            // Items representing a menu group
             this.expanded[item.name] = false;
+
+            // Grouped modules in library menu
+            _.each(item.sub_menu, (item) => {
+              this.setModuleFixedStatus(item);
+            });
+          }
+          else {
+            // First level modules in library menu
+            this.setModuleFixedStatus(item);
           }
         });
+
+        // Sanitize campaign's modules
+        _.each(this.modules, (item) => {
+          this.setModuleFixedStatus(item);
+        });
+
         this.ready = true;
       }, error => {
         this.$store.commit("global/setLoader", false);
@@ -112,14 +132,6 @@
       getLibrary () {
         return this.$store.dispatch("library/getModulesData", this.libraryId);
       },
-      getSubitemsAsArray () {
-        return _.reduce(this.items, (result, value) => {
-          if(_.has(value, 'level')) {
-            result = _.union(result, value.sub_menu);
-          }
-          return result;
-        }, []);
-      },
       addModuleByName (moduleName, type) {
         // Find module in items by type: item or subitem
         const found = type === 'item'
@@ -130,44 +142,6 @@
         mod.data = {};
 
         this.addModule(mod);
-
-      },
-      addModule (m) {
-        const mod = clone(m);
-
-        // Add module
-        this.$store.commit('campaign/addModule', mod);
-
-        // Set active on last module added
-        this.$store.commit('campaign/setActiveLastModule');
-
-        if (this.activeModule.type === 'studio') {
-          // Save current component if module type is studio
-          this.$store.commit('campaign/setCurrentComponent', {
-            moduleId: this.modules.length - 1,
-            columnId: 0,
-            componentId: 0,
-          });
-          this.$store.commit('campaign/unsetCustomModule');
-        } else {
-          // Save customModule if module type is custom
-          this.$store.commit('campaign/setCustomModule', this.modules.length - 1);
-          this.$store.commit('campaign/unsetCurrentComponent');
-        }
-
-        setTimeout(() => {
-          this.autoScroll();
-        }, 25);
-      },
-      autoScroll (){
-        let bounds = $(".section-canvas-container").outerHeight();
-        let isVisible = bounds < window.innerHeight && bounds > 0;
-
-        if (!isVisible) {
-            $('html,  .section-canvas-email').animate({
-                scrollTop: bounds
-            }, 100);
-        }
       },
       expand (event, item) {
         const index = this.expanded.indexOf(item);
@@ -219,6 +193,14 @@
         $(".empty-message").is(":visible") && $(".ghost-component").is(":visible")
           ? $(".empty-message").hide("fast")
           : $(".empty-message").show()
+      },
+      setModuleFixedStatus (item) {
+        // Get fixed modules from library config
+        const fixedModules = this.campaign.library_config.fixedModules ? JSON.parse(this.campaign.library_config.fixedModules) : [];
+
+        const found = _.filter(fixedModules, fixed => fixed.key === item.key);
+        item['isFixed'] = found.length > 0;
+        item['fixedPosition'] = found.length > 0 ? found[0].pos : undefined;
       },
     }
   };

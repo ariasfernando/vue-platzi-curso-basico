@@ -119,6 +119,12 @@ module.exports = {
         value: false,
         icon: 'fa fa-link',
       },
+      styleselect: {
+        label: 'Style Format',
+        key: 'styleselect',
+        value: false,
+        icon: 'fa fa-edit',
+      },
     },
     settings: {
       link_validate_url: {
@@ -128,14 +134,32 @@ module.exports = {
       truncate: {
         title: 'Characters Limit',
         value: false,
-        type: Number,
+        type: 'number',
         content: undefined,
       },
       lines_limit: {
         title: 'Lines Limit',
         value: false,
-        type: Number,
-        content: undefined,
+        type: 'text',
+        content: "{ \"27px\": 5, \"29px\": 4, \"34px\": 3 }",
+      },
+      fontsize_formats: {
+        title: 'Font size',
+        value: false,
+        type: 'text',
+        content: '12px 14px 16px 18px',
+      },
+      style_formats: {
+        title: 'Style format',
+        value: false,
+        type: 'text',
+        content: "[{\"title\":\"27px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"27px\",\"lineHeight\":\"30px\"}},{\"title\":\"29px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"29px\",\"lineHeight\":\"32px\"}},{\"title\":\"34px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"34px\",\"lineHeight\":\"36px\"}}]",
+      },
+      link_fixed_color: {
+        title: 'Link fixed color',
+        value: false,
+        type: 'text',
+        content: '#514960',
       },
     },
   },

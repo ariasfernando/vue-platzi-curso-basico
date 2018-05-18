@@ -3,8 +3,10 @@ function dividerDefault() {
     componentSettings: [
       [
         {
-          name: 'input-height',
-          type: 'input-height',
+          name: 'classes',
+          type: 'class-input',
+          link: 'attribute',
+          subComponent: 'container',
         },
       ],
       [
@@ -13,15 +15,32 @@ function dividerDefault() {
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
+          subComponent: 'container',
         },
         {
-          name: 'classes',
-          type: 'class-input',
+          name: 'bgcolor',
+          type: 'generic-color',
           link: 'attribute',
+          label: 'Background Color interno',
+          subComponent: 'divider',
+        },
+        {
+          name: 'height',
+          type: 'input-height',
+          link: 'style',
+          subComponent: 'divider',
+        },
+      ],
+      [
+        {
+          name: 'padding',
+          type: 'padding-group',
+          subComponent: 'container',
         },
         {
           name: 'border-group',
           type: 'border-group',
+          subComponent: 'container',
         },
       ],
     ],

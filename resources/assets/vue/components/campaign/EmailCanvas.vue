@@ -2,6 +2,7 @@
   <div>
     <back-to-top></back-to-top>
     <!-- content canvas email -->
+    <div v-if="buildingMode ==='mobile'" v-html="templateWidthStyles"></div>
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
@@ -23,13 +24,18 @@
                 border="0"
                 v-model="dragList"
                 :width="templateWidth"
+                :style="`width:${templateWidth}px`"
                 :options="options"
                 :element="'table'"
                 :move="onMove"
                 @add="onAdd"
                 @sort="onSort"
                  v-if="isNotEmptyList">
-                  <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
+                  <module
+                    v-for="(module, moduleId) in dragList"
+                    :key="module.idInstance"
+                    :module-id="moduleId"
+                  ></module>
               </draggable>
               <draggable
                 id="emailCanvas"
@@ -40,6 +46,7 @@
                 border="0"
                 v-model="dragList"
                 :width="templateWidth"
+                :style="`width:${templateWidth}px`"
                 :options="options"
                 :element="'table'"
                 @add="onAdd"
@@ -61,6 +68,7 @@
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';
   import BackToTop from '../common/BackToTop.vue';
+  import ModuleListMixin from './mixins/moduleListMixin';
 
   export default {
     name: 'EmailCanvas',
@@ -70,6 +78,7 @@
       'email-actions': EmailActions,
       BackToTop
     },
+    mixins: [ ModuleListMixin ],
     data: {
       dragGhost: null,
       onMouseOver: () => {},
@@ -99,6 +108,14 @@
       templateWidth () {
         return this.$store.getters['campaign/templateWidth'];
       },
+      templateWidthStyles(){
+        return `
+        <style>
+          #emailCanvas.stx-mobile-mode {
+              width: ${this.$store.getters["campaign/campaign"].library_config.templateMobileWidth}px!important;
+          }
+        </style>`
+      },
       buildingMode() {
         return this.$store.getters["campaign/buildingMode"];
       },
@@ -107,9 +124,6 @@
       },
       baseUrl (){
         return this.$_app.config.baseUrl;
-      },
-      modules() {
-        return this.$store.getters["campaign/modules"];
       },
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
@@ -172,14 +186,6 @@
       }
     },
     methods: {
-      getSubitemsAsArray () {
-        return _.reduce(this.items, (result, value) => {
-          if(_.has(value, 'level')) {
-            result = _.union(result, value.sub_menu);
-          }
-          return result;
-        }, []);
-      },
       onAdd(e) {
         let cloneEl = e.clone;
         let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
@@ -190,14 +196,9 @@
           ? _.find(this.items, (m) => m.name === moduleName)
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
-        const mod = clone(found);
-        mod.data = {};
+        this.addModule(found, e.newIndex);
 
-        this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
-        // Set active on last module inserted
-        this.$store.commit('campaign/setActiveModule', e.newIndex);
-
-         // Remove ghost element
+        // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = "1";
@@ -216,9 +217,14 @@
             distance = distance * 0.15; // <- velocity
             $(target).scrollTop( distance + $(target).scrollTop());
         }
+
+        // Cannot sort to/from a fixed position
+        if (evt.related && evt.dragged){
+          return !evt.related.classList.contains('stx-fixed') && !evt.dragged.classList.contains('stx-fixed');
+        }
       },
       onSort(e){
-        if (this.activeModule.type === 'studio') {
+        if (_.has(this.activeModule, 'type') && this.activeModule.type === 'studio') {
           // Save current component if module type is studio
           this.$store.commit('campaign/setCurrentComponent', {
             moduleId: e.newIndex,
@@ -294,7 +300,7 @@
         }
         else {
           // Get module ID
-          const moduleId = $target.closest(".stx-module-wrapper").find("td").data("module-id");
+          const moduleId = _.parseInt($target.closest(".stx-module-wrapper").find("td").attr("data-module-id"));
           // If it's the config gear icon
           if( $target.hasClass('icon-config') || $target.hasClass("fa-cogs") ) {
             // Show module settings
@@ -310,7 +316,7 @@
             // Clear 3rd column
             this.$store.commit("campaign/unsetCurrentComponent");
 
-            if (this.activeModule.type === 'studio') {
+            if (this.activeModule && this.activeModule.type === 'studio') {
               this.$store.commit("campaign/unsetCustomModule");
             }
           }
@@ -396,7 +402,6 @@
       min-height: 40px;
     }
     &.stx-mobile-mode {
-      width: 480px;
       // Mobile Classes
       @import '../../../less/base/commons/mobile/mobile_core_styles';
       @import '../../../less/base/commons/mobile/mobile_client_styles';
@@ -448,6 +453,7 @@
         vertical-align: middle;
         opacity: 0.7;
         text-align: center;
+        cursor: default;
 
         &:hover {
           width: 100%;
