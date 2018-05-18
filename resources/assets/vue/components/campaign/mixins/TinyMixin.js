@@ -37,7 +37,7 @@
         const options = _.filter(this.textOptions.config.options, 'value');
         const customSettings = {};
 
-        _.each(this.textOptions.settings, (e, k) => {
+        _.each(this.textOptions.config.settings, (e, k) => {
           let content;
           if (Application.utils.isJsonString(e.content)) {
             customSettings[k] = JSON.parse(e.content);
