@@ -32,6 +32,7 @@
             <div
               class="stx-edit-text stx-wrapper"
               v-html="content"
+              @keyup="clangeContent"
               @input="clangeContent"
               :id="editorId"
               ></div>

@@ -56,6 +56,7 @@
                         :style="buttonFontStyles"
                         v-html="content"
                         :id="editorId"
+                        @keyup="clangeContent"
                         @input="clangeContent"
                       >
                     </div>
