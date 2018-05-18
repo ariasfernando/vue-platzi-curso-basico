@@ -125,9 +125,6 @@
       baseUrl (){
         return this.$_app.config.baseUrl;
       },
-      modules() {
-        return this.$store.getters["campaign/modules"];
-      },
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
         return this.modules[activeModuleId] || undefined;
@@ -199,32 +196,8 @@
           ? _.find(this.items, (m) => m.name === moduleName)
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
-        const mod = clone(found);
-        mod.data = {};
+        this.addModule(found, e.newIndex);
 
-
-        if (!this.validateSortingToIndex({index: e.newIndex, moduleData: mod})){
-          this.$root.$toast('The position is occuped by a fixed module.', {className: 'et-info'});
-        }
-        else {
-          mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
-          this.insertModule({index: e.newIndex, moduleData: mod});
-        }
-/*
-
-        if (!this.validateSortingToIndex({index: e.newIndex, moduleData: mod})){
-          this.$root.$toast('The position is occuped by a fixed module.', {className: 'et-info'});
-        }
-        else {
-          this.insertModule({index: e.newIndex, moduleData: mod});
-        }
-
-
-        mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
-        this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
-        // Set active on last module inserted
-        this.$store.commit('campaign/setActiveModule', e.newIndex);
-*/
         // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
