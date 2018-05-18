@@ -29,7 +29,12 @@
             :bgcolor="component.text.attribute.bgcolor"
             :style="[textFontStyles, textBorderAndPadding,{width:widthStyle(component.text.attribute.width)}]"
           >
-            <div class="stx-edit-text stx-wrapper" :id="editorId" v-html="component.data.text"></div>
+            <div
+              class="stx-edit-text stx-wrapper"
+              v-html="content"
+              @input="clangeContent"
+              :id="editorId"
+              ></div>
             <div :class="'st-remove-element stx-toolbar toolbar-'+editorId"></div>
           </td>
         </tr> 
@@ -42,24 +47,30 @@
 <script>
 import MobileStylesMixin from "../../common/mixins/MobileStylesMixin.js";
 import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
+import TinyMixin from '../mixins/TinyMixin.js';
 import _ from "lodash";
 
 export default {
   name: "TextElement",
   props: ["module-id", "column-id", "component-id", "component", "column"],
-  mixins: [MobileStylesMixin,ComponentAttributeMixin],
+  mixins: [MobileStylesMixin, ComponentAttributeMixin, TinyMixin],
   data() {
     return {
       toolbar: " ",
-      fixed: false
+      fixed: false,
+      content: this.component.data.text,
+      timer: null
     };
   },
   computed: {
     module() {
       return this.$store.getters["campaign/modules"][this.moduleId];
     },
+    libraryConfig(){
+      return this.$store.state.campaign.campaign.library_config;
+    },
     editorId(){
-      return ["editor", this.module.idInstance, this.moduleId, this.columnId, this.componentId].join("-");
+      return ["editor", this.module.idInstance, this.columnId, this.componentId].join("-");
     },
     textFontStyles() {
       return {
@@ -124,6 +135,49 @@ export default {
           componentId:this.componentId
       });
     },
-  }
+    clangeContent(e) {
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(() => {
+        this.$store.commit('campaign/updateElement', {
+          moduleId:this.moduleId,
+          columnId:this.columnId,
+          componentId:this.componentId,
+          data: {
+            text: e.target.innerHTML
+          }
+        });
+      }, 500);
+    },
+    changeStyles(selector, styles) {
+      let editorLinks = $(editor.targetElm).find(selector);
+      if(editorLinks.length){
+        for (var i = 0; i < editorLinks.length; i++) {
+          if(typeof styles === "string"){
+            $(editorLinks[i]).css('cssText', styles);
+          } else {
+            $(editorLinks[i]).css(styles);
+          }
+        }
+      }
+    },
+  },
 };
 </script>
+
+<style lang="less">
+  .mce-menu-item-preview {
+    .mce-text {
+      font-size: 14px !important;
+    }
+  }
+
+  // hidde the sub menu of Numbered list and Bullet list
+  div[aria-label="Numbered list"],
+  div[aria-label="Bullet list"]{
+    button.mce-open{
+      display: none;
+    }
+  }
+</style>
