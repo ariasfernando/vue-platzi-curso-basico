@@ -85,7 +85,8 @@ class ProofController extends Controller
         foreach ($proof->reviewers as $reviewer) {
             if ($reviewer['email'] === Auth::user()->email) {
                 if (!isset($reviewer['opened_at'])) {
-                    $reviewer['opened_at'] = new UTCDateTime;
+                    $date = new UTCDateTime();
+                    $reviewer['opened_at'] = $date->toDateTime();
                     Activity::log('Reviewer opened a proof', [
                         'properties' => [
                             'proof_id' => new ObjectId($proof->id),
@@ -283,7 +284,8 @@ class ProofController extends Controller
         foreach ($proof->reviewers as $reviewer) {
             if ($reviewer['email'] === Auth::user()->email) {
                 $reviewer['decision'] = $decision;
-                $reviewer['decision_at'] = new UTCDateTime;
+                $date = new UTCDateTime();
+                $reviewer['decision_at'] = $date->toDateTime();
                 if ($request->has('comment') && strlen($request->input('comment')) > 0) {
                     // Store the decision comments
                     $comment = Comment::create([
