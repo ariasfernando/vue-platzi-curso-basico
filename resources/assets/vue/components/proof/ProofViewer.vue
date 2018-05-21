@@ -70,6 +70,7 @@
     import ProofComments from './ProofComments.vue';
     import ProofDecision from './ProofDecision.vue';
     import VueSticky from 'vue-sticky';
+    import proofService from '../../services/proof';
 
     export default {
         name: 'proofViewer',
@@ -79,7 +80,7 @@
         },
         data() {
             return {
-                campaign: [],
+                campaign: {},
                 showDecision: false,
                 canEdit: false,
                 reviewer: [],
@@ -109,9 +110,6 @@
             }
         },
         created: function() {
-            // TODO: find a way to define this in the vue instance
-            Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
             // Get campaign data
             this.getProofData();
         },
@@ -120,21 +118,20 @@
         },
         methods: {
             getProofData: function() {
-                var vm = this;
-                Vue.http.get(Application.globals.baseUrl + '/proof/data/' + vm.token)
-                    .then(function( resp ) {
-                        if (resp.status == 200) {
-                            vm.campaign = resp.body.data.campaign;
-                            vm.reviewer = resp.body.data.reviewer;
-                            vm.showDecision = resp.body.data.show_decision;
-                            vm.canEdit = resp.body.data.can_edit;
-                            vm.desktopWidth = resp.body.data.campaign.template_width;
-                            vm.mobileWidth = resp.body.data.campaign.template_mobile_width;
-                            if ('message' in resp.body.data) {
-                                vm.$root.$toast(resp.body.data.message, {className: 'et-success'});
-                            }
+                var _this = this;
+                proofService.getData(_this.token).then((response) => {
+                    if (response.status === 'success') {
+                        _this.campaign = response.data.campaign;
+                        _this.reviewer = response.data.reviewer;
+                        _this.showDecision = response.data.show_decision;
+                        _this.canEdit = response.data.can_edit;
+                        _this.desktopWidth = response.data.campaign.template_width;
+                        _this.mobileWidth = response.data.campaign.template_mobile_width;
+                        if ('message' in response.data) {
+                            _this.$root.$toast(response.data.message, {className: 'et-success'});
                         }
-                    });
+                    }
+                });
             },
             decisionMade: function() {
                 return false; // this will be commented until we finish all this implementation

@@ -284,7 +284,7 @@ class ProofController extends Controller
             if ($reviewer['email'] === Auth::user()->email) {
                 $reviewer['decision'] = $decision;
                 $reviewer['decision_at'] = new UTCDateTime;
-                if ($request->has('comment')) {
+                if ($request->has('comment') && strlen($request->input('comment')) > 0) {
                     // Store the decision comments
                     $comment = Comment::create([
                         'proof_id' => $proof->id,
@@ -314,7 +314,7 @@ class ProofController extends Controller
                     'proof_id' => new ObjectId($proof->id),
                     'user_id' => new ObjectId(Auth::id()),
                     'decision' => $decision,
-                    'comment' => $request->has('comment') ? new ObjectId($comment->id) : ''
+                    'comment' => $request->has('comment') && strlen($request->input('comment')) > 0 ? $comment->id : ''
                 ]
             ]);
 
@@ -363,7 +363,7 @@ class ProofController extends Controller
                 // Remove decision data from this reviewer
                 $decision = $reviewer['decision'];
                 $decision_at = $reviewer['decision_at'];
-                $decision_comment = $reviewer['decision_comment'] ?: '';
+                $decision_comment = isset($reviewer['decision_comment']) ? $reviewer['decision_comment'] : '';
                 unset($reviewer['decision'], $reviewer['decision_at'], $reviewer['decision_comment']);
                 $updated = true;
             }
@@ -378,9 +378,9 @@ class ProofController extends Controller
                 'properties' => [
                     'proof_id' => new ObjectId($proof->id),
                     'user_id' => new ObjectId(Auth::id()),
-                    'previous_decision' => $decision,
-                    'previous_decision_at' => $decision_at,
-                    'previous_decision_comment' => $decision_comment
+                    'previous_decision' => isset($decision) ? $decision : '',
+                    'previous_decision_at' => isset($decision_at) ? $decision_at : '',
+                    'previous_decision_comment' => isset($decision_comment) ? $decision_comment : ''
                 ]
             ]);
 
@@ -430,7 +430,7 @@ class ProofController extends Controller
 
             // Create proof
             $proof = Proof::create([
-                'campaign_id' => new ObjectId($campaign_id),
+                'campaign_id' => $campaign_id,
                 'requestor' => new ObjectId(Auth::id()),
                 'token' => $token,
                 'status' => Proof::STATUS_PROCESSED,
@@ -587,7 +587,10 @@ class ProofController extends Controller
             $users->where('roles', '!=', 'stensul-internal');
         }
 
-        return $users->get()->pluck('email');
+        return [
+            'status' => 'success',
+            'data' => $users->get()->pluck('email')
+        ];
     }
 
     /**
