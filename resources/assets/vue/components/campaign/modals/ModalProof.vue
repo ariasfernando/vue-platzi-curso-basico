@@ -168,7 +168,7 @@
         if(this.campaign.campaign_data.proof_id){
           data.proof_id = this.campaign.campaign_data.proof_id;
         }
-        
+
         proofService.create(data).then((response) => {
           this.$store.commit('global/setLoader', false);
           var $container = $('.modal-container').find('.send-proof');
@@ -196,8 +196,8 @@
       },
       fetchUsers () {
         proofService.getJSON('users').then((response) => {
-          if (response && response.length > 0) {
-            this.users = response;
+          if (response.status === 'success') {
+            this.users = response.data || {};
           } else {
             this.showMessage($container, 'danger', response.message);
           }
@@ -273,7 +273,7 @@
                 requiredValue = 0;
                 requiredDisable = true;
             }
-            
+
             this.reviewers.push({
               email: email,
               checked: params.required ? true : false,
