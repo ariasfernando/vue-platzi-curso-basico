@@ -65,8 +65,8 @@
                     </tr>
                   </tbody>
                 </table>
-                <div class="modal-divider" v-show="this.campaign.campaign_data.proof_id !== null"></div>
-                <div class="checkbox new-proof-checkbox" v-show="this.campaign.campaign_data.proof_id !== null">
+                <div class="modal-divider" v-show="campaignData.proof_id !== null"></div>
+                <div class="checkbox new-proof-checkbox" v-show="campaignData.proof_id !== null">
                   <div class="input-group">
                     <label data-toggle="tooltip" data-placement="top" title="Existing comments, approvals, and rejections will be archived.">
                       <checkbox name="create_new_proof" value="1" v-model="startProof">

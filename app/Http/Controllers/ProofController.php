@@ -542,6 +542,7 @@ class ProofController extends Controller
     {
         $campaign = Campaign::find($campaign_id);
         $proof = $campaign->getLastProof();
+        $reviewers = [];
 
         if ($proof && count($proof->reviewers)) {
             $reviewers = array_map(function ($reviewer) use ($proof) {
@@ -560,14 +561,12 @@ class ProofController extends Controller
                 unset($reviewer['user_id']);
                 return $reviewer;
             }, $proof->reviewers);
-
-            return [
-                'status' => 'success',
-                'data' => $reviewers
-            ];
         }
 
-        return \Response::make("", 204);
+        return [
+            'status' => 'success',
+            'data' => $reviewers
+        ];
     }
 
     /**
