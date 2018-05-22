@@ -17,9 +17,7 @@ function requestResponse(method, params, opts) {
     };
 
     if (mocks[arr[0]] && mocks[arr[0]][arr[1]]) {
-      res.body = {
-        body: mocks[arr[0]][arr[1]],
-      };
+      res.body = mocks[arr[0]][arr[1]];
     }
 
     deferred.resolve(res);

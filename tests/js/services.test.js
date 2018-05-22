@@ -1,5 +1,5 @@
-import libraryService from '../../resources/assets/vue/services/library';
-import fixtures from '../../resources/assets/vue/resources/mocks';
+import libraryService from 'services/library';
+import mocks from 'resources/mocks';
 
 require('dotenv').config();
 
@@ -18,7 +18,7 @@ describe("== Services ==", () => {
     describe("Search Libraries", () => {
       it('Should return a list of libraries', (done) => {
         libraryService.searchLibraries().then((result) => {
-          expect(result).to.equal(fixtures.library.searchLibraries);
+          expect(result).to.equal(mocks.library.searchLibraries);
         }).then(done, done);
       });
     });
@@ -26,7 +26,7 @@ describe("== Services ==", () => {
     describe("Fetch Libraries", () => {
       it('Should return a list of libraries', (done) => {
         libraryService.fetchLibraries().then((result) => {
-          expect(result).to.equal(fixtures.library.fetchLibraries);
+          expect(result).to.equal(mocks.library.fetchLibraries);
         }).then(done, done);
       });
     });
