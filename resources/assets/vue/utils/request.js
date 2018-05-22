@@ -11,11 +11,17 @@ function requestResponse(method, params, opts) {
    * UT: mocked response
    */
   if (process.env.NODE_ENV === 'test') {
-    console.log(params);
     const arr = params.path.split('.');
     const res = {
-      body: mocks[arr[0]][arr[1]],
+      body: null,
     };
+
+    if (mocks[arr[0]] && mocks[arr[0]][arr[1]]) {
+      res.body = {
+        body: mocks[arr[0]][arr[1]],
+      };
+    }
+
     deferred.resolve(res);
     return deferred.promise;
   }

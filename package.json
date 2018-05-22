@@ -74,8 +74,10 @@
     "zxcvbn": "^4.3.0"
   },
   "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.16",
     "babel": "^6.23.0",
     "babel-core": "^6.24.1",
+    "babel-jest": "^23.0.0-alpha.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
@@ -89,6 +91,8 @@
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "front-matter": "^2.1.0",
+    "jest": "^23.0.0-alpha.0",
+    "jest-vue-preprocessor": "^1.4.0",
     "mocha": "^5.0.4",
     "mocha-lcov-reporter": "^1.3.0",
     "nyc": "^11.6.0",
@@ -111,7 +115,9 @@
     "test:jest": "jest"
   },
   "jest": {
-    "setupFiles": ["./.jestrc.js"],
+    "setupFiles": [
+      "./.jestrc.js"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",
@@ -123,6 +129,7 @@
     },
     "moduleNameMapper": {
       "^@/(.*)$": "./resources/assets/vue/$1"
-    }
+    },
+    "roots": ["./resources/assets/vue/", "./stensul/customer/resources/assets/vue"]
   }
 }
