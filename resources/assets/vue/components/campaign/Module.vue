@@ -9,6 +9,10 @@
         :data-module-id="moduleId"
         :class="{ 'stx-show-error': module.data.errors && module.data.errors.length }"
         @click.prevent="config"
+        :width="moduleWidth"
+        :style="moduleStyle"
+        :valign="moduleValign"
+        :bgcolor="moduleBgcolor"
     >
       <component :is="'custom-' + module.key" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId" v-if="!module.data.hideToolbar"></module-toolbar>
@@ -190,6 +194,18 @@
       },
       columnWidthPadding(){
         return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
+      },
+      moduleWidth(){
+        return _.get(this.module,'structure.attribute.width','100%');
+      },
+      moduleStyle(){
+        return _.get(this.module,'structure.style');
+      },
+      moduleValign(){
+        return _.get(this.module,'structure.attribute.valign','top');
+      },
+      moduleBgcolor(){
+        return _.get(this.module,'structure.attribute.bgcolor');
       }
     },
     methods: {
