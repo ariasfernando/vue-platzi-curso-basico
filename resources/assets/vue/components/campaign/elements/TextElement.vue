@@ -6,8 +6,8 @@
     @click="selectComponent"
   >
     <td
-      :width="component.container.attribute.width"
-      :style="[containerBorderAndPadding, component.container.attribute.width ? widthStyle(component.container.attribute.width) : '100%']"
+      :width="component.container.attribute.width || '100%'"
+      :style="[containerBorderAndPadding, {'width': widthStyle(component.container.attribute.width || '100%')}]"
       :align="component.container.attribute.align || 'center'"
       :bgcolor="component.container.attribute.bgcolor"
       :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
@@ -23,11 +23,11 @@
         <tr>
           <td
             class="stx-position-relative"
-            :width="component.text.attribute.width"
+            :width="component.text.attribute.width || '100%'"
             :valign="component.text.attribute.valign || 'top'"
             :align="component.text.attribute.align || 'left'"
             :bgcolor="component.text.attribute.bgcolor"
-            :style="[textFontStyles, textBorderAndPadding,{width:widthStyle(component.text.attribute.width)}]"
+            :style="[textFontStyles, textBorderAndPadding, {'width': widthStyle(component.text.attribute.width || '100%')}]"
           >
             <div
               class="stx-edit-text stx-wrapper"
