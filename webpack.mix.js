@@ -23,6 +23,12 @@ mix.webpackConfig({
   node: {
     fs: 'empty',
   },
+  resolve: {
+    alias: {
+      customer: path.join(__dirname, `${customerAssetsPath}/vue`),
+      stensul: path.join(__dirname, assetsVuePath),
+    },
+  },
 });
 
 mix
@@ -40,9 +46,6 @@ mix
   .less(`${assetsPath}/less/base/commons/mobile/mobile_client_styles.less`, 'public/css/mobile_client_styles.css')
   .less(`${assetsPath}/less/base/tool/tool.less`, 'public/css/tool.css')
   .less(`${assetsPath}/less/base/base-v2/admin.less`, 'public/css/admin.css')
-  .js([
-    `${customerAssetsPath}/vue/main.js`,
-  ], `${jsDestinationPath}/customer.js`)
   .js([
     `${assetsVuePath}/campaign.js`,
   ], `${jsDestinationPath}/campaign-components.js`)

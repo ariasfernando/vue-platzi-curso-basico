@@ -16,6 +16,7 @@ export default {
     'options',
     'element',
     'isDisablePercentage',
+    'isPixel',
   ],
   mounted() {
     this.setDefaultValue();

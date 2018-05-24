@@ -103,7 +103,7 @@
           ol_fixed_style: 'margin-bottom: 0px !important; margin-top: 0px !important; margin-left: 25px; padding-left: 0px;',
           li_fixed_style: '{"margin":0}',
           p_fixed_style: '{"margin":0}',
-          forced_root_block :false,
+          forced_root_block :'p',
           target_list: false,
           invalid_elements:'img',
           link_validate_url: true,
