@@ -25,7 +25,7 @@ export default {
         return parseFloat(this.mainSetting);
       },
       set(newValue) {
-        this.mainSetting = newValue;
+        this.mainSetting = this.isPixel ? `${newValue}px` : newValue;
       }
     }
   }

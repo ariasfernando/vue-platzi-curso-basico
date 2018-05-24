@@ -51,8 +51,8 @@
             </td>
             <td :title="campaign.campaign_name">
               <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
-              <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock text-danger" v-if="enableLocking && campaign.locked"></i>
-              <i class="glyphicon glyphicon-cloud-upload text-danger" v-if="isUploaded(campaign)"></i>
+              <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock pull-left campaign-locking" v-if="enableLocking && campaign.locked"></i>
+              <i class="glyphicon glyphicon-cloud-upload" v-if="isUploaded(campaign)"></i>
             </td>
             <td>
               <span>{{campaign.library_name}}</span>

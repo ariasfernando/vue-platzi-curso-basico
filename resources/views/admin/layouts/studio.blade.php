@@ -57,7 +57,6 @@
         <script src="{{ cdn(mix('js/bootstrap.js')) }}"></script>
         <script src="{{ cdn(mix('js/tinymce.js')) }}"></script>
         <script src="{{ cdn(mix('js/application-utils-v2.js')) }}"></script>
-        <script src="{{ cdn(mix('js/customer.js')) }}"></script>
         @section('footer-script')
 
         @show
