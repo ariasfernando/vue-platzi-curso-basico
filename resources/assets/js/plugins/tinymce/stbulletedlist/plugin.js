@@ -75,7 +75,7 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
             var node = getNode();
             $table = $(editor.targetElm).find('table.'+editor.settings.tableClassName);
             var $newRow = buildRow();
-            addRowRemoveIcon($newRow);
+            addColRemoveIcon($newRow);
 
             if (validateNode() && $(node).is($(editor.targetElm).find("table."+editor.settings.tableClassName+" *"))) {
                 $(node).closest("tr").after($newRow);
@@ -90,12 +90,22 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
             }
         };
 
-        var addRowRemoveIcon = function($row) {
-            var $removeIcon = $('<td class="delete-row mceNonEditable st-remove-element"><i class="fa fa-times" aria-hidden="true"></i></td>');
-
-            if (!$row.find(".delete-row").length) {
-                $row.append($removeIcon);
+        const addColRemoveIcon = function ($row) {
+            const $colRemoveIcon = $('<td class="delete-row mceNonEditable st-remove-element"></td>');
+            if (!$row.find('.delete-row').length) {
+                $row.append(addRemoveIcon($colRemoveIcon));
+            } else {
+                const $col = $($row.find('.delete-row')[0]);
+                if (!$col.find('.fa-times').length) {
+                    addRemoveIcon($col);
+                }
             }
+        };
+
+        const addRemoveIcon = function ($col) {
+            let $removeIcon = $('<i class="fa fa-times" aria-hidden="true"></i>');
+            $col.append($removeIcon);
+            return $col;
         };
 
         // Validate if node is able to be edited.
@@ -145,10 +155,7 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
         editor
             .on("focus", function() {
                 $.each($(this.targetElm).find("tr"), function(index, row) {
-
-                    if (!$(row).find(".delete-row").length) {
-                        addRowRemoveIcon($(row));
-                    }
+                    addColRemoveIcon($(row));
                 });
             })
             .on("blur", function() {
@@ -203,9 +210,7 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
             .on('click', function(e) {
                 // Fix remove icon when a link was added.
                 $.each($(this.targetElm).find("tr"), function(index, row) {
-                    if (!$(row).find(".delete-row").length) {
-                        addRowRemoveIcon($(row));
-                    }
+                    addColRemoveIcon($(row));
                 });
             })
             // Prevent drag and drop.
@@ -235,6 +240,11 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
                 }
 
                 onDelete(event);
+            })
+            .on('SetContent', function (event) {
+                $.each($(this.targetElm).find("tr"), function(index, row) {
+                    addColRemoveIcon($(row));
+                });
             });
 
         // Add button in tinymce toolbar
