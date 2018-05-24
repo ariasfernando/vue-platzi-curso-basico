@@ -23,7 +23,7 @@ stages:
 
 before_script:
   # js related
-  - sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev
+  - sudo yum install cairo cairo-devel
   - npm install
   # Install composer dependencies
   - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
