@@ -52,5 +52,5 @@
 @endsection
 
 @section('footer-script')
-    <script src="{{ cdn(elixir('js/library.js')) }}"></script>
+    <script src="{{ cdn(mix('js/library.js')) }}"></script>
 @stop

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="menu.length">
+  <div v-if="$can('create_campaign') && menu.length">
     <a v-show="menu.length === 1"
       class="btn btn-default btn-create beta-btn-primary" :href="$_app.config.baseUrl + '/campaign/edit/?locale=en_us'">
       <i class="glyphicon glyphicon-plus-sign"></i> Create a new email

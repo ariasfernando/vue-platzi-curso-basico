@@ -24,7 +24,7 @@ class LibraryDeny extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
 
         $name = $this->ask('What is the role name ?');

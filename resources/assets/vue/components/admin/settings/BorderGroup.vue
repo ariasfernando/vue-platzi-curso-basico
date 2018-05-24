@@ -2,23 +2,23 @@
   <div>
     <border
     :element="element"
-    @style-setting-updated="styleSettingUpdatedHandler"
+    @setting-updated="settingUpdatedHandler"
     :side="'Top'"
     ></border>
     <border
     :element="element"
     :side="'Right'"
-    @style-setting-updated="styleSettingUpdatedHandler"
+    @setting-updated="settingUpdatedHandler"
     ></border>
     <border
     :element="element"
     :side="'Bottom'"
-    @style-setting-updated="styleSettingUpdatedHandler"
+    @setting-updated="settingUpdatedHandler"
     ></border>
     <border
     :element="element"
     :side="'Left'"
-    @style-setting-updated="styleSettingUpdatedHandler"
+    @setting-updated="settingUpdatedHandler"
     ></border>
   </div>
 </template>
@@ -26,14 +26,17 @@
 <script>
 import _ from "lodash";
 import Border from "./Border.vue";
+import SettingMixin from "../mixins/SettingMixin.js";
 
 export default {
   name: "BorderGroup",
-  props: ["setting", "element"],
+  mixins: [ SettingMixin ],
   components: { Border },
   methods: {
-    styleSettingUpdatedHandler(eventData) {
-      this.$emit("style-setting-updated", {
+    settingUpdatedHandler(eventData) {
+      this.$emit("setting-updated", {
+        subComponent: this.subComponent,
+        link: 'style',
         name: eventData.name,
         value: eventData.value
       });

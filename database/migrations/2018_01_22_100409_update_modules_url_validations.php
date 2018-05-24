@@ -29,13 +29,11 @@ class UpdateModulesUrlValidations extends Migration
                     if (isset($column_value['components'])) {
                         foreach ($column_value['components'] as $component_key => $component_value) {
                             if (isset($component_value['type'])) {
-
                                 if ($component_value['type'] === 'text-element' || $component_value['type'] === 'button-element') {
                                     if (isset($component_value['plugins'])) {
                                         foreach ($component_value['plugins'] as $plugin_name => $plugin) {
                                             if ($plugin_name === 'textOptions') {
                                                 if (!isset($plugin['config']['settings'])) {
-
                                                     $custom_settings = [
                                                         'link_validate_url' => [
                                                            'title' => 'Validate Url',
@@ -55,7 +53,6 @@ class UpdateModulesUrlValidations extends Migration
                                     if (isset($component_value['plugins'])) {
                                         foreach ($component_value['plugins'] as $plugin_name => $plugin) {
                                             if ($plugin_name === 'destinationUrl') {
-
                                                 if (isset($plugin['config']['required'])) {
                                                     if (isset($plugin['config']['validations'])) {
                                                         $module_structure['columns'][$column_key]['components'][$component_key]

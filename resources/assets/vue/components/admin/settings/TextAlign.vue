@@ -16,23 +16,23 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "TextAlign",
-  props: ["setting", "element", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
-      name: "align"
+      linkName: "align"
     };
   },
   computed: {
     align: {
       get: function() {
-        return this.element.attribute[this.name];
+        return this.element.attribute[this.linkName];
       },
       set: function(newValue) {
-        this.$emit("attribute-setting-updated", {
+        this.$emit("setting-updated", {
           subComponent: this.subComponent,
-          name: this.name,
+          link:'attribute',
+          name: this.linkName,
           value: newValue
         });
       }

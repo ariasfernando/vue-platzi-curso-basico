@@ -40,7 +40,6 @@ class UpdateTinyOptionalUrlValidation extends Migration
                                             foreach ($component_value['plugins'] as $plugin_name => $plugin) {
                                                 if ($plugin_name === 'textOptions') {
                                                     if (!isset($plugin['config']['settings'])) {
-
                                                         $customSettings = [
                                                             "link_validate_url" => [
                                                                "title" => "Validate Url",

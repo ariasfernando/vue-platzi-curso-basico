@@ -140,15 +140,15 @@ export default {
     }
 
     _.each(modules, (module, name) => {
-      this.Vue.component(`custom-${module.name}`, module.view);
+      this.Vue.component(`custom-${module.key}`, module.view);
       delete module.view;
 
       if (module.settings) {
-        this.Vue.component(`custom-settings-${module.name}`, module.settings);
+        this.Vue.component(`custom-settings-${module.key}`, module.settings);
         delete module.settings;
       }
 
-      this.Vue.prototype.$_app.customModules[module.name] = module;
+      this.Vue.prototype.$_app.customModules[module.key] = module;
     });
   },
   initPlugins() {

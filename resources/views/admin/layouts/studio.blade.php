@@ -8,7 +8,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title>Email Creation Platform</title>
-		<link href="{{ cdn(elixir('css/admin.css')) }}" rel="stylesheet">
+		<link href="{{ cdn(mix('css/admin.css')) }}" rel="stylesheet">
 
 		{{-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --}}
 		{{-- WARNING: Respond.js doesn't work if you view the page via file:// --}}
@@ -49,13 +49,15 @@
 		{{-- Scripts --}}
 
         {{-- Global Application JS object --}}
+        <script src="{{ cdn(mix('js/manifest.js')) }}"></script>
+        <script src="{{ cdn(mix('js/vendor.js')) }}"></script>
         @include('partials/application_script')
-
-        <script src="{{ cdn(elixir('js/jquery.js')) }}"></script>
-        <script src="{{ cdn(elixir('js/bootstrap.js')) }}"></script>
-        <script src="{{ cdn(elixir('js/tinymce.js')) }}"></script>
-        <script src="{{ cdn(elixir('js/application-utils-v2.js')) }}"></script>
-        <script src="{{ cdn(elixir('js/customer.js')) }}"></script>
+        
+        <script src="{{ cdn(mix('js/jquery.js')) }}"></script>
+        <script src="{{ cdn(mix('js/bootstrap.js')) }}"></script>
+        <script src="{{ cdn(mix('js/tinymce.js')) }}"></script>
+        <script src="{{ cdn(mix('js/application-utils-v2.js')) }}"></script>
+        <script src="{{ cdn(mix('js/customer.js')) }}"></script>
         @section('footer-script')
 
         @show

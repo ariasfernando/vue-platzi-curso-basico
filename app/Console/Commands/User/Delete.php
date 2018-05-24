@@ -27,7 +27,7 @@ class Delete extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $options = $this->option();
         $email = is_null($options["email"])

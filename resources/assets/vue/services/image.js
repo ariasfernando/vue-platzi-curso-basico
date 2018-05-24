@@ -2,7 +2,7 @@ import Q from 'q';
 import _ from 'lodash';
 import request from '../utils/request';
 import endpoints from '../resources/endpoints';
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 
 export default {
   uploadImages(data) {

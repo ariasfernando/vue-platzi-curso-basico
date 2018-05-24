@@ -50,7 +50,11 @@ export default {
     type: {
       type: String,
       required: true
-    }
+    },
+    windowId: {
+      type: String,
+      required: true,
+    },
   },
   computed: {
     showTags: function() {
@@ -95,12 +99,20 @@ export default {
         });
 
         // Ajax: On Fail
-        request.fail(function(){
+        request.fail(function(jqXHR){
           _this.$store.commit("global/setLoader", false);
-          _this.$root.$toast(
-            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-            {className: 'et-error'}
-          );
+
+          if (jqXHR.status == 403) {
+            _this.$root.$toast(
+              'Sorry, you are not allowed to clone campaigns.',
+              {className: 'et-error'}
+            );
+          } else {
+            _this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+              {className: 'et-error'}
+            );
+          }
         });
       }
     },
@@ -122,12 +134,23 @@ export default {
     },
     confirmDeleteCampaign() {
       $.post(Application.globals.baseUrl + '/campaign/delete', {
-        campaign_id: this.selectedCampaignId
-      }, function(campaigns) {
-        this.selectedCampaignId = null;
-        this.showModal = false;
-        this.$emit('refresh-campaigns', this.type);
-      }.bind(this), 'json');
+        campaign_id: this.selectedCampaignId,
+        window_id: this.windowId,
+      }, (response) => {
+
+        if (response.campaign_lock) {
+          this.selectedCampaignId = null;
+          this.showModal = false;
+          this.$root.$toast(
+            'Sorry, ' + response.locked_by + ' is editing this campaign',
+            { className: 'et-error' },
+          );
+        } else {
+          this.selectedCampaignId = null;
+          this.showModal = false;
+          this.$emit('refresh-campaigns', this.type);
+        }
+      }, 'json');
     },
     confirmEditCampaign() {
       window.location.href = this.$_app.config.baseUrl + '/campaign/edit/' + this.selectedCampaignId;
