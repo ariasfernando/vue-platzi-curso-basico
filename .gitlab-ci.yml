@@ -1,4 +1,4 @@
-image: "registry.stensuldev.net/dockerfiles/web-2.0.0"
+image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0"
 
 services:
   - mongo:latest
