@@ -1,6 +1,17 @@
 import Vue from 'vue/dist/vue';
-import _ from 'lodash';
-import Q from 'q';
+import {
+  isEmpty,
+  filter,
+  cloneDeep,
+  isUndefined,
+  isArray,
+  extend,
+  isEqual,
+  each
+} from 'lodash';
+import {
+  defer
+} from 'q';
 import clone from 'clone';
 import campaignService from '../services/campaign';
 import imageService from '../services/image';
@@ -41,8 +52,8 @@ function campaignStore() {
       moduleErrors(state) {
         const modules = state.modules;
 
-        const errors = _.filter(modules, (m) => {
-          return !_.isEmpty(m.data) && m.data.errors && m.data.errors.length
+        const errors = filter(modules, (m) => {
+          return !isEmpty(m.data) && m.data.errors && m.data.errors.length
         });
 
         return errors.length || state.fieldErrors.length;
@@ -82,7 +93,7 @@ function campaignStore() {
         return state.showModuleSettings;
       },
       locked(state) {
-        if (!_.isEmpty(state.campaign)) {
+        if (!isEmpty(state.campaign)) {
           return state.campaign.campaign_data.locked;
         }
         return false;
@@ -123,14 +134,14 @@ function campaignStore() {
         state.dirty = true;
       },
       cloneModule(state, moduleId) {
-        const clone = _.cloneDeep(state.modules[moduleId]);
+        const clone = cloneDeep(state.modules[moduleId]);
         clone.idInstance = Math.floor(100000 + (Math.random() * 900000));
         state.modules.push(clone);
         state.dirty = true;
       },
       updateCustomElement(state, payload) {
         // This is necessary, since the clickaway function is executed.
-        if ( !_.isUndefined(payload.moduleId) ){ 
+        if ( !isUndefined(payload.moduleId) ){ 
           const update = { ...state.modules[payload.moduleId].data, ...payload.data };
           state.modules[payload.moduleId].data = update;
           state.dirty = true;
@@ -138,7 +149,7 @@ function campaignStore() {
       },
       updateElement(state, payload) {
         // This is necessary, since the clickaway function is executed.
-        if ( !_.isUndefined(payload.moduleId) ){ 
+        if ( !isUndefined(payload.moduleId) ){ 
           const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
           state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
           state.dirty = true;
@@ -212,18 +223,30 @@ function campaignStore() {
       },
       saveCustomModuleData(state, data) {
         // Prevent empty arrays returned by php-mongo
-        if (_.isArray(state.modules[data.moduleId].data)) {
+        if (isArray(state.modules[data.moduleId].data)) {
           state.modules[data.moduleId].data = {};
         }
 
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
-        const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
+        const newData = extend(clone(state.modules[data.moduleId].data), data.data);
         state.modules[data.moduleId].data = newData;
         state.dirty = true;
       },
+      saveCustomModuleImageData(state, data) {
+        if (isArray(state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data = {};
+        }
+        if (!state.modules[data.moduleId].data.images) {
+          state.modules[data.moduleId].data.images = {};
+        }
+        if (!state.modules[data.moduleId].data.images[data.key]) {
+          state.modules[data.moduleId].data.images[data.key] = {};
+        }
+        state.modules[data.moduleId].data.images[data.key][data.field] = data.value;
+      },
       saveCustomModuleDataField(state, data) {
         // Prevent empty arrays returned by php-mongo
-        if (_.isArray(state.modules[data.moduleId].data)) {
+        if (isArray(state.modules[data.moduleId].data)) {
           state.modules[data.moduleId].data = {};
         }
 
@@ -257,7 +280,7 @@ function campaignStore() {
         state.fieldErrors = filtered;
       },
       clearErrorsByScope(state, scope) {
-        const filtered = state.fieldErrors.filter(err => !_.isEqual(err.scope, scope));
+        const filtered = state.fieldErrors.filter(err => !isEqual(err.scope, scope));
         state.fieldErrors = filtered;
       },
       error(err) {
@@ -270,7 +293,7 @@ function campaignStore() {
         return Promise.resolve();
       },
       addErrors(context, errors) {
-        _.each(errors, (error) => {
+        each(errors, (error) => {
           context.commit('clearErrorsByScope', error.scope);
 
           if (context.state.fieldErrors.indexOf(error) === -1) {
@@ -279,7 +302,7 @@ function campaignStore() {
         });
       },
       saveCustomModuleData(context, data) {
-        _.each(data.data, (value, field) => {
+        each(data.data, (value, field) => {
           context.commit('saveCustomModuleDataField', {
             moduleId: data.moduleId,
             field,
@@ -305,7 +328,7 @@ function campaignStore() {
           .catch(error => context.commit('error', error));
       },
       saveCampaign(context, data) {
-        const deferred = Q.defer();
+        const deferred = defer();
         campaignService.saveCampaign(data)
           .then(res => {
             context.commit('setDirty', false);
@@ -319,7 +342,7 @@ function campaignStore() {
         return deferred.promise;
       },
       completeCampaign(context, campaign) {
-        const deferred = Q.defer();
+        const deferred = defer();
         campaignService.completeCampaign(campaign)
           .then(response => {
             context.commit('setDirty', false);
@@ -333,7 +356,7 @@ function campaignStore() {
         return deferred.promise;
       },
       lockCampaign(context, campaignId) {
-        const deferred = Q.defer();
+        const deferred = defer();
 
         campaignService.lockCampaign(campaignId)
           .then(response => {
@@ -347,7 +370,7 @@ function campaignStore() {
         return deferred.promise;
       },
       unlockCampaign(context, campaignId) {
-        const deferred = Q.defer();
+        const deferred = defer();
 
         campaignService.unlockCampaign(campaignId)
         .then(response => {
@@ -361,7 +384,7 @@ function campaignStore() {
         return deferred.promise;
       },
       pingLockCampaign(context, data) {
-        const deferred = Q.defer();
+        const deferred = defer();
 
         campaignService.pingLock({ campaignId: data.campaignId, windowId: data.windowId })
           .then(response => {
@@ -373,7 +396,7 @@ function campaignStore() {
         return deferred.promise;
       },
       favoriteCampaign(context, campaignId) {
-        const deferred = Q.defer();
+        const deferred = defer();
 
         campaignService.favoriteCampaign(campaignId)
         .then(response => {
@@ -387,12 +410,12 @@ function campaignStore() {
         return deferred.promise;
       },
       uploadImages(context, data) {
-        const deferred = Q.defer();
+        const deferred = defer();
 
         imageService.uploadImages(data)
           .then((images) => {
             // override with full path
-            _.each(images, (image, key) => {
+            each(images, (image, key) => {
               images[key] = `campaigns${image}`;
             });
             deferred.resolve(images);
