@@ -22,6 +22,7 @@
             :min-value="setting.minValue"
             :max-value="setting.maxValue"
             :sub-component="setting.subComponent"
+            :is-pixel="setting.isPixel"
             :options="setting.options"
             :is-disable-percentage="setting.isDisablePercentage"
             :element="setting.subComponent ? component[setting.subComponent] : component"

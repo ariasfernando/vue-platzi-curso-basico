@@ -11,6 +11,7 @@
       style="width: 100%;"
       :style="component.container.style"
       :align="component.container.attribute.align"
+      :bgcolor="component.container.attribute.bgcolor"
       :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
     >
       <a
@@ -23,10 +24,10 @@
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.button.attribute.width"
+          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : `${component.button.attribute.width}px`"
           :height="component.button.attribute.height"
           :bgcolor="component.button.attribute.bgcolor"
-          :style="`width:${component.button.attribute.width}px`"
+          :style="tableStyles"
         >
           <tr>
             <td
@@ -109,6 +110,14 @@
         },
       libraryConfig(){
         return this.$store.state.campaign.campaign.library_config;
+      },
+      tableStyles(){
+        const width = this.component.button.style.minWidth ? undefined : `${this.component.button.attribute.width}px`;
+        return {
+          'width': width,
+          'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
+          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth
+        }
       },
       buttonBorderAndPadding(){
         return{
