@@ -32,8 +32,8 @@
             <div
               class="stx-edit-text stx-wrapper"
               v-html="content"
-              @keyup="clangeContent"
-              @input="clangeContent"
+              @keyup="changeContent"
+              @input="changeContent"
               :id="editorId"
               ></div>
             <div :class="'st-remove-element stx-toolbar toolbar-'+editorId"></div>
@@ -136,7 +136,7 @@ export default {
           componentId:this.componentId
       });
     },
-    clangeContent(e) {
+    changeContent(e) {
       if (this.timer) {
         clearTimeout(this.timer);
       }

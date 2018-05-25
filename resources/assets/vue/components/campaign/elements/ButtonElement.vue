@@ -56,8 +56,8 @@
                         :style="buttonFontStyles"
                         v-html="content"
                         :id="editorId"
-                        @keyup="clangeContent"
-                        @input="clangeContent"
+                        @keyup="changeContent"
+                        @input="changeContent"
                       >
                     </div>
                   </td>
@@ -183,7 +183,7 @@
             componentId: this.componentId
         });
       },
-      clangeContent(e) {
+      changeContent(e) {
         if (this.timer) {
           clearTimeout(this.timer);
         }
