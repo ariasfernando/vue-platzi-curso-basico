@@ -32,6 +32,7 @@ before_script:
   - php composer-setup.php
   - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
   - php composer.phar install
+  - php artisan vendor:publish
   - npm run production
   # Install CI components.
   - cd ci/; php ../composer.phar install; cd ..
