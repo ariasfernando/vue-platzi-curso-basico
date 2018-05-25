@@ -23,7 +23,7 @@ stages:
 
 before_script:
   # js related
-  - yum install -y cairo cairo-devel
+  - yum install -y gcc-c++ cairo cairo-devel
   - npm install
   # Install composer dependencies
   - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
