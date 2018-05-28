@@ -90,20 +90,20 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
             }
         };
 
-        const addColRemoveIcon = function ($row) {
-            const $colRemoveIcon = $('<td class="delete-row mceNonEditable st-remove-element"></td>');
+        var addColRemoveIcon = function ($row) {
+            var $colRemoveIcon = $('<td class="delete-row mceNonEditable st-remove-element"></td>');
             if (!$row.find('.delete-row').length) {
                 $row.append(addRemoveIcon($colRemoveIcon));
             } else {
-                const $col = $($row.find('.delete-row')[0]);
+                var $col = $($row.find('.delete-row')[0]);
                 if (!$col.find('.fa-times').length) {
                     addRemoveIcon($col);
                 }
             }
         };
 
-        const addRemoveIcon = function ($col) {
-            let $removeIcon = $('<i class="fa fa-times" aria-hidden="true"></i>');
+        var addRemoveIcon = function ($col) {
+            var $removeIcon = $('<i class="fa fa-times" aria-hidden="true"></i>');
             $col.append($removeIcon);
             return $col;
         };
