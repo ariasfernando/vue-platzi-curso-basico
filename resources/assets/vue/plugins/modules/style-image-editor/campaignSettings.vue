@@ -45,7 +45,8 @@ export default {
       showImageEditor: false,
       libraryImages: [],
       type: 'desktop',
-      image: {}
+      image: {},
+      isEdit: false
     };
   },
   computed: {
@@ -116,20 +117,31 @@ export default {
           campaignId: this.campaign.campaign_id
         })
         .then(uploadedImgs => {
-          this.updateAttribute(uploadedImgs[imgs.length - 1]);
+          this.updateAttribute(uploadedImgs[imgs.length - 1], data.newImage);
           const temp = {};
-          temp[`img${this.type === 'mobile' ? 'Mobile' : ''}`] = data.img;
-          temp[`state${this.type === 'mobile' ? 'Mobile' : ''}`] = data.state;
+          if (this.type === 'desktop') {
+            temp.img = data.img;
+            temp.state = data.state;
+            if (data.newImage === true && this.isEdit === true) {
+              if (typeof this.plugin.data.imgMobile !== 'undefined') {
+                temp.imgMobile = data.img;
+                temp.stateMobile = data.state;
+              }
+            }
+          } else {
+            temp.imgMobile = data.img;
+            temp.stateMobile = data.state;
+          }
           this.updatePluginData(uploadedImgs, data.images, {
             ...this.plugin.data,
             ...temp
-          });
+          }, data.newImage);
           this.$store.commit('global/setLoader', false);
           this.showImageEditor = false;
           this.type = 'desktop';
         });
     },
-    updatePluginData(uploadedImgs, images, data) {
+    updatePluginData(uploadedImgs, images, data, newImage) {
       images.slice(0, images.length - 1).forEach(image => {
         const i = images.indexOf(image);
         const keys = image.key.split('.');
@@ -143,7 +155,16 @@ export default {
           }
         });
       });
-      data[`img${this.type === 'mobile' ? 'Mobile' : ''}`] = uploadedImgs[images.length - 1];
+      if (this.type === 'desktop') {
+        data.img = uploadedImgs[images.length - 1];
+        if (newImage === true && this.isEdit === true) {
+          if (typeof this.plugin.data.imgMobile !== 'undefined') {
+            data.imgMobile = uploadedImgs[images.length - 1];
+          }
+        }
+      } else {
+        data.imgMobile = uploadedImgs[images.length - 1];
+      }
       this.$store.commit('campaign/savePlugin', {
         plugin: this.name,
         moduleId: this.currentComponent.moduleId,
@@ -152,7 +173,7 @@ export default {
         data: data
       });
     },
-    updateAttribute(image) {
+    updateAttribute(image, newImage) {
       this.removeErrorsImages();
       const payload = {
         plugin: this.name,
@@ -161,10 +182,28 @@ export default {
         componentId: this.currentComponent.componentId,
         subComponent: 'image',
         link: 'attribute',
-        property: `placeholder${this.type === 'mobile' ? 'Mobile' : ''}`,
         value: image
       };
-      this.$store.commit('campaign/saveComponentProperty', payload);
+      if (this.type === 'desktop') {
+        payload.property = 'placehoder';
+        this.$store.commit('campaign/saveComponentProperty', {
+          ...payload,
+          property: 'placeholder'
+        });
+        if (newImage === true && this.isEdit === true) {
+          if (typeof this.plugin.data.imgMobile !== 'undefined') {
+            this.$store.commit('campaign/saveComponentProperty', {
+              ...payload,
+              property: 'placeholderMobile'
+            });
+          }
+        }
+      } else {
+        this.$store.commit('campaign/saveComponentProperty', {
+          ...payload,
+          property: 'placeholderMobile'
+        });
+      }
     },
     removeErrorsImages() {
       let $contentImgError = $('.stx-module-wrapper-active').find(
@@ -180,11 +219,28 @@ export default {
       }
       if (Object.keys(this.plugin.data).length > 0) {
         const temp = this.plugin.data;
-        if (typeof temp[`img${this.type === 'mobile' ? 'Mobile' : ''}`] !== 'undefined') {
-          this.image = {
-            img: temp[`img${this.type === 'mobile' ? 'Mobile' : ''}`],
-            state: temp[`state${this.type === 'mobile' ? 'Mobile' : ''}`]
-          };
+        if (this.type === 'desktop') {
+          if (typeof temp.img !== 'undefined') {
+            this.isEdit = true;
+            this.image = {
+              img: temp.img,
+              state: temp.state
+            };
+          }
+        } else {
+          if (typeof temp.imgMobile !== 'undefined') {
+            this.isEdit = true;
+            this.image = {
+              img: temp.imgMobile,
+              state: temp.stateMobile
+            };
+          } else {
+            this.isEdit = true;
+            this.image = {
+              img: temp.img,
+              state: temp.state
+            };
+          }
         }
       }
       this.showImageEditor = true;

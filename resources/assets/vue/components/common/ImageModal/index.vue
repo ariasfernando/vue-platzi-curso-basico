@@ -106,7 +106,8 @@ export default {
       url: '',
       currentImage: null,
       sieOptions: {},
-      isDisabled: false
+      isDisabled: false,
+      newImage: true
     };
   },
   computed: {
@@ -228,6 +229,7 @@ export default {
         this.$refs.sie.close();
       }
       this.currentImage = null;
+      this.newImage = true;
       this.isDisabled = false;
       this.page = {
         one: true,
@@ -246,6 +248,7 @@ export default {
         image: data.img
       });
       data.images = images;
+      data.newImage = this.newImage;
       this.$emit('submitImage', data);
     },
     submit() {
@@ -285,6 +288,7 @@ export default {
         two: false,
         three: true
       };
+      this.newImage = false;
     }
     this.generateSieOptions();
   },
