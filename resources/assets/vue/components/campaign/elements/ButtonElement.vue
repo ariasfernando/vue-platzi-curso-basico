@@ -11,6 +11,7 @@
       style="width: 100%;"
       :style="component.container.style"
       :align="component.container.attribute.align"
+      :bgcolor="component.container.attribute.bgcolor"
       :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
     >
       <a
@@ -23,10 +24,10 @@
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.button.attribute.width"
+          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : `${component.button.attribute.width}px`"
           :height="component.button.attribute.height"
           :bgcolor="component.button.attribute.bgcolor"
-          :style="`width:${component.button.attribute.width}px`"
+          :style="tableStyles"
         >
           <tr>
             <td
@@ -132,6 +133,14 @@
       libraryConfig(){
         return this.$store.state.campaign.campaign.library_config;
       },
+      tableStyles(){
+        const width = this.component.button.style.minWidth ? undefined : `${this.component.button.attribute.width}px`;
+        return {
+          'width': width,
+          'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
+          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth
+        }
+      },
       buttonBorderAndPadding(){
         return{
           'padding-top':this.component.button.style.paddingTop,
@@ -149,7 +158,8 @@
           'border-top-color':this.component.button.style.borderTopColor,
           'border-right-color':this.component.button.style.borderRightColor,
           'border-bottom-color':this.component.button.style.borderBottomColor,
-          'border-left-color':this.component.button.style.borderLeftColor
+          'border-left-color':this.component.button.style.borderLeftColor,
+          'border-radius':this.component.button.style.borderRadius
         }
       },
       buttonFontStyles() {
