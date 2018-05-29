@@ -643,7 +643,8 @@ class StaticProcessor
      *
      * @return array Path or error
      */
-    public function trimImage($params) {
+    public function trimImage($params)
+    {
         $final_height = (isset($params['height']))? $params['height'] : 0;
         $background_image = (isset($params['background_image']))? $params['background_image'] : null;
 
