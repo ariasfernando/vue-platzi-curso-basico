@@ -59,7 +59,11 @@
                 </div>
               </div>
               <div v-show="page.three" style="overflow-y: auto; max-height: calc(100vh - 187px); min-height: 300px; height:100%" ref="wrapperSie">
-                <style-image-editor v-if="page.three && this.currentImage" :sieoptions="sieOptions" ref="sie" @image-submit="submitImage">
+                <style-image-editor 
+                v-if="page.three && this.currentImage" 
+                :sieoptions="sieOptions" 
+                ref="sie" 
+                @image-submit="submitImage">
                 </style-image-editor>
               </div>
             </slot>
@@ -184,8 +188,12 @@ export default {
       }
     },
     setImage(imageSource) {
+      const size = {
+        width: this.params['sie-size']['size_width'].value,
+        height: this.params['sie-size']['size_height'].value
+      }
       return imageHelper.checkGIFSize(imageSource, this.sieOptions.size)
-        .then(() => imageHelper.adjustSize(this.resizeIfSmaller || false, imageSource, this.sieOptions.size))
+        .then(() => imageHelper.adjustSize(this.resizeIfSmaller || false, imageSource, size))
         .then((newSize) => {
           this.currentImage = imageSource;
           this.changeImage(this.params);
@@ -228,6 +236,7 @@ export default {
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
       }
+      this.sieOptions = {};
       this.currentImage = null;
       this.newImage = true;
       this.isDisabled = false;
@@ -236,6 +245,11 @@ export default {
         two: false,
         three: false
       };
+    },
+    clearEvents(){
+      removeEventListener('showSubToolbar', this.disableSubmit);
+      removeEventListener('saveEdit', this.enableSubmit);
+      removeEventListener('cancelEdit', this.enableSubmit);
     },
     submitImage(data) {
       data.state.preset = sieHelper.removeUrlPath(
@@ -292,6 +306,9 @@ export default {
     }
     this.generateSieOptions();
   },
+  beforeDestroy(){
+    this.clearEvents();
+  }
 };
 </script>
 <style lang="less" scoped>
