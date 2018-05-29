@@ -34,6 +34,7 @@
               v-html="content"
               @keyup="changeContent"
               @input="changeContent"
+              @tiny-change="changeContent"
               :id="editorId"
               ></div>
             <div :class="'st-remove-element stx-toolbar toolbar-'+editorId"></div>

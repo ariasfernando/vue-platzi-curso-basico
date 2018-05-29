@@ -57,6 +57,7 @@
                         v-html="content"
                         :id="editorId"
                         @keyup="changeContent"
+                        @tiny-change="changeContent"
                         @input="changeContent"
                       >
                     </div>

@@ -233,6 +233,7 @@
               })
               .on('keyup change', (e) => {
                 const editor = tinyMCE.activeEditor;
+                editor.bodyElement.dispatchEvent(new Event("tiny-change"));
 
                 const tinyMax = parseInt(editor.settings.max_chars) || undefined;
 
