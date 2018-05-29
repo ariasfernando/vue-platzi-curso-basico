@@ -209,6 +209,7 @@ export default {
       this.sortKey = sortKey;
     },
     prepareOutput: function(value, field) {
+      value = this.$options.filters.escapeHTML(value);
       var search = this.terms;
       if (this.config.search_settings.highlight_matches === true && this.config.search_settings.fields_to_search.indexOf(field) > -1) {
         for (var i = 0; i < search.length; i++) {

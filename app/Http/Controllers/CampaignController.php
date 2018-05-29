@@ -8,6 +8,7 @@ use StensulLocale;
 use Activity;
 use Campaign;
 use EmailSender;
+use Validator;
 use Stensul\Models\Library;
 use Stensul\Services\TagManager as Tag;
 use Illuminate\Http\Request;
@@ -260,6 +261,20 @@ class CampaignController extends Controller
                 'error'   => 'Forbidden'
             ], 403);
         }
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'campaign_name' => 'not_regex:/<.*?>/',
+                'campaign_preheader' => 'not_regex:/<.*?>/'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
         return Campaign::save($request->input());
     }
 
