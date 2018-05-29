@@ -1,7 +1,7 @@
 import Vue from 'vue/dist/vue';
 import {
-  isEmpty,
   filter,
+  isEmpty,
   cloneDeep,
   isUndefined,
   isArray,
@@ -194,9 +194,11 @@ function campaignStore() {
         state.dirty = true;
       },
       savePlugin(state, payload) {
-        const originalData = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data;
-        const updated = { ...originalData, ...payload.data };
-        state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data = updated;
+        const plugin = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+        plugin.data = {
+          ...plugin.data,
+          ...payload.data
+        };
         state.dirty = true;
       },
       saveComponentProperty(state, data) {
