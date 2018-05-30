@@ -125,6 +125,7 @@
                     :module-id="moduleId"
                     :column-id="0"
                     :component-id="componentId"
+                    context="campaign"
                   ></component>
                 </template>
               </table>
@@ -149,13 +150,13 @@
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
-  import ComponentAttributeMixin from '../common/mixins/ComponentAttributeMixin.js';
+  import ElementMixin from '../common/mixins/ElementMixin.js';
   import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
     props: ['moduleId'],
-    mixins: [ ComponentAttributeMixin ],
+    mixins: [ ElementMixin ],
     computed: {
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];

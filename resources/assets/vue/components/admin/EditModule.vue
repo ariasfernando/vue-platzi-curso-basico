@@ -283,6 +283,9 @@ export default {
     min-width: 640px;
     overflow-x: hidden;
     overflow-y: visible;
+    table{
+      border-collapse: initial;
+    }
   }
 
   .module-table {

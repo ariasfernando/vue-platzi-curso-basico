@@ -377,9 +377,9 @@
   }
 
   p,ul,ol{
-      margin: 0;
-      padding: 0;
-    }
+    margin: 0;
+    padding: 0;
+  }
 
   .stx-edit-text{
 
@@ -407,6 +407,9 @@
       @import '../../../less/base/commons/mobile/mobile_client_styles';
     }
 
+    table{
+      border-collapse: initial;
+    }
     tr.ghost-component{
       text-align: center;
       color:@focus;
