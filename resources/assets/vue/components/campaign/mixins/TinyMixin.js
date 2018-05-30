@@ -173,7 +173,14 @@
                       $toolbox.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
                     }, 100);
                 }
-                
+                if ($toolbox.length && !$toolbox.find("button:contains('Formats')").length ){
+                    setTimeout(function(){
+                        var $button = $toolbox.find("button:contains('Formats')");
+                        $button.parent('div').attr('aria-label','Font Format');
+                        $button.empty();
+                        $button.append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
+                    }, 100);
+                };
             });
 
             editor
