@@ -120,6 +120,13 @@ class CampaignController extends Controller
         $window_id = Cache::get('window_lock:' . $campaign_id);
 
         if ($params = Campaign::find($campaign_id)) {
+            if (isset($params['campaign_data']['locked'])
+                && $params['campaign_data']['locked']
+                && isset($params['campaign_data']['locked_by'])
+                && $params['campaign_data']['locked_by'] != Auth::user()->email) {
+
+                return redirect(env('APP_BASE_URL', '/'))->with('campaign_locked_by', $campaign_id);
+            }
             $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
                 ? $params['campaign_data']['library']
                 : "default";
@@ -243,7 +250,24 @@ class CampaignController extends Controller
                 'locked_by' => Campaign::whoIsLocking($request->input('campaign_id'))
             ];
         } else {
-            return Campaign::delete($request->input('campaign_id'));
+
+            if ($campaign = Campaign::find($request->input('campaign_id'))) {
+                if (isset($campaign['campaign_data']['locked'])
+                    && $campaign['campaign_data']['locked']
+                    && isset($campaign['campaign_data']['locked_by'])
+                    && $campaign['campaign_data']['locked_by'] != Auth::user()->email) {
+
+                    return response()->json([
+                        'error'   => 'Forbidden'
+                    ], 403);
+                                
+                }
+                return Campaign::delete($request->input('campaign_id'));
+            }
+
+            return response()->json([
+                'error'   => 'Not found'
+            ], 404);
         }
     }
 

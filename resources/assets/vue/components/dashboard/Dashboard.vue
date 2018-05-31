@@ -155,6 +155,12 @@
             {className: 'et-error'}
           );
           break;
+        case 'campaign_locked_by':
+          this.$root.$toast(
+            'Sorry, this campaign is locked',
+            {className: 'et-error'}
+          );
+          break;
         case 'campaign_not_found':
           this.$root.$toast(
             'Sorry, we couldn\'t find the requested campaign',
