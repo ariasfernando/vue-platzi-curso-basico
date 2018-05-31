@@ -143,6 +143,10 @@ mix
     `${assetsPath}/js/library/login.js`,
   ], `${jsDestinationPath}/library.js`)
   .scripts([
+    'node_modules/jquery/dist/jquery.min.js',
+    `${assetsPath}/js/library/login.js`,
+  ], `${jsDestinationPath}/login.js`)
+  .scripts([
     `${assetsPath}/js/library/application-proof.js`,
   ], `${jsDestinationPath}/dashboard-proof.js`)
   .scripts([
