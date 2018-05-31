@@ -24,7 +24,7 @@
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : `${component.button.attribute.width}px`"
+          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
           :height="component.button.attribute.height"
           :bgcolor="component.button.attribute.bgcolor"
           :style="tableStyles"
