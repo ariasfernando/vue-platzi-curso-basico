@@ -19,7 +19,7 @@
       ></el-button>
     </div>
     <div class="clearfix" v-if="plugin.config.options.forecolor.value">
-      <settings-container v-if="!textcolor_from_library" label="textcolor_map">
+      <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library" label="textcolor_map">
         <template slot="setting-right">
           <el-input
             size="mini"
@@ -36,11 +36,11 @@
         <template slot="setting-right">
           <toggle-button
             :value="plugin.config.options.forecolor.textcolor_from_library"
-            @change="textcolorFromLibrary"
+            @change="newValue => changeOption(newValue,'textcolor_from_library','forecolor')"
           ></toggle-button>
       </template>
       </settings-container>
-      <settings-container v-if="textcolor_from_library" label="palette_name">
+      <settings-container v-if="plugin.config.options.forecolor.textcolor_from_library" label="palette_name">
         <template slot="setting-right">
           <el-input
             size="mini"
@@ -246,10 +246,6 @@ export default {
     },
     isAValidSetting(tinySetting, key) {
       return (['truncate', 'lines_limit', 'fontsize_formats', 'style_formats', 'link_fixed_color'].indexOf(key) !== -1) && tinySetting.value === true;
-    },
-    textcolorFromLibrary(newValue) {
-      changeOption(newValue,'textcolor_from_library','forecolor')
-      changeOption(newValue,'textcolor_from_library','forecolor')
     },
   }
 };
