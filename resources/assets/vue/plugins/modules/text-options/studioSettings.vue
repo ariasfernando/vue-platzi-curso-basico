@@ -19,13 +19,34 @@
       ></el-button>
     </div>
     <div class="clearfix" v-if="plugin.config.options.forecolor.value">
-      <settings-container label="textcolor_map">
+      <settings-container v-if="!textcolor_from_library" label="textcolor_map">
         <template slot="setting-right">
           <el-input
             size="mini"
             v-validate="'required'"
             v-model="textColorMap"
             placeholder="000000,Black,474646,Gray,79a8c9,Blue,cd202c,Red"
+            class="clearfix"
+          ></el-input>
+        </template>
+      </settings-container>
+    </div>
+    <div class="clearfix" v-if="plugin.config.options.forecolor.value">
+      <settings-container label="textcolor_from_library">
+        <template slot="setting-right">
+          <toggle-button
+            :value="plugin.config.options.forecolor.textcolor_from_library"
+            @change="textcolorFromLibrary"
+          ></toggle-button>
+      </template>
+      </settings-container>
+      <settings-container v-if="textcolor_from_library" label="palette_name">
+        <template slot="setting-right">
+          <el-input
+            size="mini"
+            v-validate="'required'"
+            v-model="palette_name"
+            placeholder="name"
             class="clearfix"
           ></el-input>
         </template>
@@ -98,6 +119,14 @@ export default {
       },
       set(value) {
         this.changeOption(value.split(","),'textcolor_map','forecolor');
+      },
+    },
+    palette_name: {
+      get() {
+        return this.plugin.config.options.forecolor.palette_name;
+      },
+      set(value) {
+        this.changeOption(value,'palette_name','forecolor');
       }
     },
   },
@@ -217,7 +246,11 @@ export default {
     },
     isAValidSetting(tinySetting, key) {
       return (['truncate', 'lines_limit', 'fontsize_formats', 'style_formats', 'link_fixed_color'].indexOf(key) !== -1) && tinySetting.value === true;
-    }
+    },
+    textcolorFromLibrary(newValue) {
+      changeOption(newValue,'textcolor_from_library','forecolor')
+      changeOption(newValue,'textcolor_from_library','forecolor')
+    },
   }
 };
 </script>

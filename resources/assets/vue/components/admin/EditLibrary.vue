@@ -287,6 +287,18 @@
                                   ></el-input>
                                 </p>
                               </div>
+
+                              <!-- Field external-link -->
+                              <div class="col-md-3">
+                                <label for="colorPalettes">color palettes</label>
+                                <p class="control">
+                                  <el-input
+                                    v-model="library.config.colorPalettes"
+                                    name="colorPalettes" 
+                                    placeholder="{'nombre_de_la_paleta':['000000','Black','474646','Gray','79a8c9','Blue','cd202c','Red']}"
+                                  ></el-input>
+                                </p>
+                              </div>
                             </div>
 
                             <div class="row">
