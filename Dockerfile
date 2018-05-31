@@ -18,6 +18,9 @@ FROM base AS composer_dependencies
 
 COPY ./composer.json /usr/src/app/composer.json
 #COPY ./composer.lock /usr/src/app/composer.lock
+COPY ./database /usr/src/app/database
+COPY ./tests /usr/src/app/tests
+COPY ./artisan /usr/src/app/artisan
 
 RUN cd /usr/src/app/ && composer install --no-scripts
 
