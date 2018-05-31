@@ -307,7 +307,8 @@ class CampaignController extends Controller
                 $tags = [];
                 preg_match_all("/<[^\/].*?>/is", $item, $tags);
                 foreach ($tags[0] as $index => $tag) {
-                    $clean_tag = preg_replace("/\s+on[a-z]+\s?=\s?[\"']?.*[\"']?[^>]/is", '', $tag);
+                    // Filter stuff like <img src=x onerror=alert(css)> and <svg/onload=alert('xss')>
+                    $clean_tag = preg_replace("/[\s+|\/]on[a-z]+\s?=\s?[\"']?.*[\"']?[^>]/is", '', $tag);
                     $item = str_replace($tag, $clean_tag, $item);
                 }
             });
