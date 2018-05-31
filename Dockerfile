@@ -36,12 +36,12 @@ RUN cd /usr/src/app/ && npm install
 # copy production node_modules aside
 RUN cp -R node_modules prod_node_modules
 
-FROM base AS bower_dependencies
+#FROM base AS bower_dependencies
 # force cache for bower
 #COPY ./.bowerrc /usr/src/app/.bowerrc
-COPY ./bower.json /usr/src/app/bower.json
-RUN mkdir -p resources/assets/bower
-RUN cd /usr/src/app/ && bower install --allow-root && bower cache clean --allow-root
+#COPY ./bower.json /usr/src/app/bower.json
+#RUN mkdir -p resources/assets/bower
+#RUN cd /usr/src/app/ && bower install --allow-root && bower cache clean --allow-root
 
 
 #
@@ -61,13 +61,14 @@ COPY --from=composer_dependencies /usr/src/app/vendor ./vendor
 COPY --from=npm_dependencies /usr/src/app/prod_node_modules ./node_modules
 
 # copy production bower 
-COPY --from=bower_dependencies /usr/src/app/resources/assets/bower ./resources/assets/bower
+#COPY --from=bower_dependencies /usr/src/app/resources/assets/bower ./resources/assets/bower
 
 # copy app sources
 COPY . /usr/src/app/
 
-#RUN cd /usr/src/app/ && php artisan vendor:publish
+RUN cd /usr/src/app/ && php artisan vendor:publish --all
 
-RUN cd /usr/src/app/ && gulp --production
+#RUN cd /usr/src/app/ && gulp --production
+RUN cd /usr/src/app/ && npm run production
 RUN chown -R fbridge.fbridge /usr/src/app
 
