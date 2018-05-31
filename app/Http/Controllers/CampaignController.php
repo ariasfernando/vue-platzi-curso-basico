@@ -275,7 +275,21 @@ class CampaignController extends Controller
             ], 422);
         }
 
-        return Campaign::save($request->input());
+        // Filter all onxxx attributes for security.
+        $input = $request->input();
+
+        if (!empty($input['modules_data'])) {
+            array_walk_recursive($input['modules_data'], function(&$item, $key) {
+                $tags = [];
+                preg_match_all("/<[^\/].*?>/is", $item, $tags);
+                foreach ($tags[0] as $index => $tag) {
+                    $clean_tag = preg_replace("/\s+on[a-z]+\s?=\s?[\"']?.*[\"']?[^>]/is", '', $tag);
+                    $item = str_replace($tag, $clean_tag, $item);
+                }
+            });
+        }
+
+        return Campaign::save($input);
     }
 
     /**
