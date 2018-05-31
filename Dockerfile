@@ -1,6 +1,6 @@
 #
 # ---- Base Node ----
-FROM registry.stensuldev.net/dockerfiles/web-2.0.0 AS base
+FROM registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0 AS base
 
 # set working directory
 WORKDIR /usr/src/app/
