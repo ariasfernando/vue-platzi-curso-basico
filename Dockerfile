@@ -12,12 +12,6 @@ ARG DOCKER_BUILDING
 ARG APP_NAME
 ARG NODE_ENV=production
 
-COPY ./database /usr/src/app/database
-COPY ./tests /usr/src/app/tests
-COPY ./artisan /usr/src/app/artisan
-
-COPY package.json .
-
 #
 # ---- Dependencies ----
 FROM base AS composer_dependencies
@@ -38,8 +32,6 @@ RUN cd /usr/src/app/ && npm install
 #RUN npm install --only=production 
 # copy production node_modules aside
 RUN cp -R node_modules prod_node_modules
-# install ALL node_modules, including 'devDependencies'
-#RUN npm install
 
 FROM base AS bower_dependencies
 # force cache for bower
@@ -69,7 +61,6 @@ COPY --from=npm_dependencies /usr/src/app/prod_node_modules ./node_modules
 COPY --from=bower_dependencies /usr/src/app/resources/assets/bower ./resources/assets/bower
 
 # copy app sources
-#COPY . .
 COPY . /usr/src/app/
 
 #RUN cd /usr/src/app/ && php artisan vendor:publish
@@ -77,6 +68,3 @@ COPY . /usr/src/app/
 RUN cd /usr/src/app/ && gulp --production
 RUN chown -R fbridge.fbridge /usr/src/app
 
-# expose port and define CMD
-#EXPOSE 5000
-#CMD npm run start
