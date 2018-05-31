@@ -39,7 +39,7 @@ RUN cp -R node_modules prod_node_modules
 FROM base AS bower_dependencies
 # force cache for bower
 #COPY ./.bowerrc /usr/src/app/.bowerrc
-#COPY ./bower.json /usr/src/app/bower.json
+COPY ./bower.json /usr/src/app/bower.json
 RUN mkdir -p resources/assets/bower
 RUN cd /usr/src/app/ && bower install --allow-root && bower cache clean --allow-root
 
