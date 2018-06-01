@@ -21,6 +21,7 @@
         cellspacing="0"
       >
         <tr>
+          <div :class="'st-remove-element stx-toolbar toolbar-'+editorId"></div>
           <td
             class="stx-position-relative"
             :width="component.text.attribute.width || '100%'"
@@ -37,7 +38,6 @@
               @tiny-change="changeContent"
               :id="editorId"
               ></div>
-            <div :class="'st-remove-element stx-toolbar toolbar-'+editorId"></div>
           </td>
         </tr> 
       </table>     
