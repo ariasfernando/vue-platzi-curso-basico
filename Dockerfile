@@ -17,7 +17,7 @@ ARG NODE_ENV=production
 FROM base AS composer_dependencies
 
 COPY ./composer.json /usr/src/app/composer.json
-#COPY ./composer.lock /usr/src/app/composer.lock
+COPY ./composer.lock /usr/src/app/composer.lock
 COPY ./database /usr/src/app/database
 COPY ./tests /usr/src/app/tests
 COPY ./artisan /usr/src/app/artisan
@@ -54,6 +54,9 @@ RUN cp -R node_modules prod_node_modules
 #
 # ---- Release ----
 FROM base AS release
+
+ARG DOCKER_BUILDING
+ARG APP_NAME
 # copy production composer
 COPY --from=composer_dependencies /usr/src/app/vendor ./vendor
 
