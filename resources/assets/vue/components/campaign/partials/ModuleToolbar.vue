@@ -120,6 +120,7 @@
       display: block;
       outline: 2px solid #c0dfda;
       outline-offset: -1px;
+      z-index: 299;
     }
 
     .icon-move{
@@ -155,6 +156,7 @@
       display: block;
       outline: 2px solid @focus;
       outline-offset: -1px;
+      z-index: 299;
     }
 
     .icon-move, .icon-remove,
@@ -167,6 +169,7 @@
         outline: 2px solid @focus;
         outline-offset: -1px;
         background: none;
+        z-index: 299;
       }
 
       .module-toolbar{
