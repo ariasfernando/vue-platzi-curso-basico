@@ -156,7 +156,7 @@
       display: block;
       outline: 2px solid @focus;
       outline-offset: -1px;
-      z-index: 299;
+      z-index: 298;
     }
 
     .icon-move, .icon-remove,
