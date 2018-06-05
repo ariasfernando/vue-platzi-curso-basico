@@ -6,7 +6,7 @@
     </h2>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component v-if="plugin.enabled" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+        <component v-if="plugin.enabled && plugin.name !=='text-options'" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
       </div>
     </div>
   </div>

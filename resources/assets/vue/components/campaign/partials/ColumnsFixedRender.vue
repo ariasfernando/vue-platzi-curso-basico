@@ -5,25 +5,20 @@
          cellspacing="0"
          cellpadding="0"
          border="0"
-         :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}]"
-         :bgcolor="column.container.attribute.bgcolor"
   >
       <tr
-        v-for="(component, componentId) in column.components"
-        @click="setComponent(moduleId, columnId, componentId)"
-        :key="component.id"
       >
         <td
           width="100%"
-          :valign="column.container.attribute.valign"
-          :bgcolor="column.container.attribute.bgcolor"
-          :align="column.container.attribute.align || 'center'"
-          :style="styles"
-          :class="column.container.attribute.classes ||''"
+          :valign="column.container.attribute.valign || 'top'"
+          :align="column.container.attribute.align || 'left'"
         >
           <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
             <template>
               <component
+                v-for="(component, componentId) in column.components"
+                @click="setComponent(moduleId, columnId, componentId)"
+                :key="component.id"
                 :is="component.type"
                 :component="component"
                 :module-id="moduleId"
@@ -70,14 +65,6 @@
       module() {
          return this.$store.getters["campaign/modules"][this.moduleId];
       },
-      styles() {
-        let padding = `padding-top:${this.column.container.style.paddingTop};
-                       padding-left:${this.column.container.style.paddingLeft};
-                       padding-bottom:${this.column.container.style.paddingBottom};
-                       padding-right:${this.column.container.style.paddingRight};`;
-
-        return padding;
-      }
     },
     methods: {
       setComponent(moduleId, columnId, componentId) {

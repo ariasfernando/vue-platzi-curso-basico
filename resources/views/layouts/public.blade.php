@@ -40,6 +40,11 @@
 		{{-- Debug --}}
 		@include('layouts/partials/debug')
 
+    @section('master-application-scripts')
+        {{-- Global Application JS object --}}
+        @include('partials.application_script_login')
+    @show
+
 		@section('footer-script')
 		@show
 	</body>

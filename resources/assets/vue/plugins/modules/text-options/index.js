@@ -1,5 +1,4 @@
 const studioSettings = require('./studioSettings.vue');
-const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
   name: 'text-options',
@@ -8,7 +7,6 @@ module.exports = {
   author: 'emiliano@stensul.com',
   target: ['button', 'text'],
   studioSettings,
-  campaignSettings,
   config: {
     options: {
       undo: {

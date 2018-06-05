@@ -153,6 +153,19 @@ class StaticProcessor
                     $filename = DS . 'images' . DS . trim($module['data']['rawImage']);
                     $assets[$filename] = null;
                 }
+
+                if (isset($module['data']['images']) && is_array($module['data']['images'])) {
+                    foreach ($module['data']['images'] as $key => $image_container) {
+                        if (isset($image_container['desktop']) && isset($image_container['desktop']['img'])) {
+                            $filename = DS . 'images' . DS . trim($image_container['desktop']['img']);
+                            $assets[$filename] = null;
+                        }
+                        if (isset($image_container['mobile']) && isset($image_container['mobile']['img'])) {
+                            $filename = DS . 'images' . DS . trim($image_container['mobile']['img']);
+                            $assets[$filename] = null;
+                        }
+                    }
+                }
             } // studio modules
             else {
                 if (isset($module['structure']) && isset($module['structure']['columns'])) {
@@ -160,10 +173,17 @@ class StaticProcessor
                         if (isset($column_value['components'])) {
                             foreach ($column_value['components'] as $component_key => $component_value) {
                                 if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
-                                    if (isset($component_value['attribute'])
-                                        && isset($component_value['attribute']['placeholder'])) {
-                                        $filename = DS . 'images' . DS . trim($component_value['attribute']['placeholder']);
-                                        $assets[$filename] = null;
+                                    if (isset($component_value['image'])
+                                        && isset($component_value['image']['attribute'])) {
+                                        if (isset($component_value['image']['attribute']['placeholder'])) {
+                                            $filename = DS . 'images' . DS . trim($component_value['image']['attribute']['placeholder']);
+                                            $assets[$filename] = null;
+                                        }
+
+                                        if (isset($component_value['image']['attribute']['placeholderMobile'])) {
+                                            $filename = DS . 'images' . DS . trim($component_value['image']['attribute']['placeholderMobile']);
+                                            $assets[$filename] = null;
+                                        }
                                     }
                                 }
                             }
@@ -643,7 +663,8 @@ class StaticProcessor
      *
      * @return array Path or error
      */
-    public function trimImage($params) {
+    public function trimImage($params)
+    {
         $final_height = (isset($params['height']))? $params['height'] : 0;
         $background_image = (isset($params['background_image']))? $params['background_image'] : null;
 

@@ -24,9 +24,10 @@
     @mouseover="setModulesMouseOver"
     @mouseleave="setModulesMouseLeave"
   >
-    <td 
+    <td
       class="stx-toolbar-content stx-position-relative"
       :data-module-id="moduleId"
+      :width="module.structure.attribute.width || '100%'"
       :style="module.structure.style"
       :valign="module.structure.attribute.valign || 'top'"
       :bgcolor="module.structure.attribute.bgcolor"
@@ -98,7 +99,10 @@
             v-for="(column, columnId) in module.structure.columns"
             :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
             :valign="column.container.attribute.valign || 'top'"
+            :class="column.container.attribute.classes"
+            :bgcolor="column.container.attribute.bgcolor"
             :key="column.id"
+            :style="[elementBorderAndPadding(column.container),{'width': widthStyle(column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%')}]"
           >
             <columns-fixed-render
               :column="column"
@@ -194,6 +198,16 @@
     },
     methods: {
 
+      elementBorderAndPadding(element) {
+        const BorderAndPadding = {};
+
+        _.each(element.style, (value, key) => {
+          if (key.indexOf('padding') >= 0 || key.indexOf('border') >= 0) {
+            BorderAndPadding[key] = value;
+          }
+        });
+        return BorderAndPadding;
+      },
       calculeWidthColumnPx(columnId){
         let width = this.module.structure.columns[columnId].container.attribute.width;
         if(_.endsWith(width, "%")){
@@ -272,7 +286,10 @@
 
         // Remove module highlight element
         $row.find("#moduleHighlight").remove();
-            }
+      },
+      widthStyle(width) {
+        return _.endsWith(width, "%") ? width : width + "px";
+      },
     },
     components: {
       TextElement,
