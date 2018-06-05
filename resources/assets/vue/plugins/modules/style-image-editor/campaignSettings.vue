@@ -166,7 +166,7 @@ export default {
         data.imgMobile = uploadedImgs[images.length - 1];
       }
       this.$store.commit('campaign/savePlugin', {
-        plugin: this.key,
+        plugin: this.pluginKey,
         moduleId: this.currentComponent.moduleId,
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
