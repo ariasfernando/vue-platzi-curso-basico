@@ -275,6 +275,16 @@ Application.utils = {
                 return "http://"+url;
             }
         },
+        validateSelect: function(  field ) {
+            $('#admin-user-form')
+            .find('[name="roles[]"]')
+                .selectpicker()
+                .change(function(e) {
+                    /* Revalidate the color when it is changed */
+                    $('#admin-user-form').formValidation('revalidateField', 'roles[]');
+                })
+                .end();
+        },
         validateUrlField: function( field ){
             if( !field.value ){
                 return true;
@@ -389,6 +399,7 @@ Application.utils = {
             if( validationParams.required && validationParams.required === true || validationParams.required === "true"){
                 // Set the result of the validation
                 validationResult.success = validate.validateRequiredField( field );
+                validationResult.success = validate.validateSelect( field );
 
                 // If isn't successful, set the error messages.
                 if( !validationResult.success ){
