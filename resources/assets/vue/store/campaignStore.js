@@ -486,7 +486,6 @@ function campaignStore() {
       },
       removeModule(context, moduleId) {
         context.commit('removeModule', moduleId);
-        context.commit('clearErrorsByModuleId', moduleId);
       },
     },
   };
