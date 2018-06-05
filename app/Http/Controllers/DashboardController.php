@@ -62,7 +62,6 @@ class DashboardController extends Controller
     {
         $flash_messages = [
             'campaign_lock',
-            'campaign_locked_by',
             'campaign_not_found',
             'campaign_permission',
             'campaign_create'
