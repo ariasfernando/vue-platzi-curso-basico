@@ -192,7 +192,7 @@
         }
 
         // Do not save if there are missing or wrong fields
-        if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors  ) {
+        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors) {
           this.$_app.utils.validator.modulesErrors('#emailCanvas');
 
           this.$root.$toast(
@@ -229,26 +229,25 @@
               let finishedProcessing = () => {
                 // Set campaign as processed
                 this.$store.commit('campaign/setProcessStatus');
-                // Show complete after campaign is completely processed
-                this.$store.commit("campaign/toggleModal", 'modalComplete');
-                // Redirect to `/dashboard` if user refreshes the page
-                window.history.replaceState(null, null, "?processed=true");
+                // Reload campaign data
+                this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id).then(() => {
+                  // Show complete after campaign is completely processed
+                  this.$store.commit("campaign/toggleModal", 'modalComplete');
+                  // Redirect to `/dashboard` if user refreshes the page
+                  window.history.replaceState(null, null, "?processed=true");
+                });
               };
 
-              // Set processed
+              // Set processed (if using "sync" as QUEUE_DRIVER)
               if (completeResponse.processed) {
-                return finishedProcessing();
-              }
-
-              // Poll server with job id
-              if (completeResponse.jobId) {
+                finishedProcessing();
+              } else if (completeResponse.jobId) {
+                // Poll server with job id when using an async queue driver.
                 let processInterval = setInterval(() => {
                   this.checkProcessStatus(completeResponse.jobId).then((response) => {
                     if (response.status === 'finished') {
                       clearInterval(processInterval);
                       finishedProcessing();
-                      // Reload campaign data
-                      this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id);
                     }
                   });
                 }, 2000);
