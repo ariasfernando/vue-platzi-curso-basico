@@ -157,7 +157,10 @@ module.exports = {
         title: 'Link fixed color',
         value: false,
         type: 'text',
-        content: '#514960',
+        dependsOn: {
+          config: 'options',
+          name: 'link',
+        },
       },
     },
   },
