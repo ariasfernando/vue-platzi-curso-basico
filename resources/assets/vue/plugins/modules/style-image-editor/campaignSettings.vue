@@ -36,7 +36,7 @@ import imageService from '../../../services/image';
 import imageModal from '../../../components/common/ImageModal';
 
 export default {
-  props: ['name', 'plugin'],
+  props: ['name', 'plugin', 'key'],
   components: {
     imageModal
   },
@@ -76,7 +76,7 @@ export default {
       },
       set(value) {
         const payload = {
-          plugin: this.name,
+          plugin: this.key,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
@@ -166,7 +166,7 @@ export default {
         data.imgMobile = uploadedImgs[images.length - 1];
       }
       this.$store.commit('campaign/savePlugin', {
-        plugin: this.name,
+        plugin: this.key,
         moduleId: this.currentComponent.moduleId,
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
@@ -176,7 +176,7 @@ export default {
     updateAttribute(image, newImage) {
       this.removeErrorsImages();
       const payload = {
-        plugin: this.name,
+        plugin: this.key,
         moduleId: this.currentComponent.moduleId,
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
