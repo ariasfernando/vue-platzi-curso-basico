@@ -60,12 +60,14 @@ Application.utils = {
                 // Show alert
                 $errorBox.slideDown(function(){
                     Application.utils.alert.scrollToMe();
-                    // Hide Alert after 5 seconds
-                    Application.utils.alert.timeOut = setTimeout(function(){
-                        if( $errorBox.is(":visible") ){
-                            $errorBox.slideUp("slow");
-                        }
-                    }, 8000);
+                    if(!window.location.pathname == "/admin/user") {
+                        // Hide Alert after 8 seconds
+                        Application.utils.alert.timeOut = setTimeout(function(){
+                            if( $errorBox.is(":visible") ){
+                                $errorBox.slideUp("slow");
+                            }
+                        }, 8000);
+                    }
                 });
             }
         },
