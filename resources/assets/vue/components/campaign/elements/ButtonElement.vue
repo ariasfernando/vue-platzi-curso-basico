@@ -24,7 +24,7 @@
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : `${component.button.attribute.width}px`"
+          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
           :height="component.button.attribute.height"
           :bgcolor="component.button.attribute.bgcolor"
           :style="tableStyles"
@@ -56,7 +56,11 @@
                         style="display: inline-block !important; vertical-align: middle"
                         :style="buttonFontStyles"
                         v-html="content"
-                        :id="editorId" >
+                        :id="editorId"
+                        @keyup="changeContent"
+                        @tiny-change="changeContent"
+                        @input="changeContent"
+                      >
                     </div>
                   </td>
                   <td
@@ -89,11 +93,18 @@
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
+  import TinyMixin from '../mixins/TinyMixin.js';
   import _ from 'lodash';
 
   export default {
     name: 'ButtonElement',
-    mixins: [ MobileStylesMixin, ComponentAttributeMixin ],
+    mixins: [ MobileStylesMixin, ComponentAttributeMixin, TinyMixin ],
+    data() {
+      return {    
+        content: this.component.data.text,
+        timer: null
+      };
+    },
     props: [
       'module-id',
       'column-id',
@@ -101,13 +112,24 @@
       'component',
       'column'
     ],
+    mounted(){
+      const changeStyles = (selector, styles) => {
+        let editorLinks = $(`#${this.editorId}`).find(selector);
+        if(editorLinks.length){
+          for (var i = 0; i < editorLinks.length; i++) {
+            $(editorLinks[i]).css(styles);
+          }
+        }
+      }
+      changeStyles('p', { color: this.component.button.style.color || this.libraryConfig.linkColor });
+    },
     computed: {
-        module() {
-          return this.$store.getters["campaign/modules"][this.moduleId];
-        },
-        editorId(){
-          return ["editor", this.module.idInstance, this.moduleId, this.columnId, this.componentId].join("-");
-        },
+      module() {
+        return this.$store.getters["campaign/modules"][this.moduleId];
+      },
+      editorId(){
+        return ["editor", this.module.idInstance, this.columnId, this.componentId].join("-");
+      },
       libraryConfig(){
         return this.$store.state.campaign.campaign.library_config;
       },
@@ -163,25 +185,47 @@
       widthCaret() {
         return _.parseInt(this.component.caret.attribute.width) + _.parseInt(this.component.caret.style.paddingLeft) || 0 + _.parseInt(this.component.caret.style.paddingRight) || 0;
       },
-      content(){
-        return this.component.data.text.replace("<p>", `<p style='color:${this.component.button.style.color || this.libraryConfig.linkColor} !important'>`);
-      },
     },
     methods: {
       selectComponent() {
         this.$emit("select-component", {
+            moduleId: this.moduleId,
+            columnId: this.columnId,
+            componentId: this.componentId
+        });
+      },
+      changeContent(e) {
+        if (this.timer) {
+          clearTimeout(this.timer);
+        }
+        this.timer = setTimeout(() => {
+          this.$store.commit('campaign/updateElement', {
             moduleId:this.moduleId,
             columnId:this.columnId,
-            componentId:this.componentId
-        });
-      }
-    }
-  };
+              componentId:this.componentId,
+              data: {
+                text: e.target.innerHTML
+              }
+            });
+          }, 500);
+        },  
+      },
+    };
 </script>
-
-<style>
+<style lang="less">
   .st-unlink {
     cursor: default;
   }
-
+  .mce-menu-item-preview {
+    .mce-text {
+      font-size: 14px !important;
+    }
+  }
+  // hidde the sub menu of Numbered list and Bullet list
+  div[aria-label="Numbered list"],
+  div[aria-label="Bullet list"]{
+    button.mce-open{
+      display: none;
+    }
+  }
 </style>

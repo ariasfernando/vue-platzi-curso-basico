@@ -3,14 +3,14 @@
     <div class="plugin-wrapper-inner">
       <span>
         <button @click="showModal('desktop')">
-          <i class="glyphicon glyphicon-cloud-upload"></i> Update Image
+          <i class="glyphicon glyphicon-cloud-upload"></i> Upload Image
         </button>
       </span>
     </div>
     <div class="plugin-wrapper-inner" v-if="hasImageMobile">
       <span>
         <button @click="showModal('mobile')" :disabled="!plugin.data.img">
-          <i class="glyphicon glyphicon-cloud-upload"></i> Update Image Mobile
+          <i class="glyphicon glyphicon-cloud-upload"></i> Upload Mobile Image
         </button>
       </span>
     </div>
@@ -236,12 +236,12 @@ export default {
             };
           } else {
             this.isEdit = true;
-            this.image = {
+          this.image = {
               img: temp.img,
               state: temp.state
-            };
-          }
+          };
         }
+      }
       }
       this.showImageEditor = true;
     },
