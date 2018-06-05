@@ -45,12 +45,11 @@
   import mixinValidator from '../mixins/validator';
 
   export default {
-    props: ['name', 'plugin'],
+    props: ['name', 'plugin', 'pluginKey'],
     mixins: [mixinValidator],
     mounted() {
       if (this.validationRules) {
         this.validate();
-        this.plugin.validated = true;
       }
     },
     watch: {
@@ -58,7 +57,6 @@
         handler: function(currentComponent) {
           if (this.validationRules) {
             this.validate();
-            this.plugin.validated = true;
           }
         },
         deep: true
@@ -105,7 +103,6 @@
 
           if (this.validationRules) {
             this.validate();
-            this.plugin.validated = true;
           }
         },
       },

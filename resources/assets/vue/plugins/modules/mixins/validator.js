@@ -24,6 +24,8 @@ export default {
 
           this.$_app.utils.validator.modulesErrors('#emailCanvas');
         }
+
+        this.validated = true;
       });
     },
     validateMulticolumnStudioModule() {
@@ -40,12 +42,12 @@ export default {
               if(plugin.config.validations) {
                 let validationsRequired = false;
                 _.each(plugin.config.validations, (validation, pluginIndex) => {
-                  if(plugin.enabled && validation) {
+                  if(plugin.enabled && validation && !plugin.data.validated) {
                     validationsRequired = true;
                   }
                 });
                 if(validationsRequired) {
-                  // if the validations were never ran we assume they have errors
+                  // if the validations are enabled and were never ran we assume they have errors
                   hasErrors = true;
 
                   let error = {
@@ -70,4 +72,25 @@ export default {
       return hasErrors;
     },
   },
+  computed: {
+    validated: {
+      get() {
+        return this.plugin.data.validated;
+      },
+      set(value) {
+        const payload = {
+          plugin: this.pluginKey,
+          moduleId: this.currentComponent.moduleId,
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          data: {
+            validated: value,
+          },
+        };
+  
+        // Save plugin data
+        this.$store.commit("campaign/savePlugin", payload);
+      }
+    },
+  }
 };
