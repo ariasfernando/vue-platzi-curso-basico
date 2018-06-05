@@ -176,12 +176,6 @@
         }
         return true;
       },
-      template() {
-        this.$store.commit("campaign/toggleModal", 'modalEnableTemplating');
-      },
-      checkProcessStatus(processId) {
-        return campaignService.checkProcessStatus(processId);
-      },
       _validateEmptyEmail(message = undefined) {
         if (this.modules.length === 0) {
           this.$root.$toast(
@@ -195,6 +189,12 @@
           return false;
         }
         return true;
+      },
+      template() {
+        this.$store.commit("campaign/toggleModal", 'modalEnableTemplating');
+      },
+      checkProcessStatus(processId) {
+        return campaignService.checkProcessStatus(processId);
       },
       complete() {
         // Do not save if there are missing or wrong fields
