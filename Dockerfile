@@ -1,6 +1,6 @@
 ##
 # Please do not touch this file unless you are sure
-# what you are doing
+# what you are doing.
 #
 # Multi-stage builds are a new feature requiring Docker 17.05 or higher on the daemon and client. 
 ##
