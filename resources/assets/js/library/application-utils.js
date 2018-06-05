@@ -239,21 +239,26 @@ Application.utils = {
             }
         },
         // Validate if a field is filled.
-        validateRequiredField: function( field ){
-            var result = false;
-            var $field = $(field);
+		validateRequiredField: function( field ){
+			var result = false;
+			var $field = $(field);
 
-            switch( $field.attr("type") ){
-                case "checkbox":
-                    break;
-                case "radio":
-                    break;
-                default: // "select" elements are also caught here.
-                    result = $field.val() ? true : false;
+            if ($field.prop('tagName') === 'SELECT' && $field.hasClass('selectpicker')) {
+                // This validates required on a select multiple
+                result = ( $field.val() !== null && $field.val().length > 0 );
+            } else {
+			switch( $field.attr("type") ){
+				case "checkbox":
+					break;
+				case "radio":
+					break;
+				default:
+					result = ( $field.val().trim() != "");
+			}
             }
 
-            return result;
-        },
+			return result;
+		},
         validateEmailFormat: function( field ){
             var emails = field.value.split(";").filter(Boolean)
             var re = /^(([\w-\+]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/i;
@@ -274,16 +279,6 @@ Application.utils = {
             if( result ) {
                 return "http://"+url;
             }
-        },
-        validateSelect: function(  field ) {
-            $('#admin-user-form')
-            .find('[name="roles[]"]')
-                .selectpicker()
-                .change(function(e) {
-                    /* Revalidate the color when it is changed */
-                    $('#admin-user-form').formValidation('revalidateField', 'roles[]');
-                })
-                .end();
         },
         validateUrlField: function( field ){
             if( !field.value ){
@@ -361,7 +356,6 @@ Application.utils = {
 
         },
         setError: function( field, message ){
-
             var label = '<label class="error">' + message + '</label>';
             $(field).parent().find('label.error').remove();
             if ($(field).hasClass('selectpicker') || $(field).hasClass('skip-next-on-error')) {
@@ -369,6 +363,14 @@ Application.utils = {
             } else {
                 $(field).addClass('error').after(label);
             }
+            /*
+                var $field = $(field);
+                if ($field.prop('tagName') === 'SELECT' && $field.hasClass('selectpicker')) {
+                    // If field is a select multiple, put the error over .bootstrap-select
+                    $field = $field.parent().find('.bootstrap-select');
+                }
+                $field.addClass("error").after('<label class="error">'+message+'</label>');            
+            */
         },
         setWarning: function( field, message ){
             $(field).addClass("warning").after('<label class="warning">'+message+'</label>');
@@ -399,7 +401,6 @@ Application.utils = {
             if( validationParams.required && validationParams.required === true || validationParams.required === "true"){
                 // Set the result of the validation
                 validationResult.success = validate.validateRequiredField( field );
-                validationResult.success = validate.validateSelect( field );
 
                 // If isn't successful, set the error messages.
                 if( !validationResult.success ){
@@ -494,15 +495,14 @@ Application.utils = {
             var errors = false;
 
             // Check each input.
-            $.each( inputs, function( key, field ){
+            $.each( inputs, function( key, field ){           
                 var validationResult = validate.validateField( field );
                 // If the validation isn't successful, add an error class in the input and append a label with the message after the field.
-
                 if( validationResult.success == false ){
                     errors = true;
                 }
 
-            });
+            });         
 
             return !errors;
         }
