@@ -40,7 +40,7 @@ export default {
               if(plugin.config.validations) {
                 let validationsRequired = false;
                 _.each(plugin.config.validations, (validation, pluginIndex) => {
-                  if(validation) {
+                  if(plugin.enabled && validation) {
                     validationsRequired = true;
                   }
                 });
