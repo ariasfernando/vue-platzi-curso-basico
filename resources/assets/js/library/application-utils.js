@@ -245,13 +245,18 @@ Application.utils = {
             var result = false;
             var $field = $(field);
 
+            if ($field.prop('tagName') === 'SELECT' && $field.hasClass('selectpicker')) {
+                // This validates required on a select multiple
+                result = ( $field.val() !== null && $field.val().length > 0 );
+            } else {
             switch( $field.attr("type") ){
                 case "checkbox":
                     break;
                 case "radio":
                     break;
-                default: // "select" elements are also caught here.
-                    result = $field.val() ? true : false;
+                    default:
+                        result = ( $field.val().trim() != "");
+                }
             }
 
             return result;
@@ -341,9 +346,8 @@ Application.utils = {
                 $labelMessage.remove();
             }
 
-            if ($(field).prop('tagName') === 'SELECT' && $(field).hasClass('selectpicker')) {
-                // If field is a select multiple, remove error near .bootstrap-select
-                $(field).parent().find('.bootstrap-select').removeClass('error').next("label.error").remove();;
+            if ($(field).hasClass('selectpicker')) {
+                $(field).next('button').removeClass('error').next("label.error").remove();
             }
 
             if( $(field).hasClass("warning") ){
@@ -353,11 +357,11 @@ Application.utils = {
 
         },
         setError: function( field, message ){
-
             var label = '<label class="error">' + message + '</label>';
             $(field).parent().find('label.error').remove();
             if ($(field).hasClass('selectpicker') || $(field).hasClass('skip-next-on-error')) {
                 $(field).addClass('error').next().after(label);
+                $(field).next('button').addClass('error');
             } else {
                 $(field).addClass('error').after(label);
             }
@@ -488,7 +492,6 @@ Application.utils = {
             $.each( inputs, function( key, field ){
                 var validationResult = validate.validateField( field );
                 // If the validation isn't successful, add an error class in the input and append a label with the message after the field.
-
                 if( validationResult.success == false ){
                     errors = true;
                 }
