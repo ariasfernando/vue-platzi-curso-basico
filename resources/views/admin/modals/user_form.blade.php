@@ -20,8 +20,7 @@
 			<label>Last Name</label>
 			{!! Form::text('last_name',(isset($params['user']['last_name']))? $params['user']['last_name'] : '', array (
 				'class' => 'user_last_name',
-				'id' => 'user_last_name',
-				'data-validation' => '{"required":"true"}'
+				'id' => 'user_last_name'
 			)) !!}
 		</div>
 
