@@ -150,6 +150,8 @@ class PasswordController extends Controller
         );
 
         switch ($response) {
+            // Don't tip off attackers if the user exists or not.
+            case PasswordBroker::INVALID_USER:
             case PasswordBroker::PASSWORD_RESET:
                 return redirect('auth/login')->with('message', 'SUCCESS_CHANGE');
 
