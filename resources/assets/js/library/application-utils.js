@@ -247,14 +247,14 @@ Application.utils = {
                 // This validates required on a select multiple
                 result = ( $field.val() !== null && $field.val().length > 0 );
             } else {
-			switch( $field.attr("type") ){
-				case "checkbox":
-					break;
-				case "radio":
-					break;
-				default:
-					result = ( $field.val().trim() != "");
-			}
+                switch( $field.attr("type") ){
+                    case "checkbox":
+                        break;
+                    case "radio":
+                        break;
+                    default:
+                        result = ( $field.val().trim() != "");
+                }
             }
 
 			return result;
@@ -359,7 +359,9 @@ Application.utils = {
             var label = '<label class="error">' + message + '</label>';
             $(field).parent().find('label.error').remove();
             if ($(field).hasClass('selectpicker') || $(field).hasClass('skip-next-on-error')) {
+                debugger;
                 $(field).addClass('error').next().after(label);
+                $(field).next('button').addClass('error');
             } else {
                 $(field).addClass('error').after(label);
             }
