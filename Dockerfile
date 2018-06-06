@@ -42,6 +42,15 @@ RUN cd /usr/src/app/ && npm install
 RUN cp -R node_modules prod_node_modules
 
 #
+# ---- Build Bower Dependencies ----
+FROM base AS bower_dependencies
+
+COPY ./.bowerrc /usr/src/app/.bowerrc
+COPY ./bower.json /usr/src/app/bower.json
+RUN mkdir -p resources/assets/bower
+RUN cd /usr/src/app/ && bower install --allow-root && bower cache clean --allow-root
+
+#
 # ---- Build Release ----
 FROM base AS release
 
@@ -54,12 +63,16 @@ COPY --from=composer_dependencies /usr/src/app/vendor ./vendor
 # copy node_modules dependencies
 COPY --from=npm_dependencies /usr/src/app/prod_node_modules ./node_modules
 
+# copy bower dependencies
+
+COPY --from=bower_dependencies /usr/src/app/resources/assets/bower ./resources/assets/bower
+
 # copy app sources
 COPY . /usr/src/app/
 
 RUN cd /usr/src/app/ && php artisan vendor:publish --all
 
-# run webpack
-RUN cd /usr/src/app/ && npm run production
+# run gulp
+RUN cd /home/fbridge/app/ && gulp --production
 RUN chown -R fbridge.fbridge /usr/src/app
 
