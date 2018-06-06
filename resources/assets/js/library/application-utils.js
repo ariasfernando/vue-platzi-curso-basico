@@ -344,9 +344,8 @@ Application.utils = {
                 $labelMessage.remove();
             }
 
-            if ($(field).prop('tagName') === 'SELECT' && $(field).hasClass('selectpicker')) {
-                // If field is a select multiple, remove error near .bootstrap-select
-                $(field).parent().find('.bootstrap-select').removeClass('error').next("label.error").remove();;
+            if ($(field).hasClass('selectpicker')) {
+                $(field).next('button').removeClass('error').next("label.error").remove();
             }
 
             if( $(field).hasClass("warning") ){
@@ -359,20 +358,11 @@ Application.utils = {
             var label = '<label class="error">' + message + '</label>';
             $(field).parent().find('label.error').remove();
             if ($(field).hasClass('selectpicker') || $(field).hasClass('skip-next-on-error')) {
-                debugger;
                 $(field).addClass('error').next().after(label);
                 $(field).next('button').addClass('error');
             } else {
                 $(field).addClass('error').after(label);
             }
-            /*
-                var $field = $(field);
-                if ($field.prop('tagName') === 'SELECT' && $field.hasClass('selectpicker')) {
-                    // If field is a select multiple, put the error over .bootstrap-select
-                    $field = $field.parent().find('.bootstrap-select');
-                }
-                $field.addClass("error").after('<label class="error">'+message+'</label>');            
-            */
         },
         setWarning: function( field, message ){
             $(field).addClass("warning").after('<label class="warning">'+message+'</label>');
