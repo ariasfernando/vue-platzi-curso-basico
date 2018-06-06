@@ -1,6 +1,6 @@
 #proof{
 	padding: 0px;
-    margin: -4px -5px;
+    margin: 0 -5px;
     float: none!important;
     display: table;
     width: 100%;
@@ -137,9 +137,18 @@
 }
 
 .base-proof {
+
+	.row {
+		margin-bottom: 15px;
+	}
+
     .campaign-title {
         color: #ffffff;
         font-size: 15px;
-        margin-top: 13px;
+		margin-top: 13px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		line-height: 20px;
     }
 }
