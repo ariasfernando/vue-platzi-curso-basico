@@ -68,14 +68,14 @@
                 <div class="modal-divider" v-show="campaignData.proof_id !== null"></div>
                 <div class="checkbox new-proof-checkbox" v-show="campaignData.proof_id !== null">
                   <div class="input-group">
-                    <label data-toggle="tooltip" data-placement="top" title="Existing comments, approvals, and rejections will be archived.">
+                    <label data-toggle="tooltip" data-placement="top" title="Selecting this option will archive the previously collected approvals, rejections, and comments. It will effectively start the approval process over from the beginning">
                       <checkbox name="create_new_proof" value="1" v-model="startProof">
                         Start proof from scratch
                       </checkbox>
                     </label>
                   </div>
                   <div class="input-group">
-                    <label>
+                    <label data-toggle="tooltip" data-placement="top" title="Selecting this option will trigger the review request email to all reviewers, even if they had already received it as part of an earlier request. Leaving it unchecked will send the email only to newly added or edited users">
                       <checkbox name="send_to_all" value="1">
                         Send a notification to all reviewers
                       </checkbox>
