@@ -63,7 +63,7 @@ export default {
       const setStyles = () => {
         const editor = tinymce.get(tinymce.activeEditor.id);
         /* if link_fixed_color is unset, it will use a default value from library */
-        const link_fixed_color = editor.settings.link_fixed_color || libraryLinkColor || '#aaa3b9';
+        const link_fixed_color = editor.settings.link_fixed_color;
         const link_fixed_styles = editor.settings.link_fixed_styles;
         const ul_fixed_style = editor.settings.ul_fixed_style;
         const ol_fixed_style = editor.settings.ol_fixed_style;
@@ -84,51 +84,31 @@ export default {
             }
           }
         };
-        /* check if fixed color is enabled */
-        const checkLinkFixedColor = () => {
-          if (editor.settings.link_fixed_color_enabled) {
-            /* if enabled, do not allow links to change color */
-            const editorLinks = $(editor.targetElm).find('a');
-            if (editorLinks.length) {
-              for (let i = 0; i < editorLinks.length; i++) {
-                const $el = $(editorLinks[i]);
-                const $childSpans = $el.find('span');
-                /* search for all spans inside a, an give them the link color */
-                if ($childSpans.prop('tagName') === 'SPAN') {
-                    const color = link_fixed_color;
-                    $childSpans.css('color', color);
-                }
-              }
-            }
-          } else {
-            /* If enabled, allow the links to inherit the color of the parent  */
-            const editorLinks = $(editor.targetElm).find('a');
-            if (editorLinks.length) {
-              for (let i = 0; i < editorLinks.length; i++) {
-                const $el = $(editorLinks[i]);
-                const $parentEl = $el.parent();
-                if ($parentEl.prop('tagName') === 'SPAN') {
-                  /* get the color of the parent and applyit to the link*/
-                  const parentColor = $parentEl.css('color');
-                  if (parentColor) {
-                    $el.css('color', parentColor);
-                  }
-                }
-              }
-            }
-          }
-        };
 
+        /* check if link_fixed_color is setup an apply it, otherwise, apply parent color */
         if (link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color)) {
           changeStyles('a', { color: link_fixed_color });
-          checkLinkFixedColor();
+        } else {
+          const editorLinks = $(editor.targetElm).find('a');
+          if (editorLinks.length) {
+            for (let i = 0; i < editorLinks.length; i++) {
+              const $el = $(editorLinks[i]);
+              /* return the first parent that has a color */
+              const $parentEl = $el.parents().filter(function (){
+                return $(this).css('color');
+              });
+              /* get the color of the parent and apply it to the link */
+              const parentColor = $parentEl.css('color');
+              $el.css('color', parentColor);
+            }
+          }
         }
+
         if (nameComponent === 'ButtonElement' && button_inline_color) {
           changeStyles('p', { color: this.component.button.style.color || libraryLinkColor });
         }
         if (link_fixed_styles && Application.utils.isJsonString(link_fixed_styles)) {
           changeStyles('a', JSON.parse(link_fixed_styles));
-          checkLinkFixedColor();
         }
         if (ul_fixed_style) {
           changeStyles('ul', ul_fixed_style);
