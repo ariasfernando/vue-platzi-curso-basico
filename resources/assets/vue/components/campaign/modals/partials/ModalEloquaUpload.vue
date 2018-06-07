@@ -83,22 +83,39 @@
     },
     methods: {
       openOauthModal() {
-        //this.oauthResponse = false;
         window.open( this.$_app.config.baseUrl + '/api/oauth', 'login_popup',
             'height=700,width=800,status=0,location=0,toolbar=0,top=50,left=200');
 
         return false;
       },
       oauthCallback () {
+        this.upload();
+      },
+      uploadEmail () {
+        this.$store.commit("global/setLoader", true);
+
+        if (this.espProviderConfig.use_oauth) {
+          if (this.oauthToken) {
+            this.upload();
+          } else {
+            this.openOauthModal();
+          }
+        } else {
+          this.upload();
+        }
+      },
+      upload () {
         const data = {
           campaign_id: this.campaign.campaign_id,
           api_driver: this.espProviderConfig.class,
           use_oauth: this.espProviderConfig.use_oauth,
-          access_token: this.espProviderConfig.token,
           filename: this.filename,
           subject: this.subject
         };
 
+        if (this.oauthToken) {
+          data.access_token = this.oauthToken.access_token;
+        }
         apiService.uploadEmail(data).then((response) => {
             this.uploadedSuccessfully = true;
             this.updateUploadedTable();
@@ -110,17 +127,6 @@
               {className: 'et-error'}
             )}
         );
-      },
-      uploadEmail () {
-        this.$store.commit("global/setLoader", true);
-
-        if (this.espProviderConfig.use_oauth) {
-          if (this.oauthToken) {
-            this.oauthCallback();
-          } else {
-            this.openOauthModal();
-          }
-        }
       },
       updateUploadedTable () {
         apiService.uploadedHistory(this.campaign.campaign_id).then((response) => this.uploadedHistory = response);
