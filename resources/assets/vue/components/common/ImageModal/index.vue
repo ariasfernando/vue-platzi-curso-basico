@@ -169,7 +169,7 @@ export default {
       this.reset();
       this.$emit('clean');      
     },
-    generateSieOptions(changeImage = false, newSize = {}) {
+    generateSieOptions(changeImage = false) {
       const sieOptions = {
         api: this.$_app.config.sieAPI
       };
@@ -179,8 +179,6 @@ export default {
         Object.assign(sieOptions, this.data.state);
         sieOptions.preset = sieHelper.completeUrlPath(this.$_app.config.imageUrl, sieOptions.preset);
       }
-
-      Object.assign(sieOptions.size, newSize);
 
       this.sieOptions = sieOptions;
       if (typeof this.$refs.sie !== 'undefined') {
@@ -193,11 +191,10 @@ export default {
         height: this.params['sie-size']['size_height'].value
       }
       return imageHelper.checkGIFSize(imageSource, this.sieOptions.size)
-        .then(() => imageHelper.adjustSize(this.resizeIfSmaller || false, imageSource, size))
-        .then((newSize) => {
+        .then(() => {
           this.currentImage = imageSource;
           this.changeImage(this.params);
-          this.generateSieOptions(true, newSize);
+          this.generateSieOptions(true);
           this.page = {
             one: false,
             two: false,
