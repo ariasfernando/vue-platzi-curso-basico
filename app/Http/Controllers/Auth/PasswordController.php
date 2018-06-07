@@ -14,6 +14,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Stensul\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use MongoDB\BSON\ObjectID;
 use Stensul\Http\Requests\PasswordChangeRequest;
 
 class PasswordController extends Controller
@@ -150,6 +151,7 @@ class PasswordController extends Controller
 
         switch ($response) {
             case PasswordBroker::PASSWORD_RESET:
+                Activity::log('User restored', array('properties' => ['user_id' => new ObjectID($user->_id)]));
                 return redirect('auth/login')->with('message', 'SUCCESS_CHANGE');
 
             default:

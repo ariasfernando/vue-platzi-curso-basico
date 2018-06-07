@@ -127,6 +127,12 @@ export default {
           value: false,
           type: 'switch',
         },
+        cropbox: {
+          label: 'Move cropbox',
+          key: 'cropBoxMovable',
+          value: true,
+          type: 'switch',
+        },
         round: {
           label: 'Circle Cropping',
           key: 'cropper_roundCrop',
