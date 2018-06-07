@@ -21,7 +21,7 @@ return [
     |
     */
 
-    'api_driver' => 'silverpop',
+    'api_driver' => 'eloqua',
 
     /*
     |--------------------------------------------------------------------------
@@ -75,7 +75,7 @@ return [
         'title' => 'Eloqua',
         'class' => 'Eloqua',
         'email_folder_name' =>  env('API_ELOQUA_FOLDER', ''),
-        'use_oauth' => false,
+        'use_oauth' => true,
         'subject_input' =>  true,
         'auth' => [
             'base_url' => 'https://login.eloqua.com',

@@ -58,6 +58,7 @@
         subject: '',
         uploadedHistory: {},
         uploadedSuccessfully: false,
+        oauthResponse: false,
       }
     },
     computed: {
@@ -71,6 +72,38 @@
       }
     },
     methods: {
+      openOauthModal(data) {
+        this.oauthResponse = false;
+        var popup = window.open( this.$_app.config.baseUrl + '/api/oauth', 'login_popup',
+            'height=700,width=800,status=0,location=0,toolbar=0,top=50,left=200');
+
+        // setTimeout(function () {
+        //   if (!popup || popup.outerHeight === 0) {
+        //     var $campaignUploadModal = $( options.modalSelector + '-' + $(elem).attr( 'data-' + options.apiDriver) );
+        //     $campaignUploadModal.find('.response-message-popup')
+        //       .html("Popup Blocker detected. Please add this site to your exceptions list and reload this page.")
+        //       .slideDown();
+        //     setTimeout(function() {
+        //         $campaignUploadModal.find('.response-message-popup').slideUp();
+        //     }, 6000);
+        //   }
+        // }, 500);
+
+        // var timer = setInterval(function() {
+        //   if (popup.closed) {
+        //       clearInterval(timer);
+        //       if (!this.oauthResponse) {
+        //         $( elem ).parent().removeClass("spinner");
+        //         $( elem ).removeClass("ajax-loader-small").removeAttr("disabled","disabled");
+        //       }
+        //   }
+        // }, 200);
+
+        return false;
+      },
+      oauthCallback() {
+        //TODO: Set access_token
+      },
       uploadEmail () {
         const data = {
           campaign_id: this.campaign.campaign_id,
@@ -82,6 +115,10 @@
         }
         this.$store.commit("global/setLoader", true);
 
+        if (data.use_oauth) {
+          this.openOauthModal(data);
+        }
+        
         apiService.uploadEmail(data).then((response) => {
           this.uploadedSuccessfully = true;
           this.updateUploadedTable();
