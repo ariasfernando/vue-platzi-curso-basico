@@ -74,7 +74,7 @@
   import dashboardService from '../../services/dashboard';
   import campaignCleaner from '../../utils/campaignCleaner';
   import { html_beautify } from 'js-beautify';
-  
+
 
   export default {
     name: 'EmailActions',
@@ -288,6 +288,22 @@
         });
       },
       proof() {
+        // Do not save if there are missing or wrong fields
+        if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors  ) {
+          this.$_app.utils.validator.modulesErrors('#emailCanvas');
+
+          this.$root.$toast(
+            'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
+            'or remove the incomplete module(s).',
+            {
+              className: 'et-error',
+              closeable: true
+            }
+          );
+
+          this.$store.commit('campaign/campaignCompleted', true);
+          return false;
+        }
         // Do not show proof modal if there are missing or wrong fields
         let message = 'To send an email for review, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.';
         if (!this._validate(message)) {
