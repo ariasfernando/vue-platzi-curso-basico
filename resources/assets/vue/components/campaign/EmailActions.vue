@@ -158,7 +158,7 @@
         });
       },
       _validate(message = undefined) {
-        if (this.moduleErrors) {
+        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors) {
           this.$root.$toast(
             message || 'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
@@ -168,6 +168,24 @@
               closeable: true
             }
           );
+
+          this.$_app.utils.validator.modulesErrors('#emailCanvas');
+          this.$store.commit('campaign/campaignValidated', true);
+
+          return false;
+        }
+        return true;
+      },
+      _validateEmptyEmail(message = undefined) {
+        if (this.modules.length === 0) {
+          this.$root.$toast(
+            message || 'You cannot complete an empty email.',
+            {
+              className: 'et-error',
+              closeable: true
+            }
+          );
+
           return false;
         }
         return true;
@@ -179,32 +197,8 @@
         return campaignService.checkProcessStatus(processId);
       },
       complete() {
-        if (this.modules.length === 0) {
-          this.$root.$toast(
-            'You cannot finish an empty email.',
-            {
-              className: 'et-error',
-              closeable: true
-            }
-          );
-
-          return false;
-        }
-
         // Do not save if there are missing or wrong fields
-        if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors  ) {
-          this.$_app.utils.validator.modulesErrors('#emailCanvas');
-
-          this.$root.$toast(
-            'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
-            'or remove the incomplete module(s).',
-            {
-              className: 'et-error',
-              closeable: true
-            }
-          );
-
-          this.$store.commit('campaign/campaignCompleted', true);
+        if (!this._validateEmptyEmail() || !this._validate()) {
           return false;
         }
 
@@ -288,8 +282,8 @@
       },
       proof() {
         // Do not show proof modal if there are missing or wrong fields
-        let message = 'To send an email for review, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.';
-        if (!this._validate(message)) {
+        let validateMessage = 'To send an email for review, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.';
+        if (!this._validateEmptyEmail('You cannot send for review an empty email.')) {
           return false;
         }
 
