@@ -158,12 +158,12 @@ export default {
       this.$store.commit('campaign/setActiveModule', index);
     },
     addModuleToBottom(moduleData) {
-      // Get last index
-      const lastIndex = this.getLastIndex();
       // Add module
       this.$store.commit('campaign/addModule', moduleData);
       // Set active on last module added
       this.$store.commit('campaign/setActiveLastModule');
+      // Get last index
+      const lastIndex = this.getLastIndex();
       
       if (this.activeModule.type === 'studio') {
         // Save current component if module type is studio
