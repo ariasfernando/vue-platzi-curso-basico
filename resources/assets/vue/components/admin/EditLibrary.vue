@@ -295,7 +295,7 @@
                                   <el-input
                                     v-model="library.config.colorPalettes"
                                     name="colorPalettes" 
-                                    placeholder="{'nombre_de_la_paleta':['000000','Black','474646','Gray','79a8c9','Blue','cd202c','Red']}"
+                                    placeholder="{'palette_name':['000000','Black','474646','Gray','79a8c9','Blue','cd202c','Red']}"
                                   ></el-input>
                                 </p>
                               </div>
