@@ -52,6 +52,16 @@
         this.validate();
       }
     },
+    watch: {
+      currentComponent: {
+        handler: function(currentComponent) {
+          if (this.validationRules) {
+            this.validate();
+          }
+        },
+        deep: true
+      }
+    },
     computed: {
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
