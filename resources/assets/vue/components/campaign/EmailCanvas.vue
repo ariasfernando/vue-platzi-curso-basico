@@ -2,6 +2,7 @@
   <div>
     <back-to-top></back-to-top>
     <!-- content canvas email -->
+    <div v-if="buildingMode ==='mobile'" v-html="templateWidthStyles"></div>
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
@@ -107,6 +108,14 @@
       templateWidth () {
         return this.$store.getters['campaign/templateWidth'];
       },
+      templateWidthStyles(){
+        return `
+        <style>
+          #emailCanvas.stx-mobile-mode {
+              width: ${this.$store.getters["campaign/campaign"].library_config.templateMobileWidth}px!important;
+          }
+        </style>`
+      },
       buildingMode() {
         return this.$store.getters["campaign/buildingMode"];
       },
@@ -115,9 +124,6 @@
       },
       baseUrl (){
         return this.$_app.config.baseUrl;
-      },
-      modules() {
-        return this.$store.getters["campaign/modules"];
       },
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
@@ -190,32 +196,8 @@
           ? _.find(this.items, (m) => m.name === moduleName)
           : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
-        const mod = clone(found);
-        mod.data = {};
+        this.addModule(found, e.newIndex);
 
-
-        if (!this.validateSortingToIndex({index: e.newIndex, moduleData: mod})){
-          this.$root.$toast('The position is occuped by a fixed module.', {className: 'et-info'});
-        }
-        else {
-          mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
-          this.insertModule({index: e.newIndex, moduleData: mod});
-        }
-/*
-
-        if (!this.validateSortingToIndex({index: e.newIndex, moduleData: mod})){
-          this.$root.$toast('The position is occuped by a fixed module.', {className: 'et-info'});
-        }
-        else {
-          this.insertModule({index: e.newIndex, moduleData: mod});
-        }
-
-
-        mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
-        this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
-        // Set active on last module inserted
-        this.$store.commit('campaign/setActiveModule', e.newIndex);
-*/
         // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
@@ -420,7 +402,6 @@
       min-height: 40px;
     }
     &.stx-mobile-mode {
-      width: 480px;
       // Mobile Classes
       @import '../../../less/base/commons/mobile/mobile_core_styles';
       @import '../../../less/base/commons/mobile/mobile_client_styles';

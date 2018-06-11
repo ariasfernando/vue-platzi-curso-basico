@@ -20,7 +20,7 @@
             </li>
             <li class="component-item" data-type="button-element">
               <i class="fa fa-square" aria-hidden="true"></i>
-              <p>CTA</p>
+              <p>Button</p>
             </li>
             <li class="component-item" data-type="divider-element">
               <i class="fa fa-minus-square" aria-hidden="true"></i>

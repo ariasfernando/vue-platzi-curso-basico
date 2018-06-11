@@ -2,18 +2,20 @@
   <div class="module-toolbar">
     <div class="icon-remove" @click.stop="remove" v-if="!campaign.locked"><i class="fa fa-trash-o"></i></div>
     <div class="icon-config" v-if="hasConfig" @click="config"><i class="fa fa-cogs"></i></div>
-    <div class="icon-clone" @click="clone" v-if="!campaign.locked"><i class="fa fa-clone" ></i></div>
-    <div class="icon-move" v-if="!campaign.locked"><i class="fa fa-arrows"></i></div>
+    <div class="icon-clone" @click="clone" v-if="!campaign.locked && !module.isFixed"><i class="fa fa-clone" ></i></div>
+    <div class="icon-move" v-if="!campaign.locked && !module.isFixed"><i class="fa fa-arrows"></i></div>
   </div>
 </template>
 
 <script>
 
   import _ from 'lodash';
+  import ModuleListMixin from '../mixins/moduleListMixin';
 
   export default {
     name: 'ModuleToolbar',
     props: ['moduleId'],
+    mixins: [ ModuleListMixin ],
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"].campaign_data;
@@ -54,7 +56,7 @@
 
       },
       clone(){
-        this.$store.commit("campaign/cloneModule", this.moduleId);
+        this.addModule(this.module, this.moduleId + 1);
       },
       remove() {
         this.$store.dispatch("campaign/removeModule", this.moduleId);
@@ -118,6 +120,7 @@
       display: block;
       outline: 2px solid #c0dfda;
       outline-offset: -1px;
+      z-index: 299;
     }
 
     .icon-move{
@@ -153,6 +156,7 @@
       display: block;
       outline: 2px solid @focus;
       outline-offset: -1px;
+      z-index: 298;
     }
 
     .icon-move, .icon-remove,
@@ -165,6 +169,7 @@
         outline: 2px solid @focus;
         outline-offset: -1px;
         background: none;
+        z-index: 299;
       }
 
       .module-toolbar{

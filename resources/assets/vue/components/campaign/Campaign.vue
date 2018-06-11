@@ -219,13 +219,16 @@
   }
 
   .container-campaign-subwrapper{
-    height: calc(~"100vh - 90px");
     width: 100%;
     position: relative;
     top: 0px;
     min-width: 1280px;
     overflow-x: auto;
     overflow-y: hidden;
+    position: absolute;
+    left: 0;
+    top: 90px;
+    bottom: 0px;
   }
 
   .component-settings-wrapper {

@@ -14,7 +14,7 @@ class ModulesIndex extends Migration
     public function up()
     {
         Schema::table('modules', function ($table) {
-            $table->unique('key');
+            $table->unique('key', 'modules_key_unique');
         });
     }
 
@@ -26,7 +26,7 @@ class ModulesIndex extends Migration
     public function down()
     {
         Schema::table('modules', function ($table) {
-            $table->dropIndex('key');
+            $table->dropIndex('modules_key_unique');
         });
     }
 }

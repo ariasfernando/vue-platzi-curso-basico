@@ -78,7 +78,6 @@
         {{-- Scripts --}}
         <script src="{{ cdn(mix('js/manifest.js')) }}"></script>
         <script src="{{ cdn(mix('js/vendor.js')) }}"></script>
-        <script src="{{ cdn(mix('js/customer.js')) }}"></script>
 
         @section('master-application-scripts')
             {{-- Global Application JS object --}}

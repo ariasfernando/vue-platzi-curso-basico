@@ -85,9 +85,6 @@
       items () {
         return this.$store.getters["library/modules"];
       },
-      modules() {
-        return this.$store.getters["campaign/modules"];
-      },
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
         return this.modules[activeModuleId] || undefined;
@@ -96,29 +93,27 @@
     created() {
       // Set defaults for modules from menu
       this.getLibrary().then(response => {
-        // Get fixed modules from library config
-        const fixedModules = this.campaign.library_config.fixedModules ? JSON.parse(this.campaign.library_config.fixedModules) : [];
 
         // Sanitize library's modules
         _.each(this.items, (item) => {
-          // Set expanded as false
           if (item.sub_menu) {
+            // Items representing a menu group
             this.expanded[item.name] = false;
+
+            // Grouped modules in library menu
+            _.each(item.sub_menu, (item) => {
+              this.setModuleFixedStatus(item);
+            });
           }
-          // Set fixed modules
           else {
-            const found = _.filter(fixedModules, fixed => fixed.key === item.name);
-            item['isFixed'] = found.length > 0;
-            item['fixedPosition'] = found.length > 0 ? found[0].pos : undefined;
+            // First level modules in library menu
+            this.setModuleFixedStatus(item);
           }
         });
 
         // Sanitize campaign's modules
         _.each(this.modules, (item) => {
-          // Set fixed modules
-          const found = _.filter(fixedModules, fixed => fixed.key === item.name);
-          item['isFixed'] = found.length > 0;
-          item['fixedPosition'] = found.length > 0 ? found[0].pos : undefined;
+          this.setModuleFixedStatus(item);
         });
 
         this.ready = true;
@@ -147,61 +142,6 @@
         mod.data = {};
 
         this.addModule(mod);
-      },
-      addModule (m) {
-        const mod = clone(m);
-        mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
-
-        //TODO: handle fixed modules at non-header/non-footer position
-
-        // Resolve fixed-header
-        if(this.isFixedHeader(mod)) {
-          this.removePreviousFixedHeader();
-          this.insertModule({index: 0, moduleData: mod});
-
-          setTimeout(() => {
-            this.autoScrollTop();
-          }, 25);
-        }
-        // Resolve fixed-footer and others modules
-        else {
-          // If module to add is fixed footer, remove previous one
-          if(this.isFixedFooter(mod)) {
-            this.removePreviousFixedFooter();
-          }
-          // If fixed-footer already exists, adding a module mustn't go to end of the list
-          if(this.campaignHasFixedFooter()) {
-            this.insertModule({index: this.getLastIndex(), moduleData: mod});
-          }
-          else {
-            // Add module to the end of the list
-            this.addModuleLastPosition(mod);
-          }
-
-          setTimeout(() => {
-            this.autoScrollBottom();
-          }, 25);
-        }
-      },
-      autoScrollTop (){
-        let bounds = 0;
-        let isVisible = bounds < window.innerHeight && bounds > 0;
-
-        if (!isVisible) {
-            $('html,  .section-canvas-email').animate({
-                scrollTop: bounds
-            }, 100);
-        }
-      },
-      autoScrollBottom (){
-        let bounds = $(".section-canvas-container").outerHeight();
-        let isVisible = bounds < window.innerHeight && bounds > 0;
-
-        if (!isVisible) {
-            $('html,  .section-canvas-email').animate({
-                scrollTop: bounds
-            }, 100);
-        }
       },
       expand (event, item) {
         const index = this.expanded.indexOf(item);
@@ -253,6 +193,14 @@
         $(".empty-message").is(":visible") && $(".ghost-component").is(":visible")
           ? $(".empty-message").hide("fast")
           : $(".empty-message").show()
+      },
+      setModuleFixedStatus (item) {
+        // Get fixed modules from library config
+        const fixedModules = this.campaign.library_config.fixedModules ? JSON.parse(this.campaign.library_config.fixedModules) : [];
+
+        const found = _.filter(fixedModules, fixed => fixed.key === item.key);
+        item['isFixed'] = found.length > 0;
+        item['fixedPosition'] = found.length > 0 ? found[0].pos : undefined;
       },
     }
   };
