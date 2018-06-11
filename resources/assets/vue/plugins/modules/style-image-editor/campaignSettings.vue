@@ -165,6 +165,7 @@ export default {
       } else {
         data.imgMobile = uploadedImgs[images.length - 1];
       }
+      delete data.images;
       this.$store.commit('campaign/savePlugin', {
         plugin: this.pluginKey,
         moduleId: this.currentComponent.moduleId,
