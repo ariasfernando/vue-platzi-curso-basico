@@ -192,11 +192,10 @@
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
 
         // Find module in items by type: item or subitem
-        const found = moduleType === 'item'
-          ? _.find(this.items, (m) => m.name === moduleName)
-          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
-
-        this.addModule(found, e.newIndex);
+        const found = this.findModule(moduleName, moduleType);
+        const mod = clone(found);
+        mod.data = {};
+        this.addModule(mod, e.newIndex);
 
         // Remove ghost element
         const cloneItem = e.item;
