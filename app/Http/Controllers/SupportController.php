@@ -36,7 +36,7 @@ class SupportController extends Controller
             'external_id' => $user->_id,
             'role' => 'user'
         ];
-        $jwt = JWT::encode($token, $key);
+        $jwt = JWT::encode($token, $key, array('HS256'));
         $url = config('services.zendesk.login_url') . '?jwt=' . $jwt . '&return_to=' . $return_to;
         return redirect($url);
     }
