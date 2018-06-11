@@ -33,13 +33,12 @@
 
           const modules = this.$store.getters["campaign/modules"];
 
-          if (modules.length !== 0 && Object.keys(this.currentComponent).length !== 0) {
+          if (modules.length !== 0) {
             const moduleId = this.currentComponent.moduleId;
             const columnId = this.currentComponent.columnId;
             const componentId = this.currentComponent.componentId;
 
             if (!modules[moduleId]) {
-              this.ready = false;
               return component;
             }
 
