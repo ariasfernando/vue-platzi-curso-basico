@@ -11,7 +11,7 @@
             style="vertical-align:top;"
             class="stx-draggable-wrapper"
             :class="{ 'campaign-validated': campaignValidated }"
-            :bgcolor="templateBackgroundColor()"
+            :bgcolor="templateBackgroundColor || campaign.campaign_data.library_config.templateBackgroundColor"
             @click.stop="handleActive"
             @mouseover="onMouseOver"
             @mouseleave="onMouseLeave">
@@ -128,7 +128,10 @@
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
         return this.modules[activeModuleId] || undefined;
-      }
+      },
+      templateBackgroundColor() {
+        return this.campaign.campaign_data.campaign_settings.templateBackgroundColor;
+      },
     },
     data () {
       return {
@@ -164,9 +167,6 @@
             // The placeholder image is 170x52, this positioning forces the placeholder image: top-right
             dataTransfer.setDragImage(img, 130, 16);
           }
-        },
-        templateBackgroundColor(){
-          return  this.campaign.campaign_data.library_config.templateBackgroundColor;
         },
         title  () {
           let libraryTitle = this.campaign.campaign_data.library_config.title || 'Campaign Editor';

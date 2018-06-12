@@ -9,6 +9,9 @@ import {
   isEqual,
   each
 } from 'lodash';
+
+import _ from 'lodash';
+
 import {
   defer
 } from 'q';
@@ -163,7 +166,11 @@ function campaignStore() {
         state.editedSettings[setting.name] = setting.value;
       },
       saveCampaignData(state, payload) {
-        state.campaign.campaign_data[payload.name] = payload.value;
+        const update = {};
+        update[payload.name] = payload.value;
+        const newData = _.extend(clone(state.campaign.campaign_data), update);
+
+        state.campaign.campaign_data = newData;
       },
       toggleModal(state, modalName) {
         state[modalName] = !state[modalName];
