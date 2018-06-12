@@ -96,50 +96,8 @@ function checkGIFSize(image, size) {
   });
 }
 
-function adjustSize(resize, image, size) {
-  return new Promise((resolve, reject) => {
-    if (!resize) {
-      resolve();
-    }
-    const tmpImg = new Image();
-    const newSize = size;
-    tmpImg.onload = () => {
-      const width = tmpImg.naturalWidth;
-      const height = tmpImg.naturalHeight;
-      let resized = false;
-      if (height < size.height) {
-        resized = true;
-        newSize.height = height;
-      }
-      if (width < size.width) {
-        resized = true;
-        newSize.width = width;
-      }
-      if (!resized) {
-        if (height > size.height || width > size.width) {
-          if (height > width) {
-            let p = width * 100 / height;
-            newSize.width = size.height * parseInt(p) / 100;
-          } else if (width > height) {
-            let p = height * 100 / width;
-            newSize.height = size.width * parseInt(p) / 100;
-           } else if (width == height) {
-            newSize.width = newSize.height;
-          }
-        }
-      }
-      return resolve(newSize);
-    };
-
-    tmpImg.onerror = () => reject();
-
-    tmpImg.src = image;
-  });  
-}
-
 export default {
   getBase64Img,
   checkFile,
   checkGIFSize,
-  adjustSize,
 };
