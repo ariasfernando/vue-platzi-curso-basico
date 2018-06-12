@@ -31,9 +31,40 @@ describe('== Campaign Store ==', () => {
 
       done();
     });
+
+    it('Should merge and update a campaign', (done) => {
+      // Create fake campaign
+      const campaign = {
+        campaign_data: {
+          campaign_settings: {},
+        },
+      };
+
+      // Trigger loadCampaign mutation with fake data
+      store.commit('campaign/loadCampaignData', campaign);
+
+      const expectedColor = '#FFFFFF';
+
+      const campaignSettings = {
+        templateBackgroundColor: expectedColor,
+      };
+
+      store.commit('campaign/saveCampaignData', {
+        name: 'campaign_settings',
+        value: campaignSettings,
+      });
+
+      // Get campaign data from state
+      const color = store.state.campaign.campaign.campaign_data.campaign_settings.templateBackgroundColor;
+
+      // Expect stored data to be equal to fake object
+      expect(color).to.equal(expectedColor);
+
+      done();
+    });
   });
 
-  describe('Mutations', () => {
+  describe('Actions', () => {
     it('Should trigger "getCampaignData" async action and obtain the campaign data', (done) => {
       store.dispatch('campaign/getCampaignData', '5b045affe53553000d59b18c').then((res) => {
         expect(store.state.campaign.campaign).to.deep.equal(mocks.campaign.getCampaign.campaign);
