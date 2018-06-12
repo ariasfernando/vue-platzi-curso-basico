@@ -194,10 +194,17 @@ function campaignStore() {
         state.dirty = true;
       },
       savePlugin(state, payload) {
-        const plugin = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+        let plugin;
+        if (payload.columnId && payload.componentId) {
+          plugin = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+        } else if (payload.columnId) {
+          plugin = state.modules[payload.moduleId].structure.columns[payload.columnId].plugins[payload.plugin];
+        } else {
+          plugin = state.modules[payload.moduleId].plugins[payload.plugin];
+        }
         plugin.data = {
           ...plugin.data,
-          ...payload.data
+          ...payload.data,
         };
         state.dirty = true;
       },

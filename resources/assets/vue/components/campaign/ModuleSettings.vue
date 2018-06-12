@@ -6,7 +6,7 @@
     <div class="module-plugins" v-if="hasEnabledPlugins(module)">
 
       <div v-for="(plugin, key) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component v-if="plugin.enabled && $_app.modulePlugins[key]" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+        <component v-if="plugin.enabled && $_app.modulePlugins[key]" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin" :module-id="currentModule"></component>
       </div>
     </div>
 

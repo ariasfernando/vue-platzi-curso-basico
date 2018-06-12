@@ -13,6 +13,7 @@ function textDefault() {
         paddingLeft: '5px',
       },
       styleOption: {
+        enableElement: true,
       },
       attribute: {
       },
