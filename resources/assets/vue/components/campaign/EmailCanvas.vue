@@ -10,7 +10,7 @@
             align="center"
             style="vertical-align:top;"
             class="stx-draggable-wrapper"
-            :class="{ 'campaign-completed': campaignCompleted }"
+            :class="{ 'campaign-validated': campaignValidated }"
             :bgcolor="templateBackgroundColor()"
             @click.stop="handleActive"
             @mouseover="onMouseOver"
@@ -85,8 +85,8 @@
       onMouseLeave:() => {}
     },
     computed: {
-      campaignCompleted() {
-        return this.$store.state.campaign.campaignCompleted;
+      campaignValidated() {
+        return this.$store.state.campaign.campaignValidated;
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
