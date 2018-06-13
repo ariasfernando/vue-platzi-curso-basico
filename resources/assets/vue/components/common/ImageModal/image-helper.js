@@ -64,9 +64,10 @@ function getBase64Img(image) {
   });
 }
 
-function checkGIFSize(image, size) {
+function checkSize(image, size, dontAllowSmaller) {
   return new Promise((resolve, reject) => {
-    if (!image.includes('data:image/gif;base64')) {
+    const strict = image.includes('data:image/gif;base64');
+    if (!dontAllowSmaller && !strict) {
       return resolve();
     }
     const tmpImg = new Image();
@@ -75,16 +76,16 @@ function checkGIFSize(image, size) {
     tmpImg.onload = () => {
       const width = tmpImg.naturalWidth;
       const height = tmpImg.naturalHeight;
-      if (width !== size.width) {
+      if ((strict && width !== size.width) || (!strict && width < size.width)) {
         hasErr = true;
-        msg = msg.concat(`${size.width}px in width`);
+        msg = msg.concat(`${size.width}px ${strict ? 'in' : 'or greater in'} width`);
       }
-      if (!size.auto && height !== size.height) {
+      if ((strict && !size.auto && height !== size.height) || (!strict && !size.auto && height < size.height)) {
         if (hasErr) {
           msg = msg.concat(' and ');
         }
         hasErr = true;
-        msg = msg.concat(`${size.height}px in height`);
+        msg = msg.concat(`${size.height}px ${strict ? 'in' : 'or greater in'}  height`);
       }
 
       if (hasErr) {
@@ -99,5 +100,5 @@ function checkGIFSize(image, size) {
 export default {
   getBase64Img,
   checkFile,
-  checkGIFSize,
+  checkSize,
 };

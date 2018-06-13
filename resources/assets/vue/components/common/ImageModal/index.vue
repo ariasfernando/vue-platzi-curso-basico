@@ -100,7 +100,7 @@ import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
 
 export default {
-  props: ['config', 'libraryImages', 'data', 'resizeIfSmaller'],
+  props: ['config', 'libraryImages', 'data'],
   components: {
     styleImageEditor
   },
@@ -192,9 +192,11 @@ export default {
     setImage(imageSource) {
       const size = {
         width: this.params['sie-size']['size_width'].value,
-        height: this.params['sie-size']['size_height'].value
+        height: this.params['sie-size']['size_height'].value,
+        auto: this.params['sie-size']['size_auto'].value
       }
-      return imageHelper.checkGIFSize(imageSource, this.sieOptions.size)
+
+      return imageHelper.checkSize(imageSource, this.sieOptions.size, this.params.smaller)
         .then(() => {
           this.currentImage = imageSource;
           this.changeImage(this.params);
