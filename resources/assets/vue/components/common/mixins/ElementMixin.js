@@ -6,6 +6,7 @@ export default {
     'column-id',
     'component-id',
     'component',
+    'context',
   ],
   methods: {
     // Get an string of classes
