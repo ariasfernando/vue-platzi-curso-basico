@@ -51,9 +51,9 @@
 
 <script>
 import * as elementSettings from "../settings";
-import GroupContainer from "../containers/GroupContainer.vue";
+import GroupContainer from "../../common/containers/GroupContainer.vue";
 import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
-import LabelItemContainer from "../containers/LabelItemContainer.vue";
+import LabelItemContainer from "../../common/containers/LabelItemContainer.vue";
 import settingsDefault from '../settingsDefault';
 
 export default {

@@ -5,7 +5,7 @@
     <div class="row">
       <section v-if="ready" class="col-xs-12 section-container" id="edit-container">
         <!-- START: Left Bar -->
-        <aside class="col-xs-2 left-bar">
+        <aside class="left-bar">
             <div class="fields">
               <elements-settings v-if="ready"></elements-settings>
               <!-- END: Elements -->
@@ -23,7 +23,7 @@
         </div>
         <!-- END: Module Container -->
         <!-- START: Right Bar -->
-        <aside class="col-xs-3 right-bar">
+        <aside class="right-bar">
           <div class="module-settings" v-if="currentComponent">
             <div class="fields">
 
