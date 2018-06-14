@@ -42,7 +42,7 @@ if (processed === 'true') {
   window.location.href = '/#finished-campaign';
 }
 
-new Vue({
+window.vm = new Vue({
   store,
   components: {
     Campaign,

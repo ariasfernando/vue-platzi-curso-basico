@@ -58,7 +58,11 @@
                   </div>
                 </div>
               </div>
-              <div v-show="page.three" style="overflow-y: auto; max-height: calc(100vh - 187px); min-height: 300px; height:100%" ref="wrapperSie">
+              <div
+                v-show="page.three"
+                ref="wrapperSie"
+                class="wrapper-sie"
+                >
                 <style-image-editor 
                 v-if="page.three && this.currentImage" 
                 :sieoptions="sieOptions" 
@@ -320,6 +324,7 @@ export default {
     position: absolute;
     transform: translate(-50%, -50%);
     width: 80%;
+    max-height: calc(100vh - 5%);
     .modal-container,
     .modal-body {
       width: 100%;
@@ -338,7 +343,11 @@ export default {
     }
     .modal-body {
       margin: 0;
-      height: calc(100vh - 175px);
+      height: calc(100% - 85px);
+      overflow-y: auto;
+      .wrapper-sie {
+        height: 100%;
+      }
     }
     .modal-footer {
       padding-top: 10px;
