@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import _, {
+  find
+} from 'lodash';
 import clone from 'clone';
 
 export default {
@@ -22,7 +24,11 @@ export default {
       }, []);
     },
     getLastIndex() {
-      return this.modules.length > 0 ? this.modules.length-1 : 0;
+      let index = 0;
+      if (this.modules.length > 0) {
+        index = this.getIndexFirstFixedBottomModule();
+      }
+      return index;
     },
     isFixedModule(module) {
       return _.has(module, 'isFixed') && module.isFixed;
@@ -30,8 +36,8 @@ export default {
     isFixedHeader(module) {
       return _.has(module, 'isFixed') && module.fixedPosition === 0;
     },
-    isFixedFooter(module) {
-      return _.has(module, 'isFixed') && module.fixedPosition === -1;
+    isBottomModule(module) {
+      return typeof module.isFixed !== 'undefined' && module.fixedPosition <= -1;
     },
     isInFixedModulesConfig(fixedModules, itemName, position) {
       return _.filter(fixedModules, fixed => fixed.key === itemName && fixed.pos === position).length > 0;
@@ -39,8 +45,36 @@ export default {
     campaignHasFixedHeader() {
       return this.isFixedHeader(this.modules[0]);
     },
-    campaignHasFixedFooter() {
-      return this.isFixedFooter(this.modules[this.getLastIndex()]);
+    campaignHasFixedBottomModule(mod) {
+      const found = this.modules.find(item => {
+        if (this.isBottomModule(item)) {
+          return mod.fixedPosition === item.fixedPosition;
+        }
+        return false;
+      });
+      return typeof found !== 'undefined';
+    },
+    campaignHasFixedBottomModules() {
+      const found = this.modules.find(mod => {
+        return this.isBottomModule(mod);
+      });
+      return typeof found !== 'undefined';
+    },
+    getIndexFirstFixedBottomModule() {
+      return this.modules.findIndex(mod => {
+        return this.isBottomModule(mod);
+      });
+    },
+    getNextIndexFixedBottomModule(newModule) {
+      let index = this.modules.length;
+      this.modules.forEach((item, i) => {
+        if (item.fixedPosition < 0) {
+          if (item.fixedPosition > newModule.fixedPosition) {
+            index = i;
+          }
+        }
+      });
+      return index;
     },
     removePreviousFixedInPosition(pos) {
       if(this.isFixedModule(this.modules[pos])) {
@@ -48,7 +82,7 @@ export default {
       }
     },
     removePreviousFixedHeader() {
-      if(this.campaignHasFixedHeader()) {
+      if (this.campaignHasFixedHeader()) {
         this.$store.commit('campaign/removeModule', 0);
       }
     },
@@ -75,7 +109,7 @@ export default {
           )
       ;
     },
-    autoScrollTop (){
+    autoScrollTop() {
       let bounds = 0;
       let isVisible = bounds < window.innerHeight && bounds > 0;
 
@@ -85,7 +119,7 @@ export default {
           }, 100);
       }
     },
-    autoScrollBottom (){
+    autoScrollBottom() {
       let bounds = $(".section-canvas-container").outerHeight();
       let isVisible = bounds < window.innerHeight && bounds > 0;
 
@@ -95,89 +129,82 @@ export default {
           }, 100);
       }
     },
+    findModule(moduleName, moduleType) {
+      return moduleType === 'item' ? find(this.items, (m) => m.name === moduleName) : find(this.getSubitemsAsArray(), (m) => m.name === moduleName);
+    },
     addModule(m, newIndex) {
       const mod = clone(m);
       mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
-
-      //TODO: handle fixed modules at non-header/non-footer position
-
-      if(this.isFixedHeader(mod) && this.campaignHasFixedHeader()) {
-        this.$root.$toast('A header is already present. Please remove it to add a new one.', {className: 'et-error'});
-      }
-      else if (this.isFixedFooter(mod) && this.campaignHasFixedFooter()) {
-        this.$root.$toast('A footer is already present. Please remove it to add a new one.', {className: 'et-error'});
-      }
-      else {
-        if(this.isFixedHeader(mod)) {
-          this.insertModule({index: 0, moduleData: mod});
-
+      if (this.isFixedHeader(mod) && this.campaignHasFixedHeader()) {
+        this.$root.$toast('A header is already present. Please remove it to add a new one.', {
+          className: 'et-error'
+        });
+      } else if (this.campaignHasFixedBottomModule(mod)) {
+        this.$root.$toast('This module is already present. Please remove it to add a new one.', {
+          className: 'et-error'
+        });
+      } else {
+        if (this.isFixedHeader(mod)) {
+          this.insertModule({
+            index: 0,
+            moduleData: mod
+          });
           setTimeout(() => {
             this.autoScrollTop();
           }, 25);
-        }
-        else if(this.isFixedFooter(mod)) {
-          this.addModuleToBottom(mod);
-
+        } else if (this.isBottomModule(mod)) {
+          this.addFixedBottomModule(mod);
           setTimeout(() => {
             this.autoScrollBottom();
           }, 25);
-        }
-        else {
-
-          if(newIndex === 0 && this.campaignHasFixedHeader()) {
+        } else {
+          if (newIndex === 0 && this.campaignHasFixedHeader()) {
             newIndex = 1;
-          }
-          else if((newIndex > this.getLastIndex() || newIndex === undefined) && this.campaignHasFixedFooter()) {
+          } else if (newIndex > this.getLastIndex() || newIndex === undefined) {
             // Setting the newIndex to the current last position will push the current footer to the bottom
             newIndex = this.getLastIndex();
           }
-          
-          if (newIndex === undefined) {
-            this.addModuleToBottom(mod);
-
+          this.insertModule({
+            index: newIndex,
+            moduleData: mod
+          });
+          if (newIndex >= this.getLastIndex() - 1) {
             setTimeout(() => {
               this.autoScrollBottom();
             }, 25);
-          }
-          else {
-            this.insertModule({index: newIndex, moduleData: mod});
-
-            if(newIndex >= this.getLastIndex() - 1) {
-              setTimeout(() => {
-                this.autoScrollBottom();
-              }, 25);
-            }
           }
         }
       }
     },
     insertModule({index, moduleData}) {
       // Insert module 
-      this.$store.commit('campaign/insertModule', {index: index, moduleData: moduleData});
+      this.$store.commit('campaign/insertModule', {
+        index,
+        moduleData
+      });
       // Set active inserted module
       this.$store.commit('campaign/setActiveModule', index);
-    },
-    addModuleToBottom(moduleData) {
-      // Add module
-      this.$store.commit('campaign/addModule', moduleData);
-      // Set active on last module added
-      this.$store.commit('campaign/setActiveLastModule');
-      // Get last index
-      const lastIndex = this.getLastIndex();
-      
       if (this.activeModule.type === 'studio') {
         // Save current component if module type is studio
         this.$store.commit('campaign/setCurrentComponent', {
-          moduleId: lastIndex,
+          moduleId: index,
           columnId: 0,
-          componentId: 0,
+          componentId: 0
         });
         this.$store.commit('campaign/unsetCustomModule');
       } else {
         // Save customModule if module type is custom
-        this.$store.commit('campaign/setCustomModule', lastIndex);
+        this.$store.commit('campaign/setCustomModule', index);
         this.$store.commit('campaign/unsetCurrentComponent');
       }
     },
-  },
+    addFixedBottomModule(moduleData) {
+      // Get last index
+      const index = this.getNextIndexFixedBottomModule(moduleData);
+      this.insertModule({
+        index,
+        moduleData
+      });
+    }
+  }
 };
