@@ -14,6 +14,7 @@ module.exports = {
       templateMobileWidth: '480',
       templateBackgroundColor: '#FFFFFF',
       contentBackgroundColor: '#FFFFFF',
+      colorPalettes: '',
       fontFamily: 'Arial',
       fontSize: '14',
       fontColor: '#000000',

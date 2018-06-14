@@ -21,7 +21,8 @@ Vue.use(Toast, {
 });
 Vue.use(BootstrapVue);
 Vue.use(interceptors);
-const app = new Vue({
+
+window.vm = new Vue({
   store,
   components: {
     Dashboard,

@@ -1,5 +1,4 @@
 const studioSettings = require('./studioSettings.vue');
-const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
   name: 'text-options',
@@ -8,7 +7,6 @@ module.exports = {
   author: 'emiliano@stensul.com',
   target: ['button', 'text'],
   studioSettings,
-  campaignSettings,
   config: {
     options: {
       undo: {
@@ -106,6 +104,8 @@ module.exports = {
           '79a8c9', 'Blue',
           'cd202c', 'Red',
         ],
+        textcolor_from_library: false,
+        palette_name: '',
       },
       backcolor: {
         label: 'Background color',

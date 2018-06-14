@@ -8,7 +8,7 @@
     <settings-container v-if="plugin.enabled" label="Palette">
       <template slot="setting-right">
           <el-input
-            size="mini" 
+            size="mini"
             v-validate="'required'"
             v-model="bgColorMap"
             placeholder="000000,474646,79A8C9,CD202C"
@@ -36,6 +36,9 @@
               break;
             case 'text-element':
               this.plugin.subComponent ='container';
+              break;
+            case 'divider-element':
+              this.plugin.subComponent ='divider';
               break;
             default:
               break;

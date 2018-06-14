@@ -3,14 +3,14 @@
     <div class="plugin-wrapper-inner">
       <span>
         <button @click="showModal('desktop')">
-          <i class="glyphicon glyphicon-cloud-upload"></i> Update Image
+          <i class="glyphicon glyphicon-cloud-upload"></i> Upload Image
         </button>
       </span>
     </div>
     <div class="plugin-wrapper-inner" v-if="hasImageMobile">
       <span>
         <button @click="showModal('mobile')" :disabled="!plugin.data.img">
-          <i class="glyphicon glyphicon-cloud-upload"></i> Update Image Mobile
+          <i class="glyphicon glyphicon-cloud-upload"></i> Upload Mobile Image
         </button>
       </span>
     </div>
@@ -36,7 +36,7 @@ import imageService from '../../../services/image';
 import imageModal from '../../../components/common/ImageModal';
 
 export default {
-  props: ['name', 'plugin'],
+  props: ['name', 'plugin', 'pluginKey'],
   components: {
     imageModal
   },
@@ -45,7 +45,8 @@ export default {
       showImageEditor: false,
       libraryImages: [],
       type: 'desktop',
-      image: {}
+      image: {},
+      isEdit: false
     };
   },
   computed: {
@@ -75,7 +76,7 @@ export default {
       },
       set(value) {
         const payload = {
-          plugin: this.name,
+          plugin: this.pluginKey,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
@@ -116,20 +117,31 @@ export default {
           campaignId: this.campaign.campaign_id
         })
         .then(uploadedImgs => {
-          this.updateAttribute(uploadedImgs[imgs.length - 1]);
+          this.updateAttribute(uploadedImgs[imgs.length - 1], data.newImage);
           const temp = {};
-          temp[`img${this.type === 'mobile' ? 'Mobile' : ''}`] = data.img;
-          temp[`state${this.type === 'mobile' ? 'Mobile' : ''}`] = data.state;
+          if (this.type === 'desktop') {
+            temp.img = data.img;
+            temp.state = data.state;
+            if (data.newImage === true && this.isEdit === true) {
+              if (typeof this.plugin.data.imgMobile !== 'undefined') {
+                temp.imgMobile = data.img;
+                temp.stateMobile = data.state;
+              }
+            }
+          } else {
+            temp.imgMobile = data.img;
+            temp.stateMobile = data.state;
+          }
           this.updatePluginData(uploadedImgs, data.images, {
             ...this.plugin.data,
             ...temp
-          });
+          }, data.newImage);
           this.$store.commit('global/setLoader', false);
           this.showImageEditor = false;
           this.type = 'desktop';
         });
     },
-    updatePluginData(uploadedImgs, images, data) {
+    updatePluginData(uploadedImgs, images, data, newImage) {
       images.slice(0, images.length - 1).forEach(image => {
         const i = images.indexOf(image);
         const keys = image.key.split('.');
@@ -143,28 +155,56 @@ export default {
           }
         });
       });
-      data[`img${this.type === 'mobile' ? 'Mobile' : ''}`] = uploadedImgs[images.length - 1];
+      if (this.type === 'desktop') {
+        data.img = uploadedImgs[images.length - 1];
+        if (newImage === true && this.isEdit === true) {
+          if (typeof this.plugin.data.imgMobile !== 'undefined') {
+            data.imgMobile = uploadedImgs[images.length - 1];
+          }
+        }
+      } else {
+        data.imgMobile = uploadedImgs[images.length - 1];
+      }
+      delete data.images;
       this.$store.commit('campaign/savePlugin', {
-        plugin: this.name,
+        plugin: this.pluginKey,
         moduleId: this.currentComponent.moduleId,
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         data: data
       });
     },
-    updateAttribute(image) {
+    updateAttribute(image, newImage) {
       this.removeErrorsImages();
       const payload = {
-        plugin: this.name,
+        plugin: this.pluginKey,
         moduleId: this.currentComponent.moduleId,
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         subComponent: 'image',
         link: 'attribute',
-        property: `placeholder${this.type === 'mobile' ? 'Mobile' : ''}`,
         value: image
       };
-      this.$store.commit('campaign/saveComponentProperty', payload);
+      if (this.type === 'desktop') {
+        payload.property = 'placehoder';
+        this.$store.commit('campaign/saveComponentProperty', {
+          ...payload,
+          property: 'placeholder'
+        });
+        if (newImage === true && this.isEdit === true) {
+          if (typeof this.plugin.data.imgMobile !== 'undefined') {
+            this.$store.commit('campaign/saveComponentProperty', {
+              ...payload,
+              property: 'placeholderMobile'
+            });
+          }
+        }
+      } else {
+        this.$store.commit('campaign/saveComponentProperty', {
+          ...payload,
+          property: 'placeholderMobile'
+        });
+      }
     },
     removeErrorsImages() {
       let $contentImgError = $('.stx-module-wrapper-active').find(
@@ -180,12 +220,29 @@ export default {
       }
       if (Object.keys(this.plugin.data).length > 0) {
         const temp = this.plugin.data;
-        if (typeof temp[`img${this.type === 'mobile' ? 'Mobile' : ''}`] !== 'undefined') {
+        if (this.type === 'desktop') {
+          if (typeof temp.img !== 'undefined') {
+            this.isEdit = true;
+            this.image = {
+              img: temp.img,
+              state: temp.state
+            };
+          }
+        } else {
+          if (typeof temp.imgMobile !== 'undefined') {
+            this.isEdit = true;
+            this.image = {
+              img: temp.imgMobile,
+              state: temp.stateMobile
+            };
+          } else {
+            this.isEdit = true;
           this.image = {
-            img: temp[`img${this.type === 'mobile' ? 'Mobile' : ''}`],
-            state: temp[`state${this.type === 'mobile' ? 'Mobile' : ''}`]
+              img: temp.img,
+              state: temp.state
           };
         }
+      }
       }
       this.showImageEditor = true;
     },

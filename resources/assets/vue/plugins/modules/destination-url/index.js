@@ -25,4 +25,5 @@ module.exports = {
   data: {},
   render: true,
   enabled: false,
+  validated: false,
 };
