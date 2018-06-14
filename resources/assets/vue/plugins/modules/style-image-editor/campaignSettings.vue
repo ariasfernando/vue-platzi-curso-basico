@@ -25,8 +25,8 @@
             placeholder="Alt text"
             v-model="alt"
             v-validate.initial="validationRules"
-            :class="{'input': true, 'is-danger': errors.has('alt') }">
-          <span v-show="errors.has('alt')" class="help is-danger">{{ errors.first('alt') }}</span>
+            :class="{'input': true, 'is-danger': hasError }">
+          <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
         </p>
         <p v-else>
           <el-input v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
@@ -48,10 +48,11 @@
 import imageService from '../../../services/image';
 import imageModal from '../../../components/common/ImageModal';
 import _ from 'lodash';
-import mixinValidator from '../mixins/validator';
+import validatorMixin from '../mixins/validator';
 
 export default {
   props: ['name', 'plugin', 'pluginKey'],
+  mixins: [validatorMixin],
   components: {
     imageModal
   },
@@ -70,6 +71,9 @@ export default {
     },
     currentComponent() {
       return this.$store.getters['campaign/currentComponent'];
+    },
+    module() {
+      return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
     },
     component() {
       let component = {};

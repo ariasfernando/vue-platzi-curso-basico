@@ -42,11 +42,11 @@
 
 <script>
   import _ from 'lodash';
-  import mixinValidator from '../mixins/validator';
+  import validatorMixin from '../mixins/validator';
 
   export default {
     props: ['name', 'plugin', 'pluginKey'],
-    mixins: [mixinValidator],
+    mixins: [validatorMixin],
     mounted() {
       if (this.validationRules) {
         this.validate();
@@ -68,17 +68,6 @@
       },
       module() {
         return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
-      },
-      moduleErrors() {
-        return this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
-                                                        && _.isEqual(err.scope.columnId, this.currentComponent.columnId)
-                                                        && _.isEqual(err.scope.componentId, this.currentComponent.componentId))) : [];
-      },
-      hasError() {
-        return this.moduleErrors.length > 0;
-      },
-      getErrorMessage() {
-        return this.moduleErrors.length > 0 ? this.moduleErrors[0].msg : '';
       },
       component() {
         let component = {};
