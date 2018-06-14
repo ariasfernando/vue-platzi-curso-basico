@@ -109,18 +109,22 @@
             // Grouped modules in library menu
             _.each(item.sub_menu, (subItem) => {
               this.setModuleFixedStatus(subItem);
-              if (!this.campaignHasFixedBottomModule(subItem)) {
-                if (this.isBottomModule(subItem)) {
-                  this.addFixedBottomModule(subItem);
+              if (subItem.mandatory) {
+                if (!this.campaignHasFixedBottomModule(subItem)) {
+                  if (this.isBottomModule(subItem)) {
+                    this.addFixedBottomModule(subItem);
+                  }
                 }
               }
             });
           } else {
             // First level modules in library menu
             this.setModuleFixedStatus(item);
-            if (!this.campaignHasFixedBottomModule(item)) {
-              if (this.isBottomModule(item)) {
-                this.addFixedBottomModule(item);
+            if (item.mandatory) {
+              if (!this.campaignHasFixedBottomModule(item)) {
+                if (this.isBottomModule(item)) {
+                  this.addFixedBottomModule(item);
+                }
               }
             }
           }
@@ -129,9 +133,11 @@
         // Sanitize campaign's modules
         _.each(this.modules, (item) => {
           this.setModuleFixedStatus(item);
-          if (!this.campaignHasFixedBottomModule(item)) {
-            if (this.isBottomModule(item)) {
-              this.addFixedBottomModule(item);
+          if (item.mandatory) {
+            if (!this.campaignHasFixedBottomModule(item)) {
+              if (this.isBottomModule(item)) {
+                this.addFixedBottomModule(item);
+              }
             }
           }
         });
