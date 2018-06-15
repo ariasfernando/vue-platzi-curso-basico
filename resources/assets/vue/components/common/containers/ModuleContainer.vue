@@ -7,7 +7,7 @@
       <td
         :width="component.container.attribute.width || '100%'"
         :style="elementBorderPaddingAndWidth(component.container)"
-        :align="component.container.attribute.align || 'top'"
+        :align="component.container.attribute.valign || 'top'"
         class="stx-position-relative"
         :bgcolor="component.container.attribute.bgcolor"
         :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
