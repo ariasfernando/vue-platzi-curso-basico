@@ -131,7 +131,7 @@ phpdoccheck:
 test_js:
   stage: test
   script:
-    - npm run test:single
+    - npm run cover
   artifacts:
     when: always
     name: "${CI_JOB_STAGE}_testjs_${CI_COMMIT_REF_NAME}"
