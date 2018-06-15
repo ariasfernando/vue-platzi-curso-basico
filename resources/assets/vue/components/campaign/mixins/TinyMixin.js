@@ -127,7 +127,7 @@
           skin: 'lightgray',
           skin_url: `${Application.globals.cdnHost  }/css/tinymce/lightgray`,
           toolbar,
-          plugins: 'paste advlist autolink lists stlinkextended textcolor sttextcolorextended',
+          plugins: 'paste advlist autolink lists stlinkextended textcolor sttextcolorextended stformatsmenu',
           inline: true,
           menubar: false,
           link_title: false,
