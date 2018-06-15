@@ -1,52 +1,56 @@
 <template>
-  <div class="plugin-wrapper-inner" v-if="component">
-    <div>
-      <span>
-        <label>Destination Url</label>
+  <div>
+    <settings-container label="Destination Url" customClass="destination-url" v-if="component">
+      <template slot="setting-bottom">
         <p v-if="validationRules">
-          <input
+          <el-input
             name="href"
             type="text"
+            size="mini"
             placeholder="http://examp.le"
             v-model="href"
             v-validate.initial="validationRules"
-            :class="{'input': true, 'is-danger': errors.has('href') }">
+            :class="{'input': true, 'is-danger': errors.has('href') }"></el-input>
           <span v-show="errors.has('href')" class="help is-danger">{{ errors.first('href') }}</span>
         </p>
         <p v-else>
-          <input name="href" type="text" placeholder="http://examp.le" v-model="href">
+          <el-input
+          name="href"
+          type="text"
+          size="mini"
+          placeholder="http://examp.le"
+          v-model="href"></el-input>
         </p>
-      </span>
+      </template>
+    </settings-container>
 
-      <span v-if="plugin.config.target">
-        <label>Target</label>
-        <div class="alignment-options">
-          <a
-            v-for="(icon, option) in options"
-            :class="option === target  ? 'plugin-setting-active' : ''"
-            :data-tooltip="option"
-            @click="changeTarget(option)"
-            :key="option"
+    <settings-container label="Target" v-if="plugin.config.target">
+      <template slot="setting-right">
+        <el-button
+          v-for="(icon, option) in plugin.config.options"
+          plain
+          size="mini"
+          :class="[`glyphicon glyphicon-${icon}`,{ 'active': target === option }]"
+          :data-tooltip="option"
+          @click="changeTarget(option)"
+          :key="option"
           >
-            <i :class="'glyphicon glyphicon-'+ icon"
-               :data-tooltip="option"
-               @click="changeTarget(option)"
-            ></i>
-          </a>
-        </div>
-      </span>
-    </div>
+        </el-button>
 
+      </template>
+    </settings-container>
   </div>
 </template>
 
 <script>
   import _ from 'lodash';
   import mixinValidator from '../mixins/validator';
+  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
   export default {
     props: ['name', 'plugin'],
     mixins: [mixinValidator],
+    components: { SettingsContainer },
     computed: {
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
@@ -88,11 +92,6 @@
         return rules.join('|');
       }
     },
-    data() {
-      return {
-        options: this.plugin.config.options,
-      }
-    },
     methods: {
       changeTarget(option) {
         const property = 'target';
@@ -117,3 +116,34 @@
     },
   }
 </script>
+
+<style lang="less" scoped>
+.el-button:focus,
+.el-button:hover {
+  color: inherit;
+  border-color: inherit;
+  background-color: inherit;
+}
+.el-button.active {
+  color: #ffffff;
+  border-color: rgb(120, 220, 214);
+  background-color: rgb(120, 220, 214);
+}
+.el-button + .el-button {
+  margin-left: 0;
+}
+.el-button {
+  width: 28px;
+  padding: 4px 0;
+  margin-right: 2.67px;
+  height: 26px;
+  display: block;
+  float: left;
+  &:last-of-type {
+    margin: 0;
+  }
+}
+.padding-zero {
+  padding: 0;
+}
+</style>

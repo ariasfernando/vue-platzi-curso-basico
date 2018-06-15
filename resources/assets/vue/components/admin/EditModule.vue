@@ -470,9 +470,6 @@ p,ul,ol{
       height: 50px;
     }
 
-    input[name="href"] {
-      width: 115px;
-    }
     .vue-js-switch {
       float: right;
       padding-top: 0px;

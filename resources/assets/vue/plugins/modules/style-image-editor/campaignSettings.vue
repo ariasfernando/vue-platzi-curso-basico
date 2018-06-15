@@ -1,25 +1,18 @@
 <template>
   <div class="settings-wrapper plugin-wrapper" v-if="component">
-    <div class="plugin-wrapper-inner">
-      <span>
-        <button @click="showModal('desktop')">
-          <i class="glyphicon glyphicon-cloud-upload"></i> Upload Image
-        </button>
-      </span>
-    </div>
-    <div class="plugin-wrapper-inner" v-if="hasImageMobile">
-      <span>
-        <button @click="showModal('mobile')" :disabled="!plugin.data.img">
-          <i class="glyphicon glyphicon-cloud-upload"></i> Upload Mobile Image
-        </button>
-      </span>
-    </div>
-    <div class="plugin-wrapper-inner">
-      <span>
-        <label>Alt</label>
-        <el-input v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
-      </span>
-    </div>
+    <el-button @click="showModal('desktop')" type="primary">
+      <i class="glyphicon glyphicon-cloud-upload"></i>
+      Upload Image
+    </el-button>
+    <el-button  v-if="hasImageMobile" @click="showModal('mobile')" type="primary" size="mini">
+      <i class="glyphicon glyphicon-cloud-upload"></i>
+      Upload Mobile Image
+    </el-button>
+    <settings-container label="Alt" v-if="component">
+      <template slot="setting-bottom">
+        <el-input size="mini" v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
+      </template>
+    </settings-container>
     <image-modal 
     :config="plugin.config" 
     v-if="showImageEditor" 
@@ -33,12 +26,14 @@
 
 <script>
 import imageService from '../../../services/image';
-import imageModal from '../../../components/common/ImageModal';
+import ImageModal from '../../../components/common/ImageModal';
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
 export default {
   props: ['name', 'plugin'],
   components: {
-    imageModal
+    ImageModal,
+    SettingsContainer
   },
   data() {
     return {
@@ -248,3 +243,13 @@ export default {
   },
 };
 </script>
+<style lang="less" scoped>
+.el-button {
+  border-color: rgb(120, 220, 214);
+  background-color: rgb(120, 220, 214);
+  width: 100%;
+  font-size: 12px;
+  font-weight: 300;
+  padding: 6px 20px;
+} 
+</style>

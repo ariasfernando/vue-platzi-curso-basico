@@ -1,12 +1,12 @@
 <template>
-    <div class="group-container" :class="customClass || ''">
+    <div class="group-container" :class="customClass || ''" @click="e => $emit('click', e)"  :style="{'cursor': clickeable !== false ? 'pointer' : 'default'}">
       <slot></slot>
     </div>
 </template>
 <script>
 export default {
-  name: "groupContainer",
-  props: ["customClass"],
+  name: "GroupContainer",
+  props: ["customClass", "clickeable"],
 };
 </script>
 <style lang="less" scoped>

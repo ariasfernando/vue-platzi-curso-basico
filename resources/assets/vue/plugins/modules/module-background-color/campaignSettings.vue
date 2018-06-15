@@ -1,26 +1,24 @@
 <template>
-  <div class="component-module-background-color plugin-wrapper-inner">
-    <label class="half-style-setting">{{ plugin.title }}</label>
-    <el-color-picker ref="compact" v-model="colors" color-format="hex"></el-color-picker>
-    <el-input
-      size="mini"
-      v-model="colors"
-      placeholder="transparent"
-      class="col-sm-4" 
-      disabled="disabled"
-    >
-    </el-input>
-  </div>
+  <settings-container :label="plugin.title" customClass="generic-color">
+    <template slot="setting-right">
+      <el-color-picker ref="compact" v-model="colors" color-format="hex"></el-color-picker>
+      <el-input
+        size="mini"
+        v-model="colors"
+        placeholder="transparent"
+        disabled="disabled"
+      >
+      </el-input>
+    </template>
+  </settings-container>
 </template>
 
 <script>
-import { Compact } from "vue-color";
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
 export default {
   props: ["name", "plugin", "moduleId"],
-  components: {
-    "compact-picker": Compact
-  },
+  components: { SettingsContainer },
   computed: {
     currentModule() {
       return this.$store.getters["campaign/currentModule"];
@@ -58,26 +56,16 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.half-style-setting {
-  width: 50%;
+.el-color-picker {
   float: left;
-  position: relative;
-  & + .half-style-setting {
-    padding-left: 15px;
-  }
-  &.padding-top {
-    padding-top: 5px;
-  }
-  &.float-right {
-    float: right;
-  }
+  height: 28px;
 }
 </style>
 <style lang="less">
-.component-module-background-color {
-  .el-input--mini {
-    width: 86px;
-    padding: 6px 0 0 0;
+.generic-color {
+  .el-input {
+    padding: 0;
+    width: calc(~'100% - 34px');
   }
   .el-color-picker__trigger {
     padding: 3px;
@@ -89,10 +77,6 @@ export default {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 4px;
   }
-  .el-color-picker {
-    padding: 6px 0 0 0;
-    float: left;
-  }
   input.el-input__inner {
     text-align: center;
   }
@@ -102,8 +86,6 @@ export default {
     cursor: auto;
     padding: 0;
     font-size: 12px;
-    width: 87px;
-    border: 1px solid #dcdfe6;
   }
 }
 </style>

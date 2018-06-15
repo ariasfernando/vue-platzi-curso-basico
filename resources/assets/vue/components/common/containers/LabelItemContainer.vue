@@ -1,13 +1,13 @@
 <template>
-    <b-btn block class="label-item-container" :class="customClass || ''">
+    <b-btn block class="label-item-container" :class="customClass || undefined" :style="{'cursor': collapsable !== false ? 'pointer' : 'default'}">
       <p><i :class="`glyphicon ${icon}`"></i>{{label}}</p>
-      <i class="glyphicon glyphicon-menu-down menu-dropdown"></i>
+      <i v-if="collapsable !== false" class="glyphicon glyphicon-menu-down menu-dropdown"></i>
     </b-btn>
 </template>
 <script>
 export default {
   name: "LabelItemContainer",
-  props: ["customClass", "icon", "label"]
+  props: ["customClass", "icon", "label", "collapsable"]
 };
 </script>
 <style lang="less" scoped>

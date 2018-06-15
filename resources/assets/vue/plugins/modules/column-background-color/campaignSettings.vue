@@ -1,26 +1,24 @@
 <template>
-  <div class="plugin-wrapper-inner">
-    <label>{{ plugin.title }}</label>
-    <el-color-picker  ref="compact" v-model="colors" color-format="hex"></el-color-picker>
-    <el-input
-      size="mini"
-      v-model="colors"
-      placeholder="transparent"
-      class="col-sm-4" 
-      disabled="disabled"
-    >
-    </el-input>
-  </div>
+  <settings-container :label="plugin.title" customClass="generic-color">
+    <template slot="setting-right">
+      <el-color-picker ref="compact" v-model="colors" color-format="hex"></el-color-picker>
+      <el-input
+        size="mini"
+        v-model="colors"
+        placeholder="transparent"
+        disabled="disabled"
+      >
+      </el-input>
+    </template>
+  </settings-container>
 </template>
 
 <script>
-  import { Compact } from 'vue-color'
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
   export default {
     props: ['name', 'plugin', 'moduleId', 'columnId'],
-    components: {
-      'compact-picker': Compact
-    },
+    components: { SettingsContainer },
     computed: {
       modules() {
         return this.$store.getters["campaign/modules"];
@@ -35,13 +33,14 @@
      },
      set(value){
         const payload = {
-          plugin: this.name,
-          moduleId: this.moduleId,
-          columnId: this.columnId,
-          attribute: 'bgcolor',
-          attributeValue: value,
+        moduleId: this.moduleId,
+        columnId: this.columnId,
+        subComponent: 'container',
+        link: "attribute",
+        property: "bgcolor",
+        value: value
         };
-        this.$store.commit('campaign/saveColumnAttribute', payload);
+        this.$store.commit('campaign/saveColumnProperty', payload);
       }
      
      },
@@ -57,26 +56,16 @@
   }
 </script>
 <style lang="less" scoped>
-.half-style-setting {
-  width: 50%;
+.el-color-picker {
   float: left;
-  position: relative;
-  & + .half-style-setting {
-    padding-left: 15px;
-  }
-  &.padding-top {
-    padding-top: 5px;
-  }
-  &.float-right {
-    float: right;
-  }
+  height: 28px;
 }
 </style>
 <style lang="less">
-.plugin-column-background-color {
-  .el-input--mini {
-    width: 86px;
-    padding: 6px 0 0 0;
+.generic-color {
+  .el-input {
+    padding: 0;
+    width: calc(~'100% - 34px');
   }
   .el-color-picker__trigger {
     padding: 3px;
@@ -88,21 +77,15 @@
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 4px;
   }
-  .el-color-picker {
-    padding: 6px 0 0 0;
-    float: left;
-  }
   input.el-input__inner {
     text-align: center;
   }
   .el-input.is-disabled .el-input__inner {
-    background-color: transparent!important;
+    background-color: transparent;
     color: #666666;
     cursor: auto;
     padding: 0;
-    font-size: 12px!important;
-    width: 87px!important;
-    border: 1px solid #dcdfe6!important;
+    font-size: 12px;
   }
 }
 </style>

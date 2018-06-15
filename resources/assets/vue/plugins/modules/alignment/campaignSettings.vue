@@ -1,29 +1,30 @@
 <template>
-  <div class="plugin-wrapper-inner" v-if="component">
-    <label>{{ plugin.title }}</label>
-    
-    <div class="alignment-options">
-      <a v-for="option in options" 
-         :data-tooltip="option"
-         :data-value="value"
-         :class="option === value  ? 'plugin-setting-active' : ''"
-         @click="changeAlignment(option)"
-         :key="option"
-      >
-        <i :class="'glyphicon glyphicon-align-'+ option"
-           :data-tooltip="option"
-        ></i>
-      </a>
-    </div>
-
-  </div>
+    <settings-container :label="plugin.title" v-if="component">
+      <template slot="setting-right">
+        <el-button
+          v-for="option in options"
+          plain
+          size="mini"
+          @click="changeAlignment(option)"
+          :class="[`fa fa-align-${option}`,{ active: value === option }]"
+          :data-tooltip="option"
+          :key="option"
+        ></el-button>
+      </template>
+    </settings-container>
 </template>
 
 <script>
   import _ from 'lodash';
-
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
   export default {
     props: ['name', 'plugin'],
+    components: { SettingsContainer },
+    data() {
+      return {
+        options: this.plugin.config.options
+      }
+    },
     computed: {
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
@@ -39,35 +40,59 @@
         }
         return component;
       },
-      value() {
-        return this.component[this.plugin.subComponent].attribute.align;
-      }
-    },
-    data() {
-      return {
-        options: this.plugin.config.options
-      }
+      value: {
+        get() {
+          return this.component[this.plugin.subComponent].attribute.align;
+        },
+        set(value) {
+          const payload = {
+            moduleId: this.currentComponent.moduleId,
+            columnId: this.currentComponent.columnId,
+            componentId: this.currentComponent.componentId,
+            subComponent: this.plugin.subComponent,
+            link: "attribute",
+            property: "align",
+            value: value
+          };
+          this.$store.commit('campaign/saveComponentProperty', payload);
+        }
+      },
     },
     methods: {
       changeAlignment(option) {
-        const property = 'align';
-        const value = option;
-
-        this.saveComponentProperty(property, value);
+        this.value = option;
       },
-      saveComponentProperty(property, value) {
-        const payload = {
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          subComponent: this.plugin.subComponent,
-          link: "attribute",
-          property,
-          value: value
-        };
-
-        this.$store.commit('campaign/saveComponentProperty', payload);
-      }
     },
   }
+
 </script>
+<style lang="less" scoped>
+.el-button:focus,
+.el-button:hover {
+  color: inherit;
+  border-color: inherit;
+  background-color: inherit;
+}
+.el-button.active {
+  color: #ffffff;
+  border-color: rgb(120, 220, 214);
+  background-color: rgb(120, 220, 214);
+}
+.el-button + .el-button {
+  margin-left: 0;
+}
+.el-button {
+  width: 28px;
+  padding: 4px 0;
+  margin-right: 2.67px;
+  height: 26px;
+  display: block;
+  float: left;
+  &:last-of-type {
+    margin: 0;
+  }
+}
+.padding-zero {
+  padding: 0;
+}
+</style>

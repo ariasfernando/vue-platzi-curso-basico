@@ -208,14 +208,11 @@ function campaignStore() {
         Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
-      saveComponentAttribute(state, data) {
-        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
-        attributes[data.attribute] = data.attributeValue;
-        state.dirty = true;
-      },
-      saveColumnAttribute(state, data) {
-        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].attribute;
-        attributes[data.attribute] = data.attributeValue;
+      saveColumnProperty(state, data) {
+        const columns = state.modules[data.moduleId].structure.columns[data.columnId];
+        const subComponent = data.subComponent ? columns[data.subComponent] : columns;
+        const properties = data.link ? subComponent[data.link] : subComponent;
+        Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
       saveModuleAttribute(state, data) {

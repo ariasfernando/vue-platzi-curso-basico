@@ -1,26 +1,24 @@
 <template>
-  <div :class="'plugin-wrapper-inner plugin-' + plugin.name" v-if="component">
-    <label>{{ plugin.title }}</label>
-    <el-color-picker v-model="colors" color-format="hex"></el-color-picker>
-    <el-input
-      size="mini"
-      v-model="colors"
-      placeholder="transparent"
-      class="col-sm-4" 
-      disabled="disabled"
-    >
-    </el-input>
-  </div>
+  <settings-container :label="plugin.title" customClass="generic-color">
+    <template slot="setting-right">
+      <el-color-picker v-model="colors" color-format="hex"></el-color-picker>
+      <el-input
+        size="mini"
+        v-model="colors"
+        placeholder="transparent"
+        disabled="disabled"
+      >
+      </el-input>
+    </template>
+  </settings-container>
 </template>
 
 <script>
-import { Compact } from "vue-color";
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
 export default {
-  props: ["name", "plugin"],
-  components: {
-    "compact-picker": Compact
-  },
+  props: ["name", "plugin", "moduleId"],
+  components: { SettingsContainer },
   computed: {
     currentComponent() {
       return this.$store.getters["campaign/currentComponent"];
@@ -70,11 +68,17 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.el-color-picker {
+  float: left;
+  height: 28px;
+}
+</style>
 <style lang="less">
-.plugin-wrapper-inner.plugin-background-color {
-  .el-input--mini {
-    width: 86px;
-    padding: 6px 0 0 0;
+.generic-color {
+  .el-input {
+    padding: 0;
+    width: calc(~'100% - 34px');
   }
   .el-color-picker__trigger {
     padding: 3px;
@@ -86,21 +90,15 @@ export default {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 4px;
   }
-  .el-color-picker {
-    padding: 6px 0 0 0;
-    float: left;
-  }
   input.el-input__inner {
     text-align: center;
   }
   .el-input.is-disabled .el-input__inner {
-    background-color: transparent !important;
+    background-color: transparent;
     color: #666666;
     cursor: auto;
     padding: 0;
-    font-size: 12px !important;
-    width: 87px !important;
-    border: 1px solid #dcdfe6 !important;
+    font-size: 12px;
   }
 }
 </style>

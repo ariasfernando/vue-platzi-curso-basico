@@ -1,7 +1,7 @@
 <template>
     <div class="clearfix settings-container" :class="customClass || ''">
       <template v-if="hasSettingRight">
-        <label class="half">{{label}}</label>
+        <label class="half" :title="title">{{label}}</label>
         <div class="half-setting padding-top">
             <slot name="setting-right"></slot>
         </div>
@@ -9,17 +9,17 @@
 
       <template v-if="hasSettingSideBySide">
         <div class="half-setting">
-          <label>{{labelLeft}}</label>
+          <label :title="titleLeft">{{labelLeft}}</label>
           <slot name="setting-half-left"></slot>
         </div>
         <div class="half-setting">
-          <label>{{labelRight}}</label>
+          <label :title="titleRight">{{labelRight}}</label>
           <slot name="setting-half-right"></slot>
         </div>
       </template>
     
       <template v-if="hasSettingBottom">
-        <label>{{label}}</label>
+        <label :title="title">{{label}}</label>
         <slot name="setting-bottom"></slot>
       </template>
     
@@ -29,13 +29,24 @@
 import _ from "lodash";
 export default {
   name: "SettingsContainers",
-  props: ["customClass", "label", "label-right", "label-left"],
+  props: [
+    "customClass",
+    "label",
+    "label-right",
+    "label-left",
+    "title",
+    "titleRight",
+    "titleLeft"
+  ],
   computed: {
     hasSettingRight() {
       return Boolean(this.$slots["setting-right"]);
     },
     hasSettingSideBySide() {
-      return Boolean(this.$slots["setting-half-left"]) && Boolean(this.$slots["setting-half-right"]);
+      return (
+        Boolean(this.$slots["setting-half-left"]) &&
+        Boolean(this.$slots["setting-half-right"])
+      );
     },
     hasSettingBottom() {
       return Boolean(this.$slots["setting-bottom"]);
@@ -75,5 +86,10 @@ label {
   &.half {
     width: 50%;
   }
+}
+span.is-danger {
+  font-size: 11px;
+  font-weight: 300;
+  color: #ce5f5f;
 }
 </style>

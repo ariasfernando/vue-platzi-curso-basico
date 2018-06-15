@@ -1,37 +1,33 @@
 <template>
   <div class="expand st-module-menu-wrapper">
-      <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
-
-      <div class="beta-subitem" :class="{'is-collapsed' : collapsed }">
-          <div v-if="ready" v-for="item in items" class="beta-subitem-single">
-
-            <div v-if="item.sub_menu" class="expand">
-              <h2 class="menu-active" :class="{ active: isActive }" @click="(e) => expand(e, item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
-
-                <div class="beta-submodules">
-                  <div v-for="subitem in item.sub_menu">
-                    <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd">
-                      <div class="add single">
-                        <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
-                          {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
-                        </h2>
-                      </div>
-                    </draggable>
-                  </div>
+    <label-item-container label="MODULES" icon="glyphicon-th-large" v-b-toggle.modules></label-item-container>
+      <b-collapse id="modules" visible class="card">
+        <div v-if="ready" v-for="item in items">
+          <div v-if="item.sub_menu" class="expand">
+              <div class="beta-submodules">
+                <div v-for="subitem in item.sub_menu">
+                  <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd">
+                    <div class="add single">
+                      <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
+                        {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
+                      </h2>
+                    </div>
+                  </draggable>
                 </div>
-
-            </div>
-
-            <draggable v-else :element="'div'" :options="options" @clone="onClone" @end="onEnd">
-              <div class="add single">
-                <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">
-                  {{ item.name }} <i class="glyphicon glyphicon-plus"></i>
-                </h2>
               </div>
-            </draggable>
-
           </div>
-      </div>
+          <draggable v-else :element="'div'" :options="options" @clone="onClone" @end="onEnd">
+            <group-container @click="addModuleByName(item.name, 'item')" :clickeable="true">
+              <settings-container :label="item.name" customClass="item-menu add single draggable-item" :module-id="item.name" :module-type="'item'" >
+                <template slot="setting-right">
+                  <i class="glyphicon glyphicon-plus"></i>
+                </template>
+              </settings-container>
+            </group-container>
+          </draggable>
+
+        </div>
+    </b-collapse>
 
   </div>
 </template>
@@ -42,11 +38,17 @@
   import _ from 'lodash';
   import Draggable from 'vuedraggable';
   import ModuleListMixin from './mixins/moduleListMixin';
+  import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
+  import GroupContainer from "../common/containers/GroupContainer.vue";
+  import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
 
   export default {
     name: 'CampaignMenu',
     components: {
-      Draggable
+      Draggable,
+      LabelItemContainer,
+      GroupContainer,
+      SettingsContainer,
     },
     props: {
       libraryId: {
@@ -205,72 +207,3 @@
     }
   };
 </script>
-<style lang="less">
-  @icon-option: #69dac8;
-  @focus: #69dac8;
-  @focus-light: lighten(@focus, 30%);
-  @hover: @focus-light;
-  @font-color: #999999;
-  @bg-color: #f0f0f0;
-
-   #emailCanvas{
-     &.empty{
-      border: none;
-      color:@font-color;
-      background-color: @bg-color;
-      height: 65px;
-      font-family: 'Open Sans', Arial, serif;
-      font-size: 12px;
-      padding: 0 20px;
-
-      .empty-message {
-        width: 100%;
-        display: table-cell;
-        vertical-align: middle;
-        opacity: 0.7;
-        text-align: center;
-
-        &:hover {
-          width: 100%;
-          display: table-cell;
-          vertical-align: middle;
-          opacity: 1;
-          outline: 2px dashed @font-color;
-          outline-offset: -10px;
-          text-align: center;
-        }
-      }
-    }
-
-    .ghost-component{
-      text-align: center;
-      color:@focus;
-      background-color: @hover;
-      display: table-row;
-      vertical-align: middle;
-      list-style-type: none;
-      font-size: 14px;
-      z-index: 300;
-      opacity: 1!important;
-      &:before{
-        content: "Drag the module here";
-        display: table-cell;
-        vertical-align: middle;
-        border: none;
-        color:@focus;
-        background-color: @hover;
-        height: 65px;
-        font-family: 'Open Sans', Arial, serif;
-        font-size: 14px;
-        opacity: 1;
-        outline: 2px dashed @icon-option;
-        outline-offset: -10px;
-        text-align: center;
-        padding: 0 10px;
-      }
-      *{
-        display: none;
-      }
-    }
-  }
-</style>
