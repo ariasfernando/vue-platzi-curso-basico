@@ -134,7 +134,7 @@ test_js:
     name: "${CI_JOB_STAGE}_testjs_${CI_COMMIT_REF_NAME}"
     expire_in: 30 days
     paths:
-      - coverage/
+      - ci/storage/tmp/coverage
 
 eslint:
   stage: test
