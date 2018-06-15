@@ -109,37 +109,19 @@
             // Grouped modules in library menu
             _.each(item.sub_menu, (subItem) => {
               this.setModuleFixedStatus(subItem);
-              if (subItem.mandatory) {
-                if (!this.campaignHasFixedBottomModule(subItem)) {
-                  if (this.isBottomModule(subItem)) {
-                    this.addFixedBottomModule(subItem);
-                  }
-                }
-              }
+              this.shouldAddModule(subItem);
             });
           } else {
             // First level modules in library menu
             this.setModuleFixedStatus(item);
-            if (item.mandatory) {
-              if (!this.campaignHasFixedBottomModule(item)) {
-                if (this.isBottomModule(item)) {
-                  this.addFixedBottomModule(item);
-                }
-              }
-            }
+            this.shouldAddModule(item);
           }
         });
 
         // Sanitize campaign's modules
         _.each(this.modules, (item) => {
           this.setModuleFixedStatus(item);
-          if (item.mandatory) {
-            if (!this.campaignHasFixedBottomModule(item)) {
-              if (this.isBottomModule(item)) {
-                this.addFixedBottomModule(item);
-              }
-            }
-          }
+          this.shouldAddModule(item);
         });
 
         this.ready = true;
@@ -217,6 +199,22 @@
         item['type'] = found.length > 0 ? found[0].mandatory ? 'virtual' : item['type'] : item['type'];
         item['mandatory'] = found.length > 0 ? found[0].mandatory ? true : false : false;
       },
+      shouldAddModule(item) {
+        if (item.mandatory) {
+          if (this.isBottomModule(item)) {
+            if (!this.campaignHasFixedBottomModule(item)) {
+              this.addFixedBottomModule(item);
+            }
+          } else {
+            if (!this.campaignHasFixedHeader()) {
+              this.insertModule({
+                index: 0,
+                moduleData: item
+              });
+            }
+          }
+        }
+      } 
     }
   };
 </script>
