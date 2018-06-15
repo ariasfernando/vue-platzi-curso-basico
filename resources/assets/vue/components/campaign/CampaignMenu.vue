@@ -1,38 +1,35 @@
 <template>
   <div class="expand st-module-menu-wrapper">
-      <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
-
-      <div class="beta-subitem" :class="{'is-collapsed' : collapsed }">
-          <div v-if="ready" v-for="(item, i) in items" :key="i" class="beta-subitem-single">
-
-            <div v-if="item.sub_menu" class="expand">
-              <h2 class="menu-active" :class="{ active: isActive }" @click="(e) => expand(e, item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
-
-                <div class="beta-submodules">
-                  <div v-for="(subitem, j) in item.sub_menu" :key="j">
-                    <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd" v-if="!subitem.mandatory">
-                      <div class="add single">
-                        <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
-                          {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
-                        </h2>
-                      </div>
-                    </draggable>
-                  </div>
+    <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
+    <div class="beta-subitem" :class="{'is-collapsed' : collapsed }">
+      <div v-if="ready" v-for="(item, i) in items" :key="i" class="beta-subitem-single">
+        <div v-if="item.sub_menu" class="expand">
+          <h2 class="menu-active" :class="{ active: isActive }" @click="(e) => expand(e, item.name)">
+            <i class="glyphicon glyphicon-folder-close glyph-inline"></i>
+            <span>{{ item.name }}</span>
+            <i class="glyphicon glyphicon-menu-down"></i>
+          </h2>
+          <div class="beta-submodules">
+            <div v-for="(subitem, j) in item.sub_menu" :key="j">
+              <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd" v-if="!subitem.mandatory">
+                <div class="add single">
+                  <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">{{ subitem.name }}
+                    <i class="glyphicon glyphicon-plus"></i>
+                  </h2>
                 </div>
-
+              </draggable>
             </div>
-
-            <draggable v-else-if="!item.mandatory" :element="'div'" :options="options" @clone="onClone" @end="onEnd">
-              <div class="add single">
-                <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">
-                  {{ item.name }} <i class="glyphicon glyphicon-plus"></i>
-                </h2>
-              </div>
-            </draggable>
-
           </div>
+        </div>
+        <draggable v-else-if="!item.mandatory"  :element="'div'" :options="options" @clone="onClone" @end="onEnd">
+          <div class="add single">
+            <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">{{ item.name }}
+              <i class="glyphicon glyphicon-plus"></i>
+            </h2>
+          </div>
+        </draggable>
       </div>
-
+    </div>
   </div>
 </template>
 
@@ -94,6 +91,9 @@
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
         return this.modules[activeModuleId] || undefined;
+      },
+      fixedModules() {
+        return this.campaign.library_config.fixedModules ? JSON.parse(this.campaign.library_config.fixedModules) : [];
       }
     },
     created() {
@@ -191,9 +191,7 @@
           : $(".empty-message").show()
       },
       setModuleFixedStatus(item) {
-        // Get fixed modules from library config
-        const fixedModules = this.campaign.library_config.fixedModules ? JSON.parse(this.campaign.library_config.fixedModules) : [];
-        const found = _.filter(fixedModules, fixed => fixed.key === item.key);
+        const found = _.filter(this.fixedModules, fixed => fixed.key === item.key);
         item['isFixed'] = found.length > 0;
         item['fixedPosition'] = found.length > 0 ? found[0].pos : undefined;
         item['type'] = found.length > 0 ? found[0].mandatory ? 'virtual' : item['type'] : item['type'];
@@ -205,12 +203,9 @@
             if (!this.campaignHasFixedBottomModule(item)) {
               this.addFixedBottomModule(item);
             }
-          } else {
-            if (!this.campaignHasFixedHeader()) {
-              this.insertModule({
-                index: 0,
-                moduleData: item
-              });
+          } else if (this.isTopModule(item)) {
+            if (!this.campaignHasFixedTopModule(item)) {
+              this.addFixedTopModule(item);
             }
           }
         }
