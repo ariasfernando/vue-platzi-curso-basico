@@ -10,13 +10,12 @@
       >
         <tr>
           <td
-            style="vertical-align: middle; width:100%;"
             class="stx-edit-text stx-position-relative"
-            :width="component.text.attribute.width"
+            :width="component.text.attribute.width || '100%'"
             :valign="component.text.attribute.valign || 'top'"
             :align="component.text.attribute.align || 'left'"
             :bgcolor="component.text.attribute.bgcolor"
-            :style="[fontStyles(component.text), elementBorderPaddingAndWidth(component.text)]"
+              :style="[fontStyles(component.text), elementBorderAndPadding(component.text), {'width': widthStyle(component.text.attribute.width) || '100%'}]"
           >
             <div
               class="stx-edit-text stx-wrapper"
