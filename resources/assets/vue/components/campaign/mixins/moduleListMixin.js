@@ -24,8 +24,14 @@ export default {
       }, []);
     },
     getLastIndex() {
-      let index = 0;
-      if (this.modules.length > 0) {
+      let index = this.modules.length;
+      if (this.campaignHasFixedTopModules()) {
+        const topIndex = this.getIndexLastFixedTopModule();
+        if (index < topIndex) {
+          index = topIndex + 1;
+        }
+      }
+      if (this.campaignHasFixedBottomModules()) {
         index = this.getIndexFirstFixedBottomModule();
       }
       return index;
@@ -60,6 +66,18 @@ export default {
           return mod.fixedPosition === item.fixedPosition;
         }
         return false;
+      });
+      return typeof found !== 'undefined';
+    },
+    campaignHasFixedTopModules() {
+      const found = this.modules.find(item => {
+        return this.isTopModule(item);
+      });
+      return typeof found !== 'undefined';
+    },
+    campaignHasFixedBottomModules() {
+      const found = this.modules.find(item => {
+        return this.isBottomModule(item);
       });
       return typeof found !== 'undefined';
     },
@@ -174,7 +192,13 @@ export default {
             this.autoScrollBottom();
           }, 25);
         } else {
-          if (newIndex > this.getLastIndex() || newIndex === undefined) {
+          if (typeof newIndex !== 'undefined') {
+            if (newIndex < this.getIndexLastFixedTopModule()) {
+              newIndex = this.getIndexLastFixedTopModule();
+            } else if (newIndex > this.getIndexFirstFixedBottomModule()) {
+              newIndex = this.getIndexFirstFixedBottomModule();
+            }
+          } else {
             newIndex = this.getLastIndex();
           }
           this.insertModule({
