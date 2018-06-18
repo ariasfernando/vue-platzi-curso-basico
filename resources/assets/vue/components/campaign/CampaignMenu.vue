@@ -135,7 +135,6 @@
       addModuleByName (moduleName, moduleType) {
         const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
-        mod.data = {};
 
         this.addModule(mod);
       },
@@ -172,7 +171,6 @@
 
         const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
-        mod.data = {};
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop
         // an element into email canvas
         cloneEl.addEventListener('click', (e) => {

@@ -195,7 +195,6 @@
         // Find module in items by type: item or subitem
         const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
-        mod.data = {};
         this.addModule(mod, e.newIndex);
 
         // Remove ghost element
