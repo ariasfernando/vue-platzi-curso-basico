@@ -1,5 +1,5 @@
 <template>
-  <div class="plugin-wrapper-inner">
+  <div class="plugin-wrapper-inner" v-if="module">
     <form class="form-horizontal">
       <div class="form-group">
         <div class="col-sm-8 pd-reset-right">
@@ -25,43 +25,58 @@
     props: ['name', 'plugin', 'moduleId', 'columnId', 'componentId', 'component', 'order'],
     computed: {
       module() {
-        return this.$store.getters["campaign/modules"][this.moduleId];
+        return this.$store.getters["campaign/modules"][typeof this.currentCustomModule === 'undefined' ? this.moduleId : this.currentCustomModule];
+      },
+      isCustom() {
+        return typeof this.currentCustomModule !== 'undefined'
+      },
+      currentCustomModule() {
+        return this.$store.getters["campaign/currentCustomModule"];
       },
     },
     methods: {
-      getValue(elementId){
-        for (let columnId in this.module.structure.columns) {
-          let column = this.module.structure.columns[columnId];
-          for (let componentId in column.components) {
-            if (this.module.structure.columns[columnId].components[componentId].id === _.parseInt(elementId)) {
-              return this.module.structure.columns[columnId].components[componentId].container.styleOption.enableElement;
+      getElement(elementId){
+        if (!this.isCustom) {
+          for (let columnId in this.module.structure.columns) {
+            let column = this.module.structure.columns[columnId];
+            for (let componentId in column.components) {
+              if (this.module.structure.columns[columnId].components[componentId].id === _.parseInt(elementId)) {
+                return {element: this.module.structure.columns[columnId].components[componentId].container.styleOption, columnId, componentId};
+              }
             }
           }
+        } else {
+          return {element: this.module.data[elementId]};
         }
       },
+      getValue(elementId){
+        return this.getElement(elementId).element.enableElement;
+      },
       toggleElement(value, elementId){
-        for (let columnId in this.module.structure.columns) {
-          let column = this.module.structure.columns[columnId];
-          for (let componentId in column.components) {
-            if (this.module.structure.columns[columnId].components[componentId].id === _.parseInt(elementId)) {
-              const payload = {
-                moduleId: this.moduleId,
-                columnId,
-                componentId,
-                subComponent: 'container',
-                link: "styleOption",
-                property: 'enableElement',
-                value: value
-              };
-              this.$store.commit("campaign/saveComponentProperty", payload);
-              return;
-            }
-          }
+        if (this.isCustom) {
+          let data = {};
+          data[elementId] = {"enableElement" : value}
+          this.$store.commit('campaign/saveCustomModuleData', {
+            moduleId: this.currentCustomModule,
+            data,
+          });
+        } else {
+          const element = this.getElement(elementId)
+          const payload = {
+            moduleId: this.moduleId,
+            columnId: element.columnId,
+            componentId: element.componentId,
+            subComponent: 'container',
+            link: "styleOption",
+            property: 'enableElement',
+            value: value
+          };
+          this.$store.commit("campaign/saveComponentProperty", payload);
+          return;
         }
       },
       toggleChange(value, elementId) {
         if(this.plugin.data.preventEmpty && !value){
-          let permitted = false;
           for (let i in this.plugin.data.elements) {
             if(this.plugin.data.elements[i].id !== elementId && this.getValue(this.plugin.data.elements[i].id)){
               this.toggleElement(value, elementId);
