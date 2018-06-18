@@ -94,33 +94,54 @@ var userController = function( customOptions ){
 				options.busy = true;
 
 				_this.doAjax(action, "POST", $(form).serializeArray())
-					.done(function (data) {
+					.done(function(data) {
 
 						options.busy = false;
-
-						if (data.status == 0 || data.status == 1 ) {
-							$.magnificPopup.close();
-							if ("message" in data) {
-								Application.utils.alert.display("Success!", data.message, "success");
-							}
-							_this.refreshTableView( $( options.selectors.dataList ).attr("id") );
-						} else {
-							if (data.status == 3) {
-								var errorField = $(options.selectors.mainView).find(".user_email");
-								errorField.focus().addClass("error");
-								errorField.parent().append('<label class="error">' + data.message + '</label>');
-							}
-							if (data.status == 2) {
-								$.magnificPopup.close();
-								Application.utils.alert.display("Error:", data.message, "danger");
-							}
-						}
-						return false;
+            $.magnificPopup.close();
+            if ("message" in data) {
+              Application.utils.alert.display("Success!", data.message, "success");
+            }
+            _this.refreshTableView( $( options.selectors.dataList ).attr("id") );
 					})
-					.fail(function (error) {
-						options.busy = false;
-						Application.utils.alert.display("Error:", "An error occurred while trying to save the user, please try again later.", "danger");
-					});
+					.fail(function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+
+            options.busy = false;
+            if (xhr.status === 422) {
+
+              var addError = function(field, message) {
+                var errorField = $(options.selectors.mainView).find(field);
+                errorField.focus().addClass('error');
+                errorField.parent().find('label.error').remove();
+								errorField.parent().append('<label class="error">' + message + '</label>');
+              };
+
+              if (response.errors.name) {
+                addError('.user_name', 'Please remove invalid characters from First Name');
+              }
+              if (response.errors.last_name) {
+                addError('.user_last_name', 'Please remove invalid characters from Last Name');
+              }
+              if (response.errors.user_exists) {
+                addError('.user_email', 'The email is already registered.');
+              }
+              if (response.errors.data_required) {
+                addError('.user_email', 'The email is required.');
+              }
+              if (response.errors.max_users) {
+                Application.utils.alert.display("Error:", 'The maximum number of users has been reached.', "danger");
+              }
+              if (response.errors.roles) {
+                // Application.utils.alert.display("Error:", 'Please select a valid Role.', "danger");
+                addError('div.roles-list', 'Please select at least one valid Role.');
+              }
+
+            } else {
+              var message = "An error occurred while trying to save the user, please try again later.";
+              Application.utils.alert.display("Error:", message, "danger");
+            }
+          }
+        );
 			}
 		}
 	};
