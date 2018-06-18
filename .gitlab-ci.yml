@@ -40,12 +40,6 @@ before_script:
   # Install CI components.
   - cd ci/; php ../composer.phar install; cd ..
 
-test_composer_vulnerabilities:
-  stage: test
-  script:
-    - wget http://get.sensiolabs.org/security-checker.phar
-    - php security-checker.phar security:check composer.lock
-
 phplint:
   stage: test
   script:
@@ -59,7 +53,7 @@ phplint:
     paths:
       - ci/storage/tmp/phplint.txt
 
-test_js:
+jsunit:
   stage: test
   script:
     - npm run test:single
