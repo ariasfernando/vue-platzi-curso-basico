@@ -98,7 +98,12 @@ class StaticProcessor
             }
         }
 
-        \AssetManager::deploy($data);
+        try {
+            \AssetManager::deploy($data);
+        } catch (\Exception $exception) {
+            Log::error('StaticProcessor error: ' . $exception->getMessage());
+            throw $exception;
+        }
     }
 
     /**
