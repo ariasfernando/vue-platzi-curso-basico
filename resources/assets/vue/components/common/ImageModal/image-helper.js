@@ -64,9 +64,10 @@ function getBase64Img(image) {
   });
 }
 
-function checkGIFSize(image, size) {
+function checkSize(image, size, dontAllowSmaller) {
   return new Promise((resolve, reject) => {
-    if (!image.includes('data:image/gif;base64')) {
+    const strict = image.includes('data:image/gif;base64');
+    if (!dontAllowSmaller && !strict) {
       return resolve();
     }
     const tmpImg = new Image();
@@ -75,16 +76,16 @@ function checkGIFSize(image, size) {
     tmpImg.onload = () => {
       const width = tmpImg.naturalWidth;
       const height = tmpImg.naturalHeight;
-      if (width !== size.width) {
+      if ((strict && width !== size.width) || (!strict && width < size.width)) {
         hasErr = true;
-        msg = msg.concat(`${size.width}px in width`);
+        msg = msg.concat(`${size.width}px ${strict ? 'in' : 'or greater in'} width`);
       }
-      if (!size.auto && height !== size.height) {
+      if ((strict && !size.auto && height !== size.height) || (!strict && !size.auto && height < size.height)) {
         if (hasErr) {
           msg = msg.concat(' and ');
         }
         hasErr = true;
-        msg = msg.concat(`${size.height}px in height`);
+        msg = msg.concat(`${size.height}px ${strict ? 'in' : 'or greater in'}  height`);
       }
 
       if (hasErr) {
@@ -96,50 +97,8 @@ function checkGIFSize(image, size) {
   });
 }
 
-function adjustSize(resize, image, size) {
-  return new Promise((resolve, reject) => {
-    if (!resize) {
-      resolve();
-    }
-    const tmpImg = new Image();
-    const newSize = size;
-    tmpImg.onload = () => {
-      const width = tmpImg.naturalWidth;
-      const height = tmpImg.naturalHeight;
-      let resized = false;
-      if (height < size.height) {
-        resized = true;
-        newSize.height = height;
-      }
-      if (width < size.width) {
-        resized = true;
-        newSize.width = width;
-      }
-      if (!resized) {
-        if (height > size.height || width > size.width) {
-          if (height > width) {
-            let p = width * 100 / height;
-            newSize.width = size.height * parseInt(p) / 100;
-          } else if (width > height) {
-            let p = height * 100 / width;
-            newSize.height = size.width * parseInt(p) / 100;
-           } else if (width == height) {
-            newSize.width = newSize.height;
-          }
-        }
-      }
-      return resolve(newSize);
-    };
-
-    tmpImg.onerror = () => reject();
-
-    tmpImg.src = image;
-  });  
-}
-
 export default {
   getBase64Img,
   checkFile,
-  checkGIFSize,
-  adjustSize,
+  checkSize,
 };
