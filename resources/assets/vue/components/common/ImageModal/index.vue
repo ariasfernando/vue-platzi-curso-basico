@@ -196,7 +196,7 @@ export default {
         auto: this.params['sie-size']['size_auto'].value
       }
 
-      return imageHelper.checkSize(imageSource, this.sieOptions.size, this.params.smaller)
+      return imageHelper.checkSize(imageSource, size, this.params.smaller)
         .then(() => {
           this.currentImage = imageSource;
           this.changeImage(this.params);
