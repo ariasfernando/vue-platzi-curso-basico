@@ -9,6 +9,7 @@ import styleImageEditor from './style-image-editor';
 import textOptions from './text-options';
 import variableHeight from './variable-height';
 import verticalAlignment from './vertical-alignment';
+import textColorByBackground from './text-color-by-background';
 
 export default {
   alignment,
@@ -22,4 +23,5 @@ export default {
   textOptions,
   variableHeight,
   verticalAlignment,
+  textColorByBackground,
 };

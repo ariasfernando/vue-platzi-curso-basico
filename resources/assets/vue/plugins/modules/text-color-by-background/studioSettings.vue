@@ -6,13 +6,15 @@
   </settings-container>
 </template>
 <script>
-  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import SettingsContainer from "stensul/components/common/settings/containers/SettingsContainer.vue";
+
   export default {
-    props: ['name', 'plugin'],
+    props: ['name', 'plugin', 'columnId'],
     components: { SettingsContainer },
     methods: {
       toggle(value) {
         const payload = {
+          columnId: this.columnId,
           plugin: this.name,
           enabled: value,
         };

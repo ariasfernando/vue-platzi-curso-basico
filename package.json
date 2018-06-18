@@ -15,6 +15,7 @@
     "bootstrap-select": "^1.7.5",
     "bootstrap-vue": "^1.2.0",
     "clone": "^2.1.1",
+    "contrast": "^1.0.1",
     "cropit": "~0.5.1",
     "del": "^3.0.0",
     "dotenv": "^4.0.0",
