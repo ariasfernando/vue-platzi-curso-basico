@@ -146,16 +146,32 @@
         this._save(bodyHtml).then(response => {
           this.$root.$toast('Email saved', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       _save(bodyHtml = undefined) {
-        return this.$store.dispatch("campaign/saveCampaign", {
+        const promise = this.$store.dispatch("campaign/saveCampaign", {
           campaign: this.campaign,
           bodyHtml
         });
+        promise.then(response => {
+
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          let message = 'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.';
+
+          if (error.status === 422) {
+            if (error.body.errors) {
+              if (error.body.errors.campaign_name || error.body.errors.campaign_preheader) {
+                message = 'HTML like tags are not allowed on Email Name and Preheader Text, please correct it to continue.';
+              }
+            }
+          }
+          this.$root.$toast(
+            message,
+            {className: 'et-error'}
+          );
+        });
+        return promise;
       },
       _validate(message = undefined) {
         if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors) {
@@ -253,9 +269,6 @@
                   });
                 }, 1000);
               }
-          }, error => {
-            this.$store.commit("global/setLoader", false);
-            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
         });
       },
@@ -264,9 +277,6 @@
           if (this.dirty && this.campaign.campaign_data.auto_save !== false) {
             this.$store.commit("global/setSecondaryLoader", true);
             this._save().then(response => {
-              this.$store.commit("global/setSecondaryLoader", false);
-            }, error => {
-              this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
               this.$store.commit("global/setSecondaryLoader", false);
             });
           }
@@ -281,9 +291,6 @@
         });
         this._save(bodyHtml).then(response => {
           this.$store.commit("campaign/toggleModal", 'modalPreview');
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       proof() {
@@ -303,9 +310,6 @@
         this._save(bodyHtml).then(response => {
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalProof');
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
     },
