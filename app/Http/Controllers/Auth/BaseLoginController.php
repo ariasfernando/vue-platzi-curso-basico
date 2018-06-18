@@ -142,6 +142,10 @@ class BaseLoginController extends Controller
             } else {
                 Activity::log('User Logged in');
             }
+            if ($user->unconfirmed) {
+                $user->unconfirmed = 0;
+                $user->save();
+            }
         }
 
         if (PasswordPolicy::should_update_password($user)) {

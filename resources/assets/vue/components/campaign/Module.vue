@@ -7,7 +7,7 @@
   >
     <td class="stx-toolbar-content stx-position-relative"
         :data-module-id="moduleId"
-        :class="{ 'stx-show-error': module.data.errors && module.data.errors.length }"
+        :class="{ 'stx-show-error': hasErrors }"
         @click.prevent="config"
     >
       <component :is="'custom-' + module.key" :module="module" :module-id="moduleId"></component>
@@ -31,7 +31,7 @@
       :style="module.structure.style"
       :valign="module.structure.attribute.valign || 'top'"
       :bgcolor="module.structure.attribute.bgcolor"
-      :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}"
+      :class=" { 'stx-show-error': hasErrors, 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}"
     >
 
       <table
@@ -41,7 +41,6 @@
         border="0"
         class="st-wrapper" 
         align="center"
-        :class="{ 'stx-wrapper': module.structure.columns.length === 1 }"
       >
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
@@ -154,12 +153,25 @@
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
   import ComponentAttributeMixin from '../common/mixins/ComponentAttributeMixin.js';
+  import validatorMixin from '../../plugins/modules/mixins/validator.js';
   import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
     props: ['moduleId'],
-    mixins: [ ComponentAttributeMixin ],
+    mixins: [ ComponentAttributeMixin, validatorMixin ],
+    created() {
+      if(this.module.type === 'studio'
+          && ((this.module.structure && this.module.structure.columns && this.module.structure.columns.length > 1)
+              || (this.module.structure && this.module.structure.columns && this.module.structure.columns.length === 1
+                  && this.module.structure.columns[0].components.length > 1)
+            )
+        ) {
+        // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
+        // so we need to check a flag to aid the user to open each module and run the validations at least once
+        return this.validateMulticolumnStudioModule();
+      }
+    },
     computed: {
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
@@ -168,10 +180,7 @@
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
       moduleErrors() {
-        return this.$store.getters["campaign/moduleErrors"];
-      },
-      fieldErrors() {
-        return this.$store.getters["campaign/fieldErrors"];
+        return this.module.data.errors || [];
       },
       msoStartingComment() {
         return `
@@ -194,6 +203,9 @@
       },
       columnWidthPadding(){
         return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
+      },
+      hasErrors() {
+        return this.module.data && this.module.data.errors && this.module.data.errors.length;
       }
     },
     methods: {
@@ -214,18 +226,6 @@
           return this.templateWidthWithoutPadding / 100 * _.parseInt(width);
         }
         return width;
-      },
-      showError(moduleId){
-        let err = false;
-        _.each(this.moduleErrors, (error, key) => {
-           if (!_.isUndefined(error.scope.moduleId)){
-              if (error.scope.moduleId === moduleId){
-                err = true;
-              }
-           }
-        });
-
-        return err;
       },
       config() {
         this.$store.commit("campaign/setCustomModule", this.moduleId);

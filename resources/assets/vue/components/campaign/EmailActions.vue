@@ -146,19 +146,35 @@
         this._save(bodyHtml).then(response => {
           this.$root.$toast('Email saved', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       _save(bodyHtml = undefined) {
-        return this.$store.dispatch("campaign/saveCampaign", {
+        const promise = this.$store.dispatch("campaign/saveCampaign", {
           campaign: this.campaign,
           bodyHtml
         });
+        promise.then(response => {
+
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          let message = 'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.';
+
+          if (error.status === 422) {
+            if (error.body.errors) {
+              if (error.body.errors.campaign_name || error.body.errors.campaign_preheader) {
+                message = 'HTML like tags are not allowed on Email Name and Preheader Text, please correct it to continue.';
+              }
+            }
+          }
+          this.$root.$toast(
+            message,
+            {className: 'et-error'}
+          );
+        });
+        return promise;
       },
       _validate(message = undefined) {
-        if (this.moduleErrors) {
+        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors) {
           this.$root.$toast(
             message || 'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
             'or remove the incomplete module(s).',
@@ -168,6 +184,24 @@
               closeable: true
             }
           );
+
+          this.$_app.utils.validator.modulesErrors('#emailCanvas');
+          this.$store.commit('campaign/campaignValidated', true);
+
+          return false;
+        }
+        return true;
+      },
+      _validateEmptyEmail(message = undefined) {
+        if (this.modules.length === 0) {
+          this.$root.$toast(
+            message || 'You cannot complete an empty email.',
+            {
+              className: 'et-error',
+              closeable: true
+            }
+          );
+
           return false;
         }
         return true;
@@ -179,32 +213,8 @@
         return campaignService.checkProcessStatus(processId);
       },
       complete() {
-        if (this.modules.length === 0) {
-          this.$root.$toast(
-            'You cannot finish an empty email.',
-            {
-              className: 'et-error',
-              closeable: true
-            }
-          );
-
-          return false;
-        }
-
         // Do not save if there are missing or wrong fields
-        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors) {
-          this.$_app.utils.validator.modulesErrors('#emailCanvas');
-
-          this.$root.$toast(
-            'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
-            'or remove the incomplete module(s).',
-            {
-              className: 'et-error',
-              closeable: true
-            }
-          );
-
-          this.$store.commit('campaign/campaignCompleted', true);
+        if (!this._validateEmptyEmail() || !this._validate()) {
           return false;
         }
 
@@ -252,9 +262,6 @@
                   });
                 }, 2000);
               }
-          }, error => {
-            this.$store.commit("global/setLoader", false);
-            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
         });
       },
@@ -263,9 +270,6 @@
           if (this.dirty && this.campaign.campaign_data.auto_save !== false) {
             this.$store.commit("global/setSecondaryLoader", true);
             this._save().then(response => {
-              this.$store.commit("global/setSecondaryLoader", false);
-            }, error => {
-              this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
               this.$store.commit("global/setSecondaryLoader", false);
             });
           }
@@ -280,15 +284,12 @@
         });
         this._save(bodyHtml).then(response => {
           this.$store.commit("campaign/toggleModal", 'modalPreview');
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       proof() {
         // Do not show proof modal if there are missing or wrong fields
-        let message = 'To send an email for review, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.';
-        if (!this._validate(message)) {
+        let validateMessage = 'To send an email for review, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.';
+        if (!this._validateEmptyEmail('You cannot send for review an empty email.')) {
           return false;
         }
 
@@ -302,9 +303,6 @@
         this._save(bodyHtml).then(response => {
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalProof');
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
     },

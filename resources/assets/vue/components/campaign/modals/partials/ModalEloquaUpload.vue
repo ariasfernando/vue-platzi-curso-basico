@@ -58,12 +58,23 @@
         subject: '',
         uploadedHistory: {},
         uploadedSuccessfully: false,
+        oauthResponse: false,
       }
     },
     computed: {
       campaign () {
         return this.$store.state.campaign.campaign;
       },
+      oauthToken () {
+        return this.$store.state.api.oauthToken;
+      },
+    },
+    watch: {
+      oauthToken(value) {
+        if (value) {
+          this.oauthCallback();
+        }
+      }
     },
     props: {
       espProviderConfig: {
@@ -71,28 +82,51 @@
       }
     },
     methods: {
+      openOauthModal() {
+        window.open( this.$_app.config.baseUrl + '/api/oauth', 'login_popup',
+            'height=700,width=800,status=0,location=0,toolbar=0,top=50,left=200');
+
+        return false;
+      },
+      oauthCallback () {
+        this.upload();
+      },
       uploadEmail () {
+        this.$store.commit("global/setLoader", true);
+
+        if (this.espProviderConfig.use_oauth) {
+          if (this.oauthToken) {
+            this.upload();
+          } else {
+            this.openOauthModal();
+          }
+        } else {
+          this.upload();
+        }
+      },
+      upload () {
         const data = {
           campaign_id: this.campaign.campaign_id,
           api_driver: this.espProviderConfig.class,
           use_oauth: this.espProviderConfig.use_oauth,
-          access_token: this.espProviderConfig.token,
           filename: this.filename,
           subject: this.subject
-        }
-        this.$store.commit("global/setLoader", true);
+        };
 
+        if (this.oauthToken) {
+          data.access_token = this.oauthToken.access_token;
+        }
         apiService.uploadEmail(data).then((response) => {
-          this.uploadedSuccessfully = true;
-          this.updateUploadedTable();
-          this.$store.commit("global/setLoader", false);
-        },(error) => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast(
-            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-            {className: 'et-error'}
-          )}
-        ); 
+            this.uploadedSuccessfully = true;
+            this.updateUploadedTable();
+            this.$store.commit("global/setLoader", false);
+          },(error) => {
+            this.$store.commit("global/setLoader", false);
+            this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+              {className: 'et-error'}
+            )}
+        );
       },
       updateUploadedTable () {
         apiService.uploadedHistory(this.campaign.campaign_id).then((response) => this.uploadedHistory = response);

@@ -67,15 +67,21 @@ export default {
         size_fit: {
           label: 'Image Fit',
           key: 'fit',
-          value: "1",
+          value: '1',
           type: 'select',
           options: {
-            0:'Contain',
-            1:'Cover',
-            2:'Max Size'
-          }
-        }
+            0: 'Contain',
+            1: 'Cover',
+            2: 'Max Size',
+          },
+        },
       },
+    }, 
+    smaller: {
+      label: 'Don\'t allow smaller images',
+      key: 'dontAllowSmaller',
+      value: false,
+      type: 'switch',
     },
     'sie-plugin-image_upload': {
       label: 'Upload',
@@ -127,6 +133,12 @@ export default {
           value: false,
           type: 'switch',
         },
+        cropbox: {
+          label: 'Move cropbox',
+          key: 'cropBoxMovable',
+          value: true,
+          type: 'switch',
+        },
         round: {
           label: 'Circle Cropping',
           key: 'cropper_roundCrop',
@@ -144,7 +156,7 @@ export default {
               key: 'diameter',
               value: 0,
               type: 'number',
-              step: 1,          
+              step: 1,
             },
           },
         },
@@ -213,7 +225,7 @@ export default {
           key: 'changable',
           value: true,
           type: 'switch',
-        },        
+        },
         overlay_width: {
           label: 'Width',
           key: 'width',
@@ -307,7 +319,7 @@ export default {
               key: 'height',
               value: 0,
               type: 'number',
-              step: 1,              
+              step: 1,
             },
             square_top: {
               label: 'Top',

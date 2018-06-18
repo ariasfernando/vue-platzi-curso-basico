@@ -40,10 +40,10 @@ Application.utils = {
                 // Build text message
                 var text = "";
                 if( title != "" ){
-                    text += "<strong>"+title+"</strong> ";
+                    text += '<strong>' + title.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</strong> ';
                 }
                 if( message != "" ){
-                    text += message;
+                    text += message.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                 }
 
                 // Change Text
