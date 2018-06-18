@@ -103,6 +103,7 @@ export default {
     },
     addModule(m, newIndex) {
       const mod = clone(m);
+      mod.data = mod.data ? mod.data : {};
       mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
 
       //TODO: handle fixed modules at non-header/non-footer position
