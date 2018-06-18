@@ -30,6 +30,7 @@
                 :move="onMove"
                 @add="onAdd"
                 @sort="onSort"
+                @choose="onChoose"
                  v-if="isNotEmptyList">
                   <module
                     v-for="(module, moduleId) in dragList"
@@ -192,11 +193,9 @@
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
 
         // Find module in items by type: item or subitem
-        const found = moduleType === 'item'
-          ? _.find(this.items, (m) => m.name === moduleName)
-          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
-
-        this.addModule(found, e.newIndex);
+        const found = this.findModule(moduleName, moduleType);
+        const mod = clone(found);
+        this.addModule(mod, e.newIndex);
 
         // Remove ghost element
         const cloneItem = e.item;
@@ -224,6 +223,12 @@
         }
       },
       onSort(e){
+        this.$store.commit('campaign/unsetCustomModule');
+        this.$store.commit('campaign/unsetCurrentComponent');
+
+        this.$store.commit('campaign/setActiveModule', e.newIndex);
+        this.$store.commit("campaign/setDirty", true);
+
         if (_.has(this.activeModule, 'type') && this.activeModule.type === 'studio') {
           // Save current component if module type is studio
           this.$store.commit('campaign/setCurrentComponent', {
@@ -231,15 +236,14 @@
             columnId: 0,
             componentId: 0,
           });
-          this.$store.commit('campaign/unsetCustomModule');
         } else {
           // Save customModule if module type is custom
           this.$store.commit('campaign/setCustomModule', e.newIndex);
-          this.$store.commit('campaign/unsetCurrentComponent');
         }
-
-        this.$store.commit('campaign/setActiveModule', e.newIndex);
-        this.$store.commit("campaign/setDirty", true);
+      },
+      onChoose() {
+        this.$store.commit('campaign/unsetCustomModule');
+        this.$store.commit('campaign/unsetCurrentComponent');
       },
       onMouseOver () {
         $("#emailCanvas").addClass("hovered");
