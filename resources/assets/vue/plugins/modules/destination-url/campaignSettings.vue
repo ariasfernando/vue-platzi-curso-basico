@@ -70,7 +70,7 @@
         return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
       },
       moduleErrors() {
-        return this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
+        return this.module.data && this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
                                                         && _.isEqual(err.scope.columnId, this.currentComponent.columnId)
                                                         && _.isEqual(err.scope.componentId, this.currentComponent.componentId))) : [];
       },
