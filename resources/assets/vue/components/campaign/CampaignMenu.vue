@@ -132,14 +132,9 @@
       getLibrary () {
         return this.$store.dispatch("library/getModulesData", this.libraryId);
       },
-      addModuleByName (moduleName, type) {
-        // Find module in items by type: item or subitem
-        const found = type === 'item'
-          ? _.find(this.items, (m) => m.name === moduleName)
-          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
-
+      addModuleByName (moduleName, moduleType) {
+        const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
-        mod.data = {};
 
         this.addModule(mod);
       },
@@ -173,11 +168,8 @@
         let cloneEl = evt.clone;
         let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
-        // Find module into items as item or subitem
-        const found = moduleType === 'item'
-          ? _.find(this.items, (m) => m.name === moduleName)
-          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
+        const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop
         // an element into email canvas

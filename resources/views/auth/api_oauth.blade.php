@@ -10,7 +10,7 @@
 
     <script type="text/javascript">
         var data = {!! $data !!};
-        window.opener.Application.api().oauthCallback(data);
+        window.opener.vm.$store.commit('api/setOauthToken', data);
         self.close();
     </script>
 

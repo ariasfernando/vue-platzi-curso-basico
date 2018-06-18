@@ -58,8 +58,16 @@
                   </div>
                 </div>
               </div>
-              <div v-show="page.three" style="overflow-y: auto; max-height: calc(100vh - 187px); min-height: 300px; height:100%" ref="wrapperSie">
-                <style-image-editor v-if="page.three && this.currentImage" :sieoptions="sieOptions" ref="sie" @image-submit="submitImage">
+              <div
+                v-show="page.three"
+                ref="wrapperSie"
+                class="wrapper-sie"
+                >
+                <style-image-editor 
+                v-if="page.three && this.currentImage" 
+                :sieoptions="sieOptions" 
+                ref="sie" 
+                @image-submit="submitImage">
                 </style-image-editor>
               </div>
             </slot>
@@ -92,7 +100,7 @@ import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
 
 export default {
-  props: ['config', 'libraryImages', 'data', 'resizeIfSmaller'],
+  props: ['config', 'libraryImages', 'data'],
   components: {
     styleImageEditor
   },
@@ -165,7 +173,7 @@ export default {
       this.reset();
       this.$emit('clean');      
     },
-    generateSieOptions(changeImage = false, newSize = {}) {
+    generateSieOptions(changeImage = false) {
       const sieOptions = {
         api: this.$_app.config.sieAPI
       };
@@ -176,20 +184,23 @@ export default {
         sieOptions.preset = sieHelper.completeUrlPath(this.$_app.config.imageUrl, sieOptions.preset);
       }
 
-      Object.assign(sieOptions.size, newSize);
-
       this.sieOptions = sieOptions;
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
       }
     },
     setImage(imageSource) {
-      return imageHelper.checkGIFSize(imageSource, this.sieOptions.size)
-        .then(() => imageHelper.adjustSize(this.resizeIfSmaller || false, imageSource, this.sieOptions.size))
-        .then((newSize) => {
+      const size = {
+        width: this.params['sie-size']['size_width'].value,
+        height: this.params['sie-size']['size_height'].value,
+        auto: this.params['sie-size']['size_auto'].value
+      }
+
+      return imageHelper.checkSize(imageSource, this.sieOptions.size, this.params.smaller)
+        .then(() => {
           this.currentImage = imageSource;
           this.changeImage(this.params);
-          this.generateSieOptions(true, newSize);
+          this.generateSieOptions(true);
           this.page = {
             one: false,
             two: false,
@@ -228,6 +239,7 @@ export default {
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
       }
+      this.sieOptions = {};
       this.currentImage = null;
       this.newImage = true;
       this.isDisabled = false;
@@ -236,6 +248,11 @@ export default {
         two: false,
         three: false
       };
+    },
+    clearEvents(){
+      removeEventListener('showSubToolbar', this.disableSubmit);
+      removeEventListener('saveEdit', this.enableSubmit);
+      removeEventListener('cancelEdit', this.enableSubmit);
     },
     submitImage(data) {
       data.state.preset = sieHelper.removeUrlPath(
@@ -292,6 +309,9 @@ export default {
     }
     this.generateSieOptions();
   },
+  beforeDestroy(){
+    this.clearEvents();
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -303,6 +323,7 @@ export default {
     position: absolute;
     transform: translate(-50%, -50%);
     width: 80%;
+    max-height: calc(100vh - 5%);
     .modal-container,
     .modal-body {
       width: 100%;
@@ -321,7 +342,11 @@ export default {
     }
     .modal-body {
       margin: 0;
-      height: calc(100vh - 175px);
+      height: calc(100% - 85px);
+      overflow-y: auto;
+      .wrapper-sie {
+        height: 100%;
+      }
     }
     .modal-footer {
       padding-top: 10px;

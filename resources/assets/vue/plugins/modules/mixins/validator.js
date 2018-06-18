@@ -9,6 +9,7 @@ export default {
             _.extend(err, { scope: {
               type: 'plugin',
               name: this.name,
+              msg: err.msg,
               ...this.currentComponent,
             }});
           });
@@ -23,7 +24,73 @@ export default {
 
           this.$_app.utils.validator.modulesErrors('#emailCanvas');
         }
+
+        this.validated = true;
       });
     },
+    validateMulticolumnStudioModule() {
+      // studio modules with multiple columns which have plugins with validation do not trigger when the module is added
+      // so we need to check a flag to aid the user to open each module and run the validations at least once
+      
+      let hasErrors = false;
+
+      if(this.module.structure && this.module.structure.columns && this.module.structure.columns) {
+        _.each(this.module.structure.columns, (column, columnIndex) => {
+          _.each(column.components, (component, componentIndex) => {
+            _.each(component.plugins, (plugin, pluginIndex) => {
+
+              if(plugin.config.validations) {
+                let validationsRequired = false;
+                _.each(plugin.config.validations, (validation, pluginIndex) => {
+                  if(plugin.enabled && validation && !plugin.data.validated) {
+                    validationsRequired = true;
+                  }
+                });
+                if(validationsRequired) {
+                  // if the validations are enabled and were never ran we assume they have errors
+                  hasErrors = true;
+
+                  let error = {
+                    scope: {
+                      type: 'plugin',
+                      name: plugin.name,
+                      moduleId: this.moduleId,
+                      columnId: columnIndex,
+                      componentId: componentIndex
+                    }
+                  }
+
+                  this.$store.dispatch('campaign/addErrors', [error]);
+                }
+              }
+
+            });
+          });
+        });
+      }
+
+      return hasErrors;
+    },
   },
+  computed: {
+    validated: {
+      get() {
+        return this.plugin.data.validated;
+      },
+      set(value) {
+        const payload = {
+          plugin: this.pluginKey,
+          moduleId: this.currentComponent.moduleId,
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          data: {
+            validated: value,
+          },
+        };
+  
+        // Save plugin data
+        this.$store.commit("campaign/savePlugin", payload);
+      }
+    },
+  }
 };
