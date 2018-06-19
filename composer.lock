@@ -119,16 +119,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.61.6",
+            "version": "3.61.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "a2477aacfb780a024c9a20fdb6f6c3fbf5cc84d1"
+                "reference": "7df3b62d06da6512c752b2fd224a65fc0d8c0cbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a2477aacfb780a024c9a20fdb6f6c3fbf5cc84d1",
-                "reference": "a2477aacfb780a024c9a20fdb6f6c3fbf5cc84d1",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7df3b62d06da6512c752b2fd224a65fc0d8c0cbe",
+                "reference": "7df3b62d06da6512c752b2fd224a65fc0d8c0cbe",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-06-13T21:37:13+00:00"
+            "time": "2018-06-15T21:48:00+00:00"
         },
         {
             "name": "bjeavons/zxcvbn-php",
@@ -1409,16 +1409,16 @@
         },
         {
             "name": "laravelcollective/html",
-            "version": "v5.6.9",
+            "version": "v5.6.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LaravelCollective/html.git",
-                "reference": "fda9d3dad85ecea609ef9c6323d6923536cf5643"
+                "reference": "974605fcd22a7e4d19f0b2ef635a0d1d7400387d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/fda9d3dad85ecea609ef9c6323d6923536cf5643",
-                "reference": "fda9d3dad85ecea609ef9c6323d6923536cf5643",
+                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/974605fcd22a7e4d19f0b2ef635a0d1d7400387d",
+                "reference": "974605fcd22a7e4d19f0b2ef635a0d1d7400387d",
                 "shasum": ""
             },
             "require": {
@@ -1473,7 +1473,7 @@
             ],
             "description": "HTML and Form Builders for the Laravel Framework",
             "homepage": "https://laravelcollective.com",
-            "time": "2018-05-30T16:09:07+00:00"
+            "time": "2018-06-18T15:04:16+00:00"
         },
         {
             "name": "league/climate",
@@ -2555,11 +2555,17 @@
         },
         {
             "name": "stensul/asset-manager",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
-                "url": "/storage/asset-manager",
-                "reference": "2021a382513b031a784dfc6e2c986493a2402250"
+                "url": "git@git.stensuldev.net:composer/asset-manager.git",
+                "reference": "1c605820ce5fadccfc533f8ed2ecc9c460fa003c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://composer.stensuldev.net/dist/stensul/asset-manager/stensul-asset-manager-v1.0.1-e700cf.zip",
+                "reference": "1c605820ce5fadccfc533f8ed2ecc9c460fa003c",
+                "shasum": "f127711a2e34f9ae94d1047417f9aeb46185158f"
             },
             "require": {
                 "aws/aws-sdk-php": "^3.61",
@@ -2602,7 +2608,7 @@
                 }
             ],
             "description": "Manage assets for the stensul email creator. Process assets in parallel.",
-            "time": "2018-06-14T20:49:03+00:00"
+            "time": "2018-06-18T17:10:26+00:00"
         },
         {
             "name": "stensul/filesystem",
