@@ -44,10 +44,6 @@
     },
     "repositories": [
       {
-        "type": "git",
-        "url": "/storage/asset-manager"
-      },
-      {
         "type": "composer",
         "url": "https://composer.stensuldev.net"
       }
