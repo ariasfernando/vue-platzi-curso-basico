@@ -3,7 +3,7 @@
     <label-item-container label="MODULE STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
     <div class="card" v-if="hasEnabledPlugins(module)">
       <group-container>
-        <component  v-for="(plugin, key) in module.plugins" :key="plugin.name + key" v-if="plugin.enabled && $_app.modulePlugins[key]" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+        <component  v-for="(plugin, key) in module.plugins" :key="plugin.name + key" v-if="plugin.enabled && $_app.modulePlugins[key]" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"  :module-id="currentModule"></component>
       </group-container>
     </div>
 

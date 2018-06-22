@@ -7,6 +7,7 @@ import moduleBackgroundColor from './module-background-color';
 import paletteBackgroundColor from './palette-background-color';
 import styleImageEditor from './style-image-editor';
 import textOptions from './text-options';
+import toggleElement from './toggle-element';
 import variableHeight from './variable-height';
 import verticalAlignment from './vertical-alignment';
 
@@ -20,6 +21,7 @@ export default {
   paletteBackgroundColor,
   styleImageEditor,
   textOptions,
+  toggleElement,
   variableHeight,
   verticalAlignment,
 };
