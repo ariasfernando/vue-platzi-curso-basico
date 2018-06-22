@@ -37,6 +37,7 @@
               style="vertical-align: middle; width:100%;"
               :style="buttonBorderAndPadding"
             >
+              <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>            
               <table
                 cellpadding="0"
                 cellspacing="0"
@@ -80,7 +81,6 @@
                   </td>
                 </tr>
               </table>
-              <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
             </td>
           </tr>
         </table>
