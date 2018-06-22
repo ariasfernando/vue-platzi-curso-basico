@@ -1,28 +1,24 @@
 <template>
-  <div class="plugin-wrapper-inner" v-if="module">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <div class="col-sm-8 pd-reset-right">
-          <label>{{ plugin.title }}</label>
-        </div>
-        <div class="col-sm-2">
-          <div v-for="element in plugin.data.elements" :key="element.id">
-            <label>{{ element.label }}</label>
-            <toggle-button
-              :value="getValue(element.id)"
-              @change="value => toggleChange(value, element.id)">
-            </toggle-button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
+  <settings-container :label="plugin.title" v-if="module" level="first">
+    <template slot="setting-bottom">
+      <settings-container :label="element.label" v-for="element in plugin.data.elements" :key="element.id">
+        <template slot="setting-half">
+          <toggle-button
+            :value="getValue(element.id)"
+            @change="value => toggleChange(value, element.id)">
+          </toggle-button>
+        </template>
+      </settings-container>
+    </template>
+  </settings-container>
 </template>
 
 <script>
+  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
   import _ from 'lodash';
   export default {
     props: ['name', 'plugin', 'moduleId', 'columnId', 'componentId', 'component', 'order'],
+    components: { SettingsContainer },
     computed: {
       module() {
         return this.$store.getters["campaign/modules"][typeof this.currentCustomModule === 'undefined' ? this.moduleId : this.currentCustomModule];

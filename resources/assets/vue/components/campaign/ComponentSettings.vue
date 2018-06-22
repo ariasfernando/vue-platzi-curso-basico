@@ -1,5 +1,5 @@
-<template>
-  <div class="component-settings" v-if="component">
+<template v-if="component">
+  <div>
     <label-item-container
       v-if="ready && component.plugins && Object.keys(component.plugins).length !== 0"
       :label="toCamel(component.type.replace('-element', ''))"
@@ -22,14 +22,14 @@ import GroupContainer from "../common/containers/GroupContainer.vue";
 import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
 
   export default {
+    components: {
+      GroupContainer,
+      LabelItemContainer,
+    },
     data () {
       return {
         ready: false,
       }
-    },
-    components: {
-      GroupContainer,
-      LabelItemContainer,
     },
     computed: {
       currentComponent() {

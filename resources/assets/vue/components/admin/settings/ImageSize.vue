@@ -195,7 +195,7 @@ export default {
 }
 .el-button {
   position: absolute;
-  right: 15px;
+  left: calc(50% - 43px);
   padding: 6px;
   &:active {
     background-color: #fff;
@@ -227,7 +227,7 @@ export default {
 }
 .height-icon-auto {
   position: absolute;
-  right: -15px;
+  left: calc(50% - 14px);
   margin-top: 0;
   padding: 0;
   height: 28px;
@@ -242,7 +242,7 @@ export default {
   }
 }
 .icon-height {
-  right: 0;
+  left: calc(100% - 29px);
 }
 .el-input-number {
   width: 80px;

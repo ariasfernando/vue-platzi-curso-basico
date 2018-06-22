@@ -1,5 +1,5 @@
 <template>
-    <div class="group-container" :class="customClass || ''" @click="e => $emit('click', e)"  :style="{'cursor': clickeable !== false ? 'pointer' : 'default'}">
+    <div class="group-container" :class="[customClass, {'clickeable': clickeable}]" @click="e => $emit('click', e)">
       <slot></slot>
     </div>
 </template>
@@ -16,5 +16,11 @@ export default {
     margin: 5px 0;
     background: #f9f9f9;
     border-radius: 3px;
+  }
+  .group-container.clickeable {
+    cursor: pointer;
+  }
+  .group-container.clickeable /deep/ *{
+    cursor: pointer;
   }
 </style>

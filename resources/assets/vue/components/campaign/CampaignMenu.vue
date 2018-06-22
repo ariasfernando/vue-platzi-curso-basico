@@ -18,9 +18,9 @@
           </div>
           <draggable v-else :element="'div'" :options="options" @clone="onClone" @end="onEnd">
             <group-container @click="addModuleByName(item.name, 'item')" :clickeable="true">
-              <settings-container :label="item.name" customClass="item-menu add single draggable-item" :module-id="item.name" :module-type="'item'" >
+              <settings-container :label="item.name" customClass="draggable-item" :module-id="item.name" :module-type="'item'" >
                 <template slot="setting-right">
-                  <i class="glyphicon glyphicon-plus"></i>
+                  <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
                 </template>
               </settings-container>
             </group-container>
@@ -207,3 +207,13 @@
     }
   };
 </script>
+<style lang="less" scoped>
+  .icon-plus{
+    top: 50%;
+    right: 10px;
+    font-size: 10px;
+    margin: -4px 0 0;
+    position: absolute;
+     color: #999;
+  }
+</style>
