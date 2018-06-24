@@ -10,7 +10,7 @@
       cellpadding="0" 
       cellspacing="0" 
       border="0" 
-      class="st-content-component st-wrapper"
+      class="st-content-component mobile-full-width"
       :bgcolor="column.container.attribute.bgcolor"
       :key="column.id"
     >
