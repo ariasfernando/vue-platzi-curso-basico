@@ -116,7 +116,7 @@
           @click.prevent="setComponent(moduleId, 0, componentId)"
           :key="component.id"
         >
-          <td width="100%" class="mobile-full-width" style="vertical-align: top; width: 100%;">
+          <td width="100%" class="st-mobile-full-width" style="vertical-align: top; width: 100%;">
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
               <template>
                   <component

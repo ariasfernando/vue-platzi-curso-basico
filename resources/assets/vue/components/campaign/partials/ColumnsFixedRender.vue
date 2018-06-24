@@ -1,5 +1,5 @@
 <template>
-  <table class="mobile-full-width"
+  <table class="st-mobile-full-width"
          align="left"
          width="100%"
          cellspacing="0"

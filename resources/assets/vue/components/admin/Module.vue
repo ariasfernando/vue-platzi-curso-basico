@@ -52,7 +52,7 @@
     <!-- START 1 COLUMNS -->
     <tr v-else>
       <td
-        class="mobile-full-width" 
+        class="st-mobile-full-width" 
         v-for="(column, columnId) in module.structure.columns"
         :class="[{'empty-col': !column.components.length}, module.structure.attribute.classes]" 
         :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'" 
