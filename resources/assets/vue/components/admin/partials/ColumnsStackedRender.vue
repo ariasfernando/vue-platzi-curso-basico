@@ -10,7 +10,7 @@
       cellpadding="0" 
       cellspacing="0" 
       border="0" 
-      class="st-content-component"
+      class="st-content-component st-wrapper"
       :bgcolor="column.container.attribute.bgcolor"
       :key="column.id"
     >

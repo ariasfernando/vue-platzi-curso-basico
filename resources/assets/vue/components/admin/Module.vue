@@ -52,8 +52,9 @@
     <!-- START 1 COLUMNS -->
     <tr v-else>
       <td
+        class="st-wrapper" 
         v-for="(column, columnId) in module.structure.columns"
-        :class="[{'empty-col': !column.components.length}, module.structure.attribute.classes]" 
+        :class="!column.components.length ? 'empty-col' : ''" 
         :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'" 
         :style="module.structure.style || ''"
         :bgcolor="module.structure.attribute.bgcolor"
