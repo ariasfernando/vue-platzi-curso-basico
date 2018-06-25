@@ -2555,17 +2555,17 @@
         },
         {
             "name": "stensul/asset-manager",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "git@git.stensuldev.net:composer/asset-manager.git",
-                "reference": "1c605820ce5fadccfc533f8ed2ecc9c460fa003c"
+                "reference": "66d0cb31023c340dc647fa514aed3ac5eeaf7985"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://composer.stensuldev.net/dist/stensul/asset-manager/stensul-asset-manager-v1.0.1-e700cf.zip",
-                "reference": "1c605820ce5fadccfc533f8ed2ecc9c460fa003c",
-                "shasum": "f127711a2e34f9ae94d1047417f9aeb46185158f"
+                "url": "https://composer.stensuldev.net/dist/stensul/asset-manager/stensul-asset-manager-v1.0.2-36f4b5.zip",
+                "reference": "66d0cb31023c340dc647fa514aed3ac5eeaf7985",
+                "shasum": "8961fab6ca6527bd40a91bee88b2de1ad52503d1"
             },
             "require": {
                 "aws/aws-sdk-php": "^3.61",
@@ -2608,7 +2608,7 @@
                 }
             ],
             "description": "Manage assets for the stensul email creator. Process assets in parallel.",
-            "time": "2018-06-18T17:10:26+00:00"
+            "time": "2018-06-25T17:36:48+00:00"
         },
         {
             "name": "stensul/filesystem",
