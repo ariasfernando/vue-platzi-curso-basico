@@ -132,24 +132,6 @@ export default {
         this.$store.commit('campaign/removeModule', this.getLastIndex());
       }
     },
-    validateSortingToIndex({index, moduleData}) {
-      // Get last index
-      const lastIndex = this.getLastIndex();
-
-      // Can sort the list or add via drag and drop from menu in the next cases
-      // Trying to insert in first position and campaign hasn't a fixed header
-      return (index === 0          && !this.campaignHasFixedHeader()) 
-          // Trying to insert in last position and campaign hasn't a fixed footer
-          || (index === lastIndex  && !this.campaignHasFixedFooter())
-          // Trying to insert any position except first or after last position
-          || index !== 0 && index <= lastIndex
-          // Trying to add a fixed module, is valid if it doesn't exists
-          && (
-                (this.isFixedHeader(moduleData) && !this.campaignHasFixedHeader() || !this.isFixedHeader(moduleData))
-            &&  (this.isFixedFooter(moduleData) && !this.campaignHasFixedFooter() || !this.isFixedFooter(moduleData))
-          )
-      ;
-    },
     autoScrollTop() {
       let bounds = 0;
       let isVisible = bounds < window.innerHeight && bounds > 0;
