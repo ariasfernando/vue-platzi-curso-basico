@@ -23,7 +23,7 @@ export default {
         return result;
       }, []);
     },
-    getLastIndex() {
+    getLastAvailableIndex() {
       let index = this.modules.length;
       if (this.campaignHasFixedBottomModules()) {
         index = this.getIndexFirstFixedBottomModule();
@@ -148,13 +148,13 @@ export default {
               newIndex = indexBottomModule;
             }
           } else {
-            newIndex = this.getLastIndex();
+            newIndex = this.getLastAvailableIndex();
           }
           this.insertModule({
             index: newIndex,
             moduleData: mod
           });
-          if (newIndex >= this.getLastIndex() - 1) {
+          if (newIndex >= this.getLastAvailableIndex() - 1) {
             setTimeout(() => {
               this.autoScrollBottom();
             }, 25);
