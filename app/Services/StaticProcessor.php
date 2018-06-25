@@ -99,7 +99,11 @@ class StaticProcessor
         }
 
         try {
-            \AssetManager::deploy($data);
+            \AssetManager::deploy(
+                $data,
+                env('ASSETS_UPLOAD_CONCURRENCY', 10),
+                env('ASSETS_UPLOAD_RETRIES', 2)
+            );
         } catch (\Exception $exception) {
             Log::error('StaticProcessor error: ' . $exception->getMessage());
             throw $exception;
