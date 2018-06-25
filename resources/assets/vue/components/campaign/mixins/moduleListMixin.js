@@ -25,31 +25,16 @@ export default {
     },
     getLastIndex() {
       let index = this.modules.length;
-      if (this.campaignHasFixedTopModules()) {
-        const topIndex = this.getIndexLastFixedTopModule();
-        if (index < topIndex) {
-          index = topIndex + 1;
-        }
-      }
       if (this.campaignHasFixedBottomModules()) {
         index = this.getIndexFirstFixedBottomModule();
       }
       return index;
-    },
-    isFixedModule(mod) {
-      return _.has(mod, 'isFixed') && mod.isFixed;
-    },
-    isFixedHeader(mod) {
-      return _.has(mod, 'isFixed') && mod.fixedPosition === 0;
     },
     isBottomModule(mod) {
       return typeof mod.isFixed !== 'undefined' && mod.fixedPosition <= -1;
     },
     isTopModule(mod) {
       return typeof mod.isFixed !== 'undefined' && mod.fixedPosition >= 0;
-    },
-    isInFixedModulesConfig(fixedModules, itemName, position) {
-      return _.filter(fixedModules, fixed => fixed.key === itemName && fixed.pos === position).length > 0;
     },
     campaignHasFixedTopModule(mod) {
       const found = this.modules.find(item => {
@@ -66,12 +51,6 @@ export default {
           return mod.fixedPosition === item.fixedPosition;
         }
         return false;
-      });
-      return typeof found !== 'undefined';
-    },
-    campaignHasFixedTopModules() {
-      const found = this.modules.find(item => {
-        return this.isTopModule(item);
       });
       return typeof found !== 'undefined';
     },
@@ -116,21 +95,6 @@ export default {
         }
       });
       return index;
-    },
-    removePreviousFixedInPosition(pos) {
-      if(this.isFixedModule(this.modules[pos])) {
-        this.$store.commit('campaign/removeModule', pos);
-      }
-    },
-    removePreviousFixedHeader() {
-      if (this.campaignHasFixedHeader()) {
-        this.$store.commit('campaign/removeModule', 0);
-      }
-    },
-    removePreviousFixedFooter() {
-      if(this.campaignHasFixedFooter()) {
-        this.$store.commit('campaign/removeModule', this.getLastIndex());
-      }
     },
     autoScrollTop() {
       let bounds = 0;
