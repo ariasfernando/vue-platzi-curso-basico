@@ -101,17 +101,16 @@
 
             // Grouped modules in library menu
             _.each(item.sub_menu, (subItem) => {
-              this.shouldAddModule(subItem);
+              if (subItem.mandatory) {
+                this.addMandatoryModule(subItem);
+              }
             });
           } else {
             // First level modules in library menu
-            this.shouldAddModule(item);
+            if (item.mandatory) {
+              this.addMandatoryModule(item);
+            }
           }
-        });
-
-        // Sanitize campaign's modules
-        _.each(this.modules, (item) => {
-          this.shouldAddModule(item);
         });
 
         this.ready = true;
@@ -180,19 +179,17 @@
           ? $(".empty-message").hide("fast")
           : $(".empty-message").show()
       },
-      shouldAddModule(item) {
-        if (item.mandatory) {
-          if (this.isBottomModule(item)) {
-            if (!this.campaignHasFixedBottomModule(item)) {
-              this.addFixedBottomModule(item);
-            }
-          } else if (this.isTopModule(item)) {
-            if (!this.campaignHasFixedTopModule(item)) {
-              this.addFixedTopModule(item);
-            }
+      addMandatoryModule(item) {
+        if (this.isBottomModule(item)) {
+          if (!this.campaignHasFixedBottomModule(item)) {
+            this.addFixedBottomModule(item);
+          }
+        } else if (this.isTopModule(item)) {
+          if (!this.campaignHasFixedTopModule(item)) {
+            this.addFixedTopModule(item);
           }
         }
-      } 
+      }
     }
   };
 </script>
