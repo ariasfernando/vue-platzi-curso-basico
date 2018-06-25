@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'cloud' => 'azure',
+    'cloud' => 's3',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,16 +78,11 @@ return [
         ],
 
         'cloud' => [
-            // 'driver' => 's3',
-            // 'key'    => env('AWS_S3_KEY', ''),
-            // 'secret' => env('AWS_S3_SECRET', ''),
-            // 'region' => env('AWS_S3_REGION', ''),
-            // 'bucket' => env('AWS_S3_BUCKET', ''),
-            'driver'        => 'azure',
-            'account_name'  => env('AZURE_ACCOUNT_NAME', ''),
-            'key'           => env('AZURE_ACCOUNT_KEY', ''),
-            'endpoint'      => env('AZURE_ENDPOINT', ''),
-            'container'     => env('AZURE_CONTAINER', ''),
+            'driver' => 's3',
+            'key'    => env('AWS_S3_KEY', ''),
+            'secret' => env('AWS_S3_SECRET', ''),
+            'region' => env('AWS_S3_REGION', ''),
+            'bucket' => env('AWS_S3_BUCKET', ''),
         ]
     ],
 
