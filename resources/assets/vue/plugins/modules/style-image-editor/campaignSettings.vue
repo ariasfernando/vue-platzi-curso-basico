@@ -118,7 +118,7 @@ export default {
         })
         .then(uploadedImgs => {
           this.updateAttribute(uploadedImgs[imgs.length - 1], data.newImage);
-          if(this.plugin.config.adjust.value) {
+          if(typeof this.plugin.config.adjust !== 'undefined' && this.plugin.config.adjust.value) {
             this.updateWidthAttribute(data.state.outputSize.width);
           }
           const temp = {};
