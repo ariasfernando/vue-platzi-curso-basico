@@ -87,7 +87,7 @@ export default {
       });
     },
     getIndexLastFixedTopModule() {
-      let index = 0;
+      let index = -1;
       this.modules.forEach((item, i) => {
         if (this.isTopModule(item)) {
           index = i;
@@ -178,7 +178,7 @@ export default {
           if (typeof newIndex !== 'undefined') {
             const indexTopModule = this.getIndexLastFixedTopModule();
             const indexBottomModule = this.getIndexFirstFixedBottomModule();
-            if (newIndex <= indexTopModule) {
+            if (indexTopModule !== -1 && newIndex <= indexTopModule) {
               newIndex = indexTopModule + 1;
             } else if (indexBottomModule !== -1 && newIndex > indexBottomModule) {
               newIndex = indexBottomModule;
