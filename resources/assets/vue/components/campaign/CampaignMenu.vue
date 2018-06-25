@@ -82,18 +82,11 @@
         return this.$store.getters["campaign/campaign"];
       },
       items() {
-        const items = [];
-        each(this.$store.getters["library/modules"], item => {
-          items.push(JSON.parse(JSON.stringify(item)));
-        });
-        return items;
+        return this.$store.getters["library/modules"];
       },
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
         return this.modules[activeModuleId] || undefined;
-      },
-      fixedModules() {
-        return this.campaign.library_config.fixedModules ? JSON.parse(this.campaign.library_config.fixedModules) : [];
       }
     },
     created() {
@@ -108,19 +101,16 @@
 
             // Grouped modules in library menu
             _.each(item.sub_menu, (subItem) => {
-              this.setModuleFixedStatus(subItem);
               this.shouldAddModule(subItem);
             });
           } else {
             // First level modules in library menu
-            this.setModuleFixedStatus(item);
             this.shouldAddModule(item);
           }
         });
 
         // Sanitize campaign's modules
         _.each(this.modules, (item) => {
-          this.setModuleFixedStatus(item);
           this.shouldAddModule(item);
         });
 
@@ -189,13 +179,6 @@
         $(".empty-message").is(":visible") && $(".ghost-component").is(":visible")
           ? $(".empty-message").hide("fast")
           : $(".empty-message").show()
-      },
-      setModuleFixedStatus(item) {
-        const found = _.filter(this.fixedModules, fixed => fixed.key === item.key);
-        item['isFixed'] = found.length > 0;
-        item['fixedPosition'] = found.length > 0 ? found[0].pos : undefined;
-        item['type'] = found.length > 0 ? found[0].mandatory ? 'virtual' : item['type'] : item['type'];
-        item['mandatory'] = found.length > 0 ? found[0].mandatory ? true : false : false;
       },
       shouldAddModule(item) {
         if (item.mandatory) {

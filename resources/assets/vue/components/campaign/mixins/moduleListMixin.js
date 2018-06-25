@@ -175,6 +175,7 @@ export default {
     },
     addModule(m, newIndex) {
       const mod = clone(m);
+      mod.data = mod.data ? mod.data : {};
       mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
       if (this.campaignHasFixedTopModule(mod) || this.campaignHasFixedBottomModule(mod)) {
         this.$root.$toast('This module is already present. Please remove it to add a new one.', {
@@ -193,10 +194,12 @@ export default {
           }, 25);
         } else {
           if (typeof newIndex !== 'undefined') {
-            if (newIndex < this.getIndexLastFixedTopModule()) {
-              newIndex = this.getIndexLastFixedTopModule();
-            } else if (newIndex > this.getIndexFirstFixedBottomModule()) {
-              newIndex = this.getIndexFirstFixedBottomModule();
+            const indexTopModule = this.getIndexLastFixedTopModule();
+            const indexBottomModule = this.getIndexFirstFixedBottomModule();
+            if (newIndex <= indexTopModule) {
+              newIndex = indexTopModule + 1;
+            } else if (indexBottomModule !== -1 && newIndex > indexBottomModule) {
+              newIndex = indexBottomModule;
             }
           } else {
             newIndex = this.getLastIndex();
