@@ -1,4 +1,7 @@
 import libraryService from '../services/library';
+import {
+  map
+} from 'lodash';
 
 const state = {
   modules: [],
@@ -18,7 +21,7 @@ const setModuleFixedStatus = (fixedModules = [], item) => {
 const getters = {
   modules(state, getters, rootState) {
     const fixedModules = rootState.campaign ? rootState.campaign.campaign ? rootState.campaign.campaign.library_config ? rootState.campaign.campaign.library_config.fixedModules ? JSON.parse(rootState.campaign.campaign.library_config.fixedModules) : [] : [] : [] : [];
-    return state.modules.map(moduleData => {
+    return map(state.modules, moduleData => {
       return setModuleFixedStatus(fixedModules, moduleData);
     });
   }

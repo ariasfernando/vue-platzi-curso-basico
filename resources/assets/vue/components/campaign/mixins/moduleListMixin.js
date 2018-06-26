@@ -31,10 +31,10 @@ export default {
       return index;
     },
     isBottomModule(mod) {
-      return typeof mod.isFixed !== 'undefined' && mod.fixedPosition <= -1;
+      return typeof mod.isFixed !== 'undefined' && mod.isFixed === true && mod.fixedPosition <= -1;
     },
     isTopModule(mod) {
-      return typeof mod.isFixed !== 'undefined' && mod.fixedPosition >= 0;
+      return typeof mod.isFixed !== 'undefined' && mod.isFixed === true && mod.fixedPosition >= 0;
     },
     campaignHasFixedTopModule(mod) {
       const found = this.modules.find(item => {
