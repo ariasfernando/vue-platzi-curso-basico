@@ -110,11 +110,32 @@ const mutations = {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);
   },
   savePlugin(state, payload) {
-    const pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
+    let pluginData;
+    
+    if (payload.componentId >= 0) {
+      // save component plugin
+      pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
+    } else if (payload.columnId){
+      // save column plugin
+      pluginData = state.module.structure.columns[payload.columnId].plugins[payload.plugin].config;
+    } else {
+      // save module plugin
+      pluginData = state.module.plugins[payload.plugin].config;
+    }
     _.merge(pluginData, payload.config);
   },
   savePluginSuboption(state, payload) {
-    const pluginOptions = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
+    let pluginOptions;
+    if (payload.componentId >= 0) {
+      // save component plugin
+      pluginOptions = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
+    } else if (payload.columnId) {
+      // save column plugin
+      pluginOptions = state.module.structure.columns[payload.columnId].plugins[payload.plugin].config.options;
+    } else {
+      // save module plugin
+      pluginOptions = state.module.plugins[payload.plugin].config.options;
+    }
     _.assign(pluginOptions[payload.subOption], payload.config.options[payload.subOption]);
   },
   togglePlugin(state, data) {
