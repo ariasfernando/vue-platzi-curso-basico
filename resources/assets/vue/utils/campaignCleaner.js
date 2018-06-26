@@ -138,6 +138,8 @@ export default {
         $element.removeAttr('data-persist-styles');
       });
     }
+    // Remove Comment Divs
+    $cleanedHtml = this.removeCommentDivs($cleanedHtml);
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
     return this.charConvert($cleanedHtml.html());
@@ -196,6 +198,14 @@ export default {
       }
     });
     
+    return $cleanedHtml;
+  },
+
+  removeCommentDivs($cleanedHtml) {
+    const all = $cleanedHtml.find('.st-comment');
+    $.map(all, (el) => {
+      $(el).replaceWith($(el).html());
+    });
     return $cleanedHtml;
   },
   
