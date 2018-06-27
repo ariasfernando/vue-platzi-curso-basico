@@ -9,6 +9,10 @@
         :data-module-id="moduleId"
         :class="{ 'stx-show-error': hasErrors }"
         @click.prevent="config"
+        :width="moduleWidth"
+        :style="moduleStyle"
+        :valign="moduleValign"
+        :bgcolor="moduleBgcolor"
     >
       <component :is="'custom-' + module.key" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId" v-if="!module.data.hideToolbar"></module-toolbar>
@@ -206,6 +210,18 @@
       },
       hasErrors() {
         return this.module.data && this.module.data.errors && this.module.data.errors.length;
+      },
+      moduleWidth(){
+        return _.get(this.module,'structure.attribute.width','100%');
+      },
+      moduleStyle(){
+        return _.get(this.module,'structure.style');
+      },
+      moduleValign(){
+        return _.get(this.module,'structure.attribute.valign','top');
+      },
+      moduleBgcolor(){
+        return _.get(this.module,'structure.attribute.bgcolor');
       }
     },
     methods: {
