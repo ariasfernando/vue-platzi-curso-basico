@@ -132,6 +132,7 @@
                     :module-id="moduleId"
                     :column-id="0"
                     :component-id="componentId"
+                    context="campaign"
                   ></component>
                 </template>
               </table>
@@ -156,14 +157,14 @@
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
-  import ComponentAttributeMixin from '../common/mixins/ComponentAttributeMixin.js';
   import validatorMixin from '../../plugins/modules/mixins/validator.js';
+  import ElementMixin from '../common/mixins/ElementMixin.js';
   import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
     props: ['moduleId'],
-    mixins: [ ComponentAttributeMixin, validatorMixin ],
+    mixins: [ ElementMixin, validatorMixin ],
     created() {
       if(this.module.type === 'studio'
           && ((this.module.structure && this.module.structure.columns && this.module.structure.columns.length > 1)
@@ -175,7 +176,6 @@
         // so we need to check a flag to aid the user to open each module and run the validations at least once
         return this.validateMulticolumnStudioModule();
       }
-    },
     computed: {
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];

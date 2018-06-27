@@ -85,6 +85,7 @@
               :key="component.id"
               :data-component="component"
               class="st-component"
+              context="admin"
             ></component>
           </template>
           <div v-else style="display:table-row;"> 

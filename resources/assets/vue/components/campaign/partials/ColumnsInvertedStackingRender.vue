@@ -31,6 +31,7 @@
                   :component-id="componentId"
                   :column-width="columnWidthPadding / numColumns"
                   :column="column"
+                  context="campaign"
                 ></component>
               </template>
             </table>
