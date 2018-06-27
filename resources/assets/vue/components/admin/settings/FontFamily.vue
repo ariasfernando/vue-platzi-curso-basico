@@ -35,13 +35,13 @@ export default {
         const fontsOptions = [];
         _.each(this.$_app.config.fonts, (group, index) => {
           group.map(font => {
-            if (index === 'custom') {
-                fontsOptions.push({
+            if (index === "custom") {
+              fontsOptions.push({
                 value: font.name,
                 label: font.name
               });
             } else {
-                fontsOptions.push({
+              fontsOptions.push({
                 value: font,
                 label: font
               });
@@ -73,16 +73,11 @@ export default {
 .width-full {
   width: 100%;
 }
-</style>
-
-<style lang="less">
-.field-font-family {
-  span > span.el-tag.el-tag--info {
-    counter-increment: step-counter;
-    & span::before {
-      content: counter(step-counter);
-      margin-right: 5px;
-    }
+.field-font-family /deep/ span > span.el-tag.el-tag--info {
+  counter-increment: step-counter;
+  & span::before {
+    content: counter(step-counter);
+    margin-right: 5px;
   }
 }
 </style>
