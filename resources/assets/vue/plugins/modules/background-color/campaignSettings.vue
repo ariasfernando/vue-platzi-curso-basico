@@ -88,21 +88,26 @@ export default {
   padding: 3px;
   height: 28px;
   width: 34px;
-  border-right: 0;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 4px;
+  border-left: 0;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 4px;
 }
-.generic-color /deep/ .input.el-input__inner {
-  text-align: center;
-}
-.generic-color /deep/ .el-input.is-disabled .el-input__inner {
-  background-color: transparent;
-  color: #666666;
-  cursor: auto;
-  padding: 0;
-  font-size: 12px;
-  text-align: center;
+.generic-color /deep/ .el-input{
+  .el-input__inner {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 4px;
+  }
+  &.is-disabled .el-input__inner {
+    background-color: #fff;
+    color: #666666;
+    cursor: auto;
+    padding: 0;
+    font-size: 12px;
+    text-align: center;
+  }
 }
 </style>
