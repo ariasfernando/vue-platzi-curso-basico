@@ -69,7 +69,7 @@
             <td class="actions icons" width="250">
               <p class="dash-code-option">
                 <a @click.prevent="code(campaign._id, 'html')" href="#" class="html-code">HTML</a><br>
-                <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Normal Plaintext</a>
+                <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Plaintext</a>
               </p>
               <a href="#" v-on:click.prevent="preview(campaign._id)" data-tooltip="Preview" target="_blank">
                 <i class="glyphicon glyphicon-eye-open"></i>

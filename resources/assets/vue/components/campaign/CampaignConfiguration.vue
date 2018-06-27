@@ -31,7 +31,7 @@
 
         <div class="form-group configuration-field configuration-nomargin" v-if="enablePreheader">
           <label for="campaignPreheader" title="The best practice is to limit preheaders to 50 characters.">Preheader Text</label>
-          <input type="text" placeholder="Preheader Text" name="campaignPreheader" class="campaignPreheader" maxlength="140" :value="campaign.campaign_preheader" @blur="saveSettings"/>
+          <input type="text" placeholder="Preheader Text" name="campaignPreheader" class="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
         </div>
 
         <settings-container custom-class="field-Tags" label="Tags" v-if="enableTagging">
@@ -96,6 +96,7 @@
         enableLocking: false,
         form: {
           campaignName: '',
+          campaignPreheader: '',
           campaignProcess: false,
           tags: []
         },
@@ -145,6 +146,7 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
+      this.form.campaignPreheader = this.campaign.campaign_preheader || '';
 
       this.loadConfig();
     },
@@ -192,6 +194,10 @@
 
         if (e.target.type === 'checkbox') {
           value = e.target.checked;
+        }
+
+        if(e.target.name in this.form){
+          this.form[e.target.name] = e.target.value;
         }
 
         this.$store.commit('campaign/saveSetting', {

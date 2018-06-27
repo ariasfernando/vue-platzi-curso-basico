@@ -62,7 +62,6 @@ export default {
       
       const setStyles = () => {
         const editor = tinymce.get(tinymce.activeEditor.id);
-        /* if link_fixed_color is unset, it will use a default value from library */
         const link_fixed_color = editor.settings.link_fixed_color;
         const link_fixed_styles = editor.settings.link_fixed_styles;
         const ul_fixed_style = editor.settings.ul_fixed_style;
@@ -340,9 +339,11 @@ export default {
 
       if (!_.isEmpty(options)) {
         _.each(options, (option) => {
-          if (option.key === 'forecolor' && !_.isEmpty(option.textcolor_map)) {
+          if (option.key === 'forecolor' && !_.isEmpty(option.textcolor_map) && !option.textcolor_from_library) {
             settings.plugins = [settings.plugins, 'textcolor'].join(' ');
             settings.textcolor_map = option.textcolor_map;
+          } else if (option.textcolor_from_library && Application.utils.isJsonString(this.libraryConfig.colorPalettes)) {
+            settings.textcolor_map = JSON.parse(this.libraryConfig.colorPalettes)[option.palette_name];
           }
         });
       }

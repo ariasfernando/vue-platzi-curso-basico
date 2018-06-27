@@ -1,5 +1,7 @@
 <?php
 
+$public_image_path = public_path() . '/images/';
+
 return [
 
     /*
@@ -52,7 +54,7 @@ return [
 
         'local:campaigns' => [
             'driver' => 'local',
-            'root' => public_path() . '/images/campaigns',
+            'root' => $public_image_path . 'campaigns',
         ],
 
         'local:public' => [
@@ -62,12 +64,17 @@ return [
 
         'local:libraries' => [
             'driver' => 'local',
-            'root'   => public_path() . '/images/customer/libraries/',
+            'root'   => $public_image_path . 'customer/libraries/',
         ],
 
         'local:modules' => [
             'driver' => 'local',
-            'root'   => public_path() . '/images/customer/modules/',
+            'root'   => $public_image_path . 'customer/modules/',
+        ],
+
+        'local:modules:studio' => [
+            'driver' => 'local',
+            'root'   => $public_image_path . 'customer/modules/studio/',
         ],
 
         'cloud' => [
@@ -78,5 +85,16 @@ return [
             'bucket' => env('AWS_S3_BUCKET', ''),
         ]
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Public Image Path
+    |--------------------------------------------------------------------------
+    |
+    | This will help us to obtain the path of each storage.
+    |
+    */
+
+    'public_image_path' => $public_image_path,
 
 ];

@@ -80,7 +80,8 @@ $default = [
     ],
     'api' => [
         'get'    => [
-            '/api/history' => 'ApiController@getHistory'
+            '/api/history' => 'ApiController@getHistory',
+            '/api/oauth'   => 'ApiController@getOauth'
         ],
         'post'   => [
             '/api/upload-email' => 'ApiController@postUploadEmail',

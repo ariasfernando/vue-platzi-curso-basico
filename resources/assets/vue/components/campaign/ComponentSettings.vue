@@ -6,7 +6,7 @@
     </h2>
     <div class="plugins">
       <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component v-if="plugin.enabled && plugin.name !=='text-options'" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+        <component v-if="plugin.enabled && plugin.name !=='text-options'" :is="'campaign-' + plugin.name" :name="plugin.name" :plugin-key="key" :plugin="plugin"></component>
       </div>
     </div>
   </div>
@@ -33,13 +33,12 @@
 
           const modules = this.$store.getters["campaign/modules"];
 
-          if (modules.length !== 0 && Object.keys(this.currentComponent).length !== 0) {
+          if (modules.length !== 0) {
             const moduleId = this.currentComponent.moduleId;
             const columnId = this.currentComponent.columnId;
             const componentId = this.currentComponent.componentId;
 
             if (!modules[moduleId]) {
-              this.ready = false;
               return component;
             }
 

@@ -104,6 +104,8 @@ module.exports = {
           '79a8c9', 'Blue',
           'cd202c', 'Red',
         ],
+        textcolor_from_library: false,
+        palette_name: '',
       },
       backcolor: {
         label: 'Background color',
