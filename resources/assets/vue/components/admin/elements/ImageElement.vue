@@ -3,7 +3,7 @@
       <table
       width="100%"
       style="width: 100%;"
-      :align="component.container.attribute.align"
+      :valign="component.container.attribute.valign || 'top'"
       border="0"
       cellpadding="0"
       cellspacing="0"
@@ -11,7 +11,7 @@
         <tr>
           <td 
             :width="component.image.attribute.width"
-            :valign="component.image.attribute.valign"
+            :valign="component.image.attribute.valign || 'top'"
             :align="component.image.attribute.align"
             :bgcolor="component.image.attribute.bgcolor"
             :style="elementBorderPaddingAndWidth(component.image)"

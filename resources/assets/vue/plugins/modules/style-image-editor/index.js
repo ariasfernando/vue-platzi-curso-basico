@@ -44,18 +44,18 @@ export default {
           type: 'number',
           step: 1,
         },
-        size_auto: {
-          label: 'Flexible height',
-          key: 'auto',
-          value: false,
-          type: 'switch',
-        },
         size_height: {
           label: 'Height',
           key: 'height',
           value: 200,
           type: 'number',
           step: 1,
+        },
+        size_auto: {
+          label: 'Flexible height',
+          key: 'auto',
+          value: false,
+          type: 'switch',
         },
         size_minHeight: {
           label: 'Min. Height',
@@ -64,10 +64,17 @@ export default {
           type: 'number',
           step: 1,
         },
+        size_maxHeight: {
+          label: 'Max. Height',
+          key: 'maxHeight',
+          value: 1000,
+          type: 'number',
+          step: 1,
+        },
         size_fit: {
           label: 'Image Fit',
           key: 'fit',
-          value: '1',
+          value: 1,
           type: 'select',
           options: {
             0: 'Contain',
@@ -75,11 +82,24 @@ export default {
             2: 'Max Size',
           },
         },
+        size_minWidth: {
+          label: 'Min. Width',
+          key: 'minWidth',
+          value: 1,
+          type: 'number',
+          step: 1,
+        },
       },
-    }, 
+    },
     smaller: {
       label: 'Don\'t allow smaller images',
       key: 'dontAllowSmaller',
+      value: false,
+      type: 'switch',
+    },
+    adjust: {
+      label: 'Adjust campaign image size',
+      key: 'adjustImageSize',
       value: false,
       type: 'switch',
     },
@@ -131,12 +151,6 @@ export default {
           label: 'Vertical crop',
           key: 'cropBoxResizable',
           value: false,
-          type: 'switch',
-        },
-        cropbox: {
-          label: 'Move cropbox',
-          key: 'cropBoxMovable',
-          value: true,
           type: 'switch',
         },
         round: {
