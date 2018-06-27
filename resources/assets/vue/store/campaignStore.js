@@ -219,13 +219,13 @@ function campaignStore() {
         state.dirty = true;
       },
       saveComponentAttribute(state, data) {
-        // this should be deprecated
+        // this should be deprecated, is unused
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
         attributes[data.attribute] = data.attributeValue;
         state.dirty = true;
       },
       saveColumnAttribute(state, data) {
-        // this should be deprecated
+        // this should be replaced with a function similar to saveComponentProperty, but for columns
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
         const newData = {};
         newData[data.attribute] = data.attributeValue;

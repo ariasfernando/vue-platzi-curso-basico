@@ -110,31 +110,31 @@ const mutations = {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);
   },
   savePlugin(state, payload) {
-    let pluginData;
+    let pluginData = state.module;
     
     if (payload.componentId >= 0) {
       // save component plugin
-      pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
-    } else if (payload.columnId){
+      pluginData = pluginData.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
+    } else if (payload.columnId >= 0) {
       // save column plugin
-      pluginData = state.module.structure.columns[payload.columnId].plugins[payload.plugin].config;
+      pluginData = pluginData.structure.columns[payload.columnId].plugins[payload.plugin].config;
     } else {
       // save module plugin
-      pluginData = state.module.plugins[payload.plugin].config;
+      pluginData = pluginData.plugins[payload.plugin].config;
     }
     _.merge(pluginData, payload.config);
   },
   savePluginSuboption(state, payload) {
-    let pluginOptions;
+    let pluginOptions = state.module;
     if (payload.componentId >= 0) {
       // save component plugin
-      pluginOptions = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
-    } else if (payload.columnId) {
+      pluginOptions = pluginOptions.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
+    } else if (payload.columnId >= 0) {
       // save column plugin
-      pluginOptions = state.module.structure.columns[payload.columnId].plugins[payload.plugin].config.options;
+      pluginOptions = pluginOptions.structure.columns[payload.columnId].plugins[payload.plugin].config.options;
     } else {
       // save module plugin
-      pluginOptions = state.module.plugins[payload.plugin].config.options;
+      pluginOptions = pluginOptions.plugins[payload.plugin].config.options;
     }
     _.assign(pluginOptions[payload.subOption], payload.config.options[payload.subOption]);
   },
