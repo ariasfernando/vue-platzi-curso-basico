@@ -67,12 +67,12 @@ export default {
         size_fit: {
           label: 'Image Fit',
           key: 'fit',
-          value: '1',
+          value: 1,
           type: 'select',
           options: {
-            '0': 'Contain',
-            '1': 'Cover',
-            '2': 'Max Size',
+            0: 'Contain',
+            1: 'Cover',
+            2: 'Max Size',
           },
         },
       },
@@ -137,12 +137,6 @@ export default {
           label: 'Vertical crop',
           key: 'cropBoxResizable',
           value: false,
-          type: 'switch',
-        },
-        cropbox: {
-          label: 'Move cropbox',
-          key: 'cropBoxMovable',
-          value: true,
           type: 'switch',
         },
         round: {
