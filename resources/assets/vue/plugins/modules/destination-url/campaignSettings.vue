@@ -10,8 +10,8 @@
             placeholder="http://examp.le"
             v-model="href"
             v-validate.initial="validationRules"
-            :class="{'input': true, 'is-danger': errors.has('href') }"></el-input>
-          <span v-show="errors.has('href')" class="help is-danger">{{ errors.first('href') }}</span>
+            :class="{'input': true, 'is-danger': hasError }"></el-input>
+          <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
         </p>
         <p v-else>
           <el-input
@@ -48,12 +48,41 @@
   import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
   export default {
-    props: ['name', 'plugin'],
+    props: ['name', 'plugin', 'pluginKey'],
     mixins: [mixinValidator],
     components: { SettingsContainer },
+    mounted() {
+      if (this.validationRules) {
+        this.validate();
+      }
+    },
+    watch: {
+      currentComponent: {
+        handler: function(currentComponent) {
+          if (this.validationRules) {
+            this.validate();
+          }
+        },
+        deep: true
+      }
+    },
     computed: {
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
+      },
+      module() {
+        return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
+      },
+      moduleErrors() {
+        return this.module.data && this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
+                                                        && _.isEqual(err.scope.columnId, this.currentComponent.columnId)
+                                                        && _.isEqual(err.scope.componentId, this.currentComponent.componentId))) : [];
+      },
+      hasError() {
+        return this.moduleErrors.length > 0;
+      },
+      getErrorMessage() {
+        return this.moduleErrors.length > 0 ? this.moduleErrors[0].msg : '';
       },
       component() {
         let component = {};

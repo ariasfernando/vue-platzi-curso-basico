@@ -31,14 +31,6 @@
         return this.$store.getters["campaign/modules"][this.currentCustomModule];
       }
     },
-    watch : {
-      currentCustomModule: {
-        handler: function(moduleId) {
-          return this.$store.getters["campaign/modules"][moduleId];
-        },
-        deep: true
-      },
-    },
     methods: {
       toCamel(str) {
         return _.startCase(str);

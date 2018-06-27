@@ -51,13 +51,14 @@
 
 <style lang="less">
   #search-result{
-    margin-bottom: 10px;    
+    margin-bottom: 10px;
     .title{
       font-family: 'Open Sans', Helvetica, Arial, sans-serif;
       color: #666666;
       font-size: 16px;
       font-weight: 300;
       margin-right: 5px;
+      float:left;
     }
     .beta-btn-primary{
       border-radius: 2px!important;
@@ -75,6 +76,11 @@
         margin-right: 5px;
         border-radius: 0;
         font-size: 12px;
+        margin-top: 0;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        height: 22px;
+        line-height: 20px;
         i.glyphicon{
           margin-right: 0!important;
         }

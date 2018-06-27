@@ -21,7 +21,7 @@ function dividerDefault() {
           name: 'bgcolor',
           type: 'generic-color',
           link: 'attribute',
-          label: 'Background Color interno',
+          label: 'Inner Background Color',
           subComponent: 'divider',
         },
         {

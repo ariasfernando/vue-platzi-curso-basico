@@ -95,8 +95,15 @@ export default {
           }, 100);
       }
     },
+    findModule (moduleName, moduleType){
+      // Find module in items by type: item or subitem
+      return moduleType === 'item'
+              ? _.find(this.items, (m) => m.name === moduleName)
+              : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
+    },
     addModule(m, newIndex) {
       const mod = clone(m);
+      mod.data = mod.data ? mod.data : {};
       mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
 
       //TODO: handle fixed modules at non-header/non-footer position
@@ -158,12 +165,12 @@ export default {
       this.$store.commit('campaign/setActiveModule', index);
     },
     addModuleToBottom(moduleData) {
-      // Get last index
-      const lastIndex = this.getLastIndex();
       // Add module
       this.$store.commit('campaign/addModule', moduleData);
       // Set active on last module added
       this.$store.commit('campaign/setActiveLastModule');
+      // Get last index
+      const lastIndex = this.getLastIndex();
       
       if (this.activeModule.type === 'studio') {
         // Save current component if module type is studio
