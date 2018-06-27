@@ -11,13 +11,12 @@
         >
           <tr>
             <td
-              style="vertical-align: middle; width:100%;"
               class="stx-edit-text stx-position-relative"
-              :width="component.text.attribute.width"
+              :width="component.text.attribute.width || '100%'"
               :valign="component.text.attribute.valign || 'top'"
               :align="component.text.attribute.align || 'left'"
               :bgcolor="component.text.attribute.bgcolor"
-              :style="[fontStyles(component.text), elementBorderPaddingAndWidth(component.text)]"
+              :style="[fontStyles(component.text), elementBorderAndPadding(component.text), {'width': widthStyle(component.text.attribute.width) || '100%'}]"
             >
               <tiny-mce :style="fontStyles(component.text)" :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
               <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>

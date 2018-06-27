@@ -9,14 +9,14 @@
         cellspacing="0"
       >
         <tr>
+          <div :class="'st-remove-element stx-toolbar toolbar-'+editorId"></div>
           <td
-            style="vertical-align: middle; width:100%;"
             class="stx-edit-text stx-position-relative"
-            :width="component.text.attribute.width"
+            :width="component.text.attribute.width || '100%'"
             :valign="component.text.attribute.valign || 'top'"
             :align="component.text.attribute.align || 'left'"
             :bgcolor="component.text.attribute.bgcolor"
-            :style="[fontStyles(component.text), elementBorderPaddingAndWidth(component.text)]"
+              :style="[fontStyles(component.text), elementBorderAndPadding(component.text), {'width': widthStyle(component.text.attribute.width) || '100%'}]"
           >
             <div
               class="stx-edit-text stx-wrapper"
@@ -26,10 +26,9 @@
               @tiny-change="changeContent"
               :id="editorId"
               ></div>
-            <div :class="'st-remove-element stx-toolbar toolbar-'+editorId"></div>
           </td>
         </tr> 
-      </table>
+      </table>     
   </module-container>
   <!-- TEXT ELEMENT ENDS -->
 </template>
@@ -38,7 +37,7 @@
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ModuleContainer from '../../common/containers/ModuleContainer';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
-  import TinyMixin from '../mixins/TinyMixin.js';
+import TinyMixin from '../mixins/TinyMixin.js';
   import _ from 'lodash';
 
 export default {

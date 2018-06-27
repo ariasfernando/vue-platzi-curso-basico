@@ -381,9 +381,9 @@
   }
 
   p,ul,ol{
-    margin: 0;
-    padding: 0;
-  }
+      margin: 0;
+      padding: 0;
+    }
 
   .stx-edit-text{
 

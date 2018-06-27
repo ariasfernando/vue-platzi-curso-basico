@@ -1,7 +1,7 @@
 <template>
     <div class="stx-wrapper">
       <table
-        class="st-col st-mso-full-width"
+        class="st-mobile-full-width st-mso-full-width"
         align="left"
         cellpadding="0"
         cellspacing="0"

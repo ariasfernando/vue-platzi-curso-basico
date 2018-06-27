@@ -3,7 +3,7 @@
     <table
       width="100%"
       style="width: 100%;"
-      :align="component.container.attribute.align || 'top'"
+      :valign="component.container.attribute.valign || 'top'"
       border="0"
       cellpadding="0"
       cellspacing="0"

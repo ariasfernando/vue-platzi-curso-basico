@@ -1,76 +1,76 @@
 <template>
   <module-container :component="component" @select-component="selectComponentHandler">
-    <a
-      @click.prevent
-      :href="component.button.attribute.href || ''"
-      :target="component.button.attribute.target || '_blank'"
-      :style="component.button.style.textDecoration || 'text-decoration:none;'"
-    >
-      <table
-        cellpadding="0"
-        cellspacing="0"
-        border="0"
-        :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
-        :height="component.button.attribute.height"
-        :bgcolor="component.button.attribute.bgcolor"
-        :style="tableStyles"
+      <a
+        @click.prevent
+        :href="component.button.attribute.href || ''"
+        :target="component.button.attribute.target || '_blank'"
+        :style="component.button.style.textDecoration || 'text-decoration:none;'"
       >
-        <tr>
-          <td
-            width="100%"
-            :bgcolor="component.button.attribute.bgcolor"
-            :height="component.button.attribute.height"
-            style="vertical-align: middle; width:100%;"
-            :style="elementBorderAndPadding(this.component.button)"
-          >
-            <table
-              cellpadding="0"
-              cellspacing="0"
-              border="0"
+        <table
+          cellpadding="0"
+          cellspacing="0"
+          border="0"
+          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
+          :height="component.button.attribute.height"
+          :bgcolor="component.button.attribute.bgcolor"
+          :style="tableStyles"
+        >
+          <tr>
+            <td
               width="100%"
-              style="width:100%"
+              :bgcolor="component.button.attribute.bgcolor"
+              :height="component.button.attribute.height"
+              style="vertical-align: middle; width:100%;"
+            :style="elementBorderAndPadding(this.component.button)"
             >
-              <tr>
-                <td 
-                  width="100%"
-                  :align="component.button.attribute.align"
+              <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>            
+              <table
+                cellpadding="0"
+                cellspacing="0"
+                border="0"
+                width="100%"
+                style="width:100%"
+              >
+                <tr>
+                  <td
+                    width="100%"
+                    :align="component.button.attribute.align"
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''"
-                >
-                  <div
-                    class="stx-edit-text stx-wrapper"
-                    style="display: inline-block !important; vertical-align: middle"
+                    >
+                    <div
+                        class="stx-edit-text stx-wrapper"
+                        style="display: inline-block !important; vertical-align: middle"
                     :style="fontStyles(component.button)"
-                    v-html="content"
-                    :id="editorId"
-                    @keyup="changeContent"
-                    @tiny-change="changeContent"
-                    @input="changeContent"
-                  >
-                </div>
-              </td>
-              <td
-                v-if="component.caret.attribute.url"
-                :width="widthCaret"
+                        v-html="content"
+                        :id="editorId"
+                        @keyup="changeContent"
+                        @tiny-change="changeContent"
+                        @input="changeContent"
+                      >
+                    </div>
+                  </td>
+                  <td
+                    v-if="component.caret.attribute.url"
+                    :width="widthCaret"
                 :style="[elementBorderAndPadding(component.caret), {'width': widthStyle(widthCaret)}]"
-                >
-                <img
-                    :src="$_app.config.imageUrl + component.caret.attribute.url"
-                    :bgcolor="component.caret.attribute.bgcolor"
-                    :width="component.caret.attribute.width"
-                    :height="component.caret.attribute.height === 'auto' ? undefined : component.caret.attribute.height"
-                    :valign="component.caret.attribute.valign || 'middle'"
-                    :class="component.caret.attribute.classes || ''"
-                    style="display: inline-block !important; border:0;"
                   >
-                </td>
-              </tr>
-            </table>
-            <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
-          </td>
-        </tr>
-      </table>
-    </a>
+                    <img
+                      :src="$_app.config.imageUrl + component.caret.attribute.url"
+                      :bgcolor="component.caret.attribute.bgcolor"
+                      :width="component.caret.attribute.width"
+                      :height="component.caret.attribute.height === 'auto' ? undefined : component.caret.attribute.height"
+                      :valign="component.caret.attribute.valign || 'middle'"
+                      :class="component.caret.attribute.classes || ''"
+                      style="display: inline-block !important; border:0;"
+                    >
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </a>
   </module-container>
 </template>
 
@@ -87,8 +87,8 @@
       ModuleContainer,
     },
     mixins: [ MobileStylesMixin, ElementMixin, TinyMixin ],
-    data(){
-      return {
+    data() {
+      return {    
         content: this.component.data.text,
         timer: null
       };
