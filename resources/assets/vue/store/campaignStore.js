@@ -140,10 +140,18 @@ function campaignStore() {
         state.dirty = true;
       },
       updateCustomElement(state, payload) {
-        // This is necessary, since the clickaway function is executed.
+        // DEPRECATED
         if ( !isUndefined(payload.moduleId) ){ 
           const update = { ...state.modules[payload.moduleId].data, ...payload.data };
           state.modules[payload.moduleId].data = update;
+          state.dirty = true;
+        }
+      },
+      updateCustomElementProperty(state, payload) {
+        if (!isUndefined(payload.moduleId)) { 
+          const dataComponent = state.modules[payload.moduleId].data;
+          const subComponent = payload.subComponent ? dataComponent[payload.subComponent] : dataComponent;
+          Vue.set(subComponent, payload.property, payload.value);
           state.dirty = true;
         }
       },
@@ -292,6 +300,10 @@ function campaignStore() {
     actions: {
       updateCustomElement(context, payload) {
         context.commit('updateCustomElement', payload);
+        return Promise.resolve();
+      },
+      updateCustomElementProperty(context, payload) {
+        context.commit('updateCustomElementProperty', payload);
         return Promise.resolve();
       },
       addErrors(context, errors) {
