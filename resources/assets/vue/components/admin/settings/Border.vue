@@ -199,6 +199,10 @@ button.el-button {
   .el-select{
     .el-input__inner{
       border-radius: 2px;
+
+      &:focus{
+        border: 1px solid #78dcd6;
+      }
     }
   }
 }

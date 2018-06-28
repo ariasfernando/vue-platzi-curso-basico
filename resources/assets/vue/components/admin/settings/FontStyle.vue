@@ -114,7 +114,6 @@ export default {
 <style lang="less" scoped>
 .icon-block-line-height {
   position: absolute;
-  right: -15px;
   margin-top: 0;
   padding: 0;
   height: 26px;

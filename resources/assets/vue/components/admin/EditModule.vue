@@ -410,8 +410,9 @@ p,ul,ol{
         font-size: 14px;
         background-color: #f4f4f4;
         border: 1px solid #d8d8d8;
-        padding: 20px 20px 14px 20px;
-        width: 47%;
+        border-radius: 2px;
+        padding: 25px 20px 19px 20px;
+        width: 49%;
         margin-right: 4px;
         margin-bottom: 4px;
         float: left;
@@ -441,6 +442,10 @@ p,ul,ol{
           p {
             color: #333333;
           }
+        }
+
+        &:nth-child(even){
+          margin-right: 0px;
         }
       }
     }
@@ -491,6 +496,10 @@ p,ul,ol{
         margin-left: -35px;
         padding-top: 4px;
       }
+    }
+
+    .el-switch{
+      float: right;
     }
   }
 }
