@@ -1,3 +1,7 @@
+/* eslint no-param-reassign:0 */
+/* eslint no-shadow:0 */
+/* eslint no-console:0 */
+
 import libraryService from '../services/library';
 
 const state = {
@@ -5,7 +9,7 @@ const state = {
 };
 
 const getters = {
-  modules(state) {
+  modules() {
     return state.modules;
   },
 };
@@ -14,23 +18,27 @@ const mutations = {
   loadModulesData(state, modulesData) {
     state.modules = modulesData;
   },
+  error(state, err) {
+    console.error('has occurred a error:', err.body.message);
+  },
 };
 
 const actions = {
   getModulesData(context, libraryId) {
-
     return libraryService.getMenuItems(libraryId)
       .then((response) => {
         context.commit('loadModulesData', response.modules);
       })
-      .catch(error => context.commit('error', error));
+      .catch((err) => {
+        context.commit('error', err); 
+      });
   },
 };
 
 module.exports = {
   namespaced: true,
-  state: state,
-  getters: getters,
-  mutations: mutations,
-  actions: actions
+  state,
+  getters,
+  mutations,
+  actions,
 };
