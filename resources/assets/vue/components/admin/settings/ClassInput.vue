@@ -60,4 +60,11 @@ export default {
 .width-full {
   width: 100%;
 }
+.el-input__inner{
+  border-radius: 2px;
+
+  &:focus{
+    border: 1px solid #78dcd6;
+  }
+}
 </style>

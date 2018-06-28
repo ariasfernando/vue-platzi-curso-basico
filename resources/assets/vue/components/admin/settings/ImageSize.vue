@@ -230,7 +230,7 @@ export default {
   left: calc(50% - 14px);
   margin-top: 0;
   padding: 0;
-  height: 28px;
+  height: 26px;
   width: 30px;
   text-align: center;
   padding-top: 4px;

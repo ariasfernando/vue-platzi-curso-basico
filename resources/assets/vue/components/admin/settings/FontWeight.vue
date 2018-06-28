@@ -143,7 +143,7 @@ export default {
 .el-button:not(.custom-col) {
   width: 28px;
   padding: 4px 0;
-  height: 28px;
+  height: 26px;
   display: block;
   float: left;
 }

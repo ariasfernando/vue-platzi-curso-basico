@@ -117,7 +117,7 @@ export default {
   right: -15px;
   margin-top: 0;
   padding: 0;
-  height: 28px;
+  height: 26px;
   width: 30px;
   text-align: center;
   padding-top: 4px;
