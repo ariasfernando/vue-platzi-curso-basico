@@ -1,10 +1,8 @@
+/* eslint-env node, jest, es6 */
 import Element from '../../resources/assets/vue/models/Element';
 import Plugin from '../../resources/assets/vue/models/Plugin';
 
 require('dotenv').config();
-const chai = require('chai');
-
-const expect = chai.expect;
 
 process.env.APP_ENV = 'test';
 /*
@@ -13,152 +11,150 @@ process.env.APP_ENV = 'test';
 describe('== Models ==', () => {
   describe('Elements', () => {
     describe('Element', () => {
-
       it('Should return a valid object', (done) => {
-        const element = new Element({type: 'column-element'});
-        expect(element).to.be.an('object');
+        const element = new Element({ type: 'column-element' });
+        expect(typeof element).toBe('object');
         done();
       });
 
       it('Should throw an error if you instance the object without params', (done) => {
-
         expect(() => {
           /* eslint no-new:0 */
           new Element();
-        }).to.throw();
+        }).toThrow();
 
         done();
       });
     });
 
     describe('Column', () => {
-      const element = new Element({type: 'column-element'});
+      const element = new Element({ type: 'column-element' });
       const properties = element.getProperties();
 
       it('Should return a valid object', (done) => {
-        expect(element).to.be.an('object');
+        expect(typeof element).toBe('object');
         done();
       });
 
       it('Should return a valid object of type Column', (done) => {
-        expect(properties).to.have.property('type', 'column-element');
+        expect(properties).toHaveProperty('type', 'column-element');
         done();
       });
 
       it('Should only have a specific set of properties', (done) => {
-        expect(properties).to.have.keys([
+        expect(Object.keys(properties).sort()).toEqual([
           'id',
           'type',
           'container',
           'content',
           'plugins',
           'components',
-        ]);
+        ].sort());
 
         done();
       });
     });
 
     describe('TextElement', () => {
-      const element = new Element({type: 'text-element'});
+      const element = new Element({ type: 'text-element' });
       const properties = element.getProperties();
 
       it('Should return a valid object', (done) => {
-        expect(element).to.be.an('object');
+        expect(typeof element).toBe('object');
         done();
       });
 
       it('Should return a valid object of type text-element', (done) => {
-        expect(properties).to.have.property('type', 'text-element');
+        expect(properties).toHaveProperty('type', 'text-element');
         done();
       });
 
       it('Should only have a specific set of properties', (done) => {
-        expect(properties).to.have.keys([
+        expect(Object.keys(properties).sort()).toEqual([
           'id',
           'type',
           'container',
           'text',
           'plugins',
           'data',
-        ]);
+        ].sort());
 
         done();
       });
     });
 
     describe('ImageElement', () => {
-      const element = new Element({type: 'image-element'});
+      const element = new Element({ type: 'image-element' });
       const properties = element.getProperties();
 
       it('Should return a valid object', (done) => {
-        expect(element).to.be.an('object');
+        expect(typeof element).toBe('object');
         done();
       });
 
       it('Should return a valid object of type image-element', (done) => {
-        expect(properties).to.have.property('type', 'image-element');
+        expect(properties).toHaveProperty('type', 'image-element');
         done();
       });
 
       it('Should only have a specific set of properties', (done) => {
-        expect(properties).to.have.keys([
+        expect(Object.keys(properties).sort()).toEqual([
           'id',
           'type',
           'container',
           'image',
           'plugins',
           'data',
-        ]);
+        ].sort());
 
         done();
       });
     });
 
     describe('DividerElement', () => {
-      const element = new Element({type: 'divider-element'});
+      const element = new Element({ type: 'divider-element' });
       const properties = element.getProperties();
 
       it('Should return a valid object', (done) => {
-        expect(element).to.be.an('object');
+        expect(typeof element).toBe('object');
         done();
       });
 
       it('Should return a valid object of type divider-element', (done) => {
-        expect(properties).to.have.property('type', 'divider-element');
+        expect(properties).toHaveProperty('type', 'divider-element');
         done();
       });
 
       it('Should only have a specific set of properties', (done) => {
-        expect(properties).to.have.keys([
+        expect(Object.keys(properties).sort()).toEqual([
           'id',
           'type',
           'container',
           'divider',
           'plugins',
           'data',
-        ]);
+        ].sort());
 
         done();
       });
     });
 
     describe('ButtonElement', () => {
-      const element = new Element({type: 'button-element'});
+      const element = new Element({ type: 'button-element' });
       const properties = element.getProperties();
 
       it('Should return a valid object', (done) => {
-        expect(element).to.be.an('object');
+        expect(typeof element).toBe('object');
         done();
       });
 
       it('Should return a valid object of type button-element', (done) => {
-        expect(properties).to.have.property('type', 'button-element');
+        expect(properties).toHaveProperty('type', 'button-element');
         done();
       });
 
       it('Should only have a specific set of properties', (done) => {
-        expect(properties).to.have.keys([
+        expect(Object.keys(properties).sort()).toEqual([
           'id',
           'type',
           'container',
@@ -166,17 +162,14 @@ describe('== Models ==', () => {
           'caret',
           'plugins',
           'data',
-        ]);
+        ].sort());
 
         done();
       });
     });
-
   });
 
-
   describe('Plugins', () => {
-
     const testPlugin = {
       name: 'test',
       title: 'Test Plugin',
@@ -187,12 +180,12 @@ describe('== Models ==', () => {
     const properties = plugin.getProperties();
 
     it('Should return a valid object', (done) => {
-      expect(plugin).to.be.an('object');
+      expect(typeof plugin).toBe('object');
       done();
     });
 
     it('Should only have a specific set of properties', (done) => {
-      expect(properties).to.have.keys([
+      expect(Object.keys(properties).sort()).toEqual([
         'name',
         'title',
         'version',
@@ -202,10 +195,9 @@ describe('== Models ==', () => {
         'data',
         'render',
         'enabled',
-      ]);
+      ].sort());
 
       done();
     });
   });
-
 });
