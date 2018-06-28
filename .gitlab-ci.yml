@@ -1,4 +1,4 @@
-image: "fanbridge/web:v2.0"
+image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0"
 
 services:
   - mongo:latest
@@ -6,6 +6,9 @@ services:
 variables:
   APP_NAME: "Base"
   APP_BASE_URL: "http://localhost:3000"
+  DB_HOST: mongo
+  DB_DATABASE: base
+  REDIS_HOST: base_queue_1
 
 cache:
   paths:
@@ -23,9 +26,7 @@ stages:
 
 before_script:
   # js related
-  - npm install npm-cli-login
-  - npm config set registry https://npm.stensuldev.net
-  - node_modules/.bin/npm-cli-login -u $NPM_USER -p $NPM_PASSWORD -e $NPM_EMAIL -r $NPM_REGISTRY
+  - yum install -y gcc-c++ cairo cairo-devel
   - npm install
   # Install composer dependencies
   - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
@@ -34,9 +35,11 @@ before_script:
   - php composer-setup.php
   - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
   - php composer.phar install
+  - php artisan vendor:publish --all
   - npm run production
   # Install CI components.
   - cd ci/; php ../composer.phar install; cd ..
+
 
 test_composer_vulnerabilities:
   stage: test
@@ -128,13 +131,13 @@ phpdoccheck:
 test_js:
   stage: test
   script:
-    - npm run test:single
+    - npm run cover
   artifacts:
     when: always
     name: "${CI_JOB_STAGE}_testjs_${CI_COMMIT_REF_NAME}"
     expire_in: 30 days
     paths:
-      - coverage/
+      - ci/storage/tmp/coverage
 
 eslint:
   stage: test
