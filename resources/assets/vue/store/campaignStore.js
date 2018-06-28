@@ -7,9 +7,11 @@ import {
   isArray,
   extend,
   isEqual,
-  each,
-  _
+  each
 } from 'lodash';
+
+import _ from 'lodash';
+
 import {
   defer
 } from 'q';
