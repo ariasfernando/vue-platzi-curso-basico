@@ -260,6 +260,8 @@
     display: block;
     float: left;
     padding: 0px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+
     &::-webkit-scrollbar {
         width: 2px; 
         background: transparent;
@@ -524,6 +526,24 @@
 
   .mce-edit-focus{
     outline: 1px dotted #333!important;
+  }
+  .el-switch {
+    .el-switch__core{
+      width: 34px!important;
+      height: 18px;
+
+      &:after{
+        width: 14px; 
+        height: 14px;
+      }
+    }   
+    &.is-checked{
+      .el-switch__core{
+        &:after{
+          margin-left: -15px;
+        }
+      }
+    }
   }
 </style>
 
