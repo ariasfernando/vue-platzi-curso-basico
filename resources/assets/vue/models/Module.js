@@ -62,8 +62,7 @@ function Module(data = {}) {
 
   _.extend(this.structure.settings, settings);
   _.extend(this.structure.attribute, attribute);
-
-  console.log(this);
+  
   return this;
 }
 
