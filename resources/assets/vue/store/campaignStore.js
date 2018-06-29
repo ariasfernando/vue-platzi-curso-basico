@@ -231,6 +231,8 @@ function campaignStore() {
         const subComponent = data.subComponent ? columns[data.subComponent] : columns;
         const properties = data.link ? subComponent[data.link] : subComponent;
         Vue.set(properties, data.property, data.value);
+        state.dirty = true;
+      },
       saveColumnAttribute(state, data) {
         // DEPRECATE
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
