@@ -19,8 +19,27 @@ export default {
   }
   .group-container.clickeable {
     cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s linear;
+    background: #edecef;
+    border: 1px solid #d5d3d9;
+
+    &:hover{
+      border: 1px solid #514960;
+      box-shadow: 0px 0px 3px #999999;
+    }
+    label{
+      font-size: 13px;
+    }
   }
   .group-container.clickeable /deep/ *{
     cursor: pointer;
+    color: #514960;
+  }
+
+  .group-container.clickeable /deep/ i.icon-plus{
+    font-size: 13px;
+    opacity: 0.8;
+    right: 5px;
   }
 </style>
