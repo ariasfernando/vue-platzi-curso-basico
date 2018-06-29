@@ -114,7 +114,8 @@ class SendReviewersEmail extends Job implements ShouldQueue
             'campaign_name' => $campaign->campaign_name,
             'proof_url' => url('proof/review', $this->proof->token),
             'type' => 'new_proof',
-            'send_to_all' => (isset($this->proof->send_to_all) && $this->proof->send_to_all == 1)
+            'notification_message_to_all' => $this->proof->notification_message_to_all,
+            'send_to_all' => (isset($this->proof->send_to_all) && $this->proof->send_to_all === true)
         ];
 
         if ($params['send_to_all']) {
@@ -129,6 +130,7 @@ class SendReviewersEmail extends Job implements ShouldQueue
 
         array_walk($reviewers, function (&$reviewer) use ($params) {
             if ($params['send_to_all'] || !isset($reviewer['notified']) || !$reviewer['notified']) {
+                $params['reviewer'] = $reviewer;
                 if (EmailSender::sendReviewerEmail($reviewer, $params)) {
                     $date = new UTCDateTime();
                     $reviewer['notified'] = true;

@@ -76,10 +76,14 @@
                   </div>
                   <div class="input-group">
                     <label>
-                      <checkbox name="send_to_all" value="1">
+                      <checkbox name="send_to_all" value="1" v-model="sendToAll">
                         Send a notification to all reviewers
                       </checkbox>
                     </label>
+                  </div>
+                  <div class="form-group">
+                  <label>Message for all reviewers</label>
+                    <textarea name="notification_message_4_all" id="notification_message_4_all" class="form-control" rows="3" maxlength="200" v-model="notificationMessage4All"></textarea>
                   </div>
                 </div>
               </form>
@@ -160,7 +164,9 @@
 
         let data = {
           campaign_id: this.campaign.campaign_id,
-          reviewers: this.reviewers,
+          reviewers: this.reviewers.map((rev)=>({email: rev.email, required: rev.required, notification_message: rev.notification_message})),
+          send_to_all: this.sendToAll,
+          notification_message_4_all: this.notificationMessage4All
         }
         if(!this.campaign.campaign_data.proof_id || this.startProof){
           data.create_new_proof = true;
@@ -374,6 +380,8 @@
         reviewers: [],
         currentReviewer: {},
         currentNotificationMessage: '',
+        notificationMessage4All: '',
+        sendToAll: false,
         startProof: true,
         proofAccess: {
           status: this.$_app.config.proofConfig.status,
@@ -384,3 +392,9 @@
     },
   };
 </script>
+
+<style media="screen">
+  #notification_message_4_all{
+    height: 80px;
+  }
+</style>

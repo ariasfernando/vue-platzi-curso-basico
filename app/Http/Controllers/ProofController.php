@@ -487,6 +487,11 @@ class ProofController extends Controller
             if ($request->has('send_to_all') && $request->input('send_to_all') == 1) {
                 $proof->send_to_all = true;
             }
+            $proof->notification_message_to_all = "";
+            if ($request->has('notification_message_4_all') && $request->input('notification_message_4_all') !== "") {
+                $proof->send_to_all = true;
+                $proof->notification_message_to_all = $request->input('notification_message_4_all');
+            }
             $proof->save();
             $activity = 'Proof updated';
         }
