@@ -111,7 +111,7 @@ import SettingsContainer from "../../../components/common/settings/containers/Se
 }
 .el-button:first-child:nth-last-child(3),
 .el-button:first-child:nth-last-child(3) ~ button {
-    width: 33.3333%;
+    width: 33%;
 }
 .el-button:first-child:nth-last-child(4),
 .el-button:first-child:nth-last-child(4) ~ button{
