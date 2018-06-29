@@ -4,8 +4,10 @@
 /* eslint no-console: 0 */
 /* global Application */
 
-import store from 'store';
+/* vendor import */
 import nock from 'nock';
+/* local import */
+import store from 'store';
 import mocks from 'resources/mocks';
 
 /*
