@@ -68,16 +68,16 @@
                 <div class="modal-divider" v-show="campaignData.proof_id !== null"></div>
                 <div class="checkbox new-proof-checkbox" v-show="campaignData.proof_id !== null">
                   <div class="input-group">
-                    <label data-toggle="tooltip" data-placement="top" title="Existing comments, approvals, and rejections will be archived.">
+                    <label data-toggle="tooltip" data-placement="top" title="Selecting this option will archive the previously collected approvals, rejections, and comments. It will effectively start the approval process over from the beginning">
                       <checkbox name="create_new_proof" value="1" v-model="startProof">
                         Start proof from scratch
                       </checkbox>
                     </label>
                   </div>
                   <div class="input-group">
-                    <label>
+                    <label data-toggle="tooltip" data-placement="top" title="Checking this box will send or resend both public and private notifications to all users, not just those newly added or whose message was changed">
                       <checkbox name="send_to_all" value="1" v-model="sendToAll">
-                        Send a notification to all reviewers
+                        Send/Resend notifications to all reviewers
                       </checkbox>
                     </label>
                   </div>
@@ -392,9 +392,12 @@
     },
   };
 </script>
+<<<<<<< HEAD
 
 <style media="screen">
   #notification_message_4_all{
     height: 80px;
   }
 </style>
+=======
+>>>>>>> a5da83a16f2ecb92e9df07d7810f93fd9c26dc73
