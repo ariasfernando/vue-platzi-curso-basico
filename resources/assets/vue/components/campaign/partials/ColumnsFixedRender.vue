@@ -1,5 +1,5 @@
 <template>
-  <table class="st-col"
+  <table class="st-mobile-full-width"
          align="left"
          width="100%"
          cellspacing="0"
@@ -23,7 +23,8 @@
                 :component="component"
                 :module-id="moduleId"
                 :column-id="columnId"
-                :component-id="componentId"></component>
+                :component-id="componentId"
+                context="campaign"></component>
             </template>
           </table>
         </td>

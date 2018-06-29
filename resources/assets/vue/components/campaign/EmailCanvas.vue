@@ -411,6 +411,9 @@
       @import '../../../less/base/commons/mobile/mobile_client_styles';
     }
 
+    table{
+      border-collapse: initial;
+    }
     tr.ghost-component{
       text-align: center;
       color:@focus;

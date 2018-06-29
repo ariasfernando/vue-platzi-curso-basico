@@ -13,10 +13,10 @@
             <slot name="body">
               <b-tabs>
                 <b-tab title="HTML" @click="changeTypeTextArea('normal_html')" >
-                  <textarea ref="normal_html" v-html="html"></textarea>
+                  <textarea ref="normal_html" v-html="html" readonly></textarea>
                 </b-tab>
                 <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">
-                  <textarea ref="plain_text" v-html="plainText"></textarea>
+                  <textarea ref="plain_text" v-html="plainText" readonly></textarea>
                 </b-tab>
               </b-tabs>
             </slot>

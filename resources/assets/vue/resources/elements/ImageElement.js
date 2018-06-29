@@ -10,7 +10,7 @@ function imageDefault() {
     image: {
       attribute: {
         placeholder: 'default/placeholder-square.jpg',
-        href: 'http://stensul.com',
+        href: '',
         alt: 'Image',
         title: 'Image',
         width: '100%',

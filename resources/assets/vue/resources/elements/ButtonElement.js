@@ -31,7 +31,7 @@ function buttonDefault() {
         height: '40',
         align: 'center',
         bgcolor: '#514960',
-        href: 'http://stensul.com',
+        href: '',
         valign: 'middle',
       },
     },
