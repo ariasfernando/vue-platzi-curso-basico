@@ -50,11 +50,11 @@
       },
       toggleElement(value, elementId){
         if (this.isCustom) {
-          let data = {};
-          data[elementId] = {"enableElement" : value}
-          this.$store.commit('campaign/saveCustomModuleData', {
-            moduleId: this.currentCustomModule,
-            data,
+            this.$store.dispatch("campaign/updateCustomElementProperty", {
+              moduleId: this.currentCustomModule,
+              subComponent: elementId,
+              property: 'enableElement',
+              value: value
           });
         } else {
           const element = this.getElement(elementId)

@@ -110,8 +110,8 @@ const mutations = {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);
   },
   savePlugin(state, payload) {
-    const pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
-    _.merge(pluginData, payload.config);
+    const pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+    Vue.set(pluginData, 'config', payload.config);
   },
   savePluginSuboption(state, payload) {
     const pluginOptions = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
