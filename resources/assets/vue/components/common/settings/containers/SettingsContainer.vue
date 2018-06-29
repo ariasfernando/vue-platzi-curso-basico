@@ -75,6 +75,7 @@ export default {
 .half-setting {
   width: 50%;
   float: left;
+  text-align: right;
   & + .half-setting {
     padding-left: 15px;
   }
