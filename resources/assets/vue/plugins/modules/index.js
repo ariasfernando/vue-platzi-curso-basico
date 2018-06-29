@@ -1,6 +1,7 @@
 import alignment from './alignment';
 import backgroundColor from './background-color';
 import columnBackgroundColor from './column-background-color';
+import columnPaletteBackgroundColor from './column-palette-background-color';
 import destinationUrl from './destination-url';
 import fontFamily from './font-family';
 import mobileStyles from './mobile-styles';
@@ -16,6 +17,7 @@ export default {
   alignment,
   backgroundColor,
   columnBackgroundColor,
+  columnPaletteBackgroundColor,
   destinationUrl,
   fontFamily,
   mobileStyles,

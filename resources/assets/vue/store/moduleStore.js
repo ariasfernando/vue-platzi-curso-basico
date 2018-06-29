@@ -110,11 +110,32 @@ const mutations = {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);
   },
   savePlugin(state, payload) {
-    const pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+    let pluginData = state.module;
+    
+    if (payload.componentId >= 0) {
+      // save component plugin
+      pluginData = pluginData.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+    } else if (payload.columnId >= 0) {
+      // save column plugin
+      pluginData = pluginData.structure.columns[payload.columnId].plugins[payload.plugin];
+    } else {
+      // save module plugin
+      pluginData = pluginData.plugins[payload.plugin];
+    }
     Vue.set(pluginData, 'config', payload.config);
   },
   savePluginSuboption(state, payload) {
-    const pluginOptions = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
+    let pluginOptions = state.module;
+    if (payload.componentId >= 0) {
+      // save component plugin
+      pluginOptions = pluginOptions.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
+    } else if (payload.columnId >= 0) {
+      // save column plugin
+      pluginOptions = pluginOptions.structure.columns[payload.columnId].plugins[payload.plugin].config.options;
+    } else {
+      // save module plugin
+      pluginOptions = pluginOptions.plugins[payload.plugin].config.options;
+    }
     _.assign(pluginOptions[payload.subOption], payload.config.options[payload.subOption]);
   },
   togglePlugin(state, data) {
