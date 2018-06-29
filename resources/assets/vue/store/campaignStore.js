@@ -8,8 +8,8 @@ import {
   extend,
   isEqual,
   each,
-  _
 } from 'lodash';
+import _ from 'lodash';
 
 import {
   defer
