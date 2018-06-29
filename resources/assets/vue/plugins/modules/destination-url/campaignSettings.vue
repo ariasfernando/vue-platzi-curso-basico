@@ -166,7 +166,7 @@
   margin-left: 0;
 }
 .el-button {
-  width: 28px;
+  width: 33%;
   padding: 4px 0;
   margin-right: 0px;
   height: 26px;
