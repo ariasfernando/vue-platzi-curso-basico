@@ -143,16 +143,12 @@ export default {
 .el-button:not(.custom-col) {
   width: 28px;
   padding: 4px 0;
-  height: 28px;
+  height: 26px;
   display: block;
   float: left;
 }
-</style>
-<style>
-/* not scoped */
-.input-font-weight .el-input--mini .el-input__inner {
+.input-font-weight .el-input--mini /deep/ .el-input__inner {
   text-align: center;
   border-right: 0;
 }
 </style>
-

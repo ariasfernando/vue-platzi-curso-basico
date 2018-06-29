@@ -322,6 +322,9 @@
   }
 </script>
 <style lang="less" scoped>
+.settings-container /deep/ label{
+  font-weight: 600;
+}
 .width-full {
   width: 100%;
 }
@@ -351,6 +354,25 @@
     text-overflow: ellipsis;
     display: inline-block;
   }
+}
+.el-select /deep/ .is-focus{
+  .el-input__inner{
+    border-color: #78dcd6;
+  }
+}
+.el-select /deep/ .el-input__inner,
+.el-input /deep/ .el-input__inner{
+  border-radius: 2px;
+  font-weight: 300;
+  padding-left: 8px;
+  height: 26px;
+
+  &:focus{
+    border: 1px solid #78dcd6;
+  }
+}
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected{
+  color: #61bab5;
 }
 </style>
 

@@ -77,5 +77,6 @@ export default {
 .plugin-palette /deep/ .vc-compact {
   padding-top: 5px;
   padding-left: 6px;
+  border: 1px solid #dddddd!important;
 }
 </style>

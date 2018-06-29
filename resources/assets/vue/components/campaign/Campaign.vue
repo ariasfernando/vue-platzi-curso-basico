@@ -260,6 +260,8 @@
     display: block;
     float: left;
     padding: 0px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+
     &::-webkit-scrollbar {
         width: 2px; 
         background: transparent;

@@ -261,5 +261,18 @@ export default {
   font-size: 12px;
   font-weight: 300;
   padding: 6px 20px;
+  border-radius: 2px;
+  margin-top: 5px;
 } 
+
+.el-input /deep/ .el-input__inner{
+  border-radius: 2px;
+  font-weight: 300;
+  padding-left: 8px;
+  height: 26px;
+
+  &:focus{
+    border: 1px solid #78dcd6;
+  }
+}
 </style>

@@ -129,10 +129,14 @@ export default {
 .el-button.is-disabled,
 .el-button.is-disabled:focus,
 .el-button.is-disabled:hover {
-  color: #606266;
+  background: #f8f8f8;
+  color: #666666;
   cursor: inherit;
   border: 1px solid #dcdfe6;
-  border-left: 0;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 14px;
+  border-radius: 0px 2px 2px 0px;
 }
 .input-number-size {
   padding-left: 0;
@@ -162,6 +166,9 @@ button.el-button {
 .el-input-number {
   width: 67px;
 }
+.el-input-number .el-input__inner{
+    border-radius: 2px 0px 0px 2px;
+}
 #edit-container .right-bar .form-group,
 #edit-container .left-bar .form-group {
   margin-bottom: 0;
@@ -176,16 +183,27 @@ button.el-button {
     text-align: center;
   }
   .el-input-number.is-without-controls .el-input__inner {
-    padding: 0;
+    border-radius: 2px 0px 0px 2px;
+    border-right: none;
   }
   .el-color-picker__trigger {
-    padding: 3px;
+    padding: 0px;
     height: 28px;
     width: 34px;
+    border-radius: 2px;
+
+    .el-color-picker__color{
+      border: none;
+    }
   }
-  input.el-input__inner {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+  .el-select{
+    .el-input__inner{
+      border-radius: 2px;
+
+      &:focus{
+        border: 1px solid #78dcd6;
+      }
+    }
   }
 }
 </style>

@@ -22,3 +22,15 @@ export default {
   components: { SettingsContainer },
 };
 </script>
+
+<style lang="less" scoped>
+  .el-input /deep/ .el-input__inner{
+    border-radius: 2px;
+    text-align: left;
+    padding-left: 8px;
+
+    &:focus{
+      border: 1px solid #78dcd6;
+    }
+  }
+</style>

@@ -71,21 +71,25 @@ export default {
   padding: 0;
 }
 .generic-color /deep/ .el-color-picker__trigger {
-  padding: 3px;
-  height: 28px;
+  padding: 0px;
+  height: 26px;
   width: 34px;
   border-left: 0;
-  border-top-right-radius: 4px;
+  border-top-right-radius: 2px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-  border-bottom-right-radius: 4px;
+  border-bottom-right-radius: 2px;
+
+  .el-color-picker__color{
+    border: none;
+  }
 }
 .generic-color /deep/ .el-input{
   .el-input__inner {
-    border-top-left-radius: 4px;
+    border-top-left-radius: 2px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 2px;
   }
   &.is-disabled .el-input__inner {
     background-color: #fff;
@@ -94,6 +98,7 @@ export default {
     padding: 0;
     font-size: 12px;
     text-align: center;
+    height: 26px;
   }
 }
 </style>
