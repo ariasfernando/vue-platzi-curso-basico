@@ -90,3 +90,8 @@
     }
   }
 </script>
+<style lang="less" scoped>
+.el-switch{
+  float: left;
+}
+</style>

@@ -60,4 +60,7 @@ export default {
     margin-left: -15px;
   }
 }
+.el-switch{
+  float: right;
+}
 </style>

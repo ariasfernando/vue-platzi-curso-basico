@@ -497,10 +497,6 @@ p,ul,ol{
         padding-top: 4px;
       }
     }
-
-    .el-switch{
-      float: right;
-    }
   }
 }
 </style>
