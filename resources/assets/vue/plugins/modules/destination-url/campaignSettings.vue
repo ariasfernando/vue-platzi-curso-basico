@@ -150,13 +150,17 @@
 .el-button:focus,
 .el-button:hover {
   color: inherit;
-  border-color: inherit;
+  border-color: #78dcd6;
   background-color: inherit;
 }
 .el-button.active {
   color: #ffffff;
   border-color: rgb(120, 220, 214);
   background-color: rgb(120, 220, 214);
+
+  &:before{
+    color: #ffffff;
+  }
 }
 .el-button + .el-button {
   margin-left: 0;
@@ -164,15 +168,38 @@
 .el-button {
   width: 28px;
   padding: 4px 0;
-  margin-right: 2.67px;
+  margin-right: 0px;
   height: 26px;
-  display: block;
-  float: left;
+  border-radius: 0px;
+  border-right: none;
+
+  &:before{
+    color: #999999;
+  }
+
+  &:first-of-type {
+    margin: 0;
+    border-radius: 2px 0px 0px 2px;
+    border-right: none;
+  }
+
   &:last-of-type {
     margin: 0;
+    border-radius: 0px 2px 2px 0px;
+    border-right: 1px solid #dddddd;
   }
 }
 .padding-zero {
   padding: 0;
+}
+.el-input /deep/ .el-input__inner{
+  border-radius: 2px;
+  font-weight: 300;
+  padding-left: 8px;
+  height: 26px;
+
+  &:focus{
+    border: 1px solid #78dcd6;
+  }
 }
 </style>
