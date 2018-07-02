@@ -105,9 +105,11 @@
         set(value) {
           this.saveComponentProperty('href', value);
 
-          if (this.validationRules) {
-            this.validate();
-          }
+          this.$nextTick(_ => {
+            if (this.validationRules) {
+              this.validate();
+            }
+          });
         },
       },
       validationRules() {
