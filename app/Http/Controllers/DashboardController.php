@@ -4,7 +4,7 @@ namespace Stensul\Http\Controllers;
 
 use Auth;
 use Campaign as CampaignManager;
-use Stensul\Models\Campaign;
+use CampaignModel as Campaign;
 use Stensul\Models\Library;
 use Stensul\Models\Setting;
 use Illuminate\Http\Request;

@@ -8,7 +8,8 @@ use Imagine;
 use Storage;
 use Imagine\Image\ImageInterface;
 use League\Flysystem\AdapterInterface;
-use Stensul\Services\EmailHtmlCreator as Html;
+use HtmlCreator as Html;
+use CampaignModel;
 
 class StaticProcessor
 {
@@ -21,7 +22,7 @@ class StaticProcessor
      *
      * @param \Stensul\Models\Campaign $campaign
      */
-    public function __construct(\Stensul\Models\Campaign $campaign)
+    public function __construct(CampaignModel $campaign)
     {
         $this->campaign = $campaign;
     }
@@ -117,7 +118,7 @@ class StaticProcessor
      *
      * @param \Stensul\Models\Campaign $from
      */
-    public function copyAssetsFrom(\Stensul\Models\Campaign $from)
+    public function copyAssetsFrom(CampaignModel $from)
     {
         $storage = Storage::disk('local:campaigns');
         $assets = [];
@@ -241,7 +242,7 @@ class StaticProcessor
      *
      * @param \Stensul\Models\Campaign $from
      */
-    public function replaceReferenceId(\Stensul\Models\Campaign $from)
+    public function replaceReferenceId(CampaignModel $from)
     {
         $modules_data = $this->getCampaign()->modules_data;
         foreach ($from->modules_data as $key => $module) {

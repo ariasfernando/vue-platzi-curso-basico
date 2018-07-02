@@ -17,9 +17,9 @@ use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Stensul\Models\Proof;
-use Stensul\Models\Campaign;
+use CampaignModel;
 use Stensul\Jobs\StoreAssetsInCdn;
-use Stensul\Jobs\ProcessCampaign;
+use ProcessCampaign;
 use Stensul\Jobs\SendReviewersEmail;
 use Stensul\Exceptions\PermissionDeniedException;
 use HtmlCreator as Html;
@@ -52,7 +52,7 @@ class CampaignManager
     {
         $campaign_id = $inputs['campaign_id'];
 
-        $campaign = Campaign::findOrFail($inputs['campaign_id']);
+        $campaign = CampaignModel::findOrFail($inputs['campaign_id']);
         $campaign_name = $inputs['campaign_name'] ?? '';
         $modules_data = $inputs['modules_data'] ?? [];
         if (!is_array($campaign->tags)) {
@@ -135,7 +135,7 @@ class CampaignManager
 
         $campaign_id = $inputs['campaign_id'];
         if (isset($campaign_id)) {
-            $campaign = Campaign::findOrFail($inputs['campaign_id']);
+            $campaign = CampaignModel::findOrFail($inputs['campaign_id']);
             $type = \Config::get('campaign.favorite_settings.type');
 
             if ($type === 'global') {
@@ -171,7 +171,7 @@ class CampaignManager
     public static function delete($campaign_id = null)
     {
 
-        if ($campaign_data = Campaign::find($campaign_id)) {
+        if ($campaign_data = CampaignModel::find($campaign_id)) {
             $campaign_data->status = 2;
             $campaign_data->deleted_at = Carbon::now();
             $campaign_data->deleted_by = [
@@ -212,7 +212,7 @@ class CampaignManager
     {
         $response = false;
 
-        $campaign_data = Campaign::find($campaign_id);
+        $campaign_data = CampaignModel::find($campaign_id);
 
         if (!is_null($campaign_data)) {
             $response = [
@@ -245,7 +245,7 @@ class CampaignManager
         ];
         $data['updated_by'] = $data['created_by'];
 
-        $campaign = Campaign::create($data);
+        $campaign = CampaignModel::create($data);
 
         Activity::log('Campaign created', array('properties' => ['campaign_id' => new ObjectID($campaign->id)]));
 
@@ -268,7 +268,7 @@ class CampaignManager
      */
     public static function copy($campaign_id = null)
     {
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
 
         if (!$campaign->template && !Auth::user()->can('clone_campaign')) {
             throw new PermissionDeniedException("You're not allowed to clone campaigns.");
@@ -348,7 +348,7 @@ class CampaignManager
      */
     public static function text($campaign_id = null)
     {
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
 
         if ($campaign->processed == 0 || $campaign->plain_text == '') {
             $response = Text::htmlToText($campaign->body_html);
@@ -372,7 +372,7 @@ class CampaignManager
      */
     public static function html($campaign_id = null)
     {
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
 
         return $campaign->body_html;
     }
@@ -389,7 +389,7 @@ class CampaignManager
     {
         $response = [];
 
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
 
         if ($file) {
             $assets = new Assets($campaign);
@@ -417,7 +417,7 @@ class CampaignManager
     {
         $response = [];
 
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
 
         if ($file) {
             $assets = new Assets($campaign);
@@ -473,7 +473,7 @@ class CampaignManager
      */
     public static function publicPath($campaign_id = null)
     {
-        $campaign_data = Campaign::findOrFail($campaign_id);
+        $campaign_data = CampaignModel::findOrFail($campaign_id);
 
         if ($campaign_data->processed) {
             $path = $campaign_data->getCdnPath(true) . DS . 'index.html';
@@ -494,7 +494,7 @@ class CampaignManager
      */
     public static function ogExtractor($campaign_id = null, $path = null)
     {
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
 
         if (!filter_var($path, FILTER_VALIDATE_URL)) {
             return ['error' => 'NO_VALID_URL'];
@@ -539,7 +539,7 @@ class CampaignManager
     {
         $response = [];
 
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
 
         if (!is_null($gif) && !is_null($layer)) {
             $assets = new Assets($campaign);
@@ -566,7 +566,7 @@ class CampaignManager
     public static function updateEmailSentHistory($campaign_id, $mail)
     {
         if (isset($campaign_id)) {
-            $campaign = Campaign::findOrFail($campaign_id);
+            $campaign = CampaignModel::findOrFail($campaign_id);
 
             $email_sent_data = [
                 'date' => date("Y-m-d h:i:s"),
@@ -596,7 +596,7 @@ class CampaignManager
     {
         $response = false;
 
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
 
         if (!is_null($campaign)) {
             $response = $campaign->email_sent_history;
@@ -619,7 +619,7 @@ class CampaignManager
         $response = [];
 
         if (isset($options["campaign_id"])) {
-            $campaign = Campaign::findOrFail($options["campaign_id"]);
+            $campaign = CampaignModel::findOrFail($options["campaign_id"]);
             $assets = new Assets($campaign);
             $response = $assets->customMerge($options);
         }
@@ -665,7 +665,7 @@ class CampaignManager
      */
     public static function deleteTag($campaign_id, $tag_name)
     {
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
         $tags = $campaign->tags;
         if (($key = array_search($tag_name, $tags)) !== false) {
             unset($tags[$key]);
@@ -690,7 +690,7 @@ class CampaignManager
      */
     public static function forceLock($campaign_id)
     {
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
         $campaign->locked = true;
         $campaign->locked_by = Auth::user()->email;
         $campaign->timestamps = false;
@@ -708,7 +708,7 @@ class CampaignManager
      */
     public static function unlockForced($campaign_id)
     {
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
         if ($campaign->locked_by !== Auth::user()->email) {
             throw new AuthorizationException('Only the user that locked the campaign can unlock it');
         }
@@ -721,7 +721,7 @@ class CampaignManager
 
     public static function downloadHtml($campaign_id)
     {
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
         return response()->make($campaign->body_html, 200, [
             'Content-Type' => 'text/html',
             'Content-Disposition' => 'attachment; filename="' . $campaign->campaign_name . '.html"'
@@ -741,7 +741,7 @@ class CampaignManager
     public static function updateAutoSave($campaign_id = null, $status = true)
     {
 
-        if ($campaign_data = Campaign::find($campaign_id)) {
+        if ($campaign_data = CampaignModel::find($campaign_id)) {
             $campaign_data->auto_save = $status;
             if ($campaign_data->save()) {
                 Activity::log('Autosave campaign updated', array(
@@ -765,7 +765,7 @@ class CampaignManager
     public static function trimImage($options = [])
     {
         $campaign_id = (isset($options['campaign_id']))? $options['campaign_id'] : null;
-        $campaign = Campaign::findOrFail($campaign_id);
+        $campaign = CampaignModel::findOrFail($campaign_id);
         $assets = new Assets($campaign);
         return $assets->trimImage($options);
     }

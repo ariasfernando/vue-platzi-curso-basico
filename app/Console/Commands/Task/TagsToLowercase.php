@@ -3,7 +3,7 @@
 namespace Stensul\Console\Commands\Task;
 
 use Stensul\Models\Tag;
-use Stensul\Models\Campaign;
+use CampaignModel;
 use Illuminate\Console\Command;
 
 class TagsToLowercase extends Command
@@ -36,7 +36,7 @@ class TagsToLowercase extends Command
     public function handle()
     {
         $this->info('>>> Update tags in campaigns.');
-        $campaigns = Campaign::withTrashed()->get();
+        $campaigns = CampaignModel::withTrashed()->get();
         foreach ($campaigns as $campaign) {
             if (isset($campaign->tags) && count($campaign->tags)) {
                 $campaign->timestamps = false;
