@@ -8,9 +8,25 @@
       <i class="glyphicon glyphicon-cloud-upload"></i>
       Upload Mobile Image
     </el-button>
-    <settings-container label="Alt" v-if="component">
+    <settings-container label="Alt">
       <template slot="setting-bottom">
-        <el-input size="mini" v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
+        <el-input
+          v-if="validationRules"
+          name="alt"
+          type="text"
+          placeholder="Alt text"
+          size="mini"
+          v-model="alt"
+          v-validate.initial="validationRules"
+          class="image-alt-text"
+          :class="{'input': true, 'is-danger': hasError }">
+        </el-input>
+        <el-input
+          v-else
+          v-model="alt"
+          class="image-alt-text"
+          placeholder="Alt text"></el-input>
+        <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
       </template>
     </settings-container>
     <image-modal 
@@ -28,9 +44,12 @@
 import imageService from '../../../services/image';
 import ImageModal from '../../../components/common/ImageModal';
 import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+import _ from 'lodash';
+import validatorMixin from '../mixins/validator';
 
 export default {
   props: ['name', 'plugin', 'pluginKey'],
+  mixins: [validatorMixin],
   components: {
     ImageModal,
     SettingsContainer
@@ -50,6 +69,9 @@ export default {
     },
     currentComponent() {
       return this.$store.getters['campaign/currentComponent'];
+    },
+    module() {
+      return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
     },
     component() {
       let component = {};
@@ -81,7 +103,24 @@ export default {
           value
         };
         this.$store.commit('campaign/saveComponentProperty', payload);
+        
+        this.$nextTick(() => {
+          if (this.validationRules) {
+            this.validate();
+          }
+        });
       }
+    },
+    validationRules() {
+        const rules = [];
+        if(this.plugin.config.alt && this.plugin.config.alt.validations){
+          _.each(this.plugin.config.alt.validations, (e,i) => {
+            if (e) {
+              rules.push(i);
+            }
+          });
+          return rules.join('|');
+        }
     },
     hasImageMobile() {
       return this.component.image.styleOption.hasImageMobile;

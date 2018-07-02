@@ -1,6 +1,53 @@
 import _ from 'lodash';
 
 export default {
+  mounted() {
+    if (this.validationRules) {
+      this.validate();
+    }
+  },
+  computed: {
+    validated: {
+      get() {
+        return this.plugin.data.validated;
+      },
+      set(value) {
+        const payload = {
+          plugin: this.pluginKey,
+          moduleId: this.currentComponent.moduleId,
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          data: {
+            validated: value,
+          },
+        };
+  
+        // Save plugin data
+        this.$store.commit("campaign/savePlugin", payload);
+      }
+    },
+    moduleErrors() {
+      return this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
+                                                      && _.isEqual(err.scope.columnId, this.currentComponent.columnId)
+                                                      && _.isEqual(err.scope.componentId, this.currentComponent.componentId))) : [];
+    },
+    hasError() {
+      return this.moduleErrors.length > 0;
+    },
+    getErrorMessage() {
+      return this.moduleErrors.length > 0 ? this.moduleErrors[0].msg : '';
+    },
+  },
+  watch: {
+    currentComponent: {
+      handler: function(currentComponent) {
+        if (this.validationRules) {
+          this.validate();
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
     validate() {
       this.$validator.validateAll().then(() => {
@@ -70,27 +117,6 @@ export default {
       }
 
       return hasErrors;
-    },
-  },
-  computed: {
-    validated: {
-      get() {
-        return this.plugin.data.validated;
-      },
-      set(value) {
-        const payload = {
-          plugin: this.pluginKey,
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          data: {
-            validated: value,
-          },
-        };
-  
-        // Save plugin data
-        this.$store.commit("campaign/savePlugin", payload);
-      }
-    },
+    }
   }
 };
