@@ -4,7 +4,7 @@ import campaignSettings from './campaignSettings.vue';
 export default {
   name: 'style-image-editor',
   title: 'style Image Editor',
-  version: '0.0.6',
+  version: '0.0.9',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
@@ -74,7 +74,7 @@ export default {
         size_fit: {
           label: 'Image Fit',
           key: 'fit',
-          value: 1,
+          value: '1',
           type: 'select',
           options: {
             0: 'Contain',
@@ -254,29 +254,67 @@ export default {
           type: 'number',
           step: 1,
         },
-        overlay_top: {
-          label: 'Top',
-          key: 'top',
-          value: 0,
-          type: 'number',
-          step: 1,
+        overlay_resizable: {
+          label: 'Fixed Size',
+          key: 'resizable',
+          value: false,
+          type: 'switch',
         },
-        overlay_left: {
-          label: 'Left',
-          key: 'left',
-          value: 0,
-          type: 'number',
-          step: 1,
+        overlay_absolute: {
+          label: 'Absolute position',
+          key: 'position_absolute',
+          value: true,
+          type: 'switch',
+          config: {
+            overlay_top: {
+              label: 'Top',
+              key: 'top',
+              value: 0,
+              type: 'number',
+              step: 1,
+            },
+            overlay_left: {
+              label: 'Left',
+              key: 'left',
+              value: 0,
+              type: 'number',
+              step: 1,
+            },
+          },
+        },
+        overlay_relative: {
+          label: 'Relative position',
+          key: 'position_relative',
+          value: false,
+          type: 'switch',
+          config: {
+            overlay_alignx: {
+              label: 'Horizontal Alignment',
+              key: 'alignx',
+              value: '0',
+              type: 'select',
+              options: {
+                0: 'Left',
+                1: 'Center',
+                2: 'Right',
+              },
+            },
+            overlay_aligny: {
+              label: 'Vertical Alignment',
+              key: 'aligny',
+              value: '0',
+              type: 'select',
+              options: {
+                0: 'Top',
+                1: 'Center',
+                2: 'Bottom',
+              },
+            },
+          },
         },
         overlay_fixed: {
           label: 'Fixed Position',
           key: 'fixed',
-          value: false,
-          type: 'switch',
-        },
-        overlay_resizable: {
-          label: 'Fixed Size',
-          key: 'resizable',
           value: false,
           type: 'switch',
         },
