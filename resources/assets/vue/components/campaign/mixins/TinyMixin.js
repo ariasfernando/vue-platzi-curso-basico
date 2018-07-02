@@ -59,7 +59,7 @@
         const nameComponent = this.$options.name;
         const libraryLinkColor = this.libraryConfig.linkColor;
         const editorId = ['editor', this.module.idInstance, this.columnId, this.componentId].join('-');
-        
+
         const setStyles = () => {
           const editor = tinymce.get(tinymce.activeEditor.id);
           const link_fixed_color = editor.settings.link_fixed_color;
@@ -187,7 +187,7 @@
               .on('keydown', (e) => {
                 const tinyMax = parseInt(editor.settings.max_chars);
                 const tinyMaxLines = parseInt(editor.settings.max_lines);
-                let tinyLength, 
+                let tinyLength,
                 tinyText;
 
                 if (!tinyMax) {
@@ -197,7 +197,7 @@
 
                 const $textElement = $(`#${editor.id}`);
                 tinyLength = $textElement.text().length;
-                        
+
                 const allowKeys = [
                   //  key      keyCode
                   'Backspace', 8,
@@ -293,10 +293,10 @@
                     .addClass('bg-danger');
 
                   return false
-                } 
+                }
                   $textElement
                     .removeClass('bg-danger');
-                
+
 
               })
               .on('change', (e) => {
@@ -306,14 +306,14 @@
           paste_preprocess: (plugin, args) => {
             const editor = tinymce.get(tinymce.activeEditor.id);
             const tinyMax = parseInt(editor.settings.max_chars);
-            
+
             if (!tinyMax) {
               // if truncate is NAN, returns and avoid validations
               return;
             }
 
             // trim string if exceed max char limit
-            const tinyLength = editor.getContent({ format: 'text' }).length - 1;            
+            const tinyLength = editor.getContent({ format: 'text' }).length - 1;
             const charsToPaste = tinyMax - tinyLength;
             args.content = args.content.trim().substring(0, charsToPaste);
           },
@@ -327,6 +327,16 @@
               settings.textcolor_map = option.textcolor_map;
             }
           });
+        }
+
+        // Extend plugins
+        if ('extend_plugins' in this.textOptions.config.settings) {
+          settings.plugins = [settings.plugins, this.textOptions.config.settings.extend_plugins.join(' ')].join(' ');
+        }
+
+        // Extend toolbar
+        if ('extend_toolbar' in this.textOptions.config.settings) {
+          settings.plugins = [settings.plugins, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
         }
 
         _.extend(settings, customSettings);
