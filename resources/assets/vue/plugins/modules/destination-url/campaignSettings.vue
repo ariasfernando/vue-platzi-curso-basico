@@ -105,7 +105,7 @@
         set(value) {
           this.saveComponentProperty('href', value);
 
-          this.$nextTick(_ => {
+          this.$nextTick(() => {
             if (this.validationRules) {
               this.validate();
             }
