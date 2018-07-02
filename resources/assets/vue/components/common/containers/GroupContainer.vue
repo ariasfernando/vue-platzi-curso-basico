@@ -32,14 +32,15 @@ export default {
       font-size: 13px;
     }
   }
-  .group-container.clickeable /deep/ *{
-    cursor: pointer;
-    color: #514960;
-  }
-
-  .group-container.clickeable /deep/ i.icon-plus{
-    font-size: 13px;
-    opacity: 0.8;
-    right: 5px;
+  .group-container.clickeable /deep/ {
+      * {
+      cursor: pointer;
+      color: #514960;
+    }
+    i.icon-plus{
+      font-size: 13px;
+      opacity: 0.8;
+      right: 5px;
+    }
   }
 </style>
