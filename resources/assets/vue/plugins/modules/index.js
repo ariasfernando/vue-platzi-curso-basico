@@ -6,6 +6,7 @@ import destinationUrl from './destination-url';
 import fontFamily from './font-family';
 import mobileStyles from './mobile-styles';
 import moduleBackgroundColor from './module-background-color';
+import modulePaletteBackgroundColor from './module-palette-background-color';
 import paletteBackgroundColor from './palette-background-color';
 import styleImageEditor from './style-image-editor';
 import textOptions from './text-options';
@@ -22,6 +23,7 @@ export default {
   fontFamily,
   mobileStyles,
   moduleBackgroundColor,
+  modulePaletteBackgroundColor,
   paletteBackgroundColor,
   styleImageEditor,
   textOptions,

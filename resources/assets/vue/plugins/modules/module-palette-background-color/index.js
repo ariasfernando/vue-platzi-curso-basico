@@ -2,11 +2,11 @@ const studioSettings = require('./studioSettings.vue');
 const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
-  name: 'column-palette-background-color',
-  title: 'Palette background color',
+  name: 'module-palette-background-color',
+  title: 'Palette Background color',
   version: '0.0.1',
-  author: 'elias@stensul.com',
-  target: ['column'],
+  author: 'facundo.garcia@stensul.com',
+  target: ['module'],
   studioSettings,
   campaignSettings,
   config: {
@@ -14,8 +14,7 @@ module.exports = {
     paletteName: '',
     paletteMap: [],
   },
-  data: {
-  },
+  data: {},
   render: true,
   enabled: false,
 };
