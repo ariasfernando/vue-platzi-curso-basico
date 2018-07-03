@@ -321,17 +321,17 @@
     },
   }
 </script>
-<style lang="less" scoped>
-.settings-container /deep/ label{
+<style lang="scss" scoped>
+.settings-container >>> label{
   font-weight: 600;
 }
 .width-full {
   width: 100%;
 }
-.last-saved /deep/ label.half {
+.last-saved >>> label.half {
   width: 30%;
 }
-.last-saved /deep/ .half-setting {
+.last-saved >>> .half-setting {
   width: 70%;
 }
 .autosave-message{
@@ -340,7 +340,7 @@
   padding: 0;
   text-align: right;
 }
-.field-Tags /deep/ .el-select {
+.field-Tags >>> .el-select {
   .el-select__input.is-mini {
     height: 24px;
   }
@@ -355,13 +355,13 @@
     display: inline-block;
   }
 }
-.el-select /deep/ .is-focus{
+.el-select >>> .is-focus{
   .el-input__inner{
     border-color: #78dcd6;
   }
 }
-.el-select /deep/ .el-input__inner,
-.el-input /deep/ .el-input__inner{
+.el-select >>> .el-input__inner,
+.el-input >>> .el-input__inner{
   border-radius: 2px;
   font-weight: 300;
   padding-left: 8px;

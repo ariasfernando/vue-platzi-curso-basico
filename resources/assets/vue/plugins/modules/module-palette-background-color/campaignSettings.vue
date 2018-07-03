@@ -61,13 +61,13 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
-.plugin-palette /deep/ .vc-compact-color-item {
+<style lang="scss" scoped>
+.plugin-palette >>> .vc-compact-color-item {
   width: 16px;
   height: 16px;
   margin-right: 6px !important;
 }
-.plugin-palette /deep/ .vc-compact {
+.plugin-palette >>> .vc-compact {
   padding-top: 5px;
   padding-left: 6px;
   border: 1px solid #dddddd!important;

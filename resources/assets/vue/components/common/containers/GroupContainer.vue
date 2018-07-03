@@ -9,7 +9,7 @@ export default {
   props: ["customClass", "clickeable"],
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
   .group-container {
     border: 1px solid #e6e6e6;
     padding: 4px 6px 0 6px;
@@ -32,7 +32,7 @@ export default {
       font-size: 13px;
     }
   }
-  .group-container.clickeable /deep/ {
+  .group-container.clickeable >>> {
       * {
       cursor: pointer;
       color: #514960;

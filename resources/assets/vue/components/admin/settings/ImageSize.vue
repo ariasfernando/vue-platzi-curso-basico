@@ -174,7 +174,7 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .button input {
   text-align: center;
 }
@@ -225,13 +225,13 @@ export default {
 .el-input-number {
   width: 80px;
 }
-.settings-container /deep/ .half-setting{
+.settings-container >>> .half-setting{
   text-align: left;
 }
-.settings-container  /deep/ input[type="text"] {
+.settings-container  >>> input[type="text"] {
   text-align: center;
 }
-.settings-container  /deep/ .el-input-number  .el-input__inner {
+.settings-container  >>> .el-input-number  .el-input__inner {
   text-align: center;
   border-right: 0;
   border-top-right-radius: 2px;

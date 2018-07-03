@@ -47,19 +47,19 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-color-picker {
   float: right;
   height: 26px;
 }
 .input-text-hex {
-  width: calc(~"100% - 34px");
+  width: calc(100% - 34px);
   float: left;
 }
-.generic-color /deep/ .el-input {
+.generic-color >>> .el-input {
   padding: 0;
 }
-.generic-color /deep/ .el-color-picker__trigger {
+.generic-color >>> .el-color-picker__trigger {
   padding: 0px;
   height: 28px;
   width: 34px;
@@ -73,7 +73,7 @@ export default {
     border: none;
   }
 }
-.generic-color /deep/ .el-input{
+.generic-color >>> .el-input{
   .el-input__inner {
     border-top-left-radius: 2px;
     border-top-right-radius: 0;

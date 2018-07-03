@@ -23,8 +23,8 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-  .el-input /deep/ .el-input__inner{
+<style lang="scss" scoped>
+  .el-input >>> .el-input__inner{
     border-radius: 2px;
     text-align: left;
     padding-left: 8px;

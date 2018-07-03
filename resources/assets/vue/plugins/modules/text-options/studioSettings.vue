@@ -257,7 +257,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .font-mce-ico {
   font-family: tinymce, Arial;
 }

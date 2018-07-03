@@ -146,7 +146,7 @@
   }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-button:focus,
 .el-button:hover {
   color: inherit;
@@ -204,7 +204,7 @@
 .padding-zero {
   padding: 0;
 }
-.el-input /deep/ .el-input__inner{
+.el-input >>> .el-input__inner{
   border-radius: 2px;
   font-weight: 300;
   padding-left: 8px;

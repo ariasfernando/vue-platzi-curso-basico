@@ -253,7 +253,7 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-button {
   border-color: rgb(120, 220, 214);
   background-color: rgb(120, 220, 214);
@@ -265,7 +265,7 @@ export default {
   margin-top: 5px;
 } 
 
-.el-input /deep/ .el-input__inner{
+.el-input >>> .el-input__inner{
   border-radius: 2px;
   font-weight: 300;
   padding-left: 8px;

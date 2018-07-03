@@ -45,7 +45,7 @@ import SettingsContainer from "../../../components/common/settings/containers/Se
     },
   }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-button:focus,
 .el-button:hover {
   color: inherit;

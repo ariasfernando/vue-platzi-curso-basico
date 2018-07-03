@@ -45,7 +45,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-switch /deep/ .el-switch__core {
   width: 34px !important;
   height: 18px;
