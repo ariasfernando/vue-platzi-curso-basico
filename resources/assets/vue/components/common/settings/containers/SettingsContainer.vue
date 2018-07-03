@@ -114,4 +114,7 @@ span.is-danger {
     padding-left: 10px;
   }
 }
+.is-danger >>> input{
+  border-color: #ce5f5f;
+}
 </style>
