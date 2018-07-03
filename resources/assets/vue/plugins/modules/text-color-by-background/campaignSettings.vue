@@ -25,7 +25,7 @@
         _.each(this.module.structure.columns[this.columnId].components, (comp, compId) => {
           const subComponent = comp.type.split('-')[0];
           // Set new text color
-          if (subComponent === 'button' || subComponent === 'text') {
+          if (subComponent === 'text') {
             this.$store.commit('campaign/saveComponentProperty', {
               moduleId: this.currentModule,
               columnId: this.columnId,
