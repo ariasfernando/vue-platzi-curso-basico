@@ -12,20 +12,23 @@ Vue.prototype.$_app = {
 
 describe('Can', () => {
   it('Should return true for a valid permission', (done) => {
-    const can = Vue.prototype.$can('create_campaign');
+    let can = Vue.prototype.$can('create_campaign');
     expect(can).toBeTruthy();
+    can = null;
     done();
   });
 
   it('Should return false for an invalid permission', (done) => {
-    const can = Vue.prototype.$can('edit_campaign');
+    let can = Vue.prototype.$can('edit_campaign');
     expect(can).toBeFalsy();
+    can = null;
     done();
   });
 
   it('Should return false for empty permission', (done) => {
-    const can = Vue.prototype.$can();
+    let can = Vue.prototype.$can();
     expect(can).toBeFalsy();
+    can = null;
     done();
   });
 });

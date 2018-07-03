@@ -1,3 +1,7 @@
+/* eslint no-param-reassign:0 */
+/* eslint no-shadow:0 */
+/* eslint no-console:0 */
+
 import Vue from 'vue';
 import Q from 'q';
 import _ from 'lodash';
@@ -67,10 +71,12 @@ const mutations = {
     state.currentComponent = {};
   },
   updateElement(state, payload) {
-    const update = { ...state.module.structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
+    const update = { 
+      ...state.module.structure.columns[payload.columnId].components[payload.componentId].data,
+      ...payload.data,
+    };
     state.module.structure.columns[payload.columnId].components[payload.componentId].data = update;
   },
-
   saveModuleProperty(state, data) {
     const structure = state.module.structure;
     const subComponent = data.subComponent ? structure[data.subComponent] : structure;
@@ -110,23 +116,31 @@ const mutations = {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);
   },
   savePlugin(state, payload) {
-    const pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
+    let column = state.module.structure.columns[payload.columnId];
+    const pluginData = column.components[payload.componentId].plugins[payload.plugin].config;
     _.merge(pluginData, payload.config);
+    column = null;
   },
   savePluginSuboption(state, payload) {
-    const pluginOptions = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
+    let column = state.module.structure.columns[payload.columnId];
+    const pluginOptions = column.components[payload.componentId].plugins[payload.plugin].config.options;
     _.assign(pluginOptions[payload.subOption], payload.config.options[payload.subOption]);
+    column = null;
   },
   togglePlugin(state, data) {
+    let column;
     if (data.columnId >= 0 || data.componentId >= 0) {
+      column = state.module.structure.columns[data.columnId];
       if (data.componentId >= 0) {
-        state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].enabled = data.enabled;
+        column.components[data.componentId].plugins[data.plugin].enabled = data.enabled;
       } else {
-        state.module.structure.columns[data.columnId].plugins[data.plugin].enabled = data.enabled;
+        column.plugins[data.plugin].enabled = data.enabled;
       }
+      state.module.structure.columns[data.columnId] = column;
     } else {
       state.module.plugins[data.plugin].enabled = data.enabled;
     }
+    column = null;
   },
   saveComponentProperty(state, data) {
     const component = state.module.structure.columns[data.columnId].components[data.componentId];
@@ -153,8 +167,11 @@ const mutations = {
     console.log(err);
   },
   setListLibraries(state, data) {
-    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options = data.response;
-  }
+    let componentColumn = state.module.structure.columns[data.columnId].components[data.componentId];
+    componentColumn.plugins[data.plugin].config.library.config.set_images.options = data.response;
+    state.module.structure.columns[data.columnId].components[data.componentId] = componentColumn;
+    componentColumn = null;
+  },
 };
 
 const actions = {
@@ -171,7 +188,7 @@ const actions = {
 
     // Create new instance of Element width default column data
     const element = new Element({ type: 'column-element', plugins });
-
+    
     context.commit('addColumn', element.getProperties());
   },
   sortColumn(context, data) {
@@ -200,10 +217,12 @@ const actions = {
   saveModuleData(context, data) {
     return moduleService.saveModule(data)
       .then((response) => {
+        let output;
         if (response.message && response.message === 'SUCCESS') {
           context.commit('saveModule', response.id);
-          return response.id;
+          output = response.id;
         }
+        return output;
       })
       .catch(error => context.commit('error', error));
   },
@@ -222,15 +241,15 @@ const actions = {
     return deferred.promise;
   },
   getLibraries(context, data) {
-    imageService.getLibraries().then(response => {
+    imageService.getLibraries().then((response) => {
       response.data.push('');
       
       context.commit('setListLibraries', {
         ...data,
-        response: response.data
+        response: response.data,
       });
     });
-  }
+  },
 };
 
 module.exports = {

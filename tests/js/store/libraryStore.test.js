@@ -14,11 +14,17 @@ import mocks from 'resources/mocks';
  * == Test: Models
  */
 describe('== Library Store ==', () => {
-  const baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
+  let baseUrl;
+  beforeAll(() => {
+    baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
+  });
+  afterAll(() => {
+    baseUrl = null;
+  });
   describe('Mutations', () => {
     it('trigger "loadModulesData", the data should be been registered in the state.modules', (done) => {
       // Create fake campaign
-      const modulesData = {
+      let modulesData = {
         _id: '5b2c13af57ea5300113fc7b2',
         type: 'studio',
         key: 'text',
@@ -34,17 +40,23 @@ describe('== Library Store ==', () => {
       store.commit('library/loadModulesData', modulesData);
 
       // Get campaign data from state
-      const moduleDataGetter = store.state.library.modules;
+      let moduleDataGetter = store.state.library.modules;
 
       // Expect stored data to be equal to fake object
       expect(modulesData).toEqual(moduleDataGetter);
+
+      modulesData = null;
+      moduleDataGetter = null;
 
       done();
     });
   });
 
   describe('Actions', () => {
-    const original = console.error;
+    let original;
+    beforeAll(() => {
+      original = console.error;
+    });
 
     beforeEach(() => {
       console.error = jest.fn();
@@ -54,9 +66,11 @@ describe('== Library Store ==', () => {
       console.error.mockClear();
       console.error = original;
     });
+
     afterAll(() => {
       nock.cleanAll();
       nock.restore();
+      original = null;
     });
 
     it('trigger "getModulesData" and return the library data', async (done) => {
@@ -72,7 +86,7 @@ describe('== Library Store ==', () => {
     });
 
     it('trigger "getModulesData" and return error', async (done) => {
-      const failResponse = {
+      let failResponse = {
         message: 'Call to a member function getModules() on null',
         exception: 'Symfony\\Component\\Debug\\Exception\\FatalThrowableError',
         file: '/usr/src/app/app/Http/Controllers/CampaignController.php',
@@ -98,6 +112,7 @@ describe('== Library Store ==', () => {
 
       await store.dispatch('library/getModulesData', 'E').then(() => {
         expect(console.error).toHaveBeenCalled();
+        failResponse = null;
         done();
       });
     });
@@ -105,8 +120,9 @@ describe('== Library Store ==', () => {
 
   describe('Getters', () => {
     it('trigger "modules" and had a data', (done) => {
-      const dataModule = store.getters['library/modules'];
+      let dataModule = store.getters['library/modules'];
       expect(dataModule).toEqual(mocks.library.getMenuItems);
+      dataModule = null;
       done();
     });
   });

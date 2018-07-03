@@ -9,6 +9,9 @@ import {
   isEqual,
   each
 } from 'lodash';
+
+import _ from 'lodash';
+
 import {
   defer
 } from 'q';

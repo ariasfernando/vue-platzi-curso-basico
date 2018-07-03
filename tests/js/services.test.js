@@ -15,10 +15,15 @@ process.env.APP_ENV = 'test';
  * == Test: Services
  */
 describe('== Services ==', () => {
-  const baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
+  let baseUrl;
+  beforeAll(() => {
+    baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
+  });
   afterAll(() => {
     nock.cleanAll();
     nock.restore();
+
+    baseUrl = null;
   });
   describe('Library Services', () => {
     describe('Search Libraries', () => {

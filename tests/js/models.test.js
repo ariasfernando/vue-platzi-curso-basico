@@ -12,8 +12,9 @@ describe('== Models ==', () => {
   describe('Elements', () => {
     describe('Element', () => {
       it('Should return a valid object', (done) => {
-        const element = new Element({ type: 'column-element' });
+        let element = new Element({ type: 'column-element' });
         expect(typeof element).toBe('object');
+        element = null;
         done();
       });
 
@@ -28,9 +29,16 @@ describe('== Models ==', () => {
     });
 
     describe('Column', () => {
-      const element = new Element({ type: 'column-element' });
-      const properties = element.getProperties();
-
+      let element;
+      let properties;
+      beforeAll(() => {
+        element = new Element({ type: 'column-element' });
+        properties = element.getProperties();
+      });
+      afterAll(() => {
+        element = null;
+        properties = null;
+      });
       it('Should return a valid object', (done) => {
         expect(typeof element).toBe('object');
         done();
@@ -56,9 +64,16 @@ describe('== Models ==', () => {
     });
 
     describe('TextElement', () => {
-      const element = new Element({ type: 'text-element' });
-      const properties = element.getProperties();
-
+      let element;
+      let properties;
+      beforeAll(() => {
+        element = new Element({ type: 'text-element' });
+        properties = element.getProperties();
+      });
+      afterAll(() => {
+        element = null;
+        properties = null;
+      });
       it('Should return a valid object', (done) => {
         expect(typeof element).toBe('object');
         done();
@@ -84,9 +99,16 @@ describe('== Models ==', () => {
     });
 
     describe('ImageElement', () => {
-      const element = new Element({ type: 'image-element' });
-      const properties = element.getProperties();
-
+      let element;
+      let properties;
+      beforeAll(() => {
+        element = new Element({ type: 'image-element' });
+        properties = element.getProperties();
+      });
+      afterAll(() => {
+        element = null;
+        properties = null;
+      });
       it('Should return a valid object', (done) => {
         expect(typeof element).toBe('object');
         done();
@@ -112,9 +134,16 @@ describe('== Models ==', () => {
     });
 
     describe('DividerElement', () => {
-      const element = new Element({ type: 'divider-element' });
-      const properties = element.getProperties();
-
+      let element;
+      let properties;
+      beforeAll(() => {
+        element = new Element({ type: 'divider-element' });
+        properties = element.getProperties();
+      });
+      afterAll(() => {
+        element = null;
+        properties = null;
+      });
       it('Should return a valid object', (done) => {
         expect(typeof element).toBe('object');
         done();
@@ -140,9 +169,16 @@ describe('== Models ==', () => {
     });
 
     describe('ButtonElement', () => {
-      const element = new Element({ type: 'button-element' });
-      const properties = element.getProperties();
-
+      let element;
+      let properties;
+      beforeAll(() => {
+        element = new Element({ type: 'button-element' });
+        properties = element.getProperties();
+      });
+      afterAll(() => {
+        element = null;
+        properties = null;
+      });
       it('Should return a valid object', (done) => {
         expect(typeof element).toBe('object');
         done();
@@ -170,15 +206,23 @@ describe('== Models ==', () => {
   });
 
   describe('Plugins', () => {
-    const testPlugin = {
-      name: 'test',
-      title: 'Test Plugin',
-      target: ['text'],
-    };
-
-    const plugin = new Plugin(testPlugin);
-    const properties = plugin.getProperties();
-
+    let testPlugin;
+    let plugin;
+    let properties;
+    beforeAll(() => {
+      testPlugin = {
+        name: 'test',
+        title: 'Test Plugin',
+        target: ['text'],
+      };
+      plugin = new Plugin(testPlugin);
+      properties = plugin.getProperties();
+    });
+    afterAll(() => {
+      testPlugin = null;
+      plugin = null;
+      properties = null;
+    });
     it('Should return a valid object', (done) => {
       expect(typeof plugin).toBe('object');
       done();
