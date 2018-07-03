@@ -132,7 +132,7 @@ export default {
 .el-input-number {
   width: 105px;
 }
-.settings-container >>> .half-setting:first-of-type{
+.settings-container /deep/ .half-setting:first-of-type{
   text-align: left;
 }
 </style>

@@ -225,13 +225,13 @@ export default {
 .el-input-number {
   width: 80px;
 }
-.settings-container >>> .half-setting{
+.settings-container /deep/ .half-setting{
   text-align: left;
 }
-.settings-container  >>> input[type="text"] {
+.settings-container  /deep/ input[type="text"] {
   text-align: center;
 }
-.settings-container  >>> .el-input-number  .el-input__inner {
+.settings-container  /deep/ .el-input-number  .el-input__inner {
   text-align: center;
   border-right: 0;
   border-top-right-radius: 2px;

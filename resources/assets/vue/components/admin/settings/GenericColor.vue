@@ -56,10 +56,10 @@ export default {
   width: calc(100% - 34px);
   float: left;
 }
-.generic-color >>> .el-input {
+.generic-color /deep/ .el-input {
   padding: 0;
 }
-.generic-color >>> .el-color-picker__trigger {
+.generic-color /deep/ .el-color-picker__trigger {
   padding: 0px;
   height: 28px;
   width: 34px;
@@ -73,7 +73,7 @@ export default {
     border: none;
   }
 }
-.generic-color >>> .el-input{
+.generic-color /deep/ .el-input{
   .el-input__inner {
     border-top-left-radius: 2px;
     border-top-right-radius: 0;

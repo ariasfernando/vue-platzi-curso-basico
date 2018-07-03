@@ -147,7 +147,7 @@ export default {
   display: block;
   float: left;
 }
-.input-font-weight .el-input--mini >>> .el-input__inner {
+.input-font-weight .el-input--mini /deep/ .el-input__inner {
   text-align: center;
   border-right: 0;
 }

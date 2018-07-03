@@ -114,7 +114,7 @@ span.is-danger {
     padding-left: 10px;
   }
 }
-.is-danger >>> input{
+.is-danger /deep/ input{
   border-color: #ce5f5f;
 }
 </style>

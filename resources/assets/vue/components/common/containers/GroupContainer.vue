@@ -32,7 +32,7 @@ export default {
       font-size: 13px;
     }
   }
-  .group-container.clickeable >>> {
+  .group-container.clickeable /deep/ {
       * {
       cursor: pointer;
       color: #514960;

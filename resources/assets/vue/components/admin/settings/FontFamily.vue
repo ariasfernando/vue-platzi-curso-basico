@@ -73,7 +73,7 @@ export default {
 .width-full {
   width: 100%;
 }
-.field-font-family >>> span > span.el-tag.el-tag--info {
+.field-font-family /deep/ span > span.el-tag.el-tag--info {
   counter-increment: step-counter;
   & span::before {
     content: counter(step-counter);
