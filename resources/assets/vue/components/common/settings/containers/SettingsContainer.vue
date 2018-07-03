@@ -65,7 +65,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .settings-container {
   margin-bottom: 6px;
   margin-left: 0;
