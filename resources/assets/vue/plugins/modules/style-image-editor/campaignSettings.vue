@@ -265,6 +265,13 @@ export default {
   margin-top: 5px;
 } 
 
+.el-button--primary.is-disabled, .el-button--primary.is-disabled:active, .el-button--primary.is-disabled:focus, .el-button--primary.is-disabled:hover {
+  opacity: 0.4;
+  border-color: rgb(120, 220, 214);
+  background-color: rgb(120, 220, 214);
+  margin-left: 0px;
+}
+
 .el-input >>> .el-input__inner{
   border-radius: 2px;
   font-weight: 300;
