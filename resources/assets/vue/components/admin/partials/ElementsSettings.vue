@@ -26,6 +26,10 @@
               <i class="fa fa-minus-square" aria-hidden="true"></i>
               <p>Divider</p>
             </li>
+            <li class="component-item" data-type="code-element">
+              <i class="fa fa-code" aria-hidden="true"></i>
+              <p>Custom Code</p>
+            </li>
           </draggable>
         </b-card>
       </b-collapse>

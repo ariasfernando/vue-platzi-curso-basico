@@ -39,7 +39,7 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="componentId"
-              class="st-component"
+              :class="component.class || 'st-component'"
               context="admin"></component>
           </draggable>
         </td>
@@ -90,6 +90,7 @@ import TextElement from "../elements/TextElement.vue";
 import ButtonElement from "../elements/ButtonElement.vue";
 import ImageElement from "../elements/ImageElement.vue";
 import DividerElement from "../elements/DividerElement.vue";
+import CodeElement from "../elements/CodeElement.vue";
 import ElementMixin from '../../common/mixins/ElementMixin.js';
 
 export default {
@@ -101,6 +102,7 @@ export default {
     ButtonElement,
     ImageElement,
     DividerElement,
+    CodeElement
   },
   data() {
     return {

@@ -153,6 +153,7 @@
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
+  import CodeElement from './elements/CodeElement.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
@@ -313,6 +314,7 @@
       ButtonElement,
       ImageElement,
       DividerElement,
+      CodeElement,
       ModuleToolbar,
       ColumnsStackedRender,
       ColumnsFixedRender,

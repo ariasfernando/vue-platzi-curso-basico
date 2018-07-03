@@ -45,6 +45,7 @@
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
+  import CodeElement from '../elements/CodeElement.vue';
 
   export default {
     name: 'ColumnsStackedRender',
@@ -54,6 +55,7 @@
       ButtonElement,
       ImageElement,
       DividerElement,
+      CodeElement
     },
     props: {
       moduleId:{

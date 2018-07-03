@@ -83,8 +83,8 @@
               :column-id="columnId"
               :component-id="componentId" 
               :key="component.id"
-              :data-component="component"
-              class="st-component"
+              :data-component="JSON.stringify(component)"
+              :class="component.class || 'st-component'"
               context="admin"
             ></component>
           </template>
@@ -118,6 +118,7 @@
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
+  import CodeElement from './elements/CodeElement.vue';
 
   module.exports = {
     name: 'Module',
@@ -127,6 +128,7 @@
       ButtonElement,
       ImageElement,
       DividerElement,
+      CodeElement,
       ColumnsFixedRender,
       ColumnsStackedRender
     },
@@ -238,9 +240,17 @@
     outline: 1px dashed @icon-option;
     border: none!important;
   
-    .st-component{
+    .st-component:not(.no-transparency){
       &:hover{
         opacity: 0.75;
+        .icon-move, .icon-remove{
+          display: block;
+        }
+      }
+    }
+
+    .st-component.no-transparency {
+      &:hover {
         .icon-move, .icon-remove{
           display: block;
         }

@@ -26,7 +26,7 @@
           >
           <template v-if="column.components.length">
             <component 
-              class="st-component"
+              :class="component.class || 'st-component'"
               v-for="(component, componentId) in column.components"
               :is="component.type" 
               :component="component" 
@@ -61,6 +61,7 @@
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
+  import CodeElement from '../elements/CodeElement.vue';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
 
   export default {
@@ -72,6 +73,7 @@
       ButtonElement,
       ImageElement,
       DividerElement,
+      CodeElement
     },
     props: {
       column: { 

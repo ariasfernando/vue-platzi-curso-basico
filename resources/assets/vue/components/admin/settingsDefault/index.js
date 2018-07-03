@@ -3,6 +3,7 @@ import TextElement from './TextElement';
 import ImageElement from './ImageElement';
 import ButtonElement from './ButtonElement';
 import DividerElement from './DividerElement';
+import CodeElement from './CodeElement';
 import Module from './Module';
 
 module.exports = {
@@ -11,5 +12,6 @@ module.exports = {
   'image-element': ImageElement,
   'button-element': ButtonElement,
   'divider-element': DividerElement,
+  'code-element': CodeElement,
   Module,
 };
