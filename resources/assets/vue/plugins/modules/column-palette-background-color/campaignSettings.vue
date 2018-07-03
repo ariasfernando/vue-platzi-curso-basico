@@ -7,11 +7,13 @@
 </template>
 
 <script>
+  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
   import { Compact } from 'vue-color'
 
   export default {
     props: ['name', 'plugin', 'moduleId', 'columnId'],
     components: {
+      SettingsContainer,
       'compact-picker': Compact
     },
     computed: {
