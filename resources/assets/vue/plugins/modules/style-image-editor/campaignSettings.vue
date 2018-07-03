@@ -272,6 +272,10 @@ export default {
   margin-left: 0px;
 }
 
+.el-button + .el-button {
+  margin-left: 0;
+}
+
 .el-input >>> .el-input__inner{
   border-radius: 2px;
   font-weight: 300;
