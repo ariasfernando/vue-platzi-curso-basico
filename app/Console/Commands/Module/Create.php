@@ -8,7 +8,6 @@ use Stensul\Services\ModelKeyManager;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\InputOption;
 
-
 class Create extends Command
 {
 
@@ -241,9 +240,10 @@ EOF;
     * Save index.js file for the module on disk.
     *
     * @param string $module_dir
-    * @return bolean
+    * @return boolean
     */
-    private function saveIndexFile($module_dir){
+    private function saveIndexFile($module_dir)
+    {
         $file_content = <<<EOF
 import view from './view.vue';
 import config from './config.json';
@@ -256,6 +256,5 @@ module.exports = {
 };
 EOF;
         return file_put_contents($module_dir . DS . 'index.js', $file_content);
-
     }
 }

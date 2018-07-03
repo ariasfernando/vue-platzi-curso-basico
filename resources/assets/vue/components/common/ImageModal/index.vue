@@ -100,7 +100,7 @@ import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
 
 export default {
-  props: ['config', 'libraryImages', 'data', 'resizeIfSmaller'],
+  props: ['config', 'libraryImages', 'data'],
   components: {
     styleImageEditor
   },
@@ -173,7 +173,7 @@ export default {
       this.reset();
       this.$emit('clean');      
     },
-    generateSieOptions(changeImage = false, newSize = {}) {
+    generateSieOptions(changeImage = false) {
       const sieOptions = {
         api: this.$_app.config.sieAPI
       };
@@ -184,8 +184,6 @@ export default {
         sieOptions.preset = sieHelper.completeUrlPath(this.$_app.config.imageUrl, sieOptions.preset);
       }
 
-      Object.assign(sieOptions.size, newSize);
-
       this.sieOptions = sieOptions;
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
@@ -194,14 +192,15 @@ export default {
     setImage(imageSource) {
       const size = {
         width: this.params['sie-size']['size_width'].value,
-        height: this.params['sie-size']['size_height'].value
+        height: this.params['sie-size']['size_height'].value,
+        auto: this.params['sie-size']['size_auto'].value
       }
-      return imageHelper.checkGIFSize(imageSource, this.sieOptions.size)
-        .then(() => imageHelper.adjustSize(this.resizeIfSmaller || false, imageSource, size))
-        .then((newSize) => {
+
+      return imageHelper.checkSize(imageSource, size, this.params.smaller)
+        .then(() => {
           this.currentImage = imageSource;
           this.changeImage(this.params);
-          this.generateSieOptions(true, newSize);
+          this.generateSieOptions(true);
           this.page = {
             one: false,
             two: false,

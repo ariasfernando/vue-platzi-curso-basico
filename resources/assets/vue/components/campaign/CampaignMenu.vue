@@ -128,7 +128,7 @@
       addModuleByName(moduleName, moduleType) {
         const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
-        mod.data = {};
+
         this.addModule(mod);
       },
       expand(event, item) {
@@ -161,6 +161,7 @@
         let cloneEl = evt.clone;
         let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
+
         const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
         mod.data = {};

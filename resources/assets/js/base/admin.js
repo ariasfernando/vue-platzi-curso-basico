@@ -8,7 +8,7 @@
 	}
 
 	/*
-	 | ADmin Controller
+	 | Admin Controller
 	*/
 	var user = new userController();
 	var role = new roleController();

@@ -1,19 +1,5 @@
 <template>
-  <!-- CALL TO ACTION ELEMENT -->
-  <tr
-    @click="selectComponent"
-    data-type="button-element"
-    :class="getMobileClasses(component,'tr')"
-  >
-    <td
-      class="stx-position-relative"
-      width="100%"
-      style="width: 100%;"
-      :style="component.container.style"
-      :align="component.container.attribute.align"
-      :bgcolor="component.container.attribute.bgcolor"
-      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
-    >
+  <module-container :component="component" @select-component="selectComponentHandler">
       <a
         @click.prevent
         :href="component.button.attribute.href || ''"
@@ -35,8 +21,9 @@
               :bgcolor="component.button.attribute.bgcolor"
               :height="component.button.attribute.height"
               style="vertical-align: middle; width:100%;"
-              :style="buttonBorderAndPadding"
+            :style="elementBorderAndPadding(this.component.button)"
             >
+              <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>            
               <table
                 cellpadding="0"
                 cellspacing="0"
@@ -48,13 +35,13 @@
                   <td
                     width="100%"
                     :align="component.button.attribute.align"
-                    :style="buttonFontStyles"
-                    :valign="component.button.attribute.valign || 'middle'"
+                  :style="fontStyles(component.button)"
+                  :valign="component.button.attribute.valign || ''"
                     >
                     <div
                         class="stx-edit-text stx-wrapper"
                         style="display: inline-block !important; vertical-align: middle"
-                        :style="buttonFontStyles"
+                    :style="fontStyles(component.button)"
                         v-html="content"
                         :id="editorId"
                         @keyup="changeContent"
@@ -66,7 +53,7 @@
                   <td
                     v-if="component.caret.attribute.url"
                     :width="widthCaret"
-                    :style="caretPaddingAndWidth"
+                :style="[elementBorderAndPadding(component.caret), {'width': widthStyle(widthCaret)}]"
                   >
                     <img
                       :src="$_app.config.imageUrl + component.caret.attribute.url"
@@ -80,48 +67,31 @@
                   </td>
                 </tr>
               </table>
-              <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
             </td>
           </tr>
         </table>
       </a>
-    </td>
-  </tr>
-  <!-- CTA ELEMENT ENDS -->
+  </module-container>
 </template>
 
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
-  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
+  import ModuleContainer from '../../common/containers/ModuleContainer';
+  import ElementMixin from '../../common/mixins/ElementMixin.js';
   import TinyMixin from '../mixins/TinyMixin.js';
   import _ from 'lodash';
 
   export default {
     name: 'ButtonElement',
-    mixins: [ MobileStylesMixin, ComponentAttributeMixin, TinyMixin ],
+    components: {
+      ModuleContainer,
+    },
+    mixins: [ MobileStylesMixin, ElementMixin, TinyMixin ],
     data() {
       return {    
         content: this.component.data.text,
         timer: null
       };
-    },
-    props: [
-      'module-id',
-      'column-id',
-      'component-id',
-      'component',
-      'column'
-    ],
-    mounted(){
-      const changeStyles = (selector, styles) => {
-        let editorLinks = $(`#${this.editorId}`).find(selector);
-        if(editorLinks.length){
-          for (var i = 0; i < editorLinks.length; i++) {
-            $(editorLinks[i]).css(styles);
-          }
-        }
-      }
-      changeStyles('p', { color: this.component.button.style.color || this.libraryConfig.linkColor });
     },
     computed: {
       module() {
@@ -134,52 +104,11 @@
         return this.$store.state.campaign.campaign.library_config;
       },
       tableStyles(){
-        const width = this.component.button.style.minWidth ? undefined : `${this.component.button.attribute.width}px`;
+        const width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
         return {
           'width': width,
           'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
           'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth
-        }
-      },
-      buttonBorderAndPadding(){
-        return{
-          'padding-top':this.component.button.style.paddingTop,
-          'padding-bottom':this.component.button.style.paddingBottom,
-          'padding-right':this.component.button.style.paddingRight,
-          'padding-left':this.component.button.style.paddingLeft,
-          'border-top-width':this.component.button.style.borderTopWidth,
-          'border-right-width':this.component.button.style.borderRightWidth,
-          'border-bottom-width':this.component.button.style.borderBottomWidth,
-          'border-left-width':this.component.button.style.borderLeftWidth,
-          'border-top-style':this.component.button.style.borderTopStyle,
-          'border-right-style':this.component.button.style.borderRightStyle,
-          'border-bottom-style':this.component.button.style.borderBottomStyle,
-          'border-left-style':this.component.button.style.borderLeftStyle,
-          'border-top-color':this.component.button.style.borderTopColor,
-          'border-right-color':this.component.button.style.borderRightColor,
-          'border-bottom-color':this.component.button.style.borderBottomColor,
-          'border-left-color':this.component.button.style.borderLeftColor,
-          'border-radius':this.component.button.style.borderRadius
-        }
-      },
-      buttonFontStyles() {
-        return {
-          'text-align':this.component.button.style.textAlign,
-          'font-family':this.component.button.style.fontFamily,
-          'color':this.component.button.style.color,
-          'font-size':this.component.button.style.fontSize,
-          'font-weight':this.component.button.style.fontWeight,
-          'letter-spacing':this.component.button.style.letterSpacing,
-          'line-height':this.component.button.style.lineHeight,
-        }
-      },
-      caretPaddingAndWidth() {
-        return {
-          'padding-top':this.component.caret.style.paddingTop,
-          'padding-bottom':this.component.caret.style.paddingBottom,
-          'padding-right':this.component.caret.style.paddingRight,
-          'padding-left':this.component.caret.style.paddingLeft,
-          'width': this.widthCaret + 'px'
         }
       },
       widthCaret() {

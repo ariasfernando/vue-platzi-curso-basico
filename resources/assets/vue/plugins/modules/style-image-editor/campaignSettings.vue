@@ -118,11 +118,14 @@ export default {
         })
         .then(uploadedImgs => {
           this.updateAttribute(uploadedImgs[imgs.length - 1], data.newImage);
+          if(typeof this.plugin.config.adjust !== 'undefined' && this.plugin.config.adjust.value) {
+            this.updateWidthAttribute(data.state.outputSize.width);
+          }
           const temp = {};
           if (this.type === 'desktop') {
             temp.img = data.img;
             temp.state = data.state;
-            if (data.newImage === true && this.isEdit === true) {
+            if (data.newImage && this.isEdit) {
               if (typeof this.plugin.data.imgMobile !== 'undefined') {
                 temp.imgMobile = data.img;
                 temp.stateMobile = data.state;
@@ -157,7 +160,7 @@ export default {
       });
       if (this.type === 'desktop') {
         data.img = uploadedImgs[images.length - 1];
-        if (newImage === true && this.isEdit === true) {
+        if (newImage && this.isEdit) {
           if (typeof this.plugin.data.imgMobile !== 'undefined') {
             data.imgMobile = uploadedImgs[images.length - 1];
           }
@@ -186,25 +189,31 @@ export default {
         value: image
       };
       if (this.type === 'desktop') {
-        payload.property = 'placehoder';
-        this.$store.commit('campaign/saveComponentProperty', {
-          ...payload,
-          property: 'placeholder'
-        });
-        if (newImage === true && this.isEdit === true) {
+        payload.property = 'placeholder';
+        this.$store.commit('campaign/saveComponentProperty', payload);
+
+        if (newImage && this.isEdit) {
           if (typeof this.plugin.data.imgMobile !== 'undefined') {
-            this.$store.commit('campaign/saveComponentProperty', {
-              ...payload,
-              property: 'placeholderMobile'
-            });
+            payload.property = 'placeholderMobile';
+            this.$store.commit('campaign/saveComponentProperty',payload);
           }
         }
       } else {
-        this.$store.commit('campaign/saveComponentProperty', {
-          ...payload,
-          property: 'placeholderMobile'
-        });
+        payload.property = 'placeholderMobile';
+        this.$store.commit('campaign/saveComponentProperty', payload);
       }
+    },
+    updateWidthAttribute(newWidth){
+      this.$store.commit('campaign/saveComponentProperty', {
+        plugin: this.pluginKey,
+        moduleId: this.currentComponent.moduleId,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        subComponent: 'image',
+        link: 'attribute',
+        property: 'width',
+        value: newWidth
+      });
     },
     removeErrorsImages() {
       let $contentImgError = $('.stx-module-wrapper-active').find(

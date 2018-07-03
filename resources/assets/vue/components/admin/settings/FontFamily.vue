@@ -33,22 +33,22 @@ export default {
     return {
       fontsOptions() {
         const fontsOptions = [];
+        const temp = {};
         _.each(this.$_app.config.fonts, (group, index) => {
           group.map(font => {
             if (index === 'custom') {
-                fontsOptions.push({
-                value: font.name,
-                label: font.name
-              });
+              temp[font.name] = font.name;
             } else {
-                fontsOptions.push({
-                value: font,
-                label: font
-              });
+              temp[font] = font;
             }
           });
         });
-
+        Object.keys(temp).forEach(name => {
+          fontsOptions.push({
+            value: name,
+            label: name
+          });
+        });
         return fontsOptions;
       }
     };

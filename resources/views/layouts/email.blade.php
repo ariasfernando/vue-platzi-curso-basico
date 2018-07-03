@@ -31,6 +31,17 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 	<?php echo "</he"; ?><?php echo "ad>"; ?>
 
 	<body class="st-email-body">
+		@if (isset($params['campaign_data']['campaign_fonts']))
+			@if (isset($params['campaign_data']['campaign_fonts']['custom']))
+				@if (count($params['campaign_data']['campaign_fonts']['custom']) > 0)
+					<!--[if gte mso 9]>
+					<style type="text/css">
+					body, table, td {font-family: Arial, Sans Serif !important;}
+					</style>
+					<![endif]-->
+				@endif
+			@endif
+		@endif
 		{{-- PREVIEW PREHEADER --}}
 		@if(isset($params['preheader_preview']) && strlen($params['preheader_preview']))
 			<div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['preheader_preview'] }}</div>

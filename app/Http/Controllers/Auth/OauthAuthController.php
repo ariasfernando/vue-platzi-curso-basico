@@ -79,6 +79,10 @@ class OauthAuthController extends Controller
                     if (count($roles_array) != 0 && (count(array_intersect($user_auth->roles, $roles_array)) > 0)) {
                         Auth::login($user_auth, true);
                         Activity::log('User Logged in');
+                        if ($user_auth->unconfirmed) {
+                            $user_auth->unconfirmed = 0;
+                            $user_auth->save();
+                        }
                     } else {
                         $error = array( "message" => "ERROR_ROLE" );
                     }

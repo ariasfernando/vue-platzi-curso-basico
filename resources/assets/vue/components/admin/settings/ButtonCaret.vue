@@ -53,7 +53,7 @@ export default {
             images: [vm.image]
           })
           .then(res => {
-            this.updateAttributePlaceholder("customer/modules" + res[0]);
+            this.updateAttributePlaceholder(this.$_app.config.imagePathStudio + res[0]);
           });
       };
 

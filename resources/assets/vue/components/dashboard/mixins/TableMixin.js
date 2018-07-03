@@ -133,24 +133,36 @@ export default {
       this.$emit('change-page', page, this.type);
     },
     confirmDeleteCampaign() {
-      $.post(Application.globals.baseUrl + '/campaign/delete', {
+      let jqXHR = $.post(Application.globals.baseUrl + '/campaign/delete', {
         campaign_id: this.selectedCampaignId,
         window_id: this.windowId,
       }, (response) => {
+        this.selectedCampaignId = null;
+        this.showModal = false;
+        this.$emit('refresh-campaigns', this.type);
+      }, 'json');
 
-        if (response.campaign_lock) {
-          this.selectedCampaignId = null;
-          this.showModal = false;
+      jqXHR.fail((response) => {
+        this.selectedCampaignId = null;
+        this.showModal = false;
+
+        if (response.status === 422 && response.responseJSON.campaign_lock) {
           this.$root.$toast(
-            'Sorry, ' + response.locked_by + ' is editing this campaign',
+            'Sorry, ' + response.responseJSON.locked_by + ' is editing this campaign',
+            { className: 'et-error' },
+          );
+        } else if (response.status === 404) {
+          this.$root.$toast(
+            'Sorry, this campaign no longer exists.',
             { className: 'et-error' },
           );
         } else {
-          this.selectedCampaignId = null;
-          this.showModal = false;
-          this.$emit('refresh-campaigns', this.type);
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            { className: 'et-error' },
+          );
         }
-      }, 'json');
+      });
     },
     confirmEditCampaign() {
       window.location.href = this.$_app.config.baseUrl + '/campaign/edit/' + this.selectedCampaignId;
@@ -209,6 +221,7 @@ export default {
       this.sortKey = sortKey;
     },
     prepareOutput: function(value, field) {
+      value = this.$options.filters.escapeHTML(value);
       var search = this.terms;
       if (this.config.search_settings.highlight_matches === true && this.config.search_settings.fields_to_search.indexOf(field) > -1) {
         for (var i = 0; i < search.length; i++) {

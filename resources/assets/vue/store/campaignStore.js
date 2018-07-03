@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import {
   filter,
   isEmpty,
@@ -9,6 +9,9 @@ import {
   isEqual,
   each
 } from 'lodash';
+
+import _ from 'lodash';
+
 import {
   defer
 } from 'q';
