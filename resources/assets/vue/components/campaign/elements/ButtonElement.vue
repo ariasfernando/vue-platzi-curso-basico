@@ -98,7 +98,8 @@
         return {
           'width': width,
           'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
-          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth
+          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth,
+          'border-collapse': 'initial'
         }
       },
       widthCaret() {
