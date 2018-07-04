@@ -261,6 +261,7 @@
     float: left;
     padding: 0px;
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    padding-bottom: 25px;
 
     &::-webkit-scrollbar {
         width: 2px; 
