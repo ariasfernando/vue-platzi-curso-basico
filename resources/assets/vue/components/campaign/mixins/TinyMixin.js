@@ -62,8 +62,8 @@ export default {
       if (nameComponent === 'button-element' && button_inline_color) {
         changeStyles('p', { color: this.component.button.style.color || libraryLinkColor });
       }
-      if (link_fixed_styles && Application.utils.isJsonString(link_fixed_styles)) {
-        changeStyles('a', JSON.parse(link_fixed_styles));
+      if (link_fixed_styles) {
+        changeStyles('a', link_fixed_styles);
       }
       if (ul_fixed_style) {
         changeStyles('ul', ul_fixed_style);
