@@ -86,7 +86,6 @@
     },
     data() {
       return {    
-        content: this.component.data.text,
         timer: null
       };
     },
