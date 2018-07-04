@@ -13,6 +13,83 @@ export default {
     }
   },
   methods: {
+    
+    setStyles() {
+      const nameComponent = this.component.type;
+      const libraryLinkColor = this.libraryConfig.linkColor;
+      const editor = tinymce.get(this.editorId);
+      const link_fixed_color = editor.settings.link_fixed_color;
+      const link_fixed_styles = editor.settings.link_fixed_styles;
+      const ul_fixed_style = editor.settings.ul_fixed_style;
+      const ol_fixed_style = editor.settings.ol_fixed_style;
+      const li_fixed_style = editor.settings.li_fixed_style;
+      const p_fixed_style = editor.settings.p_fixed_style;
+      const persist_styles = editor.settings.persist_styles;
+      const button_inline_color = editor.settings.button_inline_color;
+
+      const changeStyles = (selector, styles) => {
+        const editorLinks = $(editor.targetElm).find(selector);
+        if (editorLinks.length) {
+          for (let i = 0; i < editorLinks.length; i++) {
+            if (typeof styles === 'string') {
+              $(editorLinks[i]).css('cssText', styles);
+            } else {
+              $(editorLinks[i]).css(styles);
+            }
+          }
+        }
+      };
+
+      /* check if link_fixed_color is setup an apply it, otherwise, apply parent color */
+      if (link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color)) {
+        changeStyles('a', { color: link_fixed_color });
+      } else {
+        const editorLinks = $(editor.targetElm).find('a');
+        if (editorLinks.length) {
+          for (let i = 0; i < editorLinks.length; i++) {
+            const $el = $(editorLinks[i]);
+            /* return the first parent that has a color */
+            const $parentEl = $el.parents().filter(function (){
+              return $(this).css('color');
+            });
+            /* get the color of the parent and apply it to the link */
+            const parentColor = $parentEl.css('color');
+            $el.css('color', parentColor);
+          }
+        }
+      }
+
+      if (nameComponent === 'button-element' && button_inline_color) {
+        changeStyles('p', { color: this.component.button.style.color || libraryLinkColor });
+      }
+      if (link_fixed_styles && Application.utils.isJsonString(link_fixed_styles)) {
+        changeStyles('a', JSON.parse(link_fixed_styles));
+      }
+      if (ul_fixed_style) {
+        changeStyles('ul', ul_fixed_style);
+      }
+      if (ol_fixed_style) {
+        changeStyles('ol', ol_fixed_style);
+      }
+      if (li_fixed_style && Application.utils.isJsonString(li_fixed_style)) {
+        changeStyles('li', JSON.parse(li_fixed_style));
+      }
+      if (p_fixed_style && Application.utils.isJsonString(p_fixed_style)) {
+        changeStyles('p', JSON.parse(p_fixed_style));
+      }
+      if (persist_styles && Application.utils.isJsonString(persist_styles)) {
+        const persist_stylesJson = JSON.parse(persist_styles);
+        for (var i = 0; i < persist_stylesJson.length; i++) {
+          const selector = Object.keys(persist_stylesJson[i])[0];
+          const editorLinks = $(editor.targetElm).find(selector);
+          if (editorLinks.length) {
+            for (var i = 0; i < editorLinks.length; i++) {
+              $(editorLinks[i]).attr('data-persist-styles', persist_stylesJson[i][selector]);
+            }
+          }
+        }
+      }
+    },
     initTinyMCE() {
       const _this = this;
       const options = _.filter(this.textOptions.config.options, 'value');
@@ -37,8 +114,6 @@ export default {
       } else {
         toolbar = ' ';
       }
-      const nameComponent = this.component.type;
-      const libraryLinkColor = this.libraryConfig.linkColor;
       const editorId = ['editor', this.module.idInstance, this.columnId, this.componentId].join('-');
       
       // Destroy previous instance
@@ -47,80 +122,6 @@ export default {
         previousInstance.destroy();
       }
 
-      const setStyles = () => {
-        const editor = tinymce.get(tinymce.activeEditor.id);
-        const link_fixed_color = editor.settings.link_fixed_color;
-        const link_fixed_styles = editor.settings.link_fixed_styles;
-        const ul_fixed_style = editor.settings.ul_fixed_style;
-        const ol_fixed_style = editor.settings.ol_fixed_style;
-        const li_fixed_style = editor.settings.li_fixed_style;
-        const p_fixed_style = editor.settings.p_fixed_style;
-        const persist_styles = editor.settings.persist_styles;
-        const button_inline_color = editor.settings.button_inline_color;
-
-        const changeStyles = (selector, styles) => {
-          const editorLinks = $(editor.targetElm).find(selector);
-          if (editorLinks.length) {
-            for (let i = 0; i < editorLinks.length; i++) {
-              if (typeof styles === 'string') {
-                $(editorLinks[i]).css('cssText', styles);
-              } else {
-                $(editorLinks[i]).css(styles);
-              }
-            }
-          }
-        };
-
-        /* check if link_fixed_color is setup an apply it, otherwise, apply parent color */
-        if (link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color)) {
-          changeStyles('a', { color: link_fixed_color });
-        } else {
-          const editorLinks = $(editor.targetElm).find('a');
-          if (editorLinks.length) {
-            for (let i = 0; i < editorLinks.length; i++) {
-              const $el = $(editorLinks[i]);
-              /* return the first parent that has a color */
-              const $parentEl = $el.parents().filter(function (){
-                return $(this).css('color');
-              });
-              /* get the color of the parent and apply it to the link */
-              const parentColor = $parentEl.css('color');
-              $el.css('color', parentColor);
-            }
-          }
-        }
-
-        if (nameComponent === 'button-element' && button_inline_color) {
-          changeStyles('p', { color: this.component.button.style.color || libraryLinkColor });
-        }
-        if (link_fixed_styles && Application.utils.isJsonString(link_fixed_styles)) {
-          changeStyles('a', JSON.parse(link_fixed_styles));
-        }
-        if (ul_fixed_style) {
-          changeStyles('ul', ul_fixed_style);
-        }
-        if (ol_fixed_style) {
-          changeStyles('ol', ol_fixed_style);
-        }
-        if (li_fixed_style && Application.utils.isJsonString(li_fixed_style)) {
-          changeStyles('li', JSON.parse(li_fixed_style));
-        }
-        if (p_fixed_style && Application.utils.isJsonString(p_fixed_style)) {
-          changeStyles('p', JSON.parse(p_fixed_style));
-        }
-        if (persist_styles && Application.utils.isJsonString(persist_styles)) {
-          const persist_stylesJson = JSON.parse(persist_styles);
-          for (var i = 0; i < persist_stylesJson.length; i++) {
-            const selector = Object.keys(persist_stylesJson[i])[0];
-            const editorLinks = $(editor.targetElm).find(selector);
-            if (editorLinks.length) {
-              for (var i = 0; i < editorLinks.length; i++) {
-                $(editorLinks[i]).attr('data-persist-styles', persist_stylesJson[i][selector]);
-              }
-            }
-          }
-        }
-      };
 
       const settings = {
 
@@ -157,7 +158,7 @@ export default {
         advlist_number_styles: 'default',
 
         init_instance_callback: (editor) => {
-          setStyles();
+          _this.setStyles();
         },
         setup(editor) {
           editor.on('focus', (e) => {
@@ -304,7 +305,7 @@ export default {
 
             })
             .on('change', (e) => {
-              setStyles();
+              _this.setStyles();
             });
         },
         paste_preprocess: (plugin, args) => {

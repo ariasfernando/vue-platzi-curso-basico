@@ -9,6 +9,7 @@
       :id="editorId"
       @keyup="changeContent"
       @tiny-change="changeContent"
+      @tiny-style-reset-="setStyles"
       @input="changeContent"
 		></div>
 	</div>
