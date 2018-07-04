@@ -37,7 +37,7 @@ export default {
       } else {
         toolbar = ' ';
       }
-      const nameComponent = this.$options.name;
+      const nameComponent = this.component.type;
       const libraryLinkColor = this.libraryConfig.linkColor;
       const editorId = ['editor', this.module.idInstance, this.columnId, this.componentId].join('-');
       
@@ -90,7 +90,7 @@ export default {
           }
         }
 
-        if (nameComponent === 'ButtonElement' && button_inline_color) {
+        if (nameComponent === 'button-element' && button_inline_color) {
           changeStyles('p', { color: this.component.button.style.color || libraryLinkColor });
         }
         if (link_fixed_styles && Application.utils.isJsonString(link_fixed_styles)) {
