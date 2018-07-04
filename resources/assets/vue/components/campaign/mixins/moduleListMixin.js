@@ -124,7 +124,7 @@ export default {
       mod.data = mod.data ? mod.data : {};
       mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
       if (this.campaignHasFixedTopModule(mod) || this.campaignHasFixedBottomModule(mod)) {
-        this.$root.$toast('This fixed module position is already present', {
+        this.$root.$toast('This fixed module position is already taken. Please remove the existing module before adding a new module.', {
           className: 'et-error'
         });
       } else {
