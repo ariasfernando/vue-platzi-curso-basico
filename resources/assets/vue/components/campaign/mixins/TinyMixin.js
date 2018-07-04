@@ -12,26 +12,7 @@ export default {
       this.initTinyMCE();
     }
   },
-  $timer: null,
   methods: {
-    // sets the cursor position to the defined node
-    // ed: editor, start: defines if the cursor is to be placed at the start or end of the node
-    // return node: boolean, if set returns the caretnode instead of deleting it
-    setCursor(ed, node, start) {
-      const tn = ed.getDoc().createTextNode('.');
-      if (start) {
-        node.insertBefore(tn, node.firstChild);
-      }        else node.appendChild(tn);
-
-      const rng = ed.selection.getRng();
-      rng.selectNode(tn);
-      rng.setStartBefore(tn);
-      rng.setStartAfter(tn);
-
-      ed.selection.setRng(rng);
-
-      node.removeChild(tn);
-    },
     initTinyMCE() {
       const _this = this;
       const options = _.filter(this.textOptions.config.options, 'value');
@@ -60,6 +41,12 @@ export default {
       const libraryLinkColor = this.libraryConfig.linkColor;
       const editorId = ['editor', this.module.idInstance, this.columnId, this.componentId].join('-');
       
+      // Destroy previous instance
+      const previousInstance = tinymce.get(editorId);
+      if (previousInstance) {
+        previousInstance.destroy();
+      }
+
       const setStyles = () => {
         const editor = tinymce.get(tinymce.activeEditor.id);
         const link_fixed_color = editor.settings.link_fixed_color;
