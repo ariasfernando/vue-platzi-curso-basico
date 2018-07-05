@@ -160,6 +160,12 @@ export default {
 @brand-primary: lighten(@stensul-purple, 35%);
 @brand-secondary: @stensul-purple-light;
 
+  .el-input.is-active .el-input__inner,
+  .el-select .el-input__inner:focus,
+  .el-select .el-input.is-focus .el-input__inner,
+  .el-input__inner:focus {
+    border-color: rgb(120, 220, 214);
+  }
 .fade.show {
   opacity: 1;
 }
