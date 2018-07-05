@@ -11,7 +11,7 @@ import store from 'store';
 
 describe('== Module Store ==', () => {
   describe('trigger muttation:', () => {
-    it('"setLoader" and set state loading to true', (done) => {
+    it('"setLoader" and expect of set "loading" state to true', (done) => {
       store.commit('module/setLoader', true);
       // Get loading data from state
       let loadingModule = store.state.module.loading;
@@ -23,7 +23,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"setSecondaryLoader" and set state setSecondaryLoader to true', (done) => {
+    it('"setSecondaryLoader" and expect of set "setSecondaryLoader" state to true', (done) => {
       store.commit('module/setSecondaryLoader', true);
       // Get loading data from state
       let secondaryLoadingModule = store.state.module.secondaryLoading;
@@ -35,7 +35,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"setModuleData" with data, expect of the state "module" has been same to passed data', (done) => {
+    it('"setModuleData" with data, expect of the "module" state has been same to passed data', (done) => {
       let dataModule = {
         module: {},
         moduleId: 'edsr345',
@@ -52,7 +52,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"setModuleFields", with data, expect of the state "module[status]" has setted to "draft"', (done) => {
+    it('"setModuleFields", with data, expect of the "module[status]" state has setted to "draft"', (done) => {
       let dataStatus = { status: 'draft' };
 
       store.commit('module/setModuleFields', dataStatus);
@@ -65,7 +65,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"setChangeSettingComponent" with data, expect of the state "changeSettingComponent" has been same to passed data', (done) => {
+    xit('"setChangeSettingComponent" with data, expect of the "changeSettingComponent" state has been same to passed data', (done) => {
       let dataSetting = { 
         style: {
           paddingBottom: '0px',
@@ -88,7 +88,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"setCurrentComponent" with data, expect of the state "currentComponent" has been same to passed data', (done) => {
+    it('"setCurrentComponent" with data, expect of the "currentComponent" state has been same to passed data', (done) => {
       let dataSetting = {
         columnId: 0,
         componentId: 0,
@@ -105,7 +105,7 @@ describe('== Module Store ==', () => {
       
       done();
     });
-    it('"clearCurrentComponent", expect of the state "currentComponent" has been empty object', (done) => {
+    it('"clearCurrentComponent", expect of the "currentComponent" state has been empty object', (done) => {
       store.commit('module/clearCurrentComponent');
 
       let stateCurrentComponent = store.state.module.currentComponent;
@@ -115,7 +115,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"updateElement" with data, expect of the state "module" has been changed component data', (done) => {
+    it('"updateElement" with data, expect of the "module" state has been changed component data', (done) => {
       let dataElement = {
         columnId: '0',
         componentId: '0',
@@ -154,7 +154,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"saveModuleProperty" with data, expect of the state "module" has been changed property data', (done) => {
+    it('"saveModuleProperty" with data, expect of the "module" state has been changed property data', (done) => {
       let eventData = {
         subComponent: undefined,
         link: 'style',
@@ -196,7 +196,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"saveModule" with data, expect of the state "module" has been changed the moduleId', (done) => {
+    it('"saveModule" with data, expect of the "module" state has been changed the moduleId', (done) => {
       let moduleId = '5b2c13af57ea5300113fc7b2';
 
       store.commit('module/saveModule', moduleId);
@@ -210,7 +210,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"addColumn" with data, expect of the state "modules" added column data', (done) => {
+    it('"addColumn" with data, expect in the "modules" state has added column data', (done) => {
       let column = {
         id: 811955,
         type: 'column-element',
@@ -270,7 +270,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"addColumn" with data, expect of the state "modules" remove column data', (done) => {
+    it('"addColumn" with data, expect in the "modules" state has removed column data', (done) => {
       let data = {
         index: 0,
         number: 1,
@@ -288,7 +288,73 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"addComponent" with data, expect of the state "module" has been added new component data', (done) => {
+    xit('"sortColumn" ', () => {
+      // sortColumn
+    });
+    it('"setColumnWidth" with data, expect in the "module" state of each column width has modified with the new value', (done) => {
+      let data = {
+        colId: 0,
+        width: 100,
+      };
+      let newStruct = { 
+        structure: {
+          columns: [{
+            container: {
+              attribute: { width: '0%' },
+            },
+          }],
+        },
+      };
+
+      store.commit('module/setModuleData', newStruct);
+      store.commit('module/setColumnWidth', data);
+
+      let storeModuleFirstColumnWidth = store.state.module.module.structure.columns[0].container.attribute.width;
+
+      expect(storeModuleFirstColumnWidth).toEqual(`${data.width}%`);
+
+      store.commit('module/setModuleData', {});
+
+      data = null;
+      newStruct = null;
+      storeModuleFirstColumnWidth = null;
+
+      done();
+    });
+    it('"saveColumnProperty" with data, expect of the "module" state saved property data of column', (done) => {
+      let data = { 
+        colId: 0, 
+        subComponent: 'container', 
+        link: 'attribute', 
+        property: 'bgcolor', 
+        value: '#E14444',
+      };
+      let newStruct = { 
+        structure: {
+          columns: [{
+            container: {
+              attribute: { bgcolor: '#000000' },
+            },
+          }],
+        },
+      };
+
+      store.commit('module/setModuleData', newStruct);
+      store.commit('module/saveColumnProperty', data);
+
+      let storeModuleFirstColumnBgColor = store.state.module.module.structure.columns[0].container.attribute.bgcolor;
+
+      expect(storeModuleFirstColumnBgColor).toEqual(data.value);
+
+      store.commit('module/setModuleData', {});
+
+      data = null;
+      newStruct = null;
+      storeModuleFirstColumnBgColor = null;
+
+      done();
+    });
+    it('"addComponent" with data, expect of the state "module" has been added new component data', (done) => {
       let dataComponent = {
         el: {
           id: 731844,
@@ -632,6 +698,74 @@ describe('== Module Store ==', () => {
       newStruct = null;
       stateComponent = null;
       
+      done();
+    });
+    xit('"attachPlugins", ', (done) => {
+      // attachPlugins
+      done();
+    });
+    it('"removeComponents" with data, expect of the state "module" has been removed the component data', (done) => {
+      let data = { 
+        index: 0, 
+        number: 1, 
+        colId: 0,
+      };
+
+      store.commit('module/removeComponents', data);
+
+      let stateComponent = store.state.module.module.structure.columns[0].components;
+
+      expect(stateComponent).toBeEmptyArray();
+
+      data = null;
+      stateComponent = null;
+
+      done();
+    });
+    it('"savePlugin",', (done) => {
+      let payload = {
+        plugin: 'mobileStyles',
+        columnId: 0,
+        componentId: 0,
+        config: {
+          settings: {
+            hiddenMobile: {
+              value: true,
+            },
+          },
+        },
+      };
+      let newStruct = { 
+        structure: {
+          columns: [
+            { 
+              components: [{
+                plugins: {
+                  mobileStyles: {
+                    config: {},
+                  },
+                },
+              }],
+            },
+          ],
+        },
+      };
+      
+      store.commit('module/setModuleData', newStruct);
+      store.commit('module/savePlugin', payload);
+
+      let stateModulecolumn = store.state.module.module.structure.columns[payload.columnId];
+      let componentPlugin = stateModulecolumn.components[payload.componentId].plugins[payload.plugin].config;
+
+      expect(componentPlugin).toEqual(payload.config);
+
+      store.commit('module/setModuleData', {});
+
+      payload = null;
+      newStruct = null;
+      stateModulecolumn = null;
+      componentPlugin = null;
+
       done();
     });
   });
