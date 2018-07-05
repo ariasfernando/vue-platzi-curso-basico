@@ -72,8 +72,12 @@
             value: value
           };
           this.$store.commit("campaign/saveComponentProperty", payload);
-          return;
         }
+        // This event can be listed in the parent component for change action
+        this.$emit('changed', {
+          elementId: elementId,
+          value: value
+        });
       },
       toggleChange(value, elementId) {
         if(this.plugin.data.preventEmpty && !value){
