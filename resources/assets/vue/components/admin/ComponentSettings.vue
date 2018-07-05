@@ -96,7 +96,6 @@ export default {
     "input-generic-switch": elementSettings.GenericSwitch,
     "input-generic-text": elementSettings.GenericText,
     "input-image-size": elementSettings.ImageSize,
-    "input-input-height": elementSettings.InputHeight,
     "input-letter-spacing": elementSettings.LetterSpacing,
     "input-padding-group": elementSettings.PaddingGroup,
     "input-text-align": elementSettings.TextAlign,

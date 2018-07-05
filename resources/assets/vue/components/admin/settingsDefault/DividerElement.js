@@ -25,9 +25,11 @@ function dividerDefault() {
           subComponent: 'divider',
         },
         {
-          name: 'height',
-          type: 'input-height',
           link: 'style',
+          label: 'Border radius',
+          name: 'height',
+          isPixel: true,
+          type: 'generic-number',
           subComponent: 'divider',
         },
       ],

@@ -12,7 +12,6 @@ import GenericSelect from './GenericSelect.vue';
 import GenericSwitch from './GenericSwitch.vue';
 import GenericText from './GenericText.vue';
 import ImageSize from './ImageSize.vue';
-import InputHeight from './InputHeight.vue';
 import LetterSpacing from './LetterSpacing.vue';
 import PaddingGroup from './PaddingGroup.vue';
 import TextAlign from './TextAlign.vue';
@@ -34,7 +33,6 @@ const Settings = {
   GenericSwitch,
   GenericText,
   ImageSize,
-  InputHeight,
   LetterSpacing,
   PaddingGroup,
   TextAlign,
