@@ -22,15 +22,9 @@
 
       <aside class="right-bar">
         <div>
-          <transition name="slide-fade">
-            <module-settings v-if="showModuleSettings"></module-settings>
-          </transition>
-          <transition name="slide-fade">
-            <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
-          </transition>
-          <transition name="slide-fade">
-            <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
-          </transition>
+          <module-settings v-if="showModuleSettings"></module-settings>
+          <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
+          <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
         </div>
       </aside>
     </div>
