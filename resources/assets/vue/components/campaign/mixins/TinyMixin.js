@@ -272,9 +272,12 @@ export default {
                   className: 'et-error',
                   horizontalPosition: 'right',
                 });
+                $textElement.addClass('bg-danger tinymce-error');
                 e.preventDefault();
                 e.stopPropagation();
                 return false;
+              }else{
+                $textElement.removeClass('bg-danger tinymce-error');
               }
             })
             .on('keyup change', (e) => {
@@ -310,9 +313,12 @@ export default {
                   className: 'et-error',
                   horizontalPosition: 'right',
                 });
+                $textElement.addClass('bg-danger tinymce-error');
                 e.preventDefault();
                 e.stopPropagation();
                 return false;
+              }else{
+                $textElement.removeClass('bg-danger tinymce-error');
               }
 
               //Check for Lines Limit
@@ -328,13 +334,12 @@ export default {
                   duration: 2000,
                 });
 
-                $textElement
-                  .addClass('bg-danger');
+                $textElement.addClass('bg-danger tinymce-error');
 
                 return false
-              } 
-                $textElement
-                  .removeClass('bg-danger');
+              }else{
+                $textElement.removeClass('bg-danger tinymce-error');
+              }
               
 
             })
