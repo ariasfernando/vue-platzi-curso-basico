@@ -1,21 +1,29 @@
 <template>
-  <settings-container v-if="component" :label="plugin.config.options.bgcolor.label" class="plugin-palette">
-    <template slot="setting-right">
-      <compact ref="compact" v-model="color" :palette="palette"></compact>
+  <settings-container class="field-font-family" label="Font Family">
+    <template slot="setting-bottom">
+      <el-select
+      class="width-full"
+      v-model="fontFamily"
+      size="mini"
+      >
+        <el-option
+          v-for="item in plugin.config"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          >
+        </el-option>
+      </el-select>
     </template>
   </settings-container>
 </template>
 
 <script>
 import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
-import { Compact } from "vue-color";
 
 export default {
   props: ["name", "plugin", "moduleId"],
-  components: {
-    SettingsContainer,
-    Compact
-  },
+  components: { SettingsContainer },
   computed: {
     currentComponent() {
       return this.$store.getters["campaign/currentComponent"];
@@ -31,36 +39,25 @@ export default {
       }
       return component;
     },
-    palette() {
-      return this.plugin.config.options.bgcolor.palette.map(
-        color =>
-          color[0] !== "#" ? `#${color.toUpperCase()}` : color.toUpperCase()
-      );
-    },
-    color: {
+    fontFamily: {
       get() {
-        return {
-          hex: this.component[this.plugin.subComponent].attribute
-            ? this.component[this.plugin.subComponent].attribute.bgcolor
-            : this.component.attribute.bgcolor
-        };
+        return this.component[this.plugin.subComponent].style.fontFamily;
       },
       set(value) {
-        this.updateValue("bgcolor", value.hex);
+        this.saveComponentProperty("fontFamily", value);
       }
     }
   },
   methods: {
-    updateValue(property, value) {
+    saveComponentProperty(property, value) {
       const payload = {
-        plugin: this.name,
         moduleId: this.currentComponent.moduleId,
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         subComponent: this.plugin.subComponent,
-        link: "attribute",
+        link: "style",
         property,
-        value
+        value: value
       };
 
       this.$store.commit("campaign/saveComponentProperty", payload);
@@ -69,14 +66,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.plugin-palette /deep/ .vc-compact-color-item {
-  width: 16px;
-  height: 16px;
-  margin-right: 6px !important;
-}
-.plugin-palette /deep/ .vc-compact {
-  padding-top: 5px;
-  padding-left: 6px;
-  border: 1px solid #dddddd!important;
+.width-full {
+  width: 100%;
 }
 </style>

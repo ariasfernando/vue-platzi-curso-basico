@@ -9,7 +9,7 @@ export default {
   props: ["customClass", "clickeable"],
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
   .group-container {
     border: 1px solid #e6e6e6;
     padding: 4px 6px 0 6px;
@@ -32,14 +32,15 @@ export default {
       font-size: 13px;
     }
   }
-  .group-container.clickeable /deep/ *{
-    cursor: pointer;
-    color: #514960;
-  }
-
-  .group-container.clickeable /deep/ i.icon-plus{
-    font-size: 13px;
-    opacity: 0.8;
-    right: 5px;
+  .group-container.clickeable /deep/ {
+      * {
+      cursor: pointer;
+      color: #514960;
+    }
+    i.icon-plus{
+      font-size: 13px;
+      opacity: 0.8;
+      right: 5px;
+    }
   }
 </style>

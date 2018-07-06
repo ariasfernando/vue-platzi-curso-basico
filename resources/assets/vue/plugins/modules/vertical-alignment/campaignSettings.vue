@@ -45,7 +45,7 @@ import SettingsContainer from "../../../components/common/settings/containers/Se
     },
   }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-button:focus,
 .el-button:hover {
   color: inherit;
@@ -65,7 +65,7 @@ import SettingsContainer from "../../../components/common/settings/containers/Se
   margin-left: 0;
 }
 .el-button {
-  width: 28px;
+  width: 33%;
   padding: 4px 0;
   margin-right: 0px;
   height: 26px;
@@ -87,6 +87,18 @@ import SettingsContainer from "../../../components/common/settings/containers/Se
     border-radius: 0px 2px 2px 0px;
     border-right: 1px solid #dddddd;
   }
+}
+.el-button:first-child:nth-last-child(2),
+.el-button:first-child:nth-last-child(2) ~ button {
+    width: 50%;
+}
+.el-button:first-child:nth-last-child(3),
+.el-button:first-child:nth-last-child(3) ~ button {
+    width: 33%;
+}
+.el-button:first-child:nth-last-child(4),
+.el-button:first-child:nth-last-child(4) ~ button{
+    width: 25%;
 }
 .padding-zero {
   padding: 0;

@@ -292,7 +292,7 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-button {
   border-color: rgb(120, 220, 214);
   background-color: rgb(120, 220, 214);
@@ -303,6 +303,22 @@ export default {
   border-radius: 2px;
   margin-top: 5px;
 } 
+
+.el-button--primary {
+  &.is-disabled,
+  &.is-disabled:active,
+  &.is-disabled:focus,
+  &.is-disabled:hover {
+    opacity: 0.4;
+    border-color: rgb(120, 220, 214);
+    background-color: rgb(120, 220, 214);
+    margin-left: 0px;
+  }
+}
+
+.el-button + .el-button {
+  margin-left: 0;
+}
 
 .el-input /deep/ .el-input__inner{
   border-radius: 2px;

@@ -122,7 +122,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .button input {
   text-align: center;
 }

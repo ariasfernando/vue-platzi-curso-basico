@@ -47,13 +47,13 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-color-picker {
   float: right;
   height: 26px;
 }
 .input-text-hex {
-  width: calc(~"100% - 34px");
+  width: calc(100% - 34px);
   float: left;
 }
 .generic-color /deep/ .el-input {

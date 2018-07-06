@@ -7,6 +7,7 @@
     >
       <td
         :width="component.container.attribute.width || '100%'"
+        :height="component.container.attribute.height"
         :style="elementBorderPaddingAndWidth(component.container)"
         :valign="component.container.attribute.valign || 'top'"
         :align="component.container.attribute.align || 'left'"

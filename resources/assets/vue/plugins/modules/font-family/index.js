@@ -2,16 +2,14 @@ const studioSettings = require('./studioSettings.vue');
 const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
-  name: 'column-background-color',
-  title: 'Background color',
+  name: 'font-family',
+  title: 'Font family',
   version: '0.0.1',
-  author: 'emiliano@stensul.com',
-  target: ['column'],
+  author: 'facundo.garcia@stensul.com',
+  target: ['button', 'text'],
   studioSettings,
   campaignSettings,
-  config: {
-    defaultValue: '#ffffff',
-  },
+  config: {},
   data: {},
   render: true,
   enabled: false,

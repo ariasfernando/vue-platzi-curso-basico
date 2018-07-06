@@ -49,7 +49,7 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .button input {
   text-align: center;
 }
@@ -93,7 +93,7 @@ export default {
   float: right;
 }
 .half-style-setting-padding {
-  width: calc(~"50% - 15px");
+  width: calc(50% - 15px);
   margin-right: 15px;
   padding: 5px 0;
   float: left;

@@ -321,7 +321,7 @@
     },
   }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .settings-container /deep/ label{
   font-weight: 600;
 }

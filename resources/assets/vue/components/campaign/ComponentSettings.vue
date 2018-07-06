@@ -1,7 +1,6 @@
-<template v-if="component">
-  <div>
+<template>
+  <div v-if="showComponentSettings">
     <label-item-container
-      v-if="ready && component.plugins && Object.keys(component.plugins).length !== 0"
       :label="toCamel(component.type.replace('-element', ''))"
       icon="glyphicon-tasks"
       :collapsable="false"
@@ -66,6 +65,16 @@ import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
           }
         }
         return component;
+      },
+
+      showComponentSettings() {
+        let ready = false;
+        _.each(this.component.plugins, (plugin) => {
+          if (plugin.enabled && plugin.render !== false) {
+            ready = true;
+          }
+        });
+        return ready;
       },
     },
     methods: {

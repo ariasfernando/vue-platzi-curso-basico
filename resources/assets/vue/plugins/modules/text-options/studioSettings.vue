@@ -53,7 +53,7 @@
       </settings-container>
     </div>
     <div class="clearfix" v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" :key="key">
-      <settings-container :label="tinySetting.title" >
+      <settings-container  v-if="showSetting(tinySetting.dependsOn)"  :label="tinySetting.title" >
         <template slot="setting-right">
           <toggle-button :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
         </template>
@@ -137,6 +137,13 @@ export default {
     };
   },
   methods: {
+    showSetting(dependsOn) {
+      if (dependsOn) {
+        return this[dependsOn.config][dependsOn.name].value;
+      } else {
+        return true;
+      }
+    },
     toggle(value) {
       const payload = {
         plugin: this.name,
@@ -250,7 +257,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .font-mce-ico {
   font-family: tinymce, Arial;
 }

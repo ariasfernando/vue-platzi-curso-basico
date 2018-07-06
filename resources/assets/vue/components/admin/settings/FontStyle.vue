@@ -111,7 +111,7 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .icon-block-line-height {
   position: absolute;
   margin-top: 0;
@@ -131,5 +131,8 @@ export default {
 
 .el-input-number {
   width: 105px;
+}
+.settings-container /deep/ .half-setting:first-of-type{
+  text-align: left;
 }
 </style>

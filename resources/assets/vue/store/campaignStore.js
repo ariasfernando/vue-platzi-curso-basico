@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from 'vue/dist/vue';
 import {
   filter,
   isEmpty,
@@ -7,8 +7,10 @@ import {
   isArray,
   extend,
   isEqual,
-  each
+  each,
 } from 'lodash';
+import _ from 'lodash';
+
 import {
   defer
 } from 'q';
@@ -144,10 +146,18 @@ function campaignStore() {
         state.dirty = true;
       },
       updateCustomElement(state, payload) {
-        // This is necessary, since the clickaway function is executed.
+        // DEPRECATED
         if ( !isUndefined(payload.moduleId) ){ 
           const update = { ...state.modules[payload.moduleId].data, ...payload.data };
           state.modules[payload.moduleId].data = update;
+          state.dirty = true;
+        }
+      },
+      updateCustomElementProperty(state, payload) {
+        if (!isUndefined(payload.moduleId)) { 
+          const dataComponent = state.modules[payload.moduleId].data;
+          const subComponent = payload.subComponent ? dataComponent[payload.subComponent] : dataComponent;
+          Vue.set(subComponent, payload.property, payload.value);
           state.dirty = true;
         }
       },
@@ -163,7 +173,11 @@ function campaignStore() {
         state.editedSettings[setting.name] = setting.value;
       },
       saveCampaignData(state, payload) {
-        state.campaign.campaign_data[payload.name] = payload.value;
+        const update = {};
+        update[payload.name] = payload.value;
+        const newData = _.extend(clone(state.campaign.campaign_data), update);
+
+        state.campaign.campaign_data = newData;
       },
       toggleModal(state, modalName) {
         state[modalName] = !state[modalName];
@@ -217,6 +231,14 @@ function campaignStore() {
         const subComponent = data.subComponent ? columns[data.subComponent] : columns;
         const properties = data.link ? subComponent[data.link] : subComponent;
         Vue.set(properties, data.property, data.value);
+        state.dirty = true;
+      },
+      saveColumnAttribute(state, data) {
+        // DEPRECATE
+        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
+        const newData = {};
+        newData[data.attribute] = data.attributeValue;
+        state.modules[data.moduleId].structure.columns[data.columnId].container.attribute = { ...attributes, ...newData };
         state.dirty = true;
       },
       saveModuleAttribute(state, data) {
@@ -321,6 +343,10 @@ function campaignStore() {
     actions: {
       updateCustomElement(context, payload) {
         context.commit('updateCustomElement', payload);
+        return Promise.resolve();
+      },
+      updateCustomElementProperty(context, payload) {
+        context.commit('updateCustomElementProperty', payload);
         return Promise.resolve();
       },
       addErrors(context, errors) {

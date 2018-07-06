@@ -120,7 +120,7 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-icon-setting.active {
   background-color: #78dcd6;
 }
@@ -132,7 +132,7 @@ export default {
   padding: 0;
 }
 .custom-col {
-  width: calc(~"100% - 28px");
+  width: calc(100% - 28px);
   float: left;
   display: block;
   border-right: 0;
@@ -147,12 +147,8 @@ export default {
   display: block;
   float: left;
 }
-</style>
-<style>
-/* not scoped */
-.input-font-weight .el-input--mini .el-input__inner {
+.input-font-weight .el-input--mini /deep/ .el-input__inner {
   text-align: center;
   border-right: 0;
 }
 </style>
-

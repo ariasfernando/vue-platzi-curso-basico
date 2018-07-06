@@ -199,7 +199,13 @@
     }
   };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
+  .draggable-item /deep/ .half-setting{
+    width: 11%;
+  }
+  .draggable-item /deep/ label.half{
+    width: 89%;
+  }
   .icon-plus{
     top: 50%;
     right: 10px;
