@@ -333,8 +333,7 @@ function campaignStore() {
                                                         && _.isEqual(err.scope.columnId, scope.columnId)
                                                         && _.isEqual(err.scope.componentId, scope.componentId)));
         }
-
-        state.modules[scope.moduleId].data.errors = filtered;
+        Vue.set(state.modules[scope.moduleId].data, 'errors', filtered);
       },
       error(err) {
         console.error(err);

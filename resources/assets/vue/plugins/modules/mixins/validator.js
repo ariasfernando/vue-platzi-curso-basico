@@ -117,6 +117,47 @@ export default {
       }
 
       return hasErrors;
-    }
-  }
+    },
+    registerCustomModuleElementDefaultValidationError(elementName, validationOption, defaultValue) {
+      if (_.indexOf(['required', 'required:true'], validationOption) && _.isEmpty(defaultValue)) {
+        const error = {
+          msg: 'The field is required.',
+          scope: {
+            type: 'custom',
+            elementName,
+            moduleId: this.moduleId,
+            idInstance: this.module.idInstance,
+          },
+        };
+  
+        this.$store.dispatch('campaign/addErrors', [error]);
+      }
+    },
+    registerCustomModuleDefaultValidationErrors() {
+      // Since vee-validate validations do not run until the settings panel is loaded
+      // we validate 'required' validations in background to prevent completing
+
+      if (this.module.params.validation && !this.module.data.validated) {
+        _.each(this.module.params.validation, (item, key) => {
+          if (key === 'images') {
+            _.each(this.module.params.validation[key], (imageElement, key2) => {
+              _.each(this.module.params.validation[key][key2], (fieldValidations, field) => {
+                const elementName = `${key2}${field}`;
+
+                const defaultValue = this.module.data.images[key2][field];
+                const validationOptionValue = fieldValidations.option;
+                this.registerCustomModuleElementDefaultValidationError(elementName, validationOptionValue, defaultValue);
+              });
+            });
+          } else {
+            _.each(this.module.params.validation[key], (validationOptionValue) => {
+              const elementName = `${key}`;
+              const defaultValue = this.module.data[key];
+              this.registerCustomModuleElementDefaultValidationError(elementName, validationOptionValue, defaultValue);
+            });
+          }
+        });
+      }
+    },
+  },
 };
