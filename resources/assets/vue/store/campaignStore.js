@@ -336,6 +336,9 @@ function campaignStore() {
 
         state.modules[scope.moduleId].data.errors = filtered;
       },
+      setCampaignName(state, camapignName) {
+      	state.campaign.campaign_data.campaign_name = camapignName;
+      },
       error(err) {
         console.error(err);
       },
@@ -353,13 +356,35 @@ function campaignStore() {
         _.each(errors, (error) => {
           // Get module errors
           let moduleErrors = _.cloneDeep(context.state.modules[error.scope.moduleId].data.errors) || [];
+
           let moduleErrorsByField;
           if(error.scope.type === 'custom') {
+            // Remove generic errors (workaround introduced in SV2-638).
+            // This will be removed when a final solution for validations is in place.
+            const indexToRemove = moduleErrors.findIndex(err => (_.isEqual(err.scope.elementName, error.scope.elementName)
+                                                                  && _.isEqual(err.scope.idInstance, error.scope.idInstance)
+                                                                  && _.isUndefined(err.scope.msg)
+                                                                ));
+            if(indexToRemove >= 0) {
+              moduleErrors.splice(indexToRemove);
+            }
+
             moduleErrorsByField = moduleErrors.filter(err => (_.isEqual(err.scope.elementName, error.scope.elementName)
                                                                   && _.isEqual(err.scope.idInstance, error.scope.idInstance)
                                                                   && _.isEqual(err.scope.msg, error.scope.msg)));
           }
           else {
+            // Remove generic errors (workaround introduced in SV2-638)
+            // This will be removed when a final solution for validations is in place.
+            const indexToRemove = moduleErrors.findIndex(err => (_.isEqual(err.name, error.name)
+                                                                  && _.isEqual(err.scope.columnId, error.scope.columnId)
+                                                                  && _.isEqual(err.scope.componentId, error.scope.componentId)
+                                                                  && _.isUndefined(err.scope.msg)
+                                                                ));
+            if(indexToRemove >= 0) {
+              moduleErrors.splice(indexToRemove);
+            }
+
             moduleErrorsByField = moduleErrors.filter(err => (_.isEqual(err.name, error.name)
                                                                   && _.isEqual(err.scope.columnId, error.scope.columnId)
                                                                   && _.isEqual(err.scope.componentId, error.scope.componentId)

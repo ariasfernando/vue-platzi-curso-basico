@@ -44,12 +44,12 @@
 
 <script>
   import _ from 'lodash';
-  import mixinValidator from '../mixins/validator';
+  import validatorMixin from '../mixins/validator';
   import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
   export default {
     props: ['name', 'plugin', 'pluginKey'],
-    mixins: [mixinValidator],
+    mixins: [validatorMixin],
     components: { SettingsContainer },
     mounted() {
       if (this.validationRules) {
@@ -73,17 +73,6 @@
       module() {
         return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
       },
-      moduleErrors() {
-        return this.module.data && this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
-                                                        && _.isEqual(err.scope.columnId, this.currentComponent.columnId)
-                                                        && _.isEqual(err.scope.componentId, this.currentComponent.componentId))) : [];
-      },
-      hasError() {
-        return this.moduleErrors.length > 0;
-      },
-      getErrorMessage() {
-        return this.moduleErrors.length > 0 ? this.moduleErrors[0].msg : '';
-      },
       component() {
         let component = {};
         if (Object.keys(this.currentComponent).length !== 0) {
@@ -105,9 +94,11 @@
         set(value) {
           this.saveComponentProperty('href', value);
 
-          if (this.validationRules) {
-            this.validate();
-          }
+          this.$nextTick(() => {
+            if (this.validationRules) {
+              this.validate();
+            }
+          });
         },
       },
       validationRules() {

@@ -12,7 +12,7 @@
                 name="campaignName"
                 id="campaignName"
                 v-validate.initial="'required'"
-                :value="form.campaignName"
+                v-model="campaignName"
                 :class="{'input': true, 'is-danger': errors.has('campaignName') }"
                 @change="saveCampaignName"
                 @focus="checkName"
@@ -141,6 +141,14 @@
       },
       secondaryLoading() {
         return this.$store.state.global.secondaryLoading
+      },
+      campaignName: {
+        get() {
+          return this.form.campaignName;
+        },
+        set(value) {
+          this.saveCampaignName(value);
+        },
       },
     },
 
@@ -310,12 +318,12 @@
           name: 'campaignName',
           value
         });
-
-        this.validate();
+        this.$store.commit('campaign/setCampaignName', value);
       },
       checkName(event) {
         if (this.form.campaignName === 'Untitled Email') {
           this.form.campaignName = '';
+          this.$store.commit('campaign/setCampaignName', '');
         }
       }
     },

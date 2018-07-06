@@ -2,7 +2,7 @@
   <module-container :component="component" @select-component="selectComponentHandler">
       <a
         @click.prevent
-        :href="component.button.attribute.href || ''"
+        :data-contenteditable-href="component.button.attribute.href || ''"
         :target="component.button.attribute.target || '_blank'"
         :style="component.button.style.textDecoration || 'text-decoration:none;'"
       >

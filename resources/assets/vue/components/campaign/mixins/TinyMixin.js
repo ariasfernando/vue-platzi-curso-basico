@@ -40,30 +40,64 @@ export default {
         }
       };
 
-      /* check if link_fixed_color is setup an apply it, otherwise, apply parent color */
-      if (link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color)) {
-        changeStyles('a', { color: link_fixed_color });
-      } else {
+      const setLinkStyles = () => {
         const editorLinks = $(editor.targetElm).find('a');
-        if (editorLinks.length) {
-          for (let i = 0; i < editorLinks.length; i++) {
-            const $el = $(editorLinks[i]);
-            /* return the first parent that has a color */
-            const $parentEl = $el.parents().filter(function (){
-              return $(this).css('color');
-            });
-            /* get the color of the parent and apply it to the link */
-            const parentColor = $parentEl.css('color');
-            $el.css('color', parentColor);
+  
+        /* 
+        * Color Treatment
+        */
+
+        // check if link_fixed_color is setup an apply it, otherwise, apply parent color
+        if (link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color)) {
+          changeStyles('a', { color: link_fixed_color });
+        } else {
+          if (editorLinks.length) {
+            for (let i = 0; i < editorLinks.length; i++) {
+              const $el = $(editorLinks[i]);
+              // return the first parent that has a color
+              const $parentEl = $el.parents().filter(function (){
+                return $(this).css('color');
+              });
+              // get the color of the parent and apply it to the link 
+              const parentColor = $parentEl.css('color');
+              $el.css('color', parentColor);
+            }
           }
         }
-      }
+
+        /*
+        * Fixed Styles Treatment
+        */
+
+        if (link_fixed_styles) {
+          changeStyles('a', link_fixed_styles);
+        }
+
+        /* 
+        * Underline Treatment 
+        * note: text-decoration:underline in <a> is overriden by css clases in email clients, 
+        * so we have to add an underlined span inside
+        */
+
+        $.each(editorLinks, (index, el) => {
+          if (el.style.textDecoration === 'underline') {
+            const $el = $(el);
+
+            $el.find('span').css("text-decoration","underline");
+        
+            if( !$el.contents().first().nodeName === "SPAN"){
+              let content = $el.html();
+              content = $('<span style="text-decoration:underline;">').html(content);
+              $el.html(content);
+            }
+          }
+        });
+      };
+
+      setLinkStyles();
 
       if (nameComponent === 'button-element' && button_inline_color) {
         changeStyles('p', { color: this.component.button.style.color || libraryLinkColor });
-      }
-      if (link_fixed_styles) {
-        changeStyles('a', link_fixed_styles);
       }
       if (ul_fixed_style) {
         changeStyles('ul', ul_fixed_style);
