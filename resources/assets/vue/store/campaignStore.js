@@ -336,6 +336,9 @@ function campaignStore() {
 
         state.modules[scope.moduleId].data.errors = filtered;
       },
+      setCampaignName(state, camapignName) {
+      	state.campaign.campaign_data.campaign_name = camapignName;
+      },
       error(err) {
         console.error(err);
       },
