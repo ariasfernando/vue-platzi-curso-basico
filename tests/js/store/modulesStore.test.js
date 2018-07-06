@@ -722,7 +722,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"savePlugin",', (done) => {
+    it('"savePlugin" with data, expect of the state "module" has been saved the plugin data', (done) => {
       let payload = {
         plugin: 'mobileStyles',
         columnId: 0,
@@ -765,6 +765,254 @@ describe('== Module Store ==', () => {
       newStruct = null;
       stateModulecolumn = null;
       componentPlugin = null;
+
+      done();
+    });
+    it('"savePluginSuboption" with data, expect of the state "module" has been saved the plugin sub option data', (done) => {
+      let payload = {
+        plugin: 'paletteBackgroundColor',
+        columnId: 0,
+        componentId: 0,
+        config: {
+          options: {
+            bgcolor: {
+              palette: [
+                '000000',
+                '474646',
+                '79A8C9',
+                'CD202C',
+                'CD202D',
+              ],
+            },
+          },
+        },
+        subOption: 'bgcolor',
+      };
+      let newStruct = { 
+        structure: {
+          columns: [{ 
+            components: [{
+              plugins: {
+                paletteBackgroundColor: {
+                  config: {
+                    options: {
+                      bgcolor: {},
+                    },
+                  },
+                },
+              },
+            }],
+          }],
+        },
+      };
+
+      store.commit('module/setModuleData', newStruct);
+      store.commit('module/savePluginSuboption', payload);
+
+      let column = store.state.module.module.structure.columns[payload.columnId];
+      let pluginOptions = column.components[payload.componentId].plugins[payload.plugin].config.options;
+
+      expect(pluginOptions[payload.subOption]).toEqual(payload.config.options.bgcolor);
+
+      store.commit('module/setModuleData', {});
+
+      payload = null;
+      newStruct = null;
+      column = null;
+      pluginOptions = null;
+
+      done();
+    });
+    it('"togglePlugin" with data, expect of the state "module" has been saved the plugin has enabled', (done) => {
+      let data = {
+        plugin: 'paletteBackgroundColor', 
+        columnId: 0, 
+        componentId: 0, 
+        enabled: false,
+      };
+      let data2 = {
+        plugin: 'paletteBackgroundColor', 
+        columnId: 0,
+        enabled: false,
+      };
+      let data3 = {
+        plugin: 'paletteBackgroundColor', 
+        enabled: false,
+      };
+      let newStruct = { 
+        structure: {
+          columns: [{ 
+            components: [{
+              plugins: {
+                paletteBackgroundColor: {
+                  config: {
+                    options: {
+                      bgcolor: {},
+                    },
+                  },
+                  enabled: true,
+                },
+              },
+            }],
+            plugins: {
+              paletteBackgroundColor: {
+                enable: true,
+              },
+            },
+          }],
+        },
+        plugins: {
+          paletteBackgroundColor: {
+            enable: true,
+          },
+        },
+      };
+
+      store.commit('module/setModuleData', newStruct);
+      store.commit('module/togglePlugin', data);
+      store.commit('module/togglePlugin', data2);
+      store.commit('module/togglePlugin', data3);
+
+      let stateTogglePlugin = store.state.module.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin];
+      let stateTogglePlugin2 = store.state.module.module.structure.columns[data.columnId].plugins[data.plugin];
+      let stateTogglePlugin3 = store.state.module.module.plugins[data.plugin];
+
+      expect(stateTogglePlugin).toHaveProperty('enabled', false);
+      expect(stateTogglePlugin2).toHaveProperty('enabled', false);
+      expect(stateTogglePlugin3).toHaveProperty('enabled', false);
+
+      store.commit('module/setModuleData', {});
+
+      data = null;
+      data2 = null;
+      data3 = null;
+      newStruct = null;
+      stateTogglePlugin = null;
+      stateTogglePlugin2 = null;
+      stateTogglePlugin3 = null;
+
+      done();
+    });
+    it('"saveComponentProperty" with data, expect of the state "module" has been saved the component property', (done) => {
+      let data = {
+        columnId: 0,
+        componentId: 0,
+        subComponent: 'text',
+        property: 'attribute',
+        value: {},
+      };
+      let data2 = {
+        columnId: 0, 
+        componentId: 0, 
+        subComponent: 'text', 
+        link: 'style', 
+        property: 'lineHeight', 
+        value: '16px',
+      };
+      let data3 = {
+        columnId: 0,
+        componentId: 0,
+        link: 'style',
+        property: 'lineHeight',
+        value: '16px',
+      };
+      let data4 = {
+        columnId: 0,
+        componentId: 0,
+        property: 'attribute',
+        value: {},
+      };
+      let newStruct = { 
+        structure: {
+          columns: [{ 
+            components: [{
+              plugins: {
+                paletteBackgroundColor: {
+                  config: {
+                    options: {
+                      bgcolor: {},
+                    },
+                  },
+                  enabled: true,
+                },
+              },
+              text: {
+                style: {
+                  lineHeight: '16px',
+                },
+                attribute: {},
+              },
+              style: {
+                lineHeight: '16px',
+              },
+              attribute: {},
+            }],
+          }],
+        },
+      };
+
+      store.commit('module/setModuleData', newStruct);
+      store.commit('module/saveComponentProperty', data);
+      store.commit('module/saveComponentProperty', data2);
+      store.commit('module/saveComponentProperty', data3);
+      store.commit('module/saveComponentProperty', data4);
+      
+      let stateSaveComponentProperty = store.state.module.module.structure.columns[data.columnId].components[data.componentId].text.attribute;
+      let stateSaveComponentProperty2 = store.state.module.module.structure.columns[data.columnId].components[data.componentId].text.style;
+      let stateSaveComponentProperty3 = store.state.module.module.structure.columns[data.columnId].components[data.componentId].style;
+      let stateSaveComponentProperty4 = store.state.module.module.structure.columns[data.columnId].components[data.componentId].attribute;
+
+      expect(stateSaveComponentProperty).toBeEmptyObject();
+      expect(stateSaveComponentProperty2).toHaveProperty('lineHeight', '16px');
+      expect(stateSaveComponentProperty3).toHaveProperty('lineHeight', '16px');
+      expect(stateSaveComponentProperty4).toBeEmptyObject();
+
+      store.commit('module/setModuleData', {});
+
+      store.commit('module/setModuleData', newStruct);
+
+      data = null;
+      data2 = null;
+      data3 = null;
+      data4 = null;
+      newStruct = null;
+      stateSaveComponentProperty = null;
+      stateSaveComponentProperty2 = null;
+      stateSaveComponentProperty3 = null;
+      stateSaveComponentProperty4 = null;
+
+      done();
+    });
+    it('"setActiveColumn" with data, expect of the state "activeColumn" to equal to 0', (done) => {
+      store.commit('module/setActiveColumn', 1);
+      
+      let stateActiveColumn = store.state.module;
+      
+      expect(stateActiveColumn).toHaveProperty('activeColumn', 1);
+      
+      stateActiveColumn = null;
+
+      done();
+    });
+    it('"setBuildingMode" with data, expect of the state "buildingMode" to equal to 0', (done) => {
+      store.commit('module/setBuildingMode', 'mobile');
+      
+      let stateBuildingMode = store.state.module;
+      
+      expect(stateBuildingMode).toHaveProperty('buildingMode', 'mobile');
+      
+      stateBuildingMode = null;
+
+      done();
+    });
+    xit('"setColumnsFixed" with data, expect of the state "buildingMode" to equal to 0', (done) => {
+      store.commit('module/setColumnsFixed', 'mobile');
+      
+      let stateBuildingMode = store.state.module.module;
+      
+      expect(stateBuildingMode).toHaveProperty('buildingMode', 'mobile');
+      
+      stateBuildingMode = null;
 
       done();
     });

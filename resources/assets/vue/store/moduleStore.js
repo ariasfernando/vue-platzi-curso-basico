@@ -136,7 +136,6 @@ const mutations = {
       } else {
         column.plugins[data.plugin].enabled = data.enabled;
       }
-      state.module.structure.columns[data.columnId] = column;
     } else {
       state.module.plugins[data.plugin].enabled = data.enabled;
     }
