@@ -16,12 +16,12 @@
 
 <script>
 import _ from "lodash";
-import mixinValidator from "../mixins/validator";
+import validatorMixin from '../mixins/validator';
 import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
 export default {
   props: ["name", "plugin"],
-  mixins: [mixinValidator],
+  mixins: [validatorMixin],
   components: { SettingsContainer },
   computed: {
     modules() {
