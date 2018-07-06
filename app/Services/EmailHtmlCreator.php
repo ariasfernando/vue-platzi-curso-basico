@@ -326,12 +326,17 @@ class EmailHtmlCreator
             foreach ($matches[0] as $match) {
                 $url = parse_url(trim($match));
                 $extension = pathinfo($url['path'])['extension'];
+                $font_folder = basename(dirname($url['path']));
                 $basename = basename($url['path']);
-                $fragment = (isset($url['fragment'])) ? '#'.$url['fragment'] : '';
-
+                // override default behavior if parent folder is not fonts
+                if ($font_folder !== 'fonts' ) {
+                    $basename = $font_folder . DS . $basename;
+                }
+                $fragment = (isset($url['fragment'])) ? '#' . $url['fragment'] : '';
+                
                 if (in_array(strtolower($extension), $font_extensions)) {
                     // append cdn prefix
-                    $cdn_url = rtrim($cdn_path, DS).DS.'fonts'.DS.$basename.$fragment;
+                    $cdn_url = rtrim($cdn_path, DS) . DS . 'fonts' . DS . $basename . $fragment;
 
                     // replace the url in body
                     $body = str_replace(trim($match), $cdn_url, $body);

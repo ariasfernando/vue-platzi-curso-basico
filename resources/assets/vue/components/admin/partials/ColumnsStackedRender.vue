@@ -10,14 +10,14 @@
       cellpadding="0" 
       cellspacing="0" 
       border="0" 
-      class="st-content-component st-col"
+      class="st-content-component st-mobile-full-width"
       :bgcolor="column.container.attribute.bgcolor"
       :key="column.id"
     >
       <tr>
         <td
           width="100%" 
-          :style="columnBorderAndPadding(columnId)"
+          :style="elementBorderAndPadding(module.structure.columns[columnId].container)"
           :class="column.container.attribute.classes ||''"
         >
           <draggable
@@ -39,7 +39,8 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="componentId"
-              class="st-component"></component>
+              class="st-component"
+              context="admin"></component>
           </draggable>
         </td>
       </tr>  
@@ -89,10 +90,11 @@ import TextElement from "../elements/TextElement.vue";
 import ButtonElement from "../elements/ButtonElement.vue";
 import ImageElement from "../elements/ImageElement.vue";
 import DividerElement from "../elements/DividerElement.vue";
+import ElementMixin from '../../common/mixins/ElementMixin.js';
 
 export default {
   name: "ColumnsStackedRender",
-
+  mixins: [ ElementMixin ],
   components: {
     Draggable,
     TextElement,
@@ -122,31 +124,6 @@ export default {
   methods: {
     onAdd(e) {
       this.$emit("add", e);
-    },
-    columnBorderAndPadding(columnId) {
-      let properties = [
-        "padding-top",
-        "padding-left",
-        "padding-bottom",
-        "padding-right",
-        "border-top-width",
-        "border-right-width",
-        "border-bottom-width",
-        "border-left-width",
-        "border-top-style",
-        "border-right-style",
-        "border-bottom-style",
-        "border-left-style",
-        "border-top-color",
-        "border-right-color",
-        "border-bottom-color",
-        "border-left-color"
-      ];
-      return properties.map(p => {
-        return {
-          [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
-        };
-      });
     }
   }
 };

@@ -30,7 +30,8 @@ export default {
       'data-mce-href',
       'data-mce-style',
       'id',
-      'module'
+      'module',
+      'context'
     ],
     blockSelectors: [
       '.module-toolbar',
