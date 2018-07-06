@@ -6,15 +6,6 @@
       </template>
     </settings-container>
     <div v-if="plugin.enabled">
-      <settings-container label="Custom Palette" v-if="!this.plugin.config.usePaletteFromLibrary">
-      <template slot="setting-right">
-          <el-input
-            size="mini"
-            v-model="customPalette"
-            placeholder="000000,474646,79A8C9,CD202C"
-          ></el-input>
-      </template>
-      </settings-container>
       <settings-container label="Use Palette from Library">
         <template slot="setting-right">
             <toggle-button :value="this.plugin.config.usePaletteFromLibrary" @change="(newValue)=>updatePluginConfig(newValue,'usePaletteFromLibrary')"></toggle-button>
@@ -26,6 +17,15 @@
               size="mini"
               v-model="paletteFromLibrary"
               placeholder="name"
+            ></el-input>
+        </template>
+      </settings-container>
+      <settings-container v-else label="Custom Palette">
+        <template slot="setting-right">
+            <el-input
+              size="mini"
+              v-model="customPalette"
+              placeholder="000000,474646,79A8C9,CD202C"
             ></el-input>
         </template>
       </settings-container>

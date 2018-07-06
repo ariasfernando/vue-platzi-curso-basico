@@ -47,7 +47,6 @@ export default {
         return _.parseInt(this.component.divider.style.height);
       },
       set(value) {
-        this.validate();
         this.updateStyle("height", value);
       }
     }
