@@ -184,6 +184,9 @@
        	if (!this._validateEmptyCampaignName()) {
         	errorMessage = 'To continue please complete the email name.';
        	}
+        if (this.$_app.utils.validator.tinyErrors('#emailCanvas')) {
+          errorMessage = 'To continue please configure properly all text modules.';
+        }
        	if (!this._validateEmptyEmail()) {
         	return false;
        	}

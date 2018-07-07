@@ -336,7 +336,7 @@ function campaignStore() {
         Vue.set(state.modules[scope.moduleId].data, 'errors', filtered);
       },
       setCampaignName(state, camapignName) {
-      	state.campaign.campaign_data.campaign_name = camapignName;
+      	Vue.set(state.campaign.campaign_data, 'campaign_name', camapignName);
       },
       error(err) {
         console.error(err);
