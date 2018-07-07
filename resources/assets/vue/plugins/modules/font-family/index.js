@@ -9,7 +9,13 @@ module.exports = {
   target: ['button', 'text'],
   studioSettings,
   campaignSettings,
-  config: {},
+  config: [{
+    label: 'option1',
+    value: 'Helvetica, Arial, Sans-serif',
+  }, {
+    label: 'option2',
+    value: 'Arial, Sans-serif, Helvetica',
+  }],
   data: {},
   render: true,
   enabled: false,

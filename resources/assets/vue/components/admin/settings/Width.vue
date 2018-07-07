@@ -108,7 +108,7 @@ export default {
 }
 .el-button {
   position: absolute;
-  right: 15px;
+  right: 0;
   padding: 6px;
   &:active {
     background-color: #fff;
@@ -118,6 +118,8 @@ export default {
 }
 .el-input-number {
   width: 80px;
+  float: right;
+  right: 23px;
 }
 </style>
 <style  lang="less">

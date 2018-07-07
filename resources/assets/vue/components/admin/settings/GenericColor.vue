@@ -50,7 +50,12 @@ export default {
 <style lang="scss" scoped>
 .el-color-picker {
   float: right;
-  height: 26px;
+  height: 28px;
+}
+.el-color-picker /deep/ .el-color-picker__icon{
+  &:before{
+    text-shadow: 0px 1px #666666;
+  }
 }
 .input-text-hex {
   width: calc(100% - 34px);
@@ -61,7 +66,7 @@ export default {
 }
 .generic-color /deep/ .el-color-picker__trigger {
   padding: 0px;
-  height: 28px;
+  height: 26px;
   width: 34px;
   border-left: 0;
   border-top-right-radius: 2px;
@@ -86,9 +91,8 @@ export default {
     cursor: auto;
     padding: 0;
     font-size: 12px;
-    text-align: left;
-    font-weight: 300;
-    padding-left: 8px;
+    text-align: center;
+    height: 26px;
   }
 }
 </style>

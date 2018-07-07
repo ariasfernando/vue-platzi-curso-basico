@@ -10,7 +10,7 @@
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
             <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
-            <div class="lock-warning-container" v-if="locked">Unlock the email to add modules</div>
+            <div class="lock-warning-container" v-if="locked">Unfix the email to add modules</div>
           </div>
         </div>
       </aside>
@@ -199,6 +199,13 @@
 
   @brand-primary: lighten(@stensul-purple, 35%);
   @brand-secondary: @stensul-purple-light;
+  
+  .el-input.is-active .el-input__inner,
+  .el-select .el-input__inner:focus,
+  .el-select .el-input.is-focus .el-input__inner,
+  .el-input__inner:focus {
+    border-color: rgb(120, 220, 214);
+  }
   .section-canvas-email{
     .mce-content-body{
       line-height: inherit;

@@ -20,6 +20,24 @@ const state = {
   secondaryLoading: false,
 };
 
+const searchOrCreateLevel = (data, keys) => {
+  let subData = data;
+  for (let i = 0; i < keys.length; i++) {
+    if (keys[i + 1] === undefined) {
+      return {
+        data: subData,
+        property: keys[i],
+      };
+    } else {
+      if (subData[keys[i]]) {
+        subData = subData[keys[i]];
+      } else {
+        Vue.set(subData, [keys[i]], {});
+        subData = subData[keys[i]];
+      }
+    } 
+  }
+};
 const getters = {
   module(state) {
     return state.module;
@@ -114,15 +132,20 @@ const mutations = {
     
     if (payload.componentId >= 0) {
       // save component plugin
-      pluginData = pluginData.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+      pluginData = pluginData.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
     } else if (payload.columnId >= 0) {
       // save column plugin
-      pluginData = pluginData.structure.columns[payload.columnId].plugins[payload.plugin];
+      pluginData = pluginData.structure.columns[payload.columnId].plugins[payload.plugin].config;
     } else {
       // save module plugin
-      pluginData = pluginData.plugins[payload.plugin];
+      pluginData = pluginData.plugins[payload.plugin].config;
     }
-    Vue.set(pluginData, 'config', payload.config);
+    _.merge(pluginData, payload.config);
+  },
+  setPluginComponentConfig(state, data) {
+    const plugin = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin];
+    const pluginOption = searchOrCreateLevel(plugin, ['config', data.firstLevel, data.secondLevel, data.thirdLevel]);
+    Vue.set(pluginOption.data, pluginOption.property, data.value);
   },
   savePluginSuboption(state, payload) {
     let pluginOptions = state.module;
