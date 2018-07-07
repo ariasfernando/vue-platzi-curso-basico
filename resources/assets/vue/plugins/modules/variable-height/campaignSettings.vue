@@ -6,10 +6,8 @@
         :max="options.max" 
         :min="options.min"
         size="mini"
-        :class="{'input': true, 'is-danger': errors.has('height') }"
-        v-validate.initial="`between:${options.min},${options.max}`"
+        :class="{'input': true}"
       ></el-input-number>
-      <span v-show="errors.has('height')" class="help is-danger">{{ errors.first('height') }}</span>
     </template>
   </settings-container>
 </template>
