@@ -75,48 +75,48 @@ export default {
         this.validated = true;
       });
     },
-    validateMulticolumnStudioModule() {
+    registerStudioModuleDefaultValidationErrors() {
       // studio modules with multiple columns which have plugins with validation do not trigger when the module is added
-      // so we need to check a flag to aid the user to open each module and run the validations at least once
-      
-      let hasErrors = false;
+      // so we need flag them with errors to aid the user to open each module and run the validations at least once
 
-      if(this.module.structure && this.module.structure.columns && this.module.structure.columns) {
+      if (this.module.structure && this.module.structure.columns && this.module.structure.columns) {
         _.each(this.module.structure.columns, (column, columnIndex) => {
           _.each(column.components, (component, componentIndex) => {
             _.each(component.plugins, (plugin, pluginIndex) => {
+              let validations;
 
-              if(plugin.config.validations) {
+              if (plugin.config.validations) {
+                validations = plugin.config.validations;
+              } else if (plugin.config.alt && plugin.config.alt.validations) {
+                validations = plugin.config.alt.validations;
+              }
+
+              if (validations) {
                 let validationsRequired = false;
-                _.each(plugin.config.validations, (validation, pluginIndex) => {
-                  if(plugin.enabled && validation && !plugin.data.validated) {
+                _.each(validations, (validation, pluginIndex) => {
+                  if (plugin.enabled && validation && !plugin.data.validated) {
                     validationsRequired = true;
                   }
                 });
-                if(validationsRequired) {
+                if (validationsRequired) {
                   // if the validations are enabled and were never ran we assume they have errors
-                  hasErrors = true;
-
-                  let error = {
+                  const error = {
                     scope: {
                       type: 'plugin',
                       name: plugin.name,
                       moduleId: this.moduleId,
                       columnId: columnIndex,
                       componentId: componentIndex
-                    }
-                  }
+                    },
+                  };
 
                   this.$store.dispatch('campaign/addErrors', [error]);
                 }
               }
-
             });
           });
         });
       }
-
-      return hasErrors;
     },
     registerCustomModuleElementDefaultValidationError(elementName, validationOption, defaultValue) {
       if (_.indexOf(['required', 'required:true'], validationOption) && _.isEmpty(defaultValue)) {
@@ -135,7 +135,7 @@ export default {
     },
     registerCustomModuleDefaultValidationErrors() {
       // Since vee-validate validations do not run until the settings panel is loaded
-      // we validate 'required' validations in background to prevent completing
+      // we validate 'required' validations in background to prevent completing and invalid campaign
 
       if (this.module.params.validation && !this.module.data.validated) {
         _.each(this.module.params.validation, (item, key) => {

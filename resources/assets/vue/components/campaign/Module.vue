@@ -174,7 +174,7 @@
         ) {
         // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
         // so we need to check a flag to aid the user to open each module and run the validations at least once
-        this.validateMulticolumnStudioModule();
+        this.registerStudioModuleDefaultValidationErrors();
       }
       else if(this.module.type === 'custom') {
         this.registerCustomModuleDefaultValidationErrors();
