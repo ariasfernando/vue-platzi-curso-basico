@@ -154,7 +154,7 @@ export default {
           $textElement.addClass('bg-danger tinymce-error');
         }, 50);
         
-        this.$root.$toast(`PEPE You've reached the maximum number of characters (${this.tinyMax()})`, {
+        this.$root.$toast(`You've reached the maximum number of characters (${this.tinyMax()})`, {
           className: 'et-error',
           horizontalPosition: 'right',
         });
