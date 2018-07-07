@@ -34,9 +34,9 @@ export default {
             plugin: this.name,
             columnId: this.currentComponent.columnId,
             componentId: this.currentComponent.componentId,
-            config: JSON.parse(value)
+            value: JSON.parse(value)
           };
-          this.$store.commit("module/savePlugin", payload);
+          this.$store.commit("module/setPluginComponentConfig", payload);
         }
       }
     }
