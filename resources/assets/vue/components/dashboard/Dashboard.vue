@@ -113,6 +113,7 @@
       </div>
 
       <modal-proof v-if="dashboardReady"></modal-proof>
+      <modal-proof-track v-if="dashboardReady"></modal-proof-track>
 
       <spinner></spinner>
 
@@ -132,6 +133,7 @@
   import SearchResult from './partials/SearchResult.vue';
   import Spinner from '../common/Spinner.vue';
   import ModalProof from '../campaign/modals/ModalProof.vue';
+  import ModalProofTrack from '../campaign/modals/ModalProofTrack.vue';
 
   export default {
     components: {
@@ -143,7 +145,8 @@
       DashboardMenu,
       Spinner,
       SearchResult,
-      ModalProof
+      ModalProof,
+      ModalProofTrack
     },
     created: function() {
       this.updateCampaigns();
