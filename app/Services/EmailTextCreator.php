@@ -3,7 +3,7 @@
 namespace Stensul\Services;
 
 use StensulLocale;
-use Stensul\Services\TextConverter;
+use TextConverter;
 
 class EmailTextCreator
 {
@@ -17,7 +17,7 @@ class EmailTextCreator
      *
      * @param \Stensul\Models\Campaign $campaign
      */
-    public function __construct(\Stensul\Models\Campaign $campaign)
+    public function __construct(CampaignModel $campaign)
     {
         $this->campaign = $campaign;
     }

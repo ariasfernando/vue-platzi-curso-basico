@@ -3,9 +3,9 @@
 namespace Stensul\Services;
 
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Models\Campaign as ModelCampaign;
-use Stensul\Models\Library;
-use Stensul\Models\User;
+use CampaignModel;
+use LibraryModel as Library;
+use UserModel as User;
 use Activity;
 use Campaign;
 use Helper;

@@ -4,12 +4,12 @@ namespace Stensul\Http\Controllers;
 
 use Auth;
 use Campaign as CampaignManager;
-use Stensul\Models\Campaign;
-use Stensul\Models\Library;
-use Stensul\Models\Setting;
+use CampaignModel as Campaign;
+use LibraryModel as Library;
+use SettingModel as Setting;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Services\TagManager as Tag;
+use Tag;
 use MongoDB\BSON\Regex as MongoRegex;
 
 class DashboardController extends Controller

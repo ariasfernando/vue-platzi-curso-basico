@@ -46,7 +46,7 @@ class Proof extends Eloquent
      */
     public function campaign()
     {
-        return $this->belongsTo('Stensul\Models\Campaign', 'campaign_id');
+        return $this->belongsTo('CampaignModel', 'campaign_id');
     }
 
     /**
@@ -56,6 +56,6 @@ class Proof extends Eloquent
      */
     public function comments()
     {
-        return $this->hasMany('Stensul\Models\Comment');
+        return $this->hasMany('CommentModel');
     }
 }

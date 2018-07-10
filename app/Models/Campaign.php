@@ -108,7 +108,7 @@ class Campaign extends Eloquent
      */
     public function favorite_user()
     {
-        return $this->belongsToMany('Stensul\Models\User', null, null, 'favorite_by');
+        return $this->belongsToMany('UserModel', null, null, 'favorite_by');
     }
 
     /**
@@ -118,7 +118,7 @@ class Campaign extends Eloquent
      */
     public function user()
     {
-        return $this->belongsTo('Stensul\Models\User');
+        return $this->belongsTo('UserModel');
     }
 
     /**
@@ -128,7 +128,7 @@ class Campaign extends Eloquent
      */
     public function proofs()
     {
-        return $this->hasMany('Stensul\Models\Proof');
+        return $this->hasMany('ProofModel');
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\User;
 
-use Stensul\Models\User;
+use UserModel as User;
 use Illuminate\Console\Command;
 
 class Show extends Command

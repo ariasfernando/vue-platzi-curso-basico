@@ -3,7 +3,7 @@
 namespace Stensul\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
-use Stensul\Models\Campaign;
+use CampaignModel as Campaign;
 
 class Upload extends Eloquent
 {
