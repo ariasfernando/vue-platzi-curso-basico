@@ -2,6 +2,7 @@
 /* eslint import/no-unresolved: 0 */
 /* eslint import/extensions: 0 */
 /* eslint max-len: 0 */
+/* eslint no-console: 0 */
 
 /* vendor import */
 import 'expect-more-jest';
@@ -11,6 +12,23 @@ import store from 'store';
 
 describe('== Module Store ==', () => {
   describe('trigger muttation:', () => {
+    let original;
+    beforeAll(() => {
+      original = console.error;
+    });
+
+    beforeEach(() => {
+      console.error = jest.fn();
+    });
+
+    afterEach(() => {
+      console.error.mockClear();
+      console.error = original;
+    });
+
+    afterAll(() => {
+      original = null;
+    });
     it('"setLoader" and expect of set "loading" state to true', (done) => {
       store.commit('module/setLoader', true);
       // Get loading data from state
@@ -1005,16 +1023,24 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"setColumnsFixed" with data, expect of the state "buildingMode" to equal to 0', (done) => {
-      store.commit('module/setColumnsFixed', 'mobile');
-      
-      let stateBuildingMode = store.state.module.module;
-      
-      expect(stateBuildingMode).toHaveProperty('buildingMode', 'mobile');
-      
-      stateBuildingMode = null;
+    xit('"setColumnsFixed" with data, expect of the state "buildingMode" to equal to 0', () => {});
+    xit('"setInvertedStacking" ,expect ', () => {});
+    it('"toggleRaw", expect of the state "showRaw" to equal true', (done) => {
+      store.commit('module/toggleRaw');
+
+      let stateModule = store.state.module;
+
+      expect(stateModule).toHaveProperty('showRaw', true);
+
+      stateModule = null;
 
       done();
     });
+    it('"error" with dataError, expect to trigger "console error"', (done) => {
+      store.commit('module/error');
+      expect(console.error).toHaveBeenCalled();
+      done();
+    });
+    xit('setListLibraries with data, expect ', () => {});
   });
 });

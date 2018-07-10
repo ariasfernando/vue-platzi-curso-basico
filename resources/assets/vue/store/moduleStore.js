@@ -163,7 +163,7 @@ const mutations = {
     state.showRaw = !state.showRaw;
   },
   error(state, err) {
-    console.log(err);
+    console.error(err);
   },
   setListLibraries(state, data) {
     let componentColumn = state.module.structure.columns[data.columnId].components[data.componentId];
