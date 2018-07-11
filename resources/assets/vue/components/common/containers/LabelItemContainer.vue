@@ -30,6 +30,7 @@ export default {
     font-weight: 300;
     float: left;
     color: #333;
+    text-transform: uppercase;
   }
   i {
     color: #666;
