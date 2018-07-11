@@ -1,22 +1,25 @@
 <template>
   <div class="expand st-module-menu-wrapper">
     <label-item-container label="MODULES" icon="glyphicon-th-large" v-b-toggle.modules></label-item-container>
-      <b-collapse id="modules" visible class="card">
-        <div v-if="ready" v-for="item in items">
+      <b-collapse id="modules" visible>
+        <div v-if="ready" v-for="(item, i) in items" :key="i" >
           <div v-if="item.sub_menu" class="expand">
-              <div class="beta-submodules">
-                <div v-for="subitem in item.sub_menu">
-                  <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd">
-                    <div class="add single">
-                      <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
-                        {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
-                      </h2>
-                    </div>
-                  </draggable>
-                </div>
-              </div>
+            <label-item-container :label="item.name" icon="glyphicon-folder-open" v-b-toggle="item.name" class="subitem-button"></label-item-container>
+              <b-collapse :id="item.name" class="content-collapse">
+                  <div v-for="(subitem, j) in item.sub_menu" :key="j">
+                    <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd" v-if="!subitem.mandatory">
+                      <group-container  @click="addModuleByName(subitem.name, 'subitem')" :clickeable="true">
+                        <settings-container :label="subitem.name" customClass="draggable-item" :module-id="subitem.name" :module-type="'subitem'" >
+                          <template slot="setting-right">
+                            <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
+                          </template>
+                        </settings-container>
+                      </group-container>
+                    </draggable>
+                  </div>
+              </b-collapse>
           </div>
-          <draggable v-else :element="'div'" :options="options" @clone="onClone" @end="onEnd">
+        <draggable v-else-if="!item.mandatory"  :element="'div'" :options="options" @clone="onClone" @end="onEnd">
             <group-container @click="addModuleByName(item.name, 'item')" :clickeable="true">
               <settings-container :label="item.name" customClass="draggable-item" :module-id="item.name" :module-type="'item'" >
                 <template slot="setting-right">
@@ -28,7 +31,6 @@
 
         </div>
     </b-collapse>
-
   </div>
 </template>
 
@@ -213,5 +215,27 @@
     margin: -4px 0 0;
     position: absolute;
      color: #999;
+  }
+  .collapsed  /deep/ .glyphicon-folder-open:before {
+    content: "\E117";
+  }
+  .subitem-button{
+    cursor: pointer;
+    transition: all 0.3s linear;
+    background: #edecef;
+    border: 0;
+    line-height: 13px;
+    box-shadow: none;
+    padding: 15px 10px 13px 10px;
+  }
+  .expand{
+      border: 1px solid #e6e6e6;
+     margin-bottom: 5px;
+  }
+  .content-collapse{
+    background: #edecef;
+    padding: 4px 6px 0 6px;
+    background: #f9f9f9;
+    border-radius: 3px;
   }
 </style>
