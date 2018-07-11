@@ -69,7 +69,6 @@
           };
           this.$store.commit("campaign/saveComponentProperty", payload);
         }
-        // This event can be listed in the parent component for change action
         this.$emit('changed', {
           elementId: elementId,
           value: value
