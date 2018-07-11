@@ -32,7 +32,7 @@
     "jquery-ui": "1.12.1",
     "js-beautify": "^1.7.5",
     "jsonfile": "^4.0.0",
-    "laravel-mix": "~2.0.0",
+    "laravel-mix": "~2.0.*",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.4",
