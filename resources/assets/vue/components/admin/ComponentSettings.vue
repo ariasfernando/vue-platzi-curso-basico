@@ -39,7 +39,6 @@
         <div
           v-for="(plugin, key) in component.plugins"
           v-if="!shouldRenderInStyles(plugin)"
-          class="plugin-wrapper"
           :class="'plugin-' + plugin.name"
           :key="key"
         >
@@ -56,7 +55,6 @@
         <div
           v-for="(plugin, key) in component.plugins"
           v-if="shouldRenderInStyles(plugin)"
-          class="plugin-wrapper"
           :class="'plugin-' + plugin.name"
           :key="key"
         >

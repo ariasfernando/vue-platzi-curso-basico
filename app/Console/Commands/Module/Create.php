@@ -214,7 +214,7 @@ EOF;
     {
         $template = <<<EOF
 <template>
-  <div class="settings-wrapper plugin-wrapper">
+  <div>
     <!-- Module settings here -->
   </div>
 </template>

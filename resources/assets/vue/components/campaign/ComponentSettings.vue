@@ -7,7 +7,7 @@
     ></label-item-container>
     <div class="card">
       <group-container>
-        <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name" :key="'plugin-' + plugin.name">
+        <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.name" :key="'plugin-' + plugin.name">
           <component v-if="plugin.enabled && plugin.name !=='text-options'" :is="'campaign-' + plugin.name" :name="plugin.name" :plugin-key="key" :plugin="plugin"></component>
         </div>
       </group-container>

@@ -1,7 +1,7 @@
 <template>
     <div class="settings-container" :class="[customClass,{'clearfix' : !hasSettingHalf}, {[`level-${level}-container`] : level}]">
       <template v-if="hasSettingRight">
-        <label :class="{[`level-${level}`] : level}" class="half" :title="title">{{label}}</label>
+        <label :class="{[`level-${level}`] : level}" class="half" :title="title" v-if="!noLabel">{{label}}</label>
         <div class="half-setting padding-top">
             <slot name="setting-right"></slot>
         </div>
@@ -9,23 +9,23 @@
 
       <template v-if="hasSettingSideBySide">
         <div class="half-setting">
-          <label :class="{[`level-${level}`] : level}" :title="titleLeft">{{labelLeft}}</label>
+          <label :class="{[`level-${level}`] : level}" :title="titleLeft" v-if="!noLabel">{{labelLeft}}</label>
           <slot name="setting-half-left"></slot>
         </div>
         <div class="half-setting">
-          <label :class="{[`level-${level}`] : level}" :title="titleRight">{{labelRight}}</label>
+          <label :class="{[`level-${level}`] : level}" :title="titleRight" v-if="!noLabel">{{labelRight}}</label>
           <slot name="setting-half-right"></slot>
         </div>
       </template>
     
       <template v-if="hasSettingBottom">
-        <label :class="{[`level-${level}`] : level}" :title="title">{{label}}</label>
+        <label :class="{[`level-${level}`] : level}" :title="title" v-if="!noLabel">{{label}}</label>
         <slot name="setting-bottom"></slot>
       </template>
 
       <template v-if="hasSettingHalf">
         <div class="half-setting">
-          <label :class="{[`level-${level}`] : level}" :title="title">{{label}}</label>
+          <label :class="{[`level-${level}`] : level}" :title="title" v-if="!noLabel">{{label}}</label>
           <slot name="setting-half"></slot>
         </div>
       </template>
@@ -44,7 +44,8 @@ export default {
     "label-left",
     "title",
     "titleRight",
-    "titleLeft"
+    "titleLeft",
+    "noLabel"
   ],
   computed: {
     hasSettingRight() {

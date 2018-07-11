@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-wrapper plugin-wrapper" v-if="component">
+  <div v-if="component">
     <el-button @click="showModal('desktop')" type="primary">
       <i class="glyphicon glyphicon-cloud-upload"></i>
       Upload Image
