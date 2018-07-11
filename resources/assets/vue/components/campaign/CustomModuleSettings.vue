@@ -1,5 +1,5 @@
-<template v-if="module ? module.settings : false">
-  <div>
+<template>
+  <div v-if="module ? module.settings : false">
     <label-item-container
     :label="module.title"
     icon="glyphicon-tasks"

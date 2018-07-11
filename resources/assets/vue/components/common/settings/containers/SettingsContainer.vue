@@ -1,5 +1,5 @@
 <template>
-    <div class="settings-container" :class="[customClass,{'clearfix' : !hasSettingHalf}, {[`level-${level}-container`] : level}]">
+    <div class="settings-container" :class="[customClass,{'clearfix' : !hasSettingHalf},{'is-setting-half' : hasSettingHalf}, {[`level-${level}-container`] : level}]">
       <template v-if="hasSettingRight">
         <label :class="{[`level-${level}`] : level}" class="half" :title="title" v-if="!noLabel">{{label}}</label>
         <div class="half-setting padding-top">
@@ -115,6 +115,13 @@ span.is-danger {
     padding-left: 10px;
   }
 }
+.is-setting-half{
+  display: table;
+  float: left;
+  width: 50%;
+  margin-bottom: 0;
+}
+
 .is-danger /deep/ input{
   border-color: #ce5f5f;
 }
