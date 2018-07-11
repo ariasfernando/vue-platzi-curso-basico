@@ -113,6 +113,14 @@
                                 <toggle-button :value="library.config.templating" @change="updateToggle('templating')"></toggle-button>
                               </p>
                             </div>
+                            <div class="row" v-if="campaignConfig.enable_tracking">
+                              <!-- Field Tracking -->
+                              <label for="tracking" class="col-sm-4 control-label">Enable Tracking</label>
+                              <p class="control col-sm-8">
+                                <toggle-button :value="library.config.tracking" @change="updateToggle('tracking')"></toggle-button>
+                              </p>
+                            </div>
+
                         </tab>
 
                         <tab name="Template">

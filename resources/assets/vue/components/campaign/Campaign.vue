@@ -9,6 +9,7 @@
         <div class="aside-inner">
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
+            <tracking v-if="trackingEnabled" :library-key="libraryKey"></tracking>
             <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
             <div class="lock-warning-container" v-if="locked">Unlock the email to add modules</div>
           </div>
@@ -64,6 +65,7 @@
   import VueSticky from 'vue-sticky'
   import _ from 'lodash'
   import CampaignService from '../../services/campaign'
+  import Tracking from './Tracking.vue'
 
   export default {
     name: 'Campaign',
@@ -81,6 +83,7 @@
       ModalEsp,
       ModalEnableTemplating,
       Spinner,
+      Tracking,
       EmailActions
     },
     data: function () {
@@ -89,11 +92,16 @@
         campaignConfigReady: false,
         pingLockInterval: 30000,
         logTimeInterval: 30000,
+        campaignConfig: {},
+        trackingEnabled: false,
       }
     },
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"];
+      },
+      libraryKey() {
+        return this.$store.getters["campaign/campaign"].library_config.key;
       },
       locked() {
         return this.campaign.campaign_data && this.campaign.campaign_data.locked;
@@ -115,7 +123,7 @@
           window.sessionStorage.setItem('windowId', this.windowId);
         }
         return window.sessionStorage.getItem('windowId');
-      }
+      },
     },
     watch:{
       dirty(value) {
@@ -154,6 +162,8 @@
       loadConfig() {
         this.$store.dispatch("config/getConfig", 'campaign').then(response => {
           this.campaignConfigReady = true;        
+          this.campaignConfig = this.$store.getters["config/config"].campaign;
+          this.trackingEnabled = (this.campaignConfig && this.campaignConfig.enable_tracking && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
         }, error => {
           this.$root.$toast(
             'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',

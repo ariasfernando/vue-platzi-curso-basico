@@ -48,7 +48,8 @@ class Campaign extends Eloquent
         'favorite',
         'campaign_settings',
         'auto_save',
-        'parent_campaign_id'
+        'parent_campaign_id',
+        'tracking'
     ];
 
     protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token'];
@@ -87,7 +88,8 @@ class Campaign extends Eloquent
         'campaign_settings' => [],
         'auto_save' => null,
         'parent_campaign_id' => null,
-        'proof_id' => null
+        'proof_id' => null,
+        'tracking'
     );
 
     /**
