@@ -195,6 +195,8 @@ export default {
           _this.setStyles();
         },
         setup(editor) {
+          
+          editor.paste_block_drop = true;
           editor.on('focus', (e) => {
               // Change icon tiny
               // TODO  implement DRY.
