@@ -1,13 +1,21 @@
 <template>
-  <div v-if="component">
-    <el-button @click="showModal('desktop')" type="primary">
-      <i class="glyphicon glyphicon-cloud-upload"></i>
-      Upload Image
-    </el-button>
-    <el-button  v-if="hasImageMobile" @click="showModal('mobile')" type="primary" size="mini">
-      <i class="glyphicon glyphicon-cloud-upload"></i>
-      Upload Mobile Image
-    </el-button>
+  <div class="settings-wrapper plugin-wrapper" v-if="component">
+    <settings-container :no-label="true">
+      <template slot="setting-bottom">
+        <el-button @click="showModal('desktop')" type="primary">
+          <i class="glyphicon glyphicon-cloud-upload"></i>
+          Upload Image
+        </el-button>
+      </template>
+    </settings-container>
+    <settings-container :no-label="true" v-if="hasImageMobile">
+      <template slot="setting-bottom">
+        <el-button @click="showModal('mobile')" type="primary" size="mini" :disabled="!plugin.data.img">
+          <i class="glyphicon glyphicon-cloud-upload"></i>
+          Upload Mobile Image
+        </el-button>
+      </template>
+    </settings-container>
     <settings-container label="Alt">
       <template slot="setting-bottom">
         <el-input

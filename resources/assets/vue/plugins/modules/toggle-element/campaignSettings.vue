@@ -94,7 +94,7 @@
   }
 </script>
 <style lang="scss" scoped>
-.el-switch{
+.settings-container .el-switch{
   float: left;
 }
 </style>
