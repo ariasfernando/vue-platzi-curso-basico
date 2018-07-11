@@ -176,14 +176,17 @@
       _validate(customMessage = undefined) {
       	let errorMessage = '';
         if (this.$_app.utils.validator.imagesErrors('#emailCanvas')) {
-        	errorMessage = 'To continue, please upload any missing images.';
+        	errorMessage = 'To continue please upload all missing images.';
         }
        	if (this.moduleErrors) {
-       		errorMessage = 'To continue, please make sure you have complete any modules configuration required.';
+       		errorMessage = 'To continue please configure properly all modules.';
        	}
        	if (!this._validateEmptyCampaignName()) {
-        	errorMessage = 'To continue please complete the email name.';	
+        	errorMessage = 'To continue please complete the email name.';
        	}
+        if (this.$_app.utils.validator.tinyErrors('#emailCanvas')) {
+          errorMessage = 'To continue please configure properly all text modules.';
+        }
        	if (!this._validateEmptyEmail()) {
         	return false;
        	}
