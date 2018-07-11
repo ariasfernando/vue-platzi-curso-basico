@@ -1,9 +1,9 @@
 <template>
   <div class="expand st-module-menu-wrapper">
     <label-item-container label="MODULES" icon="glyphicon-th-large" v-b-toggle.modules></label-item-container>
-      <b-collapse id="modules" visible>
+      <b-collapse id="modules" visible class="card">
         <div v-if="ready" v-for="(item, i) in items" :key="i" >
-          <div v-if="item.sub_menu" class="expand">
+          <div v-if="item.sub_menu" class="expand-subitem-button">
             <label-item-container :label="item.name" icon="glyphicon-folder-open" v-b-toggle="item.name" class="subitem-button"></label-item-container>
               <b-collapse :id="item.name" class="content-collapse">
                   <div v-for="(subitem, j) in item.sub_menu" :key="j">
@@ -228,7 +228,7 @@
     box-shadow: none;
     padding: 15px 10px 13px 10px;
   }
-  .expand{
+  .expand-subitem-button{
       border: 1px solid #e6e6e6;
      margin-bottom: 5px;
   }
