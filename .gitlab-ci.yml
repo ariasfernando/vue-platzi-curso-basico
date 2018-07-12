@@ -9,6 +9,7 @@ variables:
   DB_HOST: mongo
   DB_DATABASE: base
   REDIS_HOST: base_queue_1
+  CDN_HOST: http://stensul-devel-01.akamaized.net
 
 cache:
   paths:
