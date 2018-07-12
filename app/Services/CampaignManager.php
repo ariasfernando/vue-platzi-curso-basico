@@ -245,7 +245,13 @@ class CampaignManager
         ];
         $data['updated_by'] = $data['created_by'];
 
-        $campaign = CampaignModel::create($data);
+        // Flag as an internal campaign so we can filter it on the dashboard.
+        $data['internal'] = false;
+        if (Auth::user()->hasRole(env('INTERNAL_ROLE', 'stensul-internal'))) {
+            $data['internal'] = true;
+        }
+
+        $campaign = Campaign::create($data);
 
         Activity::log('Campaign created', array('properties' => ['campaign_id' => new ObjectID($campaign->id)]));
 
