@@ -7,10 +7,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Models\Campaign;
+use CampaignModel as Campaign;
 use Stensul\Models\Library;
-use Stensul\Services\EmailHtmlCreator as Html;
-use Stensul\Services\StaticProcessor as Assets;
+use HtmlCreator as Html;
+use StaticProcessor as Assets;
 use Activity;
 use Worker;
 

@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Stensul\Jobs\Job;
 use Stensul\Models\User;
 use Stensul\Models\Proof;
-use Stensul\Models\Campaign;
+use CampaignModel as Campaign;
 use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\BSON\UTCDateTime;
 use Illuminate\Queue\SerializesModels;

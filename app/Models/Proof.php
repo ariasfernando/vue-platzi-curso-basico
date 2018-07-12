@@ -3,6 +3,7 @@
 namespace Stensul\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use CampaignModel as Campaign;
 
 class Proof extends Eloquent
 {
@@ -45,7 +46,7 @@ class Proof extends Eloquent
      */
     public function campaign()
     {
-        return $this->belongsTo('Stensul\Models\Campaign', 'campaign_id');
+        return $this->belongsTo(Campaign::class, 'campaign_id');
     }
 
     /**

@@ -10,7 +10,7 @@ use Api;
 use Config;
 use Stensul\Http\Requests;
 use Stensul\Models\User;
-use Stensul\Models\Campaign;
+use CampaignModel as Campaign;
 use Stensul\Models\Upload;
 use MongoDB\BSON\ObjectID as ObjectID;
 use GuzzleHttp\Client as Client;

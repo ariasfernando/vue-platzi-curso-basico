@@ -6,7 +6,7 @@ use Auth;
 use StensulLocale;
 use Storage;
 use Stensul\Models\Library;
-use Stensul\Models\Campaign;
+use CampaignModel as Campaign;
 use Illuminate\Http\Request;
 use Stensul\Providers\ModuleServiceProvider;
 
