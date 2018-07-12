@@ -1,6 +1,7 @@
 /* eslint-env node, jest, es6 */
 /* eslint import/no-unresolved: 0 */
 /* eslint import/extensions: 0 */
+/* eslint import/no-extraneous-dependencies:0 */
 /* eslint max-len: 0 */
 /* eslint no-console: 0 */
 
@@ -288,7 +289,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"addColumn" with data, expect in the "modules" state has removed column data', (done) => {
+    it('"removeColumns" with data, expect of the state "modules" remove column data', (done) => {
       let data = {
         index: 0,
         number: 1,
