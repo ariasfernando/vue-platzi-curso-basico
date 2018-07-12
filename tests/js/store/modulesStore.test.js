@@ -270,7 +270,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"addColumn" with data, expect of the state "modules" remove column data', (done) => {
+    it('"removeColumns" with data, expect of the state "modules" remove column data', (done) => {
       let data = {
         index: 0,
         number: 1,
