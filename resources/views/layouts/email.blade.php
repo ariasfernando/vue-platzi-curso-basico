@@ -41,23 +41,22 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 					<![endif]-->
 				@endif
 			@endif
-		@endif
-        {{-- PREVIEW PREHEADER --}}
-        @if(!Config::get('view.preheader.enabled') || !Config::get('view.libraries.' . $params['campaign_data']['library_name'] . '.preheader'))
-            {{-- PREHEADER NOT ENABLED, USE DE FACTO FROM MODULES --}}
-        @else
+        @endif
+        @if (config('global_settings.enable_preheader') && isset($params['library_config']['preheader']) && $params['library_config']['preheader'])
             @if(isset($params['preheader_preview']))
-                {{-- PREVIEW PREHEADER --}}
-                <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{$params['preheader_preview'] or ''}}
-                    {!! str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['preheader_preview'])) !!}
-                </div>
+                    {{-- PREVIEW PREHEADER --}}
+                    <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{$params['preheader_preview'] or ''}}
+                        {!! str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['preheader_preview'])) !!}
+                    </div>
             @elseif(isset($params['campaign_data']['campaign_preheader']))
                 {{-- CAMPAIGN PREHEADER --}}
                 <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['campaign_data']['campaign_preheader'] or '' }}
                     {{ str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['campaign_data']['campaign_preheader'])) }}
                 </div>
             @endif
+        @else
+            {{-- PREHEADER NOT ENABLED, USE DE FACTO FROM MODULES --}}
         @endif
-		<?= $params['body_html']; ?>
+<?= $params['body_html']; ?>
 	</body>
 </html>
