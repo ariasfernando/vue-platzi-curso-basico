@@ -4,7 +4,7 @@ namespace Stensul\Services;
 use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Models\Tag;
-use Stensul\Models\Campaign;
+use CampaignModel;
 use Stensul\Exceptions\BadParameterException;
 
 class TagManager
@@ -76,7 +76,7 @@ class TagManager
     {
         $tags = [];
         // Get tags from campaigns, so we won't show tags related to only deleted campaigns
-        $campaign_tags = Campaign::raw(function ($collection) {
+        $campaign_tags = CampaignModel::raw(function ($collection) {
             return $collection->aggregate([
                 ['$match' => ['status' => ['$ne' => 2]]], // ignore deleted campaigns
                 ['$unwind' => '$tags'],
@@ -101,7 +101,7 @@ class TagManager
      */
     public static function getPopularTags()
     {
-        $tags = Campaign::raw(function ($collection) {
+        $tags = CampaignModel::raw(function ($collection) {
             return $collection->aggregate([
                 ['$match' => ['status' => ['$ne' => 2]]], // ignore deleted campaigns
                 ['$unwind' => '$tags'],

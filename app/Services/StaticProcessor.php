@@ -8,7 +8,8 @@ use Imagine;
 use Storage;
 use Imagine\Image\ImageInterface;
 use League\Flysystem\AdapterInterface;
-use Stensul\Services\EmailHtmlCreator as Html;
+use HtmlCreator as Html;
+use CampaignModel;
 
 class StaticProcessor
 {
@@ -21,7 +22,7 @@ class StaticProcessor
      *
      * @param \Stensul\Models\Campaign $campaign
      */
-    public function __construct(\Stensul\Models\Campaign $campaign)
+    public function __construct(CampaignModel $campaign)
     {
         $this->campaign = $campaign;
     }
@@ -117,7 +118,7 @@ class StaticProcessor
      *
      * @param \Stensul\Models\Campaign $from
      */
-    public function copyAssetsFrom(\Stensul\Models\Campaign $from)
+    public function copyAssetsFrom(CampaignModel $from)
     {
         $storage = Storage::disk('local:campaigns');
         $assets = [];
@@ -241,7 +242,7 @@ class StaticProcessor
      *
      * @param \Stensul\Models\Campaign $from
      */
-    public function replaceReferenceId(\Stensul\Models\Campaign $from)
+    public function replaceReferenceId(CampaignModel $from)
     {
         $modules_data = $this->getCampaign()->modules_data;
         foreach ($from->modules_data as $key => $module) {
@@ -268,14 +269,23 @@ class StaticProcessor
                         if (isset($column_value['components'])) {
                             foreach ($column_value['components'] as $component_key => $component_value) {
                                 if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
-                                    if (isset($component_value['attribute'])
-                                        && isset($component_value['attribute']['placeholder'])) {
-                                        $modules_data[$key]['structure']['columns'][$column_key]['components']
-                                            [$component_key]['attribute']['placeholder'] = str_replace(
-                                                $from->id,
-                                                $this->getCampaign()->id,
-                                                $component_value['attribute']['placeholder']
-                                            );
+                                    if (isset($component_value['image']) && isset($component_value['image']['attribute'])) {
+                                        if (isset($component_value['image']['attribute']['placeholder'])) {
+                                            $modules_data[$key]['structure']['columns'][$column_key]['components']
+                                                [$component_key]['image']['attribute']['placeholder'] = str_replace(
+                                                    $from->id,
+                                                    $this->getCampaign()->id,
+                                                    $component_value['image']['attribute']['placeholder']
+                                                );
+                                        }
+                                        if (isset($component_value['image']['attribute']['placeholderMobile'])) {
+                                            $modules_data[$key]['structure']['columns'][$column_key]['components']
+                                                [$component_key]['image']['attribute']['placeholderMobile'] = str_replace(
+                                                    $from->id,
+                                                    $this->getCampaign()->id,
+                                                    $component_value['image']['attribute']['placeholderMobile']
+                                                );
+                                        }
                                     }
                                 }
                             }

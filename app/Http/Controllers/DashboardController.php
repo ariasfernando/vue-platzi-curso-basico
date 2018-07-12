@@ -4,7 +4,7 @@ namespace Stensul\Http\Controllers;
 
 use Auth;
 use Campaign as CampaignManager;
-use Stensul\Models\Campaign;
+use CampaignModel as Campaign;
 use Stensul\Models\Library;
 use Stensul\Models\Setting;
 use Illuminate\Http\Request;
@@ -117,6 +117,10 @@ class DashboardController extends Controller
             $campaigns->whereIn('library', $user_visibility);
         }
 
+        if (!Auth::user()->hasRole(env('INTERNAL_ROLE', 'stensul-internal'))) {
+            $campaigns->where('internal', false);
+        }
+
         if (\Config::get('campaign.enable_search')) {
             $this->searchFilter($campaigns, $request->input('terms', []));
 
@@ -203,6 +207,10 @@ class DashboardController extends Controller
 
         if (!Auth::user()->can('access_unfixed_templates')) {
             $campaigns->where('locked', '=', true, 'AND');
+        }
+
+        if (!Auth::user()->hasRole(env('INTERNAL_ROLE', 'stensul-internal'))) {
+            $campaigns->where('internal', false);
         }
 
         $total = $campaigns->count();

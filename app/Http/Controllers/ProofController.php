@@ -9,7 +9,7 @@ use Stensul\Models\Role;
 use Stensul\Models\User;
 use Stensul\Models\Proof;
 use Stensul\Models\Comment;
-use Stensul\Models\Campaign;
+use CampaignModel as Campaign;
 use Illuminate\Http\Request;
 use Stensul\Jobs\SendReviewersEmail;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;

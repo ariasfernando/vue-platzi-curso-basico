@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import _, {
+  find
+} from 'lodash';
 import clone from 'clone';
 
 export default {
@@ -12,7 +14,7 @@ export default {
     },
   },
   methods: {
-    getSubitemsAsArray () {
+    getSubitemsAsArray() {
       // Get subitems as array from modules menu
       return _.reduce(this.items, (result, value) => {
         if(_.has(value, 'level')) {
@@ -21,61 +23,80 @@ export default {
         return result;
       }, []);
     },
-    getLastIndex() {
-      return this.modules.length > 0 ? this.modules.length-1 : 0;
-    },
-    isFixedModule(module) {
-      return _.has(module, 'isFixed') && module.isFixed;
-    },
-    isFixedHeader(module) {
-      return _.has(module, 'isFixed') && module.fixedPosition === 0;
-    },
-    isFixedFooter(module) {
-      return _.has(module, 'isFixed') && module.fixedPosition === -1;
-    },
-    isInFixedModulesConfig(fixedModules, itemName, position) {
-      return _.filter(fixedModules, fixed => fixed.key === itemName && fixed.pos === position).length > 0;
-    },
-    campaignHasFixedHeader() {
-      return this.isFixedHeader(this.modules[0]);
-    },
-    campaignHasFixedFooter() {
-      return this.isFixedFooter(this.modules[this.getLastIndex()]);
-    },
-    removePreviousFixedInPosition(pos) {
-      if(this.isFixedModule(this.modules[pos])) {
-        this.$store.commit('campaign/removeModule', pos);
+    getLastAvailableIndex() {
+      let index = this.modules.length;
+      if (this.campaignHasFixedBottomModules()) {
+        index = this.getIndexFirstFixedBottomModule();
       }
+      return index;
     },
-    removePreviousFixedHeader() {
-      if(this.campaignHasFixedHeader()) {
-        this.$store.commit('campaign/removeModule', 0);
-      }
+    isBottomModule(mod) {
+      return mod.isFixed === true && mod.fixedPosition <= -1;
     },
-    removePreviousFixedFooter() {
-      if(this.campaignHasFixedFooter()) {
-        this.$store.commit('campaign/removeModule', this.getLastIndex());
-      }
+    isTopModule(mod) {
+      return mod.isFixed === true && mod.fixedPosition >= 0;
     },
-    validateSortingToIndex({index, moduleData}) {
-      // Get last index
-      const lastIndex = this.getLastIndex();
-
-      // Can sort the list or add via drag and drop from menu in the next cases
-      // Trying to insert in first position and campaign hasn't a fixed header
-      return (index === 0          && !this.campaignHasFixedHeader()) 
-          // Trying to insert in last position and campaign hasn't a fixed footer
-          || (index === lastIndex  && !this.campaignHasFixedFooter())
-          // Trying to insert any position except first or after last position
-          || index !== 0 && index <= lastIndex
-          // Trying to add a fixed module, is valid if it doesn't exists
-          && (
-                (this.isFixedHeader(moduleData) && !this.campaignHasFixedHeader() || !this.isFixedHeader(moduleData))
-            &&  (this.isFixedFooter(moduleData) && !this.campaignHasFixedFooter() || !this.isFixedFooter(moduleData))
-          )
-      ;
+    campaignHasFixedTopModule(mod) {
+      const found = this.modules.find(item => {
+        if (this.isTopModule(item)) {
+          return mod.fixedPosition === item.fixedPosition;
+        }
+        return false;
+      });
+      return typeof found !== 'undefined';
     },
-    autoScrollTop (){
+    campaignHasFixedBottomModule(mod) {
+      const found = this.modules.find(item => {
+        if (this.isBottomModule(item)) {
+          return mod.fixedPosition === item.fixedPosition;
+        }
+        return false;
+      });
+      return typeof found !== 'undefined';
+    },
+    campaignHasFixedBottomModules() {
+      const found = this.modules.find(item => {
+        return this.isBottomModule(item);
+      });
+      return typeof found !== 'undefined';
+    },
+    getIndexFirstFixedBottomModule() {
+      return this.modules.findIndex(mod => {
+        return this.isBottomModule(mod);
+      });
+    },
+    getIndexLastFixedTopModule() {
+      let index = -1;
+      this.modules.forEach((item, i) => {
+        if (this.isTopModule(item)) {
+          index = i;
+        }
+      });
+      return index;
+    },
+    getNextIndexFixedBottomModule(newModule) {
+      let index = this.modules.length;
+      this.modules.forEach((item, i) => {
+        if (item.fixedPosition < 0) {
+          if (item.fixedPosition > newModule.fixedPosition) {
+            index = i;
+          }
+        }
+      });
+      return index;
+    },
+    getNextIndexFixedTopModule(newModule) {
+      let index = 0;
+      this.modules.forEach((item, i) => {
+        if (item.fixedPosition >= 0) {
+          if (item.fixedPosition < newModule.fixedPosition) {
+            index = i + 1;
+          }
+        }
+      });
+      return index;
+    },
+    autoScrollTop() {
       let bounds = 0;
       let isVisible = bounds < window.innerHeight && bounds > 0;
 
@@ -85,7 +106,7 @@ export default {
           }, 100);
       }
     },
-    autoScrollBottom (){
+    autoScrollBottom() {
       let bounds = $(".section-canvas-container").outerHeight();
       let isVisible = bounds < window.innerHeight && bounds > 0;
 
@@ -95,89 +116,87 @@ export default {
           }, 100);
       }
     },
+    findModule(moduleName, moduleType) {
+      return moduleType === 'item' ? find(this.items, (m) => m.name === moduleName) : find(this.getSubitemsAsArray(), (m) => m.name === moduleName);
+    },
     addModule(m, newIndex) {
       const mod = clone(m);
+      mod.data = mod.data ? mod.data : {};
       mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
-
-      //TODO: handle fixed modules at non-header/non-footer position
-
-      if(this.isFixedHeader(mod) && this.campaignHasFixedHeader()) {
-        this.$root.$toast('A header is already present. Please remove it to add a new one.', {className: 'et-error'});
-      }
-      else if (this.isFixedFooter(mod) && this.campaignHasFixedFooter()) {
-        this.$root.$toast('A footer is already present. Please remove it to add a new one.', {className: 'et-error'});
-      }
-      else {
-        if(this.isFixedHeader(mod)) {
-          this.insertModule({index: 0, moduleData: mod});
-
+      if (this.campaignHasFixedTopModule(mod) || this.campaignHasFixedBottomModule(mod)) {
+        this.$root.$toast('This fixed module position is already taken. Please remove the existing module before adding a new module.', {
+          className: 'et-error'
+        });
+      } else {
+        if (this.isTopModule(mod)) {
+          this.addFixedTopModule(mod);
           setTimeout(() => {
             this.autoScrollTop();
           }, 25);
-        }
-        else if(this.isFixedFooter(mod)) {
-          this.addModuleToBottom(mod);
-
+        } else if (this.isBottomModule(mod)) {
+          this.addFixedBottomModule(mod);
           setTimeout(() => {
             this.autoScrollBottom();
           }, 25);
-        }
-        else {
-
-          if(newIndex === 0 && this.campaignHasFixedHeader()) {
-            newIndex = 1;
+        } else {
+          if (typeof newIndex !== 'undefined') {
+            const indexTopModule = this.getIndexLastFixedTopModule();
+            const indexBottomModule = this.getIndexFirstFixedBottomModule();
+            if (indexTopModule !== -1 && newIndex <= indexTopModule) {
+              newIndex = indexTopModule + 1;
+            } else if (indexBottomModule !== -1 && newIndex > indexBottomModule) {
+              newIndex = indexBottomModule;
+            }
+          } else {
+            newIndex = this.getLastAvailableIndex();
           }
-          else if((newIndex > this.getLastIndex() || newIndex === undefined) && this.campaignHasFixedFooter()) {
-            // Setting the newIndex to the current last position will push the current footer to the bottom
-            newIndex = this.getLastIndex();
-          }
-          
-          if (newIndex === undefined) {
-            this.addModuleToBottom(mod);
-
+          this.insertModule({
+            index: newIndex,
+            moduleData: mod
+          });
+          if (newIndex >= this.getLastAvailableIndex() - 1) {
             setTimeout(() => {
               this.autoScrollBottom();
             }, 25);
-          }
-          else {
-            this.insertModule({index: newIndex, moduleData: mod});
-
-            if(newIndex >= this.getLastIndex() - 1) {
-              setTimeout(() => {
-                this.autoScrollBottom();
-              }, 25);
-            }
           }
         }
       }
     },
     insertModule({index, moduleData}) {
       // Insert module 
-      this.$store.commit('campaign/insertModule', {index: index, moduleData: moduleData});
+      this.$store.commit('campaign/insertModule', {
+        index,
+        moduleData
+      });
       // Set active inserted module
       this.$store.commit('campaign/setActiveModule', index);
-    },
-    addModuleToBottom(moduleData) {
-      // Add module
-      this.$store.commit('campaign/addModule', moduleData);
-      // Set active on last module added
-      this.$store.commit('campaign/setActiveLastModule');
-      // Get last index
-      const lastIndex = this.getLastIndex();
-      
       if (this.activeModule.type === 'studio') {
         // Save current component if module type is studio
         this.$store.commit('campaign/setCurrentComponent', {
-          moduleId: lastIndex,
+          moduleId: index,
           columnId: 0,
-          componentId: 0,
+          componentId: 0
         });
         this.$store.commit('campaign/unsetCustomModule');
       } else {
         // Save customModule if module type is custom
-        this.$store.commit('campaign/setCustomModule', lastIndex);
+        this.$store.commit('campaign/setCustomModule', index);
         this.$store.commit('campaign/unsetCurrentComponent');
       }
     },
-  },
+    addFixedTopModule(moduleData) {
+      const index = this.getNextIndexFixedTopModule(moduleData);
+      this.insertModule({
+        index,
+        moduleData
+      });
+    },
+    addFixedBottomModule(moduleData) {
+      const index = this.getNextIndexFixedBottomModule(moduleData);
+      this.insertModule({
+        index,
+        moduleData
+      });
+    }
+  }
 };

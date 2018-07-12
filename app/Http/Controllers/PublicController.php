@@ -3,10 +3,10 @@
 namespace Stensul\Http\Controllers;
 
 use Config;
-use Stensul\Models\Campaign;
+use CampaignModel as Campaign;
 use Stensul\Models\Library;
 use Illuminate\Http\Request;
-use Stensul\Services\EmailHtmlCreator as Html;
+use HtmlCreator as Html;
 use StensulLocale;
 
 class PublicController extends Controller

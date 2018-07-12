@@ -14,6 +14,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Stensul\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use MongoDB\BSON\ObjectID;
 use Stensul\Http\Requests\PasswordChangeRequest;
 
 class PasswordController extends Controller
@@ -143,13 +144,17 @@ class PasswordController extends Controller
                 $user->password = bcrypt($password);
                 $user->last_password_change = Carbon::now();
                 $user->force_password = 0;
+                $user->unconfirmed = 0;
 
                 $user->save();
             }
         );
 
         switch ($response) {
+            // Don't tip off attackers if the user exists or not.
+            case PasswordBroker::INVALID_USER:
             case PasswordBroker::PASSWORD_RESET:
+                Activity::log('User restored', array('properties' => ['user_id' => new ObjectID($user->_id)]));
                 return redirect('auth/login')->with('message', 'SUCCESS_CHANGE');
 
             default:

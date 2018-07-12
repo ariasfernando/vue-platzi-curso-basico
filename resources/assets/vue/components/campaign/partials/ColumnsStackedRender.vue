@@ -1,7 +1,7 @@
 <template>
     <div class="stx-wrapper">
       <table
-        class="st-col st-mso-full-width"
+        class="st-mobile-full-width st-mso-full-width"
         align="left"
         cellpadding="0"
         cellspacing="0"
@@ -27,7 +27,8 @@
                     :component="component"
                     :module-id="moduleId"
                     :column-id="columnId"
-                    :component-id="componentId">
+                    :component-id="componentId"
+                    context="campaign">
                   </component>
             </table>
           </td>
@@ -82,8 +83,7 @@
         return this.module.structure.columns.length;
       },
       msoEndingComment() {
-        return `
-                [if gte mso 9]>
+        return `[if gte mso 9]>
               </td>
             </tr>
           </table>
@@ -119,8 +119,7 @@
         return styles;
       },
       msoBetweenComment(columnId) {
-        return `
-        [if gte mso 9]>
+        return `[if gte mso 9]>
           </td>
           <td width="${this.calculeWidthColumnPx(columnId+1)}" style='width:${this.calculeWidthColumnPx(columnId+1)}px !important' align='left' valign='top'>
         <![endif]`;
