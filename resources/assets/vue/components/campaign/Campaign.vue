@@ -256,7 +256,7 @@
   .right-bar,
   .left-bar {
     height: calc(~"100vh - 55px");
-    overflow: overlay;
+    overflow: hidden;
     width: 270px;
     display: block;
     float: left;
@@ -264,12 +264,16 @@
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
     padding-bottom: 25px;
 
+    &:hover{
+      overflow: overlay
+    }
+
     &::-webkit-scrollbar {
         width: 2px; 
         background: transparent;
     }
     &::-webkit-scrollbar-thumb {
-        background: @brand-secondary;
+        background: lighten(@stensul-gray, 40%);
     }
     .btn.btn-secondary.btn-block {
       &:hover,

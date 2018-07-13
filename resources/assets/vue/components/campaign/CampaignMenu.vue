@@ -229,13 +229,34 @@
     padding: 15px 10px 13px 10px;
   }
   .expand-subitem-button{
-      border: 1px solid #e6e6e6;
-     margin-bottom: 5px;
+    background: #edecef;
+    border: 1px solid #d5d3d9;
+    margin-bottom: 5px;
+    border-radius: 2px;
+    position: relative;
+  }
+  .expand-subitem-button /deep/ p{
+    color: #514960!important;
+    margin-left: -5px;
+  }
+  .expand-subitem-button  /deep/ .glyphicon-folder-open{
+    position: absolute;
+    right: 7px;
+    top: 15px;
+    color: #514960!important;
+    opacity: 0.8;
+  }
+  .expand-subitem-button  /deep/ .glyphicon-menu-down{
+    display: none;
   }
   .content-collapse{
     background: #edecef;
     padding: 4px 6px 0 6px;
     background: #f9f9f9;
     border-radius: 3px;
+    padding-bottom: 5px;
+  }
+  .content-collapse /deep/ div:last-child .group-container{
+    margin-bottom: 0px;
   }
 </style>

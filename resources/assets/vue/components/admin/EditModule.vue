@@ -153,6 +153,7 @@ export default {
 <style lang="less">
 @stensul-purple: #514960;
 @stensul-white: #ffffff;
+@stensul-gray: #666666;
 @stensul-purple-light: lighten(@stensul-purple, 20%);
 @focus: #78dcd6;
 @focus-light: lighten(@focus, 30%);
@@ -381,17 +382,22 @@ p,ul,ol{
   .right-bar,
   .left-bar {
     height: calc(~"100vh - 55px");
-    overflow: overlay;
+    overflow: hidden;
     width: 270px;
     display: block;
     float: left;
     padding: 0px;
+
+    &:hover{
+      overflow: overlay
+    }
+
     &::-webkit-scrollbar {
         width: 2px; 
         background: transparent;
     }
     &::-webkit-scrollbar-thumb {
-        background: @brand-secondary;
+        background: lighten(@stensul-gray, 40%);
     }
     .btn.btn-secondary.btn-block {
       &:hover,
