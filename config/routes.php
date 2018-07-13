@@ -70,13 +70,12 @@ $default = [
             '/proof/comment/{token}'       => 'ProofController@postComment',
             '/proof/decision/{token}'      => 'ProofController@postDecision',
             '/proof/create'                => 'ProofController@postCreate',
+            '/proof/delete-decision/{token}' => 'ProofController@postDeleteDecision',
         ],
 
         'put' => [],
 
-        'delete' => [
-            '/proof/decision/{token}'              => 'ProofController@deleteDecision',
-        ],
+        'delete' => [],
     ],
     'api' => [
         'get'    => [

@@ -7,8 +7,8 @@ use Cache;
 use Session;
 use Activity;
 use Carbon\Carbon;
-use Stensul\Models\Upload;
-use Stensul\Models\Library;
+use UploadModel as Upload;
+use LibraryModel as Library;
 use GuzzleHttp\Client as Client;
 use MongoDB\BSON\ObjectID as ObjectID;
 

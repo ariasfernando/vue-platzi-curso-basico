@@ -6,10 +6,10 @@ use Log;
 use Cdn;
 use Imagine;
 use Storage;
+use CampaignModel;
 use Imagine\Image\ImageInterface;
 use League\Flysystem\AdapterInterface;
 use HtmlCreator as Html;
-use CampaignModel;
 
 class StaticProcessor
 {
@@ -20,7 +20,7 @@ class StaticProcessor
     /**
      * Constructor.
      *
-     * @param \Stensul\Models\Campaign $campaign
+     * @param CampaignModel $campaign
      */
     public function __construct(CampaignModel $campaign)
     {
@@ -30,7 +30,7 @@ class StaticProcessor
     /**
      * Get campaign model.
      *
-     * @return \Stensul\Models\Campaign
+     * @return CampaignModel
      */
     public function getCampaign()
     {
@@ -116,7 +116,7 @@ class StaticProcessor
     /**
      * Copy assets from a campaign.
      *
-     * @param \Stensul\Models\Campaign $from
+     * @param CampaignModel $from
      */
     public function copyAssetsFrom(CampaignModel $from)
     {
@@ -240,7 +240,7 @@ class StaticProcessor
     /**
      * Replace reference id from a campaign.
      *
-     * @param \Stensul\Models\Campaign $from
+     * @param CampaignModel $from
      */
     public function replaceReferenceId(CampaignModel $from)
     {

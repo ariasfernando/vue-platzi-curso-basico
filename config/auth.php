@@ -66,7 +66,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => Stensul\Models\User::class,
+            'model' => UserModel::class,
         ],
     ],
 

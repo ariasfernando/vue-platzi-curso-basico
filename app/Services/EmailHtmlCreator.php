@@ -7,11 +7,11 @@ use URL;
 use View;
 use StensulLocale;
 use Storage;
-use Stensul\Models\Library;
+use LibraryModel as Library;
+use CampaignModel;
 use League\Flysystem\AdapterInterface;
 use TextCreator as Text;
 use Stensul\Providers\HelperServiceProvider as Helper;
-use CampaignModel;
 
 class EmailHtmlCreator
 {

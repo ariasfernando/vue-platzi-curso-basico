@@ -5,14 +5,14 @@ namespace Stensul\Http\Controllers\Admin;
 use Auth;
 use Activity;
 use DB;
-use Stensul\Http\Controllers\Controller as Controller;
+use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Stensul\Models\Library;
-use Stensul\Models\Permission;
-use Stensul\Models\Role;
+use LibraryModel as Library;
+use PermissionModel as Permission;
+use RoleModel as Role;
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
-use Stensul\Services\ModelKeyManager;
+use Stensul\Http\Middleware\AdminAuthenticate;
+use ModelKeyManager;
 
 class LibraryController extends Controller
 {
