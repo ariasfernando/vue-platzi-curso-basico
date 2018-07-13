@@ -62,7 +62,7 @@ class StaticProcessor
         $emailLayout = $html->getEmailLayout();
 
         $uploadedFiles = $cloud->allFiles($campaignPath);
-        $uploadedFiles = [];
+
         $data = [
             'campaign_id' => $this->getCampaign()->id,
             'cdn' => config('filesystems.disks.cloud'),
