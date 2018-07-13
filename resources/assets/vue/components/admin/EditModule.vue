@@ -382,7 +382,8 @@ p,ul,ol{
   .right-bar,
   .left-bar {
     height: calc(~"100vh - 55px");
-    overflow: hidden;
+    overflow: auto;
+    overflow: overlay;
     width: 270px;
     display: block;
     float: left;

@@ -319,6 +319,7 @@ function campaignStore() {
         if(_.has(state.modules[moduleId].data, 'errors')) {
           const filtered = state.fieldErrors.filter(err => err.scope.clearErrorsByModuleId !== moduleId);
           state.fieldErrors = filtered;
+          Vue.set(state.modules[moduleId].data, 'errors', []);
         }
       },
       clearErrorsByScope(state, scope) {
@@ -335,8 +336,8 @@ function campaignStore() {
         }
         Vue.set(state.modules[scope.moduleId].data, 'errors', filtered);
       },
-      setCampaignName(state, camapignName) {
-      	Vue.set(state.campaign.campaign_data, 'campaign_name', camapignName);
+      setCampaignName(state, campaignName) {
+      	Vue.set(state.campaign.campaign_data, 'campaign_name', campaignName);
       },
       error(err) {
         console.error(err);
