@@ -3,7 +3,7 @@
     <component
     v-for="(plugin, key) in module.plugins"
     :key="plugin.name + key"
-    v-if="isRenderSetting(plugin)"
+    v-if="isRenderSetting(plugin, key)"
     :is="'campaign-' + plugin.name"
     :name="key"
     :plugin="plugin"
@@ -21,7 +21,9 @@
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
       },
-      isRenderSetting(plugin){
+    },
+    methods:{
+      isRenderSetting(plugin, key){
         return plugin.enabled && plugin.runBackground && this.$_app.modulePlugins[key] && this.activeModule !== undefined
       }
     },
