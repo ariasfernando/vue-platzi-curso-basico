@@ -138,6 +138,7 @@ export default {
       // we validate 'required' validations in background to prevent completing and invalid campaign
 
       if (this.module.params.validation && !this.module.data.validated) {
+        this.$store.commit('campaign/clearErrorsByModuleId', this.moduleId);
         _.each(this.module.params.validation, (item, key) => {
           if (key === 'images') {
             _.each(this.module.params.validation[key], (imageElement, key2) => {
