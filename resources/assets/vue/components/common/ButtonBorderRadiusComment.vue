@@ -35,10 +35,9 @@
         return percent;
       },
       borderColor() {
-        if(this.component.button.style.borderTopColor == this.component.button.style.borderBottomColor &&
-          this.component.button.style.borderTopColor == this.component.button.style.borderLeftColor &&
-          this.component.button.style.borderTopColor == this.component.button.style.borderBottomColor ){
-          return this.component.button.style.borderTopColor;
+        if(this.component.button.style.borderTopColor && this.component.button.style.borderBottomColor && 
+          this.component.button.style.borderLeftColor && this.component.button.style.borderRightColor ){
+          return this.component.button.style.borderBottomColor;
         }
         return this.bgColor;
       },
@@ -73,7 +72,7 @@
         const minWidth = this.component.button.style.minWidth ? parseInt(this.component.button.style.minWidth) : 0;
         const editorWidth = $("#"+this.editorId).width() + paddingLeft + paddingRight;
         let width = this.component.button.attribute.width;
-        if(minWidth){
+        if(minWidth || width === 0){
           width = editorWidth > minWidth ? editorWidth : minWidth;
         }
         this.width = this.convertToPt(width);
