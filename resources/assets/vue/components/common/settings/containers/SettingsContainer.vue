@@ -24,10 +24,8 @@
       </template>
 
       <template v-if="hasSettingHalf">
-        <div class="half-setting">
           <label :class="{[`level-${level}`] : level}" :title="title" v-if="!noLabel">{{label}}</label>
           <slot name="setting-half"></slot>
-        </div>
       </template>
     
     </div>
