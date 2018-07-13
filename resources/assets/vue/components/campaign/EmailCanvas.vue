@@ -12,7 +12,7 @@
             class="stx-draggable-wrapper"
             :class="{ 'campaign-validated': campaignValidated }"
             :bgcolor="templateBackgroundColor()"
-            @click.stop="handleActive"
+            @mousedown.stop="handleActive"
             @mouseover="onMouseOver"
             @mouseleave="onMouseLeave">
               <draggable
@@ -381,9 +381,9 @@
   }
 
   p,ul,ol{
-      margin: 0;
-      padding: 0;
-    }
+    margin: 0;
+    padding: 0;
+  }
 
   .stx-edit-text{
 

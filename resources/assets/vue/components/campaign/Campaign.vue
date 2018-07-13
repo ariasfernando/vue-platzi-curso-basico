@@ -23,6 +23,7 @@
       <aside class="right-bar">
         <div>
           <module-settings v-if="showModuleSettings"></module-settings>
+          <module-background-settings v-if="activeModule !== undefined"></module-background-settings>
           <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
           <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
         </div>
@@ -52,6 +53,7 @@
   import EmailCanvas from './EmailCanvas.vue'
   import ComponentSettings from './ComponentSettings.vue'
   import CustomModuleSettings from './CustomModuleSettings.vue'
+  import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
   import Spinner from '../common/Spinner.vue'
   import EmailActions from './EmailActions.vue'
@@ -68,6 +70,7 @@
       EmailCanvas,
       ComponentSettings,
       CustomModuleSettings,
+      ModuleBackgroundSettings,
       ModuleSettings,
       ModalComplete,
       ModalPreview,
@@ -94,6 +97,9 @@
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
+      },
+      activeModule() {
+        return this.$store.getters["campaign/activeModule"];
       },
       currentCustomModule() {
         return !_.isUndefined(this.$store.getters["campaign/currentCustomModule"]);
@@ -256,7 +262,7 @@
   .right-bar,
   .left-bar {
     height: calc(~"100vh - 55px");
-    overflow: hidden;
+    overflow: overlay;
     width: 270px;
     display: block;
     float: left;
