@@ -299,7 +299,7 @@ class Campaign extends Eloquent
      */
     public function getLastProof()
     {
-        return Proof::whereCampaignId(new ObjectId($this->_id))->orderBy('created_at', 'DESC')->first();
+        return Proof::whereCampaignId($this->_id)->orderBy('created_at', 'DESC')->first();
     }
 
     /**

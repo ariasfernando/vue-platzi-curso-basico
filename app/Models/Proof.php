@@ -2,6 +2,7 @@
 
 namespace Stensul\Models;
 
+use MongoDB\BSON\ObjectID as ObjectID;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use CampaignModel as Campaign;
 

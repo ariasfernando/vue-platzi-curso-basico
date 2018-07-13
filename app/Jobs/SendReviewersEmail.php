@@ -130,8 +130,9 @@ class SendReviewersEmail extends Job implements ShouldQueue
         array_walk($reviewers, function (&$reviewer) use ($params) {
             if ($params['send_to_all'] || !isset($reviewer['notified']) || !$reviewer['notified']) {
                 if (EmailSender::sendReviewerEmail($reviewer, $params)) {
+                    $date = new UTCDateTime();
                     $reviewer['notified'] = true;
-                    $reviewer['notified_at'] = new UTCDateTime;
+                    $reviewer['notified_at'] = $date->toDateTime();
 
                     Activity::log('Reviewer has been notified of a new proof', [
                         'properties' => [
@@ -174,8 +175,9 @@ class SendReviewersEmail extends Job implements ShouldQueue
         array_walk($reviewers, function (&$reviewer) use ($params) {
             if (!isset($reviewer['proof_deleted']) || !$reviewer['proof_deleted']) {
                 if (EmailSender::sendReviewerEmail($reviewer, $params)) {
+                    $date = new UTCDateTime();
                     $reviewer['proof_deleted'] = true;
-                    $reviewer['proof_deleted_at'] = new UTCDateTime;
+                    $reviewer['proof_deleted_at'] = $date->toDateTime();
 
                     Activity::log('Reviewer has been notified of a deleted campaign with a proof', [
                         'properties' => [
