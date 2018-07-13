@@ -2,8 +2,8 @@
 
 namespace Stensul\Console\Commands\Role;
 
-use Stensul\Models\Role;
-use Stensul\Models\Permission;
+use RoleModel as Role;
+use PermissionModel as Permission;
 use Illuminate\Console\Command;
 
 class PermissionDeny extends Command

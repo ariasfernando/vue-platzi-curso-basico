@@ -4,7 +4,7 @@ namespace Stensul\Http\Controllers;
 
 use Config;
 use CampaignModel as Campaign;
-use Stensul\Models\Library;
+use LibraryModel as Library;
 use Illuminate\Http\Request;
 use HtmlCreator as Html;
 use StensulLocale;

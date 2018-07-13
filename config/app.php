@@ -271,6 +271,19 @@ return [
         'Campaign'    => Stensul\Services\CampaignManager::class,
         'StaticProcessor'    => Stensul\Services\StaticProcessor::class,
         'CampaignModel'    => Stensul\Models\Campaign::class,
+        'UserModel'    => Stensul\Models\User::class,
+        'UploadModel'    => Stensul\Models\Upload::class,
+        'LibraryModel'    => Stensul\Models\Library::class,
+        'SettingModel'    => Stensul\Models\Setting::class,
+        'RoleModel'    => Stensul\Models\Role::class,
+        'ProofModel'    => Stensul\Models\Proof::class,
+        'CommentModel'    => Stensul\Models\Comment::class,
+        'LogModel'    => Stensul\Models\Log::class,
+        'ModuleModel'    => Stensul\Models\Module::class,
+        'TagModel'    => Stensul\Models\Tag::class,
+        'PermissionModel'    => Stensul\Models\Permission::class,
+        'SendReviewersEmail' => Stensul\Jobs\SendReviewersEmail::class,
+        'StoreAssetsInCdn' => Stensul\Jobs\StoreAssetsInCdn::class,
         'TextConverter' => Stensul\Services\TextConverter::class,
         'ProcessCampaign' => Stensul\Jobs\ProcessCampaign::class,
         'EmailSender' => Stensul\Services\EmailSender::class,
@@ -285,6 +298,7 @@ return [
         'StensulModule' => Stensul\Providers\ModuleServiceProvider::class,
         'PasswordPolicy' => Stensul\Providers\PasswordPolicyServiceProvider::class,
         'Tag'         => Stensul\Services\TagManager::class,
+        'ModelKeyManager' => Stensul\Services\ModelKeyManager::class,
 
     ],
     'help' => [
@@ -295,3 +309,4 @@ return [
         'enabled' => true
     ],
 ];
+

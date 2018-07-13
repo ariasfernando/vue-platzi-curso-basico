@@ -2,8 +2,8 @@
 
 namespace Stensul\Console\Commands\Task;
 
-use Stensul\Models\Tag;
-use CampaignModel;
+use TagModel as Tag;
+use CampaignModel as Campaign;
 use Illuminate\Console\Command;
 
 class UpdateCampaignNameLowercase extends Command
@@ -36,7 +36,7 @@ class UpdateCampaignNameLowercase extends Command
     public function handle()
     {
         $this->info('>>> Update campaign name to lowercase for better sorting..');
-        $campaigns = CampaignModel::withTrashed()->get();
+        $campaigns = Campaign::withTrashed()->get();
         foreach ($campaigns as $campaign) {
             if (isset($campaign->campaign_name)) {
                 $campaign->lower_campaign_name = strtolower($campaign->campaign_name);
