@@ -3,6 +3,7 @@ import backgroundColor from './background-color';
 import columnBackgroundColor from './column-background-color';
 import columnPaletteBackgroundColor from './column-palette-background-color';
 import destinationUrl from './destination-url';
+import equalHeight from './equal-height';
 import fontFamily from './font-family';
 import mobileStyles from './mobile-styles';
 import moduleBackgroundColor from './module-background-color';
@@ -20,6 +21,7 @@ export default {
   columnBackgroundColor,
   columnPaletteBackgroundColor,
   destinationUrl,
+  equalHeight,
   fontFamily,
   mobileStyles,
   moduleBackgroundColor,

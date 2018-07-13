@@ -12,6 +12,7 @@
         <tr>
           <td
             :width="calculeWidthColumnPx(columnId)"
+            :height="column.container.attribute.height"
             :style="styles(columnId)"
             :bgcolor="column.container.attribute.bgcolor"
             :valign="column.container.attribute.valign|| 'top'"
@@ -83,8 +84,7 @@
         return this.module.structure.columns.length;
       },
       msoEndingComment() {
-        return `
-                [if gte mso 9]>
+        return `[if gte mso 9]>
               </td>
             </tr>
           </table>
@@ -117,11 +117,11 @@
           };
         });
         styles.push({'width': this.calculeStyleWidthColumnPx(columnId)}) 
+        styles.push({'height': this.module.structure.columns[columnId].container.attribute.height + 'px'}) 
         return styles;
       },
       msoBetweenComment(columnId) {
-        return `
-        [if gte mso 9]>
+        return `[if gte mso 9]>
           </td>
           <td width="${this.calculeWidthColumnPx(columnId+1)}" style='width:${this.calculeWidthColumnPx(columnId+1)}px !important' align='left' valign='top'>
         <![endif]`;
