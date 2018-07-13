@@ -6,9 +6,9 @@ use Activity;
 use EmailSender;
 use Carbon\Carbon;
 use Stensul\Jobs\Job;
-use Stensul\Models\User;
-use Stensul\Models\Proof;
-use CampaignModel as Campaign;
+use UserModel;
+use ProofModel;
+use CampaignModel;
 use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\BSON\UTCDateTime;
 use Illuminate\Queue\SerializesModels;
@@ -24,7 +24,7 @@ class SendReviewersEmail extends Job implements ShouldQueue
     use InteractsWithQueue, SerializesModels;
 
     /**
-     * @var Stensul\Models\Proof
+     * @var ProofModel
      */
     protected $proof;
 
@@ -43,7 +43,7 @@ class SendReviewersEmail extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Proof $proof, $type)
+    public function __construct(ProofModel $proof, $type)
     {
         $this->proof = $proof;
         $this->type = $type;
@@ -105,8 +105,8 @@ class SendReviewersEmail extends Job implements ShouldQueue
     protected function sendNewProofNotification()
     {
         $reviewers = $this->proof->reviewers;
-        $requestor = User::find($this->proof->requestor);
-        $campaign = Campaign::find($this->proof->campaign_id);
+        $requestor = UserModel::find($this->proof->requestor);
+        $campaign = CampaignModel::find($this->proof->campaign_id);
 
         $params = [
             'proof_id' => $this->proof->id,
@@ -164,7 +164,7 @@ class SendReviewersEmail extends Job implements ShouldQueue
     protected function sendDeletedProofNotification()
     {
         $reviewers = $this->proof->reviewers;
-        $campaign = Campaign::withTrashed()->find($this->proof->campaign_id);
+        $campaign = CampaignModel::withTrashed()->find($this->proof->campaign_id);
 
         $params = [
             'proof_id' => $this->proof->id,

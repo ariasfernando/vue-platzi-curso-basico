@@ -8,7 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use MongoDB\BSON\ObjectID as ObjectID;
 use CampaignModel as Campaign;
-use Stensul\Models\Library;
+use LibraryModel as Library;
 use HtmlCreator as Html;
 use StaticProcessor as Assets;
 use Activity;

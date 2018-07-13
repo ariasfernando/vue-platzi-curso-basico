@@ -2,7 +2,7 @@
 
 namespace Stensul\Providers;
 
-use Stensul\Models\Library;
+use LibraryModel as Library;
 use Illuminate\Support\ServiceProvider;
 
 class HelperServiceProvider extends ServiceProvider
@@ -69,7 +69,7 @@ class HelperServiceProvider extends ServiceProvider
         This is for non associative arrays where we need to concat values,
         not override it.
         */
-        if (!self::isAssoc($array1) && !isAssoc($array2)) {
+        if (!self::isAssoc($array1) && !self::isAssoc($array2)) {
             foreach ($array2 as $value) {
                 if (!in_array($value, $merged)) {
                     $merged[] = $value;

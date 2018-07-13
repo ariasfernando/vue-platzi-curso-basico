@@ -2,7 +2,7 @@
 
 namespace Stensul\Events;
 
-use Stensul\Models\User;
+use UserModel as User;
 use Stensul\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
