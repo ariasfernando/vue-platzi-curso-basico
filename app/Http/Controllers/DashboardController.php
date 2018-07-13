@@ -4,12 +4,12 @@ namespace Stensul\Http\Controllers;
 
 use Auth;
 use Campaign as CampaignManager;
-use Stensul\Models\Campaign;
-use Stensul\Models\Library;
-use Stensul\Models\Setting;
+use CampaignModel as Campaign;
+use LibraryModel as Library;
+use SettingModel as Setting;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Services\TagManager as Tag;
+use Tag;
 use MongoDB\BSON\Regex as MongoRegex;
 
 class DashboardController extends Controller
@@ -117,6 +117,10 @@ class DashboardController extends Controller
             $campaigns->whereIn('library', $user_visibility);
         }
 
+        if (!Auth::user()->hasRole(env('INTERNAL_ROLE', 'stensul-internal'))) {
+            $campaigns->where('internal', false);
+        }
+
         if (\Config::get('campaign.enable_search')) {
             $this->searchFilter($campaigns, $request->input('terms', []));
 
@@ -203,6 +207,10 @@ class DashboardController extends Controller
 
         if (!Auth::user()->can('access_unfixed_templates')) {
             $campaigns->where('locked', '=', true, 'AND');
+        }
+
+        if (!Auth::user()->hasRole(env('INTERNAL_ROLE', 'stensul-internal'))) {
+            $campaigns->where('internal', false);
         }
 
         $total = $campaigns->count();

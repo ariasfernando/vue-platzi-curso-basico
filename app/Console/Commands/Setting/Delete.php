@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\Setting;
 
-use Stensul\Models\Setting;
+use SettingModel as Setting;
 use Illuminate\Console\Command;
 
 class Delete extends Command

@@ -5,7 +5,8 @@
 /*global tinymce:true */
 
 tinymce.PluginManager.add('stlinkextended', function (editor) {
-    function createLinkList(callback) {
+    
+    function createLinkList(callback) {  
         return function () {
             var linkList = editor.settings.link_list;
 
@@ -50,7 +51,18 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         return appendItems(inputList, startItems || []);
     }
 
-    function showDialog(linkList) {
+    function showDialog (linkList) {
+        let textSelection = editor.selection.getContent({format : 'text'});
+        
+        /* in case link button is fired with keyboard shortcut, we check if there is or not a text selection */
+        if( !textSelection || $.trim( editor.selection.getContent({format : 'text'}) ) == '' ){
+            /* if there is no selection, and link button is not active (meaning that there is no link in current cursor position)
+             finish function here */
+            if( linkButton.active() == false ){
+                return false;
+            }
+        }
+
         var data = {}, selection = editor.selection, dom = editor.dom, selectedElm, anchorElm, initialText;
         var win, onlyText, textListCtrl, linkListCtrl, tagListCtrl, relListCtrl, targetListCtrl, classListCtrl, linkTitleCtrl, value;
 
@@ -502,16 +514,22 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 $('.mce-link-input .mce-textbox').removeAttr('style');
 
                 insertLink();
+
+                /* After submitting, tinymce releases the selection, so we have to disable link button */
+                linkButton.disabled(true);
             }
         });
     }
+    var linkButton = null;
 
     editor.addButton('link', {
         icon: 'link',
         tooltip: 'Insert/edit link',
         shortcut: 'Meta+K',
         onclick: createLinkList(showDialog),
-        stateSelector: 'a[href]'
+        stateSelector: 'a[href]',
+        onPostRender : function() { linkButton = this; },
+        disabled:true
     });
 
     editor.addButton('unlink', {
@@ -534,5 +552,25 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         stateSelector: 'a[href]',
         context: 'insert',
         prependToContext: true
+    });
+
+    editor.on('mouseUp', function(e){
+        /* Enable or disable the link button, depending on whether or not you have a text selection */
+        let textSelection = editor.selection.getContent({format : 'text'});
+
+        /* If there is no selection, disable the button */
+        if( !textSelection || $.trim( textSelection ) == '' ){
+            
+            /* But, if button is active, it means that already has a link added, 
+            so we have to enable the button, even if there is no selection made */
+            if( linkButton.active() ){
+                linkButton.disabled(false);
+            }else{
+                linkButton.disabled(true);
+            }
+        }else{
+            /* If there is a selection, enable de button */
+            linkButton.disabled(false);
+        }
     });
 });

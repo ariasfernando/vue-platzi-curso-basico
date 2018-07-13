@@ -2,7 +2,7 @@
 
 namespace Stensul\Providers;
 
-use Stensul\Models\Setting;
+use SettingModel as Setting;
 use Illuminate\Support\ServiceProvider;
 
 // Prevent error if config files are cached.

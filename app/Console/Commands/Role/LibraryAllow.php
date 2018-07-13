@@ -2,8 +2,8 @@
 
 namespace Stensul\Console\Commands\Role;
 
-use Stensul\Models\Role;
-use Stensul\Models\Library;
+use RoleModel as Role;
+use LibraryModel as Library;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 

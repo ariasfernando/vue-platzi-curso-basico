@@ -16,7 +16,7 @@ class AddFixedLayoutPermissions extends Migration
         ['name' => 'access_unfixed_templates', 'description' => 'Allow users to see "Unfixed Layout" templates.'],
     ];
 
-    private $roles = ['admin', 'stensul-internal', 'user'];
+    private $roles = ['admin', 'stensul-internal', 'full'];
 
     /**
      * Run the migrations.

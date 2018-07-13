@@ -6,10 +6,11 @@ use Log;
 use Cdn;
 use Imagine;
 use Storage;
+use CampaignModel;
 use Imagine\Image\ImageInterface;
 use League\Flysystem\AdapterInterface;
-use Stensul\Services\EmailHtmlCreator as Html;
 use Stensul\Jobs\CleanCdnCache;
+use HtmlCreator as Html;
 
 class StaticProcessor
 {
@@ -20,9 +21,9 @@ class StaticProcessor
     /**
      * Constructor.
      *
-     * @param \Stensul\Models\Campaign $campaign
+     * @param CampaignModel $campaign
      */
-    public function __construct(\Stensul\Models\Campaign $campaign)
+    public function __construct(CampaignModel $campaign)
     {
         $this->campaign = $campaign;
     }
@@ -30,7 +31,7 @@ class StaticProcessor
     /**
      * Get campaign model.
      *
-     * @return \Stensul\Models\Campaign
+     * @return CampaignModel
      */
     public function getCampaign()
     {
@@ -61,7 +62,7 @@ class StaticProcessor
         $emailLayout = $html->getEmailLayout();
 
         $uploadedFiles = $cloud->allFiles($campaignPath);
-
+        $uploadedFiles = [];
         $data = [
             'campaign_id' => $this->getCampaign()->id,
             'cdn' => config('filesystems.disks.cloud'),
@@ -113,9 +114,9 @@ class StaticProcessor
     /**
      * Copy assets from a campaign.
      *
-     * @param \Stensul\Models\Campaign $from
+     * @param CampaignModel $from
      */
-    public function copyAssetsFrom(\Stensul\Models\Campaign $from)
+    public function copyAssetsFrom(CampaignModel $from)
     {
         $storage = Storage::disk('local:campaigns');
         $assets = [];
@@ -237,9 +238,9 @@ class StaticProcessor
     /**
      * Replace reference id from a campaign.
      *
-     * @param \Stensul\Models\Campaign $from
+     * @param CampaignModel $from
      */
-    public function replaceReferenceId(\Stensul\Models\Campaign $from)
+    public function replaceReferenceId(CampaignModel $from)
     {
         $modules_data = $this->getCampaign()->modules_data;
         foreach ($from->modules_data as $key => $module) {

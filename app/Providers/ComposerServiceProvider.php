@@ -4,7 +4,7 @@ namespace Stensul\Providers;
 
 use Auth;
 use View;
-use Stensul\Models\User;
+use UserModel as User;
 use Illuminate\Support\ServiceProvider;
 use Stensul\Providers\ModuleServiceProvider;
 
