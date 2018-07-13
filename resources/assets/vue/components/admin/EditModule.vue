@@ -387,6 +387,8 @@ p,ul,ol{
     display: block;
     float: left;
     padding: 0px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    padding-bottom: 25px;
 
     &:hover{
       overflow: overlay
