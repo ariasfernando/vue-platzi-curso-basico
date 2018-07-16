@@ -63,13 +63,10 @@ export default {
       }
     }
   },
-  mounted() {
-    this.addClassEqualHeight();
-    this.setEqualHeights();
-  },
   watch: {
     module: {
       handler: function() {
+        this.addClassEqualHeight();
         this.setEqualHeights();
       },
       deep: true
