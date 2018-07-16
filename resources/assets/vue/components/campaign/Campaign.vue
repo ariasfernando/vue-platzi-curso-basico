@@ -151,6 +151,7 @@
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
           this.campaignReady = true;
+          this.trackingEnabled = (this.campaignReady && this.campaignConfig && this.campaignConfig.enable_tracking && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -163,7 +164,6 @@
         this.$store.dispatch("config/getConfig", 'campaign').then(response => {
           this.campaignConfigReady = true;        
           this.campaignConfig = this.$store.getters["config/config"].campaign;
-          this.trackingEnabled = (this.campaignConfig && this.campaignConfig.enable_tracking && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
         }, error => {
           this.$root.$toast(
             'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
