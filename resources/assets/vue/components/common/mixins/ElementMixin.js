@@ -22,7 +22,7 @@ export default {
       return false;
     },
     widthStyle(width) {
-      if (width !== undefined) {
+      if (width !== undefined && width !== 0) {
         return _.endsWith(width, '%') ? width : `${width}px`;
       }
       return undefined;
@@ -71,6 +71,7 @@ export default {
         'font-weight': element.style.fontWeight,
         'letter-spacing': element.style.letterSpacing,
         'line-height': element.style.lineHeight,
+        'width': this.widthStyle(element.attribute.width) || '100%',
       };
     },
   },
