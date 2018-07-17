@@ -80,6 +80,7 @@
         </td>
       </tr>
     </table>
+    <button @click="columnSelect(columnId)"></button>
   </div>
 
 </template>

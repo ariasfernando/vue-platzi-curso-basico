@@ -62,6 +62,18 @@ export default {
         }
       }
     },
+    columnSelect(columnId) {
+      this.$emit('set-component', {
+        columnId,
+        componentId: undefined,
+      });
+    },
+    moduleSelect() {
+      this.$emit('set-component', {
+        columnId: undefined,
+        componentId: undefined,
+      });
+    },
     fontStyles(element) {
       return {
         'text-align': element.attribute.align || 'left',

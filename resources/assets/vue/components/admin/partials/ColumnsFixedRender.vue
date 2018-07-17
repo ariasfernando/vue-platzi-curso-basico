@@ -49,6 +49,7 @@
               </div>
             </div>
           </draggable>
+          <button @click="columnSelect(columnId)"></button>
         </td>
       </tr>
     </table>
@@ -111,6 +112,5 @@
         this.$emit('add', e);
       },
     }    
-    
   };
 </script>

@@ -20,8 +20,8 @@
         <column-bar-container side="right">
           <div class="module-settings" v-if="currentComponent">
 
-              <general-settings v-if="ready"></general-settings>
-              <column-settings v-if="ready && module.structure.columns.length > 1"></column-settings>
+              <general-settings v-if="showGeneralSettings"></general-settings>
+              <column-settings v-if="showColumnSettings"></column-settings>
               <component-settings></component-settings>
               
           </div>
@@ -68,6 +68,12 @@ export default {
     },
     showRaw() {
       return this.$store.getters["module/showRaw"];
+    },
+    showGeneralSettings() {
+      return this.ready && this.currentComponent.columnId === undefined && this.currentComponent.componentId === undefined;
+    },
+    showColumnSettings() {
+      return this.ready && this.module.structure.columns.length > 1 && this.currentComponent.columnId !== undefined && this.currentComponent.componentId === undefined;
     }
   },
   data() {
