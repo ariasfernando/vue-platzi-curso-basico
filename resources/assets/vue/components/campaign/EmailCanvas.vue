@@ -9,7 +9,7 @@
           <td
             align="center"
             style="vertical-align:top;"
-            class="stx-draggable-wrapper"
+            class="stx-draggable-wrapper st-email-wrapper"
             :class="{ 'campaign-validated': campaignValidated }"
             :bgcolor="templateBackgroundColor()"
             @click.stop="handleActive"
