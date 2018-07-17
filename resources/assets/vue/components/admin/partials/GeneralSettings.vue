@@ -98,6 +98,11 @@ export default {
           index: cols,
           number: numCols - cols
         });
+        // unSet current component
+        this.$store.commit("module/setCurrentComponent", {
+          columnId: undefined,
+          componentId: undefined
+        });
       }
 
       if (numCols < cols) {
@@ -110,10 +115,6 @@ export default {
         "module/normalizeColumns",
         this.module.structure.columns
       );
-
-      if (cols > 0 && cols <= this.maxCols) {
-        this.$store.commit("module/setActiveColumn", cols - 1);
-      }
     },
     nameUpdatedHandler(eventData) {
       this.setModuleField({ name: eventData.value });

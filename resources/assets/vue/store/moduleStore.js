@@ -175,9 +175,6 @@ const mutations = {
     const properties = data.link ? subComponent[data.link] : subComponent;
     Vue.set(properties, data.property, data.value);
   },
-  setActiveColumn(state, columnId) {
-    state.activeColumn = columnId;
-  },
   setBuildingMode(state, mode) {
     state.buildingMode = mode;
   },
