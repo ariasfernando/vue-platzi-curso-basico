@@ -52,7 +52,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
     }
 
     function showDialog (linkList) {
-        let textSelection = editor.selection.getContent({format : 'text'});
+        var textSelection = editor.selection.getContent({format : 'text'});
         
         /* in case link button is fired with keyboard shortcut, we check if there is or not a text selection */
         if( !textSelection || $.trim( editor.selection.getContent({format : 'text'}) ) == '' ){
@@ -556,7 +556,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
 
     editor.on('mouseUp', function(e){
         /* Enable or disable the link button, depending on whether or not you have a text selection */
-        let textSelection = editor.selection.getContent({format : 'text'});
+        var textSelection = editor.selection.getContent({format : 'text'});
 
         /* If there is no selection, disable the button */
         if( !textSelection || $.trim( textSelection ) == '' ){
