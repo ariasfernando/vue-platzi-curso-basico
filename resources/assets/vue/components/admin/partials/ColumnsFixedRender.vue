@@ -34,6 +34,7 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="component.id"
+              @set-component="selection => $emit('set-component', selection)"
               context="admin"
             ></component>
             </template>

@@ -1,6 +1,5 @@
 <template>
   <div v-if="ready">
-
     <!-- START: Style -->
     <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
     <b-collapse id="style" visible accordion="module-right">

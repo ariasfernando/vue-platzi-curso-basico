@@ -55,7 +55,7 @@ export default {
             });
           }, 50);
         } else {
-          this.$store.commit('module/setCurrentComponent', {
+          this.$emit('set-component', {
             columnId: this.columnId,
             componentId: this.componentId,
           });

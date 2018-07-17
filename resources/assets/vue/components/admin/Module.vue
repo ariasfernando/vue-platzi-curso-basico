@@ -30,7 +30,12 @@
                 :valign="column.container.attribute.valign || 'top'" 
                 :key="column.id"
               >
-                <columns-fixed-render @add="onAdd" :column="column" :column-id="columnId"></columns-fixed-render>
+                <columns-fixed-render
+                  @add="onAdd"
+                  :column="column"
+                  :column-id="columnId"
+                  @set-component="setComponent"
+                ></columns-fixed-render>
               </td>
             </template>
 
@@ -39,9 +44,11 @@
               v-else
               width="100%"
             >
-              <columns-stacked-render @add="onAdd"></columns-stacked-render>
+              <columns-stacked-render
+                @add="onAdd"
+                @set-component="setComponent"
+              ></columns-stacked-render>
             </td> 
-
           </tr>
         </table>  
 
@@ -84,6 +91,7 @@
               :component-id="componentId" 
               :key="component.id"
               :data-component="component"
+              @set-component="setComponent"
               class="st-component"
               context="admin"
             ></component>

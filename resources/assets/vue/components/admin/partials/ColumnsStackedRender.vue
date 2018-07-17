@@ -39,6 +39,7 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="componentId"
+              @set-component="selection => $emit('set-component', selection)"
               class="st-component"
               context="admin"></component>
           </draggable>
