@@ -1,8 +1,7 @@
 <template>
-  <div class="component-settings height-custom" v-if="ready">
+  <div v-if="ready">
 
     <!-- START: Style -->
-
     <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
@@ -30,9 +29,7 @@
         </group-container>
       </b-card>
     </b-collapse>
-    <!-- END: Style -->
-
-    <!-- START: Funcionalities -->
+    <!-- Funcionalities -->
     <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.funcionalities></label-item-container>
     <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
@@ -46,9 +43,7 @@
         </div>
       </b-card>
     </b-collapse>
-    <!-- END: Funcionalities -->
-
-    <!-- START: Mobile Settings -->    
+    <!-- Mobile Settings -->    
     <label-item-container label="MOBILE" icon="glyphicon-tasks" v-b-toggle.mobile></label-item-container>
     <b-collapse id="mobile" accordion="module-settings-accordion-right">
       <b-card class="plugins">

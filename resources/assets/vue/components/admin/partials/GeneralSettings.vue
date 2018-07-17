@@ -1,5 +1,5 @@
 <template>
-  <div class="form-horizontal height-custom">
+  <div>
     <label-item-container label="GENERAL SETTINGS" icon="glyphicon-cog" v-b-toggle.module-settings-left></label-item-container>
     <b-collapse id="module-settings-left" visible accordion="module-right">
       <b-card class="control" >
@@ -94,9 +94,6 @@ export default {
       }
 
       if (numCols > cols) {
-        this.$store.commit("campaign/unsetActiveModule");
-        this.$store.commit("campaign/unsetCurrentModule");
-        this.$store.commit("campaign/unsetCurrentComponent");
         this.$store.commit("module/removeColumns", {
           index: cols,
           number: numCols - cols

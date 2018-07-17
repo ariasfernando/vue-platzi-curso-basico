@@ -5,10 +5,7 @@
     <div class="row">
       <section v-if="ready" class="col-xs-12 section-container" id="edit-container">
         <column-bar-container side="left">
-            <div class="fields">
               <elements-settings v-if="ready"></elements-settings>
-              <!-- END: Elements -->
-            </div>
         </column-bar-container>
         <!-- START: Module Container -->
         <div class="col-xs-8 module-container">
@@ -22,14 +19,11 @@
         <!-- END: Module Container -->
         <column-bar-container side="right">
           <div class="module-settings" v-if="currentComponent">
-            <div class="fields">
 
               <general-settings v-if="ready"></general-settings>
-
-              <column-settings v-if="ready && module.structure.columns.length > 1 "></column-settings>
-
+              <column-settings v-if="ready && module.structure.columns.length > 1"></column-settings>
               <component-settings></component-settings>
-            </div>
+              
           </div>
         </column-bar-container>
       </section>
