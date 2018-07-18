@@ -4,19 +4,10 @@
 
     <b-collapse id="column-settings" accordion="module-right">
       <b-card class="control" no-block>
-        <b-tabs card ref="tabs" v-model="tabIndex">
-          <!-- Render Tabs -->
-
-          <b-tab
-            :title="`${key+1}`"
-            :button-id="`column-${key}`"
-            :key="key"
-            v-for="(column, key) in module.structure.columns"
-          >
             <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
               <component v-for="setting in settingGroup"
                 :is="'input-' + setting.type"
-                @setting-updated="(eventData)=>settingUpdatedHandler(eventData, key)"
+                @setting-updated="settingUpdatedHandler"
                 :setting="setting.type"
                 :name="setting.name"
                 :type="setting.type"
@@ -35,7 +26,7 @@
             </group-container>
 
             <!-- Column Settings -->
-            <div :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings" :key="columnSetting.name">
+            <div :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings" :key="columnSetting.name + keySettings">
               
               <div v-if="!columnSetting.group" >
                 <column-setting-group :column-setting="columnSetting" 
@@ -54,11 +45,8 @@
             </div>
             <!-- Column Plugins -->
             <div v-for="(plugin, moduleKey) in column.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
-              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="key"></component>
+              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="currentComponent.columnId"></component>
             </div>
-            <!-- /Column Plugins -->
-          </b-tab>
-        </b-tabs>
       </b-card>
     </b-collapse>
   </div>
@@ -80,44 +68,32 @@ export default {
     "input-generic-color": elementSettings.GenericColor,
     "input-class-input": elementSettings.ClassInput,
   },
+  props: [ 'currentComponent' ],
   computed: {
     module() {
       return this.$store.getters["module/module"];
     },
-    activeColumn() {
-      return this.$store.getters["module/activeColumn"];
+    column() {
+      return this.module.structure.columns[this.currentComponent.columnId];
     },
     settings() {
       return settingsDefault['column-element']().componentSettings;
     }
   },
   methods: {
-    settingUpdatedHandler(eventData, key) {
-      this.saveColumnProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value, key);
+    settingUpdatedHandler(eventData) {
+      this.saveColumnProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value, this.currentComponent.columnId);
     },
-    saveColumnProperty(link, subComponent, name, value, colId) {
+    saveColumnProperty(link, subComponent, property, value, colId) {
       const data = {
-        colId: colId,
+        colId,
         subComponent,
         link,
-        property: name,
-        value: value
+        property,
+        value
       };
       this.$store.commit("module/saveColumnProperty", data);
     },
   },
-  watch: {
-    activeColumn(val) {
-      setTimeout(() => {
-        this.$refs.tabs.setTab(val);
-      }, 100);
-    }
-  },
-  data() {
-    return {
-      tabIndex: null,
-      enabled: false
-    };
-  }
 };
 </script>

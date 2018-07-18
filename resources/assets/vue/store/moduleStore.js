@@ -9,7 +9,6 @@ import imageService from '../services/image';
 const state = {
   module: {},
   currentComponent: {},
-  activeColumn: 0,
   buildingMode: 'desktop',
   showRaw: false,
   changeSettingComponent: {
@@ -43,9 +42,6 @@ const getters = {
   },
   changeSettingComponent(state) {
     return state.changeSettingComponent;
-  },
-  activeColumn(state) {
-    return state.activeColumn;
   },
   buildingMode(state) {
     return state.buildingMode;
