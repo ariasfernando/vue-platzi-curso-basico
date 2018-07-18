@@ -1,45 +1,44 @@
 <template>
   <div class="expand st-module-menu-wrapper">
-      <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
-
-      <div class="beta-subitem" :class="{'is-collapsed' : collapsed }">
-          <div v-if="ready" v-for="item in items" class="beta-subitem-single">
-
-            <div v-if="item.sub_menu" class="expand">
-              <h2 class="menu-active" :class="{ active: isActive }" @click="(e) => expand(e, item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
-
-                <div class="beta-submodules">
-                  <div v-for="subitem in item.sub_menu">
-                    <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd">
-                      <div class="add single">
-                        <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
-                          {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
-                        </h2>
-                      </div>
-                    </draggable>
-                  </div>
+    <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
+    <div class="beta-subitem" :class="{'is-collapsed' : collapsed }">
+      <div v-if="ready" v-for="(item, i) in items" :key="i" class="beta-subitem-single">
+        <div v-if="item.sub_menu" class="expand">
+          <h2 class="menu-active" :class="{ active: isActive }" @click="(e) => expand(e, item.name)">
+            <i class="glyphicon glyphicon-folder-close glyph-inline"></i>
+            <span>{{ item.name }}</span>
+            <i class="glyphicon glyphicon-menu-down"></i>
+          </h2>
+          <div class="beta-submodules">
+            <div v-for="(subitem, j) in item.sub_menu" :key="j">
+              <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd" v-if="!subitem.mandatory">
+                <div class="add single">
+                  <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">{{ subitem.name }}
+                    <i class="glyphicon glyphicon-plus"></i>
+                  </h2>
                 </div>
-
+              </draggable>
             </div>
-
-            <draggable v-else :element="'div'" :options="options" @clone="onClone" @end="onEnd">
-              <div class="add single">
-                <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">
-                  {{ item.name }} <i class="glyphicon glyphicon-plus"></i>
-                </h2>
-              </div>
-            </draggable>
-
           </div>
+        </div>
+        <draggable v-else-if="!item.mandatory"  :element="'div'" :options="options" @clone="onClone" @end="onEnd">
+          <div class="add single">
+            <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">{{ item.name }}
+              <i class="glyphicon glyphicon-plus"></i>
+            </h2>
+          </div>
+        </draggable>
       </div>
-
+    </div>
   </div>
 </template>
 
 <script>
 
   import clone from 'clone';
-  import _ from 'lodash';
+  import _, {
+    each
+  } from 'lodash';
   import Draggable from 'vuedraggable';
   import ModuleListMixin from './mixins/moduleListMixin';
 
@@ -55,7 +54,7 @@
       }
     },
     mixins: [ ModuleListMixin ],
-    data () {
+    data() {
       return {
         options: {
           group:{
@@ -79,10 +78,10 @@
       }
     },
     computed: {
-      campaign () {
+      campaign() {
         return this.$store.getters["campaign/campaign"];
       },
-      items () {
+      items() {
         return this.$store.getters["library/modules"];
       },
       activeModule() {
@@ -101,44 +100,38 @@
             this.expanded[item.name] = false;
 
             // Grouped modules in library menu
-            _.each(item.sub_menu, (item) => {
-              this.setModuleFixedStatus(item);
+            _.each(item.sub_menu, (subItem) => {
+              if (subItem.mandatory) {
+                this.addMandatoryModule(subItem);
+              }
             });
-          }
-          else {
+          } else {
             // First level modules in library menu
-            this.setModuleFixedStatus(item);
+            if (item.mandatory) {
+              this.addMandatoryModule(item);
+            }
           }
-        });
-
-        // Sanitize campaign's modules
-        _.each(this.modules, (item) => {
-          this.setModuleFixedStatus(item);
         });
 
         this.ready = true;
       }, error => {
         this.$store.commit("global/setLoader", false);
-        this.$root.$toast(
-          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-          {
-            className: 'et-error'
-          }
-        );
+        this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+          className: 'et-error'
+        });
       });
-
     },
     methods: {
-      getLibrary () {
+      getLibrary() {
         return this.$store.dispatch("library/getModulesData", this.libraryId);
       },
-      addModuleByName (moduleName, moduleType) {
+      addModuleByName(moduleName, moduleType) {
         const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
 
         this.addModule(mod);
       },
-      expand (event, item) {
+      expand(event, item) {
         const index = this.expanded.indexOf(item);
         if (index !== -1) {
           this.expanded.splice(index, 1);
@@ -164,36 +157,40 @@
           }
         }
       },
-      onClone (evt) {
+      onClone(evt) {
         let cloneEl = evt.clone;
         let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
 
         const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
+        mod.data = {};
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop
         // an element into email canvas
         cloneEl.addEventListener('click', (e) => {
           this.addModule(mod);
         });
       },
-      onEnd (evt) {
+      onEnd(evt) {
         this.handleEmptyMessage();
       },
-      handleEmptyMessage () {
+      handleEmptyMessage() {
         // If is dragging and the list is empty, hide empty message
         $(".empty-message").is(":visible") && $(".ghost-component").is(":visible")
           ? $(".empty-message").hide("fast")
           : $(".empty-message").show()
       },
-      setModuleFixedStatus (item) {
-        // Get fixed modules from library config
-        const fixedModules = this.campaign.library_config.fixedModules ? JSON.parse(this.campaign.library_config.fixedModules) : [];
-
-        const found = _.filter(fixedModules, fixed => fixed.key === item.key);
-        item['isFixed'] = found.length > 0;
-        item['fixedPosition'] = found.length > 0 ? found[0].pos : undefined;
-      },
+      addMandatoryModule(item) {
+        if (this.isBottomModule(item)) {
+          if (!this.campaignHasFixedBottomModule(item)) {
+            this.addFixedBottomModule(item);
+          }
+        } else if (this.isTopModule(item)) {
+          if (!this.campaignHasFixedTopModule(item)) {
+            this.addFixedTopModule(item);
+          }
+        }
+      }
     }
   };
 </script>

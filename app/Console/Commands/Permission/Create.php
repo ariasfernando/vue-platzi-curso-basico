@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\Permission;
 
-use Stensul\Models\Permission;
+use PermissionModel as Permission;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 

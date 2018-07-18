@@ -9,6 +9,7 @@ variables:
   DB_HOST: mongo
   DB_DATABASE: base
   REDIS_HOST: base_queue_1
+  CDN_HOST: http://stensul-devel-01.akamaized.net
 
 cache:
   paths:
@@ -45,6 +46,22 @@ test_composer_vulnerabilities:
   script:
     - wget http://get.sensiolabs.org/security-checker.phar
     - php security-checker.phar security:check composer.lock
+
+phpunit:
+  stage: test
+  script:
+    # Enable xdebug for code coverage
+    - yum install php72-php-pecl-xdebug.x86_64 -y
+    - ln -s /opt/remi/php72/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
+    - cp /etc/opt/remi/php72/php.d/15-xdebug.ini /etc/php.d/
+    # Run phpunit with code coverage report enbled.
+    - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
+  artifacts:
+    when: always
+    name: "${CI_JOB_STAGE}_phpunit_${CI_COMMIT_REF_NAME}"
+    expire_in: 30 days
+    paths:
+      - ci/storage/tmp/be_coverage/
 
 phplint:
   stage: test

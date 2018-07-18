@@ -5,12 +5,12 @@ namespace Stensul\Http\Controllers\Admin;
 use Auth;
 use Activity;
 use Validator;
-use Stensul\Models\User;
-use Stensul\Models\Role;
+use UserModel as User;
+use RoleModel as Role;
 use MongoDB\BSON\ObjectID;
 use Illuminate\Http\Request;
-use Stensul\Http\Controllers\Controller as Controller;
-use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
+use Stensul\Http\Controllers\Controller;
+use Stensul\Http\Middleware\AdminAuthenticate;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 

@@ -8,7 +8,7 @@ use Activity;
 use Challenge;
 use Carbon\Carbon;
 use PasswordPolicy;
-use Stensul\Models\User;
+use UserModel as User;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
 use Stensul\Http\Controllers\Controller;

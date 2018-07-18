@@ -35,6 +35,7 @@ function campaignStore() {
       modalComplete: false,
       modalPreview: false,
       modalProof: false,
+      modalProofTrack: false,
       modalEnableTemplating: false,
       modalEsp: false,
       buildingMode: 'desktop',
@@ -109,6 +110,9 @@ function campaignStore() {
     mutations: {
       campaignValidated(state, status) {
         state.campaignValidated = status;
+      },
+      campaignCanBeProcessed(state, status) {
+        state.campaign.campaign_data.can_be_processed = status;
       },
       loadCampaignData(state, campaignData) {
         state.campaign = campaignData;
