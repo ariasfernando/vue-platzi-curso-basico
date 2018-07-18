@@ -120,9 +120,31 @@ describe('== Library Store ==', () => {
 
   describe('Getters', () => {
     it('trigger "modules" and had a data', (done) => {
+      let campaignData = {
+        library_config: {
+          fixedModules: '[{"key": "text","pos": 0,"mandatory": true}]',
+        },
+        campaign_data: {
+          modules_data: mocks.library.getMenuItems,
+        },
+      };
+      store.commit('campaign/loadCampaignData', campaignData);
+      let mockObject1 = JSON.parse(JSON.stringify(mocks.library.getMenuItems[0]));
+      let mockObject2 = JSON.parse(JSON.stringify(mocks.library.getMenuItems[1]));
+      let compareObject = [
+        { ...mockObject1, isFixed: true, fixedPosition: 0, type: 'virtual', mandatory: true },
+        { ...mockObject2, isFixed: false, fixedPosition: undefined, mandatory: false },
+      ];
       let dataModule = store.getters['library/modules'];
-      expect(dataModule).toEqual(mocks.library.getMenuItems);
+
+      expect(dataModule).toEqual(compareObject);
+
+      campaignData = null;
+      mockObject1 = null;
+      mockObject2 = null;
+      compareObject = null;
       dataModule = null;
+
       done();
     });
   });

@@ -20,7 +20,7 @@ const setModuleFixedStatus = (fixedModules = [], item) => {
     type: found ? found.mandatory ? 'virtual' : item.type : item.type,
     mandatory: found ? found.mandatory ? true : false : false
   };
-}
+};
 
 const getters = {
   modules(state, getters, rootState) {
@@ -28,7 +28,7 @@ const getters = {
     return map(state.modules, moduleData => {
       return setModuleFixedStatus(fixedModules, moduleData);
     });
-  }
+  },
 };
 
 const mutations = {
@@ -58,4 +58,7 @@ module.exports = {
   getters,
   mutations,
   actions,
+  /* develblock:start */
+  setModuleFixedStatus,
+  /* develblock:end */
 };
