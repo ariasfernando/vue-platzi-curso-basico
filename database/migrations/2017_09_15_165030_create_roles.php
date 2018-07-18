@@ -10,7 +10,8 @@ class CreateRoles extends Migration
     private $roles = [
         ['name' => 'stensul-internal', 'description' => 'Stensul Internal Role'],
         ['name' => 'user', 'description' => 'User Role'],
-        ['name' => 'master', 'description' => 'Master Role'],
+        ['name' => 'full', 'description' => 'Access to all the features except admin'],
+        ['name' => 'reviewer', 'description' => 'Reviewer with only proof access'],
         ['name' => 'admin', 'description' => 'Admin Role'],
     ];
     /**

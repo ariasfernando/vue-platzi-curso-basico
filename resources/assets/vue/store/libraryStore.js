@@ -3,15 +3,32 @@
 /* eslint no-console:0 */
 
 import libraryService from '../services/library';
+import {
+  map
+} from 'lodash';
 
 const state = {
   modules: [],
 };
 
+const setModuleFixedStatus = (fixedModules = [], item) => {
+  const found = fixedModules.find(fixed => fixed.key === item.key);
+  return {
+    ...JSON.parse(JSON.stringify(item)),
+    isFixed: found ? true : false,
+    fixedPosition: found ? found.pos : undefined,
+    type: found ? found.mandatory ? 'virtual' : item.type : item.type,
+    mandatory: found ? found.mandatory ? true : false : false
+  };
+}
+
 const getters = {
-  modules() {
-    return state.modules;
-  },
+  modules(state, getters, rootState) {
+    const fixedModules = rootState.campaign ? rootState.campaign.campaign ? rootState.campaign.campaign.library_config ? rootState.campaign.campaign.library_config.fixedModules ? JSON.parse(rootState.campaign.campaign.library_config.fixedModules) : [] : [] : [] : [];
+    return map(state.modules, moduleData => {
+      return setModuleFixedStatus(fixedModules, moduleData);
+    });
+  }
 };
 
 const mutations = {

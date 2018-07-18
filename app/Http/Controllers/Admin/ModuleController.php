@@ -5,14 +5,14 @@ namespace Stensul\Http\Controllers\Admin;
 use Auth;
 use Imagine;
 use Activity;
-use Stensul\Http\Controllers\Controller as Controller;
+use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\Driver\Exception\BulkWriteException;
-use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
-use Stensul\Models\Module;
-use Stensul\Models\Library;
-use Stensul\Services\ModelKeyManager;
+use Stensul\Http\Middleware\AdminAuthenticate;
+use ModuleModel as Module;
+use LibraryModel as Library;
+use ModelKeyManager;
 
 class ModuleController extends Controller
 {

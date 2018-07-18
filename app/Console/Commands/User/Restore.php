@@ -3,7 +3,7 @@
 namespace Stensul\Console\Commands\User;
 
 use Activity;
-use Stensul\Models\User;
+use UserModel as User;
 use MongoDB\BSON\ObjectID;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;

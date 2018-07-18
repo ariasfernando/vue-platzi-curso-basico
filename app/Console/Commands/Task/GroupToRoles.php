@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\Task;
 
-use Stensul\Models\User;
+use UserModel as User;
 use Illuminate\Console\Command;
 
 class GroupToRoles extends Command

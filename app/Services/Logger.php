@@ -7,7 +7,7 @@ use Log as FileLog;
 use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\BSON\UTCDateTime;
 
-use Stensul\Models\Log as DBLog;
+use LogModel as DBLog;
 
 class Logger
 {

@@ -7,7 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Statics as Assets;
-use Stensul\Models\Campaign;
+use CampaignModel as Campaign;
 
 class StoreAssetsInCdn implements ShouldQueue
 {

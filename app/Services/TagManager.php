@@ -3,8 +3,8 @@ namespace Stensul\Services;
 
 use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Models\Tag;
-use Stensul\Models\Campaign;
+use TagModel as Tag;
+use CampaignModel as Campaign;
 use Stensul\Exceptions\BadParameterException;
 
 class TagManager
