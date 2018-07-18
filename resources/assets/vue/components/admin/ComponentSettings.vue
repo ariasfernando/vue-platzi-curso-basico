@@ -1,5 +1,5 @@
 <template>
-  <div v-if="ready">
+  <div>
     <!-- START: Style -->
     <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
     <b-collapse id="style" visible accordion="module-right">
@@ -67,12 +67,7 @@ import GroupContainer from "../common/containers/GroupContainer.vue";
 import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
 import settingsDefault from "./settingsDefault";
 export default {
-  data() {
-    return {
-      ready: false,
-      component: {}
-    };
-  },
+  props: [ 'currentComponent' ],
   components: {
     GroupContainer,
     LabelItemContainer,
@@ -94,25 +89,14 @@ export default {
     "input-vertical-align": elementSettings.VerticalAlign
   },
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
     settings() {
       return settingsDefault[this.component.type]().componentSettings;
-    }
-  },
-  watch: {
-    currentComponent: {
-      handler: function(currentComponent) {
-        let module = this.$store.getters["module/module"];
-        if (!_.isEmpty(currentComponent) && currentComponent.componentId >= 0) {
-          this.component = module.structure.columns[currentComponent.columnId].components[currentComponent.componentId];
-          this.ready = true;
-        } else {
-          this.ready = false;
-        }
-      },
-      deep: true
+    },
+    module() {
+      return this.$store.getters["module/module"];
+    },
+    component(){
+      return this.module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
     }
   },
   methods: {

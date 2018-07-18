@@ -18,13 +18,11 @@
         </div>
         <!-- END: Module Container -->
         <column-bar-container side="right">
-          <div class="module-settings" v-if="currentComponent">
 
               <general-settings v-if="showGeneralSettings"></general-settings>
-              <column-settings v-if="showColumnSettings"></column-settings>
-              <component-settings></component-settings>
+              <column-settings v-if="showColumnSettings" :currentComponent="currentComponent"></column-settings>
+              <component-settings v-if="showElementSettings" :currentComponent="currentComponent"></component-settings>
               
-          </div>
         </column-bar-container>
       </section>
     </div>
@@ -74,6 +72,9 @@ export default {
     },
     showColumnSettings() {
       return this.ready && this.module.structure.columns.length > 1 && this.currentComponent.columnId !== undefined && this.currentComponent.componentId === undefined;
+    },
+    showElementSettings() {
+      return this.ready && this.currentComponent.columnId  >= 0 && this.currentComponent.componentId >= 0;
     }
   },
   data() {
