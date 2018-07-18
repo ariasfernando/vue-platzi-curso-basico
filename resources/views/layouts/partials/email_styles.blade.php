@@ -71,7 +71,7 @@
     }
 
     @if(isset($params['campaign_data']['library_config']) && 
-        isset($params['campaign_data']['library_config']['linkColor'])
+        !empty($params['campaign_data']['library_config']['linkColor'])
     )
        a{
             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
@@ -143,7 +143,7 @@
         }
 
         @if(isset($params['campaign_data']['library_config']) && 
-            isset($params['campaign_data']['library_config']['linkColor'])
+            !empty($params['campaign_data']['library_config']['linkColor'])
         )
            a{
                 color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
@@ -166,7 +166,7 @@
             width: 100%;
         }
         @if(isset($params['campaign_data']['library_config']) && 
-            isset($params['campaign_data']['library_config']['linkColor'])
+            !empty($params['campaign_data']['library_config']['linkColor'])
         )
            a{
                 color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
