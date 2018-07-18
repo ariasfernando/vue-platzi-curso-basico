@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label-item-container label="GENERAL SETTINGS" icon="glyphicon-cog" v-b-toggle.module-settings-left></label-item-container>
+    <label-item-container label="GENERAL SETTINGS" icon="glyphicon-cog" :collapsable="false"></label-item-container>
     <b-collapse id="module-settings-left" visible accordion="module-right">
       <b-card class="control" >
         <input-generic-text

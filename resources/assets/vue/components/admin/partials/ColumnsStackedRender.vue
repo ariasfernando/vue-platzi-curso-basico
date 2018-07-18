@@ -45,6 +45,7 @@
           </draggable>
         </td>
       </tr>  
+      <button @click="columnSelect(columnId)"></button>
     </table>
 
     <!-- Empty Col -->
@@ -80,7 +81,6 @@
         </td>
       </tr>
     </table>
-    <button @click="columnSelect(columnId)"></button>
   </div>
 
 </template>

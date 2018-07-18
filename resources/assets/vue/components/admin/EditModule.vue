@@ -8,7 +8,7 @@
               <elements-settings v-if="ready"></elements-settings>
         </column-bar-container>
         <!-- START: Module Container -->
-        <div class="col-xs-8 module-container">
+        <div class="col-xs-8 module-container" @mouseup="clickModuleContainer">
           <div v-if="showRaw" class="module-wrapper">
             <textarea v-html="module" @change="updateRawModule" rows="30" style="width: 100%"></textarea>
           </div>
@@ -141,6 +141,14 @@ export default {
     },
     updateRawModule(e) {
       this.$store.commit("module/setModuleData", JSON.parse(e.target.value));
+    },
+    clickModuleContainer(e) {
+      if($(e.target).hasClass('module-container')){
+        this.$store.commit("module/setCurrentComponent", {
+          columnId: undefined,
+          componentId: undefined,
+        });
+      }
     }
   },
   created() {

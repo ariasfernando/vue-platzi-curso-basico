@@ -1,8 +1,7 @@
 <template>
   <div>
-    <label-item-container label="COLUMN SETTINGS" icon="glyphicon-pause"  v-b-toggle.column-settings></label-item-container>
+    <label-item-container label="COLUMN SETTINGS" icon="glyphicon-pause" :collapsable="false"></label-item-container>
 
-    <b-collapse id="column-settings" accordion="module-right">
       <b-card class="control" no-block>
             <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
               <component v-for="setting in settingGroup"
@@ -48,7 +47,6 @@
               <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="currentComponent.columnId"></component>
             </div>
       </b-card>
-    </b-collapse>
   </div>
 </template>
 
