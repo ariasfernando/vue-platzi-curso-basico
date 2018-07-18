@@ -68,12 +68,6 @@ export default {
         componentId: undefined,
       });
     },
-    moduleSelect() {
-      this.$emit('set-component', {
-        columnId: undefined,
-        componentId: undefined,
-      });
-    },
     fontStyles(element) {
       return {
         'text-align': element.attribute.align || 'left',

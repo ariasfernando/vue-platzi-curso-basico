@@ -229,6 +229,12 @@
       setComponent(ref) {
         this.$store.commit("module/setCurrentComponent", ref);
       },
+      moduleSelect() {
+        this.setComponent({
+          columnId: undefined,
+          componentId: undefined,
+        });
+      },
     }
   };
 </script>
