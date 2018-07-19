@@ -1086,6 +1086,8 @@ describe('== Module Store ==', () => {
 
       expect(stateImageOptions).toEqual(data.response);
 
+      store.commit('module/setModuleData', {});
+
       data = null;
       newStruct = null;
 
