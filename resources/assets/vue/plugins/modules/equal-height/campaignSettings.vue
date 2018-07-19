@@ -30,9 +30,7 @@ export default {
       let $itemsToEqualize = $("[data-module-id='" + this.moduleId + "']").find('.st-equal-height > table');
       let higherHeigh = 0;
       $itemsToEqualize.each((index, item) => {
-      const stylesColumns = this.module.structure.columns[index].container.style
-      let paddingHeight = parseInt(stylesColumns.paddingTop ? stylesColumns.paddingTop : 0) + parseInt(stylesColumns.paddingBottom ? stylesColumns.paddingBottom : 0);
-        higherHeigh = Math.max(higherHeigh, $(item).outerHeight() + paddingHeight);
+        higherHeigh = Math.max(higherHeigh, $(item).height());
       });
       return higherHeigh;
     },
