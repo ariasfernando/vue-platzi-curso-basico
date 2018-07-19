@@ -36,14 +36,17 @@ export default {
     },
     setEqualHeights() {
       if(this.module){
-        const height = this.getHigherHeight()
-        _.each(this.module.structure.columns, (column, columnIndex) => {
-          let storageData = {
-            moduleId: this.moduleId,
-            columnId: columnIndex
-          };
-          this.saveColumnAttribute('height', height, columnIndex);
-        });
+        setTimeout(() => {
+        // calculate Height after of render.
+          const height = this.getHigherHeight()
+          _.each(this.module.structure.columns, (column, columnIndex) => {
+            let storageData = {
+              moduleId: this.moduleId,
+              columnId: columnIndex
+            };
+            this.saveColumnAttribute('height', height, columnIndex);
+          });
+        }, 50);
       }
     },
     addClassEqualHeight() {
