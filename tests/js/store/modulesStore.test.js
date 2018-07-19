@@ -1042,6 +1042,54 @@ describe('== Module Store ==', () => {
       expect(console.error).toHaveBeenCalled();
       done();
     });
-    xit('setListLibraries with data, expect ', () => {});
+    it('"setListLibraries" with data, expect save data options of image has setted in library \'styleImageEditor\'', (done) => {
+      let data = {
+        plugin: 'styleImageEditor',
+        columnId: 0,
+        componentId: 0,
+        response: [
+          { 
+            _id: '5b3a897792f8ef0010137eb3', 
+            name: 'global', 
+            updated_at: '2018-07-02 16:22:15', 
+            created_at: '2018-07-02 16:22:15', 
+          },
+          '',
+        ],
+      };
+      let newStruct = { 
+        structure: {
+          columns: [{ 
+            components: [{
+              plugins: {
+                styleImageEditor: {
+                  config: {
+                    library: {
+                      config: {
+                        set_images: {
+                          options: {},
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            }],
+          }],
+        },
+      };
+
+      store.commit('module/setModuleData', newStruct);
+      store.commit('module/setListLibraries', data);
+      
+      const stateImageOptions = store.state.module.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options;
+
+      expect(stateImageOptions).toEqual(data.response);
+
+      data = null;
+      newStruct = null;
+
+      done();
+    });
   });
 });
