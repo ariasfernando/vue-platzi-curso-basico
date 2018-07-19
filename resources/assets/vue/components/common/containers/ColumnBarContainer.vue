@@ -144,5 +144,45 @@ export default {
         padding-top: 4px;
       }
     }
+    .card-header {
+      padding-bottom: 10px;
+      ul {
+        margin-left: -8px;
+        margin-right: -8px;
+        border-bottom: 1px solid #dddddd;
+
+        .nav-item {
+          border-top: 1px solid #dddddd;
+          border-left: 1px solid #dddddd;
+          margin-bottom: -2px;
+
+          &:first-child {
+            margin-left: 10px;
+          }
+
+          &:last-of-type {
+            border-right: 1px solid #dddddd;
+          }
+          .nav-link {
+            margin-right: 0;
+            padding: 4px 7px;
+            border: 0;
+            border-radius: 0;
+            font-weight: 300;
+            color: #666666;
+            &.active {
+              border-bottom: 2px solid #78dcd6;
+              background: #78dcd64d;
+            }
+            &:focus {
+              background-color: transparent;
+            }
+            &:hover {
+              background-color: #78dcd64d;
+            }
+          }
+        }
+      }
+    }
   }
 </style>
