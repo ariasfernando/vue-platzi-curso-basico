@@ -38,8 +38,8 @@
           </td>
         </tr>
       </table>
-      <comment v-if="columnId == 0" :content="msoEndingComment"></comment>
-      <comment v-else :content="msoBetweenComment"></comment>
+      <div v-if="columnId == 0" class="stx-wrapper" v-html="msoEndingComment"></div>
+      <div v-else class="stx-wrapper" v-html="msoBetweenComment"></div>
     </div>
 </template>
 
@@ -89,17 +89,17 @@
         return this.module.structure.columns.length;
       },
       msoBetweenComment() {
-        return "[if gte mso 9]>" +
-          "</td>" +
-          "<td style='width: " + this.columnWidthPadding / this.numColumns + "px' align='left' valign='top'>" +
-          "<![endif]";
+        return `<!--[if gte mso 9]>
+          </td>
+            <td style="width: ${this.columnWidthPadding / this.numColumns}px" ${this.columnBgcolor(1)} align="left" valign="top">
+          <![endif]-->`;
       },
       msoEndingComment() {
-        return "[if gte mso 9]>" +
-          "</td>" +
-          "</tr>" +
-          "</table>" +
-          "<![endif]";
+        return `<!--[if gte mso 9]>
+              </td>
+            </tr>
+          </table>
+          <![endif]-->`;
       },
       styles() {
         let padding = `padding-top:${this.column.container.style.paddingTop};padding-left:${this.column.container.style.paddingLeft};padding-bottom:${this.column.container.style.paddingBottom};padding-right:${this.column.container.style.paddingRight};`;
@@ -117,6 +117,12 @@
             componentId:data.componentId,
           });
         }, 50);
+      },
+      columnBgcolor(columnId){
+        const bgcolor = this.module.structure.columns[columnId].container.attribute.bgcolor;
+        if(bgcolor){
+          return `bgcolor="${bgcolor}"`;
+        }
       },
     }
   };

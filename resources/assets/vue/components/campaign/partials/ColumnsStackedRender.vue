@@ -34,8 +34,8 @@
           </td>
         </tr>
       </table>
-      <comment v-if="numColumns === columnId + 1" :content="msoEndingComment"></comment>
-      <comment v-else :content="msoBetweenComment(columnId)"></comment>
+      <div v-if="numColumns === columnId + 1" class="stx-wrapper" v-html="msoEndingComment"></div>
+      <div v-else class="stx-wrapper" v-html="msoBetweenComment(columnId)"></div>
     </div>
 </template>
 
@@ -83,12 +83,11 @@
         return this.module.structure.columns.length;
       },
       msoEndingComment() {
-        return `
-                [if gte mso 9]>
+        return `<!--[if gte mso 9]>
               </td>
             </tr>
           </table>
-        <![endif]`;
+        <![endif]-->`;
       },
     },
     methods: {
@@ -120,11 +119,16 @@
         return styles;
       },
       msoBetweenComment(columnId) {
-        return `
-        [if gte mso 9]>
+        return `<!--[if gte mso 9]>
           </td>
-          <td width="${this.calculeWidthColumnPx(columnId+1)}" style='width:${this.calculeWidthColumnPx(columnId+1)}px !important' align='left' valign='top'>
-        <![endif]`;
+          <td width="${this.calculeWidthColumnPx(columnId+1)}" ${this.columnBgcolor(columnId+1)} style='width:${this.calculeWidthColumnPx(columnId+1)}px !important' align='left' valign='top'>
+        <![endif]-->`;
+      },
+      columnBgcolor(columnId){
+        const bgcolor = this.module.structure.columns[columnId].container.attribute.bgcolor;
+        if(bgcolor){
+          return `bgcolor="${bgcolor}"`;
+        }
       },
       calculeWidthColumnPx(columnId){
         let width = this.module.structure.columns[columnId].container.attribute.width;

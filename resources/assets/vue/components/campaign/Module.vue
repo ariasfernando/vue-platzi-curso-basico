@@ -55,7 +55,7 @@
             v-if="module.structure.columnsStacking === 'normal'"
             :valign="module.structure.attribute.valign || 'top'"
           >
-            <comment :content="msoStartingComment"></comment>
+            <div class="stx-wrapper" v-html="msoStartingComment"></div>
             <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
           </td>
 
@@ -74,7 +74,7 @@
               >
               <tr>
                 <td width="100%" :valign="module.structure.attribute.valign || 'top'">
-                  <comment :content="msoStartingCommentInverted"></comment>
+                  <div class="stx-wrapper" v-html="msoStartingCommentInverted"></div>
 
                   <columns-inverted-stacking-render
                     :module-id="moduleId"
@@ -191,20 +191,18 @@
         return this.module.data.errors || [];
       },
       msoStartingComment() {
-        return `
-        [if gte mso 9]>
+        return `<!--[if gte mso 9]>
           <table width="${this.templateWidth}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
             <tr>
-              <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important">
-              <![endif]`;
+              <td width="${this.calculeWidthColumnPx(0)}" ${this.columnBgcolo(0)} style="width:${this.calculeWidthColumnPx(0)}px !important">
+              <![endif]-->`;
       },
       msoStartingCommentInverted() {
-        return `
-        [if gte mso 9]>
+        return `<!--[if gte mso 9]>
           <table width="${this.columnWidthPadding}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
             <tr>
-              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr">
-              <![endif]`;
+              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" ${this.columnBgcolo(0)} dir="ltr">
+              <![endif]-->`;
       },
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
@@ -309,6 +307,12 @@
       },
       widthStyle(width) {
         return _.endsWith(width, "%") ? width : width + "px";
+      },
+      columnBgcolo(columnId){
+        const bgcolor = this.module.structure.columns[columnId].container.attribute.bgcolor;
+        if(bgcolor){
+          return `bgcolor="${bgcolor}"`;
+        }
       },
     },
     components: {
