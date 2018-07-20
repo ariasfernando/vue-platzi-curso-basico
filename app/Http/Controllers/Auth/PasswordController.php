@@ -78,7 +78,7 @@ class PasswordController extends Controller
         // Challenge validation
         if (!Challenge::provider()->isValid($request)) {
             Activity::log('User login fail [ERROR_CAPTCHA]');
-            return redirect()->back()->withErrors(['status' => 'Captcha validation is required']);
+            return redirect()->back()->withErrors(['status' => 'Please confirm you are not a robot.']);
         }
 
         $this->validate($request, ['email' => 'required|email']);
