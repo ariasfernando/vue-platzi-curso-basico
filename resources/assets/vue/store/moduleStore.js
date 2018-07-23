@@ -187,7 +187,7 @@ const actions = {
 
     // Create new instance of Element width default column data
     const element = new Element({ type: 'column-element', plugins });
-    
+
     context.commit('addColumn', element.getProperties());
   },
   sortColumn(context, data) {
@@ -240,9 +240,9 @@ const actions = {
     return deferred.promise;
   },
   getLibraries(context, data) {
-    imageService.getLibraries().then((response) => {
+    return imageService.getLibraries().then((response) => {
       response.data.push('');
-      
+
       context.commit('setListLibraries', {
         ...data,
         response: response.data,
