@@ -1,7 +1,6 @@
 import Q from 'q';
 import Vue from 'vue';
 import VueResource from 'vue-resource/dist/vue-resource';
-import mocks from '../resources/mocks';
 
 Vue.use(VueResource);
 
