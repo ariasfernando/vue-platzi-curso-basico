@@ -117,7 +117,8 @@
       "^.+\\.js$": "./node_modules/babel-jest"
     },
     "moduleNameMapper": {
-      "^@/(.*)$": "./resources/assets/vue/$1"
+      "^@/(.*)$": "<rootDir>/resources/assets/vue/$1",
+      "customer(.*)$": "<rootDir>/stensul/customer/resources/assets/vue/$1"
     },
     "modulePaths": [
       "./node_modules",
