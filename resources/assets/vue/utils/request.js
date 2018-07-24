@@ -1,8 +1,7 @@
 import Q from 'q';
-import _ from 'underscore-contrib';
 import Vue from 'vue';
 import VueResource from 'vue-resource/dist/vue-resource';
-import mocks from '../resources/fixtures';
+import mocks from '../resources/mocks';
 
 Vue.use(VueResource);
 
@@ -11,11 +10,16 @@ function requestResponse(method, params, opts) {
   /*
    * UT: mocked response
    */
-  if (process.env.APP_ENV === 'test') {
+  if (process.env.NODE_ENV === 'test') {
     const arr = params.path.split('.');
     const res = {
-      body: mocks[arr[0]][arr[1]],
+      body: null,
     };
+
+    if (mocks[arr[0]] && mocks[arr[0]][arr[1]]) {
+      res.body = mocks[arr[0]][arr[1]];
+    }
+
     deferred.resolve(res);
     return deferred.promise;
   }
