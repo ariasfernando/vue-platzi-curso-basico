@@ -6,9 +6,8 @@ use Auth;
 use Session;
 use Activity;
 use Validator;
-use Stensul\Models\User;
-use Stensul\Models\Role;
-use Stensul\Http\Requests\LoginRequest;
+use UserModel as User;
+use RoleModel as Role;
 use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -86,14 +85,7 @@ class BaseRegisterController extends Controller
         if (!$is_registration) {
             return redirect(env('APP_BASE_URL', '/'));
         } else {
-            $validator = $this->validator($request->all());
-
-            if ($validator->fails()) {
-                $this->throwValidationException(
-                    $request,
-                    $validator
-                );
-            }
+            $validator = $this->validator($request->all())->validate();
 
             $request->merge(array("password" => bcrypt($request->get("password"))));
             User::create($request->all());

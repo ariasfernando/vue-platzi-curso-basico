@@ -5,7 +5,7 @@ namespace Stensul\Services\Api;
 use Auth;
 use Cache;
 use Activity;
-use Stensul\Models\Upload;
+use UploadModel as Upload;
 use Stensul\Services\Api\StrongviewConnection\StrongviewConnector;
 use MongoDB\BSON\ObjectID as ObjectID;
 

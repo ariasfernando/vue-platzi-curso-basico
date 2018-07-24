@@ -2,6 +2,7 @@
 
 namespace Stensul\Models;
 
+use MongoDB\BSON\ObjectID as ObjectID;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 class Proof extends Eloquent
@@ -45,7 +46,7 @@ class Proof extends Eloquent
      */
     public function campaign()
     {
-        return $this->belongsTo('Stensul\Models\Campaign', 'campaign_id');
+        return $this->belongsTo('CampaignModel', 'campaign_id');
     }
 
     /**
@@ -55,6 +56,6 @@ class Proof extends Eloquent
      */
     public function comments()
     {
-        return $this->hasMany('Stensul\Models\Comment');
+        return $this->hasMany('CommentModel');
     }
 }

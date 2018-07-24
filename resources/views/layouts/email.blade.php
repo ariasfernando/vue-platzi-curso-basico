@@ -41,20 +41,26 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 					<![endif]-->
 				@endif
 			@endif
-		@endif
-		{{-- PREVIEW PREHEADER --}}
-		@if(isset($params['preheader_preview']) && strlen($params['preheader_preview']))
-			<div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['preheader_preview'] }}</div>
-		@else
-		{{-- CAMPAIGN PREHEADER --}}
-			@if(Config::get('view.preheader') && (!Config::has('view.libraries.' . $params['campaign_data']['library'] . '.preheader') || Config::get('view.libraries.' . $params['campaign_data']['library'] . '.preheader')))
-				<div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['campaign_data']['campaign_preheader'] or '' }}</div>
-			@endif
-		@endif
-
-		<?= $params['body_html']; ?>
-				
-
+        @endif
+        @if (config('global_settings.enable_preheader') && isset($params['library_config']['preheader']) && $params['library_config']['preheader'])
+            @if(isset($params['preheader_preview']))
+                    {{-- PREVIEW PREHEADER --}}
+                    <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{$params['preheader_preview'] or ''}}
+                        @if ((190 - mb_strlen($params['preheader_preview']) > 0))
+                            {!! str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['preheader_preview'])) !!}
+                        @endif
+                    </div>
+            @elseif(isset($params['campaign_data']['campaign_preheader']))
+                {{-- CAMPAIGN PREHEADER --}}
+                <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['campaign_data']['campaign_preheader'] or '' }}
+                    @if ((190 - mb_strlen($params['campaign_data']['campaign_preheader']) > 0))
+                        {{ str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['campaign_data']['campaign_preheader'])) }}
+                    @endif
+                </div>
+            @endif
+        @else
+            {{-- PREHEADER NOT ENABLED, USE DE FACTO FROM MODULES --}}
+        @endif
+<?= $params['body_html']; ?>
 	</body>
-
 </html>

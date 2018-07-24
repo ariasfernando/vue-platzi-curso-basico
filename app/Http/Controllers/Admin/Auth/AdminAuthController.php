@@ -7,7 +7,7 @@ use Session;
 use Activity;
 use Validator;
 use PasswordPolicy;
-use Stensul\Models\User;
+use UserModel as User;
 use Stensul\Http\Requests\LoginRequest;
 use Stensul\Http\Controllers\Auth\BaseLoginController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;

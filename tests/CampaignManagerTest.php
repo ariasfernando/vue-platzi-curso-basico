@@ -3,6 +3,8 @@
 namespace Stensul\Tests;
 
 use Stensul\Services\CampaignManager;
+use Stensul\Exceptions\PermissionDeniedException;
+use Stensul\Models\User;
 
 class CampaignManagerTest extends TestCase
 {
@@ -24,6 +26,24 @@ class CampaignManagerTest extends TestCase
      */
     public function testCopy()
     {
+        try {
+            $campaign = CampaignManager::copy($this->campaign->id);
+            $this->assertArrayHasKey('campaign_id', $campaign);
+        } catch (\Exception $exception) {
+            $this->assertInstanceOf(PermissionDeniedException::class, $exception);
+        }
+
+        // Add permission to clone campaign.
+        $exit_code = \Artisan::call('role:permission:allow', ['--role' => 'role1', '--permission' => 'clone_campaign']);
+        $this->assertEquals($exit_code, 0);
+
+        // Assign new role to the test user and try again.
+        $exit_code = \Artisan::call('user:roles', ['--email' => 'test@stensul.com', '--roles' => 'role1']);
+        $this->assertEquals($exit_code, 0);
+
+        // Update the user model object from DB.
+        \Auth::login(User::where('_id', '=', $this->user->id)->firstOrFail());
+
         $campaign = CampaignManager::copy($this->campaign->id);
         $this->assertArrayHasKey('campaign_id', $campaign);
     }
@@ -34,6 +54,17 @@ class CampaignManagerTest extends TestCase
      */
     public function testDelete()
     {
+        // Give user clone_campaign permission for the next test.
+        $exit_code = \Artisan::call('role:permission:allow', ['--role' => 'role1', '--permission' => 'clone_campaign']);
+        $this->assertEquals($exit_code, 0);
+
+        // Assign new role to the test user.
+        $exit_code = \Artisan::call('user:roles', ['--email' => 'test@stensul.com', '--roles' => 'role1']);
+        $this->assertEquals($exit_code, 0);
+
+        // Update the user model object from DB.
+        \Auth::login(User::where('_id', '=', $this->user->id)->firstOrFail());
+
         // Test deleting an existing campaign (copy the campaign created during setup).
         $newCampaign = CampaignManager::copy($this->campaign->id);
         $response = CampaignManager::delete($newCampaign['campaign_id']);

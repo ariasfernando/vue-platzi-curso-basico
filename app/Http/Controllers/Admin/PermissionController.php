@@ -4,12 +4,12 @@ namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
 use Activity;
-use Stensul\Http\Controllers\Controller as Controller;
+use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Stensul\Models\Role;
-use Stensul\Models\Permission;
-use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
-use MongoDB\BSON\ObjectID as ObjectID;
+use RoleModel as Role;
+use PermissionModel as Permission;
+use Stensul\Http\Middleware\AdminAuthenticate;
+use MongoDB\BSON\ObjectID;
 
 class PermissionController extends Controller
 {

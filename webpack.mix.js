@@ -105,6 +105,7 @@ mix
     'node_modules/tinymce/plugins/link/plugin.js',
     'node_modules/tinymce/plugins/advlist/plugin.js',
     `${assetsPath}/js/plugins/**/*.js`,
+    `${customerAssetsPath}/js/plugins/**/*.js`,
   ], `${jsDestinationPath}/tinymce.js`)
   .scripts([
     'node_modules/underscore/underscore.js',

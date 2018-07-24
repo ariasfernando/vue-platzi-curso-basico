@@ -4,8 +4,8 @@ namespace Stensul\Console\Commands\User;
 
 use Activity;
 use PasswordPolicy;
-use Stensul\Models\User;
-use Stensul\Models\Role;
+use UserModel as User;
+use RoleModel as Role;
 use MongoDB\BSON\ObjectID;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;

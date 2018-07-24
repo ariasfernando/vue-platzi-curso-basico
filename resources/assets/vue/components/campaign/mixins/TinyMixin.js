@@ -391,6 +391,16 @@ export default {
         });
       }
 
+        // Extend plugins
+        if ('extend_plugins' in this.textOptions.config.settings) {
+          settings.plugins = [settings.plugins, this.textOptions.config.settings.extend_plugins.join(' ')].join(' ');
+        }
+
+        // Extend toolbar
+        if ('extend_toolbar' in this.textOptions.config.settings) {
+          settings.plugins = [settings.plugins, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
+        }
+
       _.extend(settings, customSettings);
 
       tinymce.init(settings);
