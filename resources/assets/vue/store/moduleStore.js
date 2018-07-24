@@ -180,8 +180,11 @@ const actions = {
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
 
     _.each(modulePlugins, (plugin, name) => {
-      if (plugin.target.indexOf('column') !== -1) {
-        plugins[name] = clone(plugin);
+      switch (plugin.target.indexOf('column') !== -1) {
+        case true:
+          plugins[name] = clone(plugin);
+          break;
+        default:
       }
     });
 
