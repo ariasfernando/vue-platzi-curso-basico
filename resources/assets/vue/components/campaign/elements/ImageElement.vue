@@ -32,6 +32,7 @@
               :width="component.image.attribute.width"
               :src="this.$_app.config.imageUrl + component.image.attribute.placeholder"
               :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
+              :style="{width:widthStyle(component.image.attribute.width)}"
               :alt="component.image.attribute.alt"
               :title="component.image.attribute.title"
             >
@@ -46,6 +47,7 @@
                   :width="component.image.attribute.width"
                   :valign="component.image.attribute.valign || 'top'"
                   :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
+                  :style="{width:widthStyle(component.image.attribute.width)}"
                   :alt="component.image.attribute.alt"
                   :title="component.image.attribute.title"
                 />
