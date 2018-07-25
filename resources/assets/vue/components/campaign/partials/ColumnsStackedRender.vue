@@ -6,7 +6,7 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :style="{'background-color' : column.container.attribute.bgcolor, 'width':calculeStyleWidthColumnPx(columnId)}"
+        :style="{'width':calculeStyleWidthColumnPx(columnId)}"
         :width="calculeWidthColumnPx(columnId)"
       >
         <tr>
@@ -115,8 +115,7 @@
           return {
             [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
           };
-        });
-        // styles.push({'width': this.calculeStyleWidthColumnPx(columnId)}) 
+        }); 
         return styles;
       },
       msoBetweenComment(columnId) {
