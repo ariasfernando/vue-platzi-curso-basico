@@ -77,19 +77,18 @@
                 :min="interop.min || 0"
                 :max="interop.max || Infinity"
                 :step="parseFloat(interop.step)"></el-input-number>
-              <el-select
-                v-model="interop.value"
-                multiple
-                v-if="interop.type === 'multi-select'"
-                :value="interop.value"
-                :parent="name"
-                :name="intername">
-                <el-option
-                  v-for="opt in interop.options"
-                  :key="opt"
-                  :label="opt"
-                  :value="opt"></el-option>
-              </el-select>
+            <el-select
+              size="mini"
+              v-if="interop.type === 'select' || interop.type === 'multi-select'"
+              @change="(newValue) => updateInterField(newValue, name, subname, intername)"
+              :value="interop.value"
+              :multiple="interop.type === 'multi-select'">
+              <el-option
+                v-for="(opt, key) in interop.options"
+                :value="key"
+                :key="key"
+                :label="opt.name ? opt.name : opt"></el-option>
+            </el-select>
             </template>
           </settings-container>
         </template>

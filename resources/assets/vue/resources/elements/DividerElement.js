@@ -15,7 +15,7 @@ function dividerDefault() {
         classes: '',
       },
       style: {
-        height: '1px',
+        height: '5px',
         paddingTop: '10px',
         paddingBottom: '10px',
         paddingRight: '10px',

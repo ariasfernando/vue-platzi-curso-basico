@@ -1,8 +1,8 @@
+/* global path */
 /*
  NOTES: .scripts() doesn't work with watch you'll have to run watch again if you're editing legacy 
  files (E.g. application-globals.js).
 */
-
 
 const mix = require('laravel-mix');
 const fs = require('fs');
@@ -105,6 +105,7 @@ mix
     'node_modules/tinymce/plugins/link/plugin.js',
     'node_modules/tinymce/plugins/advlist/plugin.js',
     `${assetsPath}/js/plugins/**/*.js`,
+    `${customerAssetsPath}/js/plugins/**/*.js`,
   ], `${jsDestinationPath}/tinymce.js`)
   .scripts([
     'node_modules/underscore/underscore.js',
@@ -178,7 +179,7 @@ mix
       const newJson = {};
       _.forIn(obj, (value, key) => {
         const newFilename = value.replace(/([^\.]+)\.([^\?]+)\?id=(.+)$/g, '$1-$3.$2');
-        const oldAsGlob = value.replace(/([^\.]+)\.([^\?]+)\?id=(.+)$/g, '$1.*.$2');
+        const oldAsGlob = value.replace(/([^\.]+)\.([^\?]+)\?id=(.+)$/g, '$1-*.$2');
         // delete old versioned file
         del.sync([`public${oldAsGlob}`]);
         // copy as new versioned

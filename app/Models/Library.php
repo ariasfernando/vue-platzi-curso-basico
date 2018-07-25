@@ -88,10 +88,10 @@ class Library extends Eloquent
                 $sub_modules_to_keep = [];
                 foreach ($mods['modules'] as $mod) {
                     if ($mod['moduleId'] !== $module_key) {
-                       $sub_modules_to_keep[] = $mod; 
+                        $sub_modules_to_keep[] = $mod;
                     }
                 }
-                if(!empty($sub_modules_to_keep)) {
+                if (!empty($sub_modules_to_keep)) {
                     $mods['modules'] = $sub_modules_to_keep;
                     $modules_to_keep[] = $mods;
                 }

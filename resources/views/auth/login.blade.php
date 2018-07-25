@@ -31,9 +31,13 @@
                          <div class="alert alert-success" role="alert">
                              Your account has been successfully created.
                          </div>
+                    @elseif (session("message") == "ERROR_CAPTCHA")
+                        <div class="alert alert-danger" role="alert">
+                            Please confirm you are not a robot.
+                        </div>
                     @else
                         <div class="alert alert-danger" role="alert">
-                            <strong>Whoops!</strong> There were some problems with your input.
+                            Invalid email address and / or password.
                         </div>
                     @endif
                 @endif

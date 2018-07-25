@@ -9,9 +9,8 @@ use Activity;
 use Validator;
 use Challenge;
 use PasswordPolicy;
-use Stensul\Models\User;
-use Stensul\Models\Role;
-use Stensul\Http\Requests\LoginRequest;
+use UserModel as User;
+use RoleModel as Role;
 use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -91,13 +90,11 @@ class BaseLoginController extends Controller
     /**
      * Try to login.
      *
-     * @param LoginRequest $request
+     * @param Request $request
      * @return \Illuminate\Http\$this
      */
-    public function postLogin(LoginRequest $request)
+    public function postLogin(Request $request)
     {
-        $error = false;
-
         if (\Config::get('challenge.enabled')) {
             $challenge_provider = \Config::get('challenge.default');
             $config = \Config::get('challenge.providers.' . $challenge_provider);
@@ -108,24 +105,25 @@ class BaseLoginController extends Controller
             }
             if (Cache::get($cache_key) > $config['max_failed_attemtps'] && !Challenge::provider()->isValid($request)) {
                 Activity::log('User login fail [ERROR_CAPTCHA]');
-                $error = true;
+                return $this->returnWithError('ERROR_CAPTCHA');
             }
         }
 
         $email = strtolower($request->input('email'));
         $password = $request->input('password');
         $remember = $request->input('remember');
-        $user = User::where('email', '=', $email)->first();
-
-        if (!$user || $error) {
-            Activity::log('User login fail [ERROR_EMAIL]');
-            return $this->returnWithError();
-        }
 
         $auth = $this::guard();
 
         if (!$auth->validate(['email' => $email, 'password' => $password])) {
             Activity::log('User login fail [ERROR_LOGIN]');
+            return $this->returnWithError();
+        }
+
+        $user = User::where('email', '=', $email)->first();
+
+        if (!$user) {
+            Activity::log('User login fail [ERROR_EMAIL]');
             return $this->returnWithError();
         }
 
@@ -142,6 +140,10 @@ class BaseLoginController extends Controller
             } else {
                 Activity::log('User Logged in');
             }
+            if ($user->unconfirmed) {
+                $user->unconfirmed = 0;
+                $user->save();
+            }
         }
 
         if (PasswordPolicy::should_update_password($user)) {
@@ -154,9 +156,9 @@ class BaseLoginController extends Controller
         }
     }
 
-    private function returnWithError()
+    private function returnWithError($message = 'ERROR_DEFAULT')
     {
-        return redirect()->back()->with(array("message" => "ERROR_DEFAULT"));
+        return redirect()->back()->with('message', $message);
     }
 
     /**

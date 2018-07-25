@@ -1,3 +1,15 @@
+@if (isset($params['campaign_data']['campaign_fonts']))
+    @if (isset($params['campaign_data']['campaign_fonts']['custom']))
+        <?php
+            $fonts = $params['campaign_data']['campaign_fonts']['custom'];
+        ?>
+        @foreach ($fonts as $a => $font)
+            @if (isset($font['url']))
+                <link href="{{ $font['url'] }}" rel="stylesheet" type="text/css">
+            @endif
+        @endforeach
+    @endif
+@endif
 <style type="text/css">
 	/* COMMON STYLES */
     .st-email-body{ 
@@ -59,7 +71,7 @@
     }
 
     @if(isset($params['campaign_data']['library_config']) && 
-        isset($params['campaign_data']['library_config']['linkColor'])
+        !empty($params['campaign_data']['library_config']['linkColor'])
     )
        a{
             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
@@ -87,35 +99,37 @@
                 $fontPath = url('/') . "/fonts/";
 
                 foreach ($fonts as $a => $font) {
-                    $definition = "";
-                    $ie = "";
+                    if (isset($font['folder'])) {
+                        $definition = "";
+                        $ie = "";
 
-                    foreach ($font['types'] as $b => $type) {
-                        foreach ($type['files'] as $c => $file) {
-                            if ($file['file'] === 'eot') {
-                                $ie = "src: url('" . $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "?#iefix');";
-                            }
-                        }
-                    }
-
-                    foreach ($font['types'] as $b => $type) {
-                        $definition .= "@font-face {font-family: '" . $font['name'] . "';";
-                        $definition .= $ie;
-                        $definition .= "src: ";
-
-                        foreach ($type['files'] as $c => $file) {
-                            $definition .= "url('". $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "') format('" . $file['file'] . "')";
-
-                            if ($c < count($type['files']) - 1) {
-                                $definition .= ",";
-                            } else {
-                                $definition .= ";";
+                        foreach ($font['types'] as $b => $type) {
+                            foreach ($type['files'] as $c => $file) {
+                                if ($file['file'] === 'eot') {
+                                    $ie = "src: url('" . $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "?#iefix');";
+                                }
                             }
                         }
 
-                        $definition .= "font-weight: " . $type['weight'] . ";}";
+                        foreach ($font['types'] as $b => $type) {
+                            $definition .= "@font-face {font-family: '" . $font['name'] . "';";
+                            $definition .= $ie;
+                            $definition .= "src: ";
+
+                            foreach ($type['files'] as $c => $file) {
+                                $definition .= "url('". $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "') format('" . $file['file'] . "')";
+
+                                if ($c < count($type['files']) - 1) {
+                                    $definition .= ",";
+                                } else {
+                                    $definition .= ";";
+                                }
+                            }
+
+                            $definition .= "font-weight: " . $type['weight'] . ";}";
+                        }
+                        echo $definition;
                     }
-                    echo $definition;
                 }
             }
         }
@@ -129,7 +143,7 @@
         }
 
         @if(isset($params['campaign_data']['library_config']) && 
-            isset($params['campaign_data']['library_config']['linkColor'])
+            !empty($params['campaign_data']['library_config']['linkColor'])
         )
            a{
                 color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
@@ -152,7 +166,7 @@
             width: 100%;
         }
         @if(isset($params['campaign_data']['library_config']) && 
-            isset($params['campaign_data']['library_config']['linkColor'])
+            !empty($params['campaign_data']['library_config']['linkColor'])
         )
            a{
                 color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};

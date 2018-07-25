@@ -1,4 +1,4 @@
-image: "fanbridge/web:v2.0"
+image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0"
 
 services:
   - mongo:latest
@@ -6,6 +6,10 @@ services:
 variables:
   APP_NAME: "Base"
   APP_BASE_URL: "http://localhost:3000"
+  DB_HOST: mongo
+  DB_DATABASE: base
+  REDIS_HOST: base_queue_1
+  CDN_HOST: http://stensul-devel-01.akamaized.net
 
 cache:
   paths:
@@ -23,9 +27,7 @@ stages:
 
 before_script:
   # js related
-  - npm install npm-cli-login
-  - npm config set registry https://npm.stensuldev.net
-  - node_modules/.bin/npm-cli-login -u $NPM_USER -p $NPM_PASSWORD -e $NPM_EMAIL -r $NPM_REGISTRY
+  - yum install -y gcc-c++ cairo cairo-devel
   - npm install
   # Install composer dependencies
   - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
@@ -34,9 +36,11 @@ before_script:
   - php composer-setup.php
   - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
   - php composer.phar install
+  - php artisan vendor:publish --all
   - npm run production
   # Install CI components.
   - cd ci/; php ../composer.phar install; cd ..
+
 
 test_composer_vulnerabilities:
   stage: test
@@ -48,9 +52,9 @@ phpunit:
   stage: test
   script:
     # Enable xdebug for code coverage
-    - yum install php70-php-pecl-xdebug.x86_64 -y
-    - ln -s /opt/remi/php70/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
-    - cp /etc/opt/remi/php70/php.d/15-xdebug.ini /etc/php.d/
+    - yum install php72-php-pecl-xdebug.x86_64 -y
+    - ln -s /opt/remi/php72/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
+    - cp /etc/opt/remi/php72/php.d/15-xdebug.ini /etc/php.d/
     # Run phpunit with code coverage report enbled.
     - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
   artifacts:
@@ -59,45 +63,6 @@ phpunit:
     expire_in: 30 days
     paths:
       - ci/storage/tmp/be_coverage/
-
-phpmd:
-  stage: test
-  script:
-    # Run php mess detector
-    - ci/vendor/bin/phpmd . html ci/rulesets/md_codesize.xml,ci/rulesets/md_design.xml,ci/rulesets/md_naming.xml,unusedcode
-      --exclude vendor,database,node_modules,resources,ci > ci/storage/tmp/phpmd.html
-  artifacts:
-    when: always
-    name: "${CI_JOB_STAGE}_phpmd_${CI_COMMIT_REF_NAME}"
-    expire_in: 30 days
-    paths:
-      - ci/storage/tmp/phpmd.html
-
-phpcs:
-  stage: test
-  script:
-    # Run php code sniffer
-    - ci/vendor/bin/phpcs --standard=psr2 app/ config/ routes/ tests/ --report=full,gitblame
-      --extensions=php --runtime-set ignore_warnings_on_exit true > ci/storage/tmp/phpcs.txt
-  artifacts:
-    when: always
-    name: "${CI_JOB_STAGE}_phpcs_${CI_COMMIT_REF_NAME}"
-    expire_in: 30 days
-    paths:
-      - ci/storage/tmp/phpcs.txt
-
-phpcpd:
-  stage: test
-  script:
-    # Run php copy/paste detector
-    - ci/vendor/bin/phpcpd . --exclude=vendor --exclude=node_modules --exclude=storage
-      --exclude=tmp --exclude ci > ci/storage/tmp/phpcpd.txt
-  artifacts:
-    when: always
-    name: "${CI_JOB_STAGE}_phpcpd_${CI_COMMIT_REF_NAME}"
-    expire_in: 30 days
-    paths:
-      - ci/storage/tmp/phpcpd.txt
 
 phplint:
   stage: test
@@ -112,29 +77,16 @@ phplint:
     paths:
       - ci/storage/tmp/phplint.txt
 
-phpdoccheck:
+jsunit:
   stage: test
   script:
-    # Run php doc check
-    - ci/vendor/bin/phpdoccheck --exclude=vendor,node_modules,ci,tmp,storage --no-ansi
-      --skip-classes -w > ci/storage/tmp/doccheck.txt
-  artifacts:
-    when: always
-    name: "${CI_JOB_STAGE}_phpdoccheck_${CI_COMMIT_REF_NAME}"
-    expire_in: 30 days
-    paths:
-      - ci/storage/tmp/doccheck.txt
-
-test_js:
-  stage: test
-  script:
-    - npm run test:single
+    - npm run cover
   artifacts:
     when: always
     name: "${CI_JOB_STAGE}_testjs_${CI_COMMIT_REF_NAME}"
     expire_in: 30 days
     paths:
-      - coverage/
+      - ci/storage/tmp/coverage
 
 eslint:
   stage: test

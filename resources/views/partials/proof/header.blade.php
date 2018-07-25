@@ -10,17 +10,16 @@
                         <a>
                     @endif
                         <span class="brand-logo"></span>
-                        <span class="by-stensul"><em>by</em> stensul</span>
                     </a>
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <h1 class="campaign-title">{{ $params['header_title'] }}</h1>
             </div>
 
             {{-- Navigation --}}
-            <div class="col-xs-4 col-md-4 logButton pull-right">
+            <div class="col-xs-4 col-md-3 logButton pull-right">
                 <nav>
                    
                     @if (!Auth::guest())

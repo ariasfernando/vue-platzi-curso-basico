@@ -4,7 +4,7 @@ namespace Stensul\Services\Api;
 
 use Auth;
 use Activity;
-use Stensul\Models\Upload;
+use UploadModel as Upload;
 use Stensul\Services\Api\ExactTargetConnection\ExactTargetConnector;
 use MongoDB\BSON\ObjectID as ObjectID;
 

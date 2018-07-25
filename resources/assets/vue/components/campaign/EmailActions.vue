@@ -42,7 +42,8 @@
             v-show="!locked"
           >Send for Review</button>
 
-          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="!campaign.campaign_data.template" @click="complete">
+          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="campaign.campaign_data.can_be_processed && !campaign.campaign_data.template" @click="complete"
+            v-show="!locked" >
             Complete
             <i class="glyphicon glyphicon-menu-right"></i>
           </a>
@@ -146,16 +147,32 @@
         this._save(bodyHtml).then(response => {
           this.$root.$toast('Email saved', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       _save(bodyHtml = undefined) {
-        return this.$store.dispatch("campaign/saveCampaign", {
+        const promise = this.$store.dispatch("campaign/saveCampaign", {
           campaign: this.campaign,
           bodyHtml
         });
+        promise.then(response => {
+
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          let message = 'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.';
+
+          if (error.status === 422) {
+            if (error.body.errors) {
+              if (error.body.errors.campaign_name || error.body.errors.campaign_preheader) {
+                message = 'HTML like tags are not allowed on Email Name and Preheader Text, please correct it to continue.';
+              }
+            }
+          }
+          this.$root.$toast(
+            message,
+            {className: 'et-error'}
+          );
+        });
+        return promise;
       },
       _validate(message = undefined) {
         if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors) {
@@ -223,33 +240,29 @@
               let finishedProcessing = () => {
                 // Set campaign as processed
                 this.$store.commit('campaign/setProcessStatus');
-                // Show complete after campaign is completely processed
-                this.$store.commit("campaign/toggleModal", 'modalComplete');
-                // Redirect to `/dashboard` if user refreshes the page
-                window.history.replaceState(null, null, "?processed=true");
+                // Reload campaign data
+                this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id).then(() => {
+                  // Show complete after campaign is completely processed
+                  this.$store.commit("campaign/toggleModal", 'modalComplete');
+                  // Redirect to `/dashboard` if user refreshes the page
+                  window.history.replaceState(null, null, "?processed=true");
+                });
               };
 
-              // Set processed
+              // Set processed (if using "sync" as QUEUE_DRIVER)
               if (completeResponse.processed) {
-                return finishedProcessing();
-              }
-
-              // Poll server with job id
-              if (completeResponse.jobId) {
+                finishedProcessing();
+              } else if (completeResponse.jobId) {
+                // Poll server with job id when using an async queue driver.
                 let processInterval = setInterval(() => {
                   this.checkProcessStatus(completeResponse.jobId).then((response) => {
                     if (response.status === 'finished') {
                       clearInterval(processInterval);
                       finishedProcessing();
-                      // Reload campaign data
-                      this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id);
                     }
                   });
                 }, 2000);
               }
-          }, error => {
-            this.$store.commit("global/setLoader", false);
-            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
         });
       },
@@ -258,9 +271,6 @@
           if (this.dirty && this.campaign.campaign_data.auto_save !== false) {
             this.$store.commit("global/setSecondaryLoader", true);
             this._save().then(response => {
-              this.$store.commit("global/setSecondaryLoader", false);
-            }, error => {
-              this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
               this.$store.commit("global/setSecondaryLoader", false);
             });
           }
@@ -275,9 +285,6 @@
         });
         this._save(bodyHtml).then(response => {
           this.$store.commit("campaign/toggleModal", 'modalPreview');
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       proof() {
@@ -297,9 +304,6 @@
         this._save(bodyHtml).then(response => {
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalProof');
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
     },

@@ -3,7 +3,7 @@
 namespace Stensul\Http\Middleware;
 
 use Closure;
-use Stensul\Models\Library;
+use LibraryModel as Library;
 
 class LoadLibraries
 {

@@ -4,7 +4,7 @@ import campaignSettings from './campaignSettings.vue';
 export default {
   name: 'style-image-editor',
   title: 'style Image Editor',
-  version: '0.0.6',
+  version: '0.0.9',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
@@ -44,18 +44,18 @@ export default {
           type: 'number',
           step: 1,
         },
-        size_auto: {
-          label: 'Flexible height',
-          key: 'auto',
-          value: false,
-          type: 'switch',
-        },
         size_height: {
           label: 'Height',
           key: 'height',
           value: 200,
           type: 'number',
           step: 1,
+        },
+        size_auto: {
+          label: 'Flexible height',
+          key: 'auto',
+          value: false,
+          type: 'switch',
         },
         size_minHeight: {
           label: 'Min. Height',
@@ -64,18 +64,44 @@ export default {
           type: 'number',
           step: 1,
         },
+        size_maxHeight: {
+          label: 'Max. Height',
+          key: 'maxHeight',
+          value: 1000,
+          type: 'number',
+          step: 1,
+        },
         size_fit: {
           label: 'Image Fit',
           key: 'fit',
-          value: "1",
+          value: '1',
           type: 'select',
           options: {
-            0:'Contain',
-            1:'Cover',
-            2:'Max Size'
-          }
-        }
+            0: 'Contain',
+            1: 'Cover',
+            2: 'Max Size',
+          },
+        },
+        size_minWidth: {
+          label: 'Min. Width',
+          key: 'minWidth',
+          value: 1,
+          type: 'number',
+          step: 1,
+        },
       },
+    },
+    smaller: {
+      label: 'Don\'t allow smaller images',
+      key: 'dontAllowSmaller',
+      value: false,
+      type: 'switch',
+    },
+    adjust: {
+      label: 'Adjust campaign image size',
+      key: 'adjustImageSize',
+      value: false,
+      type: 'switch',
     },
     'sie-plugin-image_upload': {
       label: 'Upload',
@@ -127,12 +153,6 @@ export default {
           value: false,
           type: 'switch',
         },
-        cropbox: {
-          label: 'Move cropbox',
-          key: 'cropBoxMovable',
-          value: true,
-          type: 'switch',
-        },
         round: {
           label: 'Circle Cropping',
           key: 'cropper_roundCrop',
@@ -150,7 +170,7 @@ export default {
               key: 'diameter',
               value: 0,
               type: 'number',
-              step: 1,          
+              step: 1,
             },
           },
         },
@@ -219,7 +239,7 @@ export default {
           key: 'changable',
           value: true,
           type: 'switch',
-        },        
+        },
         overlay_width: {
           label: 'Width',
           key: 'width',
@@ -234,29 +254,67 @@ export default {
           type: 'number',
           step: 1,
         },
-        overlay_top: {
-          label: 'Top',
-          key: 'top',
-          value: 0,
-          type: 'number',
-          step: 1,
+        overlay_resizable: {
+          label: 'Fixed Size',
+          key: 'resizable',
+          value: false,
+          type: 'switch',
         },
-        overlay_left: {
-          label: 'Left',
-          key: 'left',
-          value: 0,
-          type: 'number',
-          step: 1,
+        overlay_absolute: {
+          label: 'Absolute position',
+          key: 'position_absolute',
+          value: true,
+          type: 'switch',
+          config: {
+            overlay_top: {
+              label: 'Top',
+              key: 'top',
+              value: 0,
+              type: 'number',
+              step: 1,
+            },
+            overlay_left: {
+              label: 'Left',
+              key: 'left',
+              value: 0,
+              type: 'number',
+              step: 1,
+            },
+          },
+        },
+        overlay_relative: {
+          label: 'Relative position',
+          key: 'position_relative',
+          value: false,
+          type: 'switch',
+          config: {
+            overlay_alignx: {
+              label: 'Horizontal Alignment',
+              key: 'alignx',
+              value: '0',
+              type: 'select',
+              options: {
+                0: 'Left',
+                1: 'Center',
+                2: 'Right',
+              },
+            },
+            overlay_aligny: {
+              label: 'Vertical Alignment',
+              key: 'aligny',
+              value: '0',
+              type: 'select',
+              options: {
+                0: 'Top',
+                1: 'Center',
+                2: 'Bottom',
+              },
+            },
+          },
         },
         overlay_fixed: {
           label: 'Fixed Position',
           key: 'fixed',
-          value: false,
-          type: 'switch',
-        },
-        overlay_resizable: {
-          label: 'Fixed Size',
-          key: 'resizable',
           value: false,
           type: 'switch',
         },
@@ -313,7 +371,7 @@ export default {
               key: 'height',
               value: 0,
               type: 'number',
-              step: 1,              
+              step: 1,
             },
             square_top: {
               label: 'Top',

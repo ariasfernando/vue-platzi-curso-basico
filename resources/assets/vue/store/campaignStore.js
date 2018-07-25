@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import {
   filter,
   isEmpty,
@@ -9,6 +9,9 @@ import {
   isEqual,
   each
 } from 'lodash';
+
+import _ from 'lodash';
+
 import {
   defer
 } from 'q';
@@ -32,6 +35,7 @@ function campaignStore() {
       modalComplete: false,
       modalPreview: false,
       modalProof: false,
+      modalProofTrack: false,
       modalEnableTemplating: false,
       modalEsp: false,
       buildingMode: 'desktop',
@@ -107,6 +111,9 @@ function campaignStore() {
       campaignValidated(state, status) {
         state.campaignValidated = status;
       },
+      campaignCanBeProcessed(state, status) {
+        state.campaign.campaign_data.can_be_processed = status;
+      },
       loadCampaignData(state, campaignData) {
         state.campaign = campaignData;
         state.modules = campaignData.campaign_data.modules_data;
@@ -163,7 +170,11 @@ function campaignStore() {
         state.editedSettings[setting.name] = setting.value;
       },
       saveCampaignData(state, payload) {
-        state.campaign.campaign_data[payload.name] = payload.value;
+        const update = {};
+        update[payload.name] = payload.value;
+        const newData = _.extend(clone(state.campaign.campaign_data), update);
+
+        state.campaign.campaign_data = newData;
       },
       toggleModal(state, modalName) {
         state[modalName] = !state[modalName];

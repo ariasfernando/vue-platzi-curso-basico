@@ -9,6 +9,10 @@
         :data-module-id="moduleId"
         :class="{ 'stx-show-error': hasErrors }"
         @click.prevent="config"
+        :width="moduleWidth"
+        :style="moduleStyle"
+        :valign="moduleValign"
+        :bgcolor="moduleBgcolor"
     >
       <component :is="'custom-' + module.key" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId" v-if="!module.data.hideToolbar"></module-toolbar>
@@ -119,7 +123,7 @@
           @click.prevent="setComponent(moduleId, 0, componentId)"
           :key="component.id"
         >
-          <td width="100%" class="st-col" style="vertical-align: top; width: 100%;">
+          <td width="100%" class="st-mobile-full-width" style="vertical-align: top; width: 100%;">
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
               <template>
                   <component
@@ -128,6 +132,7 @@
                     :module-id="moduleId"
                     :column-id="0"
                     :component-id="componentId"
+                    context="campaign"
                   ></component>
                 </template>
               </table>
@@ -152,20 +157,25 @@
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
-  import ComponentAttributeMixin from '../common/mixins/ComponentAttributeMixin.js';
   import validatorMixin from '../../plugins/modules/mixins/validator.js';
+  import ElementMixin from '../common/mixins/ElementMixin.js';
   import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
     props: ['moduleId'],
-    mixins: [ ComponentAttributeMixin, validatorMixin ],
+    mixins: [ ElementMixin, validatorMixin ],
     created() {
-      if(this.module.type === 'studio' || (this.module.structure && this.module.structure.columns && this.module.structure.columns.length > 1)) {
-        // studio modules with multiple columns which have plugins with validation do not trigger when the module is added
-        // so we need to check a flag to aid the user to open each module and run the validations at least once
-        return this.validateMulticolumnStudioModule();
-      }
+      if(this.module.type === 'studio'
+          && ((this.module.structure && this.module.structure.columns && this.module.structure.columns.length > 1)
+              || (this.module.structure && this.module.structure.columns && this.module.structure.columns.length === 1
+                  && this.module.structure.columns[0].components.length > 1)
+            )
+        ) {
+          // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
+          // so we need to check a flag to aid the user to open each module and run the validations at least once
+          return this.validateMulticolumnStudioModule();
+        }
     },
     computed: {
       module() {
@@ -178,16 +188,14 @@
         return this.module.data.errors || [];
       },
       msoStartingComment() {
-        return `
-        [if gte mso 9]>
+        return `[if gte mso 9]>
           <table width="${this.templateWidth}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
             <tr>
               <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important">
               <![endif]`;
       },
       msoStartingCommentInverted() {
-        return `
-        [if gte mso 9]>
+        return `[if gte mso 9]>
           <table width="${this.columnWidthPadding}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
             <tr>
               <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr">
@@ -201,6 +209,18 @@
       },
       hasErrors() {
         return this.module.data && this.module.data.errors && this.module.data.errors.length;
+      },
+      moduleWidth(){
+        return _.get(this.module,'structure.attribute.width','100%');
+      },
+      moduleStyle(){
+        return _.get(this.module,'structure.style');
+      },
+      moduleValign(){
+        return _.get(this.module,'structure.attribute.valign','top');
+      },
+      moduleBgcolor(){
+        return _.get(this.module,'structure.attribute.bgcolor');
       }
     },
     methods: {
