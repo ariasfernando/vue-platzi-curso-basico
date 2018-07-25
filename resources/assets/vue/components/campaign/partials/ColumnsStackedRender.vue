@@ -7,7 +7,6 @@
         cellspacing="0"
         border="0"
         :style="{'background-color' : column.container.attribute.bgcolor, 'width':calculeStyleWidthColumnPx(columnId)}"
-        :bgcolor="column.container.attribute.bgcolor"
         :width="calculeWidthColumnPx(columnId)"
       >
         <tr>
