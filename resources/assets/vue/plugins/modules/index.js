@@ -10,6 +10,7 @@ import textOptions from './text-options';
 import variableHeight from './variable-height';
 import verticalAlignment from './vertical-alignment';
 import textColorByBackground from './text-color-by-background';
+import textColorByBackgroundForModule from './text-color-by-background-for-module';
 
 export default {
   alignment,
@@ -24,4 +25,5 @@ export default {
   variableHeight,
   verticalAlignment,
   textColorByBackground,
+  textColorByBackgroundForModule
 };
