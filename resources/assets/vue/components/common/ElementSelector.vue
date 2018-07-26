@@ -1,5 +1,5 @@
 <template>
-  <button class="button-element-selector" @click="e => $emit('click', e)">
+  <button class="element-selector" @click="e => $emit('element-selected', e)">
     {{label}}
   </button>
 </template>
@@ -7,10 +7,13 @@
 <script>
   export default {
     props: ['label'],
-    name: 'button-element-selector',
+    name: 'element-selector',
   };
   
 </script>
 
 <style lang="scss" scoped>
+.element-selector {
+  
+}
 </style>

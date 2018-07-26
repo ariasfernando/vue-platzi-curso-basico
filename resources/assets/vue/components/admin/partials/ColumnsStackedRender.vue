@@ -45,7 +45,7 @@
           </draggable>
         </td>
       </tr>  
-      <button-element-selector :label="`column ${columnId}`" @click="columnSelect(columnId)"></button-element-selector>
+      <element-selector :label="`column ${columnId}`" @element-selected="columnSelect(columnId)"></element-selector>
     </table>
 
     <!-- Empty Col -->
@@ -90,7 +90,7 @@ import _ from "lodash";
 import Draggable from "vuedraggable";
 import TextElement from "../elements/TextElement.vue";
 import ButtonElement from "../elements/ButtonElement.vue";
-import ButtonElementSelector from '../../common/ButtonElementSelector.vue';
+import ElementSelector from '../../common/ElementSelector.vue';
 import ImageElement from "../elements/ImageElement.vue";
 import DividerElement from "../elements/DividerElement.vue";
 import ElementMixin from '../../common/mixins/ElementMixin.js';
@@ -102,7 +102,7 @@ export default {
     Draggable,
     TextElement,
     ButtonElement,
-    ButtonElementSelector,
+    ElementSelector,
     ImageElement,
     DividerElement,
   },

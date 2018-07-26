@@ -110,7 +110,7 @@
       </tr>
       <!-- END 1 COLUMNS -->
     </table>
-    <button-element-selector label="Root" @click="moduleSelect"></button-element-selector>
+    <element-selector label="Root" @element-selected="moduleSelect"></element-selector>
   </div>
 </template>
     
@@ -118,7 +118,7 @@
 
   import _ from 'lodash';
   import ButtonElement from './elements/ButtonElement.vue';
-  import ButtonElementSelector from '../common/ButtonElementSelector.vue';
+  import ElementSelector from '../common/ElementSelector.vue';
   import clone from 'clone';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
@@ -137,7 +137,7 @@
     mixins: [ ElementMixin ],
     components: {
       ButtonElement,
-      ButtonElementSelector,
+      ElementSelector,
       ColumnsFixedRender,
       ColumnsStackedRender,
       DividerElement,
