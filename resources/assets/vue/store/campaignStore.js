@@ -229,8 +229,10 @@ function campaignStore() {
         state.dirty = true;
       },
       saveColumnAttribute(state, data) {
-        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].attribute;
-        attributes[data.attribute] = data.attributeValue;
+        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
+        const newData = {};
+        newData[data.attribute] = data.attributeValue;
+        state.modules[data.moduleId].structure.columns[data.columnId].container.attribute = { ...attributes, ...newData };
         state.dirty = true;
       },
       saveModuleAttribute(state, data) {
