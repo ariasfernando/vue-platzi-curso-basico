@@ -44,23 +44,24 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import CampaignConfiguration from './CampaignConfiguration.vue'
-  import ModalComplete from './modals/ModalComplete.vue'
-  import ModalPreview from './modals/ModalPreview.vue'
-  import ModalProof from './modals/ModalProof.vue'
-  import ModalEsp from './modals/ModalEsp.vue'
-  import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
   import CampaignMenu from './CampaignMenu.vue'
-  import EmailCanvas from './EmailCanvas.vue'
+  import CampaignService from '../../services/campaign'
   import ComponentSettings from './ComponentSettings.vue'
   import CustomModuleSettings from './CustomModuleSettings.vue'
+  import EmailActions from './EmailActions.vue'
+  import EmailCanvas from './EmailCanvas.vue'
+  import ModalComplete from './modals/ModalComplete.vue'
+  import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
+  import ModalEsp from './modals/ModalEsp.vue'
+  import ModalPreview from './modals/ModalPreview.vue'
+  import ModalProof from './modals/ModalProof.vue'
   import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
+  import ShadowRender from './ShadowRender.vue'
   import ModuleSettings from './ModuleSettings.vue'
   import Spinner from '../common/Spinner.vue'
-  import EmailActions from './EmailActions.vue'
   import VueSticky from 'vue-sticky'
-  import _ from 'lodash'
-  import CampaignService from '../../services/campaign'
 
   export default {
     name: 'Campaign',
@@ -68,18 +69,19 @@
     components: {
       CampaignConfiguration,
       CampaignMenu,
-      EmailCanvas,
       ComponentSettings,
       CustomModuleSettings,
-      ModuleBackgroundSettings,
-      ModuleSettings,
+      EmailActions,
+      EmailCanvas,
       ModalComplete,
+      ModalEnableTemplating,
+      ModalEsp,
       ModalPreview,
       ModalProof,
-      ModalEsp,
-      ModalEnableTemplating,
-      Spinner,
-      EmailActions
+      ModuleBackgroundSettings,
+      ModuleSettings,
+      ShadowRender,
+      Spinner
     },
     data: function () {
       return {
