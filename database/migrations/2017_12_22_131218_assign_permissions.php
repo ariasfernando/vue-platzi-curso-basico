@@ -44,7 +44,6 @@ class AssignPermissions extends Migration
                 'edit_campaign',
                 'access_favorites',
                 'access_dashboard',
-                'fix_layout',
                 'access_unfixed_templates',
                 'access_proof',
                 'edit_proof'
