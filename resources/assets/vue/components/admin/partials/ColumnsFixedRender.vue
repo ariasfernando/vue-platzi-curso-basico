@@ -49,7 +49,7 @@
               </div>
             </div>
           </draggable>
-          <button @click="columnSelect(columnId)"></button>
+          <button-element-selector :label="`column ${columnId}`" @click="columnSelect(columnId)"></button-element-selector>
         </td>
       </tr>
     </table>
@@ -61,6 +61,7 @@
   import Draggable from 'vuedraggable';
   import TextElement from '../elements/TextElement.vue';
   import ButtonElement from '../elements/ButtonElement.vue';
+  import ButtonElementSelector from '../../common/ButtonElementSelector.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
@@ -72,6 +73,7 @@
       Draggable,
       TextElement,
       ButtonElement,
+      ButtonElementSelector,
       ImageElement,
       DividerElement,
     },

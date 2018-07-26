@@ -110,38 +110,40 @@
       </tr>
       <!-- END 1 COLUMNS -->
     </table>
-    <button @click="moduleSelect"></button>
+    <button-element-selector label="Root" @click="moduleSelect"></button-element-selector>
   </div>
 </template>
     
 <script>
 
-  import Draggable from 'vuedraggable';
-  import clone from 'clone';
   import _ from 'lodash';
-  import uc from 'underscore-contrib';
-  import defaultElements from '../../resources/elements';
-  import Plugins from '../../plugins/modules';
-  import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
-  import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
-  import Element from '../../models/Element';
-  import TextElement from './elements/TextElement.vue';
   import ButtonElement from './elements/ButtonElement.vue';
-  import ImageElement from './elements/ImageElement.vue';
+  import ButtonElementSelector from '../common/ButtonElementSelector.vue';
+  import clone from 'clone';
+  import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
+  import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
+  import defaultElements from '../../resources/elements';
   import DividerElement from './elements/DividerElement.vue';
+  import Draggable from 'vuedraggable';
+  import Element from '../../models/Element';
   import ElementMixin from '../common/mixins/ElementMixin.js';
+  import ImageElement from './elements/ImageElement.vue';
+  import Plugins from '../../plugins/modules';
+  import TextElement from './elements/TextElement.vue';
+  import uc from 'underscore-contrib';
 
   module.exports = {
     name: 'Module',
     mixins: [ ElementMixin ],
     components: {
-      Draggable,
-      TextElement,
       ButtonElement,
-      ImageElement,
-      DividerElement,
+      ButtonElementSelector,
       ColumnsFixedRender,
-      ColumnsStackedRender
+      ColumnsStackedRender,
+      DividerElement,
+      Draggable,
+      ImageElement,
+      TextElement
     },
     data () {
       return {
