@@ -1,7 +1,7 @@
 <template>
   <div>
-    <label-item-container label="COLUMN SETTINGS" icon="glyphicon-pause" :collapsable="false"></label-item-container>
-
+    <label-item-container label="COLUMN SETTINGS" icon="glyphicon-pause" v-b-toggle.column-settings-styles></label-item-container>
+    <b-collapse id="column-settings-styles" visible accordion="general-settings">
       <b-card class="control" no-block>
             <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
               <component v-for="setting in settingGroup"
@@ -23,30 +23,16 @@
                 :key="setting.name">
               </component>
             </group-container>
-
-            <!-- Column Settings -->
-            <div :class="'field-' + columnSetting.name" v-for="(columnSetting, keySettings ) in column.settings" :key="columnSetting.name + keySettings">
-              
-              <div v-if="!columnSetting.group" >
-                <column-setting-group :column-setting="columnSetting" 
-                                      :column-key="key">
-                </column-setting-group>
-              </div>
-
-              <div v-else>
-                <column-setting-element :column-setting="columnSetting"
-                                        :column-key="key">
-                </column-setting-element>
-              </div>
-
-              <!-- Column Settings -->
-  
-            </div>
-            <!-- Column Plugins -->
-            <div v-for="(plugin, moduleKey) in column.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
-              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="currentComponent.columnId"></component>
-            </div>
+        </b-card>
+      </b-collapse>
+    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.column-settings-functionalities></label-item-container>
+    <b-collapse id="column-settings-functionalities" accordion="column-settings">
+      <b-card class="control" >
+        <div v-for="(plugin, moduleKey) in column.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
+          <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="currentComponent.columnId"></component>
+        </div>
       </b-card>
+    </b-collapse>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <label-item-container label="GENERAL SETTINGS" icon="glyphicon-cog" :collapsable="false"></label-item-container>
-    <b-collapse id="module-settings-left" visible accordion="module-right">
+    <label-item-container label="GENERAL SETTINGS" icon="glyphicon-cog" v-b-toggle.general-settings-styles></label-item-container>
+    <b-collapse id="general-settings-styles" visible accordion="general-settings">
       <b-card class="control" >
         <input-generic-text
           label='Module name'
@@ -37,12 +37,15 @@
             :key="setting.name">
           </component>
         </group-container>
+      </b-card>
+    </b-collapse>
+    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.general-settings-functionalities></label-item-container>
+    <b-collapse id="general-settings-functionalities" accordion="general-settings">
+      <b-card class="control" >
         <template v-if="module.plugins && Object.keys(module.plugins).length !== 0">
-            <!-- Module Plugins -->
             <div v-for="(plugin, moduleKey) in module.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
               <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin"></component>
             </div>
-            <!-- /Module Plugins -->
         </template>
       </b-card>
     </b-collapse>

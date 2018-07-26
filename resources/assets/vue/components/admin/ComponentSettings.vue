@@ -29,8 +29,8 @@
       </b-card>
     </b-collapse>
     <!-- Funcionalities -->
-    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.funcionalities></label-item-container>
-    <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
+    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.functionalities></label-item-container>
+    <b-collapse id="functionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
         <div
           v-for="(plugin, key) in component.plugins"
