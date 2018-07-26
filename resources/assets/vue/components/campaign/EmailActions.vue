@@ -224,7 +224,7 @@
       },
       _validateEmptyCampaignName() {
       	if (this.$store.getters["campaign/campaign"].campaign_data.campaign_name === '') {
-			return false;
+  			  return false;
       	} 
       	return true;
       },

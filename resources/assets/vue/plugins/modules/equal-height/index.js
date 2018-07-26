@@ -15,4 +15,5 @@ module.exports = {
   render: false,
   enabled: false,
   runBackground: true,
+  needShadowRender: true,
 };
