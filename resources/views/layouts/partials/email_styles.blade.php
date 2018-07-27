@@ -183,7 +183,7 @@
 	</style>
 <![endif]-->
 
-<!--[if gte mso]>
+<!--[if IE]>
    <style type="text/css">
         .mso-img-centered > table {
             width: auto!important;
