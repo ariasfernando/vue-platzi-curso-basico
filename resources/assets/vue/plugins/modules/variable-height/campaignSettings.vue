@@ -30,11 +30,11 @@
 
 <script>
   import _ from 'lodash';
-  import mixinValidator from '../mixins/validator';
+  import validatorMixin from '../mixins/validator';
 
   export default {
     props: ['name', 'plugin'],
-    mixins: [mixinValidator],
+    mixins: [validatorMixin],
     computed: {
       modules() {
         return this.$store.getters["campaign/modules"];

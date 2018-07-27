@@ -6,7 +6,8 @@
   </settings-container>
 </template>
 <script>
-  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import SettingsContainer from "stensul/components/common/settings/containers/SettingsContainer.vue";
+
   export default {
     props: ['name', 'plugin'],
     components: { SettingsContainer },

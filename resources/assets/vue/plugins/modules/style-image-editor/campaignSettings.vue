@@ -17,7 +17,20 @@
     <div class="plugin-wrapper-inner">
       <span>
         <label>Alt</label>
-        <el-input v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
+        
+        <p v-if="validationRules">
+          <input
+            name="alt"
+            type="text"
+            placeholder="Alt text"
+            v-model="alt"
+            v-validate.initial="validationRules"
+            :class="{'input': true, 'is-danger': hasError }">
+          <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
+        </p>
+        <p v-else>
+          <el-input v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
+        </p>
       </span>
     </div>
     <image-modal 
@@ -34,9 +47,12 @@
 <script>
 import imageService from '../../../services/image';
 import imageModal from '../../../components/common/ImageModal';
+import _ from 'lodash';
+import validatorMixin from '../mixins/validator';
 
 export default {
   props: ['name', 'plugin', 'pluginKey'],
+  mixins: [validatorMixin],
   components: {
     imageModal
   },
@@ -55,6 +71,9 @@ export default {
     },
     currentComponent() {
       return this.$store.getters['campaign/currentComponent'];
+    },
+    module() {
+      return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
     },
     component() {
       let component = {};
@@ -86,7 +105,21 @@ export default {
           value
         };
         this.$store.commit('campaign/saveComponentProperty', payload);
+        if (this.validationRules) {
+          this.validate();
+        }
       }
+    },
+    validationRules() {
+        const rules = [];
+        if(this.plugin.config.alt && this.plugin.config.alt.validations){
+          _.each(this.plugin.config.alt.validations, (e,i) => {
+            if (e) {
+              rules.push(i);
+            }
+          });
+          return rules.join('|');
+        }
     },
     hasImageMobile() {
       return this.component.image.styleOption.hasImageMobile;
