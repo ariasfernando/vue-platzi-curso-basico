@@ -198,14 +198,21 @@ const actions = {
       .catch(error => context.commit('error', error));
   },
   saveModuleData(context, data) {
-    return moduleService.saveModule(data)
+    const deferred = Q.defer();
+
+    moduleService.saveModule(data)
       .then((response) => {
         if (response.message && response.message === 'SUCCESS') {
           context.commit('saveModule', response.id);
-          return response.id;
+          deferred.resolve(response.id);
         }
       })
-      .catch(error => context.commit('error', error));
+      .catch((error) => {
+        context.commit('error', error);
+        deferred.reject(error);
+      });
+
+    return deferred.promise;
   },
   uploadImages(context, data) {
     const deferred = Q.defer();
@@ -222,15 +229,15 @@ const actions = {
     return deferred.promise;
   },
   getLibraries(context, data) {
-    imageService.getLibraries().then(response => {
+    imageService.getLibraries().then((response) => {
       response.data.push('');
       
       context.commit('setListLibraries', {
         ...data,
-        response: response.data
+        response: response.data,
       });
     });
-  }
+  },
 };
 
 module.exports = {
