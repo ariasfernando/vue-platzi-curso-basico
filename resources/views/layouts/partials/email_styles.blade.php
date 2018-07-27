@@ -183,6 +183,18 @@
 	</style>
 <![endif]-->
 
+<!--[if gte mso]>
+   <style type="text/css">
+        .mso-img-centered > table {
+            width: auto!important;
+            margin: 0 auto!important;
+        }
+        .mso-img-centered > table > tbody > tr > td {
+            margin: 0 auto!important;
+        }
+   </style>
+<![endif]-->
+
 <!--[if IEMobile]>
 	<style type="text/css">
 		td, span, p, a, h5, h6, div{font-family: Arial, Helvetica, sans-serif !important;}
