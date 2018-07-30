@@ -20,7 +20,11 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="MobileOptimized" content="320"/>
 		<meta name="viewport" content="width=device-width" />
-		<title></title>
+		@if (config('global_settings.enable_title') && isset($params['campaign_data']['email_title']))
+		<title>{{ $params['campaign_data']['email_title'] }}</title>
+        @else
+        <title></title>
+        @endif
 
 		@if(isset($params['library_config']['externalCssLink']) && !empty($params['library_config']['externalCssLink']))
 			<link href="{{ $params['library_config']['externalCssLink'] }}" rel="stylesheet">

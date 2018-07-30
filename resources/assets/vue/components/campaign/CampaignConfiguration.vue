@@ -28,10 +28,13 @@
             <span v-show="errors.has('campaignName')" class="help is-danger">{{ errors.first('campaignName') }}</span>
           </p>
         </div>
-
         <div class="form-group configuration-field configuration-nomargin" v-if="enablePreheader">
           <label for="campaignPreheader" title="The best practice is to limit preheaders to 50 characters.">Preheader Text</label>
           <input type="text" placeholder="Preheader Text" name="campaignPreheader" class="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
+        </div>
+        <div class="form-group configuration-field configuration-nomargin" v-if="enableTitle">
+          <label for="emailTitle">Email Title</label>
+          <input type="text" placeholder="Email Title" name="emailTitle" class="emailTitle" maxlength="140" :value="form.emailTitle" @blur="saveSettings"/>
         </div>
 
         <settings-container custom-class="field-Tags" label="Tags" v-if="enableTagging">
@@ -104,10 +107,12 @@
         enableTagging: false,
         enableAutoSave: false,
         enableLocking: false,
+        enableTitle: false,
         form: {
           campaignName: '',
           campaignPreheader: '',
           campaignProcess: false,
+          emailTitle: '',
           tags: []
         },
         defaultTemplateBackgroundColor() {
@@ -183,6 +188,7 @@
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
       this.form.campaignPreheader = this.campaign.campaign_preheader || '';
+      this.form.emailTitle = this.campaign.email_title || '';
 
       this.loadConfig();
     },
@@ -233,7 +239,7 @@
         }
 
         if(e.target.name in this.form){
-          this.form[e.target.name] = e.target.value;
+          this.form[e.target.name] = value;
         }
 
         this.$store.commit('campaign/saveSetting', {
@@ -246,6 +252,7 @@
           this.globalConfig = this.$store.getters["config/config"].global_settings;
           this.enableAutoSave = this.globalConfig.auto_save === '1';
           this.enablePreheader = this.globalConfig.enable_preheader === '1' && this.campaign.library_config.preheader;
+          this.enableTitle = this.globalConfig.enable_title === '1';
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -559,6 +566,9 @@
     }
     .glyphicon-star {
       color: #eac827;
+    }
+    .form-group {
+      margin-bottom: 0px;
     }
   }
 </style>
