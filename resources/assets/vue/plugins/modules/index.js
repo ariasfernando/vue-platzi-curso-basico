@@ -3,10 +3,10 @@ import backgroundColor from './background-color';
 import columnBackgroundColor from './column-background-color';
 import columnPaletteBackgroundColor from './column-palette-background-color';
 import destinationUrl from './destination-url';
-import equalHeight from './equal-height';
 import fontFamily from './font-family';
 import mobileStyles from './mobile-styles';
 import moduleBackgroundColor from './module-background-color';
+import moduleEqualHeightForColumn from './module-equal-height-for-column';
 import modulePaletteBackgroundColor from './module-palette-background-color';
 import paletteBackgroundColor from './palette-background-color';
 import styleImageEditor from './style-image-editor';
@@ -21,10 +21,10 @@ export default {
   columnBackgroundColor,
   columnPaletteBackgroundColor,
   destinationUrl,
-  equalHeight,
   fontFamily,
   mobileStyles,
   moduleBackgroundColor,
+  moduleEqualHeightForColumn,
   modulePaletteBackgroundColor,
   paletteBackgroundColor,
   styleImageEditor,
