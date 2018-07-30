@@ -5,18 +5,45 @@
 /* global Application */
 
 /* vendor import */
+import { createLocalVue } from '@vue/test-utils';
+import Vuex from 'vuex/dist/vuex';
+import { cloneDeep } from 'lodash';
 import nock from 'nock';
 /* local import */
-import store from 'store';
-import mocks from 'resources/mocks';
+import libraryStore from '@/store/libraryStore';
+import moduleStore from '@/store/moduleStore';
+import campaignStore from '@/store/campaignStore';
+import mocks from '@/resources/mocks';
+
+const localVue = createLocalVue();
+
+localVue.use(Vuex);
+
+function createStore(option) {
+  return new Vuex.Store(option);
+}
 
 /*
  * == Test: Models
  */
 describe('== Library Store ==', () => {
   let baseUrl;
+  let store;
   beforeAll(() => {
     baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
+  });
+  beforeEach(() => {
+    store = createStore({
+      strict: true,
+      modules: {
+        library: cloneDeep(libraryStore),
+        module: cloneDeep(moduleStore),
+        campaign: cloneDeep(campaignStore),
+      },
+    });
+  });
+  afterEach(() => {
+    store = null;
   });
   afterAll(() => {
     baseUrl = null;
@@ -24,7 +51,7 @@ describe('== Library Store ==', () => {
   describe('Mutations', () => {
     it('trigger "loadModulesData", the data should be been registered in the state.modules', (done) => {
       // Create fake campaign
-      let modulesData = {
+      let modulesData = [{
         _id: '5b2c13af57ea5300113fc7b2',
         type: 'studio',
         key: 'text',
@@ -34,7 +61,7 @@ describe('== Library Store ==', () => {
         status: 'publish',
         updated_at: '2018-06-21 17:07:59',
         created_at: '2018-06-21 17:07:59',
-      };
+      }];
 
       // Trigger loadCampaign mutation with fake data
       store.commit('library/loadModulesData', modulesData);
@@ -128,22 +155,25 @@ describe('== Library Store ==', () => {
           modules_data: mocks.library.getMenuItems,
         },
       };
+
       store.commit('campaign/loadCampaignData', campaignData);
+      store.commit('library/loadModulesData', mocks.library.getMenuItems);
+
       let mockObject1 = JSON.parse(JSON.stringify(mocks.library.getMenuItems[0]));
       let mockObject2 = JSON.parse(JSON.stringify(mocks.library.getMenuItems[1]));
       let compareObject = [
         { ...mockObject1, isFixed: true, fixedPosition: 0, type: 'virtual', mandatory: true },
         { ...mockObject2, isFixed: false, fixedPosition: undefined, mandatory: false },
       ];
-      let dataModule = store.getters['library/modules'];
+      let getDataModule = store.getters['library/modules'];
 
-      expect(dataModule).toEqual(compareObject);
+      expect(getDataModule).toEqual(compareObject);
 
       campaignData = null;
       mockObject1 = null;
       mockObject2 = null;
       compareObject = null;
-      dataModule = null;
+      getDataModule = null;
 
       done();
     });

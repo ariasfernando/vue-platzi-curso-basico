@@ -8,25 +8,41 @@
 
 /* vendor import */
 import Vue from 'vue';
-import Vuex from 'vuex/dist/vuex'; 
+import { createLocalVue } from '@vue/test-utils';
+import Vuex from 'vuex/dist/vuex';
+import { cloneDeep } from 'lodash';
 import nock from 'nock';
 import 'expect-more-jest';
 /* local import */
-import store from '@/store';
 import moduleStore from '@/store/moduleStore';
+import campaignStore from '@/store/campaignStore';
 import mocks from '@/resources/mocks';
 
-Vue.use(Vuex);
+const localVue = createLocalVue();
+
+localVue.use(Vuex);
+
+function createStore(option) {
+  return new Vuex.Store(option);
+}
 
 describe('== Module Store ==', () => {
   describe('trigger muttation:', () => {
     let original;
+    let store;
     beforeAll(() => {
       original = console.error;
     });
 
     beforeEach(() => {
       console.error = jest.fn();
+      store = createStore({
+        strict: true,
+        modules: {
+          module: cloneDeep(moduleStore),
+          campaign: cloneDeep(campaignStore),
+        },
+      });
     });
 
     afterEach(() => {
@@ -36,6 +52,7 @@ describe('== Module Store ==', () => {
 
     afterAll(() => {
       original = null;
+      store = null;
     });
     it('"setLoader" and expect of set "loading" state to true', (done) => {
       store.commit('module/setLoader', true);
@@ -181,24 +198,6 @@ describe('== Module Store ==', () => {
       done();
     });
     it('"saveModuleProperty" with data, expect of the "module" state has been changed property data', (done) => {
-      let modStore = new Vuex.Store({
-        strict: true,
-        modules: {
-          moduleStore,
-        },
-      });
-      let modStore2 = new Vuex.Store({
-        strict: true,
-        modules: {
-          moduleStore,
-        },
-      });
-      let modStore3 = new Vuex.Store({
-        strict: true,
-        modules: {
-          moduleStore,
-        },
-      });
       let eventData = {
         subComponent: 'image',
         link: 'style',
@@ -226,36 +225,25 @@ describe('== Module Store ==', () => {
         },
       };
 
-      modStore.commit('moduleStore/setModuleData', newStruct);
-      modStore2.commit('moduleStore/setModuleData', newStruct);
-      modStore3.commit('moduleStore/setModuleData', newStruct);
+      store.commit('module/setModuleData', newStruct);
       
-      modStore.commit('moduleStore/saveModuleProperty', eventData);
-      modStore2.commit('moduleStore/saveModuleProperty', eventData2);
-      modStore3.commit('moduleStore/saveModuleProperty', eventData3);
+      store.commit('module/saveModuleProperty', eventData);
+      store.commit('module/saveModuleProperty', eventData2);
+      store.commit('module/saveModuleProperty', eventData3);
 
-      let stateModuleProperty = modStore.state.moduleStore.module.structure.image.style;
-      let stateModuleProperty2 = modStore2.state.moduleStore.module.structure.style;
-      let stateModuleProperty3 = modStore3.state.moduleStore.module.structure;
+      let stateModuleProperty = store.state.module.module.structure;
 
-      expect(stateModuleProperty).toHaveProperty(eventData.property, eventData.value);
-      expect(stateModuleProperty2).toHaveProperty(eventData2.property, eventData2.value);
-      expect(stateModuleProperty3).toHaveProperty(eventData3.property, eventData3.value);
+      expect(stateModuleProperty.image.style).toHaveProperty(eventData.property, eventData.value);
+      expect(stateModuleProperty.style).toHaveProperty(eventData2.property, eventData2.value);
+      expect(stateModuleProperty).toHaveProperty(eventData3.property, eventData3.value);
 
-      modStore.commit('moduleStore/setModuleData', {});
-      modStore2.commit('moduleStore/setModuleData', {});
-      modStore3.commit('moduleStore/setModuleData', {});
+      store.commit('module/setModuleData', {});
 
-      modStore = null;
-      modStore2 = null;
-      modStore3 = null;
       eventData = null;
       eventData2 = null;
       eventData3 = null;
       newStruct = null;
       stateModuleProperty = null;
-      stateModuleProperty2 = null;
-      stateModuleProperty3 = null;
 
       done();
     });
@@ -313,7 +301,6 @@ describe('== Module Store ==', () => {
           verticalAligment: undefined,
         },
       };
-
       let newStruct = { 
         structure: {
           columns: [],
@@ -338,7 +325,53 @@ describe('== Module Store ==', () => {
         index: 0,
         number: 1,
       };
+      let column = {
+        id: 811955,
+        type: 'column-element',
+        container: {
+          style: {}, 
+          attribute: { width: '100%' }, 
+          styleOption: {},
+        },
+        content: {
+          style: {}, 
+          attribute: {}, 
+          styleOption: {},
+        },
+        components: [],
+        plugins: { 
+          columnBackgroundColor: { 
+            name: 'column-background-color', 
+            title: 'Background color', 
+            version: '0.0.1', 
+            author: 'emiliano@stensul.com', 
+            target: ['column'], 
+            config: {
+              defaultColors: [
+                '#ffffff', '#323c44',
+                '#cd263a', '#8d8d8d',
+                '#9e00ff', '#0000ff',
+                '#00da00', '#dada00',
+                '#ff8d00', '#ff00de',
+                '#a65628', '#848484',
+              ],
+              defaultValue: '#ffffff',
+            }, 
+            data: {}, 
+            render: true, 
+            enabled: false, 
+          }, 
+          verticalAligment: undefined,
+        },
+      };
+      let newStruct = { 
+        structure: {
+          columns: [],
+        },
+      };
 
+      store.commit('module/setModuleData', newStruct);
+      store.commit('module/addColumn', column);
       store.commit('module/removeColumns', data);
 
       let storeColumns = store.state.module.module.structure.columns;
@@ -347,6 +380,8 @@ describe('== Module Store ==', () => {
       store.commit('module/setModuleData', {});
 
       data = null;
+      column = null;
+      newStruct = null;
       storeColumns = null;
 
       done();
@@ -786,7 +821,340 @@ describe('== Module Store ==', () => {
         number: 1, 
         colId: 0,
       };
-
+      let dataComponent = {
+        el: {
+          id: 731844,
+          type: 'text-element',
+          data: { text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.' },
+          container: {
+            style: {
+              paddingTop: '5px',
+              paddingBottom: '5px',
+              paddingRight: '5px',
+              paddingLeft: '5px',
+            },
+            styleOption: {},
+            attribute: {},
+          },
+          text: {
+            style: {
+              fontFamily: 'Helvetica, Arial, Sans-serif',
+              fontSize: '12px',
+              color: '#000000',
+              fontWeight: 'normal',
+              lineHeight: '16px',
+              align: 'left',
+            },
+            styleOption: {},
+            attribute: {},
+          },
+          plugins: {
+            alignment: {
+              name: 'alignment',
+              title: 'Alignment',
+              version: '0.0.1',
+              author: 'emiliano@stensul.com',
+              target: ['button',
+                'divider',
+                'image',
+                'text',
+              ],
+              config: {
+                options: ['left',
+                  'center',
+                  'right',
+                ],
+                defaultValue: 'center',
+              },
+              data: {},
+              render: true,
+              enabled: false,
+            },
+            backgroundColor: {
+              name: 'background-color',
+              title: 'Background color',
+              version: '0.0.1',
+              author: 'emiliano@stensul.com',
+              target: ['button',
+                'divider',
+                'image',
+                'text',
+              ],
+              config: {
+                defaultColors: ['#ffffff',
+                  '#323c44',
+                  '#cd263a',
+                  '#8d8d8d',
+                  '#9e00ff',
+                  '#0000ff',
+                  '#00da00',
+                  '#dada00',
+                  '#ff8d00',
+                  '#ff00de',
+                  '#a65628',
+                  '#848484',
+                ],
+                defaultValue: '#ffffff',
+              },
+              data: {},
+              render: true,
+              enabled: false,
+            },
+            mobileStyles: {
+              name: 'mobile-styles',
+              title: 'Mobile styles',
+              version: '0.0.1',
+              author: 'matias@stensul.com',
+              target: ['styles',
+                'button',
+                'divider',
+                'image',
+                'text',
+              ],
+              config: {
+                settings: {
+                  hiddenMobile: {
+                    value: false,
+                    title: 'Hide in mobile',
+                    key: 'hidden_mobile',
+                    selector: 'tr',
+                    _class: 'st-hide-mobile',
+                  },
+                  hiddenDesktop: {
+                    value: false,
+                    title: 'Hide in desktop',
+                    key: 'hidden_desktop',
+                    selector: 'tr',
+                    _class: 'st-hide-desktop',
+                  },
+                  resetPadding: {
+                    value: false,
+                    title: 'Reset padding',
+                    key: 'reset_padding',
+                    selector: 'td:first',
+                    _class: 'st-pd-0',
+                  },
+                },
+              },
+              data: {},
+              render: true,
+              enabled: false,
+            },
+            paletteBackgroundColor: {
+              name: 'pallete-background-color',
+              title: 'Palette Background color',
+              version: '0.0.1',
+              author: 'matias@stensul.com',
+              target: ['button',
+                'divider',
+                'image',
+                'text',
+              ],
+              config: {
+                options: {
+                  bgcolor: {
+                    label: 'Background color',
+                    key: 'bgcolor',
+                    value: false,
+                    palette: ['000000',
+                      '474646',
+                      '79A8C9',
+                      'CD202C',
+                    ],
+                    defaultValue: 'transparent',
+                  },
+                },
+              },
+              data: {},
+              render: true,
+              enabled: false,
+            },
+            textOptions: {
+              name: 'text-options',
+              title: 'Text Editable',
+              version: '0.0.1',
+              author: 'emiliano@stensul.com',
+              target: ['button',
+                'text',
+              ],
+              config: {
+                options: {
+                  undo: {
+                    label: 'Undo',
+                    key: 'undo',
+                    value: false,
+                    icon: 'fa fa-undo',
+                  },
+                  redo: {
+                    label: 'Redo',
+                    key: 'redo',
+                    value: false,
+                    icon: 'fa fa-repeat',
+                  },
+                  bold: {
+                    label: 'Bold',
+                    key: 'bold',
+                    value: false,
+                    icon: 'fa fa-bold',
+                  },
+                  italic: {
+                    label: 'Italic',
+                    key: 'italic',
+                    value: false,
+                    icon: 'fa fa-italic',
+                  },
+                  underline: {
+                    label: 'Underline',
+                    key: 'underline',
+                    value: false,
+                    icon: 'fa fa-underline',
+                  },
+                  strikethrough: {
+                    label: 'Strikethrough',
+                    key: 'strikethrough',
+                    value: false,
+                    icon: 'fa fa-strikethrough',
+                  },
+                  alignleft: {
+                    label: 'Align left',
+                    key: 'alignleft',
+                    value: false,
+                    icon: 'fa fa-align-left',
+                  },
+                  aligncenter: {
+                    label: 'Align center',
+                    key: 'aligncenter',
+                    value: false,
+                    icon: 'fa fa-align-center',
+                  },
+                  alignright: {
+                    label: 'Align right',
+                    key: 'alignright',
+                    value: false,
+                    icon: 'fa fa-align-right',
+                  },
+                  superscript: {
+                    label: 'Superscript',
+                    key: 'superscript',
+                    value: false,
+                    icon: 'fa fa-superscript',
+                  },
+                  fontselect: {
+                    label: 'Font',
+                    key: 'fontselect',
+                    value: false,
+                    icon: 'fa-adapter glyphicon glyphicon-font',
+                  },
+                  fontsizeselect: {
+                    label: 'Font size',
+                    key: 'fontsizeselect',
+                    value: false,
+                    icon: 'fa-adapter glyphicon glyphicon-text-size',
+                  },
+                  bullist: {
+                    label: 'Bullet list',
+                    key: 'bullist',
+                    value: false,
+                    icon: 'fa fa-list-ul',
+                  },
+                  numlist: {
+                    label: 'Number list',
+                    key: 'numlist',
+                    value: false,
+                    icon: 'fa fa-list-ol',
+                  },
+                  forecolor: {
+                    label: 'Font color',
+                    key: 'forecolor',
+                    value: false,
+                    icon: 'font-mce-ico mce-i-forecolor',
+                    textcolor_map: ['000000',
+                      'Black',
+                      '474646',
+                      'Gray',
+                      '79a8c9',
+                      'Blue',
+                      'cd202c',
+                      'Red',
+                    ],
+                    textcolor_from_library: false,
+                    palette_name: '',
+                  },
+                  backcolor: {
+                    label: 'Background color',
+                    key: 'backcolor',
+                    value: false,
+                    icon: 'font-mce-ico mce-i-backcolor',
+                  },
+                  link: {
+                    label: 'Link',
+                    key: 'link',
+                    value: false,
+                    icon: 'fa fa-link',
+                  },
+                  styleselect: {
+                    label: 'Style Format',
+                    key: 'styleselect',
+                    value: false,
+                    icon: 'fa fa-edit',
+                  },
+                },
+                settings: {
+                  link_validate_url: {
+                    title: 'Validate Url',
+                    value: false,
+                  },
+                  truncate: {
+                    title: 'Characters Limit',
+                    value: false,
+                    type: 'number',
+                  },
+                  lines_limit: {
+                    title: 'Lines Limit',
+                    value: false,
+                    type: 'text',
+                    content: '{ "27px": 5, "29px": 4, "34px": 3 }',
+                  },
+                  fontsize_formats: {
+                    title: 'Font size',
+                    value: false,
+                    type: 'text',
+                    content: '12px 14px 16px 18px',
+                  },
+                  style_formats: {
+                    title: 'Style format',
+                    value: false,
+                    type: 'text',
+                    content: '[{"title":"27px","block":"p","styles":{"fontSize":"27px","lineHeight":"30px"}},{"title":"29px","block":"p","styles":{"fontSize":"29px","lineHeight":"32px"}},{"title":"34px","block":"p","styles":{"fontSize":"34px","lineHeight":"36px"}}]',
+                  },
+                  link_fixed_color: {
+                    title: 'Link fixed color',
+                    value: false,
+                    type: 'text',
+                    content: '#514960',
+                  },
+                },
+              },
+              render: false,
+              enabled: false,
+            },
+          },
+        },
+        index: 0,
+        colId: '0',
+      };
+      let newStruct = { 
+        structure: {
+          columns: [
+            { 
+              components: [],
+            },
+          ],
+        },
+      };
+      
+      store.commit('module/setModuleData', newStruct);
+      store.commit('module/addComponent', dataComponent);
       store.commit('module/removeComponents', data);
 
       let stateComponent = store.state.module.module.structure.columns[0].components;
@@ -794,6 +1162,8 @@ describe('== Module Store ==', () => {
       expect(stateComponent).toBeEmptyArray();
 
       data = null;
+      dataComponent = null;
+      newStruct = null;
       stateComponent = null;
 
       done();
@@ -1154,6 +1524,7 @@ describe('== Module Store ==', () => {
   describe('trigger action:', () => {
     let baseUrl;
     let original;
+    let store;
     beforeAll(() => {
       baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
       original = console.error;
@@ -1161,11 +1532,19 @@ describe('== Module Store ==', () => {
     
     beforeEach(() => {
       console.error = jest.fn();
+      store = createStore({
+        strict: true,
+        modules: {
+          module: cloneDeep(moduleStore),
+          campaign: cloneDeep(campaignStore),
+        },
+      });
     });
 
     afterEach(() => {
       console.error.mockClear();
       console.error = original;
+      store = null;
     });
 
     afterAll(() => {
@@ -3833,15 +4212,15 @@ describe('== Module Store ==', () => {
           }],
         },
       };
-
-      const modStore = new Vuex.Store({
-        state: moduleStore.state,
-        getters: moduleStore.getters,
+      let storeModule = cloneDeep(moduleStore);
+      const modStore = createStore({
+        state: storeModule.state,
+        getters: storeModule.getters,
         mutations: {
-          ...moduleStore.mutations, 
+          ...storeModule.mutations,
           setListLibraries: setDataMock,
         },
-        actions: moduleStore.actions,
+        actions: storeModule.actions,
       });
 
       modStore.commit('setModuleData', newStruct);
@@ -3874,6 +4253,7 @@ describe('== Module Store ==', () => {
         data = null;
         requestResponse = null;
         newStruct = null;
+        storeModule = null;
 
         done();
       });

@@ -2,10 +2,10 @@
 /* eslint no-shadow:0 */
 /* eslint no-console:0 */
 
-import libraryService from '../services/library';
 import {
-  map
+  map,
 } from 'lodash';
+import libraryService from '../services/library';
 
 const state = {
   modules: [],
