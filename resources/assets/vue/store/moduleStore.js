@@ -217,16 +217,21 @@ const actions = {
       .catch(error => context.commit('error', error));
   },
   saveModuleData(context, data) {
-    return moduleService.saveModule(data)
+    const deferred = Q.defer();
+
+    moduleService.saveModule(data)
       .then((response) => {
-        let output;
         if (response.message && response.message === 'SUCCESS') {
           context.commit('saveModule', response.id);
-          output = response.id;
+          deferred.resolve(response.id);
         }
-        return output;
       })
-      .catch(error => context.commit('error', error));
+      .catch((error) => {
+        context.commit('error', error);
+        deferred.reject(error);
+      });
+
+    return deferred.promise;
   },
   uploadImages(context, data) {
     const deferred = Q.defer();

@@ -71,13 +71,7 @@
         let data = this.module;
 
         this.$store.dispatch("module/saveModuleData", data)
-          .then( response => {
-            if (!response) {
-              this.$root.$toast('Error', {className: 'et-error'});
-              this.$store.commit("global/setLoader", false);
-              return;
-            }
-
+          .then(response => {
             this.$store.commit("global/setLoader", false);
             if (this.module.status === 'publish') {
               this.$router.push('/');
@@ -87,7 +81,21 @@
             this.$root.$toast('Module Saved', {className: 'et-success'});
           }).catch( error => {
             this.$store.commit("global/setLoader", false);
-            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+            if (error.status === 422) {
+              this.$root.$toast(
+                this.$options.filters.parseValidationErrors(error), {
+                  className: 'et-error',
+                  closeable: true,
+                  duration: 10000
+                }
+              );
+            } else {
+              this.$root.$toast(
+                'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+                  className: 'et-error'
+                }
+              );
+            }
           });
       },
     }

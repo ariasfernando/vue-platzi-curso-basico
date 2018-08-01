@@ -117,13 +117,6 @@
         this.$store.commit("campaign/toggleModal", 'modalEsp');
       },
     },
-    filters: {
-      capitalize: function (value) {
-        if (!value) return ''
-        value = value.toString()
-        return value.charAt(0).toUpperCase() + value.slice(1)
-      }
-    },
     created () {
       if (this.campaign.library_config.plainText) {
         this.getPlainText();
