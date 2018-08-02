@@ -126,6 +126,7 @@
     "roots": [
       "./tests/js"
     ],
+    "testEnvironment": "node",
     "coverageDirectory": "./ci/storage/tmp/coverage"
   },
   "scripts": {
