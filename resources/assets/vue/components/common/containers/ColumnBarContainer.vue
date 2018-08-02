@@ -15,7 +15,7 @@ export default {
       overflow: overlay
     }
     &::-webkit-scrollbar {
-        width: 2px; 
+        width: 4px; 
         background: transparent;
     }
     &::-webkit-scrollbar-thumb {
