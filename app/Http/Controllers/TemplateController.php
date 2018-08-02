@@ -5,8 +5,8 @@ namespace Stensul\Http\Controllers;
 use Auth;
 use StensulLocale;
 use Storage;
-use Stensul\Models\Library;
-use Stensul\Models\Campaign;
+use LibraryModel as Library;
+use CampaignModel as Campaign;
 use Illuminate\Http\Request;
 use Stensul\Providers\ModuleServiceProvider;
 
@@ -147,11 +147,13 @@ class TemplateController extends Controller
 
         return $this->renderView(
             'layouts.email',
-            ['params' => [
-                'title' => 'preview',
-                'body_html' => $campaign_data->body_html,
-                'campaign_data' => $campaign_data],
-                'library_config' => $library->config,
+            [
+                'params' => [
+                    'title' => 'preview',
+                    'body_html' => $campaign_data->body_html,
+                    'campaign_data' => $campaign_data,
+                    'library_config' => $library->config,
+                ]
             ]
         );
     }

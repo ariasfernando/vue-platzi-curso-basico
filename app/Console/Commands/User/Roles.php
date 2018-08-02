@@ -2,8 +2,8 @@
 
 namespace Stensul\Console\Commands\User;
 
-use Stensul\Models\User;
-use Stensul\Models\Role;
+use UserModel as User;
+use RoleModel as Role;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 

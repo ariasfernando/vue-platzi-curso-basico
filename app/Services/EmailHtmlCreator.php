@@ -7,9 +7,10 @@ use URL;
 use View;
 use StensulLocale;
 use Storage;
-use Stensul\Models\Library;
+use LibraryModel as Library;
+use CampaignModel;
 use League\Flysystem\AdapterInterface;
-use Stensul\Services\EmailTextCreator as Text;
+use TextCreator as Text;
 use Stensul\Providers\HelperServiceProvider as Helper;
 
 class EmailHtmlCreator
@@ -32,7 +33,7 @@ class EmailHtmlCreator
      * @param \Sensul\Models\Campaign $campaign
      * @param array                   $options
      */
-    public function __construct(\Stensul\Models\Campaign $campaign, $options = [])
+    public function __construct(CampaignModel $campaign, $options = [])
     {
         $this->campaign = $campaign;
 

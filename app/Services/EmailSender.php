@@ -3,9 +3,9 @@
 namespace Stensul\Services;
 
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Models\Campaign as ModelCampaign;
-use Stensul\Models\Library;
-use Stensul\Models\User;
+use CampaignModel;
+use LibraryModel as Library;
+use UserModel as User;
 use Activity;
 use Campaign;
 use Helper;
@@ -40,7 +40,7 @@ class EmailSender
             return ['error' => 'invalid emails'];
         }
 
-        $campaign_data = ModelCampaign::findOrFail($campaign_id);
+        $campaign_data = CampaignModel::findOrFail($campaign_id);
 
         $subject = !empty($params['subject']) ? $params['subject'] : env('MAIL_PREVIEW_SUBJECT', 'Preview email!');
 
@@ -109,7 +109,7 @@ class EmailSender
 
         $email_array = Helper::parseEmails($email);
 
-        $campaign_data = ModelCampaign::findOrFail($campaign_id);
+        $campaign_data = CampaignModel::findOrFail($campaign_id);
 
         $html_email = Campaign::html($campaign_id);
 
