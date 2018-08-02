@@ -110,7 +110,7 @@
       </tr>
       <!-- END 1 COLUMNS -->
     </table>
-    <element-selector label="Root" @element-selected="moduleSelect"></element-selector>
+    <element-selector label="Root" @element-selected="moduleSelect" selectorIcon="fa fa-cog"></element-selector>
   </div>
 </template>
     
