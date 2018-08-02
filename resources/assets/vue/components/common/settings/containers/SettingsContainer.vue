@@ -70,6 +70,10 @@ export default {
   margin-left: 0;
   margin-right: 0;
   position: relative;
+
+  .half-setting /deep/ .el-switch{
+    margin-top: 4px;
+  }
 }
 .half-setting {
   width: 50%;

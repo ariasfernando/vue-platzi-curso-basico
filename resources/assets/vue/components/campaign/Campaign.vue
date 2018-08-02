@@ -278,7 +278,7 @@
     }
 
     &::-webkit-scrollbar {
-        width: 2px; 
+        width: 4px; 
         background: transparent;
     }
     &::-webkit-scrollbar-thumb {
