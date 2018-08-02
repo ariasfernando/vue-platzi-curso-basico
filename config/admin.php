@@ -30,24 +30,28 @@ $default = [
                 "list" => [
                     "title" => "List",
                     "action" => "Admin\UserController@getIndex",
-                    "icon" => "list"
+                    "icon" => "list",
+                    "permission" => "access_admin_users"
                 ],
                 "roles" => [
                     "title" => "Roles",
                     "action" => "Admin\RoleController@getIndex",
-                    "icon" => "cog"
+                    "icon" => "cog",
+                    "permission" => "access_admin_roles"
                 ],
                 "permission" => [
                     "title" => "Permissions",
                     "action" => "Admin\PermissionController@getIndex",
-                    "icon" => "lock"
+                    "icon" => "lock",
+                    "permission" => "access_admin_permissions"
                 ],
             ]
         ],
         "settings" => [
             "title" => "Global Settings",
             "icon" => "list-alt",
-            "action" => "Admin\SettingController@getIndex"
+            "action" => "Admin\SettingController@getIndex",
+            "permission" => "access_admin_settings"
         ],
         "studio" => [
             "title" => "Studio",
@@ -56,19 +60,22 @@ $default = [
                 "library" => [
                     "title" => "Libraries",
                     "action" => "Admin\LibraryController@getIndex",
-                    "icon" => "folder-open"
+                    "icon" => "folder-open",
+                    "permission" => "access_admin_studio_libraries"
                 ],
                 "module" => [
                     "title" => "Modules",
                     "action" => "Admin\ModuleController@getIndex",
-                    "icon" => "th-list"
+                    "icon" => "th-list",
+                    "permission" => "access_admin_studio_modules"
                 ]
             ]
         ],
         "log" => [
             "title" => "Logs",
             "action" => 'Admin\LogController@getIndex',
-            "icon" => "menu-hamburger"
+            "icon" => "menu-hamburger",
+            "permission" => "access_admin_logs"
         ]
     ]
 
