@@ -1,6 +1,6 @@
 <template>
     <b-btn block class="label-item-container" :class="customClass || undefined" :style="{'cursor': collapsable !== false ? 'pointer' : 'default'}">
-      <p><i :class="`glyphicon ${icon}`"></i>{{label}}</p>
+      <p><i :class="`glyphicon ${icon}`"></i><span>{{label}}</span></p>
       <i v-if="collapsable !== false" class="glyphicon glyphicon-menu-down menu-dropdown"></i>
     </b-btn>
 </template>
@@ -31,6 +31,16 @@ export default {
     float: left;
     color: #333;
     text-transform: uppercase;
+    width: 230px;
+    text-align: left;
+    white-space: normal;
+
+    span{
+      width: 210px;
+      float: left;
+      margin-top: -2px;
+      line-height: 18px;
+    }
   }
   i {
     color: #666;
@@ -39,6 +49,7 @@ export default {
     transform: rotate(0deg);
     margin-right: 6px;
     line-height: 12px !important;
+    float: left;
   }
   &.collapsed {
     p,
