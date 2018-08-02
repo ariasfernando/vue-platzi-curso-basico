@@ -45,7 +45,7 @@
           </draggable>
         </td>
       </tr>  
-      <element-selector :label="`column ${columnId}`" @element-selected="columnSelect(columnId)"></element-selector>
+      <element-selector :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
     </table>
 
     <!-- Empty Col -->
