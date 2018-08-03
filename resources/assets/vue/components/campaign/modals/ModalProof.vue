@@ -201,7 +201,7 @@
       fetchUsers () {
         proofService.getJSON('users').then((response) => {
           if (response.status === 'success') {
-            this.users = response.data || {};
+            this.users = response.data? response.data.sort() : {};
           } else {
             this.showMessage($container, 'danger', response.message);
           }
