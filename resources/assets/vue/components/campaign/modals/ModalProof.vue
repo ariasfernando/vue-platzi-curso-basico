@@ -384,3 +384,12 @@
     },
   };
 </script>
+
+<style lang="less">
+  .dropdown-menu {
+    .open {
+      overflow-y: scroll !important;
+      width: 100%;
+    }
+  }
+</style>
