@@ -108,29 +108,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"setChangeSettingComponent" with data, expect of the "changeSettingComponent" state has been same to passed data', (done) => {
-      let dataSetting = { 
-        style: {
-          paddingBottom: '0px',
-          paddingLeft: '20px',
-          paddingRight: '20px',
-          paddingTop: '20px',
-        },
-        attribute: {
-          bgColor: '#E02A2A',
-        }, 
-      };
-
-      store.commit('module/setChangeSettingComponent', dataSetting);
-
-      let stateModuleChangeSettingComponent = store.state.module.changeSettingComponent;
-      expect(stateModuleChangeSettingComponent).toEqual(dataSetting);
-
-      dataSetting = null; 
-      stateModuleChangeSettingComponent = null;
-
-      done();
-    });
+    xit('"setChangeSettingComponent" with data, expect of the "changeSettingComponent" state has been same to passed data', () => {});
     it('"setCurrentComponent" with data, expect of the "currentComponent" state has been same to passed data', (done) => {
       let dataSetting = {
         columnId: 0,
@@ -149,11 +127,18 @@ describe('== Module Store ==', () => {
       done();
     });
     it('"clearCurrentComponent", expect of the "currentComponent" state has been empty object', (done) => {
+      let dataSetting = {
+        columnId: 0,
+        componentId: 0,
+      };
+
+      store.commit('module/setCurrentComponent', dataSetting);
       store.commit('module/clearCurrentComponent');
 
       let stateCurrentComponent = store.state.module.currentComponent;
       expect(stateCurrentComponent).toBeEmptyObject();
 
+      dataSetting = null;
       stateCurrentComponent = null;
 
       done();
@@ -386,9 +371,7 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"sortColumn" ', () => {
-      // sortColumn
-    });
+    xit('"sortColumn" ', () => {});
     it('"setColumnWidth" with data, expect in the "module" state of each column width has modified with the new value', (done) => {
       let data = {
         colId: 0,
@@ -811,10 +794,7 @@ describe('== Module Store ==', () => {
       
       done();
     });
-    xit('"attachPlugins", ', (done) => {
-      // attachPlugins
-      done();
-    });
+    xit('"attachPlugins", ', () => {});
     it('"removeComponents" with data, expect of the state "module" has been removed the component data', (done) => {
       let data = { 
         index: 0, 
@@ -1414,8 +1394,6 @@ describe('== Module Store ==', () => {
       expect(stateSaveComponentProperty4).toBeEmptyObject();
 
       store.commit('module/setModuleData', {});
-
-      store.commit('module/setModuleData', newStruct);
 
       data = null;
       data2 = null;
@@ -4257,6 +4235,92 @@ describe('== Module Store ==', () => {
 
         done();
       });
+    });
+  });
+  describe('trigger getter:', () => {
+    let store;
+    beforeEach(() => {
+      store = createStore({
+        strict: true,
+        modules: {
+          module: cloneDeep(moduleStore),
+          campaign: cloneDeep(campaignStore),
+        },
+      });
+    });
+
+    afterAll(() => {
+      store = null;
+    });
+
+    it('"module", expect state module has object', (done) => {
+      let dataModule = {
+        module: {},
+        moduleId: 'edsr345',
+        name: 'name',
+      };
+
+      store.commit('module/setModuleData', dataModule);
+
+      let getDataModule = store.getters['module/module'];
+
+      expect(getDataModule).toEqual(dataModule);
+
+      dataModule = null;
+      getDataModule = null;
+
+      done();
+    });
+    it('"currentComponent", expect state module has object', (done) => {
+      let dataSetting = {
+        columnId: 0,
+        componentId: 0,
+      };
+
+      store.commit('module/setCurrentComponent', dataSetting);
+
+      let getDataCurrentComponent = store.getters['module/currentComponent'];
+
+      expect(getDataCurrentComponent).toEqual(dataSetting);
+
+      dataSetting = null;
+      getDataCurrentComponent = null;
+      
+      done();
+    });
+    xit('"changeSettingComponent", expect state module has 1', () => {});
+    it('"activeColumn", expect state activeColumn has info', (done) => {
+      store.commit('module/setActiveColumn', 1);
+      
+      let getDataActiveColumn = store.getters['module/activeColumn'];
+
+      expect(getDataActiveColumn).toEqual(1);
+
+      getDataActiveColumn = null;
+
+      done();
+    });
+    it('"buildingMode", expect state buildingMode has \'mobile\'', (done) => {
+      store.commit('module/setBuildingMode', 'mobile');
+      
+      let getDataBuildingMode = store.getters['module/buildingMode'];
+
+      expect(getDataBuildingMode).toEqual('mobile');
+
+      getDataBuildingMode = null;
+
+      done();
+    });
+    it('"showRaw", expect state showRaw has true', (done) => {
+      store.commit('module/toggleRaw', 'mobile');
+      
+      let getDataBuildingMode = store.getters['module/showRaw'];
+
+      expect(getDataBuildingMode).toEqual(true);
+
+      getDataBuildingMode = null;
+
+      done();
     });
   });
 });
