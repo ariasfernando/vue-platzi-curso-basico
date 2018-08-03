@@ -129,12 +129,8 @@
       "./tests/js"
     ],
     "testEnvironment": "node",
-<<<<<<< HEAD
     "coverageDirectory": "./ci/storage/tmp/coverage",
     "verbose": true
-=======
-    "coverageDirectory": "./ci/storage/tmp/coverage"
->>>>>>> fe59d41490cc7f5945212b71025d8853eb8cf8fa
   },
   "scripts": {
     "dev": "NODE_ENV=development webpack --progress --config=./webpack.config.js",
