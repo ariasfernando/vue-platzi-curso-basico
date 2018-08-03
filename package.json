@@ -15,6 +15,7 @@
     "bootstrap-select": "^1.7.5",
     "bootstrap-vue": "^1.2.0",
     "clone": "^2.1.1",
+    "contrast": "^1.0.1",
     "cropit": "~0.5.1",
     "del": "^3.0.0",
     "dotenv": "^4.0.0",
@@ -44,7 +45,7 @@
     "popper.js": "^1.14.0",
     "q": "^1.5.0",
     "readdir": "0.0.13",
-    "stensul-sie-vue": "0.0.24",
+    "stensul-sie-vue": "0.0.26",
     "stringify": "^5.1.0",
     "tinymce": "~4.2.1",
     "tinymce-vue-2": "0.0.2",
@@ -125,6 +126,7 @@
     "roots": [
       "./tests/js"
     ],
+    "testEnvironment": "node",
     "coverageDirectory": "./ci/storage/tmp/coverage"
   },
   "scripts": {
