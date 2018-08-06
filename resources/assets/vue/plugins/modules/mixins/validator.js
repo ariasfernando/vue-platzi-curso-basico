@@ -91,7 +91,7 @@ export default {
                 validations = plugin.config.alt.validations;
               }
 
-              if (validations) {
+              if (validations && component.container.styleOption.enableElement && plugin.enabled) {
                 let validationsRequired = false;
                 _.each(validations, (validation, pluginIndex) => {
                   if (plugin.enabled && validation && !plugin.data.validated) {

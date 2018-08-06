@@ -15,9 +15,11 @@
 
 <script>
   import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import validatorMixin from '../mixins/validator.js';
   import _ from 'lodash';
   export default {
     props: ['name', 'plugin', 'moduleId', 'columnId', 'componentId', 'component', 'order'],
+    mixins: [ validatorMixin ],
     components: { SettingsContainer },
     computed: {
       module() {
@@ -56,8 +58,9 @@
               property: 'enableElement',
               value: value
           });
+          this.resetErrors(value,this.currentCustomModule);
         } else {
-          const element = this.getElement(elementId)
+          const element = this.getElement(elementId);
           const payload = {
             moduleId: this.moduleId,
             columnId: element.columnId,
@@ -68,6 +71,7 @@
             value: value
           };
           this.$store.commit("campaign/saveComponentProperty", payload);
+          this.resetErrors(value,this.moduleId);
         }
         this.$emit('changed', {
           elementId: elementId,
@@ -88,6 +92,14 @@
           });
         } else {
           this.toggleElement(value, elementId);
+        }
+      },
+      resetErrors(value, moduleId) {
+        this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
+        if (this.isCustom) {
+          this.registerCustomModuleDefaultValidationErrors();
+        } else {
+          this.registerStudioModuleDefaultValidationErrors();
         }
       }
     }
