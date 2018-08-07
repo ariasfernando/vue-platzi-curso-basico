@@ -36,4 +36,3 @@ const vm = new Vue({
     ProofViewer
   }
 }).$mount('#proof');
-

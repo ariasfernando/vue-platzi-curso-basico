@@ -127,10 +127,9 @@
                             <div class="row">
 
                               <!-- Field width -->
-                              <div class="col-md-3">
+                              <div class="col-md-4">
                                 <label for="templateWidth">Template width</label>
                                 <p class="control">
-
                                   <el-input-number
                                     size="mini" 
                                     v-validate="'required'"
@@ -143,10 +142,9 @@
                               </div>
 
                               <!-- Field mobile-width -->
-                              <div class="col-md-3">
+                              <div class="col-md-4">
                                 <label for="templateMobileWidth">Template Mobile Width</label>
                                 <p class="control">
-
                                   <el-input-number
                                     size="mini" 
                                     v-validate="'required'"
@@ -159,10 +157,27 @@
                                 </p>
                               </div>
 
+                              <div class="col-md-4">
+                                <label for="padding">Padding</label>
+                                <p class="control">
+                                  <el-input-number
+                                      size="mini"
+                                      v-validate="'required'"
+                                      v-model="library.config.padding"
+                                      :class="{'is-danger': errors.has('padding') }"
+                                      :name="'padding'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="row">
                               <!-- Field background-color -->
-                              <div class="col-md-3">
+                              <div class="col-md-4">
                                 <input-generic-color
                                   @setting-updated="settingUpdatedHandler"
+                                  class="label-bold"
                                   :name="'templateBackgroundColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
@@ -172,8 +187,9 @@
                               </div>
 
                               <!-- Field content-background-color -->
-                              <div class="col-md-3">
+                              <div class="col-md-4">
                                 <input-generic-color
+                                  class="label-bold"
                                   @setting-updated="settingUpdatedHandler"
                                   :name="'contentBackgroundColor'"
                                   :type="'generic-color'"
@@ -182,13 +198,25 @@
                                   :default-value="library.config.contentBackgroundColor"
                                   :element="library"></input-generic-color>
                               </div>
-                            </div>
+
+                              <!-- Field template background palettes -->
+                              <div class="col-md-4">
+                                <label for="templateBackgroundPalettes">Template background palettes</label>
+                                <p class="control">
+                                  <el-input
+                                      v-model="library.config.templateBackgroundPalettes"
+                                      name="colorPalettes"
+                                      placeholder='{ "default": "#FFFFFF", "options": { "White": "#FFFFFF", "Black": "#000000" } }"'
+                                  ></el-input>
+                                </p>
+                              </div>
+                            </div>'
 
                             <div class="row">
-
                               <!-- Field font-family -->
                               <div class="col-md-3">
                                 <input-font-family
+                                  class="label-bold"
                                   @setting-updated="settingUpdatedHandler"
                                   :name="'fontFamily'"
                                   :type="'font-family'"
@@ -201,6 +229,7 @@
                               <!-- Field font-color -->
                               <div class="col-md-3">
                                 <input-generic-color
+                                  class="label-bold"
                                   @setting-updated="settingUpdatedHandler"
                                   :name="'fontColor'"
                                   :type="'generic-color'"
@@ -248,6 +277,7 @@
                               <!-- Field link-color -->
                               <div class="col-md-3">
                                 <input-generic-color
+                                  class="label-bold"
                                   @setting-updated="settingUpdatedHandler"
                                   :name="'linkColor'"
                                   :type="'generic-color'"
@@ -266,21 +296,6 @@
                                     size="mini"
                                     @click.native="toggleUnderline"
                                   ></el-button>
-                                </p>
-                              </div>
-
-                              <div class="col-md-3">
-                                <label for="padding">Padding</label>
-                                <p class="control">
-
-                                  <el-input-number
-                                    size="mini" 
-                                    v-validate="'required'"
-                                    v-model="library.config.padding"
-                                    :class="{'is-danger': errors.has('padding') }"
-                                    :name="'padding'"
-                                  ></el-input-number>
-                                  <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
                                 </p>
                               </div>
 
@@ -916,10 +931,11 @@
       width: 50%;
     }
 
-
-
-    label{
+    label, .label-bold label {
       font-family: 'Open Sans', Arial, serif;
+      font-weight: bold !important;
+      font-size: 13px !important;
+      width: 100% !important;
     }
 
     select{

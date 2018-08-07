@@ -58,6 +58,14 @@
           </template>
         </settings-container>
 
+        <settings-container label="Email Color" v-if="campaign.library_config.templateBackgroundPalettes">
+
+          <template slot="setting-bottom" v-if="templatePalette">
+            <compact-picker ref="compact" v-model="templateBackgroundColor" :palette="Object.values(templatePalette.options)"></compact-picker>
+          </template>
+
+        </settings-container>
+
         <div class="config-box-divider" v-if="enableAutoSave">
           <label for="autoSave" class="pull-left">Auto Save</label>
           <toggle-button class="pull-right" :value="campaign.auto_save" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange"></toggle-button>
@@ -78,13 +86,15 @@
 
 <script>
   import _ from 'lodash';
+  import { Compact } from 'vue-color';
   import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
   import secondarySpinner from '../common/secondarySpinner.vue';
 
   export default {
     components: {
       SettingsContainer,
-      secondarySpinner
+      secondarySpinner,
+      'compact-picker': Compact
     },
     name: 'CampaignConfiguration',
     data () {
@@ -99,6 +109,14 @@
           campaignPreheader: '',
           campaignProcess: false,
           tags: []
+        },
+        defaultTemplateBackgroundColor() {
+          let defaultTemplateBackgroundColor = '#FFFFFF';
+          if (this.campaign.library_config.templateBackgroundColor) {
+            defaultTemplateBackgroundColor = JSON.parse(this.campaign.library_config.templateBackgroundPalettes).default
+          }
+
+          return defaultTemplateBackgroundColor
         },
         globalConfig: {},
         campaignConfig: {},
@@ -137,6 +155,24 @@
       },
       secondaryLoading() {
         return this.$store.state.global.secondaryLoading
+      },
+      templateBackgroundColor: {
+        get() {
+          return { hex: this.campaign.campaign_settings.templateBackgroundColor || this.templatePalette.default };
+        },
+        set(value) {
+          const campaignSettings = {
+            templateBackgroundColor: value.hex
+          };
+
+          this.$store.commit('campaign/saveCampaignData', {
+            name: 'campaign_settings',
+            value: campaignSettings,
+          });
+        }
+      },
+      templatePalette() {
+        return this.campaign.library_config.templateBackgroundPalettes ? JSON.parse(this.campaign.library_config.templateBackgroundPalettes) : undefined
       },
     },
 

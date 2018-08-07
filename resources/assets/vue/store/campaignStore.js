@@ -170,7 +170,11 @@ function campaignStore() {
         state.editedSettings[setting.name] = setting.value;
       },
       saveCampaignData(state, payload) {
-        state.campaign.campaign_data[payload.name] = payload.value;
+        const update = {};
+        update[payload.name] = payload.value;
+        const newData = _.extend(clone(state.campaign.campaign_data), update);
+
+        state.campaign.campaign_data = newData;
       },
       toggleModal(state, modalName) {
         state[modalName] = !state[modalName];
@@ -225,8 +229,10 @@ function campaignStore() {
         state.dirty = true;
       },
       saveColumnAttribute(state, data) {
-        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].attribute;
-        attributes[data.attribute] = data.attributeValue;
+        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
+        const newData = {};
+        newData[data.attribute] = data.attributeValue;
+        state.modules[data.moduleId].structure.columns[data.columnId].container.attribute = { ...attributes, ...newData };
         state.dirty = true;
       },
       saveModuleAttribute(state, data) {

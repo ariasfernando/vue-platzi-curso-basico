@@ -4,6 +4,7 @@ namespace Stensul\Services;
 
 use StensulLocale;
 use TextConverter;
+use CampaignModel;
 
 class EmailTextCreator
 {
