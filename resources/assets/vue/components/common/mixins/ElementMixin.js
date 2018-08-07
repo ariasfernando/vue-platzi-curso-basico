@@ -71,6 +71,7 @@ export default {
         'font-weight': element.style.fontWeight,
         'letter-spacing': element.style.letterSpacing,
         'line-height': element.style.lineHeight,
+        'text-transform': element.style.textTransform,
       };
     },
   },
