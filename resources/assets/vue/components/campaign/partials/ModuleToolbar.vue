@@ -41,6 +41,11 @@
             });
           });
         }
+
+        if (this.module.type === "custom" && "hasConfig" in this.module) {
+          hasConfig = this.module.hasConfig;
+        }
+
         return hasConfig;
       },
     },
@@ -53,7 +58,7 @@
           this.$store.commit("campaign/setCurrentModule", this.moduleId);
           this.$store.commit("campaign/unsetCustomModule");
         }
-
+        this.$store.commit("campaign/unsetCurrentCustomComponent");
       },
       clone(){
         this.addModule(this.module, this.moduleId + 1);

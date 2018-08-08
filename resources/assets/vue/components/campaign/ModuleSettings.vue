@@ -1,5 +1,5 @@
 <template>
-  <div class="column-settings section-box" v-if="module">
+  <div class="column-settings section-box" v-if="module && module.type === 'studio'">
     <h2>
       <i class="glyphicon glyphicon-pause"></i> Column Styles
     </h2>
