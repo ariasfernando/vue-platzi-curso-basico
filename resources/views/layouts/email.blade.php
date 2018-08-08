@@ -62,7 +62,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 				@endif
 			@endif
         @endif
-        @if (config('global_settings.enable_preheader') && isset($params['library_config']['preheader']) && $params['library_config']['preheader'])
+        @if (isset($params['library_config']['preheader']) && $params['library_config']['preheader'])
             @if(isset($params['preheader_preview']))
                     {{-- PREVIEW PREHEADER --}}
                     <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{$params['preheader_preview'] or ''}}

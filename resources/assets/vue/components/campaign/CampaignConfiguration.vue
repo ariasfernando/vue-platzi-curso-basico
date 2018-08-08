@@ -255,7 +255,7 @@
         this.$store.dispatch("config/getConfig", 'global_settings').then(response => {
           this.globalConfig = this.$store.getters["config/config"].global_settings;
           this.enableAutoSave = this.globalConfig.auto_save === '1';
-          this.enablePreheader = this.globalConfig.enable_preheader === '1' && this.campaign.library_config.preheader;
+          this.enablePreheader = this.campaign.library_config.preheader;
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
