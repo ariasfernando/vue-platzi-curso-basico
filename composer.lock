@@ -119,16 +119,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.64.7",
+            "version": "3.64.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "1fa00e20adc697ae996b778528254d3acff39eaa"
+                "reference": "14a8d1499450a755d6c1f147ea76eabdc1666a9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/1fa00e20adc697ae996b778528254d3acff39eaa",
-                "reference": "1fa00e20adc697ae996b778528254d3acff39eaa",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/14a8d1499450a755d6c1f147ea76eabdc1666a9d",
+                "reference": "14a8d1499450a755d6c1f147ea76eabdc1666a9d",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-08-07T20:30:32+00:00"
+            "time": "2018-08-08T20:28:00+00:00"
         },
         {
             "name": "bjeavons/zxcvbn-php",
@@ -1210,16 +1210,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.6.29",
+            "version": "v5.6.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "acc6b5c54ab196d3358f60acc5f55d9ebaaccc02"
+                "reference": "81a8f999461b6f45fe797abf88486f17a8659c09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/acc6b5c54ab196d3358f60acc5f55d9ebaaccc02",
-                "reference": "acc6b5c54ab196d3358f60acc5f55d9ebaaccc02",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/81a8f999461b6f45fe797abf88486f17a8659c09",
+                "reference": "81a8f999461b6f45fe797abf88486f17a8659c09",
                 "shasum": ""
             },
             "require": {
@@ -1345,7 +1345,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-07-26T16:01:26+00:00"
+            "time": "2018-08-09T19:19:52+00:00"
         },
         {
             "name": "laravel/socialite",
@@ -2646,17 +2646,17 @@
         },
         {
             "name": "stensul/media-gallery",
-            "version": "2.3.3",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
                 "url": "git@git.stensuldev.net:composer/media-gallery.git",
-                "reference": "d845974291e68502360bca5f03565bbcf4a843c3"
+                "reference": "7b8a8c7336fa670f845574f1ffe33d95ce527077"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.3.3-eb42e7.zip",
-                "reference": "d845974291e68502360bca5f03565bbcf4a843c3",
-                "shasum": "cbaa4053ca25e9c9056fdb8749297e40ea0d0087"
+                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.3.4-7a275f.zip",
+                "reference": "7b8a8c7336fa670f845574f1ffe33d95ce527077",
+                "shasum": "f3c97c48a62b234b67563d693820b67cb7eb53cd"
             },
             "require": {
                 "illuminate/support": "5.6.*",
@@ -2684,7 +2684,7 @@
                 }
             ],
             "description": "Media gallery for admin",
-            "time": "2018-08-03T13:29:56+00:00"
+            "time": "2018-08-08T19:51:46+00:00"
         },
         {
             "name": "stensul/php-imageproxy",
