@@ -110,7 +110,7 @@
       </tr>
       <!-- END 1 COLUMNS -->
     </table>
-    <element-selector label="Root" @element-selected="moduleSelect" selectorIcon="fa fa-cog"></element-selector>
+    <element-selector label="Root" @element-selected="moduleSelect" :active="isActiveGeneralSettings" selectorIcon="fa fa-cog"></element-selector>
   </div>
 </template>
     
@@ -162,6 +162,9 @@
     computed: {
       module() {
         return this.$store.getters["module/module"];
+      },
+      isActiveGeneralSettings() {
+        return this.currentComponent.columnId === undefined && this.currentComponent.componentId === undefined;
       },
     },   
     methods: {

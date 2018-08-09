@@ -8,6 +8,11 @@ export default {
     'component',
     'context',
   ],
+  computed: {
+    currentComponent() {
+      return this.$store.getters["module/currentComponent"];
+    },
+  },
   methods: {
     // Get an string of classes
     getAttributeClasses(component) {
@@ -67,6 +72,9 @@ export default {
         columnId,
         componentId: undefined,
       });
+    },
+    isColumnSelect(columnId) {
+      return this.currentComponent.columnId === columnId && this.currentComponent.componentId === undefined;
     },
     fontStyles(element) {
       return {

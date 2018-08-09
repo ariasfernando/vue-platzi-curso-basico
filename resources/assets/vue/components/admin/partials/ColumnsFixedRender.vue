@@ -49,7 +49,7 @@
               </div>
             </div>
           </draggable>
-          <element-selector :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
+          <element-selector :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
         </td>
       </tr>
     </table>
