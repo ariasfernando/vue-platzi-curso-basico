@@ -1,12 +1,12 @@
 <template>
-  <button class="element-selector" @click="e => $emit('element-selected', e)">
+  <button :class="`element-selector ${active ? 'active': ''}`" @click="e => $emit('element-selected', e)" >
     <i :class="selectorIcon"  aria-hidden="true"></i> {{label}}
   </button>
 </template>
 
 <script>
   export default {
-    props: ['label', 'selectorIcon'],
+    props: ['label', 'selectorIcon', 'active'],
     name: 'element-selector',
   };
   
@@ -30,6 +30,9 @@
 
   &:hover{
     background: #aaaaaa;
+  }
+  &.active{
+    background: red;
   }
 }
 </style>

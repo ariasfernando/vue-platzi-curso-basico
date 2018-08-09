@@ -58,6 +58,12 @@
             </template>
           </settings-container>
 
+          <settings-container label="Email Color" v-if="campaign.library_config.templateBackgroundPalettes">
+            <template slot="setting-bottom" v-if="templatePalette">
+              <compact-picker ref="compact" v-model="templateBackgroundColor" :palette="Object.values(templatePalette.options)"></compact-picker>
+            </template>
+          </settings-container>
+
           <settings-container v-if="enableAutoSave" label="Auto Save" class="last-saved">
             <template slot="setting-right">
               <toggle-button class="pull-right" :value="campaign.auto_save" id="autoSave" @change="autoSaveChange"></toggle-button>
@@ -78,6 +84,7 @@
 
 <script>
   import _ from 'lodash';
+  import { Compact } from 'vue-color';
   import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
   import secondarySpinner from '../common/secondarySpinner.vue';
   import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
@@ -88,7 +95,8 @@
       SettingsContainer,
       secondarySpinner,
       LabelItemContainer,
-      GroupContainer
+      GroupContainer,
+      'compact-picker': Compact
     },
     name: 'CampaignConfiguration',
     data () {
@@ -103,6 +111,14 @@
           campaignPreheader: '',
           campaignProcess: false,
           tags: []
+        },
+        defaultTemplateBackgroundColor() {
+          let defaultTemplateBackgroundColor = '#FFFFFF';
+          if (this.campaign.library_config.templateBackgroundColor) {
+            defaultTemplateBackgroundColor = JSON.parse(this.campaign.library_config.templateBackgroundPalettes).default
+          }
+
+          return defaultTemplateBackgroundColor
         },
         globalConfig: {},
         campaignConfig: {},
@@ -149,6 +165,24 @@
         set(value) {
           this.saveCampaignName(value);
         },
+      },
+      templateBackgroundColor: {
+        get() {
+          return { hex: this.campaign.campaign_settings.templateBackgroundColor || this.templatePalette.default };
+        },
+        set(value) {
+          const campaignSettings = {
+            templateBackgroundColor: value.hex
+          };
+
+          this.$store.commit('campaign/saveCampaignData', {
+            name: 'campaign_settings',
+            value: campaignSettings,
+          });
+        }
+      },
+      templatePalette() {
+        return this.campaign.library_config.templateBackgroundPalettes ? JSON.parse(this.campaign.library_config.templateBackgroundPalettes) : undefined
       },
     },
 

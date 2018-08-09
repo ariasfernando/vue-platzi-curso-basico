@@ -3,8 +3,8 @@
 namespace Stensul\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Stensul\Services\ModelKeyManager;
-use Stensul\Models\Module;
+use ModelKeyManager;
+use ModuleModel as Module;
 
 class ModuleServiceProvider extends ServiceProvider
 {
