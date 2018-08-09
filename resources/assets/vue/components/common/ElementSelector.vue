@@ -32,7 +32,7 @@
     background: #aaaaaa;
   }
   &.active{
-    background: red;
+    background: #78dcd6;
   }
 }
 </style>
