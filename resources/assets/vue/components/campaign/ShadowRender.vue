@@ -52,8 +52,7 @@ export default {
         let html = $('table#emailCanvas').clone();
         html.find('.st-remove-element').remove();
         html = Application.utils.removeWrappers(html);
-        html = html[0].outerHTML
-        this.setHtml(html);
+        this.setHtml(html[0].outerHTML);
       }, 100);
     }
   },

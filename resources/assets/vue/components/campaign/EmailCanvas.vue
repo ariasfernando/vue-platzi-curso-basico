@@ -365,10 +365,6 @@
     }  
 
   }
-  // Hack inline-block
-  .stx-wrapper {
-    font-size: 0;
-  }
   .applelinks{
     color:#6b6b6b !important; 
     text-decoration: none !important; 
