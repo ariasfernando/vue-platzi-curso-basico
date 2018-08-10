@@ -69,18 +69,7 @@ export default {
     });
 
     // Remove wrappers
-    const $wrapperElementRemove = $cleanedHtml.find('.stx-wrapper');
-
-    $.each($wrapperElementRemove, (i, element) => {
-      const $element = $(element);
-
-        // Replace element with the content element.
-      if ($element.is('table')) {
-        $element.replaceWith($element.find('td:first').html());
-      } else {
-        $element.replaceWith($element.html());
-      }
-    });
+    $cleanedHtml = Application.utils.removeWrappers($cleanedHtml);
 
     // Remove every class starting with "stx-"
     $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));

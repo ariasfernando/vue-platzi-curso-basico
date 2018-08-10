@@ -1099,4 +1099,24 @@ Application.utils = {
         }
         return true;
     },
+
+    // Remove wrappers element
+    removeWrappers: function(html) {
+      const $wrapperElementRemove = html.find('.stx-wrapper');
+
+      $.each($wrapperElementRemove, (i, element) => {
+        const $element = $(element);
+
+          // Replace element with the content element.
+        if ($element.is('table')) {
+          $element.replaceWith($element.find('td:first').html());
+        } else {
+          $element.replaceWith($element.html());
+        }
+      });
+      if (html.find('.stx-wrapper').length > 0) {
+        this.removeWrappers(html);
+      }
+      return html;
+    },
 };
