@@ -136,12 +136,8 @@
   "scripts": {
     "dev": "NODE_ENV=development webpack --progress --config=./webpack.config.js",
     "watch": "NODE_ENV=development webpack --watch --progress --hide-modules --config=./webpack.config.js",
-    "hot": "NODE_ENV=development webpack-dev-server --inline --hot --config=./webpack.config.js",
     "production": "NODE_ENV=production webpack --progress --hide-modules --config=./webpack.config.js",
     "watch:test": "npm t -- --watch",
-    "check-coverage": "istanbul check-coverage --statements 10 --branches 10 --functions 10 --lines 10",
-    "test:mocha": "mocha tests/js/*.js --compilers js:babel-register",
-    "test:single": "istanbul cover --root resources/assets/js/vue ./node_modules/.bin/_mocha -- -R spec tests/js/*.test.js --compilers js:babel-register",
     "cover": "npm t -- --coverage",
     "test": "jest"
   }
