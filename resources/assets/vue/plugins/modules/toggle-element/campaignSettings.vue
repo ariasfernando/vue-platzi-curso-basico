@@ -97,9 +97,9 @@
       resetErrors(value, moduleId) {
         this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
         if (this.isCustom) {
-          this.registerCustomModuleDefaultValidationErrors();
+          this.registerCustomModuleDefaultValidationErrors(moduleId);
         } else {
-          this.registerStudioModuleDefaultValidationErrors();
+          this.registerStudioModuleDefaultValidationErrors(moduleId);
         }
       }
     }
