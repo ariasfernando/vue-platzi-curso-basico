@@ -3,14 +3,21 @@
 </template>
 
 <script>
-// This component are in BETA version.
-// The render HAS NO HEAD.
 // The plugins that use it should updateIframe() it when it is necessary.
 // For a work correct in the plugin need a timeout for get the new render.
 import _ from 'lodash';
 export default {
   name:'shadow-render',
+
+  data() {
+      return {
+        header : '',
+      };
+  },
   computed: {
+    campaign() {
+      return this.$store.getters['campaign/campaign'];
+    },
     modules() {
       return this.$store.getters['campaign/modules'];
     },
@@ -40,19 +47,38 @@ export default {
       return render;
     }
   },
+  mounted(){
+    this.setHead();
+  },
   methods: {
+    setHead () {
+      let url = "/template/email-preview/" + this.campaign.campaign_id + '?no_body=true';
+
+        var request = Application.utils.doAjax(url, {type :'GET', dataType: "html", data: {campaign_id: this.campaign.campaign_id}});
+        let _this = this;
+        // Ajax: On Success
+        request.done(function(response){
+          _this.header = response;
+        });
+
+        // Ajax: On Fail
+        request.fail(function(jqXHR){
+        });
+    },
     isRenderSetting(plugin, key) {
       return plugin.enabled && plugin.needShadowRender;
-    },
-    setHtml(html) {
-      $('#shadowRender').contents().find('body').html(html);
     },
     updateIframe(){
       setTimeout(() => {
         let html = $('table#emailCanvas').clone();
         html.find('.st-remove-element').remove();
         html = Application.utils.removeWrappers(html);
-        this.setHtml(html[0].outerHTML);
+        this.header
+          ? (html = this.header.replace('</body>', html[0].outerHTML + '</body>'))
+          : (html = html[0].outerHTML);
+        document.getElementById('shadowRender').contentWindow.document.open();
+        document.getElementById('shadowRender').contentWindow.document.write(html);
+        document.getElementById('shadowRender').contentWindow.document.close();
       }, 100);
     }
   },
