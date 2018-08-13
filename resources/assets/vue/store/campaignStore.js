@@ -7,7 +7,7 @@ import {
   isArray,
   extend,
   isEqual,
-  each,
+  each
 } from 'lodash';
 import _ from 'lodash';
 
@@ -29,6 +29,7 @@ function campaignStore() {
       currentModuleId: undefined,
       currentCustomModuleId: undefined,
       currentComponent: {},
+      currentCustomComponent: {},
       activeModule: undefined,
       modalCode: false,
       modalComplete: false,
@@ -70,6 +71,9 @@ function campaignStore() {
       },
       currentComponent(state) {
         return state.currentComponent;
+      },
+      currentCustomComponent(state) {
+        return state.currentCustomComponent;
       },
       currentModule(state) {
         return state.currentModuleId;
@@ -199,6 +203,12 @@ function campaignStore() {
       unsetCurrentComponent(state) {
         state.currentComponent = {};
       },
+      setCurrentCustomComponent(state, data) {
+        state.currentCustomComponent = data;
+      },
+      unsetCurrentCustomComponent(state) {
+        state.currentCustomComponent = {};
+      },
       setActiveModule(state, moduleId) {
         state.activeModule = moduleId;
       },
@@ -230,13 +240,13 @@ function campaignStore() {
         Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
-      saveColumnProperty(state, data) {
-        const columns = state.modules[data.moduleId].structure.columns[data.columnId];
-        const subComponent = data.subComponent ? columns[data.subComponent] : columns;
-        const properties = data.link ? subComponent[data.link] : subComponent;
-        Vue.set(properties, data.property, data.value);
+      saveComponentAttribute(state, data) {
+        // this should be deprecated, is unused
+        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
+        attributes[data.attribute] = data.attributeValue;
         state.dirty = true;
       },
+      
       saveColumnAttribute(state, data) {
         // DEPRECATE
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
@@ -244,6 +254,20 @@ function campaignStore() {
         newData[data.attribute] = data.attributeValue;
         state.modules[data.moduleId].structure.columns[data.columnId].container.attribute = { ...attributes, ...newData };
         state.dirty = true;
+      },
+      saveColumnProperty(state, data) {
+        const columns = state.modules[data.moduleId].structure.columns;
+        const column = columns[data.columnId];
+        const columnClone = _.cloneDeep(column);
+        const subComponent = data.subComponent ? column[data.subComponent] : column;
+        const properties = data.link ? subComponent[data.link] : subComponent;
+        Vue.set(properties, data.property, data.value);
+        state.dirty = true;
+        // hack to make the column array reactive
+        // note: for more info check vue documentation #Array-Change-Detection
+        if (!_.isEqual(columnClone, column)) {
+          Vue.set(columns, data.columnId, column);
+        }
       },
       saveModuleAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.attribute;
@@ -288,13 +312,40 @@ function campaignStore() {
         }
         Vue.set(state.modules[data.moduleId].data.images[data.key], data.field, data.value);
       },
+      saveCustomModuleDataFieldByIndex(state, data) {
+        // Prevent empty arrays returned by php-mongo
+        if (_.isArray(state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data = {};
+        }
+
+        if (!(data.field in state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data[data.field] = [];
+        }
+
+        if (!(data.index in state.modules[data.moduleId].data[data.field])) {
+          state.modules[data.moduleId].data[data.field][data.index] = {};
+        }
+
+        const newData = _.extend(clone(state.modules[data.moduleId].data[data.field][data.index]), data.value);
+        state.modules[data.moduleId].data[data.field][data.index] = newData;
+        state.modules[data.moduleId].data[data.field] = clone(state.modules[data.moduleId].data[data.field]);
+        state.dirty = true;
+      },
       saveCustomModuleDataField(state, data) {
         // Prevent empty arrays returned by php-mongo
         if (isArray(state.modules[data.moduleId].data)) {
           state.modules[data.moduleId].data = {};
         }
+        if (!(data.field in state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data[data.field] = {};
+        }
 
-        state.modules[data.moduleId].data[data.field] = data.value;
+        if ("merge" in data && data.merge === true) {
+          const newData = _.extend(clone(state.modules[data.moduleId].data[data.field]), data.value);
+          state.modules[data.moduleId].data[data.field] = newData;
+        } else {
+          state.modules[data.moduleId].data[data.field] = data.value;
+        }
         state.dirty = true;
       },
       setEditorOptions(state, toolbar) {

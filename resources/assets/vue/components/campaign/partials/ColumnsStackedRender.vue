@@ -1,23 +1,25 @@
 <template>
     <div class="stx-wrapper">
       <table
+        :data-column-id="columnId"
         class="st-mobile-full-width st-mso-full-width"
         align="left"
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :style="{'background-color' : column.container.attribute.bgcolor}"
-        :bgcolor="column.container.attribute.bgcolor"
+        :width="calculeWidthColumnPx(columnId)"
+        :style="{width: calculeStyleWidthColumnPx(columnId)}"
       >
         <tr>
           <td
-            :width="calculeWidthColumnPx(columnId)"
-            :height="column.container.attribute.height"
+            width="100%"
+            style="width:100%;"
             :style="styles(columnId)"
             :bgcolor="column.container.attribute.bgcolor"
-            :valign="column.container.attribute.valign|| 'top'"
+            :valign="column.container.attribute.valign || 'top'"
             :align="column.container.attribute.align || 'center'"
-            :class="column.container.attribute.classes ||''"
+            :class="column.container.attribute.classes || ''"
+            :height="column.container.attribute.height"
           >
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
                   <component
@@ -116,8 +118,8 @@
             [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
           };
         });
-        styles.push({'width': this.calculeStyleWidthColumnPx(columnId)}) 
-        styles.push({'height': this.module.structure.columns[columnId].container.attribute.height + 'px'}) 
+        styles.push({'background-color': this.module.structure.columns[columnId].container.attribute.bgcolor});
+        styles.push({'height': this.module.structure.columns[columnId].container.attribute.height + 'px'});
         return styles;
       },
       msoBetweenComment(columnId) {
@@ -145,7 +147,7 @@
             componentId:data.componentId,
           });
         }, 50);
-      },
+      }
     }
   };
 </script>

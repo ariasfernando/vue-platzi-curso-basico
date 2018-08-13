@@ -29,20 +29,22 @@ export default {
             render = true;
           }
         });
-        _.each(module.structure.columns, (column, columnIndex) => {
-          _.each(column.plugins, (plugin, pluginKey) => {
-            if (this.isRenderSetting(plugin, pluginKey)) {
-              render = true;
-            }
-          });
-          _.each(column.components, (component, componentIndex) => {
-            _.each(component, (plugin, pluginKey) => {
+        if(module.structure){
+          _.each(module.structure.columns, (column, columnIndex) => {
+            _.each(column.plugins, (plugin, pluginKey) => {
               if (this.isRenderSetting(plugin, pluginKey)) {
                 render = true;
               }
             });
+            _.each(column.components, (component, componentIndex) => {
+              _.each(component.plugins, (plugin, pluginKey) => {
+                if (this.isRenderSetting(plugin, pluginKey)) {
+                  render = true;
+                }
+              });
+            });
           });
-        });
+        }
       });
       if(!this.headEmail) {
         this.setHeadEmail();
