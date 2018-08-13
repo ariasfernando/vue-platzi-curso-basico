@@ -11,7 +11,7 @@ export default {
 
   data() {
       return {
-        header : '',
+        headEmail : '',
       };
   },
   computed: {
@@ -44,21 +44,21 @@ export default {
           });
         });
       });
+      if(!this.headEmail) {
+        this.setHeadEmail();
+      }
       return render;
     }
   },
-  mounted(){
-    this.setHead();
-  },
   methods: {
-    setHead () {
+    setHeadEmail () {
       let url = "/template/email-preview/" + this.campaign.campaign_id + '?no_body=true';
 
         var request = Application.utils.doAjax(url, {type :'GET', dataType: "html", data: {campaign_id: this.campaign.campaign_id}});
         let _this = this;
         // Ajax: On Success
         request.done(function(response){
-          _this.header = response;
+          _this.headEmail = response;
         });
 
         // Ajax: On Fail
@@ -73,8 +73,8 @@ export default {
         let html = $('table#emailCanvas').clone();
         html.find('.st-remove-element').remove();
         html = Application.utils.removeWrappers(html);
-        this.header
-          ? (html = this.header.replace('</body>', html[0].outerHTML + '</body>'))
+        this.headEmail
+          ? (html = this.headEmail.replace('</body>', html[0].outerHTML + '</body>'))
           : (html = html[0].outerHTML);
         document.getElementById('shadowRender').contentWindow.document.open();
         document.getElementById('shadowRender').contentWindow.document.write(html);
