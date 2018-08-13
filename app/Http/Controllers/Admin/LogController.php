@@ -3,11 +3,11 @@
 namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
-use Stensul\Http\Controllers\Controller as Controller;
+use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Stensul\Models\Log;
+use LogModel as Log;
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
+use Stensul\Http\Middleware\AdminAuthenticate;
 
 class LogController extends Controller
 {

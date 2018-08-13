@@ -3,10 +3,10 @@
 namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
-use Stensul\Http\Controllers\Controller as Controller;
+use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Stensul\Models\Setting;
-use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
+use SettingModel as Setting;
+use Stensul\Http\Middleware\AdminAuthenticate;
 
 class SettingController extends Controller
 {

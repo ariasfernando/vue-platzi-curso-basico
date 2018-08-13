@@ -1,7 +1,5 @@
 import Q from 'q';
-import _ from 'underscore-contrib';
 import request from '../utils/request';
-import Tag from '../models/tag';
 import endpoints from '../resources/endpoints';
 
 export default {

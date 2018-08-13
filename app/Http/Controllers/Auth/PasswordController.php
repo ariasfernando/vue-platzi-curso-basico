@@ -8,7 +8,7 @@ use Activity;
 use Challenge;
 use Carbon\Carbon;
 use PasswordPolicy;
-use Stensul\Models\User;
+use UserModel as User;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
 use Stensul\Http\Controllers\Controller;
@@ -78,7 +78,7 @@ class PasswordController extends Controller
         // Challenge validation
         if (!Challenge::provider()->isValid($request)) {
             Activity::log('User login fail [ERROR_CAPTCHA]');
-            return redirect()->back()->withErrors(['status' => 'Captcha validation is required']);
+            return redirect()->back()->withErrors(['status' => 'Please confirm you are not a robot.']);
         }
 
         $this->validate($request, ['email' => 'required|email']);

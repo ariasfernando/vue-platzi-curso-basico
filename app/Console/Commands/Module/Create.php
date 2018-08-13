@@ -2,9 +2,9 @@
 
 namespace Stensul\Console\Commands\Module;
 
-use Stensul\Models\Module;
+use ModuleModel as Module;
 use Illuminate\Console\Command;
-use Stensul\Services\ModelKeyManager;
+use ModelKeyManager;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\InputOption;
 

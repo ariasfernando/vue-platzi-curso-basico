@@ -246,7 +246,7 @@ export default {
         link_title: false,
         link_text_to_display: false,
         link_fixed_color: false,
-        link_fixed_color_enabled: this.textOptions.config.settings.link_fixed_color.value,
+        link_fixed_color_enabled: this.textOptions.config.settings.link_fixed_color ? this.textOptions.config.settings.link_fixed_color.value : false,
         link_fixed_styles: false, // '{"text-decoration": "underline"}',
         button_inline_color: true,
         // persist_styles: JSON.stringify([{"ul":'{"mso-list": "disc"}'}]),
@@ -390,6 +390,16 @@ export default {
           }
         });
       }
+
+        // Extend plugins
+        if ('extend_plugins' in this.textOptions.config.settings) {
+          settings.plugins = [settings.plugins, this.textOptions.config.settings.extend_plugins.join(' ')].join(' ');
+        }
+
+        // Extend toolbar
+        if ('extend_toolbar' in this.textOptions.config.settings) {
+          settings.plugins = [settings.plugins, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
+        }
 
       _.extend(settings, customSettings);
 

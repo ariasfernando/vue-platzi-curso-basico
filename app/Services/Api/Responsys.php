@@ -4,7 +4,7 @@ namespace Stensul\Services\Api;
 
 use Auth;
 use Activity;
-use Stensul\Models\Upload;
+use UploadModel as Upload;
 use GuzzleHttp\Client as Client;
 use MongoDB\BSON\ObjectID as ObjectID;
 

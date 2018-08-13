@@ -9,7 +9,6 @@
     <section class="col-md-4 col-sm-10 col-xs-10 beta-login">
         @if (count($errors) > 0)
             <div class="alert alert-danger">
-                 <strong>Error:</strong>
                 @foreach ($errors->all() as $error)
                     {{ $error }}
                 @endforeach

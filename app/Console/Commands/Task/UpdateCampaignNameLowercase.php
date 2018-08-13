@@ -2,8 +2,8 @@
 
 namespace Stensul\Console\Commands\Task;
 
-use Stensul\Models\Tag;
-use Stensul\Models\Campaign;
+use TagModel as Tag;
+use CampaignModel as Campaign;
 use Illuminate\Console\Command;
 
 class UpdateCampaignNameLowercase extends Command

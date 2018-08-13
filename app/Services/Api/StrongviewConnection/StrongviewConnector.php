@@ -2,7 +2,7 @@
 namespace Stensul\Services\Api\StrongviewConnection;
 
 use Log;
-use Stensul\Models\Upload;
+use UploadModel as Upload;
 
 class StrongviewConnector
 {

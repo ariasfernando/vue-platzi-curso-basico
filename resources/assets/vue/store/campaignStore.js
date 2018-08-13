@@ -34,6 +34,7 @@ function campaignStore() {
       modalComplete: false,
       modalPreview: false,
       modalProof: false,
+      modalProofTrack: false,
       modalEnableTemplating: false,
       modalEsp: false,
       buildingMode: 'desktop',
@@ -108,6 +109,9 @@ function campaignStore() {
     mutations: {
       campaignValidated(state, status) {
         state.campaignValidated = status;
+      },
+      campaignCanBeProcessed(state, status) {
+        state.campaign.campaign_data.can_be_processed = status;
       },
       loadCampaignData(state, campaignData) {
         state.campaign = campaignData;
@@ -319,6 +323,7 @@ function campaignStore() {
         if(_.has(state.modules[moduleId].data, 'errors')) {
           const filtered = state.fieldErrors.filter(err => err.scope.clearErrorsByModuleId !== moduleId);
           state.fieldErrors = filtered;
+          Vue.set(state.modules[moduleId].data, 'errors', []);
         }
       },
       clearErrorsByScope(state, scope) {
@@ -335,8 +340,8 @@ function campaignStore() {
         }
         Vue.set(state.modules[scope.moduleId].data, 'errors', filtered);
       },
-      setCampaignName(state, camapignName) {
-      	Vue.set(state.campaign.campaign_data, 'campaign_name', camapignName);
+      setCampaignName(state, campaignName) {
+      	Vue.set(state.campaign.campaign_data, 'campaign_name', campaignName);
       },
       error(err) {
         console.error(err);

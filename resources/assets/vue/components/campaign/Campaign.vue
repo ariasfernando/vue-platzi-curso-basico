@@ -111,10 +111,14 @@
         return this.$store.getters["campaign/showModuleSettings"];
       },
       sessionWindowId() {
-        if (!window.sessionStorage.getItem('windowId')) {
-          window.sessionStorage.setItem('windowId', this.windowId);
+        try {
+          if (!window.sessionStorage.getItem('windowId')) {
+            window.sessionStorage.setItem('windowId', this.windowId);
+          }
+          return window.sessionStorage.getItem('windowId');
+        } catch(e) {
+          return false;
         }
-        return window.sessionStorage.getItem('windowId');
       }
     },
     watch:{
@@ -138,7 +142,11 @@
          * Replace url when creating a new campaign to avoid redirect.
          * Add necessary logic if using more parameters in the future.
          */
-        window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
+        try {
+          window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
+        } catch(e) {
+          return false;
+        }
 
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
@@ -261,8 +269,8 @@
   }
   .right-bar,
   .left-bar {
-    height: calc(~"100vh - 55px");
-    overflow: overlay;
+    height: calc(~"100vh - 86px");
+    overflow: auto;
     width: 270px;
     display: block;
     float: left;
@@ -275,7 +283,7 @@
     }
 
     &::-webkit-scrollbar {
-        width: 2px; 
+        width: 4px; 
         background: transparent;
     }
     &::-webkit-scrollbar-thumb {

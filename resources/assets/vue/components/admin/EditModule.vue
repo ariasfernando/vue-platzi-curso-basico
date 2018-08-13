@@ -382,18 +382,21 @@ p,ul,ol{
   .right-bar,
   .left-bar {
     height: calc(~"100vh - 55px");
-    overflow: hidden;
+    overflow: auto;
+    overflow: overlay;
     width: 270px;
     display: block;
     float: left;
     padding: 0px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    padding-bottom: 25px;
 
     &:hover{
       overflow: overlay
     }
 
     &::-webkit-scrollbar {
-        width: 2px; 
+        width: 4px; 
         background: transparent;
     }
     &::-webkit-scrollbar-thumb {

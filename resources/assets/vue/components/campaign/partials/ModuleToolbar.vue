@@ -1,6 +1,6 @@
 <template>
   <div class="module-toolbar">
-    <div class="icon-remove" @click.stop="remove" v-if="!campaign.locked"><i class="fa fa-trash-o"></i></div>
+    <div class="icon-remove" @click.stop="remove" v-if="!campaign.locked && !module.mandatory"><i class="fa fa-trash-o"></i></div>
     <div class="icon-config" v-if="hasConfig" @click="config"><i class="fa fa-cogs"></i></div>
     <div class="icon-clone" @click="clone" v-if="!campaign.locked && !module.isFixed"><i class="fa fa-clone" ></i></div>
     <div class="icon-move" v-if="!campaign.locked && !module.isFixed"><i class="fa fa-arrows"></i></div>
