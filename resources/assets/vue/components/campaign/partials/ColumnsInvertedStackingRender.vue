@@ -15,7 +15,7 @@
           <td
             width="100%"
             style="width:100%;"
-            :style="styles(0)"
+            :style="styles(columnId)"
             :bgcolor="column.container.attribute.bgcolor"
             :valign="column.container.attribute.valign || 'top'"
             :align="column.container.attribute.align || 'center'"
