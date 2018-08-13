@@ -60,6 +60,6 @@ COPY . /usr/src/app/
 RUN cd /usr/src/app/ && php artisan vendor:publish --all
 
 # run webpack
-RUN cd /usr/src/app/ && npm run laravel-mix@2.0.0 && npm run production
+RUN cd /usr/src/app/ && npm i -S laravel-mix@2.0.0 && npm run production
 RUN chown -R fbridge.fbridge /usr/src/app
 
