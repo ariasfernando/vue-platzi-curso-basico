@@ -119,7 +119,7 @@ export default {
       }
     },
     registerCustomModuleElementDefaultValidationError(moduleId, elementName, validationOption, defaultValue) {
-      if (_.indexOf(['required', 'required:true'], validationOption) && _.isEmpty(defaultValue)) {
+      if (_.indexOf(['required', 'required:true'], validationOption) >= 0 && _.isEmpty(defaultValue)) {
         const error = {
           msg: 'The field is required.',
           scope: {
