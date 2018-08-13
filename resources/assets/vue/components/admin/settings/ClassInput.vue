@@ -68,4 +68,7 @@ export default {
     border: 1px solid #78dcd6;
   }
 }
+.el-select-dropdown__item.selected{
+  color: #78dcd6!important;
+}
 </style>
