@@ -11,9 +11,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .column-bar-container{
-    &:hover{
-      overflow: overlay
-    }
     &::-webkit-scrollbar {
         width: 4px; 
         background: transparent;

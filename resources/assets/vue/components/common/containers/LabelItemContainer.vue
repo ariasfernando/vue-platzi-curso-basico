@@ -22,7 +22,6 @@ export default {
   p,i{
     transition: color 0.3s, transform 0.3s;
   }
-  
   p {
     font-size: 13px;
     margin: 0;
