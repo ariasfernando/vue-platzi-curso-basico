@@ -53,6 +53,7 @@ export default {
     setEqualHeights() {
       setTimeout(() => {
         const higherHeight = this.getHigherHeight();
+        console.log("HIGHER HEIGHT:", higherHeight);
         if(higherHeight != this.previousHeight){
           _.each(this.module.structure.columns, (column, columnIndex) => {
             const height = higherHeight - this.getPaddingTopAndBottom(columnIndex);
