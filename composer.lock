@@ -119,16 +119,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.64.10",
+            "version": "3.64.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4aa66872c4428d0db08c861a34559b0923eaae23"
+                "reference": "4f34eafb0da35ecc6ab0dddd4946a233aa03a280"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4aa66872c4428d0db08c861a34559b0923eaae23",
-                "reference": "4aa66872c4428d0db08c861a34559b0923eaae23",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4f34eafb0da35ecc6ab0dddd4946a233aa03a280",
+                "reference": "4f34eafb0da35ecc6ab0dddd4946a233aa03a280",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-08-10T21:49:00+00:00"
+            "time": "2018-08-13T21:42:40+00:00"
         },
         {
             "name": "bjeavons/zxcvbn-php",
@@ -2646,17 +2646,17 @@
         },
         {
             "name": "stensul/media-gallery",
-            "version": "2.3.4",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "git@git.stensuldev.net:composer/media-gallery.git",
-                "reference": "7b8a8c7336fa670f845574f1ffe33d95ce527077"
+                "reference": "69ca0db1a931766307ad00163fddb70478e124f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.3.4-7a275f.zip",
-                "reference": "7b8a8c7336fa670f845574f1ffe33d95ce527077",
-                "shasum": "f3c97c48a62b234b67563d693820b67cb7eb53cd"
+                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.4.0-6897f1.zip",
+                "reference": "69ca0db1a931766307ad00163fddb70478e124f1",
+                "shasum": "c2493fd0254b5e15753fe22a20461b423a196b2d"
             },
             "require": {
                 "illuminate/support": "5.6.*",
@@ -2684,7 +2684,7 @@
                 }
             ],
             "description": "Media gallery for admin",
-            "time": "2018-08-08T19:51:46+00:00"
+            "time": "2018-08-13T20:29:14+00:00"
         },
         {
             "name": "stensul/php-imageproxy",
