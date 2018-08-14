@@ -1,6 +1,7 @@
 <template>
     <div class="stx-wrapper">
       <table
+        :data-column-id="columnId"
         class="st-mobile-full-width st-mso-full-width"
         :align="columnId == 1 ? 'right' : 'left'"
         dir="ltr"

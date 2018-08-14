@@ -98,6 +98,7 @@
 
           <!--2 COLUMNS FIXED -->
           <td
+            :data-column-id="columnId"
             v-else-if="module.structure.columnsStacking == 'columnsFixed'"
             v-for="(column, columnId) in module.structure.columns"
             :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"

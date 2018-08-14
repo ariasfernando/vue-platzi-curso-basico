@@ -18,6 +18,7 @@ export default {
       'data-modal',
       'data-medium-element',
       'data-module-id',
+      'data-column-id',
       'data-placeholder',
       'contenteditable',
       'spellcheck',
