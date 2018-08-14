@@ -1102,10 +1102,10 @@ Application.utils = {
 
     // Remove wrappers element
     removeWrappers: function(html) {
-      const $wrapperElementRemove = html.find('.stx-wrapper');
+      var $wrapperElementRemove = html.find('.stx-wrapper');
 
-      $.each($wrapperElementRemove, (i, element) => {
-        const $element = $(element);
+      $.each($wrapperElementRemove, function(i, element) {
+        var $element = $(element);
 
           // Replace element with the content element.
         if ($element.is('table')) {
