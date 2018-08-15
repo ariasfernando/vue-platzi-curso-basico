@@ -156,8 +156,7 @@
         this.$store.commit('campaign/toggleModal', 'modalProof');
       },
       send () {
-        this.$store.commit('global/setLoader', true);
-
+        this.$store.commit("global/setLoader", true);
         let data = {
           campaign_id: this.campaign.campaign_id,
           reviewers: this.reviewers,
