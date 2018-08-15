@@ -81,7 +81,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 input {
   width: 80px;
 }

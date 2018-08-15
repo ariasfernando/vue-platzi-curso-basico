@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from 'vue/dist/vue';
 import {
   filter,
   isEmpty,
@@ -7,9 +7,8 @@ import {
   isArray,
   extend,
   isEqual,
-  each
+  each,
 } from 'lodash';
-
 import _ from 'lodash';
 
 import {
@@ -151,10 +150,18 @@ function campaignStore() {
         state.dirty = true;
       },
       updateCustomElement(state, payload) {
-        // This is necessary, since the clickaway function is executed.
+        // DEPRECATED
         if ( !isUndefined(payload.moduleId) ){ 
           const update = { ...state.modules[payload.moduleId].data, ...payload.data };
           state.modules[payload.moduleId].data = update;
+          state.dirty = true;
+        }
+      },
+      updateCustomElementProperty(state, payload) {
+        if (!isUndefined(payload.moduleId)) { 
+          const dataComponent = state.modules[payload.moduleId].data;
+          const subComponent = payload.subComponent ? dataComponent[payload.subComponent] : dataComponent;
+          Vue.set(subComponent, payload.property, payload.value);
           state.dirty = true;
         }
       },
@@ -223,12 +230,15 @@ function campaignStore() {
         Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
-      saveComponentAttribute(state, data) {
-        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
-        attributes[data.attribute] = data.attributeValue;
+      saveColumnProperty(state, data) {
+        const columns = state.modules[data.moduleId].structure.columns[data.columnId];
+        const subComponent = data.subComponent ? columns[data.subComponent] : columns;
+        const properties = data.link ? subComponent[data.link] : subComponent;
+        Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
       saveColumnAttribute(state, data) {
+        // DEPRECATE
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
         const newData = {};
         newData[data.attribute] = data.attributeValue;
@@ -313,6 +323,7 @@ function campaignStore() {
         if(_.has(state.modules[moduleId].data, 'errors')) {
           const filtered = state.fieldErrors.filter(err => err.scope.clearErrorsByModuleId !== moduleId);
           state.fieldErrors = filtered;
+          Vue.set(state.modules[moduleId].data, 'errors', []);
         }
       },
       clearErrorsByScope(state, scope) {
@@ -327,8 +338,10 @@ function campaignStore() {
                                                         && _.isEqual(err.scope.columnId, scope.columnId)
                                                         && _.isEqual(err.scope.componentId, scope.componentId)));
         }
-
-        state.modules[scope.moduleId].data.errors = filtered;
+        Vue.set(state.modules[scope.moduleId].data, 'errors', filtered);
+      },
+      setCampaignName(state, campaignName) {
+      	Vue.set(state.campaign.campaign_data, 'campaign_name', campaignName);
       },
       error(err) {
         console.error(err);
@@ -339,18 +352,44 @@ function campaignStore() {
         context.commit('updateCustomElement', payload);
         return Promise.resolve();
       },
+      updateCustomElementProperty(context, payload) {
+        context.commit('updateCustomElementProperty', payload);
+        return Promise.resolve();
+      },
       addErrors(context, errors) {
         _.each(errors, (error) => {
           // Get module errors
           let moduleErrors = _.cloneDeep(context.state.modules[error.scope.moduleId].data.errors) || [];
+
           let moduleErrorsByField;
           if(error.scope.type === 'custom') {
+            // Remove generic errors (workaround introduced in SV2-638).
+            // This will be removed when a final solution for validations is in place.
+            const indexToRemove = moduleErrors.findIndex(err => (_.isEqual(err.scope.elementName, error.scope.elementName)
+                                                                  && _.isEqual(err.scope.idInstance, error.scope.idInstance)
+                                                                  && _.isUndefined(err.scope.msg)
+                                                                ));
+            if(indexToRemove >= 0) {
+              moduleErrors.splice(indexToRemove, 1);
+            }
+
             moduleErrorsByField = moduleErrors.filter(err => (_.isEqual(err.scope.elementName, error.scope.elementName)
                                                                   && _.isEqual(err.scope.idInstance, error.scope.idInstance)
                                                                   && _.isEqual(err.scope.msg, error.scope.msg)));
           }
           else {
-            moduleErrorsByField = moduleErrors.filter(err => (_.isEqual(err.name, error.name)
+            // Remove generic errors (workaround introduced in SV2-638)
+            // This will be removed when a final solution for validations is in place.
+            const indexToRemove = moduleErrors.findIndex(err => (_.isEqual(err.scope.name, error.scope.name)
+                                                                  && _.isEqual(err.scope.columnId, error.scope.columnId)
+                                                                  && _.isEqual(err.scope.componentId, error.scope.componentId)
+                                                                  && _.isUndefined(err.scope.msg)
+                                                                ));
+            if(indexToRemove >= 0) {
+              moduleErrors.splice(indexToRemove, 1);
+            }
+
+            moduleErrorsByField = moduleErrors.filter(err => (_.isEqual(err.scope.name, error.scope.name)
                                                                   && _.isEqual(err.scope.columnId, error.scope.columnId)
                                                                   && _.isEqual(err.scope.componentId, error.scope.componentId)
                                                                   && _.isEqual(err.scope.msg, error.scope.msg)
