@@ -1,9 +1,10 @@
 
 <template>
-	<div class="stx-wrapper">
+	<div class="stx-wrapper" style="width: 100%;">
     <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>           
 		<div
       class="stx-edit-text stx-wrapper"
+      style="width: 100%;"
       :style="fontStyles"
       v-html="content"
       :id="editorId"
