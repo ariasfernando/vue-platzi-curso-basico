@@ -3,6 +3,7 @@ return [
     'admin' => '*',
     'global_settings' => '*',
     'campaign' => '*',
+    'tracking' => '*',
     'locale' => '*',
     'menu' => '*',
     'modals' => '*',

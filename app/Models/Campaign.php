@@ -49,6 +49,7 @@ class Campaign extends Eloquent
         'campaign_settings',
         'auto_save',
         'parent_campaign_id',
+        'tracking',
         'internal'
     ];
 
@@ -88,7 +89,8 @@ class Campaign extends Eloquent
         'campaign_settings' => [],
         'auto_save' => null,
         'parent_campaign_id' => null,
-        'proof_id' => null
+        'proof_id' => null,
+        'tracking'
     );
 
     /**
