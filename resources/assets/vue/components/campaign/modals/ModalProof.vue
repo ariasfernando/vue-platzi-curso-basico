@@ -56,7 +56,7 @@
                       </td>
                       <td>
                         <a href="#" class="add-message" title="Add a message" @click="addNotificationMessage(reviewer)">
-                          <i class="glyphicon glyphicon-envelope"></i>
+                          <i class="glyphicon glyphicon-envelope"  v-bind:class="{ containMessage: reviewer.notification_message }" ></i>
                         </a>
                         <a href="#" class="remove-reviewer" title="Remove this email" @click="removeReviewer(reviewer)">
                           <i class="glyphicon glyphicon-remove"></i>
@@ -124,7 +124,11 @@
     </div>
   </transition>
 </template>
-
+<style lang="less">
+  .containMessage {
+    color: green
+  }
+</style>
 <script>
   import request from '../../../utils/request';
   import Q from 'q';
