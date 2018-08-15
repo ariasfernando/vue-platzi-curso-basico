@@ -321,7 +321,7 @@ export default {
         overlay_description: {
           label: 'Description',
           key: 'description',
-          value: 'Text',
+          value: 'Icon',
           type: 'text',
         },
       },
