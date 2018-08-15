@@ -8,6 +8,11 @@ export default {
     'component',
     'context',
   ],
+  computed: {
+    currentComponent() {
+      return this.$store.getters["module/currentComponent"];
+    },
+  },
   methods: {
     // Get an string of classes
     getAttributeClasses(component) {
@@ -55,12 +60,21 @@ export default {
             });
           }, 50);
         } else {
-          this.$store.commit('module/setCurrentComponent', {
+          this.$emit('set-component', {
             columnId: this.columnId,
             componentId: this.componentId,
           });
         }
       }
+    },
+    columnSelect(columnId) {
+      this.$emit('set-component', {
+        columnId,
+        componentId: undefined,
+      });
+    },
+    isColumnSelect(columnId) {
+      return this.currentComponent.columnId === columnId && this.currentComponent.componentId === undefined;
     },
     fontStyles(element) {
       return {

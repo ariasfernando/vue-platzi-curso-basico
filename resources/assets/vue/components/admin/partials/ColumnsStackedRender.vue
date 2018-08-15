@@ -39,11 +39,13 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="componentId"
+              @set-component="selection => $emit('set-component', selection)"
               class="st-component"
               context="admin"></component>
           </draggable>
         </td>
       </tr>  
+      <element-selector :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
     </table>
 
     <!-- Empty Col -->
@@ -88,6 +90,7 @@ import _ from "lodash";
 import Draggable from "vuedraggable";
 import TextElement from "../elements/TextElement.vue";
 import ButtonElement from "../elements/ButtonElement.vue";
+import ElementSelector from '../../common/ElementSelector.vue';
 import ImageElement from "../elements/ImageElement.vue";
 import DividerElement from "../elements/DividerElement.vue";
 import ElementMixin from '../../common/mixins/ElementMixin.js';
@@ -99,6 +102,7 @@ export default {
     Draggable,
     TextElement,
     ButtonElement,
+    ElementSelector,
     ImageElement,
     DividerElement,
   },
