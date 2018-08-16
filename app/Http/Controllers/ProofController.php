@@ -135,7 +135,12 @@ class ProofController extends Controller
         $current_reviewer = [];
         $params['show_decision'] = true;
         $params['can_edit'] = false;
+        $params['campaign_finished'] = false;
 
+        if(isset($proof->campaign->processed) && $proof->campaign->processed==1){
+            $params['show_decision'] = false;
+            $params['campaign_finished'] = true;
+        }
         // Validate if current logged user is a reviewer
         foreach ($proof->reviewers as $reviewer) {
             if ($reviewer['email'] === Auth::user()->email) {
@@ -150,6 +155,7 @@ class ProofController extends Controller
 
         // Validate if the user can edit the campaign
         if (Auth::user()->can('edit_campaign')) {
+          if(!isset($proof->campaign->processed) || $proof->campaign->processed==0)
             $params['can_edit'] = true;
         }
 

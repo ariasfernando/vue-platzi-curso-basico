@@ -101,6 +101,14 @@
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
+              <a href="#"
+                @click.prevent="goProof(campaign.proof_token)"
+                class="proof"
+                data-toggle="tooltip"
+                data-placement="top"
+                data-tooltip="Open proof review"
+                v-if="proof.allow && proof.status && campaign.has_active_proof"
+                ><i class="glyphicon glyphicon-blackboard"></i></a>
               <a href="#" v-if="$can('clone_campaign')" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
               <a href="#"
                 class="edit"
@@ -166,6 +174,11 @@
     },
     data: function() {
       return {
+        proof: {
+          status: this.$_app.config.proofConfig.status,
+          allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
+            && this.$_app.config.permissions.indexOf('access_proof') >= 0
+        },
         last_uploads: {},
         codeType: '',
         lodash: _
@@ -179,6 +192,12 @@
       }
     },
     methods: {
+      goProof (token) {
+        if (token) {
+            const win = window.open(this.$_app.config.baseUrl + "/proof/review/" + token, '_blank');
+            win.focus();
+        }
+      },
       isUploaded: function(campaign) {
         if (campaign.uploads.length) {
           var campaign_date = new Date(campaign.updated_at);
