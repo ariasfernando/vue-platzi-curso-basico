@@ -78,7 +78,7 @@
       ModalProof,
       ModuleSettings,
       Spinner,
-      Tracking
+      Tracking,
       ColumnBarContainer
     },
     data: function () {
