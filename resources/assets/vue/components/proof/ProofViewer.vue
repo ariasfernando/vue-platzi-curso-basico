@@ -105,7 +105,6 @@
                     // to remove it so the switch can work.
                     // @TODO: check why this value is in the body_html
                     return this.campaign.body_html.replace('width="' + this.desktopWidth + '"', '');
-                  }
                 } else {
                     return '';
                 }
