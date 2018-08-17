@@ -70,30 +70,8 @@
 </script>
 
 <style lang="less">
-  @icon-option: #69dac8;
   @focus: #69dac8;
-  @focus-light: lighten(@focus, 30%);
-  @hover: @focus-light;
-
-  tr.ghost-component{
-    text-align: center;
-    color:@focus;
-    background-color: @hover;
-    height: 15px;
-    display: table-row;
-    list-style-type: none;
-    font-size: 13px;
-    z-index: 300;
-    opacity: 1!important;
-    &:before{
-      content: "Drag content here";
-    }
-    *{
-      display: none;
-    }
-
-  }
-
+  
   .stx-module-wrapper:hover {
     &::before{
       top: 0px;

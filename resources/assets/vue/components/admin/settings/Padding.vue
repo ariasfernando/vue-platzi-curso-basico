@@ -49,16 +49,25 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .button input {
   text-align: center;
 }
 .el-button.is-disabled,
 .el-button.is-disabled:focus,
 .el-button.is-disabled:hover {
-  color: #606266;
+  background: #f8f8f8;
+  color: #666666;
   cursor: inherit;
   border: 1px solid #dcdfe6;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 14px;
+  border-radius: 0px 2px 2px 0px;
+}
+.el-button.is-disabled span{
+  padding-left: 2px;
+  padding-right: 2px;
 }
 .input-number-size {
   padding-left: 0;
@@ -73,7 +82,7 @@ export default {
   right: 0;
   padding: 6px;
   &:active {
-    background-color: #fff;
+    background-color: #f8f8f8;
     border: 1px solid #dcdfe6;
     color: #606266;
   }
@@ -84,7 +93,7 @@ export default {
   float: right;
 }
 .half-style-setting-padding {
-  width: calc(~"50% - 15px");
+  width: calc(50% - 15px);
   margin-right: 15px;
   padding: 5px 0;
   float: left;
@@ -103,6 +112,7 @@ export default {
   }
   .el-input-number .el-input__inner {
     padding: 0;
+    border-radius: 2px 0px 0px 2px;
   }
 }
 </style>

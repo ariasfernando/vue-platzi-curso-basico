@@ -186,11 +186,27 @@
         });
         return promise;
       },
-      _validate(message = undefined) {
-        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors) {
+      _validate(customMessage = undefined) {
+      	let errorMessage = '';
+        if (this.$_app.utils.validator.imagesErrors('#emailCanvas')) {
+        	errorMessage = 'To continue please upload all missing images.';
+        }
+       	if (this.moduleErrors) {
+       		errorMessage = 'To continue please configure properly all modules.';
+       	}
+       	if (!this._validateEmptyCampaignName()) {
+        	errorMessage = 'To continue please complete the email name.';
+       	}
+        if (this.$_app.utils.validator.tinyErrors('#emailCanvas')) {
+          errorMessage = 'To continue please configure properly all text modules.';
+        }
+       	if (!this._validateEmptyEmail()) {
+        	return false;
+       	}
+       	
+        if (errorMessage !== '') {
           this.$root.$toast(
-            message || 'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
-            'or remove the incomplete module(s).',
+            customMessage || errorMessage,
             {
               className: 'et-error',
               duration: 10000,
@@ -219,6 +235,12 @@
         }
         return true;
       },
+      _validateEmptyCampaignName() {
+      	if (this.$store.getters["campaign/campaign"].campaign_data.campaign_name === '') {
+			return false;
+      	} 
+      	return true;
+      },
       template() {
         this.$store.commit("campaign/toggleModal", 'modalEnableTemplating');
       },
@@ -227,7 +249,7 @@
       },
       complete() {
         // Do not save if there are missing or wrong fields
-        if (!this._validateEmptyEmail() || !this._validate()) {
+        if (!this._validate()) {
           return false;
         }
 

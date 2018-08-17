@@ -9,6 +9,7 @@ function buttonDefault() {
       style: {
       },
       styleOption: {
+        enableElement: true,
       },
       attribute: {
         align: 'center',
