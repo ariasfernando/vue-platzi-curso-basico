@@ -165,14 +165,6 @@ function campaignStore() {
           state.dirty = true;
         }
       },
-      updateElement(state, payload) {
-        // This is necessary, since the clickaway function is executed.
-        if ( !isUndefined(payload.moduleId) ){ 
-          const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
-          state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
-          state.dirty = true;
-        }
-      },
       saveSetting(state, setting) {
         state.editedSettings[setting.name] = setting.value;
       },
@@ -351,6 +343,15 @@ function campaignStore() {
       updateCustomElement(context, payload) {
         context.commit('updateCustomElement', payload);
         return Promise.resolve();
+      },
+
+      updateText(context, payload) {
+        context.commit('saveComponentProperty', payload);
+        if (payload.sync !== false) {
+          payload.property = 'textDirty';
+          payload.value = Math.floor(100000 + Math.random() * 900000);
+          context.commit('saveComponentProperty', payload);
+        }
       },
       updateCustomElementProperty(context, payload) {
         context.commit('updateCustomElementProperty', payload);

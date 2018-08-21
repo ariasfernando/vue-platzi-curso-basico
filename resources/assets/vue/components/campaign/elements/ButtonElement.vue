@@ -112,13 +112,14 @@
           clearTimeout(this.timer);
         }
         this.timer = setTimeout(() => {
-          this.$store.commit('campaign/updateElement', {
+          this.$store.dispatch('campaign/updateText', {
             moduleId:this.moduleId,
             columnId:this.columnId,
             componentId:this.componentId,
-            data: {
-              text
-            }
+            link: "data",
+            property: "text",
+            sync: false,
+            text,
           });
         }, 100);
       },
