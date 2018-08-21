@@ -119,16 +119,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.64.11",
+            "version": "3.64.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4f34eafb0da35ecc6ab0dddd4946a233aa03a280"
+                "reference": "22ad993c1ed7a85d660768d30d773babbc7d38bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4f34eafb0da35ecc6ab0dddd4946a233aa03a280",
-                "reference": "4f34eafb0da35ecc6ab0dddd4946a233aa03a280",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/22ad993c1ed7a85d660768d30d773babbc7d38bd",
+                "reference": "22ad993c1ed7a85d660768d30d773babbc7d38bd",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-08-13T21:42:40+00:00"
+            "time": "2018-08-17T20:48:05+00:00"
         },
         {
             "name": "bjeavons/zxcvbn-php",
@@ -414,16 +414,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.4",
+            "version": "2.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "8790f594151ca6a2010c6218e09d96df67173ad3"
+                "reference": "54859fabea8b3beecbb1a282888d5c990036b9e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/8790f594151ca6a2010c6218e09d96df67173ad3",
-                "reference": "8790f594151ca6a2010c6218e09d96df67173ad3",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/54859fabea8b3beecbb1a282888d5c990036b9e3",
+                "reference": "54859fabea8b3beecbb1a282888d5c990036b9e3",
                 "shasum": ""
             },
             "require": {
@@ -467,7 +467,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2018-04-10T10:11:19+00:00"
+            "time": "2018-08-16T20:49:45+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -1349,16 +1349,16 @@
         },
         {
             "name": "laravel/socialite",
-            "version": "v3.0.12",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/socialite.git",
-                "reference": "b5f465847b1d637efa86bbfe2fc1c9d2bd12f60f"
+                "reference": "65f771ff4f266ebae23de1a3f18efd80a1da2f8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/socialite/zipball/b5f465847b1d637efa86bbfe2fc1c9d2bd12f60f",
-                "reference": "b5f465847b1d637efa86bbfe2fc1c9d2bd12f60f",
+                "url": "https://api.github.com/repos/laravel/socialite/zipball/65f771ff4f266ebae23de1a3f18efd80a1da2f8d",
+                "reference": "65f771ff4f266ebae23de1a3f18efd80a1da2f8d",
                 "shasum": ""
             },
             "require": {
@@ -1367,7 +1367,7 @@
                 "illuminate/http": "~5.4",
                 "illuminate/support": "~5.4",
                 "league/oauth1-client": "~1.0",
-                "php": ">=5.4.0"
+                "php": ">=5.6.4"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9",
@@ -1403,11 +1403,12 @@
                 }
             ],
             "description": "Laravel wrapper around OAuth 1 & OAuth 2 libraries.",
+            "homepage": "https://laravel.com",
             "keywords": [
                 "laravel",
                 "oauth"
             ],
-            "time": "2018-06-01T15:06:47+00:00"
+            "time": "2018-08-16T12:51:21+00:00"
         },
         {
             "name": "laravelcollective/html",
@@ -2646,17 +2647,17 @@
         },
         {
             "name": "stensul/media-gallery",
-            "version": "2.4.1",
+            "version": "2.4.2",
             "source": {
                 "type": "git",
                 "url": "git@git.stensuldev.net:composer/media-gallery.git",
-                "reference": "d8ed17fe3485e2519405300d486534d5436e0fe2"
+                "reference": "c12d74b8f0d1bfee47983b787dda595d339f6088"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.4.1-638c8a.zip",
-                "reference": "d8ed17fe3485e2519405300d486534d5436e0fe2",
-                "shasum": "ffa4fd6c929ab1ff13902d1f613399e74f02ac3d"
+                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.4.2-7f3d0c.zip",
+                "reference": "c12d74b8f0d1bfee47983b787dda595d339f6088",
+                "shasum": "9ba2c161841201757f04b9bd4b1ac9679b87d9ce"
             },
             "require": {
                 "illuminate/support": "5.6.*",
@@ -2684,7 +2685,7 @@
                 }
             ],
             "description": "Media gallery for admin",
-            "time": "2018-08-14T13:44:13+00:00"
+            "time": "2018-08-15T19:54:18+00:00"
         },
         {
             "name": "stensul/php-imageproxy",
