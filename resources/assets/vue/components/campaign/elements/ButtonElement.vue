@@ -107,7 +107,7 @@
       },
     },
     methods: {
-      changeText(text) {
+      changeText(value) {
         if (this.timer) {
           clearTimeout(this.timer);
         }
@@ -119,7 +119,7 @@
             link: "data",
             property: "text",
             sync: false,
-            text,
+            value,
           });
         }, 100);
       },
