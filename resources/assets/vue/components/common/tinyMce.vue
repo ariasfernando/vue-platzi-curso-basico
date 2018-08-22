@@ -46,9 +46,11 @@ export default {
   },
   watch:{
     textDirty(){
-      this.content = this.component.data.text;
       this.$nextTick(() => {
-        this.initTinyMCE();
+        this.content = this.component.data.text;
+        this.$nextTick(() => {
+          this.initTinyMCE();
+        });
       });
     }
   }
