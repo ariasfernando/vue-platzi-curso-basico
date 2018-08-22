@@ -1,23 +1,23 @@
 <template>
     <div class="stx-wrapper">
       <table
-        class="st-mobile-full-width st-mso-full-width"
+       class="st-mso-full-width st-mobile-full-width"
         align="left"
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :style="{'width':calculeStyleWidthColumnPx(columnId)}"
-        :width="calculeWidthColumnPx(columnId)"
+        :style="{'width':widthStyle(columnWidth(columnId))}"
+        :width="columnWidth(columnId)"
       >
         <tr>
           <td
             width="100%"
             style="width:100%;"
-            :style="styles(columnId)"
+            :style="elementBorderPaddingAndHeight(column.container)"
             :bgcolor="column.container.attribute.bgcolor"
             :valign="column.container.attribute.valign|| 'top'"
             :align="column.container.attribute.align || 'center'"
-            :class="column.container.attribute.classes ||''"
+            :class="column.container.attribute.classes"
           >
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
                   <component
@@ -46,10 +46,12 @@
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
+  import ElementMixin from '../../common/mixins/ElementMixin.js';
 
   export default {
     name: 'ColumnsStackedRender',
 
+    mixins: [ ElementMixin ],
     components: {
       TextElement,
       ButtonElement,
@@ -92,47 +94,11 @@
       },
     },
     methods: {
-      styles(columnId) {
-        let properties = [
-          "padding-top",
-          "padding-left",
-          "padding-bottom",
-          "padding-right",
-          "border-top-width",
-          "border-right-width",
-          "border-bottom-width",
-          "border-left-width",
-          "border-top-style",
-          "border-right-style",
-          "border-bottom-style",
-          "border-left-style",
-          "border-top-color",
-          "border-right-color",
-          "border-bottom-color",
-          "border-left-color"
-        ];
-        let styles = properties.map(p => {
-          return {
-            [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
-          };
-        }); 
-        return styles;
-      },
       msoBetweenComment(columnId) {
         return `[if gte mso 9]>
           </td>
-          <td width="${this.calculeWidthColumnPx(columnId+1)}" style='width:${this.calculeWidthColumnPx(columnId+1)}px !important' align='left' valign='top'>
+          <td width="${this.columnWidth(columnId+1)}" style="width:${this.widthStyle(this.columnWidth(columnId+1))}" align="left" valign="top">
         <![endif]`;
-      },
-      calculeWidthColumnPx(columnId){
-        let width = this.module.structure.columns[columnId].container.attribute.width;
-        if(_.endsWith(width, "%")){
-          return this.templateWidthWithoutPadding / 100 * _.parseInt(width);
-        }
-        return width;
-      },
-      calculeStyleWidthColumnPx(columnId){
-        return this.calculeWidthColumnPx(columnId) +'px';
       },
       selectComponent(data) {
         setTimeout(() => {

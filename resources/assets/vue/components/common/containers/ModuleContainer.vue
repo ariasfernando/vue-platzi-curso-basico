@@ -6,9 +6,9 @@
       v-if="component.container.styleOption.enableElement !== false"
     >
       <td
-        :width="component.container.attribute.width || '100%'"
+        width="100%"
         :height="component.container.attribute.height"
-        :style="elementBorderPaddingAndWidth(component.container)"
+        :style="elementBorderPaddingAndHeight(component.container)"
         :valign="component.container.attribute.valign || 'top'"
         :align="component.container.attribute.align || 'left'"
         class="stx-position-relative"

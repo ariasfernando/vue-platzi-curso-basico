@@ -80,14 +80,12 @@
                     :module-id="moduleId"
                     :column="module.structure.columns[1]"
                     :column-id="1"
-                    :column-width-padding="columnWidthPadding"
                     >
                   </columns-inverted-stacking-render>
                   <columns-inverted-stacking-render
                     :module-id="moduleId"
                     :column="module.structure.columns[0]"
                     :column-id="0"
-                    :column-width-padding="columnWidthPadding"
                     >
                   </columns-inverted-stacking-render>
 
@@ -100,12 +98,12 @@
           <td
             v-else-if="module.structure.columnsStacking == 'columnsFixed'"
             v-for="(column, columnId) in module.structure.columns"
-            :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
+            :width="columnWidth(columnId)"
             :valign="column.container.attribute.valign || 'top'"
             :class="column.container.attribute.classes"
             :bgcolor="column.container.attribute.bgcolor"
             :key="column.id"
-            :style="[elementBorderAndPadding(column.container),{'width': widthStyle(column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%')}]"
+            :style="[elementBorderPaddingAndHeight(column.container),{'width': widthStyle(columnWidth(columnId))}]"
           >
             <columns-fixed-render
               :column="column"
@@ -123,7 +121,7 @@
           @click.prevent="setComponent(moduleId, 0, componentId)"
           :key="component.id"
         >
-          <td width="100%" class="st-mobile-full-width" style="vertical-align: top; width: 100%;">
+          <td width="100%" style="vertical-align: top; width: 100%;">
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
               <template>
                   <component
@@ -165,6 +163,16 @@
     name: 'Module',
     props: ['moduleId'],
     mixins: [ ElementMixin, validatorMixin ],
+    components: {
+      TextElement,
+      ButtonElement,
+      ImageElement,
+      DividerElement,
+      ModuleToolbar,
+      ColumnsStackedRender,
+      ColumnsFixedRender,
+      ColumnsInvertedStackingRender,
+    },
     created() {
       if(this.module.type === 'studio'
           && ((this.module.structure && this.module.structure.columns && this.module.structure.columns.length > 1)
@@ -185,31 +193,25 @@
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
       },
-      templateWidth() {
-        return this.$store.getters["campaign/campaign"].library_config.templateWidth;
-      },
       moduleErrors() {
         return this.module.data.errors || [];
       },
       msoStartingComment() {
         return `[if gte mso 9]>
-          <table width="${this.templateWidth}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
+          <table width="${this.templateWidth}" style="width:${this.widthStyle(this.templateWidth)}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
             <tr>
-              <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important" valign="top">
+              <td width="${this.columnWidth(0)}" style="width:${this.widthStyle(this.columnWidth(0))}" valign="top">
               <![endif]`;
       },
       msoStartingCommentInverted() {
         return `[if gte mso 9]>
-          <table width="${this.columnWidthPadding}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
+          <table width="${this.templateWidth}" style="width:${this.widthStyle(this.templateWidth)}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
             <tr>
-              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr" valign="top">
+              <td width="${this.columnWidth(this.module.structure.columns.length - 1)}" style="width: ${this.widthStyle(this.columnWidth(this.module.structure.columns.length - 1))}" dir="ltr" valign="top">
               <![endif]`;
       },
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
-      },
-      columnWidthPadding(){
-        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
       },
       hasErrors() {
         return this.module.data && this.module.data.errors && this.module.data.errors.length;
@@ -229,23 +231,6 @@
     },
     methods: {
 
-      elementBorderAndPadding(element) {
-        const BorderAndPadding = {};
-
-        _.each(element.style, (value, key) => {
-          if (key.indexOf('padding') >= 0 || key.indexOf('border') >= 0) {
-            BorderAndPadding[key] = value;
-          }
-        });
-        return BorderAndPadding;
-      },
-      calculeWidthColumnPx(columnId){
-        let width = this.module.structure.columns[columnId].container.attribute.width;
-        if(_.endsWith(width, "%")){
-          return this.templateWidthWithoutPadding / 100 * _.parseInt(width);
-        }
-        return width;
-      },
       config() {
         this.$store.commit("campaign/setCustomModule", this.moduleId);
         this.$store.commit("campaign/unsetCurrentModule");
@@ -306,19 +291,6 @@
         // Remove module highlight element
         $row.find("#moduleHighlight").remove();
       },
-      widthStyle(width) {
-        return _.endsWith(width, "%") ? width : width + "px";
-      },
     },
-    components: {
-      TextElement,
-      ButtonElement,
-      ImageElement,
-      DividerElement,
-      ModuleToolbar,
-      ColumnsStackedRender,
-      ColumnsFixedRender,
-      ColumnsInvertedStackingRender,
-    }
   };
 </script>

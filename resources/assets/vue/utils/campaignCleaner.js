@@ -31,7 +31,9 @@ export default {
       'data-mce-style',
       'id',
       'module',
-      'context'
+      'context',
+      'column',
+      'draggable',
     ],
     blockSelectors: [
       '.module-toolbar',
@@ -39,7 +41,7 @@ export default {
       '.st-remove-element',
     ],
   },
-  
+
   clean(selector) {
     let $canvas = null;
     let $cleanedHtml = null;
@@ -48,7 +50,7 @@ export default {
 
     // Clone content
     $cleanedHtml = $canvas.clone(true);
-    
+
     // Remove attr tags function clean
     const $removeAttr = this.removeDataHtml($cleanedHtml, this.cleanOptions.attrSelectors, 'attr');
     // Function removeDataHtml fail attributes
@@ -84,23 +86,23 @@ export default {
 
     // Remove every class starting with "stx-"
     $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
-    
+
     // Remove attr class if it's empty.
     $cleanedHtml.find("[class='']").removeAttr('class');
-    
+
     // Remove attr style if it's empty.
     $cleanedHtml.find("[style='']").removeAttr('style');
-    
+
     // Remove tooltip
     $cleanedHtml.find('.actions-buttons-tooltip').remove();
-    
+
     // Remove toolbox Tinymce
     $cleanedHtml.find('.text-overlay-toolbox').remove();
-    
+
     // Convert data-contenteditable-href to href
     if ($cleanedHtml.find('[data-contenteditable-href]').length) {
       const $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
-      
+
       $.each($targetContenteditableHref, (key, element) => {
         const tempDataContenteditableHref = $(element).data('contenteditable-href');
         // Add href
@@ -117,10 +119,10 @@ export default {
       $.each($targetDataTag, (key, element) => {
         const tempDataTag = $(element).data('tag-before');
         const $element = $(element);
-        
+
         // Add tag
         $element.before(tempDataTag);
-        
+
         // Remove data-tag-before
         $element.removeAttr('data-tag-before');
       });
@@ -143,15 +145,15 @@ export default {
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
     return this.charConvert($cleanedHtml.html());
   },
-  
+
   // display plain text modal.
   removeDataHtml($html, list, type) {
     if (!$html) {
       return false;
     }
-    
+
     const $editedHtml = $html;
-    
+
     // Remove data tags
     for (let i = 0; i < list.length; i++) {
       switch (type) {
@@ -163,7 +165,7 @@ export default {
           break;
       }
     }
-    
+
     return $editedHtml;
   },
 
@@ -186,20 +188,20 @@ export default {
       newStyles = originalStylesArray.join('; ');
       $target.attr('style', newStyles);
   },
-  
+
   encodeHtmlEntities($cleanedHtml) {
     const all = $cleanedHtml.find('p, span, div, h1, h2, h3, h4, h5, a, td');
-    
+
     $.map(all, (el, index) => {
       const textConnvert = this.charConvertHtmlEntities($(el).html());
       if (el.innerText.length > 0) {
         $(el).text(textConnvert);
       }
     });
-    
+
     return $cleanedHtml;
   },
-  
+
   charConvertHtmlEntities(str) {
     const codesToChars = {
       '&amp;': '&#38;',
@@ -229,18 +231,18 @@ export default {
       '℠': '&#8480;',
       '™': '&#8482;',
     };
-    
+
     const codesToCharsTags = {
       '&quot;': "'",
       '&#039;': "'",
     };
-    
+
     const rex = new RegExp('(<[^>]*>)|(&[a-zA-Z0-9#]+;)', 'gm');
     const re = new RegExp(Object.keys(codesToChars).join('|'), 'gi');
     const reTags = new RegExp(Object.keys(codesToCharsTags).join('|'), 'gi');
     const parts = str.split(rex);
     let res = '';
-    
+
     for (let i = 0; i < parts.length; i++) {
       if (typeof parts[i] !== 'undefined') {
         // only text
@@ -255,7 +257,7 @@ export default {
     }
     return res;
   },
-  
+
   /*
   * Convert especial characters
   */
@@ -447,8 +449,10 @@ export default {
       '>': '&gt;',
       '£': '&pound;',
       '℠': '&#x2120;',
+      '': '<!---->',
+      '': 'bgcolor=""',
     };
-    
+
     $.each(chars, (key, value) => {
       if (inverse) {
         str = str.replace(new RegExp(key, 'g'), value);
@@ -456,7 +460,7 @@ export default {
         str = str.replace(new RegExp(value, 'g'), key);
       }
     });
-    
+
     return str;
   }
 

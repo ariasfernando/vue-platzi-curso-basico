@@ -8,6 +8,18 @@ export default {
     'component',
     'context',
   ],
+  computed: {
+    templateInnerWidth() {
+      const paddingLeft = _.parseInt(this.module.structure.style.paddingLeft || 0);
+      const paddingRight = _.parseInt(this.module.structure.style.paddingRight || 0);
+      const borderLeft = _.parseInt(this.module.structure.style.borderLeft || 0);
+      const borderRight = _.parseInt(this.module.structure.style.borderRight || 0);
+      return this.templateWidth - paddingLeft - paddingRight - borderLeft - borderRight;
+    },
+    templateWidth() {
+      return this.$store.getters["campaign/campaign"].library_config.templateWidth;
+    },
+  },
   methods: {
     // Get an string of classes
     getAttributeClasses(component) {
@@ -37,10 +49,10 @@ export default {
       });
       return BorderAndPadding;
     },
-    elementBorderPaddingAndWidth(element) {
+    elementBorderPaddingAndHeight(element) {
       const elementBorderAndPadding = this.elementBorderAndPadding(element);
       const styles = _.isEmpty(elementBorderAndPadding) ? {} : elementBorderAndPadding;
-      styles.width = this.widthStyle(element.attribute.width || '100%');
+      styles.height = this.widthStyle(element.attribute.height || '100%');
       return styles;
     },
     selectComponentHandler(e) {
@@ -73,6 +85,13 @@ export default {
         'line-height': element.style.lineHeight,
         'text-transform': element.style.textTransform,
       };
+    },
+    columnWidth(columnId) {
+      const width = this.module.structure.columns[columnId].container.attribute.width;
+      if (_.endsWith(width, '%')) {
+        return this.templateInnerWidth / 100 * _.parseInt(width);
+      }
+      return width;
     },
   },
 };

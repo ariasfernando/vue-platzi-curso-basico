@@ -11,8 +11,6 @@
           cellspacing="0"
           border="0"
           :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
-          :height="component.button.attribute.height"
-          :bgcolor="component.button.attribute.bgcolor"
           :style="tableStyles"
         >
           <tr>
@@ -21,7 +19,7 @@
               :bgcolor="component.button.attribute.bgcolor"
               :height="component.button.attribute.height"
               style="vertical-align: middle; width:100%;"
-            :style="elementBorderAndPadding(this.component.button)"
+              :style="elementBorderPaddingAndHeight(this.component.button)"
             >
               <table
                 cellpadding="0"

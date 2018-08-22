@@ -10,8 +10,8 @@
       <td
         width="100%"
         :bgcolor="module.structure.attribute.bgcolor"
-        :style="module.structure.style"
-        :class="module.structure.attribute.classes ||''" >
+        :style="elementBorderPaddingAndHeight(module.structure)"
+        :class="module.structure.attribute.classes" >
         <table
           width="100%"
           class="st-wrapper" 
@@ -52,13 +52,12 @@
     <!-- START 1 COLUMNS -->
     <tr v-else>
       <td
-        class="st-mobile-full-width" 
         v-for="(column, columnId) in module.structure.columns"
-        :class="[{'empty-col': !column.components.length}, module.structure.attribute.classes]" 
-        :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'" 
-        :style="module.structure.style || ''"
+        :class="[{'empty-col': !column.components.length}, module.structure.attribute.classes]"
+        width="100%"
+        :style="elementBorderPaddingAndHeight(module.structure)"
         :bgcolor="module.structure.attribute.bgcolor"
-        :valign="module.structure.attribute.valign || 'top'" 
+        :valign="module.structure.attribute.valign || 'top'"
         :data-col="columnId"
         :key="column.id"
       >
@@ -118,6 +117,7 @@
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
+  import ElementMixin from '../common/mixins/ElementMixin.js';
 
   module.exports = {
     name: 'Module',
@@ -130,6 +130,7 @@
       ColumnsFixedRender,
       ColumnsStackedRender
     },
+    mixins: [ ElementMixin],
     data () {
       return {
         options: {

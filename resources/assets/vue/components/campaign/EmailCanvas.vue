@@ -8,9 +8,10 @@
         <tr>
           <td
             align="center"
-            style="vertical-align:top;"
+            style="width: 100%;"
             class="stx-draggable-wrapper st-email-wrapper"
-            :class="{ 'campaign-validated': campaignValidated }"
+            width="100%"
+            :class="{ 'stx-campaign-validated': campaignValidated }"
             :bgcolor="templateBackgroundColor || defaultTemplateBackgroundColor"
             @click.stop="handleActive"
             @mouseover="onMouseOver"
@@ -385,7 +386,7 @@
   .st-email-body{ 
     width:100% !important;
     -webkit-text-size-adjust: 100%; 
-    margin: 0 !important; 
+    margin: 0 auto !important;
     padding: 0px; 
     background-color: #000000; 
   }

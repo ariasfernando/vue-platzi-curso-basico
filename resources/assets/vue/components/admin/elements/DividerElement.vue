@@ -15,7 +15,7 @@
           :valign="component.divider.attribute.valign || 'top'"
           :align="component.divider.attribute.align"
           :bgcolor="component.divider.attribute.bgcolor"
-          :height="component.divider.style.height"
+          :height="dividerHeightWithoutPx"
           style="display:block; margin:0 auto;"
           :style="innerTdStyle"
           >&nbsp;</td>
@@ -71,6 +71,9 @@
           fontSize: this.component.divider.style.height,
         };
       },
+      dividerHeightWithoutPx(){
+        return component.divider.style.heigh.replace('px','')
+      }
     },
   };
 </script>
