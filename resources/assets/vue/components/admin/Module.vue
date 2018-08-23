@@ -143,11 +143,6 @@
         }
       }
     },
-    computed: {
-      module() {
-        return this.$store.getters["module/module"];
-      },
-    },
     methods: {
       onSort(e) {
         const colId = e.clone.getAttribute('data-column');

@@ -31,7 +31,6 @@
                   :column-id="columnId"
                   :component-id="componentId"
                   :column="column"
-                  context="campaign"
                 ></component>
               </template>
             </table>
@@ -77,9 +76,6 @@
       },
     },
     computed: {
-      module() {
-        return this.$store.getters["campaign/modules"][this.moduleId];
-      },
       numColumns() {
         return this.module.structure.columns.length;
       },

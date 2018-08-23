@@ -5,22 +5,32 @@ export default {
     'module-id',
     'column-id',
     'component-id',
-    'component',
-    'context',
+    'component'
   ],
   computed: {
     templateInnerWidth() {
-      const paddingLeft = _.parseInt(this.module.structure.style.paddingLeft || 0);
-      const paddingRight = _.parseInt(this.module.structure.style.paddingRight || 0);
-      const borderLeft = _.parseInt(this.module.structure.style.borderLeft || 0);
-      const borderRight = _.parseInt(this.module.structure.style.borderRight || 0);
-      return this.templateWidth - paddingLeft - paddingRight - borderLeft - borderRight;
+      return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.module.structure);
     },
     templateWidth() {
-      return this.$store.getters["campaign/campaign"].library_config.templateWidth;
+      return this.isCampaign ? this.$store.getters['campaign/campaign'].library_config.templateWidth : 640;
+    },
+    imageWidth() {
+      const width = this.component.image.attribute.width;
+      if (_.endsWith(width, '%')) {
+        const imageContainerWidth = this.columnWidth(this.columnId)
+        - this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].container)
+        - this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].content)
+        - this.elementBorderAndPaddingHorizontalSpace(this.component.container);
+        return imageContainerWidth / 100 * _.parseInt(width);
+      }
+      return width;
     },
     isCampaign() {
       return !_.isEmpty(this.$store.getters['campaign/campaign']);
+    },
+    module() {
+      return this.isCampaign ? this.$store.getters['campaign/modules'][this.moduleId] :
+        this.$store.getters['module/module'];
     },
   },
   methods: {
@@ -51,6 +61,13 @@ export default {
         }
       });
       return BorderAndPadding;
+    },
+    elementBorderAndPaddingHorizontalSpace(element) {
+      const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
+      const paddingRight = _.parseInt(element.style.paddingRight || 0);
+      const borderLeft = _.parseInt(element.style.borderLeft || 0);
+      const borderRight = _.parseInt(element.style.borderRight || 0);
+      return paddingLeft + paddingRight + borderLeft + borderRight;
     },
     elementBorderPaddingAndHeight(element) {
       const elementBorderAndPadding = this.elementBorderAndPadding(element);
