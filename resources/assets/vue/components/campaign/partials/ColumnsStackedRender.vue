@@ -28,8 +28,7 @@
                     :component="component"
                     :module-id="moduleId"
                     :column-id="columnId"
-                    :component-id="componentId"
-                    context="campaign">
+                    :component-id="componentId">
                   </component>
             </table>
           </td>

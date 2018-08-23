@@ -31,7 +31,6 @@ export default {
       'data-mce-style',
       'id',
       'module',
-      'context',
       'column',
       'draggable',
     ],

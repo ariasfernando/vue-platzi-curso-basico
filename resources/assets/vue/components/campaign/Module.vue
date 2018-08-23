@@ -130,7 +130,6 @@
                     :module-id="moduleId"
                     :column-id="0"
                     :component-id="componentId"
-                    context="campaign"
                   ></component>
                 </template>
               </table>

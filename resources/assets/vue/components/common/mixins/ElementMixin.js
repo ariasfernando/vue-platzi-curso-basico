@@ -19,6 +19,9 @@ export default {
     templateWidth() {
       return this.$store.getters["campaign/campaign"].library_config.templateWidth;
     },
+    isCampaign() {
+      return !_.isEmpty(this.$store.getters['campaign/campaign']);
+    },
   },
   methods: {
     // Get an string of classes
@@ -57,7 +60,7 @@ export default {
     },
     selectComponentHandler(e) {
       if (!$(e.target).hasClass('st-remove')) {
-        if (this.context === 'campaign') {
+        if (this.isCampaign) {
           setTimeout(() => {
             // TODO: find better way to do this
             this.$store.commit('campaign/setCurrentComponent', {

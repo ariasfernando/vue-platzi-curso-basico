@@ -34,7 +34,6 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="component.id"
-              context="admin"
             ></component>
             </template>
             <div v-else style="display:table-row;"> 

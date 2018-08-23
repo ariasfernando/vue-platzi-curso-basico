@@ -1,7 +1,7 @@
 <template>
-  <table width="100%" 
-         cellspacing="0" 
-         cellpadding="0" 
+  <table width="100%"
+         cellspacing="0"
+         cellpadding="0"
          border="0"
          align="center"
   >
@@ -14,10 +14,10 @@
         :class="module.structure.attribute.classes" >
         <table
           width="100%"
-          class="st-wrapper" 
-          cellspacing="0" 
-          cellpadding="0" 
-          border="0" 
+          class="st-wrapper"
+          cellspacing="0"
+          cellpadding="0"
+          border="0"
           align="center"
         >
           <tr>
@@ -27,7 +27,7 @@
               <td
                 v-for="(column, columnId) in module.structure.columns"
                 :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
-                :valign="column.container.attribute.valign || 'top'" 
+                :valign="column.container.attribute.valign || 'top'"
                 :key="column.id"
               >
                 <columns-fixed-render @add="onAdd" :column="column" :column-id="columnId"></columns-fixed-render>
@@ -40,10 +40,9 @@
               width="100%"
             >
               <columns-stacked-render @add="onAdd"></columns-stacked-render>
-            </td> 
-
+            </td>
           </tr>
-        </table>  
+        </table>
 
       </td>
     </tr>
@@ -76,20 +75,19 @@
           <template v-if="column.components.length">
             <component
               v-for="(component, componentId) in column.components"
-              :is="component.type" 
-              :component="component" 
-              :module-id="module.id" 
+              :is="component.type"
+              :component="component"
+              :module-id="module.id"
               :column-id="columnId"
-              :component-id="componentId" 
+              :component-id="componentId"
               :key="component.id"
               :data-component="component"
               class="st-component"
-              context="admin"
             ></component>
           </template>
-          <div v-else style="display:table-row;"> 
+          <div v-else style="display:table-row;">
             <div
-              align="center" 
+              align="center"
               class="empty-cell"
               height="80"
               :data-col="columnId">Drag content here
@@ -101,7 +99,7 @@
     <!-- END 1 COLUMNS -->
   </table>
 </template>
-    
+
 <script>
 
   import Draggable from 'vuedraggable';
@@ -149,7 +147,7 @@
       module() {
         return this.$store.getters["module/module"];
       },
-    },   
+    },
     methods: {
       onSort(e) {
         const colId = e.clone.getAttribute('data-column');
@@ -238,7 +236,7 @@
   .st-content-component{
     outline: 1px dashed @icon-option;
     border: none!important;
-  
+
     .st-component{
       &:hover{
         opacity: 0.75;
@@ -254,7 +252,7 @@
     background-color: @hover;
     display: table;
     width: 100%;
-    
+
     &:hover{
       div.empty-cell {
         font-size: 13px;
@@ -269,7 +267,7 @@
       width: 100%;
       vertical-align: middle;
       font-size: 0px;
-      
+
     }
   }
 
@@ -326,6 +324,6 @@
       }
 
     }
-    
+
   }
 </style>

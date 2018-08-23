@@ -39,8 +39,7 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="componentId"
-              class="st-component"
-              context="admin"></component>
+              class="st-component"></component>
           </draggable>
         </td>
       </tr>  
