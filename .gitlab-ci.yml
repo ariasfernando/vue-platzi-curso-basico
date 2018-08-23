@@ -1,4 +1,4 @@
-image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0"
+image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.1"
 
 services:
   - mongo:latest
@@ -27,7 +27,6 @@ stages:
 
 before_script:
   # js related
-  - yum install -y gcc-c++ cairo cairo-devel
   - npm install
   # Install composer dependencies
   - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
