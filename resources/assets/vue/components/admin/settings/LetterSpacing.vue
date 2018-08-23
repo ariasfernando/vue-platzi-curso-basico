@@ -127,6 +127,11 @@ export default {
 .el-button.active {
   background-color: #78dcd6;
   padding: 7px 4px;
+  font-weight: 300;
+  color: #ffffff;
+  border: 1px solid #78dcd6;
+  border-radius: 0px 2px 2px 0px;
+  height: 28px!important;
 }
 .el-button--mini,
 .el-button--mini.is-round {
@@ -155,6 +160,9 @@ export default {
 <style lang="less">
 /* not scoped */
 .field-letter-spacing {
+  .el-button{
+    border-radius: 2px;
+  }
   .el-input-number--mini input.el-input__inner[type="text"] {
     padding-left: 0;
     padding-right: 0;
@@ -166,8 +174,40 @@ export default {
   .el-button.is-disabled,
   .el-button.is-disabled:focus,
   .el-button.is-disabled:hover {
-    color: #606266;
+    color: #666666;
     cursor: auto;
+  }
+  .el-icon-setting{
+    background: #f8f8f8;
+    color: #666666;
+    cursor: inherit;
+    border: 1px solid #dcdfe6;
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 14px;
+    border-radius: 0px 2px 2px 0px;
+    height: 28px!important;
+
+    &:hover{
+      color: #78dcd6;
+    }
+  }
+  .el-input-number /deep/ .el-input-number__decrease{
+    border-radius: 2px 0px 0px 2px;
+    background: #f8f8f8;
+  }
+  .el-input-number /deep/ .el-input-number__increase{
+    border-radius: 0px;
+    background: #f8f8f8;
+  } 
+  .el-input-number /deep/ .el-input_inner{
+    &:focus{
+      border: 1px solid #78dcd6;
+    }
+  }
+  .el-input-number /deep/ .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled), 
+  .el-input-number /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){
+    border: 1px solid #78dcd6;
   }
 }
 </style>
