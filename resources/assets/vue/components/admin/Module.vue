@@ -102,33 +102,36 @@
     <!-- END 1 COLUMNS -->
   </table>
 </template>
-    
+
 <script>
 
-  import Draggable from 'vuedraggable';
-  import clone from 'clone';
   import _ from 'lodash';
-  import uc from 'underscore-contrib';
-  import defaultElements from '../../resources/elements';
-  import Plugins from '../../plugins/modules';
-  import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
-  import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
-  import Element from '../../models/Element';
-  import TextElement from './elements/TextElement.vue';
   import ButtonElement from './elements/ButtonElement.vue';
-  import ImageElement from './elements/ImageElement.vue';
+  import clone from 'clone';
+  import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
+  import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
+  import CustomCode from './elements/CustomCode.vue';
+  import defaultElements from '../../resources/elements';
   import DividerElement from './elements/DividerElement.vue';
+  import Draggable from 'vuedraggable';
+  import Element from '../../models/Element';
+  import ElementMixin from '../common/mixins/ElementMixin.js';
+  import ImageElement from './elements/ImageElement.vue';
+  import Plugins from '../../plugins/modules';
+  import TextElement from './elements/TextElement.vue';
+  import uc from 'underscore-contrib';
 
   module.exports = {
     name: 'Module',
     components: {
-      Draggable,
-      TextElement,
       ButtonElement,
-      ImageElement,
-      DividerElement,
       ColumnsFixedRender,
-      ColumnsStackedRender
+      ColumnsStackedRender,
+      DividerElement,
+      Draggable,
+      CustomCode,
+      ImageElement,
+      TextElement,
     },
     data () {
       return {

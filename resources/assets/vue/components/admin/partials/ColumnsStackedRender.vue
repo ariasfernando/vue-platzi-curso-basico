@@ -87,6 +87,7 @@
 import _ from "lodash";
 import Draggable from "vuedraggable";
 import TextElement from "../elements/TextElement.vue";
+import CustomCode from "../elements/CustomCode.vue";
 import ButtonElement from "../elements/ButtonElement.vue";
 import ImageElement from "../elements/ImageElement.vue";
 import DividerElement from "../elements/DividerElement.vue";
@@ -98,6 +99,7 @@ export default {
   components: {
     Draggable,
     TextElement,
+    CustomCode,
     ButtonElement,
     ImageElement,
     DividerElement,

@@ -47,6 +47,7 @@
 <script>
 
   import TextElement from '../elements/TextElement.vue';
+  import CustomCode from '../elements/CustomCode.vue';
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
@@ -57,6 +58,7 @@
 
     components: {
       TextElement,
+      CustomCode,
       ButtonElement,
       ImageElement,
       DividerElement,

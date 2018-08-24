@@ -172,6 +172,33 @@ describe('== Models ==', () => {
       });
     });
 
+    describe('CustomCode', () => {
+      const element = new Element({type: 'custom-code'});
+      const properties = element.getProperties();
+
+      it('Should return a valid object', (done) => {
+        expect(element).to.be.an('object');
+        done();
+      });
+
+      it('Should return a valid object of type custom-code', (done) => {
+        expect(properties).to.have.property('type', 'custom-code');
+        done();
+      });
+
+      it('Should only have a specific set of properties', (done) => {
+        expect(properties).to.have.keys([
+          'id',
+          'type',
+          'container',
+          'code',
+          'plugins',
+        ]);
+
+        done();
+      });
+    });
+
   });
 
 
