@@ -31,7 +31,6 @@
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ElementMixin from '../../common/mixins/ElementMixin';
-  import MontedElementMixin from '../mixins/MontedElementMixin';
   import ModuleContainer from '../../common/containers/ModuleContainer';
   
   export default {
@@ -40,7 +39,7 @@
       ComponentToolbar,
       ModuleContainer
     },
-    mixins: [ MobileStylesMixin, ElementMixin, MontedElementMixin ],
+    mixins: [ MobileStylesMixin, ElementMixin],
     data(){
       return{
         defaultFirstTdStyle: {
