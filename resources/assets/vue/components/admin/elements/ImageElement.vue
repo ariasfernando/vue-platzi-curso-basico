@@ -22,7 +22,7 @@
               :href="component.image.attribute.href" 
               :alt="component.image.attribute.alt"
               :title="component.image.attribute.title"
-              :target="component.image.attribute.target"
+              :target="component.image.attribute.target || '_blank'"
               >
               <img
                 class="st-resize"
