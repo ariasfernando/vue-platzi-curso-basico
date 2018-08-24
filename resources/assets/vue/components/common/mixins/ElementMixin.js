@@ -68,8 +68,8 @@ export default {
     elementBorderAndPaddingHorizontalSpace(element) {
       const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
       const paddingRight = _.parseInt(element.style.paddingRight || 0);
-      const borderLeft = _.parseInt(element.style.borderLeft || 0);
-      const borderRight = _.parseInt(element.style.borderRight || 0);
+      const borderLeft = _.parseInt(element.style.borderLeftWidth || 0);
+      const borderRight = _.parseInt(element.style.borderRightWidth || 0);
       return paddingLeft + paddingRight + borderLeft + borderRight;
     },
     elementBorderPaddingAndHeight(element) {
