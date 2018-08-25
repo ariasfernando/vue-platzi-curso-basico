@@ -143,18 +143,18 @@ describe('== Library Store ==', () => {
     it('"updateEmailCanvas" and expect has set "modules" state, a new array of modules', (done) => {
       let modulesData = [
         {
-        _id: '5b3ce34792f8ef00137bb105',
-        type: 'virtual',
-        key: 'text_458798',
-        name: 'text',
-        structure: {},
-        plugins: {},
-        status: 'publish',
-        updated_at: '2018-08-03 16:09:09',
-        created_at: '2018-07-04 11:09:59',
-        isFixed: true,
-        fixedPosition: 0,
-        mandatory: true,
+          _id: '5b3ce34792f8ef00137bb105',
+          type: 'virtual',
+          key: 'text_458798',
+          name: 'text',
+          structure: {},
+          plugins: {},
+          status: 'publish',
+          updated_at: '2018-08-03 16:09:09',
+          created_at: '2018-07-04 11:09:59',
+          isFixed: true,
+          fixedPosition: 0,
+          mandatory: true,
         },
         {
           _id: '5b64bf6602a4cd00122d0353',
@@ -274,7 +274,132 @@ describe('== Library Store ==', () => {
 
       done();
     });
-    xit('setToggleImageEditor', () => {});
+    xit('"setToggleImageEditor"', () => {});
+    it('"setToggleModuleSettings" and expect of set "showModuleSettings" state to true', (done) => {
+      let toggleValue = true;
+
+      store.commit('campaign/setToggleModuleSettings', toggleValue);
+
+      let stateShowModuleSettings = store.state.campaign.showModuleSettings;
+
+      expect(stateShowModuleSettings).toBeTruthy();
+
+      toggleValue = null;
+      stateShowModuleSettings = null;
+
+      done();
+    });
+    xit('"addModule"', () => {});
+    it('"insertModule" expect to insert a module in "modules" state, in index 0', (done) => {
+      let objModule = {
+        index: 0,
+        moduleData: {
+          _id: '5b804c95aa96550018023592',
+          type: 'studio',
+          key: 'body',
+          name: 'body',
+          structure: {},
+          plugins: {},
+          status: 'publish',
+          updated_at: '2018-08-24 15:01:32',
+          created_at: '2018-08-24 14:21:09',
+          isFixed: false,
+          mandatory: false,
+          data: {},
+          idInstance: 150259,
+        },
+      };
+
+      store.commit('campaign/insertModule', objModule);
+
+      let stateFirstModule = store.state.campaign.modules[objModule.index];
+
+      expect(stateFirstModule).toEqual(objModule.moduleData);
+
+      objModule = null;
+      stateFirstModule = null;
+
+      done();
+    });
+    xit('"cloneModule" ', () => {});
+    xit('"updateCustomElement" ', () => {});
+    it('"updateElement" expect to update data of element', (done) => {
+      let payload = {
+        moduleId: 0,
+        columnId: 0,
+        componentId: 0,
+        data: {
+          text: '<p style="margin: 0px;" data-mce-style="margin: 0px;">Lorem ipsum dolor sit amet, consetetur <strong>sadipscing</strong> elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>',
+        },
+      };
+
+      let newStruct = [
+        {
+          structure: {
+            columns: [
+              { 
+                components: [
+                  { 
+                    data: {
+                      text: '',
+                    }, 
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ];
+
+      store.commit('campaign/updateEmailCanvas', newStruct);
+      store.commit('campaign/updateElement', payload);
+
+      let stateDataModule = store.state.campaign.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data;
+
+      expect(stateDataModule).toEqual(payload.data);
+
+      payload = null;
+      newStruct = null;
+      stateDataModule = null;
+
+      done();
+    });
+    it('"updateElement" expect return a new error', (done) => {
+      let payload = {
+        columnId: 0,
+        componentId: 0,
+        data: {
+          text: '<p style="margin: 0px;" data-mce-style="margin: 0px;">Lorem ipsum dolor sit amet, consetetur <strong>sadipscing</strong> elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>',
+        },
+      };
+      let newStruct = [
+        {
+          structure: {
+            columns: [
+              { 
+                components: [
+                  { 
+                    data: {
+                      text: '',
+                    }, 
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ];
+
+      store.commit('campaign/updateEmailCanvas', newStruct);
+
+      expect(() => store.commit('campaign/updateElement', payload)).toThrow('moduleId is undefined');
+
+      payload = null;
+      newStruct = null;
+      
+
+      done();
+    });
   });
 
   xdescribe('trigger actions', () => {

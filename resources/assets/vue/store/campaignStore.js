@@ -1,3 +1,7 @@
+/* eslint no-param-reassign:0 */
+/* eslint no-shadow:0 */
+/* eslint no-console:0 */
+
 import Vue from 'vue';
 import {
   filter,
@@ -160,10 +164,12 @@ function campaignStore() {
       },
       updateElement(state, payload) {
         // This is necessary, since the clickaway function is executed.
-        if ( !isUndefined(payload.moduleId) ){ 
+        if (!isUndefined(payload.moduleId)) {
           const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
           state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
           state.dirty = true;
+        } else {
+          throw new Error('moduleId is undefined');
         }
       },
       saveSetting(state, setting) {
