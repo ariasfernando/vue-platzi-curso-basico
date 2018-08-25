@@ -22,7 +22,7 @@ services:
       - queue
       - mail
   documentstore:
-    image: "mongo"
+    image: "mongo:3.4"
     volumes:
       - ./storage/data/:/data/db
     ports:
