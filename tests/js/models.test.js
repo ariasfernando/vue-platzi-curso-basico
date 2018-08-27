@@ -172,8 +172,8 @@ describe('== Models ==', () => {
       });
     });
 
-    describe('CustomCode', () => {
-      const element = new Element({type: 'custom-code'});
+    describe('CustomCodeElement', () => {
+      const element = new Element({type: 'custom-code-element'});
       const properties = element.getProperties();
 
       it('Should return a valid object', (done) => {
@@ -181,8 +181,8 @@ describe('== Models ==', () => {
         done();
       });
 
-      it('Should return a valid object of type custom-code', (done) => {
-        expect(properties).to.have.property('type', 'custom-code');
+      it('Should return a valid object of type custom-code-element', (done) => {
+        expect(properties).to.have.property('type', 'custom-code-element');
         done();
       });
 

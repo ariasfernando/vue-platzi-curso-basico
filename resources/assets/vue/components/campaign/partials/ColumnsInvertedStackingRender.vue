@@ -46,22 +46,22 @@
 
 <script>
 
-  import TextElement from '../elements/TextElement.vue';
-  import CustomCode from '../elements/CustomCode.vue';
-  import ButtonElement from '../elements/ButtonElement.vue';
-  import ImageElement from '../elements/ImageElement.vue';
-  import DividerElement from '../elements/DividerElement.vue';
   import _ from 'lodash';
+  import ButtonElement from '../elements/ButtonElement.vue';
+  import CustomCodeElement from '../elements/CustomCodeElement.vue';
+  import DividerElement from '../elements/DividerElement.vue';
+  import ImageElement from '../elements/ImageElement.vue';
+  import TextElement from '../elements/TextElement.vue';
 
   export default {
     name: 'ColumnsInvertedStackingRender',
 
     components: {
-      TextElement,
-      CustomCode,
       ButtonElement,
-      ImageElement,
+      CustomCodeElement,
       DividerElement,
+      ImageElement,
+      TextElement,
     },
     props: {
       moduleId:{

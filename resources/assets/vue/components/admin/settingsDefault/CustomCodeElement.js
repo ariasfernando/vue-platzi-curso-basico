@@ -3,6 +3,12 @@ function codeDefault() {
     componentSettings: [
       [
         {
+          label: 'Edit Code',
+          name: 'data',
+          type: 'generic-code',
+          subComponent: 'code',
+        },
+        {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
@@ -24,12 +30,6 @@ function codeDefault() {
           name: 'border-group',
           type: 'border-group',
           subComponent: 'container',
-        },
-        {
-          name: 'value',
-          type: 'generic-text',
-          label: 'code',
-          subComponent: 'code',
         },
       ],
     ],

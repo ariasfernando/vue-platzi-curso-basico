@@ -110,16 +110,14 @@
   import clone from 'clone';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
-  import CustomCode from './elements/CustomCode.vue';
+  import CustomCodeElement from './elements/CustomCodeElement.vue';
   import defaultElements from '../../resources/elements';
   import DividerElement from './elements/DividerElement.vue';
   import Draggable from 'vuedraggable';
   import Element from '../../models/Element';
   import ElementMixin from '../common/mixins/ElementMixin.js';
   import ImageElement from './elements/ImageElement.vue';
-  import Plugins from '../../plugins/modules';
   import TextElement from './elements/TextElement.vue';
-  import uc from 'underscore-contrib';
 
   module.exports = {
     name: 'Module',
@@ -127,9 +125,9 @@
       ButtonElement,
       ColumnsFixedRender,
       ColumnsStackedRender,
+      CustomCodeElement,
       DividerElement,
       Draggable,
-      CustomCode,
       ImageElement,
       TextElement,
     },

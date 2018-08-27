@@ -97,7 +97,8 @@ export default {
     "input-letter-spacing": elementSettings.LetterSpacing,
     "input-padding-group": elementSettings.PaddingGroup,
     "input-text-align": elementSettings.TextAlign,
-    "input-vertical-align": elementSettings.VerticalAlign
+    "input-vertical-align": elementSettings.VerticalAlign,
+    "input-generic-code": elementSettings.GenericCode
   },
   computed: {
     currentComponent() {

@@ -1,7 +1,7 @@
-function CustomCode() {
+function CustomCodeElement() {
   return {
     id: Math.floor(100000 + (Math.random() * 900000)),
-    type: 'code-element',
+    type: 'custom-code-element',
     code: {
       data: '<strong>Hello, world!</strong>',
     },
@@ -18,4 +18,4 @@ function CustomCode() {
   };
 }
 
-module.exports = CustomCode;
+module.exports = CustomCodeElement;

@@ -56,24 +56,24 @@
 
 <script>
 
-  import Draggable from 'vuedraggable';
-  import TextElement from '../elements/TextElement.vue';
-  import CustomCode from '../elements/CustomCode.vue';
   import ButtonElement from '../elements/ButtonElement.vue';
-  import ImageElement from '../elements/ImageElement.vue';
+  import CustomCodeElement from '../elements/CustomCodeElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
+  import Draggable from 'vuedraggable';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
+  import ImageElement from '../elements/ImageElement.vue';
+  import TextElement from '../elements/TextElement.vue';
 
   export default {
     name: 'ColumnsFixedRender',
     mixins: [ ElementMixin ],
     components: {
-      Draggable,
-      TextElement,
-      CustomCode,
       ButtonElement,
-      ImageElement,
+      CustomCodeElement,
       DividerElement,
+      Draggable,
+      ImageElement,
+      TextElement,
     },
     props: {
       column: { 
