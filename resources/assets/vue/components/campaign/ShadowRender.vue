@@ -1,5 +1,9 @@
 <template>
-    <iframe v-if="isRenderIframe" id="shadowRender" @update-iframe="updateIframe"></iframe>
+  <iframe
+    id="shadowRender"
+    :force="isRenderIframe"
+    @update-iframe="updateIframe"
+    ></iframe>
 </template>
 
 <script>
@@ -8,11 +12,10 @@
 import _ from 'lodash';
 export default {
   name:'shadow-render',
-
   data() {
-      return {
-        headEmail : '',
-      };
+    return {
+      headEmail : ''
+    };
   },
   computed: {
     campaign() {
@@ -22,55 +25,35 @@ export default {
       return this.$store.getters['campaign/modules'];
     },
     isRenderIframe() {
-      let render = false;
-      _.each(this.modules, (module, moduleIndex) => {
-        _.each(module.plugins, (plugin, pluginKey) => {
-          if (this.isRenderSetting(plugin, pluginKey)) {
-            render = true;
-          }
-        });
-        if(module.structure){
-          _.each(module.structure.columns, (column, columnIndex) => {
-            _.each(column.plugins, (plugin, pluginKey) => {
-              if (this.isRenderSetting(plugin, pluginKey)) {
-                render = true;
-              }
-            });
-            _.each(column.components, (component, componentIndex) => {
-              _.each(component.plugins, (plugin, pluginKey) => {
-                if (this.isRenderSetting(plugin, pluginKey)) {
-                  render = true;
-                }
-              });
-            });
-          });
-        }
-      });
-      if(!this.headEmail) {
+      if (!this.headEmail) {
         this.setHeadEmail();
       }
-      return render;
     }
   },
   methods: {
-    setHeadEmail () {
-      let url = "/template/email-preview/" + this.campaign.campaign_id + '?no_body=true';
-
-        var request = Application.utils.doAjax(url, {type :'GET', dataType: "html", data: {campaign_id: this.campaign.campaign_id}});
-        let _this = this;
+    setHeadEmail() {
+      if (this.campaign.campaign_id) {
+        const url = `/template/email-preview/${this.campaign.campaign_id}?no_body=true`;
+        const request = Application.utils.doAjax(url, {
+          type: 'GET',
+          dataType: "html",
+          data: {
+            campaign_id: this.campaign.campaign_id
+          }
+        });
         // Ajax: On Success
-        request.done(function(response){
-          _this.headEmail = response;
+        request.done((response) => {
+          this.headEmail = response;
         });
-
         // Ajax: On Fail
-        request.fail(function(jqXHR){
+        request.fail((jqXHR) => {
         });
+      }
     },
     isRenderSetting(plugin, key) {
       return plugin.enabled && plugin.needShadowRender;
     },
-    updateIframe(){
+    updateIframe() {
       setTimeout(() => {
         let html = $('table#emailCanvas').clone();
         html.find('.st-remove-element').remove();
