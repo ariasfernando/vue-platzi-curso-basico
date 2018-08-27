@@ -2,27 +2,25 @@
   <div>
     <settings-container :no-label="true">
       <template slot="setting-bottom">
-        <el-button @click="switchEditing" type="primary">
+        <el-button @click="getModal" type="primary">
           <i class="fa fa-code"></i>
           Edit Code
         </el-button>
       </template>
     </settings-container>
-    <div class="modalLikeVeil" v-if='editing === true'>
-      <div class="modalLike" v-if='editing === true'>
-        <div @click="switchEditing" class="close-button">X</div>
-        <codemirror ref="myCm"
-          v-model="code"
-          :options="cmOptions"
-        />
-        <Button @click="saveChange" class="stop-editing-button">End Editing Code</Button>
-      </div>
-    </div>
+    <modal-container v-if='showModal === true' @close-modal="showModal = false">
+      <codemirror ref="myCm"
+        v-model="code"
+        :options="cmOptions"
+      />
+      <Button @click="saveChange" class="stop-editing-button">End Editing Code</Button>
+    </modal-container>
   </div>
 </template>
 <script>
 import SettingMixin from '../mixins/SettingMixin.js';
 import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
+import ModalContainer from '../../common/containers/ModalContainer.vue';
 import { codemirror } from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/htmlmixed/htmlmixed';
@@ -33,11 +31,12 @@ export default {
   mixins: [SettingMixin],
   components: {
     SettingsContainer,
+    ModalContainer,
     codemirror
   },
   data() {
     return {
-      editing: false,
+      showModal: false,
       code: '',
       cmOptions: {
         mode: 'htmlmixed',
@@ -49,24 +48,17 @@ export default {
   methods: {
     saveChange() {
       this.mainSetting = this.code;
-      this.editing = !this.editing;
+      this.showModal = false;
     },
-    switchEditing() {
+    getModal() {
       this.code = this.mainSetting;
-      this.editing = !this.editing;
+      this.showModal = true;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.close-button {
-  float: right;
-  color: red;
-  font-weight: 900;
-  clear: both;
-  cursor: pointer;
-}
 .vue-codemirror {
   clear: both;
 }
@@ -76,25 +68,6 @@ export default {
   margin-top: -12px;
 }
 
-.modalLikeVeil {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.37);
-  z-index: 1000;
-
-  > .modalLike {
-    position: fixed;
-    top: 10vh;
-    left: 10vw;
-    right: 10vw;
-    background: white;
-    padding: 2rem;
-    border: 1px solid #f0f0f0;
-  }
-}
 .el-button {
   border-color: rgb(120, 220, 214);
   background-color: rgb(120, 220, 214);
