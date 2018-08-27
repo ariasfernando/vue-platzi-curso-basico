@@ -758,7 +758,7 @@
     }
 
     .item-remove {
-      floar: right;
+      float: right;
     }
 
     .item-name {

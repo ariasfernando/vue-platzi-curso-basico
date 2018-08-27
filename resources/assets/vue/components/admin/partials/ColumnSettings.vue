@@ -1,64 +1,36 @@
 <template>
   <div>
-    <label-item-container label="COLUMN SETTINGS" icon="glyphicon-pause"  v-b-toggle.column-settings></label-item-container>
-
-    <b-collapse id="column-settings" accordion="module-right">
+    <label-item-container label="COLUMN SETTINGS" icon="glyphicon-pause" v-b-toggle.column-settings-styles></label-item-container>
+    <b-collapse id="column-settings-styles" visible accordion="general-settings">
       <b-card class="control" no-block>
-        <b-tabs card ref="tabs" v-model="tabIndex">
-          <!-- Render Tabs -->
-
-          <b-tab
-            :title="`${key+1}`"
-            :button-id="`column-${key}`"
-            :key="key"
-            v-for="(column, key) in module.structure.columns"
-          >
-            <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
-              <component v-for="setting in settingGroup"
-                :is="'input-' + setting.type"
-                @setting-updated="(eventData)=>settingUpdatedHandler(eventData, key)"
-                :setting="setting.type"
-                :name="setting.name"
-                :type="setting.type"
-                :link="setting.link"
-                :label="setting.label"
-                :placeholder="setting.placeholder"
-                :default-value="setting.value"
-                :min-value="setting.minValue"
-                :max-value="setting.maxValue"
-                :options="setting.options"
-                :sub-component="setting.subComponent"
-                :element="setting.subComponent ? column[setting.subComponent] : column"
-                :is-disable-percentage="setting.isDisablePercentage"
-                :key="setting.name">
-              </component>
-            </group-container>
-
-            <!-- Column Settings -->
-            <div :class="'field-' + columnSetting.name" v-for="columnSetting in column.settings" :key="columnSetting.name">
-              
-              <div v-if="!columnSetting.group" >
-                <column-setting-group :column-setting="columnSetting" 
-                                      :column-key="key">
-                </column-setting-group>
-              </div>
-
-              <div v-else>
-                <column-setting-element :column-setting="columnSetting"
-                                        :column-key="key">
-                </column-setting-element>
-              </div>
-
-              <!-- Column Settings -->
-  
-            </div>
-            <!-- Column Plugins -->
-            <div v-for="(plugin, moduleKey) in column.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
-              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="key"></component>
-            </div>
-            <!-- /Column Plugins -->
-          </b-tab>
-        </b-tabs>
+        <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
+          <component v-for="setting in settingGroup"
+            :is="'input-' + setting.type"
+            @setting-updated="settingUpdatedHandler"
+            :setting="setting.type"
+            :name="setting.name"
+            :type="setting.type"
+            :link="setting.link"
+            :label="setting.label"
+            :placeholder="setting.placeholder"
+            :default-value="setting.value"
+            :min-value="setting.minValue"
+            :max-value="setting.maxValue"
+            :options="setting.options"
+            :sub-component="setting.subComponent"
+            :element="setting.subComponent ? column[setting.subComponent] : column"
+            :is-disable-percentage="setting.isDisablePercentage"
+            :key="setting.name">
+          </component>
+        </group-container>
+      </b-card>
+    </b-collapse>
+    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.column-settings-functionalities></label-item-container>
+    <b-collapse id="column-settings-functionalities" accordion="column-settings">
+      <b-card class="control" >
+        <div v-for="(plugin, moduleKey) in column.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
+          <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="currentComponent.columnId"></component>
+        </div>
       </b-card>
     </b-collapse>
   </div>
@@ -80,44 +52,32 @@ export default {
     "input-generic-color": elementSettings.GenericColor,
     "input-class-input": elementSettings.ClassInput,
   },
+  props: [ 'currentComponent' ],
   computed: {
     module() {
       return this.$store.getters["module/module"];
     },
-    activeColumn() {
-      return this.$store.getters["module/activeColumn"];
+    column() {
+      return this.module.structure.columns[this.currentComponent.columnId];
     },
     settings() {
       return settingsDefault['column-element']().componentSettings;
     }
   },
   methods: {
-    settingUpdatedHandler(eventData, key) {
-      this.saveColumnProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value, key);
+    settingUpdatedHandler(eventData) {
+      this.saveColumnProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value, this.currentComponent.columnId);
     },
-    saveColumnProperty(link, subComponent, name, value, colId) {
+    saveColumnProperty(link, subComponent, property, value, colId) {
       const data = {
-        colId: colId,
+        colId,
         subComponent,
         link,
-        property: name,
-        value: value
+        property,
+        value
       };
       this.$store.commit("module/saveColumnProperty", data);
     },
   },
-  watch: {
-    activeColumn(val) {
-      setTimeout(() => {
-        this.$refs.tabs.setTab(val);
-      }, 100);
-    }
-  },
-  data() {
-    return {
-      tabIndex: null,
-      enabled: false
-    };
-  }
 };
 </script>

@@ -34,6 +34,7 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="component.id"
+              @set-component="selection => $emit('set-component', selection)"
               context="admin"
             ></component>
             </template>
@@ -48,6 +49,7 @@
               </div>
             </div>
           </draggable>
+          <element-selector :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
         </td>
       </tr>
     </table>
@@ -61,6 +63,7 @@
   import DividerElement from '../elements/DividerElement.vue';
   import Draggable from 'vuedraggable';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
+  import ElementSelector from '../../common/ElementSelector.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import TextElement from '../elements/TextElement.vue';
 
@@ -72,6 +75,7 @@
       CustomCodeElement,
       DividerElement,
       Draggable,
+      ElementSelector,
       ImageElement,
       TextElement,
     },
@@ -112,6 +116,5 @@
         this.$emit('add', e);
       },
     }    
-    
   };
 </script>

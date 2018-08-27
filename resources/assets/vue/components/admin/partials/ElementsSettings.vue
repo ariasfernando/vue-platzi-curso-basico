@@ -5,10 +5,11 @@
 
       <b-collapse id="element" visible accordion="module-left">
         <b-card class="control">
-          <draggable :element="'ul'"
-                     :options="options"
-                     width="100%"
-                     class="components-list"
+          <draggable
+            :element="'ul'"
+            :options="options"
+            width="100%"
+            class="components-list"
           >
             <li class="component-item" data-type="text-element">
               <i class="fa fa-align-justify"></i>

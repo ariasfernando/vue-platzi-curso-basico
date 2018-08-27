@@ -1,106 +1,117 @@
 <template>
-  <table width="100%" 
-         cellspacing="0" 
-         cellpadding="0" 
-         border="0"
-         align="center"
-  >
-    <!-- START: 2 COLUMNS -->
-    <tr v-if="module.structure.columns.length > 1">
-      <td
-        width="100%"
-        :bgcolor="module.structure.attribute.bgcolor"
-        :style="module.structure.style"
-        :class="module.structure.attribute.classes ||''" >
-        <table
-          width="100%"
-          class="st-wrapper" 
-          cellspacing="0" 
-          cellpadding="0" 
-          border="0" 
-          align="center"
-        >
-          <tr>
-            <template v-if="module.structure.columnsStacking === 'columnsFixed'">
-
-              <!-- If columnsFixed is true, show Columns fixed render -->
-              <td
-                v-for="(column, columnId) in module.structure.columns"
-                :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
-                :valign="column.container.attribute.valign || 'top'" 
-                :key="column.id"
-              >
-                <columns-fixed-render @add="onAdd" :column="column" :column-id="columnId"></columns-fixed-render>
-              </td>
-            </template>
-
-            <!-- show Columns staked render -->
-            <td
-              v-else
-              width="100%"
-            >
-              <columns-stacked-render @add="onAdd"></columns-stacked-render>
-            </td> 
-
-          </tr>
-        </table>  
-
-      </td>
-    </tr>
-    <!-- END: 2 COLUMNS -->
-
-    <!-- START 1 COLUMNS -->
-    <tr v-else>
-      <td
-        class="st-mobile-full-width" 
-        v-for="(column, columnId) in module.structure.columns"
-        :class="[{'empty-col': !column.components.length}, module.structure.attribute.classes]" 
-        :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'" 
-        :style="module.structure.style || ''"
-        :bgcolor="module.structure.attribute.bgcolor"
-        :valign="module.structure.attribute.valign || 'top'" 
-        :data-col="columnId"
-        :key="column.id"
-      >
-        <draggable
-          class="st-content-component"
-          border="0"
-          width="100%"
-          cellpadding="0"
+  <div>
+    <table width="100%"
           cellspacing="0"
-          @add="onAdd"
-          :element="'table'"
-          :options="options"
+          cellpadding="0"
+          border="0"
+          align="center"
+    >
+      <!-- START: 2 COLUMNS -->
+      <tr v-if="module.structure.columns.length > 1">
+        <td
+          width="100%"
+          :bgcolor="module.structure.attribute.bgcolor"
+          :style="module.structure.style"
+          :class="module.structure.attribute.classes ||''">
+          <table
+            width="100%"
+            class="st-wrapper"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            align="center"
+          >
+            <tr>
+              <template v-if="module.structure.columnsStacking === 'columnsFixed'">
+
+                <!-- If columnsFixed is true, show Columns fixed render -->
+                <td
+                  v-for="(column, columnId) in module.structure.columns"
+                  :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
+                  :valign="column.container.attribute.valign || 'top'"
+                  :key="column.id"
+                >
+                  <columns-fixed-render
+                    @add="onAdd"
+                    :column="column"
+                    :column-id="columnId"
+                    @set-component="setComponent"
+                  ></columns-fixed-render>
+                </td>
+              </template>
+
+              <!-- show Columns staked render -->
+              <td
+                v-else
+                width="100%"
+              >
+                <columns-stacked-render
+                  @add="onAdd"
+                  @set-component="setComponent"
+                ></columns-stacked-render>
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+      <!-- END: 2 COLUMNS -->
+
+      <!-- START 1 COLUMNS -->
+      <tr v-else>
+        <td
+          class="st-mobile-full-width"
+          v-for="(column, columnId) in module.structure.columns"
+          :class="[{'empty-col': !column.components.length}, module.structure.attribute.classes]"
+          :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
+          :style="module.structure.style || ''"
+          :bgcolor="module.structure.attribute.bgcolor"
+          :valign="module.structure.attribute.valign || 'top'"
           :data-col="columnId"
-          :class="{'empty-table':!column.components.length}"
+          :key="column.id"
         >
-          <template v-if="column.components.length">
-            <component
-              v-for="(component, componentId) in column.components"
-              :is="component.type" 
-              :component="component" 
-              :module-id="module.id" 
-              :column-id="columnId"
-              :component-id="componentId" 
-              :key="component.id"
-              :data-component="component"
-              class="st-component"
-              context="admin"
-            ></component>
-          </template>
-          <div v-else style="display:table-row;"> 
-            <div
-              align="center" 
-              class="empty-cell"
-              height="80"
-              :data-col="columnId">Drag content here
+          <draggable
+            class="st-content-component"
+            border="0"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            @add="onAdd"
+            :element="'table'"
+            :options="options"
+            :data-col="columnId"
+            :class="{'empty-table':!column.components.length}"
+          >
+            <template v-if="column.components.length">
+              <component
+                v-for="(component, componentId) in column.components"
+                :is="component.type"
+                :component="component"
+                :module-id="module.id"
+                :column-id="columnId"
+                :component-id="componentId"
+                :key="component.id"
+                :data-component="component"
+                @set-component="setComponent"
+                class="st-component"
+                context="admin"
+              ></component>
+            </template>
+            <div v-else style="display:table-row;">
+              <div
+                align="center"
+                class="empty-cell"
+                height="80"
+                :data-col="columnId">Drag content here
+              </div>
             </div>
-          </div>
-        </draggable>
-      </td>
-    </tr>
-    <!-- END 1 COLUMNS -->
-  </table>
+          </draggable>
+        </td>
+      </tr>
+      <!-- END 1 COLUMNS -->
+    </table>
+    <element-selector label="Root" @element-selected="moduleSelect" :active="isActiveGeneralSettings" selectorIcon="fa fa-cog"></element-selector>
+  </div>
 </template>
 
 <script>
@@ -116,11 +127,15 @@
   import Draggable from 'vuedraggable';
   import Element from '../../models/Element';
   import ElementMixin from '../common/mixins/ElementMixin.js';
+  import ElementSelector from '../common/ElementSelector.vue';
   import ImageElement from './elements/ImageElement.vue';
+  import Plugins from '../../plugins/modules';
   import TextElement from './elements/TextElement.vue';
+  import uc from 'underscore-contrib';
 
   module.exports = {
     name: 'Module',
+    mixins: [ ElementMixin ],
     components: {
       ButtonElement,
       ColumnsFixedRender,
@@ -128,8 +143,9 @@
       CustomCodeElement,
       DividerElement,
       Draggable,
+      ElementSelector,
       ImageElement,
-      TextElement,
+      TextElement
     },
     data () {
       return {
@@ -148,6 +164,9 @@
     computed: {
       module() {
         return this.$store.getters["module/module"];
+      },
+      isActiveGeneralSettings() {
+        return this.currentComponent.columnId === undefined && this.currentComponent.componentId === undefined;
       },
     },   
     methods: {
@@ -216,6 +235,12 @@
       },
       setComponent(ref) {
         this.$store.commit("module/setCurrentComponent", ref);
+      },
+      moduleSelect() {
+        this.setComponent({
+          columnId: undefined,
+          componentId: undefined,
+        });
       },
     }
   };

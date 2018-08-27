@@ -1,8 +1,6 @@
 <template>
-  <div class="component-settings height-custom" v-if="ready">
-
+  <div>
     <!-- START: Style -->
-
     <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
@@ -30,11 +28,9 @@
         </group-container>
       </b-card>
     </b-collapse>
-    <!-- END: Style -->
-
-    <!-- START: Funcionalities -->
-    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.funcionalities></label-item-container>
-    <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
+    <!-- Funcionalities -->
+    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.functionalities></label-item-container>
+    <b-collapse id="functionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
         <div
           v-for="(plugin, key) in component.plugins"
@@ -46,9 +42,7 @@
         </div>
       </b-card>
     </b-collapse>
-    <!-- END: Funcionalities -->
-
-    <!-- START: Mobile Settings -->    
+    <!-- Mobile Settings -->    
     <label-item-container label="MOBILE" icon="glyphicon-tasks" v-b-toggle.mobile></label-item-container>
     <b-collapse id="mobile" accordion="module-settings-accordion-right">
       <b-card class="plugins">
@@ -73,12 +67,7 @@ import GroupContainer from "../common/containers/GroupContainer.vue";
 import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
 import settingsDefault from "./settingsDefault";
 export default {
-  data() {
-    return {
-      ready: false,
-      component: {}
-    };
-  },
+  props: [ 'currentComponent' ],
   components: {
     GroupContainer,
     LabelItemContainer,
@@ -101,25 +90,14 @@ export default {
     "input-generic-code": elementSettings.GenericCode
   },
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
     settings() {
       return settingsDefault[this.component.type]().componentSettings;
-    }
-  },
-  watch: {
-    currentComponent: {
-      handler: function(currentComponent) {
-        let module = this.$store.getters["module/module"];
-        if (!_.isEmpty(currentComponent) && currentComponent.componentId >= 0) {
-          this.component = module.structure.columns[currentComponent.columnId].components[currentComponent.componentId];
-          this.ready = true;
-        } else {
-          this.ready = false;
-        }
-      },
-      deep: true
+    },
+    module() {
+      return this.$store.getters["module/module"];
+    },
+    component(){
+      return this.module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
     }
   },
   methods: {
