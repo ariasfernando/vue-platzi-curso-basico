@@ -3,7 +3,7 @@
     <settings-container :no-label="true">
       <template slot="setting-bottom">
         <el-button @click="switchEditing" type="primary">
-          <i class="glyphicon glyphicon-cloud-upload"></i>
+          <i class="fa fa-code"></i>
           Edit Code
         </el-button>
       </template>
@@ -15,7 +15,7 @@
           v-model="code"
           :options="cmOptions"
         />
-        <Button @click="saveChange" class="stop-editing-button">End Editing HTML</Button>
+        <Button @click="saveChange" class="stop-editing-button">End Editing Code</Button>
       </div>
     </div>
   </div>
