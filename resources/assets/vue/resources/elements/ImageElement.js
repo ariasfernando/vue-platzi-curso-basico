@@ -13,8 +13,6 @@ function imageDefault() {
       attribute: {
         placeholder: 'default/placeholder-square.jpg',
         href: '',
-        alt: 'Image',
-        title: 'Image',
         width: '100%',
         height: 'auto',
       },
