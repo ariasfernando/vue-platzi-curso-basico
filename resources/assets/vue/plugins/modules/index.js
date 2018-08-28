@@ -7,6 +7,7 @@ import fontFamily from './font-family';
 import mobileStyles from './mobile-styles';
 import moduleBackgroundColor from './module-background-color';
 import moduleEqualHeightForColumn from './module-equal-height-for-column';
+import moduleHeightSync from './module-height-sync';
 import modulePaletteBackgroundColor from './module-palette-background-color';
 import paletteBackgroundColor from './palette-background-color';
 import styleImageEditor from './style-image-editor';
@@ -27,6 +28,7 @@ export default {
   mobileStyles,
   moduleBackgroundColor,
   moduleEqualHeightForColumn,
+  moduleHeightSync,
   modulePaletteBackgroundColor,
   paletteBackgroundColor,
   styleImageEditor,
