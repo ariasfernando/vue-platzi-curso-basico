@@ -2,7 +2,7 @@ import Vue from 'vue';
 
 function Campaign(data) {
   this.campaign_name = data.settings.campaignName || data.campaign.campaign_name;
-  this.campaign_preheader = data.settings.campaignPreheader || data.campaign.campaign_data.campaign_preheader;
+  this.campaign_preheader = data.settings.campaignPreheader || '';
   this.preheader_visible = data.settings.campaignPreheaderVisible || false;
   this.tags = data.settings.tags || [];
   this.campaign_id = data.campaign.campaign_id;

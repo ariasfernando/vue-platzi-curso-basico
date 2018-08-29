@@ -333,6 +333,7 @@ export default {
   font-weight: 300;
   padding-left: 8px;
   height: 26px;
+  font-size: 12px;
 
   &:focus{
     border: 1px solid #78dcd6;

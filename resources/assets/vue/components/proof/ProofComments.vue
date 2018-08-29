@@ -24,7 +24,9 @@
 </template>
 
 <script>
-    module.exports = {
+    import proofService from '../../services/proof';
+
+    export default {
         name: 'proofComments',
         data() {
             return {
@@ -36,9 +38,6 @@
         },
         props: ['token'],
         created: function() {
-            // TODO: find a way to define this in the vue instance
-            Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
             // Get a list of comments
             this.getComments();
         },
@@ -50,34 +49,32 @@
                 }
             },
             getComments: function() {
-                var vm = this;
-                Vue.http.get(Application.globals.baseUrl + '/proof/comments/' + this.token)
-                    .then(function( resp ) {
-                        if (resp.status == 200) {
-                            vm.comments = resp.body.data.comments;
-                        }
-                    });
+                var _this = this;
+                proofService.getComments(_this.token).then((response) => {
+                    if (response.status === 'success') {
+                        _this.comments = response.data.comments;
+                    }
+                });
             },
             submitComment: function() {
-                var vm = this;
-                vm.error = '';
-                if (vm.newComment.length > 0) {
-                    vm.canSubmit = false;
+                var _this = this;
+                _this.error = '';
+                if (_this.newComment.length > 0) {
+                    _this.canSubmit = false;
                     var data = {
-                        comment: vm.newComment
+                        comment: _this.newComment
                     };
-                    Vue.http.post(Application.globals.baseUrl + '/proof/comment/' + vm.token, data)
-                        .then(function( resp ) {
-                            if (resp.status == 200) {
-                                vm.getComments();
-                                vm.newComment = '';
-                            } else {
-                                vm.error = 'Something went wrong. Please try again.';
-                            }
-                            vm.canSubmit = true;
-                        });
+                    proofService.postComment(_this.token, data).then((response) => {
+                        if (response.status === 'success') {
+                            _this.getComments();
+                            _this.newComment = '';
+                        } else {
+                            _this.error = 'Something went wrong. Please try again.';
+                        }
+                        _this.canSubmit = true;
+                    });
                 } else {
-                    vm.error = 'Please write a comment.';
+                    _this.error = 'Please write a comment.';
                 }
             }
         }

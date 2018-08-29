@@ -42,7 +42,8 @@
             v-show="!locked"
           >Send for Review</button>
 
-          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="!campaign.campaign_data.template" @click="complete">
+          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="campaign.campaign_data.can_be_processed && !campaign.campaign_data.template" @click="complete"
+            v-show="!locked" >
             Complete
             <i class="glyphicon glyphicon-menu-right"></i>
           </a>
@@ -261,26 +262,25 @@
               let finishedProcessing = () => {
                 // Set campaign as processed
                 this.$store.commit('campaign/setProcessStatus');
-                // Show complete after campaign is completely processed
-                this.$store.commit("campaign/toggleModal", 'modalComplete');
-                // Redirect to `/dashboard` if user refreshes the page
-                window.history.replaceState(null, null, "?processed=true");
+                // Reload campaign data
+                this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id).then(() => {
+                  // Show complete after campaign is completely processed
+                  this.$store.commit("campaign/toggleModal", 'modalComplete');
+                  // Redirect to `/dashboard` if user refreshes the page
+                  window.history.replaceState(null, null, "?processed=true");
+                });
               };
 
-              // Set processed
+              // Set processed (if using "sync" as QUEUE_DRIVER)
               if (completeResponse.processed) {
-                return finishedProcessing();
-              }
-
-              // Poll server with job id
-              if (completeResponse.jobId) {
+                finishedProcessing();
+              } else if (completeResponse.jobId) {
+                // Poll server with job id when using an async queue driver.
                 let processInterval = setInterval(() => {
                   this.checkProcessStatus(completeResponse.jobId).then((response) => {
                     if (response.status === 'finished') {
                       clearInterval(processInterval);
                       finishedProcessing();
-                      // Reload campaign data
-                      this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id);
                     }
                   });
                 }, 2000);

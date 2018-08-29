@@ -24,7 +24,7 @@ function Module(data = {}) {
   const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : {};
   const mobileClasses = data.mobileClasses || [];
 
-  this.plugins = data.plugins || getPlugins();
+  this.plugins = _.merge(getPlugins(), data.plugins);
 
   this.structure = {
     columnsStacking: (data.structure && data.structure.columnsStacking) ? data.structure.columnsStacking : 'normal',
@@ -62,7 +62,7 @@ function Module(data = {}) {
 
   _.extend(this.structure.settings, settings);
   _.extend(this.structure.attribute, attribute);
-
+  
   return this;
 }
 
