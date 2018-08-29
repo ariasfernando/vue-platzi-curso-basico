@@ -196,14 +196,14 @@
         return this.module.data.errors || [];
       },
       msoStartingComment() {
-        return `<--[if gte mso 9]>
+        return `<!--[if gte mso 9]>
           <table width="${this.templateInnerWidth}" style="width:${this.widthStyle(this.templateInnerWidth)}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
             <tr>
               <td width="${this.columnWidth(0)}" ${this.columnBgcolor(0)} style="width:${this.widthStyle(this.columnWidth(0))}" valign="top">
               <![endif]-->`;
       },
       msoStartingCommentInverted() {
-        return `<--[if gte mso 9]>
+        return `<!--[if gte mso 9]>
           <table width="${this.templateInnerWidth}" style="width:${this.widthStyle(this.templateInnerWidth)}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
             <tr>
               <td width="${this.columnWidth(this.module.structure.columns.length - 1)}" ${this.columnBgcolor(this.module.structure.columns.length - 1)} style="width: ${this.widthStyle(this.columnWidth(this.module.structure.columns.length - 1))}" dir="ltr" valign="top">

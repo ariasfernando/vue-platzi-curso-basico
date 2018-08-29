@@ -85,7 +85,7 @@
         return this.module.structure.columns.length;
       },
       msoEndingComment() {
-        return `<--[if gte mso 9]>
+        return `<!--[if gte mso 9]>
               </td>
             </tr>
           </table>
@@ -94,7 +94,7 @@
     },
     methods: {
       msoBetweenComment(columnId) {
-        return `<--[if gte mso 9]>
+        return `<!--[if gte mso 9]>
           </td>
           <td width="${this.columnWidth(columnId+1)}" ${this.columnBgcolor(columnId+1)} style="width:${this.widthStyle(this.columnWidth(columnId+1))}" align="left" valign="top">
         <![endif]-->`;

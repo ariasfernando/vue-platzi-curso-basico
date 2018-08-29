@@ -80,13 +80,13 @@
         return this.module.structure.columns.length;
       },
       msoBetweenComment() {
-        return `<--[if gte mso 9]>
+        return `<!--[if gte mso 9]>
               </td>
               <td width="${this.columnWidth(this.columnId -1)}" ${this.columnBgcolor(columnId-1)} style="width: ${this.widthStyle(this.columnWidth(this.columnId -1))}" align="left" valign="top">
                 <![endif]-->`;
       },
       msoEndingComment() {
-        return `<--[if gte mso 9]>
+        return `<!--[if gte mso 9]>
             </td>
           </tr>
         </table>
