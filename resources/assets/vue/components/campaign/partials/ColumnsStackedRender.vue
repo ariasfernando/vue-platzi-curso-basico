@@ -2,6 +2,7 @@
     <div class="stx-wrapper">
       <table
        class="st-mso-full-width st-mobile-full-width"
+        :data-column-id="columnId"
         align="left"
         cellpadding="0"
         cellspacing="0"
@@ -14,6 +15,7 @@
             width="100%"
             style="width:100%;"
             :style="elementBorderPaddingAndHeight(column.container)"
+            :height="column.container.attribute.height"
             :bgcolor="column.container.attribute.bgcolor"
             :valign="column.container.attribute.valign|| 'top'"
             :align="column.container.attribute.align || 'center'"

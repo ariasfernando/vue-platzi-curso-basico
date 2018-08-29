@@ -22,9 +22,11 @@
 
       <column-bar-container side="right">
         <div>
-            <module-settings v-if="showModuleSettings"></module-settings>
-            <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
-            <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
+          <module-settings v-if="showModuleSettings"></module-settings>
+          <module-background-settings></module-background-settings>
+          <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
+          <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
+          <shadow-render></shadow-render>
         </div>
       </column-bar-container>
     </div>
@@ -56,7 +58,9 @@
   import ModalEsp from './modals/ModalEsp.vue'
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
+  import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
+  import ShadowRender from './ShadowRender.vue'
   import Spinner from '../common/Spinner.vue'
   import Tracking from './Tracking.vue'
   import VueSticky from 'vue-sticky'
@@ -67,6 +71,7 @@
     components: {
       CampaignConfiguration,
       CampaignMenu,
+      ColumnBarContainer,
       ComponentSettings,
       CustomModuleSettings,
       EmailActions,
@@ -76,11 +81,11 @@
       ModalEsp,
       ModalPreview,
       ModalProof,
+      ModuleBackgroundSettings,
       ModuleSettings,
+      ShadowRender,
       Spinner,
       Tracking,
-      EmailActions,
-      ColumnBarContainer
     },
     data: function () {
       return {

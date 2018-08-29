@@ -10,10 +10,9 @@
             align="center"
             style="width: 100%;"
             class="stx-draggable-wrapper st-email-wrapper"
-            width="100%"
             :class="{ 'stx-campaign-validated': campaignValidated }"
             :bgcolor="templateBackgroundColor || defaultTemplateBackgroundColor"
-            @click.stop="handleActive"
+            @mousedown.stop="handleActive"
             @mouseover="onMouseOver"
             @mouseleave="onMouseLeave">
               <draggable
@@ -376,7 +375,6 @@
     }  
 
   }
-
   .applelinks{
     color:#6b6b6b !important; 
     text-decoration: none !important; 
@@ -392,9 +390,9 @@
   }
 
   p,ul,ol{
-      margin: 0;
-      padding: 0;
-    }
+    margin: 0;
+    padding: 0;
+  }
 
   .stx-edit-text{
 
