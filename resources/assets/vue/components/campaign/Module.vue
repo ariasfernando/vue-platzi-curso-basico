@@ -202,7 +202,7 @@
         return `[if gte mso 9]>
           <table width="${this.columnWidthPadding}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
             <tr>
-              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" ${this.columnBgcolo(0)} dir="ltr">
+              <td style="width: ${this.calculeWidthColumnPx(1)}px !important" ${this.columnBgcolo(1)} dir="ltr">
               <![endif]-->`;
       },
       activeModule() {
