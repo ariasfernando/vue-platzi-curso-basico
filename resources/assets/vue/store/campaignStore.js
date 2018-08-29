@@ -287,6 +287,22 @@ function campaignStore() {
         state.modules[data.moduleId].data[data.field] = data.value;
         state.dirty = true;
       },
+      saveCustomModuleParamsField(state, param) {
+        // Prevent empty arrays returned by php-mongo
+        if (isArray(state.modules[param.moduleId].params)) {
+          Vue.set(state.modules[param.moduleId], 'params', {});
+        }
+        if (!(param.field in state.modules[param.moduleId].params)) {
+          Vue.set(state.modules[param.moduleId].params, param.field, {});
+        }
+        if ("merge" in param && param.merge === true) {
+          const newParams = _.extend(clone(state.modules[param.moduleId].params[param.field]), param.value);
+          Vue.set(state.modules[param.moduleId].params, param.field, newParams);
+        } else {
+          Vue.set(state.modules[param.moduleId].params, param.field, param.value);
+        }
+        state.dirty = true;
+      },
       setEditorOptions(state, toolbar) {
         state.editorToolbar = toolbar;
       },
