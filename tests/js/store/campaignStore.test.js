@@ -9,6 +9,7 @@ import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex/dist/vuex';
 import { cloneDeep } from 'lodash';
 import nock from 'nock';
+import 'expect-more-jest';
 /* local import */
 // import libraryStore from '@/store/libraryStore';
 // import moduleStore from '@/store/moduleStore';
@@ -364,7 +365,7 @@ describe('== Library Store ==', () => {
 
       done();
     });
-    it('"updateElement" expect return a new error', (done) => {
+    it('"updateElement" without moduleId, expect return a new error', (done) => {
       let payload = {
         columnId: 0,
         componentId: 0,
@@ -397,6 +398,151 @@ describe('== Library Store ==', () => {
       payload = null;
       newStruct = null;
       
+      done();
+    });
+    it('"saveSetting" with setting object, expect to set the key with a new value', (done) => {
+      let setting = {
+        name: 'tags',
+        value: ['tag', 'test'],
+      };
+
+      store.commit('campaign/saveSetting', setting);
+
+      let stateEditedSettings = store.state.campaign.editedSettings;
+
+      expect(stateEditedSettings).toHaveProperty(setting.name, setting.value);
+
+      setting = null;
+      stateEditedSettings = null;
+
+      done();
+    });
+    it('"saveCampaignData" with data, expect to save a new data or update this', (done) => {
+      let payload = {
+        name: 'campaign_settings',
+        value: {
+          templateBackgroundColor: '#000999',
+        },
+      };
+      let newStruct = {
+        campaign_data: {
+          campaign_settings: [],
+          auto_save: false,
+        },
+      };
+
+      store.commit('campaign/loadCampaignData', newStruct);
+      store.commit('campaign/saveCampaignData', payload);
+
+      let stateSaveCampaignData = store.state.campaign.campaign.campaign_data;
+
+      expect(stateSaveCampaignData).toHaveProperty(payload.name, payload.value);
+
+      payload = null;
+      newStruct = null;
+      stateSaveCampaignData = null;
+
+      done();
+    });
+    it('"toggleModal" with nameModal, expect to change the Boolean status', (done) => {
+      store.commit('campaign/toggleModal', 'modalCode');
+      store.commit('campaign/toggleModal', 'modalComplete');
+      store.commit('campaign/toggleModal', 'modalPreview');
+      store.commit('campaign/toggleModal', 'modalProof');
+      store.commit('campaign/toggleModal', 'modalProofTrack');
+      store.commit('campaign/toggleModal', 'modalEnableTemplating');
+      store.commit('campaign/toggleModal', 'modalEsp');
+
+      let stateToggleModalModalCode = store.state.campaign.modalCode;
+      let stateToggleModalModalComplete = store.state.campaign.modalComplete;
+      let stateToggleModalModalPreview = store.state.campaign.modalPreview;
+      let stateToggleModalModalProof = store.state.campaign.modalProof;
+      let stateToggleModalModalProofTrack = store.state.campaign.modalProofTrack;
+      let stateToggleModalModalEnableTemplating = store.state.campaign.modalEnableTemplating;
+      let stateToggleModalModalEsp = store.state.campaign.modalEsp;
+
+      expect(stateToggleModalModalCode).toBeTruthy();
+      expect(stateToggleModalModalComplete).toBeTruthy();
+      expect(stateToggleModalModalPreview).toBeTruthy();
+      expect(stateToggleModalModalProof).toBeTruthy();
+      expect(stateToggleModalModalProofTrack).toBeTruthy();
+      expect(stateToggleModalModalEnableTemplating).toBeTruthy();
+      expect(stateToggleModalModalEsp).toBeTruthy();
+      
+      stateToggleModalModalCode = null;
+      stateToggleModalModalComplete = null;
+      stateToggleModalModalPreview = null;
+      stateToggleModalModalProof = null;
+      stateToggleModalModalProofTrack = null;
+      stateToggleModalModalEnableTemplating = null;
+      stateToggleModalModalEsp = null;
+
+      done();
+    });
+    xit('"toggleModal" with nameModal not defined, expect to throw error message', (done) => {
+      expect(() => store.commit('campaign/toggleModal', 'modalUndefined')).toThrow('nameModal Undefined');
+      done();
+    });
+    it('"removeModule" with number of module position, expect to has removed the module', (done) => {
+      let modulesData = [
+        {
+          _id: '5b3ce34792f8ef00137bb105',
+          type: 'virtual',
+          key: 'text_458798',
+          name: 'text',
+          structure: {},
+          plugins: {},
+          status: 'publish',
+          updated_at: '2018-08-03 16:09:09',
+          created_at: '2018-07-04 11:09:59',
+          isFixed: true,
+          fixedPosition: 0,
+          mandatory: true,
+        },
+      ];
+
+      store.commit('campaign/updateEmailCanvas', modulesData);
+      store.commit('campaign/removeModule', 0);
+
+      let stateModules = store.state.campaign.modules;
+      
+      expect(stateModules).toBeEmptyArray();
+
+      modulesData = null;
+      stateModules = null;
+
+      done();
+    });
+    it('"setProcessStatus" , expect to change status Boolean to true', (done) => {
+      let newStruct = {
+        campaign_data: {
+          processed: false,
+        },
+      };
+
+      store.commit('campaign/loadCampaignData', newStruct);
+      store.commit('campaign/setProcessStatus');
+
+      let stateModules = store.state.campaign.campaign.campaign_data.processed;
+
+      expect(stateModules).toBeTruthy();
+
+      newStruct = null;
+      stateModules = null;
+
+      done();
+    });
+    it('"setCurrentComponent" with data, expect to set the "currentComponent" state', (done) => {
+      let data = { moduleId: 0, columnId: 0, componentId: 0 };
+
+      store.commit('campaign/setCurrentComponent', data);
+
+      let stateCurrentComponent = store.state.campaign.currentComponent;
+
+      expect(stateCurrentComponent).toEqual(data);
+
+      data = null;
+      stateCurrentComponent = null;
 
       done();
     });
