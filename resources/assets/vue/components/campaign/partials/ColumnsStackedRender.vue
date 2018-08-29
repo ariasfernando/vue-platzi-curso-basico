@@ -34,8 +34,8 @@
           </td>
         </tr>
       </table>
-      <comment v-if="numColumns === columnId + 1" :content="msoEndingComment"></comment>
-      <comment v-else :content="msoBetweenComment(columnId)"></comment>
+      <div v-if="numColumns === columnId + 1" class="stx-wrapper" v-html="msoEndingComment"></div>
+      <div v-else class="stx-wrapper" v-html="msoBetweenComment(columnId)"></div>
     </div>
 </template>
 
@@ -85,19 +85,19 @@
         return this.module.structure.columns.length;
       },
       msoEndingComment() {
-        return `[if gte mso 9]>
+        return `<--[if gte mso 9]>
               </td>
             </tr>
           </table>
-        <![endif]`;
+        <![endif]-->`;
       },
     },
     methods: {
       msoBetweenComment(columnId) {
-        return `[if gte mso 9]>
+        return `<--[if gte mso 9]>
           </td>
-          <td width="${this.columnWidth(columnId+1)}" style="width:${this.widthStyle(this.columnWidth(columnId+1))}" align="left" valign="top">
-        <![endif]`;
+          <td width="${this.columnWidth(columnId+1)}" ${this.columnBgcolor(columnId+1)} style="width:${this.widthStyle(this.columnWidth(columnId+1))}" align="left" valign="top">
+        <![endif]-->`;
       },
       selectComponent(data) {
         setTimeout(() => {

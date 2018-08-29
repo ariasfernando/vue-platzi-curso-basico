@@ -125,5 +125,12 @@ export default {
       }
       return width;
     },
+    columnBgcolor(columnId){
+      const bgcolor = this.module.structure.columns[columnId].container.attribute.bgcolor;
+      if (bgcolor) {
+        return `bgcolor="${bgcolor}"`;
+      }
+      return '';
+    },
   },
 };

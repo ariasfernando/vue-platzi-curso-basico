@@ -55,7 +55,7 @@
             v-if="module.structure.columnsStacking === 'normal'"
             :valign="module.structure.attribute.valign || 'top'"
           >
-            <comment :content="msoStartingComment"></comment>
+            <div class="stx-wrapper" v-html="msoStartingComment"></div>
             <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
           </td>
 
@@ -74,7 +74,7 @@
               >
               <tr>
                 <td width="100%" :valign="module.structure.attribute.valign || 'top'">
-                  <comment :content="msoStartingCommentInverted"></comment>
+                  <div class="stx-wrapper" v-html="msoStartingCommentInverted"></div>
 
                   <columns-inverted-stacking-render
                     :module-id="moduleId"
@@ -196,18 +196,18 @@
         return this.module.data.errors || [];
       },
       msoStartingComment() {
-        return `[if gte mso 9]>
+        return `<--[if gte mso 9]>
           <table width="${this.templateInnerWidth}" style="width:${this.widthStyle(this.templateInnerWidth)}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
             <tr>
-              <td width="${this.columnWidth(0)}" style="width:${this.widthStyle(this.columnWidth(0))}" valign="top">
-              <![endif]`;
+              <td width="${this.columnWidth(0)}" ${this.columnBgcolor(0)} style="width:${this.widthStyle(this.columnWidth(0))}" valign="top">
+              <![endif]-->`;
       },
       msoStartingCommentInverted() {
-        return `[if gte mso 9]>
+        return `<--[if gte mso 9]>
           <table width="${this.templateInnerWidth}" style="width:${this.widthStyle(this.templateInnerWidth)}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
             <tr>
-              <td width="${this.columnWidth(this.module.structure.columns.length - 1)}" style="width: ${this.widthStyle(this.columnWidth(this.module.structure.columns.length - 1))}" dir="ltr" valign="top">
-              <![endif]`;
+              <td width="${this.columnWidth(this.module.structure.columns.length - 1)}" ${this.columnBgcolor(this.module.structure.columns.length - 1)} style="width: ${this.widthStyle(this.columnWidth(this.module.structure.columns.length - 1))}" dir="ltr" valign="top">
+              <![endif]-->`;
       },
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
