@@ -82,7 +82,7 @@
       msoBetweenComment() {
         return `[if gte mso 9]>
               </td>
-              <td style="width: ${this.widthStyle(this.columnWidth(this.columnId -1))}" align="left" valign="top">
+              <td width="${this.columnWidth(this.columnId -1)}" style="width: ${this.widthStyle(this.columnWidth(this.columnId -1))}" align="left" valign="top">
                 <![endif]`;
       },
       msoEndingComment() {
