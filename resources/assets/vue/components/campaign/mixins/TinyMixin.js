@@ -87,7 +87,7 @@ export default {
       const link_fixed_styles = editor.settings.link_fixed_styles;
       const editorLinks = $(editor.targetElm).find('a');
 
-      /* 
+      /*
       * Color Treatment
       */
 
@@ -102,7 +102,7 @@ export default {
             const $parentEl = $el.parents().filter(function (){
               return $(this).css('color');
             });
-            // get the color of the parent and apply it to the link 
+            // get the color of the parent and apply it to the link
             const parentColor = $parentEl.css('color');
             $el.css('color', parentColor);
           }
@@ -117,9 +117,9 @@ export default {
         this.changeStyles('a', link_fixed_styles);
       }
 
-      /* 
-      * Underline Treatment 
-      * note: text-decoration:underline in <a> is overriden by css clases in email clients, 
+      /*
+      * Underline Treatment
+      * note: text-decoration:underline in <a> is overriden by css clases in email clients,
       * so we have to add an underlined span inside
       */
 
@@ -149,11 +149,11 @@ export default {
       // Check for Characters Limit
       if ((this.tinyLength() + 1) > this.tinyMax()) {
         // Prevent insertion of typed character
-        
+
         setTimeout(() => {
           $textElement.addClass('bg-danger tinymce-error');
         }, 50);
-        
+
         this.$root.$toast(`You've reached the maximum number of characters (${this.tinyMax()})`, {
           className: 'et-error',
           horizontalPosition: 'right',
@@ -200,6 +200,75 @@ export default {
       this.maxLinesValidation();
       this.minCharsValidation();
     },
+    styleFormatsIncrement() {
+      const style_formats = [];
+
+      const loop = this.textOptions.config.settings.style_formats_increment.content;
+
+      let step = Number(loop.steps.range.split(':')[0]);
+      let currentFontSize = Number(loop.apply.fontSize.initial) || step;
+      const rangeMax = Number(loop.steps.range.split(':')[1]);
+
+      const runBehaviour = (behaviour, initialValue) => {
+        behaviour = behaviour.split(':');
+        const behaviourType = behaviour[0];
+        const behaviourFactor = Number(behaviour[1]);
+        const behaviourModifier = behaviour[2];
+        let result = Number(initialValue);
+
+        switch (behaviourType) {
+          case 'static':
+            result = behaviourFactor;
+            break;
+          case 'add':
+            result += behaviourFactor;
+            break;
+          case 'multiply':
+            result = Math.round(result * behaviourFactor);
+            break;
+          default:
+            console.log('Error: behaviour type not defined');
+        }
+        return result;
+      }
+
+      const getTitle = (tmp, val, unit) => {
+        let template = tmp || '%fontVal%unit';
+        if (template.indexOf('%fontVal') !== -1) {
+          template = template.replace('%fontVal', val);
+          if (unit) template = template.replace('%unit', unit);
+          return template;
+        }
+        return template.replace('%stepVal', step);
+      };
+
+      while (step <= rangeMax) {
+        const format = {
+          block: loop.settings && loop.settings.block ? loop.settings.block : 'p',
+          styles: {},
+        };
+
+        for (const key of Object.keys(loop.apply)) {
+          const keyBehaviour = loop.apply[key].behaviour || loop.steps.behaviour;
+          const unit = loop.apply[key].unit || 'px';
+
+          if (key === 'lineHeight') {
+            const lineHeight = runBehaviour(keyBehaviour, currentFontSize);
+            format.styles[key] = `${lineHeight}${unit}`;
+          }
+        }
+
+        const fontSizeBehaviour = loop.apply.fontSize.behaviour || loop.steps.behaviour;
+        const fontSizeUnit = loop.apply.fontSize.unit || 'px';
+        format.title = getTitle(loop.title, currentFontSize , fontSizeUnit);
+        format.styles.fontSize = `${currentFontSize}${fontSizeUnit}`;
+        style_formats.push(format);
+
+        currentFontSize = runBehaviour(fontSizeBehaviour, currentFontSize);
+        step = runBehaviour(loop.steps.behaviour, step);
+      }
+      return style_formats;
+    },
     initTinyMCE() {
       const _this = this;
       const options = _.filter(this.textOptions.config.options, 'value');
@@ -213,6 +282,10 @@ export default {
         }
       });
 
+      if (this.textOptions.config.settings.style_formats_increment && this.textOptions.config.settings.style_formats_increment.value) {
+        customSettings['style_formats'] = this.styleFormatsIncrement();
+      }
+
       let toolbar = [];
 
       if (!_.isEmpty(options)) {
@@ -224,7 +297,7 @@ export default {
         toolbar = ' ';
       }
       const editorId = ['editor', this.module.idInstance, this.columnId, this.componentId].join('-');
-      
+
       // Destroy previous instance
       const previousInstance = tinymce.get(editorId);
       if (previousInstance) {
@@ -270,7 +343,7 @@ export default {
           _this.setStyles();
         },
         setup(editor) {
-          
+
           editor.paste_block_drop = true;
           editor.on('focus', (e) => {
               // Change icon tiny
@@ -366,14 +439,14 @@ export default {
         paste_preprocess: (plugin, args) => {
           const editor = tinymce.get(tinymce.activeEditor.id);
           const tinyMax = parseInt(editor.settings.max_chars);
-          
+
           if (!tinyMax) {
             // if truncate is NAN, returns and avoid validations
             return;
           }
 
           // trim string if exceed max char limit
-          const tinyLength = editor.getContent({ format: 'text' }).length - 1;            
+          const tinyLength = editor.getContent({ format: 'text' }).length - 1;
           const charsToPaste = tinyMax - tinyLength;
           args.content = args.content.trim().substring(0, charsToPaste);
         },
