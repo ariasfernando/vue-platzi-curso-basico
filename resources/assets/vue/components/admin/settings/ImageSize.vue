@@ -1,5 +1,5 @@
 <template>
-  <settings-container label-right="Height" label-left="Width" custom-class="field-image-size">
+  <settings-container label-right="Height" label-left="Width">
     <template slot="setting-half-left">
 
       <el-input-number
@@ -174,7 +174,7 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .button input {
   text-align: center;
 }
@@ -195,7 +195,7 @@ export default {
 }
 .el-button {
   position: absolute;
-  right: 15px;
+  left: calc(50% - 43px);
   padding: 6px;
   &:active {
     background-color: #fff;
@@ -203,34 +203,12 @@ export default {
     color: #606266;
   }
 }
-#field-image-size.form-group.field-image-size {
-  .padding-custom {
-    padding: 5px 0;
-  }
-  .el-input-number--mini {
-    width: 80px;
-    margin-right: 25px;
-    float: right;
-  }
-  .field-image-size {
-    padding-right: 15px;
-  }
-  .half-style-setting {
-    width: calc(~"50% - 15px");
-    margin-right: 15px;
-  }
-  .half-style-setting:nth-child(2n + 2) {
-    margin-left: 10px;
-    margin-right: 0;
-    padding-left: 0;
-  }
-}
 .height-icon-auto {
   position: absolute;
-  right: -15px;
+  left: calc(50% - 14px);
   margin-top: 0;
   padding: 0;
-  height: 28px;
+  height: 26px;
   width: 30px;
   text-align: center;
   padding-top: 4px;
@@ -242,22 +220,21 @@ export default {
   }
 }
 .icon-height {
-  right: 0;
+  left: calc(100% - 29px);
 }
 .el-input-number {
   width: 80px;
 }
-</style>
-<style  lang="less">
-.field-image-size {
-  input[type="text"] {
-    text-align: center;
-  }
-  .el-input-number .el-input__inner {
-    text-align: center;
-    border-right: 0;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-  }
+.settings-container /deep/ .half-setting{
+  text-align: left;
+}
+.settings-container  /deep/ input[type="text"] {
+  text-align: center;
+}
+.settings-container  /deep/ .el-input-number  .el-input__inner {
+  text-align: center;
+  border-right: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
 }
 </style>

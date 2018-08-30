@@ -7,6 +7,7 @@ module.exports = {
   version: '0.0.1',
   author: 'andres@stensul.com',
   target: ['divider'],
+  subComponent: 'divider',
   studioSettings,
   campaignSettings,
   config: {
