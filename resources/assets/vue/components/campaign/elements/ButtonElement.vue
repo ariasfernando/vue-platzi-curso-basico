@@ -2,7 +2,7 @@
   <module-container :component="component" @select-component="selectComponentHandler">
       <a
         @click.prevent
-        :href="component.button.attribute.href || ''"
+        :data-contenteditable-href="component.button.attribute.href || ''"
         :target="component.button.attribute.target || '_blank'"
         :style="component.button.style.textDecoration || 'text-decoration:none;'"
       >
@@ -23,7 +23,6 @@
               style="vertical-align: middle; width:100%;"
             :style="elementBorderAndPadding(this.component.button)"
             >
-              <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>            
               <table
                 cellpadding="0"
                 cellspacing="0"
@@ -35,25 +34,22 @@
                   <td
                     width="100%"
                     :align="component.button.attribute.align"
-                  :style="fontStyles(component.button)"
-                  :valign="component.button.attribute.valign || ''"
-                    >
-                    <div
-                        class="stx-edit-text stx-wrapper"
-                        style="display: inline-block !important; vertical-align: middle"
                     :style="fontStyles(component.button)"
-                        v-html="content"
-                        :id="editorId"
-                        @keyup="changeContent"
-                        @tiny-change="changeContent"
-                        @input="changeContent"
-                      >
-                    </div>
+                    :valign="component.button.attribute.valign || ''"
+                    >
+                    <tiny-mce
+                      :fontStyles="[fontStyles(component.button),{'display': 'inline-block !important'}, {'vertical-align': 'middle'}]"
+                      :module="module"
+                      :component="component"
+                      :columnId="columnId"
+                      :componentId="componentId"
+                      @changeText="changeText"
+                    ></tiny-mce>
                   </td>
                   <td
                     v-if="component.caret.attribute.url"
                     :width="widthCaret"
-                :style="[elementBorderAndPadding(component.caret), {'width': widthStyle(widthCaret)}]"
+                    :style="[elementBorderAndPadding(component.caret), {'width': widthStyle(widthCaret)}]"
                   >
                     <img
                       :src="$_app.config.imageUrl + component.caret.attribute.url"
@@ -77,19 +73,19 @@
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ModuleContainer from '../../common/containers/ModuleContainer';
+  import tinyMce from '../../common/tinyMce';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
-  import TinyMixin from '../mixins/TinyMixin.js';
   import _ from 'lodash';
 
   export default {
     name: 'ButtonElement',
+    mixins: [MobileStylesMixin, ElementMixin],
     components: {
       ModuleContainer,
+      tinyMce
     },
-    mixins: [ MobileStylesMixin, ElementMixin, TinyMixin ],
     data() {
       return {    
-        content: this.component.data.text,
         timer: null
       };
     },
@@ -97,18 +93,13 @@
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
       },
-      editorId(){
-        return ["editor", this.module.idInstance, this.columnId, this.componentId].join("-");
-      },
-      libraryConfig(){
-        return this.$store.state.campaign.campaign.library_config;
-      },
       tableStyles(){
         const width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
         return {
           'width': width,
           'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
-          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth
+          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth,
+          'border-collapse': 'initial'
         }
       },
       widthCaret() {
@@ -116,14 +107,7 @@
       },
     },
     methods: {
-      selectComponent() {
-        this.$emit("select-component", {
-            moduleId: this.moduleId,
-            columnId: this.columnId,
-            componentId: this.componentId
-        });
-      },
-      changeContent(e) {
+      changeText(text) {
         if (this.timer) {
           clearTimeout(this.timer);
         }
@@ -131,15 +115,15 @@
           this.$store.commit('campaign/updateElement', {
             moduleId:this.moduleId,
             columnId:this.columnId,
-              componentId:this.componentId,
-              data: {
-                text: e.target.innerHTML
-              }
-            });
-          }, 500);
-        },  
+            componentId:this.componentId,
+            data: {
+              text
+            }
+          });
+        }, 100);
       },
-    };
+    },
+  };
 </script>
 <style lang="less">
   .st-unlink {

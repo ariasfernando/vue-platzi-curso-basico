@@ -1,13 +1,13 @@
 <template>
-    <b-btn block class="label-item-container" :class="customClass || ''">
-      <p><i :class="`glyphicon ${icon}`"></i>{{label}}</p>
-      <i class="glyphicon glyphicon-menu-down menu-dropdown"></i>
+    <b-btn block class="label-item-container" :class="customClass || undefined" :style="{'cursor': collapsable !== false ? 'pointer' : 'default'}">
+      <p><i :class="`glyphicon ${icon}`"></i><span>{{label}}</span></p>
+      <i v-if="collapsable !== false" class="glyphicon glyphicon-menu-down menu-dropdown"></i>
     </b-btn>
 </template>
 <script>
 export default {
   name: "LabelItemContainer",
-  props: ["customClass", "icon", "label"]
+  props: ["customClass", "icon", "label", "collapsable"]
 };
 </script>
 <style lang="less" scoped>
@@ -22,7 +22,6 @@ export default {
   p,i{
     transition: color 0.3s, transform 0.3s;
   }
-  
   p {
     font-size: 13px;
     margin: 0;
@@ -30,6 +29,17 @@ export default {
     font-weight: 300;
     float: left;
     color: #333;
+    text-transform: uppercase;
+    width: 230px;
+    text-align: left;
+    white-space: normal;
+
+    span{
+      width: 210px;
+      float: left;
+      margin-top: -2px;
+      line-height: 18px;
+    }
   }
   i {
     color: #666;
@@ -38,6 +48,7 @@ export default {
     transform: rotate(0deg);
     margin-right: 6px;
     line-height: 12px !important;
+    float: left;
   }
   &.collapsed {
     p,

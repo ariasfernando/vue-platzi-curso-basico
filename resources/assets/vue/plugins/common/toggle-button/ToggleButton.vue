@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: "ToggleButton",
+  name: 'ToggleButton',
   props: {
     value: {
       type: Boolean,
@@ -18,11 +18,11 @@ export default {
     },
     activeColor: {
       type: String,
-      default: "#78DCD6"
+      default: '#78DCD6'
     },
     inactiveColor: {
       type: String,
-      default: "#dcdfe6"
+      default: '#dcdfe6'
     },
     width: {
       type: Number,
@@ -31,7 +31,7 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    },
+    }
   },
   computed: {
     toggled: {
@@ -40,8 +40,27 @@ export default {
       },
       set(val) {
         this.$emit('change', val);
-      },
-    } 
-  },
+      }
+    }
+  }
 };
 </script>
+<style lang="scss" scoped>
+.el-switch /deep/ .el-switch__core {
+  width: 34px !important;
+  height: 18px;
+
+  &:after {
+    width: 14px;
+    height: 14px;
+  }
+}
+.el-switch.is-checked /deep/ .el-switch__core {
+  &:after {
+    margin-left: -15px;
+  }
+}
+.el-switch{
+  float: right;
+}
+</style>
