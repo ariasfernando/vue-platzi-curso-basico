@@ -184,13 +184,13 @@ export default {
         sieOptions.preset = sieHelper.completeUrlPath(this.$_app.config.imageUrl, sieOptions.preset);
       }
 
-      this.overlayImages = this.overlayImages || [];
+      const overlayImages = this.overlayImages || [];
       
-      if(this.overlayImages.length > 0){
+      if(overlayImages.length > 0){
         const i = sieOptions.preset.find(e => {
           return e.type === 'sie-plugin-image-overlay';
         });
-        _.set(i, 'options.plugin.image.gallery.images', this.overlayImages);
+        _.set(i, 'options.plugin.image.gallery.images', overlayImages);
       }
 
       this.sieOptions = sieOptions;
