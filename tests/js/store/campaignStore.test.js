@@ -546,6 +546,277 @@ describe('== Library Store ==', () => {
 
       done();
     });
+    it('"unsetCurrentComponent" , expect to clean the "currentComponent" state', (done) => {
+      store.commit('campaign/unsetCurrentComponent');
+
+      let stateCurrentComponent = store.state.campaign.currentComponent;
+      
+      expect(stateCurrentComponent).toBeEmptyObject();
+
+      stateCurrentComponent = null;
+
+      done();
+    });
+    it('"setActiveModule" with moduleId, expect to set "activeModule" state with a index of module', (done) => {
+      let data = 0;
+
+      store.commit('campaign/setActiveModule', data);
+
+      let stateActiveModule = store.state.campaign.activeModule;
+      
+      expect(stateActiveModule).toEqual(0);
+      
+      data = null;
+      stateActiveModule = null;
+
+      done();
+    });
+    it('"unsetActiveModule", expect to remove of "activeModule" state the data', (done) => {
+      store.commit('campaign/unsetActiveModule');
+
+      let stateActiveModule = store.state.campaign.activeModule;
+      
+      expect(stateActiveModule).toBeUndefined();
+      
+      stateActiveModule = null;
+
+      done();
+    });
+    it('"setActiveLastModule", expect to set "activeModule" state with a index of last module', (done) => {
+      let modulesData = [
+        {
+          _id: '5b3ce34792f8ef00137bb105',
+          type: 'virtual',
+          key: 'text_458798',
+          name: 'text',
+          structure: {},
+          plugins: {},
+          status: 'publish',
+          updated_at: '2018-08-03 16:09:09',
+          created_at: '2018-07-04 11:09:59',
+          isFixed: true,
+          fixedPosition: 0,
+          mandatory: true,
+        },
+        {
+          _id: '5b64bf6602a4cd00122d0353',
+          type: 'studio',
+          key: 'banner',
+          name: 'banner',
+          structure: {},
+          plugins: {},
+          status: 'publish',
+          updated_at: '2018-08-04 12:41:49',
+          created_at: '2018-08-03 16:47:34',
+          isFixed: false,
+          mandatory: false,
+          data: [],
+          idInstance: 860980,
+        },
+        {
+          _id: '5b64bb6902a4cd00153af972',
+          type: 'studio',
+          key: 'body',
+          name: 'body',
+          structure: {},
+          plugins: {},
+          status: 'publish',
+          updated_at: '2018-08-03 16:30:33',
+          created_at: '2018-08-03 16:30:33',
+          isFixed: false,
+          mandatory: false,
+          data: [],
+          idInstance: 169033,
+        },
+        {
+          _id: '5b64b74a02a4cd000d42aad2',
+          type: 'studio',
+          key: 'untitled_module',
+          name: 'text image',
+          structure: {},
+          plugins: {},
+          status: 'publish',
+          updated_at: '2018-08-04 12:42:51',
+          created_at: '2018-08-03 16:12:58',
+          data: [],
+          idInstance: 567456,
+        },
+        {
+          _id: '5b64b94002a4cd0013159bf2',
+          type: 'studio',
+          key: 'image_text',
+          name: 'image text',
+          structure: {},
+          plugins: {},
+          status: 'publish',
+          updated_at: '2018-08-04 12:42:15',
+          created_at: '2018-08-03 16:21:20',
+          data: [],
+          idInstance: 278717,
+        },
+      ];
+
+      store.commit('campaign/updateEmailCanvas', modulesData);
+      store.commit('campaign/setActiveLastModule');
+
+      let stateActiveModule = store.state.campaign.activeModule;
+      
+      expect(stateActiveModule).toEqual(4);
+
+      modulesData = null;
+      stateActiveModule = null;
+
+      done();
+    });
+    xit('"saveComponent" with data, expect to save the component data', () => {});
+    it('"savePlugin" with data, expect to save or update the data of plugin', (done) => {
+      let payload = {
+        plugin: 'styleImageEditor',
+        moduleId: 0,
+        columnId: 0,
+        componentId: 0,
+        data: {
+          img: 'campaigns/5b86a76baa96550016453356/en_us/5b8d42c3adfb8-1535984323.7126.png',
+          state: {
+            size: {
+              width: 300,
+              height: 200,
+              auto: false,
+              minHeight: 100,
+              maxHeight: 1000,
+              fit: '1',
+              minWidth: 1,
+              scale: 2,
+            },
+            outputSize: {
+              height: 200,
+              width: 300,
+              auto: false,
+              minHeight: 100,
+              maxHeight: 1000,
+              fit: '1',
+              minWidth: 1,
+              scale: 2,
+            },
+            preset: [
+              {
+                type: 'sie-plugin-image',
+                options: {
+                  plugin: {
+                    cropper: {
+                      cropBoxResizable: false,
+                      movable: true,
+                      scalable: true,
+                      rotatable: false,
+                      zoomable: true,
+                      zoomOnTouch: false,
+                      zoomOnWheel: true,
+                      enable: true,
+                      roundCrop: {
+                        enable: false,
+                      },
+                      viewMode: 3,
+                      dragMode: 'move',
+                      modal: true,
+                      guides: false,
+                      center: false,
+                      highlight: false,
+                      background: false,
+                      autoCropArea: 1,
+                      toggleDragModeOnDblclick: false,
+                      cropBoxMovable: false,
+                      minContainerWidth: 1,
+                      minContainerHeight: 1,
+                      minCanvasWidth: 1,
+                      minCanvasHeight: 1,
+                      minCropBoxWidth: 1,
+                      minCropBoxHeight: 100,
+                      restore: false,
+                      state: {
+                        data: {
+                          x: 0,
+                          y: 167,
+                          width: 1000,
+                          height: 666,
+                          scaleX: 1,
+                          scaleY: 1,
+                        },
+                        canvas: {
+                          left: 0,
+                          top: -50,
+                          width: 300,
+                          height: 300,
+                          naturalWidth: 1000,
+                          naturalHeight: 1000,
+                        },
+                        cropbox: {
+                          left: 0,
+                          top: 0,
+                          width: 300,
+                          height: 200,
+                        },
+                        roundCrop: {
+                          round: {
+                            enable: false,
+                            only: false,
+                            diameter: 300,
+                          },
+                          active: false,
+                        },
+                      },
+                    },
+                    upload: {
+                      url: 'campaigns/5b86a76baa96550016453356/en_us/5b8d3f0906618-1535983369.0262.jpg',
+                      fillColor: '#000000',
+                      gif: false,
+                    },
+                  },
+                  layer: {
+                    description: '',
+                    visible: true,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      };
+      let modulesData = [
+        {
+          structure: {
+            columns: [
+              {
+                components: [
+                  {
+                    plugins: {
+                      styleImageEditor: {
+                        data: {},
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ];
+
+      store.commit('campaign/updateEmailCanvas', modulesData);
+      store.commit('campaign/savePlugin', payload);
+
+      let stateModulesPlugin = store.state.campaign.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data;
+      let stateDirty = store.state.campaign.dirty;
+
+      expect(stateModulesPlugin).toEqual(payload.data);
+      expect(stateDirty).toBeTruthy();
+
+      payload = null;
+      modulesData = null;
+      stateModulesPlugin = null;
+      stateDirty = null;
+
+      done();
+    });
   });
 
   xdescribe('trigger actions', () => {
