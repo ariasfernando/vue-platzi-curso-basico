@@ -14,8 +14,7 @@
         return this.$store.getters["campaign/modules"][this.currentModule];
       },
       bgcolor() {
-        const fondo = this.module.structure.attribute.bgcolor;
-        return fondo;
+        return this.module.structure.attribute.bgcolor;
       },
     },
     watch: {
@@ -31,7 +30,7 @@
             // Set new text color
             if (subComponent === 'text') {
               this.$store.commit('campaign/saveComponentProperty', {
-                moduleId: this.moduleId,
+                moduleId: this.currentModule,
                 columnId: columnId,
                 componentId: compId,
                 subComponent,
@@ -44,9 +43,7 @@
               setTimeout(() => {
                 document.getElementById(editorId).dispatchEvent(new Event("tiny-style-reset"));
               }, 10);
-
             }
-            
           });
 
         });

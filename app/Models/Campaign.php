@@ -48,7 +48,9 @@ class Campaign extends Eloquent
         'favorite',
         'campaign_settings',
         'auto_save',
-        'parent_campaign_id'
+        'parent_campaign_id',
+        'tracking',
+        'internal'
     ];
 
     protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token'];
@@ -87,7 +89,8 @@ class Campaign extends Eloquent
         'campaign_settings' => [],
         'auto_save' => null,
         'parent_campaign_id' => null,
-        'proof_id' => null
+        'proof_id' => null,
+        'tracking'
     );
 
     /**
@@ -108,7 +111,7 @@ class Campaign extends Eloquent
      */
     public function favorite_user()
     {
-        return $this->belongsToMany('Stensul\Models\User', null, null, 'favorite_by');
+        return $this->belongsToMany('UserModel', null, null, 'favorite_by');
     }
 
     /**
@@ -118,7 +121,7 @@ class Campaign extends Eloquent
      */
     public function user()
     {
-        return $this->belongsTo('Stensul\Models\User');
+        return $this->belongsTo('UserModel');
     }
 
     /**
@@ -128,7 +131,7 @@ class Campaign extends Eloquent
      */
     public function proofs()
     {
-        return $this->hasMany('Stensul\Models\Proof');
+        return $this->hasMany('ProofModel');
     }
 
     /**
@@ -298,7 +301,7 @@ class Campaign extends Eloquent
      */
     public function getLastProof()
     {
-        return Proof::whereCampaignId(new ObjectId($this->_id))->orderBy('created_at', 'DESC')->first();
+        return Proof::whereCampaignId($this->_id)->orderBy('created_at', 'DESC')->first();
     }
 
     /**

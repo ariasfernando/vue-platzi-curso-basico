@@ -9,9 +9,9 @@ use Activity;
 use Api;
 use Config;
 use Stensul\Http\Requests;
-use Stensul\Models\User;
-use Stensul\Models\Campaign;
-use Stensul\Models\Upload;
+use UserModel as User;
+use CampaignModel as Campaign;
+use UploadModel as Upload;
 use MongoDB\BSON\ObjectID as ObjectID;
 use GuzzleHttp\Client as Client;
 

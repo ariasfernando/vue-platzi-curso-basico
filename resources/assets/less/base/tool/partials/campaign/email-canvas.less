@@ -107,6 +107,11 @@
 		-o-transition: width 300ms ease-in-out, height 300ms ease-in-out;
 		transition: width 300ms ease-in-out, height 300ms ease-in-out;
 	}
+
+	.stx-email-canvas table tr td {
+		box-sizing: content-box;
+	}
+
 	// Action buttons tooltip
 	.stx-email-canvas > thead > tr > td,
 	.stx-email-canvas > tfoot > tr > td{
@@ -307,6 +312,7 @@
 		display: block;
 		position: absolute;
 		border: 0px solid rgba(105, 218, 200, 0.4);
+		pointer-events: none;
 		.box-sizing(content-box);
 	}
 	.line-separator {

@@ -8,6 +8,7 @@ export default {
         const endpoint = endpoints.api.uploadEmail;
         const deferred = Q.defer();
         const params = {
+            path: 'api.searchLibraries',
             endpoint,
             json: data
         };
@@ -24,6 +25,7 @@ export default {
         const endpoint = endpoints.api.uploadedHistory;
         const deferred = Q.defer();
         const params = {
+            path: 'api.uploadedHistory',
             endpoint,
             search: {
                 campaignId,

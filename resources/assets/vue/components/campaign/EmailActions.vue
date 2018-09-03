@@ -42,7 +42,8 @@
             v-show="!locked"
           >Send for Review</button>
 
-          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="!campaign.campaign_data.template" @click="complete">
+          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="campaign.campaign_data.can_be_processed && !campaign.campaign_data.template" @click="complete"
+            v-show="!locked" >
             Complete
             <i class="glyphicon glyphicon-menu-right"></i>
           </a>
@@ -73,10 +74,13 @@
   import dashboardService from '../../services/dashboard';
   import campaignCleaner from '../../utils/campaignCleaner';
   import { html_beautify } from 'js-beautify';
-  
+  import TrackingMixin from './mixins/trackingMixin'
+  import _ from 'lodash'
+
 
   export default {
     name: 'EmailActions',
+    mixins: [ TrackingMixin ],
     computed: {
       campaign () {
         return this.$store.getters["campaign/campaign"];
@@ -99,7 +103,7 @@
         }else{
           return this.campaign.campaign_data.library_name;
         }
-      }
+      },
     },
     data () {
       return {
@@ -124,6 +128,7 @@
           allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
             && this.$_app.config.permissions.indexOf('access_proof') >= 0
         },
+        trackingEnabled: false,
         showLibraryName: false
       }
     },
@@ -137,15 +142,23 @@
       save() {
         this.$store.commit("global/setLoader", true);
 
-        const cleanHtml = campaignCleaner.clean('.section-canvas-container');
+        var cleanHtml = campaignCleaner.clean('.section-canvas-container');
+
+        if (this.trackingEnabled) {
+          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+        }
 
         const bodyHtml = html_beautify(cleanHtml, {
           'indent_size': 2
         });
 
-        this._save(bodyHtml).then(response => {
+        // Save Request
+        this._save(bodyHtml).then(() => {
           this.$root.$toast('Email saved', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       _save(bodyHtml = undefined) {
@@ -246,7 +259,15 @@
         this.$_app.utils.hackMediaQuery('.section-canvas-container', this.campaign.campaign_data.library_config.templateWidth);
 
         // Obtain current html
-        const cleanHtml = campaignCleaner.clean('.section-canvas-container');
+        var cleanHtml = campaignCleaner.clean('.section-canvas-container');
+
+        if (this.trackingEnabled) {
+          if (!this.validateTracking()) {
+            this.$store.commit("global/setLoader", false);
+            return false;
+          }
+          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+        }
 
         const bodyHtml = html_beautify(cleanHtml, {
           'indent_size': 2
@@ -261,26 +282,25 @@
               let finishedProcessing = () => {
                 // Set campaign as processed
                 this.$store.commit('campaign/setProcessStatus');
-                // Show complete after campaign is completely processed
-                this.$store.commit("campaign/toggleModal", 'modalComplete');
-                // Redirect to `/dashboard` if user refreshes the page
-                window.history.replaceState(null, null, "?processed=true");
+                // Reload campaign data
+                this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id).then(() => {
+                  // Show complete after campaign is completely processed
+                  this.$store.commit("campaign/toggleModal", 'modalComplete');
+                  // Redirect to `/dashboard` if user refreshes the page
+                  window.history.replaceState(null, null, "?processed=true");
+                });
               };
 
-              // Set processed
+              // Set processed (if using "sync" as QUEUE_DRIVER)
               if (completeResponse.processed) {
-                return finishedProcessing();
-              }
-
-              // Poll server with job id
-              if (completeResponse.jobId) {
+                finishedProcessing();
+              } else if (completeResponse.jobId) {
+                // Poll server with job id when using an async queue driver.
                 let processInterval = setInterval(() => {
                   this.checkProcessStatus(completeResponse.jobId).then((response) => {
                     if (response.status === 'finished') {
                       clearInterval(processInterval);
                       finishedProcessing();
-                      // Reload campaign data
-                      this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id);
                     }
                   });
                 }, 2000);
@@ -310,6 +330,22 @@
         });
       },
       proof() {
+        // Do not save if there are missing or wrong fields
+        if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors  ) {
+          this.$_app.utils.validator.modulesErrors('#emailCanvas');
+
+          this.$root.$toast(
+            'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
+            'or remove the incomplete module(s).',
+            {
+              className: 'et-error',
+              closeable: true
+            }
+          );
+
+          this.$store.commit('campaign/campaignCompleted', true);
+          return false;
+        }
         // Do not show proof modal if there are missing or wrong fields
         let validateMessage = 'To send an email for review, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.';
         if (!this._validateEmptyEmail('You cannot send for review an empty email.')) {
@@ -332,6 +368,7 @@
     created () {
       this.autoSave();
       this.campaignConfig = this.$store.getters["config/config"].campaign;
+      this.trackingEnabled = (this.campaignConfig.enable_tracking && _.has(this.campaign.campaign_data.library_config, 'tracking') && this.campaign.campaign_data.library_config.tracking);
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;
 

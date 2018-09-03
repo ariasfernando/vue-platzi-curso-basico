@@ -172,13 +172,14 @@
                   && this.module.structure.columns[0].components.length > 1)
             )
         ) {
-        // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
-        // so we need to check a flag to aid the user to open each module and run the validations at least once
-        this.registerStudioModuleDefaultValidationErrors();
+          // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
+          // so we need to check a flag to aid the user to open each module and run the validations at least once
+        this.registerStudioModuleDefaultValidationErrors(this.moduleId);
       }
       else if(this.module.type === 'custom') {
-        this.registerCustomModuleDefaultValidationErrors();
-      }
+        this.$store.commit('campaign/clearErrorsByModuleId', this.moduleId);
+        this.registerCustomModuleDefaultValidationErrors(this.moduleId);
+        }
     },
     computed: {
       module() {
@@ -191,19 +192,17 @@
         return this.module.data.errors || [];
       },
       msoStartingComment() {
-        return `
-        [if gte mso 9]>
+        return `[if gte mso 9]>
           <table width="${this.templateWidth}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
             <tr>
-              <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important">
+              <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important" valign="top">
               <![endif]`;
       },
       msoStartingCommentInverted() {
-        return `
-        [if gte mso 9]>
+        return `[if gte mso 9]>
           <table width="${this.columnWidthPadding}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
             <tr>
-              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr">
+              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr" valign="top">
               <![endif]`;
       },
       activeModule() {

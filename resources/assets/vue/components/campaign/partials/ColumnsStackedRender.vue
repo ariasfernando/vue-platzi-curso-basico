@@ -6,12 +6,13 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :style="{'background-color' : column.container.attribute.bgcolor}"
-        :bgcolor="column.container.attribute.bgcolor"
+        :style="{'width':calculeStyleWidthColumnPx(columnId)}"
+        :width="calculeWidthColumnPx(columnId)"
       >
         <tr>
           <td
-            :width="calculeWidthColumnPx(columnId)"
+            width="100%"
+            style="width:100%;"
             :style="styles(columnId)"
             :bgcolor="column.container.attribute.bgcolor"
             :valign="column.container.attribute.valign|| 'top'"
@@ -83,8 +84,7 @@
         return this.module.structure.columns.length;
       },
       msoEndingComment() {
-        return `
-                [if gte mso 9]>
+        return `[if gte mso 9]>
               </td>
             </tr>
           </table>
@@ -115,13 +115,11 @@
           return {
             [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
           };
-        });
-        styles.push({'width': this.calculeStyleWidthColumnPx(columnId)}) 
+        }); 
         return styles;
       },
       msoBetweenComment(columnId) {
-        return `
-        [if gte mso 9]>
+        return `[if gte mso 9]>
           </td>
           <td width="${this.calculeWidthColumnPx(columnId+1)}" style='width:${this.calculeWidthColumnPx(columnId+1)}px !important' align='left' valign='top'>
         <![endif]`;

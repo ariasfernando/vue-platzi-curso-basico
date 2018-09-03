@@ -15,9 +15,11 @@
 
 <script>
   import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import validatorMixin from '../mixins/validator.js';
   import _ from 'lodash';
   export default {
     props: ['name', 'plugin', 'moduleId', 'columnId', 'componentId', 'component', 'order'],
+    mixins: [ validatorMixin ],
     components: { SettingsContainer },
     computed: {
       module() {
@@ -56,8 +58,9 @@
               property: 'enableElement',
               value: value
           });
+          this.resetErrors(value,this.currentCustomModule);
         } else {
-          const element = this.getElement(elementId)
+          const element = this.getElement(elementId);
           const payload = {
             moduleId: this.moduleId,
             columnId: element.columnId,
@@ -68,8 +71,12 @@
             value: value
           };
           this.$store.commit("campaign/saveComponentProperty", payload);
-          return;
+          this.resetErrors(value,this.moduleId);
         }
+        this.$emit('changed', {
+          elementId: elementId,
+          value: value
+        });
       },
       toggleChange(value, elementId) {
         if(this.plugin.data.preventEmpty && !value){
@@ -86,12 +93,20 @@
         } else {
           this.toggleElement(value, elementId);
         }
+      },
+      resetErrors(value, moduleId) {
+        this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
+        if (this.isCustom) {
+          this.registerCustomModuleDefaultValidationErrors(moduleId);
+        } else {
+          this.registerStudioModuleDefaultValidationErrors(moduleId);
+        }
       }
     }
   }
 </script>
 <style lang="scss" scoped>
-.el-switch{
+.settings-container .el-switch{
   float: left;
 }
 </style>

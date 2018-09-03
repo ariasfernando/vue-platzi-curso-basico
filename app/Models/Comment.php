@@ -22,6 +22,6 @@ class Comment extends Eloquent
      */
     public function proof()
     {
-        return $this->belongsTo('Stensul\Models\Proof');
+        return $this->belongsTo('ProofModel');
     }
 }

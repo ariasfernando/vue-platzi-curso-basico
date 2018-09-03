@@ -1,5 +1,4 @@
 import Q from 'q';
-import _ from 'underscore-contrib';
 import request from '../utils/request';
 import endpoints from '../resources/endpoints';
 
@@ -8,9 +7,10 @@ export default {
     const endpoint = endpoints.config.getConfig;
     const deferred = Q.defer();
     const params = {
+      path: 'config.getConfig',
       endpoint,
       search: {
-        key
+        key,
       },
     };
 

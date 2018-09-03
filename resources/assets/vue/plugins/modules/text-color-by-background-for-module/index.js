@@ -5,7 +5,7 @@ module.exports = {
   name: 'text-color-by-background-for-module',
   title: 'Text Color by Background',
   version: '0.0.1',
-  author: 'elias@stensul.com',
+  author: 'elias.torres@stensul.com',
   target: ['module'],
   studioSettings,
   campaignSettings,

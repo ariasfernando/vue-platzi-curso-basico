@@ -2,21 +2,24 @@
   <div class="expand st-module-menu-wrapper">
     <label-item-container label="MODULES" icon="glyphicon-th-large" v-b-toggle.modules></label-item-container>
       <b-collapse id="modules" visible class="card">
-        <div v-if="ready" v-for="item in items">
-          <div v-if="item.sub_menu" class="expand">
-              <div class="beta-submodules">
-                <div v-for="subitem in item.sub_menu">
-                  <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd">
-                    <div class="add single">
-                      <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
-                        {{ subitem.name }} <i class="glyphicon glyphicon-plus"></i>
-                      </h2>
-                    </div>
-                  </draggable>
-                </div>
-              </div>
+        <div v-if="ready" v-for="(item, i) in items" :key="i" >
+          <div v-if="item.sub_menu" class="expand-subitem-button">
+            <label-item-container :label="item.name" icon="glyphicon-folder-open" v-b-toggle="item.name" class="subitem-button"></label-item-container>
+              <b-collapse :id="item.name" class="content-collapse">
+                  <div v-for="(subitem, j) in item.sub_menu" :key="j">
+                    <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd" v-if="!subitem.mandatory">
+                      <group-container  @click="addModuleByName(subitem.name, 'subitem')" :clickeable="true">
+                        <settings-container :label="subitem.name" customClass="draggable-item" :module-id="subitem.name" :module-type="'subitem'" >
+                          <template slot="setting-right">
+                            <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
+                          </template>
+                        </settings-container>
+                      </group-container>
+                    </draggable>
+                  </div>
+              </b-collapse>
           </div>
-          <draggable v-else :element="'div'" :options="options" @clone="onClone" @end="onEnd">
+        <draggable v-else-if="!item.mandatory"  :element="'div'" :options="options" @clone="onClone" @end="onEnd">
             <group-container @click="addModuleByName(item.name, 'item')" :clickeable="true">
               <settings-container :label="item.name" customClass="draggable-item" :module-id="item.name" :module-type="'item'" >
                 <template slot="setting-right">
@@ -28,14 +31,15 @@
 
         </div>
     </b-collapse>
-
   </div>
 </template>
 
 <script>
 
   import clone from 'clone';
-  import _ from 'lodash';
+  import _, {
+    each
+  } from 'lodash';
   import Draggable from 'vuedraggable';
   import ModuleListMixin from './mixins/moduleListMixin';
   import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
@@ -57,7 +61,7 @@
       }
     },
     mixins: [ ModuleListMixin ],
-    data () {
+    data() {
       return {
         options: {
           group:{
@@ -81,10 +85,10 @@
       }
     },
     computed: {
-      campaign () {
+      campaign() {
         return this.$store.getters["campaign/campaign"];
       },
-      items () {
+      items() {
         return this.$store.getters["library/modules"];
       },
       activeModule() {
@@ -103,44 +107,38 @@
             this.expanded[item.name] = false;
 
             // Grouped modules in library menu
-            _.each(item.sub_menu, (item) => {
-              this.setModuleFixedStatus(item);
+            _.each(item.sub_menu, (subItem) => {
+              if (subItem.mandatory) {
+                this.addMandatoryModule(subItem);
+              }
             });
-          }
-          else {
+          } else {
             // First level modules in library menu
-            this.setModuleFixedStatus(item);
+            if (item.mandatory) {
+              this.addMandatoryModule(item);
+            }
           }
-        });
-
-        // Sanitize campaign's modules
-        _.each(this.modules, (item) => {
-          this.setModuleFixedStatus(item);
         });
 
         this.ready = true;
       }, error => {
         this.$store.commit("global/setLoader", false);
-        this.$root.$toast(
-          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-          {
-            className: 'et-error'
-          }
-        );
+        this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+          className: 'et-error'
+        });
       });
-
     },
     methods: {
-      getLibrary () {
+      getLibrary() {
         return this.$store.dispatch("library/getModulesData", this.libraryId);
       },
-      addModuleByName (moduleName, moduleType) {
+      addModuleByName(moduleName, moduleType) {
         const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
 
         this.addModule(mod);
       },
-      expand (event, item) {
+      expand(event, item) {
         const index = this.expanded.indexOf(item);
         if (index !== -1) {
           this.expanded.splice(index, 1);
@@ -166,36 +164,40 @@
           }
         }
       },
-      onClone (evt) {
+      onClone(evt) {
         let cloneEl = evt.clone;
         let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
 
         const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
+        mod.data = {};
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop
         // an element into email canvas
         cloneEl.addEventListener('click', (e) => {
           this.addModule(mod);
         });
       },
-      onEnd (evt) {
+      onEnd(evt) {
         this.handleEmptyMessage();
       },
-      handleEmptyMessage () {
+      handleEmptyMessage() {
         // If is dragging and the list is empty, hide empty message
         $(".empty-message").is(":visible") && $(".ghost-component").is(":visible")
           ? $(".empty-message").hide("fast")
           : $(".empty-message").show()
       },
-      setModuleFixedStatus (item) {
-        // Get fixed modules from library config
-        const fixedModules = this.campaign.library_config.fixedModules ? JSON.parse(this.campaign.library_config.fixedModules) : [];
-
-        const found = _.filter(fixedModules, fixed => fixed.key === item.key);
-        item['isFixed'] = found.length > 0;
-        item['fixedPosition'] = found.length > 0 ? found[0].pos : undefined;
-      },
+      addMandatoryModule(item) {
+        if (this.isBottomModule(item)) {
+          if (!this.campaignHasFixedBottomModule(item)) {
+            this.addFixedBottomModule(item);
+          }
+        } else if (this.isTopModule(item)) {
+          if (!this.campaignHasFixedTopModule(item)) {
+            this.addFixedTopModule(item);
+          }
+        }
+      }
     }
   };
 </script>
@@ -213,5 +215,48 @@
     margin: -4px 0 0;
     position: absolute;
      color: #999;
+  }
+  .collapsed  /deep/ .glyphicon-folder-open:before {
+    content: "\E117";
+  }
+  .subitem-button{
+    cursor: pointer;
+    transition: all 0.3s linear;
+    background: #edecef;
+    border: 0;
+    line-height: 13px;
+    box-shadow: none;
+    padding: 15px 10px 13px 10px;
+  }
+  .expand-subitem-button{
+    background: #edecef;
+    border: 1px solid #d5d3d9;
+    margin-bottom: 5px;
+    border-radius: 2px;
+    position: relative;
+  }
+  .expand-subitem-button /deep/ p{
+    color: #514960!important;
+    margin-left: -5px;
+  }
+  .expand-subitem-button  /deep/ .glyphicon-folder-open{
+    position: absolute;
+    right: 7px;
+    top: 15px;
+    color: #514960!important;
+    opacity: 0.8;
+  }
+  .expand-subitem-button  /deep/ .glyphicon-menu-down{
+    display: none;
+  }
+  .content-collapse{
+    background: #edecef;
+    padding: 4px 6px 0 6px;
+    background: #f9f9f9;
+    border-radius: 3px;
+    padding-bottom: 5px;
+  }
+  .content-collapse /deep/ div:last-child .group-container{
+    margin-bottom: 0px;
   }
 </style>

@@ -9,6 +9,7 @@
         <div>
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
+            <tracking v-if="trackingEnabled" :library-key="libraryKey"></tracking>
             <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
             <div class="lock-warning-container" v-if="locked">Unfix the email to add modules</div>
           </div>
@@ -22,9 +23,9 @@
 
       <aside class="right-bar">
         <div>
-          <module-settings v-if="showModuleSettings"></module-settings>
-          <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
-          <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
+            <module-settings v-if="showModuleSettings"></module-settings>
+            <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
+            <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
         </div>
       </aside>
     </div>
@@ -58,6 +59,7 @@
   import VueSticky from 'vue-sticky'
   import _ from 'lodash'
   import CampaignService from '../../services/campaign'
+  import Tracking from './Tracking.vue'
 
   export default {
     name: 'Campaign',
@@ -75,6 +77,7 @@
       ModalEsp,
       ModalEnableTemplating,
       Spinner,
+      Tracking,
       EmailActions
     },
     data: function () {
@@ -83,11 +86,16 @@
         campaignConfigReady: false,
         pingLockInterval: 30000,
         logTimeInterval: 30000,
+        campaignConfig: {},
+        trackingEnabled: false,
       }
     },
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"];
+      },
+      libraryKey() {
+        return this.$store.getters["campaign/campaign"].library_config.key;
       },
       locked() {
         return this.campaign.campaign_data && this.campaign.campaign_data.locked;
@@ -105,10 +113,14 @@
         return this.$store.getters["campaign/showModuleSettings"];
       },
       sessionWindowId() {
-        if (!window.sessionStorage.getItem('windowId')) {
-          window.sessionStorage.setItem('windowId', this.windowId);
+        try {
+          if (!window.sessionStorage.getItem('windowId')) {
+            window.sessionStorage.setItem('windowId', this.windowId);
+          }
+          return window.sessionStorage.getItem('windowId');
+        } catch(e) {
+          return false;
         }
-        return window.sessionStorage.getItem('windowId');
       }
     },
     watch:{
@@ -132,11 +144,16 @@
          * Replace url when creating a new campaign to avoid redirect.
          * Add necessary logic if using more parameters in the future.
          */
-        window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
+        try {
+          window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
+        } catch(e) {
+          return false;
+        }
 
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
           this.campaignReady = true;
+          this.trackingEnabled = (this.campaignReady && this.campaignConfig && this.campaignConfig.enable_tracking && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -148,6 +165,7 @@
       loadConfig() {
         this.$store.dispatch("config/getConfig", 'campaign').then(response => {
           this.campaignConfigReady = true;        
+          this.campaignConfig = this.$store.getters["config/config"].campaign;
         }, error => {
           this.$root.$toast(
             'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
@@ -255,21 +273,26 @@
   }
   .right-bar,
   .left-bar {
-    height: calc(~"100vh - 55px");
+    height: calc(~"100vh - 86px");
+    overflow: auto;
     overflow: overlay;
     width: 270px;
     display: block;
     float: left;
-    padding: 0px;
+      padding: 0px;
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
     padding-bottom: 25px;
 
-    &::-webkit-scrollbar {
-        width: 2px; 
-        background: transparent;
+    &:hover{
+      overflow: overlay
     }
+
+    &::-webkit-scrollbar {
+        width: 4px; 
+        background: transparent;
+        }
     &::-webkit-scrollbar-thumb {
-        background: @brand-secondary;
+        background: lighten(@stensul-gray, 40%);
     }
     .btn.btn-secondary.btn-block {
       &:hover,
@@ -279,10 +302,10 @@
       &:active:focus {
         color: #666666;
       }
-    }
+        }
     .fa.pull-left {
       margin-right: 12px;
-    }
+      }
 
     .components-list {
       padding: 0;
@@ -314,7 +337,7 @@
           padding: 0px;
           font-weight: 400px;
           color: #666666;
-          width: 100%;
+            width: 100%;
           font-weight: 300;
           text-align: center;
         }
@@ -326,8 +349,8 @@
             color: #333333;
           }
         }
-      }
-    }
+          }
+        }
 
     .card {
       padding: 0 8px 15px 8px;
@@ -335,24 +358,24 @@
       border-top: 1px solid #ffffff;
       margin-top: -1px;
       display: table;
-      width: 100%;
-    }
+          width: 100%;
+        }
 
-    select {
+        select{
       height: 22px;
-      font-size: 11px;
-      color: #666666;
-      border: none;
+          font-size: 11px;
+          color: #666666;
+          border: none;
       background: #f4f4f4;
-      box-shadow: none;
-      font-weight: 300;
+          box-shadow: none;
+          font-weight: 300;
       width: 65px;
-      float: right;
-    }
+          float: right;
+        }
 
     select[multiple] {
       height: 50px;
-    }
+      }
 
     .vue-js-switch {
       float: right;
@@ -366,7 +389,7 @@
         position: absolute !important;
         z-index: 300;
         right: 100%;
-      }
+          }
       .icon-remove {
         color: #999999;
         background: #ffffff;
@@ -374,8 +397,8 @@
         margin-top: -40px;
         margin-left: -35px;
         padding-top: 4px;
+        }
       }
-    }
   }
 
   .card-header {

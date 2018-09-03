@@ -53,7 +53,7 @@
   
             </div>
             <!-- Column Plugins -->
-            <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name" :key="plugin.name">
+            <div v-for="(plugin, moduleKey) in column.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
               <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="key"></component>
             </div>
             <!-- /Column Plugins -->

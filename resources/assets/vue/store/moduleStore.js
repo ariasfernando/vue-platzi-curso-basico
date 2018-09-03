@@ -22,22 +22,18 @@ const state = {
 
 const searchOrCreateLevel = (data, keys) => {
   let subData = data;
-  for (let i = 0; i < keys.length; i++) {
-    if (keys[i + 1] === undefined) {
-      return {
-        data: subData,
-        property: keys[i],
-      };
-    } else {
-      if (subData[keys[i]]) {
-        subData = subData[keys[i]];
-      } else {
-        Vue.set(subData, [keys[i]], {});
-        subData = subData[keys[i]];
-      }
-    } 
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (!_.has(subData, [keys[i]])) {
+      Vue.set(subData, [keys[i]], {});
+    }
+    subData = subData[keys[i]];
   }
+  return {
+    data: subData,
+    property: keys[keys.length - 1],
+  };
 };
+
 const getters = {
   module(state) {
     return state.module;
@@ -144,7 +140,8 @@ const mutations = {
   },
   setPluginComponentConfig(state, data) {
     const plugin = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin];
-    const pluginOption = searchOrCreateLevel(plugin, ['config', data.firstLevel, data.secondLevel, data.thirdLevel]);
+    const path = _.concat(['config'], data.path ? data.path.split('.') : []);
+    const pluginOption = searchOrCreateLevel(plugin, path);
     Vue.set(pluginOption.data, pluginOption.property, data.value);
   },
   savePluginSuboption(state, payload) {

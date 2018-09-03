@@ -1,5 +1,5 @@
 <template>
-  <div>
+    <div>
     <settings-container label="Destination Url" customClass="destination-url" v-if="component">
       <template slot="setting-bottom">
         <p v-if="validationRules">
@@ -31,9 +31,9 @@
           plain
           size="mini"
           :class="[`glyphicon glyphicon-${icon}`,{ 'active': target === option }]"
-          :data-tooltip="option"
-          @click="changeTarget(option)"
-          :key="option"
+            :data-tooltip="option"
+            @click="changeTarget(option)"
+            :key="option"
           >
         </el-button>
 
@@ -95,9 +95,9 @@
           this.saveComponentProperty('href', value);
 
           this.$nextTick(() => {
-            if (this.validationRules) {
-              this.validate();
-            }
+          if (this.validationRules) {
+            this.validate();
+          }
           });
         },
       },

@@ -44,12 +44,12 @@
 					<div class="form-group">
 						<input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
 					</div>
-                    <div class="form-group">
-                        <div class="sublink"><a href="{{ url('/password/email') }}">Forgot password?</a></div>
-                    </div>
 					<div class="form-group">
 						<button type="submit" class="btn btn-default">Change Password</button>
 					</div>
+                    <div class="form-group">
+                        <div class="sublink"><a href="{{ url('/password/email') }}">Forgot password?</a></div>
+                    </div>
 				</form>
 			</div>
 	</section>
