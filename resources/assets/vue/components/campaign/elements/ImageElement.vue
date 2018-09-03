@@ -25,8 +25,8 @@
             :target="component.image.attribute.target"
             >
             <img
-              class="st-resize"
-              :class="{'st-hide-mobile' : component.image.attribute.placeholderMobile}"
+              :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
+                        'st-resize' : component.image.styleOption.noMobileStretch !== true }"
               style="border: 0; display: block;"
               border="0"
               :valign="component.image.attribute.valign || 'top'"
@@ -43,7 +43,7 @@
                 <img
                   :src="this.$_app.config.imageUrl + component.image.attribute.placeholderMobile"
                   border="0"
-                  class="st-resize"
+                  :class="{ 'st-resize' : component.image.styleOption.noMobileStretch !== true }"
                   style="display:block;border:none;max-width:100%;height:auto;"
                   :width="component.image.attribute.width"
                   :valign="component.image.attribute.valign || 'top'"
