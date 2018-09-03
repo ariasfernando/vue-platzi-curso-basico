@@ -84,6 +84,9 @@ class CampaignManager
             $campaign->plain_text = $inputs['plain_text'];
         }
 
+        if (isset($inputs['tracking'])) {
+            $campaign->tracking = $inputs['tracking'];
+        }
 
         $campaign->tags = [];
         if (!empty($inputs['tags'])) {

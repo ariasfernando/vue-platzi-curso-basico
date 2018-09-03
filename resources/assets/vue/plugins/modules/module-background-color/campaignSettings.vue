@@ -1,26 +1,30 @@
 <template>
-  <div class="component-module-background-color plugin-wrapper-inner">
-    <label class="half-style-setting">{{ plugin.title }}</label>
-    <el-color-picker ref="compact" v-model="colors" color-format="hex"></el-color-picker>
-    <el-input
-      size="mini"
-      v-model="colors"
-      placeholder="transparent"
-      class="col-sm-4" 
-      disabled="disabled"
-    >
-    </el-input>
-  </div>
+  <settings-container :label="plugin.title" customClass="generic-color">
+    <template slot="setting-right" >
+      <div @click="openColorPicker()" class="input-text-hex">
+        <el-input
+          size="mini"
+          v-model="colors"
+          placeholder="transparent"
+          disabled="disabled"
+        ></el-input>
+      </div>
+      <el-color-picker v-model="colors" color-format="hex" :ref="`generic-color${instance}`"></el-color-picker>
+    </template>
+  </settings-container>
 </template>
 
 <script>
-import { Compact } from "vue-color";
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
 export default {
   props: ["name", "plugin", "moduleId"],
-  components: {
-    "compact-picker": Compact
-  },
+  components: { SettingsContainer },
+    data() {
+      return {
+        instance: Math.floor(100000 + Math.random() * 900000)
+      };
+    },
   computed: {
     currentModule() {
       return this.$store.getters["campaign/currentModule"];
@@ -47,63 +51,59 @@ export default {
       }
     }
   },
-  data() {
-    return {
-      defaultColors: this.plugin.config.defaultColors
-    };
+  methods: {
+    openColorPicker() {
+      this.$refs["generic-color" + this.instance].$el.children[0].click();
+    },
   },
-  mounted() {
-    this.$refs.compact.defaultColors = this.defaultColors;
-  }
 };
 </script>
-<style lang="less" scoped>
-.half-style-setting {
-  width: 50%;
-  float: left;
-  position: relative;
-  & + .half-style-setting {
-    padding-left: 15px;
-  }
-  &.padding-top {
-    padding-top: 5px;
-  }
-  &.float-right {
-    float: right;
+<style lang="scss" scoped>
+.el-color-picker {
+  float: right;
+  height: 28px;
+}
+.el-color-picker /deep/ .el-color-picker__icon{
+  &:before{
+    text-shadow: 0px 1px #666666;
   }
 }
-</style>
-<style lang="less">
-.component-module-background-color {
-  .el-input--mini {
-    width: 86px;
-    padding: 6px 0 0 0;
+.input-text-hex {
+  width: calc(100% - 34px);
+  float: left;
+}
+.generic-color /deep/ .el-input {
+  padding: 0;
+}
+.generic-color /deep/ .el-color-picker__trigger {
+  padding: 0px;
+  height: 26px;
+  width: 34px;
+  border-left: 0;
+  border-top-right-radius: 2px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 2px;
+
+  .el-color-picker__color{
+    border: none;
   }
-  .el-color-picker__trigger {
-    padding: 3px;
-    height: 28px;
-    width: 34px;
-    border-right: 0;
-    border-top-left-radius: 4px;
+}
+.generic-color /deep/ .el-input{
+  .el-input__inner {
+    border-top-left-radius: 2px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 2px;
   }
-  .el-color-picker {
-    padding: 6px 0 0 0;
-    float: left;
-  }
-  input.el-input__inner {
-    text-align: center;
-  }
-  .el-input.is-disabled .el-input__inner {
-    background-color: transparent;
+  &.is-disabled .el-input__inner {
+    background-color: #fff;
     color: #666666;
     cursor: auto;
     padding: 0;
     font-size: 12px;
-    width: 87px;
-    border: 1px solid #dcdfe6;
+    text-align: center;
+    height: 26px;
   }
 }
 </style>
