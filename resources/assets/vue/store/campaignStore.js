@@ -175,6 +175,7 @@ function campaignStore() {
       },
       saveSetting(state, setting) {
         state.editedSettings[setting.name] = setting.value;
+        state.dirty = true;
       },
       saveCampaignData(state, payload) {
         const update = {};
