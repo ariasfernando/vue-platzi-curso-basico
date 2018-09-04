@@ -54,6 +54,8 @@
       code() {
         if (this.type === 'plaintext') {
           return this.$store.state.campaign.campaign.campaign_data.plain_text;
+        } else if (this.type === 'html_minified') {
+          return this.$options.filters.charConvert(this.$store.state.campaign.campaign.campaign_data.body_html_minified);
         }
         return this.$store.state.campaign.campaign.campaign_data.body_html;
       }

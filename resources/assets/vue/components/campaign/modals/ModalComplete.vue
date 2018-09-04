@@ -18,6 +18,9 @@
                 <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">
                   <textarea ref="plain_text" v-html="plainText" readonly></textarea>
                 </b-tab>
+                <b-tab title="Minified Normal HTML" @click="changeTypeTextArea('normal_html_minified')" >
+                  <textarea ref="normal_html_minified" :value="html_minified"></textarea>
+                </b-tab>
               </b-tabs>
             </slot>
           </div>
@@ -72,6 +75,7 @@
       return {
         plainText: '',
         textareaType: 'normal_html',
+        html_minified: '',
         html: '',
       }
     },
@@ -87,6 +91,7 @@
       campaign: {
         handler: function(value) {
           this.html = value.campaign_data.body_html;
+          this.html_minified = this.$options.filters.charConvert(value.campaign_data.body_html_minified);
           this.plainText = value.campaign_data.plain_text;
         },
         deep: true
@@ -122,6 +127,10 @@
         if (!value) return ''
         value = value.toString()
         return value.charAt(0).toUpperCase() + value.slice(1)
+      },
+      charConvert: function (value) {
+        if (!value) return '';
+        return value.replace(/&amp;/g, '&');
       }
     },
     created () {

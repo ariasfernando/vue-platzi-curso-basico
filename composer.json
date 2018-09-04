@@ -27,7 +27,9 @@
         "stensul/media-gallery": "^2.2",
         "stensul/logging": "2.*",
         "stensul/silverpop-provider": "2.0.*",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "zaininnari/html-minifier": "^0.4.2",
+        "wyrihaximus/html-compress": "^1.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
