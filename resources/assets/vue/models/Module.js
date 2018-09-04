@@ -30,7 +30,8 @@ function Module(data = {}) {
     columnsStacking: (data.structure && data.structure.columnsStacking) ? data.structure.columnsStacking : 'normal',
     attribute: {
       bgcolor: attribute.bgcolor || '',
-      classes: '',
+      classes: attribute.classes || '',
+      height: attribute.height || '',
     },
     mobileClasses,
     style: {
@@ -55,6 +56,7 @@ function Module(data = {}) {
       borderLeftWidth: style.borderLeftWidth || '0px',
       borderLeftStyle: style.borderLeftStyle || 'none',
       borderLeftColor: style.borderLeftColor || '',
+      backgroundImage: style.backgroundImage || '',
     },
 
     columns: data.structure && data.structure.columns ? data.structure.columns : [],

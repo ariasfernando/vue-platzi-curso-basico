@@ -253,8 +253,15 @@ function campaignStore() {
         state.dirty = true;
       },
       saveModuleAttribute(state, data) {
+        // DEPRECATE
         const attributes = state.modules[data.moduleId].structure.attribute;
         attributes[data.attribute] = data.attributeValue;
+        state.dirty = true;
+      },
+      saveModuleProperty(state, data) {
+        const module = state.modules[data.moduleId].structure;
+        const properties = data.link ? module[data.link] : module;
+        Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
       saveModuleData(state, data) {

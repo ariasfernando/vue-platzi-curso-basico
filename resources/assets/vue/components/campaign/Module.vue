@@ -31,21 +31,15 @@
     <td
       class="stx-toolbar-content stx-position-relative"
       :data-module-id="moduleId"
+      :background="module.structure.style.backgroundImage"
       :width="module.structure.attribute.width || '100%'"
-      :style="module.structure.style"
+      :style="elementBorderAndHorizontalPadding(module.structure.style)"
       :valign="module.structure.attribute.valign || 'top'"
       :bgcolor="module.structure.attribute.bgcolor"
       :class=" { 'stx-show-error': hasErrors, 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}"
     >
 
-      <table
-        width="100%"
-        cellspacing="0"
-        cellpadding="0"
-        border="0"
-        class="st-wrapper" 
-        align="center"
-      >
+      <background-image :element="module.structure">
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
 
@@ -141,7 +135,7 @@
           </td>
         </tr>
         <!--1 COLUMN -->
-      </table>
+      </background-image>
       <module-toolbar :module-id="moduleId"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
       <div class="st-remove-element default-module-error" style="display:none"></div>
@@ -161,6 +155,7 @@
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
   import validatorMixin from '../../plugins/modules/mixins/validator.js';
   import ElementMixin from '../common/mixins/ElementMixin.js';
+  import BackgroundImage from '../common/BackgroundImage';
   import _ from 'lodash';
 
   module.exports = {
@@ -321,6 +316,7 @@
       ColumnsStackedRender,
       ColumnsFixedRender,
       ColumnsInvertedStackingRender,
+      BackgroundImage
     }
   };
 </script>

@@ -482,6 +482,10 @@
         }
       }
     }
+    .stx-wrapper {
+      display: table;
+      width: 100%;
+    }
   }
 
 </style>

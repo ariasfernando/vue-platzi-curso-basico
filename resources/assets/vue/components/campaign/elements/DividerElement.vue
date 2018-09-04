@@ -10,18 +10,12 @@
       cellpadding="0"
       cellspacing="0"
     >
-      <tr>
-        <td 
-          :width="component.divider.attribute.width"
+        <spacer 
           :valign="component.divider.attribute.valign"
           :align="component.divider.attribute.align"
           :bgcolor="component.divider.attribute.bgcolor"
           :height="component.divider.style.height"
-          style="display:block; margin:0 auto;"
-          :style="innerTdStyle"
-          :data-persist-styles="JSON.stringify(dataPersistStyles)"
-        >&nbsp;</td>
-      </tr>
+        ></spacer>
     </table>
   </module-container>
 </template>
@@ -30,35 +24,17 @@
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ModuleContainer from '../../common/containers/ModuleContainer';
   import ElementMixin from '../../common/mixins/ElementMixin';
+  import Spacer from '../../common/Spacer';
   import _ from 'underscore';
   
   export default {
     name: 'DividerElement',
     components: {
       ModuleContainer,
+      Spacer
     },
     mixins: [ MobileStylesMixin, ElementMixin ],
-    data(){
-      return{
-        dataPersistStyles: {
-          '-webkit-text-size-adjust':'100%',
-          '-ms-text-size-adjust':'100%',
-          'mso-line-height-rule':'exactly',
-          'mso-table-lspace':'0pt',
-          'mso-table-rspace':'0pt'
-        },
-      }
-    },
     computed: {
-      innerTdStyle() { 
-        return {
-          height: this.component.divider.style.height,
-          lineHeight: this.component.divider.style.height,
-          fontSize: this.component.divider.style.height,
-          maxHeight: this.component.divider.style.height,
-          backgroundColor: this.component.divider.style.borderColor,
-        }  
-      },
       tableStyle() {
         return {
           height: this.component.divider.style.height,

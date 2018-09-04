@@ -37,6 +37,12 @@ export default {
       });
       return BorderAndPadding;
     },
+    elementBorderAndHorizontalPadding(element) {
+      const elementBorderAndPadding = this.elementBorderAndPadding(element);
+      elementBorderAndPadding.paddingTop = undefined;
+      elementBorderAndPadding.paddingBottom = undefined;
+      return elementBorderAndPadding;
+    },
     elementBorderPaddingAndWidth(element) {
       const elementBorderAndPadding = this.elementBorderAndPadding(element);
       const styles = _.isEmpty(elementBorderAndPadding) ? {} : elementBorderAndPadding;
