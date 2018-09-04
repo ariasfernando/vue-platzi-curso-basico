@@ -8,7 +8,13 @@ export default {
       // check if current toggle has settings rules
       for (let index in this.plugin.data.elements) {
         if (elementId === this.plugin.data.elements[index].id) {
-          logicRules = !_.isEmpty(this.plugin.data.elements[index].logic) ? this.plugin.data.elements[index].logic[status] : false;
+          const logic = this.plugin.data.elements[index].logic; 
+          // check if logic points to a shortcut
+          if (_.isString(logic) && !_.isEmpty(logic)) {
+            logicRules = this.plugin.data.shortcuts[logic][status];
+          } else if(!_.isEmpty(this.plugin.data.elements[index].logic)) {
+            logicRules =  this.plugin.data.elements[index].logic[status];
+          }
         }
       }
 
@@ -111,7 +117,7 @@ export default {
       if (applyLogicUpdates) {
         // for each update, commit changes
         for (let index in settings.updates) {
-          const update = this.plugin.data.updates[settings.updates[index]];
+          const update = this.plugin.data.shortcuts[settings.updates[index]];
 
           if (this.isCustom) {
             // More testing is needed
