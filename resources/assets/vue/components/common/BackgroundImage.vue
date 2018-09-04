@@ -1,21 +1,25 @@
 <template>
-    <mso
+  <div class="stx-wrapper">
+    <mso v-if="hasbackgroundImage"
       :start="msoStartingComment"
       :end="msoEndingComment"
     >
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
         <spacer v-if="paddingTop" :height="paddingTop"></spacer>
 
-        <slot></slot>
+        <slot name="with-background-image"></slot>
 
         <template v-if="paddingBottom">
           <div class="stx-wrapper" v-html="'<!--[if !gte mso 9]><!---->'"></div>
               <spacer :height="paddingBottom"></spacer>
           <div class="stx-wrapper" v-html="'<!--<![endif]-->'"></div>
         </template>
+      </table>
+    </mso>
+    <table v-if="!hasbackgroundImage" width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+      <slot name="without-background-image"></slot>
     </table>
-  </mso>
-  <!-- <slot else></slot> -->
+  </div>
 </template>
 
 <script>
@@ -55,7 +59,12 @@ export default {
     },
     paddingBottom(){
       return this.element.style.paddingBottom && this.element.style.paddingBottom !== '0px' ? _.parseInt(this.element.style.paddingBottom) : undefined;
-    }
+    },
+    hasbackgroundImage() {
+      return (
+        Boolean(this.$slots["with-background-image"])
+      );
+    },
   }
 };
 </script>
