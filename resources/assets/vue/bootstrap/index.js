@@ -153,7 +153,7 @@ export default {
     if (customer.plugins) {
       _.merge(plugins, customer.plugins);
     }
-
+    
     this.Vue.prototype.$_app.modulePlugins = plugins.modules;
     this.Vue.prototype.$_app.globalComponents = plugins.common;
 
@@ -169,6 +169,7 @@ export default {
       }
 
       if (component.campaignSettings) {
+        component['hasCampaignSettings'] = true;
         this.Vue.component(`campaign-${component.name}`, component.campaignSettings);
         delete component.campaignSettings;
       }
