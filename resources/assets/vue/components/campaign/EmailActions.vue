@@ -74,10 +74,13 @@
   import dashboardService from '../../services/dashboard';
   import campaignCleaner from '../../utils/campaignCleaner';
   import { html_beautify } from 'js-beautify';
-  
+  import TrackingMixin from './mixins/trackingMixin'
+  import _ from 'lodash'
+
 
   export default {
     name: 'EmailActions',
+    mixins: [ TrackingMixin ],
     computed: {
       campaign () {
         return this.$store.getters["campaign/campaign"];
@@ -100,7 +103,7 @@
         }else{
           return this.campaign.campaign_data.library_name;
         }
-      }
+      },
     },
     data () {
       return {
@@ -125,6 +128,7 @@
           allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
             && this.$_app.config.permissions.indexOf('access_proof') >= 0
         },
+        trackingEnabled: false,
         showLibraryName: false
       }
     },
@@ -138,15 +142,23 @@
       save() {
         this.$store.commit("global/setLoader", true);
 
-        const cleanHtml = campaignCleaner.clean('.section-canvas-container');
+        var cleanHtml = campaignCleaner.clean('.section-canvas-container');
+
+        if (this.trackingEnabled) {
+          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+        }
 
         const bodyHtml = html_beautify(cleanHtml, {
           'indent_size': 2
         });
 
-        this._save(bodyHtml).then(response => {
+        // Save Request
+        this._save(bodyHtml).then(() => {
           this.$root.$toast('Email saved', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       _save(bodyHtml = undefined) {
@@ -174,11 +186,27 @@
         });
         return promise;
       },
-      _validate(message = undefined) {
-        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors) {
+      _validate(customMessage = undefined) {
+      	let errorMessage = '';
+        if (this.$_app.utils.validator.imagesErrors('#emailCanvas')) {
+        	errorMessage = 'To continue please upload all missing images.';
+        }
+       	if (this.moduleErrors) {
+       		errorMessage = 'To continue please configure properly all modules.';
+       	}
+       	if (!this._validateEmptyCampaignName()) {
+        	errorMessage = 'To continue please complete the email name.';
+       	}
+        if (this.$_app.utils.validator.tinyErrors('#emailCanvas')) {
+          errorMessage = 'To continue please configure properly all text modules.';
+        }
+       	if (!this._validateEmptyEmail()) {
+        	return false;
+       	}
+       	
+        if (errorMessage !== '') {
           this.$root.$toast(
-            message || 'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
-            'or remove the incomplete module(s).',
+            customMessage || errorMessage,
             {
               className: 'et-error',
               duration: 10000,
@@ -207,6 +235,12 @@
         }
         return true;
       },
+      _validateEmptyCampaignName() {
+      	if (this.$store.getters["campaign/campaign"].campaign_data.campaign_name === '') {
+			return false;
+      	} 
+      	return true;
+      },
       template() {
         this.$store.commit("campaign/toggleModal", 'modalEnableTemplating');
       },
@@ -215,7 +249,7 @@
       },
       complete() {
         // Do not save if there are missing or wrong fields
-        if (!this._validateEmptyEmail() || !this._validate()) {
+        if (!this._validate()) {
           return false;
         }
 
@@ -225,7 +259,15 @@
         this.$_app.utils.hackMediaQuery('.section-canvas-container', this.campaign.campaign_data.library_config.templateWidth);
 
         // Obtain current html
-        const cleanHtml = campaignCleaner.clean('.section-canvas-container');
+        var cleanHtml = campaignCleaner.clean('.section-canvas-container');
+
+        if (this.trackingEnabled) {
+          if (!this.validateTracking()) {
+            this.$store.commit("global/setLoader", false);
+            return false;
+          }
+          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+        }
 
         const bodyHtml = html_beautify(cleanHtml, {
           'indent_size': 2
@@ -294,6 +336,22 @@
         });
       },
       proof() {
+        // Do not save if there are missing or wrong fields
+        if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors  ) {
+          this.$_app.utils.validator.modulesErrors('#emailCanvas');
+
+          this.$root.$toast(
+            'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
+            'or remove the incomplete module(s).',
+            {
+              className: 'et-error',
+              closeable: true
+            }
+          );
+
+          this.$store.commit('campaign/campaignCompleted', true);
+          return false;
+        }
         // Do not show proof modal if there are missing or wrong fields
         let validateMessage = 'To send an email for review, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.';
         if (!this._validateEmptyEmail('You cannot send for review an empty email.')) {
@@ -316,6 +374,7 @@
     created () {
       this.autoSave();
       this.campaignConfig = this.$store.getters["config/config"].campaign;
+      this.trackingEnabled = (this.campaignConfig.enable_tracking && _.has(this.campaign.campaign_data.library_config, 'tracking') && this.campaign.campaign_data.library_config.tracking);
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;
 

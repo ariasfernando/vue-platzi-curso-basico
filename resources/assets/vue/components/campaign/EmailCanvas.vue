@@ -9,9 +9,9 @@
           <td
             align="center"
             style="vertical-align:top;"
-            class="stx-draggable-wrapper"
+            class="stx-draggable-wrapper st-email-wrapper"
             :class="{ 'campaign-validated': campaignValidated }"
-            :bgcolor="templateBackgroundColor()"
+            :bgcolor="templateBackgroundColor || defaultTemplateBackgroundColor"
             @click.stop="handleActive"
             @mouseover="onMouseOver"
             @mouseleave="onMouseLeave">
@@ -129,7 +129,20 @@
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
         return this.modules[activeModuleId] || undefined;
-      }
+      },
+      defaultTemplateBackgroundColor() {
+        let defaultColor = this.campaign.campaign_data.library_config.templateBackgroundColor;
+
+        if (this.campaign.library_config.templateBackgroundPalettes) {
+          const palettes = JSON.parse(this.campaign.library_config.templateBackgroundPalettes);
+          defaultColor = palettes.default;
+        }
+
+        return defaultColor;
+      },
+      templateBackgroundColor() {
+        return this.campaign.campaign_data.campaign_settings.templateBackgroundColor;
+      },
     },
     data () {
       return {
@@ -165,9 +178,6 @@
             // The placeholder image is 170x52, this positioning forces the placeholder image: top-right
             dataTransfer.setDragImage(img, 130, 16);
           }
-        },
-        templateBackgroundColor(){
-          return  this.campaign.campaign_data.library_config.templateBackgroundColor;
         },
         title  () {
           let libraryTitle = this.campaign.campaign_data.library_config.title || 'Campaign Editor';
@@ -414,14 +424,14 @@
     table{
       border-collapse: initial;
     }
-    tr.ghost-component{
+    .ghost-component{
       text-align: center;
       color:@focus;
       background-color: @hover;
       display: table-row;
       vertical-align: middle;
       list-style-type: none;
-      font-size: 13px;
+      font-size: 14px;
       z-index: 300;
       opacity: 1!important;
       &:before{

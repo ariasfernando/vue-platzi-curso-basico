@@ -1,6 +1,53 @@
 import _ from 'lodash';
 
 export default {
+  mounted() {
+    if (this.validationRules) {
+      this.validate();
+    }
+  },
+  computed: {
+    validated: {
+      get() {
+        return this.plugin.data.validated;
+      },
+      set(value) {
+        const payload = {
+          plugin: this.pluginKey,
+          moduleId: this.currentComponent.moduleId,
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          data: {
+            validated: value,
+          },
+        };
+  
+        // Save plugin data
+        this.$store.commit("campaign/savePlugin", payload);
+      }
+    },
+    moduleErrors() {
+      return this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
+                                                      && _.isEqual(err.scope.columnId, this.currentComponent.columnId)
+                                                      && _.isEqual(err.scope.componentId, this.currentComponent.componentId))) : [];
+    },
+    hasError() {
+      return this.moduleErrors.length > 0;
+    },
+    getErrorMessage() {
+      return this.moduleErrors.length > 0 ? this.moduleErrors[0].msg : '';
+    },
+  },
+  watch: {
+    currentComponent: {
+      handler: function(currentComponent) {
+        if (this.validationRules) {
+          this.validate();
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
     validate() {
       this.$validator.validateAll().then(() => {
@@ -28,69 +75,93 @@ export default {
         this.validated = true;
       });
     },
-    validateMulticolumnStudioModule() {
+    registerStudioModuleDefaultValidationErrors(moduleId) {
       // studio modules with multiple columns which have plugins with validation do not trigger when the module is added
-      // so we need to check a flag to aid the user to open each module and run the validations at least once
-      
-      let hasErrors = false;
+      // so we need flag them with errors to aid the user to open each module and run the validations at least once
 
-      if(this.module.structure && this.module.structure.columns && this.module.structure.columns) {
+      if (this.module.structure && this.module.structure.columns && this.module.structure.columns) {
         _.each(this.module.structure.columns, (column, columnIndex) => {
           _.each(column.components, (component, componentIndex) => {
             _.each(component.plugins, (plugin, pluginIndex) => {
+              let validations;
 
-              if(plugin.config.validations) {
+              if (plugin.config.validations) {
+                validations = plugin.config.validations;
+              } else if (plugin.config.alt && plugin.config.alt.validations) {
+                validations = plugin.config.alt.validations;
+              }
+
+              if (validations && component.container.styleOption.enableElement && plugin.enabled) {
                 let validationsRequired = false;
-                _.each(plugin.config.validations, (validation, pluginIndex) => {
-                  if(plugin.enabled && validation && !plugin.data.validated) {
+                _.each(validations, (validation, pluginIndex) => {
+                  if (plugin.enabled && validation && !plugin.data.validated) {
                     validationsRequired = true;
                   }
                 });
-                if(validationsRequired) {
+                if (validationsRequired) {
                   // if the validations are enabled and were never ran we assume they have errors
-                  hasErrors = true;
-
-                  let error = {
+                  const error = {
                     scope: {
                       type: 'plugin',
                       name: plugin.name,
-                      moduleId: this.moduleId,
+                      moduleId: moduleId,
                       columnId: columnIndex,
                       componentId: componentIndex
-                    }
-                  }
+                    },
+                  };
 
                   this.$store.dispatch('campaign/addErrors', [error]);
                 }
               }
-
             });
           });
         });
       }
-
-      return hasErrors;
     },
-  },
-  computed: {
-    validated: {
-      get() {
-        return this.plugin.data.validated;
-      },
-      set(value) {
-        const payload = {
-          plugin: this.pluginKey,
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          data: {
-            validated: value,
+    registerCustomModuleElementDefaultValidationError(moduleId, elementName, validationOption, defaultValue) {
+      if (_.indexOf(['required', 'required:true'], validationOption) >= 0 && _.isEmpty(defaultValue)) {
+        const error = {
+          msg: 'The field is required.',
+          scope: {
+            type: 'custom',
+            elementName,
+            moduleId: moduleId,
+            idInstance: this.module.idInstance,
           },
         };
   
-        // Save plugin data
-        this.$store.commit("campaign/savePlugin", payload);
+        this.$store.dispatch('campaign/addErrors', [error]);
       }
     },
-  }
+    registerCustomModuleDefaultValidationErrors(moduleId) {
+      // Since vee-validate validations do not run until the settings panel is loaded
+      // we validate 'required' validations in background to prevent completing and invalid campaign
+
+      if (this.module.params.validation && !this.module.data.validated) {
+        _.each(this.module.params.validation, (item, key) => {
+          if (key === 'images') {
+            _.each(this.module.params.validation[key], (imageElement, key2) => {
+
+              if (typeof imageElement.parentElement === undefined 
+                || (imageElement.parentElement && this.module.data[imageElement.parentElement].enableElement)) {
+                _.each(this.module.params.validation[key][key2], (fieldValidations, field) => {
+                  const elementName = `${key2}${field}`;
+
+                  const defaultValue = this.module.data.images[key2][field];
+                  const validationOptionValue = fieldValidations.option;
+                  this.registerCustomModuleElementDefaultValidationError(moduleId, elementName, validationOptionValue, defaultValue);
+                });
+              }
+            });
+          } else {
+            _.each(this.module.params.validation[key], (validationOptionValue) => {
+              const elementName = `${key}`;
+              const defaultValue = this.module.data[key];
+              this.registerCustomModuleElementDefaultValidationError(moduleId, elementName, validationOptionValue, defaultValue);
+            });
+          }
+        });
+      }
+    },
+  },
 };

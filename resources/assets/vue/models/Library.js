@@ -15,6 +15,7 @@ function Library(data = {}) {
     templateMobileWidth: config.templateMobileWidth || '480',
     templateBackgroundColor: typeof config.templateBackgroundColor === 'undefined' ? '#FFFFFF' : config.templateBackgroundColor,
     contentBackgroundColor: typeof config.contentBackgroundColor === 'undefined' ? '#FFFFFF' : config.contentBackgroundColor,
+    templateBackgroundPalettes: config.templateBackgroundPalettes || '',
     colorPalettes: config.colorPalettes || '',
     fontFamily: config.fontFamily || 'Arial',
     fontSize: config.fontSize || '14',
@@ -30,6 +31,7 @@ function Library(data = {}) {
     espProvider: config.espProvider || false,
     plainText: config.plainText || false,
     preheader: config.preheader || false,
+    tracking: config.tracking || false,
     tagging: config.tagging || false,
     templating: config.templating || false,
   };

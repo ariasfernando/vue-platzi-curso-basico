@@ -6,12 +6,13 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :style="{'background-color' : column.container.attribute.bgcolor}"
-        :bgcolor="column.container.attribute.bgcolor"
+        :style="{'width':calculeStyleWidthColumnPx(columnId)}"
+        :width="calculeWidthColumnPx(columnId)"
       >
         <tr>
           <td
-            :width="calculeWidthColumnPx(columnId)"
+            width="100%"
+            style="width:100%;"
             :style="styles(columnId)"
             :bgcolor="column.container.attribute.bgcolor"
             :valign="column.container.attribute.valign|| 'top'"
@@ -114,8 +115,7 @@
           return {
             [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
           };
-        });
-        styles.push({'width': this.calculeStyleWidthColumnPx(columnId)}) 
+        }); 
         return styles;
       },
       msoBetweenComment(columnId) {
