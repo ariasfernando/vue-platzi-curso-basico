@@ -15,6 +15,12 @@
 				<nav>
 					@if (!Auth::guest())
 						<span>{{ Auth::user()->name }}</span>
+						@if (!Auth::check() || Auth::user()->can('access_dashboard'))
+							<a href="{{ url('/') }}" class="help dropdown-toggle help-dropdown-menu">
+								<i class="glyphicon glyphicon-dashboard"></i>
+								<span>Dashboard</span>
+							</a>
+						@endif
 						<a href="{{ url('admin/logout') }}" class="logout">
 							<i class="fa fa-sign-out"></i>
 							<span>Logout</span>

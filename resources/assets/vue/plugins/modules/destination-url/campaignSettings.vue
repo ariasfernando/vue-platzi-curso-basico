@@ -1,6 +1,6 @@
 <template>
-    <div>
-    <settings-container label="Destination Url" customClass="destination-url" v-if="component">
+  <div>
+    <settings-container label="Destination Url" customClass="destination-url" v-if="component" key="destination-url">
       <template slot="setting-bottom">
         <p v-if="validationRules">
           <el-input
@@ -24,7 +24,7 @@
       </template>
     </settings-container>
 
-    <settings-container label="Target" v-if="plugin.config.target">
+    <settings-container label="Target" v-if="plugin.config.target" key="target">
       <template slot="setting-right">
         <el-button
           v-for="(icon, option) in plugin.config.options"
