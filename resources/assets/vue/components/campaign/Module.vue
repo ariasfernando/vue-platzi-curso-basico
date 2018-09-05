@@ -33,6 +33,7 @@
       :data-module-id="moduleId"
       :background="modulebackgroundImage"
       :width="module.structure.attribute.width || '100%'"
+      :height="module.structure.attribute.height"
       :style="styleModule"
       :valign="module.structure.attribute.valign || 'top'"
       :bgcolor="module.structure.attribute.bgcolor"
@@ -226,7 +227,7 @@
         return _.get(this.module,'structure.attribute.bgcolor');
       },
       modulebackgroundImage(){
-        return this.module.structure.style.backgroundImage;
+        return this.module.structure.style.backgroundImage ? this.$_app.config.imageUrl + this.module.structure.style.backgroundImage : undefined;
       },
       styleModule(){
         return this.modulebackgroundImage ?

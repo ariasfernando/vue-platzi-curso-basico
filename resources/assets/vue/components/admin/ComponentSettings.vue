@@ -58,7 +58,7 @@
           :class="'plugin-' + plugin.name"
           :key="key"
         >
-          <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
+          <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin" v-if="plugin.hasStudioSettings"></component>
         </div>
       </b-card>
     </b-collapse>
