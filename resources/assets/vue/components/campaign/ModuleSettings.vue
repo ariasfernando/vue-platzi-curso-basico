@@ -1,12 +1,12 @@
 <template>
-  <div class="section-box" v-if="module">
+  <div class="section-box" v-if="module && module.type === 'studio'">
     <template  v-if="hasEnabledPlugins(module)">
       <label-item-container label="MODULE STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
       <div class="card">
         <group-container>
           <component  v-for="(plugin, key) in module.plugins" :key="plugin.name + key" v-if="plugin.enabled && $_app.modulePlugins[key]" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"  :module-id="currentModule"></component>
         </group-container>
-      </div>
+    </div>
     </template>
     <template v-if="showColumnStyles">
     <label-item-container label="COLUMN STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
@@ -36,7 +36,7 @@
         </b-tabs>
       </b-card>
 
-      </div>
+    </div>
     </template>
   </div>
 </template>
