@@ -817,6 +817,162 @@ describe('== Library Store ==', () => {
 
       done();
     });
+    it('"saveComponentProperty" with data, expect to save the new properties data', (done) => {
+      let data = {
+        plugin: 'styleImageEditor',
+        moduleId: 0,
+        columnId: 0,
+        componentId: 0,
+        subComponent: 'image',
+        link: 'attribute',
+        value: 'campaigns/5b86a76baa96550016453356/en_us/5b8ef0cc06930-1536094412.0269.png',
+        property: 'placeholder',
+      };
+      let data2 = {
+        plugin: 'styleImageEditor',
+        moduleId: 0,
+        columnId: 0,
+        componentId: 0,
+        link: 'attribute',
+        value: 'campaigns/5b86a76baa96550016453356/en_us/5b8ef0cc06930-1536094412.0269.png',
+        property: 'placeholder',
+      };
+      let data3 = {
+        plugin: 'styleImageEditor',
+        moduleId: 0,
+        columnId: 0,
+        componentId: 0,
+        value: 'campaigns/5b86a76baa96550016453356/en_us/5b8ef0cc06930-1536094412.0269.png',
+        property: 'placeholder',
+      };
+      let modulesData = [
+        {
+          structure: {
+            columns: [
+              {
+                components: [
+                  {
+                    image: {
+                      attribute: {
+                        placeholder: '',
+                      },
+                    },
+                    attribute: {
+                      placeholder: '',
+                    },
+                    placeholder: '',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ];
+
+      store.commit('campaign/updateEmailCanvas', modulesData);
+      store.commit('campaign/saveComponentProperty', data);
+      store.commit('campaign/saveComponentProperty', data2);
+      store.commit('campaign/saveComponentProperty', data3);
+
+      let stateModulescomponent = store.state.campaign.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
+      let stateDirty = store.state.campaign.dirty;
+
+      expect(stateModulescomponent.image.attribute.placeholder).toEqual(data.value);
+      expect(stateModulescomponent.attribute.placeholder).toEqual(data.value);
+      expect(stateModulescomponent.placeholder).toEqual(data.value);
+      expect(stateDirty).toBeTruthy();
+
+      data = null;
+      data2 = null;
+      data3 = null;
+      modulesData = null;
+      stateModulescomponent = null;
+      stateDirty = null;
+
+      done();
+    });
+    xit('"saveComponentAttribute" ,', () => {});
+    it('"saveColumnAttribute" with data, to expect to update the attribute', (done) => {
+      let data = {
+        plugin: 'columnBackgroundColor',
+        moduleId: 0,
+        columnId: 0,
+        attribute: 'bgcolor',
+        attributeValue: '#000000',
+      };
+      let modulesData = [
+        {
+          structure: {
+            columns: [
+              {
+                container: {
+                  attribute: {
+                    width: '50%',
+                    valign: 'middle',
+                    bgcolor: '#B01F1F',
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ];
+
+      store.commit('campaign/updateEmailCanvas', modulesData);
+      store.commit('campaign/saveColumnAttribute', data);
+
+      let stateModulescomponent = store.state.campaign.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
+
+      expect(stateModulescomponent).toHaveProperty(data.attribute, data.attributeValue);
+
+      data = null;
+      
+      modulesData = null;
+      stateModulescomponent = null;
+
+      done();
+    });
+    it('"saveColumnAttribute" with data, to expect insert a new attribute', (done) => {
+      let data = {
+        plugin: 'columnBackgroundColor',
+        moduleId: 0,
+        columnId: 0,
+        attribute: 'bgcolor',
+        attributeValue: '#B01F1F',
+      };
+      let modulesData = [
+        {
+          structure: {
+            columns: [
+              {
+                container: {
+                  attribute: {
+                    width: '50%',
+                    valign: 'middle',
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ];
+
+      store.commit('campaign/updateEmailCanvas', modulesData);
+      store.commit('campaign/saveColumnAttribute', data);
+
+      let stateModulescomponent = store.state.campaign.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
+
+      expect(stateModulescomponent).toHaveProperty(data.attribute, data.attributeValue);
+
+      data = null;
+      
+      modulesData = null;
+      stateModulescomponent = null;
+
+      done();
+    });
+    xit('"saveModuleAttribute" , ', () => {});
+    xit('"saveModuleData" ,', () => {});
   });
 
   xdescribe('trigger actions', () => {
