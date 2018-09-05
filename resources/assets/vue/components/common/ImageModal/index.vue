@@ -22,7 +22,7 @@
                     </button>
                     <input ref="input" type="file" name="file" style="display: none;" />
                   </div>
-                  <div v-if="params.library">
+                  <div v-if="params.library && images.length > 0">
                     <button type="button" @click="clickGallery">
                       <i class="fa fa-picture-o" aria-hidden="true"></i>
                       <p>Media Gallery</p>
@@ -115,7 +115,7 @@ export default {
       currentImage: null,
       sieOptions: {},
       isDisabled: false,
-      newImage: true
+      isNewImage: true
     };
   },
   computed: {
@@ -196,7 +196,7 @@ export default {
         auto: this.params['sie-size']['size_auto'].value
       }
 
-      return imageHelper.checkSize(imageSource, size, this.params.smaller)
+      return imageHelper.checkSize(imageSource, this.sieOptions.size, this.params.smaller)
         .then(() => {
           this.currentImage = imageSource;
           this.changeImage(this.params);
@@ -241,7 +241,7 @@ export default {
       }
       this.sieOptions = {};
       this.currentImage = null;
-      this.newImage = true;
+      this.isNewImage = true;
       this.isDisabled = false;
       this.page = {
         one: true,
@@ -265,7 +265,7 @@ export default {
         image: data.img
       });
       data.images = images;
-      data.newImage = this.newImage;
+      data.isNewImage = this.isNewImage;
       this.$emit('submitImage', data);
     },
     submit() {
@@ -305,7 +305,7 @@ export default {
         two: false,
         three: true
       };
-      this.newImage = false;
+      this.isNewImage = false;
     }
     this.generateSieOptions();
   },
@@ -387,7 +387,7 @@ export default {
   padding-top: 40px;
   padding-left: 40px;
   padding-right: 40px;
-  overflow-y: scroll;
+  overflow-y: auto;
   .library-container {
     width: 100%;
     margin: 20px auto;

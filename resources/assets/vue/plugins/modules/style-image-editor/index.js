@@ -4,7 +4,7 @@ import campaignSettings from './campaignSettings.vue';
 export default {
   name: 'style-image-editor',
   title: 'style Image Editor',
-  version: '0.0.9',
+  version: '0.0.10',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
@@ -318,10 +318,16 @@ export default {
           value: false,
           type: 'switch',
         },
+        overlay_follow: {
+          label: 'Stick to cropper',
+          key: 'followCropper',
+          value: false,
+          type: 'switch',
+        },
         overlay_description: {
           label: 'Description',
           key: 'description',
-          value: 'Text',
+          value: 'Icon',
           type: 'text',
         },
       },

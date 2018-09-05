@@ -428,14 +428,14 @@
     table{
       border-collapse: initial;
     }
-    tr.ghost-component{
+    .ghost-component{
       text-align: center;
       color:@focus;
       background-color: @hover;
       display: table-row;
       vertical-align: middle;
       list-style-type: none;
-      font-size: 13px;
+      font-size: 14px;
       z-index: 300;
       opacity: 1!important;
       &:before{

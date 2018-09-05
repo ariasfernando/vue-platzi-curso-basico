@@ -56,7 +56,7 @@
                       </td>
                       <td>
                         <a href="#" class="add-message" title="Add a message" @click="addNotificationMessage(reviewer)">
-                          <i class="glyphicon glyphicon-envelope"></i>
+                          <i class="glyphicon glyphicon-envelope"  v-bind:class="{ containMessage: reviewer.notification_message }" ></i>
                         </a>
                         <a href="#" class="remove-reviewer" title="Remove this email" @click="removeReviewer(reviewer)">
                           <i class="glyphicon glyphicon-remove"></i>
@@ -124,7 +124,11 @@
     </div>
   </transition>
 </template>
-
+<style lang="less">
+  .containMessage {
+    color: green
+  }
+</style>
 <script>
   import request from '../../../utils/request';
   import Q from 'q';
@@ -156,8 +160,7 @@
         this.$store.commit('campaign/toggleModal', 'modalProof');
       },
       send () {
-        this.$store.commit('global/setLoader', true);
-
+        this.$store.commit("global/setLoader", true);
         let data = {
           campaign_id: this.campaign.campaign_id,
           reviewers: this.reviewers,
@@ -197,7 +200,7 @@
       fetchUsers () {
         proofService.getJSON('users').then((response) => {
           if (response.status === 'success') {
-            this.users = response.data || {};
+            this.users = response.data? response.data.sort() : {};
           } else {
             this.showMessage($container, 'danger', response.message);
           }

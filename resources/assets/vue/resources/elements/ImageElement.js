@@ -4,7 +4,9 @@ function imageDefault() {
     type: 'image-element',
     container: {
       style: {},
-      styleOption: {},
+      styleOption: {
+        enableElement: true,
+      },
       attribute: {},
     },
     image: {
