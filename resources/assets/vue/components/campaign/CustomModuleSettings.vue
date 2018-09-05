@@ -1,7 +1,7 @@
 <template>
   <div v-if="module ? module.settings : false">
     <label-item-container
-    :label="module.title"
+    :label="title"
     icon="glyphicon-tasks"
     :collapsable="false"
     ></label-item-container>
@@ -24,8 +24,18 @@
       LabelItemContainer,
     },
     computed: {
+      title() {
+        if (this.currentCustomComponent.customKey && this.module.components
+          && this.module.components[this.currentCustomComponent.customKey]) {
+          return this.module.components[this.currentCustomComponent.customKey].title;
+        }
+        return this.module.title;
+      },
       currentCustomModule() {
         return this.$store.getters["campaign/currentCustomModule"];
+      },
+      currentCustomComponent() {
+        return this.$store.getters["campaign/currentCustomComponent"];
       },
       module() {
         return this.$store.getters["campaign/modules"][this.currentCustomModule];
