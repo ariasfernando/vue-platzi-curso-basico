@@ -26,7 +26,8 @@
             >
             <img
               :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
-                        'st-resize' : component.image.styleOption.noMobileStretch !== true }"
+                        'st-resize' : mobileStretch,
+                        'st-mobile-width-constraint' : !mobileStretch }"
               style="border: 0; display: block;"
               border="0"
               :valign="component.image.attribute.valign || 'top'"
@@ -43,7 +44,8 @@
                 <img
                   :src="this.$_app.config.imageUrl + component.image.attribute.placeholderMobile"
                   border="0"
-                  :class="{ 'st-resize' : component.image.styleOption.noMobileStretch !== true }"
+                  :class="{ 'st-resize' : mobileStretch,
+                            'st-mobile-width-constraint' : !mobileStretch }"
                   style="display:block;border:none;max-width:100%;height:auto;"
                   :width="component.image.attribute.width"
                   :valign="component.image.attribute.valign || 'top'"
@@ -81,6 +83,9 @@
         let paddingRight = _.parseInt(this.component.image.style.paddingRight) || 0
         return _.parseInt(this.component.image.attribute.width) - paddingLeft - paddingRight ;
       },
+      mobileStretch() {
+        return this.component.image.styleOption.noMobileStretch !== true;
+      }
     },
   };
 </script>
