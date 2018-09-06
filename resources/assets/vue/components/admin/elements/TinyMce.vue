@@ -196,5 +196,6 @@
 <style lang="less">
   .stx-edit-text {
     cursor: text;
+    min-width: 10px;
   }
 </style>

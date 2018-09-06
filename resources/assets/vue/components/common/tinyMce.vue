@@ -58,4 +58,10 @@ export default {
       display: none;
     }
   }
+  [data-type="button-element"] .stx-edit-text {
+    min-width: 10px;
+  }
+  .mce-grid td.mce-grid-cell div{
+    line-height:10px;
+  }
 </style>
