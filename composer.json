@@ -23,7 +23,7 @@
         "hackzilla/password-generator": "^1.3",
         "akamai-open/edgegrid-client": "^1.0",
         "stensul/php-imageproxy": "0.*",
-        "stensul/media-gallery": "^2.2",
+        "stensul/media-gallery": "2.2.*",
         "stensul/logging": "2.*",
         "stensul/silverpop-provider": "2.0.*",
         "firebase/php-jwt": "^5.0",
