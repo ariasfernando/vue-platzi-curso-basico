@@ -163,6 +163,10 @@ export default {
       }
     },
     insertModule({index, moduleData}) {
+      this.$store.commit("campaign/unsetCurrentComponent");
+      this.$store.commit('campaign/unsetCurrentModule');
+      this.$store.commit('campaign/unsetCustomModule');
+
       // Insert module 
       this.$store.commit('campaign/insertModule', {
         index,
@@ -177,11 +181,9 @@ export default {
           columnId: 0,
           componentId: 0
         });
-        this.$store.commit('campaign/unsetCustomModule');
       } else {
         // Save customModule if module type is custom
         this.$store.commit('campaign/setCustomModule', index);
-        this.$store.commit('campaign/unsetCurrentComponent');
       }
     },
     addFixedTopModule(moduleData) {

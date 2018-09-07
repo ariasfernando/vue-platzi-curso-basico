@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d3d3f45c06f1fdc53cce6a66fd81f996",
+    "content-hash": "78c5922eaacb3f5b7d6401de4f1cc665",
     "packages": [
         {
             "name": "akamai-open/edgegrid-auth",
@@ -119,16 +119,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.67.4",
+            "version": "3.67.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "df94a9ad78c9e817a9887bedf0e5b269c4f25810"
+                "reference": "002577f67703af64a1be35d65edd6a74842c1e65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/df94a9ad78c9e817a9887bedf0e5b269c4f25810",
-                "reference": "df94a9ad78c9e817a9887bedf0e5b269c4f25810",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/002577f67703af64a1be35d65edd6a74842c1e65",
+                "reference": "002577f67703af64a1be35d65edd6a74842c1e65",
                 "shasum": ""
             },
             "require": {
@@ -195,24 +195,24 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-08-31T21:53:42+00:00"
+            "time": "2018-09-06T22:05:51+00:00"
         },
         {
             "name": "bjeavons/zxcvbn-php",
-            "version": "0.3.0",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bjeavons/zxcvbn-php.git",
-                "reference": "331a88932d1a399c989967d3399a4a40eb182fd5"
+                "reference": "7a7e1130c74c715e84c60c27384f657e9574a933"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bjeavons/zxcvbn-php/zipball/331a88932d1a399c989967d3399a4a40eb182fd5",
-                "reference": "331a88932d1a399c989967d3399a4a40eb182fd5",
+                "url": "https://api.github.com/repos/bjeavons/zxcvbn-php/zipball/7a7e1130c74c715e84c60c27384f657e9574a933",
+                "reference": "7a7e1130c74c715e84c60c27384f657e9574a933",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3 || ^7.0"
+                "php": "^5.6 || ^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "*",
@@ -240,7 +240,7 @@
                 "password",
                 "zxcvbn"
             ],
-            "time": "2017-01-06T15:43:33+00:00"
+            "time": "2018-07-23T05:05:36+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1248,16 +1248,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.6.37",
+            "version": "v5.6.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "975e182d42403b0efdf847c05f6bfb99144f95f5"
+                "reference": "38d838bab9434af79e8ab274ae63f52f7ed45d6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/975e182d42403b0efdf847c05f6bfb99144f95f5",
-                "reference": "975e182d42403b0efdf847c05f6bfb99144f95f5",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/38d838bab9434af79e8ab274ae63f52f7ed45d6e",
+                "reference": "38d838bab9434af79e8ab274ae63f52f7ed45d6e",
                 "shasum": ""
             },
             "require": {
@@ -1383,7 +1383,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-09-02T13:51:42+00:00"
+            "time": "2018-09-04T13:15:09+00:00"
         },
         {
             "name": "laravel/socialite",
@@ -1709,54 +1709,6 @@
             "time": "2018-03-27T20:33:59+00:00"
         },
         {
-            "name": "league/flysystem-azure",
-            "version": "1.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/flysystem-azure.git",
-                "reference": "0b9838c4f75ee41bc390357b0350e9a62e3b3a1f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-azure/zipball/0b9838c4f75ee41bc390357b0350e9a62e3b3a1f",
-                "reference": "0b9838c4f75ee41bc390357b0350e9a62e3b3a1f",
-                "shasum": ""
-            },
-            "require": {
-                "league/flysystem": "~1.0",
-                "microsoft/azure-storage": "~0.10.1",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "League\\Flysystem\\Azure\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Frank de Jonge",
-                    "email": "info@frenky.net"
-                }
-            ],
-            "description": "Flysystem adapter for Windows Azure",
-            "abandoned": "league/flysystem-azure-blob-storage",
-            "time": "2016-07-10T19:08:39+00:00"
-        },
-        {
             "name": "league/oauth1-client",
             "version": "1.7.0",
             "source": {
@@ -2023,42 +1975,27 @@
             "time": "2013-03-25T21:54:33+00:00"
         },
         {
-            "name": "microsoft/azure-storage",
-            "version": "v0.10.2",
+            "name": "microsoft/azure-storage-blob",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Azure/azure-storage-php.git",
-                "reference": "27de05b00c1858d6e1c6adbc489efa90e0342f82"
+                "url": "https://github.com/Azure/azure-storage-blob-php.git",
+                "reference": "6a89f277e876056cc80bd867f7d6104557ee26a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Azure/azure-storage-php/zipball/27de05b00c1858d6e1c6adbc489efa90e0342f82",
-                "reference": "27de05b00c1858d6e1c6adbc489efa90e0342f82",
+                "url": "https://api.github.com/repos/Azure/azure-storage-blob-php/zipball/6a89f277e876056cc80bd867f7d6104557ee26a4",
+                "reference": "6a89f277e876056cc80bd867f7d6104557ee26a4",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/guzzle": "~6.0",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "mikey179/vfsstream": "~1.6",
-                "pdepend/pdepend": "~2.2",
-                "phploc/phploc": "~2.1",
-                "phpmd/phpmd": "@stable",
-                "phpunit/phpunit": "~4.0",
-                "sebastian/phpcpd": "~2.0",
-                "squizlabs/php_codesniffer": "2.*",
-                "theseer/phpdox": "~0.8"
+                "microsoft/azure-storage-common": "~1.2.0",
+                "php": ">=5.6.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.10.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "MicrosoftAzure\\Storage\\": "src/"
+                    "MicrosoftAzure\\Storage\\Blob\\": "src/Blob"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2067,19 +2004,63 @@
             ],
             "authors": [
                 {
-                    "name": "Azure Storage PHP SDK",
+                    "name": "Azure Storage PHP Client Library",
                     "email": "dmsh@microsoft.com"
                 }
             ],
-            "description": "This project provides a set of PHP client libraries that make it easy to access Microsoft Azure storage APIs.",
+            "description": "This project provides a set of PHP client libraries that make it easy to access Microsoft Azure Storage Blob APIs.",
             "keywords": [
                 "azure",
+                "blob",
                 "php",
                 "sdk",
                 "storage"
             ],
-            "abandoned": "microsoft/azure-storage-blob, microsoft/azure-storage-table, microsoft/azure-storage-queue, microsoft/azure-storage-file",
-            "time": "2016-08-19T08:32:57+00:00"
+            "time": "2018-08-02T11:05:31+00:00"
+        },
+        {
+            "name": "microsoft/azure-storage-common",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Azure/azure-storage-common-php.git",
+                "reference": "5a721c15a4eba9233e423203bee168e47c7f8682"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Azure/azure-storage-common-php/zipball/5a721c15a4eba9233e423203bee168e47c7f8682",
+                "reference": "5a721c15a4eba9233e423203bee168e47c7f8682",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6.0",
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MicrosoftAzure\\Storage\\Common\\": "src/Common"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Azure Storage PHP Client Library",
+                    "email": "dmsh@microsoft.com"
+                }
+            ],
+            "description": "This project provides a set of common code shared by Azure Storage Blob, Table, Queue and File PHP client libraries.",
+            "keywords": [
+                "azure",
+                "common",
+                "php",
+                "sdk",
+                "storage"
+            ],
+            "time": "2018-08-02T10:54:53+00:00"
         },
         {
             "name": "mongodb/mongodb",
@@ -2408,25 +2389,25 @@
         },
         {
             "name": "olssonm/l5-zxcvbn",
-            "version": "v3.1",
+            "version": "v3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/olssonm/l5-zxcvbn.git",
-                "reference": "2a2473f84c44a440a297aa1e9acfa0d5c57af6b6"
+                "reference": "cb80e8ab6126cf16aabc64655743f508d1742cf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/olssonm/l5-zxcvbn/zipball/2a2473f84c44a440a297aa1e9acfa0d5c57af6b6",
-                "reference": "2a2473f84c44a440a297aa1e9acfa0d5c57af6b6",
+                "url": "https://api.github.com/repos/olssonm/l5-zxcvbn/zipball/cb80e8ab6126cf16aabc64655743f508d1742cf5",
+                "reference": "cb80e8ab6126cf16aabc64655743f508d1742cf5",
                 "shasum": ""
             },
             "require": {
-                "bjeavons/zxcvbn-php": "0.3.0",
-                "illuminate/support": "~5.3|~5.4|~5.5|~5.6",
+                "bjeavons/zxcvbn-php": "0.3.0|0.4.0",
+                "illuminate/support": ">=5.3.0",
                 "php": ">=5.6.0|>=7.0"
             },
             "require-dev": {
-                "orchestra/testbench": "~3.3|~3.4|~3.5|~3.6",
+                "orchestra/testbench": ">=3.3.0",
                 "phpunit/phpunit": "5.7.*|~6.0|~7.0"
             },
             "type": "library",
@@ -2467,7 +2448,7 @@
                 "validation",
                 "zxcvbn"
             ],
-            "time": "2018-02-14T09:12:03+00:00"
+            "time": "2018-09-05T16:42:45+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -2936,24 +2917,91 @@
             "time": "2017-03-18T11:32:45+00:00"
         },
         {
-            "name": "stensul/filesystem",
-            "version": "v1.0.0",
+            "name": "stensul/asset-manager",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
-                "url": "git@git.stensuldev.net:composer/filesystem.git",
-                "reference": "377f37fbb6b0c59347e2faf5e4c963fb9d0e3c57"
+                "url": "git@git.stensuldev.net:composer/asset-manager.git",
+                "reference": "6c77af7fc0c047760dba99f654780c29484ce627"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://composer.stensuldev.net/dist/stensul/filesystem/stensul-filesystem-v1.0.0-486e7f.zip",
-                "reference": "377f37fbb6b0c59347e2faf5e4c963fb9d0e3c57",
-                "shasum": "ed08381f3913107cd93d3eec6d2f5e69b844520b"
+                "url": "https://composer.stensuldev.net/dist/stensul/asset-manager/stensul-asset-manager-v1.0.4-414988.zip",
+                "reference": "6c77af7fc0c047760dba99f654780c29484ce627",
+                "shasum": "9498a6f0bb0ab7dd69b544278c4ac9064b727533"
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.61",
+                "guzzlehttp/guzzle": "^6.3",
+                "illuminate/support": "5.6.*",
+                "microsoft/azure-storage-blob": "^1.1",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Stensul\\AssetManager\\AssetManagerServiceProvider"
+                    ],
+                    "aliases": {
+                        "AssetManager": "Stensul\\AssetManager\\AssetManagerServiceProvider"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stensul\\AssetManager\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Stensul\\AssetManager\\Tests\\": "tests"
+                }
+            },
+            "license": [
+                "stensul"
+            ],
+            "authors": [
+                {
+                    "name": "Juan Ferrari",
+                    "email": "juan@stensul.com"
+                }
+            ],
+            "description": "Manage assets for the stensul email creator. Process assets in parallel.",
+            "time": "2018-07-06T20:42:44+00:00"
+        },
+        {
+            "name": "stensul/filesystem",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@git.stensuldev.net:composer/filesystem.git",
+                "reference": "3f077ea3318a2fa5c86087ed11106e7644d77e53"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://composer.stensuldev.net/dist/stensul/filesystem/stensul-filesystem-v2.0.0-ce52c9.zip",
+                "reference": "3f077ea3318a2fa5c86087ed11106e7644d77e53",
+                "shasum": "0f672e64be436022cf328b4f52e934b21f7538ab"
             },
             "require": {
                 "guzzlehttp/guzzle": "~6.0",
-                "league/flysystem-azure": "^1.0"
+                "stensul/flysystem-azure": "^1.1"
             },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Stensul\\Filesystem\\Providers\\FilesystemServiceProvider"
+                    ],
+                    "aliases": {
+                        "FilesystemServiceProvider": "Stensul\\Filesystem\\Providers\\FilesystemServiceProvider"
+                    }
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Stensul\\Filesystem\\": "src/Stensul/Filesystem/"
@@ -2969,7 +3017,53 @@
                 }
             ],
             "description": "Improved functionalities for existing flysystem packages",
-            "time": "2018-01-18T00:45:59+00:00"
+            "time": "2018-06-14T20:22:18+00:00"
+        },
+        {
+            "name": "stensul/flysystem-azure",
+            "version": "v1.1.2",
+            "source": {
+                "type": "git",
+                "url": "git@git.stensuldev.net:composer/flysystem-azure.git",
+                "reference": "2e62c6e3106883fe5b7f4b3846ebf200bcb70024"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://composer.stensuldev.net/dist/stensul/flysystem-azure/stensul-flysystem-azure-v1.1.2-ec6dce.zip",
+                "reference": "2e62c6e3106883fe5b7f4b3846ebf200bcb70024",
+                "shasum": "d287c814264e706edca341c91071ac3c59e41f70"
+            },
+            "require": {
+                "league/flysystem": "~1.0",
+                "microsoft/azure-storage-blob": "^1.1",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.8.36"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\Azure\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frenky.net"
+                }
+            ],
+            "description": "Flysystem adapter for Windows Azure",
+            "time": "2018-06-14T20:36:22+00:00"
         },
         {
             "name": "stensul/logging",
@@ -3009,17 +3103,17 @@
         },
         {
             "name": "stensul/media-gallery",
-            "version": "2.4.5",
+            "version": "2.2.3",
             "source": {
                 "type": "git",
                 "url": "git@git.stensuldev.net:composer/media-gallery.git",
-                "reference": "9b6ba3e745af680ddae61e76bee5e0dc87142f96"
+                "reference": "632a791a05a0dbfa698f90741bda6743589f3e78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.4.5-d26271.zip",
-                "reference": "9b6ba3e745af680ddae61e76bee5e0dc87142f96",
-                "shasum": "ffd96c399f6d2873a34fdc8f042979ef8256627b"
+                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.2.3-4f2c70.zip",
+                "reference": "632a791a05a0dbfa698f90741bda6743589f3e78",
+                "shasum": "dbc323d84db8782cb52f8ec01fbe7ff4bfc979ef"
             },
             "require": {
                 "illuminate/support": "5.6.*",
@@ -3047,7 +3141,7 @@
                 }
             ],
             "description": "Media gallery for admin",
-            "time": "2018-08-31T18:02:12+00:00"
+            "time": "2018-05-30T21:40:25+00:00"
         },
         {
             "name": "stensul/php-imageproxy",
@@ -4354,33 +4448,34 @@
     "packages-dev": [
         {
             "name": "barryvdh/laravel-ide-helper",
-            "version": "v2.4.3",
+            "version": "v2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-ide-helper.git",
-                "reference": "5c304db44fba8e9c4aa0c09739e59f7be7736fdd"
+                "reference": "7db1843473e1562d8e0490b51db847d3a1415140"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/5c304db44fba8e9c4aa0c09739e59f7be7736fdd",
-                "reference": "5c304db44fba8e9c4aa0c09739e59f7be7736fdd",
+                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/7db1843473e1562d8e0490b51db847d3a1415140",
+                "reference": "7db1843473e1562d8e0490b51db847d3a1415140",
                 "shasum": ""
             },
             "require": {
                 "barryvdh/reflection-docblock": "^2.0.4",
-                "illuminate/console": "^5.0,<5.7",
-                "illuminate/filesystem": "^5.0,<5.7",
-                "illuminate/support": "^5.0,<5.7",
-                "php": ">=5.4.0",
-                "symfony/class-loader": "^2.3|^3.0"
+                "composer/composer": "^1.6",
+                "illuminate/console": "^5.5,<5.8",
+                "illuminate/filesystem": "^5.5,<5.8",
+                "illuminate/support": "^5.5,<5.8",
+                "php": ">=7"
             },
             "require-dev": {
                 "doctrine/dbal": "~2.3",
-                "illuminate/config": "^5.0,<5.7",
-                "illuminate/view": "^5.0,<5.7",
+                "illuminate/config": "^5.1,<5.8",
+                "illuminate/view": "^5.1,<5.8",
+                "phpro/grumphp": "^0.14",
                 "phpunit/phpunit": "4.*",
                 "scrutinizer/ocular": "~1.1",
-                "squizlabs/php_codesniffer": "~2.3"
+                "squizlabs/php_codesniffer": "^3"
             },
             "suggest": {
                 "doctrine/dbal": "Load information from the database about models for phpdocs (~2.3)"
@@ -4388,7 +4483,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.5-dev"
                 },
                 "laravel": {
                     "providers": [
@@ -4423,7 +4518,7 @@
                 "phpstorm",
                 "sublime"
             ],
-            "time": "2018-02-08T07:56:07+00:00"
+            "time": "2018-09-06T18:41:09+00:00"
         },
         {
             "name": "barryvdh/reflection-docblock",
@@ -4473,6 +4568,309 @@
                 }
             ],
             "time": "2016-06-13T19:28:20+00:00"
+        },
+        {
+            "name": "composer/ca-bundle",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/ca-bundle.git",
+                "reference": "46afded9720f40b9dc63542af4e3e43a1177acb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/46afded9720f40b9dc63542af4e3e43a1177acb0",
+                "reference": "46afded9720f40b9dc63542af4e3e43a1177acb0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "ext-pcre": "*",
+                "php": "^5.3.2 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5",
+                "psr/log": "^1.0",
+                "symfony/process": "^2.5 || ^3.0 || ^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\CaBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
+            "keywords": [
+                "cabundle",
+                "cacert",
+                "certificate",
+                "ssl",
+                "tls"
+            ],
+            "time": "2018-08-08T08:57:40+00:00"
+        },
+        {
+            "name": "composer/composer",
+            "version": "1.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/composer.git",
+                "reference": "576aab9b5abb2ed11a1c52353a759363216a4ad2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/composer/zipball/576aab9b5abb2ed11a1c52353a759363216a4ad2",
+                "reference": "576aab9b5abb2ed11a1c52353a759363216a4ad2",
+                "shasum": ""
+            },
+            "require": {
+                "composer/ca-bundle": "^1.0",
+                "composer/semver": "^1.0",
+                "composer/spdx-licenses": "^1.2",
+                "composer/xdebug-handler": "^1.1",
+                "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
+                "php": "^5.3.2 || ^7.0",
+                "psr/log": "^1.0",
+                "seld/jsonlint": "^1.4",
+                "seld/phar-utils": "^1.0",
+                "symfony/console": "^2.7 || ^3.0 || ^4.0",
+                "symfony/filesystem": "^2.7 || ^3.0 || ^4.0",
+                "symfony/finder": "^2.7 || ^3.0 || ^4.0",
+                "symfony/process": "^2.7 || ^3.0 || ^4.0"
+            },
+            "conflict": {
+                "symfony/console": "2.8.38"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7",
+                "phpunit/phpunit-mock-objects": "^2.3 || ^3.0"
+            },
+            "suggest": {
+                "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
+                "ext-zip": "Enabling the zip extension allows you to unzip archives",
+                "ext-zlib": "Allow gzip compression of HTTP requests"
+            },
+            "bin": [
+                "bin/composer"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\": "src/Composer"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Composer helps you declare, manage and install dependencies of PHP projects, ensuring you have the right stack everywhere.",
+            "homepage": "https://getcomposer.org/",
+            "keywords": [
+                "autoload",
+                "dependency",
+                "package"
+            ],
+            "time": "2018-08-16T14:57:12+00:00"
+        },
+        {
+            "name": "composer/semver",
+            "version": "1.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/semver.git",
+                "reference": "c7cb9a2095a074d131b65a8a0cd294479d785573"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/semver/zipball/c7cb9a2095a074d131b65a8a0cd294479d785573",
+                "reference": "c7cb9a2095a074d131b65a8a0cd294479d785573",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5 || ^5.0.5",
+                "phpunit/phpunit-mock-objects": "2.3.0 || ^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Semver\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                },
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com",
+                    "homepage": "http://robbast.nl"
+                }
+            ],
+            "description": "Semver library that offers utilities, version constraint parsing and validation.",
+            "keywords": [
+                "semantic",
+                "semver",
+                "validation",
+                "versioning"
+            ],
+            "time": "2016-08-30T16:08:34+00:00"
+        },
+        {
+            "name": "composer/spdx-licenses",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/spdx-licenses.git",
+                "reference": "cb17687e9f936acd7e7245ad3890f953770dec1b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/cb17687e9f936acd7e7245ad3890f953770dec1b",
+                "reference": "cb17687e9f936acd7e7245ad3890f953770dec1b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5",
+                "phpunit/phpunit-mock-objects": "2.3.0 || ^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Spdx\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                },
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com",
+                    "homepage": "http://robbast.nl"
+                }
+            ],
+            "description": "SPDX licenses list and validation library.",
+            "keywords": [
+                "license",
+                "spdx",
+                "validator"
+            ],
+            "time": "2018-04-30T10:33:04+00:00"
+        },
+        {
+            "name": "composer/xdebug-handler",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/xdebug-handler.git",
+                "reference": "b8e9745fb9b06ea6664d8872c4505fb16df4611c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/b8e9745fb9b06ea6664d8872c4505fb16df4611c",
+                "reference": "b8e9745fb9b06ea6664d8872c4505fb16df4611c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Composer\\XdebugHandler\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Stevenson",
+                    "email": "john-stevenson@blueyonder.co.uk"
+                }
+            ],
+            "description": "Restarts a process without xdebug.",
+            "keywords": [
+                "Xdebug",
+                "performance"
+            ],
+            "time": "2018-08-31T19:07:57+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -4683,6 +5081,72 @@
                 "test"
             ],
             "time": "2015-05-11T14:41:42+00:00"
+        },
+        {
+            "name": "justinrainbow/json-schema",
+            "version": "5.2.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/justinrainbow/json-schema.git",
+                "reference": "8560d4314577199ba51bf2032f02cd1315587c23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/8560d4314577199ba51bf2032f02cd1315587c23",
+                "reference": "8560d4314577199ba51bf2032f02cd1315587c23",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.1",
+                "json-schema/json-schema-test-suite": "1.2.0",
+                "phpunit/phpunit": "^4.8.35"
+            },
+            "bin": [
+                "bin/validate-json"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JsonSchema\\": "src/JsonSchema/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bruno Prieto Reis",
+                    "email": "bruno.p.reis@gmail.com"
+                },
+                {
+                    "name": "Justin Rainbow",
+                    "email": "justin.rainbow@gmail.com"
+                },
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch"
+                },
+                {
+                    "name": "Robert Schönthal",
+                    "email": "seroscho@googlemail.com"
+                }
+            ],
+            "description": "A library to validate a json schema.",
+            "homepage": "https://github.com/justinrainbow/json-schema",
+            "keywords": [
+                "json",
+                "schema"
+            ],
+            "time": "2018-02-14T22:26:30+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -5484,16 +5948,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.3.3",
+            "version": "7.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1bd5629cccfb2c0a9ef5474b4ff772349e1ec898"
+                "reference": "0356331bf62896dc56e3a15030b23b73f38b2935"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1bd5629cccfb2c0a9ef5474b4ff772349e1ec898",
-                "reference": "1bd5629cccfb2c0a9ef5474b4ff772349e1ec898",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0356331bf62896dc56e3a15030b23b73f38b2935",
+                "reference": "0356331bf62896dc56e3a15030b23b73f38b2935",
                 "shasum": ""
             },
             "require": {
@@ -5564,7 +6028,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-09-01T15:49:55+00:00"
+            "time": "2018-09-05T09:58:53+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",
@@ -6174,6 +6638,99 @@
             "time": "2016-10-03T07:35:21+00:00"
         },
         {
+            "name": "seld/jsonlint",
+            "version": "1.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/jsonlint.git",
+                "reference": "d15f59a67ff805a44c50ea0516d2341740f81a38"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/d15f59a67ff805a44c50ea0516d2341740f81a38",
+                "reference": "d15f59a67ff805a44c50ea0516d2341740f81a38",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0"
+            },
+            "bin": [
+                "bin/jsonlint"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Seld\\JsonLint\\": "src/Seld/JsonLint/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "JSON Linter",
+            "keywords": [
+                "json",
+                "linter",
+                "parser",
+                "validator"
+            ],
+            "time": "2018-01-24T12:46:19+00:00"
+        },
+        {
+            "name": "seld/phar-utils",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/phar-utils.git",
+                "reference": "7009b5139491975ef6486545a39f3e6dad5ac30a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/7009b5139491975ef6486545a39f3e6dad5ac30a",
+                "reference": "7009b5139491975ef6486545a39f3e6dad5ac30a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Seld\\PharUtils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be"
+                }
+            ],
+            "description": "PHAR file format utilities, for when PHP phars you up",
+            "keywords": [
+                "phra"
+            ],
+            "time": "2015-10-13T18:44:15+00:00"
+        },
+        {
             "name": "squizlabs/php_codesniffer",
             "version": "3.3.1",
             "source": {
@@ -6223,62 +6780,6 @@
                 "standards"
             ],
             "time": "2018-07-26T23:47:18+00:00"
-        },
-        {
-            "name": "symfony/class-loader",
-            "version": "v3.4.15",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/class-loader.git",
-                "reference": "31db283fc86d3143e7ff87e922177b457d909c30"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/class-loader/zipball/31db283fc86d3143e7ff87e922177b457d909c30",
-                "reference": "31db283fc86d3143e7ff87e922177b457d909c30",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.5.9|>=7.0.8"
-            },
-            "require-dev": {
-                "symfony/finder": "~2.8|~3.0|~4.0",
-                "symfony/polyfill-apcu": "~1.1"
-            },
-            "suggest": {
-                "symfony/polyfill-apcu": "For using ApcClassLoader on HHVM"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\ClassLoader\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony ClassLoader Component",
-            "homepage": "https://symfony.com",
-            "time": "2018-07-26T11:19:56+00:00"
         },
         {
             "name": "symfony/dom-crawler",
@@ -6335,6 +6836,56 @@
             "description": "Symfony DomCrawler Component",
             "homepage": "https://symfony.com",
             "time": "2017-01-21T17:13:55+00:00"
+        },
+        {
+            "name": "symfony/filesystem",
+            "version": "v4.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/filesystem.git",
+                "reference": "c0f5f62db218fa72195b8b8700e4b9b9cf52eb5e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/c0f5f62db218fa72195b8b8700e4b9b9cf52eb5e",
+                "reference": "c0f5f62db218fa72195b8b8700e4b9b9cf52eb5e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/polyfill-ctype": "~1.8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Filesystem\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Filesystem Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-08-18T16:52:46+00:00"
         },
         {
             "name": "symfony/yaml",
