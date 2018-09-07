@@ -2,8 +2,7 @@
   <!-- DIVIDER ELEMENT -->
   <module-container :component="component" @select-component="selectComponentHandler">
     <table
-      width="100%"
-      style="width: 100%;"
+      :width="component.divider.attribute.width || '100%'"
       :style="tableStyle"
       :align="component.container.attribute.align"
       border="0"
@@ -12,7 +11,6 @@
     >
       <tr>
         <td 
-          :width="component.divider.attribute.width"
           :valign="component.divider.attribute.valign"
           :align="component.divider.attribute.align"
           :bgcolor="component.divider.attribute.bgcolor"
@@ -64,6 +62,7 @@
           height: this.component.divider.style.height,
           lineHeight: this.component.divider.style.height,
           fontSize: this.component.divider.style.height,
+          width: this.component.divider.attribute.width || '100%'
         };
       },
       dividerHeightWithoutPx(){

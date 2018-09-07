@@ -11,6 +11,7 @@
         <td
           width="100%"
           :bgcolor="module.structure.attribute.bgcolor"
+          :height="module.structure.attribute.height"
           :style="elementBorderPaddingAndHeight(module.structure)"
           :class="module.structure.attribute.classes" >
           <table
@@ -63,6 +64,7 @@
           v-for="(column, columnId) in module.structure.columns"
           :class="[{'empty-col': !column.components.length}, module.structure.attribute.classes]"
           width="100%"
+          :height="module.structure.attribute.height"
           :style="elementBorderPaddingAndHeight(module.structure)"
           :bgcolor="module.structure.attribute.bgcolor"
           :valign="module.structure.attribute.valign || 'top'"
