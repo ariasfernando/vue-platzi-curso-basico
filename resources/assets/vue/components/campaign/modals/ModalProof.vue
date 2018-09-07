@@ -2,7 +2,7 @@
   <transition name="modal" v-if="modalProof">
     <div class="modal-mask modal-proof">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container scrolled">
           <button type="button" class="close" @click="close">
             <span>
               &times;
@@ -389,6 +389,15 @@
 </script>
 
 <style lang="less">
+  .scrolled{
+    max-height: 85vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    .table tbody tr td{
+      vertical-align: top !important;
+    }
+  }
   .dropdown-menu {
     .open {
       overflow-y: scroll !important;
