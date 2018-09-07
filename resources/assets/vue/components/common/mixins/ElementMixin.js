@@ -37,11 +37,17 @@ export default {
       });
       return BorderAndPadding;
     },
-    elementBorderAndHorizontalPadding(element) {
-      const elementBorderAndPadding = this.elementBorderAndPadding(element);
+    elementBorderHorizontalPaddingAndHeight(element) {
+      const elementBorderAndPadding = this.elementBorderPaddingAndHeight(element);
       elementBorderAndPadding.paddingTop = undefined;
       elementBorderAndPadding.paddingBottom = undefined;
       return elementBorderAndPadding;
+    },
+    elementBorderPaddingAndHeight(element) {
+      const elementBorderAndPadding = this.elementBorderAndPadding(element);
+      const styles = _.isEmpty(elementBorderAndPadding) ? {} : elementBorderAndPadding;
+      styles.height = this.widthStyle(element.attribute.height);
+      return styles;
     },
     elementBorderPaddingAndWidth(element) {
       const elementBorderAndPadding = this.elementBorderAndPadding(element);

@@ -231,8 +231,8 @@
       },
       styleModule(){
         return this.modulebackgroundImage ?
-          this.elementBorderAndHorizontalPadding(this.module.structure.style) :
-          this.elementBorderAndPadding(this.module.structure.style);
+          this.elementBorderHorizontalPaddingAndHeight(this.module.structure) :
+          this.elementBorderPaddingAndHeight(this.module.structure);
       }
     },
     methods: {
