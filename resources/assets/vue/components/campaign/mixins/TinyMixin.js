@@ -76,7 +76,7 @@ export default {
       const link_fixed_styles = editor.settings.link_fixed_styles;
       const editorLinks = $(editor.targetElm).find('a');
 
-      /* 
+      /*
       * Color Treatment
       */
 
@@ -91,7 +91,7 @@ export default {
             const $parentEl = $el.parents().filter(function () {
               return $(this).css('color');
             });
-            // get the color of the parent and apply it to the link 
+            // get the color of the parent and apply it to the link
             const parentColor = $parentEl.css('color');
             $el.css('color', parentColor);
           }
@@ -106,9 +106,9 @@ export default {
         this.changeStyles('a', link_fixed_styles);
       }
 
-      /* 
-      * Underline Treatment 
-      * note: text-decoration:underline in <a> is overriden by css clases in email clients, 
+      /*
+      * Underline Treatment
+      * note: text-decoration:underline in <a> is overriden by css clases in email clients,
       * so we have to add an underlined span inside
       */
 
@@ -167,7 +167,8 @@ export default {
     },
     maxLinesValidation(event) {
       const divHeight = this.$textElement.height();
-      const lineHeight = parseInt(this.$textElement.css('lineHeight'));
+      const firstTextElement = this.$textElement.find('p')[0] || this.$textElement.find('li')[0];
+      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextElement).getPropertyValue('line-height'));
       const actualLines = parseInt(divHeight / lineHeight);
 
       if (actualLines > this.tinyMaxLines()) {
@@ -181,9 +182,8 @@ export default {
           event.stopPropagation();
         }
         return false;
-      } else {
-        this.clearError();
       }
+      this.clearError();
     },
     minCharsValidation(event) {
       if (this.tinyLength() < this.tinyMin()) {
@@ -252,7 +252,7 @@ export default {
         toolbar = ' ';
       }
       const editorId = ['editor', this.module.idInstance, this.columnId, this.componentId].join('-');
-      
+
       // Destroy previous instance
       const previousInstance = tinymce.get(editorId);
       if (previousInstance) {
@@ -317,11 +317,11 @@ export default {
               });
             }
             if ($toolbox.length && !$toolbox.find('button:contains("Formats")').length ){
-              setTimeout(function(){
-                var $button = $toolbox.find('button:contains("Formats")');
-                $button.parent('div').attr('aria-label','Font Format');
+              setTimeout(() => {
+                const $button = $toolbox.find("button:contains('Formats')");
+                $button.parent('div').attr('aria-label', 'Font Format');
                 $button.empty();
-                $button.append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
+                $button.append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
               });
             }
             if ($toolbox.length && !$toolbox.find("div[aria-label='Format']").length) {
@@ -359,8 +359,8 @@ export default {
             } else if (e.keyCode !== undefined) {
               code = e.keyCode;
             }
-            
-            if ($.inArray(code, allowKeys) !== -1 || 
+
+            if ($.inArray(code, allowKeys) !== -1 ||
               // Allow: Ctrl+A,Ctrl+C, Ctrl+X
               ((e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 88) && (e.ctrlKey === true || e.metaKey === true))
             ) {
@@ -407,14 +407,14 @@ export default {
         paste_preprocess: (plugin, args) => {
           const editor = tinymce.get(tinymce.activeEditor.id);
           const tinyMax = parseInt(editor.settings.max_chars);
-          
+
           if (!tinyMax) {
             // if truncate is NAN, returns and avoid validations
             return;
           }
 
           // trim string if exceed max char limit
-          const tinyLength = editor.getContent({ format: 'text' }).length - 1;            
+          const tinyLength = editor.getContent({ format: 'text' }).length - 1;
           const charsToPaste = tinyMax - tinyLength;
           args.content = args.content.trim().substring(0, charsToPaste);
         },

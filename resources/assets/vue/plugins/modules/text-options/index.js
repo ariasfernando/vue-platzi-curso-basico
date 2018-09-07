@@ -125,6 +125,12 @@ module.exports = {
         value: false,
         icon: 'fa fa-edit',
       },
+      stformatsmenu: {
+        label: 'Custom Format',
+        key: 'stformatsmenu',
+        value: false,
+        icon: 'fa fa-edit',
+      },
     },
     settings: {
       link_validate_url: {
@@ -163,6 +169,18 @@ module.exports = {
           config: 'options',
           name: 'link',
         },
+      },
+      st_formats_menu: {
+        title: 'Format menu',
+        value: false,
+        type: 'text',
+        content: "[{\"text\":\"Light\",\"value\":\"light_font\"},{\"text\":\"Normal\",\"value\":\"normal_font\"},{\"text\":\"Semi Bold\",\"value\":\"semi_bold_font\"},{\"text\":\"Bold\",\"value\":\"bold_font\"}]",
+      },
+      formats: {
+        title: 'Formats',
+        value: false,
+        type: 'text',
+        content: "{\"light_font\":{\"inline\":\"span\",\"styles\":{\"fontWeight\":\"300\"}},\"normal_font\":{\"inline\":\"span\",\"styles\":{\"fontWeight\":\"400\"}},\"semi_bold_font\":{\"inline\":\"span\",\"styles\":{\"fontWeight\":\"600\"}},\"bold_font\":{\"inline\":\"span\",\"styles\":{\"fontWeight\":\"700\"}}}",
       },
     },
   },
