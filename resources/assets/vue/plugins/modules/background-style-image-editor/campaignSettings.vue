@@ -12,6 +12,7 @@
     :config="plugin.config" 
     v-if="showImageEditor" 
     :libraryImages="libraryImages" 
+    :overlayImages="overlayImages" 
     :data="image" 
     @close="close" 
     @submitImage="submitImage">
@@ -37,6 +38,7 @@ export default {
     return {
       showImageEditor: false,
       libraryImages: [],
+      overlayImages: [],
       image: {},
       isEdit: false
     };

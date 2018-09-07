@@ -40,7 +40,7 @@
       :class=" { 'stx-show-error': hasErrors, 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}"
     >
 
-      <background-image :element="module.structure">
+      <background-image :element="module.structure" :key='modulebackgroundImage'>
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
           <!--2 COLUMNS -->
           <tr v-if="module.structure.columns.length > 1">

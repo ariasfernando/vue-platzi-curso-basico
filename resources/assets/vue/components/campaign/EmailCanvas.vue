@@ -483,7 +483,7 @@
       }
     }
     .stx-wrapper {
-      display: table;
+      display: contents;
       width: 100%;
     }
   }
