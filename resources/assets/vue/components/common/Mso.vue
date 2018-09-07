@@ -2,12 +2,12 @@
   <div class="stx-wrapper">
     <div
       v-html="start"
-      class="stx-wrapper"
+      class="stx-wrapper-comment"
       >{{ start }}</div>
     <slot></slot>
     <div
       v-html="end"
-      class="stx-wrapper"
+      class="stx-wrapper-comment"
       >{{ end }}</div>
   </div>
 </template>

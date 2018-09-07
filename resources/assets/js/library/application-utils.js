@@ -1100,23 +1100,38 @@ Application.utils = {
         return true;
     },
 
-    // Remove wrappers element
+    // Remove wrappers element ( .stx-wrapper & .stx-wrapper-comment)
     removeWrappers: function(html) {
-      var $wrapperElementRemove = html.find('.stx-wrapper');
+        function removeContainersWrappers(htmlContainers) {
+            var $wrapperElementRemove = htmlContainers.find('.stx-wrapper');
+            $.each($wrapperElementRemove, function(i, element) {
+                var $element = $(element);
 
-      $.each($wrapperElementRemove, function(i, element) {
-        var $element = $(element);
-
-          // Replace element with the content element.
-        if ($element.is('table')) {
-          $element.replaceWith($element.find('td:first').html());
-        } else {
-          $element.replaceWith($element.html());
+                // Replace element with the content element.
+                if ($element.is('table')) {
+                    $element.replaceWith($element.find('td:first').html());
+                } else {
+                    $element.replaceWith($element.html());
+                }
+            });
+            if (htmlContainers.find('.stx-wrapper').length > 0) {
+                removeContainersWrappers(htmlContainers);
+            }
+            return htmlContainers;
         }
-      });
-      if (html.find('.stx-wrapper').length > 0) {
-        this.removeWrappers(html);
-      }
+        function removeCommentWrappers(htmlComment) {
+            var $commentElementRemove = htmlComment.find('.stx-wrapper-comment');
+            if ($commentElementRemove.length > 0) {
+                    $.each($commentElementRemove, function(i, element) {
+                        $(element).replaceWith($(element).html());
+                    })
+            }
+            return htmlComment;
+        }
+        // We need first replace comment and then replace the divs that have tables.
+        // if else Jquery some times change the place of the comment.
+        html = removeCommentWrappers(html)
+        html = removeContainersWrappers(html)
       return html;
     },
 };

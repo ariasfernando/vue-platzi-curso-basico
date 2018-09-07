@@ -10,9 +10,9 @@
         <slot name="with-background-image"></slot>
 
         <template v-if="paddingBottom">
-          <div class="stx-wrapper" v-html="'<!--[if !gte mso 9]><!---->'"></div>
-              <spacer :height="paddingBottom"></spacer>
-          <div class="stx-wrapper" v-html="'<!--<![endif]-->'"></div>
+          <div class="stx-wrapper-comment" v-html="'<!--[if !gte mso 9]>--->'"></div>
+            <spacer :height="paddingBottom"></spacer>
+          <div class="stx-wrapper-comment" v-html="'<!--<![endif]-->'"></div>
         </template>
       </table>
     </mso>
