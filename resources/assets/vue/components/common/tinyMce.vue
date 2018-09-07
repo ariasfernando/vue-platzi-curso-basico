@@ -35,10 +35,23 @@ export default {
     libraryConfig(){
       return this.$store.state.campaign.campaign.library_config;
     },
+    textDirty(){
+      return this.component.data.textDirty;
+    },
   },
   methods: {
     changeContent(e) {
       this.$emit('changeText', e.target.innerHTML);
+    }
+  },
+  watch:{
+    textDirty(){
+      this.$nextTick(() => {
+        this.content = this.component.data.text;
+        this.$nextTick(() => {
+          this.initTinyMCE();
+        });
+      });
     }
   }
 };
