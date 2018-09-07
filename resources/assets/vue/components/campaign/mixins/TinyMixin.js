@@ -206,7 +206,7 @@ export default {
       const loop = this.textOptions.config.settings.style_formats_increment.content;
 
       let step = Number(loop.steps.range.split(':')[0]);
-      let currentFontSize = Number(loop.apply.fontSize.initial) || step;
+      let currentFontSize = Number(loop.styles.fontSize.initial) || step;
       const rangeMax = Number(loop.steps.range.split(':')[1]);
 
       const runBehaviour = (behaviour, initialValue) => {
@@ -244,24 +244,23 @@ export default {
 
       while (step <= rangeMax) {
         const format = {
-          block: loop.settings && loop.settings.block ? loop.settings.block : 'p',
           styles: {},
         };
 
-        for (const key of Object.keys(loop.apply)) {
-          const keyBehaviour = loop.apply[key].behaviour || loop.steps.behaviour;
-          const unit = loop.apply[key].unit || 'px';
+        _.forOwn(loop.styles, (prop, key) => { 
+          const keyBehaviour = prop.behaviour || loop.steps.behaviour;
+          const unit = prop.unit || 'px';
+          const result = runBehaviour(keyBehaviour, currentFontSize);
+          format.styles[key] = `${result}${unit}`;
+        });
 
-          if (key === 'lineHeight') {
-            const lineHeight = runBehaviour(keyBehaviour, currentFontSize);
-            format.styles[key] = `${lineHeight}${unit}`;
-          }
-        }
+        _.forOwn(loop.settings, (prop, key) => { 
+            format[key] = prop;
+        });
 
-        const fontSizeBehaviour = loop.apply.fontSize.behaviour || loop.steps.behaviour;
-        const fontSizeUnit = loop.apply.fontSize.unit || 'px';
-        format.title = getTitle(loop.title, currentFontSize , fontSizeUnit);
-        format.styles.fontSize = `${currentFontSize}${fontSizeUnit}`;
+        const fontSizeBehaviour = loop.styles.fontSize.behaviour || loop.steps.behaviour;
+        const fontSizeUnit = loop.styles.fontSize.unit || 'px';
+        format.title = getTitle(loop.title, currentFontSize, fontSizeUnit);
         style_formats.push(format);
 
         currentFontSize = runBehaviour(fontSizeBehaviour, currentFontSize);
