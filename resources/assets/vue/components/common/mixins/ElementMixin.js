@@ -75,7 +75,7 @@ export default {
     elementBorderPaddingAndHeight(element) {
       const elementBorderAndPadding = this.elementBorderAndPadding(element);
       const styles = _.isEmpty(elementBorderAndPadding) ? {} : elementBorderAndPadding;
-      styles.height = this.widthStyle(element.attribute.height || '100%');
+      styles.height = this.widthStyle(element.attribute.height);
       return styles;
     },
     selectComponentHandler(e) {
