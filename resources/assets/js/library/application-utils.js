@@ -1100,38 +1100,26 @@ Application.utils = {
         return true;
     },
 
-    // Remove wrappers element ( .stx-wrapper & .stx-wrapper-comment)
+    // Remove wrappers element
     removeWrappers: function(html) {
-        function removeContainersWrappers(htmlContainers) {
-            var $wrapperElementRemove = htmlContainers.find('.stx-wrapper');
-            $.each($wrapperElementRemove, function(i, element) {
-                var $element = $(element);
+      var $wrapperElementRemove = html.find('.stx-wrapper');
 
-                // Replace element with the content element.
-                if ($element.is('table')) {
-                    $element.replaceWith($element.find('td:first').html());
-                } else {
-                    $element.replaceWith($element.html());
-                }
-            });
-            if (htmlContainers.find('.stx-wrapper').length > 0) {
-                removeContainersWrappers(htmlContainers);
-            }
-            return htmlContainers;
+      $.each($wrapperElementRemove, function(i, element) {
+        var $element = $(element);
+        if($element.find('.stx-wrapper').length === 0){
+          // We need first replace comment and then replace the divs that have content,
+          // (from inside to outside).
+          // if else Jquery some times change the place of the comment.
+          if ($element.is('table')) {
+            $element.replaceWith($element.find('td:first').html());
+          } else {
+            $element.replaceWith($element.html());
+          }
         }
-        function removeCommentWrappers(htmlComment) {
-            var $commentElementRemove = htmlComment.find('.stx-wrapper-comment');
-            if ($commentElementRemove.length > 0) {
-                    $.each($commentElementRemove, function(i, element) {
-                        $(element).replaceWith($(element).html());
-                    })
-            }
-            return htmlComment;
-        }
-        // We need first replace comment and then replace the divs that have tables.
-        // if else Jquery some times change the place of the comment.
-        html = removeCommentWrappers(html)
-        html = removeContainersWrappers(html)
+      });
+      if (html.find('.stx-wrapper').length > 0) {
+        this.removeWrappers(html);
+      }
       return html;
     },
 };
