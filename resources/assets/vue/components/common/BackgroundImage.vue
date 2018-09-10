@@ -26,7 +26,7 @@
 <script>
 import Spacer from './Spacer';
 import WrapperComment from './comments/WrapperComment';
-import wrapper from './wrapper';
+import Wrapper from './Wrapper';
 export default {
   name: 'BackgroundImage',
   props: ['element'],
@@ -34,7 +34,7 @@ export default {
   components: {
     Spacer,
     WrapperComment,
-    wrapper,
+    Wrapper,
   },
   computed: {
     msoStartingComment() {
