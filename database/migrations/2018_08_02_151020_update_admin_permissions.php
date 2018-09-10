@@ -8,8 +8,18 @@ use Stensul\Models\Permission;
 class UpdateAdminPermissions extends Migration
 {
     private $permissions = [
-        ['name' => 'access_admin_studio_libraries', 'description' => 'Allow user to access library section in Studio.'],
-        ['name' => 'access_admin_studio_modules', 'description' => 'Allow user to access module section in Studio.']
+        [
+            'name' => 'access_admin_studio_libraries',
+            'description' => 'Allow user to access library section in Studio.'
+        ],
+        [
+            'name' => 'access_admin_studio_modules',
+            'description' => 'Allow user to access module section in Studio.'
+        ],
+        [
+            'name' => 'allows_role_change',
+            'description' => 'Allow user to change roles to another users.'
+        ]
     ];
 
     /**
@@ -20,7 +30,9 @@ class UpdateAdminPermissions extends Migration
     public function up()
     {
         foreach ($this->permissions as $permission) {
-            Permission::create($permission);
+            if (Permission::where('name', $permission['name'])->first() === null) {
+                Permission::create($permission);
+            }
         }
     }
 
