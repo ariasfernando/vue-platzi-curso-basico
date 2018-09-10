@@ -46,12 +46,13 @@ class ProcessCampaign implements ShouldQueue
         $html = new Html($campaign);
         $assets = new Assets($campaign);
 
-        $html->createHtmlBody();
+        $normal_html_body = $html->createHtmlBody();
         $html->storeHtmlInCdn();
 
         if (!env('CDN_UPLOAD_PRETEND')) {
             $assets->storeAssetsInCdn();
         }
+        $campaign->body_html = $normal_html_body;
 
         $library = Library::findOrFail($campaign->library);
 

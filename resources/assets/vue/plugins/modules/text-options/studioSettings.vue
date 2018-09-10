@@ -252,12 +252,12 @@ export default {
       this.$store.commit("module/savePluginSuboption", payload);
     },
     isAValidSetting(tinySetting, key) {
-      return (['truncate', 'lines_limit', 'fontsize_formats', 'style_formats', 'link_fixed_color'].indexOf(key) !== -1) && tinySetting.value === true;
+      return (['truncate', 'lines_limit', 'fontsize_formats', 'style_formats', 'link_fixed_color', 'st_formats_menu', 'formats'].indexOf(key) !== -1) && tinySetting.value === true;
     },
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .font-mce-ico {
   font-family: tinymce, Arial;
 }

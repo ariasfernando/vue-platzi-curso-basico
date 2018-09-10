@@ -39,7 +39,6 @@
         <div
           v-for="(plugin, key) in component.plugins"
           v-if="!shouldRenderInStyles(plugin)"
-          class="plugin-wrapper"
           :class="'plugin-' + plugin.name"
           :key="key"
         >
@@ -56,7 +55,6 @@
         <div
           v-for="(plugin, key) in component.plugins"
           v-if="shouldRenderInStyles(plugin)"
-          class="plugin-wrapper"
           :class="'plugin-' + plugin.name"
           :key="key"
         >
@@ -71,8 +69,8 @@
 <script>
 import _ from "lodash";
 import * as elementSettings from "./settings";
-import GroupContainer from "./containers/GroupContainer.vue";
-import LabelItemContainer from "./containers/LabelItemContainer.vue";
+import GroupContainer from "../common/containers/GroupContainer.vue";
+import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
 import settingsDefault from "./settingsDefault";
 export default {
   data() {
@@ -96,7 +94,6 @@ export default {
     "input-generic-switch": elementSettings.GenericSwitch,
     "input-generic-text": elementSettings.GenericText,
     "input-image-size": elementSettings.ImageSize,
-    "input-input-height": elementSettings.InputHeight,
     "input-letter-spacing": elementSettings.LetterSpacing,
     "input-padding-group": elementSettings.PaddingGroup,
     "input-text-align": elementSettings.TextAlign,

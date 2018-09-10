@@ -10,11 +10,12 @@
       >
         <tr>
           <td 
-            :width="component.image.attribute.width"
+            width="100%"
             :valign="component.image.attribute.valign || 'top'"
             :align="component.image.attribute.align"
             :bgcolor="component.image.attribute.bgcolor"
-            :style="elementBorderPaddingAndWidth(component.image)"
+            style="width:100%;"
+            :style="elementBorderAndPadding(component.image)"
           >
             <a 
               @click.prevent

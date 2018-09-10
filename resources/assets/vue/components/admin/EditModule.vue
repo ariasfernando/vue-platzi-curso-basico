@@ -5,7 +5,7 @@
     <div class="row">
       <section v-if="ready" class="col-xs-12 section-container" id="edit-container">
         <!-- START: Left Bar -->
-        <aside class="col-xs-2 left-bar">
+        <aside class="left-bar">
             <div class="fields">
               <elements-settings v-if="ready"></elements-settings>
               <!-- END: Elements -->
@@ -23,7 +23,7 @@
         </div>
         <!-- END: Module Container -->
         <!-- START: Right Bar -->
-        <aside class="col-xs-3 right-bar">
+        <aside class="right-bar">
           <div class="module-settings" v-if="currentComponent">
             <div class="fields">
 
@@ -153,6 +153,7 @@ export default {
 <style lang="less">
 @stensul-purple: #514960;
 @stensul-white: #ffffff;
+@stensul-gray: #666666;
 @stensul-purple-light: lighten(@stensul-purple, 20%);
 @focus: #78dcd6;
 @focus-light: lighten(@focus, 30%);
@@ -160,6 +161,12 @@ export default {
 @brand-primary: lighten(@stensul-purple, 35%);
 @brand-secondary: @stensul-purple-light;
 
+  .el-input.is-active .el-input__inner,
+  .el-select .el-input__inner:focus,
+  .el-select .el-input.is-focus .el-input__inner,
+  .el-input__inner:focus {
+    border-color: rgb(120, 220, 214);
+  }
 .fade.show {
   opacity: 1;
 }
@@ -375,17 +382,25 @@ p,ul,ol{
   .right-bar,
   .left-bar {
     height: calc(~"100vh - 55px");
+    overflow: auto;
     overflow: overlay;
     width: 270px;
     display: block;
     float: left;
     padding: 0px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    padding-bottom: 25px;
+
+    &:hover{
+      overflow: overlay
+    }
+
     &::-webkit-scrollbar {
-        width: 2px; 
+        width: 4px; 
         background: transparent;
     }
     &::-webkit-scrollbar-thumb {
-        background: @brand-secondary;
+        background: lighten(@stensul-gray, 40%);
     }
     .btn.btn-secondary.btn-block {
       &:hover,
@@ -410,8 +425,9 @@ p,ul,ol{
         font-size: 14px;
         background-color: #f4f4f4;
         border: 1px solid #d8d8d8;
-        padding: 20px 20px 14px 20px;
-        width: 47%;
+        border-radius: 2px;
+        padding: 25px 20px 19px 20px;
+        width: 49%;
         margin-right: 4px;
         margin-bottom: 4px;
         float: left;
@@ -442,6 +458,10 @@ p,ul,ol{
             color: #333333;
           }
         }
+
+        &:nth-child(even){
+          margin-right: 0px;
+        }
       }
     }
 
@@ -470,9 +490,6 @@ p,ul,ol{
       height: 50px;
     }
 
-    input[name="href"] {
-      width: 115px;
-    }
     .vue-js-switch {
       float: right;
       padding-top: 0px;
