@@ -1,38 +1,40 @@
 <template>
-  <div class="stx-wrapper">
-    <mso v-if="hasbackgroundImage"
+  <wrapper>
+    <wrapper-comment
+      v-if="hasbackgroundImage"
       :start="msoStartingComment"
-      :end="msoEndingComment"
-    >
+      :end="msoEndingComment">
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
         <spacer v-if="paddingTop" :height="paddingTop"></spacer>
 
         <slot name="with-background-image"></slot>
 
-        <mso v-if="paddingBottom"
+        <wrapper-comment
+          v-if="paddingBottom"
           start="<!--[if !gte mso 9]>--->"
-          end="<!--<![endif]-->"
-        >
+          end="<!--<![endif]-->">
           <spacer :height="paddingBottom"></spacer>
-        </mso>
+        </wrapper-comment>
       </table>
-    </mso>
-    <table v-if="!hasbackgroundImage" width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+    </wrapper-comment>
+    <table v-else width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
       <slot name="without-background-image"></slot>
     </table>
-  </div>
+  </wrapper>
 </template>
 
 <script>
 import Spacer from './Spacer';
-import mso from './mso';
+import WrapperComment from './comments/WrapperComment';
+import wrapper from './wrapper';
 export default {
   name: 'BackgroundImage',
   props: ['element'],
 
   components: {
     Spacer,
-    mso
+    WrapperComment,
+    wrapper,
   },
   computed: {
     msoStartingComment() {
