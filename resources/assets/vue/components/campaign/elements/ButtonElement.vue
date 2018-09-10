@@ -1,18 +1,21 @@
 <template>
   <module-container :component="component" @select-component="selectComponentHandler">
+      <button-border-radius-comment v-if="hasBorderRadius" :component="component"
+        :module="module" :columnId="columnId" :componentId="componentId"></button-border-radius-comment>
+      <div class="stx-wrapper" v-if="hasBorderRadius" v-html="notMsoStartingComment"></div>
       <a
         @click.prevent
         :data-contenteditable-href="component.button.attribute.href || ''"
         :target="component.button.attribute.target || '_blank'"
         :style="component.button.style.textDecoration || 'text-decoration:none;'"
-      >
+        >
         <table
           cellpadding="0"
           cellspacing="0"
           border="0"
           :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
           :style="tableStyles"
-        >
+          >
           <tr>
             <td
               width="100%"
@@ -65,12 +68,14 @@
           </tr>
         </table>
       </a>
+      <div class="stx-wrapper" v-if="hasBorderRadius" v-html="notMsoEndingComment"></div>
   </module-container>
 </template>
 
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ModuleContainer from '../../common/containers/ModuleContainer';
+  import ButtonBorderRadiusComment from '../../common/ButtonBorderRadiusComment.vue';
   import tinyMce from '../../common/tinyMce';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
   import _ from 'lodash';
@@ -80,11 +85,12 @@
     mixins: [MobileStylesMixin, ElementMixin],
     components: {
       ModuleContainer,
-      tinyMce
+      tinyMce,
+      ButtonBorderRadiusComment,
     },
     data() {
       return {    
-        timer: null
+        timer: null,
       };
     },
     computed: {
@@ -103,20 +109,34 @@
       widthCaret() {
         return _.parseInt(this.component.caret.attribute.width) + _.parseInt(this.component.caret.style.paddingLeft) || 0 + _.parseInt(this.component.caret.style.paddingRight) || 0;
       },
+      notMsoStartingComment(){
+        return `<!--[if !mso]><!-->`;
+      },
+      notMsoEndingComment(){
+        return `<!--<![endif]-->`;
+      },
+      hasBorderRadius() {
+        if (this.component.button.style.borderRadius) {
+          const borderRadius =  parseInt(this.component.button.style.borderRadius);
+          return borderRadius != 0 ? true : false;
+        } 
+        return false;
+      },
     },
     methods: {
-      changeText(text) {
+      changeText(value) {
         if (this.timer) {
           clearTimeout(this.timer);
         }
         this.timer = setTimeout(() => {
-          this.$store.commit('campaign/updateElement', {
+          this.$store.dispatch('campaign/updateText', {
             moduleId:this.moduleId,
             columnId:this.columnId,
             componentId:this.componentId,
-            data: {
-              text
-            }
+            link: "data",
+            property: "text",
+            sync: false,
+            value,
           });
         }, 100);
       },

@@ -421,8 +421,21 @@ class ProofController extends Controller
         }
 
         // Update reviewers
+        $save_reviewers = [];
+        $date = new UTCDateTime();
+        $modified_date = $date->toDateTime();
+
         foreach ($reviewers as $key => $value) {
-            $reviewers[$key]['user_id'] = new ObjectId(User::whereEmail($value['email'])->first()->id);
+            $reviewer_user = User::where('email', $value['email'])->first();
+            $reviewers[$key]['user_id'] = new ObjectId($reviewer_user->id);
+            // Don't save decision_comment for new proofs, saving "$oid" will throw an exception save only the fields we need.
+            $save_reviewers[$key]['user_id'] = $reviewers[$key]['user_id'];
+            $save_reviewers[$key]['display_name'] = $reviewer_user->name;
+            $save_reviewers[$key]['email'] = $reviewers[$key]['email'] ?? null;
+            $save_reviewers[$key]['last_modified_date'] = $modified_date;
+            $save_reviewers[$key]['notification_message'] = $reviewers[$key]['notification_message'] ?? null;
+            $save_reviewers[$key]['notified'] = false;
+            $save_reviewers[$key]['required'] = (int) ($reviewers[$key]['required'] ?? 0);
         }
 
         // Check if we have to create a new proof, or update the current one
@@ -436,7 +449,7 @@ class ProofController extends Controller
                 'requestor' => new ObjectId(Auth::id()),
                 'token' => $token,
                 'status' => Proof::STATUS_PROCESSED,
-                'reviewers' => $reviewers
+                'reviewers' => $save_reviewers
             ]);
             $activity = 'Proof created';
 
@@ -472,11 +485,11 @@ class ProofController extends Controller
                         unset($current_reviewer['notification_message']);
                         $reviewers[$key] = array_merge($reviewers[$key], $current_reviewer);
 
-                        if (isset($reviewer['required']) && $reviewer['required'] == 1) {
-                            $reviewers[$key]['required'] = 1;
-                        } else {
-                            $reviewers[$key]['required'] = 0;
-                        }
+                        // Recreate the ObjectId or it will fail trying to save "$oid".
+                        $reviewers[$key]['decision_comment'] = isset($reviewers[$key]['decision_comment'])
+                            ? new ObjectId((string) $reviewers[$key]['decision_comment']) : null;
+
+                        $reviewers[$key]['required'] = (int) ($reviewer['required'] ?? 0);
                     }
                 }
             }

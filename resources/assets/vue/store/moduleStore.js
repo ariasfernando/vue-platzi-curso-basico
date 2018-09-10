@@ -210,6 +210,7 @@ const mutations = {
   },
   setListLibraries(state, data) {
     state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options = data.response;
+    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config['sie-plugin-image-overlay_image'].config.overlay_gallery.config.set_images.options = data.response;
   }
 };
 
