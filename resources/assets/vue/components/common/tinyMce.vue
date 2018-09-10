@@ -1,9 +1,10 @@
 
 <template>
-	<div class="stx-wrapper" style="font-size:0;"> <!-- font-size:0 It is a hack to not render a height of 1px in chrome -->
+	<div class="stx-wrapper" style="width: 100%; font-size:0;">
     <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>           
 		<div
       class="stx-edit-text stx-wrapper"
+      style="width: 100%;"
       :style="fontStyles"
       v-html="content"
       :id="editorId"
@@ -34,10 +35,23 @@ export default {
     libraryConfig(){
       return this.$store.state.campaign.campaign.library_config;
     },
+    textDirty(){
+      return this.component.data.textDirty;
+    },
   },
   methods: {
     changeContent(e) {
       this.$emit('changeText', e.target.innerHTML);
+    }
+  },
+  watch:{
+    textDirty(){
+      this.$nextTick(() => {
+        this.content = this.component.data.text;
+        this.$nextTick(() => {
+          this.initTinyMCE();
+        });
+      });
     }
   }
 };
@@ -56,5 +70,11 @@ export default {
     button.mce-open{
       display: none;
     }
+  }
+  [data-type="button-element"] .stx-edit-text {
+    min-width: 10px;
+  }
+  .mce-grid td.mce-grid-cell div{
+    line-height:10px;
   }
 </style>

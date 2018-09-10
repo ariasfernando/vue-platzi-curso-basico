@@ -35,6 +35,12 @@
               property: 'color',
               value: color,
             })
+            
+            // reset tinymce to refresh changes on text
+            const editorId = ['editor', this.module.idInstance, this.columnId, compId].join('-');
+            setTimeout(() => {
+              document.getElementById(editorId).dispatchEvent(new Event("tiny-style-reset"));
+            }, 10);
           }
         });
       }

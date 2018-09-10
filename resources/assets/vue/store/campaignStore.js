@@ -29,6 +29,7 @@ function campaignStore() {
       currentModuleId: undefined,
       currentCustomModuleId: undefined,
       currentComponent: {},
+      currentCustomComponent: {},
       activeModule: undefined,
       modalCode: false,
       modalComplete: false,
@@ -70,6 +71,9 @@ function campaignStore() {
       },
       currentComponent(state) {
         return state.currentComponent;
+      },
+      currentCustomComponent(state) {
+        return state.currentCustomComponent;
       },
       currentModule(state) {
         return state.currentModuleId;
@@ -151,7 +155,7 @@ function campaignStore() {
       },
       updateCustomElement(state, payload) {
         // DEPRECATED
-        if ( !isUndefined(payload.moduleId) ){ 
+        if ( !isUndefined(payload.moduleId) ){
           const update = { ...state.modules[payload.moduleId].data, ...payload.data };
           state.modules[payload.moduleId].data = update;
           state.dirty = true;
@@ -165,16 +169,9 @@ function campaignStore() {
           state.dirty = true;
         }
       },
-      updateElement(state, payload) {
-        // This is necessary, since the clickaway function is executed.
-        if ( !isUndefined(payload.moduleId) ){ 
-          const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
-          state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
-          state.dirty = true;
-        }
-      },
       saveSetting(state, setting) {
         state.editedSettings[setting.name] = setting.value;
+        state.dirty = true;
       },
       saveCampaignData(state, payload) {
         const update = {};
@@ -198,6 +195,12 @@ function campaignStore() {
       },
       unsetCurrentComponent(state) {
         state.currentComponent = {};
+      },
+      setCurrentCustomComponent(state, data) {
+        state.currentCustomComponent = data;
+      },
+      unsetCurrentCustomComponent(state) {
+        state.currentCustomComponent = {};
       },
       setActiveModule(state, moduleId) {
         state.activeModule = moduleId;
@@ -318,7 +321,33 @@ function campaignStore() {
           state.modules[data.moduleId].data = {};
         }
 
-        state.modules[data.moduleId].data[data.field] = data.value;
+        if (!(data.field in state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data[data.field] = {};
+        }
+
+        if ("merge" in data && data.merge === true) {
+          const newData = _.extend(clone(state.modules[data.moduleId].data[data.field]), data.value);
+          state.modules[data.moduleId].data[data.field] = newData;
+        } else {
+          state.modules[data.moduleId].data[data.field] = data.value;
+        }
+
+        state.dirty = true;
+      },
+      saveCustomModuleParamsField(state, param) {
+        // Prevent empty arrays returned by php-mongo
+        if (isArray(state.modules[param.moduleId].params)) {
+          Vue.set(state.modules[param.moduleId], 'params', {});
+        }
+        if (!(param.field in state.modules[param.moduleId].params)) {
+          Vue.set(state.modules[param.moduleId].params, param.field, {});
+        }
+        if ("merge" in param && param.merge === true) {
+          const newParams = _.extend(clone(state.modules[param.moduleId].params[param.field]), param.value);
+          Vue.set(state.modules[param.moduleId].params, param.field, newParams);
+        } else {
+          Vue.set(state.modules[param.moduleId].params, param.field, param.value);
+        }
         state.dirty = true;
       },
       setEditorOptions(state, toolbar) {
@@ -375,6 +404,15 @@ function campaignStore() {
       updateCustomElement(context, payload) {
         context.commit('updateCustomElement', payload);
         return Promise.resolve();
+      },
+
+      updateText(context, payload) {
+        context.commit('saveComponentProperty', payload);
+        if (payload.sync !== false) {
+          payload.property = 'textDirty';
+          payload.value = Math.floor(100000 + Math.random() * 900000);
+          context.commit('saveComponentProperty', payload);
+        }
       },
       updateCustomElementProperty(context, payload) {
         context.commit('updateCustomElementProperty', payload);

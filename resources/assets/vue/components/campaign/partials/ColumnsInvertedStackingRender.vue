@@ -8,7 +8,8 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/numColumns"
+        :width="calculeWidthColumnPx(columnId)"
+        :style="{width: calculeStyleWidthColumnPx(columnId)}"
       >
         <tr>
           <td
@@ -87,6 +88,9 @@
       templateWidth() {
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
+      templateWidthWithoutPadding(){
+        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
+      },
       numColumns() {
         return this.module.structure.columns.length;
       },
@@ -119,6 +123,16 @@
             componentId:data.componentId,
           });
         }, 50);
+      },
+      calculeWidthColumnPx(columnId){
+        let width = this.module.structure.columns[columnId].container.attribute.width;
+        if(_.endsWith(width, "%")){
+          return this.templateWidthWithoutPadding / 100 * _.parseInt(width);
+        }
+        return width;
+      },
+      calculeStyleWidthColumnPx(columnId){
+        return this.calculeWidthColumnPx(columnId) +'px';
       },
     }
   };

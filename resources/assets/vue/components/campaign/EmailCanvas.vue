@@ -156,7 +156,7 @@
           // Class name for the fallback behaviour (only MS Edge)
           fallbackClass: "sortable-fallback",
           // Class name for the drop placeholder
-          ghostClass: "ghost-component", 
+          ghostClass: "ghost-component",
           // Class name for the chosen item
           chosenClass: "chosen-component",
           // Class name for the dragging item
@@ -235,6 +235,7 @@
       onSort(e){
         this.$store.commit('campaign/unsetCustomModule');
         this.$store.commit('campaign/unsetCurrentComponent');
+        this.$store.commit("campaign/unsetCurrentCustomComponent");
 
         this.$store.commit('campaign/setActiveModule', e.newIndex);
         this.$store.commit("campaign/setDirty", true);
@@ -254,6 +255,7 @@
       onChoose() {
         this.$store.commit('campaign/unsetCustomModule');
         this.$store.commit('campaign/unsetCurrentComponent');
+        this.$store.commit("campaign/unsetCurrentCustomComponent");
       },
       onMouseOver () {
         $("#emailCanvas").addClass("hovered");
@@ -308,8 +310,9 @@
           // Clear Current module state
           this.$store.commit("campaign/unsetActiveModule");
           this.$store.commit("campaign/unsetCurrentModule");
-          this.$store.commit("campaign/unsetCurrentComponent");
           this.$store.commit("campaign/unsetCustomModule");
+          this.$store.commit("campaign/unsetCurrentComponent");
+          this.$store.commit("campaign/unsetCurrentCustomComponent");
           this.$store.commit("campaign/setToggleModuleSettings", false);
         }
         else {
@@ -329,6 +332,7 @@
             this.$store.commit("campaign/setActiveModule", moduleId);
             // Clear 3rd column
             this.$store.commit("campaign/unsetCurrentComponent");
+            this.$store.commit("campaign/unsetCurrentCustomComponent");
 
             if (this.activeModule && this.activeModule.type === 'studio') {
               this.$store.commit("campaign/unsetCustomModule");
@@ -370,23 +374,23 @@
 
   /* COMMON STYLES */
   span{
-    &.st-preheader{ 
+    &.st-preheader{
       display: none!important;
-    }  
+    }
 
   }
   .applelinks{
-    color:#6b6b6b !important; 
-    text-decoration: none !important; 
-  }  
-         
+    color:#6b6b6b !important;
+    text-decoration: none !important;
+  }
+
   /*BASE-LAYOUT*/
-  .st-email-body{ 
+  .st-email-body{
     width:100% !important;
-    -webkit-text-size-adjust: 100%; 
-    margin: 0 !important; 
-    padding: 0px; 
-    background-color: #000000; 
+    -webkit-text-size-adjust: 100%;
+    margin: 0 !important;
+    padding: 0px;
+    background-color: #000000;
   }
 
   p,ul,ol{
@@ -396,7 +400,7 @@
 
   .stx-edit-text{
 
-    a:hover, 
+    a:hover,
     a:focus{
       text-decoration: none !important;
     }

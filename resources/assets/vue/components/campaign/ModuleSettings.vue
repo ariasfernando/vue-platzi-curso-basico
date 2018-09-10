@@ -1,5 +1,5 @@
 <template>
-  <div class="section-box" v-if="module">
+  <div class="section-box" v-if="module && module.type === 'studio'">
     <template  v-if="hasEnabledPlugins(module)">
       <label-item-container label="MODULE STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
       <div class="card">
@@ -15,7 +15,7 @@
           :module-id="currentModule"
           :plugin-key="pluginKey"></component>
         </group-container>
-      </div>
+    </div>
     </template>
     <template v-if="showColumnStyles">
       <label-item-container label="COLUMN STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
@@ -45,23 +45,7 @@
             </b-tab>
           </b-tabs>
         </b-card>
-
-        </div>
-    </template>
-    <!--       
-      if plugin is enabled === true && render === false mount the Js logic.
-    -->
-    <template 
-      v-for="(plugin, pluginKey) in module.plugins" :
-      v-if="plugin.enabled && $_app.modulePlugins[pluginKey] && plugin.render === false && !plugin.runBackground">
-      <component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${pluginKey}`"></component>
-    </template>
-    <template v-for="(column, columnKey) in module.structure.columns">
-      <template 
-        v-for="(plugin, pluginKey) in column.plugins"
-        v-if="plugin.enabled && $_app.modulePlugins[pluginKey] && plugin.render === false && !plugin.runBackground">
-        <component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${columnKey}-${pluginKey}`"></component>
-      </template>
+    </div>
     </template>
   </div>
 </template>

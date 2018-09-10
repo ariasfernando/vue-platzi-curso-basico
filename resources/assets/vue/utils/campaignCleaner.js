@@ -129,6 +129,17 @@ export default {
         $element.removeAttr('data-persist-styles');
       });
     }
+
+    // Skip <% %> Tags
+    if ($cleanedHtml.find('a').length) {
+      const $links = $cleanedHtml.find('a');
+      $.each($links, (i, element) => {
+        const $element = $(element);
+        const href = $element.attr("href");
+        $element.attr("href", href.replace("<%","LT%").replace("%>","%GT"));
+      });
+    }
+
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
     return this.charConvert($cleanedHtml.html());
@@ -433,6 +444,8 @@ export default {
       œ: '&#156;',
       Ú: '&#218;',
       '&': '&amp;',
+      '&lt;%': 'LT%',
+      '%&gt;': '%GT',
       '<': '&lt;',
       '>': '&gt;',
       '£': '&pound;',
@@ -450,4 +463,4 @@ export default {
     return str;
   }
 
-};
+}; 

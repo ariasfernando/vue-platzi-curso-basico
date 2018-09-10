@@ -154,7 +154,10 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
 
             // Validate only urls
             if (!matches.length && href.length > 0) {
-                if (href.indexOf('@') > 0 && href.indexOf('//') == -1 && href.indexOf('mailto:') == -1) {
+                if (href.indexOf('@') > 0
+                    && href.indexOf('//') == -1
+                    && href.indexOf('mailto:') == -1
+                    && editor.settings.autocomplete_mailto != false) {
                     href = 'mailto:' + href;
                 } else if (href.indexOf('http://') == -1
                     && href.indexOf('https://') == -1
