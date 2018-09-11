@@ -213,11 +213,14 @@ export default {
         behaviour = behaviour.split(':');
         const behaviourType = behaviour[0];
         const behaviourFactor = Number(behaviour[1]);
-        const behaviourModifier = behaviour[2];
+
         let result = Number(initialValue);
 
         switch (behaviourType) {
           case 'static':
+            // leave result as is
+            break;
+          case 'fixed':
             result = behaviourFactor;
             break;
           case 'add':
@@ -261,6 +264,7 @@ export default {
         const fontSizeBehaviour = loop.styles.fontSize.behaviour || loop.steps.behaviour;
         const fontSizeUnit = loop.styles.fontSize.unit || 'px';
         format.title = getTitle(loop.title, currentFontSize, fontSizeUnit);
+        format.styles.fontSize = `${currentFontSize}${fontSizeUnit}`;
         style_formats.push(format);
 
         currentFontSize = runBehaviour(fontSizeBehaviour, currentFontSize);
