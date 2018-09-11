@@ -349,4 +349,8 @@
     }
     
   }
+  .stx-wrapper {
+    display: contents;
+    width: 100%;
+}
 </style>

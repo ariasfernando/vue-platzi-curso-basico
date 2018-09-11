@@ -65,18 +65,24 @@ export default {
       });
       return BorderAndPadding;
     },
-    elementBorderAndPaddingHorizontalSpace(element) {
-      const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
-      const paddingRight = _.parseInt(element.style.paddingRight || 0);
-      const borderLeft = _.parseInt(element.style.borderLeftWidth || 0);
-      const borderRight = _.parseInt(element.style.borderRightWidth || 0);
-      return paddingLeft + paddingRight + borderLeft + borderRight;
+    elementBorderHorizontalPaddingAndHeight(element) {
+      const elementBorderAndPadding = this.elementBorderPaddingAndHeight(element);
+      elementBorderAndPadding.paddingTop = undefined;
+      elementBorderAndPadding.paddingBottom = undefined;
+      return elementBorderAndPadding;
     },
     elementBorderPaddingAndHeight(element) {
       const elementBorderAndPadding = this.elementBorderAndPadding(element);
       const styles = _.isEmpty(elementBorderAndPadding) ? {} : elementBorderAndPadding;
       styles.height = this.widthStyle(element.attribute.height);
       return styles;
+    },
+    elementBorderAndPaddingHorizontalSpace(element) {
+      const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
+      const paddingRight = _.parseInt(element.style.paddingRight || 0);
+      const borderLeft = _.parseInt(element.style.borderLeftWidth || 0);
+      const borderRight = _.parseInt(element.style.borderRightWidth || 0);
+      return paddingLeft + paddingRight + borderLeft + borderRight;
     },
     selectComponentHandler(e) {
       if (!$(e.target).hasClass('st-remove')) {

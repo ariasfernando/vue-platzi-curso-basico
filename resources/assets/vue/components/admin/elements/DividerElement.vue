@@ -9,17 +9,12 @@
       style="width: 100%;"
       :style="tableStyle"
     >
-      <tr>
-        <td 
-          :width="component.divider.attribute.width || '100%'"
-          :valign="component.divider.attribute.valign || 'top'"
+        <spacer 
+          :valign="component.divider.attribute.valign"
           :align="component.divider.attribute.align"
           :bgcolor="component.divider.attribute.bgcolor"
-          :height="dividerHeightWithoutPx"
-          style="display:block; margin:0 auto;"
-          :style="innerTdStyle"
-          >&nbsp;</td>
-      </tr>
+          :height="component.divider.style.height"
+        ></spacer>
     </table>
     <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
   </module-container>
@@ -32,37 +27,17 @@
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ElementMixin from '../../common/mixins/ElementMixin';
   import ModuleContainer from '../../common/containers/ModuleContainer';
+  import Spacer from '../../common/Spacer';
   
   export default {
     name: 'DividerElement',
     components: {
       ComponentToolbar,
-      ModuleContainer
+      ModuleContainer,
+      Spacer
     },
-    mixins: [ MobileStylesMixin, ElementMixin],
-    data(){
-      return{
-        defaultFirstTdStyle: {
-          verticalAlign: 'middle',
-          margin: 0,
-          width: '100%'
-        },
-        defaultInnerTdStyle: {
-          display:'block',
-          margin:'0 auto'
-        }
-      }
-    },
+    mixins: [ MobileStylesMixin, ElementMixin ],
     computed: {
-      innerTdStyle() { 
-        return {
-          height: this.component.divider.style.height,
-          lineHeight: this.component.divider.style.height,
-          fontSize: this.component.divider.style.height,
-          maxHeight: this.component.divider.style.height,
-          backgroundColor: this.component.divider.attribute.bgcolor,
-        }  
-      },
       tableStyle() {
         return {
           height: this.component.divider.style.height,
