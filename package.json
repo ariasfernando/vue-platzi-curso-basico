@@ -120,14 +120,27 @@
       "^@/(.*)$": "./resources/assets/vue/$1"
     },
     "modulePaths": [
-      "./node_modules",
-      "./resources/assets/vue"
+      "<rootDir>/node_modules",
+      "<rootDir>/resources/assets"
     ],
     "roots": [
-      "./tests/js"
+      "<rootDir>/tests/js",
+      "<rootDir>/resources/assets/"
     ],
+    "collectCoverageFrom": [
+      "**/*.{js,vue}"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 0.42,
+        "functions": 0.39,
+        "lines": 0.47,
+        "statements": 0.47
+      }
+    },
     "testEnvironment": "node",
-    "coverageDirectory": "./ci/storage/tmp/coverage"
+    "coverageDirectory": "./ci/storage/tmp/coverage",
+    "verbose": true
   },
   "scripts": {
     "dev": "NODE_ENV=development webpack --progress --config=./webpack.config.js",
