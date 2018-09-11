@@ -42,98 +42,85 @@
 
       <background-image :element="module.structure" :key='modulebackgroundImage'>
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
-          <!--2 COLUMNS -->
+          <!-- MORE THAN 1 COLUMN -->
           <tr v-if="module.structure.columns.length > 1">
-
-            <!--2 COLUMNS STACKING -->
+            <!-- COLUMNS STACKING -->
             <td
               width="100%"
-              v-if="module.structure.columnsStacking === 'normal'"
+              style="width:100%;"
+              v-if="module.structure.columnsStacking === 'normal' || isInvertedStacking"
               :valign="module.structure.attribute.valign || 'top'"
-            >
-              <div class="stx-wrapper" v-html="msoStartingComment"></div>
-              <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
-            </td>
-
-            <!--2 COLUMNS INVERTED STACKING ONLY FOR 2 COLUMNS-->
-            <td
-              width="100%"
-              v-else-if="module.structure.columnsStacking === 'invertedStacking'"
-              :valign="module.structure.attribute.valign || 'top'"
-            >
-              <table
-                width="100%"
-                cellspacing="0"
-                cellpadding="0"
-                border="0"
-                dir="rtl"
-                >
-                <tr>
-                  <td width="100%" :valign="module.structure.attribute.valign || 'top'">
-                    <div class="stx-wrapper" v-html="msoStartingCommentInverted"></div>
-
-                    <columns-inverted-stacking-render
+              >
+              <wrapper-comment
+                :start="msoStartingComment"
+                :end="msoEndingComment">
+                <template v-for="(column, columnId) in columnsSort" >
+                  <column-render
+                    :key="'column-' + columnId"
+                    :module-id="moduleId"
+                    :column="column"
+                    :column-id="columnId"
+                    :is-inverted="isInvertedStacking">
+                    <component
+                      v-for="(component, componentId) in column.components"
+                      :key="component.id"
+                      @select-component="selectComponent"
+                      :is="component.type"
+                      :component="component"
                       :module-id="moduleId"
-                      :column="module.structure.columns[1]"
-                      :column-id="1"
-                      >
-                    </columns-inverted-stacking-render>
-                    <columns-inverted-stacking-render
-                      :module-id="moduleId"
-                      :column="module.structure.columns[0]"
-                      :column-id="0"
-                      >
-                    </columns-inverted-stacking-render>
-
-                  </td>
-                </tr>
-              </table>
+                      :column-id="columnId"
+                      :component-id="componentId">
+                    </component>
+                  </column-render>
+                  <line-comment
+                    v-if="columnsSort.length -1 > columnId"
+                    :key="'comment-' + columnId"
+                    :comment="msoBetweenComment(columnId)"></line-comment>
+                </template>
+              </wrapper-comment>
             </td>
-
-            <!--2 COLUMNS FIXED -->
+            <!-- COLUMNS FIXED -->
             <td
-              :data-column-id="columnId"
               v-else-if="module.structure.columnsStacking == 'columnsFixed'"
               v-for="(column, columnId) in module.structure.columns"
+              :key="column.id"
+              :data-column-id="columnId"
               :width="columnWidth(columnId)"
               :valign="column.container.attribute.valign || 'top'"
               :class="column.container.attribute.classes"
               :height="column.container.attribute.height"
               :bgcolor="column.container.attribute.bgcolor"
-              :key="column.id"
-              :style="[elementBorderPaddingAndHeight(column.container), {'height': column.container.attribute.height + 'px'}, {'width': widthStyle(columnWidth(columnId))}]"
+              :style="[elementBorderPaddingAndHeight(column.container), {'width': widthStyle(columnWidth(columnId))}]"
             >
-              <columns-fixed-render
-                :column="column"
-                :column-id="columnId"
-                :module-id="moduleId"
-              ></columns-fixed-render>
+              <table align="left" width="100%" cellspacing="0" cellpadding="0" border="0">
+                <component
+                  v-for="(component, componentId) in column.components"
+                  :key="component.id"
+                  @select-component="selectComponent"
+                  :is="component.type"
+                  :component="component"
+                  :module-id="moduleId"
+                  :column-id="columnId"
+                  :component-id="componentId">
+                </component>
+              </table>
             </td>
           </tr>
           <!--2 COLUMNS -->
 
           <!--1 COLUMN -->
-          <tr
+          <component
             v-else
             v-for="(component, componentId) in module.structure.columns[0].components"
-            @click.prevent="setComponent(moduleId, 0, componentId)"
             :key="component.id"
-          >
-            <td width="100%" style="vertical-align: top; width: 100%;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-                <template>
-                    <component
-                      :is="component.type"
-                      :component="component"
-                      :module-id="moduleId"
-                      :column-id="0"
-                      :component-id="componentId"
-                    ></component>
-                  </template>
-                </table>
-            </td>
-          </tr>
-        <!--1 COLUMN -->
+            :is="component.type"
+            :component="component"
+            :module-id="moduleId"
+            :column-id="0"
+            :component-id="componentId"
+            @select-component="selectComponent"
+          ></component>
+          <!--1 COLUMN -->
         </template>
       </background-image>
       <module-toolbar :module-id="moduleId"></module-toolbar>
@@ -148,30 +135,30 @@
   import _ from 'lodash';
   import BackgroundImage from '../common/BackgroundImage';
   import ButtonElement from './elements/ButtonElement.vue';
-  import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
-  import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
-  import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
+  import ColumnRender from './partials/ColumnRender.vue';
   import DividerElement from './elements/DividerElement.vue';
   import ElementMixin from '../common/mixins/ElementMixin.js';
   import ImageElement from './elements/ImageElement.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import TextElement from './elements/TextElement.vue';
   import validatorMixin from '../../plugins/modules/mixins/validator.js';
+  import WrapperComment from '../common/comments/WrapperComment';
+  import LineComment from '../common/comments/LineComment';
 
   module.exports = {
     name: 'Module',
     props: ['moduleId'],
     mixins: [ ElementMixin, validatorMixin ],
     components: {
-      TextElement,
       BackgroundImage,
       ButtonElement,
-      ImageElement,
+      ColumnRender,
       DividerElement,
+      ImageElement,
+      LineComment,
       ModuleToolbar,
-      ColumnsStackedRender,
-      ColumnsFixedRender,
-      ColumnsInvertedStackingRender,
+      TextElement,
+      WrapperComment
     },
     created() {
       if(this.module.type === 'studio'
@@ -198,17 +185,17 @@
       },
       msoStartingComment() {
         return `<!--[if gte mso 9]>
-          <table width="${this.templateInnerWidth}" style="width:${this.widthStyle(this.templateInnerWidth)}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
+          <table width="${this.templateInnerWidth}" style="width:${this.widthStyle(this.templateInnerWidth)}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" ${this.isInvertedStacking ? 'dir="rtl"' : ''}>
             <tr>
-              <td width="${this.columnWidth(0)}" ${this.columnBgcolor(0)} style="width:${this.widthStyle(this.columnWidth(0))}" valign="top">
+              <td width="${this.columnWidth(0)}" ${this.columnBgcolor(0)} style="width:${this.widthStyle(this.columnWidth(0))}" ${this.isInvertedStacking ? 'dir="ltr"' : ''} valign="top">
               <![endif]-->`;
       },
-      msoStartingCommentInverted() {
+      msoEndingComment() {
         return `<!--[if gte mso 9]>
-          <table width="${this.templateInnerWidth}" style="width:${this.widthStyle(this.templateInnerWidth)}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
-            <tr>
-              <td width="${this.columnWidth(this.module.structure.columns.length - 1)}" ${this.columnBgcolor(this.module.structure.columns.length - 1)} style="width: ${this.widthStyle(this.columnWidth(this.module.structure.columns.length - 1))}" dir="ltr" valign="top">
-              <![endif]-->`;
+              </td>
+            </tr>
+          </table>
+        <![endif]-->`;
       },
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
@@ -228,6 +215,12 @@
       moduleBgcolor(){
         return _.get(this.module,'structure.attribute.bgcolor');
       },
+      isInvertedStacking(){
+        return this.module.structure.columnsStacking === 'invertedStacking';
+      },
+      columnsSort(){
+        return this.isInvertedStacking ? this.module.structure.columns.reverse() : this.module.structure.columns;
+      },
       modulebackgroundImage(){
         return this.module.structure.style.backgroundImage ? this.$_app.config.imageUrl + this.module.structure.style.backgroundImage : undefined;
       },
@@ -238,12 +231,17 @@
       }
     },
     methods: {
-
+      msoBetweenComment(columnId) {
+        return `<!--[if gte mso 9]>
+              </td>
+              <td width="${this.columnWidth(columnId + 1)}" ${this.columnBgcolor(columnId+1)} style="width: ${this.widthStyle(this.columnWidth(columnId +1))}" ${this.isInvertedStacking ? 'dir="ltr"' : ''} align="left" valign="top">
+                <![endif]-->`;
+      },
       config() {
         this.$store.commit("campaign/setCustomModule", this.moduleId);
         this.$store.commit("campaign/unsetCurrentModule");
       },
-      setComponent(moduleId, columnId, componentId) {
+      selectComponent(moduleId, columnId, componentId) {
         setTimeout(() => {
           // TODO: find better way to do this
           this.$store.commit("campaign/setCurrentComponent", {

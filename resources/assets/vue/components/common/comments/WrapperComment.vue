@@ -1,8 +1,8 @@
 <template>
   <wrapper>
-    <LineComment :comment="start"></LineComment>
+    <line-comment :comment="start"></line-comment>
       <slot></slot>
-    <LineComment :comment="end"></LineComment>
+    <line-comment :comment="end"></line-comment>
   </wrapper>
 </template>
 
