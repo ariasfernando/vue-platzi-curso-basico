@@ -127,7 +127,7 @@ export default {
     columnWidth(columnId) {
       const width = this.module.structure.columns[columnId].container.attribute.width;
       if (_.endsWith(width, '%')) {
-        return this.templateInnerWidth / 100 * _.parseInt(width);
+        return this.templateInnerWidth / 100 * parseFloat(width);
       }
       return width;
     },
