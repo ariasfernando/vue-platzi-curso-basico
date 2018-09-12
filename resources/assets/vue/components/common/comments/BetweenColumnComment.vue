@@ -11,7 +11,7 @@ import LineComment from './LineComment';
 import ElementMixin from '../mixins/ElementMixin';
 export default {
   name: 'BetweenColumnComment',
-  props: ['width', 'bgcolor', 'is-inverted-stacking'],
+  props: ['width', 'bgcolor', 'is-inverted'],
   mixins: [ElementMixin],
   components: {
     LineComment
@@ -20,7 +20,7 @@ export default {
     msoBetweenComment() {
       return `<!--[if gte mso 9]>
             </td>
-            <td width="${this.width}" ${this.bgcolor ? `bgcolor="${this.bgcolor}" ` : ''}style="width: ${this.widthStyle(this.width)}" ${this.isInvertedStacking ? 'dir="ltr" ' : ''}align="left" valign="top">
+            <td width="${this.width}" ${this.bgcolor ? `bgcolor="${this.bgcolor}" ` : ''}style="width: ${this.widthStyle(this.width)}" ${this.isInverted ? 'dir="ltr" ' : ''}align="left" valign="top">
               <![endif]-->`;
     },
   }

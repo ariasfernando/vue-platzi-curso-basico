@@ -38,8 +38,7 @@
       :class=" { 'stx-show-error': hasErrors, 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}">
       <background-image :element="module.structure" :key='modulebackgroundImage'>
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
-          <column-manager
-            :module-id="moduleId">
+          <column-manager :module-id="moduleId">
             <template slot-scope="{columnData}">
               <component
                 v-for="(component, componentId) in columnData.column.components"

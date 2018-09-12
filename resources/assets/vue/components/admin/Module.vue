@@ -1,126 +1,71 @@
 <template>
   <div>
-    <table width="100%"
-          cellspacing="0"
-          cellpadding="0"
-          border="0"
-          align="center"
-    >
-      <!-- START: 2 COLUMNS -->
-      <tr v-if="module.structure.columns.length > 1">
-        <td
-          width="100%"
-          :bgcolor="module.structure.attribute.bgcolor"
-          :height="module.structure.attribute.height"
-          :style="elementBorderPaddingAndHeight(module.structure)"
-          :class="module.structure.attribute.classes" >
-          <table
-            width="100%"
-            class="st-wrapper"
-            cellspacing="0"
-            cellpadding="0"
-            border="0"
-            align="center"
-          >
-            <tr>
-              <template v-if="module.structure.columnsStacking === 'columnsFixed'">
-
-                <!-- If columnsFixed is true, show Columns fixed render -->
-                <td
-                  v-for="(column, columnId) in module.structure.columns"
-                  :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
-                  :valign="column.container.attribute.valign || 'top'"
-                  :key="column.id"
-                >
-                  <columns-fixed-render
-                    @add="onAdd"
-                    :column="column"
-                    :column-id="columnId"
-                    @set-component="setComponent"
-                  ></columns-fixed-render>
-                </td>
-              </template>
-
-              <!-- show Columns staked render -->
-              <td
-                v-else
-                width="100%"
-              >
-                <columns-stacked-render
-                  @add="onAdd"
-                  @set-component="setComponent"
-                ></columns-stacked-render>
-              </td>
-            </tr>
-          </table>
-
-        </td>
-      </tr>
-      <!-- END: 2 COLUMNS -->
-
-      <!-- START 1 COLUMNS -->
-      <tr v-else>
-        <td
-          v-for="(column, columnId) in module.structure.columns"
-          :class="[{'empty-col': !column.components.length}, module.structure.attribute.classes]"
-          width="100%"
-          :height="module.structure.attribute.height"
-          :style="elementBorderPaddingAndHeight(module.structure)"
-          :bgcolor="module.structure.attribute.bgcolor"
-          :valign="module.structure.attribute.valign || 'top'"
-          :data-col="columnId"
-          :key="column.id"
-        >
+    <table
+      width="100%"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      align="center"
+      style="width:100%; position: relative;"
+      >
+      <column-manager @select-component="selectComponent">
+        <template slot-scope="{columnData}">
           <draggable
-            class="st-content-component"
-            border="0"
-            width="100%"
             cellpadding="0"
             cellspacing="0"
-            @add="onAdd"
+            border="0"
+            width="100%"
+            v-model="columnData.column.components"
             :element="'table'"
             :options="options"
-            :data-col="columnId"
-            :class="{'empty-table':!column.components.length}"
+            :data-col="columnData.columnId"
+            @add="onAdd"
+            :class="!columnData.column.components.length ? 'empty-table' : ''"
           >
-            <template v-if="column.components.length">
+            <template v-if="columnData.column.components.length">
               <component
-                v-for="(component, componentId) in column.components"
+                v-for="(component, componentId) in columnData.column.components"
+                :key="component.id"
+                @select-component="selectComponent"
+                class="st-component"
                 :is="component.type"
                 :component="component"
-                :module-id="module.id"
-                :column-id="columnId"
-                :component-id="componentId"
-                :key="component.id"
-                :data-component="component"
-                @set-component="setComponent"
-                class="st-component"
-              ></component>
+                :module-id="moduleId"
+                :column-id="columnData.columnId"
+                :component-id="componentId">
+              </component>
             </template>
             <div v-else style="display:table-row;">
               <div
                 align="center"
                 class="empty-cell"
                 height="80"
-                :data-col="columnId">Drag content here
+                :data-col="columnData.columnId"
+              >
+                Drag content here
               </div>
             </div>
           </draggable>
-        </td>
-      </tr>
-      <!-- END 1 COLUMNS -->
+        </template>
+      </column-manager>
+      <element-selector
+        :left-position="templateWidth/2"
+        :bottom="-90"
+        label="Root"
+        @element-selected="moduleSelect"
+        :active="isActiveGeneralSettings"
+        selectorIcon="fa fa-cog"></element-selector>
     </table>
-    <element-selector label="Root" @element-selected="moduleSelect" :active="isActiveGeneralSettings" selectorIcon="fa fa-cog"></element-selector>
   </div>
 </template>
-    
+
 <script>
 
   import _ from 'lodash';
+  import BackgroundImage from '../common/BackgroundImage';
   import ButtonElement from './elements/ButtonElement.vue';
   import clone from 'clone';
-  import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
-  import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
+  import ColumnManager from './partials/ColumnManager.vue';
   import defaultElements from '../../resources/elements';
   import DividerElement from './elements/DividerElement.vue';
   import Draggable from 'vuedraggable';
@@ -128,22 +73,20 @@
   import ElementMixin from '../common/mixins/ElementMixin.js';
   import ElementSelector from '../common/ElementSelector.vue';
   import ImageElement from './elements/ImageElement.vue';
-  import Plugins from '../../plugins/modules';
   import TextElement from './elements/TextElement.vue';
-  import uc from 'underscore-contrib';
 
   module.exports = {
     name: 'Module',
     mixins: [ ElementMixin ],
     components: {
+      BackgroundImage,
       ButtonElement,
-      ElementSelector,
-      ColumnsFixedRender,
-      ColumnsStackedRender,
+      ColumnManager,
       DividerElement,
       Draggable,
+      ElementSelector,
       ImageElement,
-      TextElement
+      TextElement,
     },
     mixins: [ ElementMixin],
     data () {
@@ -164,7 +107,10 @@
       isActiveGeneralSettings() {
         return this.currentComponent.columnId === undefined && this.currentComponent.componentId === undefined;
       },
-    },   
+      modulebackgroundImage(){
+        return this.module.structure.style.backgroundImage ? this.$_app.config.imageUrl + this.module.structure.style.backgroundImage : undefined;
+      },
+    },
     methods: {
       onSort(e) {
         const colId = e.clone.getAttribute('data-column');
@@ -224,16 +170,16 @@
         });
 
         // Set dropped element as selected
-        this.setComponent({
+        this.selectComponent({
           columnId: +colId,
           componentId,
         });
       },
-      setComponent(ref) {
+      selectComponent(ref) {
         this.$store.commit("module/setCurrentComponent", ref);
       },
       moduleSelect() {
-        this.setComponent({
+        this.selectComponent({
           columnId: undefined,
           componentId: undefined,
         });
@@ -259,7 +205,7 @@
   .st-content-component{
     outline: 1px dashed @icon-option;
     border: none!important;
-  
+
     .st-component{
       &:hover{
         opacity: 0.75;
@@ -275,7 +221,7 @@
     background-color: @hover;
     display: table;
     width: 100%;
-    
+
     &:hover{
       div.empty-cell {
         font-size: 13px;
@@ -290,7 +236,7 @@
       width: 100%;
       vertical-align: middle;
       font-size: 0px;
-      
+
     }
   }
 
@@ -347,7 +293,7 @@
       }
 
     }
-    
+
   }
   .stx-wrapper {
     display: contents;

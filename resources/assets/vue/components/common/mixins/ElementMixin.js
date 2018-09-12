@@ -35,6 +35,14 @@ export default {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
     },
+    columnsSort() {
+      return this.isInvertedStacking
+        ? this.module.structure.columns.reverse()
+        : this.module.structure.columns;
+    },
+    isInvertedStacking() {
+      return this.module.structure.columnsStacking === 'invertedStacking';
+    },
   },
   methods: {
     // Get an string of classes
@@ -96,7 +104,7 @@ export default {
             });
           }, 50);
         } else {
-          this.$emit('set-component', {
+          this.$emit('select-component', {
             columnId: this.columnId,
             componentId: this.componentId,
           });
@@ -104,7 +112,7 @@ export default {
       }
     },
     columnSelect(columnId) {
-      this.$emit('set-component', {
+      this.$emit('select-component', {
         columnId,
         componentId: undefined,
       });
