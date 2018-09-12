@@ -405,18 +405,25 @@ export default {
           });
         },
         paste_preprocess: (plugin, args) => {
-          const editor = tinymce.get(tinymce.activeEditor.id);
-          const tinyMax = parseInt(editor.settings.max_chars);
+          const editor = tinymce.get(this.editorId);
+          const tinyMax = this.tinyMax();
 
           if (!tinyMax) {
             // if truncate is NAN, returns and avoid validations
             return;
           }
-
+          const ghostObj = $('<div/>').html(args.content);
+          const cleanTxt = ghostObj.text();
           // trim string if exceed max char limit
-          const tinyLength = editor.getContent({ format: 'text' }).length - 1;
+
+          const tinyLength = $(editor.getContent({ format: 'html' })).text().length;
           const charsToPaste = tinyMax - tinyLength;
-          args.content = args.content.trim().substring(0, charsToPaste);
+
+          if (cleanTxt.length > charsToPaste){
+            args.content = cleanTxt.trim().substring(0, charsToPaste);
+          } else {
+            args.content = cleanTxt.trim();
+          }
         },
 
       };
