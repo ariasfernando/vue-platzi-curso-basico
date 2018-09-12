@@ -138,6 +138,11 @@
     components: {
       Checkbox
     },
+    data () {
+      return {
+        proofId: null
+      }
+    },
     computed: {
       modalProof () {
         return this.$store.state.campaign.modalProof;
@@ -168,7 +173,9 @@
         if(!this.campaign.campaign_data.proof_id || this.startProof){
           data.create_new_proof = true;
         }
-        if(this.campaign.campaign_data.proof_id){
+        // Use new proof id if available.
+        data.proof_id = this.proofId;
+        if (!this.proofId && this.campaign.campaign_data.proof_id) {
           data.proof_id = this.campaign.campaign_data.proof_id;
         }
 
@@ -176,6 +183,7 @@
           this.$store.commit('global/setLoader', false);
           var $container = $('.modal-container').find('.send-proof');
           if (response.status === 'success') {
+            this.proofId = response.data.proof_id;
             // If the campaign can't be completed, hide the Continue button
             if ('can_be_completed' in response.data) {
               if (response.data.can_be_completed) {
