@@ -35,10 +35,23 @@ export default {
     libraryConfig(){
       return this.$store.state.campaign.campaign.library_config;
     },
+    textDirty(){
+      return this.component.data.textDirty;
+    },
   },
   methods: {
     changeContent(e) {
       this.$emit('changeText', e.target.innerHTML);
+    }
+  },
+  watch:{
+    textDirty(){
+      this.$nextTick(() => {
+        this.content = this.component.data.text;
+        this.$nextTick(() => {
+          this.initTinyMCE();
+        });
+      });
     }
   }
 };
@@ -57,5 +70,11 @@ export default {
     button.mce-open{
       display: none;
     }
+  }
+  [data-type="button-element"] .stx-edit-text {
+    min-width: 10px;
+  }
+  .mce-grid td.mce-grid-cell div{
+    line-height:10px;
   }
 </style>

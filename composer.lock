@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49ecaa1f3b1ebe8ad46ceeab41fce3f3",
+    "content-hash": "3c799064d44b44b439726591a2195d7d",
     "packages": [
         {
             "name": "akamai-open/edgegrid-auth",
@@ -119,16 +119,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.67.5",
+            "version": "3.67.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "fa7689ba2865e9e00ac44efefc2c3f2ea8424c63"
+                "reference": "3e594391b8c60552cedcb3036c198d63315afc7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/fa7689ba2865e9e00ac44efefc2c3f2ea8424c63",
-                "reference": "fa7689ba2865e9e00ac44efefc2c3f2ea8424c63",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3e594391b8c60552cedcb3036c198d63315afc7e",
+                "reference": "3e594391b8c60552cedcb3036c198d63315afc7e",
                 "shasum": ""
             },
             "require": {
@@ -195,24 +195,24 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-09-04T21:04:34+00:00"
+            "time": "2018-09-05T23:24:12+00:00"
         },
         {
             "name": "bjeavons/zxcvbn-php",
-            "version": "0.3.0",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bjeavons/zxcvbn-php.git",
-                "reference": "331a88932d1a399c989967d3399a4a40eb182fd5"
+                "reference": "7a7e1130c74c715e84c60c27384f657e9574a933"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bjeavons/zxcvbn-php/zipball/331a88932d1a399c989967d3399a4a40eb182fd5",
-                "reference": "331a88932d1a399c989967d3399a4a40eb182fd5",
+                "url": "https://api.github.com/repos/bjeavons/zxcvbn-php/zipball/7a7e1130c74c715e84c60c27384f657e9574a933",
+                "reference": "7a7e1130c74c715e84c60c27384f657e9574a933",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3 || ^7.0"
+                "php": "^5.6 || ^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "*",
@@ -240,7 +240,7 @@
                 "password",
                 "zxcvbn"
             ],
-            "time": "2017-01-06T15:43:33+00:00"
+            "time": "2018-07-23T05:05:36+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -2074,25 +2074,25 @@
         },
         {
             "name": "olssonm/l5-zxcvbn",
-            "version": "v3.1",
+            "version": "v3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/olssonm/l5-zxcvbn.git",
-                "reference": "2a2473f84c44a440a297aa1e9acfa0d5c57af6b6"
+                "reference": "cb80e8ab6126cf16aabc64655743f508d1742cf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/olssonm/l5-zxcvbn/zipball/2a2473f84c44a440a297aa1e9acfa0d5c57af6b6",
-                "reference": "2a2473f84c44a440a297aa1e9acfa0d5c57af6b6",
+                "url": "https://api.github.com/repos/olssonm/l5-zxcvbn/zipball/cb80e8ab6126cf16aabc64655743f508d1742cf5",
+                "reference": "cb80e8ab6126cf16aabc64655743f508d1742cf5",
                 "shasum": ""
             },
             "require": {
-                "bjeavons/zxcvbn-php": "0.3.0",
-                "illuminate/support": "~5.3|~5.4|~5.5|~5.6",
+                "bjeavons/zxcvbn-php": "0.3.0|0.4.0",
+                "illuminate/support": ">=5.3.0",
                 "php": ">=5.6.0|>=7.0"
             },
             "require-dev": {
-                "orchestra/testbench": "~3.3|~3.4|~3.5|~3.6",
+                "orchestra/testbench": ">=3.3.0",
                 "phpunit/phpunit": "5.7.*|~6.0|~7.0"
             },
             "type": "library",
@@ -2133,7 +2133,7 @@
                 "validation",
                 "zxcvbn"
             ],
-            "time": "2018-02-14T09:12:03+00:00"
+            "time": "2018-09-05T16:42:45+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -2741,17 +2741,17 @@
         },
         {
             "name": "stensul/media-gallery",
-            "version": "2.4.5",
+            "version": "2.2.3",
             "source": {
                 "type": "git",
                 "url": "git@git.stensuldev.net:composer/media-gallery.git",
-                "reference": "9b6ba3e745af680ddae61e76bee5e0dc87142f96"
+                "reference": "632a791a05a0dbfa698f90741bda6743589f3e78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.4.5-d26271.zip",
-                "reference": "9b6ba3e745af680ddae61e76bee5e0dc87142f96",
-                "shasum": "ffd96c399f6d2873a34fdc8f042979ef8256627b"
+                "url": "https://composer.stensuldev.net/dist/stensul/media-gallery/stensul-media-gallery-2.2.3-4f2c70.zip",
+                "reference": "632a791a05a0dbfa698f90741bda6743589f3e78",
+                "shasum": "dbc323d84db8782cb52f8ec01fbe7ff4bfc979ef"
             },
             "require": {
                 "illuminate/support": "5.6.*",
@@ -2779,7 +2779,7 @@
                 }
             ],
             "description": "Media gallery for admin",
-            "time": "2018-08-31T18:02:12+00:00"
+            "time": "2018-05-30T21:40:25+00:00"
         },
         {
             "name": "stensul/php-imageproxy",

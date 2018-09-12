@@ -210,7 +210,7 @@
                                   ></el-input>
                                 </p>
                               </div>
-                            </div>'
+                            </div>
 
                             <div class="row">
                               <!-- Field font-family -->
@@ -758,7 +758,7 @@
     }
 
     .item-remove {
-      floar: right;
+      float: right;
     }
 
     .item-name {
