@@ -1,33 +1,38 @@
 <template>
-<wrapper>
-  <!-- more than 1 column -->
-  <tr v-if="structure.columns.length > 1">
-    <!-- columns stacking -->
-    <td
-      v-if="structure.columnsStacking === 'normal' || isInvertedStacking"
-      width="100%"
-      style="width:100%;"
-      :valign="structure.attribute.valign || 'top'"
-      >
-      <wrapper-comment
-        :start="msoStartingComment"
-        :end="msoEndingComment">
-        <template v-for="(column, columnId) in columnsSort">
-          <column-render
-            :key="'column-' + columnId"
-            :module-id="moduleId"
-            :column="column"
-            :column-id="columnId"
-            :is-inverted="isInvertedStacking">
+  <wrapper>
+    <!-- more than 1 column -->
+    <tr v-if="module.structure.columns.length > 1">
+      <!-- columns stacking -->
+      <td
+        v-if="module.structure.columnsStacking === 'normal' || isInvertedStacking"
+        width="100%"
+        style="width:100%;"
+        :valign="module.structure.attribute.valign || 'top'"
+        >
+        <columns-comment
+          :is-inverted-stacking="isInvertedStacking"
+          :wrapper-width="templateInnerWidth"
+          :width-first-column="columnWidth(0)"
+          :bgcolor="columnBgcolor(0)"
+          >
+          <template v-for="(column, columnId) in columnsSort">
+            <column-render
+              :key="'column-' + columnId"
+              :module-id="moduleId"
+              :column="column"
+              :column-id="columnId"
+              :is-inverted="isInvertedStacking">
               <slot :columnData="{columnId, column}"></slot>
             </column-render>
-            <line-comment
+            <between-column-comment
               v-if="columnsSort.length -1 > columnId"
+              :is-inverted-stacking="isInvertedStacking"
               :key="'comment-' + columnId"
-              :comment="msoBetweenComment(columnId)">
-            </line-comment>
+              :width="columnWidth(columnId + 1)"
+              :bgcolor="columnBgcolor(columnId + 1)">
+            </between-column-comment>
           </template>
-        </wrapper-comment>
+        </columns-comment>
       </td>
        <!-- columns fixed -->
       <td
@@ -55,8 +60,8 @@
 <script>
 import ColumnRender from './ColumnRender.vue';
 import ElementMixin from '../../common/mixins/ElementMixin.js';
-import LineComment from '../../common/comments/LineComment';
-import WrapperComment from '../../common/comments/WrapperComment';
+import BetweenColumnComment from '../../common/comments/BetweenColumnComment';
+import ColumnsComment from '../../common/comments/ColumnsComment';
 import Wrapper from '../../common/Wrapper';
 
 export default {
@@ -65,45 +70,19 @@ export default {
 
   components: {
     ColumnRender,
-    LineComment,
-    WrapperComment,
+    BetweenColumnComment,
+    ColumnsComment,
     Wrapper
   },
-  props: [
-    'isInverted',
-    'structure',
-  ],
   computed: {
     columnsSort() {
       return this.isInvertedStacking
-        ? this.structure.columns.reverse()
-        : this.structure.columns;
+        ? this.module.structure.columns.reverse()
+        : this.module.structure.columns;
     },
     isInvertedStacking() {
-      return this.structure.columnsStacking === 'invertedStacking';
+      return this.module.structure.columnsStacking === 'invertedStacking';
     },
-    msoStartingComment() {
-      return `<!--[if gte mso 9]>
-        <table width="${this.templateInnerWidth}" style="width:${this.widthStyle(this.templateInnerWidth)}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" ${this.isInvertedStacking ? 'dir="rtl"' : ''}>
-          <tr>
-            <td width="${this.columnWidth(0)}" ${this.columnBgcolor(0)} style="width:${this.widthStyle(this.columnWidth(0))}" ${this.isInvertedStacking ? 'dir="ltr"' : ''} valign="top">
-            <![endif]-->`;
-    },
-    msoEndingComment() {
-      return `<!--[if gte mso 9]>
-            </td>
-          </tr>
-        </table>
-      <![endif]-->`;
-    }
   },
-  methods: {
-    msoBetweenComment(columnId) {
-      return `<!--[if gte mso 9]>
-            </td>
-            <td width="${this.columnWidth(columnId + 1)}" ${this.columnBgcolor(columnId+1)} style="width: ${this.widthStyle(this.columnWidth(columnId +1))}" ${this.isInvertedStacking ? 'dir="ltr"' : ''} align="left" valign="top">
-              <![endif]-->`;
-    },
-  }
 };
 </script>

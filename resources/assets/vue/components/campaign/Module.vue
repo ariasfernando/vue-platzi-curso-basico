@@ -39,8 +39,6 @@
       <background-image :element="module.structure" :key='modulebackgroundImage'>
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
           <column-manager
-            :structure="module.structure"
-            :columns="module.structure.columns"
             :module-id="moduleId">
             <template slot-scope="{columnData}">
               <component
