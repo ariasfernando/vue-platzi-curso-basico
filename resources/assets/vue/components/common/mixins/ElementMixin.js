@@ -35,11 +35,6 @@ export default {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
     },
-    columnsSort() {
-      return this.isInvertedStacking
-        ? this.module.structure.columns.reverse()
-        : this.module.structure.columns;
-    },
     isInvertedStacking() {
       return this.module.structure.columnsStacking === 'invertedStacking';
     },

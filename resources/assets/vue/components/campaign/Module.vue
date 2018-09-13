@@ -69,7 +69,7 @@
   import DividerElement from './elements/DividerElement.vue';
   import ElementMixin from '../common/mixins/ElementMixin.js';
   import ImageElement from './elements/ImageElement.vue';
-  import ColumnManager from './partials/ColumnManager.vue';
+  import ColumnManager from '../common/containers/ColumnManager.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import TextElement from './elements/TextElement.vue';
   import validatorMixin from '../../plugins/modules/mixins/validator.js';

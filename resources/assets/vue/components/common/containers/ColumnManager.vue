@@ -1,5 +1,5 @@
 <template>
-  <wrapper>
+  <wrapper class="stx-content-component">
     <!-- more than 1 column -->
     <tr v-if="module.structure.columns.length > 1">
       <!-- columns stacking -->
@@ -15,7 +15,7 @@
           :width-first-column="columnWidth(0)"
           :bgcolor="columnBgcolor(0)"
           >
-          <template v-for="(column, columnId) in columnsSort">
+          <template v-for="(column, columnId) in module.structure.columns">
             <column-render
               :key="'column-' + columnId"
               :module-id="moduleId"
@@ -23,9 +23,10 @@
               :column-id="columnId"
               :is-inverted="isInvertedStacking">
               <slot :columnData="{columnId, column}"></slot>
+              <element-selector v-if="!isCampaign" :left-position="calculeLeftPosition(columnId)" :key="'selector' + columnId" :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
             </column-render>
             <between-column-comment
-              v-if="columnsSort.length -1 > columnId"
+              v-if="module.structure.columns.length -1 > columnId"
               :is-inverted-stacking="isInvertedStacking"
               :key="'comment-' + columnId"
               :width="columnWidth(columnId + 1)"
@@ -49,20 +50,22 @@
         >
         <table align="left" width="100%" cellspacing="0" cellpadding="0" border="0">
           <slot :columnData="{columnId, column}"></slot>
+          <element-selector v-if="!isCampaign" :left-position="calculeLeftPosition(columnId)" :width-column="columnWidth(columnId)" :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
         </table>
       </td>
     </tr>
     <!--  1 column -->
-    <slot v-else :columnData="{columnId, column}" v-for="(column, columnId) in columnsSort" ></slot>
+    <slot v-else :columnData="{columnId, column}" v-for="(column, columnId) in module.structure.columns" ></slot>
   </wrapper>
 </template>
 
 <script>
-import ColumnRender from '../../common/containers/ColumnRender.vue';
-import ElementMixin from '../../common/mixins/ElementMixin.js';
-import BetweenColumnComment from '../../common/comments/BetweenColumnComment';
-import ColumnsComment from '../../common/comments/ColumnsComment';
-import Wrapper from '../../common/Wrapper';
+import ElementSelector from '../ElementSelector.vue';
+import ColumnRender from './ColumnRender.vue';
+import ElementMixin from '../mixins/ElementMixin.js';
+import BetweenColumnComment from '../comments/BetweenColumnComment';
+import ColumnsComment from '../comments/ColumnsComment';
+import Wrapper from '../Wrapper';
 
 export default {
   name: 'ColumnManager',
@@ -70,9 +73,20 @@ export default {
 
   components: {
     ColumnRender,
+    ElementSelector,
     BetweenColumnComment,
     ColumnsComment,
     Wrapper
   },
+  methods: {
+    calculeLeftPosition(col) {
+      let leftPosition = 0;
+      for (let index = 0; index < col; index++) {
+        leftPosition += this.columnWidth(index);
+      }
+      leftPosition += this.columnWidth(col) / 2;
+      return leftPosition;
+    }
+  }
 };
 </script>

@@ -78,7 +78,7 @@
   import BackgroundImage from '../common/BackgroundImage';
   import ButtonElement from './elements/ButtonElement.vue';
   import clone from 'clone';
-  import ColumnManager from './partials/ColumnManager.vue';
+  import ColumnManager from '../common/containers/ColumnManager.vue';
   import defaultElements from '../../resources/elements';
   import DividerElement from './elements/DividerElement.vue';
   import Draggable from 'vuedraggable';
