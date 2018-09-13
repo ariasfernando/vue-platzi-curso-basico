@@ -38,6 +38,7 @@ function campaignStore() {
       modalProofTrack: false,
       modalEnableTemplating: false,
       modalEsp: false,
+      modalLiveClicker: false,
       buildingMode: 'desktop',
       editorToolbar: '',
       dirty: false,
