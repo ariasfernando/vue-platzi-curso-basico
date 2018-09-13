@@ -8,46 +8,59 @@
       align="center"
       style="width:100%; position: relative;"
       >
-      <column-manager @select-component="selectComponent">
-        <template slot-scope="{columnData}">
-          <draggable
-            cellpadding="0"
-            cellspacing="0"
-            border="0"
-            width="100%"
-            v-model="columnData.column.components"
-            :element="'table'"
-            :options="options"
-            :data-col="columnData.columnId"
-            @add="onAdd"
-            :class="!columnData.column.components.length ? 'empty-table' : ''"
-          >
-            <template v-if="columnData.column.components.length">
-              <component
-                v-for="(component, componentId) in columnData.column.components"
-                :key="component.id"
-                @select-component="selectComponent"
-                class="st-component"
-                :is="component.type"
-                :component="component"
-                :module-id="moduleId"
-                :column-id="columnData.columnId"
-                :component-id="componentId">
-              </component>
-            </template>
-            <div v-else style="display:table-row;">
-              <div
-                align="center"
-                class="empty-cell"
-                height="80"
-                :data-col="columnData.columnId"
-              >
-                Drag content here
-              </div>
-            </div>
-          </draggable>
-        </template>
-      </column-manager>
+      <td
+      :background="modulebackgroundImage"
+      :width="module.structure.attribute.width || '100%'"
+      :height="module.structure.attribute.height"
+      :style="[elementBorderPaddingAndHeight(module.structure),{position: 'relative'}]"
+      :valign="module.structure.attribute.valign || 'top'"
+      :bgcolor="module.structure.attribute.bgcolor"
+      :class="{[module.structure.attribute.classes]:module.structure.attribute.classes}">
+        <tr>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+            <column-manager @select-component="selectComponent" :key='module.structure.columnsStacking'>
+              <template slot-scope="{columnData}">
+                <draggable
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  v-model="columnData.column.components"
+                  :element="'table'"
+                  :options="options"
+                  :data-col="columnData.columnId"
+                  @add="onAdd"
+                  :class="!columnData.column.components.length ? 'empty-table' : ''"
+                >
+                  <template v-if="columnData.column.components.length">
+                    <component
+                      v-for="(component, componentId) in columnData.column.components"
+                      :key="component.id"
+                      @select-component="selectComponent"
+                      class="st-component"
+                      :is="component.type"
+                      :component="component"
+                      :module-id="moduleId"
+                      :column-id="columnData.columnId"
+                      :component-id="componentId">
+                    </component>
+                  </template>
+                  <div v-else style="display:table-row;">
+                    <div
+                      align="center"
+                      class="empty-cell"
+                      height="80"
+                      :data-col="columnData.columnId"
+                    >
+                      Drag content here
+                    </div>
+                  </div>
+                </draggable>
+              </template>
+            </column-manager>
+          </table>
+        </tr>
+      </td>
       <element-selector
         :left-position="templateWidth/2"
         :bottom="-90"

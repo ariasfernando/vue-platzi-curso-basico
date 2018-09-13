@@ -1,5 +1,5 @@
 <template>
-  <wrapper>
+  <wrapper class="st-content-component">
     <!-- more than 1 column -->
     <tr v-if="module.structure.columns.length > 1">
       <!-- columns stacking -->
@@ -11,11 +11,10 @@
         >
         <template v-for="(column, columnId) in columnsSort">
           <column-render
-            :key="'column-' + columnId"
+            :key="'column-' + column.id"
             :module-id="moduleId"
             :column="column"
             :column-id="columnId"
-            class="st-content-component"
             :is-inverted="isInvertedStacking">
             <slot :columnData="{columnId, column}"></slot>
             <element-selector :left-position="calculeLeftPosition(columnId)" :key="'selector' + columnId" :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
@@ -45,7 +44,7 @@
     <div
       v-else
       v-for="(column, columnId) in columnsSort"
-      :key="'column-' + columnId">
+      :key="'column-' + column.id">
       <slot :columnData="{columnId, column}"></slot>
     </div>
   </wrapper>
