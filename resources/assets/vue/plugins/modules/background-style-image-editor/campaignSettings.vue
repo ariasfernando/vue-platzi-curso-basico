@@ -8,13 +8,13 @@
         </el-button>
       </template>
     </settings-container>
-    <image-modal 
-    :config="plugin.config" 
-    v-if="showImageEditor" 
-    :libraryImages="libraryImages" 
-    :overlayImages="overlayImages" 
-    :data="image" 
-    @close="close" 
+    <image-modal
+    :config="plugin.config"
+    v-if="showImageEditor"
+    :libraryImages="libraryImages"
+    :overlayImages="overlayImages"
+    :data="image"
+    @close="close"
     @submitImage="submitImage">
     </image-modal>
   </div>
@@ -71,7 +71,7 @@ export default {
           const temp = {};
           temp.img = data.img;
           temp.state = data.state;
-          this.updatePluginData(uploadedImgs, data.images,{
+          this.updatePluginData(uploadedImgs, data.images, {
               ...this.plugin.data,
               ...temp
             }, data.newImage);
@@ -80,6 +80,19 @@ export default {
         });
     },
     updatePluginData(uploadedImgs, images, data, newImage) {
+      images.slice(0, images.length - 1).forEach(image => {
+        const i = images.indexOf(image);
+        const keys = image.key.split('.');
+        const img = uploadedImgs[i];
+        let subData = data.state.preset;
+        keys.forEach(key => {
+          if (keys.indexOf(key) === keys.length - 1) {
+            subData[key] = img;
+          } else {
+            subData = subData[key];
+          }
+        });
+      });
       delete data.images;
       this.$store.commit('campaign/savePlugin', {
         plugin: this.pluginKey,
@@ -89,7 +102,7 @@ export default {
     },
     updateBackgroundImage(value) {
     this.$store.commit('campaign/saveModuleProperty', {
-        moduleId: this.moduleId,  
+        moduleId: this.moduleId,
         link: 'style',
         property: 'backgroundImage',
         value
