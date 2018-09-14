@@ -2,7 +2,7 @@
 /* eslint no-shadow:0 */
 /* eslint no-console:0 */
 
-import Vue from 'vue';
+import Vue from 'vue/dist/vue';
 import {
   filter,
   isEmpty,
@@ -11,9 +11,8 @@ import {
   isArray,
   extend,
   isEqual,
-  each
+  each,
 } from 'lodash';
-
 import _ from 'lodash';
 
 import {
@@ -34,6 +33,7 @@ function campaignStore() {
       currentModuleId: undefined,
       currentCustomModuleId: undefined,
       currentComponent: {},
+      currentCustomComponent: {},
       activeModule: undefined,
       modalCode: false,
       modalComplete: false,
@@ -75,6 +75,9 @@ function campaignStore() {
       },
       currentComponent(state) {
         return state.currentComponent;
+      },
+      currentCustomComponent(state) {
+        return state.currentCustomComponent;
       },
       currentModule(state) {
         return state.currentModuleId;
@@ -155,18 +158,18 @@ function campaignStore() {
         state.dirty = true;
       },
       updateCustomElement(state, payload) {
-        // This is necessary, since the clickaway function is executed.
-        if ( !isUndefined(payload.moduleId) ){ 
+        // DEPRECATED
+        if ( !isUndefined(payload.moduleId) ){
           const update = { ...state.modules[payload.moduleId].data, ...payload.data };
           state.modules[payload.moduleId].data = update;
           state.dirty = true;
         }
       },
-      updateElement(state, payload) {
-        // This is necessary, since the clickaway function is executed.
-        if (!isUndefined(payload.moduleId)) {
-          const update = { ...state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
-          state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data = update;
+      updateCustomElementProperty(state, payload) {
+        if (!isUndefined(payload.moduleId)) { 
+          const dataComponent = state.modules[payload.moduleId].data;
+          const subComponent = payload.subComponent ? dataComponent[payload.subComponent] : dataComponent;
+          Vue.set(subComponent, payload.property, payload.value);
           state.dirty = true;
         } else {
           throw new Error('moduleId is undefined');
@@ -174,6 +177,7 @@ function campaignStore() {
       },
       saveSetting(state, setting) {
         state.editedSettings[setting.name] = setting.value;
+        state.dirty = true;
       },
       saveCampaignData(state, payload) {
         const update = {};
@@ -197,6 +201,12 @@ function campaignStore() {
       },
       unsetCurrentComponent(state) {
         state.currentComponent = {};
+      },
+      setCurrentCustomComponent(state, data) {
+        state.currentCustomComponent = data;
+      },
+      unsetCurrentCustomComponent(state) {
+        state.currentCustomComponent = {};
       },
       setActiveModule(state, moduleId) {
         state.activeModule = moduleId;
@@ -229,12 +239,15 @@ function campaignStore() {
         Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
-      saveComponentAttribute(state, data) {
-        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId].attribute;
-        attributes[data.attribute] = data.attributeValue;
+      saveColumnProperty(state, data) {
+        const columns = state.modules[data.moduleId].structure.columns[data.columnId];
+        const subComponent = data.subComponent ? columns[data.subComponent] : columns;
+        const properties = data.link ? subComponent[data.link] : subComponent;
+        Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
       saveColumnAttribute(state, data) {
+        // DEPRECATE
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
         const newData = {};
         newData[data.attribute] = data.attributeValue;
@@ -290,7 +303,33 @@ function campaignStore() {
           state.modules[data.moduleId].data = {};
         }
 
-        state.modules[data.moduleId].data[data.field] = data.value;
+        if (!(data.field in state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data[data.field] = {};
+        }
+
+        if ("merge" in data && data.merge === true) {
+          const newData = _.extend(clone(state.modules[data.moduleId].data[data.field]), data.value);
+          state.modules[data.moduleId].data[data.field] = newData;
+        } else {
+          state.modules[data.moduleId].data[data.field] = data.value;
+        }
+
+        state.dirty = true;
+      },
+      saveCustomModuleParamsField(state, param) {
+        // Prevent empty arrays returned by php-mongo
+        if (isArray(state.modules[param.moduleId].params)) {
+          Vue.set(state.modules[param.moduleId], 'params', {});
+        }
+        if (!(param.field in state.modules[param.moduleId].params)) {
+          Vue.set(state.modules[param.moduleId].params, param.field, {});
+        }
+        if ("merge" in param && param.merge === true) {
+          const newParams = _.extend(clone(state.modules[param.moduleId].params[param.field]), param.value);
+          Vue.set(state.modules[param.moduleId].params, param.field, newParams);
+        } else {
+          Vue.set(state.modules[param.moduleId].params, param.field, param.value);
+        }
         state.dirty = true;
       },
       setEditorOptions(state, toolbar) {
@@ -319,6 +358,7 @@ function campaignStore() {
         if(_.has(state.modules[moduleId].data, 'errors')) {
           const filtered = state.fieldErrors.filter(err => err.scope.clearErrorsByModuleId !== moduleId);
           state.fieldErrors = filtered;
+          Vue.set(state.modules[moduleId].data, 'errors', []);
         }
       },
       clearErrorsByScope(state, scope) {
@@ -333,8 +373,10 @@ function campaignStore() {
                                                         && _.isEqual(err.scope.columnId, scope.columnId)
                                                         && _.isEqual(err.scope.componentId, scope.componentId)));
         }
-
-        state.modules[scope.moduleId].data.errors = filtered;
+        Vue.set(state.modules[scope.moduleId].data, 'errors', filtered);
+      },
+      setCampaignName(state, campaignName) {
+      	Vue.set(state.campaign.campaign_data, 'campaign_name', campaignName);
       },
       error(err) {
         console.error(err);
@@ -345,18 +387,53 @@ function campaignStore() {
         context.commit('updateCustomElement', payload);
         return Promise.resolve();
       },
+
+      updateText(context, payload) {
+        context.commit('saveComponentProperty', payload);
+        if (payload.sync !== false) {
+          payload.property = 'textDirty';
+          payload.value = Math.floor(100000 + Math.random() * 900000);
+          context.commit('saveComponentProperty', payload);
+        }
+      },
+      updateCustomElementProperty(context, payload) {
+        context.commit('updateCustomElementProperty', payload);
+        return Promise.resolve();
+      },
       addErrors(context, errors) {
         _.each(errors, (error) => {
           // Get module errors
           let moduleErrors = _.cloneDeep(context.state.modules[error.scope.moduleId].data.errors) || [];
+
           let moduleErrorsByField;
           if(error.scope.type === 'custom') {
+            // Remove generic errors (workaround introduced in SV2-638).
+            // This will be removed when a final solution for validations is in place.
+            const indexToRemove = moduleErrors.findIndex(err => (_.isEqual(err.scope.elementName, error.scope.elementName)
+                                                                  && _.isEqual(err.scope.idInstance, error.scope.idInstance)
+                                                                  && _.isUndefined(err.scope.msg)
+                                                                ));
+            if(indexToRemove >= 0) {
+              moduleErrors.splice(indexToRemove, 1);
+            }
+
             moduleErrorsByField = moduleErrors.filter(err => (_.isEqual(err.scope.elementName, error.scope.elementName)
                                                                   && _.isEqual(err.scope.idInstance, error.scope.idInstance)
                                                                   && _.isEqual(err.scope.msg, error.scope.msg)));
           }
           else {
-            moduleErrorsByField = moduleErrors.filter(err => (_.isEqual(err.name, error.name)
+            // Remove generic errors (workaround introduced in SV2-638)
+            // This will be removed when a final solution for validations is in place.
+            const indexToRemove = moduleErrors.findIndex(err => (_.isEqual(err.scope.name, error.scope.name)
+                                                                  && _.isEqual(err.scope.columnId, error.scope.columnId)
+                                                                  && _.isEqual(err.scope.componentId, error.scope.componentId)
+                                                                  && _.isUndefined(err.scope.msg)
+                                                                ));
+            if(indexToRemove >= 0) {
+              moduleErrors.splice(indexToRemove, 1);
+            }
+
+            moduleErrorsByField = moduleErrors.filter(err => (_.isEqual(err.scope.name, error.scope.name)
                                                                   && _.isEqual(err.scope.columnId, error.scope.columnId)
                                                                   && _.isEqual(err.scope.componentId, error.scope.componentId)
                                                                   && _.isEqual(err.scope.msg, error.scope.msg)

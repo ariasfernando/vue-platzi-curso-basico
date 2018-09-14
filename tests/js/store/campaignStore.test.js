@@ -324,40 +324,42 @@ describe('== Library Store ==', () => {
     });
     xit('"cloneModule" ', () => {});
     xit('"updateCustomElement" ', () => {});
-    it('"updateElement" expect to update data of element', (done) => {
+    it('"updateCustomElementProperty" expect to update data of element', (done) => {
       let payload = {
         moduleId: 0,
-        columnId: 0,
-        componentId: 0,
-        data: {
-          text: '<p style="margin: 0px;" data-mce-style="margin: 0px;">Lorem ipsum dolor sit amet, consetetur <strong>sadipscing</strong> elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>',
-        },
+        subComponent: 'textContent',
+        property: 'background',
+        value: '#000',
       };
 
       let newStruct = [
         {
-          structure: {
-            columns: [
-              { 
-                components: [
-                  { 
-                    data: {
-                      text: '',
-                    }, 
-                  },
-                ],
-              },
-            ],
+          _id: '5b3ce34792f8ef00137bb105',
+          type: 'virtual',
+          key: 'text_458798',
+          name: 'text',
+          structure: {},
+          plugins: {},
+          status: 'publish',
+          updated_at: '2018-08-03 16:09:09',
+          created_at: '2018-07-04 11:09:59',
+          isFixed: true,
+          data: {
+            textContent: {
+              background: '#fff',
+            },
           },
+          fixedPosition: 0,
+          mandatory: true,
         },
       ];
 
       store.commit('campaign/updateEmailCanvas', newStruct);
-      store.commit('campaign/updateElement', payload);
+      store.commit('campaign/updateCustomElementProperty', payload);
 
-      let stateDataModule = store.state.campaign.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].data;
+      let stateDataModule = store.state.campaign.modules[payload.moduleId].data.textContent;
 
-      expect(stateDataModule).toEqual(payload.data);
+      expect(stateDataModule).toHaveProperty(payload.property, payload.value);
 
       payload = null;
       newStruct = null;
@@ -365,35 +367,34 @@ describe('== Library Store ==', () => {
 
       done();
     });
-    it('"updateElement" without moduleId, expect return a new error', (done) => {
+    it('"updateCustomElementProperty" without moduleId, expect return a new error', (done) => {
       let payload = {
-        columnId: 0,
-        componentId: 0,
-        data: {
-          text: '<p style="margin: 0px;" data-mce-style="margin: 0px;">Lorem ipsum dolor sit amet, consetetur <strong>sadipscing</strong> elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>',
-        },
+        subComponent: 'text-content',
+        property: 'background',
+        value: '#000'
       };
+      
       let newStruct = [
         {
-          structure: {
-            columns: [
-              { 
-                components: [
-                  { 
-                    data: {
-                      text: '',
-                    }, 
-                  },
-                ],
-              },
-            ],
-          },
+          _id: '5b3ce34792f8ef00137bb105',
+          type: 'virtual',
+          key: 'text_458798',
+          name: 'text',
+          structure: {},
+          plugins: {},
+          status: 'publish',
+          updated_at: '2018-08-03 16:09:09',
+          created_at: '2018-07-04 11:09:59',
+          isFixed: true,
+          data: {},
+          fixedPosition: 0,
+          mandatory: true,
         },
       ];
 
       store.commit('campaign/updateEmailCanvas', newStruct);
 
-      expect(() => store.commit('campaign/updateElement', payload)).toThrow('moduleId is undefined');
+      expect(() => store.commit('campaign/updateCustomElementProperty', payload)).toThrow('moduleId is undefined');
 
       payload = null;
       newStruct = null;

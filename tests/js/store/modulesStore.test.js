@@ -1476,6 +1476,17 @@ describe('== Module Store ==', () => {
                         },
                       },
                     },
+                    'sie-plugin-image-overlay_image': {
+                      config: {
+                        overlay_gallery: {
+                          config: {
+                            set_images: {
+                              options: {},
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                 },
               },

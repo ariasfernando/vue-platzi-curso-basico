@@ -4,7 +4,7 @@
       v-if="column.components.length"
       v-for="(column, columnId) in module.structure.columns"
       :width="column.container.attribute.width"
-      :style="[column.container.style,{'background-color' : column.container.attribute.bgcolor} || '']" 
+      :style="{'background-color' : column.container.attribute.bgcolor}" 
       :data-col="columnId"
       align="left"
       cellpadding="0" 
