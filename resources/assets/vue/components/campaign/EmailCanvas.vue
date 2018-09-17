@@ -425,7 +425,6 @@
       @import '../../../less/base/commons/mobile/mobile_client_styles';
     }
     span, td, table, div {
-      font-family: Arial, serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
