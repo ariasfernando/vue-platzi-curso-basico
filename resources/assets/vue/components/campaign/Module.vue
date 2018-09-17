@@ -36,7 +36,7 @@
       :valign="module.structure.attribute.valign || 'top'"
       :bgcolor="module.structure.attribute.bgcolor"
       :class=" { 'stx-show-error': hasErrors, 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}">
-      <background-image :element="module.structure" :key='modulebackgroundImage'>
+      <background-image :element="module.structure" :key='modulebackgroundImage' :width="templateInnerWidth">
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
           <column-manager :module-id="moduleId">
             <template slot-scope="{columnData}">
@@ -123,9 +123,14 @@
         return this.module.structure.style.backgroundImage ? this.$_app.config.imageUrl + this.module.structure.style.backgroundImage : undefined;
       },
       styleModule(){
-        return this.modulebackgroundImage ?
-          this.elementBorderHorizontalPaddingAndHeight(this.module.structure) :
-          this.elementBorderPaddingAndHeight(this.module.structure);
+        let styleModule = {}
+        if (this.modulebackgroundImage) {
+          styleModule = this.elementBorderHorizontalPaddingAndHeight(this.module.structure)
+          styleModule= [...styleModule, this.elementBackground(this.module.structure)]
+        } else {
+         styleModule = this.elementBorderPaddingAndHeight(this.module.structure);
+        }
+        return styleModule;
       }
     },
     methods: {

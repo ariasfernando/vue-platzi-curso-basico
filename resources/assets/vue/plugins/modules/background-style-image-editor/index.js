@@ -16,6 +16,8 @@ export default {
       type: 'switch',
       config: {
         assignHeight: false,
+        backgroundSize: 'cover',
+        addClassEqualHeight: false,
       },
     },
     ...sie.config,

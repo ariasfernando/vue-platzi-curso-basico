@@ -56,7 +56,11 @@ function Module(data = {}) {
       borderLeftWidth: style.borderLeftWidth || '0px',
       borderLeftStyle: style.borderLeftStyle || 'none',
       borderLeftColor: style.borderLeftColor || '',
+      // Background
       backgroundImage: style.backgroundImage || '',
+      backgroundRepeat: style.backgroundRepeat || '',
+      backgroundAttachment: style.backgroundAttachment || '',
+      backgroundPosition: style.backgroundPosition || '',
     },
 
     columns: data.structure && data.structure.columns ? data.structure.columns : [],
@@ -69,3 +73,4 @@ function Module(data = {}) {
 }
 
 module.exports = Module;
+  

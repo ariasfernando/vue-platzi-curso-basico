@@ -115,6 +115,15 @@ export default {
     isColumnSelect(columnId) {
       return this.currentComponent.columnId === columnId && this.currentComponent.componentId === undefined;
     },
+    elementBackground(element) {
+      const elementBackground = {};
+      _.each(element.style, (value, key) => {
+        if (key.indexOf('background') >= 0) {
+          elementBackground[key] = value;
+        }
+      });
+      return elementBackground;
+    },
     fontStyles(element) {
       return {
         'text-align': element.attribute.align || 'left',
