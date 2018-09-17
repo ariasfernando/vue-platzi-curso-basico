@@ -60,7 +60,7 @@ export default {
         size_minHeight: {
           label: 'Min. Height',
           key: 'minHeight',
-          value: 100,
+          value: 1,
           type: 'number',
           step: 1,
         },
