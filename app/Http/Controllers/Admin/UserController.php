@@ -13,6 +13,7 @@ use Stensul\Http\Controllers\Controller;
 use Stensul\Http\Middleware\AdminAuthenticate;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Stensul\Notifications\WelcomePasswordNotification;
 
 class UserController extends Controller
 {
@@ -238,9 +239,8 @@ class UserController extends Controller
             $user_auth = User::where('email', '=', $request->input('email'))->first();
 
             if (is_null($user_auth['status']) || $user_auth['status'] != "deleted") {
-                $this->passwords->sendResetLink(['email' => $user_auth['email']], function ($message) {
-                    $message->subject($this->getEmailSubject());
-                });
+                $pass_token = $this->passwords->getRepository()->create($user_auth);
+                $user_auth->notify(new WelcomePasswordNotification($pass_token, $user_auth['name']));
 
                 return response()->json([
                     'code' => 0,
