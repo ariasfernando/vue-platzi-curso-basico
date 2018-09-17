@@ -29,7 +29,7 @@ import WrapperComment from './comments/WrapperComment';
 import Wrapper from './Wrapper';
 export default {
   name: 'BackgroundImage',
-  props: ['element'],
+  props: ['element', 'width'],
 
   components: {
     Spacer,
@@ -39,9 +39,9 @@ export default {
   computed: {
     msoStartingComment() {
       return `<!--[if gte mso 9]>
-                    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" strokecolor="none" style="width:640px;height:${this.element.attribute.height}">
-                    <v:fill type="tile" src="${this.element.style.backgroundImage}" ${this.MsoBgcolor} />
-                    <v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+                    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" strokecolor="none" style="width:${this.convertPxToPt(this.width)}; height:${this.convertPxToPt(this.element.attribute.height)};" stroke="false">
+                    <v:fill type="frame" src="${this.element.style.backgroundImage}" ${this.MsoBgcolor} />
+                    <v:textbox inset="0,0,0,0">
                   <![endif]-->`;
     },
     msoEndingComment() {
@@ -68,6 +68,11 @@ export default {
         Boolean(this.$slots["with-background-image"])
       );
     },
+  },
+  methods:{
+    convertPxToPt(value){
+       return Math.ceil(parseInt(value) * 0.75) + 'pt';
+     },
   }
 };
 </script>

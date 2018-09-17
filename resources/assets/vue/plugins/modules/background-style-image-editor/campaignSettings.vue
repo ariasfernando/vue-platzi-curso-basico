@@ -28,7 +28,7 @@ import _ from 'lodash';
 import validatorMixin from '../mixins/validator';
 
 export default {
-  props: ['name', 'plugin', 'pluginKey', 'moduleId'],
+  props: ['name', 'plugin', 'pluginKey', 'moduleId', 'module'],
   mixins: [validatorMixin],
   components: {
     ImageModal,
@@ -64,9 +64,15 @@ export default {
           campaignId: this.campaign.campaign_id
         })
         .then(uploadedImgs => {
-          this.updateBackgroundImage(uploadedImgs[imgs.length - 1]);
-          if (this.plugin.config['background-style-image-editor'].config.assignHeight) {
-            this.updateHeight(data.state.outputSize.height);
+          this.updateProperty('style', 'backgroundImage', uploadedImgs[imgs.length - 1]);
+          if (this.plugin.config['background-style-image-editor'].config.backgroundSize){
+            this.updateProperty('style', 'backgroundSize', this.plugin.config['background-style-image-editor'].config.backgroundSize);
+          }
+          if (this.plugin.config['background-style-image-editor'].config.assignHeight){
+            this.updateProperty('attribute', 'height', data.state.outputSize.height);
+          }
+          if (this.plugin.config['background-style-image-editor'].config.addClassEqualHeight){
+            this.addClassEqualHeight();
           }
           const temp = {};
           temp.img = data.img;
@@ -100,22 +106,23 @@ export default {
         data: data
       });
     },
-    updateBackgroundImage(value) {
+    updateProperty(link, property, value) {
     this.$store.commit('campaign/saveModuleProperty', {
         moduleId: this.moduleId,
-        link: 'style',
-        property: 'backgroundImage',
+        link,
+        property,
         value
       });
     },
-    updateHeight(value) {
-      this.$store.commit('campaign/saveModuleProperty', {
-        moduleId: this.moduleId,
-        subComponent: 'image',
-        link: 'attribute',
-        property: 'height',
-        value
-      });
+    addClassEqualHeight() {
+      let classes = this.module.structure.attribute.classes;
+      let classesArr = classes ? classes.split(' ') : [];
+      const index = classesArr.indexOf('st-equal-height');
+      if (index === -1) {
+        classesArr.push('st-equal-height');
+        classes = classesArr.join(' ');
+        this.updateProperty('attribute', 'classes', classes);
+      }
     },
     showModal() {
       if (Object.keys(this.plugin.data).length > 0) {

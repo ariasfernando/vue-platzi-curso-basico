@@ -8,6 +8,14 @@ export default {
     'component',
     'context',
   ],
+  computed: {
+    templateInnerWidth() {
+      return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.module.structure);
+    },
+    templateWidth() {
+      return this.isCampaign ? this.$store.getters['campaign/campaign'].library_config.templateWidth : 640;
+    },
+  },
   methods: {
     // Get an string of classes
     getAttributeClasses(component) {
@@ -73,6 +81,22 @@ export default {
           });
         }
       }
+    },
+    elementBackground(element) {
+      const elementBackground = {};
+      _.each(element.style, (value, key) => {
+        if (key.indexOf('background') >= 0) {
+          elementBackground[key] = value;
+        }
+      });
+      return elementBackground;
+    },
+    elementBorderAndPaddingHorizontalSpace(element) {
+      const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
+      const paddingRight = _.parseInt(element.style.paddingRight || 0);
+      const borderLeft = _.parseInt(element.style.borderLeftWidth || 0);
+      const borderRight = _.parseInt(element.style.borderRightWidth || 0);
+      return paddingLeft + paddingRight + borderLeft + borderRight;
     },
     fontStyles(element) {
       return {
