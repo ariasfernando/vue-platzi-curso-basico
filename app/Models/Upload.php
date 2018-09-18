@@ -117,6 +117,10 @@ class Upload extends Eloquent
      */
     public static function lastUploadByCampaign($campaign_id)
     {
-        return Upload::whereCampaignId($campaign_id)->orderBy('created_at', 'DESC')->first()->toArray();
+        $last_upload = Upload::where('campaign_id', $campaign_id)->orderBy('created_at', 'DESC')->first();
+        if ($last_upload) {
+           return $last_upload->toArray();
+        }
+        return false;
     }
 }
