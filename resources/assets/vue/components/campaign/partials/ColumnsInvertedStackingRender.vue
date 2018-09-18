@@ -1,6 +1,7 @@
 <template>
     <div class="stx-wrapper">
       <table
+        :data-column-id="columnId"
         class="st-mobile-full-width st-mso-full-width"
         :align="columnId == 1 ? 'right' : 'left'"
         dir="ltr"
@@ -13,11 +14,12 @@
         <tr>
           <td
             width="100%"
-            :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}]"
+            :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}, {'height': column.container.attribute.height + 'px'}]"
             :bgcolor="column.container.attribute.bgcolor"
             :valign="column.container.attribute.valign || 'top'"
             :align="column.container.attribute.align || 'center'"
             :class="column.container.attribute.classes ||''"
+            :height="column.container.attribute.height"
           >
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
               <template>

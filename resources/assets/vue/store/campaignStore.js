@@ -234,11 +234,18 @@ function campaignStore() {
         state.dirty = true;
       },
       saveColumnProperty(state, data) {
-        const columns = state.modules[data.moduleId].structure.columns[data.columnId];
-        const subComponent = data.subComponent ? columns[data.subComponent] : columns;
+        const columns = state.modules[data.moduleId].structure.columns;
+        const column = columns[data.columnId];
+        const columnClone = _.cloneDeep(column);
+        const subComponent = data.subComponent ? column[data.subComponent] : column;
         const properties = data.link ? subComponent[data.link] : subComponent;
         Vue.set(properties, data.property, data.value);
         state.dirty = true;
+        // hack to make the column array reactive
+        // note: for more info check vue documentation #Array-Change-Detection
+        if (!_.isEqual(columnClone, column)) {
+          Vue.set(columns, data.columnId, column);
+        }
       },
       saveColumnAttribute(state, data) {
         // DEPRECATE
