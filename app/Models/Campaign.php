@@ -5,6 +5,8 @@ namespace Stensul\Models;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use zz\Html\HTMLMinify;
+use WyriHaximus\HtmlCompress\Factory as HTMLCompressor;
 
 class Campaign extends Eloquent
 {
@@ -49,10 +51,11 @@ class Campaign extends Eloquent
         'campaign_settings',
         'auto_save',
         'parent_campaign_id',
+        'tracking',
         'internal'
     ];
 
-    protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token'];
+    protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token', 'body_html_minified'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -88,7 +91,8 @@ class Campaign extends Eloquent
         'campaign_settings' => [],
         'auto_save' => null,
         'parent_campaign_id' => null,
-        'proof_id' => null
+        'proof_id' => null,
+        'tracking'
     );
 
     /**
@@ -376,5 +380,19 @@ class Campaign extends Eloquent
         }
 
         return true;
+    }
+
+    /**
+     * Minify html.
+     *
+     * @return html
+     */
+    public function getBodyHtmlMinifiedAttribute()
+    {
+        $parser = HTMLCompressor::construct();
+        return isset($this->attributes['body_html']) ? $parser->compress(HTMLMinify::minify($this->attributes['body_html'], [
+            'optimizationLevel' => HTMLMinify::OPTIMIZATION_ADVANCED,
+            'removeComment' => false,
+        ])) : '';
     }
 }

@@ -24,7 +24,7 @@ class AkamaiAdapter implements CdnInterface
         $files = is_array($files) ? $files : [$files];
         $params['objects'] = [];
         foreach ($files as $file) {
-            $params['objects'][] = rtrim(config('cdn.host'), '/') . $file;
+            $params['objects'][] = rtrim(config('cdn.host'), '/') . '/' . ltrim($file, '/');
         }
 
         if (count($params['objects']) == 0) {

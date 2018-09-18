@@ -4,7 +4,7 @@ import campaignSettings from './campaignSettings.vue';
 export default {
   name: 'style-image-editor',
   title: 'style Image Editor',
-  version: '0.0.9',
+  version: '0.0.11',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
@@ -234,6 +234,21 @@ export default {
           value: '',
           type: 'text',
         },
+        overlay_gallery: {
+          label: 'Media Gallery',
+          key: 'image_gallery',
+          type: 'switch',
+          value: false,
+          config: {
+            set_images: {
+              label: 'Image Set',
+              key: 'images',
+              value: null,
+              type: 'select',
+              options: [],
+            },
+          },
+        },
         overlay_change: {
           label: 'Change Image',
           key: 'changable',
@@ -318,10 +333,16 @@ export default {
           value: false,
           type: 'switch',
         },
+        overlay_follow: {
+          label: 'Stick to cropper',
+          key: 'followCropper',
+          value: false,
+          type: 'switch',
+        },
         overlay_description: {
           label: 'Description',
           key: 'description',
-          value: 'Text',
+          value: 'Icon',
           type: 'text',
         },
       },
