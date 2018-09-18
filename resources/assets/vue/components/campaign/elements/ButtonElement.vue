@@ -99,7 +99,11 @@
         return this.$store.getters["campaign/modules"][this.moduleId];
       },
       tableStyles(){
-        const width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
+        const { behaviour } = this.component;
+        let width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
+        if(behaviour == 'text'){
+          width = '100%';
+        }
         return {
           'width': width,
           'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
