@@ -15,6 +15,10 @@
               v-if="espProviderConfig.title == 'Silverpop'" 
               :esp-provider-config="espProviderConfig"
             ></silverpop-upload>
+            <epsilon-upload
+              v-if="espProviderConfig.title == 'Epsilon'" 
+              :esp-provider-config="espProviderConfig"
+            ></epsilon-upload>
           </slot>
           <slot name="footer">
           </slot>
@@ -29,13 +33,15 @@
   import configService from '../../../services/config';
   import EloquaUpload from './partials/ModalEloquaUpload.vue';
   import SilverpopUpload from './partials/ModalSilverpopUpload.vue';
+  import EpsilonUpload from './partials/ModalEpsilonUpload.vue';
 
 
   export default {
     components: {
       BootstrapVue,
       EloquaUpload,
-      SilverpopUpload
+      SilverpopUpload,
+      EpsilonUpload
     }, 
     data () {
       return {

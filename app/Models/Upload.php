@@ -29,7 +29,8 @@ class Upload extends Eloquent
         'path',
         'folder_id',
         'subject',
-        'preheader'
+        'preheader',
+        'properties'
     ];
 
     protected $defaults = array(
@@ -42,7 +43,8 @@ class Upload extends Eloquent
         'path' => '',
         'folder_id' => null,
         'subject' => '',
-        'preheader' => ''
+        'preheader' => '',
+        'properties' => null
     );
 
     /**
@@ -106,5 +108,15 @@ class Upload extends Eloquent
             }
         }
         return false;
+    }
+
+    /**
+     * Get the last content uploaded if exist
+     * @param  string $campaign_id; the campaiogn id to search
+     * @return array or null
+     */
+    public static function lastUploadByCampaign($campaign_id)
+    {
+        return Upload::whereCampaignId($campaign_id)->orderBy('created_at', 'DESC')->first()->toArray();
     }
 }
