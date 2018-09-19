@@ -39,7 +39,7 @@
         </group-container>
         <template v-if="module.plugins && Object.keys(module.plugins).length !== 0">
             <!-- Module Plugins -->
-            <div v-for="(plugin, moduleKey) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name" :key="plugin.name">
+            <div v-for="(plugin, moduleKey) in module.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
               <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin"></component>
             </div>
             <!-- /Module Plugins -->
@@ -51,9 +51,9 @@
 
 <script>
 import * as elementSettings from "../settings";
-import GroupContainer from "../containers/GroupContainer.vue";
+import GroupContainer from "../../common/containers/GroupContainer.vue";
 import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
-import LabelItemContainer from "../containers/LabelItemContainer.vue";
+import LabelItemContainer from "../../common/containers/LabelItemContainer.vue";
 import settingsDefault from '../settingsDefault';
 
 export default {

@@ -98,14 +98,16 @@
 
           <!--2 COLUMNS FIXED -->
           <td
+            :data-column-id="columnId"
             v-else-if="module.structure.columnsStacking == 'columnsFixed'"
             v-for="(column, columnId) in module.structure.columns"
             :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
             :valign="column.container.attribute.valign || 'top'"
             :class="column.container.attribute.classes"
+            :height="column.container.attribute.height"
             :bgcolor="column.container.attribute.bgcolor"
             :key="column.id"
-            :style="[elementBorderAndPadding(column.container),{'width': widthStyle(column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%')}]"
+            :style="[elementBorderAndPadding(column.container),{'height': column.container.attribute.height + 'px'}, {'width': widthStyle(column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%')}]"
           >
             <columns-fixed-render
               :column="column"
@@ -174,7 +176,11 @@
         ) {
           // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
           // so we need to check a flag to aid the user to open each module and run the validations at least once
-          return this.validateMulticolumnStudioModule();
+        this.registerStudioModuleDefaultValidationErrors(this.moduleId);
+      }
+      else if(this.module.type === 'custom') {
+        this.$store.commit('campaign/clearErrorsByModuleId', this.moduleId);
+        this.registerCustomModuleDefaultValidationErrors(this.moduleId);
         }
     },
     computed: {
@@ -191,14 +197,14 @@
         return `[if gte mso 9]>
           <table width="${this.templateWidth}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
             <tr>
-              <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important">
+              <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important" valign="top">
               <![endif]`;
       },
       msoStartingCommentInverted() {
         return `[if gte mso 9]>
           <table width="${this.columnWidthPadding}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
             <tr>
-              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr">
+              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr" valign="top">
               <![endif]`;
       },
       activeModule() {

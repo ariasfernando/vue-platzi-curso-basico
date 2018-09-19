@@ -1,22 +1,25 @@
 <template>
     <div class="stx-wrapper">
       <table
+        :data-column-id="columnId"
         class="st-mobile-full-width st-mso-full-width"
         :align="columnId == 1 ? 'right' : 'left'"
         dir="ltr"
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/numColumns"
+        :width="calculeWidthColumnPx(columnId)"
+        :style="{width: calculeStyleWidthColumnPx(columnId)}"
       >
         <tr>
           <td
             width="100%"
-            :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}]"
+            :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}, {'height': column.container.attribute.height + 'px'}]"
             :bgcolor="column.container.attribute.bgcolor"
             :valign="column.container.attribute.valign || 'top'"
             :align="column.container.attribute.align || 'center'"
             :class="column.container.attribute.classes ||''"
+            :height="column.container.attribute.height"
           >
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
               <template>
@@ -85,6 +88,9 @@
       templateWidth() {
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
+      templateWidthWithoutPadding(){
+        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
+      },
       numColumns() {
         return this.module.structure.columns.length;
       },
@@ -117,6 +123,16 @@
             componentId:data.componentId,
           });
         }, 50);
+      },
+      calculeWidthColumnPx(columnId){
+        let width = this.module.structure.columns[columnId].container.attribute.width;
+        if(_.endsWith(width, "%")){
+          return this.templateWidthWithoutPadding / 100 * _.parseInt(width);
+        }
+        return width;
+      },
+      calculeStyleWidthColumnPx(columnId){
+        return this.calculeWidthColumnPx(columnId) +'px';
       },
     }
   };

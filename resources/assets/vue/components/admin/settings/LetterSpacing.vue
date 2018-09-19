@@ -123,7 +123,7 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-button.active {
   background-color: #78dcd6;
   padding: 7px 4px;
@@ -133,7 +133,7 @@ export default {
   padding: 7px;
 }
 .custom-col {
-  width: calc(~"100% - 28px");
+  width: calc(100% - 28px);
   float: left;
   display: block;
   border-right: 0;
@@ -147,7 +147,7 @@ export default {
 .el-button:not(.custom-col) {
   width: 28px;
   padding: 4px 0;
-  height: 28px;
+  height: 26px;
   display: block;
   float: left;
 }

@@ -1,15 +1,4 @@
 .section-canvas-email {
-	display: inline-block;
-	vertical-align: top;
-	position: relative;
-	z-index: 998;
-	text-align: center;
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 100%;
-    width: calc(~"100% - 520px");
-    min-width: 680px;
-
 	.section-canvas-title {
 		h2 {
 			font-size: 16px;
@@ -103,13 +92,6 @@
 	        transition: left 0.15s ease-out;
 	    }
 	}
-	.section-canvas-container {
-		.box-sizing(border-box);
-		min-width: 650px;
-		background-color: #F4F4F4;
-		padding-top: 40px;
-		padding-bottom: 80px;
-	}
 
 	.st-validation-error {
 		background-color: @brand-danger;
@@ -125,6 +107,11 @@
 		-o-transition: width 300ms ease-in-out, height 300ms ease-in-out;
 		transition: width 300ms ease-in-out, height 300ms ease-in-out;
 	}
+
+	.stx-email-canvas table tr td {
+		box-sizing: content-box;
+	}
+
 	// Action buttons tooltip
 	.stx-email-canvas > thead > tr > td,
 	.stx-email-canvas > tfoot > tr > td{
@@ -325,6 +312,7 @@
 		display: block;
 		position: absolute;
 		border: 0px solid rgba(105, 218, 200, 0.4);
+		pointer-events: none;
 		.box-sizing(content-box);
 	}
 	.line-separator {

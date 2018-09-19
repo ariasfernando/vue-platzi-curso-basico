@@ -60,7 +60,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 input.input {
   margin-top: 8px;
   width: 100%;
