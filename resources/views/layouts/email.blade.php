@@ -7,7 +7,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 	 * the following hack prevents that tools like
 	 * NEWRELICK or alike inject a code that will mess with
 	 * the markup when &lt;head&gt; is found.
-	 * NO NOT CHANGE IT. See issue ST-3322
+	 * DO NOT CHANGE IT. See issue ST-3322
 	 */
 	echo "<he"; ?><?php echo "ad>"; ?>
 	
@@ -40,7 +40,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 	 * the following hack prevents that tools like
 	 * NEWRELICK or alike inject a code that will mess with
 	 * the markup when &lt;head&gt; is found.
-	 * NO NOT CHANGE IT. See issue ST-3322
+	 * DO NOT CHANGE IT. See issue ST-3322
 	 */
 	 echo "</he"; ?><?php echo "ad>"; ?>
 
