@@ -1,11 +1,16 @@
 <template>
-    <div class="column-bar-container">
+  <div class="column-bar-container">
+    <scroll-bar-container>
       <slot></slot>
-    </div>
+    </scroll-bar-container>
+  </div>
 </template>
 <script>
+import ScrollBarContainer from './ScrollBarContainer.vue';
+
 export default {
   name: "ColumnBarContainer",
+  components: { ScrollBarContainer },
   props: ["side"],
 };
 </script>
@@ -20,15 +25,12 @@ export default {
     }
 }
 .column-bar-container /deep/ {
-    height: calc(100vh - 86px);
-    overflow: auto;
-    overflow: overlay;
+    height: calc(100vh - 90px);
     width: 270px;
     display: block;
     float: left;
     padding: 0px;
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-    padding-bottom: 25px;
     background: #fff;
 
     .btn.btn-secondary.btn-block {

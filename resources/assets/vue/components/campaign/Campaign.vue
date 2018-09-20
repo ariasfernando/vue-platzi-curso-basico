@@ -5,18 +5,20 @@
     <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
       <column-bar-container side="left" :style="locked ? 'overflow-y: hidden;' : undefined">
-        <div>
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
             <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
             <div class="lock-warning-container" v-if="locked">Unfix the email to add modules</div>
           </div>
-        </div>
       </column-bar-container>
 
       <!-- container email -->
-      <section class="section-canvas-email module-container">
-        <email-canvas v-if="campaignReady"></email-canvas>
+      <section class="section-canvas-email module-container mCustomScrollbar" data-mcs-theme="minimal-dark">
+        <div class="module-container-inner">
+          <scroll-bar-container>
+            <email-canvas v-if="campaignReady"></email-canvas>
+          </scroll-bar-container>
+        </div>
       </section>
 
       <column-bar-container side="right">
@@ -56,6 +58,7 @@
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
   import ModuleSettings from './ModuleSettings.vue'
+  import ScrollBarContainer from '../common/containers/ScrollBarContainer.vue';
   import Spinner from '../common/Spinner.vue'
   import VueSticky from 'vue-sticky'
 
@@ -75,6 +78,7 @@
       ModalPreview,
       ModalProof,
       ModuleSettings,
+      ScrollBarContainer,
       Spinner,
       ColumnBarContainer
     },
@@ -156,7 +160,7 @@
       },
       loadConfig() {
         this.$store.dispatch("config/getConfig", 'campaign').then(response => {
-          this.campaignConfigReady = true;        
+          this.campaignConfigReady = true;
         }, error => {
           this.$root.$toast(
             'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
@@ -208,7 +212,7 @@
 
   @brand-primary: lighten(@stensul-purple, 35%);
   @brand-secondary: @stensul-purple-light;
-  
+
   .el-input.is-active .el-input__inner,
   .el-select .el-input__inner:focus,
   .el-select .el-input.is-focus .el-input__inner,
@@ -249,15 +253,19 @@
   }
 
   .module-container {
-    padding: 40px 20px 80px 20px;
+    padding: 0px 20px;
     background: #f0f0f0;
     display: block;
     float: left;
-    height: calc(~"100vh - 53px");
+    height: calc(~"100vh - 90px");
     width: calc(~"100% - 540px");
     min-width: 640px;
-    overflow-x: hidden;
-    overflow-y: visible;
+
+    &-inner {
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+
     table{
       border-collapse: initial;
     }
@@ -373,6 +381,15 @@
 
   .mce-edit-focus{
     outline: 1px dotted #333!important;
+  }
+
+  .section-canvas-email{
+    .mCSB_outside {
+      overflow: unset;
+      .mCSB_container {
+        overflow: unset;
+      }
+    }
   }
 </style>
 
