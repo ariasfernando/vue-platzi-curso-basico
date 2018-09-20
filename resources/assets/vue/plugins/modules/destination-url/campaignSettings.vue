@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <settings-container label="Destination Url" customClass="destination-url" v-if="component" key="destination-url">
+  <div v-show="(elementKey === currentElementKey)">
+    <settings-container label="Destination Url" customClass="destination-url" key="destination-url">
       <template slot="setting-bottom">
         <p v-if="validationRules">
           <el-input
@@ -44,52 +44,20 @@
 
 <script>
   import _ from 'lodash';
-  import validatorMixin from '../mixins/validator';
+  import validatorMixin from '../mixins/validatorMixin';
   import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
   export default {
-    props: ['name', 'plugin', 'pluginKey'],
+    props: ['name', 'plugin', 'pluginKey', 'element-location', 'element', 'current-element-Key', 'element-key', 'module'],
     mixins: [validatorMixin],
     components: { SettingsContainer },
-    mounted() {
-      if (this.validationRules) {
-        this.validate();
-      }
-    },
-    watch: {
-      currentComponent: {
-        handler: function(currentComponent) {
-          if (this.validationRules) {
-            this.validate();
-          }
-        },
-        deep: true
-      }
-    },
     computed: {
-      currentComponent() {
-        return this.$store.getters["campaign/currentComponent"];
-      },
-      module() {
-        return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
-      },
-      component() {
-        let component = {};
-        if (Object.keys(this.currentComponent).length !== 0) {
-          const moduleId = this.currentComponent.moduleId;
-          const columnId = this.currentComponent.columnId;
-          const componentId = this.currentComponent.componentId;
-
-          component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
-        }
-        return component;
-      },
       target() {
-        return this.component[this.plugin.subComponent].attribute ? this.component[this.plugin.subComponent].attribute.target : '_blank';
+        return this.element[this.plugin.subComponent].attribute ? this.element[this.plugin.subComponent].attribute.target : '_blank';
       },
       href: {
         get() {
-          return this.component[this.plugin.subComponent].attribute.href;
+          return this.element[this.plugin.subComponent].attribute.href;
         },
         set(value) {
           this.saveComponentProperty('href', value);
@@ -121,9 +89,7 @@
       },
       saveComponentProperty(property, value) {
         const payload = {
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
+          ...this.elementLocation,
           subComponent: this.plugin.subComponent,
           link:'attribute',
           property,
