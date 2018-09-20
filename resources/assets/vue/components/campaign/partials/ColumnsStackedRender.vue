@@ -1,6 +1,7 @@
 <template>
     <div class="stx-wrapper">
       <table
+        :data-column-id="columnId"
         class="st-mobile-full-width st-mso-full-width"
         align="left"
         cellpadding="0"
@@ -13,6 +14,7 @@
           <td
             width="100%"
             style="width:100%;"
+            :height="column.container.attribute.height"
             :style="styles(columnId)"
             :bgcolor="column.container.attribute.bgcolor"
             :valign="column.container.attribute.valign|| 'top'"
@@ -115,7 +117,8 @@
           return {
             [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
           };
-        }); 
+        });
+        styles.push({'height': this.module.structure.columns[columnId].container.attribute.height + 'px'})
         return styles;
       },
       msoBetweenComment(columnId) {

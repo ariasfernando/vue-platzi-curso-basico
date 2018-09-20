@@ -11,8 +11,8 @@
             style="vertical-align:top;"
             class="stx-draggable-wrapper st-email-wrapper"
             :class="{ 'campaign-validated': campaignValidated }"
+            @mousedown.stop="handleActive"
             :bgcolor="templateBackgroundColor || defaultTemplateBackgroundColor"
-            @click.stop="handleActive"
             @mouseover="onMouseOver"
             @mouseleave="onMouseLeave">
               <draggable
@@ -379,7 +379,6 @@
     }
 
   }
-
   .applelinks{
     color:#6b6b6b !important;
     text-decoration: none !important;
@@ -395,9 +394,9 @@
   }
 
   p,ul,ol{
-      margin: 0;
-      padding: 0;
-    }
+    margin: 0;
+    padding: 0;
+  }
 
   .stx-edit-text{
 
@@ -425,7 +424,6 @@
       @import '../../../less/base/commons/mobile/mobile_client_styles';
     }
     span, td, table, div {
-      font-family: Arial, serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }

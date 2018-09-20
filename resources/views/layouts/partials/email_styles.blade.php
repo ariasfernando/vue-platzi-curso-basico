@@ -13,7 +13,6 @@
 <style type="text/css">
 	/* COMMON STYLES */
     span, td, table, div {
-      font-family: Arial, serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
