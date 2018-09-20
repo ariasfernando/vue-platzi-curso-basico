@@ -16,7 +16,10 @@
             ?>
         @show
         
-        {{-- Mobile Client Styles --}}
+        .st-hide-hack { display: none !important; }
+    }
+
+    {{-- Mobile Client Styles --}}
         @section('mobile_client_styles')
              <?php
                 try
@@ -28,7 +31,5 @@
                     Activity::log("The file doesn't exist: " . $e->getMessage());
                 }
             ?>
-        @show
-        .st-hide-hack { display: none !important; }
-    }
+    @show
 @show
