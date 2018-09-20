@@ -17,6 +17,9 @@ export default {
     'compact-picker': Compact
   },
   computed: {
+    libraryConfig(){
+      return this.$store.state.campaign.campaign.library_config;
+    },
     currentModule() {
       return this.$store.getters["campaign/currentModule"];
     },
