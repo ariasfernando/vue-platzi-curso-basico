@@ -27,7 +27,8 @@
             <img
               :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
                         'st-resize' : mobileStretch,
-                        'st-mobile-width-constraint' : !mobileStretch }"
+                        'st-mobile-width-constraint' : !mobileStretch,
+                        'stx-max-width-full' : true }"
               style="border: 0; display: block;"
               border="0"
               :valign="component.image.attribute.valign || 'top'"
