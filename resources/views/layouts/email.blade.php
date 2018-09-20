@@ -2,7 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 xmlns:v="urn:schemas-microsoft-com:vml"
 xmlns:o="urn:schemas-microsoft-com:office:office">
-	<?php echo "<he"; ?><?php echo "ad>"; ?>
+	<?php
+	/**
+	 * the following hack prevents that tools like
+	 * NEWRELICK or alike inject a code that will mess with
+	 * the markup when &lt;head&gt; is found.
+	 * NO NOT CHANGE IT. See issue ST-3322
+	 */
+	echo "<he"; ?><?php echo "ad>"; ?>
 	
 		<!--if gte mso 9><xml>
 			<o:OfficeDocumentSettings>
@@ -28,7 +35,14 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 
 		@include('layouts.partials.email_styles')
 
-	<?php echo "</he"; ?><?php echo "ad>"; ?>
+	<?php
+	/**
+	 * the following hack prevents that tools like
+	 * NEWRELICK or alike inject a code that will mess with
+	 * the markup when &lt;head&gt; is found.
+	 * NO NOT CHANGE IT. See issue ST-3322
+	 */
+	 echo "</he"; ?><?php echo "ad>"; ?>
 
 	<body class="st-email-body">
 		@if (isset($params['campaign_data']['campaign_fonts']))
