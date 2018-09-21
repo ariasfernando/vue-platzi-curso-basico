@@ -204,7 +204,7 @@ export default {
 
 #edit-container {
   padding: 0px;
-  height: calc(~"100vh - 53px");
+  height: calc(~"100vh - 90px");
   overflow: hidden;
   min-width: 1200px;
 }
@@ -214,8 +214,6 @@ export default {
 }
 
 .module {
-  margin-top: -15px;
-
   .module-wrapper {
     margin: 0 auto;
 
@@ -292,7 +290,7 @@ export default {
     background: #f0f0f0;
     display: block;
     float: left;
-    height: calc(~"100vh - 53px");
+    height: calc(~"100vh - 90px");
     width: calc(~"100% - 540px");
     min-width: 640px;
     overflow-x: hidden;
