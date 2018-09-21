@@ -12,8 +12,8 @@
           <template v-for="(column, columnId) in module.structure.columns">
             <template v-for="(component, componentId) in column.components">
               <component
-                v-for="(plugin, key) in component.plugins"
-                v-if="isEnableOrRunBackground(plugin, getElementKey(module ,component))"
+                v-for="(plugin, pluginKey) in component.plugins"
+                v-if="isEnableOrRunBackground(plugin, pluginKey, getElementKey(module ,component))"
                 :is="'campaign-' + plugin.name"
                 :class="'plugin-' + plugin.name"
                 :element-key="getElementKey(module ,component)"
@@ -22,7 +22,7 @@
                 :module="module"
                 :current-element-key="currentElementKey"
                 :name="plugin.name"
-                :plugin-key="key"
+                :plugin-key="pluginKey"
                 :plugin="plugin"
                 :key="`${getElementKey(module ,component)}-plugin-${plugin.name}`"
               ></component>
@@ -74,8 +74,8 @@ import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
       showCurrentSettings() {
         let show = false
         if (this.currentElement) {
-          _.each(this.currentElement.plugins, (plugin) => {
-            if (plugin.enabled && plugin.render !== false && plugin.hasCampaignSettings) {
+          _.each(this.currentElement.plugins, (plugin, pluginKey) => {
+            if (plugin.enabled && plugin.render !== false && this.$_app.modulePlugins[pluginKey].hasCampaignSettings) {
               show = true;
             }
           });
@@ -87,8 +87,9 @@ import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
       toCamel(str) {
         return _.startCase(str);
       },
-      isEnableOrRunBackground(plugin, elementKey) {
-        return plugin.enabled && plugin.hasCampaignSettings && ( this.currentElementKey === elementKey || plugin.runBackground)
+      isEnableOrRunBackground(plugin, pluginKey, elementKey) {
+        const hasCampaignSettings = this.$_app.modulePlugins[pluginKey].hasCampaignSettings
+        return plugin.enabled && hasCampaignSettings && ( this.currentElementKey === elementKey || plugin.runBackground)
       },
       getElementKey(module, element) {
         return `${module.idInstance}-${element.id}`;
