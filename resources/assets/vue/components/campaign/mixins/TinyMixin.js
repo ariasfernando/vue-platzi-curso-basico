@@ -338,6 +338,14 @@ export default {
                   .append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-bold"></i>');
               });
             }
+            // set toolbar width
+            if ($toolbox.length) {
+              setTimeout(() => {
+                const toolboxWidth = $toolbox.find('.mce-btn-group').width();
+                $toolbox.find('.mce-container-body').width(toolboxWidth);
+                $toolbox.find('.mce-panel').width(toolboxWidth);
+              });
+            }
           });
 
           editor
