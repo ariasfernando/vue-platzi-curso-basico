@@ -1,8 +1,8 @@
 import Q from 'q';
 import _ from 'lodash';
+import Vue from 'vue';
 import request from '../utils/request';
 import endpoints from '../resources/endpoints';
-import Vue from 'vue';
 
 export default {
   uploadImages(data) {
@@ -14,11 +14,10 @@ export default {
 
     _.each(data.images, (image) => {
       if (image.indexOf(campaignUrl) !== -1) {
-        image = image.replace(campaignUrl, "");
+        image = image.replace(campaignUrl, '');
       }
 
       const params = {
-        path: 'image.uploadImage',
         endpoint,
         json: {
           campaign_id: data.campaignId,
@@ -51,7 +50,6 @@ export default {
 
     _.each(data.images, (image) => {
       const params = {
-        path: 'module.uploadImage',
         endpoint,
         json: {
           data_image: image,
@@ -80,7 +78,6 @@ export default {
     const endpoint = endpoints.image.getMedia;
 
     const params = {
-      path: 'image.getMedia',
       endpoint,
       search: { 
         library,
@@ -101,16 +98,15 @@ export default {
     const endpoint = endpoints.image.getLibraries;
   
     const params = {
-      path: 'image.getLibraries',
       endpoint,
     };
   
-    request[endpoint.method](params).then(response => {
+    request[endpoint.method](params).then((response) => {
       deferred.resolve(response.body);
-    }).catch(error => {
+    }).catch((error) => {
       deferred.reject(error);
     });
   
     return deferred.promise;
-  }
+  },
 };
