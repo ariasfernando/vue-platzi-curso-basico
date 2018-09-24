@@ -80,6 +80,7 @@
           subject: this.subject
         }
         this.$store.commit("global/setLoader", true);
+        this.uploadedSuccessfully = false;
 
         apiService.uploadEmail(data).then((response) => {
           this.uploadedSuccessfully = true;
@@ -89,7 +90,7 @@
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
             'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-            {className: 'et-error'}
+            {parent: '.modal-epsilon-upload',className: 'et-error'}
           )}
         ); 
       },
