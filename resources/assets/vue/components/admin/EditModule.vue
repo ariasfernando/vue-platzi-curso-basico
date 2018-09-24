@@ -5,24 +5,24 @@
     <div class="row">
       <section v-if="ready" class="col-xs-12 section-container" id="edit-container">
         <column-bar-container side="left">
-              <elements-settings v-if="ready"></elements-settings>
+          <elements-settings v-if="ready"></elements-settings>
         </column-bar-container>
         <!-- START: Module Container -->
         <div class="col-xs-8 module-container" @mouseup="clickModuleContainer">
-          <div v-if="showRaw" class="module-wrapper">
-            <textarea v-html="module" @change="updateRawModule" rows="30" style="width: 100%"></textarea>
-          </div>
-          <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
-            <module></module>
-          </div>
+          <scrollbar-container>
+            <div v-if="showRaw" class="module-wrapper">
+              <textarea v-html="module" @change="updateRawModule" rows="30" style="width: 100%"></textarea>
+            </div>
+            <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
+              <module></module>
+            </div>
+          </scrollbar-container>
         </div>
         <!-- END: Module Container -->
         <column-bar-container side="right">
-
-              <general-settings v-if="showGeneralSettings"></general-settings>
-              <column-settings v-if="showColumnSettings" :currentComponent="currentComponent"></column-settings>
-              <component-settings v-if="showElementSettings" :currentComponent="currentComponent"></component-settings>
-              
+          <general-settings v-if="showGeneralSettings"></general-settings>
+          <column-settings v-if="showColumnSettings" :currentComponent="currentComponent"></column-settings>
+          <component-settings v-if="showElementSettings" :currentComponent="currentComponent"></component-settings>
         </column-bar-container>
       </section>
     </div>
@@ -40,6 +40,7 @@ import GeneralSettings from "./partials/GeneralSettings.vue";
 import Module from "./Module.vue";
 import ModuleHeader from "./partials/ModuleHeader.vue";
 import moduleService from "../../services/module";
+import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
 import Spinner from "../common/Spinner.vue";
 
 export default {
@@ -52,6 +53,7 @@ export default {
     GeneralSettings,
     Module,
     ModuleHeader,
+    ScrollbarContainer,
     Spinner
   },
   computed: {
@@ -204,7 +206,7 @@ export default {
 
 #edit-container {
   padding: 0px;
-  height: calc(~"100vh - 90px");
+  height: calc(~"100vh - 53px");
   overflow: hidden;
   min-width: 1200px;
 }
@@ -214,6 +216,8 @@ export default {
 }
 
 .module {
+  margin-top: -15px;
+
   .module-wrapper {
     margin: 0 auto;
 
@@ -286,11 +290,11 @@ export default {
     table-layout: fixed;
   }
   .module-container {
-    padding: 20px;
+    padding: 0px;
     background: #f0f0f0;
     display: block;
     float: left;
-    height: calc(~"100vh - 90px");
+    height: calc(~"100vh - 53px");
     width: calc(~"100% - 540px");
     min-width: 640px;
     overflow-x: hidden;
@@ -344,5 +348,12 @@ p,ul,ol{
   .mce-content-body{
     line-height: inherit;
   }
+}
+
+#studio .column-bar-container {
+  height: calc(100vh - 53px);
+}
+#studio .module-container .scrollbar-container-inner {
+  padding: 20px;
 }
 </style>

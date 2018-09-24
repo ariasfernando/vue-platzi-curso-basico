@@ -1,16 +1,16 @@
 <template>
   <div class="column-bar-container">
-    <scroll-bar-container>
+    <scrollbar-container>
       <slot></slot>
-    </scroll-bar-container>
+    </scrollbar-container>
   </div>
 </template>
 <script>
-import ScrollBarContainer from './ScrollBarContainer.vue';
+import ScrollbarContainer from './ScrollbarContainer.vue';
 
 export default {
   name: "ColumnBarContainer",
-  components: { ScrollBarContainer },
+  components: { ScrollbarContainer },
   props: ["side"],
 };
 </script>

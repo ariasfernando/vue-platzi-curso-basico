@@ -5,28 +5,32 @@
     <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
       <column-bar-container side="left" :style="locked ? 'overflow-y: hidden;' : undefined">
+        <scrollbar-container>
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
             <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
             <div class="lock-warning-container" v-if="locked">Unfix the email to add modules</div>
           </div>
+        </scrollbar-container>
       </column-bar-container>
 
       <!-- container email -->
-      <section class="section-canvas-email module-container mCustomScrollbar" data-mcs-theme="minimal-dark">
-        <div class="module-container-inner">
-          <scroll-bar-container>
+      <section class="section-canvas-email module-container">
+        <scrollbar-container>
+          <div class="module-container-inner">
             <email-canvas v-if="campaignReady"></email-canvas>
-          </scroll-bar-container>
-        </div>
+          </div>
+        </scrollbar-container>
       </section>
 
       <column-bar-container side="right">
-        <div>
-          <module-settings v-if="showModuleSettings"></module-settings>
-          <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
-          <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
-        </div>
+        <scrollbar-container>
+          <div>
+            <module-settings v-if="showModuleSettings"></module-settings>
+            <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
+            <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
+          </div>
+        </scrollbar-container>
       </column-bar-container>
     </div>
 
@@ -58,7 +62,7 @@
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
   import ModuleSettings from './ModuleSettings.vue'
-  import ScrollBarContainer from '../common/containers/ScrollBarContainer.vue';
+  import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
   import Spinner from '../common/Spinner.vue'
   import VueSticky from 'vue-sticky'
 
@@ -78,7 +82,7 @@
       ModalPreview,
       ModalProof,
       ModuleSettings,
-      ScrollBarContainer,
+      ScrollbarContainer,
       Spinner,
       ColumnBarContainer
     },
@@ -253,7 +257,6 @@
   }
 
   .module-container {
-    padding: 0px 20px;
     background: #f0f0f0;
     display: block;
     float: left;
@@ -262,8 +265,7 @@
     min-width: 640px;
 
     &-inner {
-      padding-top: 40px;
-      padding-bottom: 40px;
+      padding: 40px 20px;
     }
 
     table{
