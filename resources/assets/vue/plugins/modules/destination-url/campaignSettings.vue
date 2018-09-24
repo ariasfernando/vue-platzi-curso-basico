@@ -62,11 +62,6 @@
         set(value) {
           this.saveComponentProperty('href', value);
 
-          this.$nextTick(() => {
-          if (this.validationRules) {
-            this.validate();
-          }
-          });
         },
       },
       validationRules() {
@@ -98,7 +93,15 @@
 
         this.$store.commit('campaign/saveComponentProperty', payload);
       },
-      
+      watch: {
+        href(value) {
+          this.$nextTick(() => {
+            if (this.validationRules) {
+              this.validate();
+            }
+          });
+        }
+      }
     },
   }
 </script>
