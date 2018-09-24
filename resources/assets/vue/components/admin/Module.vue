@@ -8,15 +8,16 @@
       align="center"
       style="width:100%; position: relative;"
       >
-      <td
-      :background="modulebackgroundImage"
-      :width="module.structure.attribute.width || '100%'"
-      :height="module.structure.attribute.height"
-      :style="[elementBorderPaddingAndHeight(module.structure),{position: 'relative'}]"
-      :valign="module.structure.attribute.valign || 'top'"
-      :bgcolor="module.structure.attribute.bgcolor"
-      :class="{[module.structure.attribute.classes]:module.structure.attribute.classes}">
-        <tr>
+      <tr>
+        <td
+          :background="modulebackgroundImage"
+          :width="module.structure.attribute.width || '100%'"
+          :height="module.structure.attribute.height"
+          :style="[elementBorderPaddingAndHeight(module.structure),{position: 'relative'}]"
+          :valign="module.structure.attribute.valign || 'top'"
+          :bgcolor="module.structure.attribute.bgcolor"
+          class="st-content-component"
+          :class="{[module.structure.attribute.classes]:module.structure.attribute.classes}">
           <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
             <column-manager @select-component="selectComponent" :key='module.structure.columnsStacking'>
               <template slot-scope="{columnData}">
@@ -26,7 +27,7 @@
                   border="0"
                   width="100%"
                   v-model="columnData.column.components"
-                  :element="'table'"
+                  element="div"
                   :options="options"
                   :data-col="columnData.columnId"
                   @add="onAdd"
@@ -48,7 +49,7 @@
                   <div v-else style="display:table-row;">
                     <div
                       align="center"
-                      class="empty-cell"
+                      class="empty-cell empty-col"
                       height="80"
                       :data-col="columnData.columnId"
                     >
@@ -59,8 +60,8 @@
               </template>
             </column-manager>
           </table>
-        </tr>
-      </td>
+        </td>
+      </tr>
       <element-selector
         :left-position="templateWidth/2"
         :bottom="-90"

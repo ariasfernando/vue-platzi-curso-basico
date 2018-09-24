@@ -1,5 +1,5 @@
 <template>
-  <wrapper class="stx-content-component">
+  <wrapper>
     <!-- more than 1 column -->
     <tr v-if="module.structure.columns.length > 1">
       <!-- columns stacking -->
