@@ -10,6 +10,7 @@
         :is="'campaign-' + plugin.name"
         :name="pluginKey"
         :plugin="plugin"
+        :module="module"
         :module-id="moduleKey">
       </component>
     </template>
