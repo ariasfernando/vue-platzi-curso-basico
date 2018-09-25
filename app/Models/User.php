@@ -172,11 +172,7 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
     */
     public function sendPasswordResetNotification($token)
     {
-        if ($this->unconfirmed) {
-            $this->notify(new WelcomePasswordNotification($token, $this->name));
-        } else {
-            $this->notify(new ResetPasswordNotification($token, $this->name));
-        }
+        $this->notify(new ResetPasswordNotification($token, $this->name));
     }
 
     /**

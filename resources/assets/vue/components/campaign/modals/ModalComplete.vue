@@ -13,7 +13,11 @@
             <slot name="body">
               <b-tabs>
                 <b-tab title="HTML" @click="changeTypeTextArea('normal_html')" >
-                  <textarea ref="normal_html" v-html="html" readonly></textarea>
+                  <div class="html_minify_toggle pull-right">
+                    <label for="htmlMinify">Minify Code</label>
+                    <toggle-button :value="this.minified.normal_html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange('normal_html')"></toggle-button>
+                  </div>
+                  <textarea ref="normal_html" v-html="this.minified.normal_html.output" readonly></textarea>
                 </b-tab>
                 <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">
                   <textarea ref="plain_text" v-html="plainText" readonly></textarea>
@@ -66,13 +70,26 @@
       },
       viewInBrowser () {
         return this.$_app.config.baseUrl + '/campaign/public-path/' + this.campaign.campaign_id;
-      },
+      }
     },
     data () {
       return {
         plainText: '',
         textareaType: 'normal_html',
-        html: '',
+        minified: {
+          normal_html: {
+            toggle: false,
+            output: '',
+            initial_html: '',
+            minified_html: ''
+          },
+          gamma_html: {
+            toggle: false,
+            output: '',
+            initial_html: '',
+            minified_html: ''
+          }
+        }
       }
     },
     watch: {
@@ -86,7 +103,9 @@
       },
       campaign: {
         handler: function(value) {
-          this.html = value.campaign_data.body_html;
+          this.minified.normal_html.initial_html = value.campaign_data.body_html;
+          this.minified.normal_html.minified_html = this.$options.filters.charConvert(value.campaign_data.body_html_minified);
+          this.minified.normal_html.output = this.minified.normal_html.initial_html;
           this.plainText = value.campaign_data.plain_text;
         },
         deep: true
@@ -116,12 +135,23 @@
         this.close();
         this.$store.commit("campaign/toggleModal", 'modalEsp');
       },
+      htmlMinifyChange(key) {
+        this.minified[key].toggle = !this.minified[key].toggle;
+        this.minified[key].output = this.minified[key].initial_html;
+        if(this.minified[key].toggle){
+          this.minified[key].output = this.minified[key].minified_html;
+        }
+      }
     },
     filters: {
       capitalize: function (value) {
         if (!value) return ''
         value = value.toString()
         return value.charAt(0).toUpperCase() + value.slice(1)
+      },
+      charConvert: function (value) {
+        if (!value) return '';
+        return value.replace(/&amp;/g, '&');
       }
     },
     created () {
