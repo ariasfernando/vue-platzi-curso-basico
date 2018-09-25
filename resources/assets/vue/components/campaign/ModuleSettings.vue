@@ -4,7 +4,16 @@
       <label-item-container label="MODULE STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
       <div class="card">
         <group-container>
-          <component v-for="(plugin, key) in module.plugins" :key="plugin.name + key" v-if="plugin.enabled && plugin.render !== false && $_app.modulePlugins[key] && !plugin.runBackground" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"  :module-id="currentModule"></component>
+          <component
+          v-for="(plugin, pluginKey) in module.plugins"
+          :key="plugin.name + pluginKey"
+          v-if="plugin.enabled && plugin.render !== false && $_app.modulePlugins[pluginKey] && !plugin.runBackground"
+          :is="'campaign-' + plugin.name"
+          :name="pluginKey"
+          :plugin="plugin"
+          :module="module"
+          :module-id="currentModule"
+          :plugin-key="pluginKey"></component>
         </group-container>
     </div>
     </template>
@@ -29,6 +38,7 @@
                   :column-id="columnKey"
                   :module-id="currentModule"
                   :key="columnKey + pluginKey"
+                  :plugin-key="pluginKey"
                   >
                 </component>
               </group-container>

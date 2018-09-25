@@ -35,6 +35,9 @@ export default {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
     },
+    isInvertedStacking() {
+      return this.module.structure.columnsStacking === 'invertedStacking';
+    },
   },
   methods: {
     // Get an string of classes
@@ -65,18 +68,24 @@ export default {
       });
       return BorderAndPadding;
     },
-    elementBorderAndPaddingHorizontalSpace(element) {
-      const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
-      const paddingRight = _.parseInt(element.style.paddingRight || 0);
-      const borderLeft = _.parseInt(element.style.borderLeftWidth || 0);
-      const borderRight = _.parseInt(element.style.borderRightWidth || 0);
-      return paddingLeft + paddingRight + borderLeft + borderRight;
+    elementBorderHorizontalPaddingAndHeight(element) {
+      const elementBorderAndPadding = this.elementBorderPaddingAndHeight(element);
+      elementBorderAndPadding.paddingTop = undefined;
+      elementBorderAndPadding.paddingBottom = undefined;
+      return elementBorderAndPadding;
     },
     elementBorderPaddingAndHeight(element) {
       const elementBorderAndPadding = this.elementBorderAndPadding(element);
       const styles = _.isEmpty(elementBorderAndPadding) ? {} : elementBorderAndPadding;
       styles.height = this.widthStyle(element.attribute.height);
       return styles;
+    },
+    elementBorderAndPaddingHorizontalSpace(element) {
+      const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
+      const paddingRight = _.parseInt(element.style.paddingRight || 0);
+      const borderLeft = _.parseInt(element.style.borderLeftWidth || 0);
+      const borderRight = _.parseInt(element.style.borderRightWidth || 0);
+      return paddingLeft + paddingRight + borderLeft + borderRight;
     },
     selectComponentHandler(e) {
       if (!$(e.target).hasClass('st-remove')) {
@@ -90,7 +99,7 @@ export default {
             });
           }, 50);
         } else {
-          this.$emit('set-component', {
+          this.$emit('select-component', {
             columnId: this.columnId,
             componentId: this.componentId,
           });
@@ -98,13 +107,22 @@ export default {
       }
     },
     columnSelect(columnId) {
-      this.$emit('set-component', {
+      this.$emit('select-component', {
         columnId,
         componentId: undefined,
       });
     },
     isColumnSelect(columnId) {
       return this.currentComponent.columnId === columnId && this.currentComponent.componentId === undefined;
+    },
+    elementBackground(element) {
+      const elementBackground = {};
+      _.each(element.style, (value, key) => {
+        if (key.indexOf('background') >= 0) {
+          elementBackground[key] = value;
+        }
+      });
+      return elementBackground;
     },
     fontStyles(element) {
       return {
@@ -121,16 +139,12 @@ export default {
     columnWidth(columnId) {
       const width = this.module.structure.columns[columnId].container.attribute.width;
       if (_.endsWith(width, '%')) {
-        return this.templateInnerWidth / 100 * _.parseInt(width);
+        return this.templateInnerWidth / 100 * parseFloat(width);
       }
       return width;
     },
-    columnBgcolor(columnId){
-      const bgcolor = this.module.structure.columns[columnId].container.attribute.bgcolor;
-      if (bgcolor) {
-        return `bgcolor="${bgcolor}"`;
-      }
-      return '';
+    columnBgcolor(column) {
+      return this.module.structure.columns[column].container.attribute.bgcolor;
     },
   },
 };

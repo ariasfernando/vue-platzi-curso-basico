@@ -85,7 +85,7 @@
       ModuleSettings,
       ShadowRender,
       Spinner,
-      Tracking
+      Tracking,
     },
     data: function () {
       return {

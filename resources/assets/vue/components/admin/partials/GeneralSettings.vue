@@ -44,7 +44,7 @@
       <b-card class="control" >
         <template v-if="module.plugins && Object.keys(module.plugins).length !== 0">
             <div v-for="(plugin, moduleKey) in module.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
-              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin"></component>
+              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" v-if="plugin.hasStudioSettings"></component>
             </div>
         </template>
       </b-card>
