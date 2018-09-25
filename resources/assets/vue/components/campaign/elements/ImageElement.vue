@@ -1,9 +1,10 @@
 <template>
   <module-container :component="component" @select-component="selectComponentHandler">
     <table
-      width="100%"
-      style="width: 100%;"
+      :width="component.container.attribute.width || '100%'"
+      :style="{width:widthStyle(component.container.attribute.width || '100%')}"
       :valign="component.container.attribute.valign || 'top'"
+      :align="component.container.attribute.align || 'left'"
       border="0"
       cellpadding="0"
       cellspacing="0"
