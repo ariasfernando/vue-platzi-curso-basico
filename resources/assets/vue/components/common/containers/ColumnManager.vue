@@ -20,7 +20,8 @@
               :key="'column-' + columnId"
               :module-id="moduleId"
               :column="column"
-              :column-id="columnId"
+              :data-column-id="columnId"
+              :column-id="column.id"
               :is-inverted="isInvertedStacking">
               <slot :columnData="{columnId, column}"></slot>
               <element-selector v-if="!isCampaign" :left-position="calculeLeftPosition(columnId)" :key="'selector' + columnId" :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
@@ -41,6 +42,7 @@
         v-for="(column, columnId) in module.structure.columns"
         :key="column.id"
         :data-column-id="columnId"
+        :column-id="column.id"
         :width="columnWidth(columnId)"
         :valign="column.container.attribute.valign || 'top'"
         :class="column.container.attribute.classes"
@@ -55,7 +57,7 @@
       </td>
     </tr>
     <!--  1 column -->
-    <slot v-else :columnData="{columnId, column}" v-for="(column, columnId) in module.structure.columns" ></slot>
+    <slot v-else :columnData="{columnId, column}" v-for="(column, columnId) in module.structure.columns" :data-column-id="columnId" :column-id="column.id" ></slot>
   </wrapper>
 </template>
 
