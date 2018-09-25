@@ -235,6 +235,78 @@ export default {
       this.maxLinesValidation();
       this.minCharsValidation();
     },
+    styleFormatsIncrement() {
+      const style_formats = [];
+
+      const loop = this.textOptions.config.settings.style_formats_increment.content;
+
+      let step = Number(loop.steps.range.split(':')[0]);
+      let currentFontSize = Number(loop.styles.fontSize.initial) || step;
+      const rangeMax = Number(loop.steps.range.split(':')[1]);
+
+      const runBehaviour = (behaviour, initialValue) => {
+        behaviour = behaviour.split(':');
+        const behaviourType = behaviour[0];
+        const behaviourFactor = Number(behaviour[1]);
+
+        let result = Number(initialValue);
+
+        switch (behaviourType) {
+          case 'static':
+            // leave result as is
+            break;
+          case 'fixed':
+            result = behaviourFactor;
+            break;
+          case 'add':
+            result += behaviourFactor;
+            break;
+          case 'multiply':
+            result = Math.round(result * behaviourFactor);
+            break;
+          default:
+            console.log('Error: behaviour type not defined');
+        }
+        return result;
+      }
+
+      const getTitle = (tmp, val, unit) => {
+        let template = tmp || '%fontVal%unit';
+        if (template.indexOf('%fontVal') !== -1) {
+          template = template.replace('%fontVal', val);
+          if (unit) template = template.replace('%unit', unit);
+          return template;
+        }
+        return template.replace('%stepVal', step);
+      };
+
+      while (step <= rangeMax) {
+        const format = {
+          styles: {},
+        };
+
+        _.forOwn(loop.styles, (prop, key) => { 
+          const keyBehaviour = prop.behaviour || loop.steps.behaviour;
+          const unit = prop.unit || 'px';
+          const result = runBehaviour(keyBehaviour, currentFontSize);
+          format.styles[key] = `${result}${unit}`;
+        });
+
+        _.forOwn(loop.settings, (prop, key) => { 
+            format[key] = prop;
+        });
+
+        const fontSizeBehaviour = loop.styles.fontSize.behaviour || loop.steps.behaviour;
+        const fontSizeUnit = loop.styles.fontSize.unit || 'px';
+        format.title = getTitle(loop.title, currentFontSize, fontSizeUnit);
+        format.styles.fontSize = `${currentFontSize}${fontSizeUnit}`;
+        style_formats.push(format);
+
+        currentFontSize = runBehaviour(fontSizeBehaviour, currentFontSize);
+        step = runBehaviour(loop.steps.behaviour, step);
+      }
+      return style_formats;
+    },
     initTinyMCE() {
       const _this = this;
       const options = _.filter(this.textOptions.config.options, 'value');
@@ -247,6 +319,10 @@ export default {
           customSettings[k] = e.content || e.value;
         }
       });
+
+      if (this.textOptions.config.settings.style_formats_increment && this.textOptions.config.settings.style_formats_increment.value) {
+        customSettings['style_formats'] = this.styleFormatsIncrement();
+      }
 
       let toolbar = [];
 
