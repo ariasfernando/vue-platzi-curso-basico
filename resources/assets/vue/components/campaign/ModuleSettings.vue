@@ -46,18 +46,18 @@
           </b-tabs>
         </b-card>
 
-        </div>
+      </div>
     </template>
-    <!--       
+    <!--
       if plugin is enabled === true && render === false mount the Js logic.
     -->
-    <template 
+    <template
       v-for="(plugin, pluginKey) in module.plugins" :
       v-if="plugin.enabled && $_app.modulePlugins[pluginKey] && plugin.render === false && !plugin.runBackground">
       <component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${pluginKey}`"></component>
     </template>
     <template v-for="(column, columnKey) in module.structure.columns">
-      <template 
+      <template
         v-for="(plugin, pluginKey) in column.plugins"
         v-if="plugin.enabled && $_app.modulePlugins[pluginKey] && plugin.render === false && !plugin.runBackground">
         <component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${columnKey}-${pluginKey}`"></component>
