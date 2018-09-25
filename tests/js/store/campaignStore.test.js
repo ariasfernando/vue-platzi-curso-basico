@@ -974,6 +974,103 @@ describe('== Library Store ==', () => {
     });
     xit('"saveModuleAttribute" , ', () => {});
     xit('"saveModuleData" ,', () => {});
+    it('"saveCustomModuleData" with data, to expect save the data', (done) => {
+      let data = {
+        moduleId: 0,
+        columnId: 0,
+        plugin: 'heightSync',
+        data: {
+          heightSync: {
+            height: 125,
+          },
+        },
+      };
+      let modulesData = [
+        {
+          data: {
+            heightSync: {
+              height: 0,
+            },
+          },
+        },
+      ];
+
+      store.commit('campaign/updateEmailCanvas', modulesData);
+      store.commit('campaign/saveCustomModuleData', data);
+
+      let stateModulesPlugin = store.state.campaign.modules[data.moduleId].data;
+
+      expect(stateModulesPlugin).toEqual(data.data);
+
+      data = null;
+      modulesData = null;
+      stateModulesPlugin = null;
+
+      done();
+    });
+    xit('"saveCustomModuleImageData"', () => {});
+    xit('"saveCustomModuleDataField"', () => {});
+    xit('"saveCustomModuleParamsField"', () => {});
+    xit('"setEditorOptions"', () => {});
+    it('"setCurrentModule with moduleId, expect to set value de current module"', (done) => {
+      let moduleId = 0;
+
+      store.commit('campaign/setCurrentModule', moduleId);
+
+      let stateCurrentModuleId = store.state.campaign.currentModuleId;
+
+      expect(stateCurrentModuleId).toEqual(moduleId);
+
+      moduleId = null;
+      stateCurrentModuleId = null;
+
+      done();
+    });
+    it('"unsetCurrentModule, expect to set value to undefined"', (done) => {
+      let moduleId = 0;
+
+      store.commit('campaign/setCurrentModule', moduleId);
+      store.commit('campaign/unsetCurrentModule');
+
+      let stateCurrentModuleId = store.state.campaign.currentModuleId;
+
+      expect(stateCurrentModuleId).toBeUndefined();
+
+      moduleId = null;
+      stateCurrentModuleId = null;
+
+      done();
+    });
+    it('"setCustomModule with data, expect to set value de current custom module"', (done) => {
+      let moduleId = 0;
+
+      store.commit('campaign/setCustomModule', moduleId);
+      
+
+      let stateCurrentModuleId = store.state.campaign.currentCustomModuleId;
+
+      expect(stateCurrentModuleId).toEqual(moduleId);
+
+      moduleId = null;
+      stateCurrentModuleId = null;
+
+      done();
+    });
+    it('"unsetCustomModule, expect to set value de current custom to undefined"', (done) => {
+      let moduleId = 0;
+
+      store.commit('campaign/setCustomModule', moduleId);
+      store.commit('campaign/unsetCustomModule');
+
+      let stateCurrentModuleId = store.state.campaign.currentCustomModuleId;
+
+      expect(stateCurrentModuleId).toBeUndefined();
+
+      moduleId = null;
+      stateCurrentModuleId = null;
+
+      done();
+    });
   });
 
   xdescribe('trigger actions', () => {
