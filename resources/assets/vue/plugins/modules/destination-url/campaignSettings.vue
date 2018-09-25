@@ -93,14 +93,14 @@
 
         this.$store.commit('campaign/saveComponentProperty', payload);
       },
-      watch: {
-        href(value) {
-          this.$nextTick(() => {
-            if (this.validationRules) {
-              this.validate();
-            }
-          });
-        }
+    },
+    watch: {
+      href(value) {
+        this.$nextTick(() => {
+          if (this.validationRules) {
+            this.validate();
+          }
+        });
       }
     },
   }
