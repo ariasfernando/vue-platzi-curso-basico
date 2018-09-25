@@ -1,7 +1,7 @@
 
 <template>
-	<div class="stx-wrapper" style="width: 100%; font-size:0;">
-    <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>           
+	<div class="stx-wrapper" style="font-size: 0; width: 100%;">
+    <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
 		<div
       class="stx-edit-text stx-wrapper"
       style="width: 100%;"

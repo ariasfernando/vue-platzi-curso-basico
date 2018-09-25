@@ -118,7 +118,7 @@
             [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
           };
         });
-        styles.push({'height': this.module.structure.columns[columnId].container.attribute.height + 'px'}) 
+        styles.push({'height': this.module.structure.columns[columnId].container.attribute.height + 'px'})
         return styles;
       },
       msoBetweenComment(columnId) {
