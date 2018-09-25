@@ -25,8 +25,9 @@
               :target="component.image.attribute.target || '_blank'"
               >
               <img
-                class="st-resize"
-                :class="{'st-hide-mobile' : component.image.attribute.placeholderMobile}"
+                :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
+                        'st-resize' : mobileStretch,
+                        'st-mobile-width-constraint' : !mobileStretch }"
                 style="border: 0; display: block;"
                 border="0"
                 :width="imageWidth"
@@ -42,7 +43,8 @@
                   <img
                     :src="imageUrl(component.image.attribute.placeholderMobile)"
                     border="0"
-                    class="st-resize"
+                    :class="{ 'st-resize' : mobileStretch,
+                              'st-mobile-width-constraint' : !mobileStretch }"
                     style="display:block;border:none;max-width:100%;height:auto;"
                     :width="imageWidth"
                     :style="{width:imageWidth}"
@@ -79,6 +81,11 @@
         imageUrl(imagePath) {
           return this.$_app.config.imageUrl + imagePath;
         }
+      }
+    },
+    computed: {
+      mobileStretch() {
+        return this.component.image.styleOption.noMobileStretch !== true;
       }
     },
   };

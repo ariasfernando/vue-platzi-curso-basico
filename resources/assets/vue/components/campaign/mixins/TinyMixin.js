@@ -82,7 +82,14 @@ export default {
 
       // check if link_fixed_color is setup an apply it, otherwise, apply parent color
       if (link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color)) {
-        this.changeStyles('a', { color: link_fixed_color });
+        if (editorLinks.length) {
+          for (let i = 0; i < editorLinks.length; i++) {
+            const $el = $(editorLinks[i]);
+            const currentSpanColor = $el.parents('span').css('color');
+            const newColor = currentSpanColor ? currentSpanColor : link_fixed_color;
+            $el.css('color', newColor);
+          }
+        }
       } else {
         if (editorLinks.length) {
           for (let i = 0; i < editorLinks.length; i++) {

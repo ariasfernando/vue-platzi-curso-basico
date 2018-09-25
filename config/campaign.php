@@ -199,4 +199,6 @@ return [
 
     'ignored_image_domains' => [],
 
+    'enable_html_minify' => true,
+
 ];
