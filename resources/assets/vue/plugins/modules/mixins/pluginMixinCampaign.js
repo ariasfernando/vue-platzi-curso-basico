@@ -8,7 +8,7 @@ export default {
       return this.module.idInstance;
     },
     isCustom() {
-      return this.module !== 'studio';
+      return this.module.type !== 'studio';
     },
   },
   methods: {
