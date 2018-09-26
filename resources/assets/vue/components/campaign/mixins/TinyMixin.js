@@ -20,24 +20,12 @@ export default {
       const nameComponent = this.component.type;
       const libraryLinkColor = this.libraryConfig.linkColor;
       const editor = tinymce.get(this.editorId);
-      const ul_fixed_style = editor.settings.ul_fixed_style;
-      const ol_fixed_style = editor.settings.ol_fixed_style;
-      const li_fixed_style = editor.settings.li_fixed_style;
       const p_fixed_style = editor.settings.p_fixed_style;
       const persist_styles = editor.settings.persist_styles;
       const button_inline_color = editor.settings.button_inline_color;
 
       if (nameComponent === 'button-element' && button_inline_color) {
         this.changeStyles('p', { color: this.component.button.style.color || libraryLinkColor });
-      }
-      if (ul_fixed_style) {
-        this.changeStyles('ul', ul_fixed_style);
-      }
-      if (ol_fixed_style) {
-        this.changeStyles('ol', ol_fixed_style);
-      }
-      if (li_fixed_style && Application.utils.isJsonString(li_fixed_style)) {
-        this.changeStyles('li', JSON.parse(li_fixed_style));
       }
       if (p_fixed_style && Application.utils.isJsonString(p_fixed_style)) {
         this.changeStyles('p', JSON.parse(p_fixed_style));
@@ -55,6 +43,7 @@ export default {
         }
       }
 
+      this.setListStyles();
       this.setLinkStyles();
     },
     changeStyles(selector, styles) {
@@ -131,6 +120,41 @@ export default {
           }
         }
       });
+    },
+    setListStyles() {
+      const editor = tinymce.get(this.editorId);
+      const ul_fixed_style = editor.settings.ul_fixed_style;
+      const ol_fixed_style = editor.settings.ol_fixed_style;
+      const li_fixed_style = editor.settings.li_fixed_style;
+      const li_keep_children_style = editor.settings.li_keep_children_style;
+
+      if (ul_fixed_style) {
+        this.changeStyles('ul', ul_fixed_style);
+      }
+      if (ol_fixed_style) {
+        this.changeStyles('ol', ol_fixed_style);
+      }
+      if (li_fixed_style && Application.utils.isJsonString(li_fixed_style)) {
+        this.changeStyles('li', JSON.parse(li_fixed_style));
+      }
+
+      if (li_keep_children_style) {
+        const editorLists = $(editor.targetElm).find('li');
+        editorLists.each((index, el) => {
+          const firstTextElement = $(el).find('span')[0];
+          if (firstTextElement) {
+            const computedStyle = document.defaultView.getComputedStyle(firstTextElement)
+            const fontSize = computedStyle.getPropertyValue('font-size');
+            const lineHeight = computedStyle.getPropertyValue('line-height');
+            const letterSpacing = computedStyle.getPropertyValue('letter-spacing');
+            $(el).css({
+              fontSize: fontSize,
+              lineHeight: lineHeight,
+              letterSpacing: letterSpacing
+            });
+          }
+        });
+      }
     },
     tinyMaxLines() {
       const editor = tinymce.get(this.editorId);
@@ -412,6 +436,14 @@ export default {
                 $toolbox.find('div[aria-label="Format"] button:first').empty();
                 $toolbox.find('div[aria-label="Format"] button:first')
                   .append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-bold"></i>');
+              });
+            }
+            // set toolbar width
+            if ($toolbox.length) {
+              setTimeout(() => {
+                const toolboxWidth = $toolbox.find('.mce-btn-group').width();
+                $toolbox.find('.mce-container-body').width(toolboxWidth);
+                $toolbox.find('.mce-panel').width(toolboxWidth);
               });
             }
           });
