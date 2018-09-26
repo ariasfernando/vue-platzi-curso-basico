@@ -45,7 +45,7 @@ export default {
                       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
                         <tbody>
                           <tr>
-                            <td width="100%" style="height:${this.convertPxToPt(this.element.attribute.height)};" valign="${this.element.attribute.valign}">
+                            <td width="100%" style="height:${this.convertPxToPt(this.element.attribute.height)};" valign="${this.valign}">
                   <![endif]-->`;
     },
     msoEndingComment() {
@@ -75,6 +75,9 @@ export default {
         Boolean(this.$slots["with-background-image"])
       );
     },
+    valign() {
+      return this.element.attribute.valign || 'top';
+    }
   },
   methods:{
     convertPxToPt(value){
