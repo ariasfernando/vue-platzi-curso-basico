@@ -10,7 +10,7 @@
         "jenssegers/mongodb": "3.4.*",
         "laravelcollective/html": "^5.6",
         "predis/predis": "^1.1",
-        "aws/aws-sdk-php": "^3.19",
+        "aws/aws-sdk-php": "^3.61",
         "guzzlehttp/guzzle": "^6.2",
         "fideloper/proxy": "~4.0",
         "html2text/html2text": "^4.0",
@@ -23,11 +23,14 @@
         "hackzilla/password-generator": "^1.3",
         "akamai-open/edgegrid-client": "^1.0",
         "stensul/php-imageproxy": "0.*",
-        "stensul/filesystem": "1.*",
-        "stensul/media-gallery": "^2.2",
+        "stensul/media-gallery": "2.2.*",
         "stensul/logging": "2.*",
         "stensul/silverpop-provider": "2.0.*",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "stensul/filesystem": "^2.0",
+        "stensul/asset-manager": "^1.0",
+        "zaininnari/html-minifier": "^0.4.2",
+        "wyrihaximus/html-compress": "^1.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

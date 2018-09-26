@@ -29,6 +29,20 @@ mix.webpackConfig({
       stensul: path.join(__dirname, assetsVuePath),
     },
   },
+  module: {
+    rules: [
+      {
+        test: /\.(js|vue)$/,
+        enforce: 'pre',
+        exclude: /(node_modules|bower_components|\.spec\.js)/,
+        use: [
+          {
+            loader: 'webpack-strip-block',
+          },
+        ],
+      },
+    ],
+  },
 });
 
 mix

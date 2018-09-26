@@ -1,42 +1,57 @@
 <template>
-  <div class="section-box" v-if="module">
+  <div class="section-box" v-if="module && module.type === 'studio'">
     <template  v-if="hasEnabledPlugins(module)">
       <label-item-container label="MODULE STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
       <div class="card">
         <group-container>
-          <component  v-for="(plugin, key) in module.plugins" :key="plugin.name + key" v-if="plugin.enabled && $_app.modulePlugins[key]" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"  :module-id="currentModule"></component>
+          <component v-for="(plugin, key) in module.plugins" :key="plugin.name + key" v-if="plugin.enabled && plugin.render !== false && $_app.modulePlugins[key] && !plugin.runBackground" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"  :module-id="currentModule"></component>
         </group-container>
-      </div>
+    </div>
     </template>
     <template v-if="showColumnStyles">
-    <label-item-container label="COLUMN STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
-    <div class="column-plugins">
-      <b-card no-block>
-        <b-tabs card :no-fade="true">
-          <b-tab
-            v-for="(column, columnKey) in module.structure.columns"
-            v-if="hasEnabledPlugins(column)"
-            :title="`${columnKey+1}`"
-            :button-id="`column-${columnKey}`"
-            :key="columnKey">
-            <group-container>
-              <component
-                v-for="(plugin, moduleKey) in column.plugins"
-                v-if="plugin.enabled && $_app.modulePlugins[moduleKey]"
-                :is="'campaign-' + plugin.name"
-                :name="moduleKey"
-                :plugin="plugin"
-                :column-id="columnKey"
-                :module-id="currentModule"
-                :key="columnKey + moduleKey"
-                >
-              </component>
-            </group-container>
-          </b-tab>
-        </b-tabs>
-      </b-card>
+      <label-item-container label="COLUMN STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
+      <div class="column-plugins">
+        <b-card no-block>
+          <b-tabs card :no-fade="true">
+            <b-tab
+              v-for="(column, columnKey) in module.structure.columns"
+              v-if="hasEnabledPlugins(column)"
+              :title="`${columnKey+1}`"
+              :button-id="`column-${columnKey}`"
+              :key="columnKey">
+              <group-container>
+                <component
+                  v-for="(plugin, pluginKey) in column.plugins"
+                  v-if="plugin.enabled && plugin.render !== false && $_app.modulePlugins[pluginKey]"
+                  :is="'campaign-' + plugin.name"
+                  :name="pluginKey"
+                  :plugin="plugin"
+                  :column-id="columnKey"
+                  :module-id="currentModule"
+                  :key="columnKey + pluginKey"
+                  >
+                </component>
+              </group-container>
+            </b-tab>
+          </b-tabs>
+        </b-card>
 
-      </div>
+        </div>
+    </template>
+    <!--       
+      if plugin is enabled === true && render === false mount the Js logic.
+    -->
+    <template 
+      v-for="(plugin, pluginKey) in module.plugins" :
+      v-if="plugin.enabled && $_app.modulePlugins[pluginKey] && plugin.render === false && !plugin.runBackground">
+      <component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${pluginKey}`"></component>
+    </template>
+    <template v-for="(column, columnKey) in module.structure.columns">
+      <template 
+        v-for="(plugin, pluginKey) in column.plugins"
+        v-if="plugin.enabled && $_app.modulePlugins[pluginKey] && plugin.render === false && !plugin.runBackground">
+        <component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${columnKey}-${pluginKey}`"></component>
+      </template>
     </template>
   </div>
 </template>
@@ -91,7 +106,7 @@
       hasEnabledPlugins(o) {
         let enabled = false;
         _.each(o.plugins, (plugin) => {
-          if (plugin.enabled) {
+          if (plugin.enabled && plugin.render !== false && !plugin.runBackground) {
             enabled = true;
           }
         });

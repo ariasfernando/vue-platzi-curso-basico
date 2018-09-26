@@ -85,7 +85,6 @@ export default {
         'font-weight': element.style.fontWeight,
         'letter-spacing': element.style.letterSpacing,
         'line-height': element.style.lineHeight,
-        'width': this.widthStyle(element.attribute.width) || '100%',
         'text-transform': element.style.textTransform,
       };
     },

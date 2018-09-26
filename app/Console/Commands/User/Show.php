@@ -26,24 +26,23 @@ class Show extends Command
      */
     public function handle()
     {
-        $users = User::all(['name', 'email', 'roles', 'deleted_at']);
-        $user_array = array();
+        $users = User::withTrashed()->orderBy('deleted_at')->get(['name', 'email', 'roles', 'deleted_at']);
+        $user_array = [];
 
         foreach ($users as $user) {
-            if (!$user->trashed()) {
-                $user_array[] = [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'roles' => join(",", $user->roles)
-                ];
-            }
+            $user_array[] = [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => join(",", $user->roles),
+                'deleted' => $user->trashed() ? $user->deleted_at : ''
+            ];
         }
 
         if (count($users) === 0) {
             $this->error('Roles not found, use command php artisan role:create!');
         } else {
-            $users_headers = ['Id', 'Name', 'Email', 'Roles'];
+            $users_headers = ['Id', 'Name', 'Email', 'Roles', 'Deleted'];
             $this->table($users_headers, $user_array);
         }
     }

@@ -1,9 +1,19 @@
+const getLibrary = require('./getLibrary');
+const newLibrary = require('./newLibrary');
+const saveLibrary = require('./saveLibrary');
+const createLibrary = require('./createLibrary');
+const deleteLibrary = require('./deleteLibrary');
+const searchLibraries = require('./searchLibrary');
+const fetchLibraries = require('./fetchLibrary');
+const getMenuItems = require('./getMenuItems').default;
+
 module.exports = {
-  getLibrary: require('./getLibrary'),
-  newLibrary: require('./newLibrary'),
-  saveLibrary: require('./saveLibrary'),
-  createLibrary: require('./createLibrary'),
-  deleteLibrary: require('./deleteLibrary'),
-  searchLibraries: require('./searchLibrary'),
-  fetchLibraries: require('./fetchLibrary')
+  getLibrary,
+  newLibrary,
+  saveLibrary,
+  createLibrary,
+  deleteLibrary,
+  searchLibraries,
+  fetchLibraries,
+  getMenuItems,
 };

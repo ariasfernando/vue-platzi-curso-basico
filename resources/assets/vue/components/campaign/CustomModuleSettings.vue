@@ -1,12 +1,12 @@
 <template>
   <div v-if="module ? module.settings : false">
     <label-item-container
-    :label="module.title"
+    :label="title"
     icon="glyphicon-tasks"
     :collapsable="false"
     ></label-item-container>
-    <div class="card">
-      <group-container>
+    <div class="card card-custom">
+      <group-container class="group-container-custom">
         <component :is="'custom-settings-' + module.key" :module-id="currentCustomModule" :module="module"></component>
       </group-container>
     </div>
@@ -24,8 +24,18 @@
       LabelItemContainer,
     },
     computed: {
+      title() {
+        if (this.currentCustomComponent.customKey && this.module.components
+          && this.module.components[this.currentCustomComponent.customKey]) {
+          return this.module.components[this.currentCustomComponent.customKey].title;
+        }
+        return this.module.title;
+      },
       currentCustomModule() {
         return this.$store.getters["campaign/currentCustomModule"];
+      },
+      currentCustomComponent() {
+        return this.$store.getters["campaign/currentCustomComponent"];
       },
       module() {
         return this.$store.getters["campaign/modules"][this.currentCustomModule];
@@ -39,8 +49,14 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .vue-js-switch {
     margin-top: 4px
   }
+  .card-custom {
+    padding-bottom: 0;
+  }
+  .group-container-custom {
+    margin: 5px 0 15px;
+}
 </style>
