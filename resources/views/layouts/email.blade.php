@@ -31,7 +31,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 	<?php echo "</he"; ?><?php echo "ad>"; ?>
 
 	<body class="st-email-body">
-		<style>
+		<style type="text/css">
 			@include('layouts.partials.mobile_styles')
 		</style>
 		@if (isset($params['campaign_data']['campaign_fonts']))

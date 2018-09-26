@@ -1,6 +1,7 @@
 @section('mobile_styles')
     {{-- Mobile styles for breakpoint: 480px --}}
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 480px),
+           screen yahoo and (max-width:480px) {
 
         {{-- Mobile Core Styles --}}
         @section('mobile_core_styles')
@@ -17,7 +18,7 @@
         @show
         
         .st-hide-hack { display: none !important; }
-    }
+    
 
     {{-- Mobile Client Styles --}}
         @section('mobile_client_styles')
@@ -31,5 +32,7 @@
                     Activity::log("The file doesn't exist: " . $e->getMessage());
                 }
             ?>
-    @show
+        @show
+    }
+
 @show
