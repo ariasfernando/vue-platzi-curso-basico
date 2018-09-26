@@ -31,9 +31,9 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 	<?php echo "</he"; ?><?php echo "ad>"; ?>
 
 	<body class="st-email-body">
-		<style type="text/css">
-			@include('layouts.partials.mobile_styles')
-		</style>
+
+		@include('layouts.partials.email_styles')
+
 		@if (isset($params['campaign_data']['campaign_fonts']))
 			@if (isset($params['campaign_data']['campaign_fonts']['custom']))
 				@if (count($params['campaign_data']['campaign_fonts']['custom']) > 0)
