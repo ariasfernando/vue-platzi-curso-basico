@@ -8,6 +8,7 @@
         <div>
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
+            <tracking v-if="trackingEnabled" :library-key="libraryKey"></tracking>
             <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
             <div class="lock-warning-container" v-if="locked">Unfix the email to add modules</div>
           </div>
@@ -22,8 +23,10 @@
       <column-bar-container side="right">
         <div>
           <module-settings v-if="showModuleSettings"></module-settings>
+          <module-background-settings></module-background-settings>
           <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
           <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
+          <shadow-render></shadow-render>
         </div>
       </column-bar-container>
     </div>
@@ -55,8 +58,11 @@
   import ModalEsp from './modals/ModalEsp.vue'
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
+  import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
+  import ShadowRender from './ShadowRender.vue'
   import Spinner from '../common/Spinner.vue'
+  import Tracking from './Tracking.vue'
   import VueSticky from 'vue-sticky'
 
   export default {
@@ -65,6 +71,7 @@
     components: {
       CampaignConfiguration,
       CampaignMenu,
+      ColumnBarContainer,
       ComponentSettings,
       CustomModuleSettings,
       EmailActions,
@@ -74,9 +81,11 @@
       ModalEsp,
       ModalPreview,
       ModalProof,
+      ModuleBackgroundSettings,
       ModuleSettings,
+      ShadowRender,
       Spinner,
-      ColumnBarContainer
+      Tracking,
     },
     data: function () {
       return {
@@ -84,11 +93,16 @@
         campaignConfigReady: false,
         pingLockInterval: 30000,
         logTimeInterval: 30000,
+        campaignConfig: {},
+        trackingEnabled: false,
       }
     },
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"];
+      },
+      libraryKey() {
+        return this.$store.getters["campaign/campaign"].library_config.key;
       },
       locked() {
         return this.campaign.campaign_data && this.campaign.campaign_data.locked;
@@ -106,14 +120,10 @@
         return this.$store.getters["campaign/showModuleSettings"];
       },
       sessionWindowId() {
-        try {
-          if (!window.sessionStorage.getItem('windowId')) {
-            window.sessionStorage.setItem('windowId', this.windowId);
-          }
-          return window.sessionStorage.getItem('windowId');
-        } catch(e) {
-          return false;
+        if (!window.sessionStorage.getItem('windowId')) {
+          window.sessionStorage.setItem('windowId', this.windowId);
         }
+        return window.sessionStorage.getItem('windowId');
       }
     },
     watch:{
@@ -137,15 +147,12 @@
          * Replace url when creating a new campaign to avoid redirect.
          * Add necessary logic if using more parameters in the future.
          */
-        try {
-          window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
-        } catch(e) {
-          return false;
-        }
+        window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
 
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
           this.campaignReady = true;
+          this.trackingEnabled = (this.campaignReady && this.campaignConfig && this.campaignConfig.enable_tracking && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -157,6 +164,7 @@
       loadConfig() {
         this.$store.dispatch("config/getConfig", 'campaign').then(response => {
           this.campaignConfigReady = true;        
+          this.campaignConfig = this.$store.getters["config/config"].campaign;
         }, error => {
           this.$root.$toast(
             'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',

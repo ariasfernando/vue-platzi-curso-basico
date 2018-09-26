@@ -126,7 +126,6 @@ export default {
   },
 
   getMenuItems(libraryId) {
-
     const endpoint = endpoints.library.getMenuItems;
     const deferred = Q.defer();
     const params = {

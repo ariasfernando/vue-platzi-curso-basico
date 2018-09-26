@@ -26,7 +26,7 @@ function dividerDefault() {
         },
         {
           link: 'style',
-          label: 'Border radius',
+          label: 'Height',
           name: 'height',
           isPixel: true,
           type: 'generic-number',
