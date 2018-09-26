@@ -98,14 +98,16 @@
 
           <!--2 COLUMNS FIXED -->
           <td
+            :data-column-id="columnId"
             v-else-if="module.structure.columnsStacking == 'columnsFixed'"
             v-for="(column, columnId) in module.structure.columns"
             :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
             :valign="column.container.attribute.valign || 'top'"
             :class="column.container.attribute.classes"
+            :height="column.container.attribute.height"
             :bgcolor="column.container.attribute.bgcolor"
             :key="column.id"
-            :style="[elementBorderAndPadding(column.container),{'width': widthStyle(column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%')}]"
+            :style="[elementBorderAndPadding(column.container),{'height': column.container.attribute.height + 'px'}, {'width': widthStyle(column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%')}]"
           >
             <columns-fixed-render
               :column="column"

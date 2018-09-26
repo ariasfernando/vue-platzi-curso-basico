@@ -13,7 +13,7 @@ services:
       - mail
   worker:
     image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0"
-    command: php /usr/src/app/artisan queue:work --daemon
+    command: php /usr/src/app/artisan queue:work --daemon --tries=3
     volumes:
     - ./storage/logs/:/var/log/
     - .:/usr/src/app
@@ -22,7 +22,7 @@ services:
       - queue
       - mail
   documentstore:
-    image: "mongo"
+    image: "mongo:3.4"
     volumes:
       - ./storage/data/:/data/db
     ports:

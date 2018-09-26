@@ -59,18 +59,19 @@ export default {
   },
     
   methods: {
-    changeText(text) {
+    changeText(value) {
       if (this.timer) {
         clearTimeout(this.timer);
       }
       this.timer = setTimeout(() => {
-        this.$store.commit('campaign/updateElement', {
+        this.$store.dispatch('campaign/updateText', {
           moduleId:this.moduleId,
           columnId:this.columnId,
           componentId:this.componentId,
-          data: {
-            text
-          }
+          link: "data",
+          property: "text",
+          sync: false,
+          value,
         });
       }, 100);
     },
