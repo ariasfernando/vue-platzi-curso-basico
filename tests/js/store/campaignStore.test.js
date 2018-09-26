@@ -1243,8 +1243,8 @@ describe('== Library Store ==', () => {
     });
 
     it('', (done) => {
-      let = ;
-      store.dispatch('campaign/updateCustomElement', );
+      // let = ;
+      // store.dispatch('campaign/updateCustomElement', );
 
       done();
     });
