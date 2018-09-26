@@ -276,6 +276,7 @@ function campaignStore() {
         state.dirty = true;
       },
       saveComponentProperty(state, data) {
+        // DEPRECATE, use saveComponentPropertyById
         const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
         const subComponent = data.subComponent ? component[data.subComponent] : component;
         const properties = data.link ? subComponent[data.link] : subComponent;
