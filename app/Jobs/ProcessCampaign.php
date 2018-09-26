@@ -7,10 +7,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Models\Campaign;
-use Stensul\Models\Library;
-use Stensul\Services\EmailHtmlCreator as Html;
-use Stensul\Services\StaticProcessor as Assets;
+use CampaignModel as Campaign;
+use LibraryModel as Library;
+use HtmlCreator as Html;
+use StaticProcessor as Assets;
 use Activity;
 use Worker;
 
@@ -46,12 +46,13 @@ class ProcessCampaign implements ShouldQueue
         $html = new Html($campaign);
         $assets = new Assets($campaign);
 
-        $html->createHtmlBody();
+        $normal_html_body = $html->createHtmlBody();
         $html->storeHtmlInCdn();
 
         if (!env('CDN_UPLOAD_PRETEND')) {
             $assets->storeAssetsInCdn();
         }
+        $campaign->body_html = $normal_html_body;
 
         $library = Library::findOrFail($campaign->library);
 

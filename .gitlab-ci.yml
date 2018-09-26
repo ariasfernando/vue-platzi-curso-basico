@@ -1,4 +1,4 @@
-image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0"
+image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.1"
 
 services:
   - mongo:latest
@@ -9,6 +9,7 @@ variables:
   DB_HOST: mongo
   DB_DATABASE: base
   REDIS_HOST: base_queue_1
+  CDN_HOST: http://stensul-devel-01.akamaized.net
 
 cache:
   paths:
@@ -24,32 +25,51 @@ stages:
   - test
   - deploy
 
-before_script:
-  # js related
-  - yum install -y gcc-c++ cairo cairo-devel
-  - npm install
-  # Install composer dependencies
-  - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
-  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  - php -r "if (hash_file('SHA384', 'composer-setup.php') === file_get_contents('installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-  - php composer-setup.php
-  - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
-  - php composer.phar install
-  - php artisan vendor:publish --all
-  - npm run production
-  # Install CI components.
-  - cd ci/; php ../composer.phar install; cd ..
+.composer_install: &composer_install
+  before_script:
+    - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php -r "if (hash_file('SHA384', 'composer-setup.php') === file_get_contents('installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
+
+.npm_install: &npm_install
+  before_script:
+    - yum install -y gcc-c++ cairo cairo-devel
+    - npm install
 
 test_composer_vulnerabilities:
   stage: test
+  <<: *composer_install
   script:
+    - php composer.phar install
     - wget http://get.sensiolabs.org/security-checker.phar
     - php security-checker.phar security:check composer.lock
 
+phpunit:
+  stage: test
+  <<: *composer_install
+  script:
+    - php composer.phar install
+    # Enable xdebug for code coverage
+    - yum install php72-php-pecl-xdebug.x86_64 -y
+    - ln -s /opt/remi/php72/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
+    - cp /etc/opt/remi/php72/php.d/15-xdebug.ini /etc/php.d/
+    # Run phpunit with code coverage report enbled.
+    - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
+  artifacts:
+    when: always
+    name: "${CI_JOB_STAGE}_phpunit_${CI_COMMIT_REF_NAME}"
+    expire_in: 30 days
+    paths:
+      - ci/storage/tmp/be_coverage/
+
 phplint:
   stage: test
+  <<: *composer_install
   script:
     # Run php parallel lint
+    - cd ci/; php ../composer.phar install; cd ..
     - ci/vendor/bin/parallel-lint --no-colors --blame . --exclude vendor --exclude node_modules
       --exclude storage --exclude tmp --exclude ci > ci/storage/tmp/phplint.txt
   artifacts:
@@ -61,11 +81,12 @@ phplint:
 
 jsunit:
   stage: test
+  <<: *npm_install
   script:
-    - npm run test:single
+    - npm run cover
   artifacts:
     when: always
     name: "${CI_JOB_STAGE}_testjs_${CI_COMMIT_REF_NAME}"
     expire_in: 30 days
     paths:
-      - coverage/
+      - ci/storage/tmp/coverage

@@ -50,7 +50,7 @@ function getBase64Img(image) {
     reader.addEventListener('load', () => {
       resolve(reader.result);
     }, false);
-    if (typeof image !== 'object' && image.includes('http')) {
+    if (typeof image !== 'object' && RegExp('^https?://').test(image)) {
       loadImage(image)
         .then((img) => {
           reader.readAsDataURL(img);
@@ -72,20 +72,20 @@ function checkSize(image, size, dontAllowSmaller) {
     }
     const tmpImg = new Image();
     let hasErr = false;
-    let msg = 'Image size should be ';
+    let msg = 'Image size must be ';
     tmpImg.onload = () => {
       const width = tmpImg.naturalWidth;
       const height = tmpImg.naturalHeight;
       if ((strict && width !== size.width) || (!strict && width < size.width)) {
         hasErr = true;
-        msg = msg.concat(`${size.width}px ${strict ? 'in' : 'or greater in'} width`);
+        msg = msg.concat(`${strict ? '' : 'at least'} ${size.width}px wide`);
       }
       if ((strict && !size.auto && height !== size.height) || (!strict && !size.auto && height < size.height)) {
         if (hasErr) {
           msg = msg.concat(' and ');
         }
         hasErr = true;
-        msg = msg.concat(`${size.height}px ${strict ? 'in' : 'or greater in'}  height`);
+        msg = msg.concat(`${strict ? '' : 'at least'} ${size.height}px high`);
       }
 
       if (hasErr) {

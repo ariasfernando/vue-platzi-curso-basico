@@ -6,9 +6,11 @@ use Log;
 use Cdn;
 use Imagine;
 use Storage;
+use CampaignModel;
 use Imagine\Image\ImageInterface;
 use League\Flysystem\AdapterInterface;
-use Stensul\Services\EmailHtmlCreator as Html;
+use Stensul\Jobs\CleanCdnCache;
+use HtmlCreator as Html;
 
 class StaticProcessor
 {
@@ -19,9 +21,9 @@ class StaticProcessor
     /**
      * Constructor.
      *
-     * @param \Stensul\Models\Campaign $campaign
+     * @param CampaignModel $campaign
      */
-    public function __construct(\Stensul\Models\Campaign $campaign)
+    public function __construct(CampaignModel $campaign)
     {
         $this->campaign = $campaign;
     }
@@ -29,7 +31,7 @@ class StaticProcessor
     /**
      * Get campaign model.
      *
-     * @return \Stensul\Models\Campaign
+     * @return CampaignModel
      */
     public function getCampaign()
     {
@@ -56,68 +58,65 @@ class StaticProcessor
         $files['font'] = $public->allFiles('fonts');
         $files['module'] = $module->allFiles();
 
-        $campaignPath = trim($this->getCampaign()->getCdnPath(), DS) . DS;
+        $campaignPath = trim($this->getCampaign()->getCdnPath(), '/') . '/';
         $emailLayout = $html->getEmailLayout();
 
         $uploadedFiles = $cloud->allFiles($campaignPath);
 
+        $data = [
+            'campaign_id' => $this->getCampaign()->id,
+            'cdn' => config('filesystems.disks.cloud'),
+            'assets' => [
+            ]
+        ];
+
         foreach ($files as $fileType => $fileGroup) {
             foreach ($fileGroup as $file) {
                 $path = $campaignPath;
-                $path .= ($fileType == 'font') ? $file : 'images' . DS . basename($file);
+                $path .= ($fileType == 'font') ? $file : 'images' . '/' . basename($file);
 
                 if (strpos($emailLayout, basename($file)) !== false) {
                     if (!in_array($path, $uploadedFiles)) {
                         Log::info(sprintf('[%s] uploading %s: %s', $this->getCampaign()->id, $file, $path));
 
                         if ($fileType == 'image') {
-                            $cloud->put($path, $local->get($file), AdapterInterface::VISIBILITY_PUBLIC);
+                            $from = config('filesystems.disks.local:campaigns.root') . DS . $file;
                         } elseif ($fileType == 'module') {
-                            $cloud->put($path, $module->get($file), AdapterInterface::VISIBILITY_PUBLIC);
+                            $from = config('filesystems.disks.local:modules.root') . DS . $file;
                         } else {
-                            $cloud->put($path, $public->get($file), AdapterInterface::VISIBILITY_PUBLIC);
+                            $from = config('filesystems.disks.local:public.root') . DS . $file;
                         }
 
-                        // clean cache
-                        $this->cleanCdnCache($path);
+                        $data['assets'][] = [
+                            'from' => $from,
+                            'to' => $path
+                        ];
+
+                        Log::info(sprintf('[%s] queuing url to be flushed in cdn: %s', $this->getCampaign()->id, $path));
+                        dispatch(new CleanCdnCache($path, $this->getCampaign()->id));
                     }
                 }
             }
         }
 
-        // clean cache
-        $this->cleanCdnCache();
-    }
-
-    /**
-     * Clean CDN cache.
-     *
-     * @param string $file
-     */
-    protected function cleanCdnCache($file = null)
-    {
-        if (strlen($file)) {
-            $file = ($file[0] != '/') ? '/'.$file : $file;
-            Log::info(sprintf('[%s] queuing url to be flushed in cdn: %s', $this->getCampaign()->id, $file));
-            $this->files[] = $file;
-        }
-
-        // queue files or flush cache
-        if (count($this->files) > 8 || $file == null) {
-            // flush cache
-            Log::info(sprintf('[%s] flushing cache', $this->getCampaign()->id));
-            Cdn::disk()->delete($this->files);
-            // clean queue
-            $this->files = [];
+        try {
+            \AssetManager::deploy(
+                $data,
+                env('ASSETS_UPLOAD_CONCURRENCY', 10),
+                env('ASSETS_UPLOAD_RETRIES', 2)
+            );
+        } catch (\Exception $exception) {
+            Log::error('StaticProcessor error: ' . $exception->getMessage());
+            throw $exception;
         }
     }
 
     /**
      * Copy assets from a campaign.
      *
-     * @param \Stensul\Models\Campaign $from
+     * @param CampaignModel $from
      */
-    public function copyAssetsFrom(\Stensul\Models\Campaign $from)
+    public function copyAssetsFrom(CampaignModel $from)
     {
         $storage = Storage::disk('local:campaigns');
         $assets = [];
@@ -239,9 +238,9 @@ class StaticProcessor
     /**
      * Replace reference id from a campaign.
      *
-     * @param \Stensul\Models\Campaign $from
+     * @param CampaignModel $from
      */
-    public function replaceReferenceId(\Stensul\Models\Campaign $from)
+    public function replaceReferenceId(CampaignModel $from)
     {
         $modules_data = $this->getCampaign()->modules_data;
         foreach ($from->modules_data as $key => $module) {
@@ -268,14 +267,23 @@ class StaticProcessor
                         if (isset($column_value['components'])) {
                             foreach ($column_value['components'] as $component_key => $component_value) {
                                 if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
-                                    if (isset($component_value['attribute'])
-                                        && isset($component_value['attribute']['placeholder'])) {
-                                        $modules_data[$key]['structure']['columns'][$column_key]['components']
-                                            [$component_key]['attribute']['placeholder'] = str_replace(
-                                                $from->id,
-                                                $this->getCampaign()->id,
-                                                $component_value['attribute']['placeholder']
-                                            );
+                                    if (isset($component_value['image']) && isset($component_value['image']['attribute'])) {
+                                        if (isset($component_value['image']['attribute']['placeholder'])) {
+                                            $modules_data[$key]['structure']['columns'][$column_key]['components']
+                                                [$component_key]['image']['attribute']['placeholder'] = str_replace(
+                                                    $from->id,
+                                                    $this->getCampaign()->id,
+                                                    $component_value['image']['attribute']['placeholder']
+                                                );
+                                        }
+                                        if (isset($component_value['image']['attribute']['placeholderMobile'])) {
+                                            $modules_data[$key]['structure']['columns'][$column_key]['components']
+                                                [$component_key]['image']['attribute']['placeholderMobile'] = str_replace(
+                                                    $from->id,
+                                                    $this->getCampaign()->id,
+                                                    $component_value['image']['attribute']['placeholderMobile']
+                                                );
+                                        }
                                     }
                                 }
                             }

@@ -1,11 +1,22 @@
 /**
  * plugin.js
+ * 
+ * currently, stlinkextended plugin is mounted always even if link option is disabled in editor settings
+ * for this reason is why if (linkButton) is in several parts of the code
  */
 
 /*global tinymce:true */
 
 tinymce.PluginManager.add('stlinkextended', function (editor) {
-    function createLinkList(callback) {
+    if(!stLinksExtended.running){
+        $('body').on('mouseup', function(){
+            stLinksExtended.checkLinkButton();
+        });
+        stLinksExtended.running = true;
+    }
+    var linkButton = null;
+
+    function createLinkList(callback) {  
         return function () {
             var linkList = editor.settings.link_list;
 
@@ -50,7 +61,21 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         return appendItems(inputList, startItems || []);
     }
 
-    function showDialog(linkList) {
+    function showDialog (linkList) {
+
+        if (linkButton) {
+            var textSelection = editor.selection.getContent({format : 'text'});
+
+            /* in case link button is fired with keyboard shortcut, we check if there is or not a text selection */
+            if (!textSelection || $.trim( editor.selection.getContent({format : 'text'})) == '') {
+                /* if there is no selection, and link button is not active (meaning that there is no link in current cursor position)
+                finish function here */
+                if (linkButton.active() == false) {
+                    return false;
+                }
+            }
+        }
+
         var data = {}, selection = editor.selection, dom = editor.dom, selectedElm, anchorElm, initialText;
         var win, onlyText, textListCtrl, linkListCtrl, tagListCtrl, relListCtrl, targetListCtrl, classListCtrl, linkTitleCtrl, value;
 
@@ -129,7 +154,10 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
 
             // Validate only urls
             if (!matches.length && href.length > 0) {
-                if (href.indexOf('@') > 0 && href.indexOf('//') == -1 && href.indexOf('mailto:') == -1) {
+                if (href.indexOf('@') > 0
+                    && href.indexOf('//') == -1
+                    && href.indexOf('mailto:') == -1
+                    && editor.settings.autocomplete_mailto != false) {
                     href = 'mailto:' + href;
                 } else if (href.indexOf('http://') == -1
                     && href.indexOf('https://') == -1
@@ -502,6 +530,9 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 $('.mce-link-input .mce-textbox').removeAttr('style');
 
                 insertLink();
+
+                /* After submitting, tinymce releases the selection, so we have to disable link button */
+                linkButton.disabled(true);
             }
         });
     }
@@ -511,7 +542,12 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         tooltip: 'Insert/edit link',
         shortcut: 'Meta+K',
         onclick: createLinkList(showDialog),
-        stateSelector: 'a[href]'
+        stateSelector: 'a[href]',
+        onPostRender : function() { 
+            linkButton = this;
+            stLinksExtended.buttons[editor.id] = this;
+         },
+        disabled:true
     });
 
     editor.addButton('unlink', {
@@ -535,4 +571,34 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         context: 'insert',
         prependToContext: true
     });
+
 });
+
+var stLinksExtended = {
+    running: false,
+    buttons: {},
+    checkLinkButton: function() {
+        /* Enable or disable the link button, depending on whether or not you have a text selection */
+        var editor = tinymce.activeEditor;
+        if (editor && editor.buttons.link) {
+            var textSelection = editor.selection.getContent({format : 'text'});
+            var linkButton = stLinksExtended.buttons[editor.id];
+
+            if (linkButton) {
+                /* If there is no selection, disable the button */
+                if (!textSelection || $.trim( textSelection ) == '') {      
+                    /* But, if button is active, it means that already has a link added, 
+                    so we have to enable the button, even if there is no selection made */
+                    if (stLinksExtended.buttons[editor.id].active()) {
+                        linkButton.disabled(false);
+                    } else {
+                        linkButton.disabled(true);
+                    }
+                } else {
+                    /* If there is a selection, enable de button */
+                    linkButton.disabled(false);
+                }
+            }
+        }
+    }
+};

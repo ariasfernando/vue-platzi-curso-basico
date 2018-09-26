@@ -41,6 +41,7 @@
     :config="plugin.config" 
     v-if="showImageEditor" 
     :libraryImages="libraryImages" 
+    :overlayImages="overlayImages" 
     :data="image" 
     @close="close" 
     @submitImage="submitImage">
@@ -66,6 +67,7 @@ export default {
     return {
       showImageEditor: false,
       libraryImages: [],
+      overlayImages: [],
       type: 'desktop',
       image: {},
       isEdit: false
@@ -140,6 +142,12 @@ export default {
         .then(res => {
           this.libraryImages = res.map(image => image.path);
         });
+    }
+    const ovGallery = _.get(this.plugin.config, 'sie-plugin-image-overlay_image.config.overlay_gallery.config.set_images.value');
+    if(ovGallery !== null){
+      imageService.getMedia(ovGallery).then(res => {
+        this.overlayImages = res.map(image => image.path);
+      });
     }
   },
   methods: {
@@ -333,6 +341,7 @@ export default {
   font-weight: 300;
   padding-left: 8px;
   height: 26px;
+  font-size: 12px;
 
   &:focus{
     border: 1px solid #78dcd6;

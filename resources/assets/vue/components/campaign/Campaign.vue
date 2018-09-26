@@ -9,6 +9,7 @@
         <div>
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
+            <tracking v-if="trackingEnabled" :library-key="libraryKey"></tracking>
             <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
             <div class="lock-warning-container" v-if="locked">Unfix the email to add modules</div>
           </div>
@@ -23,9 +24,10 @@
       <aside class="right-bar">
         <div>
           <module-settings v-if="showModuleSettings"></module-settings>
-          <module-background-settings v-if="activeModule !== undefined"></module-background-settings>
+          <module-background-settings></module-background-settings>
           <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
           <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
+          <shadow-render></shadow-render>
         </div>
       </aside>
     </div>
@@ -43,23 +45,25 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import CampaignConfiguration from './CampaignConfiguration.vue'
-  import ModalComplete from './modals/ModalComplete.vue'
-  import ModalPreview from './modals/ModalPreview.vue'
-  import ModalProof from './modals/ModalProof.vue'
-  import ModalEsp from './modals/ModalEsp.vue'
-  import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
   import CampaignMenu from './CampaignMenu.vue'
-  import EmailCanvas from './EmailCanvas.vue'
+  import CampaignService from '../../services/campaign'
   import ComponentSettings from './ComponentSettings.vue'
   import CustomModuleSettings from './CustomModuleSettings.vue'
+  import EmailActions from './EmailActions.vue'
+  import EmailCanvas from './EmailCanvas.vue'
+  import ModalComplete from './modals/ModalComplete.vue'
+  import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
+  import ModalEsp from './modals/ModalEsp.vue'
+  import ModalPreview from './modals/ModalPreview.vue'
+  import ModalProof from './modals/ModalProof.vue'
   import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
+  import ShadowRender from './ShadowRender.vue'
   import Spinner from '../common/Spinner.vue'
-  import EmailActions from './EmailActions.vue'
+  import Tracking from './Tracking.vue'
   import VueSticky from 'vue-sticky'
-  import _ from 'lodash'
-  import CampaignService from '../../services/campaign'
 
   export default {
     name: 'Campaign',
@@ -67,18 +71,20 @@
     components: {
       CampaignConfiguration,
       CampaignMenu,
-      EmailCanvas,
       ComponentSettings,
       CustomModuleSettings,
-      ModuleBackgroundSettings,
-      ModuleSettings,
+      EmailActions,
+      EmailCanvas,
       ModalComplete,
+      ModalEnableTemplating,
+      ModalEsp,
       ModalPreview,
       ModalProof,
-      ModalEsp,
-      ModalEnableTemplating,
+      ModuleBackgroundSettings,
+      ModuleSettings,
+      ShadowRender,
       Spinner,
-      EmailActions
+      Tracking
     },
     data: function () {
       return {
@@ -86,20 +92,22 @@
         campaignConfigReady: false,
         pingLockInterval: 30000,
         logTimeInterval: 30000,
+        campaignConfig: {},
+        trackingEnabled: false,
       }
     },
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"];
       },
+      libraryKey() {
+        return this.$store.getters["campaign/campaign"].library_config.key;
+      },
       locked() {
         return this.campaign.campaign_data && this.campaign.campaign_data.locked;
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
-      },
-      activeModule() {
-        return this.$store.getters["campaign/activeModule"];
       },
       currentCustomModule() {
         return !_.isUndefined(this.$store.getters["campaign/currentCustomModule"]);
@@ -143,6 +151,7 @@
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
           this.campaignReady = true;
+          this.trackingEnabled = (this.campaignReady && this.campaignConfig && this.campaignConfig.enable_tracking && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -154,6 +163,7 @@
       loadConfig() {
         this.$store.dispatch("config/getConfig", 'campaign').then(response => {
           this.campaignConfigReady = true;        
+          this.campaignConfig = this.$store.getters["config/config"].campaign;
         }, error => {
           this.$root.$toast(
             'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
@@ -261,12 +271,13 @@
   }
   .right-bar,
   .left-bar {
-    height: calc(~"100vh - 55px");
+    height: calc(~"100vh - 86px");
+    overflow: auto;
     overflow: overlay;
     width: 270px;
     display: block;
     float: left;
-    padding: 0px;
+      padding: 0px;
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
     padding-bottom: 25px;
 
@@ -275,9 +286,9 @@
     }
 
     &::-webkit-scrollbar {
-        width: 2px; 
+        width: 4px; 
         background: transparent;
-    }
+        }
     &::-webkit-scrollbar-thumb {
         background: lighten(@stensul-gray, 40%);
     }
@@ -289,10 +300,10 @@
       &:active:focus {
         color: #666666;
       }
-    }
+        }
     .fa.pull-left {
       margin-right: 12px;
-    }
+      }
 
     .components-list {
       padding: 0;
@@ -324,7 +335,7 @@
           padding: 0px;
           font-weight: 400px;
           color: #666666;
-          width: 100%;
+            width: 100%;
           font-weight: 300;
           text-align: center;
         }
@@ -336,8 +347,8 @@
             color: #333333;
           }
         }
-      }
-    }
+          }
+        }
 
     .card {
       padding: 0 8px 15px 8px;
@@ -345,24 +356,24 @@
       border-top: 1px solid #ffffff;
       margin-top: -1px;
       display: table;
-      width: 100%;
-    }
+          width: 100%;
+        }
 
-    select {
+        select{
       height: 22px;
-      font-size: 11px;
-      color: #666666;
-      border: none;
+          font-size: 11px;
+          color: #666666;
+          border: none;
       background: #f4f4f4;
-      box-shadow: none;
-      font-weight: 300;
+          box-shadow: none;
+          font-weight: 300;
       width: 65px;
-      float: right;
-    }
+          float: right;
+        }
 
     select[multiple] {
       height: 50px;
-    }
+      }
 
     .vue-js-switch {
       float: right;
@@ -376,7 +387,7 @@
         position: absolute !important;
         z-index: 300;
         right: 100%;
-      }
+          }
       .icon-remove {
         color: #999999;
         background: #ffffff;
@@ -384,8 +395,8 @@
         margin-top: -40px;
         margin-left: -35px;
         padding-top: 4px;
+        }
       }
-    }
   }
 
   .card-header {

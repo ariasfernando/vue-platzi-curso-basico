@@ -1,32 +1,51 @@
-import libraryService from '../../resources/assets/vue/services/library';
-import fixtures from '../../resources/assets/vue/resources/fixtures';
+/* eslint-env node, jest, es6 */
+/* eslint import/no-unresolved: 0 */
+/* eslint import/extensions: 0 */
+/* global Application */
+
+import nock from 'nock';
+import libraryService from 'services/library';
+import mocks from 'resources/mocks';
 
 require('dotenv').config();
 
 process.env.APP_ENV = 'test';
 
-const chai = require('chai');
-
-const should = chai.should;
-const expect = chai.expect;
-
 /*
  * == Test: Services
  */
-describe("== Services ==", () => {
-  describe("Library Services", () => {
-    describe("Search Libraries", () => {
+describe('== Services ==', () => {
+  let baseUrl;
+  beforeAll(() => {
+    baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
+  });
+  afterAll(() => {
+    nock.cleanAll();
+    nock.restore();
+
+    baseUrl = null;
+  });
+  describe('Library Services', () => {
+    describe('Search Libraries', () => {
       it('Should return a list of libraries', (done) => {
+        nock(baseUrl)
+        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+        .post('/admin/library/list')
+        .reply(200, mocks.library.searchLibraries);
         libraryService.searchLibraries().then((result) => {
-          expect(result).to.equal(fixtures.library.searchLibraries);
+          expect(result).toEqual(mocks.library.searchLibraries);
         }).then(done, done);
       });
     });
 
-    describe("Fetch Libraries", () => {
+    describe('Fetch Libraries', () => {
       it('Should return a list of libraries', (done) => {
+        nock(baseUrl)
+        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+        .get('/dashboard/libraries')
+        .reply(200, mocks.library.fetchLibraries);
         libraryService.fetchLibraries().then((result) => {
-          expect(result).to.equal(fixtures.library.fetchLibraries);
+          expect(result).toEqual(mocks.library.fetchLibraries);
         }).then(done, done);
       });
     });

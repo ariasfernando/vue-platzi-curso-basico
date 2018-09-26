@@ -4,8 +4,8 @@ namespace Stensul\Services;
 
 use MongoDB\BSON\ObjectID as ObjectID;
 
-use Stensul\Models\Module;
-use Stensul\Models\Library;
+use ModuleModel;
+use LibraryModel as Library;
 use Stensul\Exceptions\ModelKeyManagerException;
 
 class ModelKeyManager
@@ -29,7 +29,7 @@ class ModelKeyManager
         $key = preg_replace(['/[^a-z0-9 _]/i', '/\s+/'], ['', '_'], strtolower($name));
 
         // Don't check DB for custom modules, append '_custom' to the normalized module name.
-        if (is_a($model, 'Stensul\Models\Module') && $model->type !== 'studio') {
+        if (is_a($model, 'ModuleModel') && $model->type !== 'studio') {
             return $key . '_custom';
         }
 

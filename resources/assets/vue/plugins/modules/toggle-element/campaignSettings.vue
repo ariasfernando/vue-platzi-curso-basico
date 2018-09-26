@@ -15,9 +15,12 @@
 
 <script>
   import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import validatorMixin from '../mixins/validator.js';
+  import logicMixin from './logic.js';
   import _ from 'lodash';
   export default {
     props: ['name', 'plugin', 'moduleId', 'columnId', 'componentId', 'component', 'order'],
+    mixins: [validatorMixin, logicMixin],
     components: { SettingsContainer },
     computed: {
       module() {
@@ -56,8 +59,9 @@
               property: 'enableElement',
               value: value
           });
+          this.resetErrors(value,this.currentCustomModule);
         } else {
-          const element = this.getElement(elementId)
+          const element = this.getElement(elementId);
           const payload = {
             moduleId: this.moduleId,
             columnId: element.columnId,
@@ -68,14 +72,18 @@
             value: value
           };
           this.$store.commit("campaign/saveComponentProperty", payload);
+          this.resetErrors(value,this.moduleId);
         }
+
+        this.runLogic(value, elementId);
+
         this.$emit('changed', {
           elementId: elementId,
-          value: value
+          value: value,
         });
       },
       toggleChange(value, elementId) {
-        if(this.plugin.data.preventEmpty && !value){
+        if (this.plugin.data.preventEmpty && !value) {
           for (let i in this.plugin.data.elements) {
             if(this.plugin.data.elements[i].id !== elementId && this.getValue(this.plugin.data.elements[i].id)){
               this.toggleElement(value, elementId);
@@ -88,6 +96,14 @@
           });
         } else {
           this.toggleElement(value, elementId);
+        }
+      },
+      resetErrors(value, moduleId) {
+        this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
+        if (this.isCustom) {
+          this.registerCustomModuleDefaultValidationErrors(moduleId);
+        } else {
+          this.registerStudioModuleDefaultValidationErrors(moduleId);
         }
       }
     }

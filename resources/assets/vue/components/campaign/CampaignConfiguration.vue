@@ -5,7 +5,7 @@
       <!-- Configuration Inputs -->
       <div class="card">
         <group-container>
-          <settings-container custom-class="field-Tags" label="Email Name">
+          <settings-container custom-class="field-Tags" label="Email Name" key="email-name">
             <template slot="setting-bottom">
               <el-input type="text"
                 placeholder="Email Name"
@@ -27,14 +27,13 @@
             </template>
           </settings-container>
 
-
-          <settings-container label="Preheader Text" v-if="enablePreheader" title="The best practice is to limit preheaders to 50 characters.">
+          <settings-container label="Preheader Text" v-if="enablePreheader" title="The best practice is to limit preheaders to 50 characters." key="preheader-text">
             <template slot="setting-bottom">
               <el-input size="mini" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
             </template>
           </settings-container>
 
-          <settings-container custom-class="field-Tags" label="Tags" v-if="enableTagging">
+          <settings-container custom-class="field-Tags" label="Tags" v-if="enableTagging" key="tags">
             <template slot="setting-bottom">
               <el-select
                 class="width-full"
@@ -58,14 +57,20 @@
             </template>
           </settings-container>
 
-          <settings-container v-if="enableAutoSave" label="Auto Save" class="last-saved">
+          <settings-container label="Email Color" v-if="campaign.library_config.templateBackgroundPalettes" key="email-color">
+            <template slot="setting-bottom" v-if="templatePalette">
+              <compact-picker ref="compact" v-model="templateBackgroundColor" :palette="Object.values(templatePalette.options)"></compact-picker>
+            </template>
+          </settings-container>
+
+          <settings-container v-if="enableAutoSave" label="Auto Save" class="last-saved" key="auto-save">
             <template slot="setting-right">
               <toggle-button class="pull-right" :value="campaign.auto_save" id="autoSave" @change="autoSaveChange"></toggle-button>
               <label v-if="!secondaryLoading" class="autosave-message pull-right">last saved: {{this.campaign.updated_at.substring(0,16)}}</label>
               <secondary-spinner></secondary-spinner>
             </template>
           </settings-container>
-          <settings-container  v-if="enableAutoSave && $can('fix_layout')" label="Fix Layout">
+          <settings-container  v-if="enableAutoSave && $can('fix_layout')" label="Fix Layout" key="fix-layout">
             <template slot="setting-right">
               <toggle-button class="pull-right" :value="campaign.locked" id="fixLayout" @change="toggleLockCampaign"></toggle-button>
             </template>
@@ -78,6 +83,7 @@
 
 <script>
   import _ from 'lodash';
+  import { Compact } from 'vue-color';
   import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
   import secondarySpinner from '../common/secondarySpinner.vue';
   import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
@@ -88,7 +94,8 @@
       SettingsContainer,
       secondarySpinner,
       LabelItemContainer,
-      GroupContainer
+      GroupContainer,
+      'compact-picker': Compact
     },
     name: 'CampaignConfiguration',
     data () {
@@ -103,6 +110,14 @@
           campaignPreheader: '',
           campaignProcess: false,
           tags: []
+        },
+        defaultTemplateBackgroundColor() {
+          let defaultTemplateBackgroundColor = '#FFFFFF';
+          if (this.campaign.library_config.templateBackgroundColor) {
+            defaultTemplateBackgroundColor = JSON.parse(this.campaign.library_config.templateBackgroundPalettes).default
+          }
+
+          return defaultTemplateBackgroundColor
         },
         globalConfig: {},
         campaignConfig: {},
@@ -149,6 +164,24 @@
         set(value) {
           this.saveCampaignName(value);
         },
+      },
+      templateBackgroundColor: {
+        get() {
+          return { hex: this.campaign.campaign_settings.templateBackgroundColor || this.templatePalette.default };
+        },
+        set(value) {
+          const campaignSettings = {
+            templateBackgroundColor: value.hex
+          };
+
+          this.$store.commit('campaign/saveCampaignData', {
+            name: 'campaign_settings',
+            value: campaignSettings,
+          });
+        }
+      },
+      templatePalette() {
+        return this.campaign.library_config.templateBackgroundPalettes ? JSON.parse(this.campaign.library_config.templateBackgroundPalettes) : undefined
       },
     },
 

@@ -3,146 +3,152 @@
     <div class="modal-mask modal-proof">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <slot name="header">
-            <button type="button" class="close" @click="close"><span>&times;</span></button>
-          </slot>
-          <slot name="body">
-              <h4>Who would you like to send this email to for review?</h4>
-              <div class="modal-container-inner">
-                <div class="send-proof">
-                    <form name="send-proof-form" id="send-proof-form" action="/proof/create" @submit.prevent="send">
-                        <input type="hidden" name="campaign_id" id="campaign_id" :value="campaign.campaign_id">
-                        <input type="hidden" name="proof_id" id="proof_id" :value="campaign.campaign_data.proof_id">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <select name="proof_users" id="proof_users" data-live-search="true" class="proof-users-picker form-control">
-                                  <option v-bind:key="user.id" v-for="user in users" :value="user">{{user}}</option>
-                                </select>
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-reviewer-add beta-btn-primary" @click="addReviewer">Add</button>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="modal-divider"></div>
-
-                        <table class="table table-condensed" id="reviewers-table">
-                            <thead>
-                                <tr>
-                                  <th class='col-xs-5'>Email</th>
-                                  <th class='col-xs-2'>Approval Required?</th>
-                                  <th class='col-xs-1'>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                              <tr v-for="(reviewer, key) in reviewers">
-                                  <td>
-                                    <input type="hidden" :name="'reviewers[' + key + '][email]'"
-                                      :value="reviewer.email">{{reviewer.email}}
-                                  </td>
-                                  <td>
-                                    <checkbox
-                                      :checked="reviewer.checked"
-                                      :disabled="reviewer.requiredDisable || false"
-                                      :name="'reviewers[' + key + '][required]'"
-                                      :value="reviewer.requiredValue"
-                                    ></checkbox>
-                                  </td>
-                                  <td>
-                                    <input type="hidden" :name="'reviewers[' + key + '][notification_message]'"
-                                      :value="reviewer.notificationMessage" class="notification_message">
-                                    <a href="#" class="add-message" title="Add a message" @click="addNotificationMessage(reviewer)">
-                                        <i class="glyphicon glyphicon-envelope"></i></a>
-                                    <a href="#" class="remove-reviewer" title="Remove this email" @click="removeReviewer(reviewer)">
-                                        <i class="glyphicon glyphicon-remove"></i></a>
-                                  </td>
-                              </tr>
-                            </tbody>
-                        </table>
-                        <div class="modal-divider" v-show="this.campaign.campaign_data.proof_id !== null"></div>
-                        <div class="checkbox new-proof-checkbox" v-show="this.campaign.campaign_data.proof_id !== null">
-                          <div class="input-group">
-                            <label data-toggle="tooltip" data-placement="top"
-                              title="Existing comments, approvals, and rejections will be archived.">
-                              <checkbox name="create_new_proof" value="1" v-model="startProof">
-                                Start proof from scratch
-                              </checkbox>
-                            </label>
-                          </div>
-                          <div class="input-group">
-                            <label>
-                              <checkbox name="send_to_all" value="1">
-                                Send a notification to all reviewers
-                              </checkbox>
-                            </label>
-                          </div>
-                        </div>
-                    </form>
+          <button type="button" class="close" @click="close">
+            <span>
+              &times;
+            </span>
+          </button>
+          <h4>
+            Who would you like to send this email to for review?
+          </h4>
+          <h5>
+            Campaign: {{campaign.campaign_name}}
+          </h5>
+          <div class="modal-container-inner">
+            <div class="send-proof">
+              <form name="send-proof-form" id="send-proof-form" action="/proof/create" @submit.prevent="send">
+                <div class="form-group">
+                  <div class="input-group">
+                    <select name="proof_users" id="proof_users" data-live-search="true" class="proof-users-picker form-control">
+                      <option v-bind:key="user.id" v-for="user in users" :value="user">
+                        {{user}}
+                      </option>
+                    </select>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-reviewer-add beta-btn-primary" @click="addReviewer">
+                        Add
+                      </button>
+                    </span>
+                  </div>
                 </div>
-                <div id="modal-proof-message" class="modal fade" tabindex="-2" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-sm">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4>Write a message</h4>
-                        </div>
-                        <div class="modal-body">
-                          <div class="proof-add-message">
-                            <input type="hidden" name="proof-current-row" id="proof-current-row" value="" />
-                            <div class="form-group">
-                              <textarea name="notification_message" id="notification_message" class="form-control"
-                                rows="3" maxlength="200" v-model="currentNotificationMessage"></textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-primary btn-cancel beta-btn-secondary" @click="discardNotificationMessage">Cancel</button>
-                          <button class="btn btn-default beta-btn-primary" id="btn-proof-message" @click="saveNotificationMessage">Add message</button>
-                        </div>
+                <div class="modal-divider"></div>
+                <table class="table table-condensed" id="reviewers-table">
+                  <thead>
+                    <tr>
+                      <th class='col-xs-5'>
+                        Email
+                      </th>
+                      <th class='col-xs-2'>
+                        Approval Required?
+                      </th>
+                      <th class='col-xs-1'>
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(reviewer, key) in reviewers" v-bind:key="key">
+                      <td>
+                        {{reviewer.email}}
+                      </td>
+                      <td>
+                        <checkbox :disabled="reviewer.require_unabled || false" :name="'reviewers[' + key + '][required]'" v-model="reviewer.required"></checkbox>
+                      </td>
+                      <td>
+                        <a href="#" class="add-message" title="Add a message" @click="addNotificationMessage(reviewer)">
+                          <i class="glyphicon glyphicon-envelope"  v-bind:class="{ containMessage: reviewer.notification_message }" ></i>
+                        </a>
+                        <a href="#" class="remove-reviewer" title="Remove this email" @click="removeReviewer(reviewer)">
+                          <i class="glyphicon glyphicon-remove"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="modal-divider" v-show="campaignData.proof_id !== null"></div>
+                <div class="checkbox new-proof-checkbox" v-show="campaignData.proof_id !== null">
+                  <div class="input-group">
+                    <label data-toggle="tooltip" data-placement="top" title="Selecting this option will archive the previously collected approvals, rejections, and comments. It will effectively start the approval process over from the beginning">
+                      <checkbox name="create_new_proof" value="1" v-model="startProof">
+                        Start proof from scratch
+                      </checkbox>
+                    </label>
+                  </div>
+                  <div class="input-group">
+                    <label data-toggle="tooltip" data-placement="top" title="Selecting this option will trigger the review request email to all reviewers, even if they had already received it as part of an earlier request. Leaving it unchecked will send the email only to newly added or edited users">
+                      <checkbox name="send_to_all" value="1">
+                        Send a notification to all reviewers
+                      </checkbox>
+                    </label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div id="modal-proof-message" class="modal fade" tabindex="-2" role="dialog" aria-hidden="true">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4>
+                      Write a message
+                    </h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="proof-add-message">
+                      <div class="form-group">
+                        <textarea name="notification_message" id="notification_message" class="form-control" rows="3" maxlength="200" v-model="currentNotificationMessage"></textarea>
                       </div>
                     </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-cancel beta-btn-secondary" @click="discardNotificationMessage">
+                      Cancel
+                    </button>
+                    <button class="btn btn-default beta-btn-primary" id="btn-proof-message" @click="saveNotificationMessage">
+                      Add message
+                    </button>
+                  </div>
                 </div>
               </div>
-          </slot>
+            </div>
+          </div>
           <div class="modal-footer">
-            <slot name="footer">
-              <button type="button" class="btn btn-default beta-btn-secondary" @click="close">Close</button>
-              <button
-                class="btn btn-default beta-btn-primary"
-                :class="{'disabled': reviewers.length === 0}"
-                :disabled="reviewers.length === 0"
-                id="btn-send-proof"
-                @click="send"
-              >Submit</button>
-            </slot>
+            <button type="button" class="btn btn-default beta-btn-secondary" @click="close">
+              Close
+            </button>
+            <button class="btn btn-default beta-btn-primary" :class="{'disabled': reviewers.length === 0}" :disabled="reviewers.length === 0" id="btn-send-proof" @click="send">
+              Submit
+            </button>
           </div>
         </div>
       </div>
     </div>
   </transition>
 </template>
-
+<style lang="less">
+  .containMessage {
+    color: green
+  }
+</style>
 <script>
   import request from '../../../utils/request';
   import Q from 'q';
   import { Checkbox } from 'vue-checkbox-radio';
-
-  // @TODO remove jQuery dependencies.
-  $.ajaxSetup({
-      headers: {
-        'X-CSRF-token': Application.globals.csrfToken
-      }
-  });
-
+  import proofService from '../../../services/proof';
   export default {
     components: {
       Checkbox
+    },
+    data () {
+      return {
+        proofId: null
+      }
     },
     computed: {
       modalProof () {
         return this.$store.state.campaign.modalProof;
       },
       campaign () {
-        return this.$store.getters["campaign/campaign"];
+        return this.$store.getters['campaign/campaign'];
       }
     },
     watch: {
@@ -156,29 +162,34 @@
     methods: {
       close () {
         this.reviewers = [];
-        this.$store.commit("campaign/toggleModal", 'modalProof');
+        this.$store.commit('campaign/toggleModal', 'modalProof');
       },
       send () {
         this.$store.commit("global/setLoader", true);
+        let data = {
+          campaign_id: this.campaign.campaign_id,
+          reviewers: this.reviewers,
+        }
+        if(!this.campaign.campaign_data.proof_id || this.startProof){
+          data.create_new_proof = true;
+        }
+        // Use new proof id if available.
+        data.proof_id = this.proofId;
+        if (!this.proofId && this.campaign.campaign_data.proof_id) {
+          data.proof_id = this.campaign.campaign_data.proof_id;
+        }
 
-        let data = $(document.getElementById('send-proof-form')).serialize();
-
-        let jqXHR = $.ajax('/proof/create', {
-          method: 'post',
-          data: data
-        });
-
-        jqXHR.done((response) => {
-          this.$store.commit("global/setLoader", false);
+        proofService.create(data).then((response) => {
+          this.$store.commit('global/setLoader', false);
           var $container = $('.modal-container').find('.send-proof');
-
           if (response.status === 'success') {
+            this.proofId = response.data.proof_id;
             // If the campaign can't be completed, hide the Continue button
-            if ("can_be_completed" in response.data) {
+            if ('can_be_completed' in response.data) {
               if (response.data.can_be_completed) {
-                $('.campaign-continue').show();
+                this.$store.commit('campaign/campaignCanBeProcessed', true);
               } else {
-                $('.campaign-continue').hide();
+                this.$store.commit('campaign/campaignCanBeProcessed', false);
               }
             }
             this.close();
@@ -189,46 +200,54 @@
           } else {
             this.showMessage($container, 'danger', response.message);
           }
+        })
+        .catch((error) => {
+          this.$root.$toast(error, {className: 'et-error'});
         });
-
       },
       fetchUsers () {
-        $.getJSON(this.$_app.config.baseUrl + '/proof/users', {}, function(users) {
-          this.users = users;
-        }.bind(this));
-
+        proofService.getJSON('users').then((response) => {
+          if (response.status === 'success') {
+            this.users = response.data? response.data.sort() : {};
+          } else {
+            this.showMessage($container, 'danger', response.message);
+          }
+        })
+        .catch((error) => {
+          this.$root.$toast(error, {className: 'et-error'});
+        });
         return this.users;
       },
       checkCampaign () {
-        $.getJSON(this.$_app.config.baseUrl + '/proof/campaign/' + this.campaign.campaign_data._id, {}, function(response) {
+        proofService.getJSON('campaign', this.campaign.campaign_data._id).then((response) => {
           if (response.status === 'success') {
             this.campaignData = response.data;
-
             if (this.campaignData.proof_id !== null) {
-              // If a proof already exists, set the "Start proof from scratch" off
+              // If a proof already exists, set the 'Start proof from scratch' off
               this.startProof = false;
             }
-
             if ('can_be_processed' in this.campaignData && this.campaignData.can_be_processed === false) {
               this.$root.$toast(
                 this.campaignData.alert,
                 {className: 'et-info'}
               );
-              $('.campaign-continue').hide();
+              this.$store.commit('campaign/campaignCanBeProcessed', false);
             }
           }
-        }.bind(this));
+        })
+        .catch((error) => {
+          this.$root.$toast(error, {className: 'et-error'});
+        });
       },
       fetchReviewers () {
-        $.getJSON(this.$_app.config.baseUrl + '/proof/reviewers/' + this.campaign.campaign_data._id, {}, function(response) {
+        proofService.getJSON('reviewers', this.campaign.campaign_data._id).then((response) => {
           if (response && response.status === 'success') {
-              this.reviewers = [];
-              for (let index in response.data) {
-                this.addReviewer(response.data[index].email, response.data[index]);
-              }
+              this.reviewers = response.data;
           }
-        }.bind(this));
-
+        })
+        .catch((error) => {
+          this.$root.$toast(error, {className: 'et-error'});
+        });
         return this.reviewers;
       },
 
@@ -243,7 +262,7 @@
         var $table = this.getReviewersTable();
 
         if (typeof email === 'object') {
-          email = $('#proof_users option:selected').text();
+          email = $('#proof_users option:selected').text().trim();
         }
 
         // Check if the email already exists in the table
@@ -257,11 +276,11 @@
               notification_message: ''
             }, params );
 
-            var requiredValue = 1;
+            var requiredValue = 0;
             var requiredDisable = false;
             var notification_message = params.notification_message || '';
 
-            if ("require_unabled" in params) {
+            if ('require_unabled' in params && params.require_unabled) {
                 requiredValue = 0;
                 requiredDisable = true;
             }
@@ -269,9 +288,9 @@
             this.reviewers.push({
               email: email,
               checked: params.required ? true : false,
-              requiredValue: requiredValue,
-              requiredDisable: requiredDisable,
-              notificationMessage: notification_message
+              required: requiredValue,
+              require_unabled: requiredDisable,
+              notification_message: notification_message
             });
 
         } else {
@@ -321,7 +340,7 @@
 
           // Show if not exist a visible alert
           if (!container.find('.alert').length) {
-              container.prepend(errorAlert).find(".alert").slideDown();
+              container.prepend(errorAlert).find('.alert').slideDown();
               setTimeout(function() {
                   container.find('.alert')
                       .slideUp('normal', function() {
@@ -334,7 +353,7 @@
 
         $('#modal-proof-message').removeClass('fade');
         this.currentReviewer = reviewer;
-        this.currentNotificationMessage = this.currentReviewer.notificationMessage;
+        this.currentNotificationMessage = this.currentReviewer.notification_message;
         $('#modal-proof-message').show();
         $('#notification_message').focus();
       },
@@ -342,7 +361,7 @@
         $('#modal-proof-message').hide();
       },
       saveNotificationMessage () {
-        this.currentReviewer.notificationMessage = $('#notification_message').val();
+        this.currentReviewer.notification_message = $('#notification_message').val();
         $('#modal-proof-message').hide();
       }
 
@@ -376,3 +395,12 @@
     },
   };
 </script>
+
+<style lang="less">
+  .dropdown-menu {
+    .open {
+      overflow-y: scroll !important;
+      width: 100%;
+    }
+  }
+</style>

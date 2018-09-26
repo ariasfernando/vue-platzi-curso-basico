@@ -75,7 +75,7 @@ export default {
         this.validated = true;
       });
     },
-    registerStudioModuleDefaultValidationErrors() {
+    registerStudioModuleDefaultValidationErrors(moduleId) {
       // studio modules with multiple columns which have plugins with validation do not trigger when the module is added
       // so we need flag them with errors to aid the user to open each module and run the validations at least once
 
@@ -91,20 +91,26 @@ export default {
                 validations = plugin.config.alt.validations;
               }
 
-              if (validations) {
-                let validationsRequired = false;
-                _.each(validations, (validation, pluginIndex) => {
-                  if (plugin.enabled && validation && !plugin.data.validated) {
-                    validationsRequired = true;
+              if (validations && validations.required === true && component.container.styleOption.enableElement && plugin.enabled) {
+
+                // if the validations are enabled and were never ran we assume they have errors
+                let defaultValue = '';
+                if (component.type === 'button-element' && typeof component.button === 'object') {
+                  defaultValue = component.button.attribute.href;
+                } else if (component.type === 'image-element' && typeof component.image === 'object') {
+                  if (plugin.config.validations) {
+                    defaultValue = component.image.attribute.href;
+                  } else if (plugin.config.alt && plugin.config.alt.validations) {
+                    defaultValue = component.image.attribute.alt;
                   }
-                });
-                if (validationsRequired) {
-                  // if the validations are enabled and were never ran we assume they have errors
+                }
+
+                if (_.isEmpty(defaultValue)) {
                   const error = {
                     scope: {
                       type: 'plugin',
                       name: plugin.name,
-                      moduleId: this.moduleId,
+                      moduleId: moduleId,
                       columnId: columnIndex,
                       componentId: componentIndex
                     },
@@ -118,14 +124,14 @@ export default {
         });
       }
     },
-    registerCustomModuleElementDefaultValidationError(elementName, validationOption, defaultValue) {
-      if (_.indexOf(['required', 'required:true'], validationOption) && _.isEmpty(defaultValue)) {
+    registerCustomModuleElementDefaultValidationError(moduleId, elementName, validationOption, defaultValue) {
+      if (_.indexOf(['required', 'required:true'], validationOption) >= 0 && _.isEmpty(defaultValue)) {
         const error = {
           msg: 'The field is required.',
           scope: {
             type: 'custom',
             elementName,
-            moduleId: this.moduleId,
+            moduleId: moduleId,
             idInstance: this.module.idInstance,
           },
         };
@@ -133,7 +139,7 @@ export default {
         this.$store.dispatch('campaign/addErrors', [error]);
       }
     },
-    registerCustomModuleDefaultValidationErrors() {
+    registerCustomModuleDefaultValidationErrors(moduleId) {
       // Since vee-validate validations do not run until the settings panel is loaded
       // we validate 'required' validations in background to prevent completing and invalid campaign
 
@@ -141,19 +147,23 @@ export default {
         _.each(this.module.params.validation, (item, key) => {
           if (key === 'images') {
             _.each(this.module.params.validation[key], (imageElement, key2) => {
-              _.each(this.module.params.validation[key][key2], (fieldValidations, field) => {
-                const elementName = `${key2}${field}`;
 
-                const defaultValue = this.module.data.images[key2][field];
-                const validationOptionValue = fieldValidations.option;
-                this.registerCustomModuleElementDefaultValidationError(elementName, validationOptionValue, defaultValue);
-              });
+              if (typeof imageElement.parentElement === undefined 
+                || (imageElement.parentElement && this.module.data[imageElement.parentElement].enableElement)) {
+                _.each(this.module.params.validation[key][key2], (fieldValidations, field) => {
+                  const elementName = `${key2}${field}`;
+
+                  const defaultValue = this.module.data.images[key2][field];
+                  const validationOptionValue = fieldValidations.option;
+                  this.registerCustomModuleElementDefaultValidationError(moduleId, elementName, validationOptionValue, defaultValue);
+                });
+              }
             });
           } else {
             _.each(this.module.params.validation[key], (validationOptionValue) => {
               const elementName = `${key}`;
               const defaultValue = this.module.data[key];
-              this.registerCustomModuleElementDefaultValidationError(elementName, validationOptionValue, defaultValue);
+              this.registerCustomModuleElementDefaultValidationError(moduleId, elementName, validationOptionValue, defaultValue);
             });
           }
         });
