@@ -29,11 +29,14 @@ function createStore(option) {
  */
 describe('== Library Store ==', () => {
   let baseUrl;
+  let original;
   let store;
   beforeAll(() => {
     baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
+    original = console.error;
   });
   beforeEach(() => {
+    console.error = jest.fn();
     store = createStore({
       strict: true,
       modules: {
@@ -42,9 +45,12 @@ describe('== Library Store ==', () => {
     });
   });
   afterEach(() => {
+    console.error.mockClear();
+    console.error = original;
     store = null;
   });
   afterAll(() => {
+    original = null;
     baseUrl = null;
   });
   describe('trigger muttation:', () => {
@@ -1071,30 +1077,175 @@ describe('== Library Store ==', () => {
 
       done();
     });
+    it('"setTemplating" with data, expect to set campaign_data.template to true', (done) => {
+      let templating = true;
+      let campaignData = {
+        campaign_data: {
+          modules_data: {},
+          template: false,
+        },
+      };
+
+      store.commit('campaign/loadCampaignData', campaignData);
+      store.commit('campaign/setTemplating', templating);
+      
+      let stateCampaignTemplating = store.state.campaign.campaign.campaign_data.template;
+
+      expect(stateCampaignTemplating).toBeTruthy();
+
+      templating = null;
+      campaignData = null;
+      stateCampaignTemplating = null;
+
+      done();
+    });
+    xit('"addError" with data, expect to push the error to fieldError', (done) => {
+      let errorMessage1 = {
+        error: {
+          scope: {
+            type: 'plugin',
+            name: 'plugin.name',
+            moduleId: 0,
+            columnId: 0,
+            componentId: 0,
+          },
+        },
+      };
+      let errorMessage2 = {
+        error: {
+          scope: {
+            type: 'plugin',
+            name: 'plugin',
+            moduleId: 1,
+            columnId: 0,
+            componentId: 0,
+          },
+        },
+      };
+
+      store.commit('campaign/addError', errorMessage1);
+      store.commit('campaign/addError', errorMessage2);
+
+      let stateCampaignFieldError = store.state.campaign.fieldErrors;
+
+      expect(stateCampaignFieldError[0]).toEqual('typeError:unknow');
+      expect(stateCampaignFieldError[1]).toEqual('typeError:unknow type');
+
+      errorMessage1 = null;
+      errorMessage2 = null;
+      stateCampaignFieldError = null;
+
+      done();
+    });
+    xit('"clearErrorsByModuleId", with moduleId, expect to clean', (done) => {
+
+      let moduleId = 0;
+
+      let errorMessage1 = {
+          scope: {
+            type: 'plugin',
+            name: 'plugin.name',
+            moduleId: 0,
+            columnId: 0,
+            componentId: 0,
+            clearErrorsByModuleId: 0,
+          },
+      };
+      let errorMessage2 = {
+          scope: {
+            type: 'plugin',
+            name: 'plugin',
+            moduleId: 1,
+            columnId: 0,
+            componentId: 0,
+            clearErrorsByModuleId: 0,
+          },
+      };
+      let modulesData = [
+        {
+          data: {
+            errors: [],
+          },
+        },
+        {
+          data: {
+            errors: [],
+          },
+        },
+      ];
+
+      store.commit('campaign/updateEmailCanvas', modulesData);
+      store.commit('campaign/addError', errorMessage1);
+      store.commit('campaign/addError', errorMessage2);
+      store.commit('campaign/clearErrorsByModuleId', moduleId);
+      let storeModulesErorrs1 = store.state.campaign.modules[0].data;
+      let storeModulesErorrs2 = store.state.campaign.modules[1].data;
+
+      expect(storeModulesErorrs1).toEqual(errorMessage2);
+      expect(storeModulesErorrs2).not.toBe(errorMessage1);
+      
+      moduleId = null;
+      modulesData = null;
+      errorMessage1 = null;
+      errorMessage2 = null;
+
+      done();
+    });
+    xit('"clearErrorsByScope"', () => {});
+    it('"setCampaignName" with name, expect to set the name of campaign', (done) => {
+      let name = 'campaign of tests';
+      let campaignData = {
+        campaign_data: {},
+      };
+
+      store.commit('campaign/loadCampaignData', campaignData);
+      store.commit('campaign/setCampaignName', name);
+
+      let stateCampaignName = store.state.campaign.campaign.campaign_data.campaign_name;
+
+      expect(stateCampaignName).toEqual(name);
+      
+      name = null;
+      campaignData = null;
+      stateCampaignName = null;
+
+      done();
+    });
+    it('"error" with message error, expect to trigger console error', (done) => {
+      let messageError = 'type error';
+
+      store.commit('campaign/error', messageError);
+      
+      expect(console.error).toHaveBeenCalled();
+      
+      messageError = null;
+      
+      done();
+    });
   });
 
   xdescribe('trigger actions', () => {
-    let original;
+    
     beforeAll(() => {
-      original = console.error;
+      
     });
 
     beforeEach(() => {
-      console.error = jest.fn();
+      
     });
 
     afterEach(() => {
-      console.error.mockClear();
-      console.error = original;
+      
     });
 
     afterAll(() => {
-      nock.cleanAll();
-      nock.restore();
-      original = null;
+      
     });
 
     it('', (done) => {
+      let = ;
+      store.dispatch('campaign/updateCustomElement', );
+
       done();
     });
 
@@ -1108,4 +1259,5 @@ describe('== Library Store ==', () => {
       done();
     });
   });
+
 });
