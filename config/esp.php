@@ -116,7 +116,7 @@ return [
     'silverpop' => [
         'title' => 'Silverpop',
         'class' => 'Silverpop',
-        'api_path' => 'http://api.pilot.silverpop.com/XMLAPI',
+        'api_path' => env('API_SILVERPOP_BASE_URL', '').'/XMLAPI',
         'user_name' => env('API_SILVERPOP_USERNAME', ''),
         'password' => env('API_SILVERPOP_PASSWORD', ''),
         'folder_path' => '',

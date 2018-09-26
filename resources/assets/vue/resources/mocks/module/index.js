@@ -1,7 +1,13 @@
+const createModule = require('./createModule');
+const deleteModule = require('./deleteModule');
+const getAllModule = require('./getAllModule');
+const getModule = require('./getModule');
+const saveModule = require('./saveModule');
+
 module.exports = {
-  getModule: require('./getModule'),
-  getAllModules: require('./getAllModule'),
-  saveModule: require('./saveModule'),
-  createModule: require('./createModule'),
-  deleteModule: require('./deleteModule')
+  createModule,
+  deleteModule,
+  getAllModule,
+  getModule,
+  saveModule,
 };
