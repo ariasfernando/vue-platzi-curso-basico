@@ -89,7 +89,7 @@ return [
             'provider' => 'users',
             'email' => 'emails.password',
             'table' => 'password_resets',
-            'expire' => 60,
+            'expire' => env('PASSWORD_RESET_TOKEN_EXPIRATION', 720),
         ],
     ],
 
