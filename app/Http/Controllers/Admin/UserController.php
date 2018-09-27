@@ -245,10 +245,10 @@ class UserController extends Controller
 
         if (env('USER_LOGIN', 'default') === 'default') {
             $user_auth = User::where('email', '=', $request->input('email'))->first();
-
             if (is_null($user_auth['status']) || $user_auth['status'] != "deleted") {
                 $pass_token = $this->passwords->getRepository()->create($user_auth);
-                $user_auth->notify(new WelcomePasswordNotification($pass_token, $user_auth['name']));
+                $roles = !is_null($request->input("roles")) ? $request->input("roles") : [];
+                $user_auth->notify(new WelcomePasswordNotification($pass_token, $user_auth['name'], $roles));
 
                 return response()->json([
                     'code' => 0,
