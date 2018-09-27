@@ -3,6 +3,7 @@
 namespace Stensul\Services;
 
 use Auth;
+use App;
 use Log as FileLog;
 use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\BSON\UTCDateTime;
@@ -56,10 +57,12 @@ class Logger
             ->where('properties.user_id', new ObjectID($user_id))
             ->first();
 
+        $ip = request()->ip() ? request()->ip() : 'NA';
+        $user_agent =  request()->header('User-Agent') ? request()->header('User-Agent') :'NA';
         $params = [
             'description' => 'Campaign Edit Spent Time',
-            'ip' => 'NA',
-            'user_agent' => 'NA',
+            'ip' => $ip,
+            'user_agent' => $user_agent,
             'controller' => 'CampaignController',
             'action' => 'getEdit',
             'properties' => [
