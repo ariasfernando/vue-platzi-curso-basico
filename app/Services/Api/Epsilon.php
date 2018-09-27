@@ -197,9 +197,9 @@ class Epsilon implements ApiConnector
                 ]
             ];
 
-            if (isset($request['content_id'])) {
-                $content_id = $request['content_id'];
-                
+            $content_id = isset($request['content_id']) ? $request['content_id'] : $epsilon_config['content_id'];
+
+            if (!empty($content_id)) {
                 $content = $this->getContentById($content_id);
 
                 $request_type = 'PUT';

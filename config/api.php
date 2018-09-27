@@ -311,6 +311,7 @@ return [
         ],
         'x-ouid' => env('API_EPSILON_XOUID', ''),
         'folder' => env('API_EPSILON_FOLDER', ''),
+        'content_id' => env('API_EPSILON_CONTENT_ID', ''),
         'api_url' => 'https://api.harmony.epsilon.com',
         'upload_path' => '/v1/contentBlocks',
     ],
