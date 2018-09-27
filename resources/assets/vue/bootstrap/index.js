@@ -153,7 +153,7 @@ export default {
     if (customer.plugins) {
       _.merge(plugins, customer.plugins);
     }
-    
+
     this.Vue.prototype.$_app.modulePlugins = plugins.modules;
     this.Vue.prototype.$_app.globalComponents = plugins.common;
 
@@ -164,6 +164,7 @@ export default {
     // Register Global Components
     _.each(this.Vue.prototype.$_app.modulePlugins, (component) => {
       if (component.studioSettings) {
+        component['hasStudioSettings'] = true;
         this.Vue.component(`studio-${component.name}`, component.studioSettings);
         delete component.studioSettings;
       }

@@ -7,6 +7,7 @@
   >
     <td class="stx-toolbar-content stx-position-relative"
         :data-module-id="moduleId"
+        :module-id-instance="module.idInstance"
         :class="{ 'stx-show-error': hasErrors }"
         @click.prevent="config"
         :width="moduleWidth"
@@ -31,6 +32,7 @@
     <td
       class="stx-toolbar-content stx-position-relative"
       :data-module-id="moduleId"
+      :module-id-instance="module.idInstance"
       :width="module.structure.attribute.width || '100%'"
       :style="module.structure.style"
       :valign="module.structure.attribute.valign || 'top'"
@@ -165,7 +167,7 @@
 
   module.exports = {
     name: 'Module',
-    props: ['moduleId'],
+    props: ['moduleId', 'module'],
     mixins: [ ElementMixin, validatorMixin ],
     created() {
       if(this.module.type === 'studio'
@@ -184,9 +186,6 @@
         }
     },
     computed: {
-      module() {
-        return this.$store.getters["campaign/modules"][this.moduleId];
-      },
       templateWidth() {
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },

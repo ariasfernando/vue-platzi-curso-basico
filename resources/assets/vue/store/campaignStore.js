@@ -18,6 +18,43 @@ import clone from 'clone';
 import campaignService from '../services/campaign';
 import imageService from '../services/image';
 
+const convertArrayToObject = (element, { subComponent, link }) => {
+  const valueToConvert = subComponent !== undefined && link !== undefined ? element[subComponent] : element;
+  const lastPosition = link === undefined ? subComponent : link;
+  Vue.set(valueToConvert, lastPosition, {});
+  return valueToConvert[lastPosition];
+};
+
+const getComponent = (module, elementId) => {
+  let component;
+  _.forEach(module.structure.columns, (column) => {
+    _.forEach(column.components, (CurrentComponent) => {
+      if (CurrentComponent.id === elementId) {
+        component = CurrentComponent;
+        return false;
+      }
+    });
+    return !component;
+  });
+  return component;
+};
+
+const getModule = (modules, idInstance) => {
+  let module;
+  _.forEach(modules, (currentModule) => {
+    if (currentModule.idInstance === idInstance) {
+      module = currentModule;
+      return false;
+    }
+  });
+  return module;
+};
+
+const getProperties = (element, { subComponent, link }) => {
+  const subElement = subComponent ? element[subComponent] : element;
+  return link ? subElement[link] : subElement;
+};
+
 function campaignStore() {
   return {
     namespaced: true,
@@ -227,7 +264,19 @@ function campaignStore() {
         };
         state.dirty = true;
       },
+      saveComponentPropertyById(state, { moduleIdInstance, componentId, property, value, ...scope }) {
+        const module = getModule(state.modules, moduleIdInstance);
+        const component = getComponent(module, componentId);
+        let properties = getProperties(component, scope);
+        if (Array.isArray(properties) && isNaN(property)) {
+          // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
+          properties = convertArrayToObject(component, scope);
+        }
+        Vue.set(properties, property, value);
+        state.dirty = true;
+      },
       saveComponentProperty(state, data) {
+        // DEPRECATE, use saveComponentPropertyById
         const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
         const subComponent = data.subComponent ? component[data.subComponent] : component;
         const properties = data.link ? subComponent[data.link] : subComponent;
