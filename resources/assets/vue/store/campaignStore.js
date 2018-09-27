@@ -1,3 +1,7 @@
+/* eslint no-param-reassign:0 */
+/* eslint no-shadow:0 */
+/* eslint no-console:0 */
+
 import Vue from 'vue/dist/vue';
 import {
   filter,
@@ -168,6 +172,8 @@ function campaignStore() {
           const subComponent = payload.subComponent ? dataComponent[payload.subComponent] : dataComponent;
           Vue.set(subComponent, payload.property, payload.value);
           state.dirty = true;
+        } else {
+          throw new Error('moduleId is undefined');
         }
       },
       saveSetting(state, setting) {
