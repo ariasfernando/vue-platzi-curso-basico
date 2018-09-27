@@ -43,7 +43,6 @@ export default {
                     <v:fill type="frame" src="${this.element.style.backgroundImage}" ${this.MsoBgcolor} />
                     <v:textbox inset="0,0,0,0">
                       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-                        <tbody>
                           <tr>
                             <td width="100%" style="height:${this.convertPxToPt(this.element.attribute.height)};" valign="${this.valign}">
                   <![endif]-->`;
