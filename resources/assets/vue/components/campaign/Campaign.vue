@@ -171,6 +171,11 @@
           );
         });
       },
+      logTimeWindowFocus() {
+        if (document.visibilityState && document.visibilityState === 'visible') {
+          CampaignService.logTime(this.campaignId, this.logTimeInterval / 1000);
+        }
+      },
       lockPing() {
         this.$store.dispatch('campaign/pingLockCampaign',
           {campaignId: this.campaignId, windowId: this.sessionWindowId});
@@ -198,7 +203,7 @@
           {className: 'et-info'}
         );
       }
-      setInterval(CampaignService.logTime, this.logTimeInterval, this.campaignId, this.logTimeInterval / 1000);
+      setInterval(this.logTimeWindowFocus, this.logTimeInterval);
     }
   };
 </script>
