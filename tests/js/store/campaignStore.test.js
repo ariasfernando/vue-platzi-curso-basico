@@ -2,13 +2,13 @@
 /* eslint import/no-unresolved: 0 */
 /* eslint import/extensions: 0 */
 /* eslint no-console: 0 */
+/* eslint max-len: 0 */
 /* global Application */
 
 /* vendor import */
 import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex/dist/vuex';
 import { cloneDeep } from 'lodash';
-import nock from 'nock';
 import 'expect-more-jest';
 /* local import */
 // import libraryStore from '@/store/libraryStore';
@@ -28,11 +28,9 @@ function createStore(option) {
  * == Test: Models
  */
 describe('== Library Store ==', () => {
-  let baseUrl;
-  let original;
-  let store;
+  let original = () => {};
+  let store = () => {};
   beforeAll(() => {
-    baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
     original = console.error;
   });
   beforeEach(() => {
@@ -51,7 +49,6 @@ describe('== Library Store ==', () => {
   });
   afterAll(() => {
     original = null;
-    baseUrl = null;
   });
   describe('trigger muttation:', () => {
     it('"campaignValidated" and expect of set "campaignValidated" state to true', (done) => {
@@ -377,9 +374,9 @@ describe('== Library Store ==', () => {
       let payload = {
         subComponent: 'text-content',
         property: 'background',
-        value: '#000'
+        value: '#000',
       };
-      
+
       let newStruct = [
         {
           _id: '5b3ce34792f8ef00137bb105',
@@ -404,7 +401,7 @@ describe('== Library Store ==', () => {
 
       payload = null;
       newStruct = null;
-      
+
       done();
     });
     it('"saveSetting" with setting object, expect to set the key with a new value', (done) => {
@@ -475,7 +472,7 @@ describe('== Library Store ==', () => {
       expect(stateToggleModalModalProofTrack).toBeTruthy();
       expect(stateToggleModalModalEnableTemplating).toBeTruthy();
       expect(stateToggleModalModalEsp).toBeTruthy();
-      
+
       stateToggleModalModalCode = null;
       stateToggleModalModalComplete = null;
       stateToggleModalModalPreview = null;
@@ -512,7 +509,7 @@ describe('== Library Store ==', () => {
       store.commit('campaign/removeModule', 0);
 
       let stateModules = store.state.campaign.modules;
-      
+
       expect(stateModules).toBeEmptyArray();
 
       modulesData = null;
@@ -557,7 +554,7 @@ describe('== Library Store ==', () => {
       store.commit('campaign/unsetCurrentComponent');
 
       let stateCurrentComponent = store.state.campaign.currentComponent;
-      
+
       expect(stateCurrentComponent).toBeEmptyObject();
 
       stateCurrentComponent = null;
@@ -570,9 +567,9 @@ describe('== Library Store ==', () => {
       store.commit('campaign/setActiveModule', data);
 
       let stateActiveModule = store.state.campaign.activeModule;
-      
+
       expect(stateActiveModule).toEqual(0);
-      
+
       data = null;
       stateActiveModule = null;
 
@@ -582,9 +579,9 @@ describe('== Library Store ==', () => {
       store.commit('campaign/unsetActiveModule');
 
       let stateActiveModule = store.state.campaign.activeModule;
-      
+
       expect(stateActiveModule).toBeUndefined();
-      
+
       stateActiveModule = null;
 
       done();
@@ -667,7 +664,7 @@ describe('== Library Store ==', () => {
       store.commit('campaign/setActiveLastModule');
 
       let stateActiveModule = store.state.campaign.activeModule;
-      
+
       expect(stateActiveModule).toEqual(4);
 
       modulesData = null;
@@ -933,7 +930,7 @@ describe('== Library Store ==', () => {
       expect(stateModulescomponent).toHaveProperty(data.attribute, data.attributeValue);
 
       data = null;
-      
+
       modulesData = null;
       stateModulescomponent = null;
 
@@ -972,7 +969,7 @@ describe('== Library Store ==', () => {
       expect(stateModulescomponent).toHaveProperty(data.attribute, data.attributeValue);
 
       data = null;
-      
+
       modulesData = null;
       stateModulescomponent = null;
 
@@ -1051,7 +1048,7 @@ describe('== Library Store ==', () => {
       let moduleId = 0;
 
       store.commit('campaign/setCustomModule', moduleId);
-      
+
 
       let stateCurrentModuleId = store.state.campaign.currentCustomModuleId;
 
@@ -1088,7 +1085,7 @@ describe('== Library Store ==', () => {
 
       store.commit('campaign/loadCampaignData', campaignData);
       store.commit('campaign/setTemplating', templating);
-      
+
       let stateCampaignTemplating = store.state.campaign.campaign.campaign_data.template;
 
       expect(stateCampaignTemplating).toBeTruthy();
@@ -1138,28 +1135,27 @@ describe('== Library Store ==', () => {
       done();
     });
     xit('"clearErrorsByModuleId", with moduleId, expect to clean', (done) => {
-
       let moduleId = 0;
 
       let errorMessage1 = {
-          scope: {
-            type: 'plugin',
-            name: 'plugin.name',
-            moduleId: 0,
-            columnId: 0,
-            componentId: 0,
-            clearErrorsByModuleId: 0,
-          },
+        scope: {
+          type: 'plugin',
+          name: 'plugin.name',
+          moduleId: 0,
+          columnId: 0,
+          componentId: 0,
+          clearErrorsByModuleId: 0,
+        },
       };
       let errorMessage2 = {
-          scope: {
-            type: 'plugin',
-            name: 'plugin',
-            moduleId: 1,
-            columnId: 0,
-            componentId: 0,
-            clearErrorsByModuleId: 0,
-          },
+        scope: {
+          type: 'plugin',
+          name: 'plugin',
+          moduleId: 1,
+          columnId: 0,
+          componentId: 0,
+          clearErrorsByModuleId: 0,
+        },
       };
       let modulesData = [
         {
@@ -1183,11 +1179,9 @@ describe('== Library Store ==', () => {
 
       expect(storeModulesErorrs1).toEqual(errorMessage2);
       expect(storeModulesErorrs2).not.toBe(errorMessage1);
-      
-      moduleId = null;
-      modulesData = null;
-      errorMessage1 = null;
-      errorMessage2 = null;
+
+      moduleId = modulesData = errorMessage1 = errorMessage2 = storeModulesErorrs1 = storeModulesErorrs2 = null;
+
 
       done();
     });
@@ -1204,7 +1198,7 @@ describe('== Library Store ==', () => {
       let stateCampaignName = store.state.campaign.campaign.campaign_data.campaign_name;
 
       expect(stateCampaignName).toEqual(name);
-      
+
       name = null;
       campaignData = null;
       stateCampaignName = null;
@@ -1215,31 +1209,30 @@ describe('== Library Store ==', () => {
       let messageError = 'type error';
 
       store.commit('campaign/error', messageError);
-      
+
       expect(console.error).toHaveBeenCalled();
-      
+
       messageError = null;
-      
+
       done();
     });
   });
 
   xdescribe('trigger actions', () => {
-    
     beforeAll(() => {
-      
+
     });
 
     beforeEach(() => {
-      
+
     });
 
     afterEach(() => {
-      
+
     });
 
     afterAll(() => {
-      
+
     });
 
     it('', (done) => {
@@ -1259,5 +1252,4 @@ describe('== Library Store ==', () => {
       done();
     });
   });
-
 });

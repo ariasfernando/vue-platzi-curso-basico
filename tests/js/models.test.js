@@ -1,4 +1,5 @@
 /* eslint-env node, jest, es6 */
+/* eslint max-nested-callbacks: 0 */
 import Element from '../../resources/assets/vue/models/Element';
 import Plugin from '../../resources/assets/vue/models/Plugin';
 
@@ -29,8 +30,8 @@ describe('== Models ==', () => {
     });
 
     describe('Column', () => {
-      let element;
-      let properties;
+      let element = {};
+      let properties = {};
       beforeAll(() => {
         element = new Element({ type: 'column-element' });
         properties = element.getProperties();
@@ -64,8 +65,8 @@ describe('== Models ==', () => {
     });
 
     describe('TextElement', () => {
-      let element;
-      let properties;
+      let element = {};
+      let properties = {};
       beforeAll(() => {
         element = new Element({ type: 'text-element' });
         properties = element.getProperties();
@@ -99,8 +100,8 @@ describe('== Models ==', () => {
     });
 
     describe('ImageElement', () => {
-      let element;
-      let properties;
+      let element = {};
+      let properties = {};
       beforeAll(() => {
         element = new Element({ type: 'image-element' });
         properties = element.getProperties();
@@ -134,8 +135,8 @@ describe('== Models ==', () => {
     });
 
     describe('DividerElement', () => {
-      let element;
-      let properties;
+      let element = {};
+      let properties = {};
       beforeAll(() => {
         element = new Element({ type: 'divider-element' });
         properties = element.getProperties();
@@ -169,8 +170,8 @@ describe('== Models ==', () => {
     });
 
     describe('ButtonElement', () => {
-      let element;
-      let properties;
+      let element = {};
+      let properties = {};
       beforeAll(() => {
         element = new Element({ type: 'button-element' });
         properties = element.getProperties();
@@ -206,9 +207,9 @@ describe('== Models ==', () => {
   });
 
   describe('Plugins', () => {
-    let testPlugin;
-    let plugin;
-    let properties;
+    let testPlugin = {};
+    let plugin = {};
+    let properties = {};
     beforeAll(() => {
       testPlugin = {
         name: 'test',

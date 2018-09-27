@@ -27,8 +27,8 @@ function createStore(option) {
  * == Test: Models
  */
 describe('== Library Store ==', () => {
-  let baseUrl;
-  let store;
+  let baseUrl = '';
+  let store = () => {};
   beforeAll(() => {
     baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
   });
@@ -80,7 +80,7 @@ describe('== Library Store ==', () => {
   });
 
   describe('Actions', () => {
-    let original;
+    let original = () => {};
     beforeAll(() => {
       original = console.error;
     });
