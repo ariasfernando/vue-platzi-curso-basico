@@ -191,9 +191,6 @@
         }
     },
     computed: {
-      module() {
-        return this.$store.getters["campaign/modules"][this.moduleId];
-      },
       moduleErrors() {
         return this.module.data.errors || [];
       },
