@@ -7,18 +7,18 @@
 </template>
 <script>
 export default {
-  name: "ScrollbarContainer",
+  name: 'ScrollbarContainer',
   data() {
     return {
-      instance: Math.floor(100000 + Math.random() * 900000),
+      instance: Math.floor(100000 + (Math.random() * 900000)),
     };
   },
-  mounted () {
+  mounted() {
     $(`#scrollbar${this.instance}`).mCustomScrollbar({
       axis: 'y',
-      theme: 'minimal-dark'
+      theme: 'minimal-dark',
     });
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
