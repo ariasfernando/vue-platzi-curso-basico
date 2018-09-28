@@ -4,8 +4,7 @@
 
     <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
-      <!-- column left (menu) -->
-      <aside :style="locked ? 'overflow-y: hidden;' : undefined" class="left-bar">
+      <column-bar-container side="left" :style="locked ? 'overflow-y: hidden;' : undefined">
         <div>
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
@@ -14,14 +13,14 @@
             <div class="lock-warning-container" v-if="locked">Unfix the email to add modules</div>
           </div>
         </div>
-      </aside>
+      </column-bar-container>
 
-      <!-- column right (container email) -->
+      <!-- container email -->
       <section class="section-canvas-email module-container">
         <email-canvas v-if="campaignReady"></email-canvas>
       </section>
 
-      <aside class="right-bar">
+      <column-bar-container side="right">
         <div>
           <module-settings v-if="showModuleSettings"></module-settings>
           <module-background-settings></module-background-settings>
@@ -29,7 +28,7 @@
           <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
           <shadow-render></shadow-render>
         </div>
-      </aside>
+      </column-bar-container>
     </div>
 
     <!-- Modals -->
@@ -49,6 +48,7 @@
   import CampaignConfiguration from './CampaignConfiguration.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import CampaignService from '../../services/campaign'
+  import ColumnBarContainer from "../common/containers/ColumnBarContainer.vue";
   import ComponentSettings from './ComponentSettings.vue'
   import CustomModuleSettings from './CustomModuleSettings.vue'
   import EmailActions from './EmailActions.vue'
@@ -71,6 +71,7 @@
     components: {
       CampaignConfiguration,
       CampaignMenu,
+      ColumnBarContainer,
       ComponentSettings,
       CustomModuleSettings,
       EmailActions,
@@ -84,7 +85,7 @@
       ModuleSettings,
       ShadowRender,
       Spinner,
-      Tracking
+      Tracking,
     },
     data: function () {
       return {
@@ -269,176 +270,7 @@
       border-collapse: initial;
     }
   }
-  .right-bar,
-  .left-bar {
-    height: calc(~"100vh - 86px");
-    overflow: auto;
-    overflow: overlay;
-    width: 270px;
-    display: block;
-    float: left;
-      padding: 0px;
-    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-    padding-bottom: 25px;
 
-    &:hover{
-      overflow: overlay
-    }
-
-    &::-webkit-scrollbar {
-        width: 4px; 
-        background: transparent;
-        }
-    &::-webkit-scrollbar-thumb {
-        background: lighten(@stensul-gray, 40%);
-    }
-    .btn.btn-secondary.btn-block {
-      &:hover,
-      &:visited,
-      &:focus,
-      &:active,
-      &:active:focus {
-        color: #666666;
-      }
-        }
-    .fa.pull-left {
-      margin-right: 12px;
-      }
-
-    .components-list {
-      padding: 0;
-      margin: 0;
-
-      .component-item {
-        cursor: pointer;
-        list-style-type: none;
-        font-size: 14px;
-        background-color: #f4f4f4;
-        border: 1px solid #d8d8d8;
-        padding: 20px 20px 14px 20px;
-        width: 47%;
-        margin-right: 4px;
-        margin-bottom: 4px;
-        float: left;
-        text-align: center;
-        transition: all 0.3s linear;
-
-        i {
-          margin: 0 5px;
-          color: #514960;
-          font-size: 28px;
-        }
-        p {
-          display: inline-block;
-          font-size: 12px;
-          margin: 0px;
-          padding: 0px;
-          font-weight: 400px;
-          color: #666666;
-            width: 100%;
-          font-weight: 300;
-          text-align: center;
-        }
-
-        &:hover {
-          border: 1px solid #888888;
-
-          p {
-            color: #333333;
-          }
-        }
-          }
-        }
-
-    .card {
-      padding: 0 8px 15px 8px;
-      border-bottom: 1px solid #f0f0f0;
-      border-top: 1px solid #ffffff;
-      margin-top: -1px;
-      display: table;
-          width: 100%;
-        }
-
-        select{
-      height: 22px;
-          font-size: 11px;
-          color: #666666;
-          border: none;
-      background: #f4f4f4;
-          box-shadow: none;
-          font-weight: 300;
-      width: 65px;
-          float: right;
-        }
-
-    select[multiple] {
-      height: 50px;
-      }
-
-    .vue-js-switch {
-      float: right;
-      padding-top: 0px;
-      margin: 0px;
-    }
-
-    .content-colorpicker {
-      .sketch-picker {
-        display: none;
-        position: absolute !important;
-        z-index: 300;
-        right: 100%;
-          }
-      .icon-remove {
-        color: #999999;
-        background: #ffffff;
-        border: 1px solid #cccccc;
-        margin-top: -40px;
-        margin-left: -35px;
-        padding-top: 4px;
-        }
-      }
-  }
-
-  .card-header {
-    padding-bottom: 10px;
-    ul {
-      margin-left: -10px;
-      margin-right: -10px;
-      border-bottom: 1px solid #dddddd;
-
-      .nav-item {
-        border-top: 1px solid #dddddd;
-        border-left: 1px solid #dddddd;
-        margin-bottom: -2px;
-
-        &:first-child {
-          margin-left: 10px;
-        }
-
-        &:last-of-type {
-          border-right: 1px solid #dddddd;
-        }
-        .nav-link {
-          margin-right: 0;
-          padding: 4px 7px;
-          border: 0;
-          border-radius: 0;
-          font-weight: 300;
-          color: #666666;
-          &.active {
-            border-bottom: 2px solid @focus;
-            background: @focus-light;
-          }
-          &:focus {
-            background-color: transparent;
-          }
-          &:hover {
-            background-color: @focus-light;
-          }
-        }
-      }
-    }
-  }
   aside {
     width: 20%;
     background: @stensul-white;

@@ -128,11 +128,27 @@ export default {
     color: #666666;
   }
 }
-
 .el-input-number {
   width: 105px;
 }
 .settings-container /deep/ .half-setting:first-of-type{
   text-align: left;
+}
+.el-input-number /deep/ .el-input-number__decrease{
+  border-radius: 2px 0px 0px 2px;
+  background: #f8f8f8;
+}
+.el-input-number /deep/ .el-input-number__increase{
+  border-radius: 0px 2px 2px 0px;
+  background: #f8f8f8;
+} 
+.el-input-number /deep/ .el-input_inner{
+  &:focus{
+    border: 1px solid #78dcd6;
+  }
+}
+.el-input-number /deep/ .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled), 
+.el-input-number /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){
+  border: 1px solid #78dcd6;
 }
 </style>

@@ -180,10 +180,16 @@ export default {
 }
 .el-button.is-disabled,
 .el-button.is-disabled:focus,
-.el-button.is-disabled:hover {
-  color: #606266;
-  cursor: inherit;
-  border: 1px solid #dcdfe6;
+.el-button.is-disabled:hover 
+.el-button--default{
+  background: #f8f8f8;
+    color: #666666;
+    cursor: inherit;
+    border: 1px solid #dcdfe6;
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 14px;
+    border-radius: 0px 2px 2px 0px;
 }
 .input-number-size {
   padding-left: 0;
@@ -197,10 +203,31 @@ export default {
   position: absolute;
   left: calc(50% - 43px);
   padding: 6px;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 14px;
+  background: #f8f8f8;
+  color: #666666;
+  border-radius: 0px 2px 2px 0px;
+  height: 28px!important;
+
   &:active {
     background-color: #fff;
     border: 1px solid #dcdfe6;
-    color: #606266;
+    color: #666666;
+  }
+
+  &:hover{
+     color: #666666;
+  }
+}
+.el-button.active {
+  background-color: #78dcd6;
+  border: 1px solid #78dcd6;
+  color: #ffffff;
+
+  &:hover{
+    color: #ffffff;
   }
 }
 .height-icon-auto {
@@ -222,7 +249,7 @@ export default {
 .icon-height {
   left: calc(100% - 29px);
 }
-.el-input-number {
+.el-input-number{
   width: 80px;
 }
 .settings-container /deep/ .half-setting{
@@ -234,7 +261,6 @@ export default {
 .settings-container  /deep/ .el-input-number  .el-input__inner {
   text-align: center;
   border-right: 0;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
+  border-radius: 2px;
 }
 </style>
