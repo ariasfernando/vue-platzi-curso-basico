@@ -38,6 +38,7 @@
     "less-loader": "^4.1.0",
     "lodash": "^4.17.4",
     "magnific-popup": "^1.1.0",
+    "malihu-custom-scrollbar-plugin": "^3.1.5",
     "node-sass": "^4.9.3",
     "noty": "^2.3.8",
     "npm": "^5.8.0",
