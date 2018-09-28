@@ -34,19 +34,21 @@
 </template>
 
 <script>
-  import TextElement from '../elements/TextElement.vue';
   import ButtonElement from '../elements/ButtonElement.vue';
-  import ImageElement from '../elements/ImageElement.vue';
+  import CustomCodeElement from '../elements/CustomCodeElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
+  import ImageElement from '../elements/ImageElement.vue';
+  import TextElement from '../elements/TextElement.vue';
 
   export default {
     name: 'ColumnsFixedRender',
 
     components: {
-      TextElement,
       ButtonElement,
-      ImageElement,
+      CustomCodeElement,
       DividerElement,
+      ImageElement,
+      TextElement,
     },
     props: {
       column: {

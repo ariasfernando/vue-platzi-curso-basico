@@ -113,20 +113,21 @@
     <element-selector label="Root" @element-selected="moduleSelect" :active="isActiveGeneralSettings" selectorIcon="fa fa-cog"></element-selector>
   </div>
 </template>
-    
+
 <script>
 
   import _ from 'lodash';
   import ButtonElement from './elements/ButtonElement.vue';
-  import ElementSelector from '../common/ElementSelector.vue';
   import clone from 'clone';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
+  import CustomCodeElement from './elements/CustomCodeElement.vue';
   import defaultElements from '../../resources/elements';
   import DividerElement from './elements/DividerElement.vue';
   import Draggable from 'vuedraggable';
   import Element from '../../models/Element';
   import ElementMixin from '../common/mixins/ElementMixin.js';
+  import ElementSelector from '../common/ElementSelector.vue';
   import ImageElement from './elements/ImageElement.vue';
   import Plugins from '../../plugins/modules';
   import TextElement from './elements/TextElement.vue';
@@ -137,11 +138,12 @@
     mixins: [ ElementMixin ],
     components: {
       ButtonElement,
-      ElementSelector,
       ColumnsFixedRender,
       ColumnsStackedRender,
+      CustomCodeElement,
       DividerElement,
       Draggable,
+      ElementSelector,
       ImageElement,
       TextElement
     },

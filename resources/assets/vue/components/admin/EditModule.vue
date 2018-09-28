@@ -11,7 +11,7 @@
         <div class="col-xs-8 module-container" @mouseup="clickModuleContainer">
           <scrollbar-container>
             <div v-if="showRaw" class="module-wrapper">
-              <textarea v-html="module" @change="updateRawModule" rows="30" style="width: 100%"></textarea>
+              <code-editor v-model="moduleRow"></code-editor>
             </div>
             <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
               <module></module>
@@ -38,6 +38,7 @@ import ComponentSettings from "./ComponentSettings.vue";
 import ElementsSettings from "./partials/ElementsSettings.vue";
 import GeneralSettings from "./partials/GeneralSettings.vue";
 import Module from "./Module.vue";
+import CodeEditor from "./CodeEditor.vue";
 import ModuleHeader from "./partials/ModuleHeader.vue";
 import moduleService from "../../services/module";
 import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
@@ -46,6 +47,7 @@ import Spinner from "../common/Spinner.vue";
 export default {
   name: "EditModule",
   components: {
+    CodeEditor,
     ColumnBarContainer,
     ColumnSettings,
     ComponentSettings,
@@ -59,6 +61,14 @@ export default {
   computed: {
     module() {
       return this.$store.getters["module/module"];
+    },
+    moduleRow: {
+      get(){
+        return this.module;
+      },
+      set(values) {
+        this.$store.commit("module/setModuleData", JSON.parse(values));
+      },
     },
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
@@ -140,9 +150,6 @@ export default {
 
       const sideToggled = document.getElementById("edit-container");
       sideToggled.classList.toggle("sidebar-closed");
-    },
-    updateRawModule(e) {
-      this.$store.commit("module/setModuleData", JSON.parse(e.target.value));
     },
     clickModuleContainer(e) {
       if($(e.target).hasClass('module-container')){

@@ -3,28 +3,28 @@
     <label-item-container label="COLUMN SETTINGS" icon="glyphicon-pause" v-b-toggle.column-settings-styles></label-item-container>
     <b-collapse id="column-settings-styles" visible accordion="general-settings">
       <b-card class="control" no-block>
-            <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
-              <component v-for="setting in settingGroup"
-                :is="'input-' + setting.type"
-                @setting-updated="settingUpdatedHandler"
-                :setting="setting.type"
-                :name="setting.name"
-                :type="setting.type"
-                :link="setting.link"
-                :label="setting.label"
-                :placeholder="setting.placeholder"
-                :default-value="setting.value"
-                :min-value="setting.minValue"
-                :max-value="setting.maxValue"
-                :options="setting.options"
-                :sub-component="setting.subComponent"
-                :element="setting.subComponent ? column[setting.subComponent] : column"
-                :is-disable-percentage="setting.isDisablePercentage"
-                :key="setting.name">
-              </component>
-            </group-container>
-        </b-card>
-      </b-collapse>
+        <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
+          <component v-for="setting in settingGroup"
+            :is="'input-' + setting.type"
+            @setting-updated="settingUpdatedHandler"
+            :setting="setting.type"
+            :name="setting.name"
+            :type="setting.type"
+            :link="setting.link"
+            :label="setting.label"
+            :placeholder="setting.placeholder"
+            :default-value="setting.value"
+            :min-value="setting.minValue"
+            :max-value="setting.maxValue"
+            :options="setting.options"
+            :sub-component="setting.subComponent"
+            :element="setting.subComponent ? column[setting.subComponent] : column"
+            :is-disable-percentage="setting.isDisablePercentage"
+            :key="setting.name">
+          </component>
+        </group-container>
+      </b-card>
+    </b-collapse>
     <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.column-settings-functionalities></label-item-container>
     <b-collapse id="column-settings-functionalities" accordion="column-settings">
       <b-card class="control" >
