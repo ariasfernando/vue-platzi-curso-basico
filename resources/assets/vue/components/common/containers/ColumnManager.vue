@@ -10,7 +10,7 @@
         :valign="module.structure.attribute.valign || 'top'"
         >
         <columns-comment
-          :is-inverted-stacking="isInvertedStacking"
+          :is-inverted="isInvertedStacking"
           :wrapper-width="templateInnerWidth"
           :width-first-column="columnWidth(0)"
           :bgcolor="columnBgcolor(0)"
@@ -28,7 +28,7 @@
             </column-render>
             <between-column-comment
               v-if="module.structure.columns.length -1 > columnId"
-              :is-inverted-stacking="isInvertedStacking"
+              :is-inverted="isInvertedStacking"
               :key="'comment-' + columnId"
               :width="columnWidth(columnId + 1)"
               :bgcolor="columnBgcolor(columnId + 1)">
