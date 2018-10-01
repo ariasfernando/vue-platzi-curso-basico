@@ -119,14 +119,10 @@
         return this.$store.getters["campaign/showModuleSettings"];
       },
       sessionWindowId() {
-        try {
-          if (!window.sessionStorage.getItem('windowId')) {
-            window.sessionStorage.setItem('windowId', this.windowId);
-          }
-          return window.sessionStorage.getItem('windowId');
-        } catch(e) {
-          return false;
+        if (!window.sessionStorage.getItem('windowId')) {
+          window.sessionStorage.setItem('windowId', this.windowId);
         }
+        return window.sessionStorage.getItem('windowId');
       }
     },
     watch:{
@@ -150,11 +146,7 @@
          * Replace url when creating a new campaign to avoid redirect.
          * Add necessary logic if using more parameters in the future.
          */
-        try {
-          window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
-        } catch(e) {
-          return false;
-        }
+        window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
 
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
