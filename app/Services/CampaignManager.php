@@ -64,7 +64,6 @@ class CampaignManager
         $campaign->lower_campaign_name = strtolower($campaign_name);
         $campaign->modules_data = $modules_data;
         $campaign->processed = 0;
-        $campaign->first_edit = false;
         $campaign->updated_by = [
             'id' => new ObjectID(Auth::id()),
             'email' => Auth::user()->email

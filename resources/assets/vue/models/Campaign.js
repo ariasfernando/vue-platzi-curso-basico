@@ -11,7 +11,6 @@ function Campaign(data) {
   this.modules_data = data.modules;
   this.body_html = data.campaign.bodyHtml;
   this.auto_save = data.campaign.campaign_data.auto_save;
-  this.first_edit = data.campaign.campaign_data.first_edit || false;
   this.favorite = data.campaign.isFavorite;
   this.template = data.campaign.campaign_data.template;
   this.campaign_settings = data.campaign.campaign_data.campaign_settings || {};
