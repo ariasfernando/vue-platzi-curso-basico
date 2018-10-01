@@ -104,11 +104,8 @@
         }
     },
     computed: {
-       _(){
-           return _;
-      },
-      module() {
-        return this.$store.getters["campaign/modules"][this.moduleId];
+        _(){
+            return _;
       },
       moduleErrors() {
         return this.module.data.errors || [];

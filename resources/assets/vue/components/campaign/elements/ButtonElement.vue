@@ -39,7 +39,7 @@
                     :valign="component.button.attribute.valign || ''"
                     >
                     <tiny-mce
-                      :fontStyles="[fontStyles(component.button),{'display': 'inline-block !important'}, {'vertical-align': 'middle'}]"
+                      :fontStyles="fontStyles(component.button)"
                       :module="module"
                       :component="component"
                       :columnId="columnId"
