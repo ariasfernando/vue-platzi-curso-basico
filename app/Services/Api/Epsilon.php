@@ -211,7 +211,7 @@ class Epsilon implements ApiConnector
             $request_body['id'] = $content_id;
             $request_body['modifiedDate'] = $content['data']['modifiedDate'];
             $request_body['content']['id'] = $content_id;
-            $request_body['content']['modifiedDate'] = time();
+            $request_body['content']['modifiedDate'] = $content['data']['modifiedDate'];
             $request_body['parentId'] = $content['data']['parentId'];
 
         } else {
@@ -231,7 +231,7 @@ class Epsilon implements ApiConnector
                 $request_body['id'] = $content_id;
                 $request_body['modifiedDate'] = $modified_date;
                 $request_body['content']['id'] = $content_id;
-                $request_body['content']['modifiedDate'] = time();
+                $request_body['content']['modifiedDate'] = $modified_date;
             }
         }
 
