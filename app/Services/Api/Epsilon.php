@@ -138,7 +138,6 @@ class Epsilon implements ApiConnector
                 $error_messages[] = isset($error['data']['resultCode']) ? $error['data']['resultCode'] : '';
                 $error_messages[] = isset($error['data']['resultSubCode']) ? $error['data']['resultSubCode'] : '';
                 $error_messages[] = isset($error['data']['resultString']) ? $error['data']['resultString'] : '';
-                $error_messages[] = isset($error['data']['data']['id']) ? $error['data']['data']['id'] : '';
                 $error_messages[] = isset($error['data']['reason']) ? $error['data']['reason'] : '';
                 
                 $error_message = implode(',', array_filter($error_messages));
