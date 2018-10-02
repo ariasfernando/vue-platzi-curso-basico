@@ -202,7 +202,7 @@ class ProofController extends Controller
         }
 
         $data['comments'] = array_map(function ($comment) {
-            $comment['display_name'] = User::find($comment['user_id'])->name;
+            $comment['display_name'] = User::find($comment['user_id'])->full_name;
             $comment['created_at'] = Carbon::parse($comment['created_at'])->format('F jS, Y | h:i A');
             unset($comment['user_id'], $comment['_id'], $comment['proof_id']);
             return $comment;
@@ -546,7 +546,7 @@ class ProofController extends Controller
 
         if ($proof && count($proof->reviewers)) {
             $reviewers = array_map(function ($reviewer) use ($proof) {
-                $reviewer['display_name'] = User::find($reviewer['user_id'])->name;
+                $reviewer['display_name'] = User::find($reviewer['user_id'])->full_name;
                 if (isset($reviewer['decision'])) {
                     if (isset($reviewer['decision_comment'])) {
                         $reviewer['comment'] = Comment::find($reviewer['decision_comment'])->content;

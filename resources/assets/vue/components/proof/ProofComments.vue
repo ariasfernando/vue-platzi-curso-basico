@@ -1,7 +1,7 @@
 <template id="proof-comments">
     <div class="proof-comments-container">
         <div class="proof-comment" v-for="comment in comments" :class="('decision' in comment) ? comment.decision : ''">
-            <h4>{{ comment.display_name }} said:</h4>
+            <h4>{{ comment.display_name }}:</h4>
             <p>{{ comment.content }}</p>
             <p class="proof-comment-date">{{ comment.created_at }}</p>
         </div>

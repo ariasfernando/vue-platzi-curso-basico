@@ -165,6 +165,16 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
     }
 
     /**
+     * Get user full name
+     *
+     * @return array
+     */
+    public function getFullNameAttribute()
+    {
+        return trim($this->attributes['name'] . " " . $this->attributes['last_name']); 
+    }
+
+    /**
     * Send the password reset notification.
     *
     * @param  string  $token
