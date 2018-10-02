@@ -309,14 +309,14 @@ export default {
           styles: {},
         };
 
-        _.forOwn(loop.styles, (prop, key) => { 
+        _.forOwn(loop.styles, (prop, key) => {
           const keyBehaviour = prop.behaviour || loop.steps.behaviour;
           const unit = prop.unit || 'px';
           const result = runBehaviour(keyBehaviour, currentFontSize);
           format.styles[key] = `${result}${unit}`;
         });
 
-        _.forOwn(loop.settings, (prop, key) => { 
+        _.forOwn(loop.settings, (prop, key) => {
             format[key] = prop;
         });
 
@@ -554,7 +554,7 @@ export default {
 
       // Extend toolbar
       if ('extend_toolbar' in this.textOptions.config.settings) {
-        settings.plugins = [settings.plugins, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
+        settings.toolbar = [settings.toolbar, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
       }
 
       _.extend(settings, customSettings);
