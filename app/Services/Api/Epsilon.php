@@ -131,28 +131,29 @@ class Epsilon implements ApiConnector
         }
 
         if (isset($error)) {
-            if (!$this->flushed_cache) {
-                Cache::forget('api:epsilon:token');
-                $this->flushed_cache = true;
-                return $this->call($options);
-            } else {
+            if ($this->flushed_cache) {
                 $error_message = isset($error['data']['resultCode']) && isset($error['data']['resultString'])
                     ? $error['data']['resultCode'] . " - " .$error['data']['resultString']
                     : $error['status'];
-
+    
                 Activity::log('Error Epsilon [' . $error['status'] . ']', [
                     'properties' => [
                         'message' => $error_message
                     ]
                 ]);
-
+    
                 \Log::error(json_encode($error));
-
+    
                 throw new \Exception($error_message);
-            }        
-        } else {
-            return json_decode($response->getBody()->getContents(), true);
+            }
+
+            Cache::forget('api:epsilon:token');
+            $this->flushed_cache = true;
+
+            return $this->call($options);
         }
+        
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     /**
@@ -164,121 +165,122 @@ class Epsilon implements ApiConnector
      */
     public function uploadEmail($campaign = null, $request = null)
     {
-        if (!is_null($campaign)) {
-            $campaign_id = new ObjectId($campaign->id);
-            $epsilon_config = $this->epsilon_config;
+        if (is_null($campaign)) {
+            throw new \Exception('campaign_missing');
+        }
 
-            $force = (isset($request['force']) && $request['force'] === true)
-                ? true : false;
+        $campaign_id = new ObjectId($campaign->id);
+        $epsilon_config = $this->epsilon_config;
 
-            $name = (is_null($request) || !isset($request['filename']))
-                ? $campaign->campaign_name : $request['filename'];
+        $force = (isset($request['force']) && $request['force'] === true)
+            ? true : false;
 
-            if (isset($request['subject'])) {
-                $subject = $request['subject'];
-            } elseif (isset($campaign['subject_line'])) {
-                $subject = $campaign['subject_line'];
-            } else {
-                $subject = '';
+        $name = (is_null($request) || !isset($request['filename']))
+            ? $campaign->campaign_name : $request['filename'];
+
+        if (isset($request['subject'])) {
+            $subject = $request['subject'];
+        } elseif (isset($campaign['subject_line'])) {
+            $subject = $campaign['subject_line'];
+        } else {
+            $subject = '';
+        }
+
+        $request_type = 'POST';
+        $api_path = $epsilon_config['upload_path'];
+
+        $request_body = [
+            'name' => $name,
+            'description' => $subject,
+            'type' => "CONTENT_BLOCK",
+            'subType' => "HTML",
+            'content' => [
+                'characterSet' => "UTF_8",
+                'contentType' => "HTML",
+                'content' => $campaign->body_html,
+            ]
+        ];
+
+        $content_id = isset($request['content_id']) ? $request['content_id'] : $epsilon_config['content_id'];
+
+        if (!empty($content_id)) {
+            $content = $this->getContentById($content_id);
+
+            $request_type = 'PUT';
+            $api_path .= '/' . $content_id;
+            $request_body['id'] = $content_id;
+            $request_body['modifiedDate'] = $content['data']['modifiedDate'];
+            $request_body['content']['id'] = $content_id;
+            $request_body['content']['modifiedDate'] = time();
+            $request_body['parentId'] = $content['data']['parentId'];
+
+        } else {
+            if (isset($epsilon_config['folder'])) {
+                $request_body['parentId'] = $epsilon_config['folder'];
             }
 
-            $request_type = 'POST';
-            $api_path = $epsilon_config['upload_path'];
+            $last_upload = Upload::lastUploadByCampaign($campaign_id);
 
-            $request_body = [
-                'name' => $name,
-                'description' => $subject,
-                'type' => "CONTENT_BLOCK",
-                'subType' => "HTML",
-                'content' => [
-                    'characterSet' => "UTF_8",
-                    'contentType' => "HTML",
-                    'content' => $campaign->body_html,
-                ]
-            ];
-
-            $content_id = isset($request['content_id']) ? $request['content_id'] : $epsilon_config['content_id'];
-
-            if (!empty($content_id)) {
-                $content = $this->getContentById($content_id);
-
+            // Update html content if there is a previous one
+            if (!$force && $last_upload && isset($last_upload['properties']['id']) 
+                && isset($last_upload['properties']['modifiedDate'])) {
+                $content_id = $last_upload['properties']['id'];
+                $modified_date = $last_upload['properties']['modifiedDate'];
                 $request_type = 'PUT';
                 $api_path .= '/' . $content_id;
                 $request_body['id'] = $content_id;
-                $request_body['modifiedDate'] = $content['data']['modifiedDate'];
+                $request_body['modifiedDate'] = $modified_date;
                 $request_body['content']['id'] = $content_id;
                 $request_body['content']['modifiedDate'] = time();
-                $request_body['parentId'] = $content['data']['parentId'];
-
-            } else {
-                if (isset($epsilon_config['folder'])) {
-                    $request_body['parentId'] = $epsilon_config['folder'];
-                }
-
-                $last_upload = Upload::lastUploadByCampaign($campaign_id);
-
-                // Update html content if there is a previous one
-                if (!$force && $last_upload && isset($last_upload['properties']['id']) 
-                    && isset($last_upload['properties']['modifiedDate'])) {
-                    $content_id = $last_upload['properties']['id'];
-                    $modified_date = $last_upload['properties']['modifiedDate'];
-                    $request_type = 'PUT';
-                    $api_path .= '/' . $content_id;
-                    $request_body['id'] = $content_id;
-                    $request_body['modifiedDate'] = $modified_date;
-                    $request_body['content']['id'] = $content_id;
-                    $request_body['content']['modifiedDate'] = time();
-                }
             }
-
-            $api_path .= '?applyLinks=true';  
-
-            $options = [
-                'base_url' => $epsilon_config['api_url'],
-                'path' => $api_path,
-                'type' => $request_type,
-                'params' => [
-                    'headers' => [
-                        "Content-Type" =>  "application/json",
-                        "Accept"  => "application/json",
-                        "X-OUID" => $epsilon_config['x-ouid'],
-                    ],
-                    'body' => json_encode($request_body)
-                ]
-            ];
-
-            $response = $this->call($options);
-
-            if (isset($response['data']['id']) && isset($response['data']['modifiedDate'])) {
-                Activity::log('Campaign uploaded to Epsilon', [
-                    'properties' => [
-                        'campaign_id' => $campaign_id,
-                        'filename' => $name,
-                        'user_id' => new ObjectId(Auth::id())
-                    ]
-                ]);
-
-                Upload::create([
-                    'api' => 'epsilon',
-                    'campaign_id' => $campaign_id,
-                    'original_filename' => $name,
-                    'filename' => $name,
-                    'user_id' => new ObjectId(Auth::id()),
-                    'folder_id' => $epsilon_config['folder'],
-                    'properties' => [
-                        "id" => $response['data']['id'],
-                        "modifiedDate" => $response['data']['modifiedDate']
-                    ]
-                ]);
-                return [
-                    'status' => 'success'
-                ];
-            } else {
-                return $response;
-            }
-        } else {
-            throw new \Exception('campaign_missing');
         }
+
+        $api_path .= '?applyLinks=true';  
+
+        $options = [
+            'base_url' => $epsilon_config['api_url'],
+            'path' => $api_path,
+            'type' => $request_type,
+            'params' => [
+                'headers' => [
+                    "Content-Type" =>  "application/json",
+                    "Accept"  => "application/json",
+                    "X-OUID" => $epsilon_config['x-ouid'],
+                ],
+                'body' => json_encode($request_body)
+            ]
+        ];
+
+        $response = $this->call($options);
+
+        if (isset($response['data']['id']) && isset($response['data']['modifiedDate'])) {
+            Activity::log('Campaign uploaded to Epsilon', [
+                'properties' => [
+                    'campaign_id' => $campaign_id,
+                    'filename' => $name,
+                    'user_id' => new ObjectId(Auth::id())
+                ]
+            ]);
+
+            Upload::create([
+                'api' => 'epsilon',
+                'campaign_id' => $campaign_id,
+                'original_filename' => $name,
+                'filename' => $name,
+                'user_id' => new ObjectId(Auth::id()),
+                'folder_id' => $epsilon_config['folder'],
+                'properties' => [
+                    "id" => $response['data']['id'],
+                    "modifiedDate" => $response['data']['modifiedDate']
+                ]
+            ]);
+
+            return [
+                'status' => 'success'
+            ];
+        }
+        
+        return $response;
     }
 
     /**
@@ -289,11 +291,13 @@ class Epsilon implements ApiConnector
     */
     protected function getBaseToken() {
         $epsilon_config = $this->epsilon_config;
+
         if (isset($epsilon_config['auth']['credentials']['base_token'])) {
-           $base64_token = $epsilon_config['auth']['credentials']['base_token'];
+            $base64_token = $epsilon_config['auth']['credentials']['base_token'];
         } else {
             $base64_token = base64_encode($epsilon_config['auth']['credentials']['client_id'] . ":" . $epsilon_config['auth']['credentials']['client_secret']);
         }
+
         return $base64_token;
     }
 
@@ -306,29 +310,26 @@ class Epsilon implements ApiConnector
     *
     */
     public function getContentById($content_id = null) {
-
         $epsilon_config = $this->epsilon_config;
 
-        if ($content_id) {
-            $api_path = $epsilon_config['upload_path'] . '/' . $content_id;
-
-            $options = [
-                'base_url' => $epsilon_config['auth']['base_url'],
-                'path' => $api_path,
-                'type' => 'GET',
-                'params' => [
-                    'headers' => [
-                        "Content-Type" =>  "application/json",
-                        "X-OUID" => $epsilon_config['x-ouid'],
-                    ],
-                ]
-            ];
- 
-            $response = $this->call($options);
-            return $response;
-
-        } else {
+        if (!$content_id) {
             throw new \Exception('content_id_missing');
         }
+
+        $api_path = $epsilon_config['upload_path'] . '/' . $content_id;
+
+        $options = [
+            'base_url' => $epsilon_config['auth']['base_url'],
+            'path' => $api_path,
+            'type' => 'GET',
+            'params' => [
+                'headers' => [
+                    "Content-Type" =>  "application/json",
+                    "X-OUID" => $epsilon_config['x-ouid'],
+                ],
+            ]
+        ];
+
+        return $this->call($options);
     }
 }
