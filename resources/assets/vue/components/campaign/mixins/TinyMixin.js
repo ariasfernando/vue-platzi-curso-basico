@@ -162,8 +162,13 @@ export default {
         if (parseInt(editor.settings.max_lines)) {
           return parseInt(editor.settings.max_lines) || undefined;
         } else {
-          const firstTextElement = this.$textElement.find('p')[0] || this.$textElement.find('li')[0];
-          const fontSize = document.defaultView.getComputedStyle(firstTextElement).getPropertyValue('font-size');
+          const firstTextElement = this.$textElement[0].firstElementChild;
+          let firstTextNode = firstTextElement.firstChild;
+          // if the first node is a text node, we go up to te parent element.
+          if(firstTextNode.nodeName === "#text") {
+            firstTextNode = firstTextElement;
+          }
+          const fontSize = document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('font-size');
           return JSON.parse(editor.settings.max_lines)[fontSize];
         }
       }
@@ -198,9 +203,16 @@ export default {
     },
     maxLinesValidation(event) {
       const divHeight = this.$textElement.height();
-      const firstTextElement = this.$textElement.find('p')[0] || this.$textElement.find('li')[0];
-      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextElement).getPropertyValue('line-height'));
-      const actualLines = parseInt(divHeight / lineHeight);
+      const firstTextElement = this.$textElement[0].firstElementChild;
+      let firstTextNode = firstTextElement.firstChild;
+
+      // if the first node is a text node, we go up to te parent element.
+      if(firstTextNode.nodeName === "#text") {
+        firstTextNode = firstTextElement;
+      }
+
+      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      const actualLines = divHeight / lineHeight;
 
       if (actualLines > this.tinyMaxLines()) {
         this.setError({
