@@ -132,9 +132,16 @@ class Epsilon implements ApiConnector
 
         if (isset($error)) {
             if ($this->flushed_cache) {
-                $error_message = isset($error['data']['resultCode']) && isset($error['data']['resultString'])
-                    ? $error['data']['resultCode'] . " - " .$error['data']['resultString']
-                    : $error['status'];
+                $error_messages = [];
+                $error_messages[] = isset($error['status']) ? $error['status'] : '';
+                $error_messages[] = isset($error['code']) ? $error['code'] : '';
+                $error_messages[] = isset($error['data']['resultCode']) ? $error['data']['resultCode'] : '';
+                $error_messages[] = isset($error['data']['resultSubCode']) ? $error['data']['resultSubCode'] : '';
+                $error_messages[] = isset($error['data']['resultString']) ? $error['data']['resultString'] : '';
+                $error_messages[] = isset($error['data']['data']['id']) ? $error['data']['data']['id'] : '';
+                $error_messages[] = isset($error['data']['reason']) ? $error['data']['reason'] : '';
+                
+                $error_message = implode(',', array_filter($error_messages));
     
                 Activity::log('Error Epsilon [' . $error['status'] . ']', [
                     'properties' => [
