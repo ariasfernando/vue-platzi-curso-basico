@@ -13,6 +13,7 @@ function moduleDefault() {
         {
           name: 'padding',
           type: 'padding-group',
+          label: 'Padding',
         },
         {
           name: 'border-group',
