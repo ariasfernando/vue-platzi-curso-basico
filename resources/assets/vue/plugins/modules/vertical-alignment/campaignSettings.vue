@@ -46,6 +46,10 @@ import SettingsContainer from "../../../components/common/settings/containers/Se
   }
 </script>
 <style lang="scss" scoped>
+.settings-container{
+  // Hack inline-block
+  font-size: 0;
+}
 .el-button:focus,
 .el-button:hover {
   color: inherit;

@@ -13,7 +13,6 @@ import imageService from '../services/image';
 const state = {
   module: {},
   currentComponent: {},
-  activeColumn: 0,
   buildingMode: 'desktop',
   showRaw: false,
   changeSettingComponent: {
@@ -47,9 +46,6 @@ const getters = {
   },
   changeSettingComponent(state) {
     return state.changeSettingComponent;
-  },
-  activeColumn(state) {
-    return state.activeColumn;
   },
   buildingMode(state) {
     return state.buildingMode;
@@ -183,9 +179,6 @@ const mutations = {
     const subComponent = data.subComponent ? component[data.subComponent] : component;
     const properties = data.link ? subComponent[data.link] : subComponent;
     Vue.set(properties, data.property, data.value);
-  },
-  setActiveColumn(state, columnId) {
-    state.activeColumn = columnId;
   },
   setBuildingMode(state, mode) {
     state.buildingMode = mode;

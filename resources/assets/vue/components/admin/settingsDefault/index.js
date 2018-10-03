@@ -1,9 +1,10 @@
-import ColumnElement from './ColumnElement';
-import TextElement from './TextElement';
-import ImageElement from './ImageElement';
 import ButtonElement from './ButtonElement';
+import ColumnElement from './ColumnElement';
 import DividerElement from './DividerElement';
+import CustomCodeElement from './CustomCodeElement';
+import ImageElement from './ImageElement';
 import Module from './Module';
+import TextElement from './TextElement';
 
 module.exports = {
   'column-element': ColumnElement,
@@ -11,5 +12,7 @@ module.exports = {
   'image-element': ImageElement,
   'button-element': ButtonElement,
   'divider-element': DividerElement,
+  'custom-code-element': CustomCodeElement,
+
   Module,
 };

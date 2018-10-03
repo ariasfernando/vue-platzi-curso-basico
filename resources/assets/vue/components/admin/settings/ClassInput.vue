@@ -60,13 +60,15 @@ export default {
 .width-full {
   width: 100%;
 }
-.class-input{
-  .el-input__inner{
-    border-radius: 2px;
+.class-input /deep/ .el-input__inner{
+  border-radius: 2px;
+  padding-left: 8px;
 
-    &:focus{
-      border: 1px solid #78dcd6;
-    }
+  &:focus{
+    border: 1px solid #78dcd6;
   }
+}
+.el-select-dropdown__item.selected{
+  color: #78dcd6!important;
 }
 </style>
