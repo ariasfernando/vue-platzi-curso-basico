@@ -74,6 +74,14 @@
                               </p>
                             </div>
 
+                            <!-- Html to pdf -->
+                            <div class="row" v-if="campaignConfig.download_pdf">
+                              <label for="htmlToPdf" class="col-sm-4 control-label">PDF Download</label>
+                              <p class="control col-sm-8">
+                                <toggle-button :value="library.config.htmlToPdf" @change="updateToggle('htmlToPdf')"></toggle-button>
+                              </p>
+                            </div>
+
                             <!-- Field ESP -->
                             <div class="row">
                               <label for="preheader" class="col-sm-4 control-label">ESP</label>

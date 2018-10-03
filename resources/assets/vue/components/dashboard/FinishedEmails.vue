@@ -77,6 +77,9 @@
               <a :href="$_app.config.baseUrl + '/campaign/download-html/' + campaign._id" data-tooltip="Download">
                 <i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i>
               </a>
+              <a v-if="campaign.library_config.htmlToPdf" :href="$_app.config.baseUrl+'/html-to-pdf/'+campaign._id" target="_blank" data-tooltip="Download PDF">
+                <i class="glyphicon glyphicon-download" aria-hidden="true"></i>
+              </a>
               <a
                 href="#"
                 class="lock-campaign"
