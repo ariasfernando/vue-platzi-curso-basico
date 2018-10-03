@@ -24,7 +24,7 @@
               :column-id="column.id"
               :is-inverted="isInvertedStacking">
               <slot :columnData="{columnId, column}"></slot>
-              <element-selector v-if="!isCampaign" :left-position="calculeLeftPosition(columnId)" :key="'selector' + columnId" :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
+              <element-selector v-if="!isCampaign" :left-position="calculeLeftPosition(columnId)" :key="'selector' + columnId" :label="`Column ${columnId+1}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
             </column-render>
             <between-column-comment
               v-if="module.structure.columns.length -1 > columnId"
@@ -52,7 +52,7 @@
         >
         <table align="left" width="100%" cellspacing="0" cellpadding="0" border="0">
           <slot :columnData="{columnId, column}"></slot>
-          <element-selector v-if="!isCampaign" :left-position="calculeLeftPosition(columnId)" :width-column="columnWidth(columnId)" :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
+          <element-selector v-if="!isCampaign" :left-position="calculeLeftPosition(columnId)" :width-column="columnWidth(columnId)" :label="`Column ${columnId+1}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil" />
         </table>
       </td>
     </tr>
