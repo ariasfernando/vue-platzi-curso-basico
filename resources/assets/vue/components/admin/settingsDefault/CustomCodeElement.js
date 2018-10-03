@@ -31,7 +31,7 @@ function codeDefault() {
         {
           name: 'border-group',
           type: 'border-group',
-          subComponent: 'button',
+          subComponent: 'container',
         },
       ],
     ],

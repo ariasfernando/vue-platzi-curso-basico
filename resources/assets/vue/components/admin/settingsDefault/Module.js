@@ -20,7 +20,6 @@ function moduleDefault() {
         {
           name: 'border-group',
           type: 'border-group',
-          subComponent: 'button',
         },
       ],
       [

@@ -45,7 +45,7 @@ function dividerDefault() {
         {
           name: 'border-group',
           type: 'border-group',
-          subComponent: 'button',
+          subComponent: 'container',
         },
       ],
     ],

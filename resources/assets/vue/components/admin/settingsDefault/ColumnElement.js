@@ -22,7 +22,7 @@ function columnDefault() {
         {
           name: 'border-group',
           type: 'border-group',
-          subComponent: 'button',
+          subComponent: 'container',
         },
       ],
       [

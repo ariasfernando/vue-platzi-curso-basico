@@ -24,7 +24,7 @@
             :options="setting.options"
             :is-disable-percentage="setting.isDisablePercentage"
             :element="setting.subComponent ? component[setting.subComponent] : component"
-            :key="i"></component>
+            :key="i" />
         </group-container>
       </b-card>
     </b-collapse>

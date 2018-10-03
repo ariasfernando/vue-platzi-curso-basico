@@ -1,8 +1,8 @@
 <template>
   <div>
-    <label-item-container v-b-toggle.column-settings-styles :label="`Column ${currentComponent.columnId + 1} Style`" icon="glyphicon-pause" />
-    <b-collapse id="column-settings-styles" visible accordion="general-settings">
-      <b-card class="control" no-block>
+    <label-item-container label="Row Style" icon="glyphicon-cog" v-b-toggle.module-settings-styles />
+    <b-collapse id="module-settings-styles" visible accordion="module-settings">
+      <b-card class="control">
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component
             :is="'input-' + setting.type"
@@ -18,29 +18,29 @@
             :min-value="setting.minValue"
             :max-value="setting.maxValue"
             :options="setting.options"
-            :sub-component="setting.subComponent"
-            :element="setting.subComponent ? column[setting.subComponent] : column"
             :is-disable-percentage="setting.isDisablePercentage"
-            @setting-updated="settingUpdatedHandler" />
+            :element="module.structure"
+            @setting-updated="SettingUpdatedHandler" />
         </group-container>
       </b-card>
     </b-collapse>
     <label-item-container
       v-b-tooltip.hover
-      v-b-toggle.column-settings-functionalities
+      v-b-toggle.general-settings-functionalities
       label="Editor Settings"
       icon="glyphicon-tasks"
       title="Settings available in the Email Editor" />
-    <b-collapse id="column-settings-functionalities" accordion="column-settings">
+    <b-collapse id="general-settings-functionalities" accordion="general-settings">
       <b-card class="control">
-        <div v-for="(plugin, moduleKey) in column.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
-          <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="currentComponent.columnId" />
-        </div>
+        <template v-if="module.plugins && Object.keys(module.plugins).length !== 0">
+          <div v-for="(plugin, moduleKey) in module.plugins" :key="plugin.name" :class="'plugin-' + plugin.name">
+            <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" />
+          </div>
+        </template>
       </b-card>
     </b-collapse>
   </div>
 </template>
-
 
 <script>
 import * as elementSettings from '../settings';
@@ -49,46 +49,45 @@ import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
 import settingsDefault from '../settingsDefault';
 
 export default {
+  name: 'GeneralSettings',
   components: {
     GroupContainer,
     LabelItemContainer,
-    'input-padding-group': elementSettings.PaddingGroup,
     'input-border-group': elementSettings.BorderGroup,
-    'input-width': elementSettings.Width,
-    'input-generic-color': elementSettings.GenericColor,
     'input-class-input': elementSettings.ClassInput,
+    'input-columns-stacking': elementSettings.ColumnsStacking,
+    'input-generic-color': elementSettings.GenericColor,
+    'input-generic-number': elementSettings.GenericNumber,
+    'input-generic-select': elementSettings.GenericSelect,
+    'input-generic-text': elementSettings.GenericText,
+    'input-padding-group': elementSettings.PaddingGroup,
   },
-  props: ['currentComponent'],
   computed: {
     module() {
       return this.$store.getters['module/module'];
     },
-    column() {
-      return this.module.structure.columns[this.currentComponent.columnId];
-    },
     settings() {
-      return settingsDefault['column-element']().componentSettings;
+      return settingsDefault.Module().componentSettings;
     },
   },
   methods: {
-    settingUpdatedHandler(eventData) {
-      this.saveColumnProperty(
+    SettingUpdatedHandler(eventData) {
+      this.saveModuleProperty(
         eventData.link,
         eventData.subComponent,
         eventData.name,
         eventData.value,
-        this.currentComponent.columnId,
       );
     },
-    saveColumnProperty(link, subComponent, property, value, colId) {
+
+    saveModuleProperty(link, subComponent, property, value) {
       const data = {
-        colId,
         subComponent,
         link,
         property,
         value,
       };
-      this.$store.commit('module/saveColumnProperty', data);
+      this.$store.commit('module/saveModuleProperty', data);
     },
   },
 };
