@@ -25,7 +25,12 @@
         </group-container>
       </b-card>
     </b-collapse>
-    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.column-settings-functionalities></label-item-container>
+    <label-item-container
+      v-b-tooltip.hover
+      v-b-toggle.column-settings-functionalities
+      label="Editor Settings"
+      icon="glyphicon-tasks"
+      title="Settings available in the Email Editor" />
     <b-collapse id="column-settings-functionalities" accordion="column-settings">
       <b-card class="control" >
         <div v-for="(plugin, moduleKey) in column.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
