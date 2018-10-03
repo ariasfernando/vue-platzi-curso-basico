@@ -28,7 +28,7 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
      *
      * @var array
      */
-    protected $fillable = ['name', 'last_name', 'email', 'password', 'force_password', 'avatar_url', 'roles'];
+    protected $fillable = ['name', 'last_name', 'email', 'password', 'force_password', 'avatar_url', 'roles', 'fullname'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -54,6 +54,8 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         'roles' => [],
         'unconfirmed' => 1
     );
+
+    protected $appends = ['fullname'];
 
     /**
      * Constructor.
@@ -171,7 +173,7 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
      */
     public function getFullNameAttribute()
     {
-        return trim($this->attributes['name'] . " " . $this->attributes['last_name']); 
+        return rtrim($this->attributes['name'] . ' ' . $this->attributes['last_name']); 
     }
 
     /**

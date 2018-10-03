@@ -21,7 +21,8 @@ export default {
       selectedCampaignId: null,
       baseUrl: Application.globals.baseUrl,
       widthPreview: Application.globals.emailWidth || 660,
-      previewSrc: null
+      previewSrc: null,
+      askDeleteMessage: 'There are no emails to show in this list',
     }
   },
   props: {
@@ -121,8 +122,11 @@ export default {
         this.$emit('add-search-tag', tag);
       }
     },
-    askToDeleteCampaign(campaignId) {
-      this.selectedCampaignId = campaignId;
+    askToDeleteCampaign(campaign) {
+      this.selectedCampaignId = campaign.id;
+      if (campaign.status === 1 && campaign.has_active_proof === true) {
+        this.askDeleteMessage = 'Delete the campaign and send emails to all reviewers?';
+      }
       this.showModal = true;
     },
     askToEditCampaign(campaignId) {

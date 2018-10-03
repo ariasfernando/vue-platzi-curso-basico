@@ -246,6 +246,12 @@ class ProofController extends Controller
                 ]
             ]);
 
+            // Send emails to reviewers
+            $this->dispatch(new SendReviewersEmail($proof, 'new_comment', [
+                'comment' => $comment
+            ]));
+
+
             return [
                 'status' => 'success',
                 'data' => $comment
@@ -302,6 +308,14 @@ class ProofController extends Controller
                     unset($reviewer['required']);
                     $reviewer['require_unabled'] = true;
                 }
+
+                // Send notification of a decision
+                $this->dispatch(new SendReviewersEmail($proof, 'decision_taken', [
+                    'decision' => $decision,
+                    'comment' => $request->has('comment') ? $request->get('comment') : '',
+                    'reviewer' => $reviewer
+                ]));
+
                 $updated = true;
             }
             $reviewers[] = $reviewer;
@@ -366,7 +380,13 @@ class ProofController extends Controller
                 $decision = $reviewer['decision'];
                 $decision_at = $reviewer['decision_at'];
                 $decision_comment = isset($reviewer['decision_comment']) ? $reviewer['decision_comment'] : '';
-                unset($reviewer['decision'], $reviewer['decision_at'], $reviewer['decision_comment']);
+                unset(
+                    $reviewer['decision'],
+                    $reviewer['decision_at'],
+                    $reviewer['decision_comment'],
+                    $reviewer['requestor_notified'],
+                    $reviewer['requestor_notified_at']
+                );
                 $updated = true;
             }
             $reviewers[] = $reviewer;
