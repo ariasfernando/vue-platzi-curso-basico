@@ -34,7 +34,11 @@ class RotateInvertedColumns extends Migration
      */
     public function down()
     {
+        // Make it faster by disabling query log.
         DB::connection()->disableQueryLog();
+        
+        $this->editWidthColumnsToCampaigns();
+        $this->setWidthColumnsToModule();
         //
     }
 
