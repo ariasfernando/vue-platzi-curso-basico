@@ -17,10 +17,12 @@ function columnDefault() {
           subComponent: 'container',
           label: 'Padding',
         },
+      ],
+      [
         {
           name: 'border-group',
           type: 'border-group',
-          subComponent: 'container',
+          subComponent: 'button',
         },
       ],
       [

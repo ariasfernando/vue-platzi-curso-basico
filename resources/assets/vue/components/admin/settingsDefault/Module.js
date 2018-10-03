@@ -15,10 +15,15 @@ function moduleDefault() {
           type: 'padding-group',
           label: 'Padding',
         },
+      ],
+      [
         {
           name: 'border-group',
           type: 'border-group',
+          subComponent: 'button',
         },
+      ],
+      [
         {
           name: 'classes',
           type: 'class-input',

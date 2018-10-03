@@ -26,10 +26,12 @@ function codeDefault() {
           type: 'padding-group',
           subComponent: 'container',
         },
+      ],
+      [
         {
           name: 'border-group',
           type: 'border-group',
-          subComponent: 'container',
+          subComponent: 'button',
         },
       ],
     ],

@@ -40,10 +40,12 @@ function dividerDefault() {
           subComponent: 'container',
           label: 'Element Padding',
         },
+      ],
+      [
         {
           name: 'border-group',
           type: 'border-group',
-          subComponent: 'container',
+          subComponent: 'button',
         },
       ],
     ],
