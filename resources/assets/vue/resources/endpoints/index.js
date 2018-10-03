@@ -47,6 +47,10 @@ module.exports = {
       method: 'get',
       path: `${baseUrl}/package/api/library`,
     },
+    getRootFolderList: {
+      method: 'get',
+      path: `${baseUrl}/package/api/folders?library=:library`,
+    },
   },
   config: {
     getConfig: { method: 'get', path: `${baseUrl}/config/:key` },
@@ -57,6 +61,7 @@ module.exports = {
   api: {
     uploadEmail: { method: 'post', path: `${baseUrl}/api/upload-email` },
     uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId` },
+    getFolders: { method: 'get', path: `${baseUrl}/api/folders?api_driver=:api_driver` },
   },
   dashboard: {
     getMenu: { method: 'get', path: `${baseUrl}/dashboard/menu` },

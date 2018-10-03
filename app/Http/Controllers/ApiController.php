@@ -150,4 +150,9 @@ class ApiController extends Controller
 
         return ['is_valid' => false];
     }
+
+    public function getFolders(Request $request) {
+        $api_client = Api::driver($request->input('api_driver'));
+        return $api_client->folders();
+    }
 }

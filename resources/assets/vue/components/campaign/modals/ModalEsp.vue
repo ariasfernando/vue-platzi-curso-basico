@@ -15,6 +15,14 @@
               v-if="espProviderConfig.title == 'Silverpop'" 
               :esp-provider-config="espProviderConfig"
             ></silverpop-upload>
+            <responsys-upload
+              v-if="espProviderConfig.title == 'Responsys'" 
+              :esp-provider-config="espProviderConfig"
+            ></responsys-upload>
+            <default-upload
+              v-else
+              :esp-provider-config="espProviderConfig"
+            ></default-upload>
           </slot>
           <slot name="footer">
           </slot>
@@ -29,13 +37,17 @@
   import configService from '../../../services/config';
   import EloquaUpload from './partials/ModalEloquaUpload.vue';
   import SilverpopUpload from './partials/ModalSilverpopUpload.vue';
+  import ResponsysUpload from './partials/ModalResponsysUpload.vue';
+  import DefaultUpload from './partials/ModalDefaultUpload.vue';
 
 
   export default {
     components: {
       BootstrapVue,
       EloquaUpload,
-      SilverpopUpload
+      DefaultUpload,
+      SilverpopUpload,
+      ResponsysUpload
     }, 
     data () {
       return {
