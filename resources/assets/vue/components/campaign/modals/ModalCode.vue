@@ -96,6 +96,16 @@
         },
         deep: true
       },
+      modalCode(value) {
+        if (!value) {
+          // Reset values when close the modal
+          this.html.title = '';
+          this.html.toggle = false;
+          this.html.output = '';
+          this.html.initial_html = '';
+          this.html.minified_html = '';
+        }
+      }
     },
     methods: {
       close () {
