@@ -19,30 +19,34 @@
           name='length'>
         </input-generic-number>
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
-          <component v-for="setting in settingGroup"
-            :is="'input-' + setting.type"
-            @setting-updated="SettingUpdatedHandler"
-            :setting="setting.type"
-            :name="setting.name"
-            :type="setting.type"
-            :link="setting.link"
-            :label="setting.label"
-            :placeholder="setting.placeholder"
-            :default-value="setting.value"
-            :min-value="setting.minValue"
-            :max-value="setting.maxValue"
-            :options="setting.options"
-            :is-disable-percentage="setting.isDisablePercentage"
-            :element="module.structure"
-            :key="setting.name">
-          </component>
+          <template v-for="setting in settingGroup">
+            <component v-if="$can('std-module-'+setting.type)"
+              :is="'input-' + setting.type"
+              @setting-updated="SettingUpdatedHandler"
+              :setting="setting.type"
+              :name="setting.name"
+              :type="setting.type"
+              :link="setting.link"
+              :label="setting.label"
+              :placeholder="setting.placeholder"
+              :default-value="setting.value"
+              :min-value="setting.minValue"
+              :max-value="setting.maxValue"
+              :options="setting.options"
+              :is-disable-percentage="setting.isDisablePercentage"
+              :element="module.structure"
+              :key="setting.name">
+            </component>
+          </template>
         </group-container>
         <template v-if="module.plugins && Object.keys(module.plugins).length !== 0">
+          <template v-for="(plugin, moduleKey) in module.plugins">
             <!-- Module Plugins -->
-            <div v-for="(plugin, moduleKey) in module.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
-              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin"></component>
+            <div v-if="$can('std-plugin-'+plugin.name)" :class="'plugin-' + plugin.name" :key="plugin.name">
+              <component  :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin"></component>
             </div>
             <!-- /Module Plugins -->
+            </template>
         </template>
       </b-card>
     </b-collapse>
@@ -82,6 +86,11 @@ export default {
     },
     settings() {
       return settingsDefault.Module().componentSettings;
+    },
+    allowedPlugins(){
+      return this.module.plugins.filter(plugin => {
+
+      })
     }
   },
   methods: {

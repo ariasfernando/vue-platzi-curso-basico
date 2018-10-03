@@ -6,28 +6,30 @@
     <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
-        <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
-          <component
-            v-for="(setting,i) in settingGroup"
-            :show-setting="showSetting(setting)"
-            :is="'input-' + setting.type"
-            @setting-updated="settingUpdatedHandler"
-            :setting="setting.type"
-            :name="setting.name"
-            :type="setting.type"
-            :link="setting.link"
-            :label="setting.label"
-            :placeholder="setting.placeholder"
-            :default-value="setting.value"
-            :min-value="setting.minValue"
-            :max-value="setting.maxValue"
-            :sub-component="setting.subComponent"
-            :is-pixel="setting.isPixel"
-            :options="setting.options"
-            :is-disable-percentage="setting.isDisablePercentage"
-            :element="setting.subComponent ? component[setting.subComponent] : component"
-            :key="i"></component>
-        </group-container>
+          <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
+            <template v-for="(setting,i) in settingGroup">
+              <component
+                v-if="$can('std-'+component.type+'-'+setting.type)"
+                :show-setting="showSetting(setting)"
+                :is="'input-' + setting.type"
+                @setting-updated="settingUpdatedHandler"
+                :setting="setting.type"
+                :name="setting.name"
+                :type="setting.type"
+                :link="setting.link"
+                :label="setting.label"
+                :placeholder="setting.placeholder"
+                :default-value="setting.value"
+                :min-value="setting.minValue"
+                :max-value="setting.maxValue"
+                :sub-component="setting.subComponent"
+                :is-pixel="setting.isPixel"
+                :options="setting.options"
+                :is-disable-percentage="setting.isDisablePercentage"
+                :element="setting.subComponent ? component[setting.subComponent] : component"
+                :key="i"></component>
+            </template>
+          </group-container>
       </b-card>
     </b-collapse>
     <!-- END: Style -->
@@ -38,7 +40,7 @@
       <b-card class="plugins">
         <div
           v-for="(plugin, key) in component.plugins"
-          v-if="!shouldRenderInStyles(plugin)"
+          v-if="!shouldRenderInStyles(plugin) && $can('std-'+component.type+'-plugin-'+plugin.name)"
           :class="'plugin-' + plugin.name"
           :key="key"
         >
