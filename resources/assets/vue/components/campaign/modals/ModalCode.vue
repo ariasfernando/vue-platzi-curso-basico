@@ -112,12 +112,6 @@
           this.html.output = this.html.minified_html;
         }
       }
-    },
-    filters: {
-      charConvert: function (value) {
-        if (!value) return '';
-        return value.replace(/&amp;/g, '&');
-      }
     }
   };
 </script>
