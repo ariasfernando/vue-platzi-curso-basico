@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- START: Style -->
-    <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
+    <label-item-container v-b-toggle.style :label="`${toCamel(component.type.replace('-element', ''))} Style`" icon="glyphicon-pencil" />
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
@@ -106,6 +106,9 @@ export default {
     }
   },
   methods: {
+    toCamel(str) {
+      return _.startCase(str);
+    },
     saveComponentProperty(link, subComponent, name, value) {
       let data = {
         columnId: this.currentComponent.columnId,
