@@ -72,8 +72,7 @@ describe('== Library Store ==', () => {
       // Expect stored data to be equal to fake object
       expect(modulesData).toEqual(moduleDataGetter);
 
-      modulesData = null;
-      moduleDataGetter = null;
+      modulesData = moduleDataGetter = null;
 
       done();
     });
@@ -169,11 +168,7 @@ describe('== Library Store ==', () => {
 
       expect(getDataModule).toEqual(compareObject);
 
-      campaignData = null;
-      mockObject1 = null;
-      mockObject2 = null;
-      compareObject = null;
-      getDataModule = null;
+      campaignData = mockObject1 = mockObject2 = compareObject = getDataModule = null;
 
       done();
     });

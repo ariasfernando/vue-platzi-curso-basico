@@ -72,8 +72,7 @@ describe('== Models ==', () => {
         properties = element.getProperties();
       });
       afterAll(() => {
-        element = null;
-        properties = null;
+        element = properties = null;
       });
       it('Should return a valid object', (done) => {
         expect(typeof element).toBe('object');
@@ -107,8 +106,7 @@ describe('== Models ==', () => {
         properties = element.getProperties();
       });
       afterAll(() => {
-        element = null;
-        properties = null;
+        element = properties = null;
       });
       it('Should return a valid object', (done) => {
         expect(typeof element).toBe('object');
@@ -142,8 +140,7 @@ describe('== Models ==', () => {
         properties = element.getProperties();
       });
       afterAll(() => {
-        element = null;
-        properties = null;
+        element = properties = null;
       });
       it('Should return a valid object', (done) => {
         expect(typeof element).toBe('object');
@@ -177,8 +174,7 @@ describe('== Models ==', () => {
         properties = element.getProperties();
       });
       afterAll(() => {
-        element = null;
-        properties = null;
+        element = properties = null;
       });
       it('Should return a valid object', (done) => {
         expect(typeof element).toBe('object');
@@ -220,9 +216,7 @@ describe('== Models ==', () => {
       properties = plugin.getProperties();
     });
     afterAll(() => {
-      testPlugin = null;
-      plugin = null;
-      properties = null;
+      testPlugin = plugin = properties = null;
     });
     it('Should return a valid object', (done) => {
       expect(typeof plugin).toBe('object');

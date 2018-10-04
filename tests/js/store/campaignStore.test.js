@@ -9,12 +9,14 @@
 import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex/dist/vuex';
 import { cloneDeep } from 'lodash';
+import nock from 'nock';
 import 'expect-more-jest';
 /* local import */
 // import libraryStore from '@/store/libraryStore';
 // import moduleStore from '@/store/moduleStore';
+import realStore from '@/store';
 import campaignStore from '@/store/campaignStore';
-// import mocks from '@/resources/mocks';
+import mocks from '@/resources/mocks';
 
 const localVue = createLocalVue();
 
@@ -50,7 +52,7 @@ describe('== Library Store ==', () => {
   afterAll(() => {
     original = null;
   });
-  describe('trigger muttation:', () => {
+  xdescribe('trigger muttation:', () => {
     it('"campaignValidated" and expect of set "campaignValidated" state to true', (done) => {
       let status = true;
 
@@ -145,78 +147,76 @@ describe('== Library Store ==', () => {
       done();
     });
     it('"updateEmailCanvas" and expect has set "modules" state, a new array of modules', (done) => {
-      let modulesData = [
-        {
-          _id: '5b3ce34792f8ef00137bb105',
-          type: 'virtual',
-          key: 'text_458798',
-          name: 'text',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-03 16:09:09',
-          created_at: '2018-07-04 11:09:59',
-          isFixed: true,
-          fixedPosition: 0,
-          mandatory: true,
-        },
-        {
-          _id: '5b64bf6602a4cd00122d0353',
-          type: 'studio',
-          key: 'banner',
-          name: 'banner',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-04 12:41:49',
-          created_at: '2018-08-03 16:47:34',
-          isFixed: false,
-          mandatory: false,
-          data: [],
-          idInstance: 860980,
-        },
-        {
-          _id: '5b64bb6902a4cd00153af972',
-          type: 'studio',
-          key: 'body',
-          name: 'body',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-03 16:30:33',
-          created_at: '2018-08-03 16:30:33',
-          isFixed: false,
-          mandatory: false,
-          data: [],
-          idInstance: 169033,
-        },
-        {
-          _id: '5b64b74a02a4cd000d42aad2',
-          type: 'studio',
-          key: 'untitled_module',
-          name: 'text image',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-04 12:42:51',
-          created_at: '2018-08-03 16:12:58',
-          data: [],
-          idInstance: 567456,
-        },
-        {
-          _id: '5b64b94002a4cd0013159bf2',
-          type: 'studio',
-          key: 'image_text',
-          name: 'image text',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-04 12:42:15',
-          created_at: '2018-08-03 16:21:20',
-          data: [],
-          idInstance: 278717,
-        },
-      ];
+      let modulesData = [{
+        _id: '5b3ce34792f8ef00137bb105',
+        type: 'virtual',
+        key: 'text_458798',
+        name: 'text',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-03 16:09:09',
+        created_at: '2018-07-04 11:09:59',
+        isFixed: true,
+        fixedPosition: 0,
+        mandatory: true,
+      },
+      {
+        _id: '5b64bf6602a4cd00122d0353',
+        type: 'studio',
+        key: 'banner',
+        name: 'banner',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-04 12:41:49',
+        created_at: '2018-08-03 16:47:34',
+        isFixed: false,
+        mandatory: false,
+        data: [],
+        idInstance: 860980,
+      },
+      {
+        _id: '5b64bb6902a4cd00153af972',
+        type: 'studio',
+        key: 'body',
+        name: 'body',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-03 16:30:33',
+        created_at: '2018-08-03 16:30:33',
+        isFixed: false,
+        mandatory: false,
+        data: [],
+        idInstance: 169033,
+      },
+      {
+        _id: '5b64b74a02a4cd000d42aad2',
+        type: 'studio',
+        key: 'untitled_module',
+        name: 'text image',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-04 12:42:51',
+        created_at: '2018-08-03 16:12:58',
+        data: [],
+        idInstance: 567456,
+      },
+      {
+        _id: '5b64b94002a4cd0013159bf2',
+        type: 'studio',
+        key: 'image_text',
+        name: 'image text',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-04 12:42:15',
+        created_at: '2018-08-03 16:21:20',
+        data: [],
+        idInstance: 278717,
+      }];
 
       store.commit('campaign/updateEmailCanvas', modulesData);
 
@@ -335,27 +335,25 @@ describe('== Library Store ==', () => {
         value: '#000',
       };
 
-      let newStruct = [
-        {
-          _id: '5b3ce34792f8ef00137bb105',
-          type: 'virtual',
-          key: 'text_458798',
-          name: 'text',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-03 16:09:09',
-          created_at: '2018-07-04 11:09:59',
-          isFixed: true,
-          data: {
-            textContent: {
-              background: '#fff',
-            },
+      let newStruct = [{
+        _id: '5b3ce34792f8ef00137bb105',
+        type: 'virtual',
+        key: 'text_458798',
+        name: 'text',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-03 16:09:09',
+        created_at: '2018-07-04 11:09:59',
+        isFixed: true,
+        data: {
+          textContent: {
+            background: '#fff',
           },
-          fixedPosition: 0,
-          mandatory: true,
         },
-      ];
+        fixedPosition: 0,
+        mandatory: true,
+      }];
 
       store.commit('campaign/updateEmailCanvas', newStruct);
       store.commit('campaign/updateCustomElementProperty', payload);
@@ -377,23 +375,21 @@ describe('== Library Store ==', () => {
         value: '#000',
       };
 
-      let newStruct = [
-        {
-          _id: '5b3ce34792f8ef00137bb105',
-          type: 'virtual',
-          key: 'text_458798',
-          name: 'text',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-03 16:09:09',
-          created_at: '2018-07-04 11:09:59',
-          isFixed: true,
-          data: {},
-          fixedPosition: 0,
-          mandatory: true,
-        },
-      ];
+      let newStruct = [{
+        _id: '5b3ce34792f8ef00137bb105',
+        type: 'virtual',
+        key: 'text_458798',
+        name: 'text',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-03 16:09:09',
+        created_at: '2018-07-04 11:09:59',
+        isFixed: true,
+        data: {},
+        fixedPosition: 0,
+        mandatory: true,
+      }];
 
       store.commit('campaign/updateEmailCanvas', newStruct);
 
@@ -488,22 +484,20 @@ describe('== Library Store ==', () => {
       done();
     });
     it('"removeModule" with number of module position, expect to has removed the module', (done) => {
-      let modulesData = [
-        {
-          _id: '5b3ce34792f8ef00137bb105',
-          type: 'virtual',
-          key: 'text_458798',
-          name: 'text',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-03 16:09:09',
-          created_at: '2018-07-04 11:09:59',
-          isFixed: true,
-          fixedPosition: 0,
-          mandatory: true,
-        },
-      ];
+      let modulesData = [{
+        _id: '5b3ce34792f8ef00137bb105',
+        type: 'virtual',
+        key: 'text_458798',
+        name: 'text',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-03 16:09:09',
+        created_at: '2018-07-04 11:09:59',
+        isFixed: true,
+        fixedPosition: 0,
+        mandatory: true,
+      }];
 
       store.commit('campaign/updateEmailCanvas', modulesData);
       store.commit('campaign/removeModule', 0);
@@ -587,78 +581,76 @@ describe('== Library Store ==', () => {
       done();
     });
     it('"setActiveLastModule", expect to set "activeModule" state with a index of last module', (done) => {
-      let modulesData = [
-        {
-          _id: '5b3ce34792f8ef00137bb105',
-          type: 'virtual',
-          key: 'text_458798',
-          name: 'text',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-03 16:09:09',
-          created_at: '2018-07-04 11:09:59',
-          isFixed: true,
-          fixedPosition: 0,
-          mandatory: true,
-        },
-        {
-          _id: '5b64bf6602a4cd00122d0353',
-          type: 'studio',
-          key: 'banner',
-          name: 'banner',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-04 12:41:49',
-          created_at: '2018-08-03 16:47:34',
-          isFixed: false,
-          mandatory: false,
-          data: [],
-          idInstance: 860980,
-        },
-        {
-          _id: '5b64bb6902a4cd00153af972',
-          type: 'studio',
-          key: 'body',
-          name: 'body',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-03 16:30:33',
-          created_at: '2018-08-03 16:30:33',
-          isFixed: false,
-          mandatory: false,
-          data: [],
-          idInstance: 169033,
-        },
-        {
-          _id: '5b64b74a02a4cd000d42aad2',
-          type: 'studio',
-          key: 'untitled_module',
-          name: 'text image',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-04 12:42:51',
-          created_at: '2018-08-03 16:12:58',
-          data: [],
-          idInstance: 567456,
-        },
-        {
-          _id: '5b64b94002a4cd0013159bf2',
-          type: 'studio',
-          key: 'image_text',
-          name: 'image text',
-          structure: {},
-          plugins: {},
-          status: 'publish',
-          updated_at: '2018-08-04 12:42:15',
-          created_at: '2018-08-03 16:21:20',
-          data: [],
-          idInstance: 278717,
-        },
-      ];
+      let modulesData = [{
+        _id: '5b3ce34792f8ef00137bb105',
+        type: 'virtual',
+        key: 'text_458798',
+        name: 'text',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-03 16:09:09',
+        created_at: '2018-07-04 11:09:59',
+        isFixed: true,
+        fixedPosition: 0,
+        mandatory: true,
+      },
+      {
+        _id: '5b64bf6602a4cd00122d0353',
+        type: 'studio',
+        key: 'banner',
+        name: 'banner',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-04 12:41:49',
+        created_at: '2018-08-03 16:47:34',
+        isFixed: false,
+        mandatory: false,
+        data: [],
+        idInstance: 860980,
+      },
+      {
+        _id: '5b64bb6902a4cd00153af972',
+        type: 'studio',
+        key: 'body',
+        name: 'body',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-03 16:30:33',
+        created_at: '2018-08-03 16:30:33',
+        isFixed: false,
+        mandatory: false,
+        data: [],
+        idInstance: 169033,
+      },
+      {
+        _id: '5b64b74a02a4cd000d42aad2',
+        type: 'studio',
+        key: 'untitled_module',
+        name: 'text image',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-04 12:42:51',
+        created_at: '2018-08-03 16:12:58',
+        data: [],
+        idInstance: 567456,
+      },
+      {
+        _id: '5b64b94002a4cd0013159bf2',
+        type: 'studio',
+        key: 'image_text',
+        name: 'image text',
+        structure: {},
+        plugins: {},
+        status: 'publish',
+        updated_at: '2018-08-04 12:42:15',
+        created_at: '2018-08-03 16:21:20',
+        data: [],
+        idInstance: 278717,
+      }];
 
       store.commit('campaign/updateEmailCanvas', modulesData);
       store.commit('campaign/setActiveLastModule');
@@ -702,108 +694,102 @@ describe('== Library Store ==', () => {
               minWidth: 1,
               scale: 2,
             },
-            preset: [
-              {
-                type: 'sie-plugin-image',
-                options: {
-                  plugin: {
-                    cropper: {
-                      cropBoxResizable: false,
-                      movable: true,
-                      scalable: true,
-                      rotatable: false,
-                      zoomable: true,
-                      zoomOnTouch: false,
-                      zoomOnWheel: true,
-                      enable: true,
-                      roundCrop: {
-                        enable: false,
-                      },
-                      viewMode: 3,
-                      dragMode: 'move',
-                      modal: true,
-                      guides: false,
-                      center: false,
-                      highlight: false,
-                      background: false,
-                      autoCropArea: 1,
-                      toggleDragModeOnDblclick: false,
-                      cropBoxMovable: false,
-                      minContainerWidth: 1,
-                      minContainerHeight: 1,
-                      minCanvasWidth: 1,
-                      minCanvasHeight: 1,
-                      minCropBoxWidth: 1,
-                      minCropBoxHeight: 100,
-                      restore: false,
-                      state: {
-                        data: {
-                          x: 0,
-                          y: 167,
-                          width: 1000,
-                          height: 666,
-                          scaleX: 1,
-                          scaleY: 1,
-                        },
-                        canvas: {
-                          left: 0,
-                          top: -50,
-                          width: 300,
-                          height: 300,
-                          naturalWidth: 1000,
-                          naturalHeight: 1000,
-                        },
-                        cropbox: {
-                          left: 0,
-                          top: 0,
-                          width: 300,
-                          height: 200,
-                        },
-                        roundCrop: {
-                          round: {
-                            enable: false,
-                            only: false,
-                            diameter: 300,
-                          },
-                          active: false,
-                        },
-                      },
+            preset: [{
+              type: 'sie-plugin-image',
+              options: {
+                plugin: {
+                  cropper: {
+                    cropBoxResizable: false,
+                    movable: true,
+                    scalable: true,
+                    rotatable: false,
+                    zoomable: true,
+                    zoomOnTouch: false,
+                    zoomOnWheel: true,
+                    enable: true,
+                    roundCrop: {
+                      enable: false,
                     },
-                    upload: {
-                      url: 'campaigns/5b86a76baa96550016453356/en_us/5b8d3f0906618-1535983369.0262.jpg',
-                      fillColor: '#000000',
-                      gif: false,
+                    viewMode: 3,
+                    dragMode: 'move',
+                    modal: true,
+                    guides: false,
+                    center: false,
+                    highlight: false,
+                    background: false,
+                    autoCropArea: 1,
+                    toggleDragModeOnDblclick: false,
+                    cropBoxMovable: false,
+                    minContainerWidth: 1,
+                    minContainerHeight: 1,
+                    minCanvasWidth: 1,
+                    minCanvasHeight: 1,
+                    minCropBoxWidth: 1,
+                    minCropBoxHeight: 100,
+                    restore: false,
+                    state: {
+                      data: {
+                        x: 0,
+                        y: 167,
+                        width: 1000,
+                        height: 666,
+                        scaleX: 1,
+                        scaleY: 1,
+                      },
+                      canvas: {
+                        left: 0,
+                        top: -50,
+                        width: 300,
+                        height: 300,
+                        naturalWidth: 1000,
+                        naturalHeight: 1000,
+                      },
+                      cropbox: {
+                        left: 0,
+                        top: 0,
+                        width: 300,
+                        height: 200,
+                      },
+                      roundCrop: {
+                        round: {
+                          enable: false,
+                          only: false,
+                          diameter: 300,
+                        },
+                        active: false,
+                      },
                     },
                   },
-                  layer: {
-                    description: '',
-                    visible: true,
+                  upload: {
+                    url: 'campaigns/5b86a76baa96550016453356/en_us/5b8d3f0906618-1535983369.0262.jpg',
+                    fillColor: '#000000',
+                    gif: false,
                   },
                 },
+                layer: {
+                  description: '',
+                  visible: true,
+                },
               },
+            },
             ],
           },
         },
       };
-      let modulesData = [
-        {
-          structure: {
-            columns: [
-              {
-                components: [
-                  {
-                    plugins: {
-                      styleImageEditor: {
-                        data: {},
-                      },
-                    },
-                  },
-                ],
+      let modulesData = [{
+        structure: {
+          columns: [{
+            components: [{
+              plugins: {
+                styleImageEditor: {
+                  data: {},
+                },
               },
-            ],
+            }],
           },
+          ],
         },
-      ];
+      }];
 
       store.commit('campaign/updateEmailCanvas', modulesData);
       store.commit('campaign/savePlugin', payload);
@@ -849,29 +835,25 @@ describe('== Library Store ==', () => {
         value: 'campaigns/5b86a76baa96550016453356/en_us/5b8ef0cc06930-1536094412.0269.png',
         property: 'placeholder',
       };
-      let modulesData = [
-        {
-          structure: {
-            columns: [
-              {
-                components: [
-                  {
-                    image: {
-                      attribute: {
-                        placeholder: '',
-                      },
-                    },
-                    attribute: {
-                      placeholder: '',
-                    },
-                    placeholder: '',
-                  },
-                ],
+      let modulesData = [{
+        structure: {
+          columns: [{
+            components: [{
+              image: {
+                attribute: {
+                  placeholder: '',
+                },
               },
+              attribute: {
+                placeholder: '',
+              },
+              placeholder: '',
+            },
             ],
           },
+          ],
         },
-      ];
+      }];
 
       store.commit('campaign/updateEmailCanvas', modulesData);
       store.commit('campaign/saveComponentProperty', data);
@@ -904,23 +886,20 @@ describe('== Library Store ==', () => {
         attribute: 'bgcolor',
         attributeValue: '#000000',
       };
-      let modulesData = [
-        {
-          structure: {
-            columns: [
-              {
-                container: {
-                  attribute: {
-                    width: '50%',
-                    valign: 'middle',
-                    bgcolor: '#B01F1F',
-                  },
-                },
+      let modulesData = [{
+        structure: {
+          columns: [{
+            container: {
+              attribute: {
+                width: '50%',
+                valign: 'middle',
+                bgcolor: '#B01F1F',
               },
-            ],
+            },
           },
+          ],
         },
-      ];
+      }];
 
       store.commit('campaign/updateEmailCanvas', modulesData);
       store.commit('campaign/saveColumnAttribute', data);
@@ -944,22 +923,19 @@ describe('== Library Store ==', () => {
         attribute: 'bgcolor',
         attributeValue: '#B01F1F',
       };
-      let modulesData = [
-        {
-          structure: {
-            columns: [
-              {
-                container: {
-                  attribute: {
-                    width: '50%',
-                    valign: 'middle',
-                  },
-                },
+      let modulesData = [{
+        structure: {
+          columns: [{
+            container: {
+              attribute: {
+                width: '50%',
+                valign: 'middle',
               },
-            ],
+            },
           },
+          ],
         },
-      ];
+      }];
 
       store.commit('campaign/updateEmailCanvas', modulesData);
       store.commit('campaign/saveColumnAttribute', data);
@@ -988,15 +964,13 @@ describe('== Library Store ==', () => {
           },
         },
       };
-      let modulesData = [
-        {
-          data: {
-            heightSync: {
-              height: 0,
-            },
+      let modulesData = [{
+        data: {
+          heightSync: {
+            height: 0,
           },
         },
-      ];
+      }];
 
       store.commit('campaign/updateEmailCanvas', modulesData);
       store.commit('campaign/saveCustomModuleData', data);
@@ -1157,18 +1131,16 @@ describe('== Library Store ==', () => {
           clearErrorsByModuleId: 0,
         },
       };
-      let modulesData = [
-        {
-          data: {
-            errors: [],
-          },
+      let modulesData = [{
+        data: {
+          errors: [],
         },
-        {
-          data: {
-            errors: [],
-          },
+      },
+      {
+        data: {
+          errors: [],
         },
-      ];
+      }];
 
       store.commit('campaign/updateEmailCanvas', modulesData);
       store.commit('campaign/addError', errorMessage1);
@@ -1218,32 +1190,252 @@ describe('== Library Store ==', () => {
     });
   });
 
-  xdescribe('trigger actions', () => {
+  describe('trigger actions', () => {
+    let baseUrl = '';
     beforeAll(() => {
-
+      baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
     });
-
-    beforeEach(() => {
-
-    });
-
-    afterEach(() => {
-
-    });
-
     afterAll(() => {
-
+      nock.cleanAll();
+      nock.restore();
+      baseUrl = null;
     });
 
-    it('', (done) => {
-      // let = ;
-      // store.dispatch('campaign/updateCustomElement', );
+    it('"updateCustomElement" with \'payload\' data, expect call to "updateCustomElement" mutation', async (done) => {
+      let payload = {};
+      let setDataMock = jest.fn();
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          updateCustomElement: setDataMock,
+        },
+        actions: storeCampaign.actions,
+      });
+      await campStore.dispatch('updateCustomElement', payload).then(() => {
+        expect(setDataMock.mock.calls).toHaveLength(1);
+        expect(setDataMock.mock.calls[0][1]).toEqual({});
+        payload = setDataMock = storeCampaign = campStore = null;
+        done();
+      });
+    });
+    it('"updateText" with \'payload\' data, expect to call "saveComponentProperty" mutation', (done) => {
+      let setDataMock = jest.fn();
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          saveComponentProperty: setDataMock,
+        },
+        actions: storeCampaign.actions,
+      });
+      let payload = {
+        moduleId: 0,
+        columnId: 0,
+        componentId: 0,
+        link: 'data',
+        property: 'text',
+        sync: false,
+        value: '<p style="margin: 0px;" data-mce-style="margin: 0px;">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam volasduptua.</p>',
+      };
+
+      let payload2 = {
+        moduleId: 0,
+        columnId: 0,
+        componentId: 0,
+        link: 'data',
+        sync: true,
+      };
+
+      campStore.dispatch('updateText', payload);
+
+      expect(setDataMock.mock.calls).toHaveLength(1);
+      expect(setDataMock.mock.calls[0][1]).toEqual(payload);
+
+      campStore.dispatch('updateText', payload2);
+
+      expect(setDataMock.mock.calls).toHaveLength(3);
+
+      expect(setDataMock.mock.calls[1][1]).toEqual(payload2);
+      expect(setDataMock.mock.calls[2][1]).toMatchObject({ ...payload2, value: expect.any(Number) });
+
+      setDataMock = storeCampaign = payload = campStore = payload2 = null;
 
       done();
     });
+    it('"updateCustomElementProperty" with \'payload\' data, expect call to "updateCustomElementProperty" mutation', async (done) => {
+      let payload = {};
+      let setDataMock = jest.fn();
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          updateCustomElementProperty: setDataMock,
+        },
+        actions: storeCampaign.actions,
+      });
+      await campStore.dispatch('updateCustomElementProperty', payload).then(() => {
+        expect(setDataMock.mock.calls).toHaveLength(1);
+        expect(setDataMock.mock.calls[0][1]).toEqual({});
+        payload = setDataMock = storeCampaign = campStore = null;
+        done();
+      });
+    });
+    xit('"addErrors"', () => {});
+    xit('"saveCustomModuleData"', () => {});
+    it('"getCampaignData" with \'campaignId\' data, expect call to "loadCampaignData" mutation, and get the data of campaign', async (done) => {
+      let setDataMock = jest.fn();
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          loadCampaignData: setDataMock,
+        },
+        actions: storeCampaign.actions,
+      });
+      let resultGetCampaign = mocks.campaign.getCampaign;
+      resultGetCampaign.campaign.campaign_data.auto_save = null;
+      nock(baseUrl)
+        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+        .get('/campaign/data/5b045affe53553000d59b18c')
+        .reply(200, resultGetCampaign);
+      await campStore.dispatch('getCampaignData', '5b045affe53553000d59b18c').then(() => {
+        expect(setDataMock.mock.calls).toHaveLength(1);
+        resultGetCampaign.campaign.campaign_data.auto_save = true;
+        expect(setDataMock.mock.calls[0][1]).toEqual(resultGetCampaign.campaign);
+        setDataMock = storeCampaign = campStore = resultGetCampaign = null;
+        done();
+      });
+    });
+    it('"getCampaignData" with \'campaignId\' data erroneous, expect call to "error" mutation', async (done) => {
+      let responseRequest = '';
+      nock(baseUrl)
+        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+        .get('/campaign/data/5b')
+        .reply(500, responseRequest);
 
-    it('', (done) => {
-      done();
+      await store.dispatch('campaign/getCampaignData', '5b').then(() => {
+        expect(console.error).toHaveBeenCalled();
+        responseRequest = null;
+        done();
+      });
+    });
+    it('"getCampaignDataPublic", with \'campaignId\' data, expect call to "loadCampaignData" mutation, and get the data of campaign', async (done) => {
+      let setDataMock = jest.fn();
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          loadCampaignData: setDataMock,
+        },
+        actions: storeCampaign.actions,
+      });
+
+      let resultGetCampaign = mocks.campaign.getCampaignPublic;
+
+      nock(baseUrl)
+        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+        .get('/public/get/5bae3210a7082a001559ec93')
+        .reply(200, resultGetCampaign);
+
+      await campStore.dispatch('getCampaignDataPublic', '5bae3210a7082a001559ec93').then(() => {
+        expect(setDataMock.mock.calls).toHaveLength(1);
+        expect(setDataMock.mock.calls[0][1]).toEqual(resultGetCampaign.campaign);
+        setDataMock = storeCampaign = campStore = resultGetCampaign = null;
+        done();
+      });
+    });
+    it('"getCampaignDataPublic" with \'campaignId\' data erroneous, expect call to "error" mutation', async (done) => {
+      let responseRequest = '';
+      nock(baseUrl)
+        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+        .get('/public/get/5b')
+        .reply(500, responseRequest);
+
+      await store.dispatch('campaign/getCampaignDataPublic', '5b').then(() => {
+        expect(console.error).toHaveBeenCalled();
+        responseRequest = null;
+        done();
+      });
+    });
+    xit('"saveCampaign" with data, expect to save campaign', (done) => {
+      let resultSaveCampaign = mocks.campaign.saveCampaign;
+      let bodyJson = { campaign: mocks.campaign.saveCampaign.campaign, bodyHtml: mocks.campaign.saveCampaign.campaign.body_html };
+      let data = {};
+      data.campaign = mocks.campaign.saveCampaign.campaign;
+      let setDataMock1 = jest.fn();
+      let setDataMock2 = jest.fn();
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          setDirty: setDataMock1,
+          setUpdatedAt: setDataMock2,
+        },
+        actions: storeCampaign.actions,
+      });
+      let setting = {
+        name: 'tags',
+        value: ['tag', 'test'],
+      };
+      let newStruct = {
+        campaign_data: mocks.campaign.saveCampaign.campaign,
+      };
+
+      nock(baseUrl)
+        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+        .post('campaign/save', bodyJson)
+        .reply(200, resultSaveCampaign);
+
+      realStore.commit('loadCampaignData', newStruct);
+      realStore.commit('saveSetting', setting);
+      campStore.dispatch('saveCampaign', data).then(() => {
+        expect(setDataMock1.mock.calls).toHaveLength(1);
+        expect(setDataMock2.mock.calls).toHaveLength(1);
+
+        resultSaveCampaign = bodyJson = data = setDataMock1 = setDataMock2 = storeCampaign = campStore = setting = newStruct = null;
+        done();
+      });
+    });
+    xit('"completeCampaign"', (done) => {
+      let data = {};
+      data.campaign = mocks.campaign.saveCampaign.campaign;
+      let setDataMock1 = jest.fn();
+      let setDataMock2 = jest.fn();
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          setDirty: setDataMock1,
+        },
+        actions: {
+          ...storeCampaign.actions,
+          getCampaignData: setDataMock2,
+        },
+      });
+      nock(baseUrl)
+        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+        .post('/campaign/process', { campaign_id: '5bae3210a7082a001559ec93' })
+        .reply(200, { processed: '5bae3210a7082a001559ec93' });
+
+      campStore.dispatch('completeCampaign', data).then(() => {
+        data = setDataMock1 = setDataMock2 = storeCampaign = campStore = null;
+        done();
+      });
     });
   });
 
