@@ -14,24 +14,26 @@
             v-for="(column, key) in module.structure.columns"
           >
             <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
-              <component v-for="setting in settingGroup"
-                :is="'input-' + setting.type"
-                @setting-updated="(eventData)=>settingUpdatedHandler(eventData, key)"
-                :setting="setting.type"
-                :name="setting.name"
-                :type="setting.type"
-                :link="setting.link"
-                :label="setting.label"
-                :placeholder="setting.placeholder"
-                :default-value="setting.value"
-                :min-value="setting.minValue"
-                :max-value="setting.maxValue"
-                :options="setting.options"
-                :sub-component="setting.subComponent"
-                :element="setting.subComponent ? column[setting.subComponent] : column"
-                :is-disable-percentage="setting.isDisablePercentage"
-                :key="setting.name">
-              </component>
+              <template v-for="setting in settingGroup">
+                <component v-if="$can('std-column-'+setting.type)"
+                  :is="'input-' + setting.type"
+                  @setting-updated="(eventData)=>settingUpdatedHandler(eventData, key)"
+                  :setting="setting.type"
+                  :name="setting.name"
+                  :type="setting.type"
+                  :link="setting.link"
+                  :label="setting.label"
+                  :placeholder="setting.placeholder"
+                  :default-value="setting.value"
+                  :min-value="setting.minValue"
+                  :max-value="setting.maxValue"
+                  :options="setting.options"
+                  :sub-component="setting.subComponent"
+                  :element="setting.subComponent ? column[setting.subComponent] : column"
+                  :is-disable-percentage="setting.isDisablePercentage"
+                  :key="setting.name">
+                </component>
+              </template>
             </group-container>
 
             <!-- Column Settings -->
@@ -53,9 +55,11 @@
   
             </div>
             <!-- Column Plugins -->
-            <div v-for="(plugin, moduleKey) in column.plugins" :class="'plugin-' + plugin.name" :key="plugin.name">
-              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="key"></component>
-            </div>
+            <template v-for="(plugin, moduleKey) in module.plugins">
+              <div v-if="$can('std-column-plugin-'+plugin.name)" :class="'plugin-' + plugin.name" :key="plugin.name">
+                <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="key"></component>
+              </div>
+            </template>
             <!-- /Column Plugins -->
           </b-tab>
         </b-tabs>
