@@ -14,7 +14,7 @@ export default {
     },
   },
   methods: {
-    saveComponentPropertyById(componentId, subComponent, link, property, value) {
+    saveComponentPropertyById({ componentId, subComponent, link, property, value }) {
       const payload = {
         moduleIdInstance: this.moduleIdInstance,
         componentId,
@@ -32,11 +32,25 @@ export default {
       if (index === -1) {
         classesArr.push(classToAdd);
         classes = classesArr.join(' ');
-        this.saveComponentPropertyById(componentId, 'container', 'attribute', 'classes', classes);
+        this.saveComponentPropertyById({
+          moduleIdInstance: this.moduleIdInstance,
+          componentId,
+          subComponent: 'container',
+          link: 'attribute',
+          property: 'classes',
+          value: classes,
+        });
       }
     },
     saveHeight(componentId, value) {
-      this.saveComponentPropertyById(componentId, 'container', 'attribute', 'height', value);
+      this.saveComponentPropertyById({
+        moduleIdInstance: this.moduleIdInstance,
+        componentId,
+        subComponent: 'container',
+        link: 'attribute',
+        property: 'height',
+        value,
+      });
     },
   },
 };
