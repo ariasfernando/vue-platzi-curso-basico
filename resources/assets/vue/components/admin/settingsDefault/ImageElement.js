@@ -4,7 +4,7 @@ function imageDefault() {
       [
         {
           link: 'attribute',
-          label: 'Select an image placeholder',
+          label: 'Default Image',
           name: 'placeholder',
           type: 'generic-file',
           subComponent: 'image',
@@ -19,7 +19,7 @@ function imageDefault() {
         },
         {
           link: 'attribute',
-          label: 'Select an image placeholder mobile',
+          label: 'Default Image Mobile',
           name: 'placeholderMobile',
           type: 'generic-file',
           subComponent: 'image',
