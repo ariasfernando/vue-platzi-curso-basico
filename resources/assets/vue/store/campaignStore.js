@@ -311,7 +311,18 @@ function campaignStore() {
         state.modules[data.moduleId].structure.columns[data.columnId].container.attribute = { ...attributes, ...newData };
         state.dirty = true;
       },
+      saveModulePropertyById(state, { moduleIdInstance, property, value, ...scope }) {
+        const module = getModule(state.modules, moduleIdInstance);
+        let properties = getProperties(module, scope);
+        if (Array.isArray(properties) && isNaN(property)) {
+          // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
+          properties = convertArrayToObject(module, scope);
+        }
+        Vue.set(properties, property, value);
+        state.dirty = true;
+      },
       saveModuleAttribute(state, data) {
+        // DEPRECATE
         const attributes = state.modules[data.moduleId].structure.attribute;
         attributes[data.attribute] = data.attributeValue;
         state.dirty = true;

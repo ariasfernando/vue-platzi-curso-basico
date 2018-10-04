@@ -6,7 +6,7 @@ export default {
   props: ['name', 'module', 'plugin', 'moduleId'],
   data() {
     return {
-      previousHeight: 0
+      previousHeight: 0,
     };
   },
   computed: {
@@ -18,13 +18,24 @@ export default {
     },
     iframe() {
       return document.getElementById('shadowRender');
-    }
+    },
+  },
+  watch: {
+    module: {
+      handler() {
+        if (this.buildingMode === 'mobile') {
+          this.iframe.dispatchEvent(new Event('update-iframe'))
+        }
+        this.setModuleHeight();
+      },
+      deep: true,
+    },
   },
   methods: {
     saveModuleAttribute(property, value, columnId) {
       const payload = {
         moduleId: this.moduleId,
-        columnId
+        columnId,
       };
       if (this.isCustom) {
         payload.plugin = this.name;
@@ -56,18 +67,7 @@ export default {
         height = $(this.iframe.contentDocument).find(`[data-module-id="${this.moduleId}"]`).height();
       }
       return height;
-    }
+    },
   },
-  watch: {
-    module: {
-      handler(newModule) {
-        if (this.buildingMode === 'mobile') {
-          this.iframe.dispatchEvent(new Event('update-iframe'))
-        }
-        this.setModuleHeight();
-      },
-      deep: true
-    }
-  }
 };
 </script>

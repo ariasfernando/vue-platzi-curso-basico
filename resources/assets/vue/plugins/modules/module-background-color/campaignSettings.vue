@@ -1,59 +1,54 @@
 <template>
-  <settings-container :label="plugin.title" customClass="generic-color">
-    <template slot="setting-right" >
-      <div @click="openColorPicker()" class="input-text-hex">
+  <settings-container custom-class="generic-color" :label="plugin.title">
+    <template slot="setting-right">
+      <div class="input-text-hex" @click="openColorPicker()">
         <el-input
-          size="mini"
           v-model="colors"
+          size="mini"
           placeholder="transparent"
-          disabled="disabled"
-        ></el-input>
+          disabled="disabled" />
       </div>
-      <el-color-picker v-model="colors" color-format="hex" :ref="`generic-color${instance}`"></el-color-picker>
+      <el-color-picker :ref="`generic-color${instance}`" v-model="colors" color-format="hex" />
     </template>
   </settings-container>
 </template>
 
 <script>
-import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
+import pluginModuleCampaignMixin from '../mixins/pluginModuleCampaignMixin';
 
 export default {
-  props: ["name", "plugin", "moduleId"],
   components: { SettingsContainer },
-    data() {
-      return {
-        instance: Math.floor(100000 + Math.random() * 900000)
-      };
-    },
+  mixins: [pluginGenericCampaignMixin, pluginModuleCampaignMixin],
+  props: ['name', 'plugin', 'moduleId'],
+  data() {
+    return {
+      instance: Math.floor(100000 + (Math.random() * 900000)),
+    };
+  },
   computed: {
-    currentModule() {
-      return this.$store.getters["campaign/currentModule"];
-    },
-    module() {
-      return this.$store.getters["campaign/modules"][this.currentModule];
-    },
     colors: {
       get() {
-        let value = this.module.structure.attribute && this.module.structure.attribute.bgcolor ? this.module.structure.attribute.bgcolor : this.plugin.config.defaultValue ;
+        const value =
+          this.module.structure.attribute &&
+          this.module.structure.attribute.bgcolor
+            ? this.module.structure.attribute.bgcolor
+            : this.plugin.config.defaultValue;
         return value;
       },
-      set(value) {
-        if (!Application.utils.validateHexVal(value)) {
-          value = value === null ? "" : Application.utils.rgbToHex(value);
+      set(newValue) {
+        let value = newValue;
+        if (!Application.utils.validateHexVal(newValue)) {
+          value = newValue === null ? '' : Application.utils.rgbToHex(newValue);
         }
-        const payload = {
-          plugin: this.name,
-          moduleId: this.currentModule,
-          attribute: "bgcolor",
-          attributeValue: value
-        };
-        this.$store.commit("campaign/saveModuleAttribute", payload);
-      }
-    }
+        this.saveAttributeModule({ attribute: 'bgcolor', value });
+      },
+    },
   },
   methods: {
     openColorPicker() {
-      this.$refs["generic-color" + this.instance].$el.children[0].click();
+      this.$refs[`generic-color${this.instance}`].$el.children[0].click();
     },
   },
 };
@@ -63,8 +58,8 @@ export default {
   float: right;
   height: 28px;
 }
-.el-color-picker /deep/ .el-color-picker__icon{
-  &:before{
+.el-color-picker /deep/ .el-color-picker__icon {
+  &:before {
     text-shadow: 0px 1px #666666;
   }
 }
@@ -84,12 +79,11 @@ export default {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 2px;
-
-  .el-color-picker__color{
+  .el-color-picker__color {
     border: none;
   }
 }
-.generic-color /deep/ .el-input{
+.generic-color /deep/ .el-input {
   .el-input__inner {
     border-top-left-radius: 2px;
     border-top-right-radius: 0;
