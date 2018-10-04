@@ -333,6 +333,26 @@
                                 </p>
                               </div>
                             </div>
+
+                            <div class="row">
+                              <!-- Field propietary styles -->
+                              <div class="col-md-12">
+                                <label for="prependHtml">Prepend to body</label>
+                                <p class="control">
+                                  <textarea v-model="library.config.prependHtml" rows="10" name="prependHtml" type="text" placeholder=""></textarea>
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <!-- Field propietary styles -->
+                              <div class="col-md-12">
+                                <label for="appendHtml">Append to body</label>
+                                <p class="control">
+                                  <textarea v-model="library.config.appendHtml" rows="10" name="appendHtml" type="text" placeholder=""></textarea>
+                                </p>
+                              </div>
+                            </div>
                         </tab>
 
 
