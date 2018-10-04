@@ -4,7 +4,7 @@
         <el-button plain size="mini" @click="changeAlignment('left')" class="fa fa-align-left" :class="{ active: align === 'left' }"></el-button>
         <el-button plain size="mini" @click="changeAlignment('center')" class="fa fa-align-center" :class="{ active: align === 'center' }"></el-button>
         <el-button plain size="mini" @click="changeAlignment('right')" class="fa fa-align-right" :class="{ active: align === 'right' }"></el-button>
-        <el-button plain size="mini" @click="changeAlignment('justify')" class="fa fa-align-justify" :class="{ active: align === 'justify' }"></el-button>
+        <el-button v-if="subComponent !== 'image'" plain size="mini" @click="changeAlignment('justify')" class="fa fa-align-justify" :class="{ active: align === 'justify' }"></el-button>
       </template>
     </settings-container>
 </template>
@@ -31,7 +31,7 @@ export default {
       set: function(newValue) {
         this.$emit("setting-updated", {
           subComponent: this.subComponent,
-          link:'attribute',
+          link: "attribute",
           name: this.linkName,
           value: newValue
         });
@@ -46,7 +46,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.settings-container{
+.settings-container {
   // Hack inline-block
   font-size: 0;
 }
@@ -61,7 +61,7 @@ export default {
   border-color: rgb(120, 220, 214);
   background-color: rgb(120, 220, 214);
 
-  &:before{
+  &:before {
     color: #ffffff;
   }
 }
@@ -76,7 +76,7 @@ export default {
   border-radius: 0px;
   border-right: none;
 
-  &:before{
+  &:before {
     color: #999999;
   }
 
@@ -94,15 +94,15 @@ export default {
 }
 .el-button:first-child:nth-last-child(2),
 .el-button:first-child:nth-last-child(2) ~ button {
-    width: 50%;
+  width: 50%;
 }
 .el-button:first-child:nth-last-child(3),
 .el-button:first-child:nth-last-child(3) ~ button {
-    width: 33%;
+  width: 33%;
 }
 .el-button:first-child:nth-last-child(4),
-.el-button:first-child:nth-last-child(4) ~ button{
-    width: 25%;
+.el-button:first-child:nth-last-child(4) ~ button {
+  width: 25%;
 }
 .padding-zero {
   padding: 0;
