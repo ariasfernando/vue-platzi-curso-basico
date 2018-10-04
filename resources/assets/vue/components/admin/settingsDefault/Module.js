@@ -13,11 +13,16 @@ function moduleDefault() {
         {
           name: 'padding',
           type: 'padding-group',
+          label: 'Padding',
         },
+      ],
+      [
         {
           name: 'border-group',
           type: 'border-group',
         },
+      ],
+      [
         {
           name: 'classes',
           type: 'class-input',

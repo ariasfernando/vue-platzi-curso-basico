@@ -64,6 +64,7 @@ function imageDefault() {
           name: 'padding',
           type: 'padding-group',
           subComponent: 'container',
+          label: 'Element Padding',
         },
       ],
       [

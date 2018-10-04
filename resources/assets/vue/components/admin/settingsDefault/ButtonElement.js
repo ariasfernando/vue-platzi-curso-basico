@@ -59,11 +59,7 @@ function buttonDefault() {
           name: 'padding',
           type: 'padding-group',
           subComponent: 'container',
-        },
-        {
-          name: 'border-group',
-          type: 'border-group',
-          subComponent: 'button',
+          label: 'Element Padding',
         },
         {
           link: 'style',
@@ -72,7 +68,14 @@ function buttonDefault() {
           isPixel: true,
           type: 'generic-number',
           subComponent: 'button',
-        }
+        },
+      ],
+      [
+        {
+          name: 'border-group',
+          type: 'border-group',
+          subComponent: 'button',
+        },
       ],
       [
         {
@@ -149,6 +152,7 @@ function buttonDefault() {
           name: 'padding',
           type: 'padding-group',
           subComponent: 'caret',
+          label: 'Caret Padding',
         },
       ],
     ],

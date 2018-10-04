@@ -15,7 +15,10 @@ function columnDefault() {
           name: 'padding',
           type: 'padding-group',
           subComponent: 'container',
+          label: 'Padding',
         },
+      ],
+      [
         {
           name: 'border-group',
           type: 'border-group',

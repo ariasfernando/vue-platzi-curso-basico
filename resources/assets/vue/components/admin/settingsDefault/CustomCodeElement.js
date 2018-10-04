@@ -1,15 +1,19 @@
-function dividerDefault() {
+function codeDefault() {
   return {
     componentSettings: [
       [
+        {
+          label: 'Edit Code',
+          name: 'data',
+          type: 'generic-code',
+          subComponent: 'code',
+        },
         {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
           subComponent: 'container',
         },
-      ],
-      [
         {
           name: 'bgcolor',
           type: 'generic-color',
@@ -18,27 +22,9 @@ function dividerDefault() {
           subComponent: 'container',
         },
         {
-          name: 'bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Inner Background Color',
-          subComponent: 'divider',
-        },
-        {
-          link: 'style',
-          label: 'Height',
-          name: 'height',
-          isPixel: true,
-          type: 'generic-number',
-          subComponent: 'divider',
-        },
-      ],
-      [
-        {
           name: 'padding',
           type: 'padding-group',
           subComponent: 'container',
-          label: 'Element Padding',
         },
       ],
       [
@@ -52,4 +38,5 @@ function dividerDefault() {
   };
 }
 
-module.exports = dividerDefault;
+
+module.exports = codeDefault;
