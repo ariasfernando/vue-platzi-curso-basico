@@ -469,4 +469,5 @@ export default {
   data: {},
   enabled: false,
   settings: true,
+  runBackground: true,
 };

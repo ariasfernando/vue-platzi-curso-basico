@@ -21,13 +21,13 @@ export default {
         };
 
         // Save plugin data
-        this.$store.commit("campaign/savePlugin", payload);
-      }
+        this.$store.commit('campaign/savePlugin', payload);
+      },
     },
     moduleErrors() {
-      return this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
-                                                      && _.isEqual(err.scope.columnId, this.elementLocation.columnId)
-                                                      && _.isEqual(err.scope.componentId, this.elementLocation.componentId))) : [];
+      return this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name) &&
+                                                      _.isEqual(err.scope.columnId, this.elementLocation.columnId) &&
+                                                      _.isEqual(err.scope.componentId, this.elementLocation.componentId))) : [];
     },
     hasError() {
       return this.moduleErrors.length > 0;
@@ -42,12 +42,14 @@ export default {
         const errorItems = _.cloneDeep(this.$validator.errors.items);
         if (errorItems.length) {
           _.each(errorItems, (err) => {
-            _.extend(err, { scope: {
-              type: 'plugin',
-              name: this.name,
-              msg: err.msg,
-              ...this.elementLocation,
-            }});
+            _.extend(err, {
+              scope: {
+                type: 'plugin',
+                name: this.name,
+                msg: err.msg,
+                ...this.elementLocation,
+              },
+            });
           });
 
           this.$store.dispatch('campaign/addErrors', errorItems);
@@ -71,7 +73,7 @@ export default {
           scope: {
             type: 'custom',
             elementName,
-            moduleId: moduleId,
+            moduleId,
             idInstance: this.module.idInstance,
           },
         };
@@ -87,9 +89,8 @@ export default {
         _.each(this.module.params.validation, (item, key) => {
           if (key === 'images') {
             _.each(this.module.params.validation[key], (imageElement, key2) => {
-
-              if (typeof imageElement.parentElement === undefined
-                || (imageElement.parentElement && this.module.data[imageElement.parentElement].enableElement)) {
+              if (typeof imageElement.parentElement === undefined ||
+                (imageElement.parentElement && this.module.data[imageElement.parentElement].enableElement)) {
                 _.each(this.module.params.validation[key][key2], (fieldValidations, field) => {
                   const elementName = `${key2}${field}`;
 
