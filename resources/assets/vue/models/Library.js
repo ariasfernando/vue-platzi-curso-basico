@@ -36,6 +36,7 @@ function Library(data = {}) {
     tracking: config.tracking || false,
     tagging: config.tagging || false,
     templating: config.templating || false,
+    htmlToPdf: config.htmlToPdf || false,
   };
 
   const groups = [];
