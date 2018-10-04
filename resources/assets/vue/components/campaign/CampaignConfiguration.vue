@@ -220,7 +220,7 @@
       },
       validate() {
         this.$validator.validateAll().then(() => {
-          let errorItems = _.cloneDeep(this.$validator.errors.items);
+          const errorItems = _.cloneDeep(this.$validator.errors.items);
           if (errorItems.length) {
             _.each(errorItems, (err) => {
               _.extend(err, {
