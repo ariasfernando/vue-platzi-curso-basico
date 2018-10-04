@@ -74,9 +74,23 @@ export default {
         if (editorLinks.length) {
           for (let i = 0; i < editorLinks.length; i++) {
             const $el = $(editorLinks[i]);
-            const currentSpanColor = $el.parents('span').css('color');
-            const newColor = currentSpanColor ? currentSpanColor : link_fixed_color;
-            $el.css('color', newColor);
+
+            // check if element has a span as parent and then check colors
+            const $span = $el.parent('span');
+            if ($span.length) {
+              // return the first span parent that has a color
+              const $parentEl = $span.parents().filter(function () {
+                return $(this).css('color');
+              });
+              const parentColor = $parentEl.css('color');
+              const spanColor = $span.css('color');
+              // if span and parent color are the same, we assume that the span is inheriting the color
+              // so we apply the fixed color, otherwise, we let the span color.
+              const newColor = parentColor === spanColor ? link_fixed_color : spanColor;
+              $el.css('color', newColor);
+            } else {
+              $el.css('color', link_fixed_color);
+            }
           }
         }
       } else {
@@ -321,14 +335,14 @@ export default {
           styles: {},
         };
 
-        _.forOwn(loop.styles, (prop, key) => { 
+        _.forOwn(loop.styles, (prop, key) => {
           const keyBehaviour = prop.behaviour || loop.steps.behaviour;
           const unit = prop.unit || 'px';
           const result = runBehaviour(keyBehaviour, currentFontSize);
           format.styles[key] = `${result}${unit}`;
         });
 
-        _.forOwn(loop.settings, (prop, key) => { 
+        _.forOwn(loop.settings, (prop, key) => {
             format[key] = prop;
         });
 
