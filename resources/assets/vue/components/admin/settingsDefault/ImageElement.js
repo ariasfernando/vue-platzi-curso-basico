@@ -10,24 +10,11 @@ function imageDefault() {
           subComponent: 'image',
         },
         {
-          label: 'Image mobile',
-          link: 'styleOption',
-          name: 'hasImageMobile',
-          type: 'generic-switch',
-          value: false,
-          subComponent: 'image',
-        },
-        {
           link: 'attribute',
-          label: 'Default Image Mobile',
+          label: 'Default Mobile Image',
           name: 'placeholderMobile',
           type: 'generic-file',
           subComponent: 'image',
-          dependsOn: {
-            link: 'styleOption',
-            name: 'hasImageMobile',
-            subComponent: 'image',
-          },
         },
         {
           name: 'classes',
