@@ -63,23 +63,24 @@ $default = [
             '/campaign/gif-layer'          => 'CampaignController@postGifLayer',
             '/campaign/email-sent-history' => 'CampaignController@postEmailSentHistory',
             '/campaign/favorite'           => 'CampaignController@postFavorite',
+            '/campaign/trim-image'         => 'CampaignController@postTrimImage',
             '/campaign/spent-time'         => 'MetricController@postSpentTime',
             '/template/move-library'       => 'TemplateController@postMoveLibrary',
             '/template/modal'              => 'TemplateController@postModal',
             '/proof/comment/{token}'       => 'ProofController@postComment',
             '/proof/decision/{token}'      => 'ProofController@postDecision',
             '/proof/create'                => 'ProofController@postCreate',
+            '/proof/delete-decision/{token}' => 'ProofController@postDeleteDecision',
         ],
 
         'put' => [],
 
-        'delete' => [
-            '/proof/decision/{token}'              => 'ProofController@deleteDecision',
-        ],
+        'delete' => [],
     ],
     'api' => [
         'get'    => [
-            '/api/history' => 'ApiController@getHistory'
+            '/api/history' => 'ApiController@getHistory',
+            '/api/oauth'   => 'ApiController@getOauth'
         ],
         'post'   => [
             '/api/upload-email' => 'ApiController@postUploadEmail',

@@ -1,44 +1,51 @@
 <template>
-  <div class="column-settings section-box" v-if="module">
-    <h2>
-      <i class="glyphicon glyphicon-pause"></i> Column Styles
-    </h2>
-    <div class="module-plugins" v-if="hasEnabledPlugins(module)">
-
-      <div v-for="(plugin, key) in module.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component v-if="plugin.enabled && $_app.modulePlugins[key]" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
+  <div class="section-box" v-if="module">
+    <template  v-if="hasEnabledPlugins(module)">
+      <label-item-container label="MODULE STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
+      <div class="card">
+        <group-container>
+          <component  v-for="(plugin, key) in module.plugins" :key="plugin.name + key" v-if="plugin.enabled && $_app.modulePlugins[key]" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"  :module-id="currentModule"></component>
+        </group-container>
       </div>
-    </div>
-
+    </template>
+    <template v-if="showColumnStyles">
+    <label-item-container label="COLUMN STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
     <div class="column-plugins">
-      <b-card class="control container-fluid" no-block>
-        <b-tabs card>
+      <b-card no-block>
+        <b-tabs card :no-fade="true">
           <b-tab
             v-for="(column, columnKey) in module.structure.columns"
             v-if="hasEnabledPlugins(column)"
             :title="`${columnKey+1}`"
             :button-id="`column-${columnKey}`"
             :key="columnKey">
-            <div v-for="(plugin, moduleKey) in column.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
+            <group-container>
               <component
+                v-for="(plugin, moduleKey) in column.plugins"
                 v-if="plugin.enabled && $_app.modulePlugins[moduleKey]"
                 :is="'campaign-' + plugin.name"
                 :name="moduleKey"
                 :plugin="plugin"
                 :column-id="columnKey"
-                :module-id="currentModule">
+                :module-id="currentModule"
+                :key="columnKey + moduleKey"
+                >
               </component>
-            </div>
+            </group-container>
           </b-tab>
         </b-tabs>
       </b-card>
 
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
   import _ from 'lodash'
+  import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
+  import GroupContainer from "../common/containers/GroupContainer.vue";
+  import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
 
   export default {
     data () {
@@ -46,12 +53,26 @@
         ready: false,
       }
     },
+    components: {
+      LabelItemContainer,
+      SettingsContainer,
+      GroupContainer,
+    },
     computed: {
       currentModule() {
         return this.$store.getters["campaign/currentModule"];
       },
       module() {
         return this.$store.getters["campaign/modules"][this.currentModule];
+      },
+      showColumnStyles() {
+        let enabled = false;
+        _.each(this.module.structure.columns, (column) => {
+          if(this.hasEnabledPlugins(column)){
+            enabled = true;
+          };
+        });
+        return enabled;
       },
     },
     watch : {

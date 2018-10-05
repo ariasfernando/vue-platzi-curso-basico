@@ -79,16 +79,6 @@ export default {
       // Update state of the component
       this.$store.commit("module/togglePlugin", payload);
 
-      // Set current component
-      this.$store.commit("module/setCurrentComponent", {
-        columnId: payload.columnId,
-        componentId: payload.componentId
-      });
-      // Update component view in the third column
-      this.$store.commit("module/setChangeSettingComponent", {
-          style: this.module.structure.columns[payload.columnId].components[payload.componentId].style || {},
-          attribute: this.module.structure.columns[payload.columnId].components[payload.componentId].attribute || {}
-        });
     },
     changeOption(valueHeight, nameHeight) {
       let maxHeight = this.plugin.config.options.max;
@@ -123,16 +113,8 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
-.btn-group {
-  text-align: left;
-  padding: 5px 5px 10px;
-}
-.label-center {
-  display: block;
-  text-align: center !important;
-  padding-bottom: 0px !important;
-  padding-top: 0 !important;
-  text-transform: uppercase;
+<style lang="scss" scoped>
+.el-input-number--mini {
+    width: 100%;
 }
 </style>

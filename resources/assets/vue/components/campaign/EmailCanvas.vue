@@ -2,15 +2,16 @@
   <div>
     <back-to-top></back-to-top>
     <!-- content canvas email -->
+    <div v-if="buildingMode ==='mobile'" v-html="templateWidthStyles"></div>
     <div class="section-box-content section-canvas-container">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td
             align="center"
             style="vertical-align:top;"
-            class="stx-draggable-wrapper"
-            :class="{ 'campaign-completed': campaignCompleted }"
-            :bgcolor="templateBackgroundColor()"
+            class="stx-draggable-wrapper st-email-wrapper"
+            :class="{ 'campaign-validated': campaignValidated }"
+            :bgcolor="templateBackgroundColor || defaultTemplateBackgroundColor"
             @click.stop="handleActive"
             @mouseover="onMouseOver"
             @mouseleave="onMouseLeave">
@@ -23,13 +24,19 @@
                 border="0"
                 v-model="dragList"
                 :width="templateWidth"
+                :style="`width:${templateWidth}px`"
                 :options="options"
                 :element="'table'"
                 :move="onMove"
                 @add="onAdd"
                 @sort="onSort"
+                @choose="onChoose"
                  v-if="isNotEmptyList">
-                  <module v-for="(module, moduleId) in dragList" :key="moduleId" :module-id="moduleId"></module>
+                  <module
+                    v-for="(module, moduleId) in dragList"
+                    :key="module.idInstance"
+                    :module-id="moduleId"
+                  ></module>
               </draggable>
               <draggable
                 id="emailCanvas"
@@ -40,6 +47,7 @@
                 border="0"
                 v-model="dragList"
                 :width="templateWidth"
+                :style="`width:${templateWidth}px`"
                 :options="options"
                 :element="'table'"
                 @add="onAdd"
@@ -61,6 +69,7 @@
   import Module from './Module.vue';
   import EmailActions from './EmailActions.vue';
   import BackToTop from '../common/BackToTop.vue';
+  import ModuleListMixin from './mixins/moduleListMixin';
 
   export default {
     name: 'EmailCanvas',
@@ -70,14 +79,15 @@
       'email-actions': EmailActions,
       BackToTop
     },
+    mixins: [ ModuleListMixin ],
     data: {
       dragGhost: null,
       onMouseOver: () => {},
       onMouseLeave:() => {}
     },
     computed: {
-      campaignCompleted() {
-        return this.$store.state.campaign.campaignCompleted;
+      campaignValidated() {
+        return this.$store.state.campaign.campaignValidated;
       },
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
@@ -99,6 +109,14 @@
       templateWidth () {
         return this.$store.getters['campaign/templateWidth'];
       },
+      templateWidthStyles(){
+        return `
+        <style>
+          #emailCanvas.stx-mobile-mode {
+              width: ${this.$store.getters["campaign/campaign"].library_config.templateMobileWidth}px!important;
+          }
+        </style>`
+      },
       buildingMode() {
         return this.$store.getters["campaign/buildingMode"];
       },
@@ -108,13 +126,23 @@
       baseUrl (){
         return this.$_app.config.baseUrl;
       },
-      modules() {
-        return this.$store.getters["campaign/modules"];
-      },
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
         return this.modules[activeModuleId] || undefined;
-      }
+      },
+      defaultTemplateBackgroundColor() {
+        let defaultColor = this.campaign.campaign_data.library_config.templateBackgroundColor;
+
+        if (this.campaign.library_config.templateBackgroundPalettes) {
+          const palettes = JSON.parse(this.campaign.library_config.templateBackgroundPalettes);
+          defaultColor = palettes.default;
+        }
+
+        return defaultColor;
+      },
+      templateBackgroundColor() {
+        return this.campaign.campaign_data.campaign_settings.templateBackgroundColor;
+      },
     },
     data () {
       return {
@@ -151,9 +179,6 @@
             dataTransfer.setDragImage(img, 130, 16);
           }
         },
-        templateBackgroundColor(){
-          return  this.campaign.campaign_data.library_config.templateBackgroundColor;
-        },
         title  () {
           let libraryTitle = this.campaign.campaign_data.library_config.title || 'Campaign Editor';
 
@@ -172,32 +197,17 @@
       }
     },
     methods: {
-      getSubitemsAsArray () {
-        return _.reduce(this.items, (result, value) => {
-          if(_.has(value, 'level')) {
-            result = _.union(result, value.sub_menu);
-          }
-          return result;
-        }, []);
-      },
       onAdd(e) {
         let cloneEl = e.clone;
         let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
 
         // Find module in items by type: item or subitem
-        const found = moduleType === 'item'
-          ? _.find(this.items, (m) => m.name === moduleName)
-          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
-
+        const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
-        mod.data = {};
+        this.addModule(mod, e.newIndex);
 
-        this.$store.commit('campaign/insertModule', {index: e.newIndex, moduleData: mod});
-        // Set active on last module inserted
-        this.$store.commit('campaign/setActiveModule', e.newIndex);
-
-         // Remove ghost element
+        // Remove ghost element
         const cloneItem = e.item;
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = "1";
@@ -216,24 +226,34 @@
             distance = distance * 0.15; // <- velocity
             $(target).scrollTop( distance + $(target).scrollTop());
         }
+
+        // Cannot sort to/from a fixed position
+        if (evt.related && evt.dragged){
+          return !evt.related.classList.contains('stx-fixed') && !evt.dragged.classList.contains('stx-fixed');
+        }
       },
       onSort(e){
-        if (this.activeModule.type === 'studio') {
+        this.$store.commit('campaign/unsetCustomModule');
+        this.$store.commit('campaign/unsetCurrentComponent');
+
+        this.$store.commit('campaign/setActiveModule', e.newIndex);
+        this.$store.commit("campaign/setDirty", true);
+
+        if (_.has(this.activeModule, 'type') && this.activeModule.type === 'studio') {
           // Save current component if module type is studio
           this.$store.commit('campaign/setCurrentComponent', {
             moduleId: e.newIndex,
             columnId: 0,
             componentId: 0,
           });
-          this.$store.commit('campaign/unsetCustomModule');
         } else {
           // Save customModule if module type is custom
           this.$store.commit('campaign/setCustomModule', e.newIndex);
-          this.$store.commit('campaign/unsetCurrentComponent');
         }
-
-        this.$store.commit('campaign/setActiveModule', e.newIndex);
-        this.$store.commit("campaign/setDirty", true);
+      },
+      onChoose() {
+        this.$store.commit('campaign/unsetCustomModule');
+        this.$store.commit('campaign/unsetCurrentComponent');
       },
       onMouseOver () {
         $("#emailCanvas").addClass("hovered");
@@ -294,7 +314,7 @@
         }
         else {
           // Get module ID
-          const moduleId = $target.closest(".stx-module-wrapper").find("td").data("module-id");
+          const moduleId = _.parseInt($target.closest(".stx-module-wrapper").find("td").attr("data-module-id"));
           // If it's the config gear icon
           if( $target.hasClass('icon-config') || $target.hasClass("fa-cogs") ) {
             // Show module settings
@@ -396,20 +416,22 @@
       min-height: 40px;
     }
     &.stx-mobile-mode {
-      width: 480px;
       // Mobile Classes
       @import '../../../less/base/commons/mobile/mobile_core_styles';
       @import '../../../less/base/commons/mobile/mobile_client_styles';
     }
 
-    tr.ghost-component{
+    table{
+      border-collapse: initial;
+    }
+    .ghost-component{
       text-align: center;
       color:@focus;
       background-color: @hover;
       display: table-row;
       vertical-align: middle;
       list-style-type: none;
-      font-size: 13px;
+      font-size: 14px;
       z-index: 300;
       opacity: 1!important;
       &:before{

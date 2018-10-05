@@ -1,55 +1,61 @@
 <template>
-  <!-- IMAGE ELEMENT -->
-    <tr
-      data-type="image-element"
-      :data-component="JSON.stringify(component)"
-      :class="getMobileClasses(component,'tr') + component.attribute.classes"
-      @click.prevent="setComponent"
-    >
-      <td 
-        width="100%" 
-        align="center"
-        class="stx-position-relative"
-        :style="component.style" 
-        :class="getMobileClasses(component,'td:first')"
+  <module-container :component="component" @select-component="selectComponentHandler">
+      <table
+      width="100%"
+      style="width: 100%;"
+      :valign="component.container.attribute.valign || 'top'"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
       >
-        <table
-          width="100%" 
-          cellspacing="0" 
-          cellpadding="0" 
-          border="0" 
-          style="width: 100%;"
-        >
-          <tr>
-            <td 
-              width="100%" 
-              :bgcolor="component.attribute.bgcolor" 
-              :align="component.attribute.align" 
-              :valign="component.attribute.valign"
-            >
-              <a 
-                @click.prevent
-                :href="component.attribute.href" 
-                :alt="component.attribute.alt"
-                :title="component.attribute.title"
-                :target="component.attribute.target"
+        <tr>
+          <td 
+            width="100%"
+            :valign="component.image.attribute.valign || 'top'"
+            :align="component.image.attribute.align"
+            :bgcolor="component.image.attribute.bgcolor"
+            style="width:100%;"
+            :style="elementBorderAndPadding(component.image)"
+          >
+            <a 
+              @click.prevent
+              :href="component.image.attribute.href" 
+              :alt="component.image.attribute.alt"
+              :title="component.image.attribute.title"
+              :target="component.image.attribute.target"
               >
-                <img
-                  class="st-resize"
-                  border="0"
-                  :style="styleComputed"
-                  :src="imageUrl(component.attribute.placeholder)" 
-                  :width="widthInline"
-                  :height="component.attribute.height"
-                  :data-open-element-config="elementConfig"
-                >
-              </a>
-              <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+              <img
+                class="st-resize"
+                :class="{'st-hide-mobile' : component.image.attribute.placeholderMobile}"
+                style="border: 0; display: block;"
+                border="0"
+                :width="component.image.attribute.width"
+                :src="imageUrl(component.image.attribute.placeholder)"
+                :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
+                :alt="component.image.attribute.alt"
+                :title="component.image.attribute.title"
+              >
+              <template 
+                v-if="component.image.attribute.placeholderMobile">
+                <div class="show-img-mobile" style="display:none;width:0;overflow:hidden;max-height:0!important;">
+                  <img
+                    :src="imageUrl(component.image.attribute.placeholderMobile)"
+                    border="0"
+                    class="st-resize"
+                    style="display:block;border:none;max-width:100%;height:auto;"
+                    :width="component.image.attribute.width"
+                    :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
+                    :alt="component.image.attribute.alt"
+                    :title="component.image.attribute.title"
+                  />
+                </div>
+              </template>
+            </a>
+            <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
+          </td>
+        </tr>
+      </table>
+    </module-container>
   <!-- IMAGE ELEMENT ENDS -->
 </template>
 
@@ -57,22 +63,16 @@
   import _ from 'lodash';
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
-  
+  import ElementMixin from '../../common/mixins/ElementMixin';
+  import MontedElementMixin from '../mixins/MontedElementMixin';
+  import ModuleContainer from '../../common/containers/ModuleContainer';
   export default {
     name: 'ImageElement',
-    props: [
-      'module-id',
-      'column-id',
-      'component-id',
-      'component'
-    ],
     components: {
       ComponentToolbar,
+      ModuleContainer
     },
-    mixins: [ MobileStylesMixin ],
-    created () {
-      this.setupModule();
-    },
+    mixins: [ MobileStylesMixin, ElementMixin, MontedElementMixin ],
     data(){
       return {
         imageUrl(imagePath) {
@@ -80,35 +80,6 @@
         }
       }
     },
-    computed: {
-      styleComputed() {
-        const widthStyleInline = this.component.attribute.width.indexOf("%") !== -1
-          ? this.component.attribute.width
-          : `${_.parseInt(this.component.attribute.width)}px`
-        return `border: 0; display: block; width: ${widthStyleInline}`;
-      },
-      widthInline() {
-        return this.component.attribute.width.indexOf("%") !== -1 ? this.component.attribute.width : _.parseInt(this.component.attribute.width);
-      }
-    },
-    methods: {
-      setupModule () {
-        this.elementConfig = null;
-
-        if (this.component.directives && this.component.directives.elementConfig) {
-          this.elementConfig = this.component.directives.elementConfig;
-        }
-      },
-
-      setComponent(e) {
-        if (!$(e.target).hasClass("st-remove")){
-          this.$store.commit("module/setCurrentComponent", {
-            columnId: this.columnId,
-            componentId: this.componentId
-          });
-        }
-      },
-    }
   };
 </script>
 

@@ -38,14 +38,9 @@
       campaign () {
         return this.$store.getters["campaign/campaign"];
       },
-    },
-    data () {
-      return {
-        campaignConfig: {}
-      }
-    },
-    created () {
-      this.campaignConfig = this.$store.getters["config/config"].campaign;
+      campaignConfig() {
+        return this.$store.getters["config/config"].campaign;
+      },
     },
     methods: {
       confirmSave(e) {

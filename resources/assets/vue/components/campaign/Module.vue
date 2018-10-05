@@ -1,51 +1,70 @@
 <template>
   <tr v-if="module.type === 'custom'"
       class="stx-module-wrapper"
-      :class="[`stx-${module.name}`, {'stx-module-wrapper-active': activeModule === moduleId }]"
+      :class="[`stx-${module.name}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': activeModule === moduleId }]"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
   >
     <td class="stx-toolbar-content stx-position-relative"
         :data-module-id="moduleId"
-        :class="{ 'stx-show-error': module.data.errors && module.data.errors.length }"
+        :class="{ 'stx-show-error': hasErrors }"
         @click.prevent="config"
+        :width="moduleWidth"
+        :style="moduleStyle"
+        :valign="moduleValign"
+        :bgcolor="moduleBgcolor"
     >
-      <component :is="'custom-' + module.name" :module="module" :module-id="moduleId"></component>
-      <module-toolbar :module-id="moduleId"></module-toolbar>
+      <component :is="'custom-' + module.key" :module="module" :module-id="moduleId"></component>
+      <module-toolbar :module-id="moduleId" v-if="!module.data.hideToolbar"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
       <div class="st-remove-element default-module-error"></div>
     </td>
   </tr>
 
-  <tr v-else
-      class="stx-module-wrapper"
-        :class="[`stx-${module.key}`, module.structure.attribute.classes, {'stx-module-wrapper-active': activeModule === moduleId }]"
-      @mouseover="setModulesMouseOver"
-      @mouseleave="setModulesMouseLeave"
+  <tr
+    v-else
+    class="stx-module-wrapper"
+    :class="[`stx-${module.key}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': activeModule === moduleId }]"
+    @mouseover="setModulesMouseOver"
+    @mouseleave="setModulesMouseLeave"
   >
-    <td class="stx-toolbar-content stx-position-relative"
-        :data-module-id="moduleId"
-        :style="module.structure.style"
-        :bgcolor="module.structure.attribute.bgcolor"
-        :class=" { 'stx-show-error': showError(moduleId), 'st-wrapper-content': module.structure.columns.length > 1 }">
+    <td
+      class="stx-toolbar-content stx-position-relative"
+      :data-module-id="moduleId"
+      :width="module.structure.attribute.width || '100%'"
+      :style="module.structure.style"
+      :valign="module.structure.attribute.valign || 'top'"
+      :bgcolor="module.structure.attribute.bgcolor"
+      :class=" { 'stx-show-error': hasErrors, 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}"
+    >
+
       <table
         width="100%"
         cellspacing="0"
         cellpadding="0"
         border="0"
-        :class="{ 'stx-wrapper': module.structure.columns.length === 1 }"
-        >
+        class="st-wrapper" 
+        align="center"
+      >
         <!--2 COLUMNS -->
         <tr v-if="module.structure.columns.length > 1">
 
           <!--2 COLUMNS STACKING -->
-          <td width="100%" v-if="!module.structure.columnsFixed && !module.structure.invertedStacking">
+          <td
+            width="100%"
+            v-if="module.structure.columnsStacking === 'normal'"
+            :valign="module.structure.attribute.valign || 'top'"
+          >
             <comment :content="msoStartingComment"></comment>
             <columns-stacked-render v-for="(column, columnId) in module.structure.columns" :key="columnId" :module-id="moduleId" :column="column" :column-id="columnId"></columns-stacked-render>
           </td>
 
           <!--2 COLUMNS INVERTED STACKING ONLY FOR 2 COLUMNS-->
-          <td width="100%" v-else-if="!module.structure.columnsFixed && module.structure.invertedStacking">
+          <td
+            width="100%"
+            v-else-if="module.structure.columnsStacking === 'invertedStacking'"
+            :valign="module.structure.attribute.valign || 'top'"
+          >
             <table
               width="100%"
               cellspacing="0"
@@ -54,7 +73,7 @@
               dir="rtl"
               >
               <tr>
-                <td width="100%">
+                <td width="100%" :valign="module.structure.attribute.valign || 'top'">
                   <comment :content="msoStartingCommentInverted"></comment>
 
                   <columns-inverted-stacking-render
@@ -78,30 +97,45 @@
           </td>
 
           <!--2 COLUMNS FIXED -->
-          <td v-else
-              v-for="(column, columnId) in module.structure.columns"
-              :width="column.attribute && column.attribute.width ? column.attribute.width : 100/module.structure.columns.length + '%'"
-              valign="top"
+          <td
+            v-else-if="module.structure.columnsStacking == 'columnsFixed'"
+            v-for="(column, columnId) in module.structure.columns"
+            :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
+            :valign="column.container.attribute.valign || 'top'"
+            :class="column.container.attribute.classes"
+            :bgcolor="column.container.attribute.bgcolor"
+            :key="column.id"
+            :style="[elementBorderAndPadding(column.container),{'width': widthStyle(column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%')}]"
           >
-            <columns-fixed-render :column="column" :column-id="columnId" :module-id="moduleId"></columns-fixed-render>
+            <columns-fixed-render
+              :column="column"
+              :column-id="columnId"
+              :module-id="moduleId"
+            ></columns-fixed-render>
           </td>
         </tr>
         <!--2 COLUMNS -->
 
         <!--1 COLUMN -->
-        <tr v-else
+        <tr
+          v-else
           v-for="(component, componentId) in module.structure.columns[0].components"
           @click.prevent="setComponent(moduleId, 0, componentId)"
-          :class="component.attribute.hideElement ? 'stx-hide-element st-remove-element' : '' "
+          :key="component.id"
         >
-          <td :valign="component.attribute.valign" :align="component.attribute.align || 'left'">
-            <component
-              :is="component.type"
-              :component="component"
-              :module-id="moduleId"
-              :column-id="0"
-              :component-id="componentId">
-            </component>
+          <td width="100%" class="st-mobile-full-width" style="vertical-align: top; width: 100%;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+              <template>
+                  <component
+                    :is="component.type"
+                    :component="component"
+                    :module-id="moduleId"
+                    :column-id="0"
+                    :component-id="componentId"
+                    context="campaign"
+                  ></component>
+                </template>
+              </table>
           </td>
         </tr>
         <!--1 COLUMN -->
@@ -119,16 +153,34 @@
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
-  import SeparatorElement from './elements/SeparatorElement.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
+  import validatorMixin from '../../plugins/modules/mixins/validator.js';
+  import ElementMixin from '../common/mixins/ElementMixin.js';
   import _ from 'lodash';
 
   module.exports = {
     name: 'Module',
     props: ['moduleId'],
+    mixins: [ ElementMixin, validatorMixin ],
+    created() {
+      if(this.module.type === 'studio'
+          && ((this.module.structure && this.module.structure.columns && this.module.structure.columns.length > 1)
+              || (this.module.structure && this.module.structure.columns && this.module.structure.columns.length === 1
+                  && this.module.structure.columns[0].components.length > 1)
+            )
+        ) {
+          // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
+          // so we need to check a flag to aid the user to open each module and run the validations at least once
+        this.registerStudioModuleDefaultValidationErrors(this.moduleId);
+      }
+      else if(this.module.type === 'custom') {
+        this.$store.commit('campaign/clearErrorsByModuleId', this.moduleId);
+        this.registerCustomModuleDefaultValidationErrors(this.moduleId);
+        }
+    },
     computed: {
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
@@ -137,44 +189,62 @@
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
       moduleErrors() {
-        return this.$store.getters["campaign/moduleErrors"];
-      },
-      fieldErrors() {
-        return this.$store.getters["campaign/fieldErrors"];
+        return this.module.data.errors || [];
       },
       msoStartingComment() {
-        return "[if gte mso 9]>" +
-          "<table width='" + this.templateWidth + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center'>" +
-          "<tr>" +
-          "<td style='width: " + this.templateWidth / this.module.structure.columns.length + "px !important'>" +
-          "<![endif]";
+        return `[if gte mso 9]>
+          <table width="${this.templateWidth}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center">
+            <tr>
+              <td width="${this.calculeWidthColumnPx(0)}" style="width:${this.calculeWidthColumnPx(0)}px !important" valign="top">
+              <![endif]`;
       },
       msoStartingCommentInverted() {
-        return "[if gte mso 9]>" +
-          "<table width='" + this.columnWidthPadding + "' cellpading='0' cellspacing='0' border='0' style='border-collapse: collapse; table-width: fixed;' align='center' dir='rtl'>" +
-          "<tr>" +
-          "<td style='width: " + this.columnWidthPadding / this.module.structure.columns.length + "px !important' dir='ltr'>" +
-          "<![endif]";
+        return `[if gte mso 9]>
+          <table width="${this.columnWidthPadding}" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; table-width: fixed;" align="center" dir="rtl">
+            <tr>
+              <td style="width: ${this.calculeWidthColumnPx(0)}px !important" dir="ltr" valign="top">
+              <![endif]`;
       },
       activeModule() {
         return this.$store.getters["campaign/activeModule"];
       },
       columnWidthPadding(){
-        return this.templateWidth - (_.parseInt(this.module.structure.style.paddingLeft) + _.parseInt(this.module.structure.style.paddingRight));
+        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
+      },
+      hasErrors() {
+        return this.module.data && this.module.data.errors && this.module.data.errors.length;
+      },
+      moduleWidth(){
+        return _.get(this.module,'structure.attribute.width','100%');
+      },
+      moduleStyle(){
+        return _.get(this.module,'structure.style');
+      },
+      moduleValign(){
+        return _.get(this.module,'structure.attribute.valign','top');
+      },
+      moduleBgcolor(){
+        return _.get(this.module,'structure.attribute.bgcolor');
       }
     },
     methods: {
-      showError(moduleId){
-        let err = false;
-        _.each(this.moduleErrors, (error, key) => {
-           if (!_.isUndefined(error.scope.moduleId)){
-              if (error.scope.moduleId === moduleId){
-                err = true;
-              }
-           }
-        });
 
-        return err;
+      elementBorderAndPadding(element) {
+        const BorderAndPadding = {};
+
+        _.each(element.style, (value, key) => {
+          if (key.indexOf('padding') >= 0 || key.indexOf('border') >= 0) {
+            BorderAndPadding[key] = value;
+          }
+        });
+        return BorderAndPadding;
+      },
+      calculeWidthColumnPx(columnId){
+        let width = this.module.structure.columns[columnId].container.attribute.width;
+        if(_.endsWith(width, "%")){
+          return this.templateWidthWithoutPadding / 100 * _.parseInt(width);
+        }
+        return width;
       },
       config() {
         this.$store.commit("campaign/setCustomModule", this.moduleId);
@@ -235,14 +305,16 @@
 
         // Remove module highlight element
         $row.find("#moduleHighlight").remove();
-            }
+      },
+      widthStyle(width) {
+        return _.endsWith(width, "%") ? width : width + "px";
+      },
     },
     components: {
       TextElement,
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement,
       ModuleToolbar,
       ColumnsStackedRender,
       ColumnsFixedRender,

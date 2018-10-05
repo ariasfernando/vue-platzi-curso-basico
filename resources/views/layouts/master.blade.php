@@ -1,10 +1,6 @@
 <?php
     $main_class = explode('.', $view_name);
     $main_class = "base-" . end($main_class) . " " . str_replace('.', '-', $view_name);
-    $lock_error_hidden_class = 'hidden';
-    if (session()->has('campaign_lock')) {
-        $lock_error_hidden_class = '';
-    }
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +12,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Email Creation Platform</title>
 
-        <link href="{{  cdn(elixir('css/tool.css')) }}" rel="stylesheet">
+        <link href="{{  cdn(mix('css/tool.css')) }}" rel="stylesheet">
 
         @section('master-head')
             {{--  --}}
@@ -46,54 +42,6 @@
 
         {{-- CONTENT --}}
         <div class="container">
-            {{-- Error Place holder --}}
-            @section('error-placeholder')
-                @if( session()->has('campaign_lock') )
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="global-messages-placeholder text-center">
-                                <div class="alert alert-warning" role="alert">
-                                    <strong>Warning!</strong> Another user is editing this campaign
-                                    @if(config('campaign.show_who_is_locking'))
-                                    [ {{ Campaign::whoIsLocking(session()->get('campaign_lock')) }} ]
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @elseif( session()->has('campaign_not_found') )
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="global-messages-placeholder text-center">
-                                <div class="alert alert-warning" role="alert">
-                                    Sorry, we couldn't find the requested campaign
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @elseif( session()->has('campaign_permission') )
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="global-messages-placeholder text-center">
-                                <div class="alert alert-warning" role="alert">
-                                    You are not allowed to open this campaign.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="global-messages-placeholder text-center display-none">
-                                <div class="alert alert-danger" role="alert">
-                                    <strong></strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            @show
-
             <div class="row">
                 {{-- Content --}}
                 @yield('content')
@@ -128,7 +76,8 @@
         @show
 
         {{-- Scripts --}}
-        <script src="{{ cdn(elixir('js/customer.js')) }}"></script>
+        <script src="{{ cdn(mix('js/manifest.js')) }}"></script>
+        <script src="{{ cdn(mix('js/vendor.js')) }}"></script>
 
         @section('master-application-scripts')
             {{-- Global Application JS object --}}

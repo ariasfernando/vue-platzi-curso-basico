@@ -2,10 +2,10 @@
 
 namespace Stensul\Console\Commands\User;
 
-use Stensul\Models\User;
-use Illuminate\Console\Command;
 use Activity;
-use MongoDB\BSON\ObjectID as ObjectID;
+use UserModel as User;
+use MongoDB\BSON\ObjectID;
+use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
 class Restore extends Command
@@ -27,7 +27,7 @@ class Restore extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $options = $this->option();
         $email = is_null($options["email"])
@@ -43,7 +43,7 @@ class Restore extends Command
                 $user_data->status = "enabled";
                 $user_data->unset('deleted_at');
                 $user_data->save();
-                Activity::log('User restored', array('properties' => ['user_id' => new ObjectId($user_data->_id)]));
+                Activity::log('User restored', array('properties' => ['user_id' => new ObjectID($user_data->_id)]));
                 $this->info('The user '.$email.' was restored!');
             }
         } else {

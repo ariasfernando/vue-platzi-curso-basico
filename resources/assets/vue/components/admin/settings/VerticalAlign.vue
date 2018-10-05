@@ -14,12 +14,11 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "VerticalAlign",
-  props: ["setting", "element", "subComponent"],
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
   data() {
     return {
-      name: "valign"
+      linkName: "valign"
     };
   },
   computed: {
@@ -28,7 +27,12 @@ export default {
         return this.element.attribute[this.name];
       },
       set: function(newValue) {
-        this.$emit("attribute-setting-updated", { subComponent: this.subComponent, name: this.name, value: newValue });
+        this.$emit("setting-updated", {
+          subComponent: this.subComponent,
+          link:'attribute',
+          name: this.linkName,
+          value: newValue
+        });
       }
     }
   },
@@ -39,7 +43,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-button:focus,
 .el-button:hover {
   color: inherit;

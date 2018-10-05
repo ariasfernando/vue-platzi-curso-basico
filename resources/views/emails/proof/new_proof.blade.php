@@ -3,14 +3,6 @@
 @section('content')
     <tr>
         <td align="left" valign="top" style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">
-            Hi {{ $reviewer_name }},
-        </td>
-    </tr>
-    <tr>
-        <td align="left" valign="top" height="22" style="height: 22px;"><!-- &nbsp; !--></td>
-    </tr>
-    <tr>
-        <td align="left" valign="top" style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">
             Please, click here to review in your browser (Login required): <br>{{ $params['proof_url'] }}.
         </td>
     </tr>
@@ -20,10 +12,6 @@
                 <p style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">Message from {{ $params['requestor'] }}:</p>
                 <p style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">{{ $params['notification_message'] }}</p>
             </td>
-        </tr>
-    @else
-        <tr>
-            <td align="left" valign="top" height="22" style="height: 22px;"><!-- &nbsp; !--></td>
         </tr>
     @endif
     <tr>

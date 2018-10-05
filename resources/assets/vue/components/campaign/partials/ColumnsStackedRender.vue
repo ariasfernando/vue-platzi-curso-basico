@@ -1,40 +1,42 @@
 <template>
     <div class="stx-wrapper">
       <table
-        class="st-col st-mso-full-width"
+        class="st-mobile-full-width st-mso-full-width"
         align="left"
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :width="column.attribute && column.attribute.width ? column.attribute.width : 100/numColumns + '%'"
-        :style="[column.style, {'background-color' : column.attribute.bgcolor}]"
-        :bgcolor="column.attribute.bgcolor"
+        :style="{'width':calculeStyleWidthColumnPx(columnId)}"
+        :width="calculeWidthColumnPx(columnId)"
       >
-        <tr
-          v-for="(component, componentId) in column.components"
-          :key="componentId"
-          @click="setComponent(moduleId, columnId, componentId)"
-          :class="[component.attribute.classes, {'stx-hide-element st-remove-element' : component.attribute.hideElement }] "
-        >
+        <tr>
           <td
             width="100%"
-            :style="styles"
-            :bgcolor="column.attribute.bgcolor"
-            :valign="column.attribute.valign"
-            :align="component.attribute.align || 'center'"
+            style="width:100%;"
+            :style="styles(columnId)"
+            :bgcolor="column.container.attribute.bgcolor"
+            :valign="column.container.attribute.valign|| 'top'"
+            :align="column.container.attribute.align || 'center'"
+            :class="column.container.attribute.classes ||''"
           >
-            <component
-              :is="component.type"
-              :component="component"
-              :module-id="moduleId"
-              :column-id="columnId"
-              :component-id="componentId">
-            </component>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+                  <component
+                    v-for="(component, componentId) in column.components"
+                    :key="component.id"
+                    @select-component="selectComponent"
+                    :is="component.type"
+                    :component="component"
+                    :module-id="moduleId"
+                    :column-id="columnId"
+                    :component-id="componentId"
+                    context="campaign">
+                  </component>
+            </table>
           </td>
         </tr>
       </table>
       <comment v-if="numColumns === columnId + 1" :content="msoEndingComment"></comment>
-      <comment v-else :content="msoBetweenComment"></comment>
+      <comment v-else :content="msoBetweenComment(columnId)"></comment>
     </div>
 </template>
 
@@ -44,7 +46,6 @@
   import ButtonElement from '../elements/ButtonElement.vue';
   import ImageElement from '../elements/ImageElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
-  import SeparatorElement from '../elements/SeparatorElement.vue';
 
   export default {
     name: 'ColumnsStackedRender',
@@ -54,7 +55,6 @@
       ButtonElement,
       ImageElement,
       DividerElement,
-      SeparatorElement
     },
     props: {
       moduleId:{
@@ -77,36 +77,70 @@
       templateWidth() {
         return this.$store.getters["campaign/campaign"].library_config.templateWidth;
       },
+      templateWidthWithoutPadding(){
+        return this.templateWidth - _.parseInt(this.module.structure.style.paddingLeft || 0) - _.parseInt(this.module.structure.style.paddingRight || 0);
+      },
       numColumns() {
         return this.module.structure.columns.length;
       },
-      msoBetweenComment() {
-        return "[if gte mso 9]>" +
-          "</td>" +
-          "<td width='width: " + this.templateWidth / this.numColumns + "px !important' align='left' valign='top'>" +
-          "<![endif]";
-      },
       msoEndingComment() {
-        return "[if gte mso 9]>" +
-          "</td>" +
-          "</tr>" +
-          "</table>" +
-          "<![endif]";
+        return `[if gte mso 9]>
+              </td>
+            </tr>
+          </table>
+        <![endif]`;
       },
-      styles() {
-        let padding = `padding-top:${this.column.style.paddingTop};padding-left:${this.column.style.paddingLeft};padding-bottom:${this.column.style.paddingBottom};padding-right:${this.column.style.paddingRight};`;
-
-        return padding;
-      }
     },
     methods: {
-      setComponent(moduleId, columnId, componentId) {
+      styles(columnId) {
+        let properties = [
+          "padding-top",
+          "padding-left",
+          "padding-bottom",
+          "padding-right",
+          "border-top-width",
+          "border-right-width",
+          "border-bottom-width",
+          "border-left-width",
+          "border-top-style",
+          "border-right-style",
+          "border-bottom-style",
+          "border-left-style",
+          "border-top-color",
+          "border-right-color",
+          "border-bottom-color",
+          "border-left-color"
+        ];
+        let styles = properties.map(p => {
+          return {
+            [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
+          };
+        }); 
+        return styles;
+      },
+      msoBetweenComment(columnId) {
+        return `[if gte mso 9]>
+          </td>
+          <td width="${this.calculeWidthColumnPx(columnId+1)}" style='width:${this.calculeWidthColumnPx(columnId+1)}px !important' align='left' valign='top'>
+        <![endif]`;
+      },
+      calculeWidthColumnPx(columnId){
+        let width = this.module.structure.columns[columnId].container.attribute.width;
+        if(_.endsWith(width, "%")){
+          return this.templateWidthWithoutPadding / 100 * _.parseInt(width);
+        }
+        return width;
+      },
+      calculeStyleWidthColumnPx(columnId){
+        return this.calculeWidthColumnPx(columnId) +'px';
+      },
+      selectComponent(data) {
         setTimeout(() => {
           // TODO: find better way to do this
           this.$store.commit("campaign/setCurrentComponent", {
-            moduleId,
-            columnId,
-            componentId,
+            moduleId:data.moduleId,
+            columnId:data.columnId,
+            componentId:data.componentId,
           });
         }, 50);
       },

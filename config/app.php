@@ -85,7 +85,7 @@ return [
     |
     */
 
-    'timezone' => 'America/New_York',
+    'timezone' => env('APP_TIMEZONE', 'America/New_York'),
 
     /*
     |--------------------------------------------------------------------------
@@ -138,23 +138,6 @@ return [
     'key' => env('APP_KEY', 'typQzkJx013BVXBKI8DjRIxElVwNjZTs'),
 
     'cipher' => 'AES-256-CBC',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Logging Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the log settings for your application. Out of
-    | the box, Laravel uses the Monolog PHP logging library. This gives
-    | you a variety of powerful log handlers / formatters to utilize.
-    |
-    | Available Settings: "single", "daily", "syslog", "errorlog"
-    |
-    */
-
-    'log' => 'daily',
-
-    'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
     /*
     |--------------------------------------------------------------------------
@@ -286,6 +269,24 @@ return [
         'TextCreator' => Stensul\Services\EmailTextCreator::class,
         'Worker'      => Stensul\Services\Worker::class,
         'Campaign'    => Stensul\Services\CampaignManager::class,
+        'StaticProcessor'    => Stensul\Services\StaticProcessor::class,
+        'CampaignModel'    => Stensul\Models\Campaign::class,
+        'UserModel'    => Stensul\Models\User::class,
+        'ReviewerModel'    => Stensul\Models\Reviewer::class,
+        'UploadModel'    => Stensul\Models\Upload::class,
+        'LibraryModel'    => Stensul\Models\Library::class,
+        'SettingModel'    => Stensul\Models\Setting::class,
+        'RoleModel'    => Stensul\Models\Role::class,
+        'ProofModel'    => Stensul\Models\Proof::class,
+        'CommentModel'    => Stensul\Models\Comment::class,
+        'LogModel'    => Stensul\Models\Log::class,
+        'ModuleModel'    => Stensul\Models\Module::class,
+        'TagModel'    => Stensul\Models\Tag::class,
+        'PermissionModel'    => Stensul\Models\Permission::class,
+        'SendReviewersEmail' => Stensul\Jobs\SendReviewersEmail::class,
+        'StoreAssetsInCdn' => Stensul\Jobs\StoreAssetsInCdn::class,
+        'TextConverter' => Stensul\Services\TextConverter::class,
+        'ProcessCampaign' => Stensul\Jobs\ProcessCampaign::class,
         'EmailSender' => Stensul\Services\EmailSender::class,
         'Socialite'   => Laravel\Socialite\Facades\Socialite::class,
         'Imagine'     => Stensul\Services\ImageProcessor::class,
@@ -298,6 +299,7 @@ return [
         'StensulModule' => Stensul\Providers\ModuleServiceProvider::class,
         'PasswordPolicy' => Stensul\Providers\PasswordPolicyServiceProvider::class,
         'Tag'         => Stensul\Services\TagManager::class,
+        'ModelKeyManager' => Stensul\Services\ModelKeyManager::class,
 
     ],
     'help' => [
@@ -308,3 +310,4 @@ return [
         'enabled' => true
     ],
 ];
+

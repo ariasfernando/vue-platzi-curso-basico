@@ -2,7 +2,7 @@ import Q from 'q';
 import _ from 'lodash';
 import request from '../utils/request';
 import endpoints from '../resources/endpoints';
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 
 export default {
   uploadImages(data) {
@@ -18,6 +18,7 @@ export default {
       }
 
       const params = {
+        path: 'image.uploadImage',
         endpoint,
         json: {
           campaign_id: data.campaignId,
@@ -50,6 +51,7 @@ export default {
 
     _.each(data.images, (image) => {
       const params = {
+        path: 'module.uploadImage',
         endpoint,
         json: {
           data_image: image,
@@ -78,10 +80,11 @@ export default {
     const endpoint = endpoints.image.getMedia;
 
     const params = {
+      path: 'image.getMedia',
       endpoint,
       search: { 
-        library
-      }
+        library,
+      },
     };
 
     request[endpoint.method](params).then((response) => {
@@ -98,7 +101,8 @@ export default {
     const endpoint = endpoints.image.getLibraries;
   
     const params = {
-      endpoint
+      path: 'image.getLibraries',
+      endpoint,
     };
   
     request[endpoint.method](params).then(response => {

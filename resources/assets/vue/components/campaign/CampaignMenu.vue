@@ -1,51 +1,58 @@
 <template>
   <div class="expand st-module-menu-wrapper">
-      <h2 v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-th-large glyph-inline"></i> Modules <i class="glyphicon glyphicon-menu-up"></i></h2>
-
-      <div class="beta-subitem" :class="{'is-collapsed' : collapsed }">
-          <div v-if="ready" v-for="item in items" class="beta-subitem-single">
-
-            <div v-if="item.sub_menu" class="expand">
-              <h2 class="menu-active" :class="{ active: isActive }" @click="(e) => expand(e, item.name)"><i class="glyphicon glyphicon-folder-close glyph-inline"></i> <span>{{ item.name }}</span><i class="glyphicon glyphicon-menu-down"></i></h2>
-
-                <div class="beta-submodules">
-                  <div v-for="subitem in item.sub_menu">
-                    <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd">
-                      <div class="add single">
-                        <h2 class="draggable-item" @click="addModuleByName(subitem.name, 'subitem')" :module-id="subitem.name" :module-type="'subitem'">
-                          {{ subitem.title || subitem.name }} <i class="glyphicon glyphicon-plus"></i>
-                        </h2>
-                      </div>
+    <label-item-container label="MODULES" icon="glyphicon-th-large" v-b-toggle.modules></label-item-container>
+      <b-collapse id="modules" visible class="card">
+        <div v-if="ready" v-for="(item, i) in items" :key="i" >
+          <div v-if="item.sub_menu" class="expand-subitem-button">
+            <label-item-container :label="item.name" icon="glyphicon-folder-open" v-b-toggle="item.name" class="subitem-button"></label-item-container>
+              <b-collapse :id="item.name" class="content-collapse">
+                  <div v-for="(subitem, j) in item.sub_menu" :key="j">
+                    <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd" v-if="!subitem.mandatory">
+                      <group-container  @click="addModuleByName(subitem.name, 'subitem')" :clickeable="true">
+                        <settings-container :label="subitem.name" customClass="draggable-item" :module-id="subitem.name" :module-type="'subitem'" >
+                          <template slot="setting-right">
+                            <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
+                          </template>
+                        </settings-container>
+                      </group-container>
                     </draggable>
                   </div>
-                </div>
-
-            </div>
-
-            <draggable v-else :element="'div'" :options="options" @clone="onClone" @end="onEnd">
-              <div class="add single">
-                <h2 class="draggable-item" @click="addModuleByName(item.name, 'item')" :module-id="item.name" :module-type="'item'">
-                  {{ item.title || item.name }} <i class="glyphicon glyphicon-plus"></i>
-                </h2>
-              </div>
-            </draggable>
-
+              </b-collapse>
           </div>
-      </div>
+        <draggable v-else-if="!item.mandatory"  :element="'div'" :options="options" @clone="onClone" @end="onEnd">
+            <group-container @click="addModuleByName(item.name, 'item')" :clickeable="true">
+              <settings-container :label="item.name" customClass="draggable-item" :module-id="item.name" :module-type="'item'" >
+                <template slot="setting-right">
+                  <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
+                </template>
+              </settings-container>
+            </group-container>
+          </draggable>
 
+        </div>
+    </b-collapse>
   </div>
 </template>
 
 <script>
 
   import clone from 'clone';
-  import _ from 'lodash';
+  import _, {
+    each
+  } from 'lodash';
   import Draggable from 'vuedraggable';
+  import ModuleListMixin from './mixins/moduleListMixin';
+  import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
+  import GroupContainer from "../common/containers/GroupContainer.vue";
+  import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
 
   export default {
     name: 'CampaignMenu',
     components: {
-      Draggable
+      Draggable,
+      LabelItemContainer,
+      GroupContainer,
+      SettingsContainer,
     },
     props: {
       libraryId: {
@@ -53,7 +60,8 @@
         required: true
       }
     },
-    data () {
+    mixins: [ ModuleListMixin ],
+    data() {
       return {
         options: {
           group:{
@@ -77,11 +85,11 @@
       }
     },
     computed: {
-      items () {
-        return this.$store.getters["library/modules"];
+      campaign() {
+        return this.$store.getters["campaign/campaign"];
       },
-      modules() {
-        return this.$store.getters["campaign/modules"];
+      items() {
+        return this.$store.getters["library/modules"];
       },
       activeModule() {
         const activeModuleId = this.$store.getters["campaign/activeModule"];
@@ -89,87 +97,48 @@
       }
     },
     created() {
-
+      // Set defaults for modules from menu
       this.getLibrary().then(response => {
+
+        // Sanitize library's modules
         _.each(this.items, (item) => {
           if (item.sub_menu) {
+            // Items representing a menu group
             this.expanded[item.name] = false;
+
+            // Grouped modules in library menu
+            _.each(item.sub_menu, (subItem) => {
+              if (subItem.mandatory) {
+                this.addMandatoryModule(subItem);
+              }
+            });
+          } else {
+            // First level modules in library menu
+            if (item.mandatory) {
+              this.addMandatoryModule(item);
+            }
           }
         });
+
         this.ready = true;
       }, error => {
         this.$store.commit("global/setLoader", false);
-        this.$root.$toast(
-          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-          {
-            className: 'et-error'
-          }
-        );
+        this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+          className: 'et-error'
+        });
       });
-
     },
     methods: {
-      getLibrary () {
+      getLibrary() {
         return this.$store.dispatch("library/getModulesData", this.libraryId);
       },
-      getSubitemsAsArray () {
-        return _.reduce(this.items, (result, value) => {
-          if(_.has(value, 'level')) {
-            result = _.union(result, value.sub_menu);
-          }
-          return result;
-        }, []);
-      },
-      addModuleByName (moduleName, type) {
-        // Find module in items by type: item or subitem
-        const found = type === 'item'
-          ? _.find(this.items, (m) => m.name === moduleName)
-          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
-
+      addModuleByName(moduleName, moduleType) {
+        const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
-        mod.data = {};
 
         this.addModule(mod);
-
       },
-      addModule (m) {
-        const mod = clone(m);
-
-        // Add module
-        this.$store.commit('campaign/addModule', mod);
-
-        // Set active on last module added
-        this.$store.commit('campaign/setActiveLastModule');
-
-        if (this.activeModule.type === 'studio') {
-          // Save current component if module type is studio
-          this.$store.commit('campaign/setCurrentComponent', {
-            moduleId: this.modules.length - 1,
-            columnId: 0,
-            componentId: 0,
-          });
-          this.$store.commit('campaign/unsetCustomModule');
-        } else {
-          // Save customModule if module type is custom
-          this.$store.commit('campaign/setCustomModule', this.modules.length - 1);
-          this.$store.commit('campaign/unsetCurrentComponent');
-        }
-
-        setTimeout(() => {
-          this.autoScroll();
-        }, 25);
-      },
-      autoScroll (){
-        let bounds = $(".section-canvas-container").outerHeight();
-        let isVisible = bounds < window.innerHeight && bounds > 0;
-
-        if (!isVisible) {
-            $('html,  .section-canvas-email').animate({
-                scrollTop: bounds
-            }, 100);
-        }
-      },
-      expand (event, item) {
+      expand(event, item) {
         const index = this.expanded.indexOf(item);
         if (index !== -1) {
           this.expanded.splice(index, 1);
@@ -195,100 +164,99 @@
           }
         }
       },
-      onClone (evt) {
+      onClone(evt) {
         let cloneEl = evt.clone;
         let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
-        // Find module into items as item or subitem
-        const found = moduleType === 'item'
-          ? _.find(this.items, (m) => m.name === moduleName)
-          : _.find(this.getSubitemsAsArray(), (m) => m.name === moduleName)
 
+        const found = this.findModule(moduleName, moduleType);
         const mod = clone(found);
+        mod.data = {};
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop
         // an element into email canvas
         cloneEl.addEventListener('click', (e) => {
           this.addModule(mod);
         });
       },
-      onEnd (evt) {
+      onEnd(evt) {
         this.handleEmptyMessage();
       },
-      handleEmptyMessage () {
+      handleEmptyMessage() {
         // If is dragging and the list is empty, hide empty message
         $(".empty-message").is(":visible") && $(".ghost-component").is(":visible")
           ? $(".empty-message").hide("fast")
           : $(".empty-message").show()
       },
-    }
-  };
-</script>
-<style lang="less">
-  @icon-option: #69dac8;
-  @focus: #69dac8;
-  @focus-light: lighten(@focus, 30%);
-  @hover: @focus-light;
-  @font-color: #999999;
-  @bg-color: #f0f0f0;
-
-   #emailCanvas{
-     &.empty{
-      border: none;
-      color:@font-color;
-      background-color: @bg-color;
-      height: 65px;
-      font-family: 'Open Sans', Arial, serif;
-      font-size: 12px;
-      padding: 0 20px;
-
-      .empty-message {
-        width: 100%;
-        display: table-cell;
-        vertical-align: middle;
-        opacity: 0.7;
-        text-align: center;
-
-        &:hover {
-          width: 100%;
-          display: table-cell;
-          vertical-align: middle;
-          opacity: 1;
-          outline: 2px dashed @font-color;
-          outline-offset: -10px;
-          text-align: center;
+      addMandatoryModule(item) {
+        if (this.isBottomModule(item)) {
+          if (!this.campaignHasFixedBottomModule(item)) {
+            this.addFixedBottomModule(item);
+          }
+        } else if (this.isTopModule(item)) {
+          if (!this.campaignHasFixedTopModule(item)) {
+            this.addFixedTopModule(item);
+          }
         }
       }
     }
-
-    .ghost-component{
-      text-align: center;
-      color:@focus;
-      background-color: @hover;
-      display: table-row;
-      vertical-align: middle;
-      list-style-type: none;
-      font-size: 14px;
-      z-index: 300;
-      opacity: 1!important;
-      &:before{
-        content: "Drag the module here";
-        display: table-cell;
-        vertical-align: middle;
-        border: none;
-        color:@focus;
-        background-color: @hover;
-        height: 65px;
-        font-family: 'Open Sans', Arial, serif;
-        font-size: 14px;
-        opacity: 1;
-        outline: 2px dashed @icon-option;
-        outline-offset: -10px;
-        text-align: center;
-        padding: 0 10px;
-      }
-      *{
-        display: none;
-      }
-    }
+  };
+</script>
+<style lang="scss" scoped>
+  .draggable-item /deep/ .half-setting{
+    width: 11%;
+  }
+  .draggable-item /deep/ label.half{
+    width: 89%;
+  }
+  .icon-plus{
+    top: 50%;
+    right: 10px;
+    font-size: 10px;
+    margin: -4px 0 0;
+    position: absolute;
+     color: #999;
+  }
+  .collapsed  /deep/ .glyphicon-folder-open:before {
+    content: "\E117";
+  }
+  .subitem-button{
+    cursor: pointer;
+    transition: all 0.3s linear;
+    background: #edecef;
+    border: 0;
+    line-height: 13px;
+    box-shadow: none;
+    padding: 15px 10px 13px 10px;
+  }
+  .expand-subitem-button{
+    background: #edecef;
+    border: 1px solid #d5d3d9;
+    margin-bottom: 5px;
+    border-radius: 2px;
+    position: relative;
+  }
+  .expand-subitem-button /deep/ p{
+    color: #514960!important;
+    margin-left: -5px;
+  }
+  .expand-subitem-button  /deep/ .glyphicon-folder-open{
+    position: absolute;
+    right: 7px;
+    top: 15px;
+    color: #514960!important;
+    opacity: 0.8;
+  }
+  .expand-subitem-button  /deep/ .glyphicon-menu-down{
+    display: none;
+  }
+  .content-collapse{
+    background: #edecef;
+    padding: 4px 6px 0 6px;
+    background: #f9f9f9;
+    border-radius: 3px;
+    padding-bottom: 5px;
+  }
+  .content-collapse /deep/ div:last-child .group-container{
+    margin-bottom: 0px;
   }
 </style>

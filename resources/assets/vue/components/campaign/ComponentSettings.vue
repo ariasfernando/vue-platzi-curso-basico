@@ -1,21 +1,30 @@
 <template>
-  <div class="component-settings" v-if="component">
-    <h2 v-if="ready && component.plugins && Object.keys(component.plugins).length !== 0">
-      <i class="glyphicon glyphicon-tasks"></i>
-      {{ toCamel(component.type.replace('-element', '')) }}
-    </h2>
-    <div class="plugins">
-      <div v-for="(plugin, key) in component.plugins" class="plugin-wrapper" :class="'plugin-' + plugin.name">
-        <component v-if="plugin.enabled" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"></component>
-      </div>
+  <div v-if="showComponentSettings">
+    <label-item-container
+      :label="toCamel(component.type.replace('-element', ''))"
+      icon="glyphicon-tasks"
+      :collapsable="false"
+    ></label-item-container>
+    <div class="card">
+      <group-container>
+        <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.name" :key="'plugin-' + plugin.name">
+          <component v-if="plugin.enabled && plugin.name !=='text-options'" :is="'campaign-' + plugin.name" :name="plugin.name" :plugin-key="key" :plugin="plugin"></component>
+        </div>
+      </group-container>
     </div>
   </div>
 </template>
 
 <script>
   import _ from 'lodash'
+import GroupContainer from "../common/containers/GroupContainer.vue";
+import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
 
   export default {
+    components: {
+      GroupContainer,
+      LabelItemContainer,
+    },
     data () {
       return {
         ready: false,
@@ -33,17 +42,16 @@
 
           const modules = this.$store.getters["campaign/modules"];
 
-          if (modules.length !== 0 && Object.keys(this.currentComponent).length !== 0) {
+          if (modules.length !== 0) {
             const moduleId = this.currentComponent.moduleId;
             const columnId = this.currentComponent.columnId;
             const componentId = this.currentComponent.componentId;
 
             if (!modules[moduleId]) {
-              this.ready = false;
               return component;
             }
 
-            if ( _.has(this.$store.getters["campaign/modules"][moduleId], 'structure')){
+            if ( _.has(this.$store.getters["campaign/modules"][moduleId], 'structure') && this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId]){
               component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
             }
 
@@ -57,6 +65,16 @@
           }
         }
         return component;
+      },
+
+      showComponentSettings() {
+        let ready = false;
+        _.each(this.component.plugins, (plugin) => {
+          if (plugin.enabled && plugin.render !== false) {
+            ready = true;
+          }
+        });
+        return ready;
       },
     },
     methods: {

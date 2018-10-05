@@ -1,5 +1,5 @@
 <template>
-  <settings-container label-right="Height" label-left="Width" custom-class="field-image-size">
+  <settings-container label-right="Height" label-left="Width">
     <template slot="setting-half-left">
 
       <el-input-number
@@ -13,6 +13,7 @@
       <el-button
         slot="append"
         class="button icon-disable"
+         :style="!isDisablePercentage ? 'cursor: pointer' : 'cursor: default'"
         @click="onTogglePxWidth"
       >{{this.isPxWidth ? "px": "%"}}</el-button>
 
@@ -56,7 +57,6 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "ImageSize",
-  props: ["setting", "element", "subComponent","minValue"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
@@ -64,87 +64,117 @@ export default {
       min: this.minValue ? this.minValue : 10
     };
   },
+  mounted() {
+    this.defineStyleOption();
+  },
   computed: {
     isBlockHeight: {
-      get(){
-        return this.element.styleOptions["isBlockHeight"];
+      get() {
+        return this.element.styleOption["isBlockHeight"];
       },
-      set(value){
-        this.$emit("style-option-setting-updated", {
+      set(value) {
+        this.$emit("setting-updated", {
           subComponent: this.subComponent,
-          name: 'isBlockHeight',
+          link: "styleOption",
+          name: "isBlockHeight",
           value: value
         });
       }
     },
     isPxWidth: {
-      get(){
-        return this.element.styleOptions["isPxWidth"];
+      get() {
+        return this.element.styleOption["isPxWidth"];
       },
-      set(value){
-        this.$emit("style-option-setting-updated", {
+      set(value) {
+        this.$emit("setting-updated", {
           subComponent: this.subComponent,
-          name: 'isPxWidth',
+          link: "styleOption",
+          name: "isPxWidth",
           value: value
         });
       }
     },
     width: {
       get() {
-        return _.parseInt(this.element.attribute['width']);
+        return _.parseInt(this.element.attribute["width"]);
       },
-      set(value){
+      set(value) {
         value = isNaN(value) || value < this.min ? this.min : value;
-        value = this.isPxWidth ? `${value}` :`${value}%`;
-        this.$emit("attribute-setting-updated", {
+        value = this.isDisablePercentage || this.isPxWidth ? `${value}` : `${value}%`;
+        this.$emit("setting-updated", {
+          link: "attribute",
           subComponent: this.subComponent,
-          name: 'width',
+          name: "width",
           value: value
         });
       }
     },
     height: {
       get() {
-          return this.element.attribute['height'] === "auto" ? "auto" : _.parseInt(this.element.attribute['height']);        
+        return this.element.attribute["height"] === "auto" ? "auto" : _.parseInt(this.element.attribute["height"]);
       },
-      set(value){
+      set(value) {
         value = (isNaN(value) || value < this.min) && value !== "auto" ? this.min : value;
         value = `${value}`;
-        this.$emit("attribute-setting-updated", {
+        this.$emit("setting-updated", {
           subComponent: this.subComponent,
-          name: 'height',
+          link: "attribute",
+          name: "height",
           value: value
         });
       }
     },
     maxValueWidth() {
       return this.isPxWidth ? undefined : 100;
-    },
+    }
   },
   methods: {
     onTogglePxWidth() {
-      let isPxWidth = !this.isPxWidth;
-      let width;
-      if (!isPxWidth) {
-        width = Math.min(100, this.width);
-      }
+      if(!this.isDisablePercentage){
+        let isPxWidth = !this.isPxWidth;
+        let width;
+        if (!isPxWidth) {
+          width = Math.min(100, this.width);
+        }
 
-      this.isPxWidth = isPxWidth;
-      this.width = width;
+        this.isPxWidth = isPxWidth;
+        this.width = width;
+      }
     },
     onToggleBlockheight() {
       let isBlockHeight = !this.isBlockHeight;
       if (isBlockHeight) {
         this.height = "auto";
       } else {
-        this.height = '100';
+        this.height = "100";
       }
       this.isBlockHeight = isBlockHeight;
+    },
+    defineStyleOption(){
+      // set styleOption to default if is undefined
+      if (this.element.styleOption["isBlockHeight"] === undefined) {
+        this.isBlockHeight = false;
+      }
+      if (this.element.styleOption["isPxWidth"] === undefined) {
+        if(this.isDisablePercentage){
+          this.isPxWidth = true;
+        }else{
+          this.isPxWidth = false;
+        }
+      }
+    }
+  },
+  watch: {
+    element: {
+      handler: function(){
+        this.defineStyleOption
+      },
+      deep: true
     },
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .button input {
   text-align: center;
 }
@@ -165,7 +195,7 @@ export default {
 }
 .el-button {
   position: absolute;
-  right: 15px;
+  left: calc(50% - 43px);
   padding: 6px;
   &:active {
     background-color: #fff;
@@ -173,34 +203,12 @@ export default {
     color: #606266;
   }
 }
-#field-image-size.form-group.field-image-size {
-  .padding-custom {
-    padding: 5px 0;
-  }
-  .el-input-number--mini {
-    width: 80px;
-    margin-right: 25px;
-    float: right;
-  }
-  .field-image-size {
-    padding-right: 15px;
-  }
-  .half-style-setting {
-    width: calc(~"50% - 15px");
-    margin-right: 15px;
-  }
-  .half-style-setting:nth-child(2n + 2) {
-    margin-left: 10px;
-    margin-right: 0;
-    padding-left: 0;
-  }
-}
 .height-icon-auto {
   position: absolute;
-  right: -15px;
+  left: calc(50% - 14px);
   margin-top: 0;
   padding: 0;
-  height: 28px;
+  height: 26px;
   width: 30px;
   text-align: center;
   padding-top: 4px;
@@ -212,22 +220,21 @@ export default {
   }
 }
 .icon-height {
-  right: 0;
+  left: calc(100% - 29px);
 }
 .el-input-number {
   width: 80px;
 }
-</style>
-<style  lang="less">
-.field-image-size {
-  input[type="text"] {
-    text-align: center;
-  }
-  .el-input-number .el-input__inner {
-    text-align: center;
-    border-right: 0;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-  }
+.settings-container /deep/ .half-setting{
+  text-align: left;
+}
+.settings-container  /deep/ input[type="text"] {
+  text-align: center;
+}
+.settings-container  /deep/ .el-input-number  .el-input__inner {
+  text-align: center;
+  border-right: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
 }
 </style>

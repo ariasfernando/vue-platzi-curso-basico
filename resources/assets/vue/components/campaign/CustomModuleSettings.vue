@@ -1,18 +1,28 @@
 <template>
-  <div class="component-settings" v-if="module ? module.settings : false">
-    <h2><i class="glyphicon glyphicon-tasks"></i> {{ module.title }} </h2>
-    <div class="plugins">
-      <div>
-        <component :is="'custom-settings-' + module.name" :module-id="currentCustomModule" :module="module"></component>
-      </div>
+  <div v-if="module ? module.settings : false">
+    <label-item-container
+    :label="module.title"
+    icon="glyphicon-tasks"
+    :collapsable="false"
+    ></label-item-container>
+    <div class="card">
+      <group-container>
+        <component :is="'custom-settings-' + module.key" :module-id="currentCustomModule" :module="module"></component>
+      </group-container>
     </div>
   </div>
 </template>
 
 <script>
   import _ from 'lodash'
+  import GroupContainer from "../common/containers/GroupContainer.vue";
+  import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
 
   export default {
+    components: {
+      GroupContainer,
+      LabelItemContainer,
+    },
     computed: {
       currentCustomModule() {
         return this.$store.getters["campaign/currentCustomModule"];
@@ -20,14 +30,6 @@
       module() {
         return this.$store.getters["campaign/modules"][this.currentCustomModule];
       }
-    },
-    watch : {
-      currentCustomModule: {
-        handler: function(moduleId) {
-          return this.$store.getters["campaign/modules"][moduleId];
-        },
-        deep: true
-      },
     },
     methods: {
       toCamel(str) {

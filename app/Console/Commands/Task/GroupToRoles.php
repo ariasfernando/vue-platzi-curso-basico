@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\Task;
 
-use Stensul\Models\User;
+use UserModel as User;
 use Illuminate\Console\Command;
 
 class GroupToRoles extends Command
@@ -25,7 +25,7 @@ class GroupToRoles extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $users = User::all();
         $processCount = 0;

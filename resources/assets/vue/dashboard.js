@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import VueResource from 'vue-resource/dist/vue-resource';
 import Toast from 'vue-easy-toast';
 import BootstrapVue from 'bootstrap-vue';
@@ -6,9 +6,11 @@ import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
 import Dashboard from './components/dashboard/Dashboard.vue';
 import store from './store';
+import acl from './resources/plugins/acl';
 
 Vue.use(Bootstrap);
 Vue.use(VueResource);
+Vue.use(acl);
 Vue.use(Toast, {
   horizontalPosition: 'center',
   verticalPosition: 'top',
@@ -19,7 +21,8 @@ Vue.use(Toast, {
 });
 Vue.use(BootstrapVue);
 Vue.use(interceptors);
-const app = new Vue({
+
+window.vm = new Vue({
   store,
   components: {
     Dashboard,

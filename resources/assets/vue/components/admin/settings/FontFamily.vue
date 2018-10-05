@@ -10,7 +10,7 @@
       size="mini"
       >
         <el-option
-          v-for="item in options()"
+          v-for="item in fontsOptions()"
           :key="item.value"
           :label="item.label"
           :value="item.value"
@@ -27,30 +27,29 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "FontFamily",
-  props: ["setting", "element", "link", "name", "label"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
-      options() {
-        const options = [];
+      fontsOptions() {
+        const fontsOptions = [];
+        const temp = {};
         _.each(this.$_app.config.fonts, (group, index) => {
           group.map(font => {
             if (index === 'custom') {
-              options.push({
-                value: font.name,
-                label: font.name
-              });
+              temp[font.name] = font.name;
             } else {
-              options.push({
-                value: font,
-                label: font
-              });
+              temp[font] = font;
             }
           });
         });
-
-        return options;
+        Object.keys(temp).forEach(name => {
+          fontsOptions.push({
+            value: name,
+            label: name
+          });
+        });
+        return fontsOptions;
       }
     };
   },
@@ -70,20 +69,15 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .width-full {
   width: 100%;
 }
-</style>
-
-<style lang="less">
-.field-font-family {
-  span > span.el-tag.el-tag--info {
-    counter-increment: step-counter;
-    & span::before {
-      content: counter(step-counter);
-      margin-right: 5px;
-    }
+.field-font-family /deep/ span > span.el-tag.el-tag--info {
+  counter-increment: step-counter;
+  & span::before {
+    content: counter(step-counter);
+    margin-right: 5px;
   }
 }
 </style>

@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\Setting;
 
-use Stensul\Models\Setting;
+use SettingModel as Setting;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -25,7 +25,7 @@ class Create extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $options = $this->option();
 

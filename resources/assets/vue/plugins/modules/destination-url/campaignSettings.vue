@@ -1,55 +1,77 @@
 <template>
-  <div class="plugin-wrapper-inner" v-if="component">
     <div>
-      <span>
-        <label>Destination Url</label>
+    <settings-container label="Destination Url" customClass="destination-url" v-if="component">
+      <template slot="setting-bottom">
         <p v-if="validationRules">
-          <input
+          <el-input
             name="href"
             type="text"
+            size="mini"
             placeholder="http://examp.le"
             v-model="href"
             v-validate.initial="validationRules"
-            :class="{'input': true, 'is-danger': errors.has('href') }">
-          <span v-show="errors.has('href')" class="help is-danger">{{ errors.first('href') }}</span>
+            :class="{'input': true, 'is-danger': hasError }"></el-input>
+          <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
         </p>
         <p v-else>
-          <input name="href" type="text" placeholder="http://examp.le" v-model="href">
+          <el-input
+          name="href"
+          type="text"
+          size="mini"
+          placeholder="http://examp.le"
+          v-model="href"></el-input>
         </p>
-      </span>
+      </template>
+    </settings-container>
 
-      <span v-if="plugin.config.target">
-        <label>Target</label>
-        <div class="alignment-options">
-          <a v-for="(icon, option) in options" 
-             name="target"
-             :data-tooltip="option"
-             :data-value="option"
-             :class="option === target  ? 'plugin-setting-active' : ''"
-             @click="change"
+    <settings-container label="Target" v-if="plugin.config.target">
+      <template slot="setting-right">
+        <el-button
+          v-for="(icon, option) in plugin.config.options"
+          plain
+          size="mini"
+          :class="[`glyphicon glyphicon-${icon}`,{ 'active': target === option }]"
+            :data-tooltip="option"
+            @click="changeTarget(option)"
+            :key="option"
           >
-            <i :class="'glyphicon glyphicon-'+ icon"
-               :data-tooltip="option"
-               @click="change"
-            ></i>
-          </a>
-        </div>
-      </span>
-    </div>
+        </el-button>
 
+      </template>
+    </settings-container>
   </div>
 </template>
 
 <script>
   import _ from 'lodash';
-  import mixinValidator from '../mixins/validator';
+  import validatorMixin from '../mixins/validator';
+  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 
   export default {
-    props: ['name', 'plugin'],
-    mixins: [mixinValidator],
+    props: ['name', 'plugin', 'pluginKey'],
+    mixins: [validatorMixin],
+    components: { SettingsContainer },
+    mounted() {
+      if (this.validationRules) {
+        this.validate();
+      }
+    },
+    watch: {
+      currentComponent: {
+        handler: function(currentComponent) {
+          if (this.validationRules) {
+            this.validate();
+          }
+        },
+        deep: true
+      }
+    },
     computed: {
       currentComponent() {
         return this.$store.getters["campaign/currentComponent"];
+      },
+      module() {
+        return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
       },
       component() {
         let component = {};
@@ -63,18 +85,20 @@
         return component;
       },
       target() {
-        return this.component.attribute ? this.component.attribute.target : '';
+        return this.component[this.plugin.subComponent].attribute ? this.component[this.plugin.subComponent].attribute.target : '_blank';
       },
       href: {
         get() {
-          return this.component.attribute.href;
+          return this.component[this.plugin.subComponent].attribute.href;
         },
         set(value) {
-          this.saveComponentAttribute('href', value);
+          this.saveComponentProperty('href', value);
 
+          this.$nextTick(() => {
           if (this.validationRules) {
             this.validate();
           }
+          });
         },
       },
       validationRules() {
@@ -88,30 +112,97 @@
         return rules.join('|');
       }
     },
-    data() {
-      return {
-        options: this.plugin.config.options,
-      }
-    },
     methods: {
-      change(e) {
-        const attribute = e.target.name;
-        const value = e.target.getAttribute('data-tooltip');
+      changeTarget(option) {
+        const property = 'target';
+        const value = option;
 
-        this.saveComponentAttribute(attribute, value);
+        this.saveComponentProperty(property, value);
       },
-      saveComponentAttribute(attribute, value) {
+      saveComponentProperty(property, value) {
         const payload = {
-          plugin: this.name,
           moduleId: this.currentComponent.moduleId,
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
-          attribute,
-          attributeValue: value,
+          subComponent: this.plugin.subComponent,
+          link:'attribute',
+          property,
+          value: value,
         };
 
-        this.$store.commit('campaign/saveComponentAttribute', payload);
+        this.$store.commit('campaign/saveComponentProperty', payload);
       },
+      
     },
   }
 </script>
+
+<style lang="scss" scoped>
+.el-button:focus,
+.el-button:hover {
+  color: inherit;
+  border-color: #78dcd6;
+  background-color: inherit;
+}
+.el-button.active {
+  color: #ffffff;
+  border-color: rgb(120, 220, 214);
+  background-color: rgb(120, 220, 214);
+
+  &:before{
+    color: #ffffff;
+  }
+}
+.el-button + .el-button {
+  margin-left: 0;
+}
+.el-button {
+  width: 33%;
+  padding: 4px 0;
+  margin-right: 0px;
+  height: 26px;
+  border-radius: 0px;
+  border-right: none;
+
+  &:before{
+    color: #999999;
+  }
+
+  &:first-of-type {
+    margin: 0;
+    border-radius: 2px 0px 0px 2px;
+    border-right: none;
+  }
+
+  &:last-of-type {
+    margin: 0;
+    border-radius: 0px 2px 2px 0px;
+    border-right: 1px solid #dddddd;
+  }
+}
+.el-button:first-child:nth-last-child(2),
+.el-button:first-child:nth-last-child(2) ~ button {
+    width: 50%;
+}
+.el-button:first-child:nth-last-child(3),
+.el-button:first-child:nth-last-child(3) ~ button {
+    width: 33%;
+}
+.el-button:first-child:nth-last-child(4),
+.el-button:first-child:nth-last-child(4) ~ button{
+    width: 25%;
+}
+.padding-zero {
+  padding: 0;
+}
+.el-input >>> .el-input__inner{
+  border-radius: 2px;
+  font-weight: 300;
+  padding-left: 8px;
+  height: 26px;
+
+  &:focus{
+    border: 1px solid #78dcd6;
+  }
+}
+</style>

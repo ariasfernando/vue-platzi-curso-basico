@@ -3,12 +3,13 @@
 namespace Stensul\Http\Controllers;
 
 use Auth;
-use Stensul\Models\Campaign;
-use Stensul\Models\Library;
-use Stensul\Models\Setting;
+use Campaign as CampaignManager;
+use CampaignModel as Campaign;
+use LibraryModel as Library;
+use SettingModel as Setting;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Services\TagManager as Tag;
+use Tag;
 use MongoDB\BSON\Regex as MongoRegex;
 
 class DashboardController extends Controller
@@ -59,9 +60,24 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $flash_messages = [
+            'campaign_lock',
+            'campaign_not_found',
+            'campaign_permission',
+            'campaign_create'
+        ];
+        $flash = '';
+        foreach ($flash_messages as $message) {
+            if (session()->has($message)) {
+                $flash = $message;
+            }
+        }
+
         $params = [
             'locales' => \Config::get('locales'),
-            'libraries' => Auth::user()->getLibraries()
+            'libraries' => Auth::user()->getLibraries(),
+            'flash' => $flash,
+            'locked_by' => CampaignManager::whoIsLocking(session()->get('campaign_lock'))
         ];
 
         return $this->renderView('dashboard', ['params' => $params]);
@@ -101,6 +117,10 @@ class DashboardController extends Controller
             $campaigns->whereIn('library', $user_visibility);
         }
 
+        if (!Auth::user()->hasRole(env('INTERNAL_ROLE', 'stensul-internal'))) {
+            $campaigns->where('internal', false);
+        }
+
         if (\Config::get('campaign.enable_search')) {
             $this->searchFilter($campaigns, $request->input('terms', []));
 
@@ -114,7 +134,7 @@ class DashboardController extends Controller
 
         if ($sort === 'library_name') {
             $sort = 'library';
-        } else if ($sort == 'campaign_name') {
+        } elseif ($sort == 'campaign_name') {
             $sort = 'lower_campaign_name';
         }
 
@@ -183,6 +203,14 @@ class DashboardController extends Controller
 
         if (count($user_visibility) !== 0) {
             $campaigns->whereIn('library', $user_visibility);
+        }
+
+        if (!Auth::user()->can('access_unfixed_templates')) {
+            $campaigns->where('locked', '=', true, 'AND');
+        }
+
+        if (!Auth::user()->hasRole(env('INTERNAL_ROLE', 'stensul-internal'))) {
+            $campaigns->where('internal', false);
         }
 
         $total = $campaigns->count();

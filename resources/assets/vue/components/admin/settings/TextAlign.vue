@@ -16,23 +16,23 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "TextAlign",
-  props: ["setting", "element", "subComponent"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
-      name: "align"
+      linkName: "align"
     };
   },
   computed: {
     align: {
       get: function() {
-        return this.element.attribute[this.name];
+        return this.element.attribute[this.linkName];
       },
       set: function(newValue) {
-        this.$emit("attribute-setting-updated", {
+        this.$emit("setting-updated", {
           subComponent: this.subComponent,
-          name: this.name,
+          link:'attribute',
+          name: this.linkName,
           value: newValue
         });
       }
@@ -45,31 +45,64 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
+.settings-container{
+  // Hack inline-block
+  font-size: 0;
+}
 .el-button:focus,
 .el-button:hover {
   color: inherit;
-  border-color: inherit;
+  border-color: #78dcd6;
   background-color: inherit;
 }
 .el-button.active {
   color: #ffffff;
   border-color: rgb(120, 220, 214);
   background-color: rgb(120, 220, 214);
+
+  &:before{
+    color: #ffffff;
+  }
 }
 .el-button + .el-button {
   margin-left: 0;
 }
 .el-button {
-  width: 28px;
+  width: 33%;
   padding: 4px 0;
-  margin-right: 2.67px;
+  margin-right: 0px;
   height: 26px;
-  display: block;
-  float: left;
+  border-radius: 0px;
+  border-right: none;
+
+  &:before{
+    color: #999999;
+  }
+
+  &:first-of-type {
+    margin: 0;
+    border-radius: 2px 0px 0px 2px;
+    border-right: none;
+  }
+
   &:last-of-type {
     margin: 0;
+    border-radius: 0px 2px 2px 0px;
+    border-right: 1px solid #dddddd;
   }
+}
+.el-button:first-child:nth-last-child(2),
+.el-button:first-child:nth-last-child(2) ~ button {
+    width: 50%;
+}
+.el-button:first-child:nth-last-child(3),
+.el-button:first-child:nth-last-child(3) ~ button {
+    width: 33%;
+}
+.el-button:first-child:nth-last-child(4),
+.el-button:first-child:nth-last-child(4) ~ button{
+    width: 25%;
 }
 .padding-zero {
   padding: 0;

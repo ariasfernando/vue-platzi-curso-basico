@@ -1,26 +1,37 @@
-const alignment = require('./alignment');
-const destinationUrl = require('./destination-url');
-const textOptions = require('./text-options');
-const backgroundColor = require('./background-color');
-const columnBackgroundColor = require('./column-background-color');
-const moduleBackgroundColor = require('./module-background-color');
-const uploadImage = require('./upload-image');
-const imageEditor = require('./image-editor');
-const variableHeight = require('./variable-height');
-const mobileStyles = require('./mobile-styles');
-const hideElement = require('./hide-element');
+import alignment from './alignment';
+import backgroundColor from './background-color';
+import columnBackgroundColor from './column-background-color';
+import columnPaletteBackgroundColor from './column-palette-background-color';
+import destinationUrl from './destination-url';
+import fontFamily from './font-family';
+import mobileStyles from './mobile-styles';
+import moduleBackgroundColor from './module-background-color';
+import modulePaletteBackgroundColor from './module-palette-background-color';
+import paletteBackgroundColor from './palette-background-color';
+import styleImageEditor from './style-image-editor';
+import textOptions from './text-options';
+import toggleElement from './toggle-element';
+import variableHeight from './variable-height';
+import verticalAlignment from './vertical-alignment';
+import textColorByBackground from './text-color-by-background';
+import textColorByBackgroundForModule from './text-color-by-background-for-module';
 
-
-module.exports = {
+export default {
   alignment,
-  destinationUrl,
-  textOptions,
-  uploadImage,
   backgroundColor,
   columnBackgroundColor,
-  moduleBackgroundColor,
-  imageEditor,
-  variableHeight,
+  columnPaletteBackgroundColor,
+  destinationUrl,
+  fontFamily,
   mobileStyles,
-  hideElement
+  moduleBackgroundColor,
+  modulePaletteBackgroundColor,
+  paletteBackgroundColor,
+  styleImageEditor,
+  textOptions,
+  toggleElement,
+  variableHeight,
+  verticalAlignment,
+  textColorByBackground,
+  textColorByBackgroundForModule
 };

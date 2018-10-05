@@ -10,6 +10,7 @@ use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Stensul\Notifications\ResetPasswordNotification;
+use Stensul\Notifications\WelcomePasswordNotification;
 
 class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract
 {
@@ -50,8 +51,11 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         'password' => '',
         'force_password' => 1,
         'avatar_url' => '',
-        'roles' => []
+        'roles' => [],
+        'unconfirmed' => 1
     );
+
+    protected $appends = ['fullname'];
 
     /**
      * Constructor.
@@ -163,6 +167,16 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
     }
 
     /**
+     * Get user full name
+     *
+     * @return array
+     */
+    public function getFullNameAttribute()
+    {
+        return rtrim($this->attributes['name'] . ' ' . $this->attributes['last_name']);
+    }
+
+    /**
     * Send the password reset notification.
     *
     * @param  string  $token
@@ -170,7 +184,11 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
     */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPasswordNotification($token, $this->name));
+        if ($this->unconfirmed) {
+            $this->notify(new WelcomePasswordNotification($token, $this->name));
+        } else {
+            $this->notify(new ResetPasswordNotification($token, $this->name));
+        }
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\User;
 
-use Stensul\Models\User;
+use UserModel as User;
 use Illuminate\Console\Command;
 use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
@@ -27,7 +27,7 @@ class Delete extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $options = $this->option();
         $email = is_null($options["email"])

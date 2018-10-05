@@ -1,17 +1,19 @@
 import BorderGroup from './BorderGroup.vue';
 import ButtonCaret from './ButtonCaret.vue';
 import ClassInput from './ClassInput.vue';
+import ColumnsStacking from './ColumnsStacking.vue';
 import FontFamily from './FontFamily.vue';
 import FontStyle from './FontStyle.vue';
 import FontWeight from './FontWeight.vue';
 import GenericColor from './GenericColor.vue';
 import GenericFile from './GenericFile.vue';
 import GenericNumber from './GenericNumber.vue';
+import GenericSelect from './GenericSelect.vue';
+import GenericSwitch from './GenericSwitch.vue';
 import GenericText from './GenericText.vue';
 import ImageSize from './ImageSize.vue';
-import InputHeight from './InputHeight.vue';
 import LetterSpacing from './LetterSpacing.vue';
-import Padding from './Padding.vue';
+import PaddingGroup from './PaddingGroup.vue';
 import TextAlign from './TextAlign.vue';
 import VerticalAlign from './VerticalAlign.vue';
 import Width from './Width.vue';
@@ -20,17 +22,19 @@ const Settings = {
   BorderGroup,
   ButtonCaret,
   ClassInput,
+  ColumnsStacking,
   FontFamily,
   FontStyle,
   FontWeight,
   GenericColor,
   GenericFile,
   GenericNumber,
+  GenericSelect,
+  GenericSwitch,
   GenericText,
   ImageSize,
-  InputHeight,
   LetterSpacing,
-  Padding,
+  PaddingGroup,
   TextAlign,
   VerticalAlign,
   Width,

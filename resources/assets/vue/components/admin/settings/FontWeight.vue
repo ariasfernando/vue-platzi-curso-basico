@@ -10,7 +10,7 @@
           placeholder="Font Weight"
           >
           <el-option
-            v-for="item in options"
+            v-for="item in weightOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -40,43 +40,55 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "FontWeight",
-  props: ["setting", "element"],
-  mixins: [ SettingMixin ],
+  mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
-      name: "fontWeight",
+      linkName: "fontWeight",
       isCustomFontWeightName: "isCustomFontWeight",
-      options: [],
+      weightOptions: []
     };
   },
   mounted() {
-    function getOptions() {
-      let options = [];
+    function getweightOptions() {
+      let weightOptions = [];
       let val = 100;
       for (; val < 901; ) {
-        options.push({ value: val, label: val });
+        weightOptions.push({ value: val, label: val });
         val += 100;
       }
-      return options;
+      return weightOptions;
     }
-    this.options = getOptions();
+    this.weightOptions = getweightOptions();
+    this.defineStyleOption();
   },
   computed: {
     isCustomFontWeight: {
       get() {
-        return this.element.styleOptions[this.isCustomFontWeightName];
+        return (
+          this.element.styleOption[this.isCustomFontWeightName]
+        );
       },
       set(newValue) {
-        this.$emit("style-option-setting-updated", { name: this.isCustomFontWeightName, value: newValue });
+        this.$emit("setting-updated", {
+          subComponent: this.subComponent,
+          link: "styleOption",
+          name: this.isCustomFontWeightName,
+          value: newValue
+        });
       }
     },
     fontWeight: {
       get() {
-        return this.element.style[this.name];
+        return this.element.style[this.linkName];
       },
       set(newValue) {
-        this.$emit("style-setting-updated", { name: this.name, value: newValue });
+        this.$emit("setting-updated", {
+          subComponent: this.subComponent,
+          link: "style",
+          name: this.linkName,
+          value: newValue
+        });
       }
     }
   },
@@ -90,11 +102,25 @@ export default {
     },
     toggleNormalBold() {
       this.fontWeight = this.fontWeight === "normal" ? "bold" : "normal";
+    },
+    defineStyleOption(){
+      // set styleOption to default if is undefined
+      if (this.element.styleOption["isCustomFontWeight"] === undefined) {
+        this.isCustomFontWeight = false;
+      }
     }
-  }
+  },
+  watch: {
+    element: {
+      handler: function(){
+        this.defineStyleOption();
+      },
+      deep: true
+    },
+  },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-icon-setting.active {
   background-color: #78dcd6;
 }
@@ -106,7 +132,7 @@ export default {
   padding: 0;
 }
 .custom-col {
-  width: calc(~"100% - 28px");
+  width: calc(100% - 28px);
   float: left;
   display: block;
   border-right: 0;
@@ -117,16 +143,12 @@ export default {
 .el-button:not(.custom-col) {
   width: 28px;
   padding: 4px 0;
-  height: 28px;
+  height: 26px;
   display: block;
   float: left;
 }
-</style>
-<style>
-/* not scoped */
-.input-font-weight .el-input--mini .el-input__inner {
+.input-font-weight .el-input--mini /deep/ .el-input__inner {
   text-align: center;
   border-right: 0;
 }
 </style>
-

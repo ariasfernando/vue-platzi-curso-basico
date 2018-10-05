@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\Permission;
 
-use Stensul\Models\Permission;
+use PermissionModel as Permission;
 use Illuminate\Console\Command;
 
 class Delete extends Command
@@ -24,7 +24,7 @@ class Delete extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $name = $this->ask('What is the permission name ?');
 

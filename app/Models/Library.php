@@ -36,29 +36,35 @@ class Library extends Eloquent
         $modules = ModuleServiceProvider::getModuleList();
         $library_modules = [];
 
-        foreach ($this->modules as $group => $mods) {
+        foreach ($this->modules as $mods) {
             // Modules are grouped.
-            if (is_array($modules) && is_array($mods)) {
+            if (isset($mods['type']) && $mods['type'] == 'sub-menu') {
                 $submenu_items = [];
-                foreach ($mods as $mod) {
-                    if (isset($modules[$mod])) {
-                        if ($group !== 'modules-default') {
-                            $submenu_items[] = $modules[$mod];
-                        } else {
-                            $library_modules[] = $modules[$mod];
-                        }
+                foreach ($mods['modules'] as $mod) {
+                    if (is_object($modules[$mod['moduleId']])) {
+                        $mod_tmp = clone($modules[$mod['moduleId']]);
+                        $mod_tmp->name = $mod['name'];
+                    } else {
+                        $mod_tmp = $modules[$mod['moduleId']];
+                        $mod_tmp['name'] = $mod['name'];
                     }
+                    $submenu_items[] = $mod_tmp;
                 }
 
-                $library_modules[] = [
-                    'name' => preg_replace(["/^modules-/", "/_/"], ['', ' '], $group),
+                $library_modules[] = (object) [
+                    'name' => $mods['name'],
                     'sub_menu' => $submenu_items,
                     'level' => 'level-1'
                 ];
             } else { // Ungrouped modules.
-                if (isset($modules[$mods])) {
-                    $library_modules[] = $modules[$mods];
+                if (is_object($modules[$mods['moduleId']])) {
+                    $mod_tmp = clone($modules[$mods['moduleId']]);
+                    $mod_tmp->name = $mods['name'];
+                } else {
+                    $mod_tmp = $modules[$mods['moduleId']];
+                    $mod_tmp['name'] = $mods['name'];
                 }
+                $library_modules[] = $mod_tmp;
             }
         }
         return $library_modules;
@@ -76,16 +82,21 @@ class Library extends Eloquent
         $modules_to_keep = [];
 
         // Recreate the modules array without the removed module.
-        foreach ($this->modules as $group => $mods) {
+        foreach ($this->modules as $key => $mods) {
             // Grouped modules.
-            if (is_array($mods)) {
-                foreach ($mods as $mod) {
-                    if ($mod !== $module_key) {
-                        $modules_to_keep[$group][] = $mod;
+            if ($mods['type'] == 'sub-menu') {
+                $sub_modules_to_keep = [];
+                foreach ($mods['modules'] as $mod) {
+                    if ($mod['moduleId'] !== $module_key) {
+                        $sub_modules_to_keep[] = $mod;
                     }
                 }
+                if (!empty($sub_modules_to_keep)) {
+                    $mods['modules'] = $sub_modules_to_keep;
+                    $modules_to_keep[] = $mods;
+                }
             } else { // Ungrouped modules.
-                if ($mods !== $module_key) {
+                if ($mods['moduleId'] !== $module_key) {
                     $modules_to_keep[] = $mods;
                 }
             }

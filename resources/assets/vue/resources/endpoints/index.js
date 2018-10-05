@@ -34,6 +34,7 @@ module.exports = {
     lockCampaign: { method: 'post', path: `${baseUrl}/campaign/force-lock` },
     unlockCampaign: { method: 'post', path: `${baseUrl}/campaign/unlock-forced` },
     favoriteCampaign: { method: 'post', path: `${baseUrl}/campaign/favorite` },
+    pingLock: { method: 'post', path: `${baseUrl}/campaign/lock` },
     logTime: { method: 'post', path: `${baseUrl}/campaign/spent-time` },
   },
   image: {
@@ -59,5 +60,16 @@ module.exports = {
   },
   dashboard: {
     getMenu: { method: 'get', path: `${baseUrl}/dashboard/menu` },
+  },
+  proof: {
+    create: { method: 'post', path: `${baseUrl}/proof/create` },
+    users: { method: 'get', path: `${baseUrl}/proof/users` },
+    reviewers: { method: 'get', path: `${baseUrl}/proof/reviewers/:campaignId` },
+    campaign: { method: 'get', path: `${baseUrl}/proof/campaign/:campaignId` },
+    data: { method: 'get', path: `${baseUrl}/proof/data/:token` },
+    comments: { method: 'get', path: `${baseUrl}/proof/comments/:token` },
+    postComment: { method: 'post', path: `${baseUrl}/proof/comment/:token` },
+    postDecision: { method: 'post', path: `${baseUrl}/proof/decision/:token` },
+    deleteDecision: { method: 'post', path: `${baseUrl}/proof/delete-decision/:token` },
   },
 };

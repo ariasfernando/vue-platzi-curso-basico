@@ -78,23 +78,22 @@
                 <a
                   href="#"
                   class="lock-campaign"
-                  v-if="enableTemplateLocking && !campaign.locked"
+                  v-if="$can('fix_layout') && (enableTemplateLocking && !campaign.locked)"
                   @click.prevent="lockCampaign(campaign._id, campaigns.current_page)"
                   data-toggle="tooltip"
                   data-placement="bottom"
-                  data-tooltip="Lock this email for editing"
-                  @click.prevent
+                  data-tooltip="Fix email layout"
                 >
                   <i class="glyphicon fa fa-lock"></i>
                 </a>
                 <a
                   href="#"
                   class="unlock-campaign"
-                  v-if="enableTemplateLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user"
+                  v-if="$can('fix_layout') && (enableTemplateLocking && campaign.locked && campaign.locked_by === $_app.config.logged_user)"
                   @click.prevent="unlockCampaign(campaign._id, campaigns.current_page)"
                   data-toggle="tooltip"
                   data-placement="bottom"
-                  data-tooltip="Unlock"
+                  data-tooltip="Unfix email layout"
                 >
                   <i class="glyphicon fa fa-unlock"></i>
                 </a>
@@ -104,13 +103,13 @@
                   data-tooltip="Edit"
                   v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"
                   ><i class="glyphicon glyphicon-pencil"></i></a>
-                <a href="#" data-tooltip="Delete" v-if="!campaign.locked" @click.prevent="askToDeleteCampaign(campaign._id)"
+                <a href="#" data-tooltip="Delete" v-if="!campaign.locked || (campaign.locked && campaign.locked_by === $_app.config.logged_user)" @click.prevent="askToDeleteCampaign(campaign)"
                   ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
           <tr v-if="!campaigns.data.length">
             <td :colspan="showTags ? 6 : 5">
-              There are no emails to show in this list
+              {{ askDeleteMessage }}
             </td>
           </tr>
         </tbody>

@@ -10,6 +10,6 @@
 @endsection
 
 @section('footer-script')
-    <script src="{{ cdn( elixir('js/admin.js') ) }}"></script>
-	<script src="{{ cdn( elixir('js/studio-module.js') ) }}"></script>
+    <script src="{{ cdn( mix('js/admin.js') ) }}"></script>
+	<script src="{{ cdn( mix('js/studio-module.js') ) }}"></script>
 @stop

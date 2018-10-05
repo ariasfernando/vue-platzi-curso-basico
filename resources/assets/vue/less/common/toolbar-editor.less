@@ -1,9 +1,14 @@
 .stx-toolbar {
   position: absolute;
-  top: -34px;
+  transform: translate(0, -35px);
   z-index: 300;
-  background-color: #f2fcfb;
-  
+  background-color: transparent;  
+
+  .mce-btn-group {
+    .mce-btn {
+      margin-left: 0px!important;
+    }
+  }
   .mce-btn{
     &.mce-active{
       background-color: #78DCD6!important;
@@ -15,8 +20,10 @@
       }
     }
     &[aria-label="Font Sizes"],
-    &[aria-label="Font Family"]{
+    &[aria-label="Font Family"],
+    &[aria-label="Font Format"]{
       width: 45px;
+      height: 28px;
       button{
         padding: 0 20px 0 8px;
         
@@ -30,7 +37,17 @@
         }
 
       }
-    }       
+    }   
+    &[aria-label="Font Format"]{
+      button{
+        position: relative;
+        i.mce-caret{
+          position: absolute;
+          right: 8px;
+          top: 5px;
+        }
+      }
+    }    
     
   } 
 }

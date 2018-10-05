@@ -7,59 +7,29 @@ function buttonDefault() {
           type: 'font-family',
           link: 'style',
           label: 'Font Family',
+          subComponent: 'button',
         },
         {
           name: 'font-style',
           type: 'font-style',
+          subComponent: 'button',
         },
         {
           name: 'letter-spacing',
           type: 'letter-spacing',
+          subComponent: 'button',
         },
         {
           name: 'font-weight',
           type: 'font-weight',
+          subComponent: 'button',
         },
       ],
       [
         {
           name: 'text-align',
           type: 'text-align',
-        },
-      ],
-      [
-        {
-          name: 'button-caret',
-          type: 'button-caret',
-        },
-        {
-          name: 'image-size',
-          type: 'image-size',
-          subComponent: 'buttonCaret',
-          minValue: 5,
-        },
-        {
-          name: 'text-align',
-          type: 'text-align',
-          subComponent: 'buttonCaret',
-        },
-        {
-          name: 'classes',
-          type: 'class-input',
-          link: 'attribute',
-          subComponent: 'buttonCaret',
-        },
-        {
-          name: 'bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Background Color',
-          subComponent: 'buttonCaret',
-        },
-        {
-          name: 'padding',
-          type: 'padding',
-          subComponent: 'buttonCaret',
+          subComponent: 'container',
         },
       ],
       [
@@ -67,29 +37,42 @@ function buttonDefault() {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
+          subComponent: 'container',
         },
         {
           name: 'bgcolor',
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
+          subComponent: 'button',
         },
         {
           name: 'color',
           type: 'generic-color',
           link: 'style',
           label: 'Color',
+          subComponent: 'button',
         },
       ],
       [
         {
           name: 'padding',
-          type: 'padding',
+          type: 'padding-group',
+          subComponent: 'container',
         },
         {
           name: 'border-group',
           type: 'border-group',
+          subComponent: 'button',
         },
+        {
+          link: 'style',
+          label: 'Border radius',
+          name: 'borderRadius',
+          isPixel: true,
+          type: 'generic-number',
+          subComponent: 'button',
+        }
       ],
       [
         {
@@ -98,7 +81,23 @@ function buttonDefault() {
           name: 'width',
           type: 'generic-number',
           value: 150,
-          minValue: 5,
+          subComponent: 'button',
+        },
+        {
+          link: 'style',
+          label: 'max-width',
+          name: 'maxWidth',
+          isPixel: true,
+          type: 'generic-number',
+          subComponent: 'button',
+        },
+        {
+          link: 'style',
+          label: 'min-width',
+          name: 'minWidth',
+          isPixel: true,
+          type: 'generic-number',
+          subComponent: 'button',
         },
         {
           link: 'attribute',
@@ -107,6 +106,7 @@ function buttonDefault() {
           type: 'generic-number',
           value: 40,
           minValue: 5,
+          subComponent: 'button',
         },
       ],
       [
@@ -115,7 +115,40 @@ function buttonDefault() {
           label: 'Default URL',
           name: 'href',
           type: 'generic-text',
-          value: 'http://stensul.com',
+          value: '',
+          subComponent: 'button',
+        },
+      ],
+      [
+        {
+          name: 'caret',
+          type: 'caret',
+          subComponent: 'caret',
+        },
+        {
+          name: 'image-size',
+          type: 'image-size',
+          minValue: 5,
+          subComponent: 'caret',
+          isDisablePercentage: true,
+        },
+        {
+          name: 'classes',
+          type: 'class-input',
+          link: 'attribute',
+          subComponent: 'caret',
+        },
+        {
+          name: 'bgcolor',
+          type: 'generic-color',
+          link: 'attribute',
+          label: 'Background Color',
+          subComponent: 'caret',
+        },
+        {
+          name: 'padding',
+          type: 'padding-group',
+          subComponent: 'caret',
         },
       ],
     ],

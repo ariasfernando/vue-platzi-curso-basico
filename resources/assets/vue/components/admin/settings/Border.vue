@@ -71,10 +71,10 @@ export default {
       set(width) {
         width = isNaN(width) || width < this.min ? this.min : width;
         if (width > 0) {
-          if (this.style == "none") {
+          if (this.style === "none") {
             this.style = "solid";
           }
-          if (this.color == "") {
+          if (this.color === "") {
             this.color = "#000000";
           }
         } else {
@@ -85,7 +85,8 @@ export default {
             this.color = "";
           }
         }
-        this.$emit("style-setting-updated", {
+        this.$emit("setting-updated", {
+          link: "style",
           name: `border${this.side}Width`,
           value: `${width}px`
         });
@@ -93,10 +94,11 @@ export default {
     },
     style: {
       get() {
-        return this.element.style[`border${this.side}Style`];
+        return this.element.style[`border${this.side}Style`] || "none";
       },
       set(style) {
-        this.$emit("style-setting-updated", {
+        this.$emit("setting-updated", {
+          link: "style",
           name: `border${this.side}Style`,
           value: style
         });
@@ -104,16 +106,14 @@ export default {
     },
     color: {
       get() {
-        return this.element.style[`border${this.side}Color`] === "transparent"
-          ? ""
-          : this.element.style[`border${this.side}Color`];
+        return this.element.style[`border${this.side}Color`] ? this.element.style[`border${this.side}Color`] : "";
       },
       set(color) {
         if (!Application.utils.validateHexVal(color)) {
-          color =
-            color === null ? "transparent" : Application.utils.rgbToHex(color);
+          color = color === null ? "" : Application.utils.rgbToHex(color);
         }
-        this.$emit("style-setting-updated", {
+        this.$emit("setting-updated", {
+          link: "style",
           name: `border${this.side}Color`,
           value: color
         });
@@ -122,17 +122,21 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .button input {
   text-align: center;
 }
 .el-button.is-disabled,
 .el-button.is-disabled:focus,
 .el-button.is-disabled:hover {
-  color: #606266;
+  background: #f8f8f8;
+  color: #666666;
   cursor: inherit;
   border: 1px solid #dcdfe6;
-  border-left: 0;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 14px;
+  border-radius: 0px 2px 2px 0px;
 }
 .input-number-size {
   padding-left: 0;
@@ -162,6 +166,9 @@ button.el-button {
 .el-input-number {
   width: 67px;
 }
+.el-input-number .el-input__inner{
+    border-radius: 2px 0px 0px 2px;
+}
 #edit-container .right-bar .form-group,
 #edit-container .left-bar .form-group {
   margin-bottom: 0;
@@ -176,16 +183,27 @@ button.el-button {
     text-align: center;
   }
   .el-input-number.is-without-controls .el-input__inner {
-    padding: 0;
+    border-radius: 2px 0px 0px 2px;
+    border-right: none;
   }
   .el-color-picker__trigger {
-    padding: 3px;
+    padding: 0px;
     height: 28px;
     width: 34px;
+    border-radius: 2px;
+
+    .el-color-picker__color{
+      border: none;
+    }
   }
-  input.el-input__inner {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+  .el-select{
+    .el-input__inner{
+      border-radius: 2px;
+
+      &:focus{
+        border: 1px solid #78dcd6;
+      }
+    }
   }
 }
 </style>

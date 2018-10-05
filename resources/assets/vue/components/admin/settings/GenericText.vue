@@ -18,8 +18,19 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "generic-text",
-  props: ["element", "name", "type", "link", "label", "default-value", "placeholder"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
 };
 </script>
+
+<style lang="scss" scoped>
+  .el-input /deep/ .el-input__inner{
+    border-radius: 2px;
+    text-align: left;
+    padding-left: 8px;
+
+    &:focus{
+      border: 1px solid #78dcd6;
+    }
+  }
+</style>

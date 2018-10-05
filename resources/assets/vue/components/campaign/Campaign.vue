@@ -5,32 +5,27 @@
     <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
       <!-- column left (menu) -->
-      <aside :style="locked ? 'overflow-y: hidden;' : undefined">
-        <div class="aside-inner">
+      <aside :style="locked ? 'overflow-y: hidden;' : undefined" class="left-bar">
+        <div>
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
-            <campaign-menu v-if="!locked" :library-id="libraryId"></campaign-menu>
-            <div class="lock-warning-container" v-if="locked">Unlock the email to add modules</div>
+            <tracking v-if="trackingEnabled" :library-key="libraryKey"></tracking>
+            <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
+            <div class="lock-warning-container" v-if="locked">Unfix the email to add modules</div>
           </div>
         </div>
       </aside>
 
       <!-- column right (container email) -->
-      <section class="section-canvas-email section-box">
+      <section class="section-canvas-email module-container">
         <email-canvas v-if="campaignReady"></email-canvas>
       </section>
 
-      <aside class="component-settings-wrapper">
-        <div class="aside-inner section-box">
-          <transition name="slide-fade">
+      <aside class="right-bar">
+        <div>
             <module-settings v-if="showModuleSettings"></module-settings>
-          </transition>
-          <transition name="slide-fade">
             <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
-          </transition>
-          <transition name="slide-fade">
             <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
-          </transition>
         </div>
       </aside>
     </div>
@@ -64,10 +59,11 @@
   import VueSticky from 'vue-sticky'
   import _ from 'lodash'
   import CampaignService from '../../services/campaign'
+  import Tracking from './Tracking.vue'
 
   export default {
     name: 'Campaign',
-    props: ['campaignId', 'libraryId'],
+    props: ['campaignId', 'libraryId', 'windowId', 'cachedWindowId'],
     components: {
       CampaignConfiguration,
       CampaignMenu,
@@ -81,18 +77,25 @@
       ModalEsp,
       ModalEnableTemplating,
       Spinner,
+      Tracking,
       EmailActions
     },
     data: function () {
       return {
         campaignReady: false,
         campaignConfigReady: false,
+        pingLockInterval: 30000,
         logTimeInterval: 30000,
+        campaignConfig: {},
+        trackingEnabled: false,
       }
     },
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"];
+      },
+      libraryKey() {
+        return this.$store.getters["campaign/campaign"].library_config.key;
       },
       locked() {
         return this.campaign.campaign_data && this.campaign.campaign_data.locked;
@@ -108,6 +111,16 @@
       },
       showModuleSettings() {
         return this.$store.getters["campaign/showModuleSettings"];
+      },
+      sessionWindowId() {
+        try {
+          if (!window.sessionStorage.getItem('windowId')) {
+            window.sessionStorage.setItem('windowId', this.windowId);
+          }
+          return window.sessionStorage.getItem('windowId');
+        } catch(e) {
+          return false;
+        }
       }
     },
     watch:{
@@ -131,11 +144,16 @@
          * Replace url when creating a new campaign to avoid redirect.
          * Add necessary logic if using more parameters in the future.
          */
-        window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
+        try {
+          window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
+        } catch(e) {
+          return false;
+        }
 
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
           this.campaignReady = true;
+          this.trackingEnabled = (this.campaignReady && this.campaignConfig && this.campaignConfig.enable_tracking && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -147,18 +165,41 @@
       loadConfig() {
         this.$store.dispatch("config/getConfig", 'campaign').then(response => {
           this.campaignConfigReady = true;        
+          this.campaignConfig = this.$store.getters["config/config"].campaign;
         }, error => {
           this.$root.$toast(
             'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
             {className: 'et-error'}
           );
         });
+      },
+      lockPing() {
+        this.$store.dispatch('campaign/pingLockCampaign',
+          {campaignId: this.campaignId, windowId: this.sessionWindowId});
+        setInterval(() => {
+          this.$store.dispatch('campaign/pingLockCampaign',
+            {campaignId: this.campaignId, windowId: this.sessionWindowId}).then(response => {
+          }, error => {
+            this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+              {className: 'et-error'}
+            );
+          });
+
+        }, this.pingLockInterval);
       }
     },
     created: function () {
       this.$store.commit("global/setLoader", true);
       this.loadCampaign();
       this.loadConfig();
+      this.lockPing();
+      if (this.cachedWindowId && this.cachedWindowId !== this.sessionWindowId) {
+        this.$root.$toast(
+          'Warning! this campaign is already open on another window.',
+          {className: 'et-info'}
+        );
+      }
       setInterval(CampaignService.logTime, this.logTimeInterval, this.campaignId, this.logTimeInterval / 1000);
     }
   };
@@ -169,6 +210,20 @@
   @stensul-white: #FFFFFF;
   @stensul-purple: #514960;
   @stensul-gray: #666666;
+  @stensul-purple: #514960;
+  @stensul-purple-light: lighten(@stensul-purple, 20%);
+  @focus: #78dcd6;
+  @focus-light: lighten(@focus, 30%);
+
+  @brand-primary: lighten(@stensul-purple, 35%);
+  @brand-secondary: @stensul-purple-light;
+  
+  .el-input.is-active .el-input__inner,
+  .el-select .el-input__inner:focus,
+  .el-select .el-input.is-focus .el-input__inner,
+  .el-input__inner:focus {
+    border-color: rgb(120, 220, 214);
+  }
   .section-canvas-email{
     .mce-content-body{
       line-height: inherit;
@@ -190,151 +245,202 @@
   }
 
   .container-campaign-subwrapper{
-    height: calc(~"100vh - 90px");
     width: 100%;
     position: relative;
     top: 0px;
     min-width: 1280px;
     overflow-x: auto;
     overflow-y: hidden;
+    position: absolute;
+    left: 0;
+    top: 90px;
+    bottom: 0px;
   }
 
-  .component-settings-wrapper {
-    background: @stensul-white;
-
-    .component-settings {
-      background: #FFFFFF;
-      border-radius: 0px;
-      border: 1px solid transparent;
-      height: 100%;
-      display: table;
-      width: 100%;
+  .module-container {
+    padding: 40px 20px 80px 20px;
+    background: #f0f0f0;
+    display: block;
+    float: left;
+    height: calc(~"100vh - 53px");
+    width: calc(~"100% - 540px");
+    min-width: 640px;
+    overflow-x: hidden;
+    overflow-y: visible;
+    table{
+      border-collapse: initial;
+    }
+  }
+  .right-bar,
+  .left-bar {
+    height: calc(~"100vh - 86px");
+    overflow: auto;
+    overflow: overlay;
+    width: 270px;
+    display: block;
+    float: left;
       padding: 0px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    padding-bottom: 25px;
 
-      h2{
+    &:hover{
+      overflow: overlay
+    }
+
+    &::-webkit-scrollbar {
+        width: 4px; 
+        background: transparent;
+        }
+    &::-webkit-scrollbar-thumb {
+        background: lighten(@stensul-gray, 40%);
+    }
+    .btn.btn-secondary.btn-block {
+      &:hover,
+      &:visited,
+      &:focus,
+      &:active,
+      &:active:focus {
         color: #666666;
-        font-weight: 300;
-        font-size: 13px;
-        padding: 15px 10px 13px 10px;
-        border-bottom: 1px solid #F0F0F0;
-        margin-top: 0px;
-        text-transform: uppercase;
-
-        i{
-          font-size: 10px;
+      }
         }
+    .fa.pull-left {
+      margin-right: 12px;
       }
 
-      .plugins{
-        padding: 10px;
-        padding-bottom: 90px;
+    .components-list {
+      padding: 0;
+      margin: 0;
 
-        .settings-wrapper{
-          padding-bottom: 50px;
+      .component-item {
+        cursor: pointer;
+        list-style-type: none;
+        font-size: 14px;
+        background-color: #f4f4f4;
+        border: 1px solid #d8d8d8;
+        padding: 20px 20px 14px 20px;
+        width: 47%;
+        margin-right: 4px;
+        margin-bottom: 4px;
+        float: left;
+        text-align: center;
+        transition: all 0.3s linear;
+
+        i {
+          margin: 0 5px;
+          color: #514960;
+          font-size: 28px;
         }
-      }
-
-      .plugin-wrapper{
-        display: table;
-        width: 100%;
-
-        .plugin-wrapper-inner:first-child{
-          background: #f4f4f4;
-          margin-bottom: 7px;
-          padding: 10px;
-          border: 1px solid #E9E9E9;
-          width: 100%;
-          display: table;
-          border-radius: 2px;
-        }
-
-        .plugin-wrapper-inner:empty{
-          background: none;
-          margin-bottom: 0px;
-          padding: 0px;
-          border: none;
-        }
-
-        .plugin-wrapper-inner {
-          span{
-            display: block;
-            width: 100%;
-          }
-        }
-
-        label{
-          text-align: left;
-          color: #666666;
-          margin-bottom: 6px;
-          font-weight: 300;
-
-          &.label-custom{
-            display: inline-block;
-            margin: 0 0px 10px 0;
-          }
+        p {
+          display: inline-block;
           font-size: 12px;
-          margin-bottom: 5px;
-          width: 100%;
-          display: block;
+          margin: 0px;
+          padding: 0px;
+          font-weight: 400px;
+          color: #666666;
+            width: 100%;
+          font-weight: 300;
+          text-align: center;
         }
 
-        input[type=text]{
-          height: 28px;
-          background: #FFFFFF;
-          border-radius: 2px;
-          border: none;
-          float: right;
-          font-size: 11px;
-          font-weight: 300;
-          width: 100%;
-          border: 1px solid #EEEEEE;
-          padding: 7px;
+        &:hover {
+          border: 1px solid #888888;
 
-          &:focus{
-            outline: 0;
+          p {
+            color: #333333;
           }
+        }
+          }
+        }
+
+    .card {
+      padding: 0 8px 15px 8px;
+      border-bottom: 1px solid #f0f0f0;
+      border-top: 1px solid #ffffff;
+      margin-top: -1px;
+      display: table;
+          width: 100%;
         }
 
         select{
-          height: 28px;
+      height: 22px;
           font-size: 11px;
           color: #666666;
           border: none;
-          background: #FFFFFF;
+      background: #f4f4f4;
           box-shadow: none;
           font-weight: 300;
-          width: 100%;
+      width: 65px;
           float: right;
-          border: 1px solid #EEEEEE;
-
-          &:focus{
-            outline: 0;
-          }
         }
 
+    select[multiple] {
+      height: 50px;
       }
 
-      .plugin-destination-url{
-        span{
+    .vue-js-switch {
+      float: right;
+      padding-top: 0px;
+      margin: 0px;
+    }
 
-          &:last-child{
-            margin-top: 10px;
+    .content-colorpicker {
+      .sketch-picker {
+        display: none;
+        position: absolute !important;
+        z-index: 300;
+        right: 100%;
           }
+      .icon-remove {
+        color: #999999;
+        background: #ffffff;
+        border: 1px solid #cccccc;
+        margin-top: -40px;
+        margin-left: -35px;
+        padding-top: 4px;
         }
       }
+  }
 
-      .plugin-upload-image{
-        input{
-          width: 100%
+  .card-header {
+    padding-bottom: 10px;
+    ul {
+      margin-left: -10px;
+      margin-right: -10px;
+      border-bottom: 1px solid #dddddd;
+
+      .nav-item {
+        border-top: 1px solid #dddddd;
+        border-left: 1px solid #dddddd;
+        margin-bottom: -2px;
+
+        &:first-child {
+          margin-left: 10px;
         }
 
-        label{
-          margin-bottom: 7px;
+        &:last-of-type {
+          border-right: 1px solid #dddddd;
+        }
+        .nav-link {
+          margin-right: 0;
+          padding: 4px 7px;
+          border: 0;
+          border-radius: 0;
+          font-weight: 300;
+          color: #666666;
+          &.active {
+            border-bottom: 2px solid @focus;
+            background: @focus-light;
+          }
+          &:focus {
+            background-color: transparent;
+          }
+          &:hover {
+            background-color: @focus-light;
+          }
         }
       }
     }
   }
-
   aside {
     width: 20%;
     background: @stensul-white;

@@ -1,37 +1,27 @@
 <template>
-  <!-- CALL TO ACTION ELEMENT -->
-  <tr
-    data-type="button-element"
-    :data-component="JSON.stringify(component)"
-    :class="getMobileClasses(component,'tr') + component.attribute.classes"
-    @click.prevent="setComponent"
-  >
-    <td
-      class="stx-position-relative"
-      width="100%"
-      style="width: 100%;"
-      :align="component.attribute.align"
-      :class="getMobileClasses(component,'td:first')"
-    >
-      <a style="text-decoration:none;"
-         :href="component.attribute.href"
-         :target="component.attribute.target"
-         @click.prevent
+  <module-container :component="component" @select-component="selectComponentHandler">
+      <a
+        :data-contenteditable-href="component.button.attribute.href || ''"
+        :target="component.button.attribute.target || '_blank'"
+        :style="component.button.style.textDecoration || 'text-decoration:none;'"
+        @click.prevent
       >
         <table
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.attribute.width"
-          :height="component.attribute.height"
-          :style="`width:${component.attribute.width}px`"
+          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
+          :height="component.button.attribute.height"
+          :bgcolor="component.button.attribute.bgcolor"
+          :style="tableStyles"
         >
           <tr>
-            <td width="100%" 
-                align="center"
-                :bgcolor="component.attribute.bgcolor"
-                :height="component.attribute.height"
-                :style="[component.style, {'vertical-align' : component.attribute.valign}]"
+            <td
+              width="100%"
+              :bgcolor="component.button.attribute.bgcolor"
+              :height="component.button.attribute.height === 'auto' ? undefined : component.button.attribute.height"
+              style="vertical-align: middle; width:100%;"
+              :style="elementBorderAndPadding(component.button)"
             >
               <table
                 cellpadding="0"
@@ -42,24 +32,25 @@
               >
                 <tr>
                   <td 
-                    :width="component.buttonCaret.attribute.url ? '85%' : '100%'"
+                    width="100%"
+                    :align="component.button.attribute.align"
+                    :style="fontStyles(component.button)"
+                    :valign="component.button.attribute.valign || ''"
                     >
-                    <tiny-mce :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
+                    <tiny-mce :style="fontStyles(component.button)" :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
                   </td>
                   <td
-                    v-if="component.buttonCaret.attribute.url"
-                    width="15%"
+                    v-if="component.caret.attribute.url"
+                    :width="widthCaret"
+                    :style="[elementBorderAndPadding(component.caret), {'width': this.widthCaret +'px'}]"
                     >
                     <img
-                      :src="$_app.config.imageUrl + component.buttonCaret.attribute.url"
-                      :style="[component.buttonCaret.style, { 'vertical-align': component.buttonCaret.style.valign}]"
-                      :bgcolor="component.buttonCaret.attribute.bgcolor"
-                      :width="component.buttonCaret.attribute.width"
-                      :height="component.buttonCaret.attribute.height"
-                      :valign="component.buttonCaret.attribute.valign"
-                      :align="component.buttonCaret.attribute.align"
-                      :class="component.buttonCaret.attribute.classes"
-                      style="display: inline-block !important;"
+                        :src="$_app.config.imageUrl + component.caret.attribute.url"
+                        :bgcolor="component.caret.attribute.bgcolor"
+                        :width="component.caret.attribute.width"
+                        :height="component.caret.attribute.height === 'auto' ? undefined : component.caret.attribute.height"
+                        :valign="component.button.attribute.valign || 'middle'"
+                        style="display: inline-block !important; border:0;"
                       >
                   </td>
                 </tr>
@@ -69,8 +60,7 @@
           </tr>
         </table>
       </a>
-    </td>
-  </tr>
+  </module-container>
   <!-- CALL TO ACTION ELEMENT ENDS -->
 </template>
 
@@ -78,36 +68,37 @@
   import TinyMCE from './TinyMce.vue';
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import ElementMixin from '../../common/mixins/ElementMixin.js';
+  import MontedElementMixin from '../mixins/MontedElementMixin.js';
+  import ModuleContainer from '../../common/containers/ModuleContainer';
 
-  import _ from 'underscore';
+  import _ from 'lodash';
 
   export default {
     name: 'ButtonElement',
-    props: [
-      'module-id',
-      'column-id',
-      'component-id',
-      'component'
-    ],
     components: {
       'tiny-mce': TinyMCE,
       ComponentToolbar,
+      ModuleContainer,
     },
-    mixins: [ MobileStylesMixin ],
+    mixins: [ MobileStylesMixin, ElementMixin, MontedElementMixin ],
     data(){
       return {
         editorId: ['editor', this.columnId, this.componentId].join('-')
       }
     },
-    methods: {
-      setComponent(e) {
-        if (!$(e.target).hasClass("st-remove")){
-          this.$store.commit("module/setCurrentComponent", {
-            columnId: this.columnId,
-            componentId: this.componentId
-          });
+    computed:{
+      tableStyles(){
+        const width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
+        return {
+          'width': width,
+          'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
+          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth
         }
       },
+      widthCaret() {
+        return _.parseInt(this.component.caret.attribute.width) + _.parseInt(this.component.caret.style.paddingLeft) || 0 + _.parseInt(this.component.caret.style.paddingRight) || 0;
+      }
     }
   }
 </script>

@@ -13,35 +13,32 @@ function Library(data = {}) {
   this.config = {
     templateWidth: config.templateWidth || '660',
     templateMobileWidth: config.templateMobileWidth || '480',
-    templateBackgroundColor: config.templateBackgroundColor || '#FFFFFF',
-    contentBackgroundColor: config.contentBackgroundColor || '#FFFFFF',
+    templateBackgroundColor: typeof config.templateBackgroundColor === 'undefined' ? '#FFFFFF' : config.templateBackgroundColor,
+    contentBackgroundColor: typeof config.contentBackgroundColor === 'undefined' ? '#FFFFFF' : config.contentBackgroundColor,
+    templateBackgroundPalettes: config.templateBackgroundPalettes || '',
+    colorPalettes: config.colorPalettes || '',
     fontFamily: config.fontFamily || 'Arial',
     fontSize: config.fontSize || '14',
-    fontColor: config.fontColor || '#000000',
+    fontColor: typeof config.fontColor === 'undefined' ? '#000000' : config.fontColor,
     lineHeight: config.lineHeight || '18',
-    linkColor: config.linkColor || '#000000',
+    linkColor: typeof config.linkColor === 'undefined' ? '#000000' : config.linkColor,
     linkDecoration: config.linkDecoration || 'underline',
     externalCssLink: config.externalCssLink || '',
     propietaryCss: config.propietaryCss || '',
+    fixedModules: config.fixedModules || '',
     padding: config.padding || '',
     esp: config.esp || false,
     espProvider: config.espProvider || false,
     plainText: config.plainText || false,
     preheader: config.preheader || false,
+    tracking: config.tracking || false,
     tagging: config.tagging || false,
     templating: config.templating || false,
   };
 
   const groups = [];
 
-  _.each(data.modules, (modules, group) => {
-    groups.push({
-      name: group,
-      modules,
-    });
-  });
-
-  this.modules = groups;
+  this.modules = data.modules || [];
 
   return this;
 }

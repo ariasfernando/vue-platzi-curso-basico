@@ -6,22 +6,23 @@ use Log;
 use Cdn;
 use Imagine;
 use Storage;
+use CampaignModel;
 use Imagine\Image\ImageInterface;
 use League\Flysystem\AdapterInterface;
-use Stensul\Services\EmailHtmlCreator as Html;
+use HtmlCreator as Html;
 
 class StaticProcessor
 {
     protected $campaign;
 
-    private $files = []; 
+    private $files = [];
 
     /**
      * Constructor.
      *
-     * @param \Stensul\Models\Campaign $campaign
+     * @param CampaignModel $campaign
      */
-    public function __construct(\Stensul\Models\Campaign $campaign)
+    public function __construct(CampaignModel $campaign)
     {
         $this->campaign = $campaign;
     }
@@ -29,7 +30,7 @@ class StaticProcessor
     /**
      * Get campaign model.
      *
-     * @return \Stensul\Models\Campaign
+     * @return CampaignModel
      */
     public function getCampaign()
     {
@@ -59,13 +60,15 @@ class StaticProcessor
         $campaignPath = trim($this->getCampaign()->getCdnPath(), DS) . DS;
         $emailLayout = $html->getEmailLayout();
 
+        $uploadedFiles = $cloud->allFiles($campaignPath);
+
         foreach ($files as $fileType => $fileGroup) {
             foreach ($fileGroup as $file) {
                 $path = $campaignPath;
                 $path .= ($fileType == 'font') ? $file : 'images' . DS . basename($file);
 
                 if (strpos($emailLayout, basename($file)) !== false) {
-                    if (!$cloud->exists($path)) {
+                    if (!in_array($path, $uploadedFiles)) {
                         Log::info(sprintf('[%s] uploading %s: %s', $this->getCampaign()->id, $file, $path));
 
                         if ($fileType == 'image') {
@@ -113,9 +116,9 @@ class StaticProcessor
     /**
      * Copy assets from a campaign.
      *
-     * @param \Stensul\Models\Campaign $from
+     * @param CampaignModel $from
      */
-    public function copyAssetsFrom(\Stensul\Models\Campaign $from)
+    public function copyAssetsFrom(CampaignModel $from)
     {
         $storage = Storage::disk('local:campaigns');
         $assets = [];
@@ -140,7 +143,6 @@ class StaticProcessor
         // Get assets used from the modules data.
         $modules_data = $from->modules_data;
         foreach ($from->modules_data as $key => $module) {
-         
             // custom modules
             if ($module['type'] == 'custom') {
                 if (isset($module['data']['imageSrc'])) {
@@ -151,20 +153,38 @@ class StaticProcessor
                 if (isset($module['data']['rawImage'])) {
                     $filename = DS . 'images' . DS . trim($module['data']['rawImage']);
                     $assets[$filename] = null;
-
                 }
-            }
-            // studio modules
+
+                if (isset($module['data']['images']) && is_array($module['data']['images'])) {
+                    foreach ($module['data']['images'] as $key => $image_container) {
+                        if (isset($image_container['desktop']) && isset($image_container['desktop']['img'])) {
+                            $filename = DS . 'images' . DS . trim($image_container['desktop']['img']);
+                            $assets[$filename] = null;
+                        }
+                        if (isset($image_container['mobile']) && isset($image_container['mobile']['img'])) {
+                            $filename = DS . 'images' . DS . trim($image_container['mobile']['img']);
+                            $assets[$filename] = null;
+                        }
+                    }
+                }
+            } // studio modules
             else {
                 if (isset($module['structure']) && isset($module['structure']['columns'])) {
                     foreach ($module['structure']['columns'] as $column_key => $column_value) {
                         if (isset($column_value['components'])) {
                             foreach ($column_value['components'] as $component_key => $component_value) {
                                 if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
-                                    if (isset($component_value['attribute'])
-                                        && isset($component_value['attribute']['placeholder'])) {
-                                        $filename = DS . 'images' . DS . trim($component_value['attribute']['placeholder']);
-                                        $assets[$filename] = null;
+                                    if (isset($component_value['image'])
+                                        && isset($component_value['image']['attribute'])) {
+                                        if (isset($component_value['image']['attribute']['placeholder'])) {
+                                            $filename = DS . 'images' . DS . trim($component_value['image']['attribute']['placeholder']);
+                                            $assets[$filename] = null;
+                                        }
+
+                                        if (isset($component_value['image']['attribute']['placeholderMobile'])) {
+                                            $filename = DS . 'images' . DS . trim($component_value['image']['attribute']['placeholderMobile']);
+                                            $assets[$filename] = null;
+                                        }
                                     }
                                 }
                             }
@@ -172,7 +192,6 @@ class StaticProcessor
                     }
                 }
             }
-
         }
 
         $assets = array_keys($assets);
@@ -221,43 +240,52 @@ class StaticProcessor
     /**
      * Replace reference id from a campaign.
      *
-     * @param \Stensul\Models\Campaign $from
+     * @param CampaignModel $from
      */
-    public function replaceReferenceId(\Stensul\Models\Campaign $from)
+    public function replaceReferenceId(CampaignModel $from)
     {
         $modules_data = $this->getCampaign()->modules_data;
         foreach ($from->modules_data as $key => $module) {
-
             // custom modules
             if ($module['type'] == 'custom') {
                 if (isset($module['data']['imageSrc'])) {
                     $modules_data[$key]['data']['imageSrc'] = str_replace(
-                                                $from->id,
-                                                $this->getCampaign()->id,
-                                                $module['data']['imageSrc']);
+                        $from->id,
+                        $this->getCampaign()->id,
+                        $module['data']['imageSrc']
+                    );
                 }
                 if (isset($module['data']['rawImage'])) {
                     $modules_data[$key]['data']['rawImage'] = str_replace(
-                                                $from->id,
-                                                $this->getCampaign()->id,
-                                                $module['data']['imageSrc']);
+                        $from->id,
+                        $this->getCampaign()->id,
+                        $module['data']['imageSrc']
+                    );
                 }
-            }
-            // studio modules
+            } // studio modules
             else {
                 if (isset($module['structure']) && isset($module['structure']['columns'])) {
                     foreach ($module['structure']['columns'] as $column_key => $column_value) {
                         if (isset($column_value['components'])) {
                             foreach ($column_value['components'] as $component_key => $component_value) {
                                 if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
-                                    if (isset($component_value['attribute'])
-                                        && isset($component_value['attribute']['placeholder'])) {
-                                        $modules_data[$key]['structure']['columns'][$column_key]['components']
-                                            [$component_key]['attribute']['placeholder'] = str_replace(
-                                                $from->id,
-                                                $this->getCampaign()->id,
-                                                $component_value['attribute']['placeholder']
-                                            );
+                                    if (isset($component_value['image']) && isset($component_value['image']['attribute'])) {
+                                        if (isset($component_value['image']['attribute']['placeholder'])) {
+                                            $modules_data[$key]['structure']['columns'][$column_key]['components']
+                                                [$component_key]['image']['attribute']['placeholder'] = str_replace(
+                                                    $from->id,
+                                                    $this->getCampaign()->id,
+                                                    $component_value['image']['attribute']['placeholder']
+                                                );
+                                        }
+                                        if (isset($component_value['image']['attribute']['placeholderMobile'])) {
+                                            $modules_data[$key]['structure']['columns'][$column_key]['components']
+                                                [$component_key]['image']['attribute']['placeholderMobile'] = str_replace(
+                                                    $from->id,
+                                                    $this->getCampaign()->id,
+                                                    $component_value['image']['attribute']['placeholderMobile']
+                                                );
+                                        }
                                     }
                                 }
                             }
@@ -291,7 +319,7 @@ class StaticProcessor
                     $image = Imagine::load($blob);
                 } else {
                     $storage = Storage::disk('local:campaigns');
-                    $image = (strpos($blob, public_path()) === false)?
+                    $image = (strpos($blob, public_path()) === false) ?
                         Imagine::load($storage->get($blob)) :
                         Imagine::open($blob);
                     $extension = pathinfo($blob)["extension"];
@@ -307,7 +335,7 @@ class StaticProcessor
                 $blob
             );
             Log::warning($error_msg);
-            throw new \Exception($error_msg);
+            throw $e;
         }
 
         switch ($extension) {
@@ -635,5 +663,49 @@ class StaticProcessor
         }
 
         return $data;
+    }
+
+    /**
+     * Trim an image verticaly.
+     *
+     * @param integer height
+     * @param string background_image
+     *
+     * @return array Path or error
+     */
+    public function trimImage($params)
+    {
+        $final_height = (isset($params['height']))? $params['height'] : 0;
+        $background_image = (isset($params['background_image']))? $params['background_image'] : null;
+
+        list($image, $extension, $options) = $this->getImageObject($background_image);
+        $image_width = $image->getSize()->getWidth();
+        $image_height = $image->getSize()->getHeight();
+
+        $trim_position = ($image_height - $final_height) / 2;
+
+        $start = new Imagine\Image\Point(0, $trim_position);
+        $size  = new Imagine\Image\Box($image_width, $final_height);
+
+        $file_path = $this->getImagePath($extension);
+
+        $storage = Storage::disk('local:campaigns');
+        try {
+            $storage->put($file_path, $image->crop($start, $size)->get($extension, $options));
+        } catch (\Exception $e) {
+            $error_msg = sprintf(
+                "[%s] image storage for file %s failed.",
+                $this->getCampaign()->id,
+                $file_path
+            );
+            Log::warning($error_msg);
+
+            usleep(50000);
+
+            if (!$storage->put($file_path, $image->crop($start, $size)->get($extension, $options))) {
+                throw new \Exception($error_msg);
+            }
+        }
+        return [ 'path' => $file_path ];
     }
 }

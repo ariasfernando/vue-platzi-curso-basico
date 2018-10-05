@@ -1,79 +1,84 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-  <tr @click.prevent="setComponent"
-      :data-component="JSON.stringify(component)"
-      :class="getMobileClasses(component,'tr') + component.attribute.classes"
-      data-type="divider-element"
-  >
-    <td 
-      class="stx-line-height-reset stx-position-relative"
-      :bgcolor="component.attribute.bgcolor" 
-      :height="component.style.height"
-      :width="component.style.width || '100%'"
-      :style="styles"
-      :class="getMobileClasses(component,'td:first')"
+  <module-container :component="component" @select-component="selectComponentHandler">
+    <table
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      style="width: 100%;"
+      :style="tableStyle"
     >
-      <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
-    </td>
-  </tr>
+      <tr>
+        <td 
+          :width="component.divider.attribute.width || '100%'"
+          :valign="component.divider.attribute.valign || 'top'"
+          :align="component.divider.attribute.align"
+          :bgcolor="component.divider.attribute.bgcolor"
+          :height="component.divider.style.height"
+          style="display:block; margin:0 auto;"
+          :style="innerTdStyle"
+          >&nbsp;</td>
+      </tr>
+    </table>
+    <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
+  </module-container>
   <!-- DIVIDER ELEMENT ENDS -->
 </template>
 
 <script>
-  import _ from 'underscore';
+  import _ from 'lodash';
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import ElementMixin from '../../common/mixins/ElementMixin';
+  import MontedElementMixin from '../mixins/MontedElementMixin';
+  import ModuleContainer from '../../common/containers/ModuleContainer';
   
   export default {
     name: 'DividerElement',
     components: {
-      ComponentToolbar
+      ComponentToolbar,
+      ModuleContainer
     },
-    props: [
-      'module-id',
-      'column-id',
-      'component-id',
-      'component'
-    ],
-    mixins: [ MobileStylesMixin ],
-    computed: {
-      styles(){
-        let inlineStyle = `height:${this.component.style.height};
-                           width:${this.component.style.width };
-                           border-top-width:${this.component.style.borderTopWidth};
-                           border-right-width:${this.component.style.borderRightWidth};
-                           border-bottom-width:${this.component.style.borderBottomWidth};
-                           border-left-width:${this.component.style.borderLeftWidth};
-                           border-top-style:${this.component.style.borderTopStyle};
-                           border-right-style:${this.component.style.borderRightStyle};
-                           border-bottom-style:${this.component.style.borderBottomStyle};
-                           border-left-style:${this.component.style.borderLeftStyle};
-                           border-top-color:${this.component.style.borderTopColor};
-                           border-right-color:${this.component.style.borderRightColor};
-                           border-bottom-color:${this.component.style.borderBottomColor};
-                           border-left-color:${this.component.style.borderLeftColor};`;
-
-        return inlineStyle;
+    mixins: [ MobileStylesMixin, ElementMixin, MontedElementMixin ],
+    data(){
+      return{
+        defaultFirstTdStyle: {
+          verticalAlign: 'middle',
+          margin: 0,
+          width: '100%'
+        },
+        defaultInnerTdStyle: {
+          display:'block',
+          margin:'0 auto'
+        }
       }
     },
-    timeoutID: null,
-    methods: {
-      setComponent(e) {
-        if (!$(e.target).hasClass("st-remove")){
-          this.$store.commit("module/setCurrentComponent", {
-            columnId: this.columnId,
-            componentId: this.componentId
-          });
+    computed: {
+      innerTdStyle() { 
+        return {
+          height: this.component.divider.style.height,
+          lineHeight: this.component.divider.style.height,
+          fontSize: this.component.divider.style.height,
+          maxHeight: this.component.divider.style.height,
+          backgroundColor: this.component.divider.attribute.bgcolor,
         }  
       },
-    }
+      tableStyle() {
+        return {
+          height: this.component.divider.style.height,
+          lineHeight: this.component.divider.style.height,
+          fontSize: this.component.divider.style.height,
+        };
+      },
+    },
   };
 </script>
 
 <style lang="less">
   @icon-option: #69dac8;
 
-  .st-separator {
+  .st-divider {
     width: 100%;
     border: none;
   }

@@ -1,126 +1,144 @@
 <template>
-  <!-- CALL TO ACTION ELEMENT -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-    <tr
-      data-type="button-element"
-      :class="getMobileClasses(component,'tr') + component.attribute.classes"
-    >
-      <td
-        class="stx-position-relative"
-        width="100%"
-        style="width: 100%;"
-        :align="component.attribute.align"
-        :class="getMobileClasses(component,'td:first')"
+  <module-container :component="component" @select-component="selectComponentHandler">
+      <a
+        @click.prevent
+        :data-contenteditable-href="component.button.attribute.href || ''"
+        :target="component.button.attribute.target || '_blank'"
+        :style="component.button.style.textDecoration || 'text-decoration:none;'"
       >
-        <a
-          @click.prevent
-          :href="component.attribute.href"
-          :target="component.attribute.target"
-          style="text-decoration:none;"
+        <table
+          cellpadding="0"
+          cellspacing="0"
+          border="0"
+          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
+          :height="component.button.attribute.height"
+          :bgcolor="component.button.attribute.bgcolor"
+          :style="tableStyles"
         >
-          <table
-            border="0"
-            cellpadding="0"
-            cellspacing="0"
-            :width="component.attribute.width"
-            :height="component.attribute.height"
-            :style="`width:${component.attribute.width}px`"
-          >
-            <tr>
-              <td
-                width="100%"
-                align="center"
-                :bgcolor="component.attribute.bgcolor"
-                :height="component.attribute.height"
-                :style="[styles, {'vertical-align' : component.attribute.valign}]"
-              >
-                <table
+          <tr>
+            <td
+              width="100%"
+              :bgcolor="component.button.attribute.bgcolor"
+              :height="component.button.attribute.height"
+              style="vertical-align: middle; width:100%;"
+            :style="elementBorderAndPadding(this.component.button)"
+            >
+              <table
                 cellpadding="0"
                 cellspacing="0"
                 border="0"
                 width="100%"
                 style="width:100%"
-                >
-                  <tr>
-                    <td 
-                      :width="component.buttonCaret.attribute.url ? '85%' : '100%'"
-                      :style="`color:${component.style.color}`"
-                      >
-                      <div
-                          class="stx-edit-text stx-wrapper"
-                          style="display: inline-block !important; vertical-align: middle"
-                          v-html="setColorContent(component.data.text, styles.color)"
-                          :id="editorId" >
-                      </div>
-                    </td>
-                    <td
-                      v-if="component.buttonCaret.attribute.url"
-                      width="15%"
-                      >
-                      <img
-                        :src="$_app.config.imageUrl + component.buttonCaret.attribute.url"
-                        :style="[component.buttonCaret.style, { 'vertical-align': component.buttonCaret.attribute.valign}]"
-                        :bgcolor="component.buttonCaret.attribute.bgcolor"
-                        :width="component.buttonCaret.attribute.width"
-                        :height="component.buttonCaret.attribute.height"
-                        :valign="component.buttonCaret.attribute.valign"
-                        :align="component.buttonCaret.attribute.align"
-                        :class="component.buttonCaret.attribute.classes"
-                        style="display: inline-block !important;"
-                      >
-                    </td>
-                  </tr>
-                </table>
-                <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
-              </td>
-            </tr>
-          </table>
-        </a>
-      </td>
-    </tr>
-  </table>
-  <!-- CTA ELEMENT ENDS -->
+              >
+                <tr>
+                  <td
+                    width="100%"
+                    :align="component.button.attribute.align"
+                    :style="fontStyles(component.button)"
+                    :valign="component.button.attribute.valign || ''"
+                    >
+                    <tiny-mce
+                      :fontStyles="[fontStyles(component.button),{'display': 'inline-block !important'}, {'vertical-align': 'middle'}]"
+                      :module="module"
+                      :component="component"
+                      :columnId="columnId"
+                      :componentId="componentId"
+                      @changeText="changeText"
+                    ></tiny-mce>
+                  </td>
+                  <td
+                    v-if="component.caret.attribute.url"
+                    :width="widthCaret"
+                    :style="[elementBorderAndPadding(component.caret), {'width': widthStyle(widthCaret)}]"
+                  >
+                    <img
+                      :src="$_app.config.imageUrl + component.caret.attribute.url"
+                      :bgcolor="component.caret.attribute.bgcolor"
+                      :width="component.caret.attribute.width"
+                      :height="component.caret.attribute.height === 'auto' ? undefined : component.caret.attribute.height"
+                      :valign="component.caret.attribute.valign || 'middle'"
+                      :class="component.caret.attribute.classes || ''"
+                      style="display: inline-block !important; border:0;"
+                    >
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </a>
+  </module-container>
 </template>
 
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
+  import ModuleContainer from '../../common/containers/ModuleContainer';
+  import tinyMce from '../../common/tinyMce';
+  import ElementMixin from '../../common/mixins/ElementMixin.js';
   import _ from 'lodash';
 
   export default {
     name: 'ButtonElement',
-    props: [
-      'module-id',
-      'column-id',
-      'component-id',
-      'component',
-      'column'
-    ],
-    data(){
-      return {
-        editorId: ['editor', this.moduleId, this.columnId, this.componentId].join('-'),
-      }
+    mixins: [MobileStylesMixin, ElementMixin],
+    components: {
+      ModuleContainer,
+      tinyMce
+    },
+    data() {
+      return {    
+        timer: null
+      };
     },
     computed: {
-      styles(){
-        let height = {
-          height: `${this.component.attribute.height}px`
-        };
-
-        return _.extend( this.component.style, height );
-      }
+      module() {
+        return this.$store.getters["campaign/modules"][this.moduleId];
+      },
+      tableStyles(){
+        const width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
+        return {
+          'width': width,
+          'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
+          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth,
+          'border-collapse': 'initial'
+        }
+      },
+      widthCaret() {
+        return _.parseInt(this.component.caret.attribute.width) + _.parseInt(this.component.caret.style.paddingLeft) || 0 + _.parseInt(this.component.caret.style.paddingRight) || 0;
+      },
     },
-    mixins: [ MobileStylesMixin ],
     methods: {
-      setColorContent(text, color) {
-        return text.replace("<p>", `<p style='color:${color || inherit} !important'>`);
-      }
-    }
+      changeText(text) {
+        if (this.timer) {
+          clearTimeout(this.timer);
+        }
+        this.timer = setTimeout(() => {
+          this.$store.commit('campaign/updateElement', {
+            moduleId:this.moduleId,
+            columnId:this.columnId,
+            componentId:this.componentId,
+            data: {
+              text
+            }
+          });
+        }, 100);
+      },
+    },
   };
 </script>
-
-<style>
+<style lang="less">
   .st-unlink {
     cursor: default;
   }
-
+  .mce-menu-item-preview {
+    .mce-text {
+      font-size: 14px !important;
+    }
+  }
+  // hidde the sub menu of Numbered list and Bullet list
+  div[aria-label="Numbered list"],
+  div[aria-label="Bullet list"]{
+    button.mce-open{
+      display: none;
+    }
+  }
 </style>

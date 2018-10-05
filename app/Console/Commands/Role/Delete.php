@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\Role;
 
-use Stensul\Models\Role;
+use RoleModel as Role;
 use Illuminate\Console\Command;
 
 class Delete extends Command
@@ -24,7 +24,7 @@ class Delete extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $name = $this->ask('What is the role name ?');
 

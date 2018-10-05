@@ -1,8 +1,8 @@
 <template>
   <settings-container label="Button caret">
     <template slot="setting-right">
-      <i v-if="buttonCaret" class="glyphicon glyphicon-trash st-remove" @click="resetImage"></i>
-      <input class="input" name="buttonCaret" type="file" @change="onFileChange">
+      <i v-if="caret" class="glyphicon glyphicon-trash st-remove" @click="resetImage"></i>
+      <input class="input" name="caret" type="file" @change="onFileChange">
     </template>
   </settings-container>
 </template>
@@ -12,23 +12,26 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "ButtonCaret",
-  props: ["setting", "element"],
   mixins: [ SettingMixin ],
   components: { SettingsContainer },
   data() {
     return {
-      name: "url",
-      subComponent: "buttonCaret"
+      linkName: "url",
     };
   },
   computed: {
-    buttonCaret() {
-      return this.element.buttonCaret.attribute[this.name];
+    caret() {
+      return this.element.attribute[this.linkName];
     }
   },
   methods: {
     resetImage() {
-      this.$emit("attribute-setting-updated", {subComponent: this.subComponent, name: this.name, value: undefined });
+      this.$emit("setting-updated", {
+        link: 'attribute',
+        subComponent: this.subComponent,
+        name: this.linkName,
+        value: undefined
+      });
     },
     onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files;
@@ -50,7 +53,7 @@ export default {
             images: [vm.image]
           })
           .then(res => {
-            this.updateAttributePlaceholder("customer/modules" + res[0]);
+            this.updateAttributePlaceholder(this.$_app.config.imagePathStudio + res[0]);
           });
       };
 
@@ -62,7 +65,11 @@ export default {
       tmp.src = this.$_app.config.imageUrl + e;
 
       tmp.onload = () => {
-        this.$emit("attribute-setting-updated", { subComponent: this.subComponent, name: this.name, value: e });
+        this.$emit("setting-updated", {
+        link: 'attribute',
+        subComponent: this.subComponent,
+        name: this.linkName,
+        value: e });
       };
 
       tmp.onerror = () => {
@@ -74,7 +81,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 input {
   width: 80px;
 }

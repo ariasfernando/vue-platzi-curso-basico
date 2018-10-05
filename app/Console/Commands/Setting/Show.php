@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\Setting;
 
-use Stensul\Models\Setting;
+use SettingModel as Setting;
 use Illuminate\Console\Command;
 
 class Show extends Command
@@ -24,7 +24,7 @@ class Show extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $settings = Setting::all(['name', 'key', 'value'])->toArray();
         if (count($settings) === 0) {

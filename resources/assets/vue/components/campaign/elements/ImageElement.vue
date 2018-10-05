@@ -1,124 +1,86 @@
 <template>
-  <!-- IMAGE ELEMENT -->
-  <table 
-    width="100%" 
-    cellpadding="0" 
-    cellspacing="0" 
-    border="0"
-    style="width: 100%;"
-  >
-    <tr 
-      data-type="image-element"
-      :class="getMobileClasses(component,'tr') + component.attribute.classes"
+  <module-container :component="component" @select-component="selectComponentHandler">
+    <table
+      width="100%"
+      style="width: 100%;"
+      :valign="component.container.attribute.valign || 'top'"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
     >
-      <td 
-        width="100%" 
-        align="center"
-        class="stx-position-relative"
-        :style="component.style"
-        :bgcolor="component.attribute.bgcolor"
-        :class="getMobileClasses(component,'td:first')"
-      >
-        <table 
-          width="100%" 
-          cellspacing="0" 
-          cellpadding="0" 
-          border="0"
-          style="width: 100%;"
+      <tr>
+        <td 
+          width="100%"
+          :valign="component.image.attribute.valign || 'top'"
+          :align="component.image.attribute.align"
+          :bgcolor="component.image.attribute.bgcolor"
+          style="width:100%;"
+          :style="elementBorderAndPadding(component.image)"
         >
-          <tr>
-            <td 
-              width="100%" 
-              style="width: 100%;"
-              :align="component.attribute.align" 
-              :valign="component.attribute.valign"
+          <a
+            @click.prevent
+            :href="component.image.attribute.href"
+            :alt="component.image.attribute.alt"
+            :title="component.image.attribute.title"
+            :target="component.image.attribute.target"
             >
-              <a 
-                @click.prevent
-                :href="component.attribute.href"
-                :alt="component.attribute.alt"
-                :title="component.attribute.title"
-                :target="component.attribute.target"
-              >
+            <img
+              class="st-resize"
+              :class="{'st-hide-mobile' : component.image.attribute.placeholderMobile}"
+              style="border: 0; display: block;"
+              border="0"
+              :valign="component.image.attribute.valign || 'top'"
+              :width="component.image.attribute.width"
+              :src="this.$_app.config.imageUrl + component.image.attribute.placeholder"
+              :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
+              :style="{width:widthStyle(component.image.attribute.width)}"
+              :alt="component.image.attribute.alt"
+              :title="component.image.attribute.title"
+            >
+            <template
+              v-if="component.image.attribute.placeholderMobile">
+              <div class="show-img-mobile" style="display:none;width:0;overflow:hidden;max-height:0!important;">
                 <img
-                  class="st-resize"
-                  style="border: 0; display: block;"
+                  :src="this.$_app.config.imageUrl + component.image.attribute.placeholderMobile"
                   border="0"
-                  :src="imageUrl(component.attribute.placeholder)"
-                  :width="component.attribute.width" 
-                  :height="component.attribute.height"
-                  :alt="component.attribute.alt"
-                  :title="component.attribute.title"
-                >
-              </a>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-  <!-- IMAGE ELEMENT ENDS -->
+                  class="st-resize"
+                  style="display:block;border:none;max-width:100%;height:auto;"
+                  :width="component.image.attribute.width"
+                  :valign="component.image.attribute.valign || 'top'"
+                  :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
+                  :style="{width:widthStyle(component.image.attribute.width)}"
+                  :alt="component.image.attribute.alt"
+                  :title="component.image.attribute.title"
+                />
+              </div>
+            </template>
+          </a>
+        </td>
+      </tr>
+    </table>
+  </module-container>
+<!-- IMAGE ELEMENT ENDS -->
 </template>
+
 
 <script>
   import _ from 'lodash';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
-
+  import ModuleContainer from '../../common/containers/ModuleContainer';
+  import ElementMixin from '../../common/mixins/ElementMixin.js';
+  
   export default {
     name: 'ImageElement',
-    props: [
-      'module-id',
-      'column-id',
-      'component-id',
-      'component',
-      'number-required',
-      'column-width',
-      'column'
-    ],
-    mixins: [ MobileStylesMixin ],
-    created () {
-      this.setupModule();
-      if(this.numberRequired) {
-        let tempWidth = _.toString(this.component.attribute.width);
-        let paddingLeft = _.parseInt(this.component.style.paddingLeft.replace(/px$/, ''));
-        let paddingRight = _.parseInt(this.component.style.paddingRight.replace(/px$/, ''));
-        let paddingColumLeft = _.parseInt(this.column.style.paddingLeft.replace(/px$/, ''));
-        let paddingColumRight = _.parseInt(this.column.style.paddingRight.replace(/px$/, ''));
-        
-        if ( tempWidth.indexOf('%') > 1){
-
-          let widthPercent = _.parseInt(tempWidth.replace(/%$/, ''));
-          tempWidth = this.columnWidth * widthPercent / 100;
-        }else if ( tempWidth.indexOf('px') > 1){
-          tempWidth = _.parseInt(tempWidth.replace(/px$/, ''));
-        }
-        
-        const payload = {
-          moduleId: this.moduleId,
-          columnId: this.columnId,
-          componentId: 0,
-          attribute: 'width',
-          attributeValue: ( tempWidth - (paddingLeft + paddingRight) - (paddingColumLeft + paddingColumRight)),
-        };
-
-        this.$store.commit('campaign/saveComponentAttribute', payload);
-      }
+    components: {
+      ModuleContainer,
     },
-    data(){
-      return {
-        imageUrl(imagePath) {
-          return this.$_app.config.imageUrl + imagePath;
-        }
-      }
-    },
-    methods: {
-      setupModule () {
-        this.elementConfig = null;
-
-        if (this.component.directives && this.component.directives.elementConfig) {
-          this.elementConfig = this.component.directives.elementConfig;
-        }
+    mixins: [ MobileStylesMixin, ElementMixin],
+    computed: {
+      containerImageWidth(){
+        let paddingLeft = _.parseInt(this.component.image.style.paddingLeft) || 0
+        let paddingRight = _.parseInt(this.component.image.style.paddingRight) || 0
+        return _.parseInt(this.component.image.attribute.width) - paddingLeft - paddingRight ;
       },
-    }
+    },
   };
 </script>

@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\User;
 
-use Stensul\Models\User;
+use UserModel as User;
 use Illuminate\Console\Command;
 
 class Show extends Command
@@ -24,7 +24,7 @@ class Show extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $users = User::all(['name', 'email', 'roles', 'deleted_at']);
         $user_array = array();

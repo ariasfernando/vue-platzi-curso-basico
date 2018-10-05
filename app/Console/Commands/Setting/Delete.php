@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\Setting;
 
-use Stensul\Models\Setting;
+use SettingModel as Setting;
 use Illuminate\Console\Command;
 
 class Delete extends Command
@@ -24,7 +24,7 @@ class Delete extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $key = $this->ask('What is the setting key ?');
 

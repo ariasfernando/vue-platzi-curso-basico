@@ -1,8 +1,8 @@
 <template>
   <transition name="modal" v-if="modalComplete">
     <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container modal-complete">
+      <div class="modal-wrapper modal-complete">
+        <div class="modal-container">
           <slot name="header">
             <button type="button" class="close hidden" @click="close"><span>&times;</span></button>
           </slot>
@@ -13,10 +13,10 @@
             <slot name="body">
               <b-tabs>
                 <b-tab title="HTML" @click="changeTypeTextArea('normal_html')" >
-                  <textarea ref="normal_html" v-html="html"></textarea>
+                  <textarea ref="normal_html" v-html="html" readonly></textarea>
                 </b-tab>
                 <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">
-                  <textarea ref="plain_text" v-html="plainText"></textarea>
+                  <textarea ref="plain_text" v-html="plainText" readonly></textarea>
                 </b-tab>
               </b-tabs>
             </slot>
@@ -87,6 +87,7 @@
       campaign: {
         handler: function(value) {
           this.html = value.campaign_data.body_html;
+          this.plainText = value.campaign_data.plain_text;
         },
         deep: true
       },

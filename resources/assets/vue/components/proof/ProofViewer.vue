@@ -31,7 +31,7 @@
 
         <div class="section-container-campaign">
             <section class="section-canvas-email section-box">
-                <div class="section-box-content section-canvas-container">
+                <div class="section-box-content section-canvas-container scrolled">
                     <table cellpadding="0" cellspacing="0" width="100%">
                         <tr v-if="campaign.length === 0">
                             <td align="center">
@@ -67,84 +67,82 @@
 </template>
 
 <script>
-    import ProofComments from './ProofComments.vue';
-    import ProofDecision from './ProofDecision.vue';
-    import VueSticky from 'vue-sticky';
+  import ProofComments from './ProofComments.vue';
+  import ProofDecision from './ProofDecision.vue';
+  import VueSticky from 'vue-sticky';
+  import proofService from '../../services/proof';
 
-    export default {
-        name: 'proofViewer',
-        components: {
-            ProofComments,
-            ProofDecision
-        },
-        data() {
-            return {
-                campaign: [],
-                showDecision: false,
-                canEdit: false,
-                reviewer: [],
-                desktopWidth: '600',
-                mobileWidth: '300',
-                buildingMode: 'desktop'
-            };
-        },
-        props: ['token'],
-        computed: {
-            campaignHtml () {
-                if ('body_html' in this.campaign) {
-                    // Yes, it's ugly, but this width value is set in the body_html and we need
-                    // to remove it so the switch can work.
-                    // @TODO: check why this value is in the body_html
-                    return this.campaign.body_html.replace('width="' + this.desktopWidth + '"', '');
-                } else {
-                    return '';
-                }
-            },
-            templateWidth () {
-                if (this.buildingMode === 'desktop') {
-                    return this.desktopWidth;
-                } else {
-                    return this.mobileWidth;
-                }
-            }
-        },
-        created: function() {
-            // TODO: find a way to define this in the vue instance
-            Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            // Get campaign data
-            this.getProofData();
-        },
-        directives: {
-          'sticky': VueSticky,
-        },
-        methods: {
-            getProofData: function() {
-                var vm = this;
-                Vue.http.get(Application.globals.baseUrl + '/proof/data/' + vm.token)
-                    .then(function( resp ) {
-                        if (resp.status == 200) {
-                            vm.campaign = resp.body.data.campaign;
-                            vm.reviewer = resp.body.data.reviewer;
-                            vm.showDecision = resp.body.data.show_decision;
-                            vm.canEdit = resp.body.data.can_edit;
-                            vm.desktopWidth = resp.body.data.campaign.template_width;
-                            vm.mobileWidth = resp.body.data.campaign.template_mobile_width;
-                            if ('message' in resp.body.data) {
-                                vm.$root.$toast(resp.body.data.message, {className: 'et-success'});
-                            }
-                        }
-                    });
-            },
-            decisionMade: function() {
-                // Ugly but works. @TODO: find a better way to do this (e.g. vuex)
-                this.$children[1].getComments();
-            },
-            changeBuildingMode(mode) {
-                this.buildingMode = mode;
-            }
+  export default {
+    name: 'proofViewer',
+    components: {
+      ProofComments,
+      ProofDecision
+    },
+    data() {
+      return {
+        campaign: {},
+        showDecision: false,
+        canEdit: false,
+        reviewer: [],
+        desktopWidth: '600',
+        mobileWidth: '300',
+        buildingMode: 'desktop'
+      };
+    },
+    props: ['token'],
+    computed: {
+      campaignHtml () {
+        if ('body_html' in this.campaign) {
+          // Yes, it's ugly, but this width value is set in the body_html and we need
+          // to remove it so the switch can work.
+          // @TODO: check why this value is in the body_html
+          return this.campaign.body_html.replace('width="' + this.desktopWidth + '"', '');
+        } else {
+          return '';
         }
-    };
+      },
+      templateWidth () {
+        if (this.buildingMode === 'desktop') {
+          return this.desktopWidth;
+        } else {
+          return this.mobileWidth;
+        }
+      }
+    },
+    created: function() {
+      // Get campaign data
+      this.getProofData();
+    },
+    directives: {
+      'sticky': VueSticky,
+    },
+    methods: {
+      getProofData: function() {
+        var _this = this;
+        proofService.getData(_this.token).then((response) => {
+          if (response.status === 'success') {
+            _this.campaign = response.data.campaign;
+            _this.reviewer = response.data.reviewer;
+            _this.showDecision = response.data.show_decision;
+            _this.canEdit = response.data.can_edit;
+            _this.desktopWidth = response.data.campaign.template_width;
+            _this.mobileWidth = response.data.campaign.template_mobile_width;
+            if ('message' in response.data) {
+              _this.$root.$toast(response.data.message, {className: 'et-success'});
+            }
+          }
+        });
+      },
+      decisionMade: function() {
+        return false; // this will be commented until we finish all this implementation
+        // Ugly but works. @TODO: find a better way to do this (e.g. vuex)
+        this.$children[1].getComments();
+      },
+      changeBuildingMode(mode) {
+        this.buildingMode = mode;
+      }
+    }
+  };
 </script>
 
 <style lang="less">
@@ -152,6 +150,42 @@
         width: 100%;
         display: table;
         min-height: 100%;
+
+      .section-canvas-email{
+        width: 100%;
+        position: relative;
+        
+        .scrolled{
+          width: 100%;
+          max-height: 80vh;
+          overflow-y: scroll;
+        }
+        .scrolled::-webkit-scrollbar {
+          width: .4em; 
+        }
+        .scrolled::-webkit-scrollbar,
+        .scrolled::-webkit-scrollbar-thumb {
+          overflow:visible;
+          border-radius: 4px;
+        }
+        .scrolled::-webkit-scrollbar-thumb {
+          background: rgba(0,0,0,.2); 
+        }
+        .cover-bar {
+          position: absolute;
+          background: #fff;;
+          height: 100%;  
+          top: 0;
+          right: 0;
+          width: .4em;
+          -webkit-transition: all .5s;
+          opacity: 1;
+        }
+        .section-canvas-email:hover .cover-bar {
+          opacity: 0;
+          -webkit-transition: all .5s;
+        }
+      }
     }
     #emailCanvas{
         &:empty {

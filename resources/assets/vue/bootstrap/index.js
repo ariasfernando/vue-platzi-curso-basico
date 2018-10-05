@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import customer from 'customer';
 import plugins from '../plugins';
 import filters from '../filters';
 import directives from '../directives';
@@ -15,7 +16,7 @@ export default {
   bootstrap() {
     // Inject configs into main instance
     this.Vue.prototype.$_app = {
-      config: Application.globals
+      config: Application.globals,
     };
     this.Vue.prototype.$_customer = customer || {};
 
@@ -68,46 +69,42 @@ export default {
 
     fonts.custom.map(font => {
       custom[font.name] = true;
-
-      const style = document.createElement('style');
-
-      style.type = 'text/css';
-
-      let definition = '';
-
-      let ie = '';
-
-      font.types.map(typeFont => {
-        typeFont.files.map(fileFont => {
-          if (fileFont.file === 'eot') {
-            ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}?#iefix');`;
-          }
+      if (font.folder) {
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        let definition = '';
+        let ie = '';
+        font.types.map(typeFont => {
+          typeFont.files.map(fileFont => {
+            if (fileFont.file === 'eot') {
+              ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}?#iefix');`;
+            }
+          });
         });
-      });
-
-      font.types.map(typeFont => {
-        definition += `@font-face {font-family: '${font.name}';`;
-        definition += ie;
-        definition += 'src: ';
-
-        typeFont.files.map((fileFont, index) => {
-          definition += `url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}') format('${fileFont.file}')`;
-
-          if (index < typeFont.files.length - 1) {
-            definition += ',';
-          } else {
-            definition += ';';
-          }
+        font.types.map(typeFont => {
+          definition += `@font-face {font-family: '${font.name}';`;
+          definition += ie;
+          definition += 'src: ';
+          typeFont.files.map((fileFont, index) => {
+            definition += `url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}') format('${fileFont.file}')`;
+            if (index < typeFont.files.length - 1) {
+              definition += ',';
+            } else {
+              definition += ';';
+            }
+          });
+          definition += `font-weight: ${typeFont.weight};}`;
         });
-
-        definition += `font-weight: ${typeFont.weight};}`;
-      });
-
-      style.appendChild(document.createTextNode(definition));
-
-      document.head.appendChild(style);
+        style.appendChild(document.createTextNode(definition));
+        document.head.appendChild(style);
+      } else if (font.url) {
+        const link = document.createElement('link');
+        link.href = font.url;
+        link.rel="stylesheet";
+        link.type="text/css";
+        document.head.insertBefore(link, document.head.childNodes[0]);
+      }
     });
-
     this.Vue.prototype.$_app.config.fonts = fonts;
   },
   initFilters() {
@@ -140,15 +137,15 @@ export default {
     }
 
     _.each(modules, (module, name) => {
-      this.Vue.component(`custom-${module.name}`, module.view);
+      this.Vue.component(`custom-${module.key}`, module.view);
       delete module.view;
 
       if (module.settings) {
-        this.Vue.component(`custom-settings-${module.name}`, module.settings);
+        this.Vue.component(`custom-settings-${module.key}`, module.settings);
         delete module.settings;
       }
 
-      this.Vue.prototype.$_app.customModules[module.name] = module;
+      this.Vue.prototype.$_app.customModules[module.key] = module;
     });
   },
   initPlugins() {

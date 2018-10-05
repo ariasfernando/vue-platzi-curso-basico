@@ -19,35 +19,67 @@
       ></el-button>
     </div>
     <div class="clearfix" v-if="plugin.config.options.forecolor.value">
-      <settings-container label="textcolor_map">
+      <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library" label="textcolor_map">
         <template slot="setting-right">
-            <el-input
-              size="mini" 
-              v-validate="'required'"
-              v-model="textColorMap"
-              placeholder="000000,Black,474646,Gray,79a8c9,Blue,cd202c,Red"
-              class="clearfix"
-            ></el-input>
+          <el-input
+            size="mini"
+            v-validate="'required'"
+            v-model="textColorMap"
+            placeholder="000000,Black,474646,Gray,79a8c9,Blue,cd202c,Red"
+            class="clearfix"
+          ></el-input>
+        </template>
+      </settings-container>
+    </div>
+    <div class="clearfix" v-if="plugin.config.options.forecolor.value">
+      <settings-container label="textcolor_from_library">
+        <template slot="setting-right">
+          <toggle-button
+            :value="plugin.config.options.forecolor.textcolor_from_library"
+            @change="newValue => changeOption(newValue,'textcolor_from_library','forecolor')"
+          ></toggle-button>
+      </template>
+      </settings-container>
+      <settings-container v-if="plugin.config.options.forecolor.textcolor_from_library" label="palette_name">
+        <template slot="setting-right">
+          <el-input
+            size="mini"
+            v-validate="'required'"
+            v-model="palette_name"
+            placeholder="name"
+            class="clearfix"
+          ></el-input>
         </template>
       </settings-container>
     </div>
     <div class="clearfix" v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" :key="key">
-      <settings-container :label="tinySetting.title" >
+      <settings-container  v-if="showSetting(tinySetting.dependsOn)"  :label="tinySetting.title" >
         <template slot="setting-right">
-              <toggle-button :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
+          <toggle-button :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
         </template>
       </settings-container>
+
       <!-- Input if config needs it -->
       <div v-if="isAValidSetting(tinySetting ,key)">
           <el-input-number
-          size="mini" 
-          v-b-tooltip.hover
-          :title="key"
-          :name="key"
-          @change="(value)=>changeSetting(value, key)"
-          :value="tinySetting.content || 0"
-          :min="0"
+            v-if="tinySetting.type === 'number'"
+            size="mini"
+            v-b-tooltip.hover
+            :title="key"
+            :name="key"
+            @change="(value)=>changeSetting(value, key)"
+            :value="tinySetting.content || 0"
+            :min="0"
           ></el-input-number>
+          <el-input
+            v-if="tinySetting.type === 'text'"
+            size="mini"
+            v-b-tooltip.hover
+            :title="key"
+            :name="key"
+            @change="(value)=>changeSetting(value, key)"
+            :value="tinySetting.content || 0"
+          ></el-input>
       </div>
     </div>
   </div>
@@ -87,6 +119,14 @@ export default {
       },
       set(value) {
         this.changeOption(value.split(","),'textcolor_map','forecolor');
+      },
+    },
+    palette_name: {
+      get() {
+        return this.plugin.config.options.forecolor.palette_name;
+      },
+      set(value) {
+        this.changeOption(value,'palette_name','forecolor');
       }
     },
   },
@@ -97,6 +137,13 @@ export default {
     };
   },
   methods: {
+    showSetting(dependsOn) {
+      if (dependsOn) {
+        return this[dependsOn.config][dependsOn.name].value;
+      } else {
+        return true;
+      }
+    },
     toggle(value) {
       const payload = {
         plugin: this.name,
@@ -204,13 +251,13 @@ export default {
       // Save plugin data
       this.$store.commit("module/savePluginSuboption", payload);
     },
-    isAValidSetting(tinySetting, key){
-     return (key === 'truncate' || key === 'lines_limit') && tinySetting.value === true;
-     }
+    isAValidSetting(tinySetting, key) {
+      return (['truncate', 'lines_limit', 'fontsize_formats', 'style_formats', 'link_fixed_color'].indexOf(key) !== -1) && tinySetting.value === true;
+    },
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .font-mce-ico {
   font-family: tinymce, Arial;
 }

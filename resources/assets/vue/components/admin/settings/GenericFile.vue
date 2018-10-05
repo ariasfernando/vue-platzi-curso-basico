@@ -1,5 +1,5 @@
 <template>
-  <settings-container :label="label">
+  <settings-container :label="label" v-if="showSetting">
     <template slot="setting-right">
       <input class="input" :name="name" type="file" @change="onFileChange">
     </template>
@@ -11,21 +11,11 @@ import SettingsContainer from "../../common/settings/containers/SettingsContaine
 
 export default {
   name: "generic-file",
-  props: ["element", "name", "type", "link", "label", "default-value"],
   mixins: [SettingMixin],
   components: { SettingsContainer },
   methods: {
     resetImage() {
-      if (this.link === "style") {
-        this.$emit("style-setting-updated", { name: this.name, value: "" });
-      } else if (this.link === "styleOption") {
-        this.$emit("style-option-setting-updated", {
-          name: this.name,
-          value: ""
-        });
-      } else if (this.link === "attribute") {
-        this.$emit("attribute-setting-updated", { name: this.name, value: "" });
-      }
+      this.$emit("setting-updated", { link: this.link, name: this.name, value: "" });
     },
     onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files;
@@ -47,7 +37,7 @@ export default {
             images: [vm.image]
           })
           .then(res => {
-            this.updateAttributePlaceholder("customer/modules" + res[0]);
+            this.updateAttributePlaceholder(this.$_app.config.imagePathStudio + res[0]);
           });
       };
 
@@ -70,7 +60,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 input.input {
   margin-top: 8px;
   width: 100%;

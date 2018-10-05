@@ -16,11 +16,12 @@ use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
-use Stensul\Models\Proof;
-use Stensul\Models\Campaign;
-use Stensul\Jobs\StoreAssetsInCdn;
-use Stensul\Jobs\ProcessCampaign;
-use Stensul\Jobs\SendReviewersEmail;
+use ProofModel as Proof;
+use CampaignModel as Campaign;
+use StoreAssetsInCdn;
+use ProcessCampaign;
+use SendReviewersEmail;
+use Stensul\Exceptions\PermissionDeniedException;
 use HtmlCreator as Html;
 use TextCreator as Text;
 use Statics as Assets;
@@ -52,9 +53,6 @@ class CampaignManager
         $campaign_id = $inputs['campaign_id'];
 
         $campaign = Campaign::findOrFail($inputs['campaign_id']);
-        if ($campaign->locked) {
-            throw new AuthorizationException('The campaign is locked and you can not change it');
-        }
         $campaign_name = $inputs['campaign_name'] ?? '';
         $modules_data = $inputs['modules_data'] ?? [];
         if (!is_array($campaign->tags)) {
@@ -86,6 +84,9 @@ class CampaignManager
             $campaign->plain_text = $inputs['plain_text'];
         }
 
+        if (isset($inputs['tracking'])) {
+            $campaign->tracking = $inputs['tracking'];
+        }
 
         $campaign->tags = [];
         if (!empty($inputs['tags'])) {
@@ -247,6 +248,12 @@ class CampaignManager
         ];
         $data['updated_by'] = $data['created_by'];
 
+        // Flag as an internal campaign so we can filter it on the dashboard.
+        $data['internal'] = false;
+        if (Auth::user()->hasRole(env('INTERNAL_ROLE', 'stensul-internal'))) {
+            $data['internal'] = true;
+        }
+
         $campaign = Campaign::create($data);
 
         Activity::log('Campaign created', array('properties' => ['campaign_id' => new ObjectID($campaign->id)]));
@@ -272,6 +279,10 @@ class CampaignManager
     {
         $campaign = Campaign::findOrFail($campaign_id);
 
+        if (!$campaign->template && !Auth::user()->can('clone_campaign')) {
+            throw new PermissionDeniedException("You're not allowed to clone campaigns.");
+        }
+
         $new_campaign_attr = [];
 
         $value = null;
@@ -287,8 +298,6 @@ class CampaignManager
         $new_campaign_attr['body_html'] = '';
         $new_campaign_attr['plain_text'] = '';
         $new_campaign_attr['template'] = false;
-        $new_campaign_attr['locked'] = false;
-        $new_campaign_attr['locked_by'] = null;
         $new_campaign_attr['parent_campaign_id'] = new ObjectID($campaign_id);
         $new_campaign_attr['created_by'] = [
             'id' => new ObjectId(Auth::id()),
@@ -326,8 +335,11 @@ class CampaignManager
      */
     public static function process($campaign_id = null)
     {
+        Activity::logCampaignProcessTime($campaign_id, Auth::id());
 
-        $job_id = dispatch(new ProcessCampaign($campaign_id));
+        // dispatch helper no longer returns job id.
+        $job_id = app(\Illuminate\Contracts\Bus\Dispatcher::class)
+            ->dispatch(new ProcessCampaign($campaign_id));
 
         Worker::queue($job_id, 'process');
 
@@ -435,15 +447,18 @@ class CampaignManager
      *
      * @return array
      */
-    public static function lock($campaign_id = null)
+    public static function lock($campaign_id, $window_id)
     {
 
         if (Auth::check()) {
-            Cache::add('lock:' . $campaign_id, Auth::id(), Carbon::now()->addMinutes(1));
-            Cache::add('user_lock:' . $campaign_id, Auth::user()->email, Carbon::now()->addMinutes(1));
+            if (!Cache::has('lock:' . $campaign_id) || Cache::get('window_lock:' . $campaign_id) === $window_id) {
+                Cache::put('lock:' . $campaign_id, Auth::id(), 1); // 1 minute
+                Cache::put('window_lock:' . $campaign_id, $window_id, 1); // 1 minute
+                Cache::put('user_lock:' . $campaign_id, Auth::user()->email, 1); // 1 minute
+            }
         }
 
-        return array('locked' => $campaign_id);
+        return ['locked' => $campaign_id];
     }
 
     /**
@@ -638,7 +653,11 @@ class CampaignManager
                     $scraper_options = array_merge($scraper_options, $options);
                     $driver_name = 'Scraper\\' . ucfirst($scraper_type);
                     $scraper_driver = Api::driver($driver_name, $scraper_options);
-                    $job_id = dispatch(new \Stensul\Jobs\ScraperPreloader($scraper_driver));
+
+                    // dispatch helper no longer returns job id.
+                    $job_id = app(\Illuminate\Contracts\Bus\Dispatcher::class)
+                        ->dispatch(new \Stensul\Jobs\ScraperPreloader($scraper_driver));
+
                     Worker::queue($job_id, 'scraper');
                 }
             }
@@ -741,5 +760,22 @@ class CampaignManager
         }
 
         return array('error' => $campaign_id);
+    }
+
+    /**
+     * Trim an image verticaly.
+     *
+     * @param string campaign_id
+     * @param integer height
+     * @param string background_image
+     *
+     * @return array Path or error
+     */
+    public static function trimImage($options = [])
+    {
+        $campaign_id = (isset($options['campaign_id']))? $options['campaign_id'] : null;
+        $campaign = Campaign::findOrFail($campaign_id);
+        $assets = new Assets($campaign);
+        return $assets->trimImage($options);
     }
 }

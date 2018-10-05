@@ -3,8 +3,8 @@
 namespace Stensul\Console\Commands\User;
 
 use PasswordPolicy;
-use Stensul\Models\User;
-use Stensul\Models\Role;
+use UserModel as User;
+use RoleModel as Role;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Carbon\Carbon;
@@ -28,7 +28,7 @@ class ResetPassword extends Command
     /**
      * Execute the console command.
      */
-    public function fire()
+    public function handle()
     {
         $options = $this->option();
 

@@ -6,7 +6,7 @@ module.exports = {
   title: 'Alignment',
   version: '0.0.1',
   author: 'emiliano@stensul.com',
-  target: ['button', 'divider', 'image', 'text'],
+  target: ['button', 'image', 'text'],
   studioSettings,
   campaignSettings,
   config: {

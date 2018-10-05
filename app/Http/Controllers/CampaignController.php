@@ -8,8 +8,9 @@ use StensulLocale;
 use Activity;
 use Campaign;
 use EmailSender;
-use Stensul\Models\Library;
-use Stensul\Services\TagManager as Tag;
+use Validator;
+use LibraryModel as Library;
+use Tag;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -49,6 +50,10 @@ class CampaignController extends Controller
         if (!is_null($campaign_id)) {
             $params = $this->loadCampaign($campaign_id);
         } else {
+            if (!Auth::user()->can('create_campaign')) {
+                return redirect(env('APP_BASE_URL', '/'))->with('campaign_create', '');
+            }
+
             $params = [];
 
             if (!is_null($request->input("locale"))) {
@@ -75,6 +80,10 @@ class CampaignController extends Controller
 
             $campaign = Campaign::create($params);
             $params = $this->loadCampaign($campaign->_id);
+        }
+
+        if (is_a($params, 'Illuminate\Http\RedirectResponse')) {
+            return $params;
         }
 
         if (\Config::get('api.scraper.status')
@@ -108,11 +117,16 @@ class CampaignController extends Controller
             return redirect(env('APP_BASE_URL', '/'))->with('campaign_lock', $campaign_id);
         }
 
+        $window_id = Cache::get('window_lock:' . $campaign_id);
+
         if ($params = Campaign::find($campaign_id)) {
             $library_id = (isset($params['campaign_data']) && isset($params['campaign_data']['library']))
                 ? $params['campaign_data']['library']
                 : "default";
             $params['library_id'] = $library_id;
+
+            $params['cached_window_id'] = Cache::has('window_lock:' . $campaign_id)
+                ? Cache::get('window_lock:' . $campaign_id) : false;
 
             return $params;
         }
@@ -194,10 +208,10 @@ class CampaignController extends Controller
         $params = [];
         $params['menu_list'] = $library->getModules();
         uasort($params['menu_list'], function ($menu_item_a, $menu_item_b) {
-            if ($menu_item_a['name'] == $menu_item_b['name']) {
+            if ($menu_item_a->name == $menu_item_b->name) {
                 return 0;
             }
-            return ($menu_item_a['name'] < $menu_item_b['name']) ? -1 : 1;
+            return ($menu_item_a->name < $menu_item_b->name) ? -1 : 1;
         });
         return $params['menu_list'];
     }
@@ -213,17 +227,33 @@ class CampaignController extends Controller
      */
     public function postDelete(Request $request)
     {
-        if (Cache::has('lock:'.$request->input('campaign_id'))
-            && Cache::get('lock:'.$request->input('campaign_id')) !== Auth::id()
+        $campaign = Campaign::find($request->input('campaign_id'));
+
+        if (!$campaign) {
+            return response()->json([], 404);
+        }
+
+        $window_id = Cache::get('window_lock:' . $campaign['campaign_id']) ?? false;
+
+        // Don't delete a campaign if it's being edited or if it's a locked template.
+        if ((Cache::has('lock:' . $campaign['campaign_id'])
+                && Cache::get('lock:' . $campaign['campaign_id']) !== Auth::id()
+                || ($window_id && $window_id !=$request->input('window_id'))
+            )
+            || ($campaign['campaign_data']['template'] && $campaign['campaign_data']['locked']
+                && $campaign['campaign_data']['locked_by'] != Auth::user()->email)
         ) {
             Activity::log(
                 'Campaign edit deny',
-                array('properties' => ['campaign_id' => new ObjectID($request->input('campaign_id'))])
+                array('properties' => ['campaign_id' => new ObjectID($campaign['campaign_id'])])
             );
 
-            return array('campaign_lock' => $request->input('campaign_id'));
+            return response()->json([
+                'campaign_lock' => $campaign['campaign_id'],
+                'locked_by' => Campaign::whoIsLocking($campaign['campaign_id'])
+            ], 403);
         } else {
-            return Campaign::delete($request->input('campaign_id'));
+            return Campaign::delete($campaign['campaign_id']);
         }
     }
 
@@ -236,7 +266,41 @@ class CampaignController extends Controller
      */
     public function postSave(Request $request)
     {
-        return Campaign::save($request->input());
+        if ($request->input('template') && !Auth::user()->can("create_template")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'campaign_name' => 'not_regex:/<.*?>/',
+                'campaign_preheader' => 'not_regex:/<.*?>/'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Filter all onxxx attributes for security.
+        $input = $request->input();
+
+        if (!empty($input['modules_data'])) {
+            array_walk_recursive($input['modules_data'], function (&$item, $key) {
+                $tags = [];
+                preg_match_all("/<[^\/].*?>/is", $item, $tags);
+                foreach ($tags[0] as $index => $tag) {
+                    // Filter stuff like <img src=x onerror=alert(css)> and <svg/onload=alert('xss')>
+                    $clean_tag = preg_replace("/[\s+|\/]on[a-z]+\s?=\s?[\"']?.*[\"']?[^>]/is", '', $tag);
+                    $item = str_replace($tag, $clean_tag, $item);
+                }
+            });
+        }
+
+        return Campaign::save($input);
     }
 
     /**
@@ -267,7 +331,11 @@ class CampaignController extends Controller
      */
     public function postClone(Request $request)
     {
-        return Campaign::copy($request->input('campaign_id'));
+        try {
+            return Campaign::copy($request->input('campaign_id'));
+        } catch (\Stensul\Exceptions\PermissionDeniedException $exception) {
+            return response()->json(['error' => 'campaign_clone'], 403);
+        }
     }
 
     /**
@@ -315,7 +383,14 @@ class CampaignController extends Controller
      */
     public function postUploadImage(Request $request)
     {
-        return Campaign::upload($request->input('campaign_id'), $request->input('data_image'));
+        $data_image = $request->input('data_image');
+
+        // Convert local urls to local path.
+        if (substr($data_image, 0, strlen(config('app.url'))) === config('app.url')) {
+            $data_image = public_path() . str_replace(config('app.url'), '', $data_image);
+        }
+
+        return Campaign::upload($request->input('campaign_id'), $data_image);
     }
 
     /**
@@ -375,7 +450,7 @@ class CampaignController extends Controller
      */
     public function postLock(Request $request)
     {
-        return Campaign::lock($request->input('campaign_id'));
+        return Campaign::lock($request->input('campaign_id'), $request->input('window_id'));
     }
 
     /**
@@ -495,6 +570,13 @@ class CampaignController extends Controller
      */
     public function postForceLock(Request $request)
     {
+
+        if (!Auth::user()->can("fix_layout")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
+
         $campaign_id = $request->input('campaign_id');
         if (Cache::has('lock:' . $campaign_id) && Cache::get('lock:'. $campaign_id) !== Auth::id()) {
             Activity::log(
@@ -546,5 +628,22 @@ class CampaignController extends Controller
     public function postUpdateAutoSave(Request $request)
     {
         return Campaign::updateAutoSave($request->input('campaign_id'), $request->input('status'));
+    }
+
+    /**
+    *  Trim an image verticaly.
+    *
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return array Path or error
+    */
+    public function postTrimImage(Request $request)
+    {
+        $params = $request->all();
+        // Convert local urls to local path.
+        if (substr($params['background_image'], 0, strlen(config('app.url'))) === config('app.url')) {
+            $params['background_image'] = public_path() . str_replace(config('app.url'), '', $params['background_image']);
+        }
+        return Campaign::trimImage($params);
     }
 }

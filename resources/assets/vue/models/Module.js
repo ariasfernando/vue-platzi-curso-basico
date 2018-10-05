@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import clone from 'clone';
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 
 function getPlugins() {
   const plugins = {};
@@ -24,13 +24,12 @@ function Module(data = {}) {
   const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : {};
   const mobileClasses = data.mobileClasses || [];
 
-  this.plugins = data.plugins || getPlugins();
+  this.plugins = _.merge(getPlugins(), data.plugins);
 
   this.structure = {
-    columnsFixed: (data.structure && data.structure.columnsFixed) ? data.structure.columnsFixed : false,
-    invertedStacking: (data.structure && data.structure.invertedStacking) ? data.structure.invertedStacking : false,
+    columnsStacking: (data.structure && data.structure.columnsStacking) ? data.structure.columnsStacking : 'normal',
     attribute: {
-      bgcolor: attribute.bgcolor || 'transparent',
+      bgcolor: attribute.bgcolor || '',
       classes: '',
     },
     mobileClasses,
@@ -43,19 +42,19 @@ function Module(data = {}) {
       // Border Top
       borderTopWidth: style.borderTopWidth || '0px',
       borderTopStyle: style.borderTopStyle || 'none',
-      borderTopColor: style.borderTopColor || 'transparent',
+      borderTopColor: style.borderTopColor || '',
       // Border Right
       borderRightWidth: style.borderRightWidth || '0px',
       borderRightStyle: style.borderRightStyle || 'none',
-      borderRightColor: style.borderRightColor || 'transparent',
+      borderRightColor: style.borderRightColor || '',
       // Border Bottom
       borderBottomWidth: style.borderBottomWidth || '0px',
       borderBottomStyle: style.borderBottomStyle || 'none',
-      borderBottomColor: style.borderBottomColor || 'transparent',
+      borderBottomColor: style.borderBottomColor || '',
       // Border Left
       borderLeftWidth: style.borderLeftWidth || '0px',
       borderLeftStyle: style.borderLeftStyle || 'none',
-      borderLeftColor: style.borderLeftColor || 'transparent',
+      borderLeftColor: style.borderLeftColor || '',
     },
 
     columns: data.structure && data.structure.columns ? data.structure.columns : [],
@@ -63,7 +62,7 @@ function Module(data = {}) {
 
   _.extend(this.structure.settings, settings);
   _.extend(this.structure.attribute, attribute);
-
+  
   return this;
 }
 

@@ -6,7 +6,7 @@ use Auth;
 use Cache;
 use Activity;
 use Carbon\Carbon;
-use Stensul\Models\Upload;
+use UploadModel as Upload;
 use GuzzleHttp\Client as Client;
 use MongoDB\BSON\ObjectID as ObjectID;
 
@@ -135,7 +135,7 @@ class Marketo implements ApiConnector
 
             if (isset($resp['status']) && $resp['status'] === 'success') {
                 $marketo_token = $resp['data']['access_token'];
-                Cache::add($key, $marketo_token, Carbon::now()->addMinutes(10));
+                Cache::add($key, $marketo_token, 10); // 10 minutes
             }
         }
 
@@ -176,7 +176,7 @@ class Marketo implements ApiConnector
 
                 if (isset($resp['status']) && $resp['status'] === 'success') {
                     $folder = array_shift($resp['data']['result']);
-                    Cache::add($key, $folder, Carbon::now()->addHour());
+                    Cache::add($key, $folder, 60); // 1 hour
                 }
             }
         }

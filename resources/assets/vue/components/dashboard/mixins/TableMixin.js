@@ -21,7 +21,8 @@ export default {
       selectedCampaignId: null,
       baseUrl: Application.globals.baseUrl,
       widthPreview: Application.globals.emailWidth || 660,
-      previewSrc: null
+      previewSrc: null,
+      askDeleteMessage: 'There are no emails to show in this list',
     }
   },
   props: {
@@ -50,7 +51,11 @@ export default {
     type: {
       type: String,
       required: true
-    }
+    },
+    windowId: {
+      type: String,
+      required: true,
+    },
   },
   computed: {
     showTags: function() {
@@ -95,12 +100,20 @@ export default {
         });
 
         // Ajax: On Fail
-        request.fail(function(){
+        request.fail(function(jqXHR){
           _this.$store.commit("global/setLoader", false);
-          _this.$root.$toast(
-            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-            {className: 'et-error'}
-          );
+
+          if (jqXHR.status == 403) {
+            _this.$root.$toast(
+              'Sorry, you are not allowed to clone campaigns.',
+              {className: 'et-error'}
+            );
+          } else {
+            _this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+              {className: 'et-error'}
+            );
+          }
         });
       }
     },
@@ -109,8 +122,11 @@ export default {
         this.$emit('add-search-tag', tag);
       }
     },
-    askToDeleteCampaign(campaignId) {
-      this.selectedCampaignId = campaignId;
+    askToDeleteCampaign(campaign) {
+      this.selectedCampaignId = campaign.id;
+      if (campaign.status === 1 && campaign.has_active_proof === true) {
+        this.askDeleteMessage = 'Delete the campaign and send emails to all reviewers?';
+      }
       this.showModal = true;
     },
     askToEditCampaign(campaignId) {
@@ -121,13 +137,36 @@ export default {
       this.$emit('change-page', page, this.type);
     },
     confirmDeleteCampaign() {
-      $.post(Application.globals.baseUrl + '/campaign/delete', {
-        campaign_id: this.selectedCampaignId
-      }, function(campaigns) {
+      let jqXHR = $.post(Application.globals.baseUrl + '/campaign/delete', {
+        campaign_id: this.selectedCampaignId,
+        window_id: this.windowId,
+      }, (response) => {
         this.selectedCampaignId = null;
         this.showModal = false;
         this.$emit('refresh-campaigns', this.type);
-      }.bind(this), 'json');
+      }, 'json');
+
+      jqXHR.fail((response) => {
+        this.selectedCampaignId = null;
+        this.showModal = false;
+
+        if (response.status === 422 && response.responseJSON.campaign_lock) {
+          this.$root.$toast(
+            'Sorry, ' + response.responseJSON.locked_by + ' is editing this campaign',
+            { className: 'et-error' },
+          );
+        } else if (response.status === 404) {
+          this.$root.$toast(
+            'Sorry, this campaign no longer exists.',
+            { className: 'et-error' },
+          );
+        } else {
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            { className: 'et-error' },
+          );
+        }
+      });
     },
     confirmEditCampaign() {
       window.location.href = this.$_app.config.baseUrl + '/campaign/edit/' + this.selectedCampaignId;
@@ -186,6 +225,7 @@ export default {
       this.sortKey = sortKey;
     },
     prepareOutput: function(value, field) {
+      value = this.$options.filters.escapeHTML(value);
       var search = this.terms;
       if (this.config.search_settings.highlight_matches === true && this.config.search_settings.fields_to_search.indexOf(field) > -1) {
         for (var i = 0; i < search.length; i++) {

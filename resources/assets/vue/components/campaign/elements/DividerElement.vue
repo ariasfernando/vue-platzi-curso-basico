@@ -1,45 +1,43 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-  <table
-    width="100%"
-    cellpadding="0"
-    cellspacing="0"
-    border="0"
-    style="width:100%;"
-    :style="tableStyle"
-  >
-    <tr 
-      data-type="divider-element"
-      :class="getMobileClasses(component,'tr') + component.attribute.classes"
+  <module-container :component="component" @select-component="selectComponentHandler">
+    <table
+      width="100%"
+      style="width: 100%;"
+      :style="tableStyle"
+      :align="component.container.attribute.align"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
     >
-      <td
-        class="stx-position-relative stx-line-height-reset"
-        :bgcolor="component.attribute.bgcolor"
-        :height="heightAsInt"
-        :width="component.style.width || '100%'"
-        :style="styles"
-        :class="getMobileClasses(component,'td:first')"
-        :data-persist-styles="JSON.stringify(dataPersistStyles)"
-      >&nbsp;</td>
-    </tr>
-  </table>
-  <!-- DIVIDER ELEMENT ENDS -->
+      <tr>
+        <td 
+          :width="component.divider.attribute.width"
+          :valign="component.divider.attribute.valign"
+          :align="component.divider.attribute.align"
+          :bgcolor="component.divider.attribute.bgcolor"
+          :height="component.divider.style.height"
+          style="display:block; margin:0 auto;"
+          :style="innerTdStyle"
+          :data-persist-styles="JSON.stringify(dataPersistStyles)"
+        >&nbsp;</td>
+      </tr>
+    </table>
+  </module-container>
 </template>
 
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
-  import _ from 'lodash';
-
+  import ModuleContainer from '../../common/containers/ModuleContainer';
+  import ElementMixin from '../../common/mixins/ElementMixin';
+  import _ from 'underscore';
+  
   export default {
     name: 'DividerElement',
-    props: [
-      'module-id',
-      'column-id',
-      'component-id',
-      'component',
-      'column'
-    ],
-    mixins: [ MobileStylesMixin ],
+    components: {
+      ModuleContainer,
+    },
+    mixins: [ MobileStylesMixin, ElementMixin ],
     data(){
       return{
         dataPersistStyles: {
@@ -52,35 +50,23 @@
       }
     },
     computed: {
-      styles(){
-        let inlineStyle = `height:${this.component.style.height};
-                          width:${this.component.style.width };
-                          border-top-width:${this.component.style.borderTopWidth};  
-                          border-right-width:${this.component.style.borderRightWidth};
-                          border-bottom-width:${this.component.style.borderBottomWidth};
-                          border-left-width:${this.component.style.borderLeftWidth};
-                          border-top-style:${this.component.style.borderTopStyle};
-                          border-right-style:${this.component.style.borderRightStyle};
-                          border-bottom-style:${this.component.style.borderBottomStyle};
-                          border-left-style:${this.component.style.borderLeftStyle};
-                          border-top-color:${this.component.style.borderTopColor};
-                          border-right-color:${this.component.style.borderRightColor};
-                          border-bottom-color:${this.component.style.borderBottomColor};
-                          border-left-color:${this.component.style.borderLeftColor};`;
-
-        return inlineStyle;
+      innerTdStyle() { 
+        return {
+          height: this.component.divider.style.height,
+          lineHeight: this.component.divider.style.height,
+          fontSize: this.component.divider.style.height,
+          maxHeight: this.component.divider.style.height,
+          backgroundColor: this.component.divider.style.borderColor,
+        }  
       },
       tableStyle() {
         return {
-          height: this.component.style.height,
-          lineHeight: this.component.style.height,
-          fontSize: this.component.style.height,
+          height: this.component.divider.style.height,
+          lineHeight: this.component.divider.style.height,
+          fontSize: this.component.divider.style.height,
         };
       },
-      heightAsInt() {
-        return _.parseInt(this.component.style.height);
-      }
-    }
+    },
   };
 </script>
 

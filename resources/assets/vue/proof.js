@@ -8,13 +8,17 @@
  | ------------------------------------------------------------------
  */
 
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import VueResource from 'vue-resource/dist/vue-resource';
+import interceptors from './interceptors';
 import Toast from 'vue-easy-toast';
 import Bootstrap from './bootstrap';
+import BootstrapVue from 'bootstrap-vue';
 
 Vue.use(Bootstrap);
 Vue.use(VueResource);
+Vue.use(BootstrapVue);
+Vue.use(interceptors);
 
 Vue.use(Toast, {
   horizontalPosition: 'center',
@@ -27,12 +31,8 @@ Vue.use(Toast, {
 
 import ProofViewer from './components/proof/ProofViewer.vue';
 
-var vm = new Vue({
-    el: '#proof',
-    components: {
-        ProofViewer
-    },
-    ready() {
-        //
-    }
+const vm = new Vue({
+  components: {
+    ProofViewer
+  }
 }).$mount('#proof');
