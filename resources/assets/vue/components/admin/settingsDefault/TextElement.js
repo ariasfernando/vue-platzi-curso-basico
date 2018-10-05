@@ -27,11 +27,6 @@ function textDefault() {
           subComponent: 'text',
         },
         {
-          name: 'align',
-          type: 'text-align',
-          subComponent: 'text',
-        },
-        {
           name: 'classes',
           type: 'class-input',
           link: 'attribute',
