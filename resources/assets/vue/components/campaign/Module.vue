@@ -123,7 +123,7 @@
         let styleModule = {}
         if (this.modulebackgroundImage) {
           styleModule = this.elementBorderHorizontalPaddingAndHeight(this.module.structure)
-          styleModule= [...styleModule, this.elementBackground(this.module.structure)]
+          styleModule = _.merge(styleModule, this.elementBackground(this.module.structure));
         } else {
          styleModule = this.elementBorderPaddingAndHeight(this.module.structure);
         }

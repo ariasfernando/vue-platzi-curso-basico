@@ -60,6 +60,12 @@ export default {
 
 </script>
 <style lang="less">
+.stx-toolbar {
+  box-shadow: 0px 3px 4px rgba(100, 100, 100, .4);
+  .mce-toolbar-grp {
+    padding: 0px;
+  }
+}
 .mce-menu-item-preview {
   .mce-text {
     font-size: 14px !important;

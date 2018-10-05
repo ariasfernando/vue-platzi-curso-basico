@@ -42,10 +42,16 @@ export default {
                     <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" strokecolor="none" style="width:${this.convertPxToPt(this.width)}; height:${this.convertPxToPt(this.element.attribute.height)};" stroke="false">
                     <v:fill type="frame" src="${this.element.style.backgroundImage}" ${this.MsoBgcolor} />
                     <v:textbox inset="0,0,0,0">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+                          <tr>
+                            <td width="100%" style="height:${this.convertPxToPt(this.element.attribute.height)};" valign="${this.valign}">
                   <![endif]-->`;
     },
     msoEndingComment() {
       return `<!--[if gte mso 9]>
+                          </td>
+                        </tr>
+                      </table>
                     </v:textbox>
                     </v:rect>
                   <![endif]-->`;
@@ -68,6 +74,9 @@ export default {
         Boolean(this.$slots["with-background-image"])
       );
     },
+    valign() {
+      return this.element.attribute.valign || 'top';
+    }
   },
   methods:{
     convertPxToPt(value){
