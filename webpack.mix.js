@@ -102,6 +102,8 @@ mix
   .scripts([
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-ui/jquery-ui.min.js',
+    'node_modules/jquery-mousewheel/jquery.mousewheel.min.js',
+    'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js',
   ], `${jsDestinationPath}/jquery.js`)
   .scripts([
     'node_modules/bootstrap/dist/js/bootstrap.min.js',
