@@ -45,7 +45,7 @@ function textDefault() {
           name: 'color',
           type: 'generic-color',
           link: 'style',
-          label: 'Color',
+          label: 'Text Color',
           subComponent: 'text',
         },
       ],
