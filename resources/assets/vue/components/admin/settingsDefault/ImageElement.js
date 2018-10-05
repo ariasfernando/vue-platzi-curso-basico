@@ -71,14 +71,6 @@ function imageDefault() {
           value: 'Image',
           subComponent: 'image',
         },
-        {
-          link: 'attribute',
-          label: 'Title',
-          name: 'title',
-          type: 'generic-text',
-          value: 'Image',
-          subComponent: 'image',
-        },
       ],
     ],
   };
