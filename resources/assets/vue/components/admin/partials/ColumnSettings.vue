@@ -4,10 +4,9 @@
     <b-collapse id="column-settings-styles" visible accordion="general-settings">
       <b-card class="control" no-block>
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
-          <template v-for="setting in settingGroup">
-            <component v-if="$can('std-column-'+setting.type)"
+          <template v-for="setting in settingGroup.settings">
+            <component v-if="$can('std-column-'+settingGroup.groupName+'-'+setting.name)"
             :is="'input-' + setting.type"
-            v-for="setting in settingGroup"
             :key="setting.name"
             :setting="setting.type"
             :name="setting.name"
@@ -35,7 +34,7 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="column-settings-functionalities" accordion="column-settings">
       <b-card class="control">
-        <template v-for="(plugin, moduleKey) in module.plugins">
+        <template v-for="(plugin, moduleKey) in column.plugins">
           <div v-if="$can('std-column-plugin-'+plugin.name)" :class="'plugin-' + plugin.name" :key="plugin.name">
             <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="currentComponent.columnId" />
           </div>

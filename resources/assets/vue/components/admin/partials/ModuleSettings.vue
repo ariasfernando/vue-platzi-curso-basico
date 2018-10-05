@@ -3,10 +3,12 @@
     <label-item-container label="Row Style" icon="glyphicon-cog" v-b-toggle.module-settings-styles />
     <b-collapse id="module-settings-styles" visible accordion="module-settings">
       <b-card class="control">
+        
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
-          <component
+          <template v-for="setting in settingGroup.settings">
+            <component
+            v-if="$can('std-module-'+settingGroup.groupName+'-'+setting.name)"
             :is="'input-' + setting.type"
-            v-for="setting in settingGroup"
             :key="setting.name"
             :setting="setting.type"
             :name="setting.name"
@@ -21,6 +23,7 @@
             :is-disable-percentage="setting.isDisablePercentage"
             :element="module.structure"
             @setting-updated="SettingUpdatedHandler" />
+          </template>
         </group-container>
       </b-card>
     </b-collapse>
@@ -33,9 +36,11 @@
     <b-collapse id="general-settings-functionalities" accordion="general-settings">
       <b-card class="control">
         <template v-if="module.plugins && Object.keys(module.plugins).length !== 0">
-          <div v-for="(plugin, moduleKey) in module.plugins" :key="plugin.name" :class="'plugin-' + plugin.name">
-            <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" />
-          </div>
+          <template v-for="(plugin, moduleKey) in module.plugins">
+            <div v-if="$can('std-plugin-'+plugin.name)" :key="plugin.name" :class="'plugin-' + plugin.name">
+              <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" />
+            </div>
+          </template>
         </template>
       </b-card>
     </b-collapse>
@@ -67,6 +72,7 @@ export default {
       return this.$store.getters['module/module'];
     },
     settings() {
+      console.log(settingsDefault.Module().componentSettings);
       return settingsDefault.Module().componentSettings;
     },
   },

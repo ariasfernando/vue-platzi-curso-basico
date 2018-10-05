@@ -6,7 +6,7 @@
 const Acl = {
   install(Vue, options) {
     Vue.prototype.$can = (permission) => {
-      return Vue.prototype.$_app.config.permissions.indexOf(permission) !== -1;
+     return Vue.prototype.$_app.config.permissions.indexOf(permission) !== -1;
     };
   },
 };

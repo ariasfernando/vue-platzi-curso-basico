@@ -5,9 +5,9 @@
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
-         <template v-for="(setting,i) in settingGroup">
+          <template v-for="(setting,i) in settingGroup.settings">
           <component
-            v-if="$can('std-'+component.type+'-'+setting.type)"
+            v-if="$can('std-'+component.type+'-'+settingGroup.groupName+'-'+setting.name)"
             :show-setting="showSetting(setting)"
             :is="'input-' + setting.type"
             @setting-updated="settingUpdatedHandler"

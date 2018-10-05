@@ -1,17 +1,21 @@
 function textDefault() {
   return {
     componentSettings: [
-      [
-        {
+      {
+        groupName: 'fontFamilyGroup',
+        groupLabel: 'Font Family',
+        settings: [{
           name: 'fontFamily',
           type: 'font-family',
           link: 'style',
           label: 'Font Family',
           subComponent: 'text',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupName: 'fontAndStylesGroup',
+        groupLabel: 'Font and styles',
+        settings: [{
           name: 'font-style',
           type: 'font-style',
           subComponent: 'text',
@@ -36,10 +40,12 @@ function textDefault() {
           type: 'class-input',
           link: 'attribute',
           subComponent: 'container',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupName: 'colorStyles',
+        groupLabel: 'Color',
+        settings: [{
           name: 'bgcolor',
           type: 'generic-color',
           link: 'attribute',
@@ -52,16 +58,18 @@ function textDefault() {
           link: 'style',
           label: 'Color',
           subComponent: 'text',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupName: 'paddingGroup',
+        groupLabel: 'Padding',
+        settings: [{
           name: 'padding',
           type: 'padding-group',
           subComponent: 'container',
           label: 'Element Padding',
-        },
-      ],
+        }],
+      },
     ],
   };
 }

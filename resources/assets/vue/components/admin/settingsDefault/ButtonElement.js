@@ -1,61 +1,71 @@
 function buttonDefault() {
   return {
     componentSettings: [
-      [
-        {
-          name: 'fontFamily',
-          type: 'font-family',
-          link: 'style',
-          label: 'Font Family',
-          subComponent: 'button',
-        },
-        {
-          name: 'font-style',
-          type: 'font-style',
-          subComponent: 'button',
-        },
-        {
-          name: 'letter-spacing',
-          type: 'letter-spacing',
-          subComponent: 'button',
-        },
-        {
-          name: 'font-weight',
-          type: 'font-weight',
-          subComponent: 'button',
-        },
-      ],
-      [
-        {
+      {
+        groupName: 'fontSettingsGroup',
+        groupLabel: 'Font Settings',
+        settings:
+          [{
+            name: 'fontFamily',
+            type: 'font-family',
+            link: 'style',
+            label: 'Font Family',
+            subComponent: 'button',
+          },
+          {
+            name: 'font-style',
+            type: 'font-style',
+            subComponent: 'button',
+          },
+          {
+            name: 'letter-spacing',
+            type: 'letter-spacing',
+            subComponent: 'button',
+          },
+          {
+            name: 'font-weight',
+            type: 'font-weight',
+            subComponent: 'button',
+          }],
+      },
+      {
+        groupName: 'textAlignmentGroup',
+        groupLabel: 'Text Alignment',
+        settings: [{
           name: 'text-align',
           type: 'text-align',
           subComponent: 'container',
-        },
-      ],
-      [
-        {
-          name: 'classes',
-          type: 'class-input',
-          link: 'attribute',
-          subComponent: 'container',
-        },
-        {
-          name: 'bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Background Color',
-          subComponent: 'button',
-        },
-        {
-          name: 'color',
-          type: 'generic-color',
-          link: 'style',
-          label: 'Color',
-          subComponent: 'button',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupName: 'classStyleGroup',
+        groupLabel: 'Classes and Style',
+        settings: [
+          {
+            name: 'classes',
+            type: 'class-input',
+            link: 'attribute',
+            subComponent: 'container',
+          },
+          {
+            name: 'bgcolor',
+            type: 'generic-color',
+            link: 'attribute',
+            label: 'Background Color',
+            subComponent: 'button',
+          },
+          {
+            name: 'color',
+            type: 'generic-color',
+            link: 'style',
+            label: 'Color',
+            subComponent: 'button',
+          }],
+      },
+      {
+        groupName: 'paddingBorderRadiusGroup',
+        groupLabel: 'Padding and Border radius',
+        settings: [{
           name: 'padding',
           type: 'padding-group',
           subComponent: 'container',
@@ -68,17 +78,21 @@ function buttonDefault() {
           isPixel: true,
           type: 'generic-number',
           subComponent: 'button',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupName: 'borderGroup',
+        groupLabel: 'Border',
+        settings: [{
           name: 'border-group',
           type: 'border-group',
           subComponent: 'button',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupName: 'dimentionsGroup',
+        groupLabel: 'Dimentions',
+        settings: [{
           link: 'attribute',
           label: 'Width',
           name: 'width',
@@ -110,20 +124,24 @@ function buttonDefault() {
           value: 40,
           minValue: 5,
           subComponent: 'button',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupName: 'defaultUrlGroup',
+        groupLabel: 'Default URL',
+        settings: [{
           link: 'attribute',
           label: 'Default URL',
           name: 'href',
           type: 'generic-text',
           value: '',
           subComponent: 'button',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupName: 'caretGroup',
+        groupLabel: 'Default URL',
+        settings: [{
           name: 'caret',
           type: 'caret',
           subComponent: 'caret',
@@ -153,8 +171,8 @@ function buttonDefault() {
           type: 'padding-group',
           subComponent: 'caret',
           label: 'Caret Padding',
-        },
-      ],
+        }],
+      },
     ],
   };
 }

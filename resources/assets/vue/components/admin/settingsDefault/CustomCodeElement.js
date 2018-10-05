@@ -1,8 +1,10 @@
 function codeDefault() {
   return {
     componentSettings: [
-      [
-        {
+      {
+        groupName: 'customCodeGeneralSettingsGroup',
+        groupLabel: 'Settings',
+        settings: [{
           label: 'Edit Code',
           name: 'data',
           type: 'generic-code',
@@ -25,15 +27,17 @@ function codeDefault() {
           name: 'padding',
           type: 'padding-group',
           subComponent: 'container',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupName: 'borderGroup',
+        groupLabel: 'Border',
+        settings: [{
           name: 'border-group',
           type: 'border-group',
           subComponent: 'container',
-        },
-      ],
+        }],
+      },
     ],
   };
 }
