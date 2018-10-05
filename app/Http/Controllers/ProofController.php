@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use RoleModel as Role;
 use UserModel as User;
 use ProofModel as Proof;
+use ReviewerModel as Reviewer;
 use CommentModel as Comment;
 use CampaignModel as Campaign;
 use Illuminate\Http\Request;
@@ -197,12 +198,13 @@ class ProofController extends Controller
 
         // If a reviewer's email exists in the params, return how many message wrote
         if ($request->has('email')) {
-            $user_id = User::whereEmail($request->input('email'))->first()->id;
+            $user_id = Reviewer::withTrashed()->whereEmail($request->input('email'))->first()->id;
             $data['requested_user_count'] = $proof->comments()->whereUserId($user_id)->count();
         }
 
         $data['comments'] = array_map(function ($comment) {
-            $comment['display_name'] = User::find($comment['user_id'])->full_name;
+            $reviewer = Reviewer::withTrashed()->find($comment['user_id']);
+            $comment['display_name'] = $reviewer->display_name;
             $comment['created_at'] = Carbon::parse($comment['created_at'])->format('F jS, Y | h:i A');
             unset($comment['user_id'], $comment['_id'], $comment['proof_id']);
             return $comment;
@@ -442,7 +444,7 @@ class ProofController extends Controller
 
         // Update reviewers
         foreach ($reviewers as $key => $value) {
-            $reviewers[$key]['user_id'] = new ObjectId(User::whereEmail($value['email'])->first()->id);
+            $reviewers[$key]['user_id'] = new ObjectId(Reviewer::withTrashed()->whereEmail($value['email'])->first()->id);
         }
 
         // Check if we have to create a new proof, or update the current one
@@ -566,7 +568,7 @@ class ProofController extends Controller
 
         if ($proof && count($proof->reviewers)) {
             $reviewers = array_map(function ($reviewer) use ($proof) {
-                $reviewer['display_name'] = User::find($reviewer['user_id'])->full_name;
+                $reviewer['display_name'] = Reviewer::withTrashed()->find($reviewer['user_id'])->display_name;
                 if (isset($reviewer['decision'])) {
                     if (isset($reviewer['decision_comment'])) {
                         $reviewer['comment'] = Comment::find($reviewer['decision_comment'])->content;

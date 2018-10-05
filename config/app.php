@@ -272,6 +272,7 @@ return [
         'StaticProcessor'    => Stensul\Services\StaticProcessor::class,
         'CampaignModel'    => Stensul\Models\Campaign::class,
         'UserModel'    => Stensul\Models\User::class,
+        'ReviewerModel'    => Stensul\Models\Reviewer::class,
         'UploadModel'    => Stensul\Models\Upload::class,
         'LibraryModel'    => Stensul\Models\Library::class,
         'SettingModel'    => Stensul\Models\Setting::class,
