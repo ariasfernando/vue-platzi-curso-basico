@@ -31,7 +31,7 @@
 
         <div class="section-container-campaign">
             <section class="section-canvas-email section-box">
-                <div class="section-box-content section-canvas-container">
+                <div class="section-box-content section-canvas-container scrolled">
                     <table cellpadding="0" cellspacing="0" width="100%">
                         <tr v-if="campaign.length === 0">
                             <td align="center">
@@ -150,6 +150,42 @@
         width: 100%;
         display: table;
         min-height: 100%;
+
+      .section-canvas-email{
+        width: 100%;
+        position: relative;
+        
+        .scrolled{
+          width: 100%;
+          max-height: 80vh;
+          overflow-y: scroll;
+        }
+        .scrolled::-webkit-scrollbar {
+          width: .4em; 
+        }
+        .scrolled::-webkit-scrollbar,
+        .scrolled::-webkit-scrollbar-thumb {
+          overflow:visible;
+          border-radius: 4px;
+        }
+        .scrolled::-webkit-scrollbar-thumb {
+          background: rgba(0,0,0,.2); 
+        }
+        .cover-bar {
+          position: absolute;
+          background: #fff;;
+          height: 100%;  
+          top: 0;
+          right: 0;
+          width: .4em;
+          -webkit-transition: all .5s;
+          opacity: 1;
+        }
+        .section-canvas-email:hover .cover-bar {
+          opacity: 0;
+          -webkit-transition: all .5s;
+        }
+      }
     }
     #emailCanvas{
         &:empty {
