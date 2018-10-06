@@ -190,7 +190,7 @@ class EmailSender
         switch ($type) {
             case 'new_proof':
                 $email_layout = 'emails.proof.new_proof';
-                $subject = sprintf('Review Request: %s, from %s',
+                $subject = sprintf('Review Request: %s (from %s)',
                     $proof->campaign->campaign_name,
                     $data['requestor']
                 );
