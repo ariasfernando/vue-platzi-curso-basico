@@ -62,7 +62,18 @@
                 ></proof-comments>
             </aside>
         </div>
-
+        <modal-reviewer v-if="displayModal" @close="displayModal = false" @submit="goToLink">
+          <div slot="body">
+            <div>
+              The link that you are following may not render as expected in this test environment. Do you wish to proceed?
+              <br>
+              <br>
+            </div>
+            <div>
+              <p>link: <b>{{linkUrl}}</b></p>
+            </div>
+          </div>
+        </modal-reviewer>
     </div>
 </template>
 
@@ -71,12 +82,14 @@
   import ProofDecision from './ProofDecision.vue';
   import VueSticky from 'vue-sticky';
   import proofService from '../../services/proof';
+  import ModalReviewer from './modals/ModalReviewer.vue';
 
   export default {
     name: 'proofViewer',
     components: {
       ProofComments,
-      ProofDecision
+      ProofDecision,
+      ModalReviewer
     },
     data() {
       return {
@@ -86,7 +99,9 @@
         reviewer: [],
         desktopWidth: '600',
         mobileWidth: '300',
-        buildingMode: 'desktop'
+        buildingMode: 'desktop',
+        displayModal: false,
+        linkUrl: '',
       };
     },
     props: ['token'],
@@ -112,6 +127,9 @@
     created: function() {
       // Get campaign data
       this.getProofData();
+    },
+    mounted: function () {
+      this.urlPrevent();
     },
     directives: {
       'sticky': VueSticky,
@@ -140,6 +158,19 @@
       },
       changeBuildingMode(mode) {
         this.buildingMode = mode;
+      },
+      goToLink(){
+        this.displayModal = false;
+        window.open(this.linkUrl,'_blank');
+      },
+      urlPrevent() {
+        $("#emailCanvas").on('click','a', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          this.showLinkModal= true;
+          this.linkUrl = $(e.target).closest('a').attr('href');
+          this.displayModal = true;
+        });
       }
     }
   };
