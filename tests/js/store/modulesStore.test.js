@@ -102,8 +102,8 @@ describe('== Module Store ==', () => {
 
       let stateModuleStatus = store.state.module.module.status;
       expect(stateModuleStatus).toEqual(dataStatus.status);
-      
-      dataStatus = null; 
+
+      dataStatus = null;
       stateModuleStatus = null;
 
       done();
@@ -118,12 +118,12 @@ describe('== Module Store ==', () => {
       store.commit('module/setCurrentComponent', dataSetting);
 
       let stateCurrentComponent = store.state.module.currentComponent;
-      
+
       expect(stateCurrentComponent).toEqual(dataSetting);
-      
+
       dataSetting = null;
       stateCurrentComponent = null;
-      
+
       done();
     });
     it('"clearCurrentComponent", expect of the "currentComponent" state has been empty object', (done) => {
@@ -151,15 +151,15 @@ describe('== Module Store ==', () => {
           text: '<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>',
         },
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [
-            { 
+            {
               components: [
-                { 
-                  data: { 
-                    text: '', 
-                  }, 
+                {
+                  data: {
+                    text: '',
+                  },
                 },
               ],
             },
@@ -201,7 +201,7 @@ describe('== Module Store ==', () => {
         property: 'borderBottomStyle',
         value: 'none',
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           style: {},
           image: {
@@ -211,7 +211,7 @@ describe('== Module Store ==', () => {
       };
 
       store.commit('module/setModuleData', newStruct);
-      
+
       store.commit('module/saveModuleProperty', eventData);
       store.commit('module/saveModuleProperty', eventData2);
       store.commit('module/saveModuleProperty', eventData3);
@@ -251,23 +251,23 @@ describe('== Module Store ==', () => {
         id: 811955,
         type: 'column-element',
         container: {
-          style: {}, 
-          attribute: { width: '100%' }, 
+          style: {},
+          attribute: { width: '100%' },
           styleOption: {},
         },
         content: {
-          style: {}, 
-          attribute: {}, 
+          style: {},
+          attribute: {},
           styleOption: {},
         },
         components: [],
-        plugins: { 
-          columnBackgroundColor: { 
-            name: 'column-background-color', 
-            title: 'Background color', 
-            version: '0.0.1', 
-            author: 'emiliano@stensul.com', 
-            target: ['column'], 
+        plugins: {
+          columnBackgroundColor: {
+            name: 'column-background-color',
+            title: 'Background color',
+            version: '0.0.1',
+            author: 'emiliano@stensul.com',
+            target: ['column'],
             config: {
               defaultColors: [
                 '#ffffff', '#323c44',
@@ -278,15 +278,15 @@ describe('== Module Store ==', () => {
                 '#a65628', '#848484',
               ],
               defaultValue: '#ffffff',
-            }, 
-            data: {}, 
-            render: true, 
-            enabled: false, 
-          }, 
+            },
+            data: {},
+            render: true,
+            enabled: false,
+          },
           verticalAligment: undefined,
         },
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [],
         },
@@ -314,23 +314,23 @@ describe('== Module Store ==', () => {
         id: 811955,
         type: 'column-element',
         container: {
-          style: {}, 
-          attribute: { width: '100%' }, 
+          style: {},
+          attribute: { width: '100%' },
           styleOption: {},
         },
         content: {
-          style: {}, 
-          attribute: {}, 
+          style: {},
+          attribute: {},
           styleOption: {},
         },
         components: [],
-        plugins: { 
-          columnBackgroundColor: { 
-            name: 'column-background-color', 
-            title: 'Background color', 
-            version: '0.0.1', 
-            author: 'emiliano@stensul.com', 
-            target: ['column'], 
+        plugins: {
+          columnBackgroundColor: {
+            name: 'column-background-color',
+            title: 'Background color',
+            version: '0.0.1',
+            author: 'emiliano@stensul.com',
+            target: ['column'],
             config: {
               defaultColors: [
                 '#ffffff', '#323c44',
@@ -341,15 +341,15 @@ describe('== Module Store ==', () => {
                 '#a65628', '#848484',
               ],
               defaultValue: '#ffffff',
-            }, 
-            data: {}, 
-            render: true, 
-            enabled: false, 
-          }, 
+            },
+            data: {},
+            render: true,
+            enabled: false,
+          },
           verticalAligment: undefined,
         },
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [],
         },
@@ -377,7 +377,7 @@ describe('== Module Store ==', () => {
         colId: 0,
         width: 100,
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [{
             container: {
@@ -403,21 +403,21 @@ describe('== Module Store ==', () => {
       done();
     });
     it('"saveColumnProperty" with data, expect of the "module" state saved property data of column', (done) => {
-      let data = { 
-        colId: 0, 
-        subComponent: 'container', 
-        link: 'attribute', 
-        property: 'bgcolor', 
+      let data = {
+        colId: 0,
+        subComponent: 'container',
+        link: 'attribute',
+        property: 'bgcolor',
         value: '#E14444',
       };
-      let data2 = { 
-        colId: 0, 
-        subComponent: undefined, 
-        link: 'attribute', 
-        property: 'bgcolor', 
+      let data2 = {
+        colId: 0,
+        subComponent: undefined,
+        link: 'attribute',
+        property: 'bgcolor',
         value: '#E14444',
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [{
             container: {
@@ -771,34 +771,34 @@ describe('== Module Store ==', () => {
         index: 0,
         colId: '0',
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [
-            { 
+            {
               components: [],
             },
           ],
         },
       };
-      
+
       store.commit('module/setModuleData', newStruct);
       store.commit('module/addComponent', dataComponent);
 
       let stateComponent = store.state.module.module.structure.columns[0].components[0];
 
       expect(stateComponent).toEqual(dataComponent.el);
-      
+
       dataComponent = null;
       newStruct = null;
       stateComponent = null;
-      
+
       done();
     });
     xit('"attachPlugins", ', () => {});
     it('"removeComponents" with data, expect of the state "module" has been removed the component data', (done) => {
-      let data = { 
-        index: 0, 
-        number: 1, 
+      let data = {
+        index: 0,
+        number: 1,
         colId: 0,
       };
       let dataComponent = {
@@ -1123,16 +1123,16 @@ describe('== Module Store ==', () => {
         index: 0,
         colId: '0',
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [
-            { 
+            {
               components: [],
             },
           ],
         },
       };
-      
+
       store.commit('module/setModuleData', newStruct);
       store.commit('module/addComponent', dataComponent);
       store.commit('module/removeComponents', data);
@@ -1161,10 +1161,10 @@ describe('== Module Store ==', () => {
           },
         },
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [
-            { 
+            {
               components: [{
                 plugins: {
                   mobileStyles: {
@@ -1176,7 +1176,7 @@ describe('== Module Store ==', () => {
           ],
         },
       };
-      
+
       store.commit('module/setModuleData', newStruct);
       store.commit('module/savePlugin', payload);
 
@@ -1214,9 +1214,9 @@ describe('== Module Store ==', () => {
         },
         subOption: 'bgcolor',
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
-          columns: [{ 
+          columns: [{
             components: [{
               plugins: {
                 paletteBackgroundColor: {
@@ -1251,23 +1251,23 @@ describe('== Module Store ==', () => {
     });
     it('"togglePlugin" with data, expect of the state "module" has been saved the plugin has enabled', (done) => {
       let data = {
-        plugin: 'paletteBackgroundColor', 
-        columnId: 0, 
-        componentId: 0, 
+        plugin: 'paletteBackgroundColor',
+        columnId: 0,
+        componentId: 0,
         enabled: false,
       };
       let data2 = {
-        plugin: 'paletteBackgroundColor', 
+        plugin: 'paletteBackgroundColor',
         columnId: 0,
         enabled: false,
       };
       let data3 = {
-        plugin: 'paletteBackgroundColor', 
+        plugin: 'paletteBackgroundColor',
         enabled: false,
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
-          columns: [{ 
+          columns: [{
             components: [{
               plugins: {
                 paletteBackgroundColor: {
@@ -1328,11 +1328,11 @@ describe('== Module Store ==', () => {
         value: {},
       };
       let data2 = {
-        columnId: 0, 
-        componentId: 0, 
-        subComponent: 'text', 
-        link: 'style', 
-        property: 'lineHeight', 
+        columnId: 0,
+        componentId: 0,
+        subComponent: 'text',
+        link: 'style',
+        property: 'lineHeight',
         value: '16px',
       };
       let data3 = {
@@ -1348,9 +1348,9 @@ describe('== Module Store ==', () => {
         property: 'attribute',
         value: {},
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
-          columns: [{ 
+          columns: [{
             components: [{
               plugins: {
                 paletteBackgroundColor: {
@@ -1382,7 +1382,7 @@ describe('== Module Store ==', () => {
       store.commit('module/saveComponentProperty', data2);
       store.commit('module/saveComponentProperty', data3);
       store.commit('module/saveComponentProperty', data4);
-      
+
       let stateSaveComponentProperty = store.state.module.module.structure.columns[data.columnId].components[data.componentId].text.attribute;
       let stateSaveComponentProperty2 = store.state.module.module.structure.columns[data.columnId].components[data.componentId].text.style;
       let stateSaveComponentProperty3 = store.state.module.module.structure.columns[data.columnId].components[data.componentId].style;
@@ -1409,11 +1409,11 @@ describe('== Module Store ==', () => {
     });
     it('"setBuildingMode" with data, expect of the state "buildingMode" to equal to 0', (done) => {
       store.commit('module/setBuildingMode', 'mobile');
-      
+
       let stateBuildingMode = store.state.module;
-      
+
       expect(stateBuildingMode).toHaveProperty('buildingMode', 'mobile');
-      
+
       stateBuildingMode = null;
 
       done();
@@ -1442,18 +1442,18 @@ describe('== Module Store ==', () => {
         columnId: 0,
         componentId: 0,
         response: [
-          { 
-            _id: '5b3a897792f8ef0010137eb3', 
-            name: 'global', 
-            updated_at: '2018-07-02 16:22:15', 
-            created_at: '2018-07-02 16:22:15', 
+          {
+            _id: '5b3a897792f8ef0010137eb3',
+            name: 'global',
+            updated_at: '2018-07-02 16:22:15',
+            created_at: '2018-07-02 16:22:15',
           },
           '',
         ],
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
-          columns: [{ 
+          columns: [{
             components: [{
               plugins: {
                 styleImageEditor: {
@@ -1486,7 +1486,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', newStruct);
       store.commit('module/setListLibraries', data);
-      
+
       const stateImageOptions = store.state.module.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options;
 
       expect(stateImageOptions).toEqual(data.response);
@@ -1507,7 +1507,7 @@ describe('== Module Store ==', () => {
       baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
       original = console.error;
     });
-    
+
     beforeEach(() => {
       console.error = jest.fn();
       store = createStore({
@@ -1535,7 +1535,7 @@ describe('== Module Store ==', () => {
     it('"addColumn", expect that was added a new column', (done) => {
       let data = {
         type: 'column-element',
-        container: { 
+        container: {
           style: {},
           attribute: { width: '100%' },
           styleOption: {},
@@ -1545,28 +1545,28 @@ describe('== Module Store ==', () => {
           styleOption: {},
         },
         components: [],
-        plugins: { 
-          columnBackgroundColor: { 
+        plugins: {
+          columnBackgroundColor: {
             name: 'column-background-color',
             title: 'Background color',
             version: '0.0.1',
             author: 'emiliano@stensul.com',
             target: ['column'],
-            config: { 
+            config: {
               defaultColors: ['#000000', '#323c44', '#cd263a', '#8d8d8d', '#9e00ff', '#0000ff', '#00da00', '#dada00', '#ff8d00', '#ff00de', '#a65628', '#848484'],
-              defaultValue: '#000000', 
+              defaultValue: '#000000',
             },
             data: {},
             render: true,
-            enabled: false, 
+            enabled: false,
           },
-          verticalAlignment: { 
+          verticalAlignment: {
             name: 'vertical-alignment',
             title: 'Vertical alignment',
             version: '0.0.1',
             author: 'emiliano@stensul.com',
             target: ['column'],
-            config: { 
+            config: {
               options: ['top', 'middle', 'bottom'],
               defaultValue: 'middle',
             },
@@ -1585,28 +1585,28 @@ describe('== Module Store ==', () => {
           attribute: {},
           styleOption: {} },
         components: [],
-        plugins: { 
-          columnBackgroundColor: { 
+        plugins: {
+          columnBackgroundColor: {
             name: 'column-background-color',
             title: 'Background color',
             version: '0.0.1',
             author: 'emiliano@stensul.com',
             target: ['column'],
-            config: { 
+            config: {
               defaultColors: ['#000000', '#323c44', '#cd263a', '#8d8d8d', '#9e00ff', '#0000ff', '#00da00', '#dada00', '#ff8d00', '#ff00de', '#a65628', '#848484'],
-              defaultValue: '#000000', 
+              defaultValue: '#000000',
             },
             data: {},
             render: true,
-            enabled: false, 
+            enabled: false,
           },
-          verticalAlignment: { 
+          verticalAlignment: {
             name: 'vertical-alignment',
             title: 'Vertical alignment',
             version: '0.0.1',
             author: 'emiliano@stensul.com',
             target: ['column'],
-            config: { 
+            config: {
               options: ['top', 'middle', 'bottom'],
               defaultValue: 'middle',
             },
@@ -1631,11 +1631,11 @@ describe('== Module Store ==', () => {
         },
       };
 
-      Vue.prototype.$_app = { 
+      Vue.prototype.$_app = {
         modulePlugins: data2.plugins,
       };
 
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [
           ],
@@ -1668,21 +1668,21 @@ describe('== Module Store ==', () => {
       let Columns = [
         {
           container: {
-            attribute: { 
+            attribute: {
               width: 0,
             },
           },
         },
         {
           container: {
-            attribute: { 
+            attribute: {
               width: 0,
             },
           },
         },
       ];
 
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: Columns,
         },
@@ -1736,6 +1736,7 @@ describe('== Module Store ==', () => {
           attribute: {
             bgcolor: '',
             classes: '',
+            height: '',
           },
           mobileClasses: [],
           style: {
@@ -1743,6 +1744,10 @@ describe('== Module Store ==', () => {
             paddingLeft: '0px',
             paddingBottom: '0px',
             paddingRight: '0px',
+            backgroundAttachment: '',
+            backgroundImage: '',
+            backgroundPosition: '',
+            backgroundRepeat: '',
             borderTopWidth: '0px',
             borderTopStyle: 'none',
             borderTopColor: '',
@@ -2094,7 +2099,7 @@ describe('== Module Store ==', () => {
       await store.dispatch('module/getModuleData', moduleId);
 
       let stateModule = store.state.module.module;
-      
+
       expect(stateModule).toEqual(objectModule);
 
       moduleId = null;
@@ -2104,24 +2109,30 @@ describe('== Module Store ==', () => {
     });
     it('"getModuleData" without moduleId, expect to create a new module data', async (done) => {
       const objectModule = {
-        moduleId: undefined, 
-        name: 'Untitled module', 
-        title: undefined, 
-        type: 'studio', 
-        status: '', 
-        data: {}, 
-        plugins: {}, 
+        moduleId: undefined,
+        name: 'Untitled module',
+        title: undefined,
+        type: 'studio',
+        status: '',
+        data: {},
+        plugins: {},
         structure: {
-          columnsStacking: 'normal', 
+          columnsStacking: 'normal',
           attribute: {
-            bgcolor: '', classes: '',
-          }, 
-          mobileClasses: [], 
+            bgcolor: '',
+            classes: '',
+            height: '',
+          },
+          mobileClasses: [],
           style: {
             paddingTop: 0,
             paddingLeft: 0,
             paddingBottom: 0,
             paddingRight: 0,
+            backgroundAttachment: '',
+            backgroundImage: '',
+            backgroundPosition: '',
+            backgroundRepeat: '',
             borderTopWidth: '0px',
             borderTopStyle: 'none',
             borderTopColor: '',
@@ -2134,14 +2145,14 @@ describe('== Module Store ==', () => {
             borderLeftWidth: '0px',
             borderLeftStyle: 'none',
             borderLeftColor: '',
-          }, 
+          },
           columns: [],
         },
       };
       await store.dispatch('module/getModuleData');
 
       let stateModule = store.state.module.module;
-      
+
       expect(stateModule).toEqual(objectModule);
 
       stateModule = null;
@@ -2896,7 +2907,7 @@ describe('== Module Store ==', () => {
         },
       };
       let response = { id: '5b3ce34792f8ef00137bb103', message: 'SUCCESS' };
-      let newStruct = { 
+      let newStruct = {
         moduleId: '5b3ce34792f8ef00137bb105',
       };
 
@@ -3306,7 +3317,7 @@ describe('== Module Store ==', () => {
         },
       };
       let response = { id: '5b3ce34792f8ef00137bb103', message: 'SUCCESS' };
-      let newStruct = { 
+      let newStruct = {
         moduleId: '5b3ce34792f8ef00137bb105',
       };
 
@@ -3742,7 +3753,7 @@ describe('== Module Store ==', () => {
         image = null;
         dataImage = null;
         failResponse = null;
-        
+
         done();
       });
     });
@@ -4169,9 +4180,9 @@ describe('== Module Store ==', () => {
         to: 1,
         total: 1,
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
-          columns: [{ 
+          columns: [{
             components: [{
               plugins: {
                 styleImageEditor: {
@@ -4215,11 +4226,11 @@ describe('== Module Store ==', () => {
           columnId: 0,
           componentId: 2,
           response: [
-            { 
-              _id: '5b3a897792f8ef0010137eb3', 
-              name: 'global', 
-              updated_at: '2018-07-02 16:22:15', 
-              created_at: '2018-07-02 16:22:15', 
+            {
+              _id: '5b3a897792f8ef0010137eb3',
+              name: 'global',
+              updated_at: '2018-07-02 16:22:15',
+              created_at: '2018-07-02 16:22:15',
             },
             '',
           ],
@@ -4285,13 +4296,13 @@ describe('== Module Store ==', () => {
 
       dataSetting = null;
       getDataCurrentComponent = null;
-      
+
       done();
     });
     xit('"changeSettingComponent", expect state module has 1', () => {});
     it('"buildingMode", expect state buildingMode has \'mobile\'', (done) => {
       store.commit('module/setBuildingMode', 'mobile');
-      
+
       let getDataBuildingMode = store.getters['module/buildingMode'];
 
       expect(getDataBuildingMode).toEqual('mobile');
@@ -4302,7 +4313,7 @@ describe('== Module Store ==', () => {
     });
     it('"showRaw", expect state showRaw has true', (done) => {
       store.commit('module/toggleRaw', 'mobile');
-      
+
       let getDataBuildingMode = store.getters['module/showRaw'];
 
       expect(getDataBuildingMode).toEqual(true);

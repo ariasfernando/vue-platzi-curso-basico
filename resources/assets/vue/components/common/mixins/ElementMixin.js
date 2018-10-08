@@ -12,6 +12,12 @@ export default {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
     },
+    templateInnerWidth() {
+      return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.module.structure);
+    },
+    templateWidth() {
+      return this.isCampaign ? this.$store.getters['campaign/campaign'].library_config.templateWidth : 640;
+    },
   },
   methods: {
     // Get an string of classes
@@ -41,6 +47,18 @@ export default {
         }
       });
       return BorderAndPadding;
+    },
+    elementBorderHorizontalPaddingAndHeight(element) {
+      const elementBorderAndPadding = this.elementBorderPaddingAndHeight(element);
+      elementBorderAndPadding.paddingTop = undefined;
+      elementBorderAndPadding.paddingBottom = undefined;
+      return elementBorderAndPadding;
+    },
+    elementBorderPaddingAndHeight(element) {
+      const elementBorderAndPadding = this.elementBorderAndPadding(element);
+      const styles = _.isEmpty(elementBorderAndPadding) ? {} : elementBorderAndPadding;
+      styles.height = this.widthStyle(element.attribute.height);
+      return styles;
     },
     elementBorderPaddingAndWidth(element) {
       const elementBorderAndPadding = this.elementBorderAndPadding(element);
@@ -75,6 +93,22 @@ export default {
     },
     isColumnSelect(columnId) {
       return this.currentComponent.columnId === columnId && this.currentComponent.componentId === undefined;
+    },
+    elementBackground(element) {
+      const elementBackground = {};
+      _.each(element.style, (value, key) => {
+        if (key.indexOf('background') >= 0) {
+          elementBackground[key] = value;
+        }
+      });
+      return elementBackground;
+    },
+    elementBorderAndPaddingHorizontalSpace(element) {
+      const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
+      const paddingRight = _.parseInt(element.style.paddingRight || 0);
+      const borderLeft = _.parseInt(element.style.borderLeftWidth || 0);
+      const borderRight = _.parseInt(element.style.borderRightWidth || 0);
+      return paddingLeft + paddingRight + borderLeft + borderRight;
     },
     fontStyles(element) {
       return {
