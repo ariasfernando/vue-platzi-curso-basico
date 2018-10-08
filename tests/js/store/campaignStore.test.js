@@ -5144,5 +5144,21 @@ describe('== Campaign Store ==', () => {
       expect(campStore.getters.editorToolbar).toEqual(campStore.state.editorToolbar);
       done();
     });
+    it('"dirty" expect to get the dirty values', (done) => {
+      expect(campStore.getters.dirty).toBeFalsy();
+      done();
+    });
+    it('"showImageEditor" expect to get the dirty values', (done) => {
+      expect(campStore.getters.showImageEditor).toBeFalsy();
+      done();
+    });
+    it('"showModuleSettings" expect to get the dirty values', (done) => {
+      expect(campStore.getters.showModuleSettings).toBeFalsy();
+      done();
+    });
+    it('"locked" expect to get the dirty values', (done) => {
+      expect(campStore.getters.locked).toBeFalsy();
+      done();
+    });
   });
 });
