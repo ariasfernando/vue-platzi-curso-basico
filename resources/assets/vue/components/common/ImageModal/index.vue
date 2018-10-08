@@ -94,13 +94,13 @@
 </template>
 
 <script>
-import each from 'lodash/each';
+import _ from 'lodash';
 import styleImageEditor from 'stensul-sie-vue';
 import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
 
 export default {
-  props: ['config', 'libraryImages', 'data'],
+  props: ['config', 'libraryImages', 'overlayImages' ,'data'],
   components: {
     styleImageEditor
   },
@@ -184,6 +184,15 @@ export default {
         sieOptions.preset = sieHelper.completeUrlPath(this.$_app.config.imageUrl, sieOptions.preset);
       }
 
+      const overlayImages = this.overlayImages || [];
+      
+      if(overlayImages.length > 0){
+        const i = sieOptions.preset.find(e => {
+          return e.type === 'sie-plugin-image-overlay';
+        });
+        _.set(i, 'options.plugin.image.gallery.images', overlayImages);
+      }
+
       this.sieOptions = sieOptions;
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
@@ -196,7 +205,7 @@ export default {
         auto: this.params['sie-size']['size_auto'].value
       }
 
-      return imageHelper.checkSize(imageSource, this.sieOptions.size, this.params.smaller)
+      return imageHelper.checkSize(imageSource, size, this.params.smaller)
         .then(() => {
           this.currentImage = imageSource;
           this.changeImage(this.params);

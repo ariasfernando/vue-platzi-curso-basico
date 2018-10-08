@@ -23,9 +23,11 @@
 
       <aside class="right-bar">
         <div>
-            <module-settings v-if="showModuleSettings"></module-settings>
-            <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
-            <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
+          <module-settings v-if="showModuleSettings"></module-settings>
+          <module-background-settings></module-background-settings>
+          <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
+          <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
+          <shadow-render></shadow-render>
         </div>
       </aside>
     </div>
@@ -44,24 +46,26 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import CampaignConfiguration from './CampaignConfiguration.vue'
+  import CampaignMenu from './CampaignMenu.vue'
+  import CampaignService from '../../services/campaign'
+  import ComponentSettings from './ComponentSettings.vue'
+  import CustomModuleSettings from './CustomModuleSettings.vue'
+  import EmailActions from './EmailActions.vue'
+  import EmailCanvas from './EmailCanvas.vue'
   import ModalComplete from './modals/ModalComplete.vue'
+  import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
+  import ModalEsp from './modals/ModalEsp.vue'
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
   import ModalProofTrack from './modals/ModalProofTrack.vue';
-  import ModalEsp from './modals/ModalEsp.vue'
-  import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
-  import CampaignMenu from './CampaignMenu.vue'
-  import EmailCanvas from './EmailCanvas.vue'
-  import ComponentSettings from './ComponentSettings.vue'
-  import CustomModuleSettings from './CustomModuleSettings.vue'
+  import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
+  import ShadowRender from './ShadowRender.vue'
   import Spinner from '../common/Spinner.vue'
-  import EmailActions from './EmailActions.vue'
-  import VueSticky from 'vue-sticky'
-  import _ from 'lodash'
-  import CampaignService from '../../services/campaign'
   import Tracking from './Tracking.vue'
+  import VueSticky from 'vue-sticky'
 
   export default {
     name: 'Campaign',
@@ -69,19 +73,21 @@
     components: {
       CampaignConfiguration,
       CampaignMenu,
-      EmailCanvas,
       ComponentSettings,
       CustomModuleSettings,
-      ModuleSettings,
+      EmailActions,
+      EmailCanvas,
       ModalComplete,
+      ModalEnableTemplating,
+      ModalEsp,
       ModalPreview,
       ModalProof,
       ModalProofTrack,
-      ModalEsp,
-      ModalEnableTemplating,
+      ModuleBackgroundSettings,
+      ModuleSettings,
+      ShadowRender,
       Spinner,
-      Tracking,
-      EmailActions
+      Tracking
     },
     data: function () {
       return {
@@ -116,14 +122,10 @@
         return this.$store.getters["campaign/showModuleSettings"];
       },
       sessionWindowId() {
-        try {
-          if (!window.sessionStorage.getItem('windowId')) {
-            window.sessionStorage.setItem('windowId', this.windowId);
-          }
-          return window.sessionStorage.getItem('windowId');
-        } catch(e) {
-          return false;
+        if (!window.sessionStorage.getItem('windowId')) {
+          window.sessionStorage.setItem('windowId', this.windowId);
         }
+        return window.sessionStorage.getItem('windowId');
       }
     },
     watch:{
@@ -147,11 +149,7 @@
          * Replace url when creating a new campaign to avoid redirect.
          * Add necessary logic if using more parameters in the future.
          */
-        try {
-          window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
-        } catch(e) {
-          return false;
-        }
+        window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
 
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);

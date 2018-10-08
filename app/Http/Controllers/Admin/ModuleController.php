@@ -13,6 +13,8 @@ use Stensul\Http\Middleware\AdminAuthenticate;
 use ModuleModel as Module;
 use LibraryModel as Library;
 use ModelKeyManager;
+use Validator;
+use Illuminate\Validation\Rule;
 
 class ModuleController extends Controller
 {
@@ -99,10 +101,18 @@ class ModuleController extends Controller
      * Module post save. Inserts or update a module.
      *
      * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
      * @return array [id => moduleId, message => ERROR|SUCCESS]
      */
     public function postSave(Request $request)
     {
+        $request->validate([
+            'name' => 'required|max:255',
+            'structure' => 'required',
+            'plugins' => 'required',
+            'status' => ['required', Rule::in(['draft', 'publish'])],
+        ]);
+
         $params = [
             'name' => $request->input('name'),
             'structure' => $request->input('structure'),
@@ -125,21 +135,19 @@ class ModuleController extends Controller
         try {
             $module->save();
 
-            $response_message = [
+            return [
                 'id' => $module->id,
                 'message' => 'SUCCESS'
             ];
         } catch (BulkWriteException $exception) {
             if (preg_match("/^E11000 duplicate key/", $exception->getMessage())) {
-                $response_message = ['message' => 'ERROR_EXISTS'];
+                return response()->json([
+                    'message' => 'ERROR_EXISTS',
+                ], 409);
             } else {
                 throw $exception;
             }
-        } catch (\Exception $exception) {
-            $response_message = ['message' => 'ERROR_SAVING'];
         }
-
-        return $response_message;
     }
 
     /**

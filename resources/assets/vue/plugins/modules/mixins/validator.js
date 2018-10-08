@@ -91,15 +91,21 @@ export default {
                 validations = plugin.config.alt.validations;
               }
 
-              if (validations && component.container.styleOption.enableElement && plugin.enabled) {
-                let validationsRequired = false;
-                _.each(validations, (validation, pluginIndex) => {
-                  if (plugin.enabled && validation && !plugin.data.validated) {
-                    validationsRequired = true;
+              if (validations && validations.required === true && component.container.styleOption.enableElement && plugin.enabled) {
+
+                // if the validations are enabled and were never ran we assume they have errors
+                let defaultValue = '';
+                if (component.type === 'button-element' && typeof component.button === 'object') {
+                  defaultValue = component.button.attribute.href;
+                } else if (component.type === 'image-element' && typeof component.image === 'object') {
+                  if (plugin.config.validations) {
+                    defaultValue = component.image.attribute.href;
+                  } else if (plugin.config.alt && plugin.config.alt.validations) {
+                    defaultValue = component.image.attribute.alt;
                   }
-                });
-                if (validationsRequired) {
-                  // if the validations are enabled and were never ran we assume they have errors
+                }
+
+                if (_.isEmpty(defaultValue)) {
                   const error = {
                     scope: {
                       type: 'plugin',

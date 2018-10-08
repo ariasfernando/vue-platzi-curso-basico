@@ -1,9 +1,10 @@
 <template>
   <module-container :component="component" @select-component="selectComponentHandler">
       <table
-      width="100%"
-      style="width: 100%;"
+      :width="component.container.attribute.width || '100%'"
+      :style="{width:widthStyle(component.container.attribute.width || '100%')}"
       :valign="component.container.attribute.valign || 'top'"
+      :align="component.container.attribute.align || 'left'"
       border="0"
       cellpadding="0"
       cellspacing="0"
@@ -25,8 +26,9 @@
               :target="component.image.attribute.target"
               >
               <img
-                class="st-resize"
-                :class="{'st-hide-mobile' : component.image.attribute.placeholderMobile}"
+                :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
+                        'st-resize' : mobileStretch,
+                        'st-mobile-width-constraint' : !mobileStretch }"
                 style="border: 0; display: block;"
                 border="0"
                 :width="component.image.attribute.width"
@@ -41,7 +43,8 @@
                   <img
                     :src="imageUrl(component.image.attribute.placeholderMobile)"
                     border="0"
-                    class="st-resize"
+                    :class="{ 'st-resize' : mobileStretch,
+                              'st-mobile-width-constraint' : !mobileStretch }"
                     style="display:block;border:none;max-width:100%;height:auto;"
                     :width="component.image.attribute.width"
                     :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
@@ -78,6 +81,11 @@
         imageUrl(imagePath) {
           return this.$_app.config.imageUrl + imagePath;
         }
+      }
+    },
+    computed: {
+      mobileStretch() {
+        return this.component.image.styleOption.noMobileStretch !== true;
       }
     },
   };

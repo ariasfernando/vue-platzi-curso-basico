@@ -10,7 +10,8 @@
 			<label>Name</label>
 			{!! Form::text('name', (isset($params['permission']['name']))? $params['permission']['name'] : '', array (
 				'class' => 'permission_name',
-				'id' => 'permission_name'
+				'id' => 'permission_name',
+				'data-validation' => '{"required":"true"}'
 			)) !!}
 		</div>
 

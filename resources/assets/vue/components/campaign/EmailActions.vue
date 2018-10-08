@@ -351,8 +351,14 @@
                       clearInterval(processInterval);
                       finishedProcessing();
                     }
+                    else if (response.status === 'failed') {
+                      clearInterval(processInterval);
+                      this.$store.commit("global/setLoader", false);
+                      this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, '
+                        + 'please contact our support team.', {className: 'et-error'});
+                    }
                   });
-                }, 2000);
+                }, 1000);
               }
           });
         });

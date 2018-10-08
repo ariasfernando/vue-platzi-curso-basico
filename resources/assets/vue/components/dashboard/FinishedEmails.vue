@@ -115,7 +115,7 @@
                 data-tooltip="Edit"
                 @click.prevent="askToEditCampaign(campaign._id)"
                 ><i class="glyphicon glyphicon-pencil"></i></a>
-              <a href="#" :data-tooltip="'Upload to ' + lodash.capitalize(api.driver)" class="btn-upload-api"
+              <a href="#" :data-tooltip="`Upload to ${$options.filters.capitalize(api.driver)}`" class="btn-upload-api"
                 v-for="api in campaign.api"
                 v-if="!campaign.locked && campaign.library_config.esp && campaign.library_config.espProvider"
                 :data-campaign-id="campaign._id"
@@ -160,7 +160,6 @@
 </template>
 
 <script>
-  import _ from 'lodash'
   import TableMixin from './mixins/TableMixin.js';
   import ModalPreview from '../campaign/modals/ModalPreview.vue'
   import ModalCode from '../campaign/modals/ModalCode.vue'
@@ -181,7 +180,6 @@
         },
         last_uploads: {},
         codeType: '',
-        lodash: _
       }
     },
     mixins: [ TableMixin ],

@@ -49,6 +49,8 @@ class EmailSender
 
         $library = Library::find($campaign_data->library);
 
+        $body_html = config('campaign.enable_html_minify', false) && !empty($campaign_data->body_html_minified) ? $campaign_data->body_html_minified : $campaign_data->body_html;
+
         for ($i = 0; $i < count($email_array); ++$i) {
             if ($i <= $email_send_limit) {
                 $params = array(
