@@ -14,6 +14,8 @@ import 'expect-more-jest';
 /* local import */
 // import libraryStore from '@/store/libraryStore';
 // import moduleStore from '@/store/moduleStore';
+import campaignService from '@/services/campaign';
+import imageService from '@/services/image';
 import realStore from '@/store';
 import campaignStore from '@/store/campaignStore';
 import mocks from '@/resources/mocks';
@@ -29,7 +31,7 @@ function createStore(option) {
 /*
  * == Test: Models
  */
-describe('== Library Store ==', () => {
+describe('== Campaign Store ==', () => {
   let original = () => {};
   let store = () => {};
   beforeAll(() => {
@@ -52,7 +54,7 @@ describe('== Library Store ==', () => {
   afterAll(() => {
     original = null;
   });
-  xdescribe('trigger muttation:', () => {
+  describe('trigger muttation:', () => {
     it('"campaignValidated" and expect of set "campaignValidated" state to true', (done) => {
       let status = true;
 
@@ -1434,6 +1436,264 @@ describe('== Library Store ==', () => {
 
       campStore.dispatch('completeCampaign', data).then(() => {
         data = setDataMock1 = setDataMock2 = storeCampaign = campStore = null;
+        done();
+      });
+    });
+    it('"lockCampaign" with data, expect to call "getCampaignData" action and "lockCampaign" of the \'campaignService\'', async (done) => {
+      let setDataMock1 = jest.fn();
+      let setDataMock2 = jest.fn().mockResolvedValue({ campaign_id: '5bae3210a7082a001559ec93' });
+      let campaignId = '5bae3210a7082a001559ec93';
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: storeCampaign.mutations,
+        actions: {
+          ...storeCampaign.actions,
+          getCampaignData: setDataMock1,
+        },
+      });
+      campaignService.lockCampaign = setDataMock2;
+
+      await campStore.dispatch('lockCampaign', campaignId).then(() => {
+        expect(setDataMock2.mock.calls).toHaveLength(1);
+        expect(setDataMock2.mock.calls[0][0]).toEqual('5bae3210a7082a001559ec93');
+        expect(setDataMock1.mock.calls).toHaveLength(1);
+        expect(setDataMock1.mock.calls[0][1]).toEqual('5bae3210a7082a001559ec93');
+        campaignId = storeCampaign = campStore = setDataMock1 = setDataMock2 = null;
+        done();
+      });
+    });
+    it('"lockCampaign" with data erroneous, expect to call "error" mutation', async (done) => {
+      let setDataMock1 = jest.fn();
+      let error = new Error('{ message: "No query results for model [Stensul\\Models\\Campaign] 5b" }');
+      let setDataMock2 = jest.fn().mockRejectedValue(error);
+      let campaignId = '5b';
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          error: setDataMock1,
+        },
+        actions: storeCampaign.actions,
+      });
+      campaignService.lockCampaign = setDataMock2;
+
+      await campStore.dispatch('lockCampaign', campaignId).then(() => { }).catch(() => {
+        expect(setDataMock2.mock.calls).toHaveLength(1);
+        expect(setDataMock2.mock.calls[0][0]).toEqual('5b');
+        expect(setDataMock1.mock.calls).toHaveLength(1);
+        expect(setDataMock1.mock.calls[0][1]).toEqual(error);
+        campaignId = storeCampaign = campStore = setDataMock1 = setDataMock2 = error = null;
+        done();
+      });
+    });
+    it('"unlockCampaign" with data, expect to call "getCampaignData" action and "unlockCampaign" of the \'campaignService\'', async (done) => {
+      let setDataMock1 = jest.fn();
+      let setDataMock2 = jest.fn().mockResolvedValue({ campaign_id: '5bae3210a7082a001559ec93' });
+      let campaignId = '5bae3210a7082a001559ec93';
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: storeCampaign.mutations,
+        actions: {
+          ...storeCampaign.actions,
+          getCampaignData: setDataMock1,
+        },
+      });
+      campaignService.unlockCampaign = setDataMock2;
+
+      await campStore.dispatch('unlockCampaign', campaignId).then(() => {
+        expect(setDataMock2.mock.calls).toHaveLength(1);
+        expect(setDataMock2.mock.calls[0][0]).toEqual('5bae3210a7082a001559ec93');
+        expect(setDataMock1.mock.calls).toHaveLength(1);
+        expect(setDataMock1.mock.calls[0][1]).toEqual('5bae3210a7082a001559ec93');
+        campaignId = storeCampaign = campStore = setDataMock1 = setDataMock2 = null;
+        done();
+      });
+    });
+    it('"pingLockCampaign" with data erroneous, expect to call "error" mutation', async (done) => {
+      let setDataMock1 = jest.fn();
+      let error = new Error('{ message: "No query results for model [Stensul\\Models\\Campaign] 5b" }');
+      let setDataMock2 = jest.fn().mockRejectedValue(error);
+      let data = {};
+      data.campaignId = '5b';
+      data.windowId = undefined;
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          error: setDataMock1,
+        },
+        actions: storeCampaign.actions,
+      });
+      campaignService.pingLock = setDataMock2;
+
+      await campStore.dispatch('pingLockCampaign', data).then(() => { }).catch(() => {
+        expect(setDataMock2.mock.calls).toHaveLength(1);
+        expect(setDataMock2.mock.calls[0][0]).toEqual(data);
+        expect(setDataMock1.mock.calls).toHaveLength(1);
+        expect(setDataMock1.mock.calls[0][1]).toEqual(error);
+        data = storeCampaign = campStore = setDataMock1 = setDataMock2 = error = null;
+        done();
+      });
+    });
+    it('"favoriteCampaign" with campaignId, expect to call "getCampaignData" action and "favoriteCampaign" of the \'campaignService\'', async (done) => {
+      let setDataMock1 = jest.fn();
+      let setDataMock2 = jest.fn().mockResolvedValue({ campaign_id: '5bae3210a7082a001559ec93' });
+      let campaignId = '5bae3210a7082a001559ec93';
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: storeCampaign.mutations,
+        actions: {
+          ...storeCampaign.actions,
+          getCampaignData: setDataMock1,
+        },
+      });
+      campaignService.favoriteCampaign = setDataMock2;
+
+      await campStore.dispatch('favoriteCampaign', campaignId).then(() => {
+        expect(setDataMock2.mock.calls).toHaveLength(1);
+        expect(setDataMock2.mock.calls[0][0]).toEqual('5bae3210a7082a001559ec93');
+        expect(setDataMock1.mock.calls).toHaveLength(1);
+        expect(setDataMock1.mock.calls[0][1]).toEqual('5bae3210a7082a001559ec93');
+        campaignId = storeCampaign = campStore = setDataMock1 = setDataMock2 = null;
+        done();
+      });
+    });
+    it('"favoriteCampaign" with campaignId erroneous, expect to call "error" mutation', async (done) => {
+      let setDataMock1 = jest.fn();
+      let error = new Error('{ message: "No query results for model [Stensul\\Models\\Campaign] 5b" }');
+      let setDataMock2 = jest.fn().mockRejectedValue(error);
+      let campaignId = '5b';
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          error: setDataMock1,
+        },
+        actions: storeCampaign.actions,
+      });
+      campaignService.favoriteCampaign = setDataMock2;
+
+      await campStore.dispatch('favoriteCampaign', campaignId).then(() => { }).catch(() => {
+        expect(setDataMock2.mock.calls).toHaveLength(1);
+        expect(setDataMock2.mock.calls[0][0]).toEqual('5b');
+        expect(setDataMock1.mock.calls).toHaveLength(1);
+        expect(setDataMock1.mock.calls[0][1]).toEqual(error);
+        campaignId = storeCampaign = campStore = setDataMock1 = setDataMock2 = error = null;
+        done();
+      });
+    });
+    it('"uploadImages" with data, expect to call "getCampaignData" action and "uploadImages" of the \'imageService\'', async (done) => {
+      let setDataMock = jest.fn().mockResolvedValue(['/5bae3210a7082a001559ec93/en_us/5bb7bcddebe19-1538768093.9662.png']);
+      let data = {
+        images: [
+          'data:image/jpeg;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+        ],
+        campaignId: '5bae3210a7082a001559ec93',
+      };
+      imageService.uploadImages = setDataMock;
+
+      await store.dispatch('campaign/uploadImages', data).then((response) => {
+        expect(setDataMock.mock.calls).toHaveLength(1);
+        expect(setDataMock.mock.calls[0][0]).toEqual(data);
+        expect(response).toEqual(['campaigns/5bae3210a7082a001559ec93/en_us/5bb7bcddebe19-1538768093.9662.png']);
+        setDataMock = data = null;
+        done();
+      });
+    });
+    it('"uploadImages" with data erroneous, expect to call "error" mutation', async (done) => {
+      let setDataMock1 = jest.fn();
+      let responseError = new Error(
+        `{
+          "message": "Could not load image from string",
+          "exception": "Imagine\\Exception\\RuntimeException",
+          "file": "/usr/src/app/vendor/imagine/imagine/lib/Imagine/Imagick/Imagine.php",
+          "line": 107,
+          "trace": [
+              {
+                  "file": "/usr/src/app/vendor/laravel/framework/src/Illuminate/Support/Manager.php",
+                  "line": 146,
+                  "function": "load",
+                  "class": "Imagine\\Imagick\\Imagine",
+                  "type": "->"
+              }
+          ]
+        }`,
+      );
+      let setDataMock2 = jest.fn().mockRejectedValue(responseError);
+      let data = {
+        images: [
+          'data:image/jpeg;base64,',
+        ],
+        campaignId: '5bae3210a7082a001559ec93',
+      };
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          error: setDataMock1,
+        },
+        actions: storeCampaign.actions,
+      });
+      imageService.uploadImages = setDataMock2;
+
+      await campStore.dispatch('uploadImages', data).catch((error) => {
+        expect(setDataMock2.mock.calls).toHaveLength(1);
+        expect(setDataMock2.mock.calls[0][0]).toEqual(data);
+        expect(setDataMock1.mock.calls).toHaveLength(1);
+        expect(setDataMock1.mock.calls[0][1]).toEqual(error);
+        setDataMock2 = setDataMock1 = storeCampaign = campStore = responseError = data = null;
+        done();
+      });
+    });
+    it('"sendPreview" with data, expect to call "sendPreview" of the \'campaignService\'', async (done) => {
+      let data = {
+        campaignId: '5bae3210a7082a001559ec93',
+        mail: 'daniel@stensul.com',
+        preheader: 'test',
+        subject: 'prueba de mail',
+      };
+      let setDataMock = jest.fn().mockResolvedValue({ processed: ['daniel@stensul.com'] });
+      campaignService.sendPreview = setDataMock;
+
+      await store.dispatch('campaign/sendPreview', data).then((response) => {
+        expect(setDataMock.mock.calls).toHaveLength(1);
+        expect(setDataMock.mock.calls[0][0]).toEqual(data);
+        expect(response).toEqual({ processed: ['daniel@stensul.com'] });
+        data = setDataMock = null;
+        done();
+      });
+    });
+    it('"removeModule" with moduleId data, expect to call "removeModule" mutation', async (done) => {
+      let setDataMock = jest.fn();
+      let moduleId = 0;
+      let storeCampaign = cloneDeep(campaignStore);
+      let campStore = createStore({
+        state: storeCampaign.state,
+        getters: storeCampaign.getters,
+        mutations: {
+          ...storeCampaign.mutations,
+          removeModule: setDataMock,
+        },
+        actions: storeCampaign.actions,
+      });
+      await campStore.dispatch('removeModule', moduleId).then(() => {
+        expect(setDataMock.mock.calls).toHaveLength(1);
+        expect(setDataMock.mock.calls[0][1]).toEqual(moduleId);
+        moduleId = storeCampaign = campStore = setDataMock = null;
         done();
       });
     });
