@@ -3392,7 +3392,7 @@ describe('== Campaign Store ==', () => {
               proof_token: '',
             },
             library_config: {
-              templateWidth: 600,
+              templateWidth: 800,
               templateMobileWidth: 320,
               templateBackgroundColor: '#FFFFFF',
               contentBackgroundColor: '#FFFFFF',
@@ -5114,6 +5114,34 @@ describe('== Campaign Store ==', () => {
     });
     it('"currentComponent" expect to get the currentComponent values', (done) => {
       expect(campStore.getters.currentComponent).toEqual(campStore.state.currentComponent);
+      done();
+    });
+    it('"currentCustomComponent" expect to get the currentCustomComponent values', (done) => {
+      expect(campStore.getters.currentCustomComponent).toEqual(campStore.state.currentCustomComponent);
+      done();
+    });
+    it('"currentModule" expect to get the currentModuleId values', (done) => {
+      expect(campStore.getters.currentModule).toEqual(campStore.state.currentModuleId);
+      done();
+    });
+    it('"activeModule" expect to get the activeModule values', (done) => {
+      expect(campStore.getters.activeModule).toEqual(campStore.state.activeModule);
+      done();
+    });
+    it('"currentCustomModule" expect to get the currentCustomModuleId values', (done) => {
+      expect(campStore.getters.currentCustomModule).toEqual(campStore.state.currentCustomModuleId);
+      done();
+    });
+    it('"buildingMode" expect to get the buildingMode values', (done) => {
+      expect(campStore.getters.buildingMode).toEqual(campStore.state.buildingMode);
+      done();
+    });
+    it('"templateWidth" expect to get the templateWidth values', (done) => {
+      expect(campStore.getters.templateWidth).toEqual(800);
+      done();
+    });
+    it('"editorToolbar" expect to get the editorToolbar values', (done) => {
+      expect(campStore.getters.editorToolbar).toEqual(campStore.state.editorToolbar);
       done();
     });
   });
