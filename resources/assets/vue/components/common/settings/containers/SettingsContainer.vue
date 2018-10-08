@@ -8,11 +8,11 @@
       </template>
 
       <template v-if="hasSettingSideBySide">
-        <div class="half-setting">
+        <div class="half-setting half-setting--left">
           <label :class="{[`level-${level}`] : level}" :title="titleLeft" v-if="!noLabel">{{labelLeft}}</label>
           <slot name="setting-half-left"></slot>
         </div>
-        <div class="half-setting">
+        <div class="half-setting half-setting--right">
           <label :class="{[`level-${level}`] : level}" :title="titleRight" v-if="!noLabel">{{labelRight}}</label>
           <slot name="setting-half-right"></slot>
         </div>
@@ -31,37 +31,37 @@
     </div>
 </template>
 <script>
-import _ from "lodash";
+import _ from 'lodash';
 export default {
-  name: "SettingsContainers",
+  name: 'SettingsContainers',
   props: [
-    "customClass",
-    "label",
-    "level",
-    "label-right",
-    "label-left",
-    "title",
-    "titleRight",
-    "titleLeft",
-    "noLabel"
+    'customClass',
+    'label',
+    'level',
+    'label-right',
+    'label-left',
+    'title',
+    'titleRight',
+    'titleLeft',
+    'noLabel',
   ],
   computed: {
     hasSettingRight() {
-      return Boolean(this.$slots["setting-right"]);
+      return Boolean(this.$slots['setting-right']);
     },
     hasSettingSideBySide() {
       return (
-        Boolean(this.$slots["setting-half-left"]) &&
-        Boolean(this.$slots["setting-half-right"])
+        Boolean(this.$slots['setting-half-left']) &&
+        Boolean(this.$slots['setting-half-right'])
       );
     },
     hasSettingBottom() {
-      return Boolean(this.$slots["setting-bottom"]);
+      return Boolean(this.$slots['setting-bottom']);
     },
     hasSettingHalf() {
-      return Boolean(this.$slots["setting-half"]);
-    }
-  }
+      return Boolean(this.$slots['setting-half']);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -71,7 +71,7 @@ export default {
   margin-right: 0;
   position: relative;
 
-  .half-setting /deep/ .el-switch{
+  .half-setting /deep/ .el-switch {
     margin-top: 4px;
   }
 }
@@ -117,14 +117,14 @@ span.is-danger {
     padding-left: 10px;
   }
 }
-.is-setting-half{
+.is-setting-half {
   display: table;
   float: left;
   width: 50%;
   margin-bottom: 0;
 }
 
-.is-danger /deep/ input{
+.is-danger /deep/ input {
   border-color: #ce5f5f;
 }
 </style>
