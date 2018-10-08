@@ -100,7 +100,9 @@ class SendReviewersEmail extends Job implements ShouldQueue
         $data = [
             'requestor' => $requestor->name .' '. $requestor->last_name,
             'proof_url' => url('proof/review', $this->proof->token),
-            'send_to_all' => isset($this->proof->send_to_all) && $this->proof->send_to_all === 1
+            'type' => 'new_proof',
+            'notification_message_to_all' => $this->proof->notification_message_to_all,
+            'send_to_all' => (isset($this->proof->send_to_all) && $this->proof->send_to_all === true)
         ];
 
         if ($data['send_to_all']) {

@@ -75,11 +75,15 @@
                     </label>
                   </div>
                   <div class="input-group">
-                    <label data-toggle="tooltip" data-placement="top" title="Selecting this option will trigger the review request email to all reviewers, even if they had already received it as part of an earlier request. Leaving it unchecked will send the email only to newly added or edited users">
-                      <checkbox name="send_to_all" value="1">
-                        Send a notification to all reviewers
+                    <label data-toggle="tooltip" data-placement="top" title="Checking this box will send or resend both public and private notifications to all users, not just those newly added or whose message was changed">
+                      <checkbox name="send_to_all" value="1" v-model="sendToAll">
+                        Send/Resend notifications to all reviewers
                       </checkbox>
                     </label>
+                  </div>
+                  <div class="form-group">
+                  <label>Message for all reviewers</label>
+                    <textarea name="notification_message_4_all" id="notification_message_4_all" class="form-control" rows="3" maxlength="200" v-model="notificationMessage4All"></textarea>
                   </div>
                 </div>
               </form>
@@ -163,7 +167,9 @@
         this.$store.commit("global/setLoader", true);
         let data = {
           campaign_id: this.campaign.campaign_id,
-          reviewers: this.reviewers,
+          reviewers: this.reviewers.map((rev)=>({email: rev.email, required: rev.required, notification_message: rev.notification_message})),
+          send_to_all: this.sendToAll,
+          notification_message_4_all: this.notificationMessage4All
         }
         if(!this.campaign.campaign_data.proof_id || this.startProof){
           data.create_new_proof = true;
@@ -377,6 +383,8 @@
         reviewers: [],
         currentReviewer: {},
         currentNotificationMessage: '',
+        notificationMessage4All: '',
+        sendToAll: false,
         startProof: true,
         proofAccess: {
           status: this.$_app.config.proofConfig.status,
@@ -403,5 +411,11 @@
       overflow-y: scroll !important;
       width: 100%;
     }
+  }
+</style>
+
+<style media="screen">
+  #notification_message_4_all{
+    height: 80px;
   }
 </style>
