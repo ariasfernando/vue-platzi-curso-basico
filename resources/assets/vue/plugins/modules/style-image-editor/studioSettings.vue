@@ -5,7 +5,7 @@
         <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
       </template>
     </settings-container>
-    <settings-container v-if="plugin.enabled" label="Mobile Image Upload">
+    <settings-container v-if="plugin.enabled && $can('std-image-element-editor-plugin-mobile-upload')" label="Mobile Image Upload">
       <template slot="setting-right">
         <toggle-button :value="hasImageMobile" @change="toggleImageMobile"></toggle-button>
       </template>

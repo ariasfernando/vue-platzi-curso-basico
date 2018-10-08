@@ -228,6 +228,7 @@ class AssignPermissionStudio extends Migration
         $this->unsetPermission($basicPermissions,'std-image-element-editor-smaller');
         $this->unsetPermission($basicPermissions,'std-image-element-editor-adjust');
         $this->unsetPermission($basicPermissions,'std-image-element-editor-sie-plugin-image_upload');
+        $this->unsetPermission($basicPermissions,'std-image-element-editor-plugin-mobile-upload');
         $this->unsetPermission($basicPermissions,'std-image-element-editor-uploaddefault');
         $this->unsetPermission($basicPermissions,'std-image-element-editor-fillcolor');
         $this->unsetPermission($basicPermissions,'std-image-element-editor-rotatable');

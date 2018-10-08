@@ -140,6 +140,7 @@ class CreatePermissionsStudio extends Migration
         ['name' => 'std-image-element-editor-zoomable', 'description' => ''],
         ['name' => 'std-image-element-editor-vertical', 'description' => ''],
         ['name' => 'std-image-element-editor-round', 'description' => ''],
+        ['name' => 'std-image-element-editor-plugin-mobile-upload', 'description' => ''],
         ['name' => 'std-image-element-editor-sie-plugin-text_text', 'description' => ''],
         ['name' => 'std-image-element-editor-sie-plugin-image-overlay_image', 'description' => ''],
         ['name' => 'std-image-element-editor-sie-plugin-shapemask_options', 'description' => ''],
