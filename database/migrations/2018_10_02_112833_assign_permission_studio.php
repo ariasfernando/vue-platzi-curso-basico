@@ -13,11 +13,11 @@ class AssignPermissionStudio extends Migration
         'std_raw',
 
         // MODULE PERMISSIONS
-        'std-module-bgcolor',
-        'std-module-padding',
-        'std-module-border-group',
-        'std-module-classes',
-        'std-module-columnsStacking',
+        'std-module-backgroundColorGroup-bgcolor',
+        'std-module-paddingGroup-padding',
+        'std-module-borderGroup-border-group',
+        'std-module-classesAndColumnStackingGroup-classes',
+        'std-module-classesAndColumnStackingGroup-columnsStacking',
         'std-plugin-module-background-color',
         'std-plugin-module-equal-height-for-column',
         'std-plugin-module-height-sync',
@@ -26,26 +26,58 @@ class AssignPermissionStudio extends Migration
         'std-plugin-text-color-by-background-for-module',
 
         // COLUMN PERMISSIONS
-        'std-column-bgcolor',
-        'std-column-padding',
-        'std-column-border-group',
-        'std-column-width',
-        'std-column-classes',
+        'std-column-backgroundColorGroup-bgcolor',
+        'std-column-paddingGroup-padding',
+        'std-column-borderGroup-border-group',
+        'std-column-widthAndClassGroup-width',
+        'std-column-widthAndClassGroup-classes',
         'std-column-plugin-column-background-color',
         'std-column-plugin-column-palette-background-color',
         'std-column-plugin-vertical-alignment',
         'std-column-plugin-text-color-by-background',
 
         // TEXT ELEMENT PERMISSIONS
-        'std-text-element-fontFamily',
-        'std-text-element-font-style',
-        'std-text-element-letterSpacing',
-        'std-text-element-fontWeight',
-        'std-text-element-align',
-        'std-text-element-classes',
-        'std-text-element-bgcolor',
-        'std-text-element-color',
-        'std-text-element-padding',
+        'std-text-element-fontFamilyGroup-fontFamily',
+        'std-text-element-fontAndStylesGroup-font-style',
+        'std-text-element-fontAndStylesGroup-letterSpacing',
+        'std-text-element-fontAndStylesGroup-fontWeight',
+        'std-text-element-fontAndStylesGroup-align',
+        'std-text-element-fontAndStylesGroup-classes',
+        'std-text-element-colorStyles-bgcolor',
+        'std-text-element-colorStyles-color',
+        'std-module-backgroundColorGroup-bgcolor',
+        'std-module-paddingGroup-padding',
+        'std-module-borderGroup-border-group',
+        'std-module-classesAndColumnStackingGroup-classes',
+        'std-module-classesAndColumnStackingGroup-columnsStacking',
+        'std-plugin-module-background-color',
+        'std-plugin-module-equal-height-for-column',
+        'std-plugin-module-height-sync',
+        'std-plugin-module-palette-background-color',
+        'std-plugin-toggle-element',
+        'std-plugin-text-color-by-background-for-module',
+
+        // COLUMN PERMISSIONS
+        'std-column-backgroundColorGroup-bgcolor',
+        'std-column-paddingGroup-padding',
+        'std-column-borderGroup-border-group',
+        'std-column-widthAndClassGroup-width',
+        'std-column-widthAndClassGroup-classes',
+        'std-column-plugin-column-background-color',
+        'std-column-plugin-column-palette-background-color',
+        'std-column-plugin-vertical-alignment',
+        'std-column-plugin-text-color-by-background',
+
+        // TEXT ELEMENT PERMISSIONS
+        'std-text-element-fontFamilyGroup-fontFamily',
+        'std-text-element-fontAndStylesGroup-font-style',
+        'std-text-element-fontAndStylesGroup-letterSpacing',
+        'std-text-element-fontAndStylesGroup-fontWeight',
+        'std-text-element-fontAndStylesGroup-align',
+        'std-text-element-fontAndStylesGroup-classes',
+        'std-text-element-colorStyles-bgcolor',
+        'std-text-element-colorStyles-color',
+        'std-text-element-paddingGroup-padding',
         'std-text-element-plugin-alignment',
         'std-text-element-plugin-background-color',
         'std-text-element-plugin-font-family',
@@ -66,27 +98,25 @@ class AssignPermissionStudio extends Migration
         'tiny-plugin-forecolor-palette-library',
 
         // BUTTON ELEMENT PERMISSIONS
-        'std-button-element-fontFamily',
-        'std-button-element-font-style',
-        'std-button-element-letter-spacing',
-        'std-button-element-font-weight',
-        'std-button-element-text-align',
-        'std-button-element-classes',
-        'std-button-element-bgcolor',
-        'std-button-element-color',
-        'std-button-element-padding',
-        'std-button-element-borderRadius',
-        'std-button-element-border-group',
-        'std-button-element-width',
-        'std-button-element-maxWidth',
-        'std-button-element-minWidth',
-        'std-button-element-height',
-        'std-button-element-href',
-        'std-button-element-caret',
-        'std-button-element-image-size',
-        'std-button-element-classes',
-        'std-button-element-bgcolor',
-        'std-button-element-padding',
+        'std-button-element-fontSettingsGroup-fontFamily',
+        'std-button-element-fontSettingsGroup-font-style',
+        'std-button-element-fontSettingsGroup-letter-spacing',
+        'std-button-element-fontSettingsGroup-font-weight',
+        'std-button-element-textAlignmentGroup-text-align',
+        'std-button-element-classStyleGroup-classes',
+        'std-button-element-classStyleGroup-bgcolor',
+        'std-button-element-classStyleGroup-color',
+        'std-button-element-paddingBorderRadiusGroup-padding',
+        'std-button-element-paddingBorderRadiusGroup-borderRadius',
+        'std-button-element-borderGroup-border-group',
+        'std-button-element-dimentionsGroup-width',
+        'std-button-element-dimentionsGroup-height',
+        'std-button-element-defaultUrlGroup-href',
+        'std-button-element-caretGroup-caret',
+        'std-button-element-caretGroup-image-size',
+        'std-button-element-caretGroup-classes',
+        'std-button-element-caretGroup-bgcolor',
+        'std-button-element-caretGroup-padding',
         'std-button-element-plugin-background-color',
         'std-button-element-plugin-destination-url',
         'std-button-element-plugin-destination-url-validate',
@@ -98,33 +128,15 @@ class AssignPermissionStudio extends Migration
         
 
         // IMAGE ELEMENT PERMISSIONS
-        'std-image-element-placeholder',
-        'std-image-element-hasImageMobile',
-        'std-image-element-placeholderMobile',
-        'std-image-element-classes',
-        'std-image-element-image-size',
-        'std-image-element-text-align',
-        'std-image-element-bgcolor',
-        'std-image-element-padding',
-        'std-image-element-href',
-        'std-image-element-alt',
-        'std-image-element-title',
-        'std-image-element-plugin-alignment',
-        'std-image-element-plugin-background-color',
-        'std-image-element-plugin-destination-url',
-        'std-image-element-plugin-pallete-background-color',
-        'std-image-element-plugin-style-image-editor',
-        'std-image-element-placeholder',
-        'std-image-element-hasImageMobile',
-        'std-image-element-placeholderMobile',
-        'std-image-element-classes',
-        'std-image-element-image-size',
-        'std-image-element-text-align',
-        'std-image-element-bgcolor',
-        'std-image-element-padding',
-        'std-image-element-href',
-        'std-image-element-alt',
-        'std-image-element-title',
+        'std-image-element-placeholderGroup-placeholder',
+        'std-image-element-placeholderGroup-placeholderMobile',
+        'std-image-element-placeholderGroup-classes',
+        'std-image-element-imageSizeGroup-image-size',
+        'std-image-element-textAlignGroup-text-align',
+        'std-image-element-backgroundColorGroup-bgcolor',
+        'std-image-element-paddingGroup-padding',
+        'std-image-element-urlGroup-href',
+        'std-image-element-urlGroup-alt',
         'std-image-element-plugin-alignment',
         'std-image-element-plugin-background-color',
         'std-image-element-plugin-destination-url',
@@ -161,11 +173,11 @@ class AssignPermissionStudio extends Migration
         'std-image-element-editor-sie-plugin-shapemask_options',
 
         // DIVIDER ELEMENT PERMISSIONS
-        'std-divider-element-classes',
-        'std-divider-element-bgcolor',
-        'std-divider-element-height',
-        'std-divider-element-padding',
-        'std-divider-element-border-group',
+        'std-divider-element-classesGroup-classes',
+        'std-divider-element-StyleSettingsGroup-bgcolor',
+        'std-divider-element-StyleSettingsGroup-height',
+        'std-divider-element-paddingGroup-padding',
+        'std-divider-element-borderGroup-border-group',
         'std-divider-element-plugin-background-color',
         'std-divider-element-plugin-pallete-background-color',
         'std-divider-element-plugin-variable-height'
@@ -178,26 +190,29 @@ class AssignPermissionStudio extends Migration
         // Remove permissions for basic user
         $basicPermissions = $allPermissions;
         $this->unsetPermission($basicPermissions, 'std_raw');
-        $this->unsetPermission($basicPermissions, 'std-module-classes');
+        $this->unsetPermission($basicPermissions, 'std-module-classesAndColumnStackingGroup-classes');
         $this->unsetPermission($basicPermissions, 'std-plugin-text-color-by-background-for-module');
         
-        $this->unsetPermission($basicPermissions, 'std-column-classes');
+        $this->unsetPermission($basicPermissions, 'std-column-widthAndClassGroup-classes');
         $this->unsetPermission($basicPermissions, 'std-column-plugin-vertical-alignment');
         $this->unsetPermission($basicPermissions, 'std-column-plugin-text-color-by-background');
 
-        $this->unsetPermission($basicPermissions, 'std-divider-element-border-group');
-        $this->unsetPermission($basicPermissions, 'std-divider-element-classes');
+        $this->unsetPermission($basicPermissions, 'std-divider-element-borderGroup-border-group');
+        $this->unsetPermission($basicPermissions, 'std-divider-element-classesGroup-classes');
         
-        $this->unsetPermission($basicPermissions, 'std-text-element-classes');
+        $this->unsetPermission($basicPermissions, 'std-text-element-fontAndStylesGroup-classes');
         $this->unsetPermission($basicPermissions, 'tiny-plugin-link_fixed_color');
         
-        $this->unsetPermission($basicPermissions, 'std-button-element-classes');
+        $this->unsetPermission($basicPermissions, 'std-button-element-classStyleGroup-classes');
         $this->unsetPermission($basicPermissions, 'std-button-element-caret');
+        $this->unsetPermission($basicPermissions, 'std-button-element-caretGroup-caret');
+        $this->unsetPermission($basicPermissions, 'std-button-element-caretGroup-image-size');
+        $this->unsetPermission($basicPermissions, 'std-button-element-caretGroup-classes');
+        $this->unsetPermission($basicPermissions, 'std-button-element-caretGroup-bgcolor');
+        $this->unsetPermission($basicPermissions, 'std-button-element-caretGroup-padding');
         $this->unsetPermission($basicPermissions, 'std-button-element-plugin-destination-url-target');
-        $this->unsetPermission($basicPermissions, 'std-button-element-maxWidth');
-        $this->unsetPermission($basicPermissions, 'std-button-element-minWidth');
         
-        $this->unsetPermission($basicPermissions, 'std-image-element-classes');        
+        $this->unsetPermission($basicPermissions, 'std-image-element-placeholderGroup-classes');        
         $this->unsetPermission($basicPermissions, 'std-image-element-plugin-destination-url-target');
 
         $this->unsetPermission($basicPermissions,'std-image-element-editor-library');

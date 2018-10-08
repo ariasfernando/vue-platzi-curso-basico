@@ -72,7 +72,6 @@ export default {
       return this.$store.getters['module/module'];
     },
     settings() {
-      console.log(settingsDefault.Module().componentSettings);
       return settingsDefault.Module().componentSettings;
     },
   },
