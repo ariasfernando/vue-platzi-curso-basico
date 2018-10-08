@@ -21,6 +21,7 @@ module.exports = {
       url: false,
     },
     target: false,
+    title: false,
   },
   data: {},
   render: true,

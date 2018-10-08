@@ -36,7 +36,17 @@
             :key="option"
           >
         </el-button>
+      </template>
+    </settings-container>
 
+    <settings-container label="Title" v-if="plugin.config.title" key="title">
+      <template slot="setting-bottom">
+        <el-input
+          name="title"
+          type="text"
+          size="mini"
+          placeholder="Title"
+          v-model="title"></el-input>
       </template>
     </settings-container>
   </div>
@@ -101,6 +111,14 @@
           });
         },
       },
+      title: {
+        get() {
+          return this.component[this.plugin.subComponent].attribute.title;
+        },
+        set(value) {
+          this.saveComponentProperty('title', value);
+        },
+      },
       validationRules() {
         const rules = [];
         _.each(this.plugin.config.validations, (e,i) => {
@@ -129,7 +147,6 @@
           property,
           value: value,
         };
-
         this.$store.commit('campaign/saveComponentProperty', payload);
       },
       

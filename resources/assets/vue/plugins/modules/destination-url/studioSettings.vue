@@ -21,6 +21,11 @@
             <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(newValue)=>updateField(newValue, 'target')"></toggle-button>
         </template>
       </settings-container>
+      <settings-container label="Title">
+        <template slot="setting-right">
+            <toggle-button :value="plugin.config.title" @change="(newValue)=>updateField(newValue, 'title')"></toggle-button>
+        </template>
+      </settings-container>
   </template>
   </div>
 </template>
@@ -75,7 +80,6 @@
           componentId: this.currentComponent.componentId,
           config,
         };
-
         this.$store.commit('module/savePlugin', payload);
       },
     }

@@ -8,6 +8,7 @@
         :data-contenteditable-href="component.button.attribute.href || ''"
         :target="component.button.attribute.target || '_blank'"
         :style="component.button.style.textDecoration || 'text-decoration:none;'"
+        :title="component.button.attribute.title || ''"
         >
         <table
           cellpadding="0"
