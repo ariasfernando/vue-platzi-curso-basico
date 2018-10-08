@@ -32,6 +32,20 @@ function dividerDefault() {
           type: 'generic-number',
           subComponent: 'divider',
         },
+        {
+          link: 'attribute',
+          label: 'Width',
+          name: 'width',
+          isPixel: true,
+          isPercentage: true,
+          type: 'generic-number',
+          subComponent: 'divider',
+        },
+        {
+          name: 'text-align',
+          type: 'text-align',
+          subComponent: 'divider',
+        },
       ],
       [
         {

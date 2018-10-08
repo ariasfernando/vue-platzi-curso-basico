@@ -1,22 +1,21 @@
-import _ from 'lodash';
-
 export default {
   props: [
-    'name',
-    'type',
-    'link',
-    'label',
-    'placeholder',
     'default-value',
-    'min-value',
+    'element',
+    'is-disable',
+    'isDisablePercentage',
+    'isPercentage',
+    'isPixel',
+    'label',
+    'link',
     'max-value',
+    'min-value',
+    'name',
+    'options',
+    'placeholder',
     'showSetting',
     'sub-component',
-    'is-disable',
-    'options',
-    'element',
-    'isDisablePercentage',
-    'isPixel',
+    'type',
   ],
   mounted() {
     this.setDefaultValue();
