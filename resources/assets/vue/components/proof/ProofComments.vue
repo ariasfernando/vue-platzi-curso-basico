@@ -14,12 +14,14 @@
                 class="form-control"
                 placeholder="Insert your comment here..."
                 rows="3"
+                v-if="!campaignFinished"
                 v-model="newComment"
             ></textarea>
             <button
                 class="btn btn-default beta-btn-primary pull-right"
                 :class="{'ajax-loader-small': !canSubmit}"
                 :disabled="!canSubmit"
+                v-if="!campaignFinished"
                 v-on:click="submitComment()"
             >Submit</button>
         </div>
@@ -39,7 +41,7 @@
         comments: []
       };
     },
-    props: ['token'],
+    props: ['token', 'campaignFinished'],
     created: function() {
       // Get a list of comments
       this.getComments();

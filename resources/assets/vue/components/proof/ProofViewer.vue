@@ -59,6 +59,7 @@
             <aside>
                 <proof-comments
                     :token="token"
+                    :campaignFinished="campaignFinished"
                 ></proof-comments>
             </aside>
         </div>
@@ -97,6 +98,7 @@
         showDecision: false,
         canEdit: false,
         reviewer: [],
+        campaignFinished: false,
         desktopWidth: '600',
         mobileWidth: '300',
         buildingMode: 'desktop',
@@ -108,6 +110,11 @@
     computed: {
       campaignHtml () {
         if ('body_html' in this.campaign) {
+          //hide hack in Finished Emails.
+          setTimeout(function(){
+            $(".st-hide-hack").hide();
+          },1000);
+
           // Yes, it's ugly, but this width value is set in the body_html and we need
           // to remove it so the switch can work.
           // @TODO: check why this value is in the body_html
@@ -143,6 +150,7 @@
             _this.reviewer = response.data.reviewer;
             _this.showDecision = response.data.show_decision;
             _this.canEdit = response.data.can_edit;
+            _this.campaignFinished = response.data.campaign_finished;
             _this.desktopWidth = response.data.campaign.template_width;
             _this.mobileWidth = response.data.campaign.template_mobile_width;
             if ('message' in response.data) {
