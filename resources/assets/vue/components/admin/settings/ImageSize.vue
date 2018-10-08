@@ -299,6 +299,9 @@ export default {
       float: right;
       padding-left: 0px;
     }
+    .generic-number {
+      margin-top:5px;
+    }
   }
   & /deep/ .el-input {
     &-number {
