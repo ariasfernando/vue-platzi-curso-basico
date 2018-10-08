@@ -200,6 +200,39 @@ describe('== Models ==', () => {
         done();
       });
     });
+    describe('CustomCodeElement', () => {
+      let element;
+      let properties;
+      beforeAll(() => {
+        element = new Element({ type: 'custom-code-element' });
+        properties = element.getProperties();
+      });
+      afterAll(() => {
+        element = null;
+        properties = null;
+      });
+      it('Should return a valid object', (done) => {
+        expect(typeof element).toBe('object');
+        done();
+      });
+
+      it('Should return a valid object of type custom-code-element', (done) => {
+        expect(properties).toHaveProperty('type', 'custom-code-element');
+        done();
+      });
+
+      it('Should only have a specific set of properties', (done) => {
+        expect(Object.keys(properties).sort()).toEqual([
+          'id',
+          'type',
+          'container',
+          'code',
+          'plugins',
+        ].sort());
+
+        done();
+      });
+    });
   });
 
   describe('Plugins', () => {

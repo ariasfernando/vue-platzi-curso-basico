@@ -15,6 +15,8 @@ const assetsVuePath = `${assetsPath}/vue`;
 const jsDestinationPath = 'public/js';
 const customerAssetsPath = 'stensul/customer/resources/assets';
 
+require('dotenv').config();
+
 function jsAppFilePath(file) {
   return `/js/base/${file}`;
 }
@@ -100,6 +102,8 @@ mix
   .scripts([
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-ui/jquery-ui.min.js',
+    'node_modules/jquery-mousewheel/jquery.mousewheel.min.js',
+    'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js',
   ], `${jsDestinationPath}/jquery.js`)
   .scripts([
     'node_modules/bootstrap/dist/js/bootstrap.min.js',
@@ -205,6 +209,9 @@ mix
       jsonFile.writeFile(mixManifest, newJson, { spaces: 2 }, (writeError) => {
         if (writeError) console.error(writeError);
       });
+      if (process.env.NODE_ENV === 'development') {
+        console.log('\x1b[37m%s\x1b[36m%s\x1b[0m', `${process.env.APP_NAME} tool running on --> `, process.env.APP_BASE_URL);
+      }
     });
   });
 

@@ -1359,17 +1359,6 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    it('"setActiveColumn" with data, expect of the state "activeColumn" to equal to 0', (done) => {
-      store.commit('module/setActiveColumn', 1);
-
-      let stateActiveColumn = store.state.module;
-
-      expect(stateActiveColumn).toHaveProperty('activeColumn', 1);
-
-      stateActiveColumn = null;
-
-      done();
-    });
     it('"setBuildingMode" with data, expect of the state "buildingMode" to equal to 0', (done) => {
       store.commit('module/setBuildingMode', 'mobile');
 
@@ -4225,17 +4214,6 @@ describe('== Module Store ==', () => {
       done();
     });
     xit('"changeSettingComponent", expect state module has 1', () => {});
-    it('"activeColumn", expect state activeColumn has info', (done) => {
-      store.commit('module/setActiveColumn', 1);
-
-      let getDataActiveColumn = store.getters['module/activeColumn'];
-
-      expect(getDataActiveColumn).toEqual(1);
-
-      getDataActiveColumn = null;
-
-      done();
-    });
     it('"buildingMode", expect state buildingMode has \'mobile\'', (done) => {
       store.commit('module/setBuildingMode', 'mobile');
 

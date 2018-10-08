@@ -52,4 +52,8 @@ export default {
     border: 1px solid #78dcd6;
   }
 }
+.el-input-number /deep/ .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled), 
+.el-input-number /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){
+  border: 1px solid #78dcd6;
+}
 </style>

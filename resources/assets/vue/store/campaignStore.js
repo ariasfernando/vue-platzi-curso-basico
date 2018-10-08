@@ -225,6 +225,17 @@ function campaignStore() {
         Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
+      saveColumnAttribute(state, data) {
+        // DEPRECATE
+        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
+        const newData = {};
+        newData[data.attribute] = data.attributeValue;
+        state
+          .modules[data.moduleId]
+          .structure.columns[data.columnId]
+          .container.attribute = { ...attributes, ...newData };
+        state.dirty = true;
+      },
       saveColumnProperty(state, data) {
         const columns = state.modules[data.moduleId].structure.columns;
         const column = columns[data.columnId];
@@ -238,17 +249,6 @@ function campaignStore() {
         if (!_.isEqual(columnClone, column)) {
           Vue.set(columns, data.columnId, column);
         }
-      },
-      saveColumnAttribute(state, data) {
-        // DEPRECATE
-        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
-        const newData = {};
-        newData[data.attribute] = data.attributeValue;
-        state
-          .modules[data.moduleId]
-          .structure.columns[data.columnId]
-          .container.attribute = { ...attributes, ...newData };
-        state.dirty = true;
       },
       saveModuleAttribute(state, data) {
         const attributes = state.modules[data.moduleId].structure.attribute;
@@ -293,10 +293,32 @@ function campaignStore() {
         }
         Vue.set(state.modules[data.moduleId].data.images[data.key], data.field, data.value);
       },
+      saveCustomModuleDataFieldByIndex(state, data) {
+        // Prevent empty arrays returned by php-mongo
+        if (_.isArray(state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data = {};
+        }
+
+        if (!(data.field in state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data[data.field] = [];
+        }
+
+        if (!(data.index in state.modules[data.moduleId].data[data.field])) {
+          state.modules[data.moduleId].data[data.field][data.index] = {};
+        }
+
+        const newData = _.extend(clone(state.modules[data.moduleId].data[data.field][data.index]), data.value);
+        state.modules[data.moduleId].data[data.field][data.index] = newData;
+        state.modules[data.moduleId].data[data.field] = clone(state.modules[data.moduleId].data[data.field]);
+        state.dirty = true;
+      },
       saveCustomModuleDataField(state, data) {
         // Prevent empty arrays returned by php-mongo
         if (_.isArray(state.modules[data.moduleId].data)) {
           state.modules[data.moduleId].data = {};
+        }
+        if (!(data.field in state.modules[data.moduleId].data)) {
+          state.modules[data.moduleId].data[data.field] = {};
         }
 
         if (!(data.field in state.modules[data.moduleId].data)) {

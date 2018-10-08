@@ -34,6 +34,7 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="component.id"
+              @set-component="selection => $emit('set-component', selection)"
               context="admin"
             ></component>
             </template>
@@ -48,6 +49,7 @@
               </div>
             </div>
           </draggable>
+          <element-selector :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
         </td>
       </tr>
     </table>
@@ -56,22 +58,26 @@
 
 <script>
 
-  import Draggable from 'vuedraggable';
-  import TextElement from '../elements/TextElement.vue';
   import ButtonElement from '../elements/ButtonElement.vue';
-  import ImageElement from '../elements/ImageElement.vue';
+  import CustomCodeElement from '../elements/CustomCodeElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
+  import Draggable from 'vuedraggable';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
+  import ElementSelector from '../../common/ElementSelector.vue';
+  import ImageElement from '../elements/ImageElement.vue';
+  import TextElement from '../elements/TextElement.vue';
 
   export default {
     name: 'ColumnsFixedRender',
     mixins: [ ElementMixin ],
     components: {
-      Draggable,
-      TextElement,
       ButtonElement,
-      ImageElement,
+      CustomCodeElement,
       DividerElement,
+      Draggable,
+      ElementSelector,
+      ImageElement,
+      TextElement,
     },
     props: {
       column: { 
@@ -110,6 +116,5 @@
         this.$emit('add', e);
       },
     }    
-    
   };
 </script>

@@ -14,7 +14,8 @@
         <tr>
           <td
             width="100%"
-            :style="[column.container.style, {'background-color' : column.container.attribute.bgcolor}, {'height': column.container.attribute.height + 'px'}]"
+            style="width:100%;"
+            :style="styles(columnId)"
             :bgcolor="column.container.attribute.bgcolor"
             :valign="column.container.attribute.valign || 'top'"
             :align="column.container.attribute.align || 'center'"
@@ -48,20 +49,22 @@
 
 <script>
 
-  import TextElement from '../elements/TextElement.vue';
-  import ButtonElement from '../elements/ButtonElement.vue';
-  import ImageElement from '../elements/ImageElement.vue';
-  import DividerElement from '../elements/DividerElement.vue';
   import _ from 'lodash';
+  import ButtonElement from '../elements/ButtonElement.vue';
+  import CustomCodeElement from '../elements/CustomCodeElement.vue';
+  import DividerElement from '../elements/DividerElement.vue';
+  import ImageElement from '../elements/ImageElement.vue';
+  import TextElement from '../elements/TextElement.vue';
 
   export default {
     name: 'ColumnsInvertedStackingRender',
 
     components: {
-      TextElement,
       ButtonElement,
-      ImageElement,
+      CustomCodeElement,
       DividerElement,
+      ImageElement,
+      TextElement,
     },
     props: {
       moduleId:{
@@ -107,13 +110,36 @@
           "</table>" +
           "<![endif]";
       },
-      styles() {
-        let padding = `padding-top:${this.column.container.style.paddingTop};padding-left:${this.column.container.style.paddingLeft};padding-bottom:${this.column.container.style.paddingBottom};padding-right:${this.column.container.style.paddingRight};`;
-
-        return padding;
-      },
     },
     methods: {
+      styles(columnId) {
+        let properties = [
+          "padding-top",
+          "padding-left",
+          "padding-bottom",
+          "padding-right",
+          "border-top-width",
+          "border-right-width",
+          "border-bottom-width",
+          "border-left-width",
+          "border-top-style",
+          "border-right-style",
+          "border-bottom-style",
+          "border-left-style",
+          "border-top-color",
+          "border-right-color",
+          "border-bottom-color",
+          "border-left-color"
+        ];
+        let styles = properties.map(p => {
+          return {
+            [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
+          };
+        });
+        styles.push({'background-color': this.module.structure.columns[columnId].container.attribute.bgcolor});
+        styles.push({'height': this.module.structure.columns[columnId].container.attribute.height + 'px'});
+        return styles;
+      },
       selectComponent(data) {
         setTimeout(() => {
           // TODO: find better way to do this
