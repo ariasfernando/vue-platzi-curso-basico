@@ -36,6 +36,7 @@
     <modal-esp v-if="campaignReady"></modal-esp>
     <modal-proof v-if="campaignReady"></modal-proof>
     <modal-enable-templating v-if="campaignReady"></modal-enable-templating>
+    <modal-proof-track v-if="campaignReady"></modal-proof-track>
 
     <spinner></spinner>
 
@@ -47,6 +48,7 @@
   import ModalComplete from './modals/ModalComplete.vue'
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
+  import ModalProofTrack from './modals/ModalProofTrack.vue';
   import ModalEsp from './modals/ModalEsp.vue'
   import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
   import CampaignMenu from './CampaignMenu.vue'
@@ -74,6 +76,7 @@
       ModalComplete,
       ModalPreview,
       ModalProof,
+      ModalProofTrack,
       ModalEsp,
       ModalEnableTemplating,
       Spinner,
@@ -164,7 +167,7 @@
       },
       loadConfig() {
         this.$store.dispatch("config/getConfig", 'campaign').then(response => {
-          this.campaignConfigReady = true;        
+          this.campaignConfigReady = true;
           this.campaignConfig = this.$store.getters["config/config"].campaign;
         }, error => {
           this.$root.$toast(
@@ -217,7 +220,7 @@
 
   @brand-primary: lighten(@stensul-purple, 35%);
   @brand-secondary: @stensul-purple-light;
-  
+
   .el-input.is-active .el-input__inner,
   .el-select .el-input__inner:focus,
   .el-select .el-input.is-focus .el-input__inner,
@@ -288,7 +291,7 @@
     }
 
     &::-webkit-scrollbar {
-        width: 4px; 
+        width: 4px;
         background: transparent;
         }
     &::-webkit-scrollbar-thumb {
