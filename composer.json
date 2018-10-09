@@ -30,7 +30,8 @@
         "stensul/filesystem": "^2.0",
         "stensul/asset-manager": "^1.0",
         "zaininnari/html-minifier": "^0.4.2",
-        "wyrihaximus/html-compress": "^1.4"
+        "wyrihaximus/html-compress": "^1.4",
+        "stensul/html-to-pdf-service-provider": "3.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
