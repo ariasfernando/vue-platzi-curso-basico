@@ -33,6 +33,7 @@ function Library(data = {}) {
     espProvider: config.espProvider || false,
     plainText: config.plainText || false,
     preheader: config.preheader || false,
+    preheaderDefault: config.preheaderDefault || '',
     tracking: config.tracking || false,
     tagging: config.tagging || false,
     templating: config.templating || false,

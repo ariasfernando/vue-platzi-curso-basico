@@ -45,15 +45,23 @@ import SettingsContainer from "../../../components/common/settings/containers/Se
           return this.component[this.plugin.subComponent].attribute.align;
         },
         set(value) {
+          const { type, behaviour } = this.component;
           const payload = {
-            moduleId: this.currentComponent.moduleId,
-            columnId: this.currentComponent.columnId,
-            componentId: this.currentComponent.componentId,
-            subComponent: this.plugin.subComponent,
-            link: "attribute",
-            property: "align",
-            value: value
-          };
+              moduleId: this.currentComponent.moduleId,
+              columnId: this.currentComponent.columnId,
+              componentId: this.currentComponent.componentId,
+              subComponent: this.plugin.subComponent,
+              link: "attribute",
+              property: "align",
+              value: value
+            };
+
+          if(type == 'button-element' && behaviour == 'text'){
+            const textAlignPayload = Object.assign({}, payload);
+            textAlignPayload.subComponent = 'button';
+            this.$store.commit('campaign/saveComponentProperty', textAlignPayload);
+          }
+            
           this.$store.commit('campaign/saveComponentProperty', payload);
         }
       },
