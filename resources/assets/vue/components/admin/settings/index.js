@@ -5,6 +5,7 @@ import ColumnsStacking from './ColumnsStacking.vue';
 import FontFamily from './FontFamily.vue';
 import FontStyle from './FontStyle.vue';
 import FontWeight from './FontWeight.vue';
+import GenericCode from './GenericCode.vue';
 import GenericColor from './GenericColor.vue';
 import GenericFile from './GenericFile.vue';
 import GenericNumber from './GenericNumber.vue';
@@ -26,6 +27,7 @@ const Settings = {
   FontFamily,
   FontStyle,
   FontWeight,
+  GenericCode,
   GenericColor,
   GenericFile,
   GenericNumber,

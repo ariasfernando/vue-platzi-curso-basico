@@ -7,19 +7,19 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        :style="{'width':calculeStyleWidthColumnPx(columnId)}"
         :width="calculeWidthColumnPx(columnId)"
+        :style="{width: calculeStyleWidthColumnPx(columnId)}"
       >
         <tr>
           <td
             width="100%"
             style="width:100%;"
-            :height="column.container.attribute.height"
             :style="styles(columnId)"
             :bgcolor="column.container.attribute.bgcolor"
-            :valign="column.container.attribute.valign|| 'top'"
+            :valign="column.container.attribute.valign || 'top'"
             :align="column.container.attribute.align || 'center'"
-            :class="column.container.attribute.classes ||''"
+            :class="column.container.attribute.classes || ''"
+            :height="column.container.attribute.height"
           >
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
                   <component
@@ -44,19 +44,21 @@
 
 <script>
 
-  import TextElement from '../elements/TextElement.vue';
   import ButtonElement from '../elements/ButtonElement.vue';
-  import ImageElement from '../elements/ImageElement.vue';
+  import CustomCodeElement from '../elements/CustomCodeElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
+  import ImageElement from '../elements/ImageElement.vue';
+  import TextElement from '../elements/TextElement.vue';
 
   export default {
     name: 'ColumnsStackedRender',
 
     components: {
-      TextElement,
       ButtonElement,
-      ImageElement,
+      CustomCodeElement,
       DividerElement,
+      ImageElement,
+      TextElement,
     },
     props: {
       moduleId:{
@@ -118,7 +120,8 @@
             [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
           };
         });
-        styles.push({'height': this.module.structure.columns[columnId].container.attribute.height + 'px'})
+        styles.push({'background-color': this.module.structure.columns[columnId].container.attribute.bgcolor});
+        styles.push({'height': this.module.structure.columns[columnId].container.attribute.height + 'px'});
         return styles;
       },
       msoBetweenComment(columnId) {
@@ -146,7 +149,7 @@
             componentId:data.componentId,
           });
         }, 50);
-      },
+      }
     }
   };
 </script>

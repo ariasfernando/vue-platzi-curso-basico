@@ -33,4 +33,7 @@ export default {
 .width-full {
   width: 100%;
 }
+.el-select-dropdown__item.selected{
+  color: #78dcd6!important;
+}
 </style>

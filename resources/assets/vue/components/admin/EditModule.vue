@@ -4,38 +4,26 @@
 
     <div class="row">
       <section v-if="ready" class="col-xs-12 section-container" id="edit-container">
-        <!-- START: Left Bar -->
-        <aside class="left-bar">
-            <div class="fields">
-              <elements-settings v-if="ready"></elements-settings>
-              <!-- END: Elements -->
-            </div>
-        </aside>
-        <!-- END: Left Bar -->
+        <column-bar-container side="left">
+          <elements-settings v-if="ready"></elements-settings>
+        </column-bar-container>
         <!-- START: Module Container -->
-        <div class="col-xs-8 module-container">
-          <div v-if="showRaw" class="module-wrapper">
-            <textarea v-html="module" @change="updateRawModule" rows="30" style="width: 100%"></textarea>
-          </div>
-          <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
-            <module></module>
-          </div>
+        <div class="col-xs-8 module-container" @mouseup="clickModuleContainer">
+          <scrollbar-container>
+            <div v-if="showRaw" class="module-wrapper">
+              <code-editor v-model="moduleRow"></code-editor>
+            </div>
+            <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
+              <module></module>
+            </div>
+          </scrollbar-container>
         </div>
         <!-- END: Module Container -->
-        <!-- START: Right Bar -->
-        <aside class="right-bar">
-          <div class="module-settings" v-if="currentComponent">
-            <div class="fields">
-
-              <general-settings v-if="ready"></general-settings>
-
-              <column-settings v-if="ready && module.structure.columns.length > 1 "></column-settings>
-
-              <component-settings></component-settings>
-            </div>
-          </div>
-        </aside>
-        <!-- END: Right Bar -->
+        <column-bar-container side="right">
+          <general-settings v-if="showGeneralSettings"></general-settings>
+          <column-settings v-if="showColumnSettings" :currentComponent="currentComponent"></column-settings>
+          <component-settings v-if="showElementSettings" :currentComponent="currentComponent"></component-settings>
+        </column-bar-container>
       </section>
     </div>
 
@@ -44,29 +32,43 @@
 </template>
 
 <script>
-import Module from "./Module.vue";
-import ModuleHeader from "./partials/ModuleHeader.vue";
-import GeneralSettings from "./partials/GeneralSettings.vue";
+import ColumnBarContainer from "../common/containers/ColumnBarContainer";
 import ColumnSettings from "./partials/ColumnSettings.vue";
-import ElementsSettings from "./partials/ElementsSettings.vue";
 import ComponentSettings from "./ComponentSettings.vue";
+import ElementsSettings from "./partials/ElementsSettings.vue";
+import GeneralSettings from "./partials/GeneralSettings.vue";
+import Module from "./Module.vue";
+import CodeEditor from "./CodeEditor.vue";
+import ModuleHeader from "./partials/ModuleHeader.vue";
 import moduleService from "../../services/module";
+import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
 import Spinner from "../common/Spinner.vue";
 
 export default {
   name: "EditModule",
   components: {
-    Module,
-    ModuleHeader,
+    CodeEditor,
+    ColumnBarContainer,
     ColumnSettings,
+    ComponentSettings,
     ElementsSettings,
     GeneralSettings,
-    ComponentSettings,
+    Module,
+    ModuleHeader,
+    ScrollbarContainer,
     Spinner
   },
   computed: {
     module() {
       return this.$store.getters["module/module"];
+    },
+    moduleRow: {
+      get(){
+        return this.module;
+      },
+      set(values) {
+        this.$store.commit("module/setModuleData", JSON.parse(values));
+      },
     },
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
@@ -76,6 +78,15 @@ export default {
     },
     showRaw() {
       return this.$store.getters["module/showRaw"];
+    },
+    showGeneralSettings() {
+      return this.ready && this.currentComponent.columnId === undefined && this.currentComponent.componentId === undefined;
+    },
+    showColumnSettings() {
+      return this.ready && this.module.structure.columns.length > 1 && this.currentComponent.columnId !== undefined && this.currentComponent.componentId === undefined;
+    },
+    showElementSettings() {
+      return this.ready && this.currentComponent.columnId  >= 0 && this.currentComponent.componentId >= 0;
     }
   },
   data() {
@@ -140,8 +151,13 @@ export default {
       const sideToggled = document.getElementById("edit-container");
       sideToggled.classList.toggle("sidebar-closed");
     },
-    updateRawModule(e) {
-      this.$store.commit("module/setModuleData", JSON.parse(e.target.value));
+    clickModuleContainer(e) {
+      if($(e.target).hasClass('module-container')){
+        this.$store.commit("module/setCurrentComponent", {
+          columnId: undefined,
+          componentId: undefined,
+        });
+      }
     }
   },
   created() {
@@ -281,7 +297,7 @@ export default {
     table-layout: fixed;
   }
   .module-container {
-    padding: 20px;
+    padding: 0px;
     background: #f0f0f0;
     display: block;
     float: left;
@@ -339,179 +355,12 @@ p,ul,ol{
   .mce-content-body{
     line-height: inherit;
   }
-  .card-header {
-    padding-bottom: 10px;
-    ul {
-      margin-left: -10px;
-      margin-right: -10px;
-      border-bottom: 1px solid #dddddd;
+}
 
-      .nav-item {
-        border-top: 1px solid #dddddd;
-        border-left: 1px solid #dddddd;
-        margin-bottom: -2px;
-
-        &:first-child {
-          margin-left: 10px;
-        }
-
-        &:last-of-type {
-          border-right: 1px solid #dddddd;
-        }
-        .nav-link {
-          margin-right: 0;
-          padding: 4px 7px;
-          border: 0;
-          border-radius: 0;
-          font-weight: 300;
-          color: #666666;
-          &.active {
-            border-bottom: 2px solid @focus;
-            background: @focus-light;
-          }
-          &:focus {
-            background-color: transparent;
-          }
-          &:hover {
-            background-color: @focus-light;
-          }
-        }
-      }
-    }
-  }
-  .right-bar,
-  .left-bar {
-    height: calc(~"100vh - 55px");
-    overflow: auto;
-    overflow: overlay;
-    width: 270px;
-    display: block;
-    float: left;
-    padding: 0px;
-    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-    padding-bottom: 25px;
-
-    &:hover{
-      overflow: overlay
-    }
-
-    &::-webkit-scrollbar {
-        width: 4px; 
-        background: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: lighten(@stensul-gray, 40%);
-    }
-    .btn.btn-secondary.btn-block {
-      &:hover,
-      &:visited,
-      &:focus,
-      &:active,
-      &:active:focus {
-        color: #666666;
-      }
-    }
-    .fa.pull-left {
-      margin-right: 12px;
-    }
-
-    .components-list {
-      padding: 0;
-      margin: 0;
-
-      .component-item {
-        cursor: pointer;
-        list-style-type: none;
-        font-size: 14px;
-        background-color: #f4f4f4;
-        border: 1px solid #d8d8d8;
-        border-radius: 2px;
-        padding: 25px 20px 19px 20px;
-        width: 49%;
-        margin-right: 4px;
-        margin-bottom: 4px;
-        float: left;
-        text-align: center;
-        transition: all 0.3s linear;
-
-        i {
-          margin: 0 5px;
-          color: #514960;
-          font-size: 28px;
-        }
-        p {
-          display: inline-block;
-          font-size: 12px;
-          margin: 0px;
-          padding: 0px;
-          font-weight: 400px;
-          color: #666666;
-          width: 100%;
-          font-weight: 300;
-          text-align: center;
-        }
-
-        &:hover {
-          border: 1px solid #888888;
-
-          p {
-            color: #333333;
-          }
-        }
-
-        &:nth-child(even){
-          margin-right: 0px;
-        }
-      }
-    }
-
-    .card {
-      padding: 0 8px 15px 8px;
-      border-bottom: 1px solid #f0f0f0;
-      border-top: 1px solid #ffffff;
-      margin-top: -1px;
-      display: table;
-      width: 100%;
-    }
-
-    select {
-      height: 22px;
-      font-size: 11px;
-      color: #666666;
-      border: none;
-      background: #f4f4f4;
-      box-shadow: none;
-      font-weight: 300;
-      width: 65px;
-      float: right;
-    }
-
-    select[multiple] {
-      height: 50px;
-    }
-
-    .vue-js-switch {
-      float: right;
-      padding-top: 0px;
-      margin: 0px;
-    }
-
-    .content-colorpicker {
-      .sketch-picker {
-        display: none;
-        position: absolute !important;
-        z-index: 300;
-        right: 100%;
-      }
-      .icon-remove {
-        color: #999999;
-        background: #ffffff;
-        border: 1px solid #cccccc;
-        margin-top: -40px;
-        margin-left: -35px;
-        padding-top: 4px;
-      }
-    }
-  }
+#studio .column-bar-container {
+  height: calc(100vh - 53px);
+}
+#studio .module-container .scrollbar-container-inner {
+  padding: 20px;
 }
 </style>

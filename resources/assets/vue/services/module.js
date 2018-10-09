@@ -9,7 +9,6 @@ export default {
     const endpoint = endpoints.module.getModule;
     const deferred = Q.defer();
     const params = {
-      path: 'module.getLibraries',
       endpoint,
       search: { moduleId },
     };
@@ -28,7 +27,6 @@ export default {
     const endpoint = endpoints.module.getCustomModule;
     const deferred = Q.defer();
     const params = {
-      path: 'module.getCustomModule',
       endpoint,
       search: {
         moduleKey,
@@ -49,7 +47,6 @@ export default {
     const endpoint = endpoints.module.getAllModules;
     const deferred = Q.defer();
     const params = {
-      path: 'module.getAllModules',
       endpoint,
     };
 
@@ -79,7 +76,6 @@ export default {
     const endpoint = endpoints.module.saveModule;
     const deferred = Q.defer();
     const params = {
-      path: 'module.saveModule',
       endpoint,
       json: moduleJson,
     };
@@ -101,7 +97,6 @@ export default {
     const endpoint = endpoints.module.createModule;
     const deferred = Q.defer();
     const params = {
-      path: 'module.createModule',
       endpoint,
       json: moduleJson,
     };
@@ -123,7 +118,6 @@ export default {
     const endpoint = endpoints.module.deleteModule;
     const deferred = Q.defer();
     const params = {
-      path: 'module.deleteModule',
       endpoint,
       json: {
         moduleId,
@@ -150,7 +144,6 @@ export default {
 
     _.each(data.images, (image) => {
       const params = {
-        path: 'module.uploadImage',
         endpoint,
         json: {
           data_image: image,

@@ -124,16 +124,9 @@ class UserController extends Controller
      */
     public function getCreate()
     {
-        $roles_data = Role::all(['name'])->toArray();
-        $roles_array = [];
-
-        foreach ($roles_data as $role) {
-            $roles_array[$role['name']] = $role['name'];
-        }
-
         $params = [
             "title" => "Create User",
-            "roles" => $roles_array
+            "roles" => $this->listRoles()
         ];
 
         return $this->renderView('admin.modals.user_form', array('params' => $params));
@@ -149,19 +142,31 @@ class UserController extends Controller
     {
         $user_data = User::findOrFail($request->input("userId"))->toArray();
 
-        $roles_data = Role::all(['name'])->toArray();
-
-        foreach ($roles_data as $role) {
-            $roles_array[$role['name']] = $role['name'];
-        }
-
         $params = [
             "title" => "Edit User",
-            "roles" => $roles_array,
+            "roles" => $this->listRoles(),
             "user" => $user_data
         ];
 
         return $this->renderView('admin.modals.user_form', array('params' => $params));
+    }
+
+    /**
+     * Get a list of roles
+     *
+     * @return array
+     */
+    protected function listRoles()
+    {
+        $roles_data = Auth::user()->hasRole('master') ? Role::all() : Role::where('name', '<>', 'master');
+        $roles_data = $roles_data->pluck('name')->toArray();
+        $roles_array = [];
+
+        foreach ($roles_data as $role) {
+            $roles_array[$role] = $role;
+        }
+
+        return $roles_array;
     }
 
     /**
@@ -175,7 +180,10 @@ class UserController extends Controller
         $user = User::findOrFail($request->input("userId"));
         $user->name = $request->input("name");
         $user->last_name = $request->input("last_name");
-        $user->roles = (!is_null($request->input("roles")))? $request->input("roles") : [];
+
+        if ($request->has('roles')) {
+            $user->roles = $request->input("roles");
+        }
 
         if ($request->input("password")) {
             $user->password = bcrypt($request->input("password"));
