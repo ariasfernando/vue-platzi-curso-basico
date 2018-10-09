@@ -56,7 +56,7 @@
           link_text_to_display: false,
           paste_as_text: true,
           max_chars: this.settings.truncate ? this.settings.truncate.content : undefined,
-          max_lines: this.settings.lines_limit ? this.settings.lines_limit.content : undefined,
+          // max_lines: this.settings.lines_limit ? this.settings.lines_limit.content : undefined,
           forced_root_block : 'p',
           init_instance_callback: (editor) => {
 
