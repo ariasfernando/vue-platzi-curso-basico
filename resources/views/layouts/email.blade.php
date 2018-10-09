@@ -45,6 +45,9 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 	 echo "</he"; ?><?php echo "ad>"; ?>
 
 	<body class="st-email-body">
+		@if (isset($params['library_config']['prependHtml']))
+			<?php echo $params['library_config']['prependHtml']; ?>
+		@endif
 		@if (isset($params['campaign_data']['campaign_fonts']))
 			@if (isset($params['campaign_data']['campaign_fonts']['custom']))
 				@if (count($params['campaign_data']['campaign_fonts']['custom']) > 0)
@@ -76,5 +79,8 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
             {{-- PREHEADER NOT ENABLED, USE DE FACTO FROM MODULES --}}
         @endif
 <?= $params['body_html']; ?>
+		@if (isset($params['library_config']['appendHtml']))
+			<?php echo $params['library_config']['appendHtml']; ?>
+		@endif
 	</body>
 </html>

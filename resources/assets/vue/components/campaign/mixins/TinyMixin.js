@@ -74,9 +74,23 @@ export default {
         if (editorLinks.length) {
           for (let i = 0; i < editorLinks.length; i++) {
             const $el = $(editorLinks[i]);
-            const currentSpanColor = $el.parents('span').css('color');
-            const newColor = currentSpanColor ? currentSpanColor : link_fixed_color;
-            $el.css('color', newColor);
+
+            // check if element has a span as parent and then check colors
+            const $span = $el.parent('span');
+            if ($span.length) {
+              // return the first span parent that has a color
+              const $parentEl = $span.parents().filter(function () {
+                return $(this).css('color');
+              });
+              const parentColor = $parentEl.css('color');
+              const spanColor = $span.css('color');
+              // if span and parent color are the same, we assume that the span is inheriting the color
+              // so we apply the fixed color, otherwise, we let the span color.
+              const newColor = parentColor === spanColor ? link_fixed_color : spanColor;
+              $el.css('color', newColor);
+            } else {
+              $el.css('color', link_fixed_color);
+            }
           }
         }
       } else {
@@ -162,8 +176,13 @@ export default {
         if (parseInt(editor.settings.max_lines)) {
           return parseInt(editor.settings.max_lines) || undefined;
         } else {
-          const firstTextElement = this.$textElement.find('p')[0] || this.$textElement.find('li')[0];
-          const fontSize = document.defaultView.getComputedStyle(firstTextElement).getPropertyValue('font-size');
+          const firstTextElement = this.$textElement[0].firstElementChild;
+          let firstTextNode = firstTextElement.firstChild;
+          // if the first node is a text node, we go up to te parent element.
+          if(firstTextNode.nodeName === "#text") {
+            firstTextNode = firstTextElement;
+          }
+          const fontSize = document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('font-size');
           return JSON.parse(editor.settings.max_lines)[fontSize];
         }
       }
@@ -198,9 +217,16 @@ export default {
     },
     maxLinesValidation(event) {
       const divHeight = this.$textElement.height();
-      const firstTextElement = this.$textElement.find('p')[0] || this.$textElement.find('li')[0];
-      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextElement).getPropertyValue('line-height'));
-      const actualLines = parseInt(divHeight / lineHeight);
+      const firstTextElement = this.$textElement[0].firstElementChild;
+      let firstTextNode = firstTextElement.firstChild;
+
+      // if the first node is a text node, we go up to te parent element.
+      if(firstTextNode.nodeName === "#text") {
+        firstTextNode = firstTextElement;
+      }
+
+      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      const actualLines = divHeight / lineHeight;
 
       if (actualLines > this.tinyMaxLines()) {
         this.setError({
@@ -309,14 +335,14 @@ export default {
           styles: {},
         };
 
-        _.forOwn(loop.styles, (prop, key) => { 
+        _.forOwn(loop.styles, (prop, key) => {
           const keyBehaviour = prop.behaviour || loop.steps.behaviour;
           const unit = prop.unit || 'px';
           const result = runBehaviour(keyBehaviour, currentFontSize);
           format.styles[key] = `${result}${unit}`;
         });
 
-        _.forOwn(loop.settings, (prop, key) => { 
+        _.forOwn(loop.settings, (prop, key) => {
             format[key] = prop;
         });
 
