@@ -121,8 +121,29 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.el-icon-setting{
+  background: #f8f8f8;
+  color: #666666;
+  cursor: inherit;
+  border: 1px solid #dcdfe6;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 14px;
+  border-radius: 0px 2px 2px 0px;
+  height: 28px!important;
+
+  &:hover{
+    color: #78dcd6;
+  }
+}
 .el-icon-setting.active {
   background-color: #78dcd6;
+  border: 1px solid #78dcd6;
+  color: #ffffff;
+
+  &:hover{
+    color: #ffffff;
+  }
 }
 .el-button--mini,
 .el-button--mini.is-round {
@@ -147,8 +168,23 @@ export default {
   display: block;
   float: left;
 }
-.input-font-weight .el-input--mini /deep/ .el-input__inner {
+.input-font-weight /deep/ .el-input__inner {
   text-align: center;
   border-right: 0;
+  border-radius: 2px 0px 0px 2px;
+}
+.input-font-weight /deep/ button.custom-col{
+  border-radius: 2px 0px 0px 2px;
+
+  &:hover,
+  &:focus{
+    border: 1px solid #78dcd6;
+    border-right: none;
+    color: #666666;
+    background: #ffffff;
+  }
+}
+.el-select-dropdown__item.selected{
+  color: #78dcd6;
 }
 </style>
