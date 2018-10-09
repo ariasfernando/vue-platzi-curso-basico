@@ -1,7 +1,7 @@
 
 <template>
-	<div class="stx-wrapper" style="width: 100%;">
-    <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>           
+	<div class="stx-wrapper" style="font-size: 0; width: 100%;">
+    <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
 		<div
       class="stx-edit-text stx-wrapper"
       style="width: 100%;"
@@ -58,6 +58,13 @@ export default {
 
 </script>
 <style lang="less">
+  .stx-toolbar {
+    box-shadow: 0px 3px 4px rgba(100, 100, 100, .4);
+    .mce-toolbar-grp {
+      padding: 0px;
+    }
+  }
+
   .mce-menu-item-preview {
     .mce-text {
       font-size: 14px !important;

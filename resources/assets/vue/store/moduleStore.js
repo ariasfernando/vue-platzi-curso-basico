@@ -1,3 +1,7 @@
+/* eslint no-param-reassign:0 */
+/* eslint no-shadow:0 */
+/* eslint no-console:0 */
+
 import Vue from 'vue';
 import Q from 'q';
 import _ from 'lodash';
@@ -9,7 +13,6 @@ import imageService from '../services/image';
 const state = {
   module: {},
   currentComponent: {},
-  activeColumn: 0,
   buildingMode: 'desktop',
   showRaw: false,
   changeSettingComponent: {
@@ -43,9 +46,6 @@ const getters = {
   },
   changeSettingComponent(state) {
     return state.changeSettingComponent;
-  },
-  activeColumn(state) {
-    return state.activeColumn;
   },
   buildingMode(state) {
     return state.buildingMode;
@@ -81,10 +81,12 @@ const mutations = {
     state.currentComponent = {};
   },
   updateElement(state, payload) {
-    const update = { ...state.module.structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
+    const update = { 
+      ...state.module.structure.columns[payload.columnId].components[payload.componentId].data,
+      ...payload.data,
+    };
     state.module.structure.columns[payload.columnId].components[payload.componentId].data = update;
   },
-
   saveModuleProperty(state, data) {
     const structure = state.module.structure;
     const subComponent = data.subComponent ? structure[data.subComponent] : structure;
@@ -159,24 +161,24 @@ const mutations = {
     _.assign(pluginOptions[payload.subOption], payload.config.options[payload.subOption]);
   },
   togglePlugin(state, data) {
+    let column;
     if (data.columnId >= 0 || data.componentId >= 0) {
+      column = state.module.structure.columns[data.columnId];
       if (data.componentId >= 0) {
-        state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].enabled = data.enabled;
+        column.components[data.componentId].plugins[data.plugin].enabled = data.enabled;
       } else {
-        state.module.structure.columns[data.columnId].plugins[data.plugin].enabled = data.enabled;
+        column.plugins[data.plugin].enabled = data.enabled;
       }
     } else {
       state.module.plugins[data.plugin].enabled = data.enabled;
     }
+    column = null;
   },
   saveComponentProperty(state, data) {
     const component = state.module.structure.columns[data.columnId].components[data.componentId];
     const subComponent = data.subComponent ? component[data.subComponent] : component;
     const properties = data.link ? subComponent[data.link] : subComponent;
     Vue.set(properties, data.property, data.value);
-  },
-  setActiveColumn(state, columnId) {
-    state.activeColumn = columnId;
   },
   setBuildingMode(state, mode) {
     state.buildingMode = mode;
@@ -191,7 +193,7 @@ const mutations = {
     state.showRaw = !state.showRaw;
   },
   error(state, err) {
-    console.log(err);
+    console.error(err);
   },
   setListLibraries(state, data) {
     state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options = data.response;
@@ -206,8 +208,11 @@ const actions = {
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
 
     _.each(modulePlugins, (plugin, name) => {
-      if (plugin.target.indexOf('column') !== -1) {
-        plugins[name] = clone(plugin);
+      switch (plugin.target.indexOf('column') !== -1) {
+        case true:
+          plugins[name] = clone(plugin);
+          break;
+        default:
       }
     });
 
@@ -240,14 +245,21 @@ const actions = {
       .catch(error => context.commit('error', error));
   },
   saveModuleData(context, data) {
-    return moduleService.saveModule(data)
+    const deferred = Q.defer();
+
+    moduleService.saveModule(data)
       .then((response) => {
         if (response.message && response.message === 'SUCCESS') {
           context.commit('saveModule', response.id);
-          return response.id;
+          deferred.resolve(response.id);
         }
       })
-      .catch(error => context.commit('error', error));
+      .catch((error) => {
+        context.commit('error', error);
+        deferred.reject(error);
+      });
+
+    return deferred.promise;
   },
   uploadImages(context, data) {
     const deferred = Q.defer();
@@ -264,15 +276,15 @@ const actions = {
     return deferred.promise;
   },
   getLibraries(context, data) {
-    imageService.getLibraries().then(response => {
+    return imageService.getLibraries().then((response) => {
       response.data.push('');
-      
+
       context.commit('setListLibraries', {
         ...data,
-        response: response.data
+        response: response.data,
       });
     });
-  }
+  },
 };
 
 module.exports = {

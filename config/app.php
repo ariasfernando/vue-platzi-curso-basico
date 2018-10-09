@@ -209,7 +209,8 @@ return [
         Stensul\Providers\ModuleServiceProvider::class,
         Olssonm\Zxcvbn\ZxcvbnServiceProvider::class,
         Stensul\Esp\Silverpop\SilverpopServiceProvider::class,
-        Stensul\MediaGallery\MediaGalleryServiceProvider::class
+        Stensul\MediaGallery\MediaGalleryServiceProvider::class,
+        Stensul\HtmlToPdf\HtmlToPdfServiceProvider::class,
     ],
 
     /*

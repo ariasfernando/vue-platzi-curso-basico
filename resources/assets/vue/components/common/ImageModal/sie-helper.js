@@ -147,7 +147,7 @@ function removeUrlPath(urlPath, ref) {
     urlKeys.forEach((keys) => {
       const splitKeys = keys.split('.');
       splitKeys.forEach((key) => {
-        if (splitKeys.indexOf(key) === splitKeys.length - 1 && subelem[key].includes('http')) {
+        if (splitKeys.indexOf(key) === splitKeys.length - 1 && RegExp('^https?://').test(subelem[key])) {
           const url = subelem[key].replace(urlPath, '');
           subelem[key] = url;
         } else {

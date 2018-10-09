@@ -11,8 +11,8 @@
             style="vertical-align:top;"
             class="stx-draggable-wrapper st-email-wrapper"
             :class="{ 'campaign-validated': campaignValidated }"
+            @mousedown.stop="handleActive"
             :bgcolor="templateBackgroundColor || defaultTemplateBackgroundColor"
-            @click.stop="handleActive"
             @mouseover="onMouseOver"
             @mouseleave="onMouseLeave">
               <draggable
@@ -379,7 +379,6 @@
     }
 
   }
-
   .applelinks{
     color:#6b6b6b !important;
     text-decoration: none !important;
@@ -389,15 +388,15 @@
   .st-email-body{
     width:100% !important;
     -webkit-text-size-adjust: 100%;
-    margin: 0 !important;
+    margin: 0 auto!important;
     padding: 0px;
     background-color: #000000;
   }
 
   p,ul,ol{
-      margin: 0;
-      padding: 0;
-    }
+    margin: 0;
+    padding: 0;
+  }
 
   .stx-edit-text{
 
@@ -423,6 +422,10 @@
       // Mobile Classes
       @import '../../../less/base/commons/mobile/mobile_core_styles';
       @import '../../../less/base/commons/mobile/mobile_client_styles';
+    }
+    span, td, table, div {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     table{

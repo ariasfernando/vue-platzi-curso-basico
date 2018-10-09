@@ -98,14 +98,16 @@
 
           <!--2 COLUMNS FIXED -->
           <td
+            :data-column-id="columnId"
             v-else-if="module.structure.columnsStacking == 'columnsFixed'"
             v-for="(column, columnId) in module.structure.columns"
             :width="column.container.attribute && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
             :valign="column.container.attribute.valign || 'top'"
             :class="column.container.attribute.classes"
+            :height="column.container.attribute.height"
             :bgcolor="column.container.attribute.bgcolor"
             :key="column.id"
-            :style="[elementBorderAndPadding(column.container),{'width': widthStyle(column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%')}]"
+            :style="[elementBorderAndPadding(column.container),{'height': column.container.attribute.height + 'px'}, {'width': widthStyle(column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%')}]"
           >
             <columns-fixed-render
               :column="column"
@@ -150,6 +152,7 @@
 <script>
 
   import TextElement from './elements/TextElement.vue';
+  import CustomCodeElement from './elements/CustomCodeElement.vue';
   import ButtonElement from './elements/ButtonElement.vue';
   import ImageElement from './elements/ImageElement.vue';
   import DividerElement from './elements/DividerElement.vue';
@@ -172,14 +175,14 @@
                   && this.module.structure.columns[0].components.length > 1)
             )
         ) {
-          // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
-          // so we need to check a flag to aid the user to open each module and run the validations at least once
+        // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
+        // so we need to check a flag to aid the user to open each module and run the validations at least once
         this.registerStudioModuleDefaultValidationErrors(this.moduleId);
       }
       else if(this.module.type === 'custom') {
         this.$store.commit('campaign/clearErrorsByModuleId', this.moduleId);
         this.registerCustomModuleDefaultValidationErrors(this.moduleId);
-        }
+      }
     },
     computed: {
       module() {
@@ -312,6 +315,7 @@
     },
     components: {
       TextElement,
+      CustomCodeElement,
       ButtonElement,
       ImageElement,
       DividerElement,

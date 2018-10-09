@@ -1,0 +1,42 @@
+<template>
+  <div class="modal-container" >
+    <div class="st-modal">
+      <div @click="$emit('close-modal')" class="close-button">X</div>
+      <slot></slot>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  name: "LabelItemContainer",
+  props: ["customClass", "icon", "label", "collapsable"]
+};
+</script>
+<style lang="less" scoped>
+.close-button {
+  float: right;
+  color: red;
+  font-weight: 900;
+  clear: both;
+  cursor: pointer;
+}
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.37);
+  z-index: 1000;
+
+  > .st-modal {
+    position: fixed;
+    top: 10vh;
+    left: 10vw;
+    right: 10vw;
+    background: white;
+    padding: 2rem;
+    border: 1px solid #f0f0f0;
+  }
+}
+</style>
