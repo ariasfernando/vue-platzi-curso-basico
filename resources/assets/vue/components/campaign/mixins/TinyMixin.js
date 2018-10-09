@@ -580,7 +580,7 @@ export default {
 
       // Extend toolbar
       if ('extend_toolbar' in this.textOptions.config.settings) {
-        settings.plugins = [settings.plugins, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
+        settings.toolbar = [settings.toolbar, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
       }
 
       _.extend(settings, customSettings);
