@@ -26,6 +26,9 @@
             :element="setting.subComponent ? component[setting.subComponent] : component"
             :key="i" />
         </group-container>
+        <group-container v-if="component.plugins.mobileStyles" key="mobile-styles">
+          <studio-mobile-styles :plugin="component.plugins.mobileStyles" name="mobileStyles" />
+        </group-container>
       </b-card>
     </b-collapse>
     <!-- Funcionalities -->
@@ -37,31 +40,16 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="functionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
-        <div
+        <component
+          :is="'studio-' + plugin.name"
           v-for="(plugin, key) in component.plugins"
-          v-if="!shouldRenderInStyles(plugin)"
-          :class="'plugin-' + plugin.name"
           :key="key"
-        >
-          <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
-        </div>
+          v-if="plugin.name !== 'studio-mobile-styles'"
+          :class="'plugin-' + plugin.name"
+          :name="key"
+          :plugin="plugin" />
       </b-card>
     </b-collapse>
-    <!-- Mobile Settings -->    
-    <label-item-container label="MOBILE" icon="glyphicon-tasks" v-b-toggle.mobile></label-item-container>
-    <b-collapse id="mobile" accordion="module-settings-accordion-right">
-      <b-card class="plugins">
-        <div
-          v-for="(plugin, key) in component.plugins"
-          v-if="shouldRenderInStyles(plugin)"
-          :class="'plugin-' + plugin.name"
-          :key="key"
-        >
-          <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
-        </div>
-      </b-card>
-    </b-collapse>
-    <!-- END: Mobile Settings -->
   </div>
 </template>
 
@@ -119,9 +107,6 @@ export default {
         value: value
       };
       this.$store.commit("module/saveComponentProperty", data);
-    },
-    shouldRenderInStyles(plugin) {
-      return _.indexOf(plugin.target, "styles") >= 0;
     },
     settingUpdatedHandler(eventData) {
       this.saveComponentProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value);
