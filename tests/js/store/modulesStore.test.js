@@ -27,7 +27,7 @@ function createStore(option) {
 }
 
 describe('== Module Store ==', () => {
-  describe('trigger muttation:', () => {
+  describe('trigger mutation:', () => {
     let original = () => {};
     let store = () => {};
     beforeAll(() => {

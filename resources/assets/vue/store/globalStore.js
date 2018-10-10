@@ -1,3 +1,5 @@
+/* eslint no-shadow:0 */
+
 const state = {
   loading: false,
   secondaryLoading: false,
