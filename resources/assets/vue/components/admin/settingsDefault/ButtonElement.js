@@ -10,9 +10,21 @@ function buttonDefault() {
           subComponent: 'button',
         },
         {
-          name: 'font-style',
-          type: 'font-style',
+          name: 'fontSize',
+          type: 'generic-number',
+          isPixel: true,
           subComponent: 'button',
+          link: 'style',
+          label: 'Font size',
+        },
+        {
+          name: 'lineHeight',
+          label: 'Line height',
+          type: 'generic-number',
+          isPercentage: true,
+          maxPercentage: 200,
+          subComponent: 'button',
+          link: 'style',
         },
         {
           name: 'letter-spacing',

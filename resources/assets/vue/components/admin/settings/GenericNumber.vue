@@ -1,6 +1,6 @@
 <template>
   <settings-container :label="label">
-    <template slot="setting-right">
+    <template :slot="settingSlot || 'setting-right'">
       <el-input-number
         v-model="mainSettingNumeric"
         v-validate="'required'"
@@ -8,7 +8,7 @@
         :class="isPercentage || isPixel ? 'width-unit' : 'width-full'"
         size="mini"
         :min="minValue"
-        :max="isNumberPercentage ? 100 : maxValue" />
+        :max="maxCaluculate" />
       <el-button
         v-if="isPercentage || isPixel"
         slot="append"
@@ -36,9 +36,10 @@ export default {
       },
       set(newValue) {
         if (typeof this.mainSetting === 'string' && this.mainSetting.endsWith('%')) {
-          this.mainSetting = `${Math.min(100, newValue)}%`;
+          this.mainSetting = `${Math.min(this.maxPercentage || 100, newValue)}%`;
         } else {
-          this.mainSetting = newValue;
+          const parceSetting = parseFloat(newValue);
+          this.mainSetting = this.link === 'attribute' ? parceSetting : `${parceSetting}px`;
         }
       },
     },
@@ -47,14 +48,18 @@ export default {
         typeof this.mainSetting === 'string' && this.mainSetting.endsWith('%')
       );
     },
+    maxCaluculate() {
+      return this.isNumberPercentage ? this.maxPercentage || 100 : this.maxValue;
+    },
   },
   methods: {
     onToggleUnit() {
       if (this.isPercentage && this.isPixel) {
+        const parceSetting = parseFloat(this.mainSetting);
         if (this.isNumberPercentage) {
-          this.mainSetting = parseFloat(this.mainSetting);
+          this.mainSetting = this.link === 'attribute' ? parceSetting : `${parceSetting}px`;
         } else {
-          this.mainSetting = `${Math.min(100, parseFloat(this.mainSetting))}%`;
+          this.mainSetting = `${Math.min(100, parceSetting)}%`;
         }
       }
     },
@@ -123,5 +128,13 @@ export default {
 }
 .width-full {
   width: 100%;
+}
+.is-setting-half .el-input-number--mini.width-unit {
+  float: left;
+  margin-right: 0;
+}
+.is-setting-half .el-button {
+  bottom: 0;
+  right: 12px;
 }
 </style>

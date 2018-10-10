@@ -13,6 +13,8 @@
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
+            :setting-slot="setting.settingSlot"
+            :max-percentage="setting.maxPercentage"
             :link="setting.link"
             :label="setting.label"
             :placeholder="setting.placeholder"
@@ -80,7 +82,6 @@ export default {
     "input-caret": elementSettings.ButtonCaret,
     "input-class-input": elementSettings.ClassInput,
     "input-font-family": elementSettings.FontFamily,
-    "input-font-style": elementSettings.FontStyle,
     "input-font-weight": elementSettings.FontWeight,
     "input-generic-color": elementSettings.GenericColor,
     "input-generic-file": elementSettings.GenericFile,

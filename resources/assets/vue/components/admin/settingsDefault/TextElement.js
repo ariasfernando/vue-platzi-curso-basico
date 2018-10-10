@@ -12,9 +12,21 @@ function textDefault() {
       ],
       [
         {
-          name: 'font-style',
-          type: 'font-style',
+          name: 'fontSize',
+          type: 'generic-number',
+          isPixel: true,
           subComponent: 'text',
+          link: 'style',
+          label: 'Font size',
+        },
+        {
+          name: 'lineHeight',
+          label: 'Line height',
+          type: 'generic-number',
+          isPercentage: true,
+          maxPercentage: 200,
+          subComponent: 'text',
+          link: 'style',
         },
         {
           name: 'letterSpacing',
