@@ -123,7 +123,7 @@ export default {
       }
     },
     askToDeleteCampaign(campaign) {
-      this.selectedCampaignId = campaign.id;
+      this.selectedCampaignId = campaign._id;
       if (campaign.status === 1 && campaign.has_active_proof === true) {
         this.askDeleteMessage = 'Delete the campaign and send emails to all reviewers?';
       }
