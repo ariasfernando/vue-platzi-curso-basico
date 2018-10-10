@@ -52,7 +52,7 @@ describe('== Api Store ==', () => {
       oauthToken = oauthTokenState = null;
       done();
     });
-    it('"error" and expect trigger the ', (done) => {
+    it('"error" and expect trigger the "console.error"', (done) => {
       store.commit('api/error', 'message to put in the console error');
       expect(console.error).toHaveBeenCalled();
       expect(console.error.mock.calls[0][0]).toEqual('message to put in the console error');
