@@ -14,14 +14,14 @@ function dividerDefault() {
           name: 'bgcolor',
           type: 'generic-color',
           link: 'attribute',
-          label: 'Background Color',
+          label: 'Container Background Color',
           subComponent: 'container',
         },
         {
           name: 'bgcolor',
           type: 'generic-color',
           link: 'attribute',
-          label: 'Inner Background Color',
+          label: 'Background Color',
           subComponent: 'divider',
         },
         {
