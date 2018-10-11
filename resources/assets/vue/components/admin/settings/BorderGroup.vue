@@ -1,46 +1,41 @@
 <template>
   <div>
     <border
-    :element="element"
-    @setting-updated="settingUpdatedHandler"
-    :side="'Top'"
-    ></border>
+      :element="element"
+      side="Top"
+      @setting-updated="settingUpdatedHandler" />
     <border
-    :element="element"
-    :side="'Right'"
-    @setting-updated="settingUpdatedHandler"
-    ></border>
+      :element="element"
+      side="Right"
+      @setting-updated="settingUpdatedHandler" />
     <border
-    :element="element"
-    :side="'Bottom'"
-    @setting-updated="settingUpdatedHandler"
-    ></border>
+      :element="element"
+      side="Bottom"
+      @setting-updated="settingUpdatedHandler" />
     <border
-    :element="element"
-    :side="'Left'"
-    @setting-updated="settingUpdatedHandler"
-    ></border>
+      :element="element"
+      side="Left"
+      @setting-updated="settingUpdatedHandler" />
   </div>
 </template>
 
 <script>
-import _ from "lodash";
-import Border from "./Border.vue";
-import SettingMixin from "../mixins/SettingMixin.js";
+import Border from './Border.vue';
+import SettingMixin from '../mixins/SettingMixin';
 
 export default {
-  name: "BorderGroup",
-  mixins: [ SettingMixin ],
+  name: 'BorderGroup',
   components: { Border },
+  mixins: [SettingMixin],
   methods: {
     settingUpdatedHandler(eventData) {
-      this.$emit("setting-updated", {
+      this.$emit('setting-updated', {
         subComponent: this.subComponent,
         link: 'style',
         name: eventData.name,
-        value: eventData.value
+        value: eventData.value,
       });
-    }
+    },
   }
 };
 </script>
