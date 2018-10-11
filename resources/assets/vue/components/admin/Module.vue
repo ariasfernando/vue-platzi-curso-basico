@@ -110,7 +110,11 @@
       </tr>
       <!-- END 1 COLUMNS -->
     </table>
-    <element-selector label="Root" @element-selected="moduleSelect" :active="isActiveGeneralSettings" selectorIcon="fa fa-cog"></element-selector>
+    <element-selector
+      label="Row"
+      selector-icon="fa fa-cog"
+      :active="isActiveGeneralSettings"
+      @element-selected="moduleSelect" />
   </div>
 </template>
 

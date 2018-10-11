@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- START: Style -->
-    <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
+    <label-item-container v-b-toggle.style :label="`${toCamel(component.type.replace('-element', ''))} Style`" icon="glyphicon-pencil" />
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
@@ -24,12 +24,17 @@
             :options="setting.options"
             :is-disable-percentage="setting.isDisablePercentage"
             :element="setting.subComponent ? component[setting.subComponent] : component"
-            :key="i"></component>
+            :key="i" />
         </group-container>
       </b-card>
     </b-collapse>
     <!-- Funcionalities -->
-    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.functionalities></label-item-container>
+    <label-item-container
+      v-b-tooltip.hover
+      v-b-toggle.functionalities
+      label="Editor Settings"
+      icon="glyphicon-tasks"
+      title="Settings available in the Email Editor" />
     <b-collapse id="functionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
         <div
@@ -101,6 +106,9 @@ export default {
     }
   },
   methods: {
+    toCamel(str) {
+      return _.startCase(str);
+    },
     saveComponentProperty(link, subComponent, name, value) {
       let data = {
         columnId: this.currentComponent.columnId,

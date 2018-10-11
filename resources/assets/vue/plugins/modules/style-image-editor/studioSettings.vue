@@ -5,6 +5,11 @@
         <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
       </template>
     </settings-container>
+    <settings-container v-if="plugin.enabled" label="Mobile Image Upload">
+      <template slot="setting-right">
+        <toggle-button :value="hasImageMobile" @change="toggleImageMobile"></toggle-button>
+      </template>
+    </settings-container>
     <template v-if="plugin.enabled" v-for="(option, name) in plugin.config" >
       <settings-container :label="option.label" :key="name">
         <template slot="setting-right">
@@ -122,7 +127,12 @@ export default {
             this.enabled = plugin.enabled;
 
             return plugin;
-        }
+        },
+        hasImageMobile() {
+            const columnId = this.currentComponent.columnId,
+                componentId = this.currentComponent.componentId;
+            return this.module.structure.columns[columnId].components[componentId].image.styleOption.hasImageMobile;
+        },
     },
     data() {
         return {
@@ -198,7 +208,18 @@ export default {
             };
 
             this.$store.commit('module/savePlugin', payload);
-        }
+        },
+        toggleImageMobile(value) {
+            const payload = {
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                subComponent: 'image',
+                link: 'styleOption',
+                property: 'hasImageMobile',
+                value: value,
+            };
+            this.$store.commit("module/saveComponentProperty", payload);
+        },
     },
     mounted() {
         this.$store.dispatch('module/getLibraries', {
