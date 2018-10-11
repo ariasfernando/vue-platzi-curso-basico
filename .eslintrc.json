@@ -33,10 +33,10 @@
     "init-declarations": [2, "always"],
     "no-multi-assign": 0,
     "indent": [2, 2, {
-      "SwitchCase": 1,
-      "VariableDeclarator": {
-        "var": 2,
-        "let": 2,
+      "SwitchCase": 1, 
+      "VariableDeclarator": { 
+        "var": 2, 
+        "let": 2, 
         "const": 3
       }
     }],
