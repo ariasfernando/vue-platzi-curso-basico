@@ -110,16 +110,23 @@ export default {
       const borderRight = _.parseInt(element.style.borderRightWidth || 0);
       return paddingLeft + paddingRight + borderLeft + borderRight;
     },
+    lineHeightCalculate(element) {
+      if (_.endsWith(element.style.lineHeight, '%')) {
+        const lineHeight = ((parseFloat(element.style.lineHeight) + 100) / 100) * parseFloat(element.style.fontSize);
+        return `${Math.round(lineHeight * 100) / 100}px`;
+      }
+      return element.style.lineHeight;
+    },
     fontStyles(element) {
       return {
-        'text-align': element.attribute.align || 'left',
-        'font-family': element.style.fontFamily,
-        'color': element.style.color,
-        'font-size': element.style.fontSize,
-        'font-weight': element.style.fontWeight,
-        'letter-spacing': element.style.letterSpacing,
-        'line-height': element.style.lineHeight,
-        'text-transform': element.style.textTransform,
+        textAlign: element.attribute.align || 'left',
+        fontFamily: element.style.fontFamily,
+        color: element.style.color,
+        fontSize: element.style.fontSize,
+        fontWeight: element.style.fontWeight,
+        letterSpacing: element.style.letterSpacing,
+        lineHeight: this.lineHeightCalculate(element),
+        textTransform: element.style.textTransform,
       };
     },
   },
