@@ -62,10 +62,26 @@ describe('== Api Store ==', () => {
   });
   describe('trigger action:', () => {
     it('"getConfig" and expect trigger the "loadConfigData" mutation and call to "getConfig" of the \'configService\'', async (done) => {
-      let setDataMock = jest.fn().mockResolvedValue({ enable_preheader: 1, auto_save: 1 });
-      configService.getConfig = setDataMock;
-      await store.dispatch('config/getConfig', 'global_settings').then(() => {
-        setDataMock = null;
+      let setDataMock1 = jest.fn().mockResolvedValue({ enable_preheader: 1, auto_save: 1 });
+      let setDataMock2 = jest.fn();
+      let storeConfig = cloneDeep(configStore);
+      let confStore = createStore({
+        namespaced: true,
+        state: storeConfig.state,
+        getters: storeConfig.getters,
+        mutations: {
+          ...storeConfig.mutations,
+          loadConfigData: setDataMock2,
+        },
+        actions: storeConfig.actions,
+      });
+      configService.getConfig = setDataMock1;
+      await confStore.dispatch('getConfig', 'global_settings').then(() => {
+        expect(setDataMock1.mock.calls).toHaveLength(1);
+        expect(setDataMock1.mock.calls[0][0]).toEqual('global_settings');
+        expect(setDataMock2.mock.calls).toHaveLength(1);
+        expect(setDataMock2.mock.calls[0][1]).toEqual(['global_settings', { enable_preheader: 1, auto_save: 1 }]);
+        setDataMock1 = setDataMock2 = storeConfig = confStore = null;
         done();
       });
     });
