@@ -20,24 +20,12 @@ export default {
       const nameComponent = this.component.type;
       const libraryLinkColor = this.libraryConfig.linkColor;
       const editor = tinymce.get(this.editorId);
-      const ul_fixed_style = editor.settings.ul_fixed_style;
-      const ol_fixed_style = editor.settings.ol_fixed_style;
-      const li_fixed_style = editor.settings.li_fixed_style;
       const p_fixed_style = editor.settings.p_fixed_style;
       const persist_styles = editor.settings.persist_styles;
       const button_inline_color = editor.settings.button_inline_color;
 
       if (nameComponent === 'button-element' && button_inline_color) {
         this.changeStyles('p', { color: this.component.button.style.color || libraryLinkColor });
-      }
-      if (ul_fixed_style) {
-        this.changeStyles('ul', ul_fixed_style);
-      }
-      if (ol_fixed_style) {
-        this.changeStyles('ol', ol_fixed_style);
-      }
-      if (li_fixed_style && Application.utils.isJsonString(li_fixed_style)) {
-        this.changeStyles('li', JSON.parse(li_fixed_style));
       }
       if (p_fixed_style && Application.utils.isJsonString(p_fixed_style)) {
         this.changeStyles('p', JSON.parse(p_fixed_style));
@@ -55,6 +43,7 @@ export default {
         }
       }
 
+      this.setListStyles();
       this.setLinkStyles();
     },
     changeStyles(selector, styles) {
@@ -82,7 +71,28 @@ export default {
 
       // check if link_fixed_color is setup an apply it, otherwise, apply parent color
       if (link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color)) {
-        this.changeStyles('a', { color: link_fixed_color });
+        if (editorLinks.length) {
+          for (let i = 0; i < editorLinks.length; i++) {
+            const $el = $(editorLinks[i]);
+
+            // check if element has a span as parent and then check colors
+            const $span = $el.parent('span');
+            if ($span.length) {
+              // return the first span parent that has a color
+              const $parentEl = $span.parents().filter(function () {
+                return $(this).css('color');
+              });
+              const parentColor = $parentEl.css('color');
+              const spanColor = $span.css('color');
+              // if span and parent color are the same, we assume that the span is inheriting the color
+              // so we apply the fixed color, otherwise, we let the span color.
+              const newColor = parentColor === spanColor ? link_fixed_color : spanColor;
+              $el.css('color', newColor);
+            } else {
+              $el.css('color', link_fixed_color);
+            }
+          }
+        }
       } else {
         if (editorLinks.length) {
           for (let i = 0; i < editorLinks.length; i++) {
@@ -125,14 +135,54 @@ export default {
         }
       });
     },
+    setListStyles() {
+      const editor = tinymce.get(this.editorId);
+      const ul_fixed_style = editor.settings.ul_fixed_style;
+      const ol_fixed_style = editor.settings.ol_fixed_style;
+      const li_fixed_style = editor.settings.li_fixed_style;
+      const li_keep_children_style = editor.settings.li_keep_children_style;
+
+      if (ul_fixed_style) {
+        this.changeStyles('ul', ul_fixed_style);
+      }
+      if (ol_fixed_style) {
+        this.changeStyles('ol', ol_fixed_style);
+      }
+      if (li_fixed_style && Application.utils.isJsonString(li_fixed_style)) {
+        this.changeStyles('li', JSON.parse(li_fixed_style));
+      }
+
+      if (li_keep_children_style) {
+        const editorLists = $(editor.targetElm).find('li');
+        editorLists.each((index, el) => {
+          const firstTextElement = $(el).find('span')[0];
+          if (firstTextElement) {
+            const computedStyle = document.defaultView.getComputedStyle(firstTextElement)
+            const fontSize = computedStyle.getPropertyValue('font-size');
+            const lineHeight = computedStyle.getPropertyValue('line-height');
+            const letterSpacing = computedStyle.getPropertyValue('letter-spacing');
+            $(el).css({
+              fontSize: fontSize,
+              lineHeight: lineHeight,
+              letterSpacing: letterSpacing
+            });
+          }
+        });
+      }
+    },
     tinyMaxLines() {
       const editor = tinymce.get(this.editorId);
       if (editor.settings.max_lines) {
         if (parseInt(editor.settings.max_lines)) {
           return parseInt(editor.settings.max_lines) || undefined;
         } else {
-          const firstTextElement = this.$textElement.find('p')[0] || this.$textElement.find('li')[0];
-          const fontSize = document.defaultView.getComputedStyle(firstTextElement).getPropertyValue('font-size');
+          const firstTextElement = this.$textElement[0].firstElementChild;
+          let firstTextNode = firstTextElement.firstChild;
+          // if the first node is a text node, we go up to te parent element.
+          if(firstTextNode.nodeName === "#text") {
+            firstTextNode = firstTextElement;
+          }
+          const fontSize = document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('font-size');
           return JSON.parse(editor.settings.max_lines)[fontSize];
         }
       }
@@ -167,9 +217,16 @@ export default {
     },
     maxLinesValidation(event) {
       const divHeight = this.$textElement.height();
-      const firstTextElement = this.$textElement.find('p')[0] || this.$textElement.find('li')[0];
-      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextElement).getPropertyValue('line-height'));
-      const actualLines = parseInt(divHeight / lineHeight);
+      const firstTextElement = this.$textElement[0].firstElementChild;
+      let firstTextNode = firstTextElement.firstChild;
+
+      // if the first node is a text node, we go up to te parent element.
+      if(firstTextNode.nodeName === "#text") {
+        firstTextNode = firstTextElement;
+      }
+
+      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      const actualLines = divHeight / lineHeight;
 
       if (actualLines > this.tinyMaxLines()) {
         this.setError({
@@ -228,6 +285,78 @@ export default {
       this.maxLinesValidation();
       this.minCharsValidation();
     },
+    styleFormatsIncrement() {
+      const style_formats = [];
+
+      const loop = this.textOptions.config.settings.style_formats_increment.content;
+
+      let step = Number(loop.steps.range.split(':')[0]);
+      let currentFontSize = Number(loop.styles.fontSize.initial) || step;
+      const rangeMax = Number(loop.steps.range.split(':')[1]);
+
+      const runBehaviour = (behaviour, initialValue) => {
+        behaviour = behaviour.split(':');
+        const behaviourType = behaviour[0];
+        const behaviourFactor = Number(behaviour[1]);
+
+        let result = Number(initialValue);
+
+        switch (behaviourType) {
+          case 'static':
+            // leave result as is
+            break;
+          case 'fixed':
+            result = behaviourFactor;
+            break;
+          case 'add':
+            result += behaviourFactor;
+            break;
+          case 'multiply':
+            result = Math.round(result * behaviourFactor);
+            break;
+          default:
+            console.log('Error: behaviour type not defined');
+        }
+        return result;
+      }
+
+      const getTitle = (tmp, val, unit) => {
+        let template = tmp || '%fontVal%unit';
+        if (template.indexOf('%fontVal') !== -1) {
+          template = template.replace('%fontVal', val);
+          if (unit) template = template.replace('%unit', unit);
+          return template;
+        }
+        return template.replace('%stepVal', step);
+      };
+
+      while (step <= rangeMax) {
+        const format = {
+          styles: {},
+        };
+
+        _.forOwn(loop.styles, (prop, key) => {
+          const keyBehaviour = prop.behaviour || loop.steps.behaviour;
+          const unit = prop.unit || 'px';
+          const result = runBehaviour(keyBehaviour, currentFontSize);
+          format.styles[key] = `${result}${unit}`;
+        });
+
+        _.forOwn(loop.settings, (prop, key) => {
+            format[key] = prop;
+        });
+
+        const fontSizeBehaviour = loop.styles.fontSize.behaviour || loop.steps.behaviour;
+        const fontSizeUnit = loop.styles.fontSize.unit || 'px';
+        format.title = getTitle(loop.title, currentFontSize, fontSizeUnit);
+        format.styles.fontSize = `${currentFontSize}${fontSizeUnit}`;
+        style_formats.push(format);
+
+        currentFontSize = runBehaviour(fontSizeBehaviour, currentFontSize);
+        step = runBehaviour(loop.steps.behaviour, step);
+      }
+      return style_formats;
+    },
     initTinyMCE() {
       const _this = this;
       const options = _.filter(this.textOptions.config.options, 'value');
@@ -240,6 +369,10 @@ export default {
           customSettings[k] = e.content || e.value;
         }
       });
+
+      if (this.textOptions.config.settings.style_formats_increment && this.textOptions.config.settings.style_formats_increment.value) {
+        customSettings['style_formats'] = this.styleFormatsIncrement();
+      }
 
       let toolbar = [];
 
@@ -329,6 +462,14 @@ export default {
                 $toolbox.find('div[aria-label="Format"] button:first').empty();
                 $toolbox.find('div[aria-label="Format"] button:first')
                   .append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-bold"></i>');
+              });
+            }
+            // set toolbar width
+            if ($toolbox.length) {
+              setTimeout(() => {
+                const toolboxWidth = $toolbox.find('.mce-btn-group').width();
+                $toolbox.find('.mce-container-body').width(toolboxWidth);
+                $toolbox.find('.mce-panel').width(toolboxWidth);
               });
             }
           });
@@ -439,7 +580,7 @@ export default {
 
       // Extend toolbar
       if ('extend_toolbar' in this.textOptions.config.settings) {
-        settings.plugins = [settings.plugins, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
+        settings.toolbar = [settings.toolbar, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
       }
 
       _.extend(settings, customSettings);

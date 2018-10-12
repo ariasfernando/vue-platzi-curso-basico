@@ -1,16 +1,51 @@
 {
-  "extends": "airbnb-base",
+  "env": {
+    "jquery": true
+  },
+  "extends": ["airbnb-base", "plugin:vue/essential", "plugin:vue/recommended", "plugin:vue/strongly-recommended"],
   "plugins": [
     "import"
   ],
+  "parserOptions": {
+    "parser": "babel-eslint"
+  },
+  "globals": {
+    "Application": true,
+    "_": true
+  },
   "rules": {
-    "max-len": ["error", { "code": 120 }],
-    "no-trailing-spaces": "off",
-    "no-plusplus": [
-      2,
-      {
-        "allowForLoopAfterthoughts": true
+    "max-len": [2, { "code": 120 }],
+    "no-trailing-spaces": 2,
+    "no-plusplus": 0,
+
+    "vue/max-attributes-per-line": [2, {
+      "singleline": 3,
+      "multiline": {
+        "max": 3,
+        "allowFirstLine": true
       }
-    ]
+    }],
+    "vue/html-closing-bracket-newline": [2, {
+      "singleline": "never",
+      "multiline": "never"
+    }],
+    "init-declarations": [2, "always"],
+    "no-multi-assign": 0,
+    "indent": [2, 2, {
+      "SwitchCase": 1, 
+      "VariableDeclarator": { 
+        "var": 2, 
+        "let": 2, 
+        "const": 3
+      }
+    }],
+    "no-case-declarations": 2,
+    "complexity": [2, 20],
+    "max-depth": [2, 10],
+    "max-nested-callbacks": [2, 3],
+    "sort-vars": [2, {
+      "ignoreCase": false
+    }],
+    "no-param-reassign": [2, {"props": false}]
   }
 }

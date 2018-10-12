@@ -136,7 +136,7 @@ class TemplateController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function getEmailPreview($campaign_id = null)
+    public function getEmailPreview($campaign_id = null, Request $request)
     {
         $campaign_data = isset($campaign_id)
             ? Campaign::findOrFail($campaign_id)
@@ -150,7 +150,7 @@ class TemplateController extends Controller
             [
                 'params' => [
                     'title' => 'preview',
-                    'body_html' => $campaign_data->body_html,
+                    'body_html' => ($request->has('no_body') ? '' : $campaign_data->body_html),
                     'campaign_data' => $campaign_data,
                     'library_config' => $library->config,
                 ]

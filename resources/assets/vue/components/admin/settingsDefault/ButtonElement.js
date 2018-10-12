@@ -50,7 +50,7 @@ function buttonDefault() {
           name: 'color',
           type: 'generic-color',
           link: 'style',
-          label: 'Color',
+          label: 'Text Color',
           subComponent: 'button',
         },
       ],
@@ -59,11 +59,7 @@ function buttonDefault() {
           name: 'padding',
           type: 'padding-group',
           subComponent: 'container',
-        },
-        {
-          name: 'border-group',
-          type: 'border-group',
-          subComponent: 'button',
+          label: 'Element Padding',
         },
         {
           link: 'style',
@@ -72,7 +68,14 @@ function buttonDefault() {
           isPixel: true,
           type: 'generic-number',
           subComponent: 'button',
-        }
+        },
+      ],
+      [
+        {
+          name: 'border-group',
+          type: 'border-group',
+          subComponent: 'button',
+        },
       ],
       [
         {
@@ -81,22 +84,6 @@ function buttonDefault() {
           name: 'width',
           type: 'generic-number',
           value: 150,
-          subComponent: 'button',
-        },
-        {
-          link: 'style',
-          label: 'max-width',
-          name: 'maxWidth',
-          isPixel: true,
-          type: 'generic-number',
-          subComponent: 'button',
-        },
-        {
-          link: 'style',
-          label: 'min-width',
-          name: 'minWidth',
-          isPixel: true,
-          type: 'generic-number',
           subComponent: 'button',
         },
         {
@@ -149,6 +136,7 @@ function buttonDefault() {
           name: 'padding',
           type: 'padding-group',
           subComponent: 'caret',
+          label: 'Caret Padding',
         },
       ],
     ],

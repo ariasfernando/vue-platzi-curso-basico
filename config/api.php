@@ -138,8 +138,8 @@ return [
     'silverpop' => [
         'title' => 'Silverpop',
         'class' => 'Silverpop',
-        'token_endpoint' => 'https://api2.ibmmarketingcloud.com/oauth/token',
-        'endpoint' => 'https://api2.ibmmarketingcloud.com/XMLAPI',
+        'token_endpoint' => env('API_SILVERPOP_BASE_URL', '').'/oauth/token',
+        'endpoint' => env('API_SILVERPOP_BASE_URL', '').'/XMLAPI',
         'client_id' => env('API_SILVERPOP_USERNAME', ''),
         'client_secret' => env('API_SILVERPOP_PASSWORD', ''),
         'app_name' => env('API_SILVERPOP_APP_NAME', ''),

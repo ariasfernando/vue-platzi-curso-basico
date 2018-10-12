@@ -96,3 +96,16 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+.el-color-dropdown .el-button--text{
+  color: #666666;
+}
+.el-color-dropdown .el-button--default{
+  &:hover,
+  &:active,
+  &:focus{
+    color: #666666;
+    border: 1px solid #78dcd6;
+  }
+}
+</style>

@@ -5,8 +5,8 @@
     icon="glyphicon-tasks"
     :collapsable="false"
     ></label-item-container>
-    <div class="card">
-      <group-container>
+    <div class="card card-custom">
+      <group-container class="group-container-custom">
         <component :is="'custom-settings-' + module.key" :module-id="currentCustomModule" :module="module"></component>
       </group-container>
     </div>
@@ -49,8 +49,14 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .vue-js-switch {
     margin-top: 4px
   }
+  .card-custom {
+    padding-bottom: 0;
+  }
+  .group-container-custom {
+    margin: 5px 0 15px;
+}
 </style>

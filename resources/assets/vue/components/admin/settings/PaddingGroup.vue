@@ -1,5 +1,5 @@
 <template>
-  <settings-container custom-class="field-padding" label="Padding">
+  <settings-container custom-class="field-padding" :label="label">
     <template slot="setting-bottom">
       <padding
       :element="element"

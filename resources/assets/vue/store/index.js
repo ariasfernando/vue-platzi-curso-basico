@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex/dist/vuex';
-Vue.use(Vuex);
 
 // Modules
 import globalStore from './globalStore';
@@ -9,6 +8,8 @@ import moduleStore from './moduleStore';
 import campaignStore from './campaignStore';
 import apiStore from './apiStore';
 import configStore from './configStore';
+
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   strict: true,
