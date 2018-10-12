@@ -48,6 +48,9 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 		@if (isset($params['library_config']['prependHtml']))
 			<?php echo $params['library_config']['prependHtml']; ?>
 		@endif
+		
+		@include('layouts.partials.email_styles')
+		
 		@if (isset($params['campaign_data']['campaign_fonts']))
 			@if (isset($params['campaign_data']['campaign_fonts']['custom']))
 				@if (count($params['campaign_data']['campaign_fonts']['custom']) > 0)

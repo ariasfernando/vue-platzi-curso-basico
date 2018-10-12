@@ -51,3 +51,23 @@ if (!function_exists('cdn')) {
         return \config::get('view.suite_cdn_host') . $path;
     }
 }
+
+if (!function_exists('getCssContent')) {
+    /**
+     * Wraps a css in a media query .
+     *
+     * @param  string  $filename
+     * @return string
+     */
+    function getCssContent($filename)
+    {
+        try
+        {
+            return Storage::disk('local:public')->get($filename);
+        }
+        catch (Illuminate\Contracts\Filesystem\FileNotFoundException $e)
+        {
+            Activity::log("The file doesn't exist: " . $e->getMessage());
+        }
+    }
+}

@@ -191,7 +191,7 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
-      this.form.campaignPreheader = this.campaign.campaign_preheader || '';
+      this.form.campaignPreheader =  this.campaign.campaign_preheader || '';
 
       this.loadConfig();
     },
