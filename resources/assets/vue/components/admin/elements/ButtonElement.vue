@@ -10,7 +10,7 @@
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
+          :width="width"
           :height="component.button.attribute.height"
           :bgcolor="component.button.attribute.bgcolor"
           :style="tableStyles"
@@ -88,8 +88,11 @@
       }
     },
     computed:{
+      width() {
+        return this.component.button.styleOption.autoWidth ? undefined : this.component.button.attribute.width;
+      },
       tableStyles(){
-        const width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
+        const width = this.width ? this.widthStyle(this.width) : undefined;
         return {
           'width': width,
           'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
