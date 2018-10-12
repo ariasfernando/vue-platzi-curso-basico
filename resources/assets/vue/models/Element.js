@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import defaultElements from '../resources/elements';
 
 class Element {
@@ -10,7 +11,12 @@ class Element {
     }
 
     // Call function here to avoid override issues
-    const defaultProperties = defaultElements[properties.type]();
+    let defaultProperties = defaultElements[properties.type]();
+
+    if (Object.prototype.hasOwnProperty.call(properties, 'customType') && properties.customType !== '') {
+      const keyName = _.upperFirst(_.camelCase(properties.customType));
+      defaultProperties = Object.assign({}, defaultProperties, customElements.default[keyName]);
+    }
 
     this.properties = {
       ...defaultProperties,

@@ -31,6 +31,10 @@
               <i class="fa fa-code" aria-hidden="true"></i>
               <p>Custom Code</p>
             </li>
+            <li class="component-item" data-type="button-element" data-custom-type="custom-button-element">
+              <i class="fa fa-square" aria-hidden="true"></i>
+              <p>Custom Button</p>
+            </li>
           </draggable>
         </b-card>
       </b-collapse>

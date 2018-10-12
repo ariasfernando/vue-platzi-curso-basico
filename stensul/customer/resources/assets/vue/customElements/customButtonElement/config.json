@@ -1,0 +1,8 @@
+{
+    "type": "button-element",
+    "key": "custom-button-element",
+    "title": "Custom Button Element",
+    "data": {
+      "text": "I am custom"
+    }
+}

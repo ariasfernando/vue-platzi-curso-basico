@@ -200,6 +200,7 @@
 
         } else {
           const elType = e.clone.getAttribute('data-type');
+          const elCustomType = e.clone.hasAttribute('data-custom-type') ? e.clone.getAttribute('data-custom-type') : '';
 
           // Get element compatible plugins
           const plugins = {};
@@ -210,7 +211,7 @@
           });
 
           // Create a new Element with default properties
-          const element = new Element({ type: elType, plugins });
+          const element = new Element({ type: elType, plugins, customType: elCustomType});
 
           // Add it to the list
           this.$store.commit("module/addComponent", {
