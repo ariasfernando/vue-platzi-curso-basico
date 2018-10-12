@@ -3,7 +3,7 @@
     <!-- START: Style -->
     <label-item-container
       v-b-toggle.style
-      :label="`${toCamel(component.type.replace('-element', ''))} Style`"
+      :label="`${toCamel(component.type.replace('-element', ''))} Styles`"
       icon="glyphicon-pencil" />
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
