@@ -2,42 +2,43 @@ function moduleDefault() {
   return {
     componentSettings: [
       {
-        groupName: 'backgroundColorGroup',
         groupLabel: 'Background color',
         settings: [{
           name: 'bgcolor',
+          aclName: 'background_bgcolor',
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
         }],
       },
       {
-        groupName: 'paddingGroup',
         groupLabel: 'Padding',
         settings: [{
           name: 'padding',
+          aclName: 'padding_padding',
           type: 'padding-group',
           label: 'Padding',
         }],
       },
       {
-        groupName: 'borderGroup',
         groupLabel: 'Border',
         settings: [{
           name: 'border-group',
+          aclName: 'border_border-group',
           type: 'border-group',
         }],
       },
       {
-        groupName: 'classesAndColumnStackingGroup',
         groupLabel: 'Class and stacking group',
         settings: [{
           name: 'classes',
+          aclName: 'style_classes',
           type: 'class-input',
           link: 'attribute',
         },
         {
           name: 'columnsStacking',
+          aclName: 'stacking_column-stacking',
           type: 'columns-stacking',
         }],
       },

@@ -2,20 +2,20 @@ function dividerDefault() {
   return {
     componentSettings: [
       {
-        groupName: 'classesGroup',
         groupLabel: 'Classes',
         settings: [{
           name: 'classes',
+          aclName: 'classes_classes',
           type: 'class-input',
           link: 'attribute',
           subComponent: 'container',
         }],
       },
       {
-        groupName: 'StyleSettingsGroup',
         groupLabel: 'Style settings',
         settings: [{
           name: 'bgcolor',
+          aclName: 'style_bgcolor',
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
@@ -23,6 +23,7 @@ function dividerDefault() {
         },
         {
           name: 'bgcolor',
+          aclName: 'style_inner-bgcolor',
           type: 'generic-color',
           link: 'attribute',
           label: 'Inner Background Color',
@@ -32,26 +33,27 @@ function dividerDefault() {
           link: 'style',
           label: 'Height',
           name: 'height',
+          aclName: 'style_height',
           isPixel: true,
           type: 'generic-number',
           subComponent: 'divider',
         }],
       },
       {
-        groupName: 'paddingGroup',
         groupLabel: 'Padding',
         settings: [{
           name: 'padding',
+          aclName: 'padding_padding',
           type: 'padding-group',
           subComponent: 'container',
           label: 'Element Padding',
         }],
       },
       {
-        groupName: 'borderGroup',
         groupLabel: 'Border',
         settings: [{
           name: 'border-group',
+          aclName: 'border_border-group',
           type: 'border-group',
           subComponent: 'container',
         }],
