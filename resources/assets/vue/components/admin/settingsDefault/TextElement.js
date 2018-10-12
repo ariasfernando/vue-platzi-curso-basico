@@ -12,9 +12,21 @@ function textDefault() {
       ],
       [
         {
-          name: 'font-style',
-          type: 'font-style',
+          name: 'fontSize',
+          type: 'generic-number',
+          isPixel: true,
           subComponent: 'text',
+          link: 'style',
+          label: 'Font size',
+        },
+        {
+          name: 'lineHeight',
+          label: 'Line height',
+          type: 'generic-number',
+          isPercentage: true,
+          maxPercentage: 200,
+          subComponent: 'text',
+          link: 'style',
         },
         {
           name: 'letterSpacing',
@@ -24,11 +36,6 @@ function textDefault() {
         {
           name: 'fontWeight',
           type: 'font-weight',
-          subComponent: 'text',
-        },
-        {
-          name: 'align',
-          type: 'text-align',
           subComponent: 'text',
         },
         {
@@ -50,7 +57,7 @@ function textDefault() {
           name: 'color',
           type: 'generic-color',
           link: 'style',
-          label: 'Color',
+          label: 'Text Color',
           subComponent: 'text',
         },
       ],

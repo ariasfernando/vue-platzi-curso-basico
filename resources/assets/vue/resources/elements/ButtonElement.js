@@ -20,7 +20,7 @@ function buttonDefault() {
         color: '#FFFFFF',
         fontFamily: 'Helvetica, Arial, Sans-serif',
         fontSize: '12px',
-        lineHeight: '14px',
+        lineHeight: '130%',
         textAlign: 'center',
         fontWeight: 'normal',
         letterSpacing: 'normal',

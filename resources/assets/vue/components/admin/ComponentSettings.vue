@@ -6,13 +6,15 @@
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component
-            v-for="(setting,i) in settingGroup"
-            :show-setting="showSetting(setting)"
             :is="'input-' + setting.type"
-            @setting-updated="settingUpdatedHandler"
+            v-for="(setting,i) in settingGroup"
+            :key="i+setting.type"
+            :show-setting="showSetting(setting)"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
+            :setting-slot="setting.settingSlot"
+            :max-percentage="setting.maxPercentage"
             :link="setting.link"
             :label="setting.label"
             :placeholder="setting.placeholder"
@@ -21,10 +23,11 @@
             :max-value="setting.maxValue"
             :sub-component="setting.subComponent"
             :is-pixel="setting.isPixel"
+            :is-percentage="setting.isPercentage"
             :options="setting.options"
             :is-disable-percentage="setting.isDisablePercentage"
             :element="setting.subComponent ? component[setting.subComponent] : component"
-            :key="i" />
+            @setting-updated="settingUpdatedHandler" />
         </group-container>
       </b-card>
     </b-collapse>
@@ -41,8 +44,7 @@
           v-for="(plugin, key) in component.plugins"
           v-if="!shouldRenderInStyles(plugin)"
           :class="'plugin-' + plugin.name"
-          :key="key"
-        >
+          :key="key">
           <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
         </div>
       </b-card>
@@ -57,7 +59,7 @@
           :class="'plugin-' + plugin.name"
           :key="key"
         >
-          <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
+          <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin" v-if="plugin.hasStudioSettings"></component>
         </div>
       </b-card>
     </b-collapse>
@@ -80,7 +82,6 @@ export default {
     "input-caret": elementSettings.ButtonCaret,
     "input-class-input": elementSettings.ClassInput,
     "input-font-family": elementSettings.FontFamily,
-    "input-font-style": elementSettings.FontStyle,
     "input-font-weight": elementSettings.FontWeight,
     "input-generic-color": elementSettings.GenericColor,
     "input-generic-file": elementSettings.GenericFile,

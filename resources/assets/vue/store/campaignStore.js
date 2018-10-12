@@ -226,7 +226,17 @@ function campaignStore() {
         state.dirty = true;
       },
       savePlugin(state, payload) {
-        const plugin = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+        let plugin = state.modules[payload.moduleId];
+        if (payload.componentId >= 0) {
+          // save component plugin
+          plugin = plugin.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+        } else if (payload.columnId >= 0) {
+          // save column plugin
+          plugin = plugin.structure.columns[payload.columnId].plugins[payload.plugin];
+        } else {
+          // save module plugin
+          plugin = plugin.plugins[payload.plugin];
+        }
         plugin.data = {
           ...plugin.data,
           ...payload.data
@@ -278,8 +288,15 @@ function campaignStore() {
         }
       },
       saveModuleAttribute(state, data) {
+        // DEPRECATE
         const attributes = state.modules[data.moduleId].structure.attribute;
         attributes[data.attribute] = data.attributeValue;
+        state.dirty = true;
+      },
+      saveModuleProperty(state, data) {
+        const module = state.modules[data.moduleId].structure;
+        const properties = data.link ? module[data.link] : module;
+        Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
       saveModuleData(state, data) {

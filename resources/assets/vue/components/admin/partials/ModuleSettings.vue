@@ -32,11 +32,14 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="general-settings-functionalities" accordion="general-settings">
       <b-card class="control">
-        <template v-if="module.plugins && Object.keys(module.plugins).length !== 0">
-          <div v-for="(plugin, moduleKey) in module.plugins" :key="plugin.name" :class="'plugin-' + plugin.name">
-            <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" />
-          </div>
-        </template>
+        <component
+          :is="'studio-' + plugin.name"
+          v-for="(plugin, moduleKey) in module.plugins"
+          v-if="module.plugins && plugin.hasStudioSettings"
+          :key="plugin.name"
+          :name="moduleKey"
+          :plugin="plugin"
+          :class="'plugin-' + plugin.name" />
       </b-card>
     </b-collapse>
   </div>

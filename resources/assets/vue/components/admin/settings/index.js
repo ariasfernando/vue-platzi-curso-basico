@@ -3,7 +3,6 @@ import ButtonCaret from './ButtonCaret.vue';
 import ClassInput from './ClassInput.vue';
 import ColumnsStacking from './ColumnsStacking.vue';
 import FontFamily from './FontFamily.vue';
-import FontStyle from './FontStyle.vue';
 import FontWeight from './FontWeight.vue';
 import GenericCode from './GenericCode.vue';
 import GenericColor from './GenericColor.vue';
@@ -25,7 +24,6 @@ const Settings = {
   ClassInput,
   ColumnsStacking,
   FontFamily,
-  FontStyle,
   FontWeight,
   GenericCode,
   GenericColor,
