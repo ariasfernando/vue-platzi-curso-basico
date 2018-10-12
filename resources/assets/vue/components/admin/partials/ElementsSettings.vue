@@ -31,9 +31,9 @@
               <i class="fa fa-code" aria-hidden="true"></i>
               <p>Custom Code</p>
             </li>
-            <li class="component-item" data-type="button-element" data-custom-type="custom-button-element">
-              <i class="fa fa-square" aria-hidden="true"></i>
-              <p>Custom Button</p>
+            <li v-for="customElement in customElementArray" class="component-item" :key="customElement.key" :data-type="customElement.type" :data-custom-type="customElement.key">
+              <i class="fa fa-gears" aria-hidden="true"></i>
+              <p>{{ customElement.title }}</p>
             </li>
           </draggable>
         </b-card>
@@ -67,5 +67,10 @@
         },
       }
     },
+    computed: {
+      customElementArray (){
+        return customElements.default;
+      }
+    }
   }   
 </script>
