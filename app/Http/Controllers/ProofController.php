@@ -454,11 +454,11 @@ class ProofController extends Controller
         $modified_date = $date->toDateTime();
 
         foreach ($reviewers as $key => $value) {
-            $reviewer_user = User::where('email', $value['email'])->first();
-            $reviewers[$key]['user_id'] = new ObjectId(Reviewer::withTrashed()->whereEmail($value['email'])->first()->id);
+            $reviewer_user = Reviewer::withTrashed()->whereEmail($value['email'])->first();
+            $reviewers[$key]['user_id'] = new ObjectId($reviewer_user->_id);
             // Don't save decision_comment for new proofs, saving "$oid" will throw an exception save only the fields we need.
             $save_reviewers[$key]['user_id'] = $reviewers[$key]['user_id'];
-            $save_reviewers[$key]['display_name'] = $reviewer_user->name;
+            $save_reviewers[$key]['display_name'] = $reviewer_user->display_name;
             $save_reviewers[$key]['email'] = $reviewers[$key]['email'] ?? null;
             $save_reviewers[$key]['last_modified_date'] = $modified_date;
             $save_reviewers[$key]['notification_message'] = $reviewers[$key]['notification_message'] ?? null;
