@@ -7,7 +7,7 @@
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <template v-for="(setting,i) in settingGroup.settings">
           <component
-            v-if="$can('std-'+component.type+'-'+settingGroup.groupName+'-'+setting.name)"
+            v-if="$can('std-'+component.type+'_'+setting.aclName)"
             :show-setting="showSetting(setting)"
             :is="'input-' + setting.type"
             @setting-updated="settingUpdatedHandler"

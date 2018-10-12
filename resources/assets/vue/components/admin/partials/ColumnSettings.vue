@@ -5,7 +5,7 @@
       <b-card class="control" no-block>
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <template v-for="setting in settingGroup.settings">
-            <component v-if="$can('std-column-'+settingGroup.groupName+'-'+setting.name)"
+            <component v-if="$can('std-column_'+setting.aclName)"
             :is="'input-' + setting.type"
             :key="setting.name"
             :setting="setting.type"

@@ -13,11 +13,12 @@ class AssignPermissionStudio extends Migration
         'std_raw',
 
         // MODULE PERMISSIONS
-        'std-module-backgroundColorGroup-bgcolor',
-        'std-module-paddingGroup-padding',
-        'std-module-borderGroup-border-group',
-        'std-module-classesAndColumnStackingGroup-classes',
-        'std-module-classesAndColumnStackingGroup-columnsStacking',
+        'std-module_background_bgcolor',
+        'std-module_padding_padding',
+        'std-module_border_border-group',
+        'std-module_style_classes',
+        'std-module_stacking_column-stacking',
+
         'std-plugin-module-background-color',
         'std-plugin-module-equal-height-for-column',
         'std-plugin-module-height-sync',
@@ -26,58 +27,27 @@ class AssignPermissionStudio extends Migration
         'std-plugin-text-color-by-background-for-module',
 
         // COLUMN PERMISSIONS
-        'std-column-backgroundColorGroup-bgcolor',
-        'std-column-paddingGroup-padding',
-        'std-column-borderGroup-border-group',
-        'std-column-widthAndClassGroup-width',
-        'std-column-widthAndClassGroup-classes',
+        'std-column_background_bgcolor',
+        'std-column_padding_padding',
+        'std-column_border_border-group',
+        'std-column_style_width',
+        'std-column_style_classes',
         'std-column-plugin-column-background-color',
         'std-column-plugin-column-palette-background-color',
         'std-column-plugin-vertical-alignment',
         'std-column-plugin-text-color-by-background',
 
         // TEXT ELEMENT PERMISSIONS
-        'std-text-element-fontFamilyGroup-fontFamily',
-        'std-text-element-fontAndStylesGroup-font-style',
-        'std-text-element-fontAndStylesGroup-letterSpacing',
-        'std-text-element-fontAndStylesGroup-fontWeight',
-        'std-text-element-fontAndStylesGroup-align',
-        'std-text-element-fontAndStylesGroup-classes',
-        'std-text-element-colorStyles-bgcolor',
-        'std-text-element-colorStyles-color',
-        'std-module-backgroundColorGroup-bgcolor',
-        'std-module-paddingGroup-padding',
-        'std-module-borderGroup-border-group',
-        'std-module-classesAndColumnStackingGroup-classes',
-        'std-module-classesAndColumnStackingGroup-columnsStacking',
-        'std-plugin-module-background-color',
-        'std-plugin-module-equal-height-for-column',
-        'std-plugin-module-height-sync',
-        'std-plugin-module-palette-background-color',
-        'std-plugin-toggle-element',
-        'std-plugin-text-color-by-background-for-module',
+        'std-text-element_font_font-family',
+        'std-text-element_font_font-style',
+        'std-text-element_font_letter-spacing',
+        'std-text-element_font_font-weight',
+        'std-text-element_font_align',
+        'std-text-element_font_classes',
+        'std-text-element_styles_bgcolor',
+        'std-text-element_styles_color',
+        'std-text-element_padding_padding',
 
-        // COLUMN PERMISSIONS
-        'std-column-backgroundColorGroup-bgcolor',
-        'std-column-paddingGroup-padding',
-        'std-column-borderGroup-border-group',
-        'std-column-widthAndClassGroup-width',
-        'std-column-widthAndClassGroup-classes',
-        'std-column-plugin-column-background-color',
-        'std-column-plugin-column-palette-background-color',
-        'std-column-plugin-vertical-alignment',
-        'std-column-plugin-text-color-by-background',
-
-        // TEXT ELEMENT PERMISSIONS
-        'std-text-element-fontFamilyGroup-fontFamily',
-        'std-text-element-fontAndStylesGroup-font-style',
-        'std-text-element-fontAndStylesGroup-letterSpacing',
-        'std-text-element-fontAndStylesGroup-fontWeight',
-        'std-text-element-fontAndStylesGroup-align',
-        'std-text-element-fontAndStylesGroup-classes',
-        'std-text-element-colorStyles-bgcolor',
-        'std-text-element-colorStyles-color',
-        'std-text-element-paddingGroup-padding',
         'std-text-element-plugin-alignment',
         'std-text-element-plugin-background-color',
         'std-text-element-plugin-font-family',
@@ -98,25 +68,26 @@ class AssignPermissionStudio extends Migration
         'tiny-plugin-forecolor-palette-library',
 
         // BUTTON ELEMENT PERMISSIONS
-        'std-button-element-fontSettingsGroup-fontFamily',
-        'std-button-element-fontSettingsGroup-font-style',
-        'std-button-element-fontSettingsGroup-letter-spacing',
-        'std-button-element-fontSettingsGroup-font-weight',
-        'std-button-element-textAlignmentGroup-text-align',
-        'std-button-element-classStyleGroup-classes',
-        'std-button-element-classStyleGroup-bgcolor',
-        'std-button-element-classStyleGroup-color',
-        'std-button-element-paddingBorderRadiusGroup-padding',
-        'std-button-element-paddingBorderRadiusGroup-borderRadius',
-        'std-button-element-borderGroup-border-group',
-        'std-button-element-dimentionsGroup-width',
-        'std-button-element-dimentionsGroup-height',
-        'std-button-element-defaultUrlGroup-href',
-        'std-button-element-caretGroup-caret',
-        'std-button-element-caretGroup-image-size',
-        'std-button-element-caretGroup-classes',
-        'std-button-element-caretGroup-bgcolor',
-        'std-button-element-caretGroup-padding',
+        'std-button-element_font_font-family',
+        'std-button-element_font_font-style',
+        'std-button-element_font_letter-spacing',
+        'std-button-element_font_font-weight',
+        'std-button-element_textAlignment_text-align',
+        'std-button-element_style_classes',
+        'std-button-element_style_bgcolor',
+        'std-button-element_style_generic-color',
+        'std-button-element_style_padding',
+        'std-button-element_style_border-radius',
+        'std-button-element_border_border-group',
+        'std-button-element_dimentions_width',
+        'std-button-element_dimentions_height',
+        'std-button-element_url_href',
+        'std-button-element_caret_caret',
+        'std-button-element_caret_image-size',
+        'std-button-element_caret_classes',
+        'std-button-element_caret_bgcolor',
+        'std-button-element_caret_padding',
+
         'std-button-element-plugin-background-color',
         'std-button-element-plugin-destination-url',
         'std-button-element-plugin-destination-url-validate',
@@ -128,15 +99,17 @@ class AssignPermissionStudio extends Migration
         
 
         // IMAGE ELEMENT PERMISSIONS
-        'std-image-element-placeholderGroup-placeholder',
-        'std-image-element-placeholderGroup-placeholderMobile',
-        'std-image-element-placeholderGroup-classes',
-        'std-image-element-imageSizeGroup-image-size',
-        'std-image-element-textAlignGroup-text-align',
-        'std-image-element-backgroundColorGroup-bgcolor',
-        'std-image-element-paddingGroup-padding',
-        'std-image-element-urlGroup-href',
-        'std-image-element-urlGroup-alt',
+        'std-image-element_placeholder_placeholder-desktop',
+        'std-image-element_placeholder_placeholder-mobile',
+        'std-image-element_placeholder_classes',
+        'std-image-element_image_image-size',
+        'std-image-element_text_text-align',
+        'std-image-element_background_bgcolor',
+        'std-image-element_padding_padding',
+        'std-image-element_url_href',
+        'std-image-element_url_alt',
+
+
         'std-image-element-plugin-alignment',
         'std-image-element-plugin-background-color',
         'std-image-element-plugin-destination-url',
@@ -147,41 +120,59 @@ class AssignPermissionStudio extends Migration
         'std-image-element-plugin-style-image-editor',
         
         // IMAGE EDITOR PERMISSIONS
-        'std-image-element-editor-library',
-        'std-image-element-editor-url',
-        'std-image-element-editor-sie-size',
-        'std-image-element-editor-size_width',
-        'std-image-element-editor-size_height',
-        'std-image-element-editor-size_auto',
-        'std-image-element-editor-size_minHeight',
-        'std-image-element-editor-size_maxHeight',
-        'std-image-element-editor-size_fit',
-        'std-image-element-editor-size_minWidth',
-        'std-image-element-editor-smaller',
-        'std-image-element-editor-adjust',
-        'std-image-element-editor-sie-plugin-image_upload',
-        'std-image-element-editor-uploaddefault',
-        'std-image-element-editor-fillcolor',
-        'std-image-element-editor-sie-plugin-image_cropper',
-        'std-image-element-editor-movable',
-        'std-image-element-editor-rotatable',
-        'std-image-element-editor-zoomable',
-        'std-image-element-editor-vertical',
-        'std-image-element-editor-round',
-        'std-image-element-editor-sie-plugin-text_text',
-        'std-image-element-editor-sie-plugin-image-overlay_image',
-        'std-image-element-editor-sie-plugin-shapemask_options',
+        'std-image-element_editor_library',
+        'std-image-element_editor_url',
+        'std-image-element_editor_sie-size',
+        'std-image-element_editor_size_width',
+        'std-image-element_editor_size_height',
+        'std-image-element_editor_size_auto',
+        'std-image-element_editor_size_minHeight',
+        'std-image-element_editor_size_maxHeight',
+        'std-image-element_editor_size_fit',
+        'std-image-element_editor_size_minWidth',
+        'std-image-element_editor_smaller',
+        'std-image-element_editor_adjust',
+        'std-image-element_editor_sie-plugin-image_upload',
+        'std-image-element_editor_uploaddefault',
+        'std-image-element_editor_fillcolor',
+        'std-image-element_editor_sie-plugin-image_cropper',
+        'std-image-element_editor_movable',
+        'std-image-element_editor_rotatable',
+        'std-image-element_editor_zoomable',
+        'std-image-element_editor_vertical',
+        'std-image-element_editor_round',
+        'std-image-element_editor_sie-plugin-text_text',
+        'std-image-element_editor_sie-plugin-image-overlay_image',
+        'std-image-element_editor_sie-plugin-shapemask_options',
 
         // DIVIDER ELEMENT PERMISSIONS
-        'std-divider-element-classesGroup-classes',
-        'std-divider-element-StyleSettingsGroup-bgcolor',
-        'std-divider-element-StyleSettingsGroup-height',
-        'std-divider-element-paddingGroup-padding',
-        'std-divider-element-borderGroup-border-group',
+        'std-divider-element_classes_classes',
+        'std-divider-element_style_bgcolor',
+        'std-divider-element_style_inner-bgcolor',
+        'std-divider-element_style_height',
+        'std-divider-element_padding_padding',
+        'std-divider-element_border_border-group',
+
         'std-divider-element-plugin-background-color',
         'std-divider-element-plugin-pallete-background-color',
-        'std-divider-element-plugin-variable-height'
-        ];
+        'std-divider-element-plugin-variable-height',
+
+
+        // CUSTOM CODE PERMISSIONS
+        'std-custom-code-element_settings_data',
+        'std-custom-code-element_settings_classes',
+        'std-custom-code-element_settings_bgcolor',
+        'std-custom-code-element_settings_padding',
+        'std-custom-code-element_border_border-group',
+        'std-custom-code-element_settings_data',
+        'std-custom-code-element_settings_classes',
+        'std-custom-code-element_settings_bgcolor',
+        'std-custom-code-element_settings_padding',
+        'std-custom-code-element_border_border-group',
+    ];
+
+
+        
 
         // Remove permissions for advanced user
         $advancedPermissions = $allPermissions;
@@ -190,52 +181,62 @@ class AssignPermissionStudio extends Migration
         // Remove permissions for basic user
         $basicPermissions = $allPermissions;
         $this->unsetPermission($basicPermissions, 'std_raw');
-        $this->unsetPermission($basicPermissions, 'std-module-classesAndColumnStackingGroup-classes');
+        $this->unsetPermission($basicPermissions, 'std-module_style_classes');
         $this->unsetPermission($basicPermissions, 'std-plugin-text-color-by-background-for-module');
         
-        $this->unsetPermission($basicPermissions, 'std-column-widthAndClassGroup-classes');
+        $this->unsetPermission($basicPermissions, 'std-column_style_classes');
         $this->unsetPermission($basicPermissions, 'std-column-plugin-vertical-alignment');
         $this->unsetPermission($basicPermissions, 'std-column-plugin-text-color-by-background');
 
-        $this->unsetPermission($basicPermissions, 'std-divider-element-borderGroup-border-group');
-        $this->unsetPermission($basicPermissions, 'std-divider-element-classesGroup-classes');
+        $this->unsetPermission($basicPermissions, 'std-divider-element_border_border-group');
+        $this->unsetPermission($basicPermissions, 'std-divider-element_classes_classes');
         
-        $this->unsetPermission($basicPermissions, 'std-text-element-fontAndStylesGroup-classes');
+        $this->unsetPermission($basicPermissions, 'std-text-element_font_classes');
         $this->unsetPermission($basicPermissions, 'tiny-plugin-link_fixed_color');
         
-        $this->unsetPermission($basicPermissions, 'std-button-element-classStyleGroup-classes');
-        $this->unsetPermission($basicPermissions, 'std-button-element-caret');
-        $this->unsetPermission($basicPermissions, 'std-button-element-caretGroup-caret');
-        $this->unsetPermission($basicPermissions, 'std-button-element-caretGroup-image-size');
-        $this->unsetPermission($basicPermissions, 'std-button-element-caretGroup-classes');
-        $this->unsetPermission($basicPermissions, 'std-button-element-caretGroup-bgcolor');
-        $this->unsetPermission($basicPermissions, 'std-button-element-caretGroup-padding');
+        $this->unsetPermission($basicPermissions, 'std-button-element_style_classes');
+        $this->unsetPermission($basicPermissions, 'std-button-element_caret_caret');
+        $this->unsetPermission($basicPermissions, 'std-button-element_caret_image-size');
+        $this->unsetPermission($basicPermissions, 'std-button-element_caret_classes');
+        $this->unsetPermission($basicPermissions, 'std-button-element_caret_bgcolor');
+        $this->unsetPermission($basicPermissions, 'std-button-element_caret_padding');
         $this->unsetPermission($basicPermissions, 'std-button-element-plugin-destination-url-target');
         
-        $this->unsetPermission($basicPermissions, 'std-image-element-placeholderGroup-classes');        
+        $this->unsetPermission($basicPermissions, 'std-image-element_placeholder_classes');        
         $this->unsetPermission($basicPermissions, 'std-image-element-plugin-destination-url-target');
 
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-library');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-url');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-sie-size');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-size_width');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-size_height');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-size_auto');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-size_minHeight');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-size_maxHeight');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-size_fit');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-size_minWidth');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-smaller');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-adjust');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-sie-plugin-image_upload');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-plugin-mobile-upload');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-uploaddefault');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-fillcolor');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-rotatable');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-sie-plugin-text_text');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-sie-plugin-image-overlay_image');
-        $this->unsetPermission($basicPermissions,'std-image-element-editor-sie-plugin-shapemask_options');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_library');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_url');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_sie-size');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_size_width');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_size_height');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_size_auto');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_size_minHeight');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_size_maxHeight');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_size_fit');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_size_minWidth');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_smaller');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_adjust');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_sie-plugin-image_upload');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_plugin-mobile-upload');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_uploaddefault');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_fillcolor');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_rotatable');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_sie-plugin-text_text');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_sie-plugin-image-overlay_image');
+        $this->unsetPermission($basicPermissions,'std-image-element_editor_sie-plugin-shapemask_options');
  
+        $this->unsetPermission($basicPermissions,'std-custom-code-element_settings_data');
+        $this->unsetPermission($basicPermissions,'std-custom-code-element_settings_classes');
+        $this->unsetPermission($basicPermissions,'std-custom-code-element_settings_bgcolor');
+        $this->unsetPermission($basicPermissions,'std-custom-code-element_settings_padding');
+        $this->unsetPermission($basicPermissions,'std-custom-code-element_border_border-group');
+        $this->unsetPermission($basicPermissions,'std-custom-code-element_settings_data');
+        $this->unsetPermission($basicPermissions,'std-custom-code-element_settings_classes');
+        $this->unsetPermission($basicPermissions,'std-custom-code-element_settings_bgcolor');
+        $this->unsetPermission($basicPermissions,'std-custom-code-element_settings_padding');
+        $this->unsetPermission($basicPermissions,'std-custom-code-element_border_border-group');
+
 
         $roles_permissions = [
             'studio-admin' => $allPermissions,
