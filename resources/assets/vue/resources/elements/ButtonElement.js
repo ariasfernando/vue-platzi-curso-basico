@@ -33,6 +33,7 @@ function buttonDefault() {
         align: 'center',
         bgcolor: '#514960',
         href: '',
+        title: '',
         valign: 'middle',
       },
     },

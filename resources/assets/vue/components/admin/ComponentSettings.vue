@@ -10,7 +10,8 @@
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component
             :is="'input-' + setting.type"
-            v-for="(setting,i) in settingGroup"
+            v-for="(setting,i) in settingGroup.settings"
+            v-if="$can('std-'+component.type+'_'+setting.aclName)"
             :key="i+setting.type"
             :show-setting="showSetting(setting)"
             :setting="setting.type"
@@ -49,7 +50,7 @@
         <component
           :is="'studio-' + plugin.name"
           v-for="(plugin, key) in component.plugins"
-          v-if="plugin.name !== 'studio-mobile-styles'"
+          v-if="plugin.name !== 'studio-mobile-styles' && $can('std-'+component.type+'-plugin-'+plugin.name)"
           :key="key"
           :class="'plugin-' + plugin.name"
           :name="key"

@@ -6,7 +6,8 @@
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component
             :is="'input-' + setting.type"
-            v-for="setting in settingGroup"
+            v-for="setting in settingGroup.settings"
+            v-if="$can('std-module_'+setting.aclName)"
             :key="setting.name"
             :setting="setting.type"
             :name="setting.name"
@@ -35,7 +36,7 @@
         <component
           :is="'studio-' + plugin.name"
           v-for="(plugin, moduleKey) in module.plugins"
-          v-if="module.plugins && plugin.hasStudioSettings"
+          v-if="module.plugins && plugin.hasStudioSettings && $can('std-plugin-'+plugin.name)"
           :key="plugin.name"
           :name="moduleKey"
           :plugin="plugin"
