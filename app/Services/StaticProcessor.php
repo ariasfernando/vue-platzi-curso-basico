@@ -131,6 +131,12 @@ class StaticProcessor
                 }
             }
 
+            foreach ($html->backgroundImagesRegex($from->body_html) as $item) {
+                if (is_array($item) && isset($item[2])) {
+                    $assets[parse_url($item[2], PHP_URL_PATH)] = null;
+                }
+            }
+
             foreach ($html->assetsRegex($from->body_html)[0] as $item) {
                 if (is_array($item) && isset($item[2])) {
                     $assets[parse_url($item[2], PHP_URL_PATH)] = null;
@@ -188,6 +194,11 @@ class StaticProcessor
                             }
                         }
                     }
+                }
+
+                if (isset($module['structure']) && isset($module['structure']['style']['backgroundImage'])) {
+                    $filename = DS . 'images' . DS . trim($module['structure']['style']['backgroundImage']);
+                    $assets[$filename] = null;
                 }
             }
         }
@@ -289,6 +300,14 @@ class StaticProcessor
                             }
                         }
                     }
+                }
+
+                if (isset($module['structure']) && isset($module['structure']['style']['backgroundImage'])) {
+                    $modules_data[$key]['structure']['style']['backgroundImage'] = str_replace(
+                        $from->id,
+                        $this->getCampaign()->id,
+                        $module['structure']['style']['backgroundImage']
+                    );
                 }
             }
         }

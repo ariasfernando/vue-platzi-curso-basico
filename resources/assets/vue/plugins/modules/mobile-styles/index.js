@@ -6,7 +6,7 @@ module.exports = {
   title: 'Mobile styles',
   version: '0.0.1',
   author: 'matias@stensul.com',
-  target: ['styles', 'button', 'divider', 'image', 'text'],
+  target: ['button', 'divider', 'image', 'text'],
   studioSettings,
   campaignSettings,
   config: {

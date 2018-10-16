@@ -28,6 +28,7 @@ module.exports = {
       },
     },
     target: false,
+    title: false,
   },
   data: {},
   render: true,
