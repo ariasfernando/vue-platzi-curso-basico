@@ -46,6 +46,7 @@
   import _ from 'lodash';
   import validatorMixin from '../mixins/validator';
   import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import urlDestination from '../../../resources/validator_rules'
 
   export default {
     props: ['name', 'plugin', 'pluginKey'],
@@ -104,11 +105,13 @@
       validationRules() {
         const rules = [];
         _.each(this.plugin.config.validations, (e,i) => {
-          if (e) {
+          if (e === true) {
             rules.push(i);
+          } else if(typeof e == 'object' && e.selected !== 'disabled'){
+            rules.push(e.selected);
           }
+           
         });
-
         return rules.join('|');
       }
     },

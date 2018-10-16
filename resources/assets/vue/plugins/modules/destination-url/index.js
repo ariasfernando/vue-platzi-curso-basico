@@ -22,8 +22,8 @@ module.exports = {
         selected: 'disabled',
         options: {
           disabled: 'No Validation',
-          format: 'Validate Format',
-          format_destination: 'Format and Destination',
+          url: 'Validate Format',
+          urlAndDestination: 'Format and Destination',
         },
       },
     },
