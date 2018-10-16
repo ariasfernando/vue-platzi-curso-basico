@@ -98,9 +98,12 @@
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
       },
+      width() {
+        return this.component.button.styleOption.autoWidth ? undefined : this.component.button.attribute.width;
+      },
       tableStyles(){
         const { behaviour } = this.component;
-        let width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
+        let width = this.width ? this.widthStyle(this.width) : undefined;
         if(behaviour == 'text'){
           width = '100%';
         }
@@ -132,7 +135,7 @@
         if(behaviour == 'text'){
           return '100%';
         }
-        return this.component.button.style.minWidth && this.component.button.style.minWidth  !== '0px' ? undefined : this.component.button.attribute.width; 
+        return this.width; 
       }
     },
     methods: {

@@ -91,11 +91,9 @@ function buttonDefault() {
       ],
       [
         {
-          link: 'attribute',
           label: 'Width',
           name: 'width',
-          type: 'generic-number',
-          value: 150,
+          type: 'button-width',
           subComponent: 'button',
         },
         {
