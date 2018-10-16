@@ -5,7 +5,8 @@
         v-model="mainSettingNumeric"
         v-validate="'required'"
         :controls="!(isPercentage || isPixel)"
-        :class="isPercentage || isPixel ? 'width-unit' : 'width-full'"
+        controls-position="right"
+        :class="isPercentage || isPixel ? 'width-unit' : 'without-unit'"
         size="mini"
         :min="minValue"
         :max="maxCaluculate" />
@@ -39,7 +40,7 @@ export default {
           this.mainSetting = `${Math.min(this.maxPercentage || 100, newValue)}%`;
         } else {
           const parceSetting = parseFloat(newValue);
-          this.mainSetting = this.link === 'attribute' ? parceSetting : `${parceSetting}px`;
+          this.mainSetting = this.link === 'style' ? `${parceSetting}px` : parceSetting;
         }
       },
     },
@@ -90,6 +91,44 @@ export default {
   padding: 0;
   border-radius: 2px 0px 0px 2px;
 }
+.el-input-number /deep/ {
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    right: 0;
+    border: 1px solid #dcdfe6;
+    border-left: 1px solid #dcdfe6;
+  }
+  .el-input-number__decrease {
+    bottom: 0;
+    margin: 0;
+    border-radius: 0 0 2px 0;
+  }
+  .el-input-number__increase {
+    top: 0;
+    margin: 0;
+    border-radius: 0 2px 0 0;
+  }
+  .el-input-number__decrease:hover,
+  .el-input-number__increase:hover {
+    color: #78dcd6 !important;
+  }
+  .el-input-number__decrease:hover:not(.is-disabled)
+    ~ .el-input
+    .el-input__inner:not(.is-disabled),
+  .el-input-number__increase:hover:not(.is-disabled)
+    ~ .el-input
+    .el-input__inner:not(.is-disabled) {
+    border-color: #78dcd6;
+  }
+  .el-input-number--mini .el-input-number__decrease,
+  .el-input-number--mini .el-input-number__increase {
+    width: 30px;
+  }
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    background: #f8f8f8;
+  }
+}
 .el-button.is-active .el-input__inner,
 .el-input__inner:focus {
   border: 1px solid #dcdfe6;
@@ -126,8 +165,9 @@ export default {
   margin-right: 0;
   padding-left: 0;
 }
-.width-full {
-  width: 100%;
+.without-unit {
+  width: 105px;
+  padding-right: 28px;
 }
 .is-setting-half .el-input-number--mini.width-unit {
   float: left;
