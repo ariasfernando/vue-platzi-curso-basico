@@ -74,11 +74,11 @@
 </template>
 
 <script>
-  import MobileStylesMixin from '../../../../../../../resources/assets/vue/components/common/mixins/MobileStylesMixin.js';
-  import ModuleContainer from '../../../../../../../resources/assets/vue/components/common/containers/ModuleContainer';
-  import ButtonBorderRadiusComment from '../../../../../../../resources/assets/vue/components/common/ButtonBorderRadiusComment.vue';
-  import tinyMce from '../../../../../../../resources/assets/vue/components/common/tinyMce';
-  import ElementMixin from '../../../../../../../resources/assets/vue/components/common/mixins/ElementMixin.js';
+  import MobileStylesMixin from 'stensul/resources/assets/vue/components/common/mixins/MobileStylesMixin.js';
+  import ModuleContainer from 'stensul/resources/assets/vue/components/common/containers/ModuleContainer';
+  import ButtonBorderRadiusComment from 'stensul/resources/assets/vue/components/common/ButtonBorderRadiusComment.vue';
+  import tinyMce from 'stensul/resources/assets/vue/components/common/tinyMce';
+  import ElementMixin from 'stensul/resources/assets/vue/components/common/mixins/ElementMixin.js';
   import _ from 'lodash';
 
   export default {
