@@ -85,7 +85,7 @@
             <template v-if="column.components.length">
               <component
                 v-for="(component, componentId) in column.components"
-                :is="component.type"
+                :is="component.studioKey?component.studioKey:component.type"
                 :component="component"
                 :module-id="module.id"
                 :column-id="columnId"
@@ -172,7 +172,7 @@
       isActiveGeneralSettings() {
         return this.currentComponent.columnId === undefined && this.currentComponent.componentId === undefined;
       },
-    },   
+    },
     methods: {
       onSort(e) {
         const colId = e.clone.getAttribute('data-column');
@@ -268,7 +268,7 @@
   .st-content-component{
     outline: 1px dashed @icon-option;
     border: none!important;
-  
+
     .st-component{
       &:hover{
         opacity: 0.75;
@@ -284,7 +284,7 @@
     background-color: @hover;
     display: table;
     width: 100%;
-    
+
     &:hover{
       div.empty-cell {
         font-size: 13px;
@@ -299,7 +299,7 @@
       width: 100%;
       vertical-align: middle;
       font-size: 0px;
-      
+
     }
   }
 
@@ -356,6 +356,6 @@
       }
 
     }
-    
+
   }
 </style>

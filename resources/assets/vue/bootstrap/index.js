@@ -162,8 +162,10 @@ export default {
     }
 
     _.each(customElements, (element, name) => {
-      this.Vue.component(`custom-${element.key}`, element.view);
+      this.Vue.component(element.key, element.view);
+      this.Vue.component(element.studioKey, element.studio);
       delete element.view;
+      delete element.studio;
 
       if (Object.prototype.hasOwnProperty.call(settingsDefault, element.type)) {
         if (!element.settings) {
@@ -185,7 +187,7 @@ export default {
     if (customer.plugins) {
       _.merge(plugins, customer.plugins);
     }
-    
+
     this.Vue.prototype.$_app.modulePlugins = plugins.modules;
     this.Vue.prototype.$_app.globalComponents = plugins.common;
 

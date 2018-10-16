@@ -1,35 +1,35 @@
 <template>
-    <table 
+    <table
       width="100%"
       align="left"
-      cellspacing="0" 
-      cellpadding="0" 
-      border="0" 
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
       class="st-content-component"
       :bgcolor="column.container.attribute.bgcolor"
       :class="!column.components.length ? 'empty-table' : ''"
-      :style="[column.container.style,{'background-color' : column.container.attribute.bgcolor} || '']" 
+      :style="[column.container.style,{'background-color' : column.container.attribute.bgcolor} || '']"
       :data-col="columnId"
     >
       <tr>
         <td width="100%" valign="top" :style="elementBorderAndPadding(column.container)" :class="[getClassEmpty , getAttributeClasses(column)]">
-          <draggable 
-            cellpadding="0" 
-            cellspacing="0" 
+          <draggable
+            cellpadding="0"
+            cellspacing="0"
             border="0"
             width="100%"
             v-model="column.components"
             :element="'table'"
-            :options="options" 
+            :options="options"
             :data-col="columnId"
             @add="onAdd"
           >
           <template v-if="column.components.length">
-            <component 
+            <component
               class="st-component"
               v-for="(component, componentId) in column.components"
-              :is="component.type" 
-              :component="component" 
+              :is="component.studioKey?component.studioKey:component.type"
+              :component="component"
               :module-id="module.id"
               :column-id="columnId"
               :component-id="componentId"
@@ -38,8 +38,8 @@
               context="admin"
             ></component>
             </template>
-            <div v-else style="display:table-row;"> 
-              <div 
+            <div v-else style="display:table-row;">
+              <div
                 align="center"
                 class="empty-cell"
                 height="80"
@@ -80,7 +80,7 @@
       TextElement,
     },
     props: {
-      column: { 
+      column: {
         type: Object,
         default: {}
       },
@@ -115,6 +115,6 @@
       onAdd(e){
         this.$emit('add', e);
       },
-    }    
+    }
   };
 </script>

@@ -1,7 +1,7 @@
 version: '2'
 services:
   web:
-    image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0"
+    image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.1"
     ports:
     - "127.0.0.1:3000:80"
     volumes:
@@ -12,7 +12,7 @@ services:
       - queue
       - mail
   worker:
-    image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.0"
+    image: "registry.stensuldev.net/dockerfiles/web-2.0.0:2.2.1"
     command: php /usr/src/app/artisan queue:work --daemon --tries=3
     volumes:
     - ./storage/logs/:/var/log/
@@ -32,7 +32,7 @@ services:
   rockmongo:
     image: "webts/rockmongo"
     ports:
-    - "127.0.0.1:8008:80" 
+    - "127.0.0.1:8008:80"
     links:
       - documentstore:db
     environment:

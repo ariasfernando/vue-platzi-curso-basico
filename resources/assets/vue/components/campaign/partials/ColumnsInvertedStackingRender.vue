@@ -28,7 +28,7 @@
                   v-for="(component, componentId) in column.components"
                   :key="component.id"
                   @select-component="selectComponent"
-                  :is="component.type"
+                  :is="component.studioKey?component.studioKey:component.type"
                   :component="component"
                   :module-id="moduleId"
                   :column-id="columnId"
@@ -81,7 +81,7 @@
       },
       columnWidthPadding: {
         type: Number,
-        default: '' 
+        default: ''
       }
     },
     computed: {

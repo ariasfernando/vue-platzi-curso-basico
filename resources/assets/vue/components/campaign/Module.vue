@@ -43,7 +43,7 @@
         cellspacing="0"
         cellpadding="0"
         border="0"
-        class="st-wrapper" 
+        class="st-wrapper"
         align="center"
       >
         <!--2 COLUMNS -->
@@ -129,7 +129,7 @@
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
               <template>
                   <component
-                    :is="component.type"
+                    :is="component.key?component.key:component.type"
                     :component="component"
                     :module-id="moduleId"
                     :column-id="0"

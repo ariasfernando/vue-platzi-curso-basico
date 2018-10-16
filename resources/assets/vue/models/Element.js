@@ -15,13 +15,14 @@ class Element {
 
     if (Object.prototype.hasOwnProperty.call(properties, 'customType') && properties.customType !== '') {
       const keyName = _.upperFirst(_.camelCase(properties.customType));
-      defaultProperties = Object.assign({}, defaultProperties, customElements.default[keyName]);
+      defaultProperties = _.merge({}, defaultProperties, customElements.default[keyName]);
     }
 
     this.properties = {
       ...defaultProperties,
       ...properties,
     };
+
   }
 
   getProperties() {

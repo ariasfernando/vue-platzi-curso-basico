@@ -5,7 +5,7 @@
       <div class="stx-wrapper" v-if="hasBorderRadius" v-html="notMsoStartingComment"></div>
       <a
         @click.prevent
-        :data-contenteditable-href="component.button.attribute.href || ''"
+        :data-contenteditable-href="component.button.attribute.href || '#peperoni'"
         :target="component.button.attribute.target || '_blank'"
         :style="component.button.style.textDecoration || 'text-decoration:none;'"
         >
@@ -34,21 +34,6 @@
               >
                 <tr>
                   <td
-                    width="100%"
-                    :align="component.button.attribute.align"
-                    :style="fontStyles(component.button)"
-                    :valign="component.button.attribute.valign || ''"
-                    >
-                    <tiny-mce
-                      :fontStyles="[fontStyles(component.button),{'display': 'inline-block !important'}, {'vertical-align': 'middle'}]"
-                      :module="module"
-                      :component="component"
-                      :columnId="columnId"
-                      :componentId="componentId"
-                      @changeText="changeText"
-                    ></tiny-mce>
-                  </td>
-                  <td
                     v-if="component.caret.attribute.url"
                     :width="widthCaret"
                     :style="[elementBorderAndPadding(component.caret), {'width': widthStyle(widthCaret)}]"
@@ -63,6 +48,21 @@
                       style="display: inline-block !important; border:0;"
                     >
                   </td>
+                  <td
+                    width="100%"
+                    :align="component.button.attribute.align"
+                    :style="fontStyles(component.button)"
+                    :valign="component.button.attribute.valign || ''"
+                    >
+                    <tiny-mce
+                      :fontStyles="[fontStyles(component.button),{'display': 'inline-block !important'}, {'vertical-align': 'middle'}]"
+                      :module="module"
+                      :component="component"
+                      :columnId="columnId"
+                      :componentId="componentId"
+                      @changeText="changeText"
+                    ></tiny-mce>
+                  </td>
                 </tr>
               </table>
             </td>
@@ -74,11 +74,11 @@
 </template>
 
 <script>
-  import MobileStylesMixin from 'stensul/resources/assets/vue/components/common/mixins/MobileStylesMixin.js';
-  import ModuleContainer from 'stensul/resources/assets/vue/components/common/containers/ModuleContainer';
-  import ButtonBorderRadiusComment from 'stensul/resources/assets/vue/components/common/ButtonBorderRadiusComment.vue';
-  import tinyMce from 'stensul/resources/assets/vue/components/common/tinyMce';
-  import ElementMixin from 'stensul/resources/assets/vue/components/common/mixins/ElementMixin.js';
+  import MobileStylesMixin from 'stensul/components/common/mixins/MobileStylesMixin.js';
+  import ModuleContainer from 'stensul/components/common/containers/ModuleContainer';
+  import ButtonBorderRadiusComment from 'stensul/components/common/ButtonBorderRadiusComment.vue';
+  import tinyMce from 'stensul/components/common/tinyMce';
+  import ElementMixin from 'stensul/components/common/mixins/ElementMixin.js';
   import _ from 'lodash';
 
   export default {
@@ -90,7 +90,7 @@
       ButtonBorderRadiusComment,
     },
     data() {
-      return {    
+      return {
         timer: null,
       };
     },
@@ -120,7 +120,7 @@
         if (this.component.button.style.borderRadius) {
           const borderRadius =  parseInt(this.component.button.style.borderRadius);
           return borderRadius != 0 ? true : false;
-        } 
+        }
         return false;
       },
     },

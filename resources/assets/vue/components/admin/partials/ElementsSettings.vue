@@ -32,20 +32,20 @@
               <p>Custom Code</p>
             </li>
             <li v-for="customElement in customElementArray" class="component-item" :key="customElement.key" :data-type="customElement.type" :data-custom-type="customElement.key">
-              <i class="fa fa-gears" aria-hidden="true"></i>
+              <i :class="'fa fa-'+ (customElement.icon?customElement.icon:'gears')" aria-hidden="true"></i>
               <p>{{ customElement.title }}</p>
             </li>
           </draggable>
         </b-card>
       </b-collapse>
-    <!-- END: Elements -->    
+    <!-- END: Elements -->
   </div>
 </template>
 
 <script>
   import Draggable from 'vuedraggable';
   import LabelItemContainer from "../../common/containers/LabelItemContainer.vue";
-  
+
   export default {
     components: {
       LabelItemContainer,
@@ -72,5 +72,5 @@
         return customElements.default;
       }
     }
-  }   
+  }
 </script>

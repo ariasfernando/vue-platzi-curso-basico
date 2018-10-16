@@ -1,8 +1,15 @@
 {
     "type": "button-element",
     "key": "custom-button-element",
-    "title": "Custom Element",
+    "studioKey": "custom-button-element-studio",
+    "title": "Custom Button",
+    "icon": "square",
     "data": {
-      "text": "I am custom"
+      "text": "I am custom CTA"
+    },
+    "button": {
+      "attribute": {
+        "bgcolor": "#FF0000"
+      }
     }
 }

@@ -4,19 +4,19 @@
       v-if="column.components.length"
       v-for="(column, columnId) in module.structure.columns"
       :width="column.container.attribute.width"
-      :style="{'background-color' : column.container.attribute.bgcolor}" 
+      :style="{'background-color' : column.container.attribute.bgcolor}"
       :data-col="columnId"
       align="left"
-      cellpadding="0" 
-      cellspacing="0" 
-      border="0" 
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
       class="st-content-component st-mobile-full-width"
       :bgcolor="column.container.attribute.bgcolor"
       :key="column.id"
     >
       <tr>
         <td
-          width="100%" 
+          width="100%"
           :style="elementBorderAndPadding(module.structure.columns[columnId].container)"
           :class="column.container.attribute.classes ||''"
         >
@@ -24,16 +24,16 @@
             v-model="column.components"
             @add="onAdd"
             :element="'table'"
-            :options="options" 
+            :options="options"
             :data-col="columnId"
-            cellpadding="0" 
-            cellspacing="0" 
+            cellpadding="0"
+            cellspacing="0"
             border="0"
             width="100%"
           >
             <component
               v-for="(component, componentId) in column.components"
-              :is="component.type"
+              :is="component.studioKey?component.studioKey:component.type"
               :component="component"
               :module-id="module.id"
               :column-id="columnId"
@@ -44,13 +44,13 @@
               context="admin"></component>
           </draggable>
         </td>
-      </tr>  
+      </tr>
       <element-selector :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
     </table>
 
     <!-- Empty Col -->
     <table
-      v-else 
+      v-else
       align="left"
       :style="column.container.style || ''"
       :width="column.container.style && column.container.attribute.width ? column.container.attribute.width : 100/module.structure.columns.length + '%'"
@@ -59,16 +59,16 @@
         <td>
           <draggable
             @add="onAdd"
-            :element="'div'" 
-            :options="options" 
+            :element="'div'"
+            :options="options"
             :data-col="columnId"
-            cellpadding="0" 
-            cellspacing="0" 
+            cellpadding="0"
+            cellspacing="0"
             border="0"
             width="100%"
             class="empty-table"
           >
-            <div style="display:table-row;"> 
+            <div style="display:table-row;">
               <div
                 align="center"
                 class="empty-cell"
