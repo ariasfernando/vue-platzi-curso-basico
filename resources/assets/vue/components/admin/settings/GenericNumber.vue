@@ -40,7 +40,7 @@ export default {
           this.mainSetting = `${Math.min(this.maxPercentage || 100, newValue)}%`;
         } else {
           const parceSetting = parseFloat(newValue);
-          this.mainSetting = this.link === 'attribute' ? parceSetting : `${parceSetting}px`;
+          this.mainSetting = this.link === 'style' ? `${parceSetting}px` : parceSetting;
         }
       },
     },
