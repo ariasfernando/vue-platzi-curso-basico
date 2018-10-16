@@ -28,8 +28,8 @@ function createStore(option) {
 
 describe('== Module Store ==', () => {
   describe('trigger muttation:', () => {
-    let original;
-    let store;
+    let original = () => {};
+    let store = () => {};
     beforeAll(() => {
       original = console.error;
     });
@@ -51,8 +51,7 @@ describe('== Module Store ==', () => {
     });
 
     afterAll(() => {
-      original = null;
-      store = null;
+      original = store = null;
     });
     it('"setLoader" and expect of set "loading" state to true', (done) => {
       store.commit('module/setLoader', true);
@@ -90,8 +89,7 @@ describe('== Module Store ==', () => {
       let stateModule = store.state.module.module;
       expect(stateModule).toEqual(dataModule);
 
-      dataModule = null;
-      stateModule = null;
+      dataModule = stateModule = null;
 
       done();
     });
@@ -102,9 +100,8 @@ describe('== Module Store ==', () => {
 
       let stateModuleStatus = store.state.module.module.status;
       expect(stateModuleStatus).toEqual(dataStatus.status);
-      
-      dataStatus = null; 
-      stateModuleStatus = null;
+
+      dataStatus = stateModuleStatus = null;
 
       done();
     });
@@ -118,12 +115,11 @@ describe('== Module Store ==', () => {
       store.commit('module/setCurrentComponent', dataSetting);
 
       let stateCurrentComponent = store.state.module.currentComponent;
-      
+
       expect(stateCurrentComponent).toEqual(dataSetting);
-      
-      dataSetting = null;
-      stateCurrentComponent = null;
-      
+
+      dataSetting = stateCurrentComponent = null;
+
       done();
     });
     it('"clearCurrentComponent", expect of the "currentComponent" state has been empty object', (done) => {
@@ -138,8 +134,7 @@ describe('== Module Store ==', () => {
       let stateCurrentComponent = store.state.module.currentComponent;
       expect(stateCurrentComponent).toBeEmptyObject();
 
-      dataSetting = null;
-      stateCurrentComponent = null;
+      dataSetting = stateCurrentComponent = null;
 
       done();
     });
@@ -151,15 +146,15 @@ describe('== Module Store ==', () => {
           text: '<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>',
         },
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [
-            { 
+            {
               components: [
-                { 
-                  data: { 
-                    text: '', 
-                  }, 
+                {
+                  data: {
+                    text: '',
+                  },
                 },
               ],
             },
@@ -176,9 +171,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      dataElement = null;
-      newStruct = null;
-      dataModule = null;
+      dataElement = newStruct = dataModule = null;
 
       done();
     });
@@ -201,7 +194,7 @@ describe('== Module Store ==', () => {
         property: 'borderBottomStyle',
         value: 'none',
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           style: {},
           image: {
@@ -211,7 +204,7 @@ describe('== Module Store ==', () => {
       };
 
       store.commit('module/setModuleData', newStruct);
-      
+
       store.commit('module/saveModuleProperty', eventData);
       store.commit('module/saveModuleProperty', eventData2);
       store.commit('module/saveModuleProperty', eventData3);
@@ -224,11 +217,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      eventData = null;
-      eventData2 = null;
-      eventData3 = null;
-      newStruct = null;
-      stateModuleProperty = null;
+      eventData = eventData2 = eventData3 = newStruct = stateModuleProperty = null;
 
       done();
     });
@@ -241,8 +230,7 @@ describe('== Module Store ==', () => {
 
       expect(storeModuleId).toEqual(moduleId);
 
-      moduleId = null;
-      storeModuleId = null;
+      moduleId = storeModuleId = null;
 
       done();
     });
@@ -251,23 +239,23 @@ describe('== Module Store ==', () => {
         id: 811955,
         type: 'column-element',
         container: {
-          style: {}, 
-          attribute: { width: '100%' }, 
+          style: {},
+          attribute: { width: '100%' },
           styleOption: {},
         },
         content: {
-          style: {}, 
-          attribute: {}, 
+          style: {},
+          attribute: {},
           styleOption: {},
         },
         components: [],
-        plugins: { 
-          columnBackgroundColor: { 
-            name: 'column-background-color', 
-            title: 'Background color', 
-            version: '0.0.1', 
-            author: 'emiliano@stensul.com', 
-            target: ['column'], 
+        plugins: {
+          columnBackgroundColor: {
+            name: 'column-background-color',
+            title: 'Background color',
+            version: '0.0.1',
+            author: 'emiliano@stensul.com',
+            target: ['column'],
             config: {
               defaultColors: [
                 '#ffffff', '#323c44',
@@ -278,15 +266,15 @@ describe('== Module Store ==', () => {
                 '#a65628', '#848484',
               ],
               defaultValue: '#ffffff',
-            }, 
-            data: {}, 
-            render: true, 
-            enabled: false, 
-          }, 
+            },
+            data: {},
+            render: true,
+            enabled: false,
+          },
           verticalAligment: undefined,
         },
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [],
         },
@@ -299,9 +287,7 @@ describe('== Module Store ==', () => {
 
       expect(storeColumns).toEqual(column);
 
-      column = null;
-      newStruct = null;
-      storeColumns = null;
+      column = newStruct = storeColumns = null;
 
       done();
     });
@@ -314,23 +300,23 @@ describe('== Module Store ==', () => {
         id: 811955,
         type: 'column-element',
         container: {
-          style: {}, 
-          attribute: { width: '100%' }, 
+          style: {},
+          attribute: { width: '100%' },
           styleOption: {},
         },
         content: {
-          style: {}, 
-          attribute: {}, 
+          style: {},
+          attribute: {},
           styleOption: {},
         },
         components: [],
-        plugins: { 
-          columnBackgroundColor: { 
-            name: 'column-background-color', 
-            title: 'Background color', 
-            version: '0.0.1', 
-            author: 'emiliano@stensul.com', 
-            target: ['column'], 
+        plugins: {
+          columnBackgroundColor: {
+            name: 'column-background-color',
+            title: 'Background color',
+            version: '0.0.1',
+            author: 'emiliano@stensul.com',
+            target: ['column'],
             config: {
               defaultColors: [
                 '#ffffff', '#323c44',
@@ -341,15 +327,15 @@ describe('== Module Store ==', () => {
                 '#a65628', '#848484',
               ],
               defaultValue: '#ffffff',
-            }, 
-            data: {}, 
-            render: true, 
-            enabled: false, 
-          }, 
+            },
+            data: {},
+            render: true,
+            enabled: false,
+          },
           verticalAligment: undefined,
         },
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [],
         },
@@ -364,10 +350,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      column = null;
-      newStruct = null;
-      storeColumns = null;
+      data = column = newStruct = storeColumns = null;
 
       done();
     });
@@ -377,7 +360,7 @@ describe('== Module Store ==', () => {
         colId: 0,
         width: 100,
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [{
             container: {
@@ -396,28 +379,26 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      newStruct = null;
-      storeModuleFirstColumnWidth = null;
+      data = newStruct = storeModuleFirstColumnWidth = null;
 
       done();
     });
     it('"saveColumnProperty" with data, expect of the "module" state saved property data of column', (done) => {
-      let data = { 
-        colId: 0, 
-        subComponent: 'container', 
-        link: 'attribute', 
-        property: 'bgcolor', 
+      let data = {
+        colId: 0,
+        subComponent: 'container',
+        link: 'attribute',
+        property: 'bgcolor',
         value: '#E14444',
       };
-      let data2 = { 
-        colId: 0, 
-        subComponent: undefined, 
-        link: 'attribute', 
-        property: 'bgcolor', 
+      let data2 = {
+        colId: 0,
+        subComponent: undefined,
+        link: 'attribute',
+        property: 'bgcolor',
         value: '#E14444',
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [{
             container: {
@@ -440,11 +421,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      data2 = null;
-      newStruct = null;
-      storeModuleFirstColumnBgColor = null;
-      storeModuleFirstColumnBgColor2 = null;
+      data = data2 = newStruct = storeModuleFirstColumnBgColor = storeModuleFirstColumnBgColor2 = null;
 
       done();
     });
@@ -771,34 +748,32 @@ describe('== Module Store ==', () => {
         index: 0,
         colId: '0',
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [
-            { 
+            {
               components: [],
             },
           ],
         },
       };
-      
+
       store.commit('module/setModuleData', newStruct);
       store.commit('module/addComponent', dataComponent);
 
       let stateComponent = store.state.module.module.structure.columns[0].components[0];
 
       expect(stateComponent).toEqual(dataComponent.el);
-      
-      dataComponent = null;
-      newStruct = null;
-      stateComponent = null;
-      
+
+      dataComponent = newStruct = stateComponent = null;
+
       done();
     });
     xit('"attachPlugins", ', () => {});
     it('"removeComponents" with data, expect of the state "module" has been removed the component data', (done) => {
-      let data = { 
-        index: 0, 
-        number: 1, 
+      let data = {
+        index: 0,
+        number: 1,
         colId: 0,
       };
       let dataComponent = {
@@ -1123,16 +1098,16 @@ describe('== Module Store ==', () => {
         index: 0,
         colId: '0',
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [
-            { 
+            {
               components: [],
             },
           ],
         },
       };
-      
+
       store.commit('module/setModuleData', newStruct);
       store.commit('module/addComponent', dataComponent);
       store.commit('module/removeComponents', data);
@@ -1141,10 +1116,7 @@ describe('== Module Store ==', () => {
 
       expect(stateComponent).toBeEmptyArray();
 
-      data = null;
-      dataComponent = null;
-      newStruct = null;
-      stateComponent = null;
+      data = dataComponent = newStruct = stateComponent = null;
 
       done();
     });
@@ -1161,10 +1133,10 @@ describe('== Module Store ==', () => {
           },
         },
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [
-            { 
+            {
               components: [{
                 plugins: {
                   mobileStyles: {
@@ -1176,7 +1148,7 @@ describe('== Module Store ==', () => {
           ],
         },
       };
-      
+
       store.commit('module/setModuleData', newStruct);
       store.commit('module/savePlugin', payload);
 
@@ -1187,10 +1159,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      payload = null;
-      newStruct = null;
-      stateModulecolumn = null;
-      componentPlugin = null;
+      payload = newStruct = stateModulecolumn = componentPlugin = null;
 
       done();
     });
@@ -1214,9 +1183,9 @@ describe('== Module Store ==', () => {
         },
         subOption: 'bgcolor',
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
-          columns: [{ 
+          columns: [{
             components: [{
               plugins: {
                 paletteBackgroundColor: {
@@ -1242,32 +1211,29 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      payload = null;
-      newStruct = null;
-      column = null;
-      pluginOptions = null;
+      payload = newStruct = column = pluginOptions = null;
 
       done();
     });
     it('"togglePlugin" with data, expect of the state "module" has been saved the plugin has enabled', (done) => {
       let data = {
-        plugin: 'paletteBackgroundColor', 
-        columnId: 0, 
-        componentId: 0, 
+        plugin: 'paletteBackgroundColor',
+        columnId: 0,
+        componentId: 0,
         enabled: false,
       };
       let data2 = {
-        plugin: 'paletteBackgroundColor', 
+        plugin: 'paletteBackgroundColor',
         columnId: 0,
         enabled: false,
       };
       let data3 = {
-        plugin: 'paletteBackgroundColor', 
+        plugin: 'paletteBackgroundColor',
         enabled: false,
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
-          columns: [{ 
+          columns: [{
             components: [{
               plugins: {
                 paletteBackgroundColor: {
@@ -1309,13 +1275,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      data2 = null;
-      data3 = null;
-      newStruct = null;
-      stateTogglePlugin = null;
-      stateTogglePlugin2 = null;
-      stateTogglePlugin3 = null;
+      data = data2 = data3 = newStruct = stateTogglePlugin = stateTogglePlugin2 = stateTogglePlugin3 = null;
 
       done();
     });
@@ -1328,11 +1288,11 @@ describe('== Module Store ==', () => {
         value: {},
       };
       let data2 = {
-        columnId: 0, 
-        componentId: 0, 
-        subComponent: 'text', 
-        link: 'style', 
-        property: 'lineHeight', 
+        columnId: 0,
+        componentId: 0,
+        subComponent: 'text',
+        link: 'style',
+        property: 'lineHeight',
         value: '16px',
       };
       let data3 = {
@@ -1348,9 +1308,9 @@ describe('== Module Store ==', () => {
         property: 'attribute',
         value: {},
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
-          columns: [{ 
+          columns: [{
             components: [{
               plugins: {
                 paletteBackgroundColor: {
@@ -1382,7 +1342,7 @@ describe('== Module Store ==', () => {
       store.commit('module/saveComponentProperty', data2);
       store.commit('module/saveComponentProperty', data3);
       store.commit('module/saveComponentProperty', data4);
-      
+
       let stateSaveComponentProperty = store.state.module.module.structure.columns[data.columnId].components[data.componentId].text.attribute;
       let stateSaveComponentProperty2 = store.state.module.module.structure.columns[data.columnId].components[data.componentId].text.style;
       let stateSaveComponentProperty3 = store.state.module.module.structure.columns[data.columnId].components[data.componentId].style;
@@ -1395,25 +1355,17 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      data2 = null;
-      data3 = null;
-      data4 = null;
-      newStruct = null;
-      stateSaveComponentProperty = null;
-      stateSaveComponentProperty2 = null;
-      stateSaveComponentProperty3 = null;
-      stateSaveComponentProperty4 = null;
+      data = data2 = data3 = data4 = newStruct = stateSaveComponentProperty = stateSaveComponentProperty2 = stateSaveComponentProperty3 = stateSaveComponentProperty4 = null;
 
       done();
     });
     it('"setBuildingMode" with data, expect of the state "buildingMode" to equal to 0', (done) => {
       store.commit('module/setBuildingMode', 'mobile');
-      
+
       let stateBuildingMode = store.state.module;
-      
+
       expect(stateBuildingMode).toHaveProperty('buildingMode', 'mobile');
-      
+
       stateBuildingMode = null;
 
       done();
@@ -1442,18 +1394,18 @@ describe('== Module Store ==', () => {
         columnId: 0,
         componentId: 0,
         response: [
-          { 
-            _id: '5b3a897792f8ef0010137eb3', 
-            name: 'global', 
-            updated_at: '2018-07-02 16:22:15', 
-            created_at: '2018-07-02 16:22:15', 
+          {
+            _id: '5b3a897792f8ef0010137eb3',
+            name: 'global',
+            updated_at: '2018-07-02 16:22:15',
+            created_at: '2018-07-02 16:22:15',
           },
           '',
         ],
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
-          columns: [{ 
+          columns: [{
             components: [{
               plugins: {
                 styleImageEditor: {
@@ -1486,28 +1438,27 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', newStruct);
       store.commit('module/setListLibraries', data);
-      
+
       const stateImageOptions = store.state.module.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options;
 
       expect(stateImageOptions).toEqual(data.response);
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      newStruct = null;
+      data = newStruct = null;
 
       done();
     });
   });
   describe('trigger action:', () => {
-    let baseUrl;
-    let original;
-    let store;
+    let baseUrl = '';
+    let original = () => {};
+    let store = () => {};
     beforeAll(() => {
       baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
       original = console.error;
     });
-    
+
     beforeEach(() => {
       console.error = jest.fn();
       store = createStore({
@@ -1528,14 +1479,13 @@ describe('== Module Store ==', () => {
     afterAll(() => {
       nock.cleanAll();
       nock.restore();
-      baseUrl = null;
-      original = null;
+      baseUrl = original = null;
     });
 
     it('"addColumn", expect that was added a new column', (done) => {
       let data = {
         type: 'column-element',
-        container: { 
+        container: {
           style: {},
           attribute: { width: '100%' },
           styleOption: {},
@@ -1545,28 +1495,28 @@ describe('== Module Store ==', () => {
           styleOption: {},
         },
         components: [],
-        plugins: { 
-          columnBackgroundColor: { 
+        plugins: {
+          columnBackgroundColor: {
             name: 'column-background-color',
             title: 'Background color',
             version: '0.0.1',
             author: 'emiliano@stensul.com',
             target: ['column'],
-            config: { 
+            config: {
               defaultColors: ['#000000', '#323c44', '#cd263a', '#8d8d8d', '#9e00ff', '#0000ff', '#00da00', '#dada00', '#ff8d00', '#ff00de', '#a65628', '#848484'],
-              defaultValue: '#000000', 
+              defaultValue: '#000000',
             },
             data: {},
             render: true,
-            enabled: false, 
+            enabled: false,
           },
-          verticalAlignment: { 
+          verticalAlignment: {
             name: 'vertical-alignment',
             title: 'Vertical alignment',
             version: '0.0.1',
             author: 'emiliano@stensul.com',
             target: ['column'],
-            config: { 
+            config: {
               options: ['top', 'middle', 'bottom'],
               defaultValue: 'middle',
             },
@@ -1585,28 +1535,28 @@ describe('== Module Store ==', () => {
           attribute: {},
           styleOption: {} },
         components: [],
-        plugins: { 
-          columnBackgroundColor: { 
+        plugins: {
+          columnBackgroundColor: {
             name: 'column-background-color',
             title: 'Background color',
             version: '0.0.1',
             author: 'emiliano@stensul.com',
             target: ['column'],
-            config: { 
+            config: {
               defaultColors: ['#000000', '#323c44', '#cd263a', '#8d8d8d', '#9e00ff', '#0000ff', '#00da00', '#dada00', '#ff8d00', '#ff00de', '#a65628', '#848484'],
-              defaultValue: '#000000', 
+              defaultValue: '#000000',
             },
             data: {},
             render: true,
-            enabled: false, 
+            enabled: false,
           },
-          verticalAlignment: { 
+          verticalAlignment: {
             name: 'vertical-alignment',
             title: 'Vertical alignment',
             version: '0.0.1',
             author: 'emiliano@stensul.com',
             target: ['column'],
-            config: { 
+            config: {
               options: ['top', 'middle', 'bottom'],
               defaultValue: 'middle',
             },
@@ -1631,11 +1581,11 @@ describe('== Module Store ==', () => {
         },
       };
 
-      Vue.prototype.$_app = { 
+      Vue.prototype.$_app = {
         modulePlugins: data2.plugins,
       };
 
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: [
           ],
@@ -1656,10 +1606,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      data2 = null;
-      newStruct = null;
-      stateModuleColumn = null;
+      data = data2 = newStruct = stateModuleColumn = null;
 
       done();
     });
@@ -1668,21 +1615,21 @@ describe('== Module Store ==', () => {
       let Columns = [
         {
           container: {
-            attribute: { 
+            attribute: {
               width: 0,
             },
           },
         },
         {
           container: {
-            attribute: { 
+            attribute: {
               width: 0,
             },
           },
         },
       ];
 
-      let newStruct = { 
+      let newStruct = {
         structure: {
           columns: Columns,
         },
@@ -1699,10 +1646,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      Columns = null;
-      newStruct = null;
-      storeModuleFirstColumnWidth = null;
-      storeModuleSecondColumnWidth = null;
+      Columns = newStruct = storeModuleFirstColumnWidth = storeModuleSecondColumnWidth = null;
 
       done();
     });
@@ -2094,29 +2038,28 @@ describe('== Module Store ==', () => {
       await store.dispatch('module/getModuleData', moduleId);
 
       let stateModule = store.state.module.module;
-      
+
       expect(stateModule).toEqual(objectModule);
 
-      moduleId = null;
-      stateModule = null;
+      moduleId = stateModule = null;
 
       done();
     });
     it('"getModuleData" without moduleId, expect to create a new module data', async (done) => {
       const objectModule = {
-        moduleId: undefined, 
-        name: 'Untitled module', 
-        title: undefined, 
-        type: 'studio', 
-        status: '', 
-        data: {}, 
-        plugins: {}, 
+        moduleId: undefined,
+        name: 'Untitled module',
+        title: undefined,
+        type: 'studio',
+        status: '',
+        data: {},
+        plugins: {},
         structure: {
-          columnsStacking: 'normal', 
+          columnsStacking: 'normal',
           attribute: {
             bgcolor: '', classes: '',
-          }, 
-          mobileClasses: [], 
+          },
+          mobileClasses: [],
           style: {
             paddingTop: 0,
             paddingLeft: 0,
@@ -2134,14 +2077,14 @@ describe('== Module Store ==', () => {
             borderLeftWidth: '0px',
             borderLeftStyle: 'none',
             borderLeftColor: '',
-          }, 
+          },
           columns: [],
         },
       };
       await store.dispatch('module/getModuleData');
 
       let stateModule = store.state.module.module;
-      
+
       expect(stateModule).toEqual(objectModule);
 
       stateModule = null;
@@ -2504,8 +2447,7 @@ describe('== Module Store ==', () => {
 
       expect(console.error).toHaveBeenCalled();
 
-      moduleId = null;
-      failResponse = null;
+      moduleId = failResponse = null;
 
       done();
     });
@@ -2896,7 +2838,7 @@ describe('== Module Store ==', () => {
         },
       };
       let response = { id: '5b3ce34792f8ef00137bb103', message: 'SUCCESS' };
-      let newStruct = { 
+      let newStruct = {
         moduleId: '5b3ce34792f8ef00137bb105',
       };
 
@@ -2914,10 +2856,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      moduleData = null;
-      response = null;
-      newStruct = null;
-      moduleId = null;
+      moduleData = response = newStruct = moduleId = null;
     });
     xit('"saveModuleData" with data, expect has saved the module edition', () => {
       let moduleData = {
@@ -3306,7 +3245,7 @@ describe('== Module Store ==', () => {
         },
       };
       let response = { id: '5b3ce34792f8ef00137bb103', message: 'SUCCESS' };
-      let newStruct = { 
+      let newStruct = {
         moduleId: '5b3ce34792f8ef00137bb105',
       };
 
@@ -3323,10 +3262,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      moduleData = null;
-      response = null;
-      newStruct = null;
-      moduleId = null;
+      moduleData = response = newStruct = moduleId = null;
     });
     it('"uploadImages" with data, have expected to save the image with format "data:[image];[base64]" and return the path', async (done) => {
       let image = 'data:image/gif;base64,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 studio-module-9fd97d284c2172c84071.js:3401:9';
@@ -3343,8 +3279,7 @@ describe('== Module Store ==', () => {
       await store.dispatch('module/uploadImages', { images: [image] }).then((res) => {
         expect(res).toEqual(['/5b4fa329654e0-1531945769.415.gif']);
 
-        dataImage = null;
-        image = null;
+        dataImage = image = null;
 
         done();
       });
@@ -3739,10 +3674,8 @@ describe('== Module Store ==', () => {
         expect(console.error).toHaveBeenCalled();
         expect(error.status).toEqual(500);
 
-        image = null;
-        dataImage = null;
-        failResponse = null;
-        
+        image = dataImage = failResponse = null;
+
         done();
       });
     });
@@ -4136,9 +4069,7 @@ describe('== Module Store ==', () => {
         expect(console.error).toHaveBeenCalled();
         expect(error.status).toEqual(500);
 
-        image = null;
-        dataImage = null;
-        failResponse = null;
+        image = dataImage = failResponse = null;
 
         done();
       });
@@ -4169,9 +4100,9 @@ describe('== Module Store ==', () => {
         to: 1,
         total: 1,
       };
-      let newStruct = { 
+      let newStruct = {
         structure: {
-          columns: [{ 
+          columns: [{
             components: [{
               plugins: {
                 styleImageEditor: {
@@ -4215,11 +4146,11 @@ describe('== Module Store ==', () => {
           columnId: 0,
           componentId: 2,
           response: [
-            { 
-              _id: '5b3a897792f8ef0010137eb3', 
-              name: 'global', 
-              updated_at: '2018-07-02 16:22:15', 
-              created_at: '2018-07-02 16:22:15', 
+            {
+              _id: '5b3a897792f8ef0010137eb3',
+              name: 'global',
+              updated_at: '2018-07-02 16:22:15',
+              created_at: '2018-07-02 16:22:15',
             },
             '',
           ],
@@ -4227,18 +4158,14 @@ describe('== Module Store ==', () => {
 
         modStore.commit('setModuleData', {});
 
-        setDataMock = null;
-        data = null;
-        requestResponse = null;
-        newStruct = null;
-        storeModule = null;
+        setDataMock = data = requestResponse = newStruct = storeModule = null;
 
         done();
       });
     });
   });
   describe('trigger getter:', () => {
-    let store;
+    let store = () => {};
     beforeEach(() => {
       store = createStore({
         strict: true,
@@ -4266,8 +4193,7 @@ describe('== Module Store ==', () => {
 
       expect(getDataModule).toEqual(dataModule);
 
-      dataModule = null;
-      getDataModule = null;
+      dataModule = getDataModule = null;
 
       done();
     });
@@ -4283,15 +4209,14 @@ describe('== Module Store ==', () => {
 
       expect(getDataCurrentComponent).toEqual(dataSetting);
 
-      dataSetting = null;
-      getDataCurrentComponent = null;
-      
+      dataSetting = getDataCurrentComponent = null;
+
       done();
     });
     xit('"changeSettingComponent", expect state module has 1', () => {});
     it('"buildingMode", expect state buildingMode has \'mobile\'', (done) => {
       store.commit('module/setBuildingMode', 'mobile');
-      
+
       let getDataBuildingMode = store.getters['module/buildingMode'];
 
       expect(getDataBuildingMode).toEqual('mobile');
@@ -4302,7 +4227,7 @@ describe('== Module Store ==', () => {
     });
     it('"showRaw", expect state showRaw has true', (done) => {
       store.commit('module/toggleRaw', 'mobile');
-      
+
       let getDataBuildingMode = store.getters['module/showRaw'];
 
       expect(getDataBuildingMode).toEqual(true);
