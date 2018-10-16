@@ -18,7 +18,7 @@
           @click.prevent="toggleOption(optionName, option.value)" />
       </div>
       <template v-if="plugin.config.options.forecolor.value">
-        <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library" label="textcolor_map">
+        <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="textcolor_map">
           <template slot="setting-right">
             <el-input
               v-model="textColorMap"
@@ -29,7 +29,7 @@
         </settings-container>
       </template>
       <template>
-        <div v-if="plugin.config.options.forecolor.value" class="clearfix">
+        <div v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')" class="clearfix">
           <settings-container label="textcolor_from_library">
             <template slot="setting-right">
               <toggle-button
@@ -49,7 +49,7 @@
         </div>
         <div v-for="(tinySetting, key) in plugin.config.settings" :key="key" class="clearfix">
           <!-- Input if config needs it -->
-          <settings-container v-if="showSetting(tinySetting.dependsOn)" :label="tinySetting.title">
+          <settings-container v-if="showSetting(tinySetting.dependsOn) && $can('tiny-plugin-' + key)" :label="tinySetting.title">
             <template slot="setting-right">
               <el-input-number
                 v-if="tinySetting.type === 'number'"

@@ -199,11 +199,11 @@
     methods: {
       onAdd(e) {
         let cloneEl = e.clone;
-        let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
+        let moduleKey = $(cloneEl).find('.draggable-item').attr('module-id');
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
 
         // Find module in items by type: item or subitem
-        const found = this.findModule(moduleName, moduleType);
+        const found = this.findModule(moduleKey, moduleType);
         const mod = clone(found);
         this.addModule(mod, e.newIndex);
 
@@ -489,6 +489,10 @@
           text-align: center;
         }
       }
+    }
+    .stx-wrapper {
+      display: contents;
+      width: 100%;
     }
   }
 

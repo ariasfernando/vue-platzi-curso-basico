@@ -13,16 +13,16 @@
                 <b-tab title="HTML">
                   <div class="html_minify_toggle pull-right">
                     <label for="htmlMinify">Minify Code</label>
-                    <toggle-button :value="this.minified.normal_html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange('normal_html')"></toggle-button>
+                    <toggle-button :value="minified.normal_html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange('normal_html')" />
                   </div>
-                  <textarea ref="normal_html" v-html="this.minified.normal_html.output"></textarea>
+                  <textarea ref="normal_html" v-model="minified.normal_html.output" readonly />
                 </b-tab>
               </b-tabs>
             </slot>
             <slot name="body" v-if="shouldDisplay('plaintext')">
               <b-tabs>
                 <b-tab title="Plaintext">
-                  <textarea ref="plaintext" v-html="this.plainText"></textarea>
+                  <textarea ref="plaintext" v-html="plainText" readonly />
                 </b-tab>
               </b-tabs>
             </slot>

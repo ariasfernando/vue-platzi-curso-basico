@@ -1,18 +1,24 @@
 <template>
   <div>
     <!-- START: Style -->
-    <label-item-container v-b-toggle.style :label="`${toCamel(component.type.replace('-element', ''))} Style`" icon="glyphicon-pencil" />
+    <label-item-container
+      v-b-toggle.style
+      :label="`${toCamel(component.type.replace('-element', ''))} Styles`"
+      icon="glyphicon-pencil" />
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component
-            v-for="(setting,i) in settingGroup"
-            :show-setting="showSetting(setting)"
             :is="'input-' + setting.type"
-            @setting-updated="settingUpdatedHandler"
+            v-for="(setting,i) in settingGroup.settings"
+            v-if="$can('std-'+component.type+'_'+setting.aclName)"
+            :key="i+setting.type"
+            :show-setting="showSetting(setting)"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
+            :setting-slot="setting.settingSlot"
+            :max-percentage="setting.maxPercentage"
             :link="setting.link"
             :label="setting.label"
             :placeholder="setting.placeholder"
@@ -21,10 +27,11 @@
             :max-value="setting.maxValue"
             :sub-component="setting.subComponent"
             :is-pixel="setting.isPixel"
+            :is-percentage="setting.isPercentage"
             :options="setting.options"
             :is-disable-percentage="setting.isDisablePercentage"
             :element="setting.subComponent ? component[setting.subComponent] : component"
-            :key="i" />
+            @setting-updated="settingUpdatedHandler" />
         </group-container>
         <group-container v-if="component.plugins.mobileStyles" key="mobile-styles">
           <studio-mobile-styles :plugin="component.plugins.mobileStyles" name="mobileStyles" />
@@ -43,9 +50,9 @@
         <component
           :is="'studio-' + plugin.name"
           v-for="(plugin, key) in component.plugins"
+          v-if="plugin.name !== 'studio-mobile-styles' && $can('std-'+component.type+'-plugin-'+plugin.name)"
           :key="key"
           :element="component"
-          v-if="plugin.name !== 'studio-mobile-styles'"
           :class="'plugin-' + plugin.name"
           :name="key"
           :plugin="plugin" />
@@ -55,71 +62,79 @@
 </template>
 
 <script>
-import _ from "lodash";
-import * as elementSettings from "./settings";
-import GroupContainer from "../common/containers/GroupContainer.vue";
-import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
-import settingsDefault from "./settingsDefault";
+import _ from 'lodash';
+import * as elementSettings from './settings';
+import GroupContainer from '../common/containers/GroupContainer.vue';
+import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
+import settingsDefault from './settingsDefault';
+
 export default {
-  props: [ 'currentComponent' ],
   components: {
     GroupContainer,
     LabelItemContainer,
-    "input-border-group": elementSettings.BorderGroup,
-    "input-caret": elementSettings.ButtonCaret,
-    "input-class-input": elementSettings.ClassInput,
-    "input-font-family": elementSettings.FontFamily,
-    "input-font-style": elementSettings.FontStyle,
-    "input-font-weight": elementSettings.FontWeight,
-    "input-generic-color": elementSettings.GenericColor,
-    "input-generic-file": elementSettings.GenericFile,
-    "input-generic-number": elementSettings.GenericNumber,
-    "input-generic-switch": elementSettings.GenericSwitch,
-    "input-generic-text": elementSettings.GenericText,
-    "input-image-size": elementSettings.ImageSize,
-    "input-letter-spacing": elementSettings.LetterSpacing,
-    "input-padding-group": elementSettings.PaddingGroup,
-    "input-text-align": elementSettings.TextAlign,
-    "input-vertical-align": elementSettings.VerticalAlign,
-    "input-generic-code": elementSettings.GenericCode
+    'input-border-group': elementSettings.BorderGroup,
+    'input-caret': elementSettings.ButtonCaret,
+    'input-button-width': elementSettings.ButtonWidth,
+    'input-class-input': elementSettings.ClassInput,
+    'input-font-family': elementSettings.FontFamily,
+    'input-font-weight': elementSettings.FontWeight,
+    'input-generic-color': elementSettings.GenericColor,
+    'input-generic-file': elementSettings.GenericFile,
+    'input-generic-number': elementSettings.GenericNumber,
+    'input-generic-switch': elementSettings.GenericSwitch,
+    'input-generic-text': elementSettings.GenericText,
+    'input-image-size': elementSettings.ImageSize,
+    'input-letter-spacing': elementSettings.LetterSpacing,
+    'input-padding-group': elementSettings.PaddingGroup,
+    'input-text-align': elementSettings.TextAlign,
+    'input-vertical-align': elementSettings.VerticalAlign,
+    'input-generic-code': elementSettings.GenericCode,
   },
+  props: ['currentComponent'],
   computed: {
     settings() {
       return settingsDefault[this.component.type]().componentSettings;
     },
     module() {
-      return this.$store.getters["module/module"];
+      return this.$store.getters['module/module'];
     },
-    component(){
-      return this.module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];
-    }
+    component() {
+      return this.module.structure.columns[this.currentComponent.columnId]
+        .components[this.currentComponent.componentId];
+    },
   },
   methods: {
     toCamel(str) {
       return _.startCase(str);
     },
     saveComponentProperty(link, subComponent, name, value) {
-      let data = {
+      const data = {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
-        subComponent: subComponent,
-        link: link,
+        subComponent,
+        link,
         property: name,
-        value: value
+        value,
       };
-      this.$store.commit("module/saveComponentProperty", data);
+      this.$store.commit('module/saveComponentProperty', data);
     },
     settingUpdatedHandler(eventData) {
-      this.saveComponentProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value);
+      this.saveComponentProperty(
+        eventData.link,
+        eventData.subComponent,
+        eventData.name,
+        eventData.value,
+      );
     },
     showSetting(setting) {
       if (setting.dependsOn) {
-        let element = setting.dependsOn.subComponent ? this.component[setting.dependsOn.subComponent] : this.component;
+        const element = setting.dependsOn.subComponent
+          ? this.component[setting.dependsOn.subComponent]
+          : this.component;
         return element[setting.dependsOn.link][setting.dependsOn.name];
-      } else {
-        return true;
       }
-    }
-  }
+      return true;
+    },
+  },
 };
 </script>

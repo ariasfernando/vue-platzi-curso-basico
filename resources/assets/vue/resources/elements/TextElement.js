@@ -24,7 +24,7 @@ function textDefault() {
         fontSize: '12px',
         color: '#000000',
         fontWeight: 'normal',
-        lineHeight: '16px',
+        lineHeight: '130%',
         align: 'left',
       },
       styleOption: {

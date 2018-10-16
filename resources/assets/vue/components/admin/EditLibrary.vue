@@ -61,15 +61,26 @@
                             <div class="row" v-if="campaignConfig.preview.show_preheader">
                               <!-- Field Preheader -->
                               <label for="preheader" class="col-sm-4 control-label">Preheader</label>
-                              <p class="control col-sm-8">
+                              <p class="control col-sm-4">
                                 <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')"></toggle-button>
                               </p>
+
+                              <div class="col-sm-4" v-show="library.config.preheader">
+                                <!-- Preheader default text -->
+                                <p class="control">
+                                  <el-input
+                                          v-model="library.config.preheaderDefault"
+                                          placeholder="Enter preheader default text here."
+                                          name="preheader"
+                                    ></el-input>
+                                </p>
+                              </div>
                             </div>
 
                             <!-- Field Plain text -->
                             <div class="row" v-if="campaignConfig.process_plaintext">
                               <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
-                              <p class="control col-sm-8">
+                              <p class="control col-sm-4">
                                 <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')"></toggle-button>
                               </p>
                             </div>

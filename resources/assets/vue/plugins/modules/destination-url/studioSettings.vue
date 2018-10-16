@@ -8,17 +8,22 @@
   <template v-if="plugin.enabled">
       <settings-container label="Required">
         <template slot="setting-right">
-            <toggle-button :value="plugin.config.validations.required" @change="(newValue)=>updateField(newValue, 'validations.required')"></toggle-button>
+            <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(newValue)=>updateField(newValue, 'validations.required')"></toggle-button>
         </template>
       </settings-container>
       <settings-container label="Validate URL">
         <template slot="setting-right">
-            <toggle-button :value="plugin.config.validations.url" @change="(newValue)=>updateField(newValue, 'validations.url')"></toggle-button>
+            <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-validations')" :value="plugin.config.validations.url" @change="(newValue)=>updateField(newValue, 'validations.url')"></toggle-button>
         </template>
       </settings-container>
       <settings-container label="Target">
         <template slot="setting-right">
-            <toggle-button :value="plugin.config.target" @change="(newValue)=>updateField(newValue, 'target')"></toggle-button>
+            <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(newValue)=>updateField(newValue, 'target')"></toggle-button>
+        </template>
+      </settings-container>
+      <settings-container label="Title">
+        <template slot="setting-right">
+            <toggle-button :value="plugin.config.title" @change="(newValue)=>updateField(newValue, 'title')"></toggle-button>
         </template>
       </settings-container>
   </template>
@@ -75,7 +80,6 @@
           componentId: this.currentComponent.componentId,
           config,
         };
-
         this.$store.commit('module/savePlugin', payload);
       },
     }
