@@ -8,8 +8,8 @@
     ></label-item-container>
     <div class="card card-custom" :class="{hidden: !showCurrentSettings}">
       <group-container class="group-container-custom">
-        <template v-for="(module, moduleId) in modules">
-          <template v-for="(column, columnId) in module.structure.columns" v-if="module.type === 'studio'">
+        <template v-for="(module, moduleId) in modules" v-if="module.type === 'studio'">
+          <template v-for="(column, columnId) in module.structure.columns">
             <template v-for="(component, componentId) in column.components">
               <component
                 v-for="(plugin, pluginKey) in component.plugins"

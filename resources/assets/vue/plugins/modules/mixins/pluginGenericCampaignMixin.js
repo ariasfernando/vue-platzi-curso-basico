@@ -12,9 +12,12 @@ export default {
     currentCustomModule() {
       return this.$store.getters['campaign/currentCustomModule'];
     },
+    libraryConfig() {
+      return this.$store.state.campaign.campaign.library_config;
+    },
   },
   methods: {
-    saveComponentPropertyById({ componentId, subComponent, link, property, value }) {
+    saveElementProperty({ componentId, subComponent, link, property, value }) {
       const payload = {
         moduleIdInstance: this.moduleIdInstance,
         componentId,
@@ -23,16 +26,32 @@ export default {
         property,
         value,
       };
-      this.$store.commit('campaign/saveComponentPropertyById', payload);
+      this.$store.commit('campaign/saveElementProperty', payload);
+    },
+    getElement(elementId) {
+      if (!this.isCustom) {
+        let component;
+        _.forEach(this.module.structure.columns, (column) => {
+          _.forEach(column.components, (CurrentComponent) => {
+            if (CurrentComponent.id === elementId) {
+              component = CurrentComponent;
+              return false;
+            }
+          });
+          return !component;
+        });
+        return component;
+      }
+      return this.module.data[elementId];
     },
     addClassToComponent(componentId, classToAdd) {
-      let classes = this.getComponent(componentId).container.classes;
+      let classes = this.getElement(componentId).container.classes;
       const classesArr = classes ? classes.split(' ') : [];
       const index = classesArr.indexOf(classToAdd);
       if (index === -1) {
         classesArr.push(classToAdd);
         classes = classesArr.join(' ');
-        this.saveComponentPropertyById({
+        this.saveElementProperty({
           moduleIdInstance: this.moduleIdInstance,
           componentId,
           subComponent: 'container',
@@ -43,7 +62,7 @@ export default {
       }
     },
     saveHeight(componentId, value) {
-      this.saveComponentPropertyById({
+      this.saveElementProperty({
         moduleIdInstance: this.moduleIdInstance,
         componentId,
         subComponent: 'container',

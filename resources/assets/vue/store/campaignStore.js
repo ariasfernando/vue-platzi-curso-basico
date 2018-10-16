@@ -270,7 +270,7 @@ function campaignStore() {
         };
         state.dirty = true;
       },
-      saveComponentPropertyById(state, { moduleIdInstance, componentId, property, value, ...scope }) {
+      saveElementProperty(state, { moduleIdInstance, componentId, property, value, ...scope }) {
         const module = getModule(state.modules, moduleIdInstance);
         const component = getComponent(module, componentId);
         let properties = getProperties(component, scope);
@@ -282,7 +282,7 @@ function campaignStore() {
         state.dirty = true;
       },
       saveComponentProperty(state, data) {
-        // DEPRECATE, use saveComponentPropertyById
+        // DEPRECATE, use saveElementProperty
         const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
         const subComponent = data.subComponent ? component[data.subComponent] : component;
         const properties = data.link ? subComponent[data.link] : subComponent;
@@ -313,10 +313,10 @@ function campaignStore() {
       },
       saveModulePropertyById(state, { moduleIdInstance, property, value, ...scope }) {
         const module = getModule(state.modules, moduleIdInstance);
-        let properties = getProperties(module, scope);
+        let properties = getProperties(module.structure, scope);
         if (Array.isArray(properties) && isNaN(property)) {
           // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
-          properties = convertArrayToObject(module, scope);
+          properties = convertArrayToObject(module.structure, scope);
         }
         Vue.set(properties, property, value);
         state.dirty = true;

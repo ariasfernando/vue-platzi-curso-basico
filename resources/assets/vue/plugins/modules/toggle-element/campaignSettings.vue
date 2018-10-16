@@ -28,7 +28,7 @@
     },
     methods: {
       getValue(elementId){
-        return this.getElement(elementId).styleOption.enableElement;
+        return this.getElement(elementId).container.styleOption.enableElement;
       },
       toggleElement(value, elementId) {
         if (this.isCustom) {
@@ -46,7 +46,7 @@
             property: 'enableElement',
             value,
           };
-          this.saveComponentPropertyById(payload);
+          this.saveElementProperty(payload);
           this.resetErrors(value, this.moduleId);
         }
         this.$emit('changed', {

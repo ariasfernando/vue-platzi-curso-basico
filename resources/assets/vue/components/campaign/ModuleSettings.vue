@@ -4,7 +4,7 @@
       <label-item-container label="MODULE STYLES" icon="glyphicon-pause" :collapsable="false"></label-item-container>
       <div class="card">
         <group-container>
-          <component v-for="(plugin, key) in module.plugins" :key="plugin.name + key" v-if="plugin.enabled && plugin.render !== false && $_app.modulePlugins[key] && !plugin.runBackground" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin"  :module-id="currentModule"></component>
+          <component v-for="(plugin, key) in module.plugins" :key="plugin.name + key" v-if="plugin.enabled && plugin.render !== false && $_app.modulePlugins[key] && !plugin.runBackground" :is="'campaign-' + plugin.name" :name="key" :plugin="plugin" :module-id="currentModule" :module="module"></component>
         </group-container>
     </div>
     </template>

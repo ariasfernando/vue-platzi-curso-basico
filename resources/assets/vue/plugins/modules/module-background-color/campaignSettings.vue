@@ -42,7 +42,7 @@ export default {
         if (!Application.utils.validateHexVal(newValue)) {
           value = newValue === null ? '' : Application.utils.rgbToHex(newValue);
         }
-        this.saveAttributeModule({ attribute: 'bgcolor', value });
+        this.saveAttributeModule({ property: 'bgcolor', value });
       },
     },
   },
