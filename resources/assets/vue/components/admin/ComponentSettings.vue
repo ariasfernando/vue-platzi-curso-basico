@@ -44,6 +44,7 @@
           :is="'studio-' + plugin.name"
           v-for="(plugin, key) in component.plugins"
           :key="key"
+          :element="component"
           v-if="plugin.name !== 'studio-mobile-styles'"
           :class="'plugin-' + plugin.name"
           :name="key"

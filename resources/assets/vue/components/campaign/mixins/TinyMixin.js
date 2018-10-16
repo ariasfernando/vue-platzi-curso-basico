@@ -406,7 +406,6 @@ export default {
         link_title: false,
         link_text_to_display: false,
         link_fixed_color: false,
-        link_fixed_color_enabled: this.textOptions.config.settings.link_fixed_color ? this.textOptions.config.settings.link_fixed_color.value : false,
         link_fixed_styles: false, // '{"text-decoration": "underline"}',
         button_inline_color: true,
         // persist_styles: JSON.stringify([{"ul":'{"mso-list": "disc"}'}]),
