@@ -25,6 +25,7 @@ function textDefault() {
         },
         {
           name: 'lineHeight',
+          aclName: 'font_font-style',
           label: 'Line height',
           type: 'generic-number',
           isPercentage: true,
