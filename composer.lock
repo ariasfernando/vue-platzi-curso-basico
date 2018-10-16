@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "945ab7295e0853ccbf04d5efcfdde7c6",
+    "content-hash": "6bac438c6041bc819d49b0b7a2bb49ab",
     "packages": [
         {
             "name": "akamai-open/edgegrid-auth",
@@ -3211,6 +3211,35 @@
             ],
             "description": "PHP url generator for https://github.com/willnorris/imageproxy image proxy",
             "time": "2017-08-24T15:09:10+00:00"
+        },
+        {
+            "name": "stensul/responsys-provider",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "git@git.stensuldev.net:composer/responsys-provider.git",
+                "reference": "c165a68f1fc4ab43fa6fda28ad4715eb5975df1c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://composer.stensuldev.net/dist/stensul/responsys-provider/stensul-responsys-provider-2.1.0-686118.zip",
+                "reference": "c165a68f1fc4ab43fa6fda28ad4715eb5975df1c",
+                "shasum": "150228fa87295da0d6d5e5806ac70953ad44a318"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stensul\\Esp\\Responsys\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Hernán Cisneros",
+                    "email": "hernan.cisneros@stensul.com"
+                }
+            ],
+            "description": "Responsys ESP",
+            "time": "2018-09-25T18:57:25+00:00"
         },
         {
             "name": "stensul/silverpop-provider",
