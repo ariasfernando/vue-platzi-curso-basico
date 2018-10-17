@@ -27,8 +27,8 @@ function createStore(option) {
  * == Test: Models
  */
 describe('== Library Store ==', () => {
-  let baseUrl;
-  let store;
+  let baseUrl = '';
+  let store = () => {};
   beforeAll(() => {
     baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
   });
@@ -72,15 +72,14 @@ describe('== Library Store ==', () => {
       // Expect stored data to be equal to fake object
       expect(modulesData).toEqual(moduleDataGetter);
 
-      modulesData = null;
-      moduleDataGetter = null;
+      modulesData = moduleDataGetter = null;
 
       done();
     });
   });
 
   describe('Actions', () => {
-    let original;
+    let original = () => {};
     beforeAll(() => {
       original = console.error;
     });
@@ -169,11 +168,7 @@ describe('== Library Store ==', () => {
 
       expect(getDataModule).toEqual(compareObject);
 
-      campaignData = null;
-      mockObject1 = null;
-      mockObject2 = null;
-      compareObject = null;
-      getDataModule = null;
+      campaignData = mockObject1 = mockObject2 = compareObject = getDataModule = null;
 
       done();
     });

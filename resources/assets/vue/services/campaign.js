@@ -1,5 +1,4 @@
 import Q from 'q';
-import _ from 'lodash';
 import request from '../utils/request';
 import endpoints from '../resources/endpoints';
 import store from '../store';
@@ -271,7 +270,7 @@ export default {
   },
   logTime(campaignId, time) {
     const endpoint = endpoints.campaign.logTime;
-    const params = { 
+    const params = {
       endpoint,
       json: {
         campaign_id: campaignId,
