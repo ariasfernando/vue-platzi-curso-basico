@@ -116,8 +116,8 @@ export default {
           }, 100);
       }
     },
-    findModule(moduleName, moduleType) {
-      return moduleType === 'item' ? find(this.items, (m) => m.name === moduleName) : find(this.getSubitemsAsArray(), (m) => m.name === moduleName);
+    findModule(moduleKey, moduleType) {
+      return moduleType === 'item' ? find(this.items, (m) => m.key === moduleKey) : find(this.getSubitemsAsArray(), (m) => m.key === moduleKey);
     },
     addModule(m, newIndex) {
       const mod = clone(m);
@@ -167,7 +167,7 @@ export default {
       this.$store.commit('campaign/unsetCurrentModule');
       this.$store.commit('campaign/unsetCustomModule');
 
-      // Insert module 
+      // Insert module
       this.$store.commit('campaign/insertModule', {
         index,
         moduleData

@@ -18,6 +18,6 @@ export default function (selector, width) {
 
         const $parent = $canvas.querySelector('td').querySelector('table'); 
 
-        $parent.insertBefore($hack, $parent.firstChild);
+        $parent.appendChild($hack);
     }
 }

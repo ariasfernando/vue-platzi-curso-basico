@@ -13,7 +13,7 @@
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
+          :width="buttonContainerWidth"
           :style="tableStyles"
           >
           <tr>
@@ -98,7 +98,11 @@
         return this.$store.getters["campaign/modules"][this.moduleId];
       },
       tableStyles(){
-        const width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
+        const { behaviour } = this.component;
+        let width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
+        if(behaviour == 'text'){
+          width = '100%';
+        }
         return {
           'width': width,
           'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
@@ -122,6 +126,13 @@
         } 
         return false;
       },
+      buttonContainerWidth() {
+        const { behaviour } = this.component;
+        if(behaviour == 'text'){
+          return '100%';
+        }
+        return this.component.button.style.minWidth && this.component.button.style.minWidth  !== '0px' ? undefined : this.component.button.attribute.width; 
+      }
     },
     methods: {
       changeText(value) {

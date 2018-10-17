@@ -4,30 +4,17 @@ function imageDefault() {
       [
         {
           link: 'attribute',
-          label: 'Select an image placeholder',
+          label: 'Default Image',
           name: 'placeholder',
           type: 'generic-file',
           subComponent: 'image',
         },
         {
-          label: 'Image mobile',
-          link: 'styleOption',
-          name: 'hasImageMobile',
-          type: 'generic-switch',
-          value: false,
-          subComponent: 'image',
-        },
-        {
           link: 'attribute',
-          label: 'Select an image placeholder mobile',
+          label: 'Default Mobile Image',
           name: 'placeholderMobile',
           type: 'generic-file',
           subComponent: 'image',
-          dependsOn: {
-            link: 'styleOption',
-            name: 'hasImageMobile',
-            subComponent: 'image',
-          },
         },
         {
           name: 'classes',
@@ -64,6 +51,7 @@ function imageDefault() {
           name: 'padding',
           type: 'padding-group',
           subComponent: 'container',
+          label: 'Element Padding',
         },
       ],
       [
@@ -79,14 +67,6 @@ function imageDefault() {
           link: 'attribute',
           label: 'Alt',
           name: 'alt',
-          type: 'generic-text',
-          value: 'Image',
-          subComponent: 'image',
-        },
-        {
-          link: 'attribute',
-          label: 'Title',
-          name: 'title',
           type: 'generic-text',
           value: 'Image',
           subComponent: 'image',

@@ -65,10 +65,10 @@
       <element-selector
         :left-position="templateWidth/2"
         :bottom="-90"
-        label="Root"
-        @element-selected="moduleSelect"
+        label="Row"
         :active="isActiveGeneralSettings"
-        selectorIcon="fa fa-cog"></element-selector>
+        selector-icon="fa fa-cog"
+        @element-selected="moduleSelect" />
     </table>
   </div>
 </template>
@@ -80,6 +80,7 @@
   import ButtonElement from './elements/ButtonElement.vue';
   import clone from 'clone';
   import ColumnManager from '../common/containers/ColumnManager.vue';
+  import CustomCodeElement from './elements/CustomCodeElement.vue';
   import defaultElements from '../../resources/elements';
   import DividerElement from './elements/DividerElement.vue';
   import Draggable from 'vuedraggable';
@@ -96,6 +97,7 @@
       BackgroundImage,
       ButtonElement,
       ColumnManager,
+      CustomCodeElement,
       DividerElement,
       Draggable,
       ElementSelector,

@@ -28,8 +28,8 @@ function createStore(option) {
 
 describe('== Module Store ==', () => {
   describe('trigger muttation:', () => {
-    let original;
-    let store;
+    let original = () => {};
+    let store = () => {};
     beforeAll(() => {
       original = console.error;
     });
@@ -51,8 +51,7 @@ describe('== Module Store ==', () => {
     });
 
     afterAll(() => {
-      original = null;
-      store = null;
+      original = store = null;
     });
     it('"setLoader" and expect of set "loading" state to true', (done) => {
       store.commit('module/setLoader', true);
@@ -90,8 +89,7 @@ describe('== Module Store ==', () => {
       let stateModule = store.state.module.module;
       expect(stateModule).toEqual(dataModule);
 
-      dataModule = null;
-      stateModule = null;
+      dataModule = stateModule = null;
 
       done();
     });
@@ -103,8 +101,7 @@ describe('== Module Store ==', () => {
       let stateModuleStatus = store.state.module.module.status;
       expect(stateModuleStatus).toEqual(dataStatus.status);
 
-      dataStatus = null;
-      stateModuleStatus = null;
+      dataStatus = stateModuleStatus = null;
 
       done();
     });
@@ -121,8 +118,7 @@ describe('== Module Store ==', () => {
 
       expect(stateCurrentComponent).toEqual(dataSetting);
 
-      dataSetting = null;
-      stateCurrentComponent = null;
+      dataSetting = stateCurrentComponent = null;
 
       done();
     });
@@ -138,8 +134,7 @@ describe('== Module Store ==', () => {
       let stateCurrentComponent = store.state.module.currentComponent;
       expect(stateCurrentComponent).toBeEmptyObject();
 
-      dataSetting = null;
-      stateCurrentComponent = null;
+      dataSetting = stateCurrentComponent = null;
 
       done();
     });
@@ -176,9 +171,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      dataElement = null;
-      newStruct = null;
-      dataModule = null;
+      dataElement = newStruct = dataModule = null;
 
       done();
     });
@@ -224,11 +217,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      eventData = null;
-      eventData2 = null;
-      eventData3 = null;
-      newStruct = null;
-      stateModuleProperty = null;
+      eventData = eventData2 = eventData3 = newStruct = stateModuleProperty = null;
 
       done();
     });
@@ -241,8 +230,7 @@ describe('== Module Store ==', () => {
 
       expect(storeModuleId).toEqual(moduleId);
 
-      moduleId = null;
-      storeModuleId = null;
+      moduleId = storeModuleId = null;
 
       done();
     });
@@ -299,9 +287,7 @@ describe('== Module Store ==', () => {
 
       expect(storeColumns).toEqual(column);
 
-      column = null;
-      newStruct = null;
-      storeColumns = null;
+      column = newStruct = storeColumns = null;
 
       done();
     });
@@ -364,10 +350,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      column = null;
-      newStruct = null;
-      storeColumns = null;
+      data = column = newStruct = storeColumns = null;
 
       done();
     });
@@ -396,9 +379,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      newStruct = null;
-      storeModuleFirstColumnWidth = null;
+      data = newStruct = storeModuleFirstColumnWidth = null;
 
       done();
     });
@@ -440,11 +421,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      data2 = null;
-      newStruct = null;
-      storeModuleFirstColumnBgColor = null;
-      storeModuleFirstColumnBgColor2 = null;
+      data = data2 = newStruct = storeModuleFirstColumnBgColor = storeModuleFirstColumnBgColor2 = null;
 
       done();
     });
@@ -788,9 +765,7 @@ describe('== Module Store ==', () => {
 
       expect(stateComponent).toEqual(dataComponent.el);
 
-      dataComponent = null;
-      newStruct = null;
-      stateComponent = null;
+      dataComponent = newStruct = stateComponent = null;
 
       done();
     });
@@ -1141,10 +1116,7 @@ describe('== Module Store ==', () => {
 
       expect(stateComponent).toBeEmptyArray();
 
-      data = null;
-      dataComponent = null;
-      newStruct = null;
-      stateComponent = null;
+      data = dataComponent = newStruct = stateComponent = null;
 
       done();
     });
@@ -1187,10 +1159,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      payload = null;
-      newStruct = null;
-      stateModulecolumn = null;
-      componentPlugin = null;
+      payload = newStruct = stateModulecolumn = componentPlugin = null;
 
       done();
     });
@@ -1242,10 +1211,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      payload = null;
-      newStruct = null;
-      column = null;
-      pluginOptions = null;
+      payload = newStruct = column = pluginOptions = null;
 
       done();
     });
@@ -1309,13 +1275,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      data2 = null;
-      data3 = null;
-      newStruct = null;
-      stateTogglePlugin = null;
-      stateTogglePlugin2 = null;
-      stateTogglePlugin3 = null;
+      data = data2 = data3 = newStruct = stateTogglePlugin = stateTogglePlugin2 = stateTogglePlugin3 = null;
 
       done();
     });
@@ -1395,26 +1355,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      data2 = null;
-      data3 = null;
-      data4 = null;
-      newStruct = null;
-      stateSaveComponentProperty = null;
-      stateSaveComponentProperty2 = null;
-      stateSaveComponentProperty3 = null;
-      stateSaveComponentProperty4 = null;
-
-      done();
-    });
-    it('"setActiveColumn" with data, expect of the state "activeColumn" to equal to 0', (done) => {
-      store.commit('module/setActiveColumn', 1);
-
-      let stateActiveColumn = store.state.module;
-
-      expect(stateActiveColumn).toHaveProperty('activeColumn', 1);
-
-      stateActiveColumn = null;
+      data = data2 = data3 = data4 = newStruct = stateSaveComponentProperty = stateSaveComponentProperty2 = stateSaveComponentProperty3 = stateSaveComponentProperty4 = null;
 
       done();
     });
@@ -1504,16 +1445,15 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      newStruct = null;
+      data = newStruct = null;
 
       done();
     });
   });
   describe('trigger action:', () => {
-    let baseUrl;
-    let original;
-    let store;
+    let baseUrl = '';
+    let original = () => {};
+    let store = () => {};
     beforeAll(() => {
       baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
       original = console.error;
@@ -1539,8 +1479,7 @@ describe('== Module Store ==', () => {
     afterAll(() => {
       nock.cleanAll();
       nock.restore();
-      baseUrl = null;
-      original = null;
+      baseUrl = original = null;
     });
 
     it('"addColumn", expect that was added a new column', (done) => {
@@ -1667,10 +1606,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      data = null;
-      data2 = null;
-      newStruct = null;
-      stateModuleColumn = null;
+      data = data2 = newStruct = stateModuleColumn = null;
 
       done();
     });
@@ -1710,10 +1646,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      Columns = null;
-      newStruct = null;
-      storeModuleFirstColumnWidth = null;
-      storeModuleSecondColumnWidth = null;
+      Columns = newStruct = storeModuleFirstColumnWidth = storeModuleSecondColumnWidth = null;
 
       done();
     });
@@ -2113,8 +2046,7 @@ describe('== Module Store ==', () => {
 
       expect(stateModule).toEqual(objectModule);
 
-      moduleId = null;
-      stateModule = null;
+      moduleId = stateModule = null;
 
       done();
     });
@@ -2526,8 +2458,7 @@ describe('== Module Store ==', () => {
 
       expect(console.error).toHaveBeenCalled();
 
-      moduleId = null;
-      failResponse = null;
+      moduleId = failResponse = null;
 
       done();
     });
@@ -2936,10 +2867,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      moduleData = null;
-      response = null;
-      newStruct = null;
-      moduleId = null;
+      moduleData = response = newStruct = moduleId = null;
     });
     xit('"saveModuleData" with data, expect has saved the module edition', () => {
       let moduleData = {
@@ -3345,10 +3273,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', {});
 
-      moduleData = null;
-      response = null;
-      newStruct = null;
-      moduleId = null;
+      moduleData = response = newStruct = moduleId = null;
     });
     it('"uploadImages" with data, have expected to save the image with format "data:[image];[base64]" and return the path', async (done) => {
       let image = 'data:image/gif;base64,R0lGODlhMgAyAPIEAAAAAD0+dJZkQ/nhv////wAAAAAAAAAAACH5BAAMAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAMgAyAAAD/ki6BPxAyEmnewrEi9nuUSVKnGd1kFBmY7s21ZuuYSvSN8qqpj2WNYpsUbsEfUKiSwcj7ZCxxjGJCjqmUBJy2LRkv7lqDEx2ioVlMveITS/PXnd2LXfT6+U7/qvfz3Vtfj+Agn+EMRqJiooWi46PL1OQjo2TiWFKiJaXKpsamJmVmwMbnpIYbKYDpKZsqJytAKusnlQes6yrnri0lieouLKzlry6k71VxcGPysaOukwNzcOL086Jw9HC1tzd0Ezb3uLFXETj57zl5uPHzeoe4ejc7xDY8u7R2vfK9OD7wfkCxkPXT+BAbwUDZjjoLqHBAAFiQXQICADEiwctXtyoPkEhoI0Y+YEESZEISQ3TNGrk6BHCyJANX5Zs8BJjxpoRW5rEOTHeypElf/K0J5Slzgw8gWqoOZNmUqUy8yUAACH5BAAMAAAALAAAAAAyADIAAAP+SLrcCyLKGYF7wt6mL6Rgtn3dRkAlFoKp8ommCzPvOrX1POqnHaY5HqdC8/2KrNhLEzTOmkIkDOqzAKgtFZFq5EZlN6d4lQVLvGOyKYdOJ3dht7vci8vH9PZdDd/f835/a4GCfYR4g4eIiTdXjo+PZ5CTlDgslZCSmI5vWpqbVxWgoRSWjaMDKKNBpp+bA6mrbA6RGbKwsaM3tLixsKi9q2cewcGYvbivjyPIyJXNyZS/MSfQxo/W0djTStne39B0LuDk3+Lj5enN5+jlx9bsDwDq6vE0jvTe9sz54dT/8/oF+0cwoMB9AA3WI8hQXrorDRleCRBAFgCKCJVcpIg9MRzHjxUz0gLZcR3JjyIfgMQHDyPJlCdOlgy3cWVEGjIxKkyWM2XNnjt/2rwZMyfKK796EnVh9OXEk+wSAAAh+QQADAAAACwAAAAAMgAyAAAD/ki63AwiyimAezdrAqm3GQRunNZ51Nh0alhdJzq1ykk7Ii6jdPxuuceOt/oAIyrfECk0miQg5fLHkd0WttrUCJAyXdDq9rO8iqHj9Ow5U7vNPq/bykbPx/DUHV/fq/N+b32BU4CEfGCHW4aKQ2ZnUF2Sk5ORlJeYOimYl5ackk5YH5+USKSgKZqepAMip12hojOvAAOttHE4qLi1trhrK7a+va/Cw6dhOMa9x5jGwqyTIc/PnNTQzq0kzNe3k93Y377b4OXm148c5+vm6ers8NTu7+yf4PM13PHn+FiS++X6wQDYTeBAgstIKKyBcNzChV0IGoSoL+DEbQACBOClOvEijIwaO6ILSXKjRywlRcpLSfIkyJD/CnZM6fElzXs2YT7EwRJmxVY9N+58ENRntaAXcyKNCLRnugQAIfkEAAwAAAAsAAAAADIAMgAAA/5IutwMIsopgHs3awKptxkEbpzWedTYdGpYXSc6tcpJOyIuo3T8brnHjrf6ACMq3xApNJokIOXyx5HdFrba1AiQMl3Q6vazvIqh4/TsOVO7zT6v28pGz8fw1B1f36vzfm99gVOAhHxgh1uGikNmZ1BdkpOTkZSXmDopmJeWnJJOWB+flEikoCmanqQDIqddoaIzrwADrbRxOKi4tba4ayu2vr2vwsOnYTjGvceYxsKskyHPz5zU0M6tJMzXt5Pd2N++2+Dl5tePHOfr5unq7PDU7u/sn+DzNdzx5/hYkvvl+sEA2E3gQILLSCisgXDcwoVdCBqEqC/gxG0AAgTgpTrxIoyMGjuiC0lyo0csJUXKS0nyJMiQ/wp2TOnxJc17NmE+xMESZsVWPTfufBDUZ7WgF3MijQi0Z7oEACH5BAAMAAAALAAAAAAyADIAggAAADEXMT0+dGQvZJZkQ4c/h/nhv////wP+eLoH/IDISad7CsSLWyYcE1WkFC4j2GXf2ZSwm5rrtUFwjFduU2g0VE4nJPUAhZ/lMyxxZpTjYJCyNZ0NaLQDmFZfV2fzmFSaLBptNRyEFKbUsxEoB8WgUrhSG6XL02lYGF0DZXFsfWE9PklTZiCAfH2AgoOGhSORgXeaRis+jpmamzyjfm2DehumpCasfosvXXuvpLWbsaKut2i8KjVzvpC8sWCTtb23kYPByLvOWyLNzspqKK3DtQarwksZBuAz1eHVPCLg26LK6OXeKOjkBj+1BfDK7u/26POm9fD8owBygUdQXr+CBgNu+9QA4T9N/hAC1OCvGACH/8okwQjpTuPGcAwbcmQHaGTBYt9MhihJTgNClCk5rry28iK7kCJsvpzJAoLIhThzumT34xoKod9gMrSJJImDpk+feMmiIejSbRqbOn3zFI6GqRmO4NTq0SMVOGepoAgQoOranFzIln2D1qsItmzdAgiwtm0NuWbRuu2L1+/eDHhrahAgoBoAxif2Fn7KV3JeqokZN36puXPjJ4XzHrbclnRezTrtdTbVIHTetqFNt/2cmuDjxp9jy0482fVs1BgXQ3a927fxNKhrh/Nc3Ljz16eT22b+vPrz26uHYkdtvXtsz9m3D/fuXTz4z9S7JwAAIfkEAAwAAAAsAAAAADIAMgCCAAAAMRcxPT50ZC9klmRDhz+H+eG/////A/54utwLJMoZgXvE3qYvpGC2fZ2jQSUWgqnyiaMLM+86tfXMyWluVxyWpwAg0X6hkk/3KBAlJ2RSJTQNBq+olGIp2loHwDUb3iaRYIDzWYEWfVkz01W4YtssLz6z0kM9dgNPS241JG9+N4CCTndybltgYWtXbBmIhIVvU0ONgoeYmaGJQCN1nxWjpKmqXBthdoOqmzezfpJlYrK2t7x6uIesvJq2pR55vsSzc0dcvlnPoSbIw8LFrs21z9bL2GG0yqoGKNveAAbohs/p0d5h6OOgvvDtfzTw7AZEvAX45XPn/MHbp6ofPoKjEHrAx1BfwYYOE4579Q7iwFAGISIsYuwQV0WL6NasARlSZEaPH0nGe6OyIcqUIJWwZFcE4kuYNmk8KEIjYDqKHHy6VPLAxMebPWvSI7Kz6M4TE4FSDKjGSRer3x6M+cZT6tRxIqtardPFTpGtLtJIFWvSJJZAYrA8CBCgq4sAPT2wbXsqENq7dOuewAtYEke+nsz2CBy4C2EAjZMCECAg2uTKHBjXDYMXcuQ3jSlXtim6dOUOnhkX6aw6dWjKQumVVsVZc93bqm1Pnkm68mnNq23Tde36NeyYlyvrFs5c+BvRShkmh928OvPU06OnM13cunfj0JVOp/69/HDTs4ug7848AQAh+QQADAAAACwAAAAAMgAyAIIAAAAxFzE9PnRkL2SWZEOHP4f54b////8D/ni63AwkykmAezfrA6m3GQRunNZ51Nh06qqI14lO7SvVCwivM1rLlZCtBexFiJ9YAcB6GH3OpANQWN5sTylnhgMMBiddNsnsdb/h7fjz7FatxxuzGF4Hp4UvOP4p8ytcQGd6VkU0fnxzc1BTX297dnJjOByPA3AVioaHiox4VY4smoh9o1p4oUeji6WrKSaEIqudnLNpIRWXsrasmbx+lGrAv4jEwCatvHLEd7gpxsvGilPJttHKr1G1v6rM2Ry93b8Gu9zfAAbpMtLq0t8c6eSixvHuVw/x7QZLvwX50Eem5CMXj98sf/kMrlIYY+BAhYoQPjxIbgM6hwlHSXQI5JGKOosYH76pErLgSInBXpQcqGklxpQqXVbMMadeTYcwY65UMWLOg4sfSdAsyQTDiynwggqlyeTfEpo5fuqYubQhuTcWqDwt+gINOK5VG2qtMnZJnqx6mHh90UVo2ZMjweiRCyZHgABgOQT4GeMt3Llzed69yxXA3heEQ/iNG5jI4MFZDxtOzBSAAAHSLGNe8RivXr2Qv0K+jPkl6dOYe3bGaxg04cmPNZfGeXqW69h4O8MefdM05tS6d+vGvVr27Jeyhedezbz5HNJNadduTr06bOPR66FWXr17bNSpLxq/zJ15AgAh+QQADAAAACwAAAAAMgAyAIIAAAAxFzE9PnRkL2SWZEOHP4f54b////8D/ni63AwkykmAezfrA6m3GQRunNZ51Nh06qqI14lO7SvVCwivM1rLlZCtBexFiJ9YAcB6GH3OpANQWN5sTylnhgMMBiddNsnsdb/h7fjz7FatxxuzGF4Hp4UvOP4p8ytcQGd6VkU0fnxzc1BTX297dnJjOByPA3AVioaHiox4VY4smoh9o1p4oUeji6WrKSaEIqudnLNpIRWXsrasmbx+lGrAv4jEwCatvHLEd7gpxsvGilPJttHKr1G1v6rM2Ry93b8Gu9zfAAbpMtLq0t8c6eSixvHuVw/x7QZLvwX50Eem5CMXj98sf/kMrlIYY+BAhYoQPjxIbgM6hwlHSXQI5JGKOosYH76pErLgSInBXpQcqGklxpQqXVbMMadeTYcwY65UMWLOg4sfSdAsyQTDiynwggqlyeTfEpo5fuqYubQhuTcWqDwt+gINOK5VG2qtMnZJnqx6mHh90UVo2ZMjweiRCyZHgABgOQT4GeMt3Llzed69yxXA3heEQ/iNG5jI4MFZDxtOzBSAAAHSLGNe8RivXr2Qv0K+jPkl6dOYe3bGaxg04cmPNZfGeXqW69h4O8MefdM05tS6d+vGvVr27Jeyhedezbz5HNJNadduTr06bOPR66FWXr17bNSpLxq/zJ15AgA7 studio-module-9fd97d284c2172c84071.js:3401:9';
@@ -3365,8 +3290,7 @@ describe('== Module Store ==', () => {
       await store.dispatch('module/uploadImages', { images: [image] }).then((res) => {
         expect(res).toEqual(['/5b4fa329654e0-1531945769.415.gif']);
 
-        dataImage = null;
-        image = null;
+        dataImage = image = null;
 
         done();
       });
@@ -3761,9 +3685,7 @@ describe('== Module Store ==', () => {
         expect(console.error).toHaveBeenCalled();
         expect(error.status).toEqual(500);
 
-        image = null;
-        dataImage = null;
-        failResponse = null;
+        image = dataImage = failResponse = null;
 
         done();
       });
@@ -4158,9 +4080,7 @@ describe('== Module Store ==', () => {
         expect(console.error).toHaveBeenCalled();
         expect(error.status).toEqual(500);
 
-        image = null;
-        dataImage = null;
-        failResponse = null;
+        image = dataImage = failResponse = null;
 
         done();
       });
@@ -4249,18 +4169,14 @@ describe('== Module Store ==', () => {
 
         modStore.commit('setModuleData', {});
 
-        setDataMock = null;
-        data = null;
-        requestResponse = null;
-        newStruct = null;
-        storeModule = null;
+        setDataMock = data = requestResponse = newStruct = storeModule = null;
 
         done();
       });
     });
   });
   describe('trigger getter:', () => {
-    let store;
+    let store = () => {};
     beforeEach(() => {
       store = createStore({
         strict: true,
@@ -4288,8 +4204,7 @@ describe('== Module Store ==', () => {
 
       expect(getDataModule).toEqual(dataModule);
 
-      dataModule = null;
-      getDataModule = null;
+      dataModule = getDataModule = null;
 
       done();
     });
@@ -4305,23 +4220,11 @@ describe('== Module Store ==', () => {
 
       expect(getDataCurrentComponent).toEqual(dataSetting);
 
-      dataSetting = null;
-      getDataCurrentComponent = null;
+      dataSetting = getDataCurrentComponent = null;
 
       done();
     });
     xit('"changeSettingComponent", expect state module has 1', () => {});
-    it('"activeColumn", expect state activeColumn has info', (done) => {
-      store.commit('module/setActiveColumn', 1);
-
-      let getDataActiveColumn = store.getters['module/activeColumn'];
-
-      expect(getDataActiveColumn).toEqual(1);
-
-      getDataActiveColumn = null;
-
-      done();
-    });
     it('"buildingMode", expect state buildingMode has \'mobile\'', (done) => {
       store.commit('module/setBuildingMode', 'mobile');
 

@@ -1,3 +1,4 @@
+import { hooks } from 'customer';
 /*
 * -- CAMPAIGN CLEANER ---
 */
@@ -51,6 +52,10 @@ export default {
     // Clone content
     $cleanedHtml = $canvas.clone(true);
 
+    if (typeof hooks === 'object' && _.has(hooks, 'campaignCleaner.preCleanHook')) {
+      $cleanedHtml = hooks.campaignCleaner.preCleanHook($cleanedHtml);
+    }
+
     // Remove attr tags function clean
     const $removeAttr = this.removeDataHtml($cleanedHtml, this.cleanOptions.attrSelectors, 'attr');
     // Function removeDataHtml fail attributes
@@ -83,7 +88,7 @@ export default {
     $cleanedHtml.find("[style='']").removeAttr('style');
 
     // Remove attr bgcolor if it's empty.
-    $cleanedHtml.find("[bgcolor='']").removeAttr('style');
+    $cleanedHtml.find("[bgcolor='']").removeAttr('bgcolor');
 
     // Remove tooltip
     $cleanedHtml.find('.actions-buttons-tooltip').remove();
@@ -99,8 +104,8 @@ export default {
         const tempDataContenteditableHref = $(element).data('contenteditable-href');
         // Add href
         $(element).attr('href', tempDataContenteditableHref);
-        // Remove data-contenteditable-href 
-        $(element).removeAttr('data-contenteditable-href'); 
+        // Remove data-contenteditable-href
+        $(element).removeAttr('data-contenteditable-href');
       });
     }
 
@@ -468,4 +473,4 @@ export default {
     return str;
   }
 
-}; 
+};

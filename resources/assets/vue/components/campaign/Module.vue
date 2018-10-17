@@ -63,13 +63,13 @@
 
 <script>
 
-  import _ from 'lodash';
   import BackgroundImage from '../common/BackgroundImage';
   import ButtonElement from './elements/ButtonElement.vue';
+  import ColumnManager from '../common/containers/ColumnManager.vue';
+  import CustomCodeElement from './elements/CustomCodeElement.vue';
   import DividerElement from './elements/DividerElement.vue';
   import ElementMixin from '../common/mixins/ElementMixin.js';
   import ImageElement from './elements/ImageElement.vue';
-  import ColumnManager from '../common/containers/ColumnManager.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import TextElement from './elements/TextElement.vue';
   import validatorMixin from '../../plugins/modules/mixins/validator.js';
@@ -94,14 +94,14 @@
                   && this.module.structure.columns[0].components.length > 1)
             )
         ) {
-          // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
-          // so we need to check a flag to aid the user to open each module and run the validations at least once
+        // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
+        // so we need to check a flag to aid the user to open each module and run the validations at least once
         this.registerStudioModuleDefaultValidationErrors(this.moduleId);
       }
       else if(this.module.type === 'custom') {
         this.$store.commit('campaign/clearErrorsByModuleId', this.moduleId);
         this.registerCustomModuleDefaultValidationErrors(this.moduleId);
-        }
+      }
     },
     computed: {
         _(){
