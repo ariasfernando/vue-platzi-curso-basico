@@ -26,7 +26,7 @@
 
     <div class="col-xs-3 header-col">
       <div class="vertical-center pull-right">
-        <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" @click.prevent="toggleRaw">Raw</a>
+        <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" v-if="$can('std_raw')" @click.prevent="toggleRaw">Raw</a>
         <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" @click.prevent="saveModule('draft')" :disabled="errors.any()">Save as draft<i class="glyphicon glyphicon-menu-right"></i></a>
         <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-menu-right"></i></a>
       </div>
