@@ -1,14 +1,15 @@
 <template>
   <table
     class="st-mso-full-width st-mobile-full-width"
-    :data-column-id="columnId"
+    :data-column-id="dataColumnId"
+    :column-id="columnId"
     :align="isInverted ? 'right' : 'left'"
     :dir="isInverted ? 'ltr' : undefined"
     cellpadding="0"
     cellspacing="0"
     border="0"
-    :width="columnWidth(columnId)"
-    :style="{width: widthStyle(columnWidth(columnId))}"
+    :width="columnWidth(dataColumnId)"
+    :style="{width: widthStyle(columnWidth(dataColumnId))}"
   >
     <tr>
       <td
@@ -35,6 +36,6 @@ import ElementMixin from '../../common/mixins/ElementMixin.js';
 export default {
   name: 'ColumnRender',
   mixins: [ElementMixin],
-  props: ['moduleId', 'column', 'columnId', 'isInverted'],
+  props: ['moduleId', 'column', 'columnId', 'isInverted', 'dataColumnId'],
 };
 </script>
