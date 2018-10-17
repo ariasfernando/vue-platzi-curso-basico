@@ -39,4 +39,24 @@ export default {
         return deferred.promise;
     },
 
+    getFolders(api_driver) {
+        const endpoint = endpoints.api.getFolders;
+        const deferred = Q.defer();
+        const params = {
+            path: 'api.getFolders',
+            endpoint,
+            search: {
+                api_driver,
+            },
+        };
+
+        request[endpoint.method](params).then((response) => {
+            deferred.resolve(response.body);
+        }).catch((err) => {
+            deferred.reject(err);
+        });
+
+        return deferred.promise;
+    },
+
 };
