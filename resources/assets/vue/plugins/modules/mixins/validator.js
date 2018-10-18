@@ -51,8 +51,9 @@ export default {
   methods: {
     validate() {
       this.$validator.validateAll().then(() => {
-        if (this.$validator.errors.items.length) {
-          _.each(this.$validator.errors.items, (err) => {
+        const errorItems = _.cloneDeep(this.$validator.errors.items);
+        if (errorItems.length) {
+          _.each(errorItems, (err) => {
             _.extend(err, { scope: {
               type: 'plugin',
               name: this.name,
@@ -61,7 +62,7 @@ export default {
             }});
           });
 
-          this.$store.dispatch('campaign/addErrors', this.$validator.errors.items);
+          this.$store.dispatch('campaign/addErrors', errorItems);
         } else {
           this.$store.commit('campaign/clearErrorsByScope', {
             type: 'plugin',
@@ -91,15 +92,21 @@ export default {
                 validations = plugin.config.alt.validations;
               }
 
-              if (validations && component.container.styleOption.enableElement && plugin.enabled) {
-                let validationsRequired = false;
-                _.each(validations, (validation, pluginIndex) => {
-                  if (plugin.enabled && validation && !plugin.data.validated) {
-                    validationsRequired = true;
+              if (validations && validations.required === true && component.container.styleOption.enableElement && plugin.enabled) {
+
+                // if the validations are enabled and were never ran we assume they have errors
+                let defaultValue = '';
+                if (component.type === 'button-element' && typeof component.button === 'object') {
+                  defaultValue = component.button.attribute.href;
+                } else if (component.type === 'image-element' && typeof component.image === 'object') {
+                  if (plugin.config.validations) {
+                    defaultValue = component.image.attribute.href;
+                  } else if (plugin.config.alt && plugin.config.alt.validations) {
+                    defaultValue = component.image.attribute.alt;
                   }
-                });
-                if (validationsRequired) {
-                  // if the validations are enabled and were never ran we assume they have errors
+                }
+
+                if (_.isEmpty(defaultValue)) {
                   const error = {
                     scope: {
                       type: 'plugin',

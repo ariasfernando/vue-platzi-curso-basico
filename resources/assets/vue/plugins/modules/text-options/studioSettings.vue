@@ -19,7 +19,7 @@
       ></el-button>
     </div>
     <div class="clearfix" v-if="plugin.config.options.forecolor.value">
-      <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library" label="textcolor_map">
+      <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="textcolor_map">
         <template slot="setting-right">
           <el-input
             size="mini"
@@ -32,7 +32,7 @@
       </settings-container>
     </div>
     <div class="clearfix" v-if="plugin.config.options.forecolor.value">
-      <settings-container label="textcolor_from_library">
+      <settings-container label="textcolor_from_library" v-if="$can('tiny-plugin-forecolor-palette-library')">
         <template slot="setting-right">
           <toggle-button
             :value="plugin.config.options.forecolor.textcolor_from_library"
@@ -53,7 +53,7 @@
       </settings-container>
     </div>
     <div class="clearfix" v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" :key="key">
-      <settings-container  v-if="showSetting(tinySetting.dependsOn)"  :label="tinySetting.title" >
+      <settings-container  v-if="showSetting(tinySetting.dependsOn) && $can('tiny-plugin-'+key)"  :label="tinySetting.title" >
         <template slot="setting-right">
           <toggle-button :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
         </template>
@@ -252,7 +252,7 @@ export default {
       this.$store.commit("module/savePluginSuboption", payload);
     },
     isAValidSetting(tinySetting, key) {
-      return (['truncate', 'lines_limit', 'fontsize_formats', 'style_formats', 'link_fixed_color'].indexOf(key) !== -1) && tinySetting.value === true;
+      return (['truncate', 'lines_limit', 'fontsize_formats', 'style_formats', 'link_fixed_color', 'st_formats_menu', 'formats'].indexOf(key) !== -1) && tinySetting.value === true;
     },
   }
 };

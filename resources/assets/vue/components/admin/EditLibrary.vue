@@ -61,16 +61,35 @@
                             <div class="row" v-if="campaignConfig.preview.show_preheader">
                               <!-- Field Preheader -->
                               <label for="preheader" class="col-sm-4 control-label">Preheader</label>
-                              <p class="control col-sm-8">
+                              <p class="control col-sm-4">
                                 <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')"></toggle-button>
                               </p>
+
+                              <div class="col-sm-4" v-show="library.config.preheader">
+                                <!-- Preheader default text -->
+                                <p class="control">
+                                  <el-input
+                                          v-model="library.config.preheaderDefault"
+                                          placeholder="Enter preheader default text here."
+                                          name="preheader"
+                                    ></el-input>
+                                </p>
+                              </div>
                             </div>
 
                             <!-- Field Plain text -->
                             <div class="row" v-if="campaignConfig.process_plaintext">
                               <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
-                              <p class="control col-sm-8">
+                              <p class="control col-sm-4">
                                 <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')"></toggle-button>
+                              </p>
+                            </div>
+
+                            <!-- Html to pdf -->
+                            <div class="row" v-if="campaignConfig.download_pdf">
+                              <label for="htmlToPdf" class="col-sm-4 control-label">PDF Download</label>
+                              <p class="control col-sm-8">
+                                <toggle-button :value="library.config.htmlToPdf" @change="updateToggle('htmlToPdf')"></toggle-button>
                               </p>
                             </div>
 
@@ -210,7 +229,7 @@
                                   ></el-input>
                                 </p>
                               </div>
-                            </div>'
+                            </div>
 
                             <div class="row">
                               <!-- Field font-family -->
@@ -330,6 +349,26 @@
                                 <label for="propietaryCss">Propietary Styles</label>
                                 <p class="control">
                                   <textarea v-model="library.config.propietaryCss" rows="10" name="propietaryCss" type="text" placeholder=""></textarea>
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <!-- Field propietary styles -->
+                              <div class="col-md-12">
+                                <label for="prependHtml">Prepend to body</label>
+                                <p class="control">
+                                  <textarea v-model="library.config.prependHtml" rows="10" name="prependHtml" type="text" placeholder=""></textarea>
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <!-- Field propietary styles -->
+                              <div class="col-md-12">
+                                <label for="appendHtml">Append to body</label>
+                                <p class="control">
+                                  <textarea v-model="library.config.appendHtml" rows="10" name="appendHtml" type="text" placeholder=""></textarea>
                                 </p>
                               </div>
                             </div>

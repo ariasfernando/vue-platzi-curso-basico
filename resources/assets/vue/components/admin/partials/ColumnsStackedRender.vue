@@ -87,24 +87,26 @@
 
 <script>
 import _ from "lodash";
-import Draggable from "vuedraggable";
-import TextElement from "../elements/TextElement.vue";
 import ButtonElement from "../elements/ButtonElement.vue";
+import CustomCodeElement from "../elements/CustomCodeElement.vue";
+import DividerElement from "../elements/DividerElement.vue";
+import Draggable from "vuedraggable";
+import ElementMixin from '../../common/mixins/ElementMixin.js';
 import ElementSelector from '../../common/ElementSelector.vue';
 import ImageElement from "../elements/ImageElement.vue";
-import DividerElement from "../elements/DividerElement.vue";
-import ElementMixin from '../../common/mixins/ElementMixin.js';
+import TextElement from "../elements/TextElement.vue";
 
 export default {
   name: "ColumnsStackedRender",
   mixins: [ ElementMixin ],
   components: {
-    Draggable,
-    TextElement,
     ButtonElement,
+    CustomCodeElement,
+    DividerElement,
+    Draggable,
     ElementSelector,
     ImageElement,
-    DividerElement,
+    TextElement,
   },
   data() {
     return {

@@ -335,7 +335,7 @@ class CampaignManager
      */
     public static function process($campaign_id = null)
     {
-        Activity::logCampaignProcessTime($campaign_id, Auth::id());
+        Activity::logCampaignProcessTime($campaign_id, Auth::id(), true);
 
         // dispatch helper no longer returns job id.
         $job_id = app(\Illuminate\Contracts\Bus\Dispatcher::class)

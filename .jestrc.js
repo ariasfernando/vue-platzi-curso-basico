@@ -1,5 +1,7 @@
 import $ from 'jquery';
+import _ from 'lodash';
 global.$ = global.jQuery = $;
+global._ = _;
 
 const Application = {};
 Application.globals = Application.globals || {};
