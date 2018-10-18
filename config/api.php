@@ -145,6 +145,7 @@ return [
         'app_name' => env('API_SILVERPOP_APP_NAME', ''),
         'refresh_token' => env('API_SILVERPOP_REFRESH_TOKEN', ''),
         'folder_path' => '',
+        'tracking_level' => env('API_SILVERPOP_TRACKING_LEVEL', '1'),
         'libraries' => []
     ],
 
