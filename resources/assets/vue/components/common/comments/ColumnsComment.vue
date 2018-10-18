@@ -3,20 +3,21 @@
   <wrapper-comment
     :start="msoStartingComment"
     :end="msoEndingComment">
-    <slot></slot>
+    <slot />
   </wrapper-comment>
 </template>
 
 <script>
-import WrapperComment from './WrapperComment';
+import WrapperComment from './WrapperComment.vue';
 import ElementMixin from '../mixins/ElementMixin';
+
 export default {
   name: 'ColumnsComment',
-  props: ['is-inverted', 'width-first-column', 'bgcolor', 'wrapper-width'],
-  mixins: [ElementMixin],
   components: {
-    WrapperComment
+    WrapperComment,
   },
+  mixins: [ElementMixin],
+  props: ['is-inverted', 'width-first-column', 'bgcolor', 'wrapper-width'],
   computed: {
     msoStartingComment() {
       return `<!--[if gte mso 9]>
@@ -31,7 +32,7 @@ export default {
           </tr>
         </table>
       <![endif]-->`;
-    }
-  }
+    },
+  },
 };
 </script>
