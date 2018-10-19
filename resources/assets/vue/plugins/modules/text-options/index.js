@@ -100,6 +100,14 @@ module.exports = {
         key: 'backcolor',
         value: false,
         icon: 'font-mce-ico mce-i-backcolor',
+        backcolor_map: [
+          { label: 'Yellow', value: '#E3EB05' },
+          { label: 'Orange', value: '#FC9264' },
+          { label: 'Pink', value: '#FC6487' },
+          { label: 'Blue', value: '#64EAFC' },
+        ],
+        backcolor_from_library: false,
+        palette_name: '',
       },
       link: {
         label: 'Link',

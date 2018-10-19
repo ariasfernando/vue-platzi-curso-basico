@@ -3,6 +3,7 @@ export default {
     adapter(adaptee, relation) {
       const relations = {
         forecolor: 'textColorMapArray',
+        backcolor: 'textColorMapArray',
         fontsize_formats: 'valuesToSpaceSeparatedString',
       };
       let output;

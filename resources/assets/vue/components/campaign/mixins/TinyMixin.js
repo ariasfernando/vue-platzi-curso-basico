@@ -570,10 +570,23 @@ export default {
 
       if (!_.isEmpty(options)) {
         _.each(options, (option) => {
-          if (option.key === 'forecolor' && !_.isEmpty(option.textcolor_map) && !option.textcolor_from_library) {
-            settings.textcolor_map = this.adapter(option.textcolor_map, 'forecolor');
-          } else if (option.textcolor_from_library && Application.utils.isJsonString(this.libraryConfig.colorPalettes)) {
-            settings.textcolor_map = JSON.parse(this.libraryConfig.colorPalettes)[option.palette_name];
+          if (option.key === 'forecolor') {
+            if (!_.isEmpty(option.textcolor_map) && !option.textcolor_from_library) {
+              settings.textcolor_map = this.adapter(option.textcolor_map, 'forecolor');
+            } else if (option.textcolor_from_library && Application.utils.isJsonString(this.libraryConfig.colorPalettes)) {
+              settings.textcolor_map = JSON.parse(this.libraryConfig.colorPalettes)[option.palette_name];
+            }
+          }
+
+          if (option.key === 'backcolor') {
+            if (!_.isEmpty(option.backcolor_map) && !option.backcolor_from_library) {
+              settings.backcolor_map = this.adapter(option.backcolor_map, option.key);
+            } else if (option.backcolor_from_library && Application.utils.isJsonString(this.libraryConfig.colorPalettes)) {
+              settings.backcolor_map = JSON.parse(this.libraryConfig.colorPalettes)[option.palette_name];
+            }
+            if (!_.isEmpty(option.backcolor_map) || option.backcolor_from_library) {
+              settings.plugins = [settings.plugins, 'stbackcolorextended'].join(' ');
+            }
           }
         });
       }

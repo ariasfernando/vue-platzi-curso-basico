@@ -18,6 +18,7 @@
           @click.prevent="toggleOption(optionName, option.value)" />
       </div>
       <group-container label="Advance Settings">
+        <!-- forecolor -->
         <template v-if="plugin.config.options.forecolor.value">
           <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="Color List">
             <template slot="setting-right">
@@ -25,29 +26,60 @@
                 v-model="textColorMap"
                 v-validate="'required'"
                 size="mini"
-                placeholder='[{ label: "Black", value: "#000000" },{ label: "Gray", value: "#474646" }]' />
+                placeholder='[{ label: "Black", value: "#000000" },{ label: "Gray", value: "#474646" },{ label: "Blue", value: "#79A8C9" },{ label: "Red", value: "#CD202C" }]' />
             </template>
           </settings-container>
         </template>
+        <template v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')">
+          <settings-container label="Color List By Library">
+            <template slot="setting-right">
+              <toggle-button
+                :value="plugin.config.options.forecolor.textcolor_from_library"
+                @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
+            </template>
+          </settings-container>
+          <settings-container v-if="plugin.config.options.forecolor.textcolor_from_library" label="Palette Name">
+            <template slot="setting-right">
+              <el-input
+                v-model="palette_name"
+                v-validate="'required'"
+                size="mini"
+                placeholder="name" />
+            </template>
+          </settings-container>
+        </template>
+        <!-- backcolor -->
+        <template v-if="plugin.config.options.backcolor.value">
+          <settings-container v-if="!plugin.config.options.backcolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="Highlight Color List">
+            <template slot="setting-right">
+              <el-input
+                v-model="backColorMap"
+                v-validate="'required'"
+                size="mini"
+                placeholder='[{ label: "Yellow", value: "#E3EB05" },{ label: "Orange", value: "#FC9264" },{ label: "Pink", value: "#FC6487" },{ label: "Blue", value: "#64EAFC" }]' />
+            </template>
+          </settings-container>
+        </template>
+        <template v-if="plugin.config.options.backcolor.value && $can('tiny-plugin-forecolor-palette-library')">
+          <settings-container label="Highlight Color List By Library">
+            <template slot="setting-right">
+              <toggle-button
+                :value="plugin.config.options.backcolor.backcolor_from_library"
+                @change="newValue => changeOption(newValue, 'backcolor', 'backcolor_from_library')" />
+            </template>
+          </settings-container>
+          <settings-container v-if="plugin.config.options.backcolor.backcolor_from_library" label="Palette Name">
+            <template slot="setting-right">
+              <el-input
+                v-model="back_palette_name"
+                v-validate="'required'"
+                size="mini"
+                placeholder="name" />
+            </template>
+          </settings-container>
+        </template>
+        <!--settings-->
         <template>
-          <div v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')" class="clearfix">
-            <settings-container label="Color List By Library">
-              <template slot="setting-right">
-                <toggle-button
-                  :value="plugin.config.options.forecolor.textcolor_from_library"
-                  @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
-              </template>
-            </settings-container>
-            <settings-container v-if="plugin.config.options.forecolor.textcolor_from_library" label="Palette Name">
-              <template slot="setting-right">
-                <el-input
-                  v-model="palette_name"
-                  v-validate="'required'"
-                  size="mini"
-                  placeholder="name" />
-              </template>
-            </settings-container>
-          </div>
           <div v-for="(tinySetting, key) in plugin.config.settings" :key="key" class="clearfix">
             <!-- Input if config needs it -->
             <settings-container v-if="showSetting(tinySetting.dependsOn) && $can('tiny-plugin-' + key)" :label="tinySetting.title">
@@ -128,12 +160,33 @@ export default {
         }
       },
     },
-    palette_name: {
+    backColorMap: {
       get() {
-        return this.plugin.config.options.forecolor.palette_name;
+        const value = this.plugin.config.options.backcolor.backcolor_map;
+        return typeof value === 'object' ? JSON.stringify(value) : value;
       },
       set(value) {
-        this.changeOption(value, 'forecolor', 'palette_name');
+        if (Application.utils.isJsonString(value)) {
+          this.changeOption(JSON.parse(value), 'backcolor', 'backcolor_map');
+        } else if (_.isEmpty(value)) {
+          this.changeOption(value, 'backcolor', 'backcolor_map');
+        }
+      },
+    },
+    palette_name: {
+      get() {
+        return this.plugin.config.options.backcolor.palette_name;
+      },
+      set(value) {
+        this.changeOption(value, 'backcolor', 'palette_name');
+      },
+    },
+    back_palette_name: {
+      get() {
+        return this.plugin.config.options.backcolor.palette_name;
+      },
+      set(value) {
+        this.changeOption(value, 'backcolor', 'palette_name');
       },
     },
   },
