@@ -18,26 +18,26 @@
           @click.prevent="toggleOption(optionName, option.value)" />
       </div>
       <template v-if="plugin.config.options.forecolor.value">
-        <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="textcolor_map">
+        <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="Color List">
           <template slot="setting-right">
             <el-input
               v-model="textColorMap"
               v-validate="'required'"
               size="mini"
-              placeholder="000000,Black,474646,Gray,79a8c9,Blue,cd202c,Red" />
+              placeholder='[{ label: "Black", value: "#000000" },{ label: "Gray", value: "#474646" }]' />
           </template>
         </settings-container>
       </template>
       <template>
         <div v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')" class="clearfix">
-          <settings-container label="textcolor_from_library">
+          <settings-container label="Color List By Library">
             <template slot="setting-right">
               <toggle-button
                 :value="plugin.config.options.forecolor.textcolor_from_library"
                 @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
             </template>
           </settings-container>
-          <settings-container v-if="plugin.config.options.forecolor.textcolor_from_library" label="palette_name">
+          <settings-container v-if="plugin.config.options.forecolor.textcolor_from_library" label="Palette Name">
             <template slot="setting-right">
               <el-input
                 v-model="palette_name"
@@ -111,10 +111,15 @@ export default {
     },
     textColorMap: {
       get() {
-        return this.plugin.config.options.forecolor.textcolor_map.join(',');
+        const value = this.plugin.config.options.forecolor.textcolor_map;
+        return typeof value === 'object' ? JSON.stringify(value) : value;
       },
       set(value) {
-        this.changeOption(value.split(','), 'forecolor', 'textcolor_map');
+        if (Application.utils.isJsonString(value)) {
+          this.changeOption(JSON.parse(value), 'forecolor', 'textcolor_map');
+        } else if (_.isEmpty(value)) {
+          this.changeOption(value, 'forecolor', 'textcolor_map');
+        }
       },
     },
     palette_name: {
