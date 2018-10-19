@@ -17,76 +17,82 @@
           size="mini"
           @click.prevent="toggleOption(optionName, option.value)" />
       </div>
-      <template v-if="plugin.config.options.forecolor.value">
-        <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="Color List">
-          <template slot="setting-right">
-            <el-input
-              v-model="textColorMap"
-              v-validate="'required'"
-              size="mini"
-              placeholder='[{ label: "Black", value: "#000000" },{ label: "Gray", value: "#474646" }]' />
-          </template>
-        </settings-container>
-      </template>
-      <template>
-        <div v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')" class="clearfix">
-          <settings-container label="Color List By Library">
-            <template slot="setting-right">
-              <toggle-button
-                :value="plugin.config.options.forecolor.textcolor_from_library"
-                @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
-            </template>
-          </settings-container>
-          <settings-container v-if="plugin.config.options.forecolor.textcolor_from_library" label="Palette Name">
+      <group-container label="Advance Settings">
+        <template v-if="plugin.config.options.forecolor.value">
+          <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="Color List">
             <template slot="setting-right">
               <el-input
-                v-model="palette_name"
+                v-model="textColorMap"
                 v-validate="'required'"
                 size="mini"
-                placeholder="name" />
+                placeholder='[{ label: "Black", value: "#000000" },{ label: "Gray", value: "#474646" }]' />
             </template>
           </settings-container>
-        </div>
-        <div v-for="(tinySetting, key) in plugin.config.settings" :key="key" class="clearfix">
-          <!-- Input if config needs it -->
-          <settings-container v-if="showSetting(tinySetting.dependsOn) && $can('tiny-plugin-' + key)" :label="tinySetting.title">
-            <template slot="setting-right">
-              <el-input-number
-                v-if="tinySetting.type === 'number'"
-                v-b-tooltip.hover
-                :value="tinySetting.content || 0"
-                size="mini"
-                :title="key"
-                :min="0"
-                :name="key"
-                @change="(value)=>changeSetting(value, key)" />
-              <el-input
-                v-else-if="tinySetting.type === 'text'"
-                v-b-tooltip.hover
-                size="mini"
-                :title="key"
-                :name="key"
-                :value="tinySetting.content || 0"
-                @change="(value)=>changeSetting(value, key)" />
-              <component
-                :is="tinySetting.type"
-                :value="tinySetting.content"
-                :default-value="tinySetting.defaultValue"
-                :false-text="tinySetting.falseText"
-                @change="(value)=>changeSetting(value, key)" />
-            </template>
-          </settings-container>
-        </div>
-      </template>
+        </template>
+        <template>
+          <div v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')" class="clearfix">
+            <settings-container label="Color List By Library">
+              <template slot="setting-right">
+                <toggle-button
+                  :value="plugin.config.options.forecolor.textcolor_from_library"
+                  @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
+              </template>
+            </settings-container>
+            <settings-container v-if="plugin.config.options.forecolor.textcolor_from_library" label="Palette Name">
+              <template slot="setting-right">
+                <el-input
+                  v-model="palette_name"
+                  v-validate="'required'"
+                  size="mini"
+                  placeholder="name" />
+              </template>
+            </settings-container>
+          </div>
+          <div v-for="(tinySetting, key) in plugin.config.settings" :key="key" class="clearfix">
+            <!-- Input if config needs it -->
+            <settings-container v-if="showSetting(tinySetting.dependsOn) && $can('tiny-plugin-' + key)" :label="tinySetting.title">
+              <template slot="setting-right">
+                <el-input-number
+                  v-if="tinySetting.type === 'number'"
+                  v-b-tooltip.hover
+                  :value="tinySetting.content || 0"
+                  size="mini"
+                  :title="key"
+                  :min="0"
+                  :name="key"
+                  @change="(value)=>changeSetting(value, key)" />
+                <el-input
+                  v-else-if="tinySetting.type === 'text'"
+                  v-b-tooltip.hover
+                  size="mini"
+                  :title="key"
+                  :name="key"
+                  :value="tinySetting.content || 0"
+                  @change="(value)=>changeSetting(value, key)" />
+                <component
+                  :is="tinySetting.type"
+                  :value="tinySetting.content"
+                  :default-value="tinySetting.defaultValue"
+                  :false-text="tinySetting.falseText"
+                  @change="(value)=>changeSetting(value, key)" />
+              </template>
+            </settings-container>
+          </div>
+        </template>
+      </group-container>
     </template>
   </div>
 </template>
 
 <script>
+import GroupContainer from '../../../components/common/containers/GroupContainer.vue';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
 export default {
-  components: { SettingsContainer },
+  components: {
+    GroupContainer,
+    SettingsContainer,
+  },
   props: ['name', 'element', 'plugin'],
   computed: {
     currentComponent() {
