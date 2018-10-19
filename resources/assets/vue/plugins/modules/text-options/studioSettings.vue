@@ -67,7 +67,7 @@
                   size="mini"
                   :title="key"
                   :name="key"
-                  :value="tinySetting.content || 0"
+                  :value="tinySettingContent(tinySetting.content)"
                   @change="(value)=>changeSetting(value, key)" />
                 <component
                   :is="tinySetting.type"
@@ -169,9 +169,15 @@ export default {
         plugin: this.name,
         componentId: this.element.id,
         path: `settings.${settingName}.content`,
-        value,
+        value: Application.utils.isJsonString(value) ? JSON.parse(value) : value,
       };
       this.$store.commit('module/setPluginElementConfig', payload);
+    },
+    tinySettingContent(content) {
+      if (content) {
+        return typeof content === 'object' ? JSON.stringify(content) : content;
+      }
+      return 0;
     },
   },
 };

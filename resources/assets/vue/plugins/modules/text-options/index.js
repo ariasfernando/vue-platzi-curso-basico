@@ -136,7 +136,12 @@ module.exports = {
         title: 'Font size',
         value: false,
         type: 'text',
-        content: '12px 14px 16px 18px',
+        content: [
+          { value: '12px' },
+          { value: '14px' },
+          { value: '16px' },
+          { value: '18px' },
+        ],
         dependsOn: {
           config: 'options',
           name: 'fontsizeselect',

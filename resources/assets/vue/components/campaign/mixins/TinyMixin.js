@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import Adapter from './tinyMce/Adapter';
+import Adapter from './tinymce/Adapter';
 
 export default {
   props: ['name', 'plugin'],
@@ -369,9 +369,9 @@ export default {
 
       _.each(this.textOptions.config.settings, (e, k) => {
         if (Application.utils.isJsonString(e.content)) {
-          customSettings[k] = JSON.parse(e.content);
+          customSettings[k] = this.adapter(JSON.parse(e.content), k);
         } else {
-          customSettings[k] = e.content || e.value;
+          customSettings[k] = e.content ? this.adapter(e.content, k) : this.adapter(e.value, k);
         }
       });
 
