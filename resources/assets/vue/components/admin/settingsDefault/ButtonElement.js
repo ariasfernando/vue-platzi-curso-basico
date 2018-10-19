@@ -3,51 +3,49 @@ function buttonDefault() {
     componentSettings: [
       {
         groupLabel: 'Font Settings',
-        showLabel: false,
         settings:
-        [{
-          name: 'fontFamily',
-          type: 'font-family',
-          aclName: 'font_font-family',
-          link: 'style',
-          label: 'Font Family',
-          subComponent: 'button',
-        },
-        {
-          name: 'fontSize',
-          type: 'generic-number',
-          aclName: 'font_font-style',
-          isPixel: true,
-          subComponent: 'button',
-          link: 'style',
-          label: 'Font size',
-        },
-        {
-          name: 'lineHeight',
-          label: 'Line height',
-          type: 'generic-number',
-          aclName: 'font_font-style',
-          isPercentage: true,
-          maxPercentage: 200,
-          subComponent: 'button',
-          link: 'style',
-        },
-        {
-          name: 'letter-spacing',
-          aclName: 'font_letter-spacing',
-          type: 'letter-spacing',
-          subComponent: 'button',
-        },
-        {
-          name: 'font-weight',
-          aclName: 'font_font-weight',
-          type: 'font-weight',
-          subComponent: 'button',
-        }],
+          [{
+            name: 'fontFamily',
+            type: 'font-family',
+            aclName: 'font_font-family',
+            link: 'style',
+            label: 'Font Family',
+            subComponent: 'button',
+          },
+          {
+            name: 'fontSize',
+            type: 'generic-number',
+            aclName: 'font_font-style',
+            isPixel: true,
+            subComponent: 'button',
+            link: 'style',
+            label: 'Font size',
+          },
+          {
+            name: 'lineHeight',
+            label: 'Line height',
+            type: 'generic-number',
+            aclName: 'font_font-style',
+            isPercentage: true,
+            maxPercentage: 200,
+            subComponent: 'button',
+            link: 'style',
+          },
+          {
+            name: 'letter-spacing',
+            aclName: 'font_letter-spacing',
+            type: 'letter-spacing',
+            subComponent: 'button',
+          },
+          {
+            name: 'font-weight',
+            aclName: 'font_font-weight',
+            type: 'font-weight',
+            subComponent: 'button',
+          }],
       },
       {
         groupLabel: 'Text Alignment',
-        showLabel: false,
         settings: [{
           name: 'text-align',
           aclName: 'textAlignment_text-align',
@@ -57,7 +55,6 @@ function buttonDefault() {
       },
       {
         groupLabel: 'Classes and Style',
-        showLabel: false,
         settings: [
           {
             name: 'classes',
@@ -85,7 +82,6 @@ function buttonDefault() {
       },
       {
         groupLabel: 'Padding and Border radius',
-        showLabel: false,
         settings: [{
           name: 'padding',
           type: 'padding-group',
@@ -105,7 +101,6 @@ function buttonDefault() {
       },
       {
         groupLabel: 'Border',
-        showLabel: false,
         settings: [{
           name: 'border-group',
           aclName: 'border_border-group',
@@ -115,7 +110,6 @@ function buttonDefault() {
       },
       {
         groupLabel: 'Dimentions',
-        showLabel: false,
         settings: [{
           link: 'attribute',
           label: 'Width',
@@ -138,7 +132,6 @@ function buttonDefault() {
       },
       {
         groupLabel: 'Default URL',
-        showLabel: false,
         settings: [{
           link: 'attribute',
           label: 'Default URL',
@@ -151,7 +144,6 @@ function buttonDefault() {
       },
       {
         groupLabel: 'Caret',
-        showLabel: true,
         settings: [{
           name: 'caret',
           aclName: 'caret_caret',
