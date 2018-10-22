@@ -89,12 +89,10 @@
               </form>
             </div>
             <div id="modal-proof-message" class="modal fade" tabindex="-2" role="dialog" aria-hidden="true">
-              <div class="modal-dialog modal-sm">
+              <div class="modal-dialog modal-md">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4>
-                      Write a message
-                    </h4>
+                    <h4>Write a message</h4>
                   </div>
                   <div class="modal-body">
                     <div class="proof-add-message">
@@ -418,6 +416,17 @@
     .open {
       overflow-y: scroll !important;
       width: 100%;
+    }
+  }
+  #modal-proof-message {
+    .modal-header {
+      padding: 0;
+    }
+    .modal-body {
+      margin: 0;
+    }
+    .modal-footer {
+      padding: 15px 0px 0px 0px !important;
     }
   }
 </style>
