@@ -121,7 +121,7 @@ function buttonDefault() {
           label: 'Width',
           name: 'width',
           aclName: 'dimentions_width',
-          type: 'generic-number',
+          type: 'button-width',
           value: 150,
           subComponent: 'button',
         },
