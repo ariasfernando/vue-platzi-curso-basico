@@ -13,14 +13,11 @@
                 <p style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">Message from {{ $params['requestor'] }} to all reviewers: </p>
                 <p style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">{{ $params['notification_message_to_all'] }}</p>
               @endif
-              @if (strlen($params['notification_message']) && !isset($params['reviewer']['notified']))
+              @if (strlen($params['notification_message']) && (!isset($params['reviewer']['notified']) || $params['reviewer']['notified'] === false))
                 <p style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">Message directly to you:</p>
                 <p style="font-family:'Open Sans', Arial, Helvetica, sans-serif; font-size:15px; color:#666666; font-weight:300; line-height:22px; -webkit-text-size-adjust:none;">{{ $params['notification_message'] }}</p>
               @endif
             </td>
         </tr>
     @endif
-    <tr>
-        <td height="24" align="left" valign="top"></td>
-    </tr>
 @endsection
