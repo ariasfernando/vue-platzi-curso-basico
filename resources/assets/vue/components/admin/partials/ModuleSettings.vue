@@ -6,7 +6,8 @@
         <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
           <component
             :is="'input-' + setting.type"
-            v-for="setting in settingGroup"
+            v-for="setting in settingGroup.settings"
+            v-if="$can('std-module_'+setting.aclName)"
             :key="setting.name"
             :setting="setting.type"
             :name="setting.name"
@@ -32,11 +33,14 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="general-settings-functionalities" accordion="general-settings">
       <b-card class="control">
-        <template v-if="module.plugins && Object.keys(module.plugins).length !== 0">
-          <div v-for="(plugin, moduleKey) in module.plugins" :key="plugin.name" :class="'plugin-' + plugin.name">
-            <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" />
-          </div>
-        </template>
+        <component
+          :is="'studio-' + plugin.name"
+          v-for="(plugin, moduleKey) in module.plugins"
+          v-if="module.plugins && plugin.hasStudioSettings && $can('std-plugin-'+plugin.name)"
+          :key="plugin.name"
+          :name="moduleKey"
+          :plugin="plugin"
+          :class="'plugin-' + plugin.name" />
       </b-card>
     </b-collapse>
   </div>

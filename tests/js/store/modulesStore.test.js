@@ -1680,6 +1680,7 @@ describe('== Module Store ==', () => {
           attribute: {
             bgcolor: '',
             classes: '',
+            height: '',
           },
           mobileClasses: [],
           style: {
@@ -1687,6 +1688,10 @@ describe('== Module Store ==', () => {
             paddingLeft: '0px',
             paddingBottom: '0px',
             paddingRight: '0px',
+            backgroundAttachment: '',
+            backgroundImage: '',
+            backgroundPosition: '',
+            backgroundRepeat: '',
             borderTopWidth: '0px',
             borderTopStyle: 'none',
             borderTopColor: '',
@@ -2057,7 +2062,9 @@ describe('== Module Store ==', () => {
         structure: {
           columnsStacking: 'normal',
           attribute: {
-            bgcolor: '', classes: '',
+            bgcolor: '',
+            classes: '',
+            height: '',
           },
           mobileClasses: [],
           style: {
@@ -2065,6 +2072,10 @@ describe('== Module Store ==', () => {
             paddingLeft: 0,
             paddingBottom: 0,
             paddingRight: 0,
+            backgroundAttachment: '',
+            backgroundImage: '',
+            backgroundPosition: '',
+            backgroundRepeat: '',
             borderTopWidth: '0px',
             borderTopStyle: 'none',
             borderTopColor: '',

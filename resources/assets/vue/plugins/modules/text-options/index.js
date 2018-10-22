@@ -9,18 +9,6 @@ module.exports = {
   studioSettings,
   config: {
     options: {
-      undo: {
-        label: 'Undo',
-        key: 'undo',
-        value: false,
-        icon: 'fa fa-undo',
-      },
-      redo: {
-        label: 'Redo',
-        key: 'redo',
-        value: false,
-        icon: 'fa fa-repeat',
-      },
       bold: {
         label: 'Bold',
         key: 'bold',
@@ -63,17 +51,17 @@ module.exports = {
         value: false,
         icon: 'fa fa-align-right',
       },
+      alignjustify: {
+        label: 'Align justify',
+        key: 'alignjustify',
+        value: false,
+        icon: 'fa fa-align-justify',
+      },
       superscript: {
         label: 'Superscript',
         key: 'superscript',
         value: false,
         icon: 'fa fa-superscript',
-      },
-      fontselect: {
-        label: 'Font',
-        key: 'fontselect',
-        value: false,
-        icon: 'fa-adapter glyphicon glyphicon-font',
       },
       fontsizeselect: {
         label: 'Font size',
@@ -119,12 +107,6 @@ module.exports = {
         value: false,
         icon: 'fa fa-link',
       },
-      styleselect: {
-        label: 'Style Format',
-        key: 'styleselect',
-        value: false,
-        icon: 'fa fa-edit',
-      },
       stformatsmenu: {
         label: 'Custom Format',
         key: 'stformatsmenu',
@@ -154,12 +136,6 @@ module.exports = {
         value: false,
         type: 'text',
         content: '12px 14px 16px 18px',
-      },
-      style_formats: {
-        title: 'Style format',
-        value: false,
-        type: 'text',
-        content: "[{\"title\":\"27px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"27px\",\"lineHeight\":\"30px\"}},{\"title\":\"29px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"29px\",\"lineHeight\":\"32px\"}},{\"title\":\"34px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"34px\",\"lineHeight\":\"36px\"}}]",
       },
       link_fixed_color: {
         title: 'Link fixed color',
