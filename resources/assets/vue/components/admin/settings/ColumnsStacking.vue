@@ -27,12 +27,15 @@ export default {
   name: "ColumnsStacking",
   mixins: [SettingMixin],
   components: { SettingsContainer },
+  data() {
+    return {
+      columnsStacking: '',
+    };
+  },
 
   computed: {
     columnsOptions() {
-      let columnsOptions = [];
-      if (this.element.columns.length > 1) {
-        columnsOptions.push(
+      return [
           {
             value: "normal",
             label: "Normal"
@@ -40,26 +43,35 @@ export default {
           {
             value: "columnsFixed",
             label: "Columns fixed"
-          }
-        );
-      }
-      if (this.element.columns.length === 2) {
-        columnsOptions.push({
-          value: "invertedStacking",
-          label: "Inverted stacking"
-        });
-      }
-      return columnsOptions;
+          },
+          {
+            value: "invertedStacking",
+            label: "Inverted stacking"
+          }];
+    },
+    mounted() {
+      columnsStacking = this.mainSetting
     },
   },
   watch: {
     element: {
       handler: function(newElement) {
-        if (newElement.columns.length === 1 || newElement.columns.length > 2 && this.mainSetting === "invertedStacking") {
+        if (newElement.columns.length === 1) {
           this.mainSetting = "normal";
         }
       },
       deep: true
+    },
+    mainSetting: function(newMainSetting) {
+        if( newMainSetting !== this.columnsStacking && (newMainSetting === "invertedStacking" || this.columnsStacking  === "invertedStacking")) {
+        // If the new value or the old value is invertedStacking: the columns will reverse
+          const columnsClone = _.clone(this.element.columns)
+          this.$emit("setting-updated", {
+            name: 'columns',
+            value: columnsClone.reverse()
+          });
+        }
+        this.columnsStacking = newMainSetting;
     }
   }
 };
