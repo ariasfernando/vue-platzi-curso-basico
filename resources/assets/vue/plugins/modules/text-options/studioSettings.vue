@@ -103,6 +103,7 @@
                   @change="(value)=>changeSetting(value, key)" />
                 <component
                   :is="tinySetting.type"
+                  v-else
                   :value="tinySetting.content"
                   :default-value="tinySetting.defaultValue"
                   :false-text="tinySetting.falseText"
