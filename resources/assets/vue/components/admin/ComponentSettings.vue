@@ -52,6 +52,7 @@
           v-for="(plugin, key) in component.plugins"
           v-if="plugin.name !== 'studio-mobile-styles' && $can('std-'+component.type+'-plugin-'+plugin.name)"
           :key="key"
+          :element="component"
           :class="'plugin-' + plugin.name"
           :name="key"
           :plugin="plugin" />

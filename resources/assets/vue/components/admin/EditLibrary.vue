@@ -574,7 +574,17 @@
               }
             })
             .catch((error) => {
-              this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+              if (error.status === 422) {
+                this.$root.$toast(
+                  this.$options.filters.parseValidationErrors(error), {
+                    className: 'et-error',
+                    closeable: true,
+                    duration: 10000
+                  }
+                );
+              } else {
+                this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+              }
             });
         } else {
           libraryService.createLibrary(formData)
@@ -586,9 +596,28 @@
               }
             })
             .catch((error) => {
+              const { errors } = error.body;
+              if (error.status === 422) {
+                this.$root.$toast(
+                  this.$options.filters.parseValidationErrors(error), {
+                    className: 'et-error',
+                    closeable: true,
+                    duration: 10000
+                  }
+                );
+              } else {
                 this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+              }
             });
         }
+        
+      },
+      extractErrors(errArr){
+        let errors = []
+        Object.keys(errArr).forEach(key => {
+          errors.push(errArr[key][0]);
+        });
+        return errors;
       },
       addGroup() {
         this.temporal = this.temporal || 1;
