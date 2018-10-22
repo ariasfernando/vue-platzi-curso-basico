@@ -55,7 +55,18 @@
     <div class="clearfix" v-for="(tinySetting, key) in plugin.config.settings" v-if="plugin.enabled" :key="key">
       <settings-container  v-if="showSetting(tinySetting.dependsOn) && $can('tiny-plugin-'+key)"  :label="tinySetting.title" >
         <template slot="setting-right">
-          <toggle-button :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
+            <el-select
+            v-if="tinySetting.type === 'select'"
+            size="mini"
+            @change="(value) => changeSetting(value, key)"
+            :value="tinySetting.content">
+            <el-option
+              v-for="(opt, key) in tinySetting.options"
+              :value="key"
+              :key="key"
+              :label="opt"></el-option>
+          </el-select>
+          <toggle-button v-else :value="tinySetting.value" @change="(newValue)=>toggleSetting(newValue, key)"></toggle-button>
         </template>
       </settings-container>
 
@@ -80,6 +91,7 @@
             @change="(value)=>changeSetting(value, key)"
             :value="tinySetting.content || 0"
           ></el-input>
+          
       </div>
     </div>
   </div>
