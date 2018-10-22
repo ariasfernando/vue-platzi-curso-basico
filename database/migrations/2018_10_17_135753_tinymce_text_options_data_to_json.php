@@ -48,6 +48,9 @@ class TinymceTextOptionsDataToJson extends Migration
         if ($data === "0" || $data === 0 || $data === "") {
             return $data;
         }
+        if (is_array($data) && $data[0] === "") {
+            return "";
+        }
 
         $relations = array(
             'forecolor' => 'arrayToTextColorMapJSON',
@@ -56,17 +59,18 @@ class TinymceTextOptionsDataToJson extends Migration
         );
 
         $output = array();
-
         switch ($relations[$relation]) {
             case 'arrayToTextColorMapJSON':
-                if (is_array($data) && !$this->is_assoc($data)) {
+                if (is_array($data)) {
                     for ($i = 0; $i < count($data); $i+=2) {
-                        if (!empty($data[$i]) && !empty($data[$i+1])) {
-                            $obj = array(
-                                "label" => $data[$i + 1],
-                                "value" => $data[$i]
-                            );
-                            array_push($output, $obj);
+                        if (!$this->is_assoc($data[$i])) {
+                            if (!empty($data[$i]) && !empty($data[$i+1])) {
+                                $obj = array(
+                                    "label" => $data[$i + 1],
+                                    "value" => $data[$i]
+                                );
+                                array_push($output, $obj);
+                            }
                         }
                     }
                 }
@@ -83,12 +87,14 @@ class TinymceTextOptionsDataToJson extends Migration
                 }
                 break;
         }
-
         return $output;
     }
     protected function adapterReverse($data, $relation) {
         if ($data === "0" || $data === 0 || $data === "") {
             return $data;
+        }
+        if (is_array($data) && $data[0] === "") {
+            return "";
         }
 
         $relations = array(
@@ -97,36 +103,42 @@ class TinymceTextOptionsDataToJson extends Migration
             'fontsize' => 'valuesToSpaceSeparatedString'
         );
 
-        $output = "";
-
+        $output = $data;
         switch ($relations[$relation]) {
             case 'textColorMapArray':
                 $output = array();
                 foreach ($data as $item) {
-                    array_push($output, $item['value']);
-                    array_push($output, $item['label']);
+                    if ($this->is_assoc($item) ) {
+                        array_push($output, $item['value']);
+                        array_push($output, $item['label']);
+                    }
                 }
                 break;
             case 'valuesToSpaceSeparatedString':
-                if (is_string($data)) {
-                    $arr = array();
-                    foreach ($data as $item) {
-                        array_push($array, $item['value']);
+                $arr = array();
+                foreach ($data as $item) {
+                    if ($this->is_assoc($item) ) {
+                        array_push($arr, $item['value']);
                     }
-                    $output = implode(" ", $arr);
                 }
+                $output = empty($arr) ? $data : implode(" ", $arr);
                 break;
         }
         return $output;
     }
 
     protected function is_assoc($var) {
-        return is_array($var) && array_diff_key($var,array_keys(array_keys($var)));
+        if (is_array($var)) {
+            foreach($var as $key => $value) {
+                return ! is_int($key);
+            }
+            return false;
+        }
+        return false;
     }
 
     protected function updateTextOptionsFormat_campaigns() {
         Campaign::withTrashed()->chunk(100, function ($campaigns) {
-            var_dump($this->reverse);
             Logging::info('-------------------------');
             Logging::info('CAMPAIGNS');
             Logging::info('-------------------------');
@@ -138,6 +150,7 @@ class TinymceTextOptionsDataToJson extends Migration
                             if (isset($column['components'])) {
                                 foreach ($column['components'] as $component_key => $component) {
                                     if (isset($component['type']) && ($component['type'] === 'button-element' || $component['type'] === 'text-element')) {
+                                        Logging::info('updating ' . isset($module['name']) ? $module['name'] : '' . ' componen_id: ' . $component['id']);
                                         // forecolor
                                         if(isset($component['plugins']['textOptions']['config']['options']['forecolor'])
                                             && isset($component['plugins']['textOptions']['config']['options']['forecolor']['textcolor_map'])) {
@@ -191,6 +204,7 @@ class TinymceTextOptionsDataToJson extends Migration
                             foreach ($column['components'] as $component_key => $component) {
                                 if (isset($component['type']) && ($component['type'] === 'button-element' || $component['type'] === 'text-element')) {
                                     // forecolor
+                                    Logging::info('updating ' . isset($module['name']) ? $module['name'] : '' . ' componen_id: ' . $component['id']);
                                     if(isset($component['plugins']['textOptions']['config']['options']['forecolor'])
                                         && isset($component['plugins']['textOptions']['config']['options']['forecolor']['textcolor_map'])) {
                                         $textcolor_map = $component['plugins']['textOptions']['config']['options']['forecolor']['textcolor_map'];
