@@ -6,7 +6,7 @@
       :align="align"
       :bgcolor="bgcolor"
       :height="localHeight"
-      style="display:block; margin:0 auto; font-size: 0; line-height: 0; width: 100%;"
+      style="display:block; margin:0 auto; width: 100%;"
       :style="innerTdStyle"
       :data-persist-styles="JSON.stringify(dataPersistStyles)"
     >&nbsp;</td>
@@ -34,6 +34,8 @@ export default {
     },
     innerTdStyle() {
       return {
+        lineHeight: `${this.localHeight}px`,
+        fontSize: `${this.localHeight}px`,
         height: `${this.localHeight}px`,
         maxHeight: `${this.localHeight}px`,
       };
