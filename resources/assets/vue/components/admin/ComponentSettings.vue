@@ -33,7 +33,7 @@
             :element="setting.subComponent ? component[setting.subComponent] : component"
             @setting-updated="settingUpdatedHandler" />
         </group-container>
-        <group-container v-if="component.plugins.mobileStyles" key="mobile-styles">
+        <group-container v-if="component.plugins.mobileStyles" key="mobile-styles" label="Mobile Settings">
           <studio-mobile-styles :plugin="component.plugins.mobileStyles" name="mobileStyles" />
         </group-container>
       </b-card>
