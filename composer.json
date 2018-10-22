@@ -25,7 +25,7 @@
         "stensul/php-imageproxy": "0.*",
         "stensul/media-gallery": "2.2.*",
         "stensul/logging": "2.*",
-        "stensul/silverpop-provider": "dev-v2.1.2-SV2-1078_tracking_level_value",
+        "stensul/silverpop-provider": "2.1.*",
         "firebase/php-jwt": "^5.0",
         "stensul/filesystem": "^2.0",
         "stensul/asset-manager": "^1.0",
