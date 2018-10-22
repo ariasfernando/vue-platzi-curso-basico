@@ -590,7 +590,7 @@ class ProofController extends Controller
     public function getUsers()
     {
         // Ignore current user and deleted users
-        $users = User::where('email', '!=', Auth::user()->email)->active();
+        $users = User::active();
 
         // Get roles that has access to approvals page (so users with these roles can be added as reviewers)
         $roles = Role::wherePermissions('access_proof')->get()->pluck(['name']);
