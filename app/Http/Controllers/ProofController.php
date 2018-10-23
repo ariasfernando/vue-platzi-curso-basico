@@ -7,7 +7,7 @@ use Activity;
 use Carbon\Carbon;
 use RoleModel as Role;
 use UserModel as User;
-use ProofModel as Proof;
+use ProofModel;
 use ReviewerModel as Reviewer;
 use CommentModel as Comment;
 use CampaignModel as Campaign;
@@ -51,7 +51,7 @@ class ProofController extends Controller
     public function getReview(Request $request, $token)
     {
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id())) {
@@ -59,10 +59,10 @@ class ProofController extends Controller
         }
 
         // Validate if the proof is available
-        if ($proof->status === Proof::STATUS_DELETED) {
+        if ($proof->status === ProofModel::STATUS_DELETED) {
             // Check if there's a new version of the proof and if the current user has access to it
             if (isset($proof->campaign->proof_id)) {
-                $new_proof = Proof::find($proof->campaign->proof_id);
+                $new_proof = ProofModel::find($proof->campaign->proof_id);
                 if ($new_proof && $proof->id !== $new_proof->id && $new_proof->userCanAccess(Auth::id())) {
                     // Current user has access to the new proof, redirect and show message
                     $request->session()->put(
@@ -124,7 +124,7 @@ class ProofController extends Controller
     public function getData(Request $request, $token)
     {
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id())) {
@@ -191,7 +191,7 @@ class ProofController extends Controller
     public function getComments(Request $request, $token)
     {
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id())) {
@@ -232,7 +232,7 @@ class ProofController extends Controller
     public function postComment(Request $request, $token)
     {
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id())) {
@@ -284,7 +284,7 @@ class ProofController extends Controller
         $decision = $request->get('decision');
 
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id()) || !$decision) {
@@ -366,7 +366,7 @@ class ProofController extends Controller
     public function postDeleteDecision($token)
     {
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id())) {
@@ -471,11 +471,11 @@ class ProofController extends Controller
             $token = md5(uniqid() . $campaign_id);
 
             // Create proof
-            $proof = Proof::create([
+            $proof = ProofModel::create([
                 'campaign_id' => $campaign_id,
                 'requestor' => new ObjectId(Auth::id()),
                 'token' => $token,
-                'status' => Proof::STATUS_PROCESSED,
+                'status' => ProofModel::STATUS_PROCESSED,
                 'reviewers' => $save_reviewers
             ]);
             $activity = 'Proof created';
@@ -485,9 +485,9 @@ class ProofController extends Controller
                 $campaign = Campaign::find($campaign_id);
                 if (isset($campaign->proof_id)) {
                     // Find the previous proof
-                    $old_proof = Proof::find($campaign->proof_id);
+                    $old_proof = ProofModel::find($campaign->proof_id);
                     if ($old_proof) {
-                        $old_proof->status = Proof::STATUS_DELETED;
+                        $old_proof->status = ProofModel::STATUS_DELETED;
                         $old_proof->save();
 
                         // Set the previous proof id in the new one
@@ -497,7 +497,7 @@ class ProofController extends Controller
                 }
             }
         } else {
-            $proof = Proof::find($request->input('proof_id'));
+            $proof = ProofModel::find($request->input('proof_id'));
 
             foreach ($reviewers as $key => $reviewer) {
                 foreach ($proof->reviewers as $current_reviewer) {
@@ -659,7 +659,7 @@ class ProofController extends Controller
             $token = null;
 
             if ($campaign->proof_id) {
-                $proof = Proof::find($campaign->proof_id);
+                $proof = ProofModel::find($campaign->proof_id);
                 $token = $proof->token;
             }
             $data['token'] = $token;
