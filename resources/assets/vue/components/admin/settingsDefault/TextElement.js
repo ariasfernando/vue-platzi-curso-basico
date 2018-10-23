@@ -3,6 +3,7 @@ function textDefault() {
     componentSettings: [
       {
         groupLabel: 'Font Family',
+        showLabel: false,
         settings: [{
           name: 'fontFamily',
           aclName: 'font_font-family',
@@ -14,6 +15,7 @@ function textDefault() {
       },
       {
         groupLabel: 'Font and styles',
+        showLabel: false,
         settings: [{
           name: 'fontSize',
           aclName: 'font_font-style',
@@ -55,6 +57,7 @@ function textDefault() {
       },
       {
         groupLabel: 'Color',
+        showLabel: false,
         settings: [{
           name: 'bgcolor',
           aclName: 'styles_bgcolor',
@@ -74,6 +77,7 @@ function textDefault() {
       },
       {
         groupLabel: 'Padding',
+        showLabel: false,
         settings: [{
           name: 'padding',
           aclName: 'padding_padding',
