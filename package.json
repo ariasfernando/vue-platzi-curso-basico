@@ -101,11 +101,19 @@
     "jest-vue-preprocessor": "^1.4.0",
     "nock": "^9.3.3",
     "pre-commit": "^1.2.2",
-    "stackup": "1.0.1"
+    "pre-commit-with-lint": "^1.2.5",
+    "stackup": "1.0.1",
+    "stylelint": "^9.6.0"
   },
-  "pre-commit": [
-    "cover"
-  ],
+  "pre-commit": {
+    "lint": {
+      "stylelint": ".(s?css)|(less)$",
+      "eslint": ".(js)|(vue)$"
+    },
+    "run": [
+      "cover"
+    ]
+  },
   "jest": {
     "setupFiles": [
       "./.jestrc.js"
@@ -140,6 +148,7 @@
     "production": "NODE_ENV=production webpack --progress --hide-modules --config=./webpack.config.js",
     "watch:test": "npm t -- --watch",
     "cover": "npm t -- --coverage",
-    "test": "jest"
+    "test": "jest",
+    "eslint": "./node_modules/.bin/eslint ./resources/**/*.{js,vue} || echo \"\n$(tput setaf 1) CORRECT CODE IN THE ABOVE FILES AND TRY AGAIN $(tput sgr 0)\n\""
   }
 }
