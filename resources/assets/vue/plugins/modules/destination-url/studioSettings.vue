@@ -13,7 +13,17 @@
       </settings-container>
       <settings-container label="Validate URL">
         <template slot="setting-right">
-            <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-validations')" :value="plugin.config.validations.url" @change="(newValue)=>updateField(newValue, 'validations.url')"></toggle-button>
+        <el-select
+          v-if="$can('std-'+component.type+'-plugin-destination-url-validations')"
+          size="mini"
+          @change="(newValue) => updateField(newValue, 'validations.url.selected')"
+          :value="validationValue">
+          <el-option
+            v-for="(opt, key) in validateOptions"
+            :value="key"
+            :key="key"
+            :label="opt"></el-option>
+        </el-select>
         </template>
       </settings-container>
       <settings-container label="Target">
@@ -45,6 +55,14 @@
     },
     mixins: [pluginMixin],
     components: { SettingsContainer },
+    computed: {
+      validateOptions: function(){
+        return this.plugin.config.validations.url.options;
+      },
+      validationValue: function() {
+        return this.plugin.config.validations.url.selected;
+      }
+    },
     watch: {
       component: {
         handler: function() {
