@@ -71,6 +71,22 @@ class UpdateRolesStudioAcl extends Migration
         }
         $role->permissions = $rolePermissions;
         $role->save();
+
+        $role = Role::where('name', 'studio-advanced')->firstOrFail();
+        $rolePermissions = $role->permissions;
+        foreach($this->newRolePermissions as $permission){
+            $this->searchAndUnset($rolePermissions, $permission);
+        }
+        $role->permissions = $rolePermissions;
+        $role->save();
+
+        $role = Role::where('name', 'studio-admin')->firstOrFail();
+        $rolePermissions = $role->permissions;
+        foreach($this->newRolePermissions as $permission){
+            $this->searchAndUnset($rolePermissions, $permission);
+        }
+        $role->permissions = $rolePermissions;
+        $role->save();
     }
 
     private function searchAndUnset(&$arr, $perm)
