@@ -60,6 +60,17 @@
                 :min="0"
                 :name="key"
                 @change="(value)=>changeSetting(value, key)" />
+              <el-select
+                v-else-if="tinySetting.type === 'select'"
+                size="mini"
+                :value="tinySetting.content"
+                @change="(value) => changeSetting(value, key)">
+                <el-option
+                  v-for="(opt, optKey) in tinySetting.options"
+                  :key="optKey"
+                  :value="optKey"
+                  :label="opt" />
+              </el-select>
               <el-input
                 v-else-if="tinySetting.type === 'text'"
                 v-b-tooltip.hover

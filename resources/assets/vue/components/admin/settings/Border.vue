@@ -69,7 +69,7 @@ export default {
           if (this.style === 'none') {
             this.style = 'solid';
           }
-          if (this.color) {
+          if (!this.color) {
             this.color = '#000000';
           }
         }

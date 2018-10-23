@@ -81,18 +81,20 @@ class UpdateButtonsAutoWidth extends Migration
             Logging::info('-------------------------');
             foreach ($modules as $key => $module) {
                 $module_structure = $module['structure'];
-                foreach ($module_structure['columns'] as $column_key => $column) {
-                    if (isset($column['components'])) {
-                        foreach ($column['components'] as $component_key => $component) {
-                            if (isset($component['type']) && ($component['type'] === 'button-element')) {
-                                if (!empty($component['button']['style']['minWidth'])) {
-                                    Logging::info('Found button with minWidth defined');
-                                    $minWidth = $component['button']['style']['minWidth'];
-                                    if ($minWidth !== "0px" ) {
-                                        if ($component['button']['styleOption']) {
-                                            Logging::info('Setting styleOption autoWidth to true');
-                                            $component['button']['styleOption']['autoWidth'] = true;
-                                            $module_structure['columns'][$column_key]['components'][$component_key] = $component;
+                if (isset($module_structure) && isset($module_structure['columns'])) {
+                    foreach ($module_structure['columns'] as $column_key => $column) {
+                        if (isset($column['components'])) {
+                            foreach ($column['components'] as $component_key => $component) {
+                                if (isset($component['type']) && ($component['type'] === 'button-element')) {
+                                    if (!empty($component['button']['style']['minWidth'])) {
+                                        Logging::info('Found button with minWidth defined');
+                                        $minWidth = $component['button']['style']['minWidth'];
+                                        if ($minWidth !== "0px" ) {
+                                            if ($component['button']['styleOption']) {
+                                                Logging::info('Setting styleOption autoWidth to true');
+                                                $component['button']['styleOption']['autoWidth'] = true;
+                                                $module_structure['columns'][$column_key]['components'][$component_key] = $component;
+                                            }
                                         }
                                     }
                                 }

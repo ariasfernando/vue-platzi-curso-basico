@@ -3,6 +3,7 @@ function columnDefault() {
     componentSettings: [
       {
         groupLabel: 'Background Color',
+        showLabel: false,
         settings: [{
           name: 'bgcolor',
           aclName: 'background_bgcolor',
@@ -14,6 +15,7 @@ function columnDefault() {
       },
       {
         groupLabel: 'Padding',
+        showLabel: false,
         settings: [{
           name: 'padding',
           aclName: 'padding_padding',
@@ -24,6 +26,7 @@ function columnDefault() {
       },
       {
         groupLabel: 'Border',
+        showLabel: false,
         settings: [{
           name: 'border-group',
           aclName: 'border_border-group',
@@ -33,6 +36,7 @@ function columnDefault() {
       },
       {
         groupLabel: 'Width and Class',
+        showLabel: false,
         settings: [{
           link: 'attribute',
           label: 'Width',

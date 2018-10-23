@@ -7,7 +7,7 @@
       icon="glyphicon-pencil" />
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
-        <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in settings" :label="settingGroup.showLabel ? settingGroup.groupLabel : null" :key="groupKey">
           <component
             :is="'input-' + setting.type"
             v-for="(setting,i) in settingGroup.settings"
@@ -33,7 +33,7 @@
             :element="setting.subComponent ? component[setting.subComponent] : component"
             @setting-updated="settingUpdatedHandler" />
         </group-container>
-        <group-container v-if="component.plugins.mobileStyles" key="mobile-styles">
+        <group-container v-if="component.plugins.mobileStyles" key="mobile-styles" label="Mobile Settings">
           <studio-mobile-styles :plugin="component.plugins.mobileStyles" name="mobileStyles" />
         </group-container>
       </b-card>
