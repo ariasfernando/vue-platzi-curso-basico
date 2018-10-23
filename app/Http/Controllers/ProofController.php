@@ -462,7 +462,6 @@ class ProofController extends Controller
             $save_reviewers[$key]['email'] = $reviewers[$key]['email'] ?? null;
             $save_reviewers[$key]['last_modified_date'] = $modified_date;
             $save_reviewers[$key]['notification_message'] = $reviewers[$key]['notification_message'] ?? null;
-            $save_reviewers[$key]['notified'] = false;
             $save_reviewers[$key]['required'] = (int) ($reviewers[$key]['required'] ?? 0);
         }
 
@@ -525,6 +524,11 @@ class ProofController extends Controller
             $proof->reviewers = $reviewers;
             $proof->requestor = new ObjectId(Auth::id());
 
+            $proof->save();
+            $activity = 'Proof updated';
+        }
+
+        if ($proof) {
             if ($request->has('send_to_all') && $request->input('send_to_all') == 1) {
                 $proof->send_to_all = true;
             }
@@ -534,10 +538,6 @@ class ProofController extends Controller
                 $proof->notification_message_to_all = $request->input('notification_message_4_all');
             }
             $proof->save();
-            $activity = 'Proof updated';
-        }
-
-        if ($proof) {
             Activity::log($activity, [
                 'properties' => [
                     'proof_id' => new ObjectId($proof->id),
