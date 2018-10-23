@@ -1,11 +1,10 @@
-import _ from 'lodash';
-
 export default {
   props: [
     'module-id',
     'column-id',
     'component-id',
-    'component'
+    'component',
+    'column',
   ],
   computed: {
     currentComponent() {
@@ -20,11 +19,11 @@ export default {
     imageWidth() {
       const width = this.component.image.attribute.width;
       if (_.endsWith(width, '%')) {
-        const imageContainerWidth = this.columnWidth(this.columnId)
-        - this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].container)
-        - this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].content)
-        - this.elementBorderAndPaddingHorizontalSpace(this.component.container);
-        return imageContainerWidth / 100 * _.parseInt(width);
+        const imageContainerWidth = this.columnWidth(this.columnId) -
+          this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].container) -
+          this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].content) -
+          this.elementBorderAndPaddingHorizontalSpace(this.component.container);
+        return ((imageContainerWidth / 100) * _.parseInt(width));
       }
       return width;
     },
