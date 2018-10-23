@@ -4,7 +4,7 @@ namespace Stensul\Services;
 
 use MongoDB\BSON\ObjectID as ObjectID;
 use CampaignModel;
-use ProofModel as Proof;
+use ProofModel;
 use LibraryModel as Library;
 use UserModel as User;
 use Activity;
@@ -183,7 +183,7 @@ class EmailSender
      * @param  array                $data  Any required data
      * @return array Response
      */
-    public static function sendApprovalsEmail(User $user, Proof $proof, $type, $data = [])
+    public static function sendApprovalsEmail(User $user, ProofModel $proof, $type, $data = [])
     {
         if (!isset($user->email)) {
             return ['error' => 'invalid email'];
