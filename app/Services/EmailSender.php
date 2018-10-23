@@ -4,7 +4,7 @@ namespace Stensul\Services;
 
 use MongoDB\BSON\ObjectID as ObjectID;
 use CampaignModel;
-use ProofModel as Proof;
+use Stensul\Models\Proof;
 use LibraryModel as Library;
 use UserModel as User;
 use Activity;
