@@ -9,18 +9,6 @@ module.exports = {
   studioSettings,
   config: {
     options: {
-      undo: {
-        label: 'Undo',
-        key: 'undo',
-        value: false,
-        icon: 'fa fa-undo',
-      },
-      redo: {
-        label: 'Redo',
-        key: 'redo',
-        value: false,
-        icon: 'fa fa-repeat',
-      },
       bold: {
         label: 'Bold',
         key: 'bold',
@@ -63,17 +51,17 @@ module.exports = {
         value: false,
         icon: 'fa fa-align-right',
       },
+      alignjustify: {
+        label: 'Align justify',
+        key: 'alignjustify',
+        value: false,
+        icon: 'fa fa-align-justify',
+      },
       superscript: {
         label: 'Superscript',
         key: 'superscript',
         value: false,
         icon: 'fa fa-superscript',
-      },
-      fontselect: {
-        label: 'Font',
-        key: 'fontselect',
-        value: false,
-        icon: 'fa-adapter glyphicon glyphicon-font',
       },
       fontsizeselect: {
         label: 'Font size',
@@ -119,12 +107,6 @@ module.exports = {
         value: false,
         icon: 'fa fa-link',
       },
-      styleselect: {
-        label: 'Style Format',
-        key: 'styleselect',
-        value: false,
-        icon: 'fa fa-edit',
-      },
       stformatsmenu: {
         label: 'Custom Format',
         key: 'stformatsmenu',
@@ -134,53 +116,59 @@ module.exports = {
     },
     settings: {
       link_validate_url: {
-        title: 'Validate Url',
-        value: false,
+        title: 'Validate URL',
+        value: 'disabled',
+        type: 'select',
+        options: {
+          disabled: 'No Validation',
+          url: 'Validate Format',
+          urlAndDestination: 'Format and Destination',
+        },
+        content: 'disabled',
       },
       truncate: {
         title: 'Characters Limit',
-        value: false,
-        type: 'number',
-        content: undefined,
+        type: 'input-toggleable-number',
+        falseText: 'Disabled',
+        content: false,
       },
       lines_limit: {
         title: 'Lines Limit',
-        value: false,
-        type: 'text',
-        content: "{ \"27px\": 5, \"29px\": 4, \"34px\": 3 }",
+        type: 'input-toggleable-text',
+        falseText: 'Disabled',
+        content: false,
+        defaultValue: 2,
       },
       fontsize_formats: {
         title: 'Font size',
         value: false,
         type: 'text',
         content: '12px 14px 16px 18px',
-      },
-      style_formats: {
-        title: 'Style format',
-        value: false,
-        type: 'text',
-        content: "[{\"title\":\"27px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"27px\",\"lineHeight\":\"30px\"}},{\"title\":\"29px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"29px\",\"lineHeight\":\"32px\"}},{\"title\":\"34px\",\"block\":\"p\",\"styles\":{\"fontSize\":\"34px\",\"lineHeight\":\"36px\"}}]",
+        dependsOn: {
+          config: 'options',
+          name: 'fontsizeselect',
+        },
       },
       link_fixed_color: {
         title: 'Link fixed color',
-        value: false,
-        type: 'text',
+        type: 'input-toggleable-text',
+        falseText: 'Disabled',
+        content: false,
+        defaultValue: '#000000',
         dependsOn: {
           config: 'options',
           name: 'link',
         },
-      },
-      st_formats_menu: {
-        title: 'Format menu',
-        value: false,
-        type: 'text',
-        content: "[{\"text\":\"Light\",\"value\":\"light_font\"},{\"text\":\"Normal\",\"value\":\"normal_font\"},{\"text\":\"Semi Bold\",\"value\":\"semi_bold_font\"},{\"text\":\"Bold\",\"value\":\"bold_font\"}]",
       },
       formats: {
         title: 'Formats',
         value: false,
         type: 'text',
         content: "{\"light_font\":{\"inline\":\"span\",\"styles\":{\"fontWeight\":\"300\"}},\"normal_font\":{\"inline\":\"span\",\"styles\":{\"fontWeight\":\"400\"}},\"semi_bold_font\":{\"inline\":\"span\",\"styles\":{\"fontWeight\":\"600\"}},\"bold_font\":{\"inline\":\"span\",\"styles\":{\"fontWeight\":\"700\"}}}",
+        dependsOn: {
+          config: 'options',
+          name: 'stformatsmenu',
+        },
       },
     },
   },

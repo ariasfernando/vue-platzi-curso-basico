@@ -1,7 +1,11 @@
-const ToggleButton = require('./toggle-button');
 const Comment = require('./comment');
+const InputToggleableNumber = require('./input-toggleable-number');
+const InputToggleableText = require('./input-toggleable-text');
+const ToggleButton = require('./toggle-button');
 
 module.exports = {
-  ToggleButton,
   Comment,
+  InputToggleableNumber,
+  InputToggleableText,
+  ToggleButton,
 };

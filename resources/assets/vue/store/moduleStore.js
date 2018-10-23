@@ -23,6 +23,19 @@ const state = {
   secondaryLoading: false,
 };
 
+const getElement = (module, elementId) => {
+  let component;
+  _.forEach(module.structure.columns, (column) => {
+    _.forEach(column.components, (CurrentComponent) => {
+      if (CurrentComponent.id === elementId) {
+        component = CurrentComponent;
+        return false;
+      }
+    });
+    return !component;
+  });
+  return component;
+};
 const getProperties = (element, data) => {
   const subComponent = data.subComponent ? element[data.subComponent] : element;
   return data.link ? subComponent[data.link] : subComponent;
@@ -159,7 +172,15 @@ const mutations = {
     }
     _.merge(pluginData, payload.config);
   },
+  setPluginElementConfig(state, { componentId, plugin, path, value }) {
+    const component = getElement(state.module, componentId);
+    const pluginData = component.plugins[plugin];
+    const pathArray = _.concat(['config'], path ? path.split('.') : []);
+    const pluginOption = searchOrCreateLevel(pluginData, pathArray);
+    Vue.set(pluginOption.data, pluginOption.property, value);
+  },
   setPluginComponentConfig(state, data) {
+    // DEPRECATE
     const plugin = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin];
     const path = _.concat(['config'], data.path ? data.path.split('.') : []);
     const pluginOption = searchOrCreateLevel(plugin, path);

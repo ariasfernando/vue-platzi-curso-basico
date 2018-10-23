@@ -75,7 +75,7 @@ export default {
       $cleanedHtml.find(selector).remove();
     });
 
-    // Remove wrappers element ( .stx-wrapper & .stx-wrapper-comment)
+    // Remove wrappers element ( .stx-wrapper )
     $cleanedHtml = Application.utils.removeWrappers($cleanedHtml);
 
     // Remove every class starting with "stx-"
