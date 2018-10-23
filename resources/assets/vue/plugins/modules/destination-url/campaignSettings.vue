@@ -36,7 +36,17 @@
             :key="option"
           >
         </el-button>
+      </template>
+    </settings-container>
 
+    <settings-container label="Title" v-if="plugin.config.title" key="title">
+      <template slot="setting-bottom">
+        <el-input
+          name="title"
+          type="text"
+          size="mini"
+          placeholder="Title"
+          v-model="title"></el-input>
       </template>
     </settings-container>
   </div>
@@ -46,6 +56,7 @@
   import _ from 'lodash';
   import validatorMixin from '../mixins/validator';
   import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import urlDestination from '../../../resources/validator_rules'
 
   export default {
     props: ['name', 'plugin', 'pluginKey'],
@@ -101,14 +112,24 @@
           });
         },
       },
+      title: {
+        get() {
+          return this.component[this.plugin.subComponent].attribute.title;
+        },
+        set(value) {
+          this.saveComponentProperty('title', value);
+        },
+      },
       validationRules() {
         const rules = [];
         _.each(this.plugin.config.validations, (e,i) => {
-          if (e) {
+          if (e === true) {
             rules.push(i);
+          } else if(typeof e == 'object' && e.selected !== 'disabled'){
+            rules.push(e.selected);
           }
+           
         });
-
         return rules.join('|');
       }
     },
@@ -129,7 +150,6 @@
           property,
           value: value,
         };
-
         this.$store.commit('campaign/saveComponentProperty', payload);
       },
       

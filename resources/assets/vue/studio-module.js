@@ -11,7 +11,9 @@ import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
 import { studioModuleRoutes } from './router';
 import store from './store';
+import acl from './resources/plugins/acl';
 
+Vue.use(acl);
 Vue.use(Bootstrap);
 Vue.use(Toast, {
   horizontalPosition: 'center',

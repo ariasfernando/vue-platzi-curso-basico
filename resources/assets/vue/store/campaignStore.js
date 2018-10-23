@@ -1,22 +1,8 @@
-/* eslint no-param-reassign:0 */
-/* eslint no-shadow:0 */
 /* eslint no-console:0 */
-
 import Vue from 'vue/dist/vue';
-import {
-  filter,
-  isEmpty,
-  cloneDeep,
-  isUndefined,
-  isArray,
-  extend,
-  isEqual,
-  each
-} from 'lodash';
-import _ from 'lodash';
 
 import {
-  defer
+  defer,
 } from 'q';
 import clone from 'clone';
 import campaignService from '../services/campaign';
@@ -59,16 +45,12 @@ function campaignStore() {
       },
       moduleErrors(state) {
         const modules = state.modules;
-        const errors = _.filter(modules, (m) => {
-          return !_.isEmpty(m.data) && m.data.errors && m.data.errors.length
-        });
+        const errors = _.filter(modules, m => (!_.isEmpty(m.data) && m.data.errors && m.data.errors.length));
         return errors.length > 0;
       },
       getModuleErrors(state) {
         const modules = state.modules;
-        const errors = _.filter(modules, (m) => {
-          return !_.isEmpty(m.data) && m.data.errors && m.data.errors.length
-        });
+        const errors = _.filter(modules, m => (!_.isEmpty(m.data) && m.data.errors && m.data.errors.length));
         return errors;
       },
       fieldErrors(state) {
@@ -109,7 +91,7 @@ function campaignStore() {
         return state.showModuleSettings;
       },
       locked(state) {
-        if (!isEmpty(state.campaign)) {
+        if (!_.isEmpty(state.campaign)) {
           return state.campaign.campaign_data.locked;
         }
         return false;
@@ -126,8 +108,8 @@ function campaignStore() {
         state.campaign = campaignData;
         state.modules = campaignData.campaign_data.modules_data;
       },
-      updateEmailCanvas(state, modules_data) {
-        state.modules = modules_data;
+      updateEmailCanvas(state, modulesData) {
+        state.modules = modulesData;
       },
       changeBuildingMode(state, buildingMode) {
         state.buildingMode = buildingMode;
@@ -148,26 +130,26 @@ function campaignStore() {
         state.modules.push(moduleData);
         state.dirty = true;
       },
-      insertModule(state, {index, moduleData}) {
+      insertModule(state, { index, moduleData }) {
         state.modules.splice(index, 0, moduleData);
         state.dirty = true;
       },
       cloneModule(state, moduleId) {
-        const clone = cloneDeep(state.modules[moduleId]);
-        clone.idInstance = Math.floor(100000 + (Math.random() * 900000));
-        state.modules.push(clone);
+        const cloned = _.cloneDeep(state.modules[moduleId]);
+        cloned.idInstance = Math.floor(100000 + (Math.random() * 900000));
+        state.modules.push(cloned);
         state.dirty = true;
       },
       updateCustomElement(state, payload) {
         // DEPRECATED
-        if ( !isUndefined(payload.moduleId) ){
+        if (!_.isUndefined(payload.moduleId)) {
           const update = { ...state.modules[payload.moduleId].data, ...payload.data };
           state.modules[payload.moduleId].data = update;
           state.dirty = true;
         }
       },
       updateCustomElementProperty(state, payload) {
-        if (!isUndefined(payload.moduleId)) { 
+        if (!_.isUndefined(payload.moduleId)) {
           const dataComponent = state.modules[payload.moduleId].data;
           const subComponent = payload.subComponent ? dataComponent[payload.subComponent] : dataComponent;
           Vue.set(subComponent, payload.property, payload.value);
@@ -216,7 +198,7 @@ function campaignStore() {
         state.activeModule = undefined;
       },
       setActiveLastModule(state) {
-        state.activeModule = state.modules.length-1;
+        state.activeModule = state.modules.length - 1;
       },
       saveComponent(state, data) {
         const moduleId = data.moduleId;
@@ -226,10 +208,20 @@ function campaignStore() {
         state.dirty = true;
       },
       savePlugin(state, payload) {
-        const plugin = state.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+        let plugin = state.modules[payload.moduleId];
+        if (payload.componentId >= 0) {
+          // save component plugin
+          plugin = plugin.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
+        } else if (payload.columnId >= 0) {
+          // save column plugin
+          plugin = plugin.structure.columns[payload.columnId].plugins[payload.plugin];
+        } else {
+          // save module plugin
+          plugin = plugin.plugins[payload.plugin];
+        }
         plugin.data = {
           ...plugin.data,
-          ...payload.data
+          ...payload.data,
         };
         state.dirty = true;
       },
@@ -240,27 +232,15 @@ function campaignStore() {
         Vue.set(properties, data.property, data.value);
         state.dirty = true;
       },
-      saveColumnProperty(state, data) {
-        const columns = state.modules[data.moduleId].structure.columns;
-        const column = columns[data.columnId];
-        const columnClone = _.cloneDeep(column);
-        const subComponent = data.subComponent ? column[data.subComponent] : column;
-        const properties = data.link ? subComponent[data.link] : subComponent;
-        Vue.set(properties, data.property, data.value);
-        state.dirty = true;
-        // hack to make the column array reactive
-        // note: for more info check vue documentation #Array-Change-Detection
-        if (!_.isEqual(columnClone, column)) {
-          Vue.set(columns, data.columnId, column);
-        }
-      },
-      
       saveColumnAttribute(state, data) {
         // DEPRECATE
         const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
         const newData = {};
         newData[data.attribute] = data.attributeValue;
-        state.modules[data.moduleId].structure.columns[data.columnId].container.attribute = { ...attributes, ...newData };
+        state
+          .modules[data.moduleId]
+          .structure.columns[data.columnId]
+          .container.attribute = { ...attributes, ...newData };
         state.dirty = true;
       },
       saveColumnProperty(state, data) {
@@ -278,12 +258,19 @@ function campaignStore() {
         }
       },
       saveModuleAttribute(state, data) {
+        // DEPRECATE
         const attributes = state.modules[data.moduleId].structure.attribute;
         attributes[data.attribute] = data.attributeValue;
         state.dirty = true;
       },
+      saveModuleProperty(state, data) {
+        const module = state.modules[data.moduleId].structure;
+        const properties = data.link ? module[data.link] : module;
+        Vue.set(properties, data.property, data.value);
+        state.dirty = true;
+      },
       saveModuleData(state, data) {
-        //TODO: Migrate saveCustomModuleData to this method
+        // TODO: Migrate saveCustomModuleData to this method
         // Prevent empty arrays returned by php-mongo
         if (_.isArray(state.modules[data.moduleId].data)) {
           state.modules[data.moduleId].data = {};
@@ -296,17 +283,17 @@ function campaignStore() {
       },
       saveCustomModuleData(state, data) {
         // Prevent empty arrays returned by php-mongo
-        if (isArray(state.modules[data.moduleId].data)) {
+        if (_.isArray(state.modules[data.moduleId].data)) {
           Vue.set(state.modules[data.moduleId], 'data', {});
         }
 
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
-        const newData = extend(clone(state.modules[data.moduleId].data), data.data);
+        const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
         Vue.set(state.modules[data.moduleId], 'data', newData);
         state.dirty = true;
       },
       saveCustomModuleImageData(state, data) {
-        if (isArray(state.modules[data.moduleId].data)) {
+        if (_.isArray(state.modules[data.moduleId].data)) {
           state.modules[data.moduleId].data = {};
         }
         if (!state.modules[data.moduleId].data.images) {
@@ -341,7 +328,7 @@ function campaignStore() {
       },
       saveCustomModuleDataField(state, data) {
         // Prevent empty arrays returned by php-mongo
-        if (isArray(state.modules[data.moduleId].data)) {
+        if (_.isArray(state.modules[data.moduleId].data)) {
           state.modules[data.moduleId].data = {};
         }
         if (!(data.field in state.modules[data.moduleId].data)) {
@@ -352,7 +339,7 @@ function campaignStore() {
           state.modules[data.moduleId].data[data.field] = {};
         }
 
-        if ("merge" in data && data.merge === true) {
+        if ('merge' in data && data.merge === true) {
           const newData = _.extend(clone(state.modules[data.moduleId].data[data.field]), data.value);
           state.modules[data.moduleId].data[data.field] = newData;
         } else {
@@ -363,13 +350,13 @@ function campaignStore() {
       },
       saveCustomModuleParamsField(state, param) {
         // Prevent empty arrays returned by php-mongo
-        if (isArray(state.modules[param.moduleId].params)) {
+        if (_.isArray(state.modules[param.moduleId].params)) {
           Vue.set(state.modules[param.moduleId], 'params', {});
         }
         if (!(param.field in state.modules[param.moduleId].params)) {
           Vue.set(state.modules[param.moduleId].params, param.field, {});
         }
-        if ("merge" in param && param.merge === true) {
+        if ('merge' in param && param.merge === true) {
           const newParams = _.extend(clone(state.modules[param.moduleId].params[param.field]), param.value);
           Vue.set(state.modules[param.moduleId].params, param.field, newParams);
         } else {
@@ -400,7 +387,7 @@ function campaignStore() {
         state.fieldErrors.push(error);
       },
       clearErrorsByModuleId(state, moduleId) {
-        if(_.has(state.modules[moduleId].data, 'errors')) {
+        if (_.has(state.modules[moduleId].data, 'errors')) {
           const filtered = state.fieldErrors.filter(err => err.scope.clearErrorsByModuleId !== moduleId);
           state.fieldErrors = filtered;
           Vue.set(state.modules[moduleId].data, 'errors', []);
@@ -408,20 +395,19 @@ function campaignStore() {
       },
       clearErrorsByScope(state, scope) {
         const moduleErrors = state.modules[scope.moduleId].data.errors || [];
-        let filtered;
-        if(scope.type === 'custom') {
+        let filtered = () => {};
+        if (scope.type === 'custom') {
           filtered = moduleErrors.filter(err => !(_.isEqual(err.scope.elementName, scope.elementName)
-                                                        && _.isEqual(err.scope.idInstance, scope.idInstance)));
-        }
-        else {
+            && _.isEqual(err.scope.idInstance, scope.idInstance)));
+        } else {
           filtered = moduleErrors.filter(err => !(_.isEqual(err.scope.name, scope.name)
-                                                        && _.isEqual(err.scope.columnId, scope.columnId)
-                                                        && _.isEqual(err.scope.componentId, scope.componentId)));
+            && _.isEqual(err.scope.columnId, scope.columnId)
+            && _.isEqual(err.scope.componentId, scope.componentId)));
         }
         Vue.set(state.modules[scope.moduleId].data, 'errors', filtered);
       },
       setCampaignName(state, campaignName) {
-      	Vue.set(state.campaign.campaign_data, 'campaign_name', campaignName);
+        Vue.set(state.campaign.campaign_data, 'campaign_name', campaignName);
       },
       error(err) {
         console.error(err);
@@ -432,12 +418,11 @@ function campaignStore() {
         context.commit('updateCustomElement', payload);
         return Promise.resolve();
       },
-
       updateText(context, payload) {
         context.commit('saveComponentProperty', payload);
         if (payload.sync !== false) {
           payload.property = 'textDirty';
-          payload.value = Math.floor(100000 + Math.random() * 900000);
+          payload.value = Math.floor(100000 + (Math.random() * 900000));
           context.commit('saveComponentProperty', payload);
         }
       },
@@ -448,56 +433,60 @@ function campaignStore() {
       addErrors(context, errors) {
         _.each(errors, (error) => {
           // Get module errors
-          let moduleErrors = _.cloneDeep(context.state.modules[error.scope.moduleId].data.errors) || [];
+          const moduleErrors = _.cloneDeep(context.state.modules[error.scope.moduleId].data.errors) || [];
 
-          let moduleErrorsByField;
-          if(error.scope.type === 'custom') {
+          let moduleErrorsByField = [];
+          if (error.scope.type === 'custom') {
             // Remove generic errors (workaround introduced in SV2-638).
             // This will be removed when a final solution for validations is in place.
-            const indexToRemove = moduleErrors.findIndex(err => (_.isEqual(err.scope.elementName, error.scope.elementName)
-                                                                  && _.isEqual(err.scope.idInstance, error.scope.idInstance)
-                                                                  && _.isUndefined(err.scope.msg)
-                                                                ));
-            if(indexToRemove >= 0) {
+            const indexToRemove = moduleErrors.findIndex(
+              err => (_.isEqual(err.scope.elementName, error.scope.elementName)
+                && _.isEqual(err.scope.idInstance, error.scope.idInstance)
+                && _.isUndefined(err.scope.msg)
+              ));
+            if (indexToRemove >= 0) {
               moduleErrors.splice(indexToRemove, 1);
             }
 
-            moduleErrorsByField = moduleErrors.filter(err => (_.isEqual(err.scope.elementName, error.scope.elementName)
-                                                                  && _.isEqual(err.scope.idInstance, error.scope.idInstance)
-                                                                  && _.isEqual(err.scope.msg, error.scope.msg)));
-          }
-          else {
+            moduleErrorsByField = moduleErrors.filter(
+              err => (_.isEqual(err.scope.elementName, error.scope.elementName)
+                && _.isEqual(err.scope.idInstance, error.scope.idInstance)
+                && _.isEqual(err.scope.msg, error.scope.msg)
+              ));
+          } else {
             // Remove generic errors (workaround introduced in SV2-638)
             // This will be removed when a final solution for validations is in place.
-            const indexToRemove = moduleErrors.findIndex(err => (_.isEqual(err.scope.name, error.scope.name)
-                                                                  && _.isEqual(err.scope.columnId, error.scope.columnId)
-                                                                  && _.isEqual(err.scope.componentId, error.scope.componentId)
-                                                                  && _.isUndefined(err.scope.msg)
-                                                                ));
-            if(indexToRemove >= 0) {
+            const indexToRemove = moduleErrors.findIndex(
+              err => (_.isEqual(err.scope.name, error.scope.name)
+                && _.isEqual(err.scope.columnId, error.scope.columnId)
+                && _.isEqual(err.scope.componentId, error.scope.componentId)
+                && _.isUndefined(err.scope.msg)
+              ));
+            if (indexToRemove >= 0) {
               moduleErrors.splice(indexToRemove, 1);
             }
 
-            moduleErrorsByField = moduleErrors.filter(err => (_.isEqual(err.scope.name, error.scope.name)
-                                                                  && _.isEqual(err.scope.columnId, error.scope.columnId)
-                                                                  && _.isEqual(err.scope.componentId, error.scope.componentId)
-                                                                  && _.isEqual(err.scope.msg, error.scope.msg)
-                                                                ));
+            moduleErrorsByField = moduleErrors.filter(
+              err => (_.isEqual(err.scope.name, error.scope.name)
+                && _.isEqual(err.scope.columnId, error.scope.columnId)
+                && _.isEqual(err.scope.componentId, error.scope.componentId)
+                && _.isEqual(err.scope.msg, error.scope.msg)
+              ));
           }
           // Check if error already exists
-          if(moduleErrorsByField.length === 0) {
+          if (moduleErrorsByField.length === 0) {
             // Add error
             moduleErrors.push(error);
             // Save module data
             context.commit('saveModuleData', {
               moduleId: error.scope.moduleId,
-              data: { errors: moduleErrors }
+              data: { errors: moduleErrors },
             });
           }
         });
       },
       saveCustomModuleData(context, data) {
-        each(data.data, (value, field) => {
+        _.each(data.data, (value, field) => {
           context.commit('saveCustomModuleDataField', {
             moduleId: data.moduleId,
             field,
@@ -508,9 +497,11 @@ function campaignStore() {
       getCampaignData(context, campaignId) {
         return campaignService.getCampaign(campaignId)
           .then((response) => {
-            let campaign = response.campaign;
+            const campaign = response.campaign;
             // TODO: use a model
+
             campaign.campaign_data.auto_save = campaign.campaign_data.auto_save !== false;
+
             context.commit('loadCampaignData', response.campaign);
           })
           .catch(error => context.commit('error', error));
@@ -525,12 +516,12 @@ function campaignStore() {
       saveCampaign(context, data) {
         const deferred = defer();
         campaignService.saveCampaign(data)
-          .then(res => {
+          .then((res) => {
             context.commit('setDirty', false);
             context.commit('setUpdatedAt', res.updatedAt);
             deferred.resolve(res.campaignId);
           })
-          .catch(error => {
+          .catch((error) => {
             context.commit('error', error);
             deferred.reject(error);
           });
@@ -539,12 +530,12 @@ function campaignStore() {
       completeCampaign(context, campaign) {
         const deferred = defer();
         campaignService.completeCampaign(campaign)
-          .then(response => {
+          .then((response) => {
             context.commit('setDirty', false);
             context.dispatch('getCampaignData', response.campaignId);
             deferred.resolve(response);
           })
-          .catch(error => {
+          .catch((error) => {
             context.commit('error', error);
             deferred.reject(error);
           });
@@ -554,11 +545,11 @@ function campaignStore() {
         const deferred = defer();
 
         campaignService.lockCampaign(campaignId)
-          .then(response => {
+          .then((response) => {
             context.dispatch('getCampaignData', response.campaign_id);
             deferred.resolve(response);
           })
-          .catch(error => {
+          .catch((error) => {
             context.commit('error', error);
             deferred.reject(error);
           });
@@ -568,23 +559,22 @@ function campaignStore() {
         const deferred = defer();
 
         campaignService.unlockCampaign(campaignId)
-        .then(response => {
-          context.dispatch('getCampaignData', response.campaign_id);
-          deferred.resolve(response);
-        })
-        .catch(error => {
-          context.commit('error', error);
-          deferred.reject(error);
-        });
+          .then((response) => {
+            context.dispatch('getCampaignData', response.campaign_id);
+            deferred.resolve(response);
+          })
+          .catch((error) => {
+            context.commit('error', error);
+            deferred.reject(error);
+          });
         return deferred.promise;
       },
       pingLockCampaign(context, data) {
         const deferred = defer();
 
         campaignService.pingLock({ campaignId: data.campaignId, windowId: data.windowId })
-          .then(response => {
-          })
-          .catch(error => {
+          .then(() => {})
+          .catch((error) => {
             context.commit('error', error);
             deferred.reject(error);
           });
@@ -594,14 +584,14 @@ function campaignStore() {
         const deferred = defer();
 
         campaignService.favoriteCampaign(campaignId)
-        .then(response => {
-          context.dispatch('getCampaignData', response.campaign_id);
-          deferred.resolve(response);
-        })
-        .catch(error => {
-          context.commit('error', error);
-          deferred.reject(error);
-        });
+          .then((response) => {
+            context.dispatch('getCampaignData', response.campaign_id);
+            deferred.resolve(response);
+          })
+          .catch((error) => {
+            context.commit('error', error);
+            deferred.reject(error);
+          });
         return deferred.promise;
       },
       uploadImages(context, data) {
@@ -610,12 +600,12 @@ function campaignStore() {
         imageService.uploadImages(data)
           .then((images) => {
             // override with full path
-            each(images, (image, key) => {
+            _.each(images, (image, key) => {
               images[key] = `campaigns${image}`;
             });
             deferred.resolve(images);
           })
-          .catch(error => {
+          .catch((error) => {
             context.commit('error', error);
             deferred.reject(error);
           });

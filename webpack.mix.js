@@ -57,7 +57,6 @@ mix
     $: 'jquery',
     jQuery: 'jquery',
   })
-  .less(`${assetsPath}/less/vendor/stensul/media-gallery/media-gallery.less`, 'public/css/media-gallery.css')
   .less(`${assetsPath}/less/base/commons/mobile/mobile_core_styles.less`, 'public/css/mobile_core_styles.css')
   .less(`${assetsPath}/less/base/commons/mobile/mobile_client_styles.less`, 'public/css/mobile_client_styles.css')
   .less(`${assetsPath}/less/base/tool/tool.less`, 'public/css/tool.css')
@@ -102,6 +101,8 @@ mix
   .scripts([
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-ui/jquery-ui.min.js',
+    'node_modules/jquery-mousewheel/jquery.mousewheel.min.js',
+    'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js',
   ], `${jsDestinationPath}/jquery.js`)
   .scripts([
     'node_modules/bootstrap/dist/js/bootstrap.min.js',

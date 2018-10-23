@@ -1,76 +1,84 @@
 function imageDefault() {
   return {
     componentSettings: [
-      [
-        {
+      {
+        groupLabel: 'Placeholders',
+        showLabel: false,
+        settings: [{
           link: 'attribute',
-          label: 'Select an image placeholder',
+          label: 'Default Image',
           name: 'placeholder',
+          aclName: 'placeholder_placeholder-desktop',
           type: 'generic-file',
-          subComponent: 'image',
-        },
-        {
-          label: 'Image mobile',
-          link: 'styleOption',
-          name: 'hasImageMobile',
-          type: 'generic-switch',
-          value: false,
           subComponent: 'image',
         },
         {
           link: 'attribute',
-          label: 'Select an image placeholder mobile',
+          label: 'Default Mobile Image',
           name: 'placeholderMobile',
+          aclName: 'placeholder_placeholder-mobile',
           type: 'generic-file',
           subComponent: 'image',
-          dependsOn: {
-            link: 'styleOption',
-            name: 'hasImageMobile',
-            subComponent: 'image',
-          },
         },
         {
           name: 'classes',
+          aclName: 'placeholder_classes',
           type: 'class-input',
           link: 'attribute',
           subComponent: 'container',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupLabel: 'Image size',
+        showLabel: false,
+        settings: [{
           name: 'image-size',
+          aclName: 'image_image-size',
           type: 'image-size',
           subComponent: 'image',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupLabel: 'Text align',
+        showLabel: false,
+        settings: [{
           name: 'text-align',
+          aclName: 'text_text-align',
           type: 'text-align',
           subComponent: 'image',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupLabel: 'Background color',
+        showLabel: false,
+        settings: [{
           name: 'bgcolor',
+          aclName: 'background_bgcolor',
           type: 'generic-color',
           link: 'attribute',
           label: 'Background Color',
           subComponent: 'container',
-        },
-      ],
-      [
-        {
+        }],
+      },
+      {
+        groupLabel: 'Padding group',
+        showLabel: false,
+        settings: [{
           name: 'padding',
+          aclName: 'padding_padding',
           type: 'padding-group',
           subComponent: 'container',
-        },
-      ],
-      [
-        {
+          label: 'Element Padding',
+        }],
+      },
+      {
+        groupLabel: 'Url Settings',
+        showLabel: false,
+        settings: [{
           link: 'attribute',
           label: 'Default URL',
           name: 'href',
+          aclName: 'url_href',
           type: 'generic-text',
           value: '',
           subComponent: 'image',
@@ -79,20 +87,12 @@ function imageDefault() {
           link: 'attribute',
           label: 'Alt',
           name: 'alt',
+          aclName: 'url_alt',
           type: 'generic-text',
           value: 'Image',
           subComponent: 'image',
-        },
-        {
-          link: 'attribute',
-          label: 'Title',
-          name: 'title',
-          type: 'generic-text',
-          value: 'Image',
-          subComponent: 'image',
-        },
-      ],
-    ],
+        }],
+      }],
   };
 }
 
