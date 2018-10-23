@@ -27,7 +27,7 @@
                   border="0"
                   width="100%"
                   v-model="columnData.column.components"
-                  element="div"
+                  element="table"
                   :options="options"
                   :data-col="columnData.columnId"
                   @add="onAdd"
