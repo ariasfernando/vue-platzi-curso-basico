@@ -58,6 +58,7 @@
 
             <aside>
                 <proof-comments
+                    ref="proofComments"
                     :token="token"
                     :campaignFinished="campaignFinished"
                 ></proof-comments>
@@ -160,9 +161,8 @@
         });
       },
       decisionMade: function() {
-        return false; // this will be commented until we finish all this implementation
         // Ugly but works. @TODO: find a better way to do this (e.g. vuex)
-        this.$children[1].getComments();
+        this.$refs.proofComments.getComments();
       },
       changeBuildingMode(mode) {
         this.buildingMode = mode;
@@ -193,14 +193,14 @@
       .section-canvas-email{
         width: 100%;
         position: relative;
-        
+
         .scrolled{
           width: 100%;
           max-height: 80vh;
           overflow-y: scroll;
         }
         .scrolled::-webkit-scrollbar {
-          width: .4em; 
+          width: .4em;
         }
         .scrolled::-webkit-scrollbar,
         .scrolled::-webkit-scrollbar-thumb {
@@ -208,12 +208,12 @@
           border-radius: 4px;
         }
         .scrolled::-webkit-scrollbar-thumb {
-          background: rgba(0,0,0,.2); 
+          background: rgba(0,0,0,.2);
         }
         .cover-bar {
           position: absolute;
           background: #fff;;
-          height: 100%;  
+          height: 100%;
           top: 0;
           right: 0;
           width: .4em;
