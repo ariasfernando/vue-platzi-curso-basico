@@ -118,7 +118,7 @@ class SendReviewersEmail extends Job implements ShouldQueue
 
         array_walk($reviewers, function (&$reviewer) use ($data) {
             if ($data['send_to_all'] || !isset($reviewer['notified']) || !$reviewer['notified']) {
-                $user = ReviewerModel::find($reviewer['user_id'])->active()->first();
+                $user = ReviewerModel::active()->find($reviewer['user_id']);
                 $data['reviewer'] = $reviewer;
                 if (EmailSender::sendApprovalsEmail($user, $this->proof, $this->type, $data)) {
 
