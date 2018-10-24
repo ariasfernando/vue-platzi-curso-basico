@@ -1,5 +1,6 @@
 import alignment from './alignment';
 import backgroundColor from './background-color';
+import backgroundStyleImageEditor from './background-style-image-editor';
 import columnBackgroundColor from './column-background-color';
 import columnPaletteBackgroundColor from './column-palette-background-color';
 import destinationUrl from './destination-url';
@@ -22,6 +23,7 @@ import verticalAlignment from './vertical-alignment';
 export default {
   alignment,
   backgroundColor,
+  backgroundStyleImageEditor,
   columnBackgroundColor,
   columnPaletteBackgroundColor,
   destinationUrl,

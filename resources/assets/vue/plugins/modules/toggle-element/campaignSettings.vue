@@ -17,10 +17,11 @@
   import pluginModuleCampaignMixin from '../mixins/pluginModuleCampaignMixin';
   import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
   import validatorMixin from '../mixins/validatorMixin';
+  import logicMixin from './logic.js';
 
   export default {
     components: { SettingsContainer },
-    mixins: [validatorMixin, pluginGenericCampaignMixin, pluginModuleCampaignMixin],
+    mixins: [validatorMixin, logicMixin, pluginGenericCampaignMixin, pluginModuleCampaignMixin],
     data() {
       return {
         subComponent: 'container',
@@ -49,6 +50,9 @@
           this.saveElementProperty(payload);
           this.resetErrors(value, this.moduleId);
         }
+
+        this.runLogic(value, elementId);
+
         this.$emit('changed', {
           elementId,
           value,

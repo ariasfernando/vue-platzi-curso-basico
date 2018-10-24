@@ -19,7 +19,7 @@
     .st-email-body{
         width:100% !important;
         -webkit-text-size-adjust: 100%;
-        margin: 0 !important;
+        margin: 0 auto!important;
         padding: 0px;
         background-color: #ffffff;
     }

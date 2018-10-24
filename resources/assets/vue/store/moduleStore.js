@@ -13,7 +13,6 @@ import imageService from '../services/image';
 const state = {
   module: {},
   currentComponent: {},
-  activeColumn: 0,
   buildingMode: 'desktop',
   showRaw: false,
   changeSettingComponent: {
@@ -24,6 +23,19 @@ const state = {
   secondaryLoading: false,
 };
 
+const getElement = (module, elementId) => {
+  let component;
+  _.forEach(module.structure.columns, (column) => {
+    _.forEach(column.components, (CurrentComponent) => {
+      if (CurrentComponent.id === elementId) {
+        component = CurrentComponent;
+        return false;
+      }
+    });
+    return !component;
+  });
+  return component;
+};
 const searchOrCreateLevel = (data, keys) => {
   let subData = data;
   for (let i = 0; i < keys.length - 1; i++) {
@@ -47,9 +59,6 @@ const getters = {
   },
   changeSettingComponent(state) {
     return state.changeSettingComponent;
-  },
-  activeColumn(state) {
-    return state.activeColumn;
   },
   buildingMode(state) {
     return state.buildingMode;
@@ -144,7 +153,15 @@ const mutations = {
     }
     _.merge(pluginData, payload.config);
   },
+  setPluginElementConfig(state, { componentId, plugin, path, value }) {
+    const component = getElement(state.module, componentId);
+    const pluginData = component.plugins[plugin];
+    const pathArray = _.concat(['config'], path ? path.split('.') : []);
+    const pluginOption = searchOrCreateLevel(pluginData, pathArray);
+    Vue.set(pluginOption.data, pluginOption.property, value);
+  },
   setPluginComponentConfig(state, data) {
+    // DEPRECATE
     const plugin = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin];
     const path = _.concat(['config'], data.path ? data.path.split('.') : []);
     const pluginOption = searchOrCreateLevel(plugin, path);
@@ -183,9 +200,6 @@ const mutations = {
     const subComponent = data.subComponent ? component[data.subComponent] : component;
     const properties = data.link ? subComponent[data.link] : subComponent;
     Vue.set(properties, data.property, data.value);
-  },
-  setActiveColumn(state, columnId) {
-    state.activeColumn = columnId;
   },
   setBuildingMode(state, mode) {
     state.buildingMode = mode;

@@ -8,8 +8,8 @@
               <b-collapse :id="item.name" class="content-collapse">
                   <div v-for="(subitem, j) in item.sub_menu" :key="j">
                     <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd" v-if="!subitem.mandatory">
-                      <group-container  @click="addModuleByName(subitem.name, 'subitem')" :clickeable="true">
-                        <settings-container :label="subitem.name" customClass="draggable-item" :module-id="subitem.name" :module-type="'subitem'" >
+                      <group-container  @click="addModuleByKey(subitem.key, 'subitem')" :clickeable="true">
+                        <settings-container :label="subitem.name" customClass="draggable-item" :module-id="subitem.key" :module-type="'subitem'" >
                           <template slot="setting-right">
                             <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
                           </template>
@@ -20,8 +20,8 @@
               </b-collapse>
           </div>
         <draggable v-else-if="!item.mandatory"  :element="'div'" :options="options" @clone="onClone" @end="onEnd">
-            <group-container @click="addModuleByName(item.name, 'item')" :clickeable="true">
-              <settings-container :label="item.name" customClass="draggable-item" :module-id="item.name" :module-type="'item'" >
+            <group-container @click="addModuleByKey(item.key, 'item')" :clickeable="true">
+              <settings-container :label="item.name" customClass="draggable-item" :module-id="item.key" :module-type="'item'" >
                 <template slot="setting-right">
                   <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
                 </template>
@@ -132,8 +132,8 @@
       getLibrary() {
         return this.$store.dispatch("library/getModulesData", this.libraryId);
       },
-      addModuleByName(moduleName, moduleType) {
-        const found = this.findModule(moduleName, moduleType);
+      addModuleByKey(moduleKey, moduleType) {
+        const found = this.findModule(moduleKey, moduleType);
         const mod = clone(found);
 
         this.addModule(mod);
@@ -166,10 +166,10 @@
       },
       onClone(evt) {
         let cloneEl = evt.clone;
-        let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
+        let moduleKey = $(cloneEl).find('.draggable-item').attr('module-id');
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
 
-        const found = this.findModule(moduleName, moduleType);
+        const found = this.findModule(moduleKey, moduleType);
         const mod = clone(found);
         mod.data = {};
         // Hack to handle draggable element and re-bind click to addModule method after drag & drop

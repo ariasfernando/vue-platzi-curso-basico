@@ -36,6 +36,17 @@
           @click="changeTarget(option)" />
       </template>
     </settings-container>
+
+    <settings-container label="Title" v-if="plugin.config.title" key="title">
+      <template slot="setting-bottom">
+        <el-input
+          name="title"
+          type="text"
+          size="mini"
+          placeholder="Title"
+          v-model="title"></el-input>
+      </template>
+    </settings-container>
   </div>
 </template>
 
@@ -61,12 +72,23 @@
           this.saveAttributeInThisElement({ property: 'href', value });
         },
       },
+      title: {
+        get() {
+          return this.component[this.plugin.subComponent].attribute.title;
+        },
+        set(value) {
+          this.saveAttributeInThisElement('title', value);
+        },
+      },
       validationRules() {
         const rules = [];
-        _.each(this.plugin.config.validations, (e, i) => {
-          if (e) {
+        _.each(this.plugin.config.validations, (e,i) => {
+          if (e === true) {
             rules.push(i);
+          } else if(typeof e == 'object' && e.selected !== 'disabled'){
+            rules.push(e.selected);
           }
+           
         });
         return rules.join('|');
       },

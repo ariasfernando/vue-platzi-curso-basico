@@ -200,11 +200,11 @@
     methods: {
       onAdd(e) {
         let cloneEl = e.clone;
-        let moduleName = $(cloneEl).find('.draggable-item').attr('module-id');
+        let moduleKey = $(cloneEl).find('.draggable-item').attr('module-id');
         let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
 
         // Find module in items by type: item or subitem
-        const found = this.findModule(moduleName, moduleType);
+        const found = this.findModule(moduleKey, moduleType);
         const mod = clone(found);
         this.addModule(mod, e.newIndex);
 
@@ -389,7 +389,7 @@
   .st-email-body{
     width:100% !important;
     -webkit-text-size-adjust: 100%;
-    margin: 0 !important;
+    margin: 0 auto!important;
     padding: 0px;
     background-color: #000000;
   }
@@ -490,6 +490,10 @@
           text-align: center;
         }
       }
+    }
+    .stx-wrapper {
+      display: contents;
+      width: 100%;
     }
   }
 

@@ -1,13 +1,13 @@
 <template>
-    <b-btn block class="label-item-container" :class="customClass || undefined" :style="{'cursor': collapsable !== false ? 'pointer' : 'default'}">
-      <p><i :class="`glyphicon ${icon}`"></i><span>{{label}}</span></p>
-      <i v-if="collapsable !== false" class="glyphicon glyphicon-menu-down menu-dropdown"></i>
-    </b-btn>
+  <b-btn block class="label-item-container" :class="customClass || undefined" :style="{'cursor': collapsable !== false ? 'pointer' : 'default'}">
+    <p><i :class="`glyphicon ${icon}`" /><span>{{ label }}</span></p>
+    <i v-if="collapsable !== false" class="glyphicon glyphicon-menu-down menu-dropdown" />
+  </b-btn>
 </template>
 <script>
 export default {
-  name: "LabelItemContainer",
-  props: ["customClass", "icon", "label", "collapsable"]
+  name: 'LabelItemContainer',
+  props: ['customClass', 'icon', 'label', 'collapsable']
 };
 </script>
 <style lang="less" scoped>
@@ -19,7 +19,8 @@ export default {
   border-left: 0;
   border-right: 0;
   padding: 15px 10px 13px 10px;
-  p,i{
+  p,
+  i {
     transition: color 0.3s, transform 0.3s;
   }
   p {
@@ -33,8 +34,7 @@ export default {
     width: 230px;
     text-align: left;
     white-space: normal;
-
-    span{
+    span {
       width: 210px;
       float: left;
       margin-top: -2px;
@@ -44,8 +44,8 @@ export default {
   i {
     color: #666;
     vertical-align: baseline !important;
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
     margin-right: 6px;
     line-height: 12px !important;
     float: left;
@@ -56,7 +56,8 @@ export default {
       color: #969595;
     }
     i.glyphicon-menu-down {
-      transform: rotate(180deg);
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
     }
   }
   &:focus,

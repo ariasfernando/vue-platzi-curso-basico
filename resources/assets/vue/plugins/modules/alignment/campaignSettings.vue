@@ -33,7 +33,11 @@ export default {
         return this.element[this.plugin.subComponent].attribute.align;
       },
       set(value) {
+        const { type, behaviour } = this.element;
         this.saveAttributeInThisElement({ property: 'align', value });
+        if (type === 'button-element' && behaviour === 'text') {
+          this.saveAttributeInThisElement({ subComponent: 'button', property: 'align', value });
+        }
       },
     },
   },

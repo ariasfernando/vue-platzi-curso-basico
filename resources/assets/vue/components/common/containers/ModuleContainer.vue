@@ -3,7 +3,7 @@
       :data-type="component.type"
       :component-id="component.id"
       :class="getMobileClasses(component,'tr')"
-      @click.prevent="clickOnComponent"
+      @mousedown="clickOnComponent"
       v-if="component.container.styleOption.enableElement !== false"
     >
       <td
