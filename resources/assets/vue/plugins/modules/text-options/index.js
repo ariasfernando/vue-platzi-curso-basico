@@ -124,6 +124,10 @@ module.exports = {
           url: 'Validate Format',
           urlAndDestination: 'Format and Destination',
         },
+        dependsOn: {
+          config: 'options',
+          name: 'link',
+        },
         content: 'disabled',
       },
       truncate: {
