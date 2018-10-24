@@ -48,7 +48,7 @@ class TinymceTextOptionsDataToJson extends Migration
         if ($data === "0" || $data === 0 || $data === "") {
             return $data;
         }
-        if (is_array($data) && $data[0] === "") {
+        if (is_array($data) && empty($data) || $data[0] === "") {
             return "";
         }
 
@@ -93,7 +93,7 @@ class TinymceTextOptionsDataToJson extends Migration
         if ($data === "0" || $data === 0 || $data === "") {
             return $data;
         }
-        if (is_array($data) && $data[0] === "") {
+        if (is_array($data) && empty($data) || $data[0] === "") {
             return "";
         }
 
