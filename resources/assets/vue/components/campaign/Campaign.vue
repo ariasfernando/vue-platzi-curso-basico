@@ -27,11 +27,11 @@
       <column-bar-container side="right">
         <scrollbar-container>
           <div>
-            <module-settings v-if="showModuleSettings"></module-settings>
-            <module-background-settings></module-background-settings>
-            <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
-            <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
-            <shadow-render></shadow-render>
+            <module-settings v-if="showModuleSettings" />
+            <module-background-settings />
+            <component-settings />
+            <custom-module-settings v-if="currentCustomModule" />
+            <shadow-render />
           </div>
         </scrollbar-container>
       </column-bar-container>

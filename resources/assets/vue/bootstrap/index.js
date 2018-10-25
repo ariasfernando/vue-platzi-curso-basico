@@ -153,7 +153,7 @@ export default {
     if (customer.plugins) {
       _.merge(plugins, customer.plugins);
     }
-    
+
     this.Vue.prototype.$_app.modulePlugins = plugins.modules;
     this.Vue.prototype.$_app.globalComponents = plugins.common;
 

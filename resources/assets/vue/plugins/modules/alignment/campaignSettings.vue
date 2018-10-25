@@ -1,80 +1,54 @@
 <template>
-    <settings-container :label="plugin.title" v-if="component">
-      <template slot="setting-right">
-        <el-button
-          v-for="option in options"
-          plain
-          size="mini"
-          @click="changeAlignment(option)"
-          :class="[`fa fa-align-${option}`,{ active: value === option }]"
-          :data-tooltip="option"
-          :key="option"
-        ></el-button>
-      </template>
-    </settings-container>
+  <settings-container :label="plugin.title">
+    <template slot="setting-right">
+      <el-button
+        v-for="option in options"
+        :key="option"
+        plain
+        size="mini"
+        :class="[`fa fa-align-${option}`,{ active: value === option }]"
+        :data-tooltip="option"
+        @click="changeAlignment(option)" />
+    </template>
+  </settings-container>
 </template>
 
 <script>
-  import _ from 'lodash';
-import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
-  export default {
-    props: ['name', 'plugin'],
-    components: { SettingsContainer },
-    data() {
-      return {
-        options: this.plugin.config.options
-      }
-    },
-    computed: {
-      currentComponent() {
-        return this.$store.getters["campaign/currentComponent"];
-      },
-      component() {
-        let component = {};
-        if (Object.keys(this.currentComponent).length !== 0) {
-          const moduleId = this.currentComponent.moduleId;
-          const columnId = this.currentComponent.columnId;
-          const componentId = this.currentComponent.componentId;
+import pluginElementCampaignMixin from '../mixins/pluginElementCampaignMixin';
+import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
-          component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
-        }
-        return component;
+export default {
+  components: { SettingsContainer },
+  mixins: [pluginGenericCampaignMixin, pluginElementCampaignMixin],
+  props: ['name', 'plugin'],
+  data() {
+    return {
+      options: this.plugin.config.options,
+    };
+  },
+  computed: {
+    value: {
+      get() {
+        return this.element[this.plugin.subComponent].attribute.align;
       },
-      value: {
-        get() {
-          return this.component[this.plugin.subComponent].attribute.align;
-        },
-        set(value) {
-          const { type, behaviour } = this.component;
-          const payload = {
-              moduleId: this.currentComponent.moduleId,
-              columnId: this.currentComponent.columnId,
-              componentId: this.currentComponent.componentId,
-              subComponent: this.plugin.subComponent,
-              link: "attribute",
-              property: "align",
-              value: value
-            };
-
-          if(type == 'button-element' && behaviour == 'text'){
-            const textAlignPayload = Object.assign({}, payload);
-            textAlignPayload.subComponent = 'button';
-            this.$store.commit('campaign/saveComponentProperty', textAlignPayload);
-          }
-            
-          this.$store.commit('campaign/saveComponentProperty', payload);
+      set(value) {
+        const { type, behaviour } = this.element;
+        this.saveAttributeInThisElement({ property: 'align', value });
+        if (type === 'button-element' && behaviour === 'text') {
+          this.saveAttributeInThisElement({ subComponent: 'button', property: 'align', value });
         }
       },
     },
-    methods: {
-      changeAlignment(option) {
-        this.value = option;
-      },
+  },
+  methods: {
+    changeAlignment(option) {
+      this.value = option;
     },
-  }
-
+  },
+};
 </script>
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 .el-button:focus,
 .el-button:hover {
   color: inherit;
@@ -86,7 +60,7 @@ import SettingsContainer from "../../../components/common/settings/containers/Se
   border-color: rgb(120, 220, 214);
   background-color: rgb(120, 220, 214);
 
-  &:before{
+  &:before {
     color: #ffffff;
   }
 }
@@ -101,7 +75,7 @@ import SettingsContainer from "../../../components/common/settings/containers/Se
   border-radius: 0px;
   border-right: none;
 
-  &:before{
+  &:before {
     color: #999999;
   }
 
@@ -119,15 +93,15 @@ import SettingsContainer from "../../../components/common/settings/containers/Se
 }
 .el-button:first-child:nth-last-child(2),
 .el-button:first-child:nth-last-child(2) ~ button {
-    width: 50%;
+  width: 50%;
 }
 .el-button:first-child:nth-last-child(3),
 .el-button:first-child:nth-last-child(3) ~ button {
-    width: 33%;
+  width: 33%;
 }
 .el-button:first-child:nth-last-child(4),
-.el-button:first-child:nth-last-child(4) ~ button{
-    width: 25%;
+.el-button:first-child:nth-last-child(4) ~ button {
+  width: 25%;
 }
 .padding-zero {
   padding: 0;

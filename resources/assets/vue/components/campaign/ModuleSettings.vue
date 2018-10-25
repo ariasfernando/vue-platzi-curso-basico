@@ -13,7 +13,7 @@
           :plugin="plugin"
           :module="module"
           :module-id="currentModule"
-          :plugin-key="pluginKey"></component>
+          :plugin-key="pluginKey" />
         </group-container>
     </div>
     </template>
@@ -54,7 +54,7 @@
     <template
       v-for="(plugin, pluginKey) in module.plugins" :
       v-if="plugin.enabled && $_app.modulePlugins[pluginKey] && plugin.render === false && !plugin.runBackground">
-      <component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${pluginKey}`"></component>
+      <component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${pluginKey}`" :module="module"></component>
     </template>
     <template v-for="(column, columnKey) in module.structure.columns">
       <template

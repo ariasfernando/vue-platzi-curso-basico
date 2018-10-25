@@ -204,7 +204,7 @@
     },
     methods: {
       changeTags(values) {
-        let tags = [];
+        const tags = [];
         for (let n = 0; n < values.length; n++) {
           if (values[n].match(/[^a-z0-9-_]+/i)) {
             this.$root.$toast('Only alphanumeric characters, hyphens and underscores are allowed.', {className: 'et-error'});
@@ -215,7 +215,7 @@
         this.form.tags = tags;
         this.$store.commit('campaign/saveSetting', {
           name: 'tags',
-          value: tags
+          value: tags,
         });
       },
       validate() {

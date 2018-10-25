@@ -1,22 +1,41 @@
 <template>
-  <div v-if="showComponentSettings">
+  <div>
     <label-item-container
-      :label="toCamel(component.type.replace('-element', ''))"
+      v-if="showCurrentSettings"
+      :label="toCamel(currentElement.type.replace('-element', ''))"
       icon="glyphicon-tasks"
       :collapsable="false"
     ></label-item-container>
-    <div class="card">
-      <group-container>
-        <div v-for="(plugin, key) in component.plugins" :class="'plugin-' + plugin.name" :key="'plugin-' + plugin.name">
-          <component v-if="plugin.enabled && plugin.name !=='text-options'" :is="'campaign-' + plugin.name" :name="plugin.name" :plugin-key="key" :plugin="plugin"></component>
-        </div>
+    <div class="card card-custom" :class="{hidden: !showCurrentSettings}">
+      <group-container class="group-container-custom">
+        <template v-for="(module, moduleId) in modules" v-if="module.type === 'studio'">
+          <template v-for="(column, columnId) in module.structure.columns">
+            <template v-for="(component, componentId) in column.components">
+              <component
+                v-for="(plugin, pluginKey) in component.plugins"
+                v-if="isEnableOrRunBackground(plugin, pluginKey, getElementKey(module ,component))"
+                :is="'campaign-' + plugin.name"
+                :class="'plugin-' + plugin.name"
+                :element-key="getElementKey(module ,component)"
+                :element-location="{columnId, componentId ,moduleId}"
+                :element="component"
+                :module="module"
+                :current-element-key="currentElementKey"
+                :name="plugin.name"
+                :plugin-key="pluginKey"
+                :plugin="plugin"
+                :key="`${getElementKey(module ,component)}-plugin-${plugin.name}`"
+              ></component>
+            </template>
+          </template>
+        </template>
       </group-container>
     </div>
   </div>
 </template>
 
 <script>
-  import _ from 'lodash'
+import _ from 'lodash'
 import GroupContainer from "../common/containers/GroupContainer.vue";
 import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
 
@@ -31,73 +50,62 @@ import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
       }
     },
     computed: {
+      modules() {
+        return this.$store.getters["campaign/modules"];
+      },
       currentComponent() {
-        return this.$store.getters["campaign/currentComponent"];
+        return this.$store.getters["campaign/currentComponent"]
       },
-      component() {
-        let component = {};
-        this.ready = false;
-
+      currentElement() {
         if (Object.keys(this.currentComponent).length !== 0) {
-
-          const modules = this.$store.getters["campaign/modules"];
-
-          if (modules.length !== 0) {
-            const moduleId = this.currentComponent.moduleId;
-            const columnId = this.currentComponent.columnId;
-            const componentId = this.currentComponent.componentId;
-
-            if (!modules[moduleId]) {
-              return component;
-            }
-
-            if ( _.has(this.$store.getters["campaign/modules"][moduleId], 'structure') && this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId]){
-              component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
-            }
-
-            if (component) {
-              _.each(component.plugins, (plugin) => {
-                if (plugin.enabled && plugin.render !== false) {
-                  this.ready = true;
-                }
-              });
-            }
-          }
+          const moduleId = this.currentComponent.moduleId;
+          const columnId = this.currentComponent.columnId;
+          const componentId = this.currentComponent.componentId;
+          return this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId]
         }
-        return component;
+        return;
       },
-
-      showComponentSettings() {
-        let ready = false;
-        _.each(this.component.plugins, (plugin) => {
-          if (plugin.enabled && plugin.render !== false) {
-            ready = true;
-          }
-        });
-        return ready;
+      currentElementKey() {
+        return this.currentElement ? `${this.modules[this.currentComponent.moduleId].idInstance}-${this.currentElement.id}` : undefined;
+      },
+      showModuleSettings() {
+        return this.$store.getters["campaign/showModuleSettings"];
+      },
+      showCurrentSettings() {
+        let show = false
+        if (this.currentElement) {
+          _.each(this.currentElement.plugins, (plugin, pluginKey) => {
+            if (plugin.enabled && plugin.render !== false && this.$_app.modulePlugins[pluginKey].hasCampaignSettings) {
+              show = true;
+            }
+          });
+        }
+        return show;
       },
     },
     methods: {
       toCamel(str) {
         return _.startCase(str);
       },
-      saveComponent() {
-        this.$store.commit('campaign/saveComponent', {
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          component: this.component
-        });
+      isEnableOrRunBackground(plugin, pluginKey, elementKey) {
+        const hasCampaignSettings = this.$_app.modulePlugins[pluginKey].hasCampaignSettings
+        return plugin.enabled && hasCampaignSettings && ( this.currentElementKey === elementKey || plugin.runBackground)
       },
-      unsetCustomModule() {
-        this.$store.commit("campaign/setCustomModule", undefined);
-      }
+      getElementKey(module, element) {
+        return `${module.idInstance}-${element.id}`;
+      },
     }
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .vue-js-switch {
     margin-top: 4px
   }
+  .card-custom {
+    padding-bottom: 0;
+  }
+  .group-container-custom {
+    margin: 5px 0 15px;
+}
 </style>

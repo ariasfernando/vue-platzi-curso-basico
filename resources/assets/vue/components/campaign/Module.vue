@@ -7,6 +7,7 @@
   >
     <td class="stx-toolbar-content stx-position-relative"
         :data-module-id="moduleId"
+        :module-id-instance="module.idInstance"
         :class="{ 'stx-show-error': hasErrors }"
         @click.prevent="config"
         :width="moduleWidth"
@@ -31,6 +32,7 @@
     <td
       class="stx-toolbar-content stx-position-relative"
       :data-module-id="moduleId"
+      :module-id-instance="module.idInstance"
       :background="modulebackgroundImage"
       :width="module.structure.attribute.width || '100%'"
       :height="module.structure.attribute.height"
@@ -157,7 +159,7 @@
   import ColumnsStackedRender from './partials/ColumnsStackedRender.vue';
   import ColumnsFixedRender from './partials/ColumnsFixedRender.vue';
   import ColumnsInvertedStackingRender from './partials/ColumnsInvertedStackingRender.vue';
-  import validatorMixin from '../../plugins/modules/mixins/validator.js';
+  import validatorMixin from '../../plugins/modules/mixins/validatorMixin.js';
   import ElementMixin from '../common/mixins/ElementMixin.js';
   import BackgroundImage from '../common/BackgroundImage';
   import _ from 'lodash';
@@ -167,17 +169,7 @@
     props: ['moduleId'],
     mixins: [ ElementMixin, validatorMixin ],
     created() {
-      if(this.module.type === 'studio'
-          && ((this.module.structure && this.module.structure.columns && this.module.structure.columns.length > 1)
-              || (this.module.structure && this.module.structure.columns && this.module.structure.columns.length === 1
-                  && this.module.structure.columns[0].components.length > 1)
-            )
-        ) {
-        // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
-        // so we need to check a flag to aid the user to open each module and run the validations at least once
-        this.registerStudioModuleDefaultValidationErrors(this.moduleId);
-      }
-      else if(this.module.type === 'custom') {
+      if (this.module.type === 'custom') {
         this.$store.commit('campaign/clearErrorsByModuleId', this.moduleId);
         this.registerCustomModuleDefaultValidationErrors(this.moduleId);
       }
