@@ -35,18 +35,27 @@
 			)) !!}
 		</div>
 
-		<!-- Select Role -->
-		<div class="modal-mpf-row selector">
-			<label>Select Role</label>
-			{!! Form::select('roles', $params['roles'], (isset($params['user']['roles']))? $params['user']['roles'] : '',array (
-				'class' => 'form-control selectpicker roles-list',
-				'id' => 'roles',
-				'name' => 'roles[]',
-				'multiple' => 'true',
-				'title' => '',
-				'data-validation' => '{"required":"true"}'
-			)); !!}
-		</div>
+		@if (Auth::user()->can('allows_role_change'))
+			<!-- Select Role -->
+			<div class="modal-mpf-row selector">
+				<label>Select Role</label>
+				{!!
+					Form::select(
+						'roles',
+						$params['roles'],
+						isset($params['user']['roles']) ? $params['user']['roles'] : '',
+						[
+							'class' => 'form-control selectpicker roles-list',
+							'id' => 'roles',
+							'name' => 'roles[]',
+							'multiple' => 'true',
+							'title' => '',
+							'data-validation' => '{"required":"true"}'
+						]
+					);
+				!!}
+			</div>
+		@endif
 
 		<!-- Input submit  -->
 		<div class="modal-mpf-submit">

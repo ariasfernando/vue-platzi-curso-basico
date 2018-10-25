@@ -25,15 +25,19 @@ function Library(data = {}) {
     linkDecoration: config.linkDecoration || 'underline',
     externalCssLink: config.externalCssLink || '',
     propietaryCss: config.propietaryCss || '',
+    prependHtml: config.prependHtml || '',
+    appendHtml: config.appendHtml || '',
     fixedModules: config.fixedModules || '',
     padding: config.padding || '',
     esp: config.esp || false,
     espProvider: config.espProvider || false,
     plainText: config.plainText || false,
     preheader: config.preheader || false,
+    preheaderDefault: config.preheaderDefault || '',
     tracking: config.tracking || false,
     tagging: config.tagging || false,
     templating: config.templating || false,
+    htmlToPdf: config.htmlToPdf || false,
   };
 
   const groups = [];

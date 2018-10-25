@@ -191,7 +191,7 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
-      this.form.campaignPreheader = this.campaign.campaign_preheader || '';
+      this.form.campaignPreheader =  this.campaign.campaign_preheader || '';
 
       this.loadConfig();
     },
@@ -220,14 +220,15 @@
       },
       validate() {
         this.$validator.validateAll().then(() => {
-          if (this.$validator.errors.items.length) {
-            _.each(this.$validator.errors.items, (err) => {
+          const errorItems = _.cloneDeep(this.$validator.errors.items);
+          if (errorItems.length) {
+            _.each(errorItems, (err) => {
               _.extend(err, {
                 scope: '',
               });
             });
 
-            this.$store.dispatch('campaign/addErrors', this.$validator.errors.items);
+            this.$store.dispatch('campaign/addErrors', errorItems);
           } else {
             this.$store.commit('campaign/clearErrorsByScope', '');
           }

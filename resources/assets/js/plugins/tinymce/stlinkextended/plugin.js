@@ -449,7 +449,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 }
 
                 // Validate the inserted url
-                if (editor.settings.link_validate_url) {
+                if (editor.settings.link_validate_url !== 'disabled') {
                     var matches = [];
 
                     if (editor.settings.tag_list) {
@@ -457,9 +457,10 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                             return tag.value == win.find('#href').value();
                         });
                     }
-
                     // Validate only urls
-                    if (!matches.length && !validateUrl(href)) {
+                    if ((editor.settings.link_validate_url === 'url' || editor.settings.link_validate_url === 'urlAndDestination')
+                        && !matches.length 
+                        && !validateUrl(href)) {
                         var errorMessage = 'Entered URL is invalid or incomplete.';
                         if (Application.utils.validate.messages.url){
                             errorMessage = Application.utils.validate.messages.url;
@@ -472,7 +473,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     }
 
                     // validateUrlExists
-                    if(Application.globals.validateUrlExists) {
+                    if(Application.globals.validateUrlExists && editor.settings.link_validate_url === 'urlAndDestination') {
                         var $input = $('.mce-link-input .mce-textbox');
                         var urlValidated = false;
                         var dataUrlValidated = $input.data("url-validated")

@@ -80,4 +80,7 @@ export default {
     margin-right: 5px;
   }
 }
+.el-select-dropdown__item.selected{
+  color: #78dcd6!important;
+}
 </style>

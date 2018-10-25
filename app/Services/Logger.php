@@ -3,6 +3,7 @@
 namespace Stensul\Services;
 
 use Auth;
+use App;
 use Log as FileLog;
 use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\BSON\UTCDateTime;
@@ -56,10 +57,12 @@ class Logger
             ->where('properties.user_id', new ObjectID($user_id))
             ->first();
 
+        $ip = request()->ip() ? request()->ip() : 'NA';
+        $user_agent =  request()->header('User-Agent') ? request()->header('User-Agent') :'NA';
         $params = [
             'description' => 'Campaign Edit Spent Time',
-            'ip' => 'NA',
-            'user_agent' => 'NA',
+            'ip' => $ip,
+            'user_agent' => $user_agent,
             'controller' => 'CampaignController',
             'action' => 'getEdit',
             'properties' => [
@@ -81,9 +84,10 @@ class Logger
      * @param string $campaign_id
      * @param string $user_id
      * @param string $stage start|finish
+     * @param boolean $start Force start, used when editing a finished campaign.
      * @return void
      */
-    public static function logCampaignProcessTime($campaign_id, $user_id = null)
+    public static function logCampaignProcessTime($campaign_id, $user_id = null, $start = false)
     {
         $log = DBLog::where('description', 'Campaign Process Spent Time')
             ->where('properties.campaign_id', new ObjectID($campaign_id))
@@ -112,10 +116,15 @@ class Logger
 
         $properties = $log->properties;
 
-        $properties['finish'] = $date;
-        $properties['elapsed'] = ((int) $date->__toString() - (int) $log->properties['start']->__toString()) / 1000;
-        $log->properties = $properties;
+        if ($start) {
+            $properties['start'] = $date;
+            $properties['finish'] = null;
+        } else {
+            $properties['finish'] = $date;
+            $properties['elapsed'] = ((int) $date->__toString() - (int) $log->properties['start']->__toString()) / 1000;
+        }
 
+        $log->properties = $properties;
         $log->save();
 
         return $log;

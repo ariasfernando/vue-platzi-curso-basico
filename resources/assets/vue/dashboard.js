@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource/dist/vue-resource';
 import Toast from 'vue-easy-toast';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import locale from 'element-ui/lib/locale/lang/en';
 import BootstrapVue from 'bootstrap-vue';
 import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
@@ -21,6 +24,7 @@ Vue.use(Toast, {
 });
 Vue.use(BootstrapVue);
 Vue.use(interceptors);
+Vue.use(ElementUI, { locale });
 
 window.vm = new Vue({
   store,

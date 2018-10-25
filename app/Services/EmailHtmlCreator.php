@@ -192,6 +192,45 @@ class EmailHtmlCreator
     }
 
     /**
+     * Replace images url from img tag.
+     *
+     * @return \Illuminate\View\View|string
+     */
+    public  function replaceBackgroundImageTag($body = null)
+    {
+        $matches = $this->backgroundImagesRegex($body);
+        $cdn_path = $this->getCampaign()->getCdnPath(true);
+
+        if ($matches) {
+            $ignored_image_domains = config('campaign.ignored_image_domains', []);
+
+            foreach ($matches as $match) {
+                $url = trim($match[2]);
+
+                if ($ignored_image_domains) {
+                    // If we need to ignore certain domains, we will need to check each image against them.
+                    foreach ($ignored_image_domains as $i) {
+                        if (strpos($url, $i) !== false) {
+                            continue 2;
+                        }
+                    }
+                }
+
+                // get the image basename
+                $basename = basename(parse_url($url, PHP_URL_PATH));
+
+                // append cdn prefix
+                $cdn_url = rtrim($cdn_path, DS).DS.'images'.DS.$basename;
+
+                // replace the url in body 
+                $body = str_replace($url, $cdn_url, $body);
+            }
+        }
+
+        return $body;
+    }
+
+    /**
      * Replace images url from outlook image tag.
      *
      * @return \Illuminate\View\View|string
@@ -271,6 +310,7 @@ class EmailHtmlCreator
         $body = $this->body;
 
         $body = $this->replaceImageTagSrc($body);
+        $body = $this->replaceBackgroundImageTag($body);
         $body = $this->replaceImageOutlookSrc($body);
         $body = $this->replaceImageCssUrl($body);
 
@@ -288,6 +328,21 @@ class EmailHtmlCreator
             $body = $this->body;
         }
         $regexp = "<img\s[^>]*src=([\"\']??)([^\" >]*?)\\1[^>]*>";
+        preg_match_all("/$regexp/siU", $body, $matches, PREG_SET_ORDER);
+        return $matches;
+    }
+
+    /**
+     * Create a regex for search background images in the campaign body
+     *
+     * @return array
+     */
+    public function backgroundImagesRegex($body = null)
+    {
+        if (is_null($body)) {
+            $body = $this->body;
+        }
+        $regexp = "<td\s[^>]*background=([\"\']??)([^\" >]*?)\\1[^>]*>";
         preg_match_all("/$regexp/siU", $body, $matches, PREG_SET_ORDER);
         return $matches;
     }
