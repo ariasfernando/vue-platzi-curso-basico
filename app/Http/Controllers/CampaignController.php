@@ -4,6 +4,7 @@ namespace Stensul\Http\Controllers;
 
 use Auth;
 use Cache;
+use Stensul\Http\Requests\Campaign\PostLockRequest;
 use StensulLocale;
 use Activity;
 use Campaign;
@@ -452,7 +453,7 @@ class CampaignController extends Controller
      *
      * @return array
      */
-    public function postLock(Request $request)
+    public function postLock(PostLockRequest $request)
     {
         return Campaign::lock($request->input('campaign_id'), $request->input('window_id'));
     }
