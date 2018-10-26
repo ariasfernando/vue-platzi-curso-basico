@@ -93,13 +93,24 @@
                   :min="0"
                   :name="key"
                   @change="(value)=>changeSetting(value, key)" />
+                <el-select
+                  v-else-if="tinySetting.type === 'select'"
+                  size="mini"
+                  :value="tinySetting.content"
+                  @change="(value) => changeSetting(value, key)">
+                  <el-option
+                    v-for="(opt, optKey) in tinySetting.options"
+                    :key="optKey"
+                    :value="optKey"
+                    :label="opt" />
+                </el-select>
                 <el-input
                   v-else-if="tinySetting.type === 'text'"
                   v-b-tooltip.hover
                   size="mini"
                   :title="key"
                   :name="key"
-                  :value="tinySettingContent(tinySetting.content)"
+                  :value="tinySetting.content || 0"
                   @change="(value)=>changeSetting(value, key)" />
                 <component
                   :is="tinySetting.type"
@@ -223,7 +234,9 @@ export default {
         plugin: this.name,
         componentId: this.element.id,
         path: `settings.${settingName}.content`,
-        value: Application.utils.isJsonString(value) ? JSON.parse(value) : value,
+        value: Application.utils.isJsonString(value)
+          ? JSON.parse(value)
+          : value,
       };
       this.$store.commit('module/setPluginElementConfig', payload);
     },

@@ -13,6 +13,8 @@ use RoleModel as Role;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Stensul\Http\Middleware\AdminAuthenticate;
 use ModelKeyManager;
+use Validator;
+use Illuminate\Validation\Rule;
 
 class LibraryController extends Controller
 {
@@ -173,6 +175,10 @@ class LibraryController extends Controller
         $library->config = $request->input("config");
         $library->modules = $request->input('modules');
 
+        $request->validate([
+            'name' => ['required', 'max:255', $this->libraryUniqueValidator($request->input('libraryId'))],
+        ]);
+
         if (is_null($library->config)) {
             return array("message" => "ERROR_CONFIG");
         }
@@ -194,11 +200,16 @@ class LibraryController extends Controller
 
     /**
      * Library post create.
-     *
+     * @throws \Illuminate\Validation\ValidationException
      * @return Boolean
      */
     public function postCreate(Request $request)
     {
+
+        $request->validate([
+            'name' => ['required', 'max:255', $this->libraryUniqueValidator($request->input('libraryId'))],
+        ]);
+
         $params = [
             "name" => $request->input("name"),
             "key" => ModelKeyManager::getStandardKey(new Library, $request->input('name')),
@@ -207,9 +218,6 @@ class LibraryController extends Controller
             "modules" => $request->input('modules')
         ];
 
-        if (Library::where('name', '=', $params['key'])->exists()) {
-            $response_message = array("message"=> "ERROR_EXISTS");
-        } else {
             // Create permission to have access to the new library
             $permission_params = [
                 "name" => "access_library_" . $params['key'],
@@ -232,7 +240,7 @@ class LibraryController extends Controller
 
                 $response_message = array("message"=> "SUCCESS");
             }
-        }
+
 
         return $response_message;
     }
@@ -266,5 +274,19 @@ class LibraryController extends Controller
     {
         $providers = config('esp');
         return $providers;
+    }
+
+    private function libraryUniqueValidator($id) {
+        $uniqueValidator = Rule::unique('libraries', 'name')->where(function ($query) {
+            return $query->where('deleted_at', null);
+        });
+
+        if ($id) {
+            $uniqueValidator = Rule::unique('libraries', 'name')->where(function ($query) {
+                return $query->where('deleted_at', null);
+            })->ignore($id, '_id');
+        }
+        
+        return $uniqueValidator;
     }
 }

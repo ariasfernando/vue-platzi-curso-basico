@@ -74,6 +74,24 @@ body.base-session {
 			color: @dropdown-link-color;
 			background: @beta-error;
 			border: none;
+
+			ul {
+				list-style: none;
+				padding-left: 0;
+			}
+
+			a {
+				font-size: 14px;
+				opacity: 0.7;
+				text-decoration: underline;
+				transition: all 0.3s linear;
+
+				&:hover {
+					color: #ffffff;
+					opacity: 1;
+				}
+			}
+
 		}
 
 		.alert {

@@ -10,6 +10,7 @@
   "license": "Propietary",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "bootstrap": "^3.3.7",
     "bootstrap-colorpicker": "2.5.2",
     "bootstrap-select": "^1.7.5",

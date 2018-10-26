@@ -124,8 +124,19 @@ module.exports = {
     },
     settings: {
       link_validate_url: {
-        title: 'Validate Url',
-        value: false,
+        title: 'Validate URL',
+        value: 'disabled',
+        type: 'select',
+        options: {
+          disabled: 'No Validation',
+          url: 'Validate Format',
+          urlAndDestination: 'Format and Destination',
+        },
+        dependsOn: {
+          config: 'options',
+          name: 'link',
+        },
+        content: 'disabled',
       },
       truncate: {
         title: 'Characters Limit',
