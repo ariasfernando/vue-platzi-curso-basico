@@ -36,7 +36,7 @@
         <component
           :is="'studio-' + plugin.name"
           v-for="(plugin, moduleKey) in module.plugins"
-          v-if="module.plugins && plugin.hasStudioSettings && $can('std-plugin-'+plugin.name)"
+          v-if="module.plugins && $_app.modulePlugins[moduleKey].hasStudioSettings && $can('std-plugin-'+plugin.name)"
           :key="plugin.name"
           :name="moduleKey"
           :plugin="plugin"

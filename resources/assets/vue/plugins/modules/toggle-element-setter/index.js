@@ -1,14 +1,13 @@
-const campaignSettings = require('./campaignSettings.vue');
+const studioSettings = require('./studioSettings.vue');
 
 module.exports = {
-  name: 'toggle-element',
+  name: 'toggle-element-setter',
   title: 'Toggle element',
   version: '0.0.1',
   author: 'facundo.garcia@stensul.com',
-  target: ['module'],
-  campaignSettings,
+  target: ['button', 'image', 'text', 'divider'],
+  studioSettings,
   config: {
-    defaultValue: false,
   },
   data: {
   },
