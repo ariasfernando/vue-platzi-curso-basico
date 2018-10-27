@@ -50,7 +50,7 @@
         <component
           :is="'studio-' + plugin.name"
           v-for="(plugin, key) in component.plugins"
-          v-if="plugin.name !== 'studio-mobile-styles' && $can('std-'+component.type+'-plugin-'+plugin.name)"
+          v-if="plugin.name !== 'studio-mobile-styles' && $can('std-'+component.type+'-plugin-'+plugin.name) && $_app.modulePlugins[key].hasStudioSettings"
           :key="key"
           :element="component"
           :class="'plugin-' + plugin.name"
