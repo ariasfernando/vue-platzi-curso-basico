@@ -3,7 +3,7 @@
     <label-item-container v-b-toggle.column-settings-styles :label="`Column ${currentComponent.columnId + 1} Style`" icon="glyphicon-pause" />
     <b-collapse id="column-settings-styles" visible accordion="general-settings">
       <b-card class="control" no-block>
-        <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-column_')" :key="groupKey">
           <component
             :is="'input-' + setting.type"
             v-for="setting in settingGroup.settings"
@@ -50,8 +50,11 @@ import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
 import settingsDefault from '../settingsDefault';
+import AclMixing from '../mixins/AclMixin';
+
 
 export default {
+  mixins: [AclMixing],
   components: {
     GroupContainer,
     LabelItemContainer,
