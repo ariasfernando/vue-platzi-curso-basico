@@ -15,7 +15,6 @@
           cellspacing="0"
           border="0"
           :width="buttonContainerWidth"
-          :height="component.button.attribute.height"
           :style="tableStyles"
           >
           <tr>
@@ -24,7 +23,7 @@
               :bgcolor="component.button.attribute.bgcolor"
               :height="component.button.attribute.height"
               style="vertical-align: middle; width:100%;"
-            :style="elementBorderAndPadding(this.component.button)"
+              :style="elementBorderPaddingAndHeight(this.component.button)"
             >
               <table
                 cellpadding="0"
@@ -41,7 +40,7 @@
                     :valign="component.button.attribute.valign || ''"
                     >
                     <tiny-mce
-                      :fontStyles="[fontStyles(component.button),{'display': 'inline-block !important'}, {'vertical-align': 'middle'}]"
+                      :fontStyles="fontStyles(component.button)"
                       :module="module"
                       :component="component"
                       :columnId="columnId"

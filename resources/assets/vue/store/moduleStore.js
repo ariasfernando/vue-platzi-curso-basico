@@ -36,6 +36,18 @@ const getElement = (module, elementId) => {
   });
   return component;
 };
+const getProperties = (element, data) => {
+  const subComponent = data.subComponent ? element[data.subComponent] : element;
+  return data.link ? subComponent[data.link] : subComponent;
+};
+
+const convertArrayToObject = (element, data) => {
+  const valueToConvert = data.subComponent !== undefined && data.link !== undefined ? element[data.subComponent] : element;
+  const lastPosition = data.link === undefined ? data.subComponent : data.link;
+  Vue.set(valueToConvert, lastPosition, {});
+  return valueToConvert[lastPosition];
+};
+
 const searchOrCreateLevel = (data, keys) => {
   let subData = data;
   for (let i = 0; i < keys.length - 1; i++) {
@@ -102,8 +114,11 @@ const mutations = {
   },
   saveModuleProperty(state, data) {
     const structure = state.module.structure;
-    const subComponent = data.subComponent ? structure[data.subComponent] : structure;
-    const properties = data.link ? subComponent[data.link] : subComponent;
+    let properties = getProperties(structure, data);
+    if (Array.isArray(properties) && isNaN(data.property)) {
+      // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
+      properties = convertArrayToObject(structure, data);
+    }
     Vue.set(properties, data.property, data.value);
   },
   saveModule(state, moduleId) {
@@ -126,7 +141,11 @@ const mutations = {
   },
   saveColumnProperty(state, data) {
     const column = state.module.structure.columns[data.colId];
-    const properties = data.subComponent ? column[data.subComponent][data.link] : column[data.link];
+    let properties = getProperties(column, data);
+    if (Array.isArray(properties) && isNaN(data.property)) {
+      // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
+      properties = convertArrayToObject(column, data);
+    }
     Vue.set(properties, data.property, data.value);
   },
   addComponent(state, data) {
@@ -203,8 +222,11 @@ const mutations = {
   },
   saveComponentProperty(state, data) {
     const component = state.module.structure.columns[data.columnId].components[data.componentId];
-    const subComponent = data.subComponent ? component[data.subComponent] : component;
-    const properties = data.link ? subComponent[data.link] : subComponent;
+    let properties = getProperties(component, data);
+    if (Array.isArray(properties) && isNaN(data.property)) {
+      // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
+      properties = convertArrayToObject(component, data);
+    }
     Vue.set(properties, data.property, data.value);
   },
   setBuildingMode(state, mode) {

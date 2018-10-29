@@ -11,8 +11,6 @@
           cellspacing="0"
           border="0"
           :width="buttonContainerWidth"
-          :height="component.button.attribute.height"
-          :bgcolor="component.button.attribute.bgcolor"
           :style="tableStyles"
         >
           <tr>
@@ -21,7 +19,7 @@
               :bgcolor="component.button.attribute.bgcolor"
               :height="component.button.attribute.height === 'auto' ? undefined : component.button.attribute.height"
               style="vertical-align: middle; width:100%;"
-              :style="elementBorderAndPadding(component.button)"
+              :style="elementBorderPaddingAndHeight(component.button)"
             >
               <table
                 cellpadding="0"
@@ -69,7 +67,6 @@
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
-  import MontedElementMixin from '../mixins/MontedElementMixin.js';
   import ModuleContainer from '../../common/containers/ModuleContainer';
 
   import _ from 'lodash';
@@ -81,7 +78,7 @@
       ComponentToolbar,
       ModuleContainer,
     },
-    mixins: [ MobileStylesMixin, ElementMixin, MontedElementMixin ],
+    mixins: [ MobileStylesMixin, ElementMixin],
     data(){
       return {
         editorId: ['editor', this.columnId, this.componentId].join('-')

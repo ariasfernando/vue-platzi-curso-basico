@@ -377,6 +377,6 @@ ol {
   height: calc(~'100vh - 102px');
 }
 #studio .module-container .scrollbar-container-inner {
-  padding: 20px;
+  padding: 20px 20px 100px;
 }
 </style>

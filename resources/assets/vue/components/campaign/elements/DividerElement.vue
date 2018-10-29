@@ -37,6 +37,7 @@
           height: this.component.divider.style.height,
           lineHeight: this.component.divider.style.height,
           fontSize: this.component.divider.style.height,
+          width: this.component.divider.attribute.width || '100%'
         };
       },
     },

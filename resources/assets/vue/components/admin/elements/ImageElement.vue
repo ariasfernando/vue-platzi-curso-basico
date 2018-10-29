@@ -23,7 +23,7 @@
               :href="component.image.attribute.href" 
               :alt="component.image.attribute.alt"
               :title="component.image.attribute.title"
-              :target="component.image.attribute.target"
+              :target="component.image.attribute.target || '_blank'"
               >
               <img
                 :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
@@ -31,7 +31,8 @@
                         'st-mobile-width-constraint' : !mobileStretch }"
                 style="border: 0; display: block;"
                 border="0"
-                :width="component.image.attribute.width"
+                :width="imageWidth"
+                :style="{width:imageWidth}"
                 :src="imageUrl(component.image.attribute.placeholder)"
                 :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
                 :alt="component.image.attribute.alt"
@@ -46,7 +47,8 @@
                     :class="{ 'st-resize' : mobileStretch,
                               'st-mobile-width-constraint' : !mobileStretch }"
                     style="display:block;border:none;max-width:100%;height:auto;"
-                    :width="component.image.attribute.width"
+                    :width="imageWidth"
+                    :style="{width:imageWidth}"
                     :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
                     :alt="component.image.attribute.alt"
                     :title="component.image.attribute.title"
@@ -67,7 +69,6 @@
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ElementMixin from '../../common/mixins/ElementMixin';
-  import MontedElementMixin from '../mixins/MontedElementMixin';
   import ModuleContainer from '../../common/containers/ModuleContainer';
   export default {
     name: 'ImageElement',
@@ -75,7 +76,7 @@
       ComponentToolbar,
       ModuleContainer
     },
-    mixins: [ MobileStylesMixin, ElementMixin, MontedElementMixin ],
+    mixins: [ MobileStylesMixin, ElementMixin],
     data(){
       return {
         imageUrl(imagePath) {

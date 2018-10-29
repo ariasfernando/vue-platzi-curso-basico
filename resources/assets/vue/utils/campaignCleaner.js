@@ -33,7 +33,8 @@ export default {
       'data-mce-style',
       'id',
       'module',
-      'context'
+      'column',
+      'draggable',
     ],
     blockSelectors: [
       '.module-toolbar',
@@ -74,7 +75,7 @@ export default {
       $cleanedHtml.find(selector).remove();
     });
 
-    // Remove wrappers
+    // Remove wrappers element ( .stx-wrapper )
     $cleanedHtml = Application.utils.removeWrappers($cleanedHtml);
 
     // Remove every class starting with "stx-"
@@ -85,6 +86,9 @@ export default {
 
     // Remove attr style if it's empty.
     $cleanedHtml.find("[style='']").removeAttr('style');
+
+    // Remove attr bgcolor if it's empty.
+    $cleanedHtml.find("[bgcolor='']").removeAttr('bgcolor');
 
     // Remove tooltip
     $cleanedHtml.find('.actions-buttons-tooltip').remove();
@@ -239,6 +243,7 @@ export default {
     const codesToCharsTags = {
       '&quot;': "'",
       '&#039;': "'",
+      '<!---->': '',
     };
 
     const rex = new RegExp('(<[^>]*>)|(&[a-zA-Z0-9#]+;)', 'gm');
