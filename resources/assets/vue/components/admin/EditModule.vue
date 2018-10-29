@@ -226,9 +226,10 @@ export default {
 
 #edit-container {
   padding: 0px;
-  height: calc(~'100vh - 53px');
+  height: calc(~'100vh -102px');
   overflow: hidden;
   min-width: 1200px;
+  padding-top: 46px;
 }
 
 .row-style-left {
@@ -314,7 +315,7 @@ export default {
     background: #f0f0f0;
     display: block;
     float: left;
-    height: calc(~'100vh - 53px');
+    height: calc(~'100vh - 102px');
     width: calc(~'100% - 540px');
     min-width: 640px;
     overflow-x: hidden;
@@ -373,7 +374,7 @@ ol {
 }
 
 #studio .column-bar-container {
-  height: calc(100vh - 53px);
+  height: calc(~'100vh - 102px');
 }
 #studio .module-container .scrollbar-container-inner {
   padding: 20px;
