@@ -51,7 +51,7 @@ class Authenticate
                     Auth::logout();
                     $validUser = false;
                 }
-                if (PasswordPolicy::should_update_password(Auth::user())) {
+                if ($validUser && PasswordPolicy::should_update_password(Auth::user())) {
                     return redirect()->guest('password/change');
                 }
             }
