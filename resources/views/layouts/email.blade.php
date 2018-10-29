@@ -74,7 +74,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
                 {{-- CAMPAIGN PREHEADER --}}
                 <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['campaign_data']['campaign_preheader'] or '' }}
                     @if ((190 - mb_strlen($params['campaign_data']['campaign_preheader']) > 0))
-                        {{ str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['campaign_data']['campaign_preheader'])) }}
+					{!! str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['campaign_data']['campaign_preheader'])) !!}
                     @endif
                 </div>
             @endif
