@@ -16,7 +16,7 @@ class UpdatePermissionsRoleAssignmentStudioElementToggle extends Migration
     {
          // ADMIN
          // add std-text-element-plugin-toggle-element-setter 
-         $role = Role::where('name', 'studio-admin')->firstOrFail();
+         $role = Role::where('name', 'studio-master')->firstOrFail();
          $rolePermissions = $role->permissions;
          $rolePermissions[] = 'std-text-element-plugin-toggle-element-setter';
          $rolePermissions[] = 'std-image-element-plugin-toggle-element-setter';
