@@ -19,6 +19,15 @@
       </div>
       <group-container label="Advance Settings">
         <!-- forecolor -->
+        <template v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')">
+          <settings-container label="Color List By Library">
+            <template slot="setting-right">
+              <toggle-button
+                :value="plugin.config.options.forecolor.textcolor_from_library"
+                @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
+            </template>
+          </settings-container>
+        </template>
         <template v-if="plugin.config.options.forecolor.value">
           <settings-container v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="Color List">
             <template slot="setting-right">
@@ -31,13 +40,6 @@
           </settings-container>
         </template>
         <template v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container label="Color List By Library">
-            <template slot="setting-right">
-              <toggle-button
-                :value="plugin.config.options.forecolor.textcolor_from_library"
-                @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
-            </template>
-          </settings-container>
           <settings-container v-if="plugin.config.options.forecolor.textcolor_from_library" label="Palette Name">
             <template slot="setting-right">
               <el-input
@@ -49,8 +51,17 @@
           </settings-container>
         </template>
         <!-- backcolor -->
+        <template v-if="plugin.config.options.backcolor.value && $can('tiny-plugin-forecolor-palette-library')">
+          <settings-container label="Highlight Color List By Library">
+            <template slot="setting-right">
+              <toggle-button
+                :value="plugin.config.options.backcolor.backcolor_from_library"
+                @change="newValue => changeOption(newValue, 'backcolor', 'backcolor_from_library')" />
+            </template>
+          </settings-container>
+        </template>
         <template v-if="plugin.config.options.backcolor.value">
-          <settings-container v-if="!plugin.config.options.backcolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="Highlight Color List">
+          <settings-container v-if="!plugin.config.options.backcolor.backcolor_from_library && $can('tiny-plugin-forecolor-palette')" label="Highlight Color List">
             <template slot="setting-right">
               <el-input
                 v-model="backColorMap"
@@ -61,13 +72,6 @@
           </settings-container>
         </template>
         <template v-if="plugin.config.options.backcolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container label="Highlight Color List By Library">
-            <template slot="setting-right">
-              <toggle-button
-                :value="plugin.config.options.backcolor.backcolor_from_library"
-                @change="newValue => changeOption(newValue, 'backcolor', 'backcolor_from_library')" />
-            </template>
-          </settings-container>
           <settings-container v-if="plugin.config.options.backcolor.backcolor_from_library" label="Palette Name">
             <template slot="setting-right">
               <el-input
