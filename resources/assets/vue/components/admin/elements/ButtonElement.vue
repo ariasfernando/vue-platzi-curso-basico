@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <module-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
       <a
         :data-contenteditable-href="component.button.attribute.href || ''"
         :target="component.button.attribute.target || '_blank'"

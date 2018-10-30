@@ -43,6 +43,7 @@
                       :component="component"
                       :module-id="moduleId"
                       :column-id="columnData.columnId"
+                      :is-active="currentElement.id === component.id"
                       :component-id="componentId">
                     </component>
                   </template>

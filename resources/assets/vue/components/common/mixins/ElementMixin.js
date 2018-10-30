@@ -5,11 +5,21 @@ export default {
     'module-id',
     'column-id',
     'component-id',
-    'component'
+    'component',
+    'is-active'
   ],
   computed: {
     currentComponent() {
       return this.$store.getters["module/currentComponent"];
+    },
+    currentElement() {
+      if (this.currentComponent.componentId !== undefined) {
+        return this.module.structure.columns[this.currentComponent.columnId]
+            .components[this.currentComponent.componentId];
+      } else if (this.currentComponent.columnId !== undefined) {
+        return this.module.structure.columns[this.currentComponent.columnId];
+      }
+      return this.module;
     },
     templateInnerWidth() {
       return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.module.structure);

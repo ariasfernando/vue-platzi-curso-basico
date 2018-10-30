@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <module-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
       <table
       :width="component.container.attribute.width || '100%'"
       :style="{width:widthStyle(component.container.attribute.width || '100%')}"

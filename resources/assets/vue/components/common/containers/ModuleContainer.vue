@@ -1,7 +1,7 @@
 <template>
     <tr
       :data-type="component.type"
-      :class="getMobileClasses(component,'tr')"
+      :class="[getMobileClasses(component,'tr'), {'is-active': isActive}]"
       @mousedown="clickOnComponent"
       v-if="component.container.styleOption.enableElement !== false"
     >
@@ -19,15 +19,14 @@
       </td>
   </tr>
 </template>
-    
+
 <script>
   import _ from 'lodash';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
-  
+
   export default {
     name: 'ModuleContainer',
-    props: ['component'],
     mixins: [ MobileStylesMixin, ElementMixin ],
 
     methods: {

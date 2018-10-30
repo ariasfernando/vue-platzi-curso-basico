@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <module-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
     <!-- TEXT ELEMENT -->
         <table
           width="100%"

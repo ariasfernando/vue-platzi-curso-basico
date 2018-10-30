@@ -379,4 +379,18 @@ ol {
 #studio .module-container .scrollbar-container-inner {
   padding: 20px 20px 100px;
 }
+#studio .st-component.is-active > td:before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  background: none;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: 2px solid #69dac8;
+  outline-offset: -1px;
+  z-index: 298;
+}
 </style>
