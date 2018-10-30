@@ -6,16 +6,16 @@ export default {
     'column-id',
     'component-id',
     'component',
-    'is-active'
+    'is-active',
   ],
   computed: {
     currentComponent() {
-      return this.$store.getters["module/currentComponent"];
+      return this.$store.getters['module/currentComponent'];
     },
     currentElement() {
       if (this.currentComponent.componentId !== undefined) {
         return this.module.structure.columns[this.currentComponent.columnId]
-            .components[this.currentComponent.componentId];
+          .components[this.currentComponent.componentId];
       } else if (this.currentComponent.columnId !== undefined) {
         return this.module.structure.columns[this.currentComponent.columnId];
       }
@@ -30,11 +30,11 @@ export default {
     imageWidth() {
       const width = this.component.image.attribute.width;
       if (_.endsWith(width, '%')) {
-        const imageContainerWidth = this.columnWidth(this.columnId)
-        - this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].container)
-        - this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].content)
-        - this.elementBorderAndPaddingHorizontalSpace(this.component.container);
-        return imageContainerWidth / 100 * _.parseInt(width);
+        const imageContainerWidth = this.columnWidth(this.columnId) -
+          this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].container) -
+          this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].content) -
+          this.elementBorderAndPaddingHorizontalSpace(this.component.container);
+        return (imageContainerWidth / 100) * _.parseInt(width);
       }
       return width;
     },
@@ -156,7 +156,7 @@ export default {
     columnWidth(columnId) {
       const width = this.module.structure.columns[columnId].container.attribute.width;
       if (_.endsWith(width, '%')) {
-        return this.templateInnerWidth / 100 * parseFloat(width);
+        return (this.templateInnerWidth / 100) * parseFloat(width);
       }
       return width;
     },
