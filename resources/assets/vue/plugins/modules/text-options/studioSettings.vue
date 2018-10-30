@@ -110,7 +110,7 @@
                   size="mini"
                   :title="key"
                   :name="key"
-                  :value="tinySetting.content || 0"
+                  :value="tinySettingContent(tinySetting.content)"
                   @change="(value)=>changeSetting(value, key)" />
                 <component
                   :is="tinySetting.type"
