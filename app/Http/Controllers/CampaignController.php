@@ -646,4 +646,23 @@ class CampaignController extends Controller
         }
         return Campaign::trimImage($params);
     }
+
+    /**
+     * Set campaigns as archive or not.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return string
+     *
+     * @throws
+     */
+    public function postArchive(Request $request)
+    {
+        if (!Auth::user()->can("access_archive")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
+        return Campaign::archive($request->input());
+    }
 }
