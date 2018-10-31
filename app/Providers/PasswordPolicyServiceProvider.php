@@ -56,7 +56,8 @@ class PasswordPolicyServiceProvider extends ZxcvbnServiceProvider
         // @codingStandardsIgnoreEnd
         return 'required|confirmed|min:' . \Config::get('auth.password_policy.min_length')
             . '|max:' . \Config::get('auth.password_policy.max_length')
-            . '|zxcvbn_min:' . \Config::get('auth.password_policy.min_score');
+            . '|zxcvbn_min:' . \Config::get('auth.password_policy.min_score')
+            . '|not_in:' . $user_data->email . ',' . $user_data->name;
     }
 
     /**

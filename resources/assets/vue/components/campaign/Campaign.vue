@@ -4,35 +4,37 @@
 
     <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
-      <!-- column left (menu) -->
-      <aside :style="locked ? 'overflow-y: hidden;' : undefined">
-        <div class="aside-inner">
+      <column-bar-container side="left" :style="locked ? 'overflow-y: hidden;' : undefined">
+        <scrollbar-container>
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
+            <tracking v-if="trackingEnabled" :library-key="libraryKey"></tracking>
             <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
-            <div class="lock-warning-container" v-if="locked">Unlock the email to add modules</div>
+            <div class="lock-warning-container" v-if="locked">Unfix the email to add modules</div>
           </div>
-        </div>
-      </aside>
+        </scrollbar-container>
+      </column-bar-container>
 
-      <!-- column right (container email) -->
-      <section class="section-canvas-email section-box">
-        <email-canvas v-if="campaignReady"></email-canvas>
+      <!-- container email -->
+      <section class="section-canvas-email module-container">
+        <scrollbar-container>
+          <div class="module-container-inner">
+            <email-canvas v-if="campaignReady"></email-canvas>
+          </div>
+        </scrollbar-container>
       </section>
 
-      <aside class="component-settings-wrapper">
-        <div class="aside-inner section-box">
-          <transition name="slide-fade">
+      <column-bar-container side="right">
+        <scrollbar-container>
+          <div>
             <module-settings v-if="showModuleSettings"></module-settings>
-          </transition>
-          <transition name="slide-fade">
+            <module-background-settings></module-background-settings>
             <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
-          </transition>
-          <transition name="slide-fade">
             <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
-          </transition>
-        </div>
-      </aside>
+            <shadow-render></shadow-render>
+          </div>
+        </scrollbar-container>
+      </column-bar-container>
     </div>
 
     <!-- Modals -->
@@ -48,22 +50,27 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import CampaignConfiguration from './CampaignConfiguration.vue'
-  import ModalComplete from './modals/ModalComplete.vue'
-  import ModalPreview from './modals/ModalPreview.vue'
-  import ModalProof from './modals/ModalProof.vue'
-  import ModalEsp from './modals/ModalEsp.vue'
-  import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
   import CampaignMenu from './CampaignMenu.vue'
-  import EmailCanvas from './EmailCanvas.vue'
+  import CampaignService from '../../services/campaign'
+  import ColumnBarContainer from "../common/containers/ColumnBarContainer.vue";
   import ComponentSettings from './ComponentSettings.vue'
   import CustomModuleSettings from './CustomModuleSettings.vue'
-  import ModuleSettings from './ModuleSettings.vue'
-  import Spinner from '../common/Spinner.vue'
   import EmailActions from './EmailActions.vue'
+  import EmailCanvas from './EmailCanvas.vue'
+  import ModalComplete from './modals/ModalComplete.vue'
+  import ModalEnableTemplating from './modals/ModalEnableTemplating.vue'
+  import ModalEsp from './modals/ModalEsp.vue'
+  import ModalPreview from './modals/ModalPreview.vue'
+  import ModalProof from './modals/ModalProof.vue'
+  import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
+  import ModuleSettings from './ModuleSettings.vue'
+  import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
+  import ShadowRender from './ShadowRender.vue'
+  import Spinner from '../common/Spinner.vue'
+  import Tracking from './Tracking.vue'
   import VueSticky from 'vue-sticky'
-  import _ from 'lodash'
-  import CampaignService from '../../services/campaign'
 
   export default {
     name: 'Campaign',
@@ -71,17 +78,22 @@
     components: {
       CampaignConfiguration,
       CampaignMenu,
-      EmailCanvas,
+      ColumnBarContainer,
       ComponentSettings,
       CustomModuleSettings,
-      ModuleSettings,
+      EmailActions,
+      EmailCanvas,
       ModalComplete,
+      ModalEnableTemplating,
+      ModalEsp,
       ModalPreview,
       ModalProof,
-      ModalEsp,
-      ModalEnableTemplating,
+      ModuleBackgroundSettings,
+      ModuleSettings,
+      ScrollbarContainer,
+      ShadowRender,
       Spinner,
-      EmailActions
+      Tracking,
     },
     data: function () {
       return {
@@ -89,11 +101,16 @@
         campaignConfigReady: false,
         pingLockInterval: 30000,
         logTimeInterval: 30000,
+        campaignConfig: {},
+        trackingEnabled: false,
       }
     },
     computed: {
       campaign() {
         return this.$store.getters["campaign/campaign"];
+      },
+      libraryKey() {
+        return this.$store.getters["campaign/campaign"].library_config.key;
       },
       locked() {
         return this.campaign.campaign_data && this.campaign.campaign_data.locked;
@@ -111,14 +128,10 @@
         return this.$store.getters["campaign/showModuleSettings"];
       },
       sessionWindowId() {
-        try {
-          if (!window.sessionStorage.getItem('windowId')) {
-            window.sessionStorage.setItem('windowId', this.windowId);
-          }
-          return window.sessionStorage.getItem('windowId');
-        } catch(e) {
-          return false;
+        if (!window.sessionStorage.getItem('windowId')) {
+          window.sessionStorage.setItem('windowId', this.windowId);
         }
+        return window.sessionStorage.getItem('windowId');
       }
     },
     watch:{
@@ -142,15 +155,12 @@
          * Replace url when creating a new campaign to avoid redirect.
          * Add necessary logic if using more parameters in the future.
          */
-        try {
-          window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
-        } catch(e) {
-          return false;
-        }
+        window.history.replaceState({}, null, '/campaign/edit/' + this.campaignId);
 
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
           this.campaignReady = true;
+          this.trackingEnabled = (this.campaignReady && this.campaignConfig && this.campaignConfig.enable_tracking && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -161,13 +171,19 @@
       },
       loadConfig() {
         this.$store.dispatch("config/getConfig", 'campaign').then(response => {
-          this.campaignConfigReady = true;        
+          this.campaignConfigReady = true;
+          this.campaignConfig = this.$store.getters["config/config"].campaign;
         }, error => {
           this.$root.$toast(
             'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
             {className: 'et-error'}
           );
         });
+      },
+      logTimeWindowFocus() {
+        if (document.visibilityState && document.visibilityState === 'visible') {
+          CampaignService.logTime(this.campaignId, this.logTimeInterval / 1000);
+        }
       },
       lockPing() {
         this.$store.dispatch('campaign/pingLockCampaign',
@@ -196,7 +212,7 @@
           {className: 'et-info'}
         );
       }
-      setInterval(CampaignService.logTime, this.logTimeInterval, this.campaignId, this.logTimeInterval / 1000);
+      setInterval(this.logTimeWindowFocus, this.logTimeInterval);
     }
   };
 </script>
@@ -206,6 +222,20 @@
   @stensul-white: #FFFFFF;
   @stensul-purple: #514960;
   @stensul-gray: #666666;
+  @stensul-purple: #514960;
+  @stensul-purple-light: lighten(@stensul-purple, 20%);
+  @focus: #78dcd6;
+  @focus-light: lighten(@focus, 30%);
+
+  @brand-primary: lighten(@stensul-purple, 35%);
+  @brand-secondary: @stensul-purple-light;
+
+  .el-input.is-active .el-input__inner,
+  .el-select .el-input__inner:focus,
+  .el-select .el-input.is-focus .el-input__inner,
+  .el-input__inner:focus {
+    border-color: rgb(120, 220, 214);
+  }
   .section-canvas-email{
     .mce-content-body{
       line-height: inherit;
@@ -239,139 +269,20 @@
     bottom: 0px;
   }
 
-  .component-settings-wrapper {
-    background: @stensul-white;
+  .module-container {
+    background: #f0f0f0;
+    display: block;
+    float: left;
+    height: calc(~"100vh - 90px");
+    width: calc(~"100% - 540px");
+    min-width: 640px;
 
-    .component-settings {
-      background: #FFFFFF;
-      border-radius: 0px;
-      border: 1px solid transparent;
-      height: 100%;
-      display: table;
-      width: 100%;
-      padding: 0px;
+    &-inner {
+      padding: 40px 20px;
+    }
 
-      h2{
-        color: #666666;
-        font-weight: 300;
-        font-size: 13px;
-        padding: 15px 10px 13px 10px;
-        border-bottom: 1px solid #F0F0F0;
-        margin-top: 0px;
-        text-transform: uppercase;
-
-        i{
-          font-size: 10px;
-        }
-      }
-
-      .plugins{
-        padding: 10px;
-        padding-bottom: 90px;
-
-        .settings-wrapper{
-          padding-bottom: 50px;
-        }
-      }
-
-      .plugin-wrapper{
-        display: table;
-        width: 100%;
-
-        .plugin-wrapper-inner:first-child{
-          background: #f4f4f4;
-          margin-bottom: 7px;
-          padding: 10px;
-          border: 1px solid #E9E9E9;
-          width: 100%;
-          display: table;
-          border-radius: 2px;
-        }
-
-        .plugin-wrapper-inner:empty{
-          background: none;
-          margin-bottom: 0px;
-          padding: 0px;
-          border: none;
-        }
-
-        .plugin-wrapper-inner {
-          span{
-            display: block;
-            width: 100%;
-          }
-        }
-
-        label{
-          text-align: left;
-          color: #666666;
-          margin-bottom: 6px;
-          font-weight: 300;
-
-          &.label-custom{
-            display: inline-block;
-            margin: 0 0px 10px 0;
-          }
-          font-size: 12px;
-          margin-bottom: 5px;
-          width: 100%;
-          display: block;
-        }
-
-        input[type=text]{
-          height: 28px;
-          background: #FFFFFF;
-          border-radius: 2px;
-          border: none;
-          float: right;
-          font-size: 11px;
-          font-weight: 300;
-          width: 100%;
-          border: 1px solid #EEEEEE;
-          padding: 7px;
-
-          &:focus{
-            outline: 0;
-          }
-        }
-
-        select{
-          height: 28px;
-          font-size: 11px;
-          color: #666666;
-          border: none;
-          background: #FFFFFF;
-          box-shadow: none;
-          font-weight: 300;
-          width: 100%;
-          float: right;
-          border: 1px solid #EEEEEE;
-
-          &:focus{
-            outline: 0;
-          }
-        }
-
-      }
-
-      .plugin-destination-url{
-        span{
-
-          &:last-child{
-            margin-top: 10px;
-          }
-        }
-      }
-
-      .plugin-upload-image{
-        input{
-          width: 100%
-        }
-
-        label{
-          margin-bottom: 7px;
-        }
-      }
+    table{
+      border-collapse: initial;
     }
   }
 
@@ -485,6 +396,15 @@
 
   .mce-edit-focus{
     outline: 1px dotted #333!important;
+  }
+
+  .section-canvas-email{
+    .mCSB_outside {
+      overflow: unset;
+      .mCSB_container {
+        overflow: unset;
+      }
+    }
   }
 </style>
 

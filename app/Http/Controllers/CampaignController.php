@@ -74,6 +74,10 @@ class CampaignController extends Controller
                 $params['library'] = new ObjectID($libraries[0]['_id']);
                 $library = Library::find($libraries[0]['_id']);
             }
+            
+            if($library['config']['preheader']){
+                $params['campaign_preheader'] = $library['config']['preheaderDefault'];
+            }
 
             $params['library_name'] = $library->name;
             $params['campaign_name'] = 'Untitled Email';

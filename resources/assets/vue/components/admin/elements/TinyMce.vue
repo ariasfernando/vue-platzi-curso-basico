@@ -49,14 +49,14 @@
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
           inline: true,
           menubar: false,
-          toolbar: 'undo redo | alignleft aligncenter alignright | bold italic underline | link | forecolor backcolor',
+          toolbar: 'undo redo | alignleft aligncenter alignright alignjustify | bold italic underline | link | forecolor backcolor',
           plugins: 'paste advlist autolink lists textcolor link',
           link_validate_url: true,
           link_title: false,
           link_text_to_display: false,
           paste_as_text: true,
           max_chars: this.settings.truncate ? this.settings.truncate.content : undefined,
-          max_lines: this.settings.lines_limit ? this.settings.lines_limit.content : undefined,
+          // max_lines: this.settings.lines_limit ? this.settings.lines_limit.content : undefined,
           forced_root_block : 'p',
           init_instance_callback: (editor) => {
 
@@ -196,5 +196,6 @@
 <style lang="less">
   .stx-edit-text {
     cursor: text;
+    min-width: 10px;
   }
 </style>

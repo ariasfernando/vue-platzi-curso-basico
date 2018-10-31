@@ -2,7 +2,8 @@
     <tr
       :data-type="component.type"
       :class="getMobileClasses(component,'tr')"
-      @click.prevent="clickOnComponent"
+      @mousedown="clickOnComponent"
+      v-if="component.container.styleOption.enableElement !== false"
     >
       <td
         :width="component.container.attribute.width || '100%'"

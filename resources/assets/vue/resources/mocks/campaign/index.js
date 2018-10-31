@@ -1,5 +1,11 @@
+const getCampaign = require('./getCampaign');
+const getCampaignPublic = require('./getCampaignPublic');
+const saveCampaign = require('./saveCampaign');
+const cloneCampaign = require('./cloneCampaign');
+
 module.exports = {
-  getCampaign: require('./getCampaign'),
-  saveCampaign: require('./saveCampaign'),
-  cloneCampaign: require('./cloneCampaign')
+  getCampaign,
+  getCampaignPublic,
+  saveCampaign,
+  cloneCampaign,
 };

@@ -29,8 +29,11 @@ export default {
   components: { SettingsContainer },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .width-full {
   width: 100%;
+}
+.el-select-dropdown__item.selected{
+  color: #78dcd6!important;
 }
 </style>

@@ -5,10 +5,11 @@
 
       <b-collapse id="element" visible accordion="module-left">
         <b-card class="control">
-          <draggable :element="'ul'"
-                     :options="options"
-                     width="100%"
-                     class="components-list"
+          <draggable
+            :element="'ul'"
+            :options="options"
+            width="100%"
+            class="components-list"
           >
             <li class="component-item" data-type="text-element">
               <i class="fa fa-align-justify"></i>
@@ -26,6 +27,10 @@
               <i class="fa fa-minus-square" aria-hidden="true"></i>
               <p>Divider</p>
             </li>
+            <li class="component-item" data-type="custom-code-element">
+              <i class="fa fa-code" aria-hidden="true"></i>
+              <p>Custom Code</p>
+            </li>
           </draggable>
         </b-card>
       </b-collapse>
@@ -35,7 +40,7 @@
 
 <script>
   import Draggable from 'vuedraggable';
-  import LabelItemContainer from "../containers/LabelItemContainer.vue";
+  import LabelItemContainer from "../../common/containers/LabelItemContainer.vue";
   
   export default {
     components: {

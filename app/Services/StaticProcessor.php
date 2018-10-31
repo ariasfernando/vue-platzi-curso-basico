@@ -9,6 +9,7 @@ use Storage;
 use CampaignModel;
 use Imagine\Image\ImageInterface;
 use League\Flysystem\AdapterInterface;
+use Stensul\Jobs\CleanCdnCache;
 use HtmlCreator as Html;
 
 class StaticProcessor
@@ -57,59 +58,56 @@ class StaticProcessor
         $files['font'] = $public->allFiles('fonts');
         $files['module'] = $module->allFiles();
 
-        $campaignPath = trim($this->getCampaign()->getCdnPath(), DS) . DS;
+        $campaignPath = trim($this->getCampaign()->getCdnPath(), '/') . '/';
         $emailLayout = $html->getEmailLayout();
 
         $uploadedFiles = $cloud->allFiles($campaignPath);
 
+        $data = [
+            'campaign_id' => $this->getCampaign()->id,
+            'cdn' => config('filesystems.disks.cloud'),
+            'assets' => [
+            ]
+        ];
+
         foreach ($files as $fileType => $fileGroup) {
             foreach ($fileGroup as $file) {
                 $path = $campaignPath;
-                $path .= ($fileType == 'font') ? $file : 'images' . DS . basename($file);
+                $path .= ($fileType == 'font') ? $file : 'images' . '/' . basename($file);
 
                 if (strpos($emailLayout, basename($file)) !== false) {
                     if (!in_array($path, $uploadedFiles)) {
                         Log::info(sprintf('[%s] uploading %s: %s', $this->getCampaign()->id, $file, $path));
 
                         if ($fileType == 'image') {
-                            $cloud->put($path, $local->get($file), AdapterInterface::VISIBILITY_PUBLIC);
+                            $from = config('filesystems.disks.local:campaigns.root') . DS . $file;
                         } elseif ($fileType == 'module') {
-                            $cloud->put($path, $module->get($file), AdapterInterface::VISIBILITY_PUBLIC);
+                            $from = config('filesystems.disks.local:modules.root') . DS . $file;
                         } else {
-                            $cloud->put($path, $public->get($file), AdapterInterface::VISIBILITY_PUBLIC);
+                            $from = config('filesystems.disks.local:public.root') . DS . $file;
                         }
 
-                        // clean cache
-                        $this->cleanCdnCache($path);
+                        $data['assets'][] = [
+                            'from' => $from,
+                            'to' => $path
+                        ];
+
+                        Log::info(sprintf('[%s] queuing url to be flushed in cdn: %s', $this->getCampaign()->id, $path));
+                        dispatch(new CleanCdnCache($path, $this->getCampaign()->id));
                     }
                 }
             }
         }
 
-        // clean cache
-        $this->cleanCdnCache();
-    }
-
-    /**
-     * Clean CDN cache.
-     *
-     * @param string $file
-     */
-    protected function cleanCdnCache($file = null)
-    {
-        if (strlen($file)) {
-            $file = ($file[0] != '/') ? '/'.$file : $file;
-            Log::info(sprintf('[%s] queuing url to be flushed in cdn: %s', $this->getCampaign()->id, $file));
-            $this->files[] = $file;
-        }
-
-        // queue files or flush cache
-        if (count($this->files) > 8 || $file == null) {
-            // flush cache
-            Log::info(sprintf('[%s] flushing cache', $this->getCampaign()->id));
-            Cdn::disk()->delete($this->files);
-            // clean queue
-            $this->files = [];
+        try {
+            \AssetManager::deploy(
+                $data,
+                env('ASSETS_UPLOAD_CONCURRENCY', 10),
+                env('ASSETS_UPLOAD_RETRIES', 2)
+            );
+        } catch (\Exception $exception) {
+            Log::error('StaticProcessor error: ' . $exception->getMessage());
+            throw $exception;
         }
     }
 
@@ -128,6 +126,12 @@ class StaticProcessor
             $html = new Html($this->getCampaign());
 
             foreach ($html->imagesRegex($from->body_html) as $item) {
+                if (is_array($item) && isset($item[2])) {
+                    $assets[parse_url($item[2], PHP_URL_PATH)] = null;
+                }
+            }
+
+            foreach ($html->backgroundImagesRegex($from->body_html) as $item) {
                 if (is_array($item) && isset($item[2])) {
                     $assets[parse_url($item[2], PHP_URL_PATH)] = null;
                 }
@@ -190,6 +194,11 @@ class StaticProcessor
                             }
                         }
                     }
+                }
+
+                if (isset($module['structure']) && isset($module['structure']['style']['backgroundImage'])) {
+                    $filename = DS . 'images' . DS . trim($module['structure']['style']['backgroundImage']);
+                    $assets[$filename] = null;
                 }
             }
         }
@@ -291,6 +300,14 @@ class StaticProcessor
                             }
                         }
                     }
+                }
+
+                if (isset($module['structure']) && isset($module['structure']['style']['backgroundImage'])) {
+                    $modules_data[$key]['structure']['style']['backgroundImage'] = str_replace(
+                        $from->id,
+                        $this->getCampaign()->id,
+                        $module['structure']['style']['backgroundImage']
+                    );
                 }
             }
         }

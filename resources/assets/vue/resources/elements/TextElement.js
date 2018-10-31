@@ -13,6 +13,7 @@ function textDefault() {
         paddingLeft: '5px',
       },
       styleOption: {
+        enableElement: true,
       },
       attribute: {
       },
@@ -23,7 +24,7 @@ function textDefault() {
         fontSize: '12px',
         color: '#000000',
         fontWeight: 'normal',
-        lineHeight: '16px',
+        lineHeight: '20%',
         align: 'left',
       },
       styleOption: {

@@ -1,19 +1,18 @@
 <template>
-  <div class="plugin-wrapper-inner">
-    <label>{{ plugin.title }}</label>
-
-    <div class="alignment-options">
-      <a data-tooltip="Top" :class="{ 'plugin-setting-active': value === 'top' }" @click="change('top')"><i class="glyphicon glyphicon-object-align-top"></i></a>
-      <a data-tooltip="Middle" :class="{ 'plugin-setting-active': value === 'middle' }" @click="change('middle')"><i class="glyphicon glyphicon-object-align-horizontal"></i></a>
-      <a data-tooltip="Bottom" :class="{ 'plugin-setting-active': value === 'bottom' }" @click="change('bottom')"><i class="glyphicon glyphicon-object-align-bottom"></i></a>
-    </div>
-
-  </div>
+    <settings-container :label="plugin.title">
+      <template slot="setting-right">
+        <el-button plain size="mini" @click="changeAlignment('top')" class="glyphicon glyphicon-object-align-top" :class="{ active: value === 'top' }"></el-button>
+        <el-button plain size="mini" @click="changeAlignment('middle')" class="glyphicon glyphicon-object-align-horizontal" :class="{ active: value === 'middle' }"></el-button>
+        <el-button plain size="mini" @click="changeAlignment('bottom')" class="glyphicon glyphicon-object-align-bottom" :class="{ active: value === 'bottom' }"></el-button>
+      </template>
+    </settings-container>
 </template>
 
 <script>
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
   export default {
     props: ['name', 'plugin', 'moduleId', 'columnId'],
+    components: { SettingsContainer },
     computed: {
       modules() {
         return this.$store.getters["campaign/modules"];
@@ -31,17 +30,81 @@
       }
     },
     methods: {
-      change(val) {
+      changeAlignment(value) {
         const payload = {
-          plugin: this.name,
           moduleId: this.moduleId,
           columnId: this.columnId,
-          attribute: 'valign',
-          attributeValue: val,
-        };
+          subComponent: 'container',
+          link: "attribute",
+          property: "valign",
+          value: value
+          };
 
-        this.$store.commit('campaign/saveColumnAttribute', payload);
+        this.$store.commit('campaign/saveColumnProperty', payload);
       }
     },
   }
 </script>
+<style lang="scss" scoped>
+.settings-container{
+  // Hack inline-block
+  font-size: 0;
+}
+.el-button:focus,
+.el-button:hover {
+  color: inherit;
+  border-color: #78dcd6;
+  background-color: inherit;
+}
+.el-button.active {
+  color: #ffffff;
+  border-color: rgb(120, 220, 214);
+  background-color: rgb(120, 220, 214);
+
+  &:before{
+    color: #ffffff;
+  }
+}
+.el-button + .el-button {
+  margin-left: 0;
+}
+.el-button {
+  width: 33%;
+  padding: 4px 0;
+  margin-right: 0px;
+  height: 26px;
+  border-radius: 0px;
+  border-right: none;
+
+  &:before{
+    color: #999999;
+  }
+
+  &:first-of-type {
+    margin: 0;
+    border-radius: 2px 0px 0px 2px;
+    border-right: none;
+  }
+
+  &:last-of-type {
+    margin: 0;
+    border-radius: 0px 2px 2px 0px;
+    border-right: 1px solid #dddddd;
+  }
+}
+.el-button:first-child:nth-last-child(2),
+.el-button:first-child:nth-last-child(2) ~ button {
+    width: 50%;
+}
+.el-button:first-child:nth-last-child(3),
+.el-button:first-child:nth-last-child(3) ~ button {
+    width: 33%;
+}
+.el-button:first-child:nth-last-child(4),
+.el-button:first-child:nth-last-child(4) ~ button{
+    width: 25%;
+}
+.padding-zero {
+  padding: 0;
+}
+</style>

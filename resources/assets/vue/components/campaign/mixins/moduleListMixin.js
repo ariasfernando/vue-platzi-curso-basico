@@ -116,8 +116,8 @@ export default {
           }, 100);
       }
     },
-    findModule(moduleName, moduleType) {
-      return moduleType === 'item' ? find(this.items, (m) => m.name === moduleName) : find(this.getSubitemsAsArray(), (m) => m.name === moduleName);
+    findModule(moduleKey, moduleType) {
+      return moduleType === 'item' ? find(this.items, (m) => m.key === moduleKey) : find(this.getSubitemsAsArray(), (m) => m.key === moduleKey);
     },
     addModule(m, newIndex) {
       const mod = clone(m);
@@ -163,7 +163,11 @@ export default {
       }
     },
     insertModule({index, moduleData}) {
-      // Insert module 
+      this.$store.commit("campaign/unsetCurrentComponent");
+      this.$store.commit('campaign/unsetCurrentModule');
+      this.$store.commit('campaign/unsetCustomModule');
+
+      // Insert module
       this.$store.commit('campaign/insertModule', {
         index,
         moduleData
@@ -177,11 +181,9 @@ export default {
           columnId: 0,
           componentId: 0
         });
-        this.$store.commit('campaign/unsetCustomModule');
       } else {
         // Save customModule if module type is custom
         this.$store.commit('campaign/setCustomModule', index);
-        this.$store.commit('campaign/unsetCurrentComponent');
       }
     },
     addFixedTopModule(moduleData) {

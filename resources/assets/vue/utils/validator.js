@@ -21,5 +21,11 @@ module.exports = {
     if ($(selector).find('div.default-module-error').length > 0) {
       $(selector).find('div.default-module-error').show();   
     }
+  },
+  tinyErrors(selector){
+    if ($(selector).find('div.tinymce-error').length > 0) {
+      return true;  
+    }
+    return false;
   }
 };

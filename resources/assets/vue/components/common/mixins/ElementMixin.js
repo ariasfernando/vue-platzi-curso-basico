@@ -8,6 +8,17 @@ export default {
     'component',
     'context',
   ],
+  computed: {
+    currentComponent() {
+      return this.$store.getters["module/currentComponent"];
+    },
+    templateInnerWidth() {
+      return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.module.structure);
+    },
+    templateWidth() {
+      return this.isCampaign ? this.$store.getters['campaign/campaign'].library_config.templateWidth : 640;
+    },
+  },
   methods: {
     // Get an string of classes
     getAttributeClasses(component) {
@@ -22,7 +33,7 @@ export default {
       return false;
     },
     widthStyle(width) {
-      if (width !== undefined) {
+      if (width !== undefined && width !== 0) {
         return _.endsWith(width, '%') ? width : `${width}px`;
       }
       return undefined;
@@ -36,6 +47,18 @@ export default {
         }
       });
       return BorderAndPadding;
+    },
+    elementBorderHorizontalPaddingAndHeight(element) {
+      const elementBorderAndPadding = this.elementBorderPaddingAndHeight(element);
+      elementBorderAndPadding.paddingTop = undefined;
+      elementBorderAndPadding.paddingBottom = undefined;
+      return elementBorderAndPadding;
+    },
+    elementBorderPaddingAndHeight(element) {
+      const elementBorderAndPadding = this.elementBorderAndPadding(element);
+      const styles = _.isEmpty(elementBorderAndPadding) ? {} : elementBorderAndPadding;
+      styles.height = this.widthStyle(element.attribute.height);
+      return styles;
     },
     elementBorderPaddingAndWidth(element) {
       const elementBorderAndPadding = this.elementBorderAndPadding(element);
@@ -55,22 +78,55 @@ export default {
             });
           }, 50);
         } else {
-          this.$store.commit('module/setCurrentComponent', {
+          this.$emit('set-component', {
             columnId: this.columnId,
             componentId: this.componentId,
           });
         }
       }
     },
+    columnSelect(columnId) {
+      this.$emit('set-component', {
+        columnId,
+        componentId: undefined,
+      });
+    },
+    isColumnSelect(columnId) {
+      return this.currentComponent.columnId === columnId && this.currentComponent.componentId === undefined;
+    },
+    elementBackground(element) {
+      const elementBackground = {};
+      _.each(element.style, (value, key) => {
+        if (key.indexOf('background') >= 0) {
+          elementBackground[key] = value;
+        }
+      });
+      return elementBackground;
+    },
+    elementBorderAndPaddingHorizontalSpace(element) {
+      const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
+      const paddingRight = _.parseInt(element.style.paddingRight || 0);
+      const borderLeft = _.parseInt(element.style.borderLeftWidth || 0);
+      const borderRight = _.parseInt(element.style.borderRightWidth || 0);
+      return paddingLeft + paddingRight + borderLeft + borderRight;
+    },
+    lineHeightCalculate(element) {
+      if (_.endsWith(element.style.lineHeight, '%')) {
+        const lineHeight = ((parseFloat(element.style.lineHeight) + 100) / 100) * parseFloat(element.style.fontSize);
+        return `${Math.round(lineHeight * 100) / 100}px`;
+      }
+      return element.style.lineHeight;
+    },
     fontStyles(element) {
       return {
-        'text-align': element.attribute.align || 'left',
-        'font-family': element.style.fontFamily,
-        'color': element.style.color,
-        'font-size': element.style.fontSize,
-        'font-weight': element.style.fontWeight,
-        'letter-spacing': element.style.letterSpacing,
-        'line-height': element.style.lineHeight,
+        textAlign: element.attribute.align || 'left',
+        fontFamily: element.style.fontFamily,
+        color: element.style.color,
+        fontSize: element.style.fontSize,
+        fontWeight: element.style.fontWeight,
+        letterSpacing: element.style.letterSpacing,
+        lineHeight: this.lineHeightCalculate(element),
+        textTransform: element.style.textTransform,
       };
     },
   },

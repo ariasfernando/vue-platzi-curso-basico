@@ -24,13 +24,14 @@ function Module(data = {}) {
   const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : {};
   const mobileClasses = data.mobileClasses || [];
 
-  this.plugins = data.plugins || getPlugins();
+  this.plugins = _.merge(getPlugins(), data.plugins);
 
   this.structure = {
     columnsStacking: (data.structure && data.structure.columnsStacking) ? data.structure.columnsStacking : 'normal',
     attribute: {
       bgcolor: attribute.bgcolor || '',
-      classes: '',
+      classes: attribute.classes || '',
+      height: attribute.height || '',
     },
     mobileClasses,
     style: {
@@ -55,6 +56,11 @@ function Module(data = {}) {
       borderLeftWidth: style.borderLeftWidth || '0px',
       borderLeftStyle: style.borderLeftStyle || 'none',
       borderLeftColor: style.borderLeftColor || '',
+      // Background
+      backgroundImage: style.backgroundImage || '',
+      backgroundRepeat: style.backgroundRepeat || '',
+      backgroundAttachment: style.backgroundAttachment || '',
+      backgroundPosition: style.backgroundPosition || '',
     },
 
     columns: data.structure && data.structure.columns ? data.structure.columns : [],
@@ -62,8 +68,9 @@ function Module(data = {}) {
 
   _.extend(this.structure.settings, settings);
   _.extend(this.structure.attribute, attribute);
-
+  
   return this;
 }
 
 module.exports = Module;
+  

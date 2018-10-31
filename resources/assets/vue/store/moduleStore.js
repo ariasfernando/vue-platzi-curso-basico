@@ -1,3 +1,7 @@
+/* eslint no-param-reassign:0 */
+/* eslint no-shadow:0 */
+/* eslint no-console:0 */
+
 import Vue from 'vue';
 import Q from 'q';
 import _ from 'lodash';
@@ -9,7 +13,6 @@ import imageService from '../services/image';
 const state = {
   module: {},
   currentComponent: {},
-  activeColumn: 0,
   buildingMode: 'desktop',
   showRaw: false,
   changeSettingComponent: {
@@ -18,6 +21,33 @@ const state = {
   },
   loading: false,
   secondaryLoading: false,
+};
+
+const getElement = (module, elementId) => {
+  let component;
+  _.forEach(module.structure.columns, (column) => {
+    _.forEach(column.components, (CurrentComponent) => {
+      if (CurrentComponent.id === elementId) {
+        component = CurrentComponent;
+        return false;
+      }
+    });
+    return !component;
+  });
+  return component;
+};
+const searchOrCreateLevel = (data, keys) => {
+  let subData = data;
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (!_.has(subData, [keys[i]])) {
+      Vue.set(subData, [keys[i]], {});
+    }
+    subData = subData[keys[i]];
+  }
+  return {
+    data: subData,
+    property: keys[keys.length - 1],
+  };
 };
 
 const getters = {
@@ -29,9 +59,6 @@ const getters = {
   },
   changeSettingComponent(state) {
     return state.changeSettingComponent;
-  },
-  activeColumn(state) {
-    return state.activeColumn;
   },
   buildingMode(state) {
     return state.buildingMode;
@@ -67,10 +94,12 @@ const mutations = {
     state.currentComponent = {};
   },
   updateElement(state, payload) {
-    const update = { ...state.module.structure.columns[payload.columnId].components[payload.componentId].data, ...payload.data };
+    const update = { 
+      ...state.module.structure.columns[payload.columnId].components[payload.componentId].data,
+      ...payload.data,
+    };
     state.module.structure.columns[payload.columnId].components[payload.componentId].data = update;
   },
-
   saveModuleProperty(state, data) {
     const structure = state.module.structure;
     const subComponent = data.subComponent ? structure[data.subComponent] : structure;
@@ -110,32 +139,67 @@ const mutations = {
     state.module.structure.columns[data.colId].components.splice(data.index, data.number);
   },
   savePlugin(state, payload) {
-    const pluginData = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
+    let pluginData = state.module;
+    
+    if (payload.componentId >= 0) {
+      // save component plugin
+      pluginData = pluginData.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
+    } else if (payload.columnId >= 0) {
+      // save column plugin
+      pluginData = pluginData.structure.columns[payload.columnId].plugins[payload.plugin].config;
+    } else {
+      // save module plugin
+      pluginData = pluginData.plugins[payload.plugin].config;
+    }
     _.merge(pluginData, payload.config);
   },
+  setPluginElementConfig(state, { componentId, plugin, path, value }) {
+    const component = getElement(state.module, componentId);
+    const pluginData = component.plugins[plugin];
+    const pathArray = _.concat(['config'], path ? path.split('.') : []);
+    const pluginOption = searchOrCreateLevel(pluginData, pathArray);
+    Vue.set(pluginOption.data, pluginOption.property, value);
+  },
+  setPluginComponentConfig(state, data) {
+    // DEPRECATE
+    const plugin = state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin];
+    const path = _.concat(['config'], data.path ? data.path.split('.') : []);
+    const pluginOption = searchOrCreateLevel(plugin, path);
+    Vue.set(pluginOption.data, pluginOption.property, data.value);
+  },
   savePluginSuboption(state, payload) {
-    const pluginOptions = state.module.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
+    let pluginOptions = state.module;
+    if (payload.componentId >= 0) {
+      // save component plugin
+      pluginOptions = pluginOptions.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config.options;
+    } else if (payload.columnId >= 0) {
+      // save column plugin
+      pluginOptions = pluginOptions.structure.columns[payload.columnId].plugins[payload.plugin].config.options;
+    } else {
+      // save module plugin
+      pluginOptions = pluginOptions.plugins[payload.plugin].config.options;
+    }
     _.assign(pluginOptions[payload.subOption], payload.config.options[payload.subOption]);
   },
   togglePlugin(state, data) {
+    let column;
     if (data.columnId >= 0 || data.componentId >= 0) {
+      column = state.module.structure.columns[data.columnId];
       if (data.componentId >= 0) {
-        state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].enabled = data.enabled;
+        column.components[data.componentId].plugins[data.plugin].enabled = data.enabled;
       } else {
-        state.module.structure.columns[data.columnId].plugins[data.plugin].enabled = data.enabled;
+        column.plugins[data.plugin].enabled = data.enabled;
       }
     } else {
       state.module.plugins[data.plugin].enabled = data.enabled;
     }
+    column = null;
   },
   saveComponentProperty(state, data) {
     const component = state.module.structure.columns[data.columnId].components[data.componentId];
     const subComponent = data.subComponent ? component[data.subComponent] : component;
     const properties = data.link ? subComponent[data.link] : subComponent;
     Vue.set(properties, data.property, data.value);
-  },
-  setActiveColumn(state, columnId) {
-    state.activeColumn = columnId;
   },
   setBuildingMode(state, mode) {
     state.buildingMode = mode;
@@ -150,10 +214,11 @@ const mutations = {
     state.showRaw = !state.showRaw;
   },
   error(state, err) {
-    console.log(err);
+    console.error(err);
   },
   setListLibraries(state, data) {
     state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options = data.response;
+    state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config['sie-plugin-image-overlay_image'].config.overlay_gallery.config.set_images.options = data.response;
   }
 };
 
@@ -164,8 +229,11 @@ const actions = {
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
 
     _.each(modulePlugins, (plugin, name) => {
-      if (plugin.target.indexOf('column') !== -1) {
-        plugins[name] = clone(plugin);
+      switch (plugin.target.indexOf('column') !== -1) {
+        case true:
+          plugins[name] = clone(plugin);
+          break;
+        default:
       }
     });
 
@@ -198,14 +266,21 @@ const actions = {
       .catch(error => context.commit('error', error));
   },
   saveModuleData(context, data) {
-    return moduleService.saveModule(data)
+    const deferred = Q.defer();
+
+    moduleService.saveModule(data)
       .then((response) => {
         if (response.message && response.message === 'SUCCESS') {
           context.commit('saveModule', response.id);
-          return response.id;
+          deferred.resolve(response.id);
         }
       })
-      .catch(error => context.commit('error', error));
+      .catch((error) => {
+        context.commit('error', error);
+        deferred.reject(error);
+      });
+
+    return deferred.promise;
   },
   uploadImages(context, data) {
     const deferred = Q.defer();
@@ -222,15 +297,15 @@ const actions = {
     return deferred.promise;
   },
   getLibraries(context, data) {
-    imageService.getLibraries().then(response => {
+    return imageService.getLibraries().then((response) => {
       response.data.push('');
-      
+
       context.commit('setListLibraries', {
         ...data,
-        response: response.data
+        response: response.data,
       });
     });
-  }
+  },
 };
 
 module.exports = {

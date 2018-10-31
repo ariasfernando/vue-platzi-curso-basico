@@ -1,7 +1,7 @@
 <template>
   <module-container :component="component" @select-component="selectComponentHandler">
       <a
-        :href="component.button.attribute.href || ''"
+        :data-contenteditable-href="component.button.attribute.href || ''"
         :target="component.button.attribute.target || '_blank'"
         :style="component.button.style.textDecoration || 'text-decoration:none;'"
         @click.prevent
@@ -10,7 +10,7 @@
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
+          :width="buttonContainerWidth"
           :height="component.button.attribute.height"
           :bgcolor="component.button.attribute.bgcolor"
           :style="tableStyles"
@@ -87,14 +87,29 @@
         editorId: ['editor', this.columnId, this.componentId].join('-')
       }
     },
-    computed:{
-      tableStyles(){
-        const width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
+    computed: {
+      buttonContainerWidth() {
+        const { behaviour } = this.component;
+        if (behaviour === 'text') {
+          return '100%';
+        }
+        return this.width;
+      },
+      width() {
+        return this.component.button.styleOption.autoWidth ? undefined : this.component.button.attribute.width;
+      },
+      tableStyles() {
+        const { behaviour } = this.component;
+        let width = this.width ? this.widthStyle(this.width) : undefined;
+        if (behaviour === 'text') {
+          width = '100%';
+        }
         return {
           'width': width,
           'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
-          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth
-        }
+          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth,
+          'border-collapse': 'initial',
+        };
       },
       widthCaret() {
         return _.parseInt(this.component.caret.attribute.width) + _.parseInt(this.component.caret.style.paddingLeft) || 0 + _.parseInt(this.component.caret.style.paddingRight) || 0;
