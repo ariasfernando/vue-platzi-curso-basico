@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Stensul\Models\Permission;
 
-class AddArcvhiePermission extends Migration
+class AddArchivePermission extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class AddArcvhiePermission extends Migration
     {
         Permission::create([
             'name' => 'access_archive',
-            'description' => 'Allows archive campaigns.'
+            'description' => 'Access archived campaigns.'
         ]);
     }
 
