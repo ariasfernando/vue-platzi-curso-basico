@@ -191,10 +191,10 @@ export default {
     },
     palette_name: {
       get() {
-        return this.plugin.config.options.backcolor.palette_name;
+        return this.plugin.config.options.forecolor.palette_name;
       },
       set(value) {
-        this.changeOption(value, 'backcolor', 'palette_name');
+        this.changeOption(value, 'forecolor', 'palette_name');
       },
     },
     back_palette_name: {
