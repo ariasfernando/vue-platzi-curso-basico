@@ -17,7 +17,7 @@
           size="mini"
           @click.prevent="toggleOption(optionName, option.value)" />
       </div>
-      <group-container label="Advance Settings">
+      <group-container label="Advanced Settings">
         <!-- forecolor -->
         <template v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')">
           <settings-container label="Color List By Library">
