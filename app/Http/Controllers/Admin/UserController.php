@@ -126,7 +126,8 @@ class UserController extends Controller
     {
         $params = [
             "title" => "Create User",
-            "roles" => $this->listRoles()
+            "roles" => $this->listRoles(),
+            "change_roles" => true
         ];
 
         return $this->renderView('admin.modals.user_form', array('params' => $params));
@@ -145,6 +146,7 @@ class UserController extends Controller
         $params = [
             "title" => "Edit User",
             "roles" => $this->listRoles(),
+            "change_roles" => Auth::user()->can('allows_role_change'),
             "user" => $user_data
         ];
 
