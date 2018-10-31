@@ -135,9 +135,22 @@
                             <div class="row" v-if="campaignConfig.enable_tracking">
                               <!-- Field Tracking -->
                               <label for="tracking" class="col-sm-4 control-label">Enable Tracking</label>
-                              <p class="control col-sm-8">
+                              <div class="control col-sm-1">
                                 <toggle-button :value="library.config.tracking" @change="updateToggle('tracking')"></toggle-button>
-                              </p>
+                              </div>
+                              <div class="col-sm-11">
+                                <textarea
+                                    v-model="library.config.trackingConfig"
+                                    v-validate="'required:library.config.tracking|isValidJson'"
+                                    :name="'trackingConfig'"
+                                    :style="{borderColor: errors.has('trackingConfig') ? 'red' : '', resize: 'vertical'}"
+                                    :disabled="!library.config.tracking"
+                                    data-vv-as="configuration"
+                                    placeholder="Add the tracking configuration in JSON format...">
+                                </textarea>
+                                <span v-if="errors.has('trackingConfig')" class="help is-danger">{{ errors.first('trackingConfig') }}</span>
+                                <span v-else>&nbsp;</span>
+                              </div>
                             </div>
 
                         </tab>

@@ -1,71 +1,75 @@
 <template>
-  <div class="expand configuration-mod" v-if="trackingConfigReady">
-    <h2 class="show-configuration" v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }">
-        <i class="glyphicon glyphicon-cog glyph-inline"></i> Tracking Configuration <i class="glyphicon glyphicon-menu-up"></i>
-    </h2>
-    <div class="level-1 open-section-campaign" v-bind:class="{'is-collapsed' : collapsed }">
-      <form class="tracking-configuration" name="tracking-configuration" id="trackingConfiguration">
-        <!-- Configuration Inputs -->
-        <div v-for="(item, key) in trackingConfig">
-          <div class="tracking-item">
-            <div class="form-group" v-if="item.input_type == 'select'">
-              <div>
-                <label :for="'trk'+trackingConfig[key].name">{{ trackingConfig[key].label }}</label>
+  <div v-if="trackingConfigReady" class="expand configuration-mod">
+    <label-item-container v-b-toggle.trackingSettings label="TRACKING CONFIGURATION" icon="glyphicon-cog" />
+    <b-collapse id="trackingSettings" visible>
+      <div class="card">
+        <form id="trackingConfiguration" class="tracking-configuration" name="tracking-configuration">
+          <!-- Configuration Inputs -->
+          <div v-for="(item, key) in trackingConfig">
+            <div class="tracking-item">
+              <div v-if="item.input_type === 'select'" class="form-group">
+                <div>
+                  <label :for="`trk-${trackingConfig[key].name}`">{{ trackingConfig[key].label }}</label>
+                </div>
+                <div>
+                  <el-select
+                    v-model="trackingData['trk-' + key]"
+                    v-validate="'required'"
+                    class="float-left width-full"
+                    :name="`trk-${trackingConfig[key].name}`"
+                    placeholder="">
+                    <el-option
+                      v-for="value in item.options"
+                      :key="value"
+                      :label="value"
+                      :value="value" />
+                  </el-select>
+                </div>
+                <span
+                  v-show="errors.has(trackingData[`trk-${trackingConfig[key].name}`])"
+                  class="help is-danger">{{ errors.first(trackingData[`trk-${trackingConfig[key].name}`]) }}
+            </span>
               </div>
-              <div>
-                <el-select
-                :placeholder="trackingConfig[key].name"
-                v-model="trackingData['trk-'+key]"
-                class="float-left width-full"
-                v-validate="'required'"
-                >
-                  <el-option
-                    v-for="value in item.options"
-                    :key="value"
-                    :label="value"
-                    :value="value"
-                    >
-                  </el-option>
-                </el-select>
+              <div v-else-if="item.input_type === 'hidden'" class="form-group">
+                <input
+                  type="hidden"
+                  :name="`trk-${trackingConfig[key].name}`"
+                  :value="trackingData[`trk-${key}`]"
+                  @blur="saveSettings">
               </div>
-              <span v-show="errors['trk-'+trackingConfig[key].name] !== undefined" class="help is-danger">{{ errors['trk-'+trackingConfig[key].name] }}</span>
-            </div>
-            <div class="form-group" v-else-if="item.input_type == 'hidden'">
-              <input type="hidden"
-                :name="'trk-'+trackingConfig[key].name"
-                :value="trackingData['trk-'+key]"
-                @blur="saveSettings">
-              <span v-show="errors['trk-'+trackingConfig[key].name] !== undefined" class="help is-danger">{{ errors['trk-'+trackingConfig[key].name] }}</span>
-            </div>
-            <div class="form-group" v-else>
-              <div>
-                <label :for="'trk'+trackingConfig[key].name">{{ trackingConfig[key].label }}</label>
+              <div v-else class="form-group">
+                <div>
+                  <label :for="`trk-${trackingConfig[key].name}`">{{ trackingConfig[key].label }}</label>
+                </div>
+                <div>
+                  <el-input
+                    v-model="trackingData['trk-' + key]"
+                    v-validate="'required'"
+                    :name="`trk-${trackingConfig[key].name}`"
+                    :controls="false"
+                    class="float-left"
+                    @blur="saveSettings" />
+                </div>
+                <span
+                  v-show="errors.has(trackingData[`trk-${trackingConfig[key].name}`])"
+                  class="help is-danger">{{ errors.first(trackingData[`trk-${trackingConfig[key].name}`]) }}
+            </span>
               </div>
-              <div>
-                <el-input
-                  v-validate="'required'"
-                  v-model="trackingData['trk-'+key]"
-                  :name="'trk-'+trackingConfig[key].name"
-                  :controls="false"
-                  @blur="saveSettings"
-                  class="float-left"
-                ></el-input>
-              </div>
-              <span v-show="errors['trk-'+trackingConfig[key].name] !== undefined" class="help is-danger">{{ errors['trk-'+trackingConfig[key].name] }}</span>
             </div>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </b-collapse>
   </div>
 </template>
 
 <script>
-  import _ from 'lodash';
   import TrackingMixin from './mixins/trackingMixin';
+  import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
 
   export default {
     components: {
+      LabelItemContainer,
     },
     mixins: [ TrackingMixin ],
     props: {
@@ -83,11 +87,6 @@
       campaign() {
         return this.$store.getters['campaign/campaign'];
       }
-    },
-    created () {
-      this.loadConfig();
-    },
-    mounted (){
     },
     methods: {
       loadCampaign() {

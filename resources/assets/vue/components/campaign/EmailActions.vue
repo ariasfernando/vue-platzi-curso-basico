@@ -145,7 +145,7 @@
         var cleanHtml = campaignCleaner.clean('.section-canvas-container');
 
         if (this.trackingEnabled) {
-          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+          cleanHtml = this.addTrackingParams(cleanHtml);
         }
 
         const bodyHtml = html_beautify(cleanHtml, {
@@ -266,7 +266,7 @@
             this.$store.commit("global/setLoader", false);
             return false;
           }
-          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+          cleanHtml = this.addTrackingParams(cleanHtml);
         }
 
         const bodyHtml = html_beautify(cleanHtml, {
