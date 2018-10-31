@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label-item-container v-b-toggle.column-settings-styles :label="`Column ${currentComponent.columnId + 1} Style`" icon="glyphicon-pause" />
+    <label-item-container v-b-toggle.column-settings-styles :label="`Column ${currentComponent.columnId + 1} Styles`" icon="glyphicon-pause" />
     <b-collapse id="column-settings-styles" visible accordion="general-settings">
       <b-card class="control" no-block>
         <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-column_')" :key="groupKey">

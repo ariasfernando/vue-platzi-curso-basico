@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label-item-container label="Row Style" icon="glyphicon-cog" v-b-toggle.module-settings-styles />
+    <label-item-container label="Row Styles" icon="glyphicon-cog" v-b-toggle.module-settings-styles />
     <b-collapse id="module-settings-styles" visible accordion="module-settings">
       <b-card class="control">
         <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-module_')" :key="groupKey">
