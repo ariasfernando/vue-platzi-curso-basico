@@ -26,7 +26,7 @@
                     v-for="(component, componentId) in column.components"
                     :key="component.id"
                     @select-component="selectComponent"
-                    :is="component.studioKey?component.studioKey:component.type"
+                    :is="component.key || component.type"
                     :component="component"
                     :module-id="moduleId"
                     :column-id="columnId"

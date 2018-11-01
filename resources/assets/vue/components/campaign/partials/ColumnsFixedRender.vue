@@ -19,7 +19,7 @@
                 v-for="(component, componentId) in column.components"
                 @click="setComponent(moduleId, columnId, componentId)"
                 :key="component.id"
-                :is="component.studioKey?component.studioKey:component.type"
+                :is="component.key || component.type"
                 :component="component"
                 :module-id="moduleId"
                 :column-id="columnId"
