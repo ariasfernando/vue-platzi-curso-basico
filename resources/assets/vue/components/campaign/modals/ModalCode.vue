@@ -57,10 +57,10 @@
         plainText: '',
         html: {
           title: '',
-            toggle: false,
-            output: '',
-            initial_html: '',
-            minified_html: ''
+          toggle: false,
+          output: '',
+          initial_html: '',
+          minified_html: ''
           }
         }
     },
