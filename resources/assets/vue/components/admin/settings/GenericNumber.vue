@@ -4,8 +4,7 @@
       <el-input-number
         v-model="mainSettingNumeric"
         v-validate="'required'"
-        :controls="!(isPercentage || isPixel)"
-        controls-position="right"
+        :controls="true"
         :class="isPercentage || isPixel ? 'width-unit' : 'without-unit'"
         size="mini"
         :min="minValue"
@@ -89,22 +88,23 @@ export default {
 }
 .el-input-number /deep/ .el-input__inner {
   padding: 0;
-  border-radius: 2px 0px 0px 2px;
+  border-radius: 2px 2px 2px 2px;
 }
 .el-input-number /deep/ {
   .el-input-number__decrease,
   .el-input-number__increase {
     right: 0;
-    border: 1px solid #dcdfe6;
     border-left: 1px solid #dcdfe6;
   }
   .el-input-number__decrease {
-    bottom: 0;
+    top: 1px;
+    left:0;
     margin: 0;
     border-radius: 0 0 2px 0;
   }
   .el-input-number__increase {
-    top: 0;
+    top: 1px;
+    right:1px;
     margin: 0;
     border-radius: 0 2px 0 0;
   }
@@ -149,8 +149,8 @@ export default {
   }
 }
 .el-input-number--mini.width-unit {
-  width: 80px;
-  margin-right: 25px;
+  width: 91px;
+  margin-right: 29px;
   float: right;
 }
 .half-style-setting-padding {
@@ -167,7 +167,6 @@ export default {
 }
 .without-unit {
   width: 105px;
-  padding-right: 28px;
 }
 .is-setting-half .el-input-number--mini.width-unit {
   float: left;
