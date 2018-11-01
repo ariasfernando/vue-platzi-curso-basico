@@ -3,7 +3,7 @@
     <label-item-container label="Row Style" icon="glyphicon-cog" v-b-toggle.module-settings-styles />
     <b-collapse id="module-settings-styles" visible accordion="module-settings">
       <b-card class="control">
-        <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-module_')" :key="groupKey">
           <component
             :is="'input-' + setting.type"
             v-for="setting in settingGroup.settings"
@@ -36,7 +36,7 @@
         <component
           :is="'studio-' + plugin.name"
           v-for="(plugin, moduleKey) in module.plugins"
-          v-if="module.plugins && plugin.hasStudioSettings && $can('std-plugin-'+plugin.name)"
+          v-if="module.plugins && $_app.modulePlugins[moduleKey].hasStudioSettings && $can('std-plugin-'+plugin.name)"
           :key="plugin.name"
           :name="moduleKey"
           :plugin="plugin"
@@ -51,9 +51,12 @@ import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
 import settingsDefault from '../settingsDefault';
+import AclMixing from '../mixins/AclMixin';
+
 
 export default {
   name: 'GeneralSettings',
+  mixins: [AclMixing],
   components: {
     GroupContainer,
     LabelItemContainer,
