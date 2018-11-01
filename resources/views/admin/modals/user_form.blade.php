@@ -35,7 +35,7 @@
 			)) !!}
 		</div>
 
-		@if (Auth::user()->can('allows_role_change'))
+		@if ($params['change_roles'])
 			<!-- Select Role -->
 			<div class="modal-mpf-row selector">
 				<label>Select Role</label>

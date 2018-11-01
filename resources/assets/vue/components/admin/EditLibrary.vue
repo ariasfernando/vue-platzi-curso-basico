@@ -61,7 +61,7 @@
                             <div class="row" v-if="campaignConfig.preview.show_preheader">
                               <!-- Field Preheader -->
                               <label for="preheader" class="col-sm-4 control-label">Preheader</label>
-                              <p class="control col-sm-4">
+                              <p class="control col-sm-1">
                                 <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')"></toggle-button>
                               </p>
 
@@ -80,7 +80,7 @@
                             <!-- Field Plain text -->
                             <div class="row" v-if="campaignConfig.process_plaintext">
                               <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
-                              <p class="control col-sm-4">
+                              <p class="control col-sm-1">
                                 <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')"></toggle-button>
                               </p>
                             </div>
@@ -88,7 +88,7 @@
                             <!-- Html to pdf -->
                             <div class="row" v-if="campaignConfig.download_pdf">
                               <label for="htmlToPdf" class="col-sm-4 control-label">PDF Download</label>
-                              <p class="control col-sm-8">
+                              <p class="control col-sm-1">
                                 <toggle-button :value="library.config.htmlToPdf" @change="updateToggle('htmlToPdf')"></toggle-button>
                               </p>
                             </div>
@@ -135,7 +135,7 @@
                             <div class="row" v-if="campaignConfig.enable_tracking">
                               <!-- Field Tracking -->
                               <label for="tracking" class="col-sm-4 control-label">Enable Tracking</label>
-                              <p class="control col-sm-8">
+                              <p class="control col-sm-1">
                                 <toggle-button :value="library.config.tracking" @change="updateToggle('tracking')"></toggle-button>
                               </p>
                             </div>
@@ -712,6 +712,10 @@
   @brand-secondary: @stensul-purple-light;
 
   .library {
+    .control-label {
+      width: 30% !important;
+    }
+
     margin-top: -15px;
 
     .header {
