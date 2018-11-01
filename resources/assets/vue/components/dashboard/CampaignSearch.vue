@@ -20,7 +20,7 @@
       </button>
     </div>
     <ul v-if="showTagDropdown && ready" class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content"
-      tabindex="0" style="top: 33px; left: 0; width: 100%;">
+      tabindex="0" style="top: 33px; left: 0; width: 100%; cursor: default;">
       <li class="ui-autocomplete-category" v-if="$can('access_archive')">Filters</li>
       <li v-for="filter in filters" :aria-label="filter.label" class="ui-menu-item" tabindex="-1"
         @click.prevent="addFilterParam(filter)" v-if="$can('access_archive')">{{filter.label}}</li>
@@ -117,6 +117,7 @@
       },
       addFilterParam: function(filter) {
         this.$emit('add-filter-param', filter.filterTerm);
+        this.closeTagDropdown();
       },
       closeTagDropdown: function() {
         this.filteredTagNames = clone(this.tagNames);
