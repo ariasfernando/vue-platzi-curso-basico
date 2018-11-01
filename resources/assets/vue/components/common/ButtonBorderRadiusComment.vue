@@ -1,14 +1,21 @@
 <template>
-  <div class="stx-wrapper" v-html="content" />
+  <line-comment :comment="content" />
 </template>
 
 <script>
+import ElementMixin from './mixins/ElementMixin';
+import LineComment from './comments/LineComment.vue';
+
 export default {
-  props: ['component', 'module', 'columnId', 'componentId'],
+  components: { LineComment },
+  mixins: [ElementMixin],
+  props: ['module'],
   data() {
     return {
       height: 0,
+      outerHeight: 0,
       lineHeight: 0,
+      fontSize: 0,
       lines: 1,
       text: '',
       textRaise: 0,
@@ -17,7 +24,7 @@ export default {
   },
   computed: {
     arcSize() {
-      const percent = Math.round(this.borderRadius * 100 / this.height);
+      const percent = Math.round((this.borderRadius * 100) / this.height);
       return percent;
     },
     bgColor() {
@@ -38,12 +45,9 @@ export default {
       return this.module.structure.attribute.bgcolor;
     },
     borderColor() {
-      if (this.borderWidth) {
-        if (this.component.button.style.borderBottomColor) {
-          // we assume that all borders have the same color, could be extended in the future
-          return this.component.button.style.borderBottomColor;
-        }
-        return this.bgColor;
+      if (this.borderWidth && this.component.button.style.borderBottomColor) {
+        // we assume that all borders have the same color, could be extended in the future
+        return this.component.button.style.borderBottomColor;
       }
       return this.bgColor;
     },
@@ -55,7 +59,9 @@ export default {
     },
     borderRadius() {
       return Math.ceil(
-        this.convertToPt(parseInt(this.component.button.style.borderRadius)),
+        this.convertToPt(
+          parseInt(this.component.button.style.borderRadius, 10),
+        ),
       );
     },
     buttonAlignment() {
@@ -67,7 +73,9 @@ export default {
             <tr>
               <td width="100%" valign="top" align="${
                 this.buttonAlignment
-              }" style="padding: 0px; width: 100%; height:${this.height}pt;">
+              }" style="padding: 0px; width: 100%; height:${
+        this.outerHeight
+      }pt;">
                 <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
                   href="${this.href}"
                   style="height:${this.height}pt; v-text-anchor:middle; width:${
@@ -103,12 +111,11 @@ export default {
       const style = `text-align: ${element.attribute.align || 'left'};
         font-family: ${element.style.fontFamily};
         color: ${element.style.color};
-        font-size: ${element.style.fontSize};
+        font-size: ${this.fontSize}px;
         font-weight: ${element.style.fontWeight};
         letter-spacing: ${element.style.letterSpacing};
         mso-line-height-rule: exactly;
-        line-height: ${this.lineHeight}px;
-        mso-text-raise: ${this.textRaise}px;`;
+        line-height: ${this.lineHeight}px;`;
       return style;
     },
   },
@@ -129,7 +136,7 @@ export default {
   },
   methods: {
     convertToPt(value) {
-      return Math.ceil(parseInt(value) * 0.75);
+      return Math.ceil(parseInt(value, 10) * 0.75);
     },
     editorHeight() {
       return $(`#${this.editorId}`).height();
@@ -139,48 +146,84 @@ export default {
       this.setText();
       this.setWidth();
       this.setHeight();
-      this.setLines();
-      this.setLineHeight();
-      this.setTextRaise();
+      this.setFontSizeAndLineHeight();
     },
     setHeight() {
-      const paddingTop = this.component.button.style.paddingTop
-        ? parseInt(this.component.button.style.paddingTop)
-        : 0;
-      const paddingBottom = this.component.button.style.paddingBottom
-        ? parseInt(this.component.button.style.paddingBottom)
-        : 0;
-      const componentHeight = this.editorHeight() + paddingTop + paddingBottom;
-      let height = this.component.button.attribute.height;
-      if (componentHeight > height) {
-        height = componentHeight;
-      }
+      const componentHeight = this.getComponentHeight();
+      const height = Math.max(
+        parseInt(this.component.button.attribute.height, 10),
+        componentHeight,
+      );
       this.height = this.convertToPt(height);
+      this.outerHeight = this.height + (this.borderWidth * 2);
     },
     setLines() {
-      const element = this.component.button;
-      const lineHeight = parseInt(element.style.lineHeight);
-      let lines = 1;
-      if (this.editorHeight() >= lineHeight * 2) {
-        lines = Math.round(this.editorHeight() / lineHeight);
-      }
-      this.lines = lines;
+      const lineHeight = this.getHighestLineHeight();
+      this.lines =
+        this.editorHeight() >= lineHeight * 2
+          ? Math.round(this.editorHeight() / lineHeight)
+          : 1;
     },
-    setLineHeight() {
+    getComponentHeight() {
+      const paddingTop = this.component.button.style.paddingTop
+        ? parseInt(this.component.button.style.paddingTop, 10)
+        : 0;
+      const paddingBottom = this.component.button.style.paddingBottom
+        ? parseInt(this.component.button.style.paddingBottom, 10)
+        : 0;
+      return this.editorHeight() + paddingTop + paddingBottom;
+    },
+    getHighestLineHeight() {
       const element = this.component.button;
-      const fontSize = parseInt(element.style.fontSize);
-      let lineHeight = parseInt(element.style.lineHeight);
-      if (this.lines > 1) {
-        if (fontSize !== lineHeight) {
-          lineHeight = Math.round(lineHeight * 0.9);
-        }
-      }
-      const lineHeightPercent = lineHeight * 100 / fontSize;
+      const elementLineHeight = parseInt(this.lineHeightCalculate(element), 10);
+      const $editorSpans = $(`#${this.editorId}`).find('span');
+      const editorHighestLineHeight = Math.max(
+        ...$editorSpans
+          .map(function() {
+            return $(this).height();
+          })
+          .get(),
+      );
+
+      return Math.max(elementLineHeight, editorHighestLineHeight);
+    },
+    getHighestFontSize() {
+      const element = this.component.button;
+      const elementFontSize = parseInt(element.style.fontSize, 10);
+      const $editorSpans = $(`#${this.editorId}`).find('span');
+      const editorHighestFontSize = Math.max(
+        ...$editorSpans
+          .map(function () {
+            return parseInt($(this).css('font-size'), 10);
+          })
+          .get(),
+      );
+
+      return Math.max(elementFontSize, editorHighestFontSize);
+    },
+    setFontSizeAndLineHeight() {
+      this.setLines();
+      const fontSize = this.getHighestFontSize();
+      let lineHeight = this.getHighestLineHeight();
+
+      // To prevent Outlook from cropping our text,
+      // if the lineHeight exceeds 200% of the fontSize, we reduce it to a 'more razonable' percentage
+      const lineHeightPercent = (lineHeight * 100) / fontSize;
       if (lineHeightPercent >= 200) {
-        lineHeight = fontSize * 1.8;
+        lineHeight = fontSize * 1.5;
+      }
+
+      // Also, reduce the lineHeight if the summatory of lineHeights exceeds the element height
+      // this should not be a common issue, but can happen if the module isn't well configured
+      if (lineHeight * this.lines >= this.getComponentHeight()) {
+        lineHeight *= 0.75;
+        if (lineHeight < fontSize) {
+          lineHeight = fontSize;
+        }
       }
 
       this.lineHeight = Math.round(lineHeight);
+      this.fontSize = fontSize;
     },
     setText() {
       // we get the text using jQuery instead of using component.data.text because the text is inside tinymce
@@ -188,29 +231,22 @@ export default {
       // some custom plugins that make changes to texts in tinymce without triggering a edition event
       this.text = $(`#${this.editorId}`).html();
     },
-    setTextRaise() {
-      const element = this.component.button;
-      const fontSize = parseInt(element.style.fontSize);
-      const raiseRatio = (this.lineHeight - fontSize) / 2;
-      this.textRaise = Math.round(raiseRatio);
-    },
     setWidth() {
-      const paddingLeft = this.component.button.style.paddingLeft
-        ? parseInt(this.component.button.style.paddingLeft)
+      const style = this.component.button.style;
+      const paddingLeft = style.paddingLeft
+        ? parseInt(style.paddingLeft, 10)
         : 0;
-      const paddingRight = this.component.button.style.paddingRight
-        ? parseInt(this.component.button.style.paddingRight)
+      const paddingRight = style.paddingRight
+        ? parseInt(style.paddingRight, 10)
         : 0;
-      const minWidth = this.component.button.style.minWidth
-        ? parseInt(this.component.button.style.minWidth)
-        : 0;
+      const minWidth = style.minWidth ? parseInt(style.minWidth, 10) : 0;
+
       const editorWidth =
         $(`#${this.editorId}`).width() + paddingLeft + paddingRight;
-      let width = this.component.button.attribute.width;
-      if (minWidth || width === 0) {
-        width = editorWidth > minWidth ? editorWidth : minWidth;
-      }
-      this.width = this.convertToPt(width);
+      const buttonWidth = this.component.button.attribute.width;
+      const finalWidth = Math.max(editorWidth, buttonWidth, minWidth);
+
+      this.width = this.convertToPt(finalWidth);
     },
   },
 };
