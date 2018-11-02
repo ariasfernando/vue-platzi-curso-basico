@@ -562,15 +562,15 @@ export default {
           // trim string if exceed max char limit
 
           const tinyLength = $(editor.getContent({ format: 'html' })).text().length;
-          const charsToPaste = tinyMax - tinyLength;
+          const selectionLength = editor.selection.getContent({ format: 'text' }).length;
+          const charsToPaste = (tinyMax - tinyLength) + selectionLength;
 
-          if (cleanTxt.length > charsToPaste){
+          if (cleanTxt.length > charsToPaste) {
             args.content = cleanTxt.trim().substring(0, charsToPaste);
           } else {
             args.content = cleanTxt.trim();
           }
         },
-
       };
 
       if (!_.isEmpty(options)) {
