@@ -273,9 +273,7 @@ export default {
       this.$store.commit('module/setPluginElementConfig', payload);
     },
     tinySettingContent(content) {
-      console.log("content", content);
       if (content) {
-        console.log("Json stringify", JSON.stringify(content));
         return typeof content === 'object' ? JSON.stringify(content) : content;
       }
       return 0;
