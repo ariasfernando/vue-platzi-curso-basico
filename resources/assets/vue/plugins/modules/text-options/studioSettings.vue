@@ -130,6 +130,7 @@
                   v-else
                   :value="plugin.config.settings[tinySetting.key].content"
                   :default-value="tinySetting.defaultValue"
+                  :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
                   :false-text="tinySetting.falseText"
                   @change="(value)=>changeSetting(value, tinySetting.key)" />
               </template>
@@ -261,10 +262,15 @@ export default {
       this.$store.commit('module/setPluginElementConfig', payload);
     },
     tinySettingContent(content) {
+      console.log("content", content);
       if (content) {
+        console.log("Json stringify", JSON.stringify(content));
         return typeof content === 'object' ? JSON.stringify(content) : content;
       }
       return 0;
+    },
+    isDisabled(isDisabled, content) {
+      return (isDisabled && content) ? isDisabled(this.tinySettingContent(content)) : false;
     },
   },
 };
