@@ -1,7 +1,11 @@
 import _ from 'lodash';
+import Adapter from './tinymce/Adapter';
 
 export default {
   props: ['name', 'plugin'],
+  mixins: [
+    Adapter,
+  ],
   mounted() {
     if (this.textOptions.enabled) {
       this.initTinyMCE();
@@ -20,24 +24,14 @@ export default {
       const nameComponent = this.component.type;
       const libraryLinkColor = this.libraryConfig.linkColor;
       const editor = tinymce.get(this.editorId);
-      const ul_fixed_style = editor.settings.ul_fixed_style;
-      const ol_fixed_style = editor.settings.ol_fixed_style;
-      const li_fixed_style = editor.settings.li_fixed_style;
       const p_fixed_style = editor.settings.p_fixed_style;
       const persist_styles = editor.settings.persist_styles;
       const button_inline_color = editor.settings.button_inline_color;
 
       if (nameComponent === 'button-element' && button_inline_color) {
-        this.changeStyles('p', { color: this.component.button.style.color || libraryLinkColor });
-      }
-      if (ul_fixed_style) {
-        this.changeStyles('ul', ul_fixed_style);
-      }
-      if (ol_fixed_style) {
-        this.changeStyles('ol', ol_fixed_style);
-      }
-      if (li_fixed_style && Application.utils.isJsonString(li_fixed_style)) {
-        this.changeStyles('li', JSON.parse(li_fixed_style));
+        this.changeStyles('p', {
+          color: this.component.button.style.color || libraryLinkColor
+        });
       }
       if (p_fixed_style && Application.utils.isJsonString(p_fixed_style)) {
         this.changeStyles('p', JSON.parse(p_fixed_style));
@@ -55,6 +49,7 @@ export default {
         }
       }
 
+      this.setListStyles();
       this.setLinkStyles();
     },
     changeStyles(selector, styles) {
@@ -77,12 +72,33 @@ export default {
       const editorLinks = $(editor.targetElm).find('a');
 
       /*
-      * Color Treatment
-      */
+       * Color Treatment
+       */
 
       // check if link_fixed_color is setup an apply it, otherwise, apply parent color
       if (link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color)) {
-        this.changeStyles('a', { color: link_fixed_color });
+        if (editorLinks.length) {
+          for (let i = 0; i < editorLinks.length; i++) {
+            const $el = $(editorLinks[i]);
+
+            // check if element has a span as parent and then check colors
+            const $span = $el.parent('span');
+            if ($span.length) {
+              // return the first span parent that has a color
+              const $parentEl = $span.parents().filter(function () {
+                return $(this).css('color');
+              });
+              const parentColor = $parentEl.css('color');
+              const spanColor = $span.css('color');
+              // if span and parent color are the same, we assume that the span is inheriting the color
+              // so we apply the fixed color, otherwise, we let the span color.
+              const newColor = parentColor === spanColor ? link_fixed_color : spanColor;
+              $el.css('color', newColor);
+            } else {
+              $el.css('color', link_fixed_color);
+            }
+          }
+        }
       } else {
         if (editorLinks.length) {
           for (let i = 0; i < editorLinks.length; i++) {
@@ -99,18 +115,18 @@ export default {
       }
 
       /*
-      * Fixed Styles Treatment
-      */
+       * Fixed Styles Treatment
+       */
 
       if (link_fixed_styles) {
         this.changeStyles('a', link_fixed_styles);
       }
 
       /*
-      * Underline Treatment
-      * note: text-decoration:underline in <a> is overriden by css clases in email clients,
-      * so we have to add an underlined span inside
-      */
+       * Underline Treatment
+       * note: text-decoration:underline in <a> is overriden by css clases in email clients,
+       * so we have to add an underlined span inside
+       */
 
       $.each(editorLinks, (index, el) => {
         if (link_fixed_styles && link_fixed_styles["text-decoration"] === "underline") {
@@ -125,14 +141,54 @@ export default {
         }
       });
     },
+    setListStyles() {
+      const editor = tinymce.get(this.editorId);
+      const ul_fixed_style = editor.settings.ul_fixed_style;
+      const ol_fixed_style = editor.settings.ol_fixed_style;
+      const li_fixed_style = editor.settings.li_fixed_style;
+      const li_keep_children_style = editor.settings.li_keep_children_style;
+
+      if (ul_fixed_style) {
+        this.changeStyles('ul', ul_fixed_style);
+      }
+      if (ol_fixed_style) {
+        this.changeStyles('ol', ol_fixed_style);
+      }
+      if (li_fixed_style && Application.utils.isJsonString(li_fixed_style)) {
+        this.changeStyles('li', JSON.parse(li_fixed_style));
+      }
+
+      if (li_keep_children_style) {
+        const editorLists = $(editor.targetElm).find('li');
+        editorLists.each((index, el) => {
+          const firstTextElement = $(el).find('span')[0];
+          if (firstTextElement) {
+            const computedStyle = document.defaultView.getComputedStyle(firstTextElement)
+            const fontSize = computedStyle.getPropertyValue('font-size');
+            const lineHeight = computedStyle.getPropertyValue('line-height');
+            const letterSpacing = computedStyle.getPropertyValue('letter-spacing');
+            $(el).css({
+              fontSize,
+              lineHeight,
+              letterSpacing,
+            });
+          }
+        });
+      }
+    },
     tinyMaxLines() {
       const editor = tinymce.get(this.editorId);
       if (editor.settings.max_lines) {
         if (parseInt(editor.settings.max_lines)) {
           return parseInt(editor.settings.max_lines) || undefined;
         } else {
-          const firstTextElement = this.$textElement.find('p')[0] || this.$textElement.find('li')[0];
-          const fontSize = document.defaultView.getComputedStyle(firstTextElement).getPropertyValue('font-size');
+          const firstTextElement = this.$textElement[0].firstElementChild;
+          let firstTextNode = firstTextElement.firstChild;
+          // if the first node is a text node, we go up to te parent element.
+          if (firstTextNode.nodeName === '#text') {
+            firstTextNode = firstTextElement;
+          }
+          const fontSize = document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('font-size');
           return JSON.parse(editor.settings.max_lines)[fontSize];
         }
       }
@@ -161,15 +217,21 @@ export default {
           event.stopPropagation();
         }
         return false;
-      } else {
-        this.clearError();
       }
+      this.clearError();
     },
     maxLinesValidation(event) {
       const divHeight = this.$textElement.height();
-      const firstTextElement = this.$textElement.find('p')[0] || this.$textElement.find('li')[0];
-      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextElement).getPropertyValue('line-height'));
-      const actualLines = parseInt(divHeight / lineHeight);
+      const firstTextElement = this.$textElement[0].firstElementChild;
+      let firstTextNode = firstTextElement.firstChild;
+
+      // if the first node is a text node, we go up to te parent element.
+      if (firstTextNode.nodeName === '#text') {
+        firstTextNode = firstTextElement;
+      }
+
+      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      const actualLines = divHeight / lineHeight;
 
       if (actualLines > this.tinyMaxLines()) {
         this.setError({
@@ -228,6 +290,78 @@ export default {
       this.maxLinesValidation();
       this.minCharsValidation();
     },
+    styleFormatsIncrement() {
+      const style_formats = [];
+
+      const loop = this.textOptions.config.settings.style_formats_increment.content;
+
+      let step = Number(loop.steps.range.split(':')[0]);
+      let currentFontSize = Number(loop.styles.fontSize.initial) || step;
+      const rangeMax = Number(loop.steps.range.split(':')[1]);
+
+      const runBehaviour = (behaviour, initialValue) => {
+        behaviour = behaviour.split(':');
+        const behaviourType = behaviour[0];
+        const behaviourFactor = Number(behaviour[1]);
+
+        let result = Number(initialValue);
+
+        switch (behaviourType) {
+          case 'static':
+            // leave result as is
+            break;
+          case 'fixed':
+            result = behaviourFactor;
+            break;
+          case 'add':
+            result += behaviourFactor;
+            break;
+          case 'multiply':
+            result = Math.round(result * behaviourFactor);
+            break;
+          default:
+            console.log('Error: behaviour type not defined');
+        }
+        return result;
+      }
+
+      const getTitle = (tmp, val, unit) => {
+        let template = tmp || '%fontVal%unit';
+        if (template.indexOf('%fontVal') !== -1) {
+          template = template.replace('%fontVal', val);
+          if (unit) template = template.replace('%unit', unit);
+          return template;
+        }
+        return template.replace('%stepVal', step);
+      };
+
+      while (step <= rangeMax) {
+        const format = {
+          styles: {},
+        };
+
+        _.forOwn(loop.styles, (prop, key) => {
+          const keyBehaviour = prop.behaviour || loop.steps.behaviour;
+          const unit = prop.unit || 'px';
+          const result = runBehaviour(keyBehaviour, currentFontSize);
+          format.styles[key] = `${result}${unit}`;
+        });
+
+        _.forOwn(loop.settings, (prop, key) => {
+          format[key] = prop;
+        });
+
+        const fontSizeBehaviour = loop.styles.fontSize.behaviour || loop.steps.behaviour;
+        const fontSizeUnit = loop.styles.fontSize.unit || 'px';
+        format.title = getTitle(loop.title, currentFontSize, fontSizeUnit);
+        format.styles.fontSize = `${currentFontSize}${fontSizeUnit}`;
+        style_formats.push(format);
+
+        currentFontSize = runBehaviour(fontSizeBehaviour, currentFontSize);
+        step = runBehaviour(loop.steps.behaviour, step);
+      }
+      return style_formats;
+    },
     initTinyMCE() {
       const _this = this;
       const options = _.filter(this.textOptions.config.options, 'value');
@@ -235,11 +369,15 @@ export default {
 
       _.each(this.textOptions.config.settings, (e, k) => {
         if (Application.utils.isJsonString(e.content)) {
-          customSettings[k] = JSON.parse(e.content);
+          customSettings[k] = this.adapter(JSON.parse(e.content), k);
         } else {
-          customSettings[k] = e.content || e.value;
+          customSettings[k] = e.content ? this.adapter(e.content, k) : this.adapter(e.value, k);
         }
       });
+
+      if (this.textOptions.config.settings.style_formats_increment && this.textOptions.config.settings.style_formats_increment.value) {
+        customSettings.style_formats = this.styleFormatsIncrement();
+      }
 
       let toolbar = [];
 
@@ -273,7 +411,6 @@ export default {
         link_title: false,
         link_text_to_display: false,
         link_fixed_color: false,
-        link_fixed_color_enabled: this.textOptions.config.settings.link_fixed_color ? this.textOptions.config.settings.link_fixed_color.value : false,
         link_fixed_styles: false, // '{"text-decoration": "underline"}',
         button_inline_color: true,
         // persist_styles: JSON.stringify([{"ul":'{"mso-list": "disc"}'}]),
@@ -300,23 +437,23 @@ export default {
         setup(editor) {
           editor.paste_block_drop = true;
           editor.on('focus', (e) => {
-              // Change icon tiny
-              // TODO  implement DRY.
+            // Change icon tiny
+            // TODO  implement DRY.
             const $toolbox = $(editor.settings.fixed_toolbar_container);
 
             if ($toolbox.length && !$toolbox.find('div[aria-label="Font Sizes"] .text-size').length) {
-              setTimeout(() =>  {
+              setTimeout(() => {
                 $toolbox.find('div[aria-label="Font Sizes"] button:first').empty();
                 $toolbox.find('div[aria-label="Font Sizes"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
               });
             }
             if ($toolbox.length && !$toolbox.find('div[aria-label="Font Family"] .text-size').length) {
-              setTimeout(() =>  {
+              setTimeout(() => {
                 $toolbox.find('div[aria-label="Font Family"] button:first').empty();
                 $toolbox.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
               });
             }
-            if ($toolbox.length && !$toolbox.find('button:contains("Formats")').length ){
+            if ($toolbox.length && !$toolbox.find('button:contains("Formats")').length) {
               setTimeout(() => {
                 const $button = $toolbox.find("button:contains('Formats')");
                 $button.parent('div').attr('aria-label', 'Font Format');
@@ -331,103 +468,130 @@ export default {
                   .append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-bold"></i>');
               });
             }
+            // set toolbar width
+            if ($toolbox.length) {
+              setTimeout(() => {
+                const toolboxWidth = $toolbox.find('.mce-btn-group').width();
+                $toolbox.find('.mce-container-body').width(toolboxWidth);
+                $toolbox.find('.mce-panel').width(toolboxWidth);
+              });
+            }
           });
 
           editor
-          .on('keydown', (e) => {
-            if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
-              // if truncate is NAN, returns and avoid validations
-              return;
-            }
-            const allowKeys = [
-              //  key      keyCode
-              'Backspace', 8,
-              'Delete', 46,
-              'Tab', 9,
-              'Escape', 27,
-              'Home', 36,
-              'End', 35,
-              'ArrowLeft', 37,
-              'ArrowRight', 39,
-              'ArrowUp', 38,
-              'ArrowDown', 40,
-            ];
-
-            let code = null;
-            if (e.key !== undefined) {
-              code = e.key;
-            } else if (e.keyCode !== undefined) {
-              code = e.keyCode;
-            }
-
-            if ($.inArray(code, allowKeys) !== -1 ||
-              // Allow: Ctrl+A,Ctrl+C, Ctrl+X
-              ((e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 88) && (e.ctrlKey === true || e.metaKey === true))
-            ) {
-              if (code === 'Backspace') {
-                // Check for Min Characters Limit
-                _this.minCharsValidation(e);
+            .on('keydown', (e) => {
+              if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
+                // if truncate is NAN, returns and avoid validations
+                return;
               }
-              return;
-            }
+              const allowKeys = [
+                //  key      keyCode
+                'Backspace', 8,
+                'Delete', 46,
+                'Tab', 9,
+                'Escape', 27,
+                'Home', 36,
+                'End', 35,
+                'ArrowLeft', 37,
+                'ArrowRight', 39,
+                'ArrowUp', 38,
+                'ArrowDown', 40,
+              ];
 
-            // Check for Characters Limit
-            _this.maxCharsValidation(e);
+              let code = null;
+              if (e.key !== undefined) {
+                code = e.key;
+              } else if (e.keyCode !== undefined) {
+                code = e.keyCode;
+              }
 
-            // Check for Lines Limit
-            _this.maxLinesValidation(e);
-          })
-          .on('keyup change', (e) => {
-            editor.bodyElement.dispatchEvent(new Event('tiny-change'));
+              if ($.inArray(code, allowKeys) !== -1 ||
+                // Allow: Ctrl+A,Ctrl+C, Ctrl+X
+                ((e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 88) && (e.ctrlKey === true || e.metaKey === true))
+              ) {
+                if (code === 'Backspace') {
+                  // Check for Min Characters Limit
+                  _this.minCharsValidation(e);
+                }
+                return;
+              }
 
-            if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
-              //if truncate is NAN, returns and avoid validations
-              return;
-            }
+              // Check for Characters Limit
+              _this.maxCharsValidation(e);
 
-            // Check for Min Characters Limit
-            _this.minCharsValidation(e);
+              // Check for Lines Limit
+              _this.maxLinesValidation(e);
+            })
+            .on('keyup change', (e) => {
+              editor.bodyElement.dispatchEvent(new Event('tiny-change'));
 
-            // Check for Characters Limit
-            _this.maxCharsValidation(e);
+              if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
+                //if truncate is NAN, returns and avoid validations
+                return;
+              }
 
-            // Check for Lines Limit
-            _this.maxLinesValidation(e);
+              // Check for Min Characters Limit
+              _this.minCharsValidation(e);
 
-          })
-          .on('change', (e) => {
-            _this.setStyles();
-          })
-          .on('ExecCommand', (e) => {
-            if (e.command == 'mceInsertContent' && $(e.value)[0].nodeName == 'A')  {
-              _this.setLinkStyles();
-            }
-          });
+              // Check for Characters Limit
+              _this.maxCharsValidation(e);
+
+              // Check for Lines Limit
+              _this.maxLinesValidation(e);
+
+            })
+            .on('change', (e) => {
+              _this.setStyles();
+            })
+            .on('ExecCommand', (e) => {
+              if (e.command === 'mceInsertContent' && $(e.value)[0].nodeName === 'A') {
+                _this.setLinkStyles();
+              }
+            });
         },
         paste_preprocess: (plugin, args) => {
-          const editor = tinymce.get(tinymce.activeEditor.id);
-          const tinyMax = parseInt(editor.settings.max_chars);
+          const editor = tinymce.get(this.editorId);
+          const tinyMax = this.tinyMax();
 
           if (!tinyMax) {
             // if truncate is NAN, returns and avoid validations
             return;
           }
-
+          const ghostObj = $('<div/>').html(args.content);
+          const cleanTxt = ghostObj.text();
           // trim string if exceed max char limit
-          const tinyLength = editor.getContent({ format: 'text' }).length - 1;
+
+          const tinyLength = $(editor.getContent({ format: 'html' })).text().length;
           const charsToPaste = tinyMax - tinyLength;
-          args.content = args.content.trim().substring(0, charsToPaste);
+
+          if (cleanTxt.length > charsToPaste){
+            args.content = cleanTxt.trim().substring(0, charsToPaste);
+          } else {
+            args.content = cleanTxt.trim();
+          }
         },
 
       };
 
       if (!_.isEmpty(options)) {
         _.each(options, (option) => {
-          if (option.key === 'forecolor' && !_.isEmpty(option.textcolor_map) && !option.textcolor_from_library) {
-            settings.plugins = [settings.plugins, 'textcolor'].join(' ');
-            settings.textcolor_map = option.textcolor_map;
-          } else if (option.textcolor_from_library && Application.utils.isJsonString(this.libraryConfig.colorPalettes)) {
-            settings.textcolor_map = JSON.parse(this.libraryConfig.colorPalettes)[option.palette_name];
+          if (option.key === 'forecolor') {
+            if (!_.isEmpty(option.textcolor_map) && !option.textcolor_from_library) {
+              settings.textcolor_map = this.adapter(option.textcolor_map, 'forecolor');
+            } else if (option.textcolor_from_library && Application.utils.isJsonString(this.libraryConfig.colorPalettes)) {
+              settings.textcolor_map = JSON.parse(this.libraryConfig.colorPalettes)[option.palette_name];
+            }
+          }
+
+          if (option.key === 'backcolor') {
+            if (!_.isEmpty(option.backcolor_map) && !option.backcolor_from_library) {
+              settings.backcolor_map = this.adapter(option.backcolor_map, option.key);
+            } else if (option.backcolor_from_library && Application.utils.isJsonString(this.libraryConfig.colorPalettes)) {
+              settings.backcolor_map = JSON.parse(this.libraryConfig.colorPalettes)[option.palette_name];
+            }
+            if (!_.isEmpty(option.backcolor_map) || option.backcolor_from_library) {
+              settings.plugins = [settings.plugins, 'stbackcolorextended'].join(' ');
+            }
           }
         });
       }
@@ -439,7 +603,7 @@ export default {
 
       // Extend toolbar
       if ('extend_toolbar' in this.textOptions.config.settings) {
-        settings.plugins = [settings.plugins, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
+        settings.toolbar = [settings.toolbar, this.textOptions.config.settings.extend_toolbar.join(' ')].join(' ');
       }
 
       _.extend(settings, customSettings);

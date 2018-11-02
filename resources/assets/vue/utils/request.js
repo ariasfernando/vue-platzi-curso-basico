@@ -1,29 +1,11 @@
 import Q from 'q';
 import Vue from 'vue';
 import VueResource from 'vue-resource/dist/vue-resource';
-import mocks from '../resources/mocks';
 
 Vue.use(VueResource);
 
 function requestResponse(method, params, opts) {
   const deferred = Q.defer();
-  /*
-   * UT: mocked response
-   */
-  if (process.env.NODE_ENV === 'test') {
-    const arr = params.path.split('.');
-    const res = {
-      body: null,
-    };
-
-    if (mocks[arr[0]] && mocks[arr[0]][arr[1]]) {
-      res.body = mocks[arr[0]][arr[1]];
-    }
-
-    deferred.resolve(res);
-    return deferred.promise;
-  }
-
   const options = opts || {};
 
   options.url = exports.getPath(params.endpoint.path, params.search);
@@ -44,7 +26,6 @@ function requestResponse(method, params, opts) {
     .catch((error) => {
       deferred.reject(error);
     });
-
   return deferred.promise;
 }
 

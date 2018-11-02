@@ -65,6 +65,17 @@
       </div>
 
     </div>
+    <b-modal ref="noApprovedModal" hide-footer title="Using Component Methods" class="modal-approved">
+      <div class="d-block text-center">
+        <br/>
+        <h4>Pending approval</h4>
+        <p>This email has pending feedback from <b>{{ unApprovedemails.join(', ') }}</b>. To view the status of all reviews, <a @click="showProofTracking()" >click here</a> , otherwise hit OK below to complete the email</p><br/><br/>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default beta-btn-secondary" @click="$refs.noApprovedModal.hide();">Cancel</button>
+        <button class="btn btn-default beta-btn-primary" @click="isApproved = true; complete();">Ok</button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -73,6 +84,7 @@
   import campaignService from '../../services/campaign';
   import dashboardService from '../../services/dashboard';
   import campaignCleaner from '../../utils/campaignCleaner';
+  import proofService from '../../services/proof';
   import { html_beautify } from 'js-beautify';
   import TrackingMixin from './mixins/trackingMixin'
   import _ from 'lodash'
@@ -129,7 +141,9 @@
             && this.$_app.config.permissions.indexOf('access_proof') >= 0
         },
         trackingEnabled: false,
-        showLibraryName: false
+        showLibraryName: false,
+        isApproved: false,
+        unApprovedemails: [],
       }
     },
     directives: {
@@ -162,6 +176,12 @@
         });
       },
       _save(bodyHtml = undefined) {
+        // Add hack for devices that do not detect media queries on save action.
+        // So we need to have the fix if we want to send a preview before complete a campaign.
+        this.$_app.utils.hackMediaQuery(
+          '.section-canvas-container',
+          this.campaign.campaign_data.library_config.templateWidth);
+
         const promise = this.$store.dispatch("campaign/saveCampaign", {
           campaign: this.campaign,
           bodyHtml
@@ -203,7 +223,7 @@
        	if (!this._validateEmptyEmail()) {
         	return false;
        	}
-       	
+
         if (errorMessage !== '') {
           this.$root.$toast(
             customMessage || errorMessage,
@@ -237,9 +257,40 @@
       },
       _validateEmptyCampaignName() {
       	if (this.$store.getters["campaign/campaign"].campaign_data.campaign_name === '') {
-			return false;
-      	} 
+			       return false;
+      	}
       	return true;
+      },
+      _approved(){
+        if(!this.campaign.campaign_data.template && this.proofAccess.allow && this.proofAccess.status){
+          if (this.isApproved === true) return true;
+          proofService.getJSON('reviewers', this.campaign.campaign_data._id).then((response) => {
+            if (response && response.status === 'success') {
+                this.unApprovedemails = response.data
+                      .filter(function(r){
+                        return r.decision === undefined || r.decision.indexOf('approve')=== false
+                      }).map(function(r){
+                        return r.email;
+                      });
+                if(this.unApprovedemails.length){
+                  this.$refs.noApprovedModal.show();
+                  return false;
+                }else{
+                  this.isApproved = true;
+                  this.complete();
+                }
+            }
+          })
+          .catch((error) => {
+            this.$root.$toast(error, {className: 'et-error'});
+          });
+          return false;
+        }
+        return true;
+      },
+      showProofTracking(){
+        this.$store.commit('campaign/toggleModal', 'modalProofTrack');
+        return true;
       },
       template() {
         this.$store.commit("campaign/toggleModal", 'modalEnableTemplating');
@@ -250,6 +301,10 @@
       complete() {
         // Do not save if there are missing or wrong fields
         if (!this._validate()) {
+          return false;
+        }
+
+        if(!this._approved()){
           return false;
         }
 
@@ -405,9 +460,6 @@
     outline: none;
     border: 1px solid #dddddd;
   }
-</style>
-
-<style lang="less" scoped>
   .subheader-title{
     line-height:30px;
     color:#514960;
@@ -418,4 +470,13 @@
     font-weight: 300;
     margin-top: -1px;
   }
+</style>
+
+<style lang="less">
+.modal-approved {
+  .modal-body{
+    margin: 0px;
+    padding-top: 53px;
+  }
+}
 </style>

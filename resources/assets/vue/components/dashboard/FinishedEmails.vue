@@ -68,7 +68,7 @@
             </td>
             <td class="actions icons" width="250">
               <p class="dash-code-option">
-                <a @click.prevent="code(campaign._id, 'html')" href="#" class="html-code">HTML</a><br>
+                <a @click.prevent="code(campaign._id, 'normal_html')" href="#" class="html-code">NORMAL HTML</a><br>
                 <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Plaintext</a>
               </p>
               <a href="#" v-on:click.prevent="preview(campaign._id)" data-tooltip="Preview" target="_blank">
@@ -76,6 +76,9 @@
               </a>
               <a :href="$_app.config.baseUrl + '/campaign/download-html/' + campaign._id" data-tooltip="Download">
                 <i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i>
+              </a>
+              <a v-if="campaign.library_config.htmlToPdf" :href="$_app.config.baseUrl+'/html-to-pdf/'+campaign._id" target="_blank" data-tooltip="Download PDF">
+                <i class="glyphicon glyphicon-download" aria-hidden="true"></i>
               </a>
               <a
                 href="#"
@@ -101,25 +104,33 @@
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
+              <a href="#"
+                @click.prevent="goProof(campaign.proof_token)"
+                class="proof"
+                data-toggle="tooltip"
+                data-placement="top"
+                data-tooltip="Open proof review"
+                v-if="proof.allow && proof.status && campaign.has_active_proof"
+                ><i class="glyphicon glyphicon-blackboard"></i></a>
               <a href="#" v-if="$can('clone_campaign')" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
               <a href="#"
                 class="edit"
                 data-tooltip="Edit"
                 @click.prevent="askToEditCampaign(campaign._id)"
                 ><i class="glyphicon glyphicon-pencil"></i></a>
-              <a href="#" :data-tooltip="'Upload to ' + lodash.capitalize(api.driver)" class="btn-upload-api"
+              <a href="#" :data-tooltip="`Upload to ${$options.filters.capitalize(api.driver)}`" class="btn-upload-api"
                 v-for="api in campaign.api"
                 v-if="!campaign.locked && campaign.library_config.esp && campaign.library_config.espProvider"
                 :data-campaign-id="campaign._id"
                 :data-api-driver="api.driver"
                 @click="upload(campaign._id)"><i class="glyphicon glyphicon-cloud-upload"></i></a>
-              <a href="#" data-tooltip="Delete" @click.prevent="askToDeleteCampaign(campaign._id)"
+              <a href="#" data-tooltip="Delete" @click.prevent="askToDeleteCampaign(campaign)"
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
           <tr v-if="!campaigns.data.length">
             <td :colspan="showTags ? 6 : 5">
-              There are no emails to show in this list
+              {{ askDeleteMessage }}
             </td>
           </tr>
         </tbody>
@@ -152,7 +163,6 @@
 </template>
 
 <script>
-  import _ from 'lodash'
   import TableMixin from './mixins/TableMixin.js';
   import ModalPreview from '../campaign/modals/ModalPreview.vue'
   import ModalCode from '../campaign/modals/ModalCode.vue'
@@ -166,9 +176,13 @@
     },
     data: function() {
       return {
+        proof: {
+          status: this.$_app.config.proofConfig.status,
+          allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
+            && this.$_app.config.permissions.indexOf('access_proof') >= 0
+        },
         last_uploads: {},
         codeType: '',
-        lodash: _
       }
     },
     mixins: [ TableMixin ],
@@ -179,6 +193,12 @@
       }
     },
     methods: {
+      goProof (token) {
+        if (token) {
+            const win = window.open(this.$_app.config.baseUrl + "/proof/review/" + token, '_blank');
+            win.focus();
+        }
+      },
       isUploaded: function(campaign) {
         if (campaign.uploads.length) {
           var campaign_date = new Date(campaign.updated_at);

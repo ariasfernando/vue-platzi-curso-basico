@@ -2,10 +2,16 @@ Hi {{ $name }},<br /><br/>
 
 We just created your new stensul account (<a href="{{ url('/') }}" target="_blank">{{ url('/') }}</a>). <br/><br/>
 
+
 Please click the following link to login for the first time, you will be asked to create a new password:<br />
 <a href="{{ url('password/reset/'.$token) }}" target="_blank">{{ url('password/reset/'.$token) }}</a><br/><br/>
 
-This link expires in one hour. <br/><br/>
+This link expires in one hour. If the link is expired you can ask for a password recovery
+<a href="{{ url('/password/email') }}" target="_blank">here</a><br/><br/>
+
+@if(isset($roles) && count($roles) === 1 && in_array("reviewer", $roles))
+Please note, you are added as a <strong>Reviewer</strong> only. You do not have access to the stensul dashboard, only emails that are sent to you for review.<br/>
+@endif
 
 If you did not request an account, please email us immediately at <a href="mailto:{{ $app_config['app_mail_address'] }}">{{ $app_config['app_mail_address'] }}</a> <br/><br/>
 

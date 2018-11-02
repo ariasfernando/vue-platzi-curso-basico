@@ -7,7 +7,6 @@ export default {
     const endpoint = endpoints.config.getConfig;
     const deferred = Q.defer();
     const params = {
-      path: 'config.getConfig',
       endpoint,
       search: {
         key,
@@ -21,5 +20,5 @@ export default {
     });
 
     return deferred.promise;
-  }
+  },
 };

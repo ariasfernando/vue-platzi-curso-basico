@@ -37,6 +37,8 @@ return [
         'title' => 'Responsys',
         'class' => 'Responsys',
         'default_path' => '/contentlibrary/' . env('API_RESPONSYS_PATH', ''),
+        'folders' => [
+        ],
         'auth' => [
             'type' => 'POST',
             'url' => '/rest/api/v1.1/auth/token',
@@ -138,8 +140,8 @@ return [
     'silverpop' => [
         'title' => 'Silverpop',
         'class' => 'Silverpop',
-        'token_endpoint' => 'https://api2.ibmmarketingcloud.com/oauth/token',
-        'endpoint' => 'https://api2.ibmmarketingcloud.com/XMLAPI',
+        'token_endpoint' => env('API_SILVERPOP_BASE_URL', '').'/oauth/token',
+        'endpoint' => env('API_SILVERPOP_BASE_URL', '').'/XMLAPI',
         'client_id' => env('API_SILVERPOP_USERNAME', ''),
         'client_secret' => env('API_SILVERPOP_PASSWORD', ''),
         'app_name' => env('API_SILVERPOP_APP_NAME', ''),

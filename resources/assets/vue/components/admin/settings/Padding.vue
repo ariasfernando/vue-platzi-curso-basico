@@ -10,7 +10,7 @@
       v-validate="'required'"
       v-model="padding"
       :min="min"
-      :controls="false"
+      :controls="true"
     ></el-input-number>
     <el-button
       class="button"
