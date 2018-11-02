@@ -45,13 +45,6 @@
           </settings-container>
         </template>
         <template v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container key="textcolor_from_library" label="Color List By Library">
-            <template slot="setting-right">
-              <toggle-button
-                :value="plugin.config.options.forecolor.textcolor_from_library"
-                @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
-            </template>
-          </settings-container>
           <settings-container
             v-if="plugin.config.options.forecolor.textcolor_from_library"
             key="forecolor_palette_name"
