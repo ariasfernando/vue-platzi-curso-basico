@@ -28,7 +28,7 @@ export default {
 
   props: {
     value: {
-      type: [String, Number, Boolean],
+      type: [String, Number, Object, Boolean],
       default: false,
     },
     falseText: {
@@ -43,9 +43,13 @@ export default {
   computed: {
     textValue: {
       get() {
-        return Application.utils.isJsonString(this.value)
-          ? JSON.stringify(this.value)
-          : String(this.value);
+        if (typeof this.value === 'object') {
+          return JSON.stringify(this.value);
+        } else {
+          return Application.utils.isJsonString(this.value)
+            ? JSON.stringify(this.value)
+            : String(this.value);
+        }
       },
       set(value) {
         this.$emit('input', value);

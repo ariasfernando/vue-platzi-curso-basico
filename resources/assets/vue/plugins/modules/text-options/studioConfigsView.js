@@ -90,6 +90,14 @@ function configsView() {
       lines_limit: {
         key: 'lines_limit',
         title: 'Lines Limit',
+        type: 'input-toggleable-number',
+        falseText: 'Disabled',
+        defaultValue: 2,
+        isDisabled: value => (Application.utils.isJsonObjectString(value)),
+      },
+      lines_limit_advanced: {
+        key: 'lines_limit',
+        title: 'Lines Limit Advanced',
         type: 'input-toggleable-text',
         falseText: 'Disabled',
         defaultValue: '2',
