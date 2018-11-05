@@ -103,13 +103,13 @@
                   data-tooltip="Edit"
                   v-if="!campaign.locked || campaign.locked_by === $_app.config.logged_user"
                   ><i class="glyphicon glyphicon-pencil"></i></a>
-                <a href="#" data-tooltip="Delete" v-if="!campaign.locked || (campaign.locked && campaign.locked_by === $_app.config.logged_user)" @click.prevent="askToDeleteCampaign(campaign._id)"
+                <a href="#" data-tooltip="Delete" v-if="!campaign.locked || (campaign.locked && campaign.locked_by === $_app.config.logged_user)" @click.prevent="askToDeleteCampaign(campaign)"
                   ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
           <tr v-if="!campaigns.data.length">
             <td :colspan="showTags ? 6 : 5">
-              There are no emails to show in this list
+              {{ askDeleteMessage }}
             </td>
           </tr>
         </tbody>

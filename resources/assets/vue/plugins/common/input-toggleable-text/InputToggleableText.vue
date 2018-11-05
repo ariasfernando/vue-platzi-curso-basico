@@ -25,7 +25,21 @@
 
 export default {
   name: 'InputToggleableNumber',
-  props: ['value', 'falseText', 'defaultValue'],
+
+  props: {
+    value: {
+      type: [Boolean, String, Number],
+      default: false,
+    },
+    falseText: {
+      type: String,
+      default: 'Disabled',
+    },
+    defaultValue: {
+      type: String,
+      default: 'true',
+    },
+  },
   computed: {
     numberValue: {
       get() {
@@ -82,6 +96,7 @@ export default {
     &.is-disabled:focus,
     &.is-disabled:hover {
       color: #666666;
+      background-color: #f0f0f0;
       cursor: auto;
     }
   }
@@ -89,7 +104,6 @@ export default {
   .el-icon-setting{
     background: #f8f8f8;
     color: #666666;
-    cursor: inherit;
     border: 1px solid #dcdfe6;
     font-size: 11px;
     font-weight: 300;

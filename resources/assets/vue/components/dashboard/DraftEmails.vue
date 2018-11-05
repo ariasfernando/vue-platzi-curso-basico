@@ -120,13 +120,13 @@
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
-              <a href="#" data-tooltip="Delete" @click.prevent="askToDeleteCampaign(campaign._id)"
+              <a href="#" data-tooltip="Delete" @click.prevent="askToDeleteCampaign(campaign)"
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
           <tr v-if="!campaigns.data.length">
             <td :colspan="showTags ? 7 : 6">
-              There are no emails to show in this list
+              {{ askDeleteMessage }}
             </td>
           </tr>
         </tbody>
