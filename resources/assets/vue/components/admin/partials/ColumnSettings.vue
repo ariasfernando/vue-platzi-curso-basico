@@ -35,16 +35,14 @@
     <b-collapse id="column-settings-functionalities" accordion="column-settings">
       <b-card class="control">
         <group-container v-for="(pluginGroup, groupKey) in plugins" :key="groupKey" :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
-          <template v-for="(plugin, moduleKey) in pluginFilter(pluginGroup.plugins)">
-            <div v-if="$can('std-column-plugin-'+plugin.aclName)"
-                 :key="plugin.name"
-                 :class="'plugin-' + plugin.name">
-              <component :is="'studio-' + plugin.name"
-                         :name="_.camelCase(plugin.name)"
-                         :plugin="_.camelCase(plugin.name)"
-                         :column-id="currentComponent.columnId" />
-            </div>
-          </template>
+            <component
+              v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+              :key="plugin.name + column.id"
+              :class="'plugin-' + plugin.name"
+              :is="'studio-' + plugin.name"
+              :name="_.camelCase(plugin.name)"
+              :plugin="column.plugins[_.camelCase(plugin.name)]" 
+              :column-id="currentComponent.columnId" />
         </group-container>
       </b-card>
     </b-collapse>
@@ -53,7 +51,6 @@
 
 
 <script>
-import _ from 'lodash';
 import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';

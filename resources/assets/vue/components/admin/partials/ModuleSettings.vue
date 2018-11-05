@@ -34,19 +34,13 @@
     <b-collapse id="general-settings-functionalities" accordion="general-settings">
       <b-card class="control">
         <group-container v-for="(pluginGroup, groupKey) in plugins" :key="groupKey" :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
-          <template v-for="(plugin, moduleKey) in pluginFilter(pluginGroup.plugins)">
-            <div v-if="$can('std-plugin-'+plugin.aclName)"
-                :key="plugin.name"
-                :class="'plugin-' + plugin.name">
-                <component
-                  :is="'studio-' + plugin.name"
-                  v-if="module.plugins && $can('std-plugin-'+plugin.name)"
-                  :key="plugin.name"
-                  :name="_.camelCase(plugin.name)"
-                  :plugin="_.camelCase(plugin.name)"
-                  :class="'plugin-' + plugin.name" />
-                  </div>
-          </template>
+          <component 
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+            :is="'studio-' + plugin.name"
+            :key="plugin.name"
+            :name="_.camelCase(plugin.name)"
+            :plugin="module.plugins[_.camelCase(plugin.name)]"
+            :class="'plugin-' + plugin.name" />
         </group-container>
       </b-card>
     </b-collapse>
@@ -54,7 +48,6 @@
 </template>
 
 <script>
-import _ from 'lodash';
 import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';

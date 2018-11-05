@@ -50,9 +50,9 @@
         <group-container v-for="(pluginGroup, groupKey) in plugins" :key="groupKey" :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
           <component
             :is="'studio-' + plugin.name"
-            v-for="(plugin, key) in pluginFilter(pluginGroup.plugins)"
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
             v-if="$can('std-'+component.type+'-plugin-'+plugin.aclName)"
-            :key="'std-'+component.type+'-plugin-' + plugin.name"
+            :key="'std-'+component.id+'-plugin-' + plugin.name"
             :element="component"
             :class="'plugin-' + plugin.name"
             :name="_.camelCase(plugin.name)"
@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import _ from 'lodash';
 import * as elementSettings from './settings';
 import GroupContainer from '../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
