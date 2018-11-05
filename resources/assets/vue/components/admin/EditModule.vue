@@ -168,7 +168,7 @@ export default {
       sideToggled.classList.toggle('sidebar-closed');
     },
     clickModuleContainer(e) {
-      if ($(e.target).hasClass('module-container')) {
+      if ($(e.target).hasClass('scrollbar-container-inner') || $(e.target).hasClass('mCustomScrollBox')) {
         this.$store.commit('module/setCurrentComponent', {
           columnId: undefined,
           componentId: undefined,
