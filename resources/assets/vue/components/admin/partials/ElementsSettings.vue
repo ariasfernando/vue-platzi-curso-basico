@@ -27,7 +27,7 @@
               <i class="fa fa-minus-square" aria-hidden="true"></i>
               <p>Divider</p>
             </li>
-            <li class="component-item" data-type="custom-code-element">
+            <li class="component-item" data-type="custom-code-element" v-if="$can('std-element-custom-code')">
               <i class="fa fa-code" aria-hidden="true"></i>
               <p>Custom Code</p>
             </li>
