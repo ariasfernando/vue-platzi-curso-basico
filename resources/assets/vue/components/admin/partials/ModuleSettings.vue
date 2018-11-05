@@ -33,25 +33,34 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="general-settings-functionalities" accordion="general-settings">
       <b-card class="control">
-        <component
-          :is="'studio-' + plugin.name"
-          v-for="(plugin, moduleKey) in module.plugins"
-          v-if="module.plugins && $_app.modulePlugins[moduleKey].hasStudioSettings && $can('std-plugin-'+plugin.name)"
-          :key="plugin.name"
-          :name="moduleKey"
-          :plugin="plugin"
-          :class="'plugin-' + plugin.name" />
+        <group-container v-for="(pluginGroup, groupKey) in plugins" :key="groupKey" :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <template v-for="(plugin, moduleKey) in pluginFilter(pluginGroup.plugins)">
+            <div v-if="$can('std-plugin-'+plugin.aclName)"
+                :key="plugin.name"
+                :class="'plugin-' + plugin.name">
+                <component
+                  :is="'studio-' + plugin.name"
+                  v-if="module.plugins && $can('std-plugin-'+plugin.name)"
+                  :key="plugin.name"
+                  :name="_.camelCase(plugin.name)"
+                  :plugin="_.camelCase(plugin.name)"
+                  :class="'plugin-' + plugin.name" />
+                  </div>
+          </template>
+        </group-container>
       </b-card>
     </b-collapse>
   </div>
 </template>
 
 <script>
+import _ from 'lodash';
 import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
 import settingsDefault from '../settingsDefault';
 import AclMixing from '../mixins/AclMixin';
+import pluginsLayout from '../pluginsLayout';
 
 
 export default {
@@ -76,8 +85,19 @@ export default {
     settings() {
       return settingsDefault.Module().componentSettings;
     },
+    plugins() {
+      return pluginsLayout['Module']().componentPlugins;
+    },
+    _() {
+      return _;
+    },
   },
   methods: {
+     pluginFilter(plugins) {
+      return plugins.filter((plugin) => {
+        return this.$can(`std-plugin-${plugin.aclName}`);
+      });
+    },
     SettingUpdatedHandler(eventData) {
       this.saveModuleProperty(
         eventData.link,

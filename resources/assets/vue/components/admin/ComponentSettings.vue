@@ -3,7 +3,7 @@
     <!-- START: Style -->
     <label-item-container
       v-b-toggle.style
-      :label="`${toCamel(component.type.replace('-element', ''))} Styles`"
+      :label="`${_.startCase(component.type.replace('-element', ''))} Styles`"
       icon="glyphicon-pencil" />
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
@@ -47,15 +47,17 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="functionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
-        <component
-          :is="'studio-' + plugin.name"
-          v-for="(plugin, key) in component.plugins"
-          v-if="plugin.name !== 'studio-mobile-styles' && $can('std-'+component.type+'-plugin-'+plugin.name) && $_app.modulePlugins[key].hasStudioSettings"
-          :key="key"
-          :element="component"
-          :class="'plugin-' + plugin.name"
-          :name="key"
-          :plugin="plugin" />
+        <group-container v-for="(pluginGroup, groupKey) in plugins" :key="groupKey" :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <component
+            :is="'studio-' + plugin.name"
+            v-for="(plugin, key) in pluginFilter(pluginGroup.plugins)"
+            v-if="$can('std-'+component.type+'-plugin-'+plugin.aclName)"
+            :key="'std-'+component.type+'-plugin-' + plugin.name"
+            :element="component"
+            :class="'plugin-' + plugin.name"
+            :name="_.camelCase(plugin.name)"
+            :plugin="component.plugins[_.camelCase(plugin.name)]" />
+        </group-container>
       </b-card>
     </b-collapse>
   </div>
@@ -68,6 +70,7 @@ import GroupContainer from '../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
 import settingsDefault from './settingsDefault';
 import AclMixing from './mixins/AclMixin';
+import pluginsLayout from './pluginsLayout';
 
 export default {
   components: {
@@ -97,6 +100,9 @@ export default {
     settings() {
       return settingsDefault[this.component.type]().componentSettings;
     },
+    plugins() {
+      return pluginsLayout[this.component.type]().componentPlugins;
+    },
     module() {
       return this.$store.getters['module/module'];
     },
@@ -104,10 +110,15 @@ export default {
       return this.module.structure.columns[this.currentComponent.columnId]
         .components[this.currentComponent.componentId];
     },
+    _() {
+      return _;
+    },
   },
   methods: {
-    toCamel(str) {
-      return _.startCase(str);
+    pluginFilter(plugins) {
+      return plugins.filter((plugin) => {
+        return this.$can(`std-${this.component.type}-plugin-${plugin.aclName}`);
+      });
     },
     saveComponentProperty(link, subComponent, name, value) {
       const data = {

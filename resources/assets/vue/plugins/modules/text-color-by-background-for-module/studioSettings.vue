@@ -1,16 +1,17 @@
 <template>
-  <settings-container :label="plugin.title">
+  <settings-container :label="modulePlugin.title">
     <template slot="setting-right">
-        <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
+        <toggle-button :value="modulePlugin.enabled" @change="toggle"></toggle-button>
     </template>
   </settings-container>
 </template>
 <script>
   import SettingsContainer from "stensul/components/common/settings/containers/SettingsContainer.vue";
-
+  import pluginMixin from '../mixins/pluginMixin';
   export default {
-    props: ['name', 'plugin'],
+    props: ['name'],
     components: { SettingsContainer },
+    mixins: [pluginMixin],
     methods: {
       toggle(value) {
         const payload = {

@@ -34,11 +34,18 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="column-settings-functionalities" accordion="column-settings">
       <b-card class="control">
-        <template v-for="(plugin, moduleKey) in column.plugins">
-          <div v-if="$can('std-column-plugin-'+plugin.name)" :class="'plugin-' + plugin.name" :key="plugin.name">
-            <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="currentComponent.columnId" />
-          </div>
-        </template>
+        <group-container v-for="(pluginGroup, groupKey) in plugins" :key="groupKey" :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <template v-for="(plugin, moduleKey) in pluginFilter(pluginGroup.plugins)">
+            <div v-if="$can('std-column-plugin-'+plugin.aclName)"
+                 :key="plugin.name"
+                 :class="'plugin-' + plugin.name">
+              <component :is="'studio-' + plugin.name"
+                         :name="_.camelCase(plugin.name)"
+                         :plugin="_.camelCase(plugin.name)"
+                         :column-id="currentComponent.columnId" />
+            </div>
+          </template>
+        </group-container>
       </b-card>
     </b-collapse>
   </div>
@@ -46,11 +53,13 @@
 
 
 <script>
+import _ from 'lodash';
 import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
 import settingsDefault from '../settingsDefault';
 import AclMixing from '../mixins/AclMixin';
+import pluginsLayout from '../pluginsLayout';
 
 
 export default {
@@ -75,8 +84,19 @@ export default {
     settings() {
       return settingsDefault['column-element']().componentSettings;
     },
+    plugins() {
+      return pluginsLayout['column-element']().componentPlugins;
+    },
+    _() {
+      return _;
+    },
   },
   methods: {
+    pluginFilter(plugins) {
+      return plugins.filter((plugin) => {
+        return this.$can(`std-column-plugin-${plugin.aclName}`);
+      });
+    },
     settingUpdatedHandler(eventData) {
       this.saveColumnProperty(
         eventData.link,
