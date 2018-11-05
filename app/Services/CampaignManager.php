@@ -16,11 +16,11 @@ use Activity;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
-use Stensul\Models\Proof;
-use Stensul\Models\Campaign;
-use Stensul\Jobs\StoreAssetsInCdn;
-use Stensul\Jobs\ProcessCampaign;
-use Stensul\Jobs\SendReviewersEmail;
+use ProofModel as Proof;
+use CampaignModel as Campaign;
+use StoreAssetsInCdn;
+use ProcessCampaign;
+use SendReviewersEmail;
 use Stensul\Exceptions\PermissionDeniedException;
 use HtmlCreator as Html;
 use TextCreator as Text;
@@ -84,6 +84,9 @@ class CampaignManager
             $campaign->plain_text = $inputs['plain_text'];
         }
 
+        if (isset($inputs['tracking'])) {
+            $campaign->tracking = $inputs['tracking'];
+        }
 
         $campaign->tags = [];
         if (!empty($inputs['tags'])) {
@@ -245,6 +248,12 @@ class CampaignManager
         ];
         $data['updated_by'] = $data['created_by'];
 
+        // Flag as an internal campaign so we can filter it on the dashboard.
+        $data['internal'] = false;
+        if (Auth::user()->hasRole(env('INTERNAL_ROLE', 'stensul-internal'))) {
+            $data['internal'] = true;
+        }
+
         $campaign = Campaign::create($data);
 
         Activity::log('Campaign created', array('properties' => ['campaign_id' => new ObjectID($campaign->id)]));
@@ -326,7 +335,7 @@ class CampaignManager
      */
     public static function process($campaign_id = null)
     {
-        Activity::logCampaignProcessTime($campaign_id, Auth::id());
+        Activity::logCampaignProcessTime($campaign_id, Auth::id(), true);
 
         // dispatch helper no longer returns job id.
         $job_id = app(\Illuminate\Contracts\Bus\Dispatcher::class)

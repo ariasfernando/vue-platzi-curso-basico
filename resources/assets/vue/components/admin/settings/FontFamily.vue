@@ -33,22 +33,22 @@ export default {
     return {
       fontsOptions() {
         const fontsOptions = [];
+        const temp = {};
         _.each(this.$_app.config.fonts, (group, index) => {
           group.map(font => {
             if (index === 'custom') {
-                fontsOptions.push({
-                value: font.name,
-                label: font.name
-              });
+              temp[font.name] = font.name;
             } else {
-                fontsOptions.push({
-                value: font,
-                label: font
-              });
+              temp[font] = font;
             }
           });
         });
-
+        Object.keys(temp).forEach(name => {
+          fontsOptions.push({
+            value: name,
+            label: name
+          });
+        });
         return fontsOptions;
       }
     };
@@ -69,20 +69,18 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .width-full {
   width: 100%;
 }
-</style>
-
-<style lang="less">
-.field-font-family {
-  span > span.el-tag.el-tag--info {
-    counter-increment: step-counter;
-    & span::before {
-      content: counter(step-counter);
-      margin-right: 5px;
-    }
+.field-font-family /deep/ span > span.el-tag.el-tag--info {
+  counter-increment: step-counter;
+  & span::before {
+    content: counter(step-counter);
+    margin-right: 5px;
   }
+}
+.el-select-dropdown__item.selected{
+  color: #78dcd6!important;
 }
 </style>

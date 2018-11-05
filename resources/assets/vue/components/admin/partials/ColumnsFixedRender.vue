@@ -12,7 +12,7 @@
       :data-col="columnId"
     >
       <tr>
-        <td width="100%" valign="top" :style="styles" :class="[getClassEmpty , getAttributeClasses(column)]">
+        <td width="100%" valign="top" :style="elementBorderAndPadding(column.container)" :class="[getClassEmpty , getAttributeClasses(column)]">
           <draggable 
             cellpadding="0" 
             cellspacing="0" 
@@ -34,7 +34,8 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="component.id"
-              @select-component="selectComponent"
+              @set-component="selection => $emit('set-component', selection)"
+              context="admin"
             ></component>
             </template>
             <div v-else style="display:table-row;"> 
@@ -48,6 +49,7 @@
               </div>
             </div>
           </draggable>
+          <element-selector :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
         </td>
       </tr>
     </table>
@@ -56,22 +58,26 @@
 
 <script>
 
-  import Draggable from 'vuedraggable';
-  import TextElement from '../elements/TextElement.vue';
   import ButtonElement from '../elements/ButtonElement.vue';
-  import ImageElement from '../elements/ImageElement.vue';
+  import CustomCodeElement from '../elements/CustomCodeElement.vue';
   import DividerElement from '../elements/DividerElement.vue';
-  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
+  import Draggable from 'vuedraggable';
+  import ElementMixin from '../../common/mixins/ElementMixin.js';
+  import ElementSelector from '../../common/ElementSelector.vue';
+  import ImageElement from '../elements/ImageElement.vue';
+  import TextElement from '../elements/TextElement.vue';
 
   export default {
     name: 'ColumnsFixedRender',
-    mixins: [ ComponentAttributeMixin ],
+    mixins: [ ElementMixin ],
     components: {
-      Draggable,
-      TextElement,
       ButtonElement,
-      ImageElement,
+      CustomCodeElement,
       DividerElement,
+      Draggable,
+      ElementSelector,
+      ImageElement,
+      TextElement,
     },
     props: {
       column: { 
@@ -103,43 +109,12 @@
       },
       getClassEmpty(){
         return this.column.components.length ? '' : 'empty-table';
-      },
-      styles(){
-        let inlineStyle = `padding-top:${this.column.container.style.paddingTop};
-                           padding-left:${this.column.container.style.paddingLeft};
-                           padding-bottom:${this.column.container.style.paddingBottom};
-                           padding-right:${this.column.container.style.paddingRight};
-                           border-top-width:${this.column.container.style.borderTopWidth};
-                           border-right-width:${this.column.container.style.borderRightWidth};
-                           border-bottom-width:${this.column.container.style.borderBottomWidth};
-                           border-left-width:${this.column.container.style.borderLeftWidth};
-                           border-top-style:${this.column.container.style.borderTopStyle};
-                           border-right-style:${this.column.container.style.borderRightStyle};
-                           border-bottom-style:${this.column.container.style.borderBottomStyle};
-                           border-left-style:${this.column.container.style.borderLeftStyle};
-                           border-top-color:${this.column.container.style.borderTopColor};
-                           border-right-color:${this.column.container.style.borderRightColor};
-                           border-bottom-color:${this.column.container.style.borderBottomColor};
-                           border-left-color:${this.column.container.style.borderLeftColor};`
-
-        return inlineStyle;
       }
     },
     methods: {
       onAdd(e){
         this.$emit('add', e);
       },
-      selectComponent(data) {
-        setTimeout(() => {
-          // TODO: find better way to do this
-          this.$store.commit("campaign/setCurrentComponent", {
-            moduleId:data.moduleId,
-            columnId:data.columnId,
-            componentId:data.componentId,
-          });
-        }, 50);
-      },
     }    
-    
   };
 </script>

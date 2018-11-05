@@ -69,46 +69,42 @@ export default {
 
     fonts.custom.map(font => {
       custom[font.name] = true;
-
-      const style = document.createElement('style');
-
-      style.type = 'text/css';
-
-      let definition = '';
-
-      let ie = '';
-
-      font.types.map(typeFont => {
-        typeFont.files.map(fileFont => {
-          if (fileFont.file === 'eot') {
-            ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}?#iefix');`;
-          }
+      if (font.folder) {
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        let definition = '';
+        let ie = '';
+        font.types.map(typeFont => {
+          typeFont.files.map(fileFont => {
+            if (fileFont.file === 'eot') {
+              ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}?#iefix');`;
+            }
+          });
         });
-      });
-
-      font.types.map(typeFont => {
-        definition += `@font-face {font-family: '${font.name}';`;
-        definition += ie;
-        definition += 'src: ';
-
-        typeFont.files.map((fileFont, index) => {
-          definition += `url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}') format('${fileFont.file}')`;
-
-          if (index < typeFont.files.length - 1) {
-            definition += ',';
-          } else {
-            definition += ';';
-          }
+        font.types.map(typeFont => {
+          definition += `@font-face {font-family: '${font.name}';`;
+          definition += ie;
+          definition += 'src: ';
+          typeFont.files.map((fileFont, index) => {
+            definition += `url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}') format('${fileFont.file}')`;
+            if (index < typeFont.files.length - 1) {
+              definition += ',';
+            } else {
+              definition += ';';
+            }
+          });
+          definition += `font-weight: ${typeFont.weight};}`;
         });
-
-        definition += `font-weight: ${typeFont.weight};}`;
-      });
-
-      style.appendChild(document.createTextNode(definition));
-
-      document.head.appendChild(style);
+        style.appendChild(document.createTextNode(definition));
+        document.head.appendChild(style);
+      } else if (font.url) {
+        const link = document.createElement('link');
+        link.href = font.url;
+        link.rel="stylesheet";
+        link.type="text/css";
+        document.head.insertBefore(link, document.head.childNodes[0]);
+      }
     });
-
     this.Vue.prototype.$_app.config.fonts = fonts;
   },
   initFilters() {
@@ -157,7 +153,7 @@ export default {
     if (customer.plugins) {
       _.merge(plugins, customer.plugins);
     }
-
+    
     this.Vue.prototype.$_app.modulePlugins = plugins.modules;
     this.Vue.prototype.$_app.globalComponents = plugins.common;
 
@@ -168,11 +164,13 @@ export default {
     // Register Global Components
     _.each(this.Vue.prototype.$_app.modulePlugins, (component) => {
       if (component.studioSettings) {
+        component['hasStudioSettings'] = true;
         this.Vue.component(`studio-${component.name}`, component.studioSettings);
         delete component.studioSettings;
       }
 
       if (component.campaignSettings) {
+        component['hasCampaignSettings'] = true;
         this.Vue.component(`campaign-${component.name}`, component.campaignSettings);
         delete component.campaignSettings;
       }

@@ -10,7 +10,8 @@
 			<label>First Name</label>
 			{!! Form::text('name', (isset($params['user']['name']))? $params['user']['name'] : '', array (
 				'class' => 'user_name',
-				'id' => 'user_name'
+                'id' => 'user_name',
+                'data-validation' => '{"required":"true"}'
 			)) !!}
 		</div>
 
@@ -19,7 +20,8 @@
 			<label>Last Name</label>
 			{!! Form::text('last_name',(isset($params['user']['last_name']))? $params['user']['last_name'] : '', array (
 				'class' => 'user_last_name',
-				'id' => 'user_last_name'
+                'id' => 'user_last_name',
+                'data-validation' => '{"required":"true"}'
 			)) !!}
 		</div>
 
@@ -33,18 +35,27 @@
 			)) !!}
 		</div>
 
-		<!-- Select Role -->
-		<div class="modal-mpf-row selector">
-			<label>Select Role</label>
-			{!! Form::select('roles', $params['roles'], (isset($params['user']['roles']))? $params['user']['roles'] : '',array (
-				'class' => 'form-control selectpicker',
-				'id' => 'roles',
-				'name' => 'roles[]',
-				'multiple' => 'true',
-				'title' => '',
-				'data-validation' => '{"required":"true"}'
-			)); !!}
-		</div>
+		@if ($params['change_roles'])
+			<!-- Select Role -->
+			<div class="modal-mpf-row selector">
+				<label>Select Role</label>
+				{!!
+					Form::select(
+						'roles',
+						$params['roles'],
+						isset($params['user']['roles']) ? $params['user']['roles'] : '',
+						[
+							'class' => 'form-control selectpicker roles-list',
+							'id' => 'roles',
+							'name' => 'roles[]',
+							'multiple' => 'true',
+							'title' => '',
+							'data-validation' => '{"required":"true"}'
+						]
+					);
+				!!}
+			</div>
+		@endif
 
 		<!-- Input submit  -->
 		<div class="modal-mpf-submit">

@@ -55,4 +55,8 @@ return [
         'login_url'    => env('ZENDESK_LOGIN_URL'),
         'organization' => env('ZENDESK_ORGANIZATION')
     ],
+    'html_to_pdf' => [
+        'api_key' => env('HTMLPDF_API_KEY'),
+        'api_url' => env('HTMLPDF_API_URL')
+    ],
 ];

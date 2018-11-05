@@ -8,8 +8,9 @@ use StensulLocale;
 use Activity;
 use Campaign;
 use EmailSender;
-use Stensul\Models\Library;
-use Stensul\Services\TagManager as Tag;
+use Validator;
+use LibraryModel as Library;
+use Tag;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -72,6 +73,10 @@ class CampaignController extends Controller
 
                 $params['library'] = new ObjectID($libraries[0]['_id']);
                 $library = Library::find($libraries[0]['_id']);
+            }
+            
+            if($library['config']['preheader']){
+                $params['campaign_preheader'] = $library['config']['preheaderDefault'];
             }
 
             $params['library_name'] = $library->name;
@@ -226,23 +231,33 @@ class CampaignController extends Controller
      */
     public function postDelete(Request $request)
     {
-        $window_id = Cache::get('window_lock:' . $request->input('campaign_id')) ?? false;
+        $campaign = Campaign::find($request->input('campaign_id'));
 
-        if (Cache::has('lock:' . $request->input('campaign_id'))
-            && Cache::get('lock:' . $request->input('campaign_id')) !== Auth::id()
-            || ($window_id && $window_id !=$request->input('window_id'))
+        if (!$campaign) {
+            return response()->json([], 404);
+        }
+
+        $window_id = Cache::get('window_lock:' . $campaign['campaign_id']) ?? false;
+
+        // Don't delete a campaign if it's being edited or if it's a locked template.
+        if ((Cache::has('lock:' . $campaign['campaign_id'])
+                && Cache::get('lock:' . $campaign['campaign_id']) !== Auth::id()
+                || ($window_id && $window_id !=$request->input('window_id'))
+            )
+            || ($campaign['campaign_data']['template'] && $campaign['campaign_data']['locked']
+                && $campaign['campaign_data']['locked_by'] != Auth::user()->email)
         ) {
             Activity::log(
                 'Campaign edit deny',
-                array('properties' => ['campaign_id' => new ObjectID($request->input('campaign_id'))])
+                array('properties' => ['campaign_id' => new ObjectID($campaign['campaign_id'])])
             );
 
-            return [
-                'campaign_lock' => $request->input('campaign_id'),
-                'locked_by' => Campaign::whoIsLocking($request->input('campaign_id'))
-            ];
+            return response()->json([
+                'campaign_lock' => $campaign['campaign_id'],
+                'locked_by' => Campaign::whoIsLocking($campaign['campaign_id'])
+            ], 403);
         } else {
-            return Campaign::delete($request->input('campaign_id'));
+            return Campaign::delete($campaign['campaign_id']);
         }
     }
 
@@ -260,7 +275,36 @@ class CampaignController extends Controller
                 'error'   => 'Forbidden'
             ], 403);
         }
-        return Campaign::save($request->input());
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'campaign_name' => 'not_regex:/<.*?>/',
+                'campaign_preheader' => 'not_regex:/<.*?>/'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Filter all onxxx attributes for security.
+        $input = $request->input();
+
+        if (!empty($input['modules_data'])) {
+            array_walk_recursive($input['modules_data'], function (&$item, $key) {
+                $tags = [];
+                preg_match_all("/<[^\/].*?>/is", $item, $tags);
+                foreach ($tags[0] as $index => $tag) {
+                    // Filter stuff like <img src=x onerror=alert(css)> and <svg/onload=alert('xss')>
+                    $clean_tag = preg_replace("/[\s+|\/]on[a-z]+\s?=\s?[\"']?.*[\"']?[^>]/is", '', $tag);
+                    $item = str_replace($tag, $clean_tag, $item);
+                }
+            });
+        }
+
+        return Campaign::save($input);
     }
 
     /**

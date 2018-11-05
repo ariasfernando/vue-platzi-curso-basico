@@ -10,6 +10,7 @@ use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Stensul\Notifications\ResetPasswordNotification;
+use Stensul\Notifications\WelcomePasswordNotification;
 
 class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract
 {
@@ -50,8 +51,11 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         'password' => '',
         'force_password' => 1,
         'avatar_url' => '',
-        'roles' => []
+        'roles' => [],
+        'unconfirmed' => 1
     );
+
+    protected $appends = ['fullname'];
 
     /**
      * Constructor.
@@ -160,6 +164,16 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
             $permissions = array_merge($permissions, $role_data->permissions);
         }
         return $permissions;
+    }
+
+    /**
+     * Get user full name
+     *
+     * @return array
+     */
+    public function getFullNameAttribute()
+    {
+        return rtrim($this->attributes['name'] . ' ' . $this->attributes['last_name']);
     }
 
     /**

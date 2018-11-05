@@ -4,20 +4,20 @@
       v-if="column.components.length"
       v-for="(column, columnId) in module.structure.columns"
       :width="column.container.attribute.width"
-      :style="[column.container.style,{'background-color' : column.container.attribute.bgcolor} || '']" 
+      :style="{'background-color' : column.container.attribute.bgcolor}" 
       :data-col="columnId"
       align="left"
       cellpadding="0" 
       cellspacing="0" 
       border="0" 
-      class="st-content-component st-col"
+      class="st-content-component st-mobile-full-width"
       :bgcolor="column.container.attribute.bgcolor"
       :key="column.id"
     >
       <tr>
         <td
           width="100%" 
-          :style="columnBorderAndPadding(columnId)"
+          :style="elementBorderAndPadding(module.structure.columns[columnId].container)"
           :class="column.container.attribute.classes ||''"
         >
           <draggable
@@ -39,10 +39,13 @@
               :column-id="columnId"
               :component-id="componentId"
               :key="componentId"
-              class="st-component"></component>
+              @set-component="selection => $emit('set-component', selection)"
+              class="st-component"
+              context="admin"></component>
           </draggable>
         </td>
       </tr>  
+      <element-selector :label="`Col ${columnId}`" @element-selected="columnSelect(columnId)" :active="isColumnSelect(columnId)" selectorIcon="fa fa-pencil"></element-selector>
     </table>
 
     <!-- Empty Col -->
@@ -84,21 +87,26 @@
 
 <script>
 import _ from "lodash";
-import Draggable from "vuedraggable";
-import TextElement from "../elements/TextElement.vue";
 import ButtonElement from "../elements/ButtonElement.vue";
-import ImageElement from "../elements/ImageElement.vue";
+import CustomCodeElement from "../elements/CustomCodeElement.vue";
 import DividerElement from "../elements/DividerElement.vue";
+import Draggable from "vuedraggable";
+import ElementMixin from '../../common/mixins/ElementMixin.js';
+import ElementSelector from '../../common/ElementSelector.vue';
+import ImageElement from "../elements/ImageElement.vue";
+import TextElement from "../elements/TextElement.vue";
 
 export default {
   name: "ColumnsStackedRender",
-
+  mixins: [ ElementMixin ],
   components: {
-    Draggable,
-    TextElement,
     ButtonElement,
-    ImageElement,
+    CustomCodeElement,
     DividerElement,
+    Draggable,
+    ElementSelector,
+    ImageElement,
+    TextElement,
   },
   data() {
     return {
@@ -122,31 +130,6 @@ export default {
   methods: {
     onAdd(e) {
       this.$emit("add", e);
-    },
-    columnBorderAndPadding(columnId) {
-      let properties = [
-        "padding-top",
-        "padding-left",
-        "padding-bottom",
-        "padding-right",
-        "border-top-width",
-        "border-right-width",
-        "border-bottom-width",
-        "border-left-width",
-        "border-top-style",
-        "border-right-style",
-        "border-bottom-style",
-        "border-left-style",
-        "border-top-color",
-        "border-right-color",
-        "border-bottom-color",
-        "border-left-color"
-      ];
-      return properties.map(p => {
-        return {
-          [p]: this.module.structure.columns[columnId].container.style[_.camelCase(p)]
-        };
-      });
     }
   }
 };

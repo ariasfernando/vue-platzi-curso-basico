@@ -8,12 +8,13 @@ use Activity;
 use Challenge;
 use Carbon\Carbon;
 use PasswordPolicy;
-use Stensul\Models\User;
+use UserModel as User;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
 use Stensul\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use MongoDB\BSON\ObjectID;
 use Stensul\Http\Requests\PasswordChangeRequest;
 
 class PasswordController extends Controller
@@ -77,7 +78,7 @@ class PasswordController extends Controller
         // Challenge validation
         if (!Challenge::provider()->isValid($request)) {
             Activity::log('User login fail [ERROR_CAPTCHA]');
-            return redirect()->back()->withErrors(['status' => 'Captcha validation is required']);
+            return redirect()->back()->withErrors(['status' => 'Please confirm you are not a robot.']);
         }
 
         $this->validate($request, ['email' => 'required|email']);
@@ -143,13 +144,17 @@ class PasswordController extends Controller
                 $user->password = bcrypt($password);
                 $user->last_password_change = Carbon::now();
                 $user->force_password = 0;
+                $user->unconfirmed = 0;
 
                 $user->save();
             }
         );
 
         switch ($response) {
+            // Don't tip off attackers if the user exists or not.
+            case PasswordBroker::INVALID_USER:
             case PasswordBroker::PASSWORD_RESET:
+                Activity::log('User restored', array('properties' => ['user_id' => new ObjectID($user->_id)]));
                 return redirect('auth/login')->with('message', 'SUCCESS_CHANGE');
 
             default:

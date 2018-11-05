@@ -1,29 +1,47 @@
 <template>
   <div class="settings-wrapper plugin-wrapper" v-if="component">
-    <div class="plugin-wrapper-inner">
-      <span>
-        <button @click="showModal('desktop')">
-          <i class="glyphicon glyphicon-cloud-upload"></i> Upload Image
-        </button>
-      </span>
-    </div>
-    <div class="plugin-wrapper-inner" v-if="hasImageMobile">
-      <span>
-        <button @click="showModal('mobile')" :disabled="!plugin.data.img">
-          <i class="glyphicon glyphicon-cloud-upload"></i> Upload Mobile Image
-        </button>
-      </span>
-    </div>
-    <div class="plugin-wrapper-inner">
-      <span>
-        <label>Alt</label>
-        <el-input v-model="alt" class="image-alt-text" placeholder="Alt text"></el-input>
-      </span>
-    </div>
+    <settings-container :no-label="true">
+      <template slot="setting-bottom">
+        <el-button @click="showModal('desktop')" type="primary">
+          <i class="glyphicon glyphicon-cloud-upload"></i>
+          Upload Image
+        </el-button>
+      </template>
+    </settings-container>
+    <settings-container :no-label="true" v-if="hasImageMobile">
+      <template slot="setting-bottom">
+        <el-button @click="showModal('mobile')" type="primary" size="mini" :disabled="!plugin.data.img">
+          <i class="glyphicon glyphicon-cloud-upload"></i>
+          Upload Mobile Image
+        </el-button>
+      </template>
+    </settings-container>
+    <settings-container label="Alt">
+      <template slot="setting-bottom">
+        <el-input
+          v-if="validationRules"
+          name="alt"
+          type="text"
+          placeholder="Alt text"
+          size="mini"
+          v-model="alt"
+          v-validate.initial="validationRules"
+          class="image-alt-text"
+          :class="{'input': true, 'is-danger': hasError }">
+        </el-input>
+        <el-input
+          v-else
+          v-model="alt"
+          class="image-alt-text"
+          placeholder="Alt text"></el-input>
+        <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
+      </template>
+    </settings-container>
     <image-modal 
     :config="plugin.config" 
     v-if="showImageEditor" 
     :libraryImages="libraryImages" 
+    :overlayImages="overlayImages" 
     :data="image" 
     @close="close" 
     @submitImage="submitImage">
@@ -33,17 +51,23 @@
 
 <script>
 import imageService from '../../../services/image';
-import imageModal from '../../../components/common/ImageModal';
+import ImageModal from '../../../components/common/ImageModal';
+import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+import _ from 'lodash';
+import validatorMixin from '../mixins/validator';
 
 export default {
   props: ['name', 'plugin', 'pluginKey'],
+  mixins: [validatorMixin],
   components: {
-    imageModal
+    ImageModal,
+    SettingsContainer
   },
   data() {
     return {
       showImageEditor: false,
       libraryImages: [],
+      overlayImages: [],
       type: 'desktop',
       image: {},
       isEdit: false
@@ -55,6 +79,9 @@ export default {
     },
     currentComponent() {
       return this.$store.getters['campaign/currentComponent'];
+    },
+    module() {
+      return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
     },
     component() {
       let component = {};
@@ -86,7 +113,24 @@ export default {
           value
         };
         this.$store.commit('campaign/saveComponentProperty', payload);
+        
+        this.$nextTick(() => {
+          if (this.validationRules) {
+            this.validate();
+          }
+        });
       }
+    },
+    validationRules() {
+        const rules = [];
+        if(this.plugin.config.alt && this.plugin.config.alt.validations){
+          _.each(this.plugin.config.alt.validations, (e,i) => {
+            if (e) {
+              rules.push(i);
+            }
+          });
+          return rules.join('|');
+        }
     },
     hasImageMobile() {
       return this.component.image.styleOption.hasImageMobile;
@@ -98,6 +142,12 @@ export default {
         .then(res => {
           this.libraryImages = res.map(image => image.path);
         });
+    }
+    const ovGallery = _.get(this.plugin.config, 'sie-plugin-image-overlay_image.config.overlay_gallery.config.set_images.value');
+    if(ovGallery !== null){
+      imageService.getMedia(ovGallery).then(res => {
+        this.overlayImages = res.map(image => image.path);
+      });
     }
   },
   methods: {
@@ -118,11 +168,14 @@ export default {
         })
         .then(uploadedImgs => {
           this.updateAttribute(uploadedImgs[imgs.length - 1], data.newImage);
+          if(typeof this.plugin.config.adjust !== 'undefined' && this.plugin.config.adjust.value) {
+            this.updateWidthAttribute(data.state.outputSize.width);
+          }
           const temp = {};
           if (this.type === 'desktop') {
             temp.img = data.img;
             temp.state = data.state;
-            if (data.newImage === true && this.isEdit === true) {
+            if (data.newImage && this.isEdit) {
               if (typeof this.plugin.data.imgMobile !== 'undefined') {
                 temp.imgMobile = data.img;
                 temp.stateMobile = data.state;
@@ -157,7 +210,7 @@ export default {
       });
       if (this.type === 'desktop') {
         data.img = uploadedImgs[images.length - 1];
-        if (newImage === true && this.isEdit === true) {
+        if (newImage && this.isEdit) {
           if (typeof this.plugin.data.imgMobile !== 'undefined') {
             data.imgMobile = uploadedImgs[images.length - 1];
           }
@@ -186,25 +239,31 @@ export default {
         value: image
       };
       if (this.type === 'desktop') {
-        payload.property = 'placehoder';
-        this.$store.commit('campaign/saveComponentProperty', {
-          ...payload,
-          property: 'placeholder'
-        });
-        if (newImage === true && this.isEdit === true) {
+        payload.property = 'placeholder';
+        this.$store.commit('campaign/saveComponentProperty', payload);
+
+        if (newImage && this.isEdit) {
           if (typeof this.plugin.data.imgMobile !== 'undefined') {
-            this.$store.commit('campaign/saveComponentProperty', {
-              ...payload,
-              property: 'placeholderMobile'
-            });
+            payload.property = 'placeholderMobile';
+            this.$store.commit('campaign/saveComponentProperty',payload);
           }
         }
       } else {
-        this.$store.commit('campaign/saveComponentProperty', {
-          ...payload,
-          property: 'placeholderMobile'
-        });
+        payload.property = 'placeholderMobile';
+        this.$store.commit('campaign/saveComponentProperty', payload);
       }
+    },
+    updateWidthAttribute(newWidth){
+      this.$store.commit('campaign/saveComponentProperty', {
+        plugin: this.pluginKey,
+        moduleId: this.currentComponent.moduleId,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        subComponent: 'image',
+        link: 'attribute',
+        property: 'width',
+        value: newWidth
+      });
     },
     removeErrorsImages() {
       let $contentImgError = $('.stx-module-wrapper-active').find(
@@ -249,3 +308,43 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.el-button {
+  border-color: rgb(120, 220, 214);
+  background-color: rgb(120, 220, 214);
+  width: 100%;
+  font-size: 12px;
+  font-weight: 300;
+  padding: 6px 20px;
+  border-radius: 2px;
+  margin-top: 5px;
+} 
+
+.el-button--primary {
+  &.is-disabled,
+  &.is-disabled:active,
+  &.is-disabled:focus,
+  &.is-disabled:hover {
+    opacity: 0.4;
+    border-color: rgb(120, 220, 214);
+    background-color: rgb(120, 220, 214);
+    margin-left: 0px;
+  }
+}
+
+.el-button + .el-button {
+  margin-left: 0;
+}
+
+.el-input /deep/ .el-input__inner{
+  border-radius: 2px;
+  font-weight: 300;
+  padding-left: 8px;
+  height: 26px;
+  font-size: 12px;
+
+  &:focus{
+    border: 1px solid #78dcd6;
+  }
+}
+</style>

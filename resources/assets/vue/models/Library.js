@@ -15,6 +15,7 @@ function Library(data = {}) {
     templateMobileWidth: config.templateMobileWidth || '480',
     templateBackgroundColor: typeof config.templateBackgroundColor === 'undefined' ? '#FFFFFF' : config.templateBackgroundColor,
     contentBackgroundColor: typeof config.contentBackgroundColor === 'undefined' ? '#FFFFFF' : config.contentBackgroundColor,
+    templateBackgroundPalettes: config.templateBackgroundPalettes || '',
     colorPalettes: config.colorPalettes || '',
     fontFamily: config.fontFamily || 'Arial',
     fontSize: config.fontSize || '14',
@@ -24,14 +25,19 @@ function Library(data = {}) {
     linkDecoration: config.linkDecoration || 'underline',
     externalCssLink: config.externalCssLink || '',
     propietaryCss: config.propietaryCss || '',
+    prependHtml: config.prependHtml || '',
+    appendHtml: config.appendHtml || '',
     fixedModules: config.fixedModules || '',
     padding: config.padding || '',
     esp: config.esp || false,
     espProvider: config.espProvider || false,
     plainText: config.plainText || false,
     preheader: config.preheader || false,
+    preheaderDefault: config.preheaderDefault || '',
+    tracking: config.tracking || false,
     tagging: config.tagging || false,
     templating: config.templating || false,
+    htmlToPdf: config.htmlToPdf || false,
   };
 
   const groups = [];

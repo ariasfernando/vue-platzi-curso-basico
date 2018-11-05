@@ -4,12 +4,16 @@ namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
 use Activity;
-use Stensul\Models\User;
-use Stensul\Models\Role;
+use Validator;
+use UserModel as User;
+use RoleModel as Role;
 use MongoDB\BSON\ObjectID;
 use Illuminate\Http\Request;
-use Stensul\Http\Controllers\Controller as Controller;
-use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
+use Stensul\Http\Controllers\Controller;
+use Stensul\Http\Middleware\AdminAuthenticate;
+use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use Stensul\Notifications\WelcomePasswordNotification;
 
 class UserController extends Controller
 {
@@ -22,13 +26,16 @@ class UserController extends Controller
     |
     */
 
+    use ResetsPasswords;
+
     /**
      * Create a new controller instance.
      */
-    public function __construct()
+    public function __construct(PasswordBroker $passwords)
     {
         $this->middleware('AdminAuthenticate');
         $this->middleware('acl.permission:access_admin_users');
+        $this->passwords = $passwords;
     }
 
     /**
@@ -117,16 +124,10 @@ class UserController extends Controller
      */
     public function getCreate()
     {
-        $roles_data = Role::all(['name'])->toArray();
-        $roles_array = [];
-
-        foreach ($roles_data as $role) {
-            $roles_array[$role['name']] = $role['name'];
-        }
-
         $params = [
             "title" => "Create User",
-            "roles" => $roles_array
+            "roles" => $this->listRoles(),
+            "change_roles" => true
         ];
 
         return $this->renderView('admin.modals.user_form', array('params' => $params));
@@ -142,19 +143,32 @@ class UserController extends Controller
     {
         $user_data = User::findOrFail($request->input("userId"))->toArray();
 
-        $roles_data = Role::all(['name'])->toArray();
-
-        foreach ($roles_data as $role) {
-            $roles_array[$role['name']] = $role['name'];
-        }
-
         $params = [
             "title" => "Edit User",
-            "roles" => $roles_array,
+            "roles" => $this->listRoles(),
+            "change_roles" => Auth::user()->can('allows_role_change'),
             "user" => $user_data
         ];
 
         return $this->renderView('admin.modals.user_form', array('params' => $params));
+    }
+
+    /**
+     * Get a list of roles
+     *
+     * @return array
+     */
+    protected function listRoles()
+    {
+        $roles_data = Auth::user()->hasRole('master') ? Role::all() : Role::where('name', '<>', 'master');
+        $roles_data = $roles_data->pluck('name')->toArray();
+        $roles_array = [];
+
+        foreach ($roles_data as $role) {
+            $roles_array[$role] = $role;
+        }
+
+        return $roles_array;
     }
 
     /**
@@ -168,7 +182,10 @@ class UserController extends Controller
         $user = User::findOrFail($request->input("userId"));
         $user->name = $request->input("name");
         $user->last_name = $request->input("last_name");
-        $user->roles = (!is_null($request->input("roles")))? $request->input("roles") : [];
+
+        if ($request->has('roles')) {
+            $user->roles = $request->input("roles");
+        }
 
         if ($request->input("password")) {
             $user->password = bcrypt($request->input("password"));
@@ -187,17 +204,69 @@ class UserController extends Controller
      */
     public function postCreate(Request $request)
     {
-        $roles = (!is_null($request->input("roles")))? $request->input("roles") : [];
-        $status = \Artisan::call('user:create', [
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'user_email' => 'email',
+                'name' => 'not_regex:/<.*?>/',
+                'last_name' => 'not_regex:/<.*?>/',
+                'roles' => 'array|required'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'code' => 1,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $roles = !is_null($request->input("roles")) ? $request->input("roles") : [];
+        $code = \Artisan::call('user:create', [
             '--name' => $request->input("name"),
             '--lastname' => $request->input("last_name"),
             '--email' => $request->input("email"),
             '--roles' => join(",", $roles)
         ]);
-        return [
-            'status' => $status,
-            'message' => \Artisan::output()
+
+        $messages = [
+            2 => ['max_users' => 'The maximum number of users has been reached.'],
+            3 => ['user_exists' => 'The email is already registered.'],
+            4 => ['data_required' => 'The email and the password are required.'],
+            5 => ['user_exists' => 'The email is already registered.'],
         ];
+
+        $message = $messages[$code] ?? 'error';
+
+        if ($code > 0) {
+            return response()->json([
+                'code' => $code,
+                'errors' => $message
+            ], 422);
+        }
+
+        if (env('USER_LOGIN', 'default') === 'default') {
+            $user_auth = User::where('email', '=', $request->input('email'))->first();
+            if (is_null($user_auth['status']) || $user_auth['status'] != "deleted") {
+                $pass_token = $this->passwords->getRepository()->create($user_auth);
+                $user_auth->notify(new WelcomePasswordNotification($pass_token, $user_auth['name'], $user_auth['roles']));
+
+                return response()->json([
+                    'code' => 0,
+                    'message' => 'The user was created! We sent an email to the new account with a link to login.'
+                ], 200);
+            }
+        } else {
+            return response()->json([
+                'code' => 0,
+                'message' => 'The user was created!'
+            ], 200);
+        }
+
+        return response()->json([
+            'code' => 0,
+            'message' => 'Unknown error'
+        ], 500);
     }
 
     /**

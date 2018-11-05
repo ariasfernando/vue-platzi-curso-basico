@@ -1,41 +1,30 @@
 <template>
-  <!-- CALL TO ACTION ELEMENT -->
-  <tr
-    @click="selectComponent"
-    data-type="button-element"
-    :class="getMobileClasses(component,'tr')"
-  >
-    <td
-      class="stx-position-relative"
-      width="100%"
-      style="width: 100%;"
-      :style="component.container.style"
-      :align="component.container.attribute.align"
-      :bgcolor="component.container.attribute.bgcolor"
-      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
-    >
+  <module-container :component="component" @select-component="selectComponentHandler">
+      <button-border-radius-comment v-if="hasBorderRadius" :component="component"
+        :module="module" :columnId="columnId" :componentId="componentId"></button-border-radius-comment>
+      <div class="stx-wrapper" v-if="hasBorderRadius" v-html="notMsoStartingComment"></div>
       <a
         @click.prevent
-        :href="component.button.attribute.href || ''"
+        :data-contenteditable-href="component.button.attribute.href || ''"
         :target="component.button.attribute.target || '_blank'"
         :style="component.button.style.textDecoration || 'text-decoration:none;'"
-      >
+        :title="component.button.attribute.title || ''"
+        >
         <table
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
+          :width="buttonContainerWidth"
           :height="component.button.attribute.height"
-          :bgcolor="component.button.attribute.bgcolor"
           :style="tableStyles"
-        >
+          >
           <tr>
             <td
               width="100%"
               :bgcolor="component.button.attribute.bgcolor"
               :height="component.button.attribute.height"
               style="vertical-align: middle; width:100%;"
-              :style="buttonBorderAndPadding"
+            :style="elementBorderAndPadding(this.component.button)"
             >
               <table
                 cellpadding="0"
@@ -48,25 +37,22 @@
                   <td
                     width="100%"
                     :align="component.button.attribute.align"
-                    :style="buttonFontStyles"
-                    :valign="component.button.attribute.valign || 'middle'"
+                    :style="fontStyles(component.button)"
+                    :valign="component.button.attribute.valign || ''"
                     >
-                    <div
-                        class="stx-edit-text stx-wrapper"
-                        style="display: inline-block !important; vertical-align: middle"
-                        :style="buttonFontStyles"
-                        v-html="content"
-                        :id="editorId"
-                        @keyup="changeContent"
-                        @tiny-change="changeContent"
-                        @input="changeContent"
-                      >
-                    </div>
+                    <tiny-mce
+                      :fontStyles="[fontStyles(component.button),{'display': 'inline-block !important'}, {'vertical-align': 'middle'}]"
+                      :module="module"
+                      :component="component"
+                      :columnId="columnId"
+                      :componentId="componentId"
+                      @changeText="changeText"
+                    ></tiny-mce>
                   </td>
                   <td
                     v-if="component.caret.attribute.url"
                     :width="widthCaret"
-                    :style="caretPaddingAndWidth"
+                    :style="[elementBorderAndPadding(component.caret), {'width': widthStyle(widthCaret)}]"
                   >
                     <img
                       :src="$_app.config.imageUrl + component.caret.attribute.url"
@@ -80,137 +66,98 @@
                   </td>
                 </tr>
               </table>
-              <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
             </td>
           </tr>
         </table>
       </a>
-    </td>
-  </tr>
-  <!-- CTA ELEMENT ENDS -->
+      <div class="stx-wrapper" v-if="hasBorderRadius" v-html="notMsoEndingComment"></div>
+  </module-container>
 </template>
 
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
-  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
-  import TinyMixin from '../mixins/TinyMixin.js';
+  import ModuleContainer from '../../common/containers/ModuleContainer';
+  import ButtonBorderRadiusComment from '../../common/ButtonBorderRadiusComment.vue';
+  import tinyMce from '../../common/tinyMce';
+  import ElementMixin from '../../common/mixins/ElementMixin.js';
   import _ from 'lodash';
 
   export default {
     name: 'ButtonElement',
-    mixins: [ MobileStylesMixin, ComponentAttributeMixin, TinyMixin ],
+    mixins: [MobileStylesMixin, ElementMixin],
+    components: {
+      ModuleContainer,
+      tinyMce,
+      ButtonBorderRadiusComment,
+    },
     data() {
       return {    
-        content: this.component.data.text,
-        timer: null
+        timer: null,
       };
-    },
-    props: [
-      'module-id',
-      'column-id',
-      'component-id',
-      'component',
-      'column'
-    ],
-    mounted(){
-      const changeStyles = (selector, styles) => {
-        let editorLinks = $(`#${this.editorId}`).find(selector);
-        if(editorLinks.length){
-          for (var i = 0; i < editorLinks.length; i++) {
-            $(editorLinks[i]).css(styles);
-          }
-        }
-      }
-      changeStyles('p', { color: this.component.button.style.color || this.libraryConfig.linkColor });
     },
     computed: {
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
       },
-      editorId(){
-        return ["editor", this.module.idInstance, this.columnId, this.componentId].join("-");
-      },
-      libraryConfig(){
-        return this.$store.state.campaign.campaign.library_config;
+      width() {
+        return this.component.button.styleOption.autoWidth ? undefined : this.component.button.attribute.width;
       },
       tableStyles(){
-        const width = this.component.button.style.minWidth ? undefined : `${this.component.button.attribute.width}px`;
+        const { behaviour } = this.component;
+        let width = this.width ? this.widthStyle(this.width) : undefined;
+        if(behaviour == 'text'){
+          width = '100%';
+        }
         return {
           'width': width,
           'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
-          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth
-        }
-      },
-      buttonBorderAndPadding(){
-        return{
-          'padding-top':this.component.button.style.paddingTop,
-          'padding-bottom':this.component.button.style.paddingBottom,
-          'padding-right':this.component.button.style.paddingRight,
-          'padding-left':this.component.button.style.paddingLeft,
-          'border-top-width':this.component.button.style.borderTopWidth,
-          'border-right-width':this.component.button.style.borderRightWidth,
-          'border-bottom-width':this.component.button.style.borderBottomWidth,
-          'border-left-width':this.component.button.style.borderLeftWidth,
-          'border-top-style':this.component.button.style.borderTopStyle,
-          'border-right-style':this.component.button.style.borderRightStyle,
-          'border-bottom-style':this.component.button.style.borderBottomStyle,
-          'border-left-style':this.component.button.style.borderLeftStyle,
-          'border-top-color':this.component.button.style.borderTopColor,
-          'border-right-color':this.component.button.style.borderRightColor,
-          'border-bottom-color':this.component.button.style.borderBottomColor,
-          'border-left-color':this.component.button.style.borderLeftColor,
-          'border-radius':this.component.button.style.borderRadius
-        }
-      },
-      buttonFontStyles() {
-        return {
-          'text-align':this.component.button.style.textAlign,
-          'font-family':this.component.button.style.fontFamily,
-          'color':this.component.button.style.color,
-          'font-size':this.component.button.style.fontSize,
-          'font-weight':this.component.button.style.fontWeight,
-          'letter-spacing':this.component.button.style.letterSpacing,
-          'line-height':this.component.button.style.lineHeight,
-        }
-      },
-      caretPaddingAndWidth() {
-        return {
-          'padding-top':this.component.caret.style.paddingTop,
-          'padding-bottom':this.component.caret.style.paddingBottom,
-          'padding-right':this.component.caret.style.paddingRight,
-          'padding-left':this.component.caret.style.paddingLeft,
-          'width': this.widthCaret + 'px'
+          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth,
+          'border-collapse': 'initial'
         }
       },
       widthCaret() {
         return _.parseInt(this.component.caret.attribute.width) + _.parseInt(this.component.caret.style.paddingLeft) || 0 + _.parseInt(this.component.caret.style.paddingRight) || 0;
       },
+      notMsoStartingComment(){
+        return `<!--[if !mso]><!-->`;
+      },
+      notMsoEndingComment(){
+        return `<!--<![endif]-->`;
+      },
+      hasBorderRadius() {
+        if (this.component.button.style.borderRadius) {
+          const borderRadius =  parseInt(this.component.button.style.borderRadius);
+          return borderRadius != 0 ? true : false;
+        } 
+        return false;
+      },
+      buttonContainerWidth() {
+        const { behaviour } = this.component;
+        if(behaviour == 'text'){
+          return '100%';
+        }
+        return this.width; 
+      }
     },
     methods: {
-      selectComponent() {
-        this.$emit("select-component", {
-            moduleId: this.moduleId,
-            columnId: this.columnId,
-            componentId: this.componentId
-        });
-      },
-      changeContent(e) {
+      changeText(value) {
         if (this.timer) {
           clearTimeout(this.timer);
         }
         this.timer = setTimeout(() => {
-          this.$store.commit('campaign/updateElement', {
+          this.$store.dispatch('campaign/updateText', {
             moduleId:this.moduleId,
             columnId:this.columnId,
-              componentId:this.componentId,
-              data: {
-                text: e.target.innerHTML
-              }
-            });
-          }, 500);
-        },  
+            componentId:this.componentId,
+            link: "data",
+            property: "text",
+            sync: false,
+            value,
+          });
+        }, 100);
       },
-    };
+    },
+  };
 </script>
 <style lang="less">
   .st-unlink {

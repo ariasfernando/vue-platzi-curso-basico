@@ -1,8 +1,8 @@
+/* global path */
 /*
  NOTES: .scripts() doesn't work with watch you'll have to run watch again if you're editing legacy 
  files (E.g. application-globals.js).
 */
-
 
 const mix = require('laravel-mix');
 const fs = require('fs');
@@ -14,6 +14,8 @@ const assetsPath = 'resources/assets';
 const assetsVuePath = `${assetsPath}/vue`;
 const jsDestinationPath = 'public/js';
 const customerAssetsPath = 'stensul/customer/resources/assets';
+
+require('dotenv').config();
 
 function jsAppFilePath(file) {
   return `/js/base/${file}`;
@@ -29,6 +31,20 @@ mix.webpackConfig({
       stensul: path.join(__dirname, assetsVuePath),
     },
   },
+  module: {
+    rules: [
+      {
+        test: /\.(js|vue)$/,
+        enforce: 'pre',
+        exclude: /(node_modules|bower_components|\.spec\.js)/,
+        use: [
+          {
+            loader: 'webpack-strip-block',
+          },
+        ],
+      },
+    ],
+  },
 });
 
 mix
@@ -41,7 +57,6 @@ mix
     $: 'jquery',
     jQuery: 'jquery',
   })
-  .less(`${assetsPath}/less/vendor/stensul/media-gallery/media-gallery.less`, 'public/css/media-gallery.css')
   .less(`${assetsPath}/less/base/commons/mobile/mobile_core_styles.less`, 'public/css/mobile_core_styles.css')
   .less(`${assetsPath}/less/base/commons/mobile/mobile_client_styles.less`, 'public/css/mobile_client_styles.css')
   .less(`${assetsPath}/less/base/tool/tool.less`, 'public/css/tool.css')
@@ -86,6 +101,8 @@ mix
   .scripts([
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-ui/jquery-ui.min.js',
+    'node_modules/jquery-mousewheel/jquery.mousewheel.min.js',
+    'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js',
   ], `${jsDestinationPath}/jquery.js`)
   .scripts([
     'node_modules/bootstrap/dist/js/bootstrap.min.js',
@@ -105,6 +122,7 @@ mix
     'node_modules/tinymce/plugins/link/plugin.js',
     'node_modules/tinymce/plugins/advlist/plugin.js',
     `${assetsPath}/js/plugins/**/*.js`,
+    `${customerAssetsPath}/js/plugins/**/*.js`,
   ], `${jsDestinationPath}/tinymce.js`)
   .scripts([
     'node_modules/underscore/underscore.js',
@@ -178,7 +196,7 @@ mix
       const newJson = {};
       _.forIn(obj, (value, key) => {
         const newFilename = value.replace(/([^\.]+)\.([^\?]+)\?id=(.+)$/g, '$1-$3.$2');
-        const oldAsGlob = value.replace(/([^\.]+)\.([^\?]+)\?id=(.+)$/g, '$1.*.$2');
+        const oldAsGlob = value.replace(/([^\.]+)\.([^\?]+)\?id=(.+)$/g, '$1-*.$2');
         // delete old versioned file
         del.sync([`public${oldAsGlob}`]);
         // copy as new versioned
@@ -190,6 +208,9 @@ mix
       jsonFile.writeFile(mixManifest, newJson, { spaces: 2 }, (writeError) => {
         if (writeError) console.error(writeError);
       });
+      if (process.env.NODE_ENV === 'development') {
+        console.log('\x1b[37m%s\x1b[36m%s\x1b[0m', `${process.env.APP_NAME} tool running on --> `, process.env.APP_BASE_URL);
+      }
     });
   });
 

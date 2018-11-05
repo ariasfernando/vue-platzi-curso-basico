@@ -50,9 +50,9 @@
 
         <modal v-if="showUndoDecisionModal" @close="closeUndoDecisionModal" @accept="confirmUndoDecisionModal">
             <div slot="body">
-                <p v-if="this.selectedDecision === 'approve' || this.selectedDecision === 'approve-with-comments'">
+                <p v-if="selectedDecision === 'approve' || selectedDecision === 'approve-with-comments'">
                     You already approved this campaign. Are you sure you want to undo this action?</p>
-                <p v-if="this.selectedDecision === 'reject' || this.selectedDecision === 'reject-with-comments'">
+                <p v-if="selectedDecision === 'reject' || selectedDecision === 'reject-with-comments'">
                     You already rejected this campaign. Are you sure you want to undo this action?</p>
             </div>
         </modal>
@@ -63,6 +63,7 @@
 <script>
     import Modal from '../common/Modal.vue';
     import ProofDecisionButton from './ProofDecisionButton.vue';
+    import proofService from '../../services/proof';
 
     module.exports = {
         name: 'proofDecision',
@@ -81,21 +82,10 @@
         },
         props: ['decision', 'token'],
         created: function() {
-            // TODO: find a way to define this in the vue instance
-            Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             // Load the current decision
             this.selectedDecision = this.decision;
         },
         methods: {
-            getComments: function() {
-                var vm = this;
-                Vue.http.get(Application.globals.baseUrl + '/proof/comments/' + vm.token)
-                    .then(function( resp ) {
-                        if (resp.status == 200) {
-                            vm.comments = resp.body;
-                        }
-                    });
-            },
             submitDecision: function(decision) {
                 var vm = this;
 
@@ -105,22 +95,23 @@
                 }
                 vm.loadingDecision = decision;
 
-                Vue.http.post(Application.globals.baseUrl + '/proof/decision/' + vm.token, {
+                const data = {
                     decision: decision,
                     comment: vm.comment
-                })
-                    .then(function( resp ) {
-                        if (resp.status == 200) {
-                            vm.selectedDecision = decision;
-                            // Show an alert
-                            vm.$root.$toast(resp.message || 'Thank you! Your feedback has been successfully collected.', {className: 'et-success'});
-                            vm.$emit('decision');
-                        } else {
-                            // Show an alert
-                            vm.$root.$toast(resp.message, {className: 'et-error'});
-                        }
-                        vm.loadingDecision = '';
-                    });
+                };
+
+                proofService.postDecision(vm.token, data).then((response) => {
+                    if (response.status === 'success') {
+                        vm.selectedDecision = decision;
+                        // Show an alert
+                        vm.$root.$toast(response.message || 'Thank you! Your feedback has been successfully collected.', {className: 'et-success'});
+                        vm.$emit('decision');
+                    } else {
+                        // Show an alert
+                        vm.$root.$toast(response.message, {className: 'et-error'});
+                    }
+                    vm.loadingDecision = '';
+                });
             },
             askComment: function(decision) {
                 if (this.selectedDecision.length > 0) {
@@ -140,26 +131,26 @@
             },
             undoDecision: function() {
                 this.showUndoDecisionModal = true;
+                this.comment = '';
             },
             closeUndoDecisionModal: function() {
                 this.showUndoDecisionModal = false
             },
             confirmUndoDecisionModal: function() {
-                var vm = this;
-                Vue.http.delete(Application.globals.baseUrl + '/proof/decision/' + vm.token)
-                    .then(function( resp ) {
-                        vm.closeUndoDecisionModal();
-                        if (resp.status == 200) {
-                            vm.selectedDecision = '';
-                            // Show an alert
-                            vm.$root.$toast(resp.body.message || 'Your decision has been undone.', {className: 'et-success'});
-                            vm.$emit('decision');
-                        } else {
-                            // Show an alert
-                            vm.$root.$toast(resp.body.message, {className: 'et-error'});
-                        }
-                        vm.loadingDecision = '';
-                    });
+                var _this = this;
+                proofService.deleteDecision(_this.token).then((response) => {
+                    _this.closeUndoDecisionModal();
+                    if (response.status === 'success') {
+                        _this.selectedDecision = '';
+                        // Show an alert
+                        _this.$root.$toast(response.body.message || 'Your decision has been undone.', {className: 'et-success'});
+                        _this.$emit('decision');
+                    } else {
+                        // Show an alert
+                        _this.$root.$toast(response.body.message, {className: 'et-error'});
+                    }
+                    _this.loadingDecision = '';
+                });
             }
         }
     };

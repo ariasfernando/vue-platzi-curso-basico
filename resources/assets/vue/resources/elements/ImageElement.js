@@ -4,13 +4,15 @@ function imageDefault() {
     type: 'image-element',
     container: {
       style: {},
-      styleOption: {},
+      styleOption: {
+        enableElement: true,
+      },
       attribute: {},
     },
     image: {
       attribute: {
-        placeholder: 'default/placeholder-square.jpg',
-        href: 'http://stensul.com',
+        placeholder: 'default/placeholder-16-9-1000x563.jpg',
+        href: '',
         alt: 'Image',
         title: 'Image',
         width: '100%',

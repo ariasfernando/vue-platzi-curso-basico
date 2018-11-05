@@ -1,5 +1,4 @@
 import Q from 'q';
-import _ from 'underscore-contrib';
 import request from '../utils/request';
 import endpoints from '../resources/endpoints';
 
@@ -10,7 +9,7 @@ export default {
     const params = {
       endpoint,
       search: {
-        key
+        key,
       },
     };
 
@@ -21,5 +20,5 @@ export default {
     });
 
     return deferred.promise;
-  }
+  },
 };

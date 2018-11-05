@@ -3,7 +3,7 @@
 namespace Stensul\Console\Commands\User;
 
 use Activity;
-use Stensul\Models\User;
+use UserModel as User;
 use MongoDB\BSON\ObjectID;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -31,24 +31,29 @@ class Restore extends Command
     {
         $options = $this->option();
         $email = is_null($options["email"])
-            ? $this->ask('What is the user email that you want restore?')
+            ? $this->ask('What is the user email that you want to restore?')
             : $options["email"];
 
-        if ($email != "") {
-            if (!User::where('email', '=', $email)->exists()) {
-                $this->error('The email does not exist.');
-            } else {
-                $user_data = User::where('email', '=', $email)->firstOrFail();
-                $user_data->restore();
-                $user_data->status = "enabled";
-                $user_data->unset('deleted_at');
-                $user_data->save();
-                Activity::log('User restored', array('properties' => ['user_id' => new ObjectID($user_data->_id)]));
-                $this->info('The user '.$email.' was restored!');
-            }
-        } else {
-            $this->error('The email is required.');
+        if ($email == "") {
+            return $this->error('The email is required.');
         }
+
+        if (User::where('email', '=', $email)->first()) {
+            return $this->error('There\'s already an active user with this email.');
+        }
+
+        $user_data = User::onlyTrashed()->where('email', '=', $email)->first();
+
+        if (!$user_data) {
+            return $this->error('The email does not exist or is not deleted.');
+        }
+
+        $user_data->restore();
+        $user_data->status = "enabled";
+        $user_data->unset('deleted_at');
+        $user_data->save();
+        Activity::log('User restored', array('properties' => ['user_id' => new ObjectID($user_data->_id)]));
+        $this->info('The user ' . $email . ' was restored!');
     }
 
     /**

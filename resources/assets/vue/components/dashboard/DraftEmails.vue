@@ -42,7 +42,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="campaign in campaigns.data" :data-campaign="campaign._id">
+          <tr v-for="campaign in campaigns.data" v-bind:key="campaign._id" :data-campaign="campaign._id">
             <td class="last-modified">
               <span>{{campaign.created_at}}</span><br><span class="text-overflow" :title="campaign.created_by.email">by {{campaign.created_by.email}}</span>
             </td>
@@ -53,10 +53,10 @@
               <span v-html="prepareOutput(campaign.campaign_name, 'campaign_name')"></span>
               <i title="This campaign is locked" alt="This campaign is locked" class="fa fa-lock pull-left campaign-locking" v-if="enableLocking && campaign.locked"></i>
               <a :data-campaign-id="campaign._id"
-                :data-campaign-name="campaign.campaign_name"
                 class="proof-track-modal pull-right right-icon"
                 href="#"
                 title="Track active proof"
+                @click.prevent="openProofTrackModal(campaign._id)"
                 v-if="proof.allow && proof.status && campaign.has_active_proof"
               ><i class="fa fa-sticky-note"></i></a>
             </td>
@@ -120,13 +120,13 @@
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
-              <a href="#" data-tooltip="Delete" @click.prevent="askToDeleteCampaign(campaign._id)"
+              <a href="#" data-tooltip="Delete" @click.prevent="askToDeleteCampaign(campaign)"
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
           <tr v-if="!campaigns.data.length">
             <td :colspan="showTags ? 7 : 6">
-              There are no emails to show in this list
+              {{ askDeleteMessage }}
             </td>
           </tr>
         </tbody>
@@ -174,6 +174,19 @@
             const win = window.open(this.$_app.config.baseUrl + "/proof/review/" + token, '_blank');
             win.focus();
         }
+      },
+      openProofTrackModal (campaignId) {
+        this.$store.commit("global/setLoader", true);
+        this.$store.dispatch("campaign/getCampaignData", campaignId).then(response => {
+          this.$store.commit("global/setLoader", false);
+          this.$store.commit("campaign/toggleModal", 'modalProofTrack');
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+            {className: 'et-error'}
+          );
+        });
       },
       openProofModal (campaignId) {
         this.$store.commit("global/setLoader", true);

@@ -5,13 +5,14 @@ namespace Stensul\Http\Controllers;
 use Auth;
 use Activity;
 use Carbon\Carbon;
-use Stensul\Models\Role;
-use Stensul\Models\User;
-use Stensul\Models\Proof;
-use Stensul\Models\Comment;
-use Stensul\Models\Campaign;
+use RoleModel as Role;
+use UserModel as User;
+use ProofModel;
+use ReviewerModel as Reviewer;
+use CommentModel as Comment;
+use CampaignModel as Campaign;
 use Illuminate\Http\Request;
-use Stensul\Jobs\SendReviewersEmail;
+use SendReviewersEmail;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\BSON\UTCDateTime;
@@ -50,7 +51,7 @@ class ProofController extends Controller
     public function getReview(Request $request, $token)
     {
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id())) {
@@ -58,10 +59,10 @@ class ProofController extends Controller
         }
 
         // Validate if the proof is available
-        if ($proof->status === Proof::STATUS_DELETED) {
+        if ($proof->status === ProofModel::STATUS_DELETED) {
             // Check if there's a new version of the proof and if the current user has access to it
             if (isset($proof->campaign->proof_id)) {
-                $new_proof = Proof::find($proof->campaign->proof_id);
+                $new_proof = ProofModel::find($proof->campaign->proof_id);
                 if ($new_proof && $proof->id !== $new_proof->id && $new_proof->userCanAccess(Auth::id())) {
                     // Current user has access to the new proof, redirect and show message
                     $request->session()->put(
@@ -85,7 +86,8 @@ class ProofController extends Controller
         foreach ($proof->reviewers as $reviewer) {
             if ($reviewer['email'] === Auth::user()->email) {
                 if (!isset($reviewer['opened_at'])) {
-                    $reviewer['opened_at'] = new UTCDateTime;
+                    $date = new UTCDateTime();
+                    $reviewer['opened_at'] = $date->toDateTime();
                     Activity::log('Reviewer opened a proof', [
                         'properties' => [
                             'proof_id' => new ObjectId($proof->id),
@@ -122,7 +124,7 @@ class ProofController extends Controller
     public function getData(Request $request, $token)
     {
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id())) {
@@ -134,7 +136,12 @@ class ProofController extends Controller
         $current_reviewer = [];
         $params['show_decision'] = true;
         $params['can_edit'] = false;
+        $params['campaign_finished'] = false;
 
+        if(isset($proof->campaign->processed) && $proof->campaign->processed==1){
+            $params['show_decision'] = false;
+            $params['campaign_finished'] = true;
+        }
         // Validate if current logged user is a reviewer
         foreach ($proof->reviewers as $reviewer) {
             if ($reviewer['email'] === Auth::user()->email) {
@@ -149,6 +156,7 @@ class ProofController extends Controller
 
         // Validate if the user can edit the campaign
         if (Auth::user()->can('edit_campaign')) {
+          if(!isset($proof->campaign->processed) || $proof->campaign->processed==0)
             $params['can_edit'] = true;
         }
 
@@ -183,7 +191,7 @@ class ProofController extends Controller
     public function getComments(Request $request, $token)
     {
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id())) {
@@ -196,12 +204,13 @@ class ProofController extends Controller
 
         // If a reviewer's email exists in the params, return how many message wrote
         if ($request->has('email')) {
-            $user_id = User::whereEmail($request->input('email'))->first()->id;
+            $user_id = Reviewer::withTrashed()->whereEmail($request->input('email'))->first()->id;
             $data['requested_user_count'] = $proof->comments()->whereUserId($user_id)->count();
         }
 
         $data['comments'] = array_map(function ($comment) {
-            $comment['display_name'] = User::find($comment['user_id'])->name;
+            $reviewer = Reviewer::withTrashed()->find($comment['user_id']);
+            $comment['display_name'] = $reviewer->display_name;
             $comment['created_at'] = Carbon::parse($comment['created_at'])->format('F jS, Y | h:i A');
             unset($comment['user_id'], $comment['_id'], $comment['proof_id']);
             return $comment;
@@ -223,7 +232,7 @@ class ProofController extends Controller
     public function postComment(Request $request, $token)
     {
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id())) {
@@ -244,6 +253,12 @@ class ProofController extends Controller
                     'comment_id' => new ObjectId($comment->id)
                 ]
             ]);
+
+            // Send emails to reviewers
+            $this->dispatch(new SendReviewersEmail($proof, 'new_comment', [
+                'comment' => $comment
+            ]));
+
 
             return [
                 'status' => 'success',
@@ -269,7 +284,7 @@ class ProofController extends Controller
         $decision = $request->get('decision');
 
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id()) || !$decision) {
@@ -283,8 +298,9 @@ class ProofController extends Controller
         foreach ($proof->reviewers as $reviewer) {
             if ($reviewer['email'] === Auth::user()->email) {
                 $reviewer['decision'] = $decision;
-                $reviewer['decision_at'] = new UTCDateTime;
-                if ($request->has('comment')) {
+                $date = new UTCDateTime();
+                $reviewer['decision_at'] = $date->toDateTime();
+                if ($request->has('comment') && strlen($request->input('comment')) > 0) {
                     // Store the decision comments
                     $comment = Comment::create([
                         'proof_id' => $proof->id,
@@ -300,6 +316,14 @@ class ProofController extends Controller
                     unset($reviewer['required']);
                     $reviewer['require_unabled'] = true;
                 }
+
+                // Send notification of a decision
+                $this->dispatch(new SendReviewersEmail($proof, 'decision_taken', [
+                    'decision' => $decision,
+                    'comment' => $request->has('comment') ? $request->get('comment') : '',
+                    'reviewer' => $reviewer
+                ]));
+
                 $updated = true;
             }
             $reviewers[] = $reviewer;
@@ -314,7 +338,7 @@ class ProofController extends Controller
                     'proof_id' => new ObjectId($proof->id),
                     'user_id' => new ObjectId(Auth::id()),
                     'decision' => $decision,
-                    'comment' => $request->has('comment') ? new ObjectId($comment->id) : ''
+                    'comment' => $request->has('comment') && strlen($request->input('comment')) > 0 ? $comment->id : ''
                 ]
             ]);
 
@@ -339,10 +363,10 @@ class ProofController extends Controller
      * @param  String  $token
      * @return Json
      */
-    public function deleteDecision($token)
+    public function postDeleteDecision($token)
     {
         // Get proof by given token
-        $proof = Proof::whereToken($token)->first();
+        $proof = ProofModel::whereToken($token)->first();
 
         // Validate
         if (!$proof || !$proof->userCanAccess(Auth::id())) {
@@ -363,8 +387,14 @@ class ProofController extends Controller
                 // Remove decision data from this reviewer
                 $decision = $reviewer['decision'];
                 $decision_at = $reviewer['decision_at'];
-                $decision_comment = $reviewer['decision_comment'] ?? '';
-                unset($reviewer['decision'], $reviewer['decision_at'], $reviewer['decision_comment']);
+                $decision_comment = isset($reviewer['decision_comment']) ? $reviewer['decision_comment'] : '';
+                unset(
+                    $reviewer['decision'],
+                    $reviewer['decision_at'],
+                    $reviewer['decision_comment'],
+                    $reviewer['requestor_notified'],
+                    $reviewer['requestor_notified_at']
+                );
                 $updated = true;
             }
             $reviewers[] = $reviewer;
@@ -378,9 +408,9 @@ class ProofController extends Controller
                 'properties' => [
                     'proof_id' => new ObjectId($proof->id),
                     'user_id' => new ObjectId(Auth::id()),
-                    'previous_decision' => $decision,
-                    'previous_decision_at' => $decision_at,
-                    'previous_decision_comment' => $decision_comment
+                    'previous_decision' => isset($decision) ? $decision : '',
+                    'previous_decision_at' => isset($decision_at) ? $decision_at : '',
+                    'previous_decision_comment' => isset($decision_comment) ? $decision_comment : ''
                 ]
             ]);
 
@@ -419,8 +449,20 @@ class ProofController extends Controller
         }
 
         // Update reviewers
+        $save_reviewers = [];
+        $date = new UTCDateTime();
+        $modified_date = $date->toDateTime();
+
         foreach ($reviewers as $key => $value) {
-            $reviewers[$key]['user_id'] = new ObjectId(User::whereEmail($value['email'])->first()->id);
+            $reviewer_user = Reviewer::withTrashed()->whereEmail($value['email'])->first();
+            $reviewers[$key]['user_id'] = new ObjectId($reviewer_user->_id);
+            // Don't save decision_comment for new proofs, saving "$oid" will throw an exception save only the fields we need.
+            $save_reviewers[$key]['user_id'] = $reviewers[$key]['user_id'];
+            $save_reviewers[$key]['display_name'] = $reviewer_user->display_name;
+            $save_reviewers[$key]['email'] = $reviewers[$key]['email'] ?? null;
+            $save_reviewers[$key]['last_modified_date'] = $modified_date;
+            $save_reviewers[$key]['notification_message'] = $reviewers[$key]['notification_message'] ?? null;
+            $save_reviewers[$key]['required'] = (int) ($reviewers[$key]['required'] ?? 0);
         }
 
         // Check if we have to create a new proof, or update the current one
@@ -429,12 +471,12 @@ class ProofController extends Controller
             $token = md5(uniqid() . $campaign_id);
 
             // Create proof
-            $proof = Proof::create([
-                'campaign_id' => new ObjectId($campaign_id),
+            $proof = ProofModel::create([
+                'campaign_id' => $campaign_id,
                 'requestor' => new ObjectId(Auth::id()),
                 'token' => $token,
-                'status' => Proof::STATUS_PROCESSED,
-                'reviewers' => $reviewers
+                'status' => ProofModel::STATUS_PROCESSED,
+                'reviewers' => $save_reviewers
             ]);
             $activity = 'Proof created';
 
@@ -443,9 +485,9 @@ class ProofController extends Controller
                 $campaign = Campaign::find($campaign_id);
                 if (isset($campaign->proof_id)) {
                     // Find the previous proof
-                    $old_proof = Proof::find($campaign->proof_id);
+                    $old_proof = ProofModel::find($campaign->proof_id);
                     if ($old_proof) {
-                        $old_proof->status = Proof::STATUS_DELETED;
+                        $old_proof->status = ProofModel::STATUS_DELETED;
                         $old_proof->save();
 
                         // Set the previous proof id in the new one
@@ -455,7 +497,7 @@ class ProofController extends Controller
                 }
             }
         } else {
-            $proof = Proof::find($request->input('proof_id'));
+            $proof = ProofModel::find($request->input('proof_id'));
 
             foreach ($reviewers as $key => $reviewer) {
                 foreach ($proof->reviewers as $current_reviewer) {
@@ -470,11 +512,11 @@ class ProofController extends Controller
                         unset($current_reviewer['notification_message']);
                         $reviewers[$key] = array_merge($reviewers[$key], $current_reviewer);
 
-                        if (isset($reviewer['required']) && $reviewer['required'] == 1) {
-                            $reviewers[$key]['required'] = 1;
-                        } else {
-                            $reviewers[$key]['required'] = 0;
-                        }
+                        // Recreate the ObjectId or it will fail trying to save "$oid".
+                        $reviewers[$key]['decision_comment'] = isset($reviewers[$key]['decision_comment'])
+                            ? new ObjectId((string) $reviewers[$key]['decision_comment']) : null;
+
+                        $reviewers[$key]['required'] = (int) ($reviewer['required'] ?? 0);
                     }
                 }
             }
@@ -482,14 +524,20 @@ class ProofController extends Controller
             $proof->reviewers = $reviewers;
             $proof->requestor = new ObjectId(Auth::id());
 
-            if ($request->has('send_to_all') && $request->input('send_to_all') == 1) {
-                $proof->send_to_all = true;
-            }
             $proof->save();
             $activity = 'Proof updated';
         }
 
         if ($proof) {
+            if ($request->has('send_to_all') && $request->input('send_to_all') == 1) {
+                $proof->send_to_all = true;
+            }
+            $proof->notification_message_to_all = "";
+            if ($request->has('notification_message_4_all') && $request->input('notification_message_4_all') !== "") {
+                $proof->send_to_all = true;
+                $proof->notification_message_to_all = $request->input('notification_message_4_all');
+            }
+            $proof->save();
             Activity::log($activity, [
                 'properties' => [
                     'proof_id' => new ObjectId($proof->id),
@@ -521,6 +569,13 @@ class ProofController extends Controller
         ];
     }
 
+    protected function formatDate($utcdatetime)
+    {
+        $date = new \DateTime($utcdatetime['date'], new \DateTimeZone(isset($utcdatetime['timezone']) ? $utcdatetime['timezone'] : 'UTC'));
+        $date->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        return $date->format('Y-m-d H:i:s');
+    }
+
     /**
      * Get a list of reviewers by a given campaign id
      *
@@ -533,32 +588,31 @@ class ProofController extends Controller
     {
         $campaign = Campaign::find($campaign_id);
         $proof = $campaign->getLastProof();
+        $reviewers = [];
 
         if ($proof && count($proof->reviewers)) {
             $reviewers = array_map(function ($reviewer) use ($proof) {
-                $reviewer['display_name'] = User::find($reviewer['user_id'])->name;
+                $reviewer['display_name'] = Reviewer::withTrashed()->find($reviewer['user_id'])->display_name;
                 if (isset($reviewer['decision'])) {
                     if (isset($reviewer['decision_comment'])) {
                         $reviewer['comment'] = Comment::find($reviewer['decision_comment'])->content;
                     }
-                    $date = $reviewer['decision_at']->toDateTime()->format('Y-m-d H:i:s');
+                    $date = $this->formatDate($reviewer['decision_at']);
                 } else {
                     $date = isset($reviewer['notified_at'])
-                        ? $reviewer['notified_at']->toDateTime()->format('Y-m-d H:i:s')
+                        ? $this->formatDate($reviewer['notified_at'])
                         : $proof->created_at->format('Y-m-d H:i:s');
                 }
                 $reviewer['last_modified_date'] = $date;
                 unset($reviewer['user_id']);
                 return $reviewer;
             }, $proof->reviewers);
-
-            return [
-                'status' => 'success',
-                'data' => $reviewers
-            ];
         }
 
-        return \Response::make("", 204);
+        return [
+            'status' => 'success',
+            'data' => $reviewers
+        ];
     }
 
     /**
@@ -580,7 +634,10 @@ class ProofController extends Controller
             $users->where('roles', '!=', 'stensul-internal');
         }
 
-        return $users->get()->pluck('email');
+        return [
+            'status' => 'success',
+            'data' => $users->get()->pluck('email')
+        ];
     }
 
     /**
@@ -602,7 +659,7 @@ class ProofController extends Controller
             $token = null;
 
             if ($campaign->proof_id) {
-                $proof = Proof::find($campaign->proof_id);
+                $proof = ProofModel::find($campaign->proof_id);
                 $token = $proof->token;
             }
             $data['token'] = $token;

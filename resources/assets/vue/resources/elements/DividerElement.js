@@ -4,7 +4,9 @@ function dividerDefault() {
     type: 'image-element',
     container: {
       style: {},
-      styleOption: {},
+      styleOption: {
+        enableElement: true,
+      },
       attribute: {},
     },
     divider: {
@@ -15,7 +17,7 @@ function dividerDefault() {
         classes: '',
       },
       style: {
-        height: '1px',
+        height: '5px',
         paddingTop: '10px',
         paddingBottom: '10px',
         paddingRight: '10px',

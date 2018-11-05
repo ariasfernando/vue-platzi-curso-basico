@@ -47,6 +47,10 @@ module.exports = {
       method: 'get',
       path: `${baseUrl}/package/api/library`,
     },
+    getRootFolderList: {
+      method: 'get',
+      path: `${baseUrl}/package/api/folders?library=:library`,
+    },
   },
   config: {
     getConfig: { method: 'get', path: `${baseUrl}/config/:key` },
@@ -57,8 +61,20 @@ module.exports = {
   api: {
     uploadEmail: { method: 'post', path: `${baseUrl}/api/upload-email` },
     uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId` },
+    getFolders: { method: 'get', path: `${baseUrl}/api/folders?api_driver=:api_driver` },
   },
   dashboard: {
     getMenu: { method: 'get', path: `${baseUrl}/dashboard/menu` },
+  },
+  proof: {
+    create: { method: 'post', path: `${baseUrl}/proof/create` },
+    users: { method: 'get', path: `${baseUrl}/proof/users` },
+    reviewers: { method: 'get', path: `${baseUrl}/proof/reviewers/:campaignId` },
+    campaign: { method: 'get', path: `${baseUrl}/proof/campaign/:campaignId` },
+    data: { method: 'get', path: `${baseUrl}/proof/data/:token` },
+    comments: { method: 'get', path: `${baseUrl}/proof/comments/:token` },
+    postComment: { method: 'post', path: `${baseUrl}/proof/comment/:token` },
+    postDecision: { method: 'post', path: `${baseUrl}/proof/decision/:token` },
+    deleteDecision: { method: 'post', path: `${baseUrl}/proof/delete-decision/:token` },
   },
 };

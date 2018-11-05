@@ -9,6 +9,7 @@ function buttonDefault() {
       style: {
       },
       styleOption: {
+        enableElement: true,
       },
       attribute: {
         align: 'center',
@@ -19,7 +20,7 @@ function buttonDefault() {
         color: '#FFFFFF',
         fontFamily: 'Helvetica, Arial, Sans-serif',
         fontSize: '12px',
-        lineHeight: '14px',
+        lineHeight: '20%',
         textAlign: 'center',
         fontWeight: 'normal',
         letterSpacing: 'normal',
@@ -31,7 +32,8 @@ function buttonDefault() {
         height: '40',
         align: 'center',
         bgcolor: '#514960',
-        href: 'http://stensul.com',
+        href: '',
+        title: '',
         valign: 'middle',
       },
     },

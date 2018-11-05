@@ -1,52 +1,67 @@
 <template>
-  <div class="plugin-wrapper-inner" v-if="component">
-    <div>
-      <span>
-        <label>Destination Url</label>
+  <div>
+    <settings-container label="Destination Url" customClass="destination-url" v-if="component" key="destination-url">
+      <template slot="setting-bottom">
         <p v-if="validationRules">
-          <input
+          <el-input
             name="href"
             type="text"
+            size="mini"
             placeholder="http://examp.le"
             v-model="href"
             v-validate.initial="validationRules"
-            :class="{'input': true, 'is-danger': hasError }">
+            :class="{'input': true, 'is-danger': hasError }"></el-input>
           <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
         </p>
         <p v-else>
-          <input name="href" type="text" placeholder="http://examp.le" v-model="href">
+          <el-input
+          name="href"
+          type="text"
+          size="mini"
+          placeholder="http://examp.le"
+          v-model="href"></el-input>
         </p>
-      </span>
+      </template>
+    </settings-container>
 
-      <span v-if="plugin.config.target">
-        <label>Target</label>
-        <div class="alignment-options">
-          <a
-            v-for="(icon, option) in options"
-            :class="option === target  ? 'plugin-setting-active' : ''"
+    <settings-container label="Target" v-if="plugin.config.target" key="target">
+      <template slot="setting-right">
+        <el-button
+          v-for="(icon, option) in plugin.config.options"
+          plain
+          size="mini"
+          :class="[`glyphicon glyphicon-${icon}`,{ 'active': target === option }]"
             :data-tooltip="option"
             @click="changeTarget(option)"
             :key="option"
           >
-            <i :class="'glyphicon glyphicon-'+ icon"
-               :data-tooltip="option"
-               @click="changeTarget(option)"
-            ></i>
-          </a>
-        </div>
-      </span>
-    </div>
+        </el-button>
+      </template>
+    </settings-container>
 
+    <settings-container label="Title" v-if="plugin.config.title" key="title">
+      <template slot="setting-bottom">
+        <el-input
+          name="title"
+          type="text"
+          size="mini"
+          placeholder="Title"
+          v-model="title"></el-input>
+      </template>
+    </settings-container>
   </div>
 </template>
 
 <script>
   import _ from 'lodash';
-  import mixinValidator from '../mixins/validator';
+  import validatorMixin from '../mixins/validator';
+  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import urlDestination from '../../../resources/validator_rules'
 
   export default {
     props: ['name', 'plugin', 'pluginKey'],
-    mixins: [mixinValidator],
+    mixins: [validatorMixin],
+    components: { SettingsContainer },
     mounted() {
       if (this.validationRules) {
         this.validate();
@@ -69,17 +84,6 @@
       module() {
         return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
       },
-      moduleErrors() {
-        return this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
-                                                        && _.isEqual(err.scope.columnId, this.currentComponent.columnId)
-                                                        && _.isEqual(err.scope.componentId, this.currentComponent.componentId))) : [];
-      },
-      hasError() {
-        return this.moduleErrors.length > 0;
-      },
-      getErrorMessage() {
-        return this.moduleErrors.length > 0 ? this.moduleErrors[0].msg : '';
-      },
       component() {
         let component = {};
         if (Object.keys(this.currentComponent).length !== 0) {
@@ -101,25 +105,32 @@
         set(value) {
           this.saveComponentProperty('href', value);
 
+          this.$nextTick(() => {
           if (this.validationRules) {
             this.validate();
           }
+          });
+        },
+      },
+      title: {
+        get() {
+          return this.component[this.plugin.subComponent].attribute.title;
+        },
+        set(value) {
+          this.saveComponentProperty('title', value);
         },
       },
       validationRules() {
         const rules = [];
         _.each(this.plugin.config.validations, (e,i) => {
-          if (e) {
+          if (e === true) {
             rules.push(i);
+          } else if(typeof e == 'object' && e.selected !== 'disabled'){
+            rules.push(e.selected);
           }
+           
         });
-
         return rules.join('|');
-      }
-    },
-    data() {
-      return {
-        options: this.plugin.config.options,
       }
     },
     methods: {
@@ -139,10 +150,79 @@
           property,
           value: value,
         };
-
         this.$store.commit('campaign/saveComponentProperty', payload);
       },
       
     },
   }
 </script>
+
+<style lang="scss" scoped>
+.el-button:focus,
+.el-button:hover {
+  color: inherit;
+  border-color: #78dcd6;
+  background-color: inherit;
+}
+.el-button.active {
+  color: #ffffff;
+  border-color: rgb(120, 220, 214);
+  background-color: rgb(120, 220, 214);
+
+  &:before{
+    color: #ffffff;
+  }
+}
+.el-button + .el-button {
+  margin-left: 0;
+}
+.el-button {
+  width: 33%;
+  padding: 4px 0;
+  margin-right: 0px;
+  height: 26px;
+  border-radius: 0px;
+  border-right: none;
+
+  &:before{
+    color: #999999;
+  }
+
+  &:first-of-type {
+    margin: 0;
+    border-radius: 2px 0px 0px 2px;
+    border-right: none;
+  }
+
+  &:last-of-type {
+    margin: 0;
+    border-radius: 0px 2px 2px 0px;
+    border-right: 1px solid #dddddd;
+  }
+}
+.el-button:first-child:nth-last-child(2),
+.el-button:first-child:nth-last-child(2) ~ button {
+    width: 50%;
+}
+.el-button:first-child:nth-last-child(3),
+.el-button:first-child:nth-last-child(3) ~ button {
+    width: 33%;
+}
+.el-button:first-child:nth-last-child(4),
+.el-button:first-child:nth-last-child(4) ~ button{
+    width: 25%;
+}
+.padding-zero {
+  padding: 0;
+}
+.el-input >>> .el-input__inner{
+  border-radius: 2px;
+  font-weight: 300;
+  padding-left: 8px;
+  height: 26px;
+
+  &:focus{
+    border: 1px solid #78dcd6;
+  }
+}
+</style>

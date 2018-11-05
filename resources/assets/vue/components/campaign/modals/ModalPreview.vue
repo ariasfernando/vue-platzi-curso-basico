@@ -198,8 +198,8 @@
 
           let $emailBody = $('.preview-container').find("iframe").contents().find('.st-email-body');
           let height = $emailBody.height();
-          $emailBody.find('a').click(function () {
-            return false;
+          $emailBody.find('a').each(function() {
+            $(this).attr('target', '_blank');
           });
           this.previewFrameHeight = height;
           $('.iframe-container').scrollTop(0);

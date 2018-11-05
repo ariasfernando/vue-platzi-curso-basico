@@ -22,7 +22,7 @@
                     </button>
                     <input ref="input" type="file" name="file" style="display: none;" />
                   </div>
-                  <div v-if="params.library">
+                  <div v-if="params.library && images.length > 0">
                     <button type="button" @click="clickGallery">
                       <i class="fa fa-picture-o" aria-hidden="true"></i>
                       <p>Media Gallery</p>
@@ -94,13 +94,13 @@
 </template>
 
 <script>
-import each from 'lodash/each';
+import _ from 'lodash';
 import styleImageEditor from 'stensul-sie-vue';
 import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
 
 export default {
-  props: ['config', 'libraryImages', 'data', 'resizeIfSmaller'],
+  props: ['config', 'libraryImages', 'overlayImages' ,'data'],
   components: {
     styleImageEditor
   },
@@ -115,7 +115,7 @@ export default {
       currentImage: null,
       sieOptions: {},
       isDisabled: false,
-      newImage: true
+      isNewImage: true
     };
   },
   computed: {
@@ -173,7 +173,7 @@ export default {
       this.reset();
       this.$emit('clean');      
     },
-    generateSieOptions(changeImage = false, newSize = {}) {
+    generateSieOptions(changeImage = false) {
       const sieOptions = {
         api: this.$_app.config.sieAPI
       };
@@ -184,7 +184,14 @@ export default {
         sieOptions.preset = sieHelper.completeUrlPath(this.$_app.config.imageUrl, sieOptions.preset);
       }
 
-      Object.assign(sieOptions.size, newSize);
+      const overlayImages = this.overlayImages || [];
+      
+      if(overlayImages.length > 0){
+        const i = sieOptions.preset.find(e => {
+          return e.type === 'sie-plugin-image-overlay';
+        });
+        _.set(i, 'options.plugin.image.gallery.images', overlayImages);
+      }
 
       this.sieOptions = sieOptions;
       if (typeof this.$refs.sie !== 'undefined') {
@@ -194,14 +201,15 @@ export default {
     setImage(imageSource) {
       const size = {
         width: this.params['sie-size']['size_width'].value,
-        height: this.params['sie-size']['size_height'].value
+        height: this.params['sie-size']['size_height'].value,
+        auto: this.params['sie-size']['size_auto'].value
       }
-      return imageHelper.checkGIFSize(imageSource, this.sieOptions.size)
-        .then(() => imageHelper.adjustSize(this.resizeIfSmaller || false, imageSource, size))
-        .then((newSize) => {
+
+      return imageHelper.checkSize(imageSource, size, this.params.smaller)
+        .then(() => {
           this.currentImage = imageSource;
           this.changeImage(this.params);
-          this.generateSieOptions(true, newSize);
+          this.generateSieOptions(true);
           this.page = {
             one: false,
             two: false,
@@ -242,7 +250,7 @@ export default {
       }
       this.sieOptions = {};
       this.currentImage = null;
-      this.newImage = true;
+      this.isNewImage = true;
       this.isDisabled = false;
       this.page = {
         one: true,
@@ -266,7 +274,7 @@ export default {
         image: data.img
       });
       data.images = images;
-      data.newImage = this.newImage;
+      data.isNewImage = this.isNewImage;
       this.$emit('submitImage', data);
     },
     submit() {
@@ -306,7 +314,7 @@ export default {
         two: false,
         three: true
       };
-      this.newImage = false;
+      this.isNewImage = false;
     }
     this.generateSieOptions();
   },
@@ -388,7 +396,7 @@ export default {
   padding-top: 40px;
   padding-left: 40px;
   padding-right: 40px;
-  overflow-y: scroll;
+  overflow-y: auto;
   .library-container {
     width: 100%;
     margin: 20px auto;

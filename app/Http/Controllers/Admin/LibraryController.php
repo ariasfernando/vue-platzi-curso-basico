@@ -5,14 +5,16 @@ namespace Stensul\Http\Controllers\Admin;
 use Auth;
 use Activity;
 use DB;
-use Stensul\Http\Controllers\Controller as Controller;
+use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Stensul\Models\Library;
-use Stensul\Models\Permission;
-use Stensul\Models\Role;
+use LibraryModel as Library;
+use PermissionModel as Permission;
+use RoleModel as Role;
 use MongoDB\BSON\ObjectID as ObjectID;
-use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
-use Stensul\Services\ModelKeyManager;
+use Stensul\Http\Middleware\AdminAuthenticate;
+use ModelKeyManager;
+use Validator;
+use Illuminate\Validation\Rule;
 
 class LibraryController extends Controller
 {
@@ -173,6 +175,10 @@ class LibraryController extends Controller
         $library->config = $request->input("config");
         $library->modules = $request->input('modules');
 
+        $request->validate([
+            'name' => ['required', 'max:255', $this->libraryUniqueValidator($request->input('libraryId'))],
+        ]);
+
         if (is_null($library->config)) {
             return array("message" => "ERROR_CONFIG");
         }
@@ -183,7 +189,7 @@ class LibraryController extends Controller
 
         $library->save();
         
-        if($library->name !== $old_name) {
+        if ($library->name !== $old_name) {
             // Update library name in campaigns for library name search
             // We do not use directly the Campaign model class to avoid touching the updated_at attribute
             DB::table('campaigns')->where('library', new ObjectID($library->id))->update(['library_name' => $library->name]);
@@ -194,11 +200,16 @@ class LibraryController extends Controller
 
     /**
      * Library post create.
-     *
+     * @throws \Illuminate\Validation\ValidationException
      * @return Boolean
      */
     public function postCreate(Request $request)
     {
+
+        $request->validate([
+            'name' => ['required', 'max:255', $this->libraryUniqueValidator($request->input('libraryId'))],
+        ]);
+
         $params = [
             "name" => $request->input("name"),
             "key" => ModelKeyManager::getStandardKey(new Library, $request->input('name')),
@@ -207,9 +218,6 @@ class LibraryController extends Controller
             "modules" => $request->input('modules')
         ];
 
-        if (Library::where('name', '=', $params['key'])->exists()) {
-            $response_message = array("message"=> "ERROR_EXISTS");
-        } else {
             // Create permission to have access to the new library
             $permission_params = [
                 "name" => "access_library_" . $params['key'],
@@ -232,7 +240,7 @@ class LibraryController extends Controller
 
                 $response_message = array("message"=> "SUCCESS");
             }
-        }
+
 
         return $response_message;
     }
@@ -266,5 +274,19 @@ class LibraryController extends Controller
     {
         $providers = config('esp');
         return $providers;
+    }
+
+    private function libraryUniqueValidator($id) {
+        $uniqueValidator = Rule::unique('libraries', 'name')->where(function ($query) {
+            return $query->where('deleted_at', null);
+        });
+
+        if ($id) {
+            $uniqueValidator = Rule::unique('libraries', 'name')->where(function ($query) {
+                return $query->where('deleted_at', null);
+            })->ignore($id, '_id');
+        }
+        
+        return $uniqueValidator;
     }
 }

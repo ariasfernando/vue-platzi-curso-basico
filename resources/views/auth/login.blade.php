@@ -31,9 +31,13 @@
                          <div class="alert alert-success" role="alert">
                              Your account has been successfully created.
                          </div>
+                    @elseif (session("message") == "ERROR_CAPTCHA")
+                        <div class="alert alert-danger" role="alert">
+                            Please confirm you are not a robot.
+                        </div>
                     @else
                         <div class="alert alert-danger" role="alert">
-                            <strong>Whoops!</strong> There were some problems with your input.
+                            Invalid email address and / or password.
                         </div>
                     @endif
                 @endif
@@ -44,7 +48,6 @@
 
                 <div class="form-group">
                     <input type="password" placeholder="Password" class="form-control" name="password">
-                    <div class="sublink"><a href="{{ url('/password/email') }}">Forgot password?</a></div>
                 </div>
 
                 @if ( isset($challenge_provider) )
@@ -55,6 +58,7 @@
                 <div class="form-group submit-row">
                     <div class="text-center">
                         <button type="submit" class="btn">Login</button>
+                        <div class="sublink"><a href="{{ url('/password/email') }}">Forgot password?</a></div>
                         @if ( env('USER_REGISTRATION', false) )
                             <a href="{{ url('/auth/register') }}" class="register">Don't have a user? Register here.</a>
                         @endif

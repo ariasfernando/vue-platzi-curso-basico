@@ -94,7 +94,7 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .button input {
   text-align: center;
 }
@@ -108,7 +108,7 @@ export default {
 }
 .el-button {
   position: absolute;
-  right: 15px;
+  right: 0;
   padding: 6px;
   &:active {
     background-color: #fff;
@@ -118,6 +118,32 @@ export default {
 }
 .el-input-number {
   width: 80px;
+  float: right;
+  right: 23px;
+}
+.el-button{
+  background: #f8f8f8;
+  color: #666666;
+  cursor: inherit;
+  border: 1px solid #dcdfe6;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 14px;
+  border-radius: 0px 2px 2px 0px;
+  height: 28px!important;
+
+  &:hover{
+    color: #78dcd6;
+  }
+}
+.el-button.active {
+  background-color: #78dcd6;
+  border: 1px solid #78dcd6;
+  color: #ffffff;
+
+  &:hover{
+    color: #ffffff;
+  }
 }
 </style>
 <style  lang="less">
@@ -130,6 +156,17 @@ export default {
     border-right: 0;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
+  }
+
+  .el-input-number .el-button{
+    background: #f8f8f8;
+    color: #666666;
+    cursor: inherit;
+    border: 1px solid #dcdfe6;
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 14px;
+    border-radius: 0px 2px 2px 0px;
   }
 }
 </style>

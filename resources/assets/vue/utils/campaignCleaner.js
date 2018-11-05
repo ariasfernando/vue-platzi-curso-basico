@@ -1,3 +1,4 @@
+import { hooks } from 'customer';
 /*
 * -- CAMPAIGN CLEANER ---
 */
@@ -18,6 +19,7 @@ export default {
       'data-modal',
       'data-medium-element',
       'data-module-id',
+      'data-column-id',
       'data-placeholder',
       'contenteditable',
       'spellcheck',
@@ -30,7 +32,8 @@ export default {
       'data-mce-href',
       'data-mce-style',
       'id',
-      'module'
+      'module',
+      'context'
     ],
     blockSelectors: [
       '.module-toolbar',
@@ -48,6 +51,10 @@ export default {
     // Clone content
     $cleanedHtml = $canvas.clone(true);
     
+    if (typeof hooks === 'object' && _.has(hooks, 'campaignCleaner.preCleanHook')) {
+      $cleanedHtml = hooks.campaignCleaner.preCleanHook($cleanedHtml);
+    }
+
     // Remove attr tags function clean
     const $removeAttr = this.removeDataHtml($cleanedHtml, this.cleanOptions.attrSelectors, 'attr');
     // Function removeDataHtml fail attributes
@@ -68,18 +75,7 @@ export default {
     });
 
     // Remove wrappers
-    const $wrapperElementRemove = $cleanedHtml.find('.stx-wrapper');
-
-    $.each($wrapperElementRemove, (i, element) => {
-      const $element = $(element);
-
-        // Replace element with the content element.
-      if ($element.is('table')) {
-        $element.replaceWith($element.find('td:first').html());
-      } else {
-        $element.replaceWith($element.html());
-      }
-    });
+    $cleanedHtml = Application.utils.removeWrappers($cleanedHtml);
 
     // Remove every class starting with "stx-"
     $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
@@ -140,6 +136,17 @@ export default {
     }
     // Remove Comment Divs
     $cleanedHtml = this.removeCommentDivs($cleanedHtml);
+
+    // Skip <% %> Tags
+    if ($cleanedHtml.find('a').length) {
+      const $links = $cleanedHtml.find('a');
+      $.each($links, (i, element) => {
+        const $element = $(element);
+        const href = $element.attr("href");
+        $element.attr("href", href.replace("<%","LT%").replace("%>","%GT"));
+      });
+    }
+
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
     return this.charConvert($cleanedHtml.html());
@@ -452,6 +459,8 @@ export default {
       œ: '&#156;',
       Ú: '&#218;',
       '&': '&amp;',
+      '&lt;%': 'LT%',
+      '%&gt;': '%GT',
       '<': '&lt;',
       '>': '&gt;',
       '£': '&pound;',

@@ -37,7 +37,7 @@ export default {
             images: [vm.image]
           })
           .then(res => {
-            this.updateAttributePlaceholder("customer/modules" + res[0]);
+            this.updateAttributePlaceholder(this.$_app.config.imagePathStudio + res[0]);
           });
       };
 
@@ -60,7 +60,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 input.input {
   margin-top: 8px;
   width: 100%;

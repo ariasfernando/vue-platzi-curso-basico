@@ -40,10 +40,10 @@ Application.utils = {
                 // Build text message
                 var text = "";
                 if( title != "" ){
-                    text += "<strong>"+title+"</strong> ";
+                    text += '<strong>' + title.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</strong> ';
                 }
                 if( message != "" ){
-                    text += message;
+                    text += message.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                 }
 
                 // Change Text
@@ -60,12 +60,14 @@ Application.utils = {
                 // Show alert
                 $errorBox.slideDown(function(){
                     Application.utils.alert.scrollToMe();
-                    // Hide Alert after 5 seconds
+                    if(!window.location.pathname == "/admin/user") {
+                        // Hide Alert after 8 seconds
                     Application.utils.alert.timeOut = setTimeout(function(){
                         if( $errorBox.is(":visible") ){
                             $errorBox.slideUp("slow");
                         }
                     }, 8000);
+                    }
                 });
             }
         },
@@ -243,13 +245,18 @@ Application.utils = {
             var result = false;
             var $field = $(field);
 
+            if ($field.prop('tagName') === 'SELECT' && $field.hasClass('selectpicker')) {
+                // This validates required on a select multiple
+                result = ( $field.val() !== null && $field.val().length > 0 );
+            } else {
             switch( $field.attr("type") ){
                 case "checkbox":
                     break;
                 case "radio":
                     break;
-                default: // "select" elements are also caught here.
-                    result = $field.val() ? true : false;
+                    default:
+                        result = ( $field.val().trim() != "");
+                }
             }
 
             return result;
@@ -339,9 +346,8 @@ Application.utils = {
                 $labelMessage.remove();
             }
 
-            if ($(field).prop('tagName') === 'SELECT' && $(field).hasClass('selectpicker')) {
-                // If field is a select multiple, remove error near .bootstrap-select
-                $(field).parent().find('.bootstrap-select').removeClass('error').next("label.error").remove();;
+            if ($(field).hasClass('selectpicker')) {
+                $(field).next('button').removeClass('error').next("label.error").remove();
             }
 
             if( $(field).hasClass("warning") ){
@@ -351,11 +357,11 @@ Application.utils = {
 
         },
         setError: function( field, message ){
-
             var label = '<label class="error">' + message + '</label>';
             $(field).parent().find('label.error').remove();
             if ($(field).hasClass('selectpicker') || $(field).hasClass('skip-next-on-error')) {
                 $(field).addClass('error').next().after(label);
+                $(field).next('button').addClass('error');
             } else {
                 $(field).addClass('error').after(label);
             }
@@ -486,7 +492,6 @@ Application.utils = {
             $.each( inputs, function( key, field ){
                 var validationResult = validate.validateField( field );
                 // If the validation isn't successful, add an error class in the input and append a label with the message after the field.
-
                 if( validationResult.success == false ){
                     errors = true;
                 }
@@ -1093,5 +1098,28 @@ Application.utils = {
             return false;
         }
         return true;
+    },
+
+    // Remove wrappers element
+    removeWrappers: function(html) {
+      var $wrapperElementRemove = html.find('.stx-wrapper');
+
+      $.each($wrapperElementRemove, function(i, element) {
+        var $element = $(element);
+        if($element.find('.stx-wrapper').length === 0){
+          // We need first replace comment and then replace the divs that have content,
+          // (from inside to outside).
+          // if else Jquery some times change the place of the comment.
+          if ($element.is('table')) {
+            $element.replaceWith($element.find('td:first').html());
+          } else {
+            $element.replaceWith($element.html());
+          }
+        }
+      });
+      if (html.find('.stx-wrapper').length > 0) {
+        this.removeWrappers(html);
+      }
+      return html;
     },
 };

@@ -1,22 +1,7 @@
 <template>
-  <!-- CALL TO ACTION ELEMENT -->
-  <tr
-    data-type="button-element"
-    :data-component="JSON.stringify(component)"
-    :class="getMobileClasses(component,'tr')"
-    @click.prevent="setComponent"
-  >
-    <td
-      class="stx-position-relative"
-      width="100%"
-      style="width: 100%;"
-      :style="component.container.style"
-      :align="component.container.attribute.align"
-      :bgcolor="component.container.attribute.bgcolor"
-      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]"
-    >
+  <module-container :component="component" @select-component="selectComponentHandler">
       <a
-        :href="component.button.attribute.href || ''"
+        :data-contenteditable-href="component.button.attribute.href || ''"
         :target="component.button.attribute.target || '_blank'"
         :style="component.button.style.textDecoration || 'text-decoration:none;'"
         @click.prevent
@@ -25,7 +10,7 @@
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
+          :width="buttonContainerWidth"
           :height="component.button.attribute.height"
           :bgcolor="component.button.attribute.bgcolor"
           :style="tableStyles"
@@ -36,7 +21,7 @@
               :bgcolor="component.button.attribute.bgcolor"
               :height="component.button.attribute.height === 'auto' ? undefined : component.button.attribute.height"
               style="vertical-align: middle; width:100%;"
-              :style="buttonBorderAndPadding"
+              :style="elementBorderAndPadding(component.button)"
             >
               <table
                 cellpadding="0"
@@ -46,18 +31,18 @@
                 style="width:100%"
               >
                 <tr>
-                  <td
+                  <td 
                     width="100%"
                     :align="component.button.attribute.align"
-                    :style="buttonFontStyles"
+                    :style="fontStyles(component.button)"
                     :valign="component.button.attribute.valign || ''"
                     >
-                    <tiny-mce :style="buttonFontStyles" :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
+                    <tiny-mce :style="fontStyles(component.button)" :id="editorId" :value="component.data.text" data-key="text" :settings="component.plugins.textOptions.config.settings"></tiny-mce>
                   </td>
                   <td
                     v-if="component.caret.attribute.url"
                     :width="widthCaret"
-                    :style="caretPaddingAndWidth"
+                    :style="[elementBorderAndPadding(component.caret), {'width': this.widthCaret +'px'}]"
                     >
                     <img
                         :src="$_app.config.imageUrl + component.caret.attribute.url"
@@ -75,8 +60,7 @@
           </tr>
         </table>
       </a>
-    </td>
-  </tr>
+  </module-container>
   <!-- CALL TO ACTION ELEMENT ENDS -->
 </template>
 
@@ -84,110 +68,52 @@
   import TinyMCE from './TinyMce.vue';
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
-  import ComponentAttributeMixin from '../../common/mixins/ComponentAttributeMixin.js';
+  import ElementMixin from '../../common/mixins/ElementMixin.js';
+  import MontedElementMixin from '../mixins/MontedElementMixin.js';
+  import ModuleContainer from '../../common/containers/ModuleContainer';
 
   import _ from 'lodash';
 
   export default {
     name: 'ButtonElement',
-    props: [
-      'module-id',
-      'column-id',
-      'component-id',
-      'component'
-    ],
     components: {
       'tiny-mce': TinyMCE,
       ComponentToolbar,
+      ModuleContainer,
     },
-    mixins: [ MobileStylesMixin, ComponentAttributeMixin ],
+    mixins: [ MobileStylesMixin, ElementMixin, MontedElementMixin ],
     data(){
       return {
         editorId: ['editor', this.columnId, this.componentId].join('-')
       }
     },
-    computed:{
-      tableStyles(){
-        const width = this.component.button.style.minWidth ? undefined : `${this.component.button.attribute.width}px`;
+    computed: {
+      buttonContainerWidth() {
+        const { behaviour } = this.component;
+        if (behaviour === 'text') {
+          return '100%';
+        }
+        return this.width;
+      },
+      width() {
+        return this.component.button.styleOption.autoWidth ? undefined : this.component.button.attribute.width;
+      },
+      tableStyles() {
+        const { behaviour } = this.component;
+        let width = this.width ? this.widthStyle(this.width) : undefined;
+        if (behaviour === 'text') {
+          width = '100%';
+        }
         return {
           'width': width,
           'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
-          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth
-        }
-      },
-      buttonBorderAndPadding(){
-        return{
-          'padding-top':this.component.button.style.paddingTop,
-          'padding-bottom':this.component.button.style.paddingBottom,
-          'padding-right':this.component.button.style.paddingRight,
-          'padding-left':this.component.button.style.paddingLeft,
-          'border-top-width':this.component.button.style.borderTopWidth,
-          'border-right-width':this.component.button.style.borderRightWidth,
-          'border-bottom-width':this.component.button.style.borderBottomWidth,
-          'border-left-width':this.component.button.style.borderLeftWidth,
-          'border-top-style':this.component.button.style.borderTopStyle,
-          'border-right-style':this.component.button.style.borderRightStyle,
-          'border-bottom-style':this.component.button.style.borderBottomStyle,
-          'border-left-style':this.component.button.style.borderLeftStyle,
-          'border-top-color':this.component.button.style.borderTopColor,
-          'border-right-color':this.component.button.style.borderRightColor,
-          'border-bottom-color':this.component.button.style.borderBottomColor,
-          'border-left-color':this.component.button.style.borderLeftColor,
-          'border-radius':this.component.button.style.borderRadius
-        }
-      },
-      buttonFontStyles() {
-        return {
-          'text-align':this.component.button.style.textAlign,
-          'font-family':this.component.button.style.fontFamily,
-          'color':this.component.button.style.color,
-          'font-size':this.component.button.style.fontSize,
-          'font-weight':this.component.button.style.fontWeight,
-          'letter-spacing':this.component.button.style.letterSpacing,
-          'line-height':this.component.button.style.lineHeight,
-        }
-      },
-      caretPaddingAndWidth() {
-        return {
-          'padding-top':this.component.caret.style.paddingTop,
-          'padding-bottom':this.component.caret.style.paddingBottom,
-          'padding-right':this.component.caret.style.paddingRight,
-          'padding-left':this.component.caret.style.paddingLeft,
-          'width': this.widthCaret +'px'
-        }
+          'max-width': this.component.button.style.maxWidth === '0px' ? undefined : this.component.button.style.maxWidth,
+          'border-collapse': 'initial',
+        };
       },
       widthCaret() {
         return _.parseInt(this.component.caret.attribute.width) + _.parseInt(this.component.caret.style.paddingLeft) || 0 + _.parseInt(this.component.caret.style.paddingRight) || 0;
       }
-    },
-    methods: {
-      setComponent(e) {
-        if (!$(e.target).hasClass("st-remove")){
-          this.$store.commit("module/setCurrentComponent", {
-            columnId: this.columnId,
-            componentId: this.componentId
-          });
-        }
-      },
-    mounted() {
-      const subcomponents = ['text', 'content', 'container', 'image'];
-      subcomponents.forEach((subcomponent) => {
-        const propertys = ['attribute', 'style', 'styleOption'];
-        const thisSubcomponent = subcomponent;
-        propertys.forEach((property) => {
-          if (this.component && this.component[thisSubcomponent] && Array.isArray(this.component[thisSubcomponent][property])) {
-            const data = {
-              columnId: this.columnId,
-              componentId: this.componentId,
-              subComponent: thisSubcomponent,
-              property,
-              value: new Object,
-            };
-            this.$store.commit('module/saveComponentProperty', data);
-          }
-        });
-      });
-    },
     }
   }
 </script>

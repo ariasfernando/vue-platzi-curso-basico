@@ -5,14 +5,16 @@ namespace Stensul\Http\Controllers\Admin;
 use Auth;
 use Imagine;
 use Activity;
-use Stensul\Http\Controllers\Controller as Controller;
+use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\Driver\Exception\BulkWriteException;
-use Stensul\Http\Middleware\AdminAuthenticate as AdminAuthenticate;
-use Stensul\Models\Module;
-use Stensul\Models\Library;
-use Stensul\Services\ModelKeyManager;
+use Stensul\Http\Middleware\AdminAuthenticate;
+use ModuleModel as Module;
+use LibraryModel as Library;
+use ModelKeyManager;
+use Validator;
+use Illuminate\Validation\Rule;
 
 class ModuleController extends Controller
 {
@@ -99,10 +101,19 @@ class ModuleController extends Controller
      * Module post save. Inserts or update a module.
      *
      * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
      * @return array [id => moduleId, message => ERROR|SUCCESS]
      */
     public function postSave(Request $request)
     {
+
+        $request->validate([
+            'name' => ['required', 'max:255', $this->moduleUniqueValidator($request->input('moduleId'))],
+            'structure' => 'required',
+            'plugins' => 'required',
+            'status' => ['required', Rule::in(['draft', 'publish'])],
+        ]);
+
         $params = [
             'name' => $request->input('name'),
             'structure' => $request->input('structure'),
@@ -125,21 +136,19 @@ class ModuleController extends Controller
         try {
             $module->save();
 
-            $response_message = [
+            return [
                 'id' => $module->id,
                 'message' => 'SUCCESS'
             ];
         } catch (BulkWriteException $exception) {
             if (preg_match("/^E11000 duplicate key/", $exception->getMessage())) {
-                $response_message = ['message' => 'ERROR_EXISTS'];
+                return response()->json([
+                    'message' => 'ERROR_EXISTS',
+                ], 409);
             } else {
                 throw $exception;
             }
-        } catch (\Exception $exception) {
-            $response_message = ['message' => 'ERROR_SAVING'];
         }
-
-        return $response_message;
     }
 
     /**
@@ -181,6 +190,20 @@ class ModuleController extends Controller
     public function postUploadImage(Request $request)
     {
         $image = new Imagine;
-        return $image->saveImage($request->input('data_image'), 'local:modules');
+        return $image->saveImage($request->input('data_image'), 'local:modules:studio');
+    }
+
+    private function moduleUniqueValidator($id) {
+        $uniqueValidator = Rule::unique('modules', 'name')->where(function ($query) {
+            return $query->where('deleted_at', null);
+        });
+
+        if ($id) {
+            $uniqueValidator = Rule::unique('modules', 'name')->where(function ($query) {
+                return $query->where('deleted_at', null);
+            })->ignore($id, '_id');
+        }
+        
+        return $uniqueValidator;
     }
 }

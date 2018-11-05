@@ -9,7 +9,7 @@ function transform(params) {
       return false;
     }
     const count = keys.filter(k => k.includes(kp[0])).length;
-    return key.includes('sie-plugin') && (params[key] || count>1);
+    return key.includes('sie-plugin') && (params[key] || count > 1);
   });
   const core = keys.filter(key => key.includes('sie-') && !key.includes('sie-plugin'));
 
@@ -25,22 +25,29 @@ function transform(params) {
   plugins.forEach((pkey) => {
     const opts = params[pkey];
     const pluginParts = pkey.split('_');
+    const layerPropsKeys = Object.keys(opts).filter(opt => ['description', 'visible'].includes(opts[opt].key));
     const layer = {
       type: pluginParts[0],
       options: {
         plugin: {
         },
         layer: {
-          description: typeof opts.description !== 'undefined' ? opts.description.value : '',
-          visible: typeof opts.visible !== 'undefined' ? opts.visible.value : true,
+          description: '',
+          visible: true,
         },
       },
     };
 
+    layerPropsKeys.forEach((key) => {
+      const prop = opts[key];
+      layer.options.layer[prop.key] = prop.value;
+      delete opts[key];
+    });
+
     const plugin = {};
 
     if (!opts) {
-      plugin['enable'] = false;
+      plugin.enable = false;
       layer.options.plugin[pluginParts[1]] = plugin;
     }
 
@@ -54,7 +61,7 @@ function transform(params) {
         layer.options.plugin[itemKeys[0]] = layer.options.plugin[itemKeys[0]] || {};
         if (item.value) {
           const tconfig = {
-            enable: true
+            enable: true,
           };
 
           Object.keys(item.config).forEach((configKey) => {
@@ -65,8 +72,8 @@ function transform(params) {
           layer.options.plugin[itemKeys[0]][itemKeys[1]] = tconfig;
         } else {
           layer.options.plugin[itemKeys[0]][itemKeys[1]] = {
-            enable: false
-          }
+            enable: false,
+          };
         }
       }
     });
@@ -140,7 +147,7 @@ function removeUrlPath(urlPath, ref) {
     urlKeys.forEach((keys) => {
       const splitKeys = keys.split('.');
       splitKeys.forEach((key) => {
-        if (splitKeys.indexOf(key) === splitKeys.length - 1 && subelem[key].includes('http')) {
+        if (splitKeys.indexOf(key) === splitKeys.length - 1 && RegExp('^https?://').test(subelem[key])) {
           const url = subelem[key].replace(urlPath, '');
           subelem[key] = url;
         } else {

@@ -5,8 +5,13 @@
         <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
       </template>
     </settings-container>
+    <settings-container v-if="plugin.enabled && $can('std-image-element_editor_plugin-mobile-upload')" label="Mobile Image Upload">
+      <template slot="setting-right">
+        <toggle-button :value="hasImageMobile" @change="toggleImageMobile"></toggle-button>
+      </template>
+    </settings-container>
     <template v-if="plugin.enabled" v-for="(option, name) in plugin.config" >
-      <settings-container :label="option.label" :key="name">
+      <settings-container v-if="$can('std-image-element_editor_'+name)" :label="option.label" :key="name">
         <template slot="setting-right">
           <toggle-button v-if="option.type === 'switch'" :disabled="!enabled" :value="option.value" @change="(newValue)=>updateField(newValue, name)"></toggle-button>
           <el-input-number
@@ -36,7 +41,7 @@
         </template>
       </settings-container>
       <template  v-if="option.value && option.config" v-for="(subopt, subname) in option.config">
-        <settings-container :label="subopt.label" :key="subname">
+        <settings-container v-if="$can('std-image-element_editor_'+subname)" :label="subopt.label" :key="subname">
           <template slot="setting-right">
             <toggle-button v-if="subopt.type === 'switch'" :value="subopt.value" active-color="#78DCD6" @change="(newValue)=>updateSubField(newValue, name, subname)"></toggle-button>
             <el-input size="mini"  v-if="subopt.type === 'text'" :value="subopt.value" @change="(newValue)=>updateSubField(newValue, name, subname)"></el-input>
@@ -64,7 +69,7 @@
             </template>
         </settings-container>
         <template v-if="subopt.value && subopt.config" v-for="(interop, intername) in subopt.config">
-          <settings-container :label="interop.label" :key="intername">
+          <settings-container v-if="$can('std-image-element_editor_'+intername)" :label="interop.label" :key="intername">
             <template slot="setting-right">
               <toggle-button v-if="interop.type === 'switch'" :value="interop.value" active-color="#78DCD6" @change="(newValue)=>updateInterField(newValue, name, subname, intername)"></toggle-button>
               <el-input size="mini"  v-if="interop.type === 'text'" :value="interop.value" @change="(newValue)=>updateInterField(newValue, name, subname, subninternameame)"></el-input>
@@ -77,19 +82,18 @@
                 :min="interop.min || 0"
                 :max="interop.max || Infinity"
                 :step="parseFloat(interop.step)"></el-input-number>
-              <el-select
-                v-model="interop.value"
-                multiple
-                v-if="interop.type === 'multi-select'"
-                :value="interop.value"
-                :parent="name"
-                :name="intername">
-                <el-option
-                  v-for="opt in interop.options"
-                  :key="opt"
-                  :label="opt"
-                  :value="opt"></el-option>
-              </el-select>
+            <el-select
+              size="mini"
+              v-if="interop.type === 'select' || interop.type === 'multi-select'"
+              @change="(newValue) => updateInterField(newValue, name, subname, intername)"
+              :value="interop.value"
+              :multiple="interop.type === 'multi-select'">
+              <el-option
+                v-for="(opt, key) in interop.options"
+                :value="key"
+                :key="key"
+                :label="opt.name ? opt.name : opt"></el-option>
+            </el-select>
             </template>
           </settings-container>
         </template>
@@ -123,7 +127,12 @@ export default {
             this.enabled = plugin.enabled;
 
             return plugin;
-        }
+        },
+        hasImageMobile() {
+            const columnId = this.currentComponent.columnId,
+                componentId = this.currentComponent.componentId;
+            return this.module.structure.columns[columnId].components[componentId].image.styleOption.hasImageMobile;
+        },
     },
     data() {
         return {
@@ -199,7 +208,18 @@ export default {
             };
 
             this.$store.commit('module/savePlugin', payload);
-        }
+        },
+        toggleImageMobile(value) {
+            const payload = {
+                columnId: this.currentComponent.columnId,
+                componentId: this.currentComponent.componentId,
+                subComponent: 'image',
+                link: 'styleOption',
+                property: 'hasImageMobile',
+                value: value,
+            };
+            this.$store.commit("module/saveComponentProperty", payload);
+        },
     },
     mounted() {
         this.$store.dispatch('module/getLibraries', {

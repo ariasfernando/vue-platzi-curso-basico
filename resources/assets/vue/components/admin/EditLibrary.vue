@@ -61,16 +61,35 @@
                             <div class="row" v-if="campaignConfig.preview.show_preheader">
                               <!-- Field Preheader -->
                               <label for="preheader" class="col-sm-4 control-label">Preheader</label>
-                              <p class="control col-sm-8">
+                              <p class="control col-sm-1">
                                 <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')"></toggle-button>
                               </p>
+
+                              <div class="col-sm-4" v-show="library.config.preheader">
+                                <!-- Preheader default text -->
+                                <p class="control">
+                                  <el-input
+                                          v-model="library.config.preheaderDefault"
+                                          placeholder="Enter preheader default text here."
+                                          name="preheader"
+                                    ></el-input>
+                                </p>
+                              </div>
                             </div>
 
                             <!-- Field Plain text -->
                             <div class="row" v-if="campaignConfig.process_plaintext">
                               <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
-                              <p class="control col-sm-8">
+                              <p class="control col-sm-1">
                                 <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')"></toggle-button>
+                              </p>
+                            </div>
+
+                            <!-- Html to pdf -->
+                            <div class="row" v-if="campaignConfig.download_pdf">
+                              <label for="htmlToPdf" class="col-sm-4 control-label">PDF Download</label>
+                              <p class="control col-sm-1">
+                                <toggle-button :value="library.config.htmlToPdf" @change="updateToggle('htmlToPdf')"></toggle-button>
                               </p>
                             </div>
 
@@ -113,16 +132,23 @@
                                 <toggle-button :value="library.config.templating" @change="updateToggle('templating')"></toggle-button>
                               </p>
                             </div>
+                            <div class="row" v-if="campaignConfig.enable_tracking">
+                              <!-- Field Tracking -->
+                              <label for="tracking" class="col-sm-4 control-label">Enable Tracking</label>
+                              <p class="control col-sm-1">
+                                <toggle-button :value="library.config.tracking" @change="updateToggle('tracking')"></toggle-button>
+                              </p>
+                            </div>
+
                         </tab>
 
                         <tab name="Template">
                             <div class="row">
 
                               <!-- Field width -->
-                              <div class="col-md-3">
+                              <div class="col-md-4">
                                 <label for="templateWidth">Template width</label>
                                 <p class="control">
-
                                   <el-input-number
                                     size="mini" 
                                     v-validate="'required'"
@@ -135,10 +161,9 @@
                               </div>
 
                               <!-- Field mobile-width -->
-                              <div class="col-md-3">
+                              <div class="col-md-4">
                                 <label for="templateMobileWidth">Template Mobile Width</label>
                                 <p class="control">
-
                                   <el-input-number
                                     size="mini" 
                                     v-validate="'required'"
@@ -151,10 +176,27 @@
                                 </p>
                               </div>
 
+                              <div class="col-md-4">
+                                <label for="padding">Padding</label>
+                                <p class="control">
+                                  <el-input-number
+                                      size="mini"
+                                      v-validate="'required'"
+                                      v-model="library.config.padding"
+                                      :class="{'is-danger': errors.has('padding') }"
+                                      :name="'padding'"
+                                  ></el-input-number>
+                                  <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="row">
                               <!-- Field background-color -->
-                              <div class="col-md-3">
+                              <div class="col-md-4">
                                 <input-generic-color
                                   @setting-updated="settingUpdatedHandler"
+                                  class="label-bold"
                                   :name="'templateBackgroundColor'"
                                   :type="'generic-color'"
                                   :link="'config'"
@@ -164,8 +206,9 @@
                               </div>
 
                               <!-- Field content-background-color -->
-                              <div class="col-md-3">
+                              <div class="col-md-4">
                                 <input-generic-color
+                                  class="label-bold"
                                   @setting-updated="settingUpdatedHandler"
                                   :name="'contentBackgroundColor'"
                                   :type="'generic-color'"
@@ -174,13 +217,25 @@
                                   :default-value="library.config.contentBackgroundColor"
                                   :element="library"></input-generic-color>
                               </div>
+
+                              <!-- Field template background palettes -->
+                              <div class="col-md-4">
+                                <label for="templateBackgroundPalettes">Template background palettes</label>
+                                <p class="control">
+                                  <el-input
+                                      v-model="library.config.templateBackgroundPalettes"
+                                      name="colorPalettes"
+                                      placeholder='{ "default": "#FFFFFF", "options": { "White": "#FFFFFF", "Black": "#000000" } }"'
+                                  ></el-input>
+                                </p>
+                              </div>
                             </div>
 
                             <div class="row">
-
                               <!-- Field font-family -->
                               <div class="col-md-3">
                                 <input-font-family
+                                  class="label-bold"
                                   @setting-updated="settingUpdatedHandler"
                                   :name="'fontFamily'"
                                   :type="'font-family'"
@@ -193,6 +248,7 @@
                               <!-- Field font-color -->
                               <div class="col-md-3">
                                 <input-generic-color
+                                  class="label-bold"
                                   @setting-updated="settingUpdatedHandler"
                                   :name="'fontColor'"
                                   :type="'generic-color'"
@@ -240,6 +296,7 @@
                               <!-- Field link-color -->
                               <div class="col-md-3">
                                 <input-generic-color
+                                  class="label-bold"
                                   @setting-updated="settingUpdatedHandler"
                                   :name="'linkColor'"
                                   :type="'generic-color'"
@@ -258,21 +315,6 @@
                                     size="mini"
                                     @click.native="toggleUnderline"
                                   ></el-button>
-                                </p>
-                              </div>
-
-                              <div class="col-md-3">
-                                <label for="padding">Padding</label>
-                                <p class="control">
-
-                                  <el-input-number
-                                    size="mini" 
-                                    v-validate="'required'"
-                                    v-model="library.config.padding"
-                                    :class="{'is-danger': errors.has('padding') }"
-                                    :name="'padding'"
-                                  ></el-input-number>
-                                  <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
                                 </p>
                               </div>
 
@@ -310,6 +352,26 @@
                                 </p>
                               </div>
                             </div>
+
+                            <div class="row">
+                              <!-- Field propietary styles -->
+                              <div class="col-md-12">
+                                <label for="prependHtml">Prepend to body</label>
+                                <p class="control">
+                                  <textarea v-model="library.config.prependHtml" rows="10" name="prependHtml" type="text" placeholder=""></textarea>
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <!-- Field propietary styles -->
+                              <div class="col-md-12">
+                                <label for="appendHtml">Append to body</label>
+                                <p class="control">
+                                  <textarea v-model="library.config.appendHtml" rows="10" name="appendHtml" type="text" placeholder=""></textarea>
+                                </p>
+                              </div>
+                            </div>
                         </tab>
 
 
@@ -318,18 +380,17 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <p>
+                                <label for="name">Add module:</label>
+                                <el-autocomplete
+														      class="inline-input"
+														      v-model="state"
+														      :fetch-suggestions="querySearch"
+														      placeholder="Please Input"
+														      @select="handleSelect"
+														    ></el-autocomplete>
+																  	| 
                                   <button class="btn btn-success btn-add-group" @click.prevent="addGroup">Add Group</button>
-                                </p>  
-                                <label for="name">Modules to add:</label>
-                                <draggable :element="'ul'"
-                                            :options="options"
-                                            width="100%"
-                                            class="components-list"
-                                >
-                                  <li class="component-item list-group-item" v-for="module in modules" style="border:1px;" :data-module-id="module" @click="addItem(module)">
-                                    <p>{{module}}</p>
-                                  </li>
-                                </draggable>
+                                </p>
                               </div>
                               <div class="col-md-6">
                                 <label for="name">Menu</label>
@@ -346,12 +407,14 @@
                                         </p>
                                         <draggable v-model="group.modules" class="drag-component-menu" @add="onAdd" :options="{group:'menuList'}">
                                           <template v-for="(module, idx) in group.modules">
-                                            <p class="module-id">{{ module.moduleId }}</p>
-                                            <li class="component-item list-group-item">
-                                              <input v-model="module.name" v-validate="'required'"
-                                                      :class="{'input': true, 'menu-item' : true }" type="text" placeholder="Enter module name">
-                                              <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(group.modules,idx)"></span>
-                                            </li>
+                                            <el-tooltip class="item" effect="light" placement="left">
+																							<div slot="content">ID: {{ module.moduleId }}</div>
+	                                            <li class="component-item list-group-item">
+	                                              <input v-model="module.name" v-validate="'required'"
+	                                                      :class="{'input': true, 'menu-item' : true }" type="text" placeholder="Enter module name">
+	                                              <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(group.modules,idx)"></span>
+	                                            </li>
+                                            </el-tooltip>
                                           </template>
                                         </draggable>
                                         <div class="group-remove-container">
@@ -359,13 +422,14 @@
                                           <hr/>
                                         </div>
                                       </div>
-                                      <p class="module-id">{{ group.moduleId }}</p>
-                                      <li v-if="group.type == 'item'" class="component-item list-group-item">
-                                        <input v-model="group.name" v-validate="'required'"
-                                                :class="{'input': true , 'menu-item' : true }" type="text" placeholder="Enter module name">
-                                        <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(library.modules,idx)"></span>
-                                        
-                                      </li>
+                                      <el-tooltip class="item" effect="light" placement="left">
+																				<div slot="content">ID: {{ group.moduleId }}</div>
+	                                      <li v-if="group.type == 'item'" class="component-item list-group-item">
+	                                        <input v-model="group.name" v-validate="'required'"
+	                                                :class="{'input': true , 'menu-item' : true }" type="text" placeholder="Enter module name">
+	                                        <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(library.modules,idx)"></span>
+	                                      </li>
+                                     	</el-tooltip>
                                     </div>
                                   </draggable>
                                 </div>
@@ -420,7 +484,8 @@
     data () {
       return {
         library: {},
-        modules: {},
+        modules: [],
+        state: '',
         espList: {},
         ready: false,
         campaignConfig: {},
@@ -476,7 +541,9 @@
           libraryService.getLibrary(libraryId)
             .then((response) => {
               this.library = response.library;
-              this.modules = response.modules ? response.modules : {};
+              if (response.modules) {
+              	this.loadModules(response.modules);
+              }
               this.ready = true;
             })
             .catch((error) => {
@@ -486,7 +553,7 @@
           libraryService.newLibrary()
             .then((response) => {
               this.library = response.library;
-              this.modules = response.modules;
+              this.loadModules(response.modules);
               this.ready = true;
             })
             .catch((error) => {
@@ -512,7 +579,17 @@
               }
             })
             .catch((error) => {
-              this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+              if (error.status === 422) {
+                this.$root.$toast(
+                  this.$options.filters.parseValidationErrors(error), {
+                    className: 'et-error',
+                    closeable: true,
+                    duration: 10000
+                  }
+                );
+              } else {
+                this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+              }
             });
         } else {
           libraryService.createLibrary(formData)
@@ -524,9 +601,28 @@
               }
             })
             .catch((error) => {
+              const { errors } = error.body;
+              if (error.status === 422) {
+                this.$root.$toast(
+                  this.$options.filters.parseValidationErrors(error), {
+                    className: 'et-error',
+                    closeable: true,
+                    duration: 10000
+                  }
+                );
+              } else {
                 this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+              }
             });
         }
+        
+      },
+      extractErrors(errArr){
+        let errors = []
+        Object.keys(errArr).forEach(key => {
+          errors.push(errArr[key][0]);
+        });
+        return errors;
       },
       addGroup() {
         this.temporal = this.temporal || 1;
@@ -570,6 +666,28 @@
       },
       settingUpdatedHandler(eventData) {
         this.library.config[eventData.name] = eventData.value;
+      },
+      querySearch(queryString, cb) {
+        var modules = this.modules;
+        var results = queryString ? modules.filter(this.createFilter(queryString)) : modules;
+        // call callback function to return suggestions
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (module) => {
+          return (module.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      loadModules(modules) {
+      	var modulesToAdd = [];
+				modules.forEach(function(data){
+				    modulesToAdd.push({value:data});
+				});
+				this.modules = modulesToAdd;
+      },
+      handleSelect(item) {
+      	this.addItem(item.value);
+      	this.state = '';
       }
     },
     created () {
@@ -594,6 +712,10 @@
   @brand-secondary: @stensul-purple-light;
 
   .library {
+    .control-label {
+      width: 30% !important;
+    }
+
     margin-top: -15px;
 
     .header {
@@ -735,7 +857,7 @@
     }
 
     .item-remove {
-      floar: right;
+      float: right;
     }
 
     .item-name {
@@ -908,10 +1030,11 @@
       width: 50%;
     }
 
-
-
-    label{
+    label, .label-bold label {
       font-family: 'Open Sans', Arial, serif;
+      font-weight: bold !important;
+      font-size: 13px !important;
+      width: 100% !important;
     }
 
     select{

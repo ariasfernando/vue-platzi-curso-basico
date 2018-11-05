@@ -7,9 +7,10 @@ use URL;
 use View;
 use StensulLocale;
 use Storage;
-use Stensul\Models\Library;
+use LibraryModel as Library;
+use CampaignModel;
 use League\Flysystem\AdapterInterface;
-use Stensul\Services\EmailTextCreator as Text;
+use TextCreator as Text;
 use Stensul\Providers\HelperServiceProvider as Helper;
 
 class EmailHtmlCreator
@@ -32,7 +33,7 @@ class EmailHtmlCreator
      * @param \Sensul\Models\Campaign $campaign
      * @param array                   $options
      */
-    public function __construct(\Stensul\Models\Campaign $campaign, $options = [])
+    public function __construct(CampaignModel $campaign, $options = [])
     {
         $this->campaign = $campaign;
 
@@ -191,6 +192,45 @@ class EmailHtmlCreator
     }
 
     /**
+     * Replace images url from img tag.
+     *
+     * @return \Illuminate\View\View|string
+     */
+    public  function replaceBackgroundImageTag($body = null)
+    {
+        $matches = $this->backgroundImagesRegex($body);
+        $cdn_path = $this->getCampaign()->getCdnPath(true);
+
+        if ($matches) {
+            $ignored_image_domains = config('campaign.ignored_image_domains', []);
+
+            foreach ($matches as $match) {
+                $url = trim($match[2]);
+
+                if ($ignored_image_domains) {
+                    // If we need to ignore certain domains, we will need to check each image against them.
+                    foreach ($ignored_image_domains as $i) {
+                        if (strpos($url, $i) !== false) {
+                            continue 2;
+                        }
+                    }
+                }
+
+                // get the image basename
+                $basename = basename(parse_url($url, PHP_URL_PATH));
+
+                // append cdn prefix
+                $cdn_url = rtrim($cdn_path, DS).DS.'images'.DS.$basename;
+
+                // replace the url in body 
+                $body = str_replace($url, $cdn_url, $body);
+            }
+        }
+
+        return $body;
+    }
+
+    /**
      * Replace images url from outlook image tag.
      *
      * @return \Illuminate\View\View|string
@@ -270,6 +310,7 @@ class EmailHtmlCreator
         $body = $this->body;
 
         $body = $this->replaceImageTagSrc($body);
+        $body = $this->replaceBackgroundImageTag($body);
         $body = $this->replaceImageOutlookSrc($body);
         $body = $this->replaceImageCssUrl($body);
 
@@ -287,6 +328,21 @@ class EmailHtmlCreator
             $body = $this->body;
         }
         $regexp = "<img\s[^>]*src=([\"\']??)([^\" >]*?)\\1[^>]*>";
+        preg_match_all("/$regexp/siU", $body, $matches, PREG_SET_ORDER);
+        return $matches;
+    }
+
+    /**
+     * Create a regex for search background images in the campaign body
+     *
+     * @return array
+     */
+    public function backgroundImagesRegex($body = null)
+    {
+        if (is_null($body)) {
+            $body = $this->body;
+        }
+        $regexp = "<td\s[^>]*background=([\"\']??)([^\" >]*?)\\1[^>]*>";
         preg_match_all("/$regexp/siU", $body, $matches, PREG_SET_ORDER);
         return $matches;
     }
@@ -326,12 +382,17 @@ class EmailHtmlCreator
             foreach ($matches[0] as $match) {
                 $url = parse_url(trim($match));
                 $extension = pathinfo($url['path'])['extension'];
+                $font_folder = basename(dirname($url['path']));
                 $basename = basename($url['path']);
-                $fragment = (isset($url['fragment'])) ? '#'.$url['fragment'] : '';
-
+                // override default behavior if parent folder is not fonts
+                if ($font_folder !== 'fonts' ) {
+                    $basename = $font_folder . DS . $basename;
+                }
+                $fragment = (isset($url['fragment'])) ? '#' . $url['fragment'] : '';
+                
                 if (in_array(strtolower($extension), $font_extensions)) {
                     // append cdn prefix
-                    $cdn_url = rtrim($cdn_path, DS).DS.'fonts'.DS.$basename.$fragment;
+                    $cdn_url = rtrim($cdn_path, DS) . DS . 'fonts' . DS . $basename . $fragment;
 
                     // replace the url in body
                     $body = str_replace(trim($match), $cdn_url, $body);

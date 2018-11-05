@@ -2,7 +2,7 @@
 
 namespace Stensul\Console\Commands\Role;
 
-use Stensul\Models\Role;
+use RoleModel as Role;
 use Illuminate\Console\Command;
 
 class LibraryDeny extends Command

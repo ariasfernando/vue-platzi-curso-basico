@@ -42,7 +42,8 @@
             v-show="!locked"
           >Send for Review</button>
 
-          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="!campaign.campaign_data.template" @click="complete">
+          <a class="btn campaign-continue beta-btn-primary" :class="{ 'hidden': campaign.locked, 'button-disabled': errors.length } " v-if="campaign.campaign_data.can_be_processed && !campaign.campaign_data.template" @click="complete"
+            v-show="!locked" >
             Complete
             <i class="glyphicon glyphicon-menu-right"></i>
           </a>
@@ -64,6 +65,17 @@
       </div>
 
     </div>
+    <b-modal ref="noApprovedModal" hide-footer title="Using Component Methods" class="modal-approved">
+      <div class="d-block text-center">
+        <br/>
+        <h4>Pending approval</h4>
+        <p>This email has pending feedback from <b>{{ unApprovedemails.join(', ') }}</b>. To view the status of all reviews, <a @click="showProofTracking()" >click here</a> , otherwise hit OK below to complete the email</p><br/><br/>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default beta-btn-secondary" @click="$refs.noApprovedModal.hide();">Cancel</button>
+        <button class="btn btn-default beta-btn-primary" @click="isApproved = true; complete();">Ok</button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -72,11 +84,15 @@
   import campaignService from '../../services/campaign';
   import dashboardService from '../../services/dashboard';
   import campaignCleaner from '../../utils/campaignCleaner';
+  import proofService from '../../services/proof';
   import { html_beautify } from 'js-beautify';
-  
+  import TrackingMixin from './mixins/trackingMixin'
+  import _ from 'lodash'
+
 
   export default {
     name: 'EmailActions',
+    mixins: [ TrackingMixin ],
     computed: {
       campaign () {
         return this.$store.getters["campaign/campaign"];
@@ -99,7 +115,7 @@
         }else{
           return this.campaign.campaign_data.library_name;
         }
-      }
+      },
     },
     data () {
       return {
@@ -124,7 +140,10 @@
           allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
             && this.$_app.config.permissions.indexOf('access_proof') >= 0
         },
-        showLibraryName: false
+        trackingEnabled: false,
+        showLibraryName: false,
+        isApproved: false,
+        unApprovedemails: [],
       }
     },
     directives: {
@@ -137,13 +156,18 @@
       save() {
         this.$store.commit("global/setLoader", true);
 
-        const cleanHtml = campaignCleaner.clean('.section-canvas-container');
+        var cleanHtml = campaignCleaner.clean('.section-canvas-container');
+
+        if (this.trackingEnabled) {
+          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+        }
 
         const bodyHtml = html_beautify(cleanHtml, {
           'indent_size': 2
         });
 
-        this._save(bodyHtml).then(response => {
+        // Save Request
+        this._save(bodyHtml).then(() => {
           this.$root.$toast('Email saved', {className: 'et-info'});
           this.$store.commit("global/setLoader", false);
         }, error => {
@@ -152,16 +176,57 @@
         });
       },
       _save(bodyHtml = undefined) {
-        return this.$store.dispatch("campaign/saveCampaign", {
+        // Add hack for devices that do not detect media queries on save action.
+        // So we need to have the fix if we want to send a preview before complete a campaign.
+        this.$_app.utils.hackMediaQuery(
+          '.section-canvas-container',
+          this.campaign.campaign_data.library_config.templateWidth);
+
+        const promise = this.$store.dispatch("campaign/saveCampaign", {
           campaign: this.campaign,
           bodyHtml
         });
-      },
-      _validate(message = undefined) {
-        if (this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors) {
+        promise.then(response => {
+
+        }, error => {
+          this.$store.commit("global/setLoader", false);
+          let message = 'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.';
+
+          if (error.status === 422) {
+            if (error.body.errors) {
+              if (error.body.errors.campaign_name || error.body.errors.campaign_preheader) {
+                message = 'HTML like tags are not allowed on Email Name and Preheader Text, please correct it to continue.';
+              }
+            }
+          }
           this.$root.$toast(
-            message || 'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
-            'or remove the incomplete module(s).',
+            message,
+            {className: 'et-error'}
+          );
+        });
+        return promise;
+      },
+      _validate(customMessage = undefined) {
+      	let errorMessage = '';
+        if (this.$_app.utils.validator.imagesErrors('#emailCanvas')) {
+        	errorMessage = 'To continue please upload all missing images.';
+        }
+       	if (this.moduleErrors) {
+       		errorMessage = 'To continue please configure properly all modules.';
+       	}
+       	if (!this._validateEmptyCampaignName()) {
+        	errorMessage = 'To continue please complete the email name.';
+       	}
+        if (this.$_app.utils.validator.tinyErrors('#emailCanvas')) {
+          errorMessage = 'To continue please configure properly all text modules.';
+        }
+       	if (!this._validateEmptyEmail()) {
+        	return false;
+       	}
+
+        if (errorMessage !== '') {
+          this.$root.$toast(
+            customMessage || errorMessage,
             {
               className: 'et-error',
               duration: 10000,
@@ -190,6 +255,43 @@
         }
         return true;
       },
+      _validateEmptyCampaignName() {
+      	if (this.$store.getters["campaign/campaign"].campaign_data.campaign_name === '') {
+			       return false;
+      	}
+      	return true;
+      },
+      _approved(){
+        if(!this.campaign.campaign_data.template && this.proofAccess.allow && this.proofAccess.status){
+          if (this.isApproved === true) return true;
+          proofService.getJSON('reviewers', this.campaign.campaign_data._id).then((response) => {
+            if (response && response.status === 'success') {
+                this.unApprovedemails = response.data
+                      .filter(function(r){
+                        return r.decision === undefined || r.decision.indexOf('approve')=== false
+                      }).map(function(r){
+                        return r.email;
+                      });
+                if(this.unApprovedemails.length){
+                  this.$refs.noApprovedModal.show();
+                  return false;
+                }else{
+                  this.isApproved = true;
+                  this.complete();
+                }
+            }
+          })
+          .catch((error) => {
+            this.$root.$toast(error, {className: 'et-error'});
+          });
+          return false;
+        }
+        return true;
+      },
+      showProofTracking(){
+        this.$store.commit('campaign/toggleModal', 'modalProofTrack');
+        return true;
+      },
       template() {
         this.$store.commit("campaign/toggleModal", 'modalEnableTemplating');
       },
@@ -198,7 +300,11 @@
       },
       complete() {
         // Do not save if there are missing or wrong fields
-        if (!this._validateEmptyEmail() || !this._validate()) {
+        if (!this._validate()) {
+          return false;
+        }
+
+        if(!this._approved()){
           return false;
         }
 
@@ -208,7 +314,15 @@
         this.$_app.utils.hackMediaQuery('.section-canvas-container', this.campaign.campaign_data.library_config.templateWidth);
 
         // Obtain current html
-        const cleanHtml = campaignCleaner.clean('.section-canvas-container');
+        var cleanHtml = campaignCleaner.clean('.section-canvas-container');
+
+        if (this.trackingEnabled) {
+          if (!this.validateTracking()) {
+            this.$store.commit("global/setLoader", false);
+            return false;
+          }
+          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+        }
 
         const bodyHtml = html_beautify(cleanHtml, {
           'indent_size': 2
@@ -223,33 +337,35 @@
               let finishedProcessing = () => {
                 // Set campaign as processed
                 this.$store.commit('campaign/setProcessStatus');
-                // Show complete after campaign is completely processed
-                this.$store.commit("campaign/toggleModal", 'modalComplete');
-                // Redirect to `/dashboard` if user refreshes the page
-                window.history.replaceState(null, null, "?processed=true");
+                // Reload campaign data
+                this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id).then(() => {
+                  // Show complete after campaign is completely processed
+                  this.$store.commit("campaign/toggleModal", 'modalComplete');
+                  // Redirect to `/dashboard` if user refreshes the page
+                  window.history.replaceState(null, null, "?processed=true");
+                });
               };
 
-              // Set processed
+              // Set processed (if using "sync" as QUEUE_DRIVER)
               if (completeResponse.processed) {
-                return finishedProcessing();
-              }
-
-              // Poll server with job id
-              if (completeResponse.jobId) {
+                finishedProcessing();
+              } else if (completeResponse.jobId) {
+                // Poll server with job id when using an async queue driver.
                 let processInterval = setInterval(() => {
                   this.checkProcessStatus(completeResponse.jobId).then((response) => {
                     if (response.status === 'finished') {
                       clearInterval(processInterval);
                       finishedProcessing();
-                      // Reload campaign data
-                      this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id);
+                    }
+                    else if (response.status === 'failed') {
+                      clearInterval(processInterval);
+                      this.$store.commit("global/setLoader", false);
+                      this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, '
+                        + 'please contact our support team.', {className: 'et-error'});
                     }
                   });
-                }, 2000);
+                }, 1000);
               }
-          }, error => {
-            this.$store.commit("global/setLoader", false);
-            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
         });
       },
@@ -258,9 +374,6 @@
           if (this.dirty && this.campaign.campaign_data.auto_save !== false) {
             this.$store.commit("global/setSecondaryLoader", true);
             this._save().then(response => {
-              this.$store.commit("global/setSecondaryLoader", false);
-            }, error => {
-              this.$root.$toast("Changes couldn't be saved", {className: 'et-error'});
               this.$store.commit("global/setSecondaryLoader", false);
             });
           }
@@ -275,12 +388,25 @@
         });
         this._save(bodyHtml).then(response => {
           this.$store.commit("campaign/toggleModal", 'modalPreview');
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
       proof() {
+        // Do not save if there are missing or wrong fields
+        if ( this.$_app.utils.validator.imagesErrors('#emailCanvas') || this.moduleErrors  ) {
+          this.$_app.utils.validator.modulesErrors('#emailCanvas');
+
+          this.$root.$toast(
+            'To continue, please make sure you have completed the Email Name, upload any missing images and complete any missing Destination URLs, ' +
+            'or remove the incomplete module(s).',
+            {
+              className: 'et-error',
+              closeable: true
+            }
+          );
+
+          this.$store.commit('campaign/campaignCompleted', true);
+          return false;
+        }
         // Do not show proof modal if there are missing or wrong fields
         let validateMessage = 'To send an email for review, please make sure you have completed the Campaign Name, upload any missing images and complete any missing Destination URLs, or remove the incomplete module(s). Missing areas are now highlighted in red below.';
         if (!this._validateEmptyEmail('You cannot send for review an empty email.')) {
@@ -297,15 +423,13 @@
         this._save(bodyHtml).then(response => {
           this.$store.commit("global/setLoader", false);
           this.$store.commit("campaign/toggleModal", 'modalProof');
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
         });
       },
     },
     created () {
       this.autoSave();
       this.campaignConfig = this.$store.getters["config/config"].campaign;
+      this.trackingEnabled = (this.campaignConfig.enable_tracking && _.has(this.campaign.campaign_data.library_config, 'tracking') && this.campaign.campaign_data.library_config.tracking);
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;
 
@@ -336,9 +460,6 @@
     outline: none;
     border: 1px solid #dddddd;
   }
-</style>
-
-<style lang="less" scoped>
   .subheader-title{
     line-height:30px;
     color:#514960;
@@ -349,4 +470,13 @@
     font-weight: 300;
     margin-top: -1px;
   }
+</style>
+
+<style lang="less">
+.modal-approved {
+  .modal-body{
+    margin: 0px;
+    padding-top: 53px;
+  }
+}
 </style>

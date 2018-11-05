@@ -1,8 +1,8 @@
 import Q from 'q';
 import _ from 'lodash';
+import Vue from 'vue';
 import request from '../utils/request';
 import endpoints from '../resources/endpoints';
-import Vue from 'vue';
 
 export default {
   uploadImages(data) {
@@ -13,15 +13,18 @@ export default {
     const campaignUrl = Vue.prototype.$_app.config.campaignImageUrl;
 
     _.each(data.images, (image) => {
+      let item = '';
       if (image.indexOf(campaignUrl) !== -1) {
-        image = image.replace(campaignUrl, "");
+        item = image.replace(campaignUrl, '');
+      } else {
+        item = image;
       }
 
       const params = {
         endpoint,
         json: {
           campaign_id: data.campaignId,
-          data_image: image,
+          data_image: item,
         },
       };
       promises.push(request[endpoint.method](params));
@@ -79,9 +82,9 @@ export default {
 
     const params = {
       endpoint,
-      search: { 
-        library
-      }
+      search: {
+        library,
+      },
     };
 
     request[endpoint.method](params).then((response) => {
@@ -94,19 +97,19 @@ export default {
   },
   getLibraries() {
     const deferred = Q.defer();
-  
+
     const endpoint = endpoints.image.getLibraries;
-  
+
     const params = {
-      endpoint
+      endpoint,
     };
-  
-    request[endpoint.method](params).then(response => {
+
+    request[endpoint.method](params).then((response) => {
       deferred.resolve(response.body);
-    }).catch(error => {
+    }).catch((error) => {
       deferred.reject(error);
     });
-  
+
     return deferred.promise;
-  }
+  },
 };

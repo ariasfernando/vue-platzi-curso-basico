@@ -3,7 +3,7 @@
 namespace Stensul\Providers;
 
 use Carbon\Carbon;
-use Stensul\Models\User;
+use UserModel as User;
 use ZxcvbnPhp\Zxcvbn as ZxcvbnPhp;
 use Illuminate\Support\ServiceProvider;
 use Olssonm\Zxcvbn\ZxcvbnServiceProvider;
@@ -14,7 +14,7 @@ class PasswordPolicyServiceProvider extends ZxcvbnServiceProvider
     /**
      * Check if a user should update their password
      * @codingStandardsIgnoreStart  (ignore method name not in camelCase, required by Laravel)
-     * @param  Stensul\Models\User $user
+     * @param  UserModel $user
      * @return boolean
      */
     public static function should_update_password(User $user)
@@ -56,7 +56,8 @@ class PasswordPolicyServiceProvider extends ZxcvbnServiceProvider
         // @codingStandardsIgnoreEnd
         return 'required|confirmed|min:' . \Config::get('auth.password_policy.min_length')
             . '|max:' . \Config::get('auth.password_policy.max_length')
-            . '|zxcvbn_min:' . \Config::get('auth.password_policy.min_score');
+            . '|zxcvbn_min:' . \Config::get('auth.password_policy.min_score')
+            . '|not_in:' . $user_data->email . ',' . $user_data->name;
     }
 
     /**

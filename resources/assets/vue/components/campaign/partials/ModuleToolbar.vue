@@ -1,6 +1,6 @@
 <template>
   <div class="module-toolbar">
-    <div class="icon-remove" @click.stop="remove" v-if="!campaign.locked"><i class="fa fa-trash-o"></i></div>
+    <div class="icon-remove" @click.stop="remove" v-if="!campaign.locked && !module.mandatory"><i class="fa fa-trash-o"></i></div>
     <div class="icon-config" v-if="hasConfig" @click="config"><i class="fa fa-cogs"></i></div>
     <div class="icon-clone" @click="clone" v-if="!campaign.locked && !module.isFixed"><i class="fa fa-clone" ></i></div>
     <div class="icon-move" v-if="!campaign.locked && !module.isFixed"><i class="fa fa-arrows"></i></div>
@@ -41,6 +41,11 @@
             });
           });
         }
+
+        if (this.module.type === "custom" && "hasConfig" in this.module) {
+          hasConfig = this.module.hasConfig;
+        }
+
         return hasConfig;
       },
     },
@@ -53,7 +58,7 @@
           this.$store.commit("campaign/setCurrentModule", this.moduleId);
           this.$store.commit("campaign/unsetCustomModule");
         }
-
+        this.$store.commit("campaign/unsetCurrentCustomComponent");
       },
       clone(){
         this.addModule(this.module, this.moduleId + 1);
@@ -70,29 +75,7 @@
 </script>
 
 <style lang="less">
-  @icon-option: #69dac8;
   @focus: #69dac8;
-  @focus-light: lighten(@focus, 30%);
-  @hover: @focus-light;
-
-  tr.ghost-component{
-    text-align: center;
-    color:@focus;
-    background-color: @hover;
-    height: 15px;
-    display: table-row;
-    list-style-type: none;
-    font-size: 13px;
-    z-index: 300;
-    opacity: 1!important;
-    &:before{
-      content: "Drag content here";
-    }
-    *{
-      display: none;
-    }
-
-  }
 
   .stx-module-wrapper:hover {
     &::before{
