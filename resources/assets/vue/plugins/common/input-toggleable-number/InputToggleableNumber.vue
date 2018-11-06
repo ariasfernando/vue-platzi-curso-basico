@@ -1,7 +1,15 @@
 <template>
   <div>
     <el-button
-      v-if="!value"
+      v-if="disabled"
+      class="custom-col"
+      size="mini"
+      disabled>
+      {{ value }}
+    </el-button>
+
+    <el-button
+      v-else-if="!value"
       class="custom-col"
       size="mini"
       disabled>
@@ -25,7 +33,7 @@
 
 export default {
   name: 'InputToggleableNumber',
-  props: ['value', 'falseText'],
+  props: ['value', 'falseText', 'disabled'],
   computed: {
     numberValue: {
       get() {

@@ -75,6 +75,7 @@ export default {
     LabelItemContainer,
     'input-border-group': elementSettings.BorderGroup,
     'input-caret': elementSettings.ButtonCaret,
+    'input-horizontal-padding-group': elementSettings.HorizontalPaddingGroup,
     'input-button-width': elementSettings.ButtonWidth,
     'input-class-input': elementSettings.ClassInput,
     'input-font-family': elementSettings.FontFamily,
@@ -91,8 +92,8 @@ export default {
     'input-vertical-align': elementSettings.VerticalAlign,
     'input-generic-code': elementSettings.GenericCode,
   },
-  props: ['currentComponent'],
   mixins: [AclMixing],
+  props: ['currentComponent'],
   computed: {
     settings() {
       return settingsDefault[this.component.type]().componentSettings;

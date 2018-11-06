@@ -2,7 +2,7 @@
   <div class="col-xs-12 module">
     <module-header />
     <div class="row">
-      <section v-if="ready" class="col-xs-12 section-container" id="edit-container">
+      <section v-if="ready" id="edit-container" class="col-xs-12 section-container">
         <column-bar-container side="left">
           <general-settings v-if="ready" />
           <elements-settings v-if="ready" />
@@ -58,6 +58,11 @@ export default {
     ScrollbarContainer,
     Spinner,
   },
+  data() {
+    return {
+      ready: false,
+    };
+  },
   computed: {
     module() {
       return this.$store.getters['module/module'];
@@ -68,7 +73,7 @@ export default {
       },
       set(values) {
         this.$store.commit('module/setModuleData', JSON.parse(values));
-      }
+      },
     },
     currentComponent() {
       return this.$store.getters['module/currentComponent'];
@@ -102,11 +107,6 @@ export default {
       );
     },
   },
-  data() {
-    return {
-      ready: false,
-    };
-  },
   watch: {
     ready(value) {
       if (value === true) {
@@ -116,6 +116,9 @@ export default {
         }, 100);
       }
     },
+  },
+  created() {
+    this.loadModule();
   },
   methods: {
     loadColumn() {
@@ -132,9 +135,9 @@ export default {
       // TODO: Trigger event editModule.onInit
       this.$store
         .dispatch('module/getModuleData', moduleId)
-        .then(response => {
+        .then((response) => {
           if (this.$route.path.match(/^\/clone\//)) {
-            let cloned = Object.assign({}, this.module);
+            const cloned = Object.assign({}, this.module);
             cloned.moduleId = undefined;
             cloned.name = undefined;
             this.$store.commit('module/setModuleData', cloned);
@@ -144,10 +147,10 @@ export default {
           this.ready = true;
           this.$store.commit('global/setLoader', false);
         })
-        .catch(error => {
+        .catch((error) => {
           this.$root.$toast(
             "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.",
-            { className: 'et-error' }
+            { className: 'et-error' },
           );
         });
     },
@@ -165,16 +168,13 @@ export default {
       sideToggled.classList.toggle('sidebar-closed');
     },
     clickModuleContainer(e) {
-      if ($(e.target).hasClass('module-container')) {
+      if ($(e.target).hasClass('scrollbar-container-inner') || $(e.target).hasClass('mCustomScrollBox')) {
         this.$store.commit('module/setCurrentComponent', {
           columnId: undefined,
           componentId: undefined,
         });
       }
     },
-  },
-  created() {
-    this.loadModule();
   },
 };
 </script>
@@ -226,9 +226,10 @@ export default {
 
 #edit-container {
   padding: 0px;
-  height: calc(~'100vh - 53px');
+  height: calc(~'100vh -102px');
   overflow: hidden;
   min-width: 1200px;
+  padding-top: 46px;
 }
 
 .row-style-left {
@@ -314,7 +315,7 @@ export default {
     background: #f0f0f0;
     display: block;
     float: left;
-    height: calc(~'100vh - 53px');
+    height: calc(~'100vh - 102px');
     width: calc(~'100% - 540px');
     min-width: 640px;
     overflow-x: hidden;
@@ -373,9 +374,23 @@ ol {
 }
 
 #studio .column-bar-container {
-  height: calc(100vh - 53px);
+  height: calc(~'100vh - 102px');
 }
 #studio .module-container .scrollbar-container-inner {
-  padding: 20px;
+  padding: 20px 20px 100px;
+}
+#studio .st-component.is-active > td:before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  background: none;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: 2px solid #69dac8;
+  outline-offset: -1px;
+  z-index: 298;
 }
 </style>

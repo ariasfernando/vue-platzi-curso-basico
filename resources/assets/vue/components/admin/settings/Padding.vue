@@ -1,35 +1,33 @@
 <template>
   <div
-    class="half-style-setting-padding align-element"
-    :title="`Padding ${this.side}`"
     v-b-tooltip.hover
-    :data-tooltip="`Padding ${this.side}`"
-      >
+    class="half-style-setting-padding align-element"
+    :title="`Padding ${side}`"
+    :data-tooltip="`Padding ${side}`">
     <el-input-number
-      size="mini" 
-      v-validate="'required'"
       v-model="padding"
+      v-validate="'required'"
+      controls-position="right"
+      size="mini"
       :min="min"
-      :controls="true"
-    ></el-input-number>
+      :controls="true" />
     <el-button
       class="button"
-      disabled="disabled"
-    >px</el-button>
+      disabled="disabled">px</el-button>
   </div>
 </template>
 
 <script>
-import _ from "lodash";
-import SettingMixin from "../mixins/SettingMixin.js";
+import _ from 'lodash';
+import SettingMixin from '../mixins/SettingMixin';
 
 export default {
-  name: "Padding",
-  props: ["side", "element"],
+  name: 'Padding',
   mixins: [SettingMixin],
+  props: ['side', 'element'],
   data() {
     return {
-      min: 0
+      min: 0,
     };
   },
   computed: {
@@ -38,14 +36,14 @@ export default {
         return _.parseInt(this.element.style[`padding${this.side}`]) || 0;
       },
       set(value) {
-        this.$emit("setting-updated", {
+        this.$emit('setting-updated', {
           subComponent: this.subComponent,
-          link: "style",
+          link: 'style',
           name: `padding${this.side}`,
-          value: `${value}px`
+          value: `${value}px`,
         });
-      }
-    }
+      },
+    },
   },
 };
 </script>
@@ -111,7 +109,7 @@ export default {
     text-align: center;
   }
   .el-input-number .el-input__inner {
-    padding: 0;
+    padding: 0 28px 0 0;
     border-radius: 2px 0px 0px 2px;
   }
 }
