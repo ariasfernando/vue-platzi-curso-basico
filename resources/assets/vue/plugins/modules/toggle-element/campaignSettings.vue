@@ -13,15 +13,14 @@
 </template>
 
 <script>
-  import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
-  import pluginModuleCampaignMixin from '../mixins/pluginModuleCampaignMixin';
+  import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
   import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
   import validatorMixin from '../mixins/validatorMixin';
   import logicMixin from './logic.js';
 
   export default {
     components: { SettingsContainer },
-    mixins: [validatorMixin, logicMixin, pluginGenericCampaignMixin, pluginModuleCampaignMixin],
+    mixins: [validatorMixin, logicMixin, pluginCampaignMixin],
     data() {
       return {
         subComponent: 'container',
@@ -35,7 +34,7 @@
         if (this.isCustom) {
           this.$store.dispatch('campaign/updateCustomElementProperty', {
             moduleId: this.currentCustomModule,
-            elementId,
+            subComponent: elementId,
             property: 'enableElement',
             value,
           });

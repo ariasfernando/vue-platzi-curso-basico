@@ -2,11 +2,10 @@
 </template>
 
 <script>
-import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
-import pluginElementCampaignMixin from '../mixins/pluginElementCampaignMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
-  mixins: [pluginGenericCampaignMixin, pluginElementCampaignMixin],
+  mixins: [pluginCampaignMixin],
   data() {
     return {
       previousImagesUrls: [],

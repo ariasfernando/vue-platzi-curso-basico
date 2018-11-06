@@ -14,14 +14,12 @@
 </template>
 
 <script>
-import pluginElementCampaignMixin from '../mixins/pluginElementCampaignMixin';
-import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
 export default {
   components: { SettingsContainer },
-  mixins: [pluginGenericCampaignMixin, pluginElementCampaignMixin],
-  props: ['name', 'plugin'],
+  mixins: [pluginCampaignMixin],
   data() {
     return {
       options: this.plugin.config.options,

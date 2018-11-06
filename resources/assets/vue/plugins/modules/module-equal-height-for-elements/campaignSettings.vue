@@ -2,11 +2,10 @@
 </template>
 
 <script>
-import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
-import pluginModuleCampaignMixin from '../mixins/pluginModuleCampaignMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
-  mixins: [pluginGenericCampaignMixin, pluginModuleCampaignMixin],
+  mixins: [pluginCampaignMixin],
   data() {
     return {
       subComponent: 'container',
@@ -18,8 +17,8 @@ export default {
       const buildingMode = this.buildingMode;
       let higherHeight = 0;
       let $item = false;
-      _.each(components, (component) => {
-        const selector = `[module-id-instance='${moduleIdInstance}'] [component-id='${component}'] table:first`;
+      _.each(components, (elementId) => {
+        const selector = `[module-id-instance='${moduleIdInstance}'] [element-id='${elementId}'] table:first`;
         if (buildingMode === 'desktop') {
           $item = $(selector);
         } else {

@@ -52,13 +52,12 @@
 
 <script>
   import validatorMixin from '../mixins/validatorMixin';
-  import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
-  import pluginElementCampaignMixin from '../mixins/pluginElementCampaignMixin';
+  import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
   import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
   export default {
     components: { SettingsContainer },
-    mixins: [validatorMixin, pluginGenericCampaignMixin, pluginElementCampaignMixin],
+    mixins: [validatorMixin, pluginCampaignMixin],
     computed: {
       target() {
         return this.element[this.plugin.subComponent].attribute ? this.element[this.plugin.subComponent].attribute.target : '_blank';

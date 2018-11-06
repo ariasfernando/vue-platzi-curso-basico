@@ -15,12 +15,11 @@
 
 <script>
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
-import pluginElementCampaignMixin from '../mixins/pluginElementCampaignMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
   components: { SettingsContainer },
-  mixins: [pluginGenericCampaignMixin, pluginElementCampaignMixin],
+  mixins: [pluginCampaignMixin],
   data() {
     return {
       instance: Math.floor(100000 + (Math.random() * 900000)),

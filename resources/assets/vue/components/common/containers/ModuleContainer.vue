@@ -1,7 +1,7 @@
 <template>
     <tr
       :data-type="component.type"
-      :component-id="component.id"
+      :element-id="component.id"
       :class="getMobileClasses(component,'tr')"
       @mousedown="clickOnComponent"
       v-if="component.container.styleOption.enableElement !== false"

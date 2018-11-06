@@ -66,7 +66,7 @@ import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
         return;
       },
       currentElementKey() {
-        return this.currentElement ? `${this.modules[this.currentComponent.moduleId].idInstance}-${this.currentElement.id}` : undefined;
+        return this.currentElement ? this.getElementKey(this.modules[this.currentComponent.moduleId], this.currentElement) : undefined;
       },
       showModuleSettings() {
         return this.$store.getters["campaign/showModuleSettings"];

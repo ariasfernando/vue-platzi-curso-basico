@@ -12,13 +12,12 @@
 </template>
 
 <script>
-import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
-import pluginElementCampaignMixin from '../mixins/pluginElementCampaignMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
 export default {
   components: { SettingsContainer },
-  mixins: [pluginGenericCampaignMixin, pluginElementCampaignMixin],
+  mixins: [pluginCampaignMixin],
   data() {
     return {
       subComponent: 'divider',

@@ -15,12 +15,11 @@
 
 <script>
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
-import pluginModuleCampaignMixin from '../mixins/pluginModuleCampaignMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
   components: { SettingsContainer },
-  mixins: [pluginGenericCampaignMixin, pluginModuleCampaignMixin],
+  mixins: [pluginCampaignMixin],
   props: ['name', 'plugin', 'moduleId'],
   data() {
     return {
@@ -42,7 +41,7 @@ export default {
         if (!Application.utils.validateHexVal(newValue)) {
           value = newValue === null ? '' : Application.utils.rgbToHex(newValue);
         }
-        this.saveAttributeModule({ property: 'bgcolor', value });
+        this.saveAttributeInThisElement({ property: 'bgcolor', value });
       },
     },
   },

@@ -50,13 +50,12 @@
 <script>
 import ImageModal from '../../../components/common/ImageModal';
 import imageService from '../../../services/image';
-import pluginElementCampaignMixin from '../mixins/pluginElementCampaignMixin';
-import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 import validatorMixin from '../mixins/validatorMixin';
 
 export default {
-  mixins: [validatorMixin, pluginGenericCampaignMixin, pluginElementCampaignMixin],
+  mixins: [validatorMixin, pluginCampaignMixin],
   components: {
     ImageModal,
     SettingsContainer,

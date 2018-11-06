@@ -8,12 +8,11 @@
 
 <script>
 import { Compact } from 'vue-color';
-import pluginElementCampaignMixin from '../mixins/pluginElementCampaignMixin';
-import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
 export default {
-  mixins: [pluginGenericCampaignMixin, pluginElementCampaignMixin],
+  mixins: [pluginCampaignMixin],
   components: {
     SettingsContainer,
     Compact,
