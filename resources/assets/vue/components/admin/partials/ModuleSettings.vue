@@ -33,10 +33,14 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="general-settings-functionalities" accordion="general-settings">
       <b-card class="control">
-        <group-container v-for="(pluginGroup, groupKey) in plugins" :key="groupKey" :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
-          <component 
-            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+        <group-container
+          v-for="(pluginGroup, groupKey) in pluginsGroups"
+          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+          :key="groupKey"
+          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <component
             :is="'studio-' + plugin.name"
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
             :key="plugin.name"
             :name="_.camelCase(plugin.name)"
             :plugin="module.plugins[_.camelCase(plugin.name)]"
@@ -55,10 +59,8 @@ import settingsDefault from '../settingsDefault';
 import AclMixing from '../mixins/AclMixin';
 import pluginsLayout from '../pluginsLayout';
 
-
 export default {
   name: 'GeneralSettings',
-  mixins: [AclMixing],
   components: {
     GroupContainer,
     LabelItemContainer,
@@ -71,6 +73,7 @@ export default {
     'input-generic-text': elementSettings.GenericText,
     'input-padding-group': elementSettings.PaddingGroup,
   },
+  mixins: [AclMixing],
   computed: {
     module() {
       return this.$store.getters['module/module'];
@@ -78,7 +81,7 @@ export default {
     settings() {
       return settingsDefault.Module().componentSettings;
     },
-    plugins() {
+    pluginsGroups() {
       return pluginsLayout['Module']().componentPlugins;
     },
     _() {
@@ -86,8 +89,8 @@ export default {
     },
   },
   methods: {
-     pluginFilter(plugins) {
-      return plugins.filter((plugin) => {
+    pluginFilter(plugins) {
+      return plugins.filter(plugin => {
         return this.$can(`std-plugin-${plugin.aclName}`);
       });
     },

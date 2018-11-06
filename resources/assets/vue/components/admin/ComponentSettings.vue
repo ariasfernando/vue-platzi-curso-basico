@@ -47,11 +47,14 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="functionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
-        <group-container v-for="(pluginGroup, groupKey) in plugins" :key="groupKey" :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+        <group-container
+          v-for="(pluginGroup, groupKey) in pluginsGroups"
+          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+          :key="groupKey"
+          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
           <component
             :is="'studio-' + plugin.name"
             v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
-            v-if="$can('std-'+component.type+'-plugin-'+plugin.aclName)"
             :key="'std-'+component.id+'-plugin-' + plugin.name"
             :element="component"
             :class="'plugin-' + plugin.name"
@@ -99,7 +102,7 @@ export default {
     settings() {
       return settingsDefault[this.component.type]().componentSettings;
     },
-    plugins() {
+    pluginsGroups() {
       return pluginsLayout[this.component.type]().componentPlugins;
     },
     module() {

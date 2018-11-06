@@ -34,15 +34,19 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="column-settings-functionalities" accordion="column-settings">
       <b-card class="control">
-        <group-container v-for="(pluginGroup, groupKey) in plugins" :key="groupKey" :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
-            <component
-              v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
-              :key="plugin.name + column.id"
-              :class="'plugin-' + plugin.name"
-              :is="'studio-' + plugin.name"
-              :name="_.camelCase(plugin.name)"
-              :plugin="column.plugins[_.camelCase(plugin.name)]" 
-              :column-id="currentComponent.columnId" />
+        <group-container
+          v-for="(pluginGroup, groupKey) in pluginsGroups"
+          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+          :key="groupKey"
+          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <component
+            :is="'studio-' + plugin.name"
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+            :key="plugin.name + column.id"
+            :class="'plugin-' + plugin.name"
+            :name="_.camelCase(plugin.name)"
+            :plugin="column.plugins[_.camelCase(plugin.name)]"
+            :column-id="currentComponent.columnId" />
         </group-container>
       </b-card>
     </b-collapse>
@@ -58,9 +62,7 @@ import settingsDefault from '../settingsDefault';
 import AclMixing from '../mixins/AclMixin';
 import pluginsLayout from '../pluginsLayout';
 
-
 export default {
-  mixins: [AclMixing],
   components: {
     GroupContainer,
     LabelItemContainer,
@@ -70,6 +72,7 @@ export default {
     'input-generic-color': elementSettings.GenericColor,
     'input-class-input': elementSettings.ClassInput,
   },
+  mixins: [AclMixing],
   props: ['currentComponent'],
   computed: {
     module() {
@@ -81,7 +84,7 @@ export default {
     settings() {
       return settingsDefault['column-element']().componentSettings;
     },
-    plugins() {
+    pluginsGroups() {
       return pluginsLayout['column-element']().componentPlugins;
     },
     _() {
@@ -90,7 +93,7 @@ export default {
   },
   methods: {
     pluginFilter(plugins) {
-      return plugins.filter((plugin) => {
+      return plugins.filter(plugin => {
         return this.$can(`std-column-plugin-${plugin.aclName}`);
       });
     },
