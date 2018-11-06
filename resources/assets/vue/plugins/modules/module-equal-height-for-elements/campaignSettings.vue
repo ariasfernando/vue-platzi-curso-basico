@@ -7,6 +7,11 @@ import pluginModuleCampaignMixin from '../mixins/pluginModuleCampaignMixin';
 
 export default {
   mixins: [pluginGenericCampaignMixin, pluginModuleCampaignMixin],
+  data() {
+    return {
+      subComponent: 'container',
+    };
+  },
   methods: {
     getHigherHeight(components) {
       const moduleIdInstance = this.moduleIdInstance;
@@ -27,9 +32,9 @@ export default {
     setEqualHeights() {
       _.each(this.plugin.config.groups, (components) => {
         const minHeight = this.getHigherHeight(components);
-        _.each(components, (componentId) => {
-          this.saveHeight(componentId, minHeight);
-          this.addClassToComponent(componentId, 'st-equal-height');
+        _.each(components, (elementId) => {
+          this.saveHeight({ elementId, value: minHeight });
+          this.addClassToElement({ value: 'st-equal-height', elementId });
         });
       });
     },

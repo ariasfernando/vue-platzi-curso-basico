@@ -1,5 +1,4 @@
 export default {
-  props: ['name', 'plugin', 'pluginKey', 'module', 'moduleId'],
 
   methods: {
     saveAttributeModule(payload) {
@@ -21,7 +20,7 @@ export default {
         property,
         value,
       };
-      this.$store.commit('campaign/saveModulePropertyById', payload);
+      this.$store.commit('campaign/saveElementProperty', payload);
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-wrapper plugin-wrapper">
+  <div v-show="(elementKey === currentElementKey)">
     <settings-container :no-label="true">
       <template slot="setting-bottom">
         <el-button type="primary" @click="showModal('desktop')">

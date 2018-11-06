@@ -1,4 +1,5 @@
 export default {
+  props: ['name', 'plugin', 'pluginKey', 'element-location', 'moduleId', 'element', 'current-element-Key', 'element-key', 'module'],
   computed: {
     buildingMode() {
       return this.$store.getters['campaign/buildingMode'];
@@ -15,12 +16,15 @@ export default {
     libraryConfig() {
       return this.$store.state.campaign.campaign.library_config;
     },
+    isCurrentElement() {
+      return this.elementKey === this.currentElementKey;
+    },
   },
   methods: {
-    saveElementProperty({ componentId, subComponent, link, property, value }) {
+    saveElementProperty({ elementId, subComponent, link, property, value }) {
       const payload = {
         moduleIdInstance: this.moduleIdInstance,
-        componentId,
+        elementId,
         subComponent: subComponent || this.plugin.subComponent || this.subComponent,
         link,
         property,
@@ -30,30 +34,34 @@ export default {
     },
     getElement(elementId) {
       if (!this.isCustom) {
-        let component;
+        let element = false;
         _.forEach(this.module.structure.columns, (column) => {
+          if (column.id === elementId) {
+            element = column;
+            return false;
+          }
           _.forEach(column.components, (CurrentComponent) => {
             if (CurrentComponent.id === elementId) {
-              component = CurrentComponent;
+              element = CurrentComponent;
               return false;
             }
           });
-          return !component;
+          return !element;
         });
-        return component;
+        return element;
       }
       return this.module.data[elementId];
     },
-    addClassToComponent(componentId, classToAdd) {
-      let classes = this.getElement(componentId).container.classes;
+    addClassToElement({ elementId, value }) {
+      let classes = this.getElement(elementId).container.classes;
       const classesArr = classes ? classes.split(' ') : [];
-      const index = classesArr.indexOf(classToAdd);
+      const index = classesArr.indexOf(value);
       if (index === -1) {
-        classesArr.push(classToAdd);
+        classesArr.push(value);
         classes = classesArr.join(' ');
         this.saveElementProperty({
           moduleIdInstance: this.moduleIdInstance,
-          componentId,
+          elementId,
           subComponent: 'container',
           link: 'attribute',
           property: 'classes',
@@ -61,10 +69,10 @@ export default {
         });
       }
     },
-    saveHeight(componentId, value) {
+    saveHeight({ elementId, value }) {
       this.saveElementProperty({
         moduleIdInstance: this.moduleIdInstance,
-        componentId,
+        elementId,
         subComponent: 'container',
         link: 'attribute',
         property: 'height',

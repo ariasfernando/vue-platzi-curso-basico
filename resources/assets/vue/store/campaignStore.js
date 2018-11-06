@@ -1,5 +1,5 @@
 /* eslint no-console:0 */
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 
 import {
   defer,
@@ -15,18 +15,22 @@ const convertArrayToObject = (element, { subComponent, link }) => {
   return valueToConvert[lastPosition];
 };
 
-const getComponent = (module, elementId) => {
-  let component;
+const getElement = (module, elementId) => {
+  let element;
   _.forEach(module.structure.columns, (column) => {
+    if (column.id === elementId) {
+      element = column;
+      return false;
+    }
     _.forEach(column.components, (CurrentComponent) => {
       if (CurrentComponent.id === elementId) {
-        component = CurrentComponent;
+        element = CurrentComponent;
         return false;
       }
     });
-    return !component;
+    return !element;
   });
-  return component;
+  return element;
 };
 
 const getModule = (modules, idInstance) => {
@@ -262,13 +266,13 @@ function campaignStore() {
         };
         state.dirty = true;
       },
-      saveElementProperty(state, { moduleIdInstance, componentId, property, value, ...scope }) {
+      saveElementProperty(state, { moduleIdInstance, elementId, property, value, ...scope }) {
         const module = getModule(state.modules, moduleIdInstance);
-        const component = getComponent(module, componentId);
-        let properties = getProperties(component, scope);
+        const element = elementId === undefined ? module : getElement(module, elementId);
+        let properties = getProperties(element, scope);
         if (Array.isArray(properties) && isNaN(property)) {
           // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
-          properties = convertArrayToObject(component, scope);
+          properties = convertArrayToObject(element, scope);
         }
         Vue.set(properties, property, value);
         state.dirty = true;
@@ -305,16 +309,6 @@ function campaignStore() {
         if (!_.isEqual(columnClone, column)) {
           Vue.set(columns, data.columnId, column);
         }
-      },
-      saveModulePropertyById(state, { moduleIdInstance, property, value, ...scope }) {
-        const module = getModule(state.modules, moduleIdInstance);
-        let properties = getProperties(module.structure, scope);
-        if (Array.isArray(properties) && isNaN(property)) {
-          // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
-          properties = convertArrayToObject(module.structure, scope);
-        }
-        Vue.set(properties, property, value);
-        state.dirty = true;
       },
       saveModuleAttribute(state, data) {
         // DEPRECATE

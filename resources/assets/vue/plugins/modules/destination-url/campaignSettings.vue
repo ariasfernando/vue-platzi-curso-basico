@@ -1,5 +1,5 @@
 <template>
-  <div v-show="(elementKey === currentElementKey)">
+  <div v-show="isCurrentElement">
     <settings-container key="destination-url" label="Destination Url" custom-class="destination-url">
       <template slot="setting-bottom">
         <p v-if="validationRules">
@@ -37,21 +37,20 @@
       </template>
     </settings-container>
 
-    <settings-container label="Title" v-if="plugin.config.title" key="title">
+    <settings-container v-if="plugin.config.title" key="title" label="Title">
       <template slot="setting-bottom">
         <el-input
+          v-model="title"
           name="title"
           type="text"
           size="mini"
-          placeholder="Title"
-          v-model="title"></el-input>
+          placeholder="Title" />
       </template>
     </settings-container>
   </div>
 </template>
 
 <script>
-  import _ from 'lodash';
   import validatorMixin from '../mixins/validatorMixin';
   import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
   import pluginElementCampaignMixin from '../mixins/pluginElementCampaignMixin';
@@ -74,21 +73,20 @@
       },
       title: {
         get() {
-          return this.component[this.plugin.subComponent].attribute.title;
+          return this.element[this.plugin.subComponent].attribute.title;
         },
         set(value) {
-          this.saveAttributeInThisElement('title', value);
+          this.saveAttributeInThisElement({ property: 'title', value });
         },
       },
       validationRules() {
         const rules = [];
-        _.each(this.plugin.config.validations, (e,i) => {
+        _.each(this.plugin.config.validations, (e, i) => {
           if (e === true) {
             rules.push(i);
-          } else if(typeof e == 'object' && e.selected !== 'disabled'){
+          } else if (typeof e === 'object' && e.selected !== 'disabled') {
             rules.push(e.selected);
           }
-           
         });
         return rules.join('|');
       },

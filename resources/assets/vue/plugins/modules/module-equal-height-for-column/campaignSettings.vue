@@ -3,28 +3,18 @@
 
 <script>
 import pluginGenericCampaignMixin from '../mixins/pluginGenericCampaignMixin';
+import pluginElementCampaignMixin from '../mixins/pluginElementCampaignMixin';
 
 export default {
-  mixins: [pluginGenericCampaignMixin],
-  props: ['name', 'plugin', 'moduleId'],
+  mixins: [pluginGenericCampaignMixin, pluginElementCampaignMixin],
   data() {
     return {
       previousImagesUrls: [],
       previousHeight: 0,
+      subComponent: 'container',
     };
   },
   methods: {
-    saveColumnAttribute(property, value, columnId) {
-      const payload = {
-        moduleId: this.moduleId,
-        columnId,
-        subComponent: 'container',
-        link: 'attribute',
-        property,
-        value,
-      };
-      this.$store.commit('campaign/saveColumnProperty', payload);
-    },
     getHigherHeight() {
       const moduleIdInstance = this.moduleIdInstance;
       const selector = `[module-id-instance="${moduleIdInstance}"] .st-equal-height > table`;
@@ -48,7 +38,12 @@ export default {
         if (higherHeight !== this.previousHeight) {
           _.each(this.module.structure.columns, (column, columnIndex) => {
             const height = higherHeight - this.getPaddingTopAndBottom(columnIndex);
-            this.saveColumnAttribute('height', height, columnIndex);
+            this.saveElementProperty({
+              elementId: column.id,
+              link: 'attribute',
+              property: 'height',
+              value: height,
+            });
             this.previousHeight = higherHeight;
           });
         }
@@ -62,15 +57,8 @@ export default {
       };
     },
     addClassEqualHeight() {
-      _.each(this.module.structure.columns, (column, columnIndex) => {
-        let classes = column.container.attribute.classes;
-        const classesArr = classes ? classes.split(' ') : [];
-        const index = classesArr.indexOf('st-equal-height');
-        if (index === -1) {
-          classesArr.push('st-equal-height');
-          classes = classesArr.join(' ');
-          this.saveColumnAttribute('classes', classes, columnIndex);
-        }
+      _.each(this.module.structure.columns, (column) => {
+          this.addClassToElement({ value: 'st-equal-height', elementId: column.id });
       });
     },
     getImagesUrls(module) {

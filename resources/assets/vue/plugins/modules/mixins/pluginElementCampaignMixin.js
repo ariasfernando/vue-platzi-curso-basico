@@ -1,9 +1,8 @@
 export default {
-  props: ['name', 'plugin', 'pluginKey', 'element-location', 'element', 'current-element-Key', 'element-key', 'module'],
   methods: {
     saveInThisElement({ subComponent, link, property, value }) {
       this.saveElementProperty({
-        componentId: this.element.id,
+        elementId: this.element.id,
         subComponent: subComponent || this.plugin.subComponent || this.subComponent,
         link,
         property,

@@ -12,6 +12,7 @@
           :name="pluginKey"
           :plugin="plugin"
           :module="module"
+          :element="module"
           :module-id="currentModule"
           :plugin-key="pluginKey" />
         </group-container>
@@ -39,6 +40,8 @@
                   :module-id="currentModule"
                   :key="columnKey + pluginKey"
                   :plugin-key="pluginKey"
+                  :module="module"
+                  :element="column"
                   >
                 </component>
               </group-container>

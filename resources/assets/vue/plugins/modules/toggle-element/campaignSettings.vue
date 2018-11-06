@@ -35,14 +35,14 @@
         if (this.isCustom) {
           this.$store.dispatch('campaign/updateCustomElementProperty', {
             moduleId: this.currentCustomModule,
-            subComponent: elementId,
+            elementId,
             property: 'enableElement',
             value,
           });
           this.resetErrors(value, this.currentCustomModule);
         } else {
           const payload = {
-            componentId: elementId,
+            elementId,
             link: 'styleOption',
             property: 'enableElement',
             value,

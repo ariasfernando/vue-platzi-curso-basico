@@ -1,5 +1,5 @@
 <template>
-  <settings-container v-if="component" :label="plugin.config.options.bgcolor.label" class="plugin-palette">
+  <settings-container :label="plugin.config.options.bgcolor.label" class="plugin-palette">
     <template slot="setting-right">
       <compact ref="compact" v-model="color" :palette="palette" />
     </template>
@@ -32,7 +32,7 @@ export default {
         };
       },
       set(value) {
-        this.saveStyleInThisElement({ property: 'bgcolor', value: value.hex });
+        this.saveAttributeInThisElement({ property: 'bgcolor', value: value.hex });
       },
     },
   },
