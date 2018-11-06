@@ -9,15 +9,17 @@
             <div class="tracking-item">
               <div v-if="item.input_type === 'select'" class="form-group">
                 <div>
-                  <label :for="`trk-${trackingConfig[key].name}`">{{ trackingConfig[key].label }}</label>
+                  <label :for="`trk-${item.name}`">{{ item.label }}</label>
                 </div>
                 <div>
                   <el-select
-                    v-model="trackingData['trk-' + key]"
                     v-validate="'required'"
                     class="float-left width-full"
-                    :name="`trk-${trackingConfig[key].name}`"
-                    placeholder="">
+                    :name="`trk-${item.name}`"
+                    :value="trackingData[`trk-${key}`]"
+                    placeholder=""
+                    :data-vv-as="item.label"
+                    @input="onInputChange(`trk-${item.name}`, $event)">
                     <el-option
                       v-for="value in item.options"
                       :key="value"
@@ -26,33 +28,34 @@
                   </el-select>
                 </div>
                 <span
-                  v-show="errors.has(trackingData[`trk-${trackingConfig[key].name}`])"
-                  class="help is-danger">{{ errors.first(trackingData[`trk-${trackingConfig[key].name}`]) }}
+                  v-show="errors.has(`trk-${item.name}`)"
+                  class="help is-danger">{{ errors.first(`trk-${item.name}`) }}
             </span>
               </div>
               <div v-else-if="item.input_type === 'hidden'" class="form-group">
                 <input
                   type="hidden"
-                  :name="`trk-${trackingConfig[key].name}`"
-                  :value="trackingData[`trk-${key}`]"
-                  @blur="saveSettings">
+                  :name="`trk-${item.name}`"
+                  :value="trackingData[`trk-${key}`]">
               </div>
               <div v-else class="form-group">
                 <div>
-                  <label :for="`trk-${trackingConfig[key].name}`">{{ trackingConfig[key].label }}</label>
+                  <label :for="`trk-${item.name}`">{{ item.label }}</label>
                 </div>
                 <div>
                   <el-input
-                    v-model="trackingData['trk-' + key]"
                     v-validate="'required'"
-                    :name="`trk-${trackingConfig[key].name}`"
+                    :name="`trk-${item.name}`"
+                    :value="trackingData[`trk-${key}`]"
                     :controls="false"
                     class="float-left"
-                    @blur="saveSettings" />
+                    :data-vv-as="item.label"
+                    @input="onInputChange(`trk-${item.name}`, $event)"
+                    @blur="onBlur(`trk-${item.name}`, $event.target.value)" />
                 </div>
                 <span
-                  v-show="errors.has(trackingData[`trk-${trackingConfig[key].name}`])"
-                  class="help is-danger">{{ errors.first(trackingData[`trk-${trackingConfig[key].name}`]) }}
+                  v-show="errors.has(`trk-${item.name}`)"
+                  class="help is-danger">{{ errors.first(`trk-${item.name}`) }}
             </span>
               </div>
             </div>
@@ -84,30 +87,29 @@
       }
     },
     computed: {
-      campaign() {
-        return this.$store.getters['campaign/campaign'];
+      trackingData() {
+        if (this.campaignData.tracking !== undefined) {
+          return this.campaignData.tracking;
+        } else {
+          let data = {};
+          for (let k in this.trackingConfig) {
+            data[`trk-${this.trackingConfig[k].name}`] = this.trackingConfig[k].values;
+          }
+
+          return data;
+        }
       }
     },
     methods: {
-      loadCampaign() {
-        this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
-          this.$store.commit("global/setLoader", false);
-          this.campaignReady = true;
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast(
-            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-            {className: 'et-error'}
-          );
-        });
-      },
-      saveSettings(e) {
-        this.trackingData[e.target.name] = e.target.value.replace(/[^a-zA-Z0-9_\[\]]/g, '');
+      onInputChange(key, value) {
         this.$store.commit('campaign/saveCampaignData', {
           name: 'tracking',
-          value: this.trackingData
+          value: {...this.trackingData, [key]: value}
         });
       },
+      onBlur(key, value) {
+        this.onInputChange(key, value.replace(/[^a-zA-Z0-9_\[\]]/g, ''));
+      }
     }
   };
 </script>

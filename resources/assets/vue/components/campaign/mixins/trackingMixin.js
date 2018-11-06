@@ -3,7 +3,6 @@ export default {
     return {
       trackingConfigReady: false,
       trackingConfig: {},
-      trackingData: {}
     }
   },
   computed: {
@@ -17,14 +16,6 @@ export default {
   methods: {
     loadConfig() {
       this.trackingConfig = JSON.parse(this.campaignData.library_config.trackingConfig);
-
-      if (this.campaignData.tracking !== undefined) {
-        this.trackingData = this.campaignData.tracking;
-      } else {
-        for (let k in this.trackingConfig) {
-          this.trackingData[`trk-${this.trackingConfig[k].name}`] = this.trackingConfig[k].values;
-        }
-      }
 
       this.trackingConfigReady = true;
     },
@@ -52,7 +43,7 @@ export default {
 
         if (typeof trackingData[key] === 'undefined' || trackingData[key] === '') {
           $toast(
-            `Error: ${param} is required`,
+            `Error: ${this.trackingConfig[param].label} is required`,
             {
               className: 'et-error',
               duration: 10000,
