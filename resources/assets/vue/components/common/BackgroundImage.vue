@@ -1,41 +1,37 @@
 <template>
-  <wrapper>
-    <wrapper-comment
-      v-if="hasbackgroundImage"
-      :start="msoStartingComment"
-      :end="msoEndingComment">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-        <spacer v-if="paddingTop" :height="paddingTop"></spacer>
+  <wrapper-comment
+    v-if="hasbackgroundImage"
+    :start="msoStartingComment"
+    :end="msoEndingComment">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+      <spacer v-if="paddingTop" :height="paddingTop" />
 
-        <slot name="with-background-image"></slot>
+      <slot name="with-background-image" />
 
-        <wrapper-comment
-          v-if="paddingBottom"
-          start="<!--[if !gte mso 9]>--->"
-          end="<!--<![endif]-->">
-          <spacer :height="paddingBottom"></spacer>
-        </wrapper-comment>
-      </table>
-    </wrapper-comment>
-    <table v-else width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-      <slot name="without-background-image"></slot>
+      <wrapper-comment
+        v-if="paddingBottom"
+        start="<!--[if !gte mso 9]>--->"
+        end="<!--<![endif]-->">
+        <spacer :height="paddingBottom" />
+      </wrapper-comment>
     </table>
-  </wrapper>
+  </wrapper-comment>
+  <table v-else width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+    <slot name="without-background-image" />
+  </table>
 </template>
 
 <script>
-import Spacer from './Spacer';
-import WrapperComment from './comments/WrapperComment';
-import Wrapper from './Wrapper';
+import Spacer from './Spacer.vue';
+import WrapperComment from './comments/WrapperComment.vue';
+
 export default {
   name: 'BackgroundImage',
-  props: ['element', 'width'],
-
   components: {
     Spacer,
     WrapperComment,
-    Wrapper,
   },
+  props: ['element', 'width'],
   computed: {
     msoStartingComment() {
       return `<!--[if gte mso 9]>
@@ -56,32 +52,35 @@ export default {
                     </v:rect>
                   <![endif]-->`;
     },
-
     MsoBgcolor() {
       if (this.element.attribute.bgcolor) {
         return `color="${this.element.attribute.bgcolor}"`;
       }
       return '';
     },
-    paddingTop(){
-      return this.element.style.paddingTop && this.element.style.paddingTop !== '0px' ? _.parseInt(this.element.style.paddingTop) : undefined;
+    paddingTop() {
+      return this.element.style.paddingTop &&
+        this.element.style.paddingTop !== '0px'
+        ? _.parseInt(this.element.style.paddingTop)
+        : undefined;
     },
-    paddingBottom(){
-      return this.element.style.paddingBottom && this.element.style.paddingBottom !== '0px' ? _.parseInt(this.element.style.paddingBottom) : undefined;
+    paddingBottom() {
+      return this.element.style.paddingBottom &&
+        this.element.style.paddingBottom !== '0px'
+        ? _.parseInt(this.element.style.paddingBottom)
+        : undefined;
     },
     hasbackgroundImage() {
-      return (
-        Boolean(this.$slots["with-background-image"])
-      );
+      return Boolean(this.$slots['with-background-image']);
     },
     valign() {
       return this.element.attribute.valign || 'top';
-    }
+    },
   },
-  methods:{
-    convertPxToPt(value){
-       return Math.ceil(parseInt(value) * 0.75) + 'pt';
-     },
-  }
+  methods: {
+    convertPxToPt(value) {
+      return `${Math.ceil(parseFloat(value) * 0.75)}pt`;
+    },
+  },
 };
 </script>

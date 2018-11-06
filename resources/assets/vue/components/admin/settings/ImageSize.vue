@@ -299,7 +299,8 @@ export default {
       float: right;
       padding-left: 0px;
     }
-    .generic-number {
+    .generic-number,
+    .is-disabled {
       margin-top:5px;
     }
   }
