@@ -1,9 +1,8 @@
 <template>
   <div
-    v-b-tooltip.hover
     class="half-style-setting-padding align-element"
-    :title="`Padding ${side}`"
-    :data-tooltip="`Padding ${side}`">
+    :title="`Padding ${side}`">
+    <span class="side-title">{{ uppercaseSide }}</span>
     <el-input-number
       v-model="padding"
       v-validate="'required'"
@@ -11,9 +10,6 @@
       size="mini"
       :min="min"
       :controls="true" />
-    <el-button
-      class="button"
-      disabled="disabled">px</el-button>
   </div>
 </template>
 
@@ -43,6 +39,9 @@ export default {
           value: `${value}px`,
         });
       },
+    },
+    uppercaseSide() {
+      return this.side.toUpperCase();
     },
   },
 };
@@ -86,21 +85,29 @@ export default {
   }
 }
 .el-input-number--mini {
-  width: 80px;
-  margin-right: 25px;
+  width: 57px;
+  margin-right: 0px;
   float: right;
 }
 .half-style-setting-padding {
-  width: calc(50% - 15px);
-  margin-right: 15px;
+  width: calc(30% - 15px);
+  margin-right: 3px;
   padding: 5px 0;
   float: left;
   position: relative;
-}
-.half-style-setting-padding:nth-of-type(2n + 2) {
-  margin-left: 15px;
-  margin-right: 0;
-  padding-left: 0;
+
+  .side-title {
+    color: #bdbfbb;
+    font-size: 10px;
+    margin-bottom: 2px;
+    font-weight: 100;
+  }
+
+  .el-input-number /deep/ {
+    .el-input-number__decrease, .el-input-number__increase {
+      width: 17px;
+    }
+  }
 }
 </style>
   <style lang="less" >
@@ -109,7 +116,7 @@ export default {
     text-align: center;
   }
   .el-input-number .el-input__inner {
-    padding: 0 28px 0 0;
+    padding: 0 17px 0 0;
     border-radius: 2px 0px 0px 2px;
   }
 }
