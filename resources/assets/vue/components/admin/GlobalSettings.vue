@@ -40,6 +40,9 @@
                         :value="JSON.stringify(setting.value, null, 2)" 
                         @change="updateTextarea($event, setting.key)">
                       </el-input>
+                      <div v-if="setting.properties.type == 'font'" class="btn btn-default btn-create pull-left">
+                        <router-link to="/fonts" class="btn-create"><i class="glyphicon glyphicon-edit"></i> Edit setting</router-link>
+                      </div>
                   </td>
                 </tr>
                 </tbody>
@@ -55,12 +58,6 @@
         </div>
       </div>
     </div>
-    <div class="row" v-if="ready && !settings.length">
-      <div class="col-xs-12">
-        There are no settings created or you don't have permission to access any,
-        check the roles or create a new one.
-      </div>
-    </div>
   </section>
 </template>
 
@@ -72,18 +69,20 @@
     name: 'globalSettings',
     data: function () {
       return {
-        settings: {},
         ready: false,
       }
     },
-    components: {
-    }, 
+    computed: {
+      settings() {
+        return this.$store.getters["setting/settings"];
+      },
+    },
     methods: {
       fetchSettings () {
         this.loading = true;
         settingService.fetchSettings()
           .then((response) => {
-            this.settings = response;
+            this.$store.commit("setting/setSettings", response);
             this.ready = true;
             this.loading = false;
           })

@@ -33,5 +33,21 @@ export default {
     });
 
     return deferred.promise;
+  },
+  uploadFont(file) {
+    const endpoint = endpoints.setting.uploadFont;
+    const deferred = Q.defer();
+    const params = {
+      endpoint,
+      json: file,
+    };
+
+    request[endpoint.method](params).then((response) => {
+      deferred.resolve(response.body);
+    }).catch((err) => {
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
   }
 };

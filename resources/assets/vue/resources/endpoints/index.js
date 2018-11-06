@@ -80,5 +80,6 @@ module.exports = {
   setting: {
     fetchSettings: { method: 'get', path: `${baseUrl}/admin/setting/all` },
     saveSetting: { method: 'post', path: `${baseUrl}/admin/setting/edit` },
+    uploadFont: { method: 'post', path: `${baseUrl}/admin/setting/upload-font` },
   },
 };

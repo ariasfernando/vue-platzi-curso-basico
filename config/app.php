@@ -302,6 +302,7 @@ return [
         'PasswordPolicy' => Stensul\Providers\PasswordPolicyServiceProvider::class,
         'Tag'         => Stensul\Services\TagManager::class,
         'ModelKeyManager' => Stensul\Services\ModelKeyManager::class,
+        'FileManager' => Stensul\Services\FileManager::class,
 
     ],
     'help' => [
