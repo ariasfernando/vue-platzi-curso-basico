@@ -128,6 +128,8 @@ export default {
       if (_.endsWith(element.style.lineHeight, '%')) {
         const lineHeight = ((parseFloat(element.style.lineHeight) + 100) / 100) * parseFloat(element.style.fontSize);
         return `${Math.round(lineHeight * 100) / 100}px`;
+      } else if (_.endsWith(element.style.lineHeight, 'em')) {
+        return `${(parseFloat(element.style.lineHeight) * parseFloat(element.style.fontSize))}px`;
       }
       return element.style.lineHeight;
     },

@@ -87,10 +87,10 @@ module.exports = {
         value: false,
         icon: 'font-mce-ico mce-i-forecolor',
         textcolor_map: [
-          '000000', 'Black',
-          '474646', 'Gray',
-          '79a8c9', 'Blue',
-          'cd202c', 'Red',
+          { label: 'Black', value: '#000000' },
+          { label: 'Gray', value: '#474646' },
+          { label: 'Blue', value: '#79A8C9' },
+          { label: 'Red', value: '#CD202C' },
         ],
         textcolor_from_library: false,
         palette_name: '',
@@ -100,6 +100,14 @@ module.exports = {
         key: 'backcolor',
         value: false,
         icon: 'font-mce-ico mce-i-backcolor',
+        backcolor_map: [
+          { label: 'Yellow', value: '#E3EB05' },
+          { label: 'Orange', value: '#FC9264' },
+          { label: 'Pink', value: '#FC6487' },
+          { label: 'Blue', value: '#64EAFC' },
+        ],
+        backcolor_from_library: false,
+        palette_name: '',
       },
       link: {
         label: 'Link',
@@ -147,7 +155,12 @@ module.exports = {
         title: 'Font size',
         value: false,
         type: 'text',
-        content: '12px 14px 16px 18px',
+        content: [
+          { value: '12px' },
+          { value: '14px' },
+          { value: '16px' },
+          { value: '18px' },
+        ],
         dependsOn: {
           config: 'options',
           name: 'fontsizeselect',

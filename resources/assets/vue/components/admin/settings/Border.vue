@@ -22,7 +22,8 @@
           v-validate="'required'"
           size="mini"
           :min="min"
-          :controls="false"
+          :controls="true"
+          controls-position="right"
           class="float-left" />
         <el-button
           class="button float-left"
@@ -142,6 +143,7 @@ button.el-button {
 .el-color-picker {
   height: 30px;
 }
+
 .float-left {
   float: left;
 }
@@ -154,9 +156,13 @@ button.el-button {
 .el-input-number {
   width: 67px;
 }
-.el-input-number .el-input__inner {
+
+.el-input-number.is-controls-right /deep/ .el-input__inner {
   border-radius: 2px 0px 0px 2px;
+  padding-left: 8px;
+  padding-right: 35px;
 }
+
 #edit-container .right-bar .form-group,
 #edit-container .left-bar .form-group {
   margin-bottom: 0;
@@ -166,6 +172,8 @@ button.el-button {
 }
 </style>
 <style lang="less" >
+
+
 .field-border {
   input[type='text'] {
     text-align: center;
