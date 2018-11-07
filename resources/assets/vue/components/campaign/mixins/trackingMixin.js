@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     loadConfig() {
-      this.trackingConfig = JSON.parse(this.campaignData.library_config.trackingConfig);
+      this.trackingConfig = JSON.parse(this.campaignData.library_config.trackingConfig || '{}');
 
       this.trackingConfigReady = true;
     },
