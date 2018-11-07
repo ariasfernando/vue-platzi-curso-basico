@@ -21,10 +21,10 @@ export default {
             validated: value,
           },
         };
-  
+
         // Save plugin data
-        this.$store.commit("campaign/savePlugin", payload);
-      }
+        this.$store.commit('campaign/savePlugin', payload);
+      },
     },
     moduleErrors() {
       return this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
@@ -40,13 +40,13 @@ export default {
   },
   watch: {
     currentComponent: {
-      handler: function(currentComponent) {
+      handler(currentComponent) {
         if (this.validationRules) {
           this.validate();
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     validate() {
@@ -59,7 +59,7 @@ export default {
               name: this.name,
               msg: err.msg,
               ...this.currentComponent,
-            }});
+            } });
           });
 
           this.$store.dispatch('campaign/addErrors', errorItems);
@@ -93,7 +93,6 @@ export default {
               }
 
               if (validations && validations.required === true && component.container.styleOption.enableElement && plugin.enabled) {
-
                 // if the validations are enabled and were never ran we assume they have errors
                 let defaultValue = '';
                 if (component.type === 'text-element' && typeof component.button === 'object') {
@@ -113,9 +112,9 @@ export default {
                     scope: {
                       type: 'plugin',
                       name: plugin.name,
-                      moduleId: moduleId,
+                      moduleId,
                       columnId: columnIndex,
-                      componentId: componentIndex
+                      componentId: componentIndex,
                     },
                   };
 
@@ -134,11 +133,11 @@ export default {
           scope: {
             type: 'custom',
             elementName,
-            moduleId: moduleId,
+            moduleId,
             idInstance: this.module.idInstance,
           },
         };
-  
+
         this.$store.dispatch('campaign/addErrors', [error]);
       }
     },
@@ -150,8 +149,7 @@ export default {
         _.each(this.module.params.validation, (item, key) => {
           if (key === 'images') {
             _.each(this.module.params.validation[key], (imageElement, key2) => {
-
-              if (typeof imageElement.parentElement === undefined 
+              if (typeof imageElement.parentElement === undefined
                 || (imageElement.parentElement && this.module.data[imageElement.parentElement].enableElement)) {
                 _.each(this.module.params.validation[key][key2], (fieldValidations, field) => {
                   const elementName = `${key2}${field}`;
