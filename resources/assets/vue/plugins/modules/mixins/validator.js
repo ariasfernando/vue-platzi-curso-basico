@@ -96,7 +96,9 @@ export default {
 
                 // if the validations are enabled and were never ran we assume they have errors
                 let defaultValue = '';
-                if (component.type === 'button-element' && typeof component.button === 'object') {
+                if (component.type === 'text-element' && typeof component.button === 'object') {
+                  defaultValue = component.text.attribute.href;
+                } else if (component.type === 'button-element' && typeof component.button === 'object') {
                   defaultValue = component.button.attribute.href;
                 } else if (component.type === 'image-element' && typeof component.image === 'object') {
                   if (plugin.config.validations) {

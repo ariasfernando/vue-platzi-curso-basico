@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export default {
   props: [
     'module-id',
@@ -7,6 +5,7 @@ export default {
     'component-id',
     'component',
     'is-active',
+    'column',
   ],
   computed: {
     currentComponent() {
@@ -34,7 +33,7 @@ export default {
           this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].container) -
           this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].content) -
           this.elementBorderAndPaddingHorizontalSpace(this.component.container);
-        return (imageContainerWidth / 100) * _.parseInt(width);
+        return ((imageContainerWidth / 100) * _.parseInt(width));
       }
       return width;
     },

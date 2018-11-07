@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export default {
   methods: {
     // Get an array of classes matching the selector param in config (NOT in DOM or VDOM)
