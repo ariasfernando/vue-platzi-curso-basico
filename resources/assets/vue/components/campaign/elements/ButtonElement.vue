@@ -1,7 +1,7 @@
 <template>
   <module-container :component="component" @select-component="selectComponentHandler">
       <button-border-radius-comment v-if="hasBorderRadius" :component="component"
-        :module="module" :columnId="columnId" :componentId="componentId"></button-border-radius-comment>
+        :module="module" :module-id="moduleId" :columnId="columnId" :componentId="componentId"></button-border-radius-comment>
       <div class="stx-wrapper" v-if="hasBorderRadius" v-html="notMsoStartingComment"></div>
       <a
         @click.prevent
