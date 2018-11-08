@@ -176,13 +176,15 @@ class CampaignManager
 
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->status = 2;
-            $campaign_data->deleted_at = Carbon::now();
+
             $campaign_data->deleted_by = [
                 'id' => new ObjectID(Auth::id()),
                 'email' => Auth::user()->email
             ];
 
-            if ($campaign_data->save()) {
+            $campaign_data->save();
+
+            if ($campaign_data->delete()) {
                 Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectId($campaign_id)]));
                 // Check proof
                 if ($campaign_data->has_active_proof) {
@@ -195,6 +197,7 @@ class CampaignManager
                         dispatch(new SendReviewersEmail($proof, 'deleted_proof'));
                     }
                 }
+
                 return array('success' => $campaign_id);
             }
         }

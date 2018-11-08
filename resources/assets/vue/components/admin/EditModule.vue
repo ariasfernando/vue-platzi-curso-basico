@@ -146,6 +146,19 @@ export default {
           // TODO: Trigger event editModule.onLoaded
           this.ready = true;
           this.$store.commit('global/setLoader', false);
+
+          if (this.module.inUse) {
+            this.$root.$toast(
+              "This module is already in use. Any changes will not affect or update the module instance in "
+                + "the existing campaigns. To create a new version you can clone the module in the module list.",
+              {
+                className: 'et-info',
+                closeable: true,
+                duration: 10000
+              },
+            );
+          }
+
         })
         .catch((error) => {
           this.$root.$toast(
