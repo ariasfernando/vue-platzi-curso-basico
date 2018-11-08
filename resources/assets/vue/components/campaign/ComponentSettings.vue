@@ -75,7 +75,7 @@ import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
         let show = false
         if (this.currentElement) {
           _.each(this.currentElement.plugins, (plugin, pluginKey) => {
-            if (plugin.enabled && plugin.render !== false && this.$_app.modulePlugins[pluginKey].hasCampaignSettings) {
+            if (plugin.enabled && plugin.render !== false && this.hasCampaignSettings(pluginKey)) {
               show = true;
             }
           });
@@ -88,12 +88,14 @@ import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
         return _.startCase(str);
       },
       isEnableOrRunBackground(plugin, pluginKey, elementKey) {
-        const hasCampaignSettings = this.$_app.modulePlugins[pluginKey].hasCampaignSettings
-        return plugin.enabled && hasCampaignSettings && ( this.currentElementKey === elementKey || plugin.runBackground)
+        return plugin.enabled && this.hasCampaignSettings(pluginKey) && ( this.currentElementKey === elementKey || plugin.runBackground)
       },
       getElementKey(module, element) {
         return `${module.idInstance}-${element.id}`;
       },
+      hasCampaignSettings(key) {
+        return this.$_app.modulePlugins[key] && this.$_app.modulePlugins[key].hasCampaignSettings;
+      }
     }
   }
 </script>
