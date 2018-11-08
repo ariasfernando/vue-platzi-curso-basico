@@ -69,50 +69,38 @@ export default {
       const links = Array.from(dom.querySelectorAll('a'));
 
       links.forEach((link) => {
-        let trackingPosition = link.closest('th') ? link.closest('th').getAttribute('data-tracking-position') : false;
-
-        if (!trackingPosition) {
-          trackingPosition = link.closest('td').getAttribute('data-tracking-position');
+        if (link.classList.contains('st-no-tracking')) {
+          return false;
         }
 
-        if (!trackingPosition) {
-          trackingPosition = link.getAttribute('data-tracking-position');
+        let linkHref = link.getAttribute('href');
+
+        if (linkHref === '' || linkHref === '#') {
+          return false;
         }
 
-        if (!link.classList.contains('st-no-tracking')) {
-          let linkHref = link.getAttribute('href');
+        let anchor = '';
+        const anchorPos = linkHref.indexOf('#');
 
-          if (linkHref === '' || linkHref === '#') {
-            return false;
-          }
-
-          let anchor = '';
-          const anchorPos = linkHref.indexOf('#');
-
-          if (anchorPos !== -1) {
-            anchor = linkHref.substring(anchorPos);
-            linkHref = linkHref.replace(anchor, '');
-          }
-
-          if (linkHref.length > 0) {
-            Object.keys(trackingConfig).forEach((param) => {
-              let key = `trk-${param}`;
-              let separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
-              let value = typeof trackingData[key] !== 'undefined' ? trackingData[key] : '';
-              linkHref += `${separator}${param}=${value}`;
-            });
-
-            if (trackingPosition) {
-              linkHref += `&utm_content=${trackingPosition}`;
-            }
-          }
-
-          if (anchor.length) {
-            linkHref += anchor;
-          }
-
-          link.setAttribute('href', linkHref);
+        if (anchorPos !== -1) {
+          anchor   = linkHref.substring(anchorPos);
+          linkHref = linkHref.replace(anchor, '');
         }
+
+        if (linkHref.length > 0) {
+          Object.keys(trackingConfig).forEach((param) => {
+            let key = `trk-${param}`;
+            let separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
+            let value = typeof trackingData[key] !== 'undefined' ? trackingData[key] : '';
+            linkHref += `${separator}${param}=${value}`;
+          });
+        }
+
+        if (anchor.length) {
+          linkHref += anchor;
+        }
+
+        link.setAttribute('href', linkHref);
       });
 
       let serializer = new XMLSerializer();
