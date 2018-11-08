@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Stensul\Models\Role;
+use Stensul\Models\User;
 
 class AssignStudioRoleToStensulUsers extends Migration
 {
@@ -17,13 +17,17 @@ class AssignStudioRoleToStensulUsers extends Migration
 
         if (Role::where('name', 'studio-master')->first()) {
             foreach ($users as $user) {
-                $user->roles = array_merge($user->roles, ['studio-master']);
-                $user->save();
+                if (!in_array('studio-master', $user->roles)) {
+                    $user->roles = array_merge($user->roles, ['studio-master']);
+                    $user->save();
+                }
             }
         } elseif (Role::where('name', 'studio-admin')->first()) {
             foreach ($users as $user) {
-                $user->roles = array_merge($user->roles, ['studio-admin']);
-                $user->save();
+                if (!in_array('studio-admin', $user->roles)) {
+                    $user->roles = array_merge($user->roles, ['studio-admin']);
+                    $user->save();
+                }
             }
         }
     }
