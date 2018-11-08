@@ -27,6 +27,18 @@ function textDefault() {
         ],
       },
       {
+        groupLabel: 'Destination URL',
+        showLabel: false,
+        plugins:
+        [
+          {
+            name: 'destination-url',
+            title: 'Destination URL',
+            aclName: 'destination-url',
+          },
+        ],
+      },
+      {
         groupLabel: '',
         showLabel: false,
         plugins: [

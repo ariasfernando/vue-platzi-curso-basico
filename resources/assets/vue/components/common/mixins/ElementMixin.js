@@ -47,6 +47,9 @@ export default {
     isInvertedStacking() {
       return this.module.structure.columnsStacking === 'invertedStacking';
     },
+    buildingMode() {
+      return this.isCampaign ? this.$store.getters['campaign/buildingMode'] : this.$store.getters['module/buildingMode'];
+    },
   },
   methods: {
     // Get an string of classes
