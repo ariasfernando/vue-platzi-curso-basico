@@ -32,6 +32,17 @@ export default {
       };
       this.$store.commit('campaign/saveElementProperty', payload);
     },
+    saveElementPluginData({ elementId, type, plugin, path, value }) {
+      const payload = {
+        moduleIdInstance: this.moduleIdInstance,
+        elementId,
+        plugin,
+        type,
+        path,
+        value,
+      };
+      this.$store.commit('campaign/saveElementPluginData', payload);
+    },
     getElement(elementId) {
       if (!this.isCustom) {
         let element = false;

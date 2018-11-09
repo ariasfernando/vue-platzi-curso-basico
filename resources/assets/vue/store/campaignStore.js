@@ -49,6 +49,20 @@ const getProperties = (element, { subComponent, link }) => {
   return link ? subElement[link] : subElement;
 };
 
+const searchOrCreateLevel = (data, keys) => {
+  let subData = data;
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (!_.has(subData, [keys[i]])) {
+      Vue.set(subData, [keys[i]], {});
+    }
+    subData = subData[keys[i]];
+  }
+  return {
+    data: subData,
+    property: keys[keys.length - 1],
+  };
+};
+
 function campaignStore() {
   return {
     namespaced: true,
@@ -276,6 +290,14 @@ function campaignStore() {
         }
         Vue.set(properties, property, value);
         state.dirty = true;
+      },
+      saveElementPluginData(state, { moduleIdInstance, elementId, type, plugin, path, value }) {
+        const module = getModule(state.modules, moduleIdInstance);
+        const element = elementId === undefined ? module : getElement(module, elementId);
+        const pluginData = element.plugins[plugin];
+        const pathArray = _.concat([type || 'data'], path ? path.split('.') : []);
+        const pluginOption = searchOrCreateLevel(pluginData, pathArray);
+        Vue.set(pluginOption.data, pluginOption.property, value);
       },
       saveComponentProperty(state, data) {
         // DEPRECATE, use saveElementProperty
