@@ -18,6 +18,6 @@ class WelcomePasswordNotification extends ResetPasswordNotification
     {
         return (new MailMessage)
             ->subject(env('MAIL_WELCOME_SUBJECT', 'Welcome to stensul!'))
-            ->view('emails.password_welcome', ['token' => $this->token, 'name' => $this->name]);
+            ->view('emails.password_welcome', ['token' => $this->token, 'name' => $this->name, 'roles' => $this->roles]);
     }
 }

@@ -1,4 +1,3 @@
-const studioSettings = require('./studioSettings.vue');
 const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
@@ -7,7 +6,6 @@ module.exports = {
   version: '0.0.1',
   author: 'facundo.garcia@stensul.com',
   target: ['module'],
-  studioSettings,
   campaignSettings,
   config: {
     defaultValue: false,
