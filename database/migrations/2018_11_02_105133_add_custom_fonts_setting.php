@@ -20,7 +20,7 @@ class AddCustomFontsSetting extends Migration
             'key' => 'custom_fonts',
             'value' => [],
             'properties' => [
-                "type" => 'fonts'
+                "type" => 'font'
             ]
         ];
         Setting::create($custom_fonts_setting);
