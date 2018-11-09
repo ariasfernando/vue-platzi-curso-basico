@@ -162,7 +162,7 @@ export default {
       if (_.endsWith(width, '%')) {
         return (this.templateInnerWidth / 100) * parseFloat(width);
       }
-      return width;
+      return parseFloat(width);
     },
     columnBgcolor(column) {
       return this.module.structure.columns[column].container.attribute.bgcolor;
