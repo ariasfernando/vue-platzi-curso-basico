@@ -2,7 +2,7 @@
   <transition name="modal" v-if="modalProof">
     <div class="modal-mask modal-proof">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container scrolled">
           <button type="button" class="close" @click="close">
             <span>
               &times;
@@ -75,22 +75,24 @@
                     </label>
                   </div>
                   <div class="input-group">
-                    <label data-toggle="tooltip" data-placement="top" title="Selecting this option will trigger the review request email to all reviewers, even if they had already received it as part of an earlier request. Leaving it unchecked will send the email only to newly added or edited users">
-                      <checkbox name="send_to_all" value="1">
-                        Send a notification to all reviewers
+                    <label data-toggle="tooltip" data-placement="top" title="Checking this box will send or resend both public and private notifications to all users, not just those newly added or whose message was changed">
+                      <checkbox name="send_to_all" value="1" v-model="sendToAll">
+                        Send/Resend notifications to all reviewers
                       </checkbox>
                     </label>
                   </div>
                 </div>
+                <div class="form-group">
+                  <label>Message for all reviewers</label>
+                  <textarea name="notification_message_4_all" id="notification_message_4_all" class="form-control" rows="3" maxlength="200" v-model="notificationMessage4All"></textarea>
+                </div>
               </form>
             </div>
             <div id="modal-proof-message" class="modal fade" tabindex="-2" role="dialog" aria-hidden="true">
-              <div class="modal-dialog modal-sm">
+              <div class="modal-dialog modal-md">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4>
-                      Write a message
-                    </h4>
+                    <h4>Write a message</h4>
                   </div>
                   <div class="modal-body">
                     <div class="proof-add-message">
@@ -168,7 +170,9 @@
         this.$store.commit("global/setLoader", true);
         let data = {
           campaign_id: this.campaign.campaign_id,
-          reviewers: this.reviewers,
+          reviewers: this.reviewers.map((rev)=>({email: rev.email, required: rev.required, notification_message: rev.notification_message})),
+          send_to_all: this.sendToAll,
+          notification_message_4_all: this.notificationMessage4All
         }
         if(!this.campaign.campaign_data.proof_id || this.startProof){
           data.create_new_proof = true;
@@ -385,6 +389,8 @@
         reviewers: [],
         currentReviewer: {},
         currentNotificationMessage: '',
+        notificationMessage4All: '',
+        sendToAll: false,
         startProof: true,
         proofAccess: {
           status: this.$_app.config.proofConfig.status,
@@ -397,10 +403,36 @@
 </script>
 
 <style lang="less">
+  .scrolled{
+    max-height: 85vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    .table tbody tr td{
+      vertical-align: top !important;
+    }
+  }
   .dropdown-menu {
     .open {
       overflow-y: scroll !important;
       width: 100%;
     }
+  }
+  #modal-proof-message {
+    .modal-header {
+      padding: 0;
+    }
+    .modal-body {
+      margin: 0;
+    }
+    .modal-footer {
+      padding: 15px 0px 0px 0px !important;
+    }
+  }
+</style>
+
+<style media="screen">
+  #notification_message_4_all{
+    height: 80px;
   }
 </style>

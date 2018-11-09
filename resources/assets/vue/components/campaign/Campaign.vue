@@ -43,6 +43,7 @@
     <modal-esp v-if="campaignReady"></modal-esp>
     <modal-proof v-if="campaignReady"></modal-proof>
     <modal-enable-templating v-if="campaignReady"></modal-enable-templating>
+    <modal-proof-track v-if="campaignReady"></modal-proof-track>
 
     <spinner></spinner>
 
@@ -64,6 +65,7 @@
   import ModalEsp from './modals/ModalEsp.vue'
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
+  import ModalProofTrack from './modals/ModalProofTrack.vue';
   import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
   import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
@@ -88,6 +90,7 @@
       ModalEsp,
       ModalPreview,
       ModalProof,
+      ModalProofTrack,
       ModuleBackgroundSettings,
       ModuleSettings,
       ScrollbarContainer,
