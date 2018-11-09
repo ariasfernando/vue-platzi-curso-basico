@@ -40,9 +40,9 @@ export default {
             element = column;
             return false;
           }
-          _.forEach(column.components, (CurrentComponent) => {
-            if (CurrentComponent.id === elementId) {
-              element = CurrentComponent;
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === elementId) {
+              element = currentComponent;
               return false;
             }
           });
@@ -51,6 +51,38 @@ export default {
         return element;
       }
       return this.module.data[elementId];
+    },
+    getColumnIndexByComponentId(elementId) {
+      if (!this.isCustom) {
+        let columnIndex = false;
+        _.forEach(this.module.structure.columns, (column, currentColumnIndex) => {
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === elementId) {
+              columnIndex = currentColumnIndex;
+              return false;
+            }
+          });
+          return columnIndex === false;
+        });
+        return columnIndex;
+      }
+      return undefined;
+    },
+    getComponentIndexByComponentId(elementId) {
+      if (!this.isCustom) {
+        let componentIndex = false;
+        _.forEach(this.module.structure.columns, (column) => {
+          _.forEach(column.components, (currentComponent, currentComponentIndex) => {
+            if (currentComponent.id === elementId) {
+              componentIndex = currentComponentIndex;
+              return false;
+            }
+          });
+          return componentIndex === false;
+        });
+        return componentIndex;
+      }
+      return undefined;
     },
     addClassToElement({ elementId, value }) {
       let classes = this.getElement(elementId).container.classes;
