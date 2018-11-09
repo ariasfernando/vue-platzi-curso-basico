@@ -32,7 +32,7 @@ class ModuleUsage extends Migration
                         try {
                             if (isset($module['_id'])) {
                                 Log::info(sprintf('Module id: %s', $module['_id']));
-                                \ModuleUsageModel::create([
+                                \Stensul\Models\ModuleUsage::create([
                                     'campaign_id' => new ObjectId($campaign->id),
                                     'module_id' => new ObjectId($module['_id']),
                                 ]);
