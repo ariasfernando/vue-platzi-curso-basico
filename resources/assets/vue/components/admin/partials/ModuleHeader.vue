@@ -1,5 +1,5 @@
 <template>
-  <div class="row header" v-sticky="{ zIndex: 999, stickyTop: 0 }">
+  <div class="row header">
     <div class="col-xs-3 header-col">
       <div class="beta-btn-secondary pull-left" @click="$router.push('/')">
         <i class="glyphicon glyphicon-menu-left"></i>
@@ -35,8 +35,6 @@
 </template>
 
 <script>
-  import VueSticky from 'vue-sticky';
-
   export default {
     computed: {
       module() {
@@ -50,9 +48,6 @@
       return {
         showRaw: false,
       }
-    },
-    directives: {
-      'sticky': VueSticky,
     },
     methods: {
       toggleRaw() {
@@ -102,14 +97,18 @@
   }
 </script>
 <style lang="less" scoped>
-
 @stensul-purple: #514960;
 @stensul-white: #ffffff;
   .header {
+    position: fixed;
+    top: 59px;
+    z-index: 2;
+    left: 15px;
+    right: 15px;
     color: @stensul-purple;
     background-color: #ffffff;
-    height: 53px;
-    padding: 17px 0;
+    height: 45px;
+    padding: 13px 0;
     box-shadow: 0px 0px 4px #999999;
     margin-top: -3px;
     min-width: 1200px;

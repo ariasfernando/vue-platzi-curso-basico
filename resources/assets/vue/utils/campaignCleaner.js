@@ -33,7 +33,8 @@ export default {
       'data-mce-style',
       'id',
       'module',
-      'context'
+      'column',
+      'draggable',
     ],
     blockSelectors: [
       '.module-toolbar',
@@ -74,7 +75,7 @@ export default {
       $cleanedHtml.find(selector).remove();
     });
 
-    // Remove wrappers
+    // Remove wrappers element ( .stx-wrapper )
     $cleanedHtml = Application.utils.removeWrappers($cleanedHtml);
 
     // Remove every class starting with "stx-"
@@ -85,6 +86,9 @@ export default {
 
     // Remove attr style if it's empty.
     $cleanedHtml.find("[style='']").removeAttr('style');
+
+    // Remove attr bgcolor if it's empty.
+    $cleanedHtml.find("[bgcolor='']").removeAttr('bgcolor');
 
     // Remove tooltip
     $cleanedHtml.find('.actions-buttons-tooltip').remove();
@@ -119,17 +123,17 @@ export default {
         // Remove data-tag-before
         $element.removeAttr('data-tag-before');
       });
-    };
+    }
 
     // Convert and add data-persist-styles to css property inline in styles attribute
     if ($cleanedHtml.find('[data-persist-styles]').length) {
-      const $toPersistArray = $cleanedHtml.find("[data-persist-styles]");
+      const $toPersistArray = $cleanedHtml.find('[data-persist-styles]');
       $.each($toPersistArray, (i, element) => {
         const $element = $(element);
         // Add inline data-saved CSS hacks
         this.addCSSHacks(
           $element,
-          Application.utils.objToCss($element.data('persist-styles'))
+          Application.utils.objToCss($element.data('persist-styles')),
         );
         $element.removeAttr('data-persist-styles');
       });
@@ -140,8 +144,12 @@ export default {
       const $links = $cleanedHtml.find('a');
       $.each($links, (i, element) => {
         const $element = $(element);
-        const href = $element.attr("href");
-        $element.attr("href", href.replace("<%","LT%").replace("%>","%GT"));
+        const href = $element.attr('href');
+        if (href) {
+          $element.attr('href', href.replace('<%', 'LT%').replace('%>', '%GT'));
+        } else {
+          $element.replaceWith($element.html());
+        }
       });
     }
 
@@ -174,23 +182,21 @@ export default {
   },
 
   addCSSHacks($target, newStyles) {
-      newStyles.replace(';','');
-      var originalStyles = $target.attr('style');
-      var originalStylesArray = originalStyles.split(';');
+    newStyles.replace(';', '');
+    const originalStyles = $target.attr('style');
+    let originalStylesArray = originalStyles.split(';');
 
-      if(!originalStyles.includes(newStyles)){
-          originalStylesArray.push(newStyles);
-      }
+    if (!originalStyles.includes(newStyles)) {
+      originalStylesArray.push(newStyles);
+    }
 
-      for (var i = 0; i < originalStylesArray.length; i++) {
-          originalStylesArray[i] = originalStylesArray[i].replace(' ','');
-      }
+    for (let i = 0; i < originalStylesArray.length; i++) {
+      originalStylesArray[i] = originalStylesArray[i].replace(' ', '');
+    }
 
-      originalStylesArray = originalStylesArray.filter(function(item) {
-          return item !== '';
-      })
-      newStyles = originalStylesArray.join('; ');
-      $target.attr('style', newStyles);
+    originalStylesArray = originalStylesArray.filter(item => item !== '');
+    newStyles = originalStylesArray.join('; ');
+    $target.attr('style', newStyles);
   },
 
   encodeHtmlEntities($cleanedHtml) {
@@ -239,6 +245,7 @@ export default {
     const codesToCharsTags = {
       '&quot;': "'",
       '&#039;': "'",
+      '<!---->': '',
     };
 
     const rex = new RegExp('(<[^>]*>)|(&[a-zA-Z0-9#]+;)', 'gm');
@@ -466,6 +473,6 @@ export default {
     });
 
     return str;
-  }
+  },
 
 };

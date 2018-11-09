@@ -1,63 +1,58 @@
 <template>
   <module-container :component="component" @select-component="selectComponentHandler">
+    <a
+      :data-contenteditable-href="component.text.attribute.href"
+      :style="component.text.style.textDecoration || 'text-decoration:none;'"
+      :target="component.text.attribute.target || '_blank'"
+      @click.prevent>
       <table
-        width="100%"
-        style="width: 100%;"
+        :width="component.text.attribute.width || '100%'"
+        :style="{'width': widthStyle(component.text.attribute.width) || '100%'}"
         :align="component.container.attribute.align"
         border="0"
         cellpadding="0"
-        cellspacing="0"
-      >
+        cellspacing="0">
         <tr>
           <td
             class="stx-edit-text stx-position-relative"
-            :width="component.text.attribute.width || '100%'"
+            width="100%"
             :valign="component.text.attribute.valign || 'top'"
             :align="component.text.attribute.align || 'left'"
             :bgcolor="component.text.attribute.bgcolor"
-            :style="[fontStyles(component.text), elementBorderAndPadding(component.text), {'width': widthStyle(component.text.attribute.width) || '100%'}]"
-          >
+            :style="[fontStyles(component.text), elementBorderAndPadding(component.text), {width:'100%'}]">
             <tiny-mce
-              :fontStyles="[fontStyles(component.text),{'display': 'inline-block !important'}, {'vertical-align': 'middle'}]"
+              :font-styles="fontStyles(component.text)"
               :module="module"
               :component="component"
-              :columnId="columnId"
-              :componentId="componentId"
-              @changeText="changeText"
-            ></tiny-mce>
+              :column-id="columnId"
+              :component-id="componentId"
+              @changeText="changeText" />
           </td>
-        </tr> 
-      </table>     
+        </tr>
+      </table>
+    </a>
   </module-container>
-  <!-- TEXT ELEMENT ENDS -->
 </template>
 
 <script>
-  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
-  import ModuleContainer from '../../common/containers/ModuleContainer';
-  import ElementMixin from '../../common/mixins/ElementMixin.js';
-  import tinyMce from '../../common/tinyMce';
-  import _ from 'lodash';
+import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
+import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import ElementMixin from '../../common/mixins/ElementMixin';
+import TinyMce from '../../common/tinyMce.vue';
 
 export default {
-  name: "TextElement",
-  props: ["module-id", "column-id", "component-id", "component", "column"],
-  mixins: [MobileStylesMixin, ElementMixin],
+  name: 'TextElement',
   components: {
     ModuleContainer,
-    tinyMce
+    TinyMce,
   },
+  mixins: [MobileStylesMixin, ElementMixin],
   data() {
     return {
-      timer: null
+      timer: null,
     };
   },
-  computed: {
-    module() {
-      return this.$store.getters["campaign/modules"][this.moduleId];
-    },
-  },
-    
+
   methods: {
     changeText(value) {
       if (this.timer) {
@@ -65,11 +60,11 @@ export default {
       }
       this.timer = setTimeout(() => {
         this.$store.dispatch('campaign/updateText', {
-          moduleId:this.moduleId,
-          columnId:this.columnId,
-          componentId:this.componentId,
-          link: "data",
-          property: "text",
+          moduleId: this.moduleId,
+          columnId: this.columnId,
+          componentId: this.componentId,
+          link: 'data',
+          property: 'text',
           sync: false,
           value,
         });
