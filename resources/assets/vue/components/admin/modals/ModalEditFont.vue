@@ -126,14 +126,15 @@
           });
       },
       saveFontFamily() {
-        let fontFamilyData = {'name': this.fontFamilyName,'fonts': this.fileList};
+        const fontFamilyData = {'name': this.fontFamilyName,'fonts': this.fileList};
+        const fontFamilyList = _.cloneDeep(this.fontFamilyList)
         if(this.currentFont !== undefined) {
-            this.fontFamilyList[this.currentFont] = fontFamilyData;
+          fontFamilyList[this.currentFont] = fontFamilyData;
         } else {
-            this.fontFamilyList.push(fontFamilyData);
+          fontFamilyList.push(fontFamilyData);
         }
-        this.$store.commit("setting/setCustomFontsList", this.fontFamilyList);
-        this.saveSetting('custom_fonts',this.fontFamilyList);
+        this.$store.commit("setting/setCustomFontsList", fontFamilyList);
+        this.saveSetting('custom_fonts', fontFamilyList);
         this.close();
       }
     },
