@@ -96,7 +96,7 @@ export default {
       return undefined;
     },
     addClassToElement({ elementId, value }) {
-      let classes = this.getElement(elementId).container.classes;
+      let classes = this.getElement(elementId).container.attribute.classes;
       const classesArr = classes ? classes.split(' ') : [];
       const index = classesArr.indexOf(value);
       if (index === -1) {
