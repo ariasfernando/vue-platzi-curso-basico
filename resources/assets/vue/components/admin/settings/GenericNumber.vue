@@ -7,6 +7,7 @@
         :controls="true"
         :class="isPercentage || isPixel ? 'width-unit' : 'without-unit'"
         size="mini"
+        controls-position="right"
         :min="minValue"
         :max="maxCaluculate" />
       <el-button
@@ -88,23 +89,22 @@ export default {
 }
 .el-input-number /deep/ .el-input__inner {
   padding: 0;
-  border-radius: 2px 2px 2px 2px;
+  border-radius: 2px 0px 0px 2px;
 }
 .el-input-number /deep/ {
   .el-input-number__decrease,
   .el-input-number__increase {
     right: 0;
+    border: 1px solid #dcdfe6;
     border-left: 1px solid #dcdfe6;
   }
   .el-input-number__decrease {
-    top: 1px;
-    left:0;
+    bottom: 0;
     margin: 0;
     border-radius: 0 0 2px 0;
   }
   .el-input-number__increase {
-    top: 1px;
-    right:1px;
+    top: 0;
     margin: 0;
     border-radius: 0 2px 0 0;
   }
@@ -149,8 +149,9 @@ export default {
   }
 }
 .el-input-number--mini.width-unit {
-  width: 91px;
-  margin-right: 29px;
+  width: 95px;
+  margin-right: 25px;
+  padding-right: 26px;
   float: right;
 }
 .half-style-setting-padding {
@@ -166,7 +167,8 @@ export default {
   padding-left: 0;
 }
 .without-unit {
-  width: 105px;
+  width: 127px;
+  padding-right: 28px;
 }
 .is-setting-half .el-input-number--mini.width-unit {
   float: left;
