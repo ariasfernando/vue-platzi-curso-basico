@@ -123,3 +123,9 @@ export default {
   },
 };
 </script>
+
+<style lang="less">
+.stx-position-relative {
+  position: relative;
+}
+</style>
