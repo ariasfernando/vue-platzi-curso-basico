@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" v-if="modalEditFont">
+  <transition v-if="modalEditFont" name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper modal-font">
         <div class="modal-container">
@@ -16,19 +16,18 @@
                 <label for="name">Name</label>
                 <p class="control">
                   <el-input
-                      name="fontFamilyName"
-                      v-model="fontFamilyName"
-                      v-validate="'required'"
-                      placeholder="Enter name here."
-                      :class="{'is-danger': errors.has('name') }"
-                  ></el-input>
+                    v-model="fontFamilyName"
+                    v-validate="'required'"
+                    name="fontFamilyName"
+                    placeholder="Enter name here."
+                    :class="{'is-danger': errors.has('name') }" />
                   <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
                 </p>
               </div>
 
               <el-upload
-                class="upload-demo"
                 ref="upload"
+                class="upload-demo"
                 :action="uploadEndpoint"
                 :headers="headerCSRF"
                 :before-remove="beforeRemove"
@@ -44,7 +43,8 @@
           <div class="modal-footer">
             <slot name="footer">
               <div class="modal-footer">
-                <a target="_blank" type="button" class="btn beta-btn-primary pull-right" @click="saveFontFamily">Save</a>
+                <a target="_blank" type="button" class="btn beta-btn-primary pull-right"
+                   @click="saveFontFamily">Save</a>
               </div>
             </slot>
           </div>
@@ -55,39 +55,36 @@
 </template>
 
 <script>
-  import BootstrapVue from 'bootstrap-vue';
-  import settingService from '../../../services/setting'
+  import settingService from '../../../services/setting';
 
   export default {
-    components: {
-      BootstrapVue,
-    },
-    computed: {
-      modalEditFont () {
-        return this.$store.getters["setting/modalEditFont"];
-      },
-      fontFamilyList () {
-        return this.$store.getters["setting/customFontsList"];
-      },
-      headerCSRF () {
-        return  {'X-CSRF-token': Application.globals.csrfToken}
-      },
-      uploadEndpoint(){
-        return this.$_app.config.baseUrl + "/admin/setting/upload-font";
-      },
-      currentFont(){
-        return this.$store.getters["setting/currentFont"];
-      },
-    },
-    data () {
+
+    data() {
       return {
         fontFamilyName: '',
         fileList: [],
-      }
+      };
+    },
+    computed: {
+      modalEditFont() {
+        return this.$store.getters['setting/modalEditFont'];
+      },
+      fontFamilyList() {
+        return this.$store.getters['setting/customFontsList'];
+      },
+      headerCSRF() {
+        return { 'X-CSRF-token': Application.globals.csrfToken };
+      },
+      uploadEndpoint() {
+        return this.$_app.config.baseUrl + '/admin/setting/upload-font';
+      },
+      currentFont() {
+        return this.$store.getters['setting/currentFont'];
+      },
     },
     watch: {
       currentFont(val) {
-        if(val !== undefined) {
+        if (val !== undefined) {
           this.fontFamilyName = this.fontFamilyList[val].name;
           this.fileList = this.fontFamilyList[val].fonts;
         } else {
@@ -95,6 +92,12 @@
           this.fileList = [];
         }
       },
+    },
+    created() {
+      if (this.currentFont !== undefined) {
+        this.fontFamilyName = this.fontFamilyList[this.currentFont].name;
+        this.fileList = this.fontFamilyList[this.currentFont].fonts;
+      }
     },
     methods: {
       handleSuccess(r, f, fl) {
@@ -105,19 +108,19 @@
         this.fileList = fl;
       },
       beforeRemove(f, fl) {
-        return this.$confirm(`Are you sure?`);
+        return this.$confirm('Are you sure?');
       },
-      close () {
-        this.$store.commit("setting/toggleModal", 'modalEditFont');
+      close() {
+        this.$store.commit('setting/toggleModal', 'modalEditFont');
       },
-      saveSetting (key, value) {
+      saveSetting(key, value) {
         this.loading = true;
-        let settingJson = {
-          key: key,
-          value:value
-        }
+        const settingJson = {
+          key,
+          value,
+        };
         settingService.saveSetting(settingJson)
-          .then((response) => {
+          .then(() => {
             this.ready = true;
             this.loading = false;
           })
@@ -126,24 +129,18 @@
           });
       },
       saveFontFamily() {
-        const fontFamilyData = {'name': this.fontFamilyName,'fonts': this.fileList};
+        const fontFamilyData = { name: this.fontFamilyName, fonts: this.fileList };
         const fontFamilyList = _.cloneDeep(this.fontFamilyList)
-        if(this.currentFont !== undefined) {
+        if (this.currentFont !== undefined) {
           fontFamilyList[this.currentFont] = fontFamilyData;
         } else {
           fontFamilyList.push(fontFamilyData);
         }
-        this.$store.commit("setting/setCustomFontsList", fontFamilyList);
+        this.$store.commit('setting/setCustomFontsList', fontFamilyList);
         this.saveSetting('custom_fonts', fontFamilyList);
         this.close();
-      }
+      },
     },
-    created () {
-      if(this.currentFont !== undefined){
-        this.fontFamilyName = this.fontFamilyList[this.currentFont].name;
-        this.fileList = this.fontFamilyList[this.currentFont].fonts;
-      }
-    }
   };
 </script>
 
