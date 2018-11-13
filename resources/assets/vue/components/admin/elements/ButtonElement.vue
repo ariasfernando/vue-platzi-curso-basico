@@ -121,22 +121,5 @@ export default {
       );
     },
   },
-  methods: {
-    changeText(value) {
-      if (this.timer) {
-        clearTimeout(this.timer);
-      }
-      this.timer = setTimeout(() => {
-        this.$store.dispatch('module/updateText', {
-          columnId: this.columnId,
-          componentId: this.componentId,
-          link: 'data',
-          property: 'text',
-          sync: false,
-          value,
-        });
-      }, 100);
-    },
-  },
 };
 </script>
