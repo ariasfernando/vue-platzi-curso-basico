@@ -7,6 +7,11 @@ export default {
     'is-active',
     'column',
   ],
+  data() {
+    return {
+      timer: null,
+    };
+  },
   computed: {
     currentComponent() {
       return this.$store.getters['module/currentComponent'];

@@ -64,19 +64,19 @@
 
 <script>
 
-import TinyMce from '../../common/tinyMce.vue';
 import ComponentToolbar from './ComponentToolbar.vue';
-import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
+import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ModuleContainer from '../../common/containers/ModuleContainer.vue';
 import textOptions from '../settingsDefault/TextOptions';
+import TinyMce from '../../common/tinyMce.vue';
 
 export default {
   name: 'ButtonElement',
   components: {
-    TinyMce,
     ComponentToolbar,
     ModuleContainer,
+    TinyMce,
   },
   mixins: [MobileStylesMixin, ElementMixin],
   computed: {

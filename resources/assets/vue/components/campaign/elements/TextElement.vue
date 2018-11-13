@@ -36,9 +36,9 @@
 </template>
 
 <script>
+import ElementMixin from '../../common/mixins/ElementMixin';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ModuleContainer from '../../common/containers/ModuleContainer.vue';
-import ElementMixin from '../../common/mixins/ElementMixin';
 import TinyMce from '../../common/tinyMce.vue';
 
 export default {
@@ -48,10 +48,5 @@ export default {
     TinyMce,
   },
   mixins: [MobileStylesMixin, ElementMixin],
-  data() {
-    return {
-      timer: null,
-    };
-  },
 };
 </script>
