@@ -40,13 +40,13 @@
                     :valign="component.button.attribute.valign || ''"
                     >
                     <tiny-mce
-                      :fontStyles="fontStyles(component.button)"
-                      :module="module"
-                      :component="component"
-                      :columnId="columnId"
-                      :componentId="componentId"
-                      @changeText="changeText"
-                    ></tiny-mce>
+                      :editor-id="`idInstance-${module.idInstance}-moduleId-${component.id}`"
+                      :font-styles="fontStyles(component.button)"
+                      :text="component.data.text"
+                      :text-dirty="component.data.textDirty"
+                      :type="component.type"
+                      :config="component.plugins.textOptions"
+                      @changeText="changeText" />
                   </td>
                   <td
                     v-if="component.caret.attribute.url"
@@ -77,7 +77,7 @@
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ModuleContainer from '../../common/containers/ModuleContainer';
   import ButtonBorderRadiusComment from '../../common/ButtonBorderRadiusComment.vue';
-  import tinyMce from '../../common/tinyMce';
+  import TinyMce from '../../common/tinyMce';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
   import _ from 'lodash';
 
@@ -86,7 +86,7 @@
     mixins: [MobileStylesMixin, ElementMixin],
     components: {
       ModuleContainer,
-      tinyMce,
+      TinyMce,
       ButtonBorderRadiusComment,
     },
     data() {
@@ -158,20 +158,3 @@
     },
   };
 </script>
-<style lang="less">
-  .st-unlink {
-    cursor: default;
-  }
-  .mce-menu-item-preview {
-    .mce-text {
-      font-size: 14px !important;
-    }
-  }
-  // hidde the sub menu of Numbered list and Bullet list
-  div[aria-label="Numbered list"],
-  div[aria-label="Bullet list"]{
-    button.mce-open{
-      display: none;
-    }
-  }
-</style>

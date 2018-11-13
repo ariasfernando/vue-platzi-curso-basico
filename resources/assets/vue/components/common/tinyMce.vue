@@ -1,44 +1,34 @@
 <template>
-  <div class="stx-wrapper" style="font-size:0; width: 100%;"> <!-- font-size:0 It is a hack to not render a height of 1px in chrome -->
-    <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
-		<div
-      class="stx-edit-text stx-wrapper"
-      style="width: 100%; display: inline-block !important;"
-      :style="fontStyles"
-      v-html="content"
-      :id="editorId"
-      @keyup="changeContent"
-      @tiny-change="changeContent"
-      @tiny-style-reset="setStyles"
-      @input="changeContent"
-		></div>
-	</div>
+  <div
+    :id="editorId"
+    class="stx-edit-text stx-wrapper"
+    style="width: 100%; display: inline-block !important;"
+    :style="fontStyles"
+    @keyup="changeContent"
+    @tiny-change="changeContent"
+    @tiny-style-reset="setStyles"
+    @input="changeContent"
+    v-html="content" />
 </template>
 <script>
-import mixinTiny from '../campaign/mixins/TinyMixin.js';
+import mixinTiny from './mixins/TinyMixin.js';
+
 export default {
-  props: ['module-id', 'module', 'component', 'columnId', 'componentId', 'config', 'fontStyles'],
   mixins: [mixinTiny],
   data() {
     return {
-      content: this.component.data.text,
-      timer: null
+      content: this.text,
+      timer: null,
     };
   },
-  computed: {
-    editorId() {
-      return [
-        'editor',
-        this.module.idInstance,
-        this.columnId,
-        this.componentId
-      ].join('-');
-    },
-    libraryConfig() {
-      return this.$store.state.campaign.campaign.library_config;
-    },
+  watch: {
     textDirty() {
-      return this.component.data.textDirty;
+      this.$nextTick(() => {
+        this.content = this.text;
+        this.$nextTick(() => {
+          this.initTinyMCE();
+        });
+      });
     },
   },
   methods: {
@@ -46,26 +36,9 @@ export default {
       this.$emit('changeText', e.target.innerHTML);
     },
   },
-  watch: {
-    textDirty() {
-      this.$nextTick(() => {
-        this.content = this.component.data.text;
-        this.$nextTick(() => {
-          this.initTinyMCE();
-        });
-      });
-    },
-  },
 };
-
 </script>
-<style lang="less">
-.stx-toolbar {
-  box-shadow: 0px 3px 4px rgba(100, 100, 100, .4);
-  .mce-toolbar-grp {
-    padding: 0px;
-  }
-}
+<style lang="scss">
 .mce-menu-item-preview {
   .mce-text {
     font-size: 14px !important;
@@ -82,7 +55,62 @@ div[aria-label='Bullet list'] {
 [data-type='button-element'] .stx-edit-text {
   min-width: 10px;
 }
+[data-type='text-element'] .stx-edit-text {
+  min-width: 10px;
+}
 .mce-grid td.mce-grid-cell div {
   line-height: 10px;
+}
+.mce-container {
+  box-shadow: 0px 3px 4px rgba(100, 100, 100, 0.4);
+  background-color: transparent;
+  .mce-toolbar-grp {
+    padding: 0px;
+  }
+  .mce-btn-group {
+    .mce-btn {
+      margin-left: 0px !important;
+    }
+  }
+  .mce-btn {
+    &.mce-active {
+      background-color: #78dcd6 !important;
+      border-color: #69dac8 !important;
+
+      &:hover {
+        background-color: #78dcd6 !important;
+        border-color: #69dac8 !important;
+      }
+    }
+    &[aria-label='Font Sizes'],
+    &[aria-label='Font Family'],
+    &[aria-label='Font Format'],
+    &[aria-label='Format'] {
+      width: 45px;
+      height: 28px;
+      button {
+        padding: 0 20px 0 8px;
+
+        i.stx-toolbar-icon {
+          width: 20px;
+          height: 20px;
+          margin: 0;
+          padding: 7px 0 0 0;
+          border-right: 1px solid #bfbfbf;
+          font-family: 'Glyphicons Halflings' !important;
+        }
+      }
+    }
+    &[aria-label='Font Format'] {
+      button {
+        position: relative;
+        i.mce-caret {
+          position: absolute;
+          right: 8px;
+          top: 5px;
+        }
+      }
+    }
+  }
 }
 </style>

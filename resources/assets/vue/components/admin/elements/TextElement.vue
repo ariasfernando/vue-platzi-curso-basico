@@ -21,11 +21,13 @@
             :bgcolor="component.text.attribute.bgcolor"
             :style="[fontStyles(component.text), elementBorderAndPadding(component.text), {width:'100%'}]">
             <tiny-mce
-              :id="editorId"
-              :style="fontStyles(component.text)"
-              :value="component.data.text"
-              data-key="text"
-              :settings="component.plugins.textOptions.config.settings" />
+              :editor-id="`moduleId-${component.id}`"
+              :font-styles="fontStyles(component.text)"
+              :text="component.data.text"
+              :type="component.type"
+              :text-dirty="component.data.textDirty"
+              :config="textOptions"
+              @changeText="changeText" />
             <component-toolbar :component-id="componentId" :column-id="columnId" />
           </td>
         </tr>
@@ -35,11 +37,12 @@
 </template>
 
 <script>
-import TinyMce from './TinyMce.vue';
+import TinyMce from '../../common/tinyMce.vue';
 import ComponentToolbar from './ComponentToolbar.vue';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
 import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import textOptions from '../settingsDefault/TextOptions';
 
 export default {
   name: 'TextElement',
@@ -55,18 +58,27 @@ export default {
       dirty: false,
     };
   },
+  computed: {
+    textOptions() {
+      return textOptions();
+    },
+  },
+  methods: {
+    changeText(value) {
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(() => {
+        this.$store.dispatch('module/updateText', {
+          columnId: this.columnId,
+          componentId: this.componentId,
+          link: 'data',
+          property: 'text',
+          sync: false,
+          value,
+        });
+      }, 100);
+    },
+  },
 };
 </script>
-
-<style lang="less">
-.stx-position-relative {
-  position: relative;
-}
-
-.stx-edit-text {
-  p {
-    margin: 0;
-    padding: 0;
-  }
-}
-</style>

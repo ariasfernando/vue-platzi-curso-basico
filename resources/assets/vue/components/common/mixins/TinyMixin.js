@@ -1,8 +1,7 @@
-import _ from 'lodash';
 import Adapter from './tinymce/Adapter';
 
 export default {
-  props: ['name', 'plugin'],
+  props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text'],
   mixins: [
     Adapter,
   ],
@@ -13,24 +12,26 @@ export default {
   },
   computed: {
     textOptions() {
-      return this.component.plugins.textOptions;
+      return this.config;
     },
     $textElement() {
       return $('#' + this.editorId);
     },
+    libraryConfig() {
+      return this.$store.state.campaign.campaign.library_config;
+    },
   },
   methods: {
     setStyles() {
-      const nameComponent = this.component.type;
-      const libraryLinkColor = this.libraryConfig.linkColor;
+      const libraryLinkColor = this.libraryConfig ? this.libraryConfig.linkColor : undefined;
       const editor = tinymce.get(this.editorId);
       const p_fixed_style = editor.settings.p_fixed_style;
       const persist_styles = editor.settings.persist_styles;
       const button_inline_color = editor.settings.button_inline_color;
 
-      if (nameComponent === 'button-element' && button_inline_color) {
+      if (this.type === 'button-element' && button_inline_color) {
         this.changeStyles('p', {
-          color: this.component.button.style.color || libraryLinkColor
+          color: this.fontStyles.color || libraryLinkColor
         });
       }
       if (p_fixed_style && Application.utils.isJsonString(p_fixed_style)) {
@@ -381,7 +382,9 @@ export default {
 
       let toolbar = [];
 
-      if (!_.isEmpty(options)) {
+      if (this.textOptions.config.toolbarString !== undefined){
+        toolbar = this.textOptions.config.toolbarString;
+      } else if (!_.isEmpty(options)) {
         _.each(options, (option) => {
           toolbar.push(option.key);
         });
@@ -389,18 +392,15 @@ export default {
       } else {
         toolbar = ' ';
       }
-      const editorId = ['editor', this.module.idInstance, this.columnId, this.componentId].join('-');
-
       // Destroy previous instance
-      const previousInstance = tinymce.get(editorId);
+      const previousInstance = tinymce.get(this.editorId);
       if (previousInstance) {
         previousInstance.destroy();
       }
 
 
       const settings = {
-        selector: `#${editorId}`,
-        fixed_toolbar_container: `.toolbar-${editorId}`,
+        selector: `#${this.editorId}`,
         document_base_url: `${Application.globals.cdnHost  }/js/tinymce/`,
         skin: 'lightgray',
         skin_url: `${Application.globals.cdnHost  }/css/tinymce/lightgray`,
@@ -612,7 +612,7 @@ export default {
       this.validateTiny();
     },
     destroyed() {
-      tinymce.get(editorId).destroy();
+      tinymce.get(this.editorId).destroy();
     },
   },
 };

@@ -31,10 +31,13 @@
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
                   <tiny-mce
-                    :id="editorId"
-                    :style="fontStyles(component.button)"
-                    :value="component.data.text" data-key="text"
-                    :settings="component.plugins.textOptions.config.settings" />
+                    :editor-id="`moduleId-${component.id}`"
+                    :font-styles="fontStyles(component.button)"
+                    :text="component.data.text"
+                    :type="component.type"
+                    :text-dirty="component.data.textDirty"
+                    :config="textOptions"
+                    @changeText="changeText" />
                 </td>
                 <td
                   v-if="component.caret.attribute.url"
@@ -60,26 +63,22 @@
 </template>
 
 <script>
-import _ from 'lodash';
-import TinyMCE from './TinyMce.vue';
+
+import TinyMce from '../../common/tinyMce.vue';
 import ComponentToolbar from './ComponentToolbar.vue';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
 import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import textOptions from '../settingsDefault/TextOptions';
 
 export default {
   name: 'ButtonElement',
   components: {
-    'tiny-mce': TinyMCE,
+    TinyMce,
     ComponentToolbar,
     ModuleContainer,
   },
   mixins: [MobileStylesMixin, ElementMixin],
-  data() {
-    return {
-      editorId: ['editor', this.columnId, this.componentId].join('-'),
-    };
-  },
   computed: {
     buttonContainerWidth() {
       const { behaviour } = this.component;
@@ -87,6 +86,9 @@ export default {
         return '100%';
       }
       return this.width;
+    },
+    textOptions() {
+      return textOptions();
     },
     width() {
       return this.component.button.styleOption.autoWidth
@@ -119,23 +121,22 @@ export default {
       );
     },
   },
+  methods: {
+    changeText(value) {
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(() => {
+        this.$store.dispatch('module/updateText', {
+          columnId: this.columnId,
+          componentId: this.componentId,
+          link: 'data',
+          property: 'text',
+          sync: false,
+          value,
+        });
+      }, 100);
+    },
+  },
 };
 </script>
-
-<style lang="less">
-@icon-option: #69dac8;
-
-.stx-position-relative {
-  position: relative;
-}
-
-.st-cta {
-  td {
-    vertical-align: middle;
-    a {
-      text-decoration: none;
-      display: block;
-    }
-  }
-}
-</style>

@@ -324,6 +324,14 @@ const actions = {
 
     return deferred.promise;
   },
+  updateText(context, payload) {
+    context.commit('saveComponentProperty', payload);
+    if (payload.sync !== false) {
+      payload.property = 'textDirty';
+      payload.value = Math.floor(100000 + (Math.random() * 900000));
+      context.commit('saveComponentProperty', payload);
+    }
+  },
   getLibraries(context, data) {
     return imageService.getLibraries().then((response) => {
       response.data.push('');
