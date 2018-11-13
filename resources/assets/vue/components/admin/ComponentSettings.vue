@@ -7,7 +7,7 @@
       icon="glyphicon-pencil" />
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
-        <group-container v-for="(settingGroup, groupKey) in settings" :label="settingGroup.showLabel ? settingGroup.groupLabel : null" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-'+component.type+'_')" :label="settingGroup.showLabel ? settingGroup.groupLabel : null" :key="groupKey">
           <component
             :is="'input-' + setting.type"
             v-for="(setting,i) in settingGroup.settings"
@@ -50,7 +50,7 @@
         <component
           :is="'studio-' + plugin.name"
           v-for="(plugin, key) in component.plugins"
-          v-if="plugin.name !== 'studio-mobile-styles' && $can('std-'+component.type+'-plugin-'+plugin.name)"
+          v-if="plugin.name !== 'studio-mobile-styles' && $can('std-'+component.type+'-plugin-'+plugin.name) && $_app.modulePlugins[key].hasStudioSettings"
           :key="key"
           :element="component"
           :class="'plugin-' + plugin.name"
@@ -67,6 +67,7 @@ import * as elementSettings from './settings';
 import GroupContainer from '../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
 import settingsDefault from './settingsDefault';
+import AclMixing from './mixins/AclMixin';
 
 export default {
   components: {
@@ -91,6 +92,7 @@ export default {
     'input-generic-code': elementSettings.GenericCode,
   },
   props: ['currentComponent'],
+  mixins: [AclMixing],
   computed: {
     settings() {
       return settingsDefault[this.component.type]().componentSettings;

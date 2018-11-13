@@ -153,10 +153,16 @@ const mutations = {
     }
     _.merge(pluginData, payload.config);
   },
-  setPluginElementConfig(state, { componentId, plugin, path, value }) {
-    const component = getElement(state.module, componentId);
+
+  setPluginElementConfig(state, { componentId, type, plugin, path, value }) {
+    let component = {};
+    if (componentId === undefined) {
+      component = state.module;
+    } else {
+      component = getElement(state.module, componentId);
+    }
     const pluginData = component.plugins[plugin];
-    const pathArray = _.concat(['config'], path ? path.split('.') : []);
+    const pathArray = _.concat([type || 'config'], path ? path.split('.') : []);
     const pluginOption = searchOrCreateLevel(pluginData, pathArray);
     Vue.set(pluginOption.data, pluginOption.property, value);
   },
