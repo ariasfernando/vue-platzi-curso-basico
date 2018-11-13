@@ -17,7 +17,7 @@
                     <label for="htmlMinify">Minify Code</label>
                     <toggle-button :value="minified.normal_html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange('normal_html')" />
                   </div>
-                  <textarea ref="normal_html" readonly>{{ minified.normal_html.output }}</textarea>
+                  <textarea ref="normal_html" v-model="minified.normal_html.output" readonly />
                 </b-tab>
                 <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">
                   <textarea ref="plain_text" v-html="plainText" readonly />
