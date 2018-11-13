@@ -311,8 +311,6 @@
         // Show Loader
         this.$store.commit("global/setLoader", true);
 
-        this.$_app.utils.hackMediaQuery('.section-canvas-container', this.campaign.campaign_data.library_config.templateWidth);
-
         // Obtain current html
         var cleanHtml = campaignCleaner.clean('.section-canvas-container');
 
