@@ -5,7 +5,7 @@
       <div class="col-xs-12">
         <h2 class="pull-left">Module List</h2>
         <div class="btn btn-default btn-create pull-right">
-          <router-link to="/create"><i class="glyphicon glyphicon-plus-sign"></i> Create a new Module</router-link>
+          <router-link to="/create"><i class="glyphicon glyphicon-plus-sign" /> Create a new Module</router-link>
         </div>
       </div>
     </div>
@@ -14,44 +14,50 @@
       <div class="col-xs-12">
 
         <div class="table-responsive">
-          <table width="100%" border="0" cellpadding="0" cellspacing="0" id="admin-module"
-                 class="table table-bordered table-striped data-list">
+          <table id="admin-module" width="100%" border="0"
+                 cellpadding="0" cellspacing="0" class="table table-bordered table-striped data-list">
             <thead>
-            <tr>
-              <th class="sortable">
-                <a href="#" class="" id="name" data-order-field="name">
-                  Name
-                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
-                </a>
-              </th>
-              <th class="sortable">
-                <a href="#" class="" id="name" data-order-field="name">
-                  Type
-                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
-                </a>
-              </th>
-              <th class="sortable">
-                <a href="#" class="" id="status" data-order-field="status">
-                  Status
-                  <i class="glyphicon glyphicon-menu-down pull-right"></i>
-                </a>
-              </th>
-              <th width="150" class="bold">Actions</th>
-            </tr>
+              <tr>
+                <th class="sortable">
+                  <a id="name" href="#" class="" data-order-field="name">
+                    Name
+                    <i class="glyphicon glyphicon-menu-down pull-right" />
+                  </a>
+                </th>
+                <th class="sortable">
+                  <a id="name" href="#" class="" data-order-field="name">
+                    Type
+                    <i class="glyphicon glyphicon-menu-down pull-right" />
+                  </a>
+                </th>
+                <th class="sortable">
+                  <a id="status" href="#" class="" data-order-field="status">
+                    Status
+                    <i class="glyphicon glyphicon-menu-down pull-right" />
+                  </a>
+                </th>
+                <th width="150" class="bold">Actions</th>
+              </tr>
             </thead>
             <tbody v-if="ready">
-            <tr v-for="(module, id) in modules" :data-module="id" :key="id">
-              <td :title="module.title">{{ module.title }}</td>
-              <td :title="module.type">{{ module.type }}</td>
-              <td :title="module.status">{{ module.status }}</td>
-              <td class="text-right actions icons">
-                <router-link v-if="module.type === 'studio'" :to="'/clone/' + module.moduleId"><i class="glyphicon glyphicon-duplicate"></i></router-link>
-                <router-link v-if="module.type === 'studio'" :to="'/edit/' + module.moduleId"><i class="glyphicon glyphicon-pencil"></i></router-link>
+              <tr v-for="(module, id) in modules" :key="id" :data-module="id">
+                <td :title="module.title">{{ module.title }}</td>
+                <td :title="module.type">{{ module.type }}</td>
+                <td :title="module.status">{{ module.status }}</td>
+                <td class="text-right actions icons">
+                  <router-link v-if="module.type === 'studio'" :to="'/clone/' + module.moduleId">
+                    <i class="glyphicon glyphicon-duplicate" />
+                  </router-link>
+                  <router-link v-if="module.type === 'studio'" :to="'/edit/' + module.moduleId">
+                    <i class="glyphicon glyphicon-pencil" />
+                  </router-link>
 
-                <a v-if="module.type === 'studio'" href="#" class="delete" title="Delete" @click="deleteModule(module)"><i
-                  class="glyphicon glyphicon-trash"></i></a>
-              </td>
-            </tr>
+                  <a v-if="module.type === 'studio'" href="#" class="delete"
+                     title="Delete" @click="deleteModule(module)">
+                    <i class="glyphicon glyphicon-trash" />
+                  </a>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -62,18 +68,24 @@
 </template>
 
 <script>
-  import moduleService from '../../services/module'
+  import moduleService from '../../services/module';
 
   export default {
     name: 'Modules',
-    data: function () {
+    data() {
       return {
         modules: {},
-        ready: false
-      }
+        ready: false,
+      };
+    },
+    created() {
+      this.loadModules();
+    },
+    mounted() {
+      this.toggleSidebar();
     },
     methods: {
-      loadModules () {
+      loadModules() {
         moduleService.getAllModules()
           .then((response) => {
             this.modules = response;
@@ -83,17 +95,17 @@
             this.$root.$toast(error, {className: 'et-error'});
           });
       },
-      deleteModule (module) {
+      deleteModule(module) {
         const moduleIdx = this.modules.indexOf(module);
 
-        if (confirm("Are you sure?")) {
+        if (confirm('Are you sure?')) {
           moduleService.deleteModule(module.moduleId)
-            .then((response) => {
+            .then(() => {
               this.modules.splice(moduleIdx, 1);
-              this.$root.$toast("Module was deleted", {className: 'et-success'});
+              this.$root.$toast('Module was deleted', { className: 'et-success' });
             })
             .catch((error) => {
-              this.$root.$toast(error.message, {className: 'et-error'});
+              this.$root.$toast(error.message, { className: 'et-error' });
             });
         }
       },
@@ -105,12 +117,6 @@
         container.style.paddingLeft = '225px';
       },
     },
-    created () {
-      this.loadModules();
-    },
-    mounted() {
-      this.toggleSidebar();
-    }
   };
 </script>
 
