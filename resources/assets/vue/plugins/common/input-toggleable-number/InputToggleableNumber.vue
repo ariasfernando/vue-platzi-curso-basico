@@ -2,7 +2,7 @@
   <div>
     <el-button
       v-if="disabled"
-      class="custom-col"
+      class="custom-col toggleable-number-disabled"
       size="mini"
       disabled>
       {{ value }}
@@ -107,6 +107,13 @@ export default {
 
     &:hover{
       color: #78dcd6;
+    }
+  }
+
+  .toggleable-number-disabled /deep/ {
+    span {
+      display: block;
+      overflow: hidden;
     }
   }
 

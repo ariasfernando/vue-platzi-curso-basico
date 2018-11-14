@@ -97,7 +97,7 @@ function configsView() {
       },
       lines_limit_advanced: {
         key: 'lines_limit',
-        title: 'Lines Limit Advanced',
+        title: 'Lines Limit',
         type: 'input-toggleable-text',
         falseText: 'Disabled',
         defaultValue: '2',
