@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label-item-container label="General Settings" icon="glyphicon-cog" v-b-toggle.general-settings-styles />
+    <label-item-container v-b-toggle.general-settings-styles label="General Settings" icon="glyphicon-cog" />
     <b-collapse id="general-settings-styles" visible accordion="general-settings">
       <b-card class="control">
         <input-generic-text
