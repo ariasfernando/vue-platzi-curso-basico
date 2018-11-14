@@ -29,7 +29,7 @@
 
           <settings-container label="Preheader Text" v-if="enablePreheader" title="The best practice is to limit preheaders to 50 characters." key="preheader-text">
             <template slot="setting-bottom">
-              <el-input size="mini" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
+              <el-input v-model="campaignPreheader" size="mini" placeholder="Preheader Text" maxlength="140" />
             </template>
           </settings-container>
 
@@ -107,7 +107,6 @@
         enableLocking: false,
         form: {
           campaignName: '',
-          campaignPreheader: '',
           campaignProcess: false,
           tags: []
         },
@@ -125,6 +124,9 @@
       }
     },
     computed: {
+      editedSettings() {
+        return this.$store.getters['campaign/editedSettings'];
+      },
       locked() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked;
       },
@@ -165,6 +167,17 @@
           this.saveCampaignName(value);
         },
       },
+      campaignPreheader: {
+        get() {
+          return this.editedSettings.campaignPreheader;
+        },
+        set(value) {
+          this.$store.commit('campaign/saveSetting', {
+            name: 'campaignPreheader',
+            value,
+          });
+        },
+      },
       templateBackgroundColor: {
         get() {
           return { hex: this.campaign.campaign_settings.templateBackgroundColor || this.templatePalette.default };
@@ -191,7 +204,7 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
-      this.form.campaignPreheader =  this.campaign.campaign_preheader || '';
+      this.campaignPreheader = this.campaign.campaign_preheader;
 
       this.loadConfig();
     },
@@ -233,22 +246,6 @@
             this.$store.commit('campaign/clearErrorsByScope', '');
           }
 
-        });
-      },
-      saveSettings(e) {
-        let value = e.target.value;
-
-        if (e.target.type === 'checkbox') {
-          value = e.target.checked;
-        }
-
-        if(e.target.name in this.form){
-          this.form[e.target.name] = e.target.value;
-        }
-
-        this.$store.commit('campaign/saveSetting', {
-          name: e.target.name,
-          value
         });
       },
       loadConfig() {
