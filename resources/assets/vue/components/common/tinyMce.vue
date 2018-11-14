@@ -44,6 +44,9 @@ export default {
     font-size: 14px !important;
   }
 }
+div[aria-label='hack-for-selector']{
+  display: none;
+}
 
 // hidde the sub menu of Numbered list and Bullet list
 div[aria-label='Numbered list'],

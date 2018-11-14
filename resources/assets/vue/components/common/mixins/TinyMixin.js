@@ -382,7 +382,7 @@ export default {
 
       let toolbar = [];
 
-      if (this.textOptions.config.toolbarString !== undefined){
+      if (this.textOptions.config.toolbarString !== undefined) {
         toolbar = this.textOptions.config.toolbarString;
       } else if (!_.isEmpty(options)) {
         _.each(options, (option) => {
@@ -403,8 +403,8 @@ export default {
         selector: `#${this.editorId}`,
         document_base_url: `${Application.globals.cdnHost  }/js/tinymce/`,
         skin: 'lightgray',
-        skin_url: `${Application.globals.cdnHost  }/css/tinymce/lightgray`,
-        toolbar,
+        skin_url: `${Application.globals.cdnHost}/css/tinymce/lightgray`,
+        toolbar: `${toolbar} hack-for-selector`,
         plugins: 'paste advlist autolink lists stlinkextended textcolor sttextcolorextended  stformatsmenu',
         inline: true,
         menubar: false,
@@ -431,51 +431,47 @@ export default {
         advlist_bullet_styles: 'default',
         advlist_number_styles: 'default',
 
-        init_instance_callback: (editor) => {
+        init_instance_callback: () => {
           _this.setStyles();
         },
         setup(editor) {
+          editor.addButton('hack-for-selector', {
+            icon: `hack-for-selector ${_this.editorId}`,
+            tooltip: 'hack-for-selector',
+          });
           editor.paste_block_drop = true;
           editor.on('focus', (e) => {
             // Change icon tiny
             // TODO  implement DRY.
-            const $toolbox = $(editor.settings.fixed_toolbar_container);
+            setTimeout(() => {
+              const $toolbox = $(`.mce-i-hack-for-selector.${_this.editorId}`).parents('.mce-floatpanel');
 
-            if ($toolbox.length && !$toolbox.find('div[aria-label="Font Sizes"] .text-size').length) {
-              setTimeout(() => {
+              if ($toolbox.length && !$toolbox.find('div[aria-label="Font Sizes"] .text-size').length) {
                 $toolbox.find('div[aria-label="Font Sizes"] button:first').empty();
                 $toolbox.find('div[aria-label="Font Sizes"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
-              });
-            }
-            if ($toolbox.length && !$toolbox.find('div[aria-label="Font Family"] .text-size').length) {
-              setTimeout(() => {
+              }
+              if ($toolbox.length && !$toolbox.find('div[aria-label="Font Family"] .text-size').length) {
                 $toolbox.find('div[aria-label="Font Family"] button:first').empty();
                 $toolbox.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
-              });
-            }
-            if ($toolbox.length && !$toolbox.find('button:contains("Formats")').length) {
-              setTimeout(() => {
+              }
+              if ($toolbox.length && !$toolbox.find('button:contains("Formats")').length) {
                 const $button = $toolbox.find("button:contains('Formats')");
                 $button.parent('div').attr('aria-label', 'Font Format');
                 $button.empty();
                 $button.append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
-              });
-            }
-            if ($toolbox.length && !$toolbox.find("div[aria-label='Format']").length) {
-              setTimeout(() => {
+              }
+              if ($toolbox.length && !$toolbox.find("div[aria-label='Format']").length) {
                 $toolbox.find('div[aria-label="Format"] button:first').empty();
                 $toolbox.find('div[aria-label="Format"] button:first')
                   .append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-bold"></i>');
-              });
-            }
-            // set toolbar width
-            if ($toolbox.length) {
-              setTimeout(() => {
+              }
+              // set toolbar width
+              if ($toolbox.length) {
                 const toolboxWidth = $toolbox.find('.mce-btn-group').width();
                 $toolbox.find('.mce-container-body').width(toolboxWidth);
                 $toolbox.find('.mce-panel').width(toolboxWidth);
-              });
-            }
+              }
+            });
           });
 
           editor
