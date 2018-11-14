@@ -1,5 +1,16 @@
 /* eslint no-console:0 */
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
+import {
+  filter,
+  isEmpty,
+  cloneDeep,
+  isUndefined,
+  isArray,
+  extend,
+  isEqual,
+  each
+} from 'lodash';
+import _ from 'lodash';
 
 import {
   defer,
