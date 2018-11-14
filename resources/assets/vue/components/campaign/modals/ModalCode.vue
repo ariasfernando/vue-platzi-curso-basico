@@ -13,9 +13,9 @@
                 <b-tab :title="html.title">
                   <div class="html_minify_toggle pull-right">
                     <label for="htmlMinify">Minify Code</label>
-                    <toggle-button :value="html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange()"></toggle-button>
+                    <toggle-button :value="html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange()" />
                   </div>
-                  <textarea :ref="textareaType">{{ html.output }}</textarea>
+                  <textarea :ref="textareaType" v-model="html.output" readonly />
                 </b-tab>
               </b-tabs>
             </slot>
