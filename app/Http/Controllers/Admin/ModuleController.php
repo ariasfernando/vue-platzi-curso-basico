@@ -109,6 +109,7 @@ class ModuleController extends Controller
 
         $request->validate([
             'name' => ['required', 'max:255', $this->moduleUniqueValidator($request->input('moduleId'))],
+            'description' => ['max:255'],
             'structure' => 'required',
             'plugins' => 'required',
             'status' => ['required', Rule::in(['draft', 'publish'])],
@@ -116,17 +117,25 @@ class ModuleController extends Controller
 
         $params = [
             'name' => $request->input('name'),
+            'description' => $request->input('description'),
             'structure' => $request->input('structure'),
             'plugins' => $request->input('plugins'),
             'status' => $request->input('status', 'draft'),
             'type' => 'studio'
         ];
 
+        $user = new \stdClass();
+        $user->_id = new ObjectID(Auth::user()->id);
+        $user->email = Auth::user()->email;
+
+        //If the module has id we are editing it, if not, we are creating it
         if ($request->input("moduleId")) {
             $module = Module::findOrFail($request->input("moduleId"));
+            $module->updated_by = $user;
         } else {
             $module = new Module;
             $module->key = ModelKeyManager::getStandardKey($module, $request->input('name'));
+            $module->created_by = $user;
         }
 
         foreach ($params as $key => $value) {

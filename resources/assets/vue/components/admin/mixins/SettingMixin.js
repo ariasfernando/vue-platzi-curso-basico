@@ -18,6 +18,9 @@ export default {
     'showSetting',
     'sub-component',
     'type',
+    'setting-position',
+    'autosize',
+    'resize',
   ],
   mounted() {
     this.setDefaultValue();
