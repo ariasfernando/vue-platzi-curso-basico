@@ -2,7 +2,7 @@
 /* eslint no-shadow:0 */
 /* eslint no-console:0 */
 
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import {
   filter,
   isEmpty,
