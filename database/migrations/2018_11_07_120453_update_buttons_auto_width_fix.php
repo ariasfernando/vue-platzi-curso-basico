@@ -44,13 +44,22 @@ class UpdateButtonsAutoWidthFix extends Migration
                         foreach ($module['structure']['columns'] as $column_key => $column) {
                             if (isset($column['components'])) {
                                 foreach ($column['components'] as $component_key => $component) {
-                                    if (isset($component['type']) && ($component['type'] === 'button-element')) {
+                                    Logging::info('It will check '.$module['key']);
+                                    if (isset($component['type'])
+                                        && ($component['type'] === 'button-element')
+                                        && isset($component['button'])
+                                        && isset($component['button']['attribute'])
+                                        && isset($component['button']['styleOption'])
+                                        && isset($component['button']['style'])) {
                                         $width = $component['button']['attribute']['width'];
-                                        $minWidth = isset($component['button']['style']['minWidth']) ? $component['button']['style']['minWidth'] : "0px";
+                                        $minWidth = isset($component['button'])
+                                            && isset($component['button']['style']) 
+                                            && isset($component['button']['style']['minWidth'])
+                                            ? $component['button']['style']['minWidth'] : "0px";
                                         if ($minWidth !== "0px" || $width === 0 || $width === "0px") {
-                                                Logging::info('Setting styleOption autoWidth to true');
-                                                $component['button']['styleOption']['autoWidth'] = true;
-                                                $modules_data[$key]['structure']['columns'][$column_key]['components'][$component_key] = $component;
+                                            Logging::info('It will set '.$module['key'].' styleOption autoWidth to true');
+                                            $component['button']['styleOption']['autoWidth'] = true;
+                                            $modules_data[$key]['structure']['columns'][$column_key]['components'][$component_key] = $component;
                                         }
                                     }
                                 }
@@ -81,11 +90,17 @@ class UpdateButtonsAutoWidthFix extends Migration
                     foreach ($module_structure['columns'] as $column_key => $column) {
                         if (isset($column['components'])) {
                             foreach ($column['components'] as $component_key => $component) {
-                                if (isset($component['type']) && ($component['type'] === 'button-element')) {
+                                Logging::info('It will check '.$module['key']);
+                                if (isset($component['type'])
+                                    && ($component['type'] === 'button-element')
+                                    && isset($component['button'])
+                                    && isset($component['button']['attribute'])
+                                    && isset($component['button']['styleOption'])
+                                    && isset($component['button']['style'])) {
                                     $minWidth = isset($component['button']['style']['minWidth']) ? $component['button']['style']['minWidth'] : '0px';
                                     $width = $component['button']['attribute']['width'];
                                     if ($minWidth !== "0px" || $width === 0 || $width === "0px") {
-                                        Logging::info('Setting styleOption autoWidth to true');
+                                        Logging::info('It will set '.$module['key'].' styleOption autoWidth to true');
                                         $component['button']['styleOption']['autoWidth'] = true;
                                         $module_structure['columns'][$column_key]['components'][$component_key] = $component;
                                     }
