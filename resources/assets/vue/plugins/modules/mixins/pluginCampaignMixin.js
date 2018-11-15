@@ -32,6 +32,17 @@ export default {
       };
       this.$store.commit('campaign/saveElementProperty', payload);
     },
+    saveElementPluginData({ elementId, type, plugin, path, value }) {
+      const payload = {
+        moduleIdInstance: this.moduleIdInstance,
+        elementId,
+        plugin,
+        type,
+        path,
+        value,
+      };
+      this.$store.commit('campaign/saveElementPluginData', payload);
+    },
     getElement(elementId) {
       if (!this.isCustom) {
         let element = false;
@@ -85,7 +96,7 @@ export default {
       return undefined;
     },
     addClassToElement({ elementId, value }) {
-      let classes = this.getElement(elementId).container.classes;
+      let classes = this.getElement(elementId).container.attribute.classes;
       const classesArr = classes ? classes.split(' ') : [];
       const index = classesArr.indexOf(value);
       if (index === -1) {
