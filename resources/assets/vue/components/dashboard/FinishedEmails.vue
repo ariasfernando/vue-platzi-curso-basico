@@ -67,10 +67,25 @@
               ></campaign-tag>
             </td>
             <td class="actions icons" width="250">
+
+
               <p class="dash-code-option">
                 <a @click.prevent="code(campaign._id, 'normal_html')" href="#" class="html-code">NORMAL HTML</a><br>
                 <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Plaintext</a>
               </p>
+
+              <a
+                  href="#"
+                  class="archive-campaign"
+                  v-if="$can('access_archive')"
+                  @click.prevent="doArchive(campaign._id)"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  :data-tooltip="wasArchive(campaign.archive) ?  'Archive Email' : 'Unarchive Email'"
+                  v-html="isArchive(campaign)"
+                >
+                </a>
+
               <a href="#" v-on:click.prevent="preview(campaign._id)" data-tooltip="Preview" target="_blank">
                 <i class="glyphicon glyphicon-eye-open"></i>
               </a>

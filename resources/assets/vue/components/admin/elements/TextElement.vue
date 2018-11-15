@@ -32,7 +32,6 @@
   import ComponentToolbar from './ComponentToolbar.vue';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
-  import MontedElementMixin from '../mixins/MontedElementMixin.js';
   import ModuleContainer from '../../common/containers/ModuleContainer';
   import _ from 'lodash';
 
@@ -43,7 +42,7 @@
       ComponentToolbar,
       ModuleContainer
     },
-    mixins: [ MobileStylesMixin, ElementMixin, MontedElementMixin ],
+    mixins: [ MobileStylesMixin, ElementMixin],
     data(){
       return {
         editorId: ['editor', this.columnId, this.componentId].join('-'),

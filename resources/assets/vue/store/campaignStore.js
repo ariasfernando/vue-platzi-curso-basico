@@ -97,6 +97,9 @@ function campaignStore() {
       fieldErrors(state) {
         return state.fieldErrors;
       },
+      editedSettings(state) {
+        return state.editedSettings;
+      },
       currentComponent(state) {
         return state.currentComponent;
       },
@@ -199,8 +202,8 @@ function campaignStore() {
           throw new Error('moduleId is undefined');
         }
       },
-      saveSetting(state, setting) {
-        state.editedSettings[setting.name] = setting.value;
+      saveSetting(state, { name, value }) {
+        Vue.set(state.editedSettings, name, value);
         state.dirty = true;
       },
       saveCampaignData(state, payload) {

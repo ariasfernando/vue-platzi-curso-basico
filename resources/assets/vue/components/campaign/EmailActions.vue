@@ -176,12 +176,6 @@
         });
       },
       _save(bodyHtml = undefined) {
-        // Add hack for devices that do not detect media queries on save action.
-        // So we need to have the fix if we want to send a preview before complete a campaign.
-        this.$_app.utils.hackMediaQuery(
-          '.section-canvas-container',
-          this.campaign.campaign_data.library_config.templateWidth);
-
         const promise = this.$store.dispatch("campaign/saveCampaign", {
           campaign: this.campaign,
           bodyHtml
@@ -310,8 +304,6 @@
 
         // Show Loader
         this.$store.commit("global/setLoader", true);
-
-        this.$_app.utils.hackMediaQuery('.section-canvas-container', this.campaign.campaign_data.library_config.templateWidth);
 
         // Obtain current html
         var cleanHtml = campaignCleaner.clean('.section-canvas-container');
