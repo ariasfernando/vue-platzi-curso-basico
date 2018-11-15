@@ -24,10 +24,7 @@ export default {
   mixins: [SettingMixin],
   computed: {
     selectedSettingPosition() {
-      if (this.settingPosition) {
-        return this.settingPosition;
-      }
-      return 'setting-right';
+      return this.settingPosition || 'setting-right';
     },
   },
 };

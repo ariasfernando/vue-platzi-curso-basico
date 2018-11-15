@@ -1655,6 +1655,7 @@ describe('== Module Store ==', () => {
       const objectModule = {
         moduleId: '5b3ce34792f8ef00137bb105',
         name: 'text',
+        description: 'text',
         title: 'text',
         type: 'studio',
         status: 'draft',
@@ -2054,6 +2055,7 @@ describe('== Module Store ==', () => {
       const objectModule = {
         moduleId: undefined,
         name: 'Untitled module',
+        description: null,
         title: undefined,
         type: 'studio',
         status: '',
