@@ -52,7 +52,8 @@ class Campaign extends Eloquent
         'auto_save',
         'parent_campaign_id',
         'tracking',
-        'internal'
+        'internal',
+        'archive'
     ];
 
     protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token', 'body_html_minified'];
@@ -92,7 +93,8 @@ class Campaign extends Eloquent
         'auto_save' => null,
         'parent_campaign_id' => null,
         'proof_id' => null,
-        'tracking'
+        'tracking',
+        'archive' => false
     );
 
     /**
