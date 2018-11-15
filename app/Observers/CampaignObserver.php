@@ -73,10 +73,20 @@ class CampaignObserver
     private function addUsage(\CampaignModel $campaign)
     {
         foreach ($campaign->modules_data as $module) {
-            \ModuleUsageModel::create([
-                'campaign_id' => new ObjectId($campaign->id),
-                'module_id' => new ObjectId($module['_id']),
-            ]);
+            if (isset($module['_id'])) {
+                try {
+                    \ModuleUsageModel::create([
+                        'campaign_id' => new ObjectId($campaign->id),
+                        'module_id' => new ObjectId($module['_id']),
+                    ]);
+                } catch (\Exception $e) {
+                    \Log::info(sprintf(
+                        'CampaignObserver: ignoring invalid module or campaign id; module: %s, campaign: %s',
+                        $module['_id'],
+                        $campaign->id
+                    ));
+                }
+            }
         }
     }
 }
