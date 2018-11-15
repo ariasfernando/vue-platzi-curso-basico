@@ -390,7 +390,7 @@ ol {
   height: calc(~'100vh - 102px');
 }
 #studio .module-container .scrollbar-container-inner {
-  padding: 20px 20px 100px;
+  padding: 40px 20px 100px;
 }
 #studio .st-component.is-active > td:before {
   content: '';

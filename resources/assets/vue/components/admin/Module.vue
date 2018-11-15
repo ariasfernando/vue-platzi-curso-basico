@@ -232,15 +232,12 @@ module.exports = {
   outline: 1px dashed @icon-option;
   border: none !important;
 
-  .st-component {
-    &:hover {
-      opacity: 0.75;
+  .st-component:hover {
       .icon-move,
       .icon-remove {
         display: block;
       }
     }
-  }
 }
 
 .empty-table {

@@ -401,10 +401,11 @@ export default {
 
       const settings = {
         selector: `#${this.editorId}`,
-        document_base_url: `${Application.globals.cdnHost  }/js/tinymce/`,
+        fixed_toolbar_container: `.toolbar-${this.editorId}`,
+        document_base_url: `${Application.globals.cdnHost}/js/tinymce/`,
         skin: 'lightgray',
         skin_url: `${Application.globals.cdnHost}/css/tinymce/lightgray`,
-        toolbar: `${toolbar} hack-for-selector`,
+        toolbar,
         plugins: 'paste advlist autolink lists stlinkextended textcolor sttextcolorextended  stformatsmenu',
         inline: true,
         menubar: false,
@@ -437,44 +438,47 @@ export default {
         setup(editor) {
           editor.paste_block_drop = true;
 
-          // We need to add a button with the editorId in order to get the toolbor.
-          editor.addButton('hack-for-selector', {
-            icon: `hack-for-selector ${_this.editorId}`,
-            tooltip: 'hack-for-selector',
-          });
 
           editor.on('focus', (e) => {
             // Change icon tiny
             // TODO  implement DRY.
-            setTimeout(() => {
-              const $toolbar = $(`.mce-i-hack-for-selector.${_this.editorId}`).parents('.mce-floatpanel');
+            const $toolbox = $(editor.settings.fixed_toolbar_container);
 
-              if ($toolbar.length && !$toolbar.find('div[aria-label="Font Sizes"] .text-size').length) {
-                $toolbar.find('div[aria-label="Font Sizes"] button:first').empty();
-                $toolbar.find('div[aria-label="Font Sizes"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
-              }
-              if ($toolbar.length && !$toolbar.find('div[aria-label="Font Family"] .text-size').length) {
-                $toolbar.find('div[aria-label="Font Family"] button:first').empty();
-                $toolbar.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
-              }
-              if ($toolbar.length && !$toolbar.find('button:contains("Formats")').length) {
-                const $button = $toolbar.find("button:contains('Formats')");
+            if ($toolbox.length && !$toolbox.find('div[aria-label="Font Sizes"] .text-size').length) {
+              setTimeout(() => {
+                $toolbox.find('div[aria-label="Font Sizes"] button:first').empty();
+                $toolbox.find('div[aria-label="Font Sizes"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
+              });
+            }
+            if ($toolbox.length && !$toolbox.find('div[aria-label="Font Family"] .text-size').length) {
+              setTimeout(() => {
+                $toolbox.find('div[aria-label="Font Family"] button:first').empty();
+                $toolbox.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
+              });
+            }
+            if ($toolbox.length && !$toolbox.find('button:contains("Formats")').length) {
+              setTimeout(() => {
+                const $button = $toolbox.find("button:contains('Formats')");
                 $button.parent('div').attr('aria-label', 'Font Format');
                 $button.empty();
                 $button.append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
-              }
-              if ($toolbar.length && !$toolbar.find("div[aria-label='Format']").length) {
-                $toolbar.find('div[aria-label="Format"] button:first').empty();
-                $toolbar.find('div[aria-label="Format"] button:first')
+              });
+            }
+            if ($toolbox.length && !$toolbox.find("div[aria-label='Format']").length) {
+              setTimeout(() => {
+                $toolbox.find('div[aria-label="Format"] button:first').empty();
+                $toolbox.find('div[aria-label="Format"] button:first')
                   .append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-bold"></i>');
-              }
-              // set toolbar width
-              if ($toolbar.length) {
-                const toolbarWidth = $toolbar.find('.mce-container-body.mce-flow-layout').width();
-                $toolbar.find('.mce-container-body').width(toolbarWidth);
-                $toolbar.find('.mce-panel').width(toolbarWidth);
-              }
-            });
+              });
+            }
+            // set toolbar width
+            if ($toolbox.length) {
+              setTimeout(() => {
+                const toolboxWidth = $toolbox.find('.mce-btn-group').width();
+                $toolbox.find('.mce-container-body').width(toolboxWidth);
+                $toolbox.find('.mce-panel').width(toolboxWidth);
+              });
+            }
           });
 
           editor

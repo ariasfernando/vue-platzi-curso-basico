@@ -1,14 +1,18 @@
 <template>
-  <div
-    :id="editorId"
-    class="stx-edit-text stx-wrapper"
-    style="width: 100%; display: inline-block !important;"
-    :style="fontStyles"
-    @keyup="changeContent"
-    @tiny-change="changeContent"
-    @tiny-style-reset="setStyles"
-    @input="changeContent"
-    v-html="content" />
+  <!-- font-size:0 It is a hack to not render a height of 1px in chrome -->
+  <div class="stx-wrapper" style="font-size:0; width: 100%;">
+    <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`" />
+    <div
+      :id="editorId"
+      class="stx-edit-text stx-wrapper"
+      style="width: 100%; display: inline-block !important; vertical-align: middle"
+      :style="fontStyles"
+      @keyup="changeContent"
+      @tiny-change="changeContent"
+      @tiny-style-reset="setStyles"
+      @input="changeContent"
+      v-html="content" />
+  </div>
 </template>
 <script>
 import mixinTiny from './mixins/TinyMixin.js';
@@ -38,79 +42,81 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.mce-menu-item-preview {
-  .mce-text {
-    font-size: 14px !important;
-  }
-}
-div[aria-label='hack-for-selector']{
-  display: none;
-}
-
-// hidde the sub menu of Numbered list and Bullet list
-div[aria-label='Numbered list'],
-div[aria-label='Bullet list'] {
-  button.mce-open {
-    display: none;
-  }
-}
-[data-type='button-element'] .stx-edit-text {
-  min-width: 10px;
-}
-[data-type='text-element'] .stx-edit-text {
-  min-width: 10px;
-}
-.mce-grid td.mce-grid-cell div {
-  line-height: 10px;
-}
-.mce-container {
+<style lang="scss" scope>
+.stx-toolbar {
+  position: absolute;
+  transform: translate(0, -35px);
+  z-index: 300;
   box-shadow: 0px 3px 4px rgba(100, 100, 100, 0.4);
   background-color: transparent;
-  .mce-toolbar-grp {
-    padding: 0px;
-  }
-  .mce-btn-group {
-    .mce-btn {
-      margin-left: 0px !important;
+  // hidde the sub menu of Numbered list and Bullet list
+  /deep/ {
+    .mce-tinymce.mce-tinymce-inline .mce-panel {
+      background: #f0f0f0;
     }
-  }
-  .mce-btn {
-    &.mce-active {
-      background-color: #78dcd6 !important;
-      border-color: #69dac8 !important;
-
-      &:hover {
+    .mce-menu-item-preview .mce-text {
+      font-size: 14px !important;
+    }
+    [data-type='button-element'] .stx-edit-text {
+      min-width: 10px;
+    }
+    [data-type='text-element'] .stx-edit-text {
+      min-width: 10px;
+    }
+    .mce-grid td.mce-grid-cell div {
+      line-height: 10px;
+    }
+    div[aria-label='Numbered list'],
+    div[aria-label='Bullet list'] {
+      button.mce-open {
+        display: none;
+      }
+    }
+    .mce-toolbar-grp {
+      padding: 0px;
+    }
+    .mce-btn-group {
+      .mce-btn {
+        margin-left: 0px !important;
+      }
+    }
+    .mce-btn {
+      &.mce-active {
         background-color: #78dcd6 !important;
         border-color: #69dac8 !important;
-      }
-    }
-    &[aria-label='Font Sizes'],
-    &[aria-label='Font Family'],
-    &[aria-label='Font Format'],
-    &[aria-label='Format'] {
-      width: 45px;
-      height: 28px;
-      button {
-        padding: 0 20px 0 8px;
 
-        i.stx-toolbar-icon {
-          width: 20px;
-          height: 20px;
-          margin: 0;
-          padding: 7px 0 0 0;
-          border-right: 1px solid #bfbfbf;
-          font-family: 'Glyphicons Halflings' !important;
+        &:hover {
+          background-color: #78dcd6 !important;
+          border-color: #69dac8 !important;
         }
       }
-    }
-    &[aria-label='Font Format'] {
-      button {
-        position: relative;
-        i.mce-caret {
-          position: absolute;
-          right: 8px;
-          top: 5px;
+      &[aria-label='Font Sizes'],
+      &[aria-label='Font Family'],
+      &[aria-label='Font Format'],
+      &[aria-label='Format'] {
+        width: 45px;
+        height: 28px;
+        button {
+          padding: 0 20px 0 8px;
+
+          i.stx-toolbar-icon {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            padding: 7px 0 0 0;
+            border-right: 1px solid #bfbfbf;
+            font-family: 'Glyphicons Halflings' !important;
+          }
+        }
+      }
+      &[aria-label='Font Format'] {
+        button {
+          position: relative;
+          i.mce-caret {
+            position: absolute;
+            right: 8px;
+            top: 5px;
+          }
         }
       }
     }
