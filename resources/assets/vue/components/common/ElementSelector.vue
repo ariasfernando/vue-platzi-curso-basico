@@ -1,37 +1,39 @@
 <template>
-  <button :class="`element-selector ${active ? 'active': ''}`" @click="e => $emit('element-selected', e)" >
+  <button
+    :style="[{left :leftPosition + 'px'},{bottom: bottom +'px'}]"
+    :class="`element-selector ${active ? 'active': ''}`"
+    @click="e => $emit('element-selected', e)" >
     <i :class="selectorIcon"  aria-hidden="true"></i> {{label}}
   </button>
 </template>
 
 <script>
-  export default {
-    props: ['label', 'selectorIcon', 'active'],
-    name: 'element-selector',
-  };
-  
+export default {
+  name: 'ElementSelector',
+  props: ['label', 'selectorIcon', 'active', 'left-position', 'bottom'],
+};
 </script>
 
 <style lang="scss" scoped>
 .element-selector {
   border-radius: 2px;
-  background: #CDCDCD;
+  background: #cdcdcd;
   border: none;
-  position: relative;
   display: block;
-  margin: 0 auto;
-  margin-top: 20px;
   font-size: 11px;
   font-weight: normal;
   color: #ffffff;
   outline: none;
   transition: all 0.3s linear;
   padding: 2px 7px 3px 7px;
+  bottom: -40px;
+  position: absolute;
+  transform: translateX(-50%);
 
-  &:hover{
+  &:hover {
     background: #aaaaaa;
   }
-  &.active{
+  &.active {
     background: #78dcd6;
   }
 }

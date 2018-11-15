@@ -5,8 +5,7 @@ export default {
     'module-id',
     'column-id',
     'component-id',
-    'component',
-    'context',
+    'component'
   ],
   computed: {
     currentComponent() {
@@ -17,6 +16,27 @@ export default {
     },
     templateWidth() {
       return this.isCampaign ? this.$store.getters['campaign/campaign'].library_config.templateWidth : 640;
+    },
+    imageWidth() {
+      const width = this.component.image.attribute.width;
+      if (_.endsWith(width, '%')) {
+        const imageContainerWidth = this.columnWidth(this.columnId)
+        - this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].container)
+        - this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].content)
+        - this.elementBorderAndPaddingHorizontalSpace(this.component.container);
+        return imageContainerWidth / 100 * _.parseInt(width);
+      }
+      return width;
+    },
+    isCampaign() {
+      return !_.isEmpty(this.$store.getters['campaign/campaign']);
+    },
+    module() {
+      return this.isCampaign ? this.$store.getters['campaign/modules'][this.moduleId] :
+        this.$store.getters['module/module'];
+    },
+    isInvertedStacking() {
+      return this.module.structure.columnsStacking === 'invertedStacking';
     },
   },
   methods: {
@@ -60,15 +80,16 @@ export default {
       styles.height = this.widthStyle(element.attribute.height);
       return styles;
     },
-    elementBorderPaddingAndWidth(element) {
-      const elementBorderAndPadding = this.elementBorderAndPadding(element);
-      const styles = _.isEmpty(elementBorderAndPadding) ? {} : elementBorderAndPadding;
-      styles.width = this.widthStyle(element.attribute.width || '100%');
-      return styles;
+    elementBorderAndPaddingHorizontalSpace(element) {
+      const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
+      const paddingRight = _.parseInt(element.style.paddingRight || 0);
+      const borderLeft = _.parseInt(element.style.borderLeftWidth || 0);
+      const borderRight = _.parseInt(element.style.borderRightWidth || 0);
+      return paddingLeft + paddingRight + borderLeft + borderRight;
     },
     selectComponentHandler(e) {
       if (!$(e.target).hasClass('st-remove')) {
-        if (this.context === 'campaign') {
+        if (this.isCampaign) {
           setTimeout(() => {
             // TODO: find better way to do this
             this.$store.commit('campaign/setCurrentComponent', {
@@ -78,7 +99,7 @@ export default {
             });
           }, 50);
         } else {
-          this.$emit('set-component', {
+          this.$emit('select-component', {
             columnId: this.columnId,
             componentId: this.componentId,
           });
@@ -86,7 +107,7 @@ export default {
       }
     },
     columnSelect(columnId) {
-      this.$emit('set-component', {
+      this.$emit('select-component', {
         columnId,
         componentId: undefined,
       });
@@ -102,13 +123,6 @@ export default {
         }
       });
       return elementBackground;
-    },
-    elementBorderAndPaddingHorizontalSpace(element) {
-      const paddingLeft = _.parseInt(element.style.paddingLeft || 0);
-      const paddingRight = _.parseInt(element.style.paddingRight || 0);
-      const borderLeft = _.parseInt(element.style.borderLeftWidth || 0);
-      const borderRight = _.parseInt(element.style.borderRightWidth || 0);
-      return paddingLeft + paddingRight + borderLeft + borderRight;
     },
     lineHeightCalculate(element) {
       if (_.endsWith(element.style.lineHeight, '%')) {
@@ -130,6 +144,16 @@ export default {
         lineHeight: this.lineHeightCalculate(element),
         textTransform: element.style.textTransform,
       };
+    },
+    columnWidth(columnId) {
+      const width = this.module.structure.columns[columnId].container.attribute.width;
+      if (_.endsWith(width, '%')) {
+        return this.templateInnerWidth / 100 * parseFloat(width);
+      }
+      return width;
+    },
+    columnBgcolor(column) {
+      return this.module.structure.columns[column].container.attribute.bgcolor;
     },
   },
 };

@@ -23,7 +23,6 @@
 import ComponentToolbar from './ComponentToolbar.vue';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
-import MontedElementMixin from '../mixins/MontedElementMixin';
 import ModuleContainer from '../../common/containers/ModuleContainer.vue';
 import Spacer from '../../common/Spacer.vue';
 
@@ -34,7 +33,7 @@ export default {
     ModuleContainer,
     Spacer,
   },
-  mixins: [MobileStylesMixin, ElementMixin, MontedElementMixin],
+  mixins: [MobileStylesMixin, ElementMixin],
   computed: {
     tableStyle() {
       return {
