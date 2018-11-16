@@ -19,21 +19,27 @@
             <thead>
               <tr>
                 <th class="sortable">
-                  <a id="name" href="#" class="" data-order-field="name">
+                  <a id="name" href="#" class="sortable-option sort-order-desc" data-order-field="name">
                     Name
-                    <i class="glyphicon glyphicon-menu-down pull-right" />
+                    <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
                 <th class="sortable">
-                  <a id="name" href="#" class="" data-order-field="name">
+                  <a id="name" href="#" class="sortable-option sort-order-desc" data-order-field="libraries">
+                    Libraries
+                    <i class="glyphicon glyphicon-menu-down" />
+                  </a>
+                </th>
+                <th class="sortable">
+                  <a id="type" href="#" class="sortable-option sort-order-desc" data-order-field="type">
                     Type
-                    <i class="glyphicon glyphicon-menu-down pull-right" />
+                    <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
                 <th class="sortable">
-                  <a id="status" href="#" class="" data-order-field="status">
+                  <a id="status" href="#" class="sortable-option sort-order-desc" data-order-field="status">
                     Status
-                    <i class="glyphicon glyphicon-menu-down pull-right" />
+                    <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
                 <th width="150" class="bold">Actions</th>
@@ -42,6 +48,9 @@
             <tbody v-if="ready">
               <tr v-for="(module, id) in modules" :key="id" :data-module="id">
                 <td :title="module.title">{{ module.title }}</td>
+                <td :title="module.libraries">
+                  <span v-for="(library) in module.libraries" :key="library" class="st-rounded-tag">{{ library }}</span>
+                </td>
                 <td :title="module.type">{{ module.type }}</td>
                 <td :title="module.status">{{ module.status }}</td>
                 <td class="text-right actions icons">
@@ -89,10 +98,11 @@
         moduleService.getAllModules()
           .then((response) => {
             this.modules = response;
+            console.log('modules', this.modules);
             this.ready = true;
           })
           .catch((error) => {
-            this.$root.$toast(error, {className: 'et-error'});
+            this.$root.$toast(error, { className: 'et-error' });
           });
       },
       deleteModule(module) {
@@ -120,7 +130,7 @@
   };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import '../../less/admin';
 
   .btn-create {
@@ -138,5 +148,20 @@
       color: #514960!important;
     }
 
+  }
+
+  .st-rounded-tag {
+    display: inline;
+    padding: 0.3em 0.9em;
+    font-size: 90%;
+    line-height: 1;
+    color: #666666;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 1em;
+    margin-bottom: 0px;
+    margin-right: 5px;
+    background-color: #eaeaea;
   }
 </style>

@@ -13,6 +13,7 @@ function getPlugins() {
 }
 
 function Module(data = {}) {
+  this.libraries = data.libraries || [];
   this.moduleId = data._id || undefined;
   this.name = data.name || data.title || 'Untitled module';
   this.title = data.title || data.name;
