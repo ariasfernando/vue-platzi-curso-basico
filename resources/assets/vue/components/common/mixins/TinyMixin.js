@@ -1,3 +1,4 @@
+/* eslint camelcase:0 */
 import Adapter from './tinymce/Adapter';
 
 export default {
@@ -474,7 +475,11 @@ export default {
             // set toolbar width
             if ($toolbar.length) {
               setTimeout(() => {
-                const toolbarWidth = $toolbar.find('.mce-container-body.mce-flow-layout').width();
+                const toolboxGroups = $toolbar.find('.mce-btn-group');
+                let toolbarWidth = 0;
+                toolboxGroups.each(function (i) {
+                  toolbarWidth += $(this).width() + (i === 0 ? 2 : 7);
+                });
                 $toolbar.find('.mce-container-body').width(toolbarWidth);
                 $toolbar.find('.mce-panel').width(toolbarWidth);
               });
