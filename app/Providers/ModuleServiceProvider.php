@@ -61,6 +61,12 @@ class ModuleServiceProvider extends ServiceProvider
                 $module_key = $config->key;
                 if (isset($config->enabled) && $config->enabled === true) {
                     $modules[$module_key] = $config;
+                    $module = new Module(['key' => $module_key]);
+                    $libraries = $module->getLibraries();
+                    $modules[$module_key]['libraries'] = [];
+                    foreach ($libraries as $library) {
+                        $modules[$module_key]['libraries'][] = $library->name;
+                    }
                 }
             }
         }
@@ -78,7 +84,12 @@ class ModuleServiceProvider extends ServiceProvider
         }
 
         foreach ($modules_db as $module) {
-            $modules[$module->key] = $module;
+            $modules[$module->key] = $module->toArray();
+            $libraries = $module->getLibraries();
+            $modules[$module->key]['libraries'] = [];
+            foreach ($libraries as $library) {
+                $modules[$module->key]['libraries'][] = $library->name;
+            }
         }
 
         ksort($modules);
