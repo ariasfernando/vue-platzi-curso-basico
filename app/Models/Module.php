@@ -77,14 +77,14 @@ class Module extends Eloquent
    */
   public function getLibraries()
   {
-    $result = [];
-    $libraries = Library::all();
+      $result = [];
+      $libraries = Library::all();
 
-    foreach ($libraries as $library) {
-      if (\Helper::recursive_array_search($this->key, \Helper::array_column_recursive($library['modules'], 'moduleId'))) {
-        $result[] = $library;
+      foreach ($libraries as $library) {
+          if (\Helper::recursive_array_search($this->key, \Helper::array_column_recursive($library['modules'], 'moduleId'))) {
+              $result[] = $library;
+          }
       }
-    }
-    return $result;
+      return $result;
   }
 }
