@@ -1,12 +1,11 @@
 <template>
-  <div class="admin-search-box pull-right">
-    <input class="btn btn-success pull-right submit-config" type="submit" value="">
+  <div class="search-box">
+    <input class="btn btn-success search-box-button" type="submit" value="">
     <input
-      id="search_field"
       v-model="searchText"
-      class="search_field"
+      class="search-box-field"
       type="text">
-    <button id="admin-clear-btn" class="btn btn-success" @click="clearSearch">
+    <button class="btn btn-success search-box-clear" @click="clearSearch">
       <i class="glyphicon glyphicon-remove-sign" />
     </button>
   </div>
@@ -23,6 +22,10 @@ export default {
     columnsToFilter: {
       type: [String, Array],
       default: 'name',
+    },
+    dirty: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
@@ -43,6 +46,9 @@ export default {
           this.$emit('filtered', this.filteredCollection);
         }
       }, 500);
+    },
+    dirty() {
+      this.clearSearch();
     },
   },
   methods: {
@@ -65,16 +71,14 @@ export default {
       }, obj)).map(i => obj[i]);
     },
     filterOneColumn() {
-      this.filteredCollection = _.filter(this.collection, (item) => {
-        return item[this.columnsToFilter].toLowerCase().indexOf(this.searchText.toLowerCase()) > -1;
-      });
+      this.filteredCollection = _.filter(this.collection, item =>
+        item[this.columnsToFilter].toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
     },
     filterManyColumns() {
       this.filteredCollection = [];
       _.forEach(this.columnsToFilter, (column) => {
-        this.filteredCollection = this.filteredCollection.concat(_.filter(this.collection, (item) => {
-          return item[column].toLowerCase().indexOf(this.searchText.toLowerCase()) > -1;
-        }));
+        this.filteredCollection = this.filteredCollection.concat(_.filter(this.collection, item =>
+          item[column].toLowerCase().indexOf(this.searchText.toLowerCase()) > -1));
       });
       this.filteredCollection = this.removeDuplicates(this.filteredCollection, 'moduleId');
     },
@@ -82,5 +86,48 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.search-box {
+  margin-left: 15px;
+  position: relative;
+
+  &-field {
+    padding: 6px 12px 6px 30px;
+    width: 300px;
+  }
+  button {
+    position: absolute;
+    background: none;
+    border: none;
+    right: 0px;
+    top: 7px;
+    z-index: 2;
+    outline: 0;
+    &:hover,
+    &:active,
+    &:focus {
+      color: #999999;
+      background: none;
+      outline: 0;
+      box-shadow: none;
+    }
+  }
+  input[type='submit'] {
+    position: absolute;
+    left: 10px;
+    background: none;
+    color: #666666;
+    top: -2px;
+    padding: 0px;
+    border: none;
+    font-family: 'Glyphicons Halflings';
+    &:hover,
+    &:active,
+    &:focus {
+      color: #999999;
+      box-shadow: none;
+      outline: 0;
+    }
+  }
+}
 </style>
