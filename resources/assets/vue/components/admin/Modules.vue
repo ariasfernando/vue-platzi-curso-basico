@@ -24,7 +24,7 @@
             </div>
             <div class="level-item">
               <div class="search-container">
-                <search-input :collection="modules[activeTab]" :columns-to-filter="['name', 'status']" @filtered="refreshData" />
+                <search-input :dirty="resetSearch" :collection="modules[activeTab]" :columns-to-filter="['name', 'status']" @filtered="refreshData" />
               </div>
             </div>
           </div>
@@ -67,7 +67,7 @@
               </tr>
             </thead>
             <tbody v-if="ready">
-              <tr v-for="(module, id) in filteredModules" :key="id" :data-module="id">
+              <tr v-for="(module, id) in filteredModules[activeTab]" :key="id" :data-module="id">
                 <td :title="module.title">{{ module.title }}</td>
                 <td :title="module.type">{{ module.type }}</td>
                 <td :title="module.status">{{ module.status }}</td>
@@ -92,6 +92,11 @@
                   </a>
                 </td>
               </tr>
+              <tr v-if="filteredModules[activeTab].length == 0">
+                <td colspan="4">
+                  No results were found for your search.
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -112,11 +117,15 @@ export default {
     return {
       modules: {
         studio: {},
-        custom: {}
+        custom: {},
       },
       ready: false,
-      filteredModules: [],
+      filteredModules: {
+        studio: [],
+        custom: [],
+      },
       activeTab: 'studio',
+      resetSearch: 0,
     };
   },
   created() {
@@ -132,7 +141,7 @@ export default {
         .getAllModules(type)
         .then(response => {
           this.modules[type] = response;
-          this.filteredModules = this.modules[type];
+          this.filteredModules[type] = this.modules[type];
           this.ready = true;
         })
         .catch(error => {
@@ -164,11 +173,12 @@ export default {
       container.style.paddingLeft = '225px';
     },
     refreshData(data) {
-      this.filteredModules = data;
+      this.filteredModules[this.activeTab] = data;
     },
     setTab(type) {
       this.activeTab = type;
-      this.filteredModules = this.modules[this.activeTab];
+      this.filteredModules[type] = this.modules[type];
+      this.resetSearch++;
     },
   },
 };
