@@ -88,7 +88,6 @@ export default {
 
 <style lang="scss" scoped>
 .search-box {
-  margin-left: 15px;
   position: relative;
   clear: both;
 

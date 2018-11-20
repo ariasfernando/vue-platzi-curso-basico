@@ -207,6 +207,9 @@ $stensul-purple: #514960;
 .list-layout {
   .list-header {
     margin-bottom: 10px;
+    .search-container {
+      width: 300px;
+    }
   }
 }
 
