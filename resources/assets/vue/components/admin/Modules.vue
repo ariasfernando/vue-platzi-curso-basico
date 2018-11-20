@@ -98,7 +98,6 @@
         moduleService.getAllModules()
           .then((response) => {
             this.modules = response;
-            console.log('modules', this.modules);
             this.ready = true;
           })
           .catch((error) => {
