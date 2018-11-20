@@ -90,10 +90,11 @@ export default {
 .search-box {
   margin-left: 15px;
   position: relative;
+  clear: both;
 
   &-field {
     padding: 6px 12px 6px 30px;
-    width: 300px;
+    width: 100%;
   }
   button {
     position: absolute;
