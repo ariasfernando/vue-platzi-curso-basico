@@ -65,16 +65,14 @@ export default {
       }, obj)).map(i => obj[i]);
     },
     filterOneColumn() {
-      this.filteredCollection = _.filter(this.collection, (item) => {
-        return item[this.columnsToFilter].toLowerCase().indexOf(this.searchText.toLowerCase()) > -1;
-      });
+      this.filteredCollection = _.filter(this.collection, item =>
+        item[this.columnsToFilter].toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
     },
     filterManyColumns() {
       this.filteredCollection = [];
       _.forEach(this.columnsToFilter, (column) => {
-        this.filteredCollection = this.filteredCollection.concat(_.filter(this.collection, (item) => {
-          return item[column].toLowerCase().indexOf(this.searchText.toLowerCase()) > -1;
-        }));
+        this.filteredCollection = this.filteredCollection.concat(_.filter(this.collection, item =>
+          item[column].toLowerCase().indexOf(this.searchText.toLowerCase()) > -1));
       });
       this.filteredCollection = this.removeDuplicates(this.filteredCollection, 'moduleId');
     },
