@@ -1,15 +1,15 @@
 <template>
-  <div class="modal-container" >
+  <div class="modal-container-component">
     <div class="st-modal">
-      <div @click="$emit('close-modal')" class="close-button">X</div>
-      <slot></slot>
+      <div class="close-button" @click="$emit('close-modal')">X</div>
+      <slot />
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: "LabelItemContainer",
-  props: ["customClass", "icon", "label", "collapsable"]
+  name: 'LabelItemContainer',
+  props: ['customClass', 'icon', 'label', 'collapsable'],
 };
 </script>
 <style lang="less" scoped>
@@ -20,7 +20,7 @@ export default {
   clear: both;
   cursor: pointer;
 }
-.modal-container {
+.modal-container-component {
   position: fixed;
   top: 0;
   left: 0;
