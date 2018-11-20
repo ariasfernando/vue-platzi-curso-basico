@@ -24,7 +24,7 @@
             </div>
             <div class="level-item">
               <div class="search-container">
-                <search-input :collection="modules" :columns-to-filter="['name', 'status']" @filtered="refreshData" />
+                <search-input :collection="modules[activeTab]" :columns-to-filter="['name', 'status']" @filtered="refreshData" />
               </div>
             </div>
           </div>
@@ -110,25 +110,29 @@ export default {
   components: { 'search-input': searchInput },
   data() {
     return {
-      modules: {},
+      modules: {
+        studio: {},
+        custom: {}
+      },
       ready: false,
       filteredModules: [],
       activeTab: 'studio',
     };
   },
   created() {
-    this.loadModules();
+    this.loadModules('studio');
+    this.loadModules('custom');
   },
   mounted() {
     this.toggleSidebar();
   },
   methods: {
-    loadModules() {
+    loadModules(type) {
       moduleService
-        .getAllModules()
+        .getAllModules(type)
         .then(response => {
-          this.modules = response;
-          this.filteredModules = this.modules;
+          this.modules[type] = response;
+          this.filteredModules = this.modules[type];
           this.ready = true;
         })
         .catch(error => {
@@ -136,13 +140,13 @@ export default {
         });
     },
     deleteModule(module) {
-      const moduleIdx = this.modules.indexOf(module);
+      const moduleIdx = this.modules[this.activeTab].indexOf(module);
 
       if (confirm('Are you sure?')) {
         moduleService
           .deleteModule(module.moduleId)
           .then(() => {
-            this.modules.splice(moduleIdx, 1);
+            this.modules[this.activeTab].splice(moduleIdx, 1);
             this.$root.$toast('Module was deleted', {
               className: 'et-success',
             });
@@ -164,6 +168,7 @@ export default {
     },
     setTab(type) {
       this.activeTab = type;
+      this.filteredModules = this.modules[this.activeTab];
     },
   },
 };
