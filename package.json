@@ -108,8 +108,8 @@
   },
   "pre-commit": {
     "lint": {
-      "stylelint": ".(s?css)|(less)$",
-      "eslint": ".(js)|(vue)$"
+      "stylelint": ".(s?css|less)$",
+      "eslint": ".(js|vue)$"
     },
     "run": [
       "cover"
