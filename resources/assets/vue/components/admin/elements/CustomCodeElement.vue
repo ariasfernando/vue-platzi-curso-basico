@@ -1,26 +1,25 @@
 <template>
   <module-container :component="component" @select-component="selectComponentHandler">
-    <div class="stx-wraper" v-html="this.component.code.data || this.emptyMessage"></div>
-    <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
+    <div class="stx-wraper" v-html="component.code.data || emptyMessage" />
+    <component-toolbar v-if="isStudio" :component-id="componentId" :column-id="columnId" />
   </module-container>
 </template>
 
 <script>
-import _ from 'lodash';
 import ComponentToolbar from './ComponentToolbar.vue';
-import ElementMixin from '../../common/mixins/ElementMixin.js';
-import ModuleContainer from '../../common/containers/ModuleContainer';
+import ElementMixin from '../../common/mixins/ElementMixin';
+import ModuleContainer from '../../common/containers/ModuleContainer.vue';
 
 export default {
   name: 'CustomCodeElement',
   components: {
     ComponentToolbar,
-    ModuleContainer
+    ModuleContainer,
   },
   mixins: [ElementMixin],
   data() {
     return {
-      emptyMessage: 
+      emptyMessage:
         '<div style="text-align: center;">Click to edit <strong>HTML</strong></div>',
     };
   },

@@ -53,7 +53,7 @@
                 </td>
               </tr>
             </table>
-            <component-toolbar :component-id="componentId" :column-id="columnId" />
+            <component-toolbar v-if="isStudio" :component-id="componentId" :column-id="columnId" />
           </td>
         </tr>
       </table>
@@ -68,7 +68,6 @@ import ComponentToolbar from './ComponentToolbar.vue';
 import ElementMixin from '../../common/mixins/ElementMixin';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ModuleContainer from '../../common/containers/ModuleContainer.vue';
-import textOptions from '../settingsDefault/TextOptions';
 import TinyMce from '../../common/tinyMce.vue';
 
 export default {
@@ -86,9 +85,6 @@ export default {
         return '100%';
       }
       return this.width;
-    },
-    textOptions() {
-      return textOptions();
     },
     width() {
       return this.component.button.styleOption.autoWidth

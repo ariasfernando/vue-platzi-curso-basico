@@ -26,43 +26,40 @@
               :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
                         'st-resize' : mobileStretch,
                         'st-mobile-width-constraint' : !mobileStretch }"
-                style="border: 0; display: block;"
-                border="0"
-                :width="imageWidth"
-                :style="{width: widthStyle(imageWidth)}"
-                :src="imageUrl(component.image.attribute.placeholder)"
-                :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
-                :alt="component.image.attribute.alt"
-                :title="component.image.attribute.title"
-              >
-              <template 
-                v-if="component.image.attribute.placeholderMobile">
-                <div class="show-img-mobile" style="display:none;width:0;overflow:hidden;max-height:0!important;">
-                  <img
-                    :src="imageUrl(component.image.attribute.placeholderMobile)"
-                    border="0"
-                    :class="{ 'st-resize' : mobileStretch,
-                              'st-mobile-width-constraint' : !mobileStretch }"
-                    style="display:block;border:none;max-width:100%;height:auto;"
-                    :width="imageWidth"
-                    :style="{width: widthStyle(imageWidth)}"
-                    :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
-                    :alt="component.image.attribute.alt"
-                    :title="component.image.attribute.title"
-                  />
-                </div>
-              </template>
-            </a>
-            <component-toolbar :component-id="componentId" :column-id="columnId"></component-toolbar>
-          </td>
-        </tr>
-      </table>
-    </module-container>
+              style="border: 0; display: block;"
+              border="0"
+              :width="imageWidth"
+              :style="{width: widthStyle(imageWidth)}"
+              :src="imageUrl(component.image.attribute.placeholder)"
+              :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
+              :alt="component.image.attribute.alt"
+              :title="component.image.attribute.title">
+            <template
+              v-if="component.image.attribute.placeholderMobile">
+              <div class="show-img-mobile" style="display:none;width:0;overflow:hidden;max-height:0!important;">
+                <img
+                  :src="imageUrl(component.image.attribute.placeholderMobile)"
+                  border="0"
+                  :class="{ 'st-resize' : mobileStretch,
+                            'st-mobile-width-constraint' : !mobileStretch }"
+                  style="display:block;border:none;max-width:100%;height:auto;"
+                  :width="imageWidth"
+                  :style="{width: widthStyle(imageWidth)}"
+                  :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
+                  :alt="component.image.attribute.alt"
+                  :title="component.image.attribute.title">
+              </div>
+            </template>
+          </a>
+          <component-toolbar v-if="isStudio" :component-id="componentId" :column-id="columnId" />
+        </td>
+      </tr>
+    </table>
+  </module-container>
   <!-- IMAGE ELEMENT ENDS -->
 </template>
 
 <script>
-import _ from 'lodash';
 import ComponentToolbar from './ComponentToolbar.vue';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';

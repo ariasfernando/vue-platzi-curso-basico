@@ -1,3 +1,5 @@
+import textOptions from '../../admin/settingsDefault/TextOptions';
+
 export default {
   props: [
     'module',
@@ -46,11 +48,20 @@ export default {
     isCampaign() {
       return !_.isEmpty(this.$store.getters['campaign/campaign']);
     },
+    isStudio() {
+      return !_.isEmpty(this.$store.getters['module/module']);
+    },
+    isPreview() {
+      return !this.isStudio && !this.isCampaign;
+    },
     isInvertedStacking() {
       return this.module.structure.columnsStacking === 'invertedStacking';
     },
     buildingMode() {
       return this.isCampaign ? this.$store.getters['campaign/buildingMode'] : this.$store.getters['module/buildingMode'];
+    },
+    textOptions() {
+      return this.isPreview ? false : textOptions();
     },
   },
   methods: {

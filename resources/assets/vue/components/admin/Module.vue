@@ -25,6 +25,7 @@
             style="width: 100%;">
             <column-manager
               :key="module.structure.columnsStacking"
+              :module="module"
               @select-component="selectComponent">
               <template slot-scope="{columnData}">
                 <draggable
@@ -43,6 +44,7 @@
                       :is="component.type"
                       v-for="(component, componentId) in columnData.column.components"
                       :key="component.id"
+                      :module="module"
                       class="st-component"
                       :component="component"
                       :module-id="moduleId"
@@ -67,6 +69,7 @@
         </td>
       </tr>
       <element-selector
+        v-if="isStudio" 
         :left-position="templateWidth/2"
         :bottom="-90"
         label="Row"

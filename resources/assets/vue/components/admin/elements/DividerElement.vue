@@ -14,7 +14,7 @@
         :bgcolor="component.divider.attribute.bgcolor"
         :height="component.divider.attribute.height || component.divider.style.height" />
     </table>
-    <component-toolbar :component-id="componentId" :column-id="columnId" />
+    <component-toolbar v-if="isStudio" :component-id="componentId" :column-id="columnId" />
   </module-container>
   <!-- DIVIDER ELEMENT ENDS -->
 </template>
