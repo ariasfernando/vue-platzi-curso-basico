@@ -1,17 +1,38 @@
 <template>
-  <section class="col-xs-12 section-container">
+  <section class="col-xs-12 section-container list-layout">
 
-    <div class="row">
+    <div class="row list-header">
       <div class="col-xs-12">
-        <h2 class="pull-left">Module List</h2>
-        <search-input :collection="modules" :columns-to-filter="['name', 'status']" @filtered="refreshData" />
-        <div class="btn btn-default btn-create pull-right">
-          <router-link to="/create"><i class="glyphicon glyphicon-plus-sign" /> Create a new Module</router-link>
+        <div class="level">
+          <div class="level-left is-spaced-2">
+            <div id="tab-studio" class="level-item is-clickable" :class="{'is-active': activeTab === 'studio'}" @click="setTab('studio')">
+              <span class="title is-2">
+                Studio
+              </span>
+            </div>
+            <div id="tab-custom" class="level-item is-clickable" :class="{'is-active': activeTab === 'custom'}" @click="setTab('custom')">
+              <span class="title is-2">
+                Custom
+              </span>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <div class="btn btn-default btn-create">
+                <router-link to="/create"><i class="glyphicon glyphicon-plus-sign"></i> Create a new Module</router-link>
+              </div>
+            </div>
+            <div class="level-item">
+              <div class="search-container">
+                <search-input :collection="modules" :columns-to-filter="['name', 'status']" @filtered="refreshData" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row list-body">
       <div class="col-xs-12">
 
         <div class="table-responsive">
@@ -92,6 +113,7 @@ export default {
       modules: {},
       ready: false,
       filteredModules: [],
+      activeTab: 'studio',
     };
   },
   created() {
@@ -104,12 +126,12 @@ export default {
     loadModules() {
       moduleService
         .getAllModules()
-        .then((response) => {
+        .then(response => {
           this.modules = response;
           this.filteredModules = this.modules;
           this.ready = true;
         })
-        .catch((error) => {
+        .catch(error => {
           this.$root.$toast(error, { className: 'et-error' });
         });
     },
@@ -125,7 +147,7 @@ export default {
               className: 'et-success',
             });
           })
-          .catch((error) => {
+          .catch(error => {
             this.$root.$toast(error.message, { className: 'et-error' });
           });
       }
@@ -140,13 +162,15 @@ export default {
     refreshData(data) {
       this.filteredModules = data;
     },
+    setTab(type) {
+      this.activeTab = type;
+    },
   },
 };
 </script>
 
 <style lang="less">
 @import '../../less/admin';
-
 .btn-create {
   margin-bottom: 10px;
   text-decoration: none !important;
@@ -162,3 +186,101 @@ export default {
   }
 }
 </style>
+
+<style lang="scss" scoped>
+$stensul-purple: #514960;
+.list-layout {
+  .list-header {
+    margin-bottom: 10px;
+  }
+}
+
+.level {
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  img {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  & > .level-item {
+    &:not(.is-narrow) {
+      flex-grow: 1;
+    }
+  }
+
+  &-left,
+  &-right {
+    align-items: center;
+    display: flex;
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    .level-item {
+      &:not(:last-child) {
+        margin-right: 0.75rem;
+      }
+      &.is-flexible {
+        flex-grow: 1;
+      }
+    }
+    &.is-spaced-2 {
+      .level-item {
+        &:not(:last-child) {
+          margin-right: 2rem;
+        }
+      }
+    }
+  }
+  &-left {
+    justify-content: flex-start;
+  }
+  &-right {
+    justify-content: flex-end;
+  }
+
+  &-item {
+    align-items: center;
+    display: flex;
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    .title,
+    .subtitle,
+    .btn {
+      margin-bottom: 0;
+    }
+    &.is-active {
+      position: relative;
+      &::before {
+        content: '';
+        height: 2px;
+        background-color: $stensul-purple;
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+      }
+      .title {
+        color: $stensul-purple;
+      }
+    }
+    &.is-clickable {
+      cursor: pointer;
+    }
+  }
+}
+
+// Titles
+.title {
+  font-weight: 300;
+  font-family: 'Open Sans', Arial, serif;
+  color: #999999;
+  &.is-2 {
+    font-size: 28px;
+  }
+}
+</style>
+
