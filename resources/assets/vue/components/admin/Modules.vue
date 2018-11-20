@@ -4,17 +4,7 @@
     <div class="row">
       <div class="col-xs-12">
         <h2 class="pull-left">Module List</h2>
-        <div class="admin-search-box pull-right">
-          <input class="btn btn-success pull-right submit-config" type="submit" value="">
-          <input
-            id="search_field"
-            v-model="searchText"
-            class="search_field"
-            type="text">
-          <button id="admin-clear-btn" class="btn btn-success" @click="clearSearch">
-            <i class="glyphicon glyphicon-remove-sign" />
-          </button>
-        </div>
+        <search-input :collection="modules" :columns-to-filter="['name', 'status']" @filtered="refreshData" />
         <div class="btn btn-default btn-create pull-right">
           <router-link to="/create"><i class="glyphicon glyphicon-plus-sign" /> Create a new Module</router-link>
         </div>
@@ -92,29 +82,17 @@
 
 <script>
 import moduleService from '../../services/module';
+import searchInput from './searchInput.vue';
 
 export default {
   name: 'Modules',
+  components: { 'search-input': searchInput },
   data() {
     return {
       modules: {},
-      filteredModules: {},
       ready: false,
-      searchText: '',
-      timer: '',
+      filteredModules: [],
     };
-  },
-  watch: {
-    searchText() {
-      clearTimeout(this.timer);
-      this.timer = setTimeout(() => {
-        if (this.searchText !== '') {
-          this.search();
-        } else {
-          this.filteredModules = this.modules;
-        }
-      }, 500);
-    },
   },
   created() {
     this.loadModules();
@@ -159,13 +137,8 @@ export default {
       const container = document.getElementsByClassName('base-admin')[0];
       container.style.paddingLeft = '225px';
     },
-    search() {
-      this.filteredModules = _.filter(this.modules, (item) => {
-        return item.name.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1;
-      });
-    },
-    clearSearch() {
-      this.searchText = '';
+    refreshData(data) {
+      this.filteredModules = data;
     },
   },
 };
