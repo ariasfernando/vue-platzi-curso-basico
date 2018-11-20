@@ -21,7 +21,7 @@
             :bgcolor="component.text.attribute.bgcolor"
             :style="[fontStyles(component.text), elementBorderAndPadding(component.text), {width:'100%'}]">
             <tiny-mce
-              :editor-id="`idInstance-${module.idInstance}-moduleId-${component.id}`"
+              :editor-id="`idInstance-${module.idInstance}-componentId-${component.id}`"
               :font-styles="fontStyles(component.text)"
               :text="component.data.text"
               :type="component.type"

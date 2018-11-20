@@ -40,7 +40,7 @@
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
                   <tiny-mce
-                    :editor-id="`idInstance-${module.idInstance}-moduleId-${component.id}`"
+                    :editor-id="`idInstance-${module.idInstance}-componentId-${component.id}`"
                     :font-styles="fontStyles(component.button)"
                     :text="component.data.text"
                     :text-dirty="component.data.textDirty"
