@@ -14,7 +14,7 @@
               <code-editor v-model="moduleRow" />
             </div>
             <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
-              <module />
+              <module :module="module" />
             </div>
           </scrollbar-container>
         </div>

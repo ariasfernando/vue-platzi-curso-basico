@@ -1,5 +1,6 @@
 export default {
   props: [
+    'module',
     'module-id',
     'column-id',
     'component-id',
@@ -44,10 +45,6 @@ export default {
     },
     isCampaign() {
       return !_.isEmpty(this.$store.getters['campaign/campaign']);
-    },
-    module() {
-      return this.isCampaign ? this.$store.getters['campaign/modules'][this.moduleId] :
-        this.$store.getters['module/module'];
     },
     isInvertedStacking() {
       return this.module.structure.columnsStacking === 'invertedStacking';

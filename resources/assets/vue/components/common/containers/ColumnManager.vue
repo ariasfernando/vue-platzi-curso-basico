@@ -14,7 +14,7 @@
           :wrapper-width="templateInnerWidth"
           :width-first-column="columnWidth(0)"
           :bgcolor="columnBgcolor(0)"
-          >
+          :module="module">
           <template v-for="(column, columnId) in module.structure.columns">
             <column-render
               :key="'column-' + columnId"
@@ -22,8 +22,9 @@
               :column="column"
               :data-column-id="columnId"
               :column-id="column.id"
+              :module="module"
               :is-inverted="isInvertedStacking">
-              <slot :columnData="{columnId, column}"></slot>
+              <slot :columnData="{columnId, column}" />
               <element-selector
                 v-if="!isCampaign && buildingMode === 'desktop'"
                 :key="'selector' + columnId"

@@ -40,25 +40,25 @@
       :class=" { 'stx-show-error': hasErrors, 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}">
       <background-image :element="module.structure" :key='modulebackgroundImage' :width="templateInnerWidth">
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
-          <column-manager :module-id="moduleId">
+          <column-manager :module-id="moduleId" :module="module">
             <template slot-scope="{columnData}">
               <component
+                :is="component.type"
                 v-for="(component, componentId) in columnData.column.components"
                 :key="component.id"
-                @select-component="selectComponent"
-                :is="component.type"
                 :component="component"
                 :module-id="moduleId"
+                :module="module"
                 :column-id="columnData.columnId"
-                :component-id="componentId">
-              </component>
+                :component-id="componentId"
+                @select-component="selectComponent" />
             </template>
           </column-manager>
         </template>
       </background-image>
-      <module-toolbar :module-id="moduleId"></module-toolbar>
-      <div class="st-remove-element module-overlay"></div>
-      <div class="st-remove-element default-module-error" style="display:none"></div>
+      <module-toolbar :module-id="moduleId" />
+      <div class="st-remove-element module-overlay" />
+      <div class="st-remove-element default-module-error" style="display:none" />
     </td>
   </tr>
 </template>
