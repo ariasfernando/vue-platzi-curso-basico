@@ -109,7 +109,7 @@
         });
       },
       onBlur(key, value) {
-        this.onInputChange(key, value.replace(/[^a-zA-Z0-9_\[\]]/g, ''));
+        this.onInputChange(key, value.replace(/[\<\>]/g, ''));
       }
     }
   };
