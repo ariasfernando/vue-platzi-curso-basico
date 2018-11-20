@@ -1,6 +1,6 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-  <module-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
+  <element-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
     <table
       :width="component.divider.attribute.width || '100%'"
       :style="tableStyle"
@@ -15,7 +15,7 @@
         :height="component.divider.attribute.height || component.divider.style.height" />
     </table>
     <component-toolbar v-if="isStudio" :component-id="componentId" :column-id="columnId" />
-  </module-container>
+  </element-container>
   <!-- DIVIDER ELEMENT ENDS -->
 </template>
 
@@ -23,14 +23,14 @@
 import ComponentToolbar from './ComponentToolbar.vue';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
-import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import ElementContainer from '../../common/containers/ElementContainer.vue';
 import Spacer from '../../common/Spacer.vue';
 
 export default {
   name: 'DividerElement',
   components: {
     ComponentToolbar,
-    ModuleContainer,
+    ElementContainer,
     Spacer,
   },
   mixins: [MobileStylesMixin, ElementMixin],

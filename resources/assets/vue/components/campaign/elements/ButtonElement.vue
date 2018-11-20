@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <element-container :component="component" @select-component="selectComponentHandler">
     <button-border-radius-comment
       v-if="hasBorderRadius"
       :component="component"
@@ -68,21 +68,21 @@
       </table>
     </a>
     <div v-if="hasBorderRadius" class="stx-wrapper" v-html="notMsoEndingComment" />
-  </module-container>
+  </element-container>
 </template>
 
 <script>
 import ButtonBorderRadiusComment from '../../common/ButtonBorderRadiusComment.vue';
 import ElementMixin from '../../common/mixins/ElementMixin';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
-import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import ElementContainer from '../../common/containers/ElementContainer.vue';
 import TinyMce from '../../common/tinyMce.vue';
 
 export default {
   name: 'ButtonElement',
   components: {
     ButtonBorderRadiusComment,
-    ModuleContainer,
+    ElementContainer,
     TinyMce,
   },
   mixins: [MobileStylesMixin, ElementMixin],

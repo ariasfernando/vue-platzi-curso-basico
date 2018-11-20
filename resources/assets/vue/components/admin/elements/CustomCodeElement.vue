@@ -1,20 +1,20 @@
 <template>
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <element-container :component="component" @select-component="selectComponentHandler">
     <div class="stx-wraper" v-html="component.code.data || emptyMessage" />
     <component-toolbar v-if="isStudio" :component-id="componentId" :column-id="columnId" />
-  </module-container>
+  </element-container>
 </template>
 
 <script>
 import ComponentToolbar from './ComponentToolbar.vue';
 import ElementMixin from '../../common/mixins/ElementMixin';
-import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import ElementContainer from '../../common/containers/ElementContainer.vue';
 
 export default {
   name: 'CustomCodeElement',
   components: {
     ComponentToolbar,
-    ModuleContainer,
+    ElementContainer,
   },
   mixins: [ElementMixin],
   data() {

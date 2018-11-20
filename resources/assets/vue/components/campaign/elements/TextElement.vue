@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <element-container :component="component" @select-component="selectComponentHandler">
     <a
       :data-contenteditable-href="component.text.attribute.href"
       :style="component.text.style.textDecoration || 'text-decoration:none;'"
@@ -32,19 +32,19 @@
         </tr>
       </table>
     </a>
-  </module-container>
+  </element-container>
 </template>
 
 <script>
 import ElementMixin from '../../common/mixins/ElementMixin';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
-import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import ElementContainer from '../../common/containers/ElementContainer.vue';
 import TinyMce from '../../common/tinyMce.vue';
 
 export default {
   name: 'TextElement',
   components: {
-    ModuleContainer,
+    ElementContainer,
     TinyMce,
   },
   mixins: [MobileStylesMixin, ElementMixin],

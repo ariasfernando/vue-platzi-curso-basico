@@ -1,6 +1,6 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <element-container :component="component" @select-component="selectComponentHandler">
     <table
       :width="component.divider.attribute.width || '100%'"
       :style="tableStyle"
@@ -14,19 +14,19 @@
         :bgcolor="component.divider.attribute.bgcolor"
         :height="component.divider.attribute.height || component.divider.style.height" />
     </table>
-  </module-container>
+  </element-container>
 </template>
 
 <script>
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
-  import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+  import ElementContainer from '../../common/containers/ElementContainer.vue';
   import ElementMixin from '../../common/mixins/ElementMixin';
   import Spacer from '../../common/Spacer.vue';
 
   export default {
     name: 'DividerElement',
     components: {
-      ModuleContainer,
+      ElementContainer,
       Spacer,
     },
     mixins: [MobileStylesMixin, ElementMixin],

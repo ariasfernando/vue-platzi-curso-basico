@@ -24,7 +24,7 @@ import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
 
 export default {
-  name: 'ModuleContainer',
+  name: 'ElementContainer',
   mixins: [MobileStylesMixin, ElementMixin],
   methods: {
     clickOnComponent(e) {

@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
+  <element-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
     <a
       :data-contenteditable-href="component.button.attribute.href || ''"
       :target="component.button.attribute.target || '_blank'"
@@ -58,7 +58,7 @@
         </tr>
       </table>
     </a>
-  </module-container>
+  </element-container>
   <!-- CALL TO ACTION ELEMENT ENDS -->
 </template>
 
@@ -67,14 +67,14 @@
 import ComponentToolbar from './ComponentToolbar.vue';
 import ElementMixin from '../../common/mixins/ElementMixin';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
-import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import ElementContainer from '../../common/containers/ElementContainer.vue';
 import TinyMce from '../../common/tinyMce.vue';
 
 export default {
   name: 'ButtonElement',
   components: {
     ComponentToolbar,
-    ModuleContainer,
+    ElementContainer,
     TinyMce,
   },
   mixins: [MobileStylesMixin, ElementMixin],

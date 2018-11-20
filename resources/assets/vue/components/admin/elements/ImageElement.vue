@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
+  <element-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
     <table
       :width="component.container.attribute.width || '100%'"
       :style="{width:widthStyle(component.container.attribute.width || '100%')}"
@@ -55,7 +55,7 @@
         </td>
       </tr>
     </table>
-  </module-container>
+  </element-container>
   <!-- IMAGE ELEMENT ENDS -->
 </template>
 
@@ -63,13 +63,13 @@
 import ComponentToolbar from './ComponentToolbar.vue';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
-import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import ElementContainer from '../../common/containers/ElementContainer.vue';
 
 export default {
   name: 'ImageElement',
   components: {
     ComponentToolbar,
-    ModuleContainer,
+    ElementContainer,
   },
   mixins: [MobileStylesMixin, ElementMixin],
   data() {
