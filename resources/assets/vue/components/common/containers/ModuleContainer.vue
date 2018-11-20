@@ -2,6 +2,7 @@
   <tr
     v-if="component.container.styleOption.enableElement !== false"
     :data-type="component.type"
+    :element-id="component.id"
     :class="[getMobileClasses(component,'tr'), {'is-active': isActive}]"
     @mousedown="clickOnComponent">
     <td
