@@ -120,7 +120,6 @@
           this.minified.normal_html.output = this.minified.normal_html.initial_html;
           this.minified.mask_link_html.output = value.campaign_data.mask_link_html;
           this.plainText = value.campaign_data.plain_text;
-          console.log('this.minified', this.minified);
         },
         deep: true
       },

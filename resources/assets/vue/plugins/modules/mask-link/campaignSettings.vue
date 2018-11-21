@@ -27,20 +27,16 @@ export default {
     mask_description: {
       get() {
         if (!_.isEmpty(this.currentComponent) && this.component) {
-          console.log('1 getting dataDescription this.component[this.plugin.subComponent].attribute.dataDescription', this.component[this.plugin.subComponent].attribute.dataDescription);
           return this.component[this.plugin.subComponent].attribute.dataDescription || '';
         } else if (typeof this.moduleDataIndex != 'undefined' || typeof this.moduleDataKey != 'undefined') {
-          console.log('2 getting dataDescription this.module.data[this.moduleDataKey][this.moduleDataIndex].dataDescription', this.module.data[this.moduleDataKey][this.moduleDataIndex].dataDescription);
           return this.module.data && !_.isUndefined(this.module.data[this.moduleDataKey]) && !_.isUndefined(this.module.data[this.moduleDataKey][this.moduleDataIndex])
             ? this.module.data[this.moduleDataKey][this.moduleDataIndex].dataDescription
             : null;
         } else {
-          console.log('3 getting dataDescription this.module.data[\'dataDescription\']', this.module.data['dataDescription']);
           return this.module.data && this.module.data['dataDescription'] ? this.module.data['dataDescription'] : null;
         }
       },
       set(value) {
-        console.log('setting dataDescription', value);
         this.saveComponentProperty("dataDescription", value);
       },
     },
@@ -81,7 +77,6 @@ export default {
     };
   },
   created() {
-    console.log('this.component', this.component);
     if (_.has(this.component, 'plugins.destinationUrl.config.validations.url.selected')) {
       this.component.plugins.destinationUrl.config.validations.url.selected = 'url';
     }
@@ -89,7 +84,6 @@ export default {
   methods: {
     saveComponentProperty(property, value) {
       value = value.replace(/[^a-zA-Z0-9_\[\]]/g, '');
-      console.log('Por guardar maskLink.value', value);
       if (!_.isEmpty(this.currentComponent)) {
         const payload = {
           moduleId: this.currentComponent.moduleId,
@@ -100,12 +94,10 @@ export default {
           property,
           value: value
         };
-        console.log('1 setting dataDescription campaign/saveComponentProperty', payload);
         this.$store.commit("campaign/saveComponentProperty", payload);
       } else if (typeof this.moduleDataIndex != 'undefined') {
         const data = JSON.parse(JSON.stringify(this.module.data));
         data[this.moduleDataKey][this.moduleDataIndex][property] = value;
-        console.log('2 setting dataDescription campaign/saveCustomModuleData ', {moduleId: this.currentCustomModule, data});
         this.$store.commit('campaign/saveCustomModuleData', {
           moduleId: this.currentCustomModule,
           data,
@@ -113,7 +105,6 @@ export default {
       } else {
         const data = {};
         data[property] = value;
-        console.log('3 setting dataDescription campaign/saveCustomModuleData', {moduleId: this.currentCustomModule, data});
         this.$store.commit('campaign/saveCustomModuleData', {
           moduleId: this.currentCustomModule,
           data,

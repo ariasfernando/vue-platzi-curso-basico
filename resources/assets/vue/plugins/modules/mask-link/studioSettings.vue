@@ -89,7 +89,6 @@
       },
     },
     created() {
-      console.log('this.component', this.component);
     },
     data() {
       return {
