@@ -10,6 +10,7 @@ function Campaign(data) {
   this.campaign_process = data.settings.campaignProcess || false;
   this.modules_data = data.modules;
   this.body_html = data.campaign.bodyHtml;
+  this.plain_text = data.campaign.plainText;
   this.auto_save = data.campaign.campaign_data.auto_save;
   this.favorite = data.campaign.isFavorite;
   this.template = data.campaign.campaign_data.template;

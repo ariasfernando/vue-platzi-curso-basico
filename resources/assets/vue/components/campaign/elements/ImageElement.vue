@@ -24,6 +24,7 @@
             :alt="component.image.attribute.alt"
             :title="component.image.attribute.title"
             :target="component.image.attribute.target || '_blank'"
+            :data-description="component.image.attribute.dataDescription || ''"
             >
             <img
               :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,

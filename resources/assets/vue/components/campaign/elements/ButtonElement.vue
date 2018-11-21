@@ -9,6 +9,7 @@
         :target="component.button.attribute.target || '_blank'"
         :style="component.button.style.textDecoration || 'text-decoration:none;'"
         :title="component.button.attribute.title || ''"
+        :data-description="component.button.attribute.dataDescription || ''"
         >
         <table
           cellpadding="0"

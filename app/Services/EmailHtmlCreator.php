@@ -41,6 +41,44 @@ class EmailHtmlCreator
     }
 
     /**
+     * Create HTML body.
+     *
+     * @return string
+     */
+    public function createHtmlBody()
+    {
+        // Initialize locale
+        StensulLocale::init($this->getCampaign()->locale);
+
+        $this->body = $this->getEmailLayout();
+
+        $this->body = $this->replaceViewInBrowserLink();
+
+        if (!env('CDN_UPLOAD_PRETEND', false)) {
+            $this->body = $this->replaceImagesPath();
+            $this->body = $this->replaceFontPath();
+        }
+        $this->body = $this->removeAttributes();
+        $this->body = $this->replaceCharacters();
+ 
+        return $this->body;
+    }
+
+    public function createHtmlBodyMaskLink()
+    {
+        $this->body = $this->getEmailLayout();
+        $this->body = $this->replaceViewInBrowserLink();
+        if (!env('CDN_UPLOAD_PRETEND', false)) {
+            $this->body = $this->replaceImagesPath();
+            $this->body = $this->replaceFontPath();
+        }
+        $this->body = $this->replaceMaskLinks();
+        $this->body = $this->removeAttributes();
+        $this->body = $this->replaceCharacters();
+        $this->body = $this->replaceRgbForHex();
+        return $this->body;
+    }
+     /**
      * Create text version.
      *
      * @return string
@@ -84,31 +122,6 @@ class EmailHtmlCreator
                     ]
                 )
                 ->render();
-    }
-
-    /**
-     * Create HTML body.
-     *
-     * @return string
-     */
-    public function createHtmlBody()
-    {
-        // Initialize locale
-        StensulLocale::init($this->getCampaign()->locale);
-
-        $this->body = $this->getEmailLayout();
-
-        $this->body = $this->replaceViewInBrowserLink();
-
-        if (!env('CDN_UPLOAD_PRETEND', false)) {
-            $this->body = $this->replaceImagesPath();
-            $this->body = $this->replaceFontPath();
-        }
-
-        $this->getCampaign()->body_html = $this->body;
-        $this->getCampaign()->save();
-
-        return $this->body;
     }
 
     /**
@@ -437,5 +450,136 @@ class EmailHtmlCreator
     public function setBody($body)
     {
         $this->body = $body;
+    }
+
+    /**
+     * Remove invalid attributes
+     *
+     * @return string
+     */
+    public function removeAttributes()
+    {
+        $this->body = self::removeAttributesStatic($this->body);
+        return $this->body;
+    }
+
+    public static function removeAttributesStatic($body)
+    {
+        $attributes = [
+            '/data-image=([\"\']).*?\\1/'           => '',
+            '/data-key=([\"\']).*?\\1/'             => '',
+            '/data-mce-href=([\"\']).*?\\1/'        => '',
+            '/ contenteditable=([\"\'])true\\1/'    => '',
+            '/data-link-type=([\"\']).*?\\1/'       => '',
+            '/data-description=([\"\']).*?\\1/'     => '',
+            '/data-v-[a-z0-9A-Z]{8}=""/'            => '',
+        ];
+
+        foreach ($attributes as $regexp => $replace_value) {
+            $body = preg_replace($regexp, $replace_value, $body);
+        }
+
+        return  $body;
+    }
+
+    /**
+    * Replace characters
+    *
+    * @return string
+    */
+    public function replaceCharacters()
+    {
+        $attributes = [
+            '/&quot;/' => "'",
+            '/&amp;#39;/' => "'",
+            '/&amp;lt;/' => "<",
+            '/&amp;gt;/' => ">",
+        ];
+
+        foreach ($attributes as $regexp => $replace_value) {
+            $this->body = preg_replace($regexp, $replace_value, $this->body);
+        }
+        return $this->body;
+    }
+
+    public function replaceRgbForHex() {
+        $regexp = '/rgb\((\d{1,3}),[\s]?(\d{1,3}),[\s]?(\d{1,3})\)/i';
+        $body = $this->body;
+        preg_match_all($regexp, $body, $match);
+        $matches = array_shift($match);
+        if (is_array($matches) && count($matches)) {
+            foreach ($matches as $idx => $m) {
+                $body = str_replace($matches[$idx], sprintf("#%02x%02x%02x", $match[0][$idx], $match[1][$idx], $match[2][$idx]), $body);
+            }
+        }
+        return $this->body = $body;
+    }
+
+    /**
+     * Replace mask_link links
+     *
+     * @param  $mask_link bool
+     * @return string
+     */
+    public function replaceMaskLinks()
+    {
+        return self::replaceMaskLinksStatic($this->body);
+    }
+
+    public static function replaceMaskLinksStatic($body)
+    {
+        $output = $body;
+        $regexp_href = "<a\s[^>]*href=([\"\']??)([^\\1 >]*?)\\1[^>]*(data-description=([\"\']??)([^\\4 >]*?)\\4)(.*)?>";
+        $regexp_description = "<a\s[^>]*data-description=([\"\']??)([^\\1 >]*?)\\1[^>]*(href=([\"\']??)([^\\4 >]*?)\\4)(.*)?>";
+
+        preg_match_all("/$regexp_href/siU", $body, $matches_href, PREG_SET_ORDER);
+        preg_match_all("/$regexp_description/siU", $body, $matches_description, PREG_SET_ORDER);
+        
+        $replaceFn = function(&$output, $matches, $case) {
+            if (!empty($matches)) {
+                $link_structure = \View::make("layouts.partials.link_structure_mask_link")->render();
+                $link_structure = trim($link_structure);
+                $replace_tags = ['[DESTINATION_URL]', '[LINK_DESCRIPTION]'];
+                if ($case === 'href') {
+                    $idx_url = 2;
+                    $idx_desc = 5;
+                } else {
+                    $idx_url = 5;
+                    $idx_desc = 2;
+                }
+
+                foreach ($matches as $match) {
+                    if (isset($match[5])) {
+                        $url = (isset($match[$idx_url])) ? trim($match[$idx_url]) : '';
+                        $description = (isset($match[$idx_desc])) ? trim($match[$idx_desc]) : '';
+                        if (!empty($url) && !empty($description)) {
+                            if ((!filter_var($url, FILTER_VALIDATE_URL)) && !(filter_var('http://'.$url, FILTER_VALIDATE_URL))) {
+                                continue;
+                            }
+                        }
+                        if (isset($url) && isset($description)) {
+                            $replace_tags_with = [$url, $description];
+                            $new_url = str_replace($replace_tags, $replace_tags_with, $link_structure);
+                            $pos = strpos($output, $match[0]);
+                            $url = str_replace('|+|amp|+|', '&', $url);
+                            $replace_tag = str_replace($url, $new_url, $match[0]);
+                            $replace_tag = str_replace('[GAMMA_CODE]', $description, $replace_tag);
+                            $replace_tag = str_replace('"${track(', '\'${track(', $replace_tag);
+                            $replace_tag = str_replace(')}"', ")}'", $replace_tag);
+                            $replace_tag = trim($replace_tag);
+
+                            if ($pos !== false) {
+                                $output = substr_replace($output, $replace_tag, $pos, strlen($match[0]));
+                            }
+                        }
+                    }
+                }
+            }
+            $output = str_replace('[GAMMA_CODE]', '', $output);
+            return $output;
+        };
+        $replaceFn($output, $matches_href, 'href');
+        $replaceFn($output, $matches_description, 'description');
+        return $output;
     }
 }

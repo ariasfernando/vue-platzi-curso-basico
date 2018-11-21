@@ -77,7 +77,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         }
 
         var data = {}, selection = editor.selection, dom = editor.dom, selectedElm, anchorElm, initialText;
-        var win, onlyText, textListCtrl, linkListCtrl, tagListCtrl, relListCtrl, targetListCtrl, classListCtrl, linkTitleCtrl, value;
+        var win, onlyText, textListCtrl, linkListCtrl, tagListCtrl, relListCtrl, targetListCtrl, classListCtrl, colorsListCtrl, linkTitleCtrl, value, dataDescCtrl;
 
         function linkListChangeHandler(e) {
             var textCtrl = win.find('#text');
@@ -171,6 +171,23 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             data.href = href;
         }
 
+        function validateDescription(target){
+            var description = target.value;
+            return validateNoSpaces( description );
+        }
+
+        function validateNoSpaces( value ){
+            if( !value ){
+                return true;
+            }
+
+            if( value.indexOf(" ") >= 0 ){
+                return false;
+            }
+
+            return true;
+        }
+
         function isOnlyTextSelected(anchorElm) {
             var html = selection.getContent();
 
@@ -202,6 +219,9 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
 
         data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : selection.getContent({ format: 'text' });
         data.href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
+        data.dataDescription = anchorElm ? dom.getAttrib(anchorElm, 'data-description') : '';
+
+        data.style = [];
 
         if (anchorElm) {
             data.target = dom.getAttrib(anchorElm, 'target');
@@ -269,6 +289,19 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 },
                 onPostRender: function () {
                     tagListCtrl = this;
+                }
+            };
+        }
+
+        if (editor.settings.data_description) {
+            dataDescCtrl = {
+                name: 'data_description',
+                type: 'textbox',
+                size: 40,
+                label: 'Description',
+                value: data.dataDescription || '',
+                onfocusout: function (e) {
+                    validateDescription(e.target);
                 }
             };
         }
@@ -351,15 +384,24 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 tagListCtrl,
                 relListCtrl,
                 targetListCtrl,
-                classListCtrl
+                classListCtrl,
+                dataDescCtrl,
             ],
             onSubmit: function (e) {
 
                 // Force validate url input
                 urlValidate($('.mce-link-input .mce-textbox')[0]);
 
+                var validDescription = true;
+                // Validate data description format.
+                if( $('.mce-container-body .mce-textbox:eq(1)').length ){
+                    validDescription = validateDescription($('.mce-container-body .mce-textbox:eq(1)')[0]);
+                }
+
                 var href;
                 href = data.href;
+
+                var dataDescription = e.data.data_description || undefined;
 
                 // Validate an url
                 function validateUrl(url) {
@@ -409,6 +451,9 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                         "data-mce-href": href
                     };
 
+                    if (dataDescription) {
+                        linkAttrs["data-description"] = dataDescription;
+                    }
                     if (anchorElm) {
                         editor.focus();
 
@@ -470,6 +515,31 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                             .focus();
                         win.find('#href')[0].tooltip().text(errorMessage).show();
                         return false;
+                    }
+
+                    if( !validDescription ){
+                        var noSpacesAllowTxt = 'Spaces are not allow.';
+                        $('.mce-container-body .mce-textbox:eq(1)')
+                            .addClass('error')
+                            .focus();
+                        win.find('#data_description')[0].tooltip().text(noSpacesAllowTxt).show();
+                        // Fix tooltip position.
+                        $(".mce-tooltip:contains("+noSpacesAllowTxt+")").css("top","+=40");
+                        return false;
+                    }
+
+                    // Make description required if link exits
+                    if( href.length && !dataDescription ){
+                        var noSpacesAllowTxt = 'This field is required.';
+                        if ($('.mce-container-body .mce-textbox:eq(1)').length) {
+                          $('.mce-container-body .mce-textbox:eq(1)')
+                              .addClass('error')
+                              .focus();
+                          win.find('#data_description')[0].tooltip().text(noSpacesAllowTxt).show();
+                          // Fix tooltip position.
+                          $(".mce-tooltip:contains("+noSpacesAllowTxt+")").css("top","+=40");
+                          return false;
+                        }
                     }
 
                     // validateUrlExists

@@ -61,6 +61,13 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $s = new \stdClass();
+        $s->a = 'b';
+        \Log::error(print_r($s,1));
+        $e = new \Stensul\Events\Test($s);
+        event($e);
+        \Log::error(print_r($s,1));
+
         $flash_messages = [
             'campaign_lock',
             'campaign_not_found',
@@ -80,7 +87,6 @@ class DashboardController extends Controller
             'flash' => $flash,
             'locked_by' => CampaignManager::whoIsLocking(session()->get('campaign_lock'))
         ];
-
         return $this->renderView('dashboard', ['params' => $params]);
     }
 

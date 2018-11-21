@@ -19,8 +19,15 @@
                   </div>
                   <textarea ref="normal_html" v-model="minified.normal_html.output" readonly />
                 </b-tab>
+                <b-tab title="MASKED HTML" @click="changeTypeTextArea('mask_link_html')" >
+                  <div class="html_minify_toggle pull-right">
+                    <label for="htmlMinify">Minify Code</label>
+                    <toggle-button :value="this.minified.mask_link_html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange('mask_link_html')"></toggle-button>
+                  </div>
+                  <textarea ref="mask_link_html" v-html="this.minified.mask_link_html.output" readonly></textarea>
+                </b-tab>
                 <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">
-                  <textarea ref="plain_text" v-html="plainText" readonly />
+                  <textarea ref="plain_text" :value="plainText"></textarea>
                 </b-tab>
               </b-tabs>
             </slot>
@@ -62,6 +69,9 @@
       CopyToClipboard
     },
     computed: {
+      maskLinks() {
+        return (Application.globals.maskLinks !== undefined && Application.globals.maskLinks);
+      },
       modalComplete () {
         return this.$store.state.campaign.modalComplete;
       },
@@ -83,7 +93,7 @@
             initial_html: '',
             minified_html: ''
           },
-          gamma_html: {
+          mask_link_html: {
             toggle: false,
             output: '',
             initial_html: '',
@@ -103,13 +113,21 @@
       },
       campaign: {
         handler: function(value) {
+          this.minified.mask_link_html.initial_html = this.$options.filters.charConvert(value.campaign_data.mask_link_html);
+          this.minified.mask_link_html.minified_html = this.$options.filters.charConvert(value.campaign_data.mask_link_html_minified);
           this.minified.normal_html.initial_html = value.campaign_data.body_html;
           this.minified.normal_html.minified_html = this.$options.filters.charConvert(value.campaign_data.body_html_minified);
           this.minified.normal_html.output = this.minified.normal_html.initial_html;
+          this.minified.mask_link_html.output = value.campaign_data.mask_link_html;
           this.plainText = value.campaign_data.plain_text;
+          console.log('this.minified', this.minified);
         },
         deep: true
       },
+      textareaType(value) {
+        this.minified[value].output = this.minified[value].initial_html;
+        this.minified[value].toggle = false;
+      }
     },
     methods: {
       getPlainText() {
