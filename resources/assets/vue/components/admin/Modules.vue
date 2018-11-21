@@ -5,12 +5,18 @@
       <div class="col-xs-12">
         <div class="level">
           <div class="level-left is-spaced-2">
-            <div id="tab-studio" class="level-item is-clickable" :class="{'is-active': activeTab === 'studio'}" @click="setTab('studio')">
+            <div
+              id="tab-studio" class="level-item is-clickable"
+              :class="{'is-active': activeTab === 'studio'}"
+              @click="setTab('studio')">
               <span class="title is-2">
                 Studio
               </span>
             </div>
-            <div id="tab-custom" class="level-item is-clickable" :class="{'is-active': activeTab === 'custom'}" @click="setTab('custom')">
+            <div
+              id="tab-custom" class="level-item is-clickable"
+              :class="{'is-active': activeTab === 'custom'}"
+              @click="setTab('custom')">
               <span class="title is-2">
                 Custom
               </span>
@@ -19,12 +25,18 @@
           <div class="level-right">
             <div class="level-item">
               <div class="btn btn-default btn-create">
-                <router-link to="/create"><i class="glyphicon glyphicon-plus-sign"></i> Create a new Module</router-link>
+                <router-link to="/create">
+                  <i class="glyphicon glyphicon-plus-sign" /> Create a new Module
+                </router-link>
               </div>
             </div>
             <div class="level-item">
               <div class="search-container">
-                <search-input :dirty="resetSearch" :collection="modules[activeTab]" :columns-to-filter="['name', 'status']" @filtered="refreshData" />
+                <search-input
+                  :dirty="resetSearch"
+                  :collection="modules[activeTab]"
+                  :columns-to-filter="['name', 'status']"
+                  @filtered="refreshData" />
               </div>
             </div>
           </div>
@@ -36,25 +48,32 @@
       <div class="col-xs-12">
 
         <div class="table-responsive">
-          <table id="admin-module" width="100%" border="0"
-                 cellpadding="0" cellspacing="0" class="table table-bordered table-striped"
-                 :class="{'is-empty': filteredModules[activeTab].length === 0}">
+          <table
+            id="admin-module" width="100%" border="0"
+            cellpadding="0" cellspacing="0" class="table table-bordered table-striped"
+            :class="{'is-empty': filteredModules[activeTab].length === 0}">
             <thead>
               <tr>
                 <th class="sortable">
-                  <a id="name" href="#" class="sortable-option sort-order-desc" data-order-field="name">
+                  <a
+                    id="name" href="#" class="sortable-option sort-order-desc"
+                    data-order-field="name">
                     Name
                     <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
                 <th class="sortable">
-                  <a id="name" href="#" class="sortable-option sort-order-desc" data-order-field="libraries">
+                  <a
+                    id="name" href="#" class="sortable-option sort-order-desc"
+                    data-order-field="libraries">
                     Libraries
                     <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
                 <th class="sortable">
-                  <a id="status" href="#" class="sortable-option sort-order-desc" data-order-field="status">
+                  <a
+                    id="status" href="#" class="sortable-option sort-order-desc"
+                    data-order-field="status">
                     Status
                     <i class="glyphicon glyphicon-menu-down" />
                   </a>
@@ -160,7 +179,7 @@ export default {
               className: 'et-success',
             });
           })
-          .catch(error => {
+          .catch((error) => {
             this.$root.$toast(error.message, { className: 'et-error' });
           });
       }
