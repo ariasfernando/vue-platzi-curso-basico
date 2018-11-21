@@ -36,71 +36,64 @@
       <div class="col-xs-12">
 
         <div class="table-responsive">
-          <table
-            id="admin-module"
-            width="100%"
-            border="0"
-            cellpadding="0"
-            cellspacing="0"
-            class="table table-bordered table-striped data-list">
+          <table id="admin-module" width="100%" border="0"
+                 cellpadding="0" cellspacing="0" class="table table-bordered table-striped"
+                 :class="{'is-empty': filteredModules[activeTab].length === 0}">
             <thead>
               <tr>
                 <th class="sortable">
-                  <a id="name" href="#" data-order-field="name">
+                  <a id="name" href="#" class="sortable-option sort-order-desc" data-order-field="name">
                     Name
-                    <i class="glyphicon glyphicon-menu-down pull-right" />
+                    <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
                 <th class="sortable">
-                  <a id="name" href="#" data-order-field="name">
-                    Type
-                    <i class="glyphicon glyphicon-menu-down pull-right" />
+                  <a id="name" href="#" class="sortable-option sort-order-desc" data-order-field="libraries">
+                    Libraries
+                    <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
                 <th class="sortable">
-                  <a id="status" href="#" data-order-field="status">
+                  <a id="status" href="#" class="sortable-option sort-order-desc" data-order-field="status">
                     Status
-                    <i class="glyphicon glyphicon-menu-down pull-right" />
+                    <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
-                <th width="150" class="bold">Actions</th>
+                <th width="150" class="bold has-text-centered">Actions</th>
               </tr>
             </thead>
             <tbody v-if="ready">
               <tr v-for="(module, id) in filteredModules[activeTab]" :key="id" :data-module="id">
                 <td :title="module.title">{{ module.title }}</td>
-                <td :title="module.type">{{ module.type }}</td>
-                <td :title="module.status">{{ module.status }}</td>
-                <td class="text-right actions icons">
-                  <router-link
-                    v-if="module.type === 'studio'"
-                    :to="'/clone/' + module.moduleId">
+                <td :title="module.libraries">
+                  <span v-for="(library) in module.libraries" :key="library" class="st-rounded-tag">{{ library }}</span>
+                </td>
+                <td :title="module.status">
+                  <span class="st-rounded-tag">{{ module.status }}</span>
+                </td>
+                <td class="text-right actions icons has-text-centered">
+                  <router-link v-if="module.type === 'studio'" :to="'/clone/' + module.moduleId">
                     <i class="glyphicon glyphicon-duplicate" />
                   </router-link>
-                  <router-link
-                    v-if="module.type === 'studio'"
-                    :to="'/edit/' + module.moduleId">
+                  <router-link v-if="module.type === 'studio'" :to="'/edit/' + module.moduleId">
                     <i class="glyphicon glyphicon-pencil" />
                   </router-link>
-                  <a
-                    v-if="module.type === 'studio'"
-                    href="#"
-                    class="delete"
-                    title="Delete"
-                    @click="deleteModule(module)">
+
+                  <a v-if="module.type === 'studio'" href="#" class="delete"
+                     title="Delete" @click="deleteModule(module)">
                     <i class="glyphicon glyphicon-trash" />
                   </a>
-                </td>
-              </tr>
-              <tr v-if="filteredModules[activeTab].length == 0">
-                <td colspan="4">
-                  No results were found for your search.
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-
+        <div v-if="ready && filteredModules[activeTab].length === 0" class="no-results">
+          No results were found.
+        </div>
+        <div v-if="ready === false" class="no-results">
+          <generic-spinner />
+        </div>
       </div>
     </div>
   </section>
@@ -108,11 +101,15 @@
 
 <script>
 import moduleService from '../../services/module';
-import searchInput from './searchInput.vue';
+import SearchInput from './SearchInput.vue';
+import GenericSpinner from '../common/GenericSpinner.vue';
 
 export default {
   name: 'Modules',
-  components: { 'search-input': searchInput },
+  components: {
+    SearchInput,
+    GenericSpinner,
+  },
   data() {
     return {
       modules: {
@@ -129,22 +126,25 @@ export default {
     };
   },
   created() {
-    this.loadModules('studio');
-    this.loadModules('custom');
+    this.loadModules();
   },
   mounted() {
     this.toggleSidebar();
   },
   methods: {
-    loadModules(type) {
-      moduleService
-        .getAllModules(type)
-        .then(response => {
-          this.modules[type] = response;
-          this.filteredModules[type] = this.modules[type];
+    loadModules() {
+      const studioModules = moduleService.getAllModules('studio');
+      const customModules = moduleService.getAllModules('custom');
+
+      Promise.all([studioModules, customModules])
+        .then((response) => {
+          this.modules.studio = response[0];
+          this.modules.custom = response[1];
+          this.filteredModules.studio = this.modules.studio;
+          this.filteredModules.custom = this.modules.custom;
           this.ready = true;
         })
-        .catch(error => {
+        .catch((error) => {
           this.$root.$toast(error, { className: 'et-error' });
         });
     },
@@ -184,7 +184,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import '../../less/admin';
 .btn-create {
   margin-bottom: 10px;
@@ -209,6 +209,42 @@ $stensul-purple: #514960;
     margin-bottom: 10px;
     .search-container {
       width: 300px;
+    }
+  }
+  .list-body {
+    .table {
+      &.is-empty {
+        margin-bottom: 0px;
+      }
+      th,
+      td {
+        width: 25%;
+        &:nth-of-type(2) {
+          width: 40%;
+        }
+      }
+      th {
+        padding: 8px 16px;
+        .glyphicon-menu-down {
+          // sort isn't developed, so we hide this for the moment
+          display: none;
+        }
+      }
+      td {
+        padding: 16px 16px;
+      }
+    }
+    .no-results {
+      background-color: #ffffff;
+      border: 1px solid #edecec;
+      border-top: 0px;
+      color: #666666;
+      font-family: 'Open Sans', Arial, serif;
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 18px;
+      padding: 16px 16px;
+      vertical-align: middle;
     }
   }
 }
@@ -274,11 +310,11 @@ $stensul-purple: #514960;
       position: relative;
       &::before {
         content: '';
-        height: 2px;
         background-color: $stensul-purple;
-        position: absolute;
         bottom: 0px;
+        height: 2px;
         left: 0px;
+        position: absolute;
         right: 0px;
       }
       .title {
@@ -293,12 +329,32 @@ $stensul-purple: #514960;
 
 // Titles
 .title {
-  font-weight: 300;
-  font-family: 'Open Sans', Arial, serif;
   color: #999999;
+  font-family: 'Open Sans', Arial, serif;
+  font-weight: 300;
   &.is-2 {
     font-size: 28px;
   }
+}
+
+.st-rounded-tag {
+  background-color: #eaeaea;
+  border-radius: 1em;
+  color: #666666;
+  display: inline-block;
+  font-size: 90%;
+  line-height: 1;
+  margin-bottom: 2px;
+  margin-right: 5px;
+  margin-top: 2px;
+  padding: 0.5em 0.9em;
+  text-align: center;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.has-text-centered {
+  text-align: center;
 }
 </style>
 

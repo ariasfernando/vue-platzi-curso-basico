@@ -1660,6 +1660,7 @@ describe('== Module Store ==', () => {
         status: 'draft',
         data: {},
         inUse: 0,
+        libraries: [],
         plugins: {
           moduleBackgroundColor: {
             name: 'module-background-color',
@@ -2061,6 +2062,7 @@ describe('== Module Store ==', () => {
         data: {},
         plugins: {},
         inUse: 0,
+        libraries: [],
         structure: {
           columnsStacking: 'normal',
           attribute: {
