@@ -14,17 +14,18 @@
     "_": true
   },
   "rules": {
-    "max-len": [2, { "code": 120}],
+    "max-len": [1, { "code": 120}],
     "no-trailing-spaces": 2,
     "no-plusplus": 0,
     "no-underscore-dangle":0,
     "vue/max-attributes-per-line": [2, {
-      "singleline": 3,
+      "singleline": 5,
       "multiline": {
-        "max": 3,
+        "max": 5,
         "allowFirstLine": true
       }
     }],
+    "vue/require-prop-types": [0],
     "vue/html-closing-bracket-newline": [2, {
       "singleline": "never",
       "multiline": "never"
