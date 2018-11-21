@@ -1659,6 +1659,7 @@ describe('== Module Store ==', () => {
         type: 'studio',
         status: 'draft',
         data: {},
+        inUse: 0,
         plugins: {
           moduleBackgroundColor: {
             name: 'module-background-color',
@@ -2059,6 +2060,7 @@ describe('== Module Store ==', () => {
         status: '',
         data: {},
         plugins: {},
+        inUse: 0,
         structure: {
           columnsStacking: 'normal',
           attribute: {

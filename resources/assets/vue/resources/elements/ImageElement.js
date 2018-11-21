@@ -17,7 +17,9 @@ function imageDefault() {
         height: 'auto',
       },
       style: {},
-      styleOption: {},
+      styleOption: {
+        noMobileStretch: true,
+      },
     },
     plugins: {},
     data: {},

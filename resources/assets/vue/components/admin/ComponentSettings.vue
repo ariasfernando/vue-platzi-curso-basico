@@ -3,7 +3,7 @@
     <!-- START: Style -->
     <label-item-container
       v-b-toggle.style
-      :label="`${toCamel(component.type.replace('-element', ''))} Styles`"
+      :label="`${_.startCase(component.type.replace('-element', ''))} Styles`"
       icon="glyphicon-pencil" />
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
@@ -47,27 +47,32 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="functionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
-        <component
-          :is="'studio-' + plugin.name"
-          v-for="(plugin, key) in component.plugins"
-          v-if="plugin.name !== 'studio-mobile-styles' && $can('std-'+component.type+'-plugin-'+plugin.name) && $_app.modulePlugins[key].hasStudioSettings"
-          :key="key"
-          :element="component"
-          :class="'plugin-' + plugin.name"
-          :name="key"
-          :plugin="plugin" />
+        <group-container
+          v-for="(pluginGroup, groupKey) in pluginsGroups"
+          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+          :key="groupKey"
+          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <component
+            :is="'studio-' + plugin.name"
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+            :key="'std-'+component.id+'-plugin-' + plugin.name"
+            :element="component"
+            :class="'plugin-' + plugin.name"
+            :name="_.camelCase(plugin.name)"
+            :plugin="component.plugins[_.camelCase(plugin.name)]" />
+        </group-container>
       </b-card>
     </b-collapse>
   </div>
 </template>
 
 <script>
-import _ from 'lodash';
 import * as elementSettings from './settings';
 import GroupContainer from '../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
 import settingsDefault from './settingsDefault';
 import AclMixing from './mixins/AclMixin';
+import pluginsLayout from './pluginsLayout';
 
 export default {
   components: {
@@ -75,6 +80,7 @@ export default {
     LabelItemContainer,
     'input-border-group': elementSettings.BorderGroup,
     'input-caret': elementSettings.ButtonCaret,
+    'input-horizontal-padding-group': elementSettings.HorizontalPaddingGroup,
     'input-button-width': elementSettings.ButtonWidth,
     'input-class-input': elementSettings.ClassInput,
     'input-font-family': elementSettings.FontFamily,
@@ -91,11 +97,14 @@ export default {
     'input-vertical-align': elementSettings.VerticalAlign,
     'input-generic-code': elementSettings.GenericCode,
   },
-  props: ['currentComponent'],
   mixins: [AclMixing],
+  props: ['currentComponent'],
   computed: {
     settings() {
       return settingsDefault[this.component.type]().componentSettings;
+    },
+    pluginsGroups() {
+      return pluginsLayout[this.component.type]().componentPlugins;
     },
     module() {
       return this.$store.getters['module/module'];
@@ -104,10 +113,15 @@ export default {
       return this.module.structure.columns[this.currentComponent.columnId]
         .components[this.currentComponent.componentId];
     },
+    _() {
+      return _;
+    },
   },
   methods: {
-    toCamel(str) {
-      return _.startCase(str);
+    pluginFilter(plugins) {
+      return plugins.filter((plugin) => {
+        return this.$can(`std-${this.component.type}-plugin-${plugin.aclName}`);
+      });
     },
     saveComponentProperty(link, subComponent, name, value) {
       const data = {
