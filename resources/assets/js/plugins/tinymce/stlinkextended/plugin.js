@@ -528,19 +528,6 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                         return false;
                     }
 
-                    // Make description required if link exits
-                    if( href.length && !dataDescription ){
-                        var noSpacesAllowTxt = 'This field is required.';
-                        if ($('.mce-container-body .mce-textbox:eq(1)').length) {
-                          $('.mce-container-body .mce-textbox:eq(1)')
-                              .addClass('error')
-                              .focus();
-                          win.find('#data_description')[0].tooltip().text(noSpacesAllowTxt).show();
-                          // Fix tooltip position.
-                          $(".mce-tooltip:contains("+noSpacesAllowTxt+")").css("top","+=40");
-                          return false;
-                        }
-                    }
 
                     // validateUrlExists
                     if(Application.globals.validateUrlExists && editor.settings.link_validate_url === 'urlAndDestination') {

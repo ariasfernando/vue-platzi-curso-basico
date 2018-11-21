@@ -1,32 +1,29 @@
 <template>
-  <module-container :component="component" @select-component="selectComponentHandler">
-      <table
+  <module-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
+    <table
       :width="component.container.attribute.width || '100%'"
       :style="{width:widthStyle(component.container.attribute.width || '100%')}"
       :valign="component.container.attribute.valign || 'top'"
       :align="component.container.attribute.align || 'left'"
       border="0"
       cellpadding="0"
-      cellspacing="0"
-      >
-        <tr>
-          <td 
-            width="100%"
-            :valign="component.image.attribute.valign || 'top'"
-            :align="component.image.attribute.align"
-            :bgcolor="component.image.attribute.bgcolor"
-            style="width:100%;"
-            :style="elementBorderAndPadding(component.image)"
-          >
-            <a 
-              @click.prevent
-              :href="component.image.attribute.href" 
-              :alt="component.image.attribute.alt"
-              :title="component.image.attribute.title"
-              :target="component.image.attribute.target || '_blank'"
-              >
-              <img
-                :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
+      cellspacing="0">
+      <tr>
+        <td
+          width="100%"
+          :valign="component.image.attribute.valign || 'top'"
+          :align="component.image.attribute.align"
+          :bgcolor="component.image.attribute.bgcolor"
+          style="width:100%;"
+          :style="elementBorderAndPadding(component.image)">
+          <a
+            :href="component.image.attribute.href"
+            :alt="component.image.attribute.alt"
+            :title="component.image.attribute.title"
+            :target="component.image.attribute.target || '_blank'"
+            @click.prevent>
+            <img
+              :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
                         'st-resize' : mobileStretch,
                         'st-mobile-width-constraint' : !mobileStretch }"
                 style="border: 0; display: block;"
@@ -65,37 +62,38 @@
 </template>
 
 <script>
-  import _ from 'lodash';
-  import ComponentToolbar from './ComponentToolbar.vue';
-  import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
-  import ElementMixin from '../../common/mixins/ElementMixin';
-  import ModuleContainer from '../../common/containers/ModuleContainer';
-  export default {
-    name: 'ImageElement',
-    components: {
-      ComponentToolbar,
-      ModuleContainer
+import _ from 'lodash';
+import ComponentToolbar from './ComponentToolbar.vue';
+import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
+import ElementMixin from '../../common/mixins/ElementMixin';
+import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+
+export default {
+  name: 'ImageElement',
+  components: {
+    ComponentToolbar,
+    ModuleContainer,
+  },
+  mixins: [MobileStylesMixin, ElementMixin],
+  data() {
+    return {
+      imageUrl(imagePath) {
+        return this.$_app.config.imageUrl + imagePath;
+      },
+    };
+  },
+  computed: {
+    mobileStretch() {
+      return this.component.image.styleOption.noMobileStretch !== true;
     },
-    mixins: [ MobileStylesMixin, ElementMixin],
-    data(){
-      return {
-        imageUrl(imagePath) {
-          return this.$_app.config.imageUrl + imagePath;
-        }
-      }
-    },
-    computed: {
-      mobileStretch() {
-        return this.component.image.styleOption.noMobileStretch !== true;
-      }
-    },
-  };
+  },
+};
 </script>
 
 <style lang="less">
-  @icon-option: #69dac8;
+@icon-option: #69dac8;
 
-  .stx-position-relative{
-    position: relative;
-  }
+.stx-position-relative {
+  position: relative;
+}
 </style>

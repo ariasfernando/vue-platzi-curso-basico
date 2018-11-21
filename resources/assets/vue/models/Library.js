@@ -21,7 +21,7 @@ function Library(data = {}) {
     fontSize: config.fontSize || '14',
     fontColor: typeof config.fontColor === 'undefined' ? '#000000' : config.fontColor,
     lineHeight: config.lineHeight || '18',
-    linkColor: typeof config.linkColor === 'undefined' ? '#000000' : config.linkColor,
+    linkColor: typeof config.linkColor === 'undefined' ? '' : config.linkColor,
     linkDecoration: config.linkDecoration || 'underline',
     externalCssLink: config.externalCssLink || '',
     propietaryCss: config.propietaryCss || '',
