@@ -37,6 +37,9 @@ export default {
       }
       return width;
     },
+    imageMaxWidth() {
+      return this.component.image.style.maxWidth || '100%';
+    },
     isCampaign() {
       return !_.isEmpty(this.$store.getters['campaign/campaign']);
     },
