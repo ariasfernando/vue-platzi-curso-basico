@@ -69,7 +69,7 @@
         </td>
       </tr>
       <element-selector
-        v-if="isStudio" 
+        v-if="isStudio"
         :left-position="templateWidth/2"
         :bottom="-90"
         label="Row"
