@@ -1,12 +1,13 @@
 <template>
   <div>
-    <label-item-container label="Row Style" icon="glyphicon-cog" v-b-toggle.module-settings-styles />
+    <label-item-container label="Row Styles" icon="glyphicon-cog" v-b-toggle.module-settings-styles />
     <b-collapse id="module-settings-styles" visible accordion="module-settings">
       <b-card class="control">
-        <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-module_')" :key="groupKey">
           <component
             :is="'input-' + setting.type"
-            v-for="setting in settingGroup"
+            v-for="setting in settingGroup.settings"
+            v-if="$can('std-module_'+setting.aclName)"
             :key="setting.name"
             :setting="setting.type"
             :name="setting.name"
@@ -32,11 +33,19 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="general-settings-functionalities" accordion="general-settings">
       <b-card class="control">
-        <template v-if="module.plugins && Object.keys(module.plugins).length !== 0">
-          <div v-for="(plugin, moduleKey) in module.plugins" :key="plugin.name" :class="'plugin-' + plugin.name">
-            <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" />
-          </div>
-        </template>
+        <group-container
+          v-for="(pluginGroup, groupKey) in pluginsGroups"
+          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+          :key="groupKey"
+          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <component
+            :is="'studio-' + plugin.name"
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+            :key="plugin.name"
+            :name="_.camelCase(plugin.name)"
+            :plugin="module.plugins[_.camelCase(plugin.name)]"
+            :class="'plugin-' + plugin.name" />
+        </group-container>
       </b-card>
     </b-collapse>
   </div>
@@ -47,6 +56,8 @@ import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
 import settingsDefault from '../settingsDefault';
+import AclMixing from '../mixins/AclMixin';
+import pluginsLayout from '../pluginsLayout';
 
 export default {
   name: 'GeneralSettings',
@@ -62,6 +73,7 @@ export default {
     'input-generic-text': elementSettings.GenericText,
     'input-padding-group': elementSettings.PaddingGroup,
   },
+  mixins: [AclMixing],
   computed: {
     module() {
       return this.$store.getters['module/module'];
@@ -69,8 +81,19 @@ export default {
     settings() {
       return settingsDefault.Module().componentSettings;
     },
+    pluginsGroups() {
+      return pluginsLayout['Module']().componentPlugins;
+    },
+    _() {
+      return _;
+    },
   },
   methods: {
+    pluginFilter(plugins) {
+      return plugins.filter(plugin => {
+        return this.$can(`std-plugin-${plugin.aclName}`);
+      });
+    },
     SettingUpdatedHandler(eventData) {
       this.saveModuleProperty(
         eventData.link,

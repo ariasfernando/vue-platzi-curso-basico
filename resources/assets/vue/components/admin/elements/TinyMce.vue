@@ -49,7 +49,7 @@
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
           inline: true,
           menubar: false,
-          toolbar: 'undo redo | alignleft aligncenter alignright | bold italic underline | link | forecolor backcolor',
+          toolbar: 'undo redo | alignleft aligncenter alignright alignjustify | bold italic underline | link | forecolor backcolor',
           plugins: 'paste advlist autolink lists textcolor link',
           link_validate_url: true,
           link_title: false,
@@ -167,21 +167,27 @@
               });
           },
           paste_preprocess: (plugin, args) => {
+            const editor = tinymce.get(this.id);
+            const tinyMax = this.settings.truncate.content || undefined;
 
-            let editor = tinymce.get(tinymce.activeEditor.id);``
-
-            if( !this.settings.truncate ){
-              //if truncate is NAN, returns and avoid validations
-              return
+            if (!tinyMax) {
+              // if truncate is NAN, returns and avoid validations
+              return;
             }
+            const ghostObj = $('<div/>').html(args.content);
+            const cleanTxt = ghostObj.text();
+            // trim string if exceed max char limit
 
-            //trim string if exceed max char limit
-            let tinyLength = editor.getContent({format: 'text'}).length - 1;
-            let charsToPaste = +this.settings.truncate.content - tinyLength;
-            args.content = args.content.trim().substring(0, charsToPaste);
+            const tinyLength = $(editor.getContent({ format: 'html' })).text().length;
+            const selectionLength = editor.selection.getContent({ format: 'text' }).length;
+            const charsToPaste = (tinyMax - tinyLength) + selectionLength;
 
-
-          }
+            if (cleanTxt.length > charsToPaste) {
+              args.content = cleanTxt.trim().substring(0, charsToPaste);
+            } else {
+              args.content = cleanTxt.trim();
+            }
+          },
         }, params);
 
         tinymce.init(options);

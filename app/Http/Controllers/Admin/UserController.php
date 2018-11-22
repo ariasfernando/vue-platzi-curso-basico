@@ -126,7 +126,8 @@ class UserController extends Controller
     {
         $params = [
             "title" => "Create User",
-            "roles" => $this->listRoles()
+            "roles" => $this->listRoles(),
+            "change_roles" => true
         ];
 
         return $this->renderView('admin.modals.user_form', array('params' => $params));
@@ -145,6 +146,7 @@ class UserController extends Controller
         $params = [
             "title" => "Edit User",
             "roles" => $this->listRoles(),
+            "change_roles" => Auth::user()->can('allows_role_change'),
             "user" => $user_data
         ];
 
@@ -245,10 +247,9 @@ class UserController extends Controller
 
         if (env('USER_LOGIN', 'default') === 'default') {
             $user_auth = User::where('email', '=', $request->input('email'))->first();
-
             if (is_null($user_auth['status']) || $user_auth['status'] != "deleted") {
                 $pass_token = $this->passwords->getRepository()->create($user_auth);
-                $user_auth->notify(new WelcomePasswordNotification($pass_token, $user_auth['name']));
+                $user_auth->notify(new WelcomePasswordNotification($pass_token, $user_auth['name'], $user_auth['roles']));
 
                 return response()->json([
                     'code' => 0,

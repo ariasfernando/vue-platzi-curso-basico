@@ -23,5 +23,8 @@ return [
         'epsilon' => [
             'title', 'class'
         ],
+        'responsys' => [
+            'title', 'class'
+        ],
     ],
 ];

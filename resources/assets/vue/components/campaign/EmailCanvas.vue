@@ -8,11 +8,11 @@
         <tr>
           <td
             align="center"
-            style="vertical-align:top;"
+            style="width: 100%;"
             class="stx-draggable-wrapper st-email-wrapper"
-            :class="{ 'campaign-validated': campaignValidated }"
-            @mousedown.stop="handleActive"
+            :class="{ 'stx-campaign-validated': campaignValidated }"
             :bgcolor="templateBackgroundColor || defaultTemplateBackgroundColor"
+            @mousedown.stop="handleActive"
             @mouseover="onMouseOver"
             @mouseleave="onMouseLeave">
               <draggable
@@ -489,6 +489,10 @@
           text-align: center;
         }
       }
+    }
+    .stx-wrapper {
+      display: contents;
+      width: 100%;
     }
   }
 

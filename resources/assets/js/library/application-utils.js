@@ -1100,18 +1100,32 @@ Application.utils = {
         return true;
     },
 
+    isJsonObjectString: function(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        var jsonString = JSON.parse(str);
+
+        return typeof jsonString == 'object';
+    },
+
     // Remove wrappers element
     removeWrappers: function(html) {
       var $wrapperElementRemove = html.find('.stx-wrapper');
 
       $.each($wrapperElementRemove, function(i, element) {
         var $element = $(element);
-
-          // Replace element with the content element.
-        if ($element.is('table')) {
-          $element.replaceWith($element.find('td:first').html());
-        } else {
-          $element.replaceWith($element.html());
+        if($element.find('.stx-wrapper').length === 0){
+          // We need first replace comment and then replace the divs that have content,
+          // (from inside to outside).
+          // if else Jquery some times change the place of the comment.
+          if ($element.is('table')) {
+            $element.replaceWith($element.find('td:first').html());
+          } else {
+            $element.replaceWith($element.html());
+          }
         }
       });
       if (html.find('.stx-wrapper').length > 0) {

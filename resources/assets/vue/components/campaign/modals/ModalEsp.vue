@@ -19,6 +19,14 @@
               v-if="espProviderConfig.title == 'Epsilon'" 
               :esp-provider-config="espProviderConfig"
             ></epsilon-upload>
+            <responsys-upload
+              v-if="espProviderConfig.title == 'Responsys'" 
+              :esp-provider-config="espProviderConfig"
+            ></responsys-upload>
+            <default-upload
+              v-else
+              :esp-provider-config="espProviderConfig"
+            ></default-upload>
           </slot>
           <slot name="footer">
           </slot>
@@ -34,7 +42,8 @@
   import EloquaUpload from './partials/ModalEloquaUpload.vue';
   import SilverpopUpload from './partials/ModalSilverpopUpload.vue';
   import EpsilonUpload from './partials/ModalEpsilonUpload.vue';
-
+  import ResponsysUpload from './partials/ModalResponsysUpload.vue';
+  import DefaultUpload from './partials/ModalDefaultUpload.vue';
 
   export default {
     components: {
@@ -42,6 +51,8 @@
       EloquaUpload,
       SilverpopUpload,
       EpsilonUpload
+      DefaultUpload,
+      ResponsysUpload
     }, 
     data () {
       return {
