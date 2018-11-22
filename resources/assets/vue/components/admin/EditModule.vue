@@ -13,9 +13,9 @@
             <div v-if="showRaw" class="module-wrapper">
               <code-editor v-model="moduleRow" />
             </div>
-            <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
+            <module-container v-else :building-mode="buildingMode" :width-desktop="640" :width-mobile="480">
               <module :module="module" />
-            </div>
+            </module-container>
           </scrollbar-container>
         </div>
         <!-- END: Module Container -->
@@ -32,12 +32,13 @@
 
 <script>
 import CodeEditor from './CodeEditor.vue';
-import ColumnBarContainer from '../common/containers/ColumnBarContainer';
+import ColumnBarContainer from '../common/containers/ColumnBarContainer.vue';
 import ColumnSettings from './partials/ColumnSettings.vue';
 import ComponentSettings from './ComponentSettings.vue';
 import ElementsSettings from './partials/ElementsSettings.vue';
 import GeneralSettings from './partials/GeneralSettings.vue';
 import Module from './Module.vue';
+import ModuleContainer from '../common/containers/ModuleContainer.vue';
 import ModuleHeader from './partials/ModuleHeader.vue';
 import ModuleSettings from './partials/ModuleSettings.vue';
 import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
@@ -53,6 +54,7 @@ export default {
     ElementsSettings,
     GeneralSettings,
     Module,
+    ModuleContainer,
     ModuleHeader,
     ModuleSettings,
     ScrollbarContainer,
@@ -251,24 +253,6 @@ export default {
 
 .module {
   margin-top: -15px;
-
-  .module-wrapper {
-    margin: 0 auto;
-
-    &.stx-desktop-mode {
-      width: 640px;
-
-      .st-hide-desktop {
-        display: none;
-      }
-    }
-    &.stx-mobile-mode {
-      width: 480px;
-      // Mobile Classes
-      @import '../../../less/base/commons/mobile/mobile_core_styles';
-      @import '../../../less/base/commons/mobile/mobile_client_styles';
-    }
-  }
 
   .m-l-button {
     margin-left: 7px !important;
