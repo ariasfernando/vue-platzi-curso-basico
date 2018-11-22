@@ -28,15 +28,14 @@
             <img
               :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
                         'st-resize' : mobileStretch,
-                        'st-mobile-width-constraint' : !mobileStretch,
-                        'stx-max-width-full' : true }"
+                        'st-mobile-width-constraint' : !mobileStretch}"
               style="border: 0; display: block;"
               border="0"
               :valign="component.image.attribute.valign || 'top'"
               :width="imageWidth"
               :src="this.$_app.config.imageUrl + component.image.attribute.placeholder"
               :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
-              :style="{width: widthStyle(imageWidth)}"
+              :style="{width: widthStyle(imageWidth), 'max-width': imageMaxWidth}"
               :alt="component.image.attribute.alt"
               :title="component.image.attribute.title"
             >
@@ -52,7 +51,7 @@
                   :width="imageWidth"
                   :valign="component.image.attribute.valign || 'top'"
                   :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
-                  :style="{width: widthStyle(imageWidth)}"
+                  :style="{width: widthStyle(imageWidth), 'max-width': imageMaxWidth}"
                   :alt="component.image.attribute.alt"
                   :title="component.image.attribute.title"
                 />

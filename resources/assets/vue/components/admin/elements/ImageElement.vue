@@ -29,7 +29,7 @@
               style="border: 0; display: block;"
               border="0"
               :width="imageWidth"
-              :style="{width: widthStyle(imageWidth)}"
+              :style="{width: widthStyle(imageWidth), 'max-width': imageMaxWidth}"
               :src="imageUrl(component.image.attribute.placeholder)"
               :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
               :alt="component.image.attribute.alt"
@@ -44,7 +44,7 @@
                             'st-mobile-width-constraint' : !mobileStretch }"
                   style="display:block;border:none;max-width:100%;height:auto;"
                   :width="imageWidth"
-                  :style="{width: widthStyle(imageWidth)}"
+                  :style="{width: widthStyle(imageWidth), 'max-width': imageMaxWidth}"
                   :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
                   :alt="component.image.attribute.alt"
                   :title="component.image.attribute.title">
