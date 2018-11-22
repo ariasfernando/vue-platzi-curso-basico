@@ -52,7 +52,7 @@ export default {
       return !_.isEmpty(this.$store.getters['campaign/campaign']);
     },
     isStudio() {
-      return !_.isEmpty(this.$store.getters['module/module']);
+      return this.$store.getters['module/module'] && this.$store.getters['module/module'].moduleId;
     },
     isPreview() {
       return !this.isStudio && !this.isCampaign;

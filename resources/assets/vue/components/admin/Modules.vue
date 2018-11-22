@@ -45,6 +45,7 @@
               <td :title="module.type">{{ module.type }}</td>
               <td :title="module.status">{{ module.status }}</td>
               <td class="text-right actions icons">
+                <a v-if="module.type === 'studio'" href="#" @click="()=>{moduleSelected = module; modulePreview = true}"><i class="glyphicon glyphicon-eye-open"></i></a>
                 <router-link v-if="module.type === 'studio'" :to="'/clone/' + module.moduleId"><i class="glyphicon glyphicon-duplicate"></i></router-link>
                 <router-link v-if="module.type === 'studio'" :to="'/edit/' + module.moduleId"><i class="glyphicon glyphicon-pencil"></i></router-link>
 
@@ -58,18 +59,29 @@
 
       </div>
     </div>
+    <modal-container v-if="modulePreview === true" button-close-text="Close" @close-modal="modulePreview = false">
+      <module-preview :module="moduleSelected" />
+    </modal-container>
   </section>
 </template>
 
 <script>
-  import moduleService from '../../services/module'
+  import moduleService from '../../services/module';
+  import ModulePreview from './ModulePreview.vue';
+  import ModalContainer from '../common/containers/ModalContainer.vue';
 
   export default {
     name: 'Modules',
-    data: function () {
+    components: {
+      ModulePreview,
+      ModalContainer,
+    },
+    data() {
       return {
         modules: {},
-        ready: false
+        ready: false,
+        modulePreview: false,
+        moduleSelected: false,
       }
     },
     methods: {
