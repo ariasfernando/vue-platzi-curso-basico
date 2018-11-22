@@ -1,9 +1,9 @@
 <template>
-  <div class="row header" v-sticky="{ zIndex: 999, stickyTop: 0 }">
+  <div v-sticky="{ zIndex: 999, stickyTop: 0 }" class="row header">
     <div class="col-xs-3 header-col">
       <div class="beta-btn-secondary pull-left" @click="$router.push('/')">
-        <i class="glyphicon glyphicon-menu-left"></i>
-          <a href="#" >Back</a>
+        <i class="glyphicon glyphicon-menu-left" />
+        <a href="#">Back</a>
       </div>
       <div class="col-xs-8 section-title vertical-center">New Module</div>
     </div>
@@ -11,24 +11,31 @@
     <div class="col-xs-6 header-col">
       <div class="section-title vertical-center">
         <div class="switch">
-          <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-          <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="changeBuildingMode('desktop')">
-            <i class="fa fa-desktop"></i>
+          <input id="desktop" type="radio" class="switch-input"
+                 name="view" value="desktop" checked>
+          <label for="desktop" class="switch-label switch-label-off campaign-switch-view"
+                 @click="changeBuildingMode('desktop')">
+            <i class="fa fa-desktop" />
           </label>
-          <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-          <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="changeBuildingMode('mobile')">
-            <i class="glyphicon glyphicon-phone"></i>
+          <input id="mobile" type="radio" class="switch-input"
+                 name="view" value="mobile">
+          <label for="mobile" class="switch-label switch-label-on campaign-switch-view"
+                 @click="changeBuildingMode('mobile')">
+            <i class="glyphicon glyphicon-phone" />
           </label>
-          <span class="switch-selection"></span>
+          <span class="switch-selection" />
         </div>
       </div>
     </div>
 
     <div class="col-xs-3 header-col">
       <div class="vertical-center pull-right">
-        <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" v-if="$can('std_raw')" @click.prevent="toggleRaw">Raw</a>
-        <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" @click.prevent="saveModule('draft')" :disabled="errors.any()">Save as draft<i class="glyphicon glyphicon-menu-right"></i></a>
-        <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-menu-right"></i></a>
+        <a v-if="$can('std_raw')" class="btn btn-continue beta-btn-secondary m-l-button" href="#"
+           @click.prevent="toggleRaw">Raw</a>
+        <a class="btn btn-continue beta-btn-secondary m-l-button" href="#" :disabled="errors.any()"
+           @click.prevent="saveModule('draft')">Save as draft<i class="glyphicon glyphicon-menu-right" /></a>
+        <a class="btn btn-continue beta-btn-secondary m-l-button" href="#"
+           @click.prevent="saveModule('publish')">Publish<i class="glyphicon glyphicon-menu-right" /></a>
       </div>
     </div>
   </div>
@@ -38,68 +45,67 @@
   import VueSticky from 'vue-sticky';
 
   export default {
-    computed: {
-      module() {
-        return this.$store.getters["module/module"];
-      },
-      buildingMode() {
-        return this.$store.getters["module/buildingMode"];
-      }
+    directives: {
+      sticky: VueSticky,
     },
-    data () {
+    data() {
       return {
         showRaw: false,
-      }
+      };
     },
-    directives: {
-      'sticky': VueSticky,
+    computed: {
+      module() {
+        return this.$store.getters['module/module'];
+      },
+      buildingMode() {
+        return this.$store.getters['module/buildingMode'];
+      },
     },
     methods: {
       toggleRaw() {
-        this.$store.commit("module/toggleRaw");
+        this.$store.commit('module/toggleRaw');
       },
       changeBuildingMode(mode) {
-        this.$store.commit("module/setBuildingMode", mode);
+        this.$store.commit('module/setBuildingMode', mode);
       },
       setModuleField(data) {
-        this.$store.commit("module/setModuleFields", data);
+        this.$store.commit('module/setModuleFields', data);
       },
       saveModule(status) {
-        this.$store.commit("global/setLoader", true);
+        this.$store.commit('global/setLoader', true);
         this.setModuleField({ status });
+        const data = this.module;
 
-        let data = this.module;
-
-        this.$store.dispatch("module/saveModuleData", data)
+        this.$store.dispatch('module/saveModuleData', data)
           .then(response => {
-            this.$store.commit("global/setLoader", false);
+            this.$store.commit('global/setLoader', false);
             if (this.module.status === 'publish') {
               this.$router.push('/');
             } else if (this.module.status === 'draft' && data.moduleId) {
-              this.$router.push('/edit/' + data.moduleId);
+              this.$router.push(`/edit/${data.moduleId}`);
             }
-            this.$root.$toast('Module Saved', {className: 'et-success'});
-          }).catch( error => {
-            this.$store.commit("global/setLoader", false);
+            this.$root.$toast('Module Saved', { className: 'et-success' });
+          }).catch(error => {
+            this.$store.commit('global/setLoader', false);
             if (error.status === 422) {
               this.$root.$toast(
                 this.$options.filters.parseValidationErrors(error), {
                   className: 'et-error',
                   closeable: true,
-                  duration: 10000
-                }
+                  duration: 10000,
+                },
               );
             } else {
               this.$root.$toast(
                 'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
-                  className: 'et-error'
-                }
+                  className: 'et-error',
+                },
               );
             }
           });
       },
-    }
-  }
+    },
+  };
 </script>
 <style lang="less" scoped>
 
