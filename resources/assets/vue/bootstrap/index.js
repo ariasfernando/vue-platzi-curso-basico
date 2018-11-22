@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import customer from 'customer';
 import plugins from '../plugins';
+import stensulUi from '../stensul-ui';
 import filters from '../filters';
 import directives from '../directives';
 import modules from '../modules';
@@ -37,6 +38,9 @@ export default {
 
     // Custom Modules
     this.initModules();
+
+    // Register stensul Ui
+    this.initStensulUi();
 
     // Register plugins for studio modules ( module, column and components plugins )
     this.initPlugins();
@@ -147,6 +151,10 @@ export default {
 
       this.Vue.prototype.$_app.customModules[module.key] = module;
     });
+  },
+  initStensulUi() {
+    this.Vue.prototype.$_app.globalComponents = stensulUi;
+    this.initGlobalComponents();
   },
   initPlugins() {
     // Register Global Plugins
