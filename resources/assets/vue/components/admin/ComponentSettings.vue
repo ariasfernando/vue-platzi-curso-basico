@@ -104,7 +104,7 @@ export default {
       return settingsDefault[this.component.type]().componentSettings;
     },
     pluginsGroups() {
-      return pluginsLayout[this.component.type]().componentPlugins;
+      return pluginsLayout[this.component.type] ? pluginsLayout[this.component.type]().componentPlugins : undefined;
     },
     module() {
       return this.$store.getters['module/module'];
