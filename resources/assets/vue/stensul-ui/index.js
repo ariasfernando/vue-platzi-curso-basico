@@ -1,9 +1,11 @@
+const Button = require('./button');
 const InputToggleableNumber = require('./input-toggleable-number');
 const InputToggleableText = require('./input-toggleable-text');
-const switchDesktopMobile = require('./switch-desktop-mobile');
+const SwitchDesktopMobile = require('./switch-desktop-mobile');
 
 module.exports = {
+  Button,
   InputToggleableNumber,
   InputToggleableText,
-  switchDesktopMobile,
+  SwitchDesktopMobile,
 };
