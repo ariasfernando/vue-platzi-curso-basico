@@ -1,15 +1,21 @@
 <template>
   <div class="modal-container-component">
     <div class="st-modal">
-      <div class="close-button" @click="$emit('close-modal')">X</div>
-      <slot />
+      <div class="row">
+        <div class="col-sx-12">
+          <div class="close-button" @click="$emit('close-modal')">X</div>
+          <slot />
+          <Button v-if="buttonSubmitText" class="button-submit-modal" @click="$emit('submit-modal')">{{ buttonSubmitText }}</Button>
+          <Button v-if="buttonCloseText" class="button-close-modal" @click="$emit('close-modal')">{{ buttonCloseText }}</Button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: 'LabelItemContainer',
-  props: ['customClass', 'icon', 'label', 'collapsable'],
+  props: ['buttonCloseText', 'buttonSubmitText'],
 };
 </script>
 <style lang="less" scoped>
@@ -19,6 +25,12 @@ export default {
   font-weight: 900;
   clear: both;
   cursor: pointer;
+}
+.button-close-modal {
+    float: right;
+}
+.button-submit-modal {
+    float: right;
 }
 .modal-container-component {
   position: fixed;
