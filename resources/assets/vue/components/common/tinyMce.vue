@@ -3,7 +3,7 @@
     <div class="st-remove-element stx-toolbar" :class="`toolbar-${editorId}`"></div>
 		<div
       class="stx-edit-text stx-wrapper"
-      style="width: 100%; display: inline-block !important; vertical-align: middle"
+      style="width: 100%; display: inline-block !important;"
       :style="fontStyles"
       v-html="content"
       :id="editorId"
