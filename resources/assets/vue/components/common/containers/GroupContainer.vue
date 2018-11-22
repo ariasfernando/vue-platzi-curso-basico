@@ -1,12 +1,13 @@
 <template>
     <div class="group-container" :class="[customClass, {'clickeable': clickeable}]" @click="e => $emit('click', e)">
+      <label v-if="label">{{label}}</label>
       <slot></slot>
     </div>
 </template>
 <script>
 export default {
   name: "GroupContainer",
-  props: ["customClass", "clickeable"],
+  props: ["customClass", "clickeable", "label"],
 };
 </script>
 <style lang="scss" scoped>
@@ -16,8 +17,25 @@ export default {
     margin: 5px 0;
     background: #f9f9f9;
     border-radius: 3px;
-  }
-  .group-container.clickeable {
+    &:empty {
+      padding: 0;
+      border: 0;
+     margin: 0;
+    }
+    label {
+      text-align: left;
+      color: #666666;
+      font-weight: 400;
+      padding: 10px 0 5px;
+      font-size: 12px;
+      width: 100%;
+      float: left;
+      margin-bottom: 0;
+      &.half {
+        width: 50%;
+      }
+    }
+    &.clickeable {
     cursor: pointer;
     text-transform: uppercase;
     transition: all 0.3s linear;
@@ -31,16 +49,17 @@ export default {
     label{
       font-size: 13px;
     }
-  }
-  .group-container.clickeable /deep/ {
-      * {
-      cursor: pointer;
-      color: #514960;
+    &.clickeable /deep/ {
+        * {
+        cursor: pointer;
+        color: #514960;
+      }
+      i.icon-plus{
+        font-size: 13px;
+        opacity: 0.8;
+        right: 5px;
+      }
     }
-    i.icon-plus{
-      font-size: 13px;
-      opacity: 0.8;
-      right: 5px;
-    }
   }
+}
 </style>

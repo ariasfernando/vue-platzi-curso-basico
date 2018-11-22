@@ -55,6 +55,8 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         'unconfirmed' => 1
     );
 
+    protected $appends = ['fullname'];
+
     /**
      * Constructor.
      *
@@ -165,6 +167,16 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
     }
 
     /**
+     * Get user full name
+     *
+     * @return array
+     */
+    public function getFullNameAttribute()
+    {
+        return rtrim($this->attributes['name'] . ' ' . $this->attributes['last_name']);
+    }
+
+    /**
     * Send the password reset notification.
     *
     * @param  string  $token
@@ -172,11 +184,7 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
     */
     public function sendPasswordResetNotification($token)
     {
-        if ($this->unconfirmed) {
-            $this->notify(new WelcomePasswordNotification($token, $this->name));
-        } else {
-            $this->notify(new ResetPasswordNotification($token, $this->name));
-        }
+        $this->notify(new ResetPasswordNotification($token, $this->name));
     }
 
     /**

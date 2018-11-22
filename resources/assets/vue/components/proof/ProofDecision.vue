@@ -131,6 +131,7 @@
             },
             undoDecision: function() {
                 this.showUndoDecisionModal = true;
+                this.comment = '';
             },
             closeUndoDecisionModal: function() {
                 this.showUndoDecisionModal = false

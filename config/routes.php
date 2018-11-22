@@ -63,6 +63,7 @@ $default = [
             '/campaign/gif-layer'          => 'CampaignController@postGifLayer',
             '/campaign/email-sent-history' => 'CampaignController@postEmailSentHistory',
             '/campaign/favorite'           => 'CampaignController@postFavorite',
+            '/campaign/archive'           => 'CampaignController@postArchive',
             '/campaign/trim-image'         => 'CampaignController@postTrimImage',
             '/campaign/spent-time'         => 'MetricController@postSpentTime',
             '/template/move-library'       => 'TemplateController@postMoveLibrary',
@@ -80,7 +81,8 @@ $default = [
     'api' => [
         'get'    => [
             '/api/history' => 'ApiController@getHistory',
-            '/api/oauth'   => 'ApiController@getOauth'
+            '/api/oauth'   => 'ApiController@getOauth',
+            '/api/folders'   => 'ApiController@getFolders',
         ],
         'post'   => [
             '/api/upload-email' => 'ApiController@postUploadEmail',

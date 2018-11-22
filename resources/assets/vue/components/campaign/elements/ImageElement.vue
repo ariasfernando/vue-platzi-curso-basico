@@ -1,9 +1,10 @@
 <template>
   <module-container :component="component" @select-component="selectComponentHandler">
     <table
-      width="100%"
-      style="width: 100%;"
+      :width="component.container.attribute.width || '100%'"
+      :style="{width:widthStyle(component.container.attribute.width || '100%')}"
       :valign="component.container.attribute.valign || 'top'"
+      :align="component.container.attribute.align || 'left'"
       border="0"
       cellpadding="0"
       cellspacing="0"
@@ -22,18 +23,19 @@
             :href="component.image.attribute.href"
             :alt="component.image.attribute.alt"
             :title="component.image.attribute.title"
-            :target="component.image.attribute.target"
+            :target="component.image.attribute.target || '_blank'"
             >
             <img
-              class="st-resize"
-              :class="{'st-hide-mobile' : component.image.attribute.placeholderMobile}"
+              :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
+                        'st-resize' : mobileStretch,
+                        'st-mobile-width-constraint' : !mobileStretch}"
               style="border: 0; display: block;"
               border="0"
               :valign="component.image.attribute.valign || 'top'"
-              :width="component.image.attribute.width"
+              :width="imageWidth"
               :src="this.$_app.config.imageUrl + component.image.attribute.placeholder"
               :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
-              :style="{width:widthStyle(component.image.attribute.width)}"
+              :style="{width: widthStyle(imageWidth), 'max-width': imageMaxWidth}"
               :alt="component.image.attribute.alt"
               :title="component.image.attribute.title"
             >
@@ -43,12 +45,13 @@
                 <img
                   :src="this.$_app.config.imageUrl + component.image.attribute.placeholderMobile"
                   border="0"
-                  class="st-resize"
+                  :class="{ 'st-resize' : mobileStretch,
+                            'st-mobile-width-constraint' : !mobileStretch }"
                   style="display:block;border:none;max-width:100%;height:auto;"
-                  :width="component.image.attribute.width"
+                  :width="imageWidth"
                   :valign="component.image.attribute.valign || 'top'"
                   :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
-                  :style="{width:widthStyle(component.image.attribute.width)}"
+                  :style="{width: widthStyle(imageWidth), 'max-width': imageMaxWidth}"
                   :alt="component.image.attribute.alt"
                   :title="component.image.attribute.title"
                 />
@@ -76,11 +79,9 @@
     },
     mixins: [ MobileStylesMixin, ElementMixin],
     computed: {
-      containerImageWidth(){
-        let paddingLeft = _.parseInt(this.component.image.style.paddingLeft) || 0
-        let paddingRight = _.parseInt(this.component.image.style.paddingRight) || 0
-        return _.parseInt(this.component.image.attribute.width) - paddingLeft - paddingRight ;
-      },
+      mobileStretch() {
+        return this.component.image.styleOption.noMobileStretch !== true;
+      }
     },
   };
 </script>

@@ -3,7 +3,7 @@ import campaignSettings from './campaignSettings.vue';
 
 export default {
   name: 'style-image-editor',
-  title: 'style Image Editor',
+  title: 'Image Editable',
   version: '0.0.11',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
@@ -60,7 +60,7 @@ export default {
         size_minHeight: {
           label: 'Min. Height',
           key: 'minHeight',
-          value: 100,
+          value: 1,
           type: 'number',
           step: 1,
         },

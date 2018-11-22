@@ -21,10 +21,10 @@ export default {
             validated: value,
           },
         };
-  
+
         // Save plugin data
-        this.$store.commit("campaign/savePlugin", payload);
-      }
+        this.$store.commit('campaign/savePlugin', payload);
+      },
     },
     moduleErrors() {
       return this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name)
@@ -40,28 +40,29 @@ export default {
   },
   watch: {
     currentComponent: {
-      handler: function(currentComponent) {
+      handler(currentComponent) {
         if (this.validationRules) {
           this.validate();
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     validate() {
       this.$validator.validateAll().then(() => {
-        if (this.$validator.errors.items.length) {
-          _.each(this.$validator.errors.items, (err) => {
+        const errorItems = _.cloneDeep(this.$validator.errors.items);
+        if (errorItems.length) {
+          _.each(errorItems, (err) => {
             _.extend(err, { scope: {
               type: 'plugin',
               name: this.name,
               msg: err.msg,
               ...this.currentComponent,
-            }});
+            } });
           });
 
-          this.$store.dispatch('campaign/addErrors', this.$validator.errors.items);
+          this.$store.dispatch('campaign/addErrors', errorItems);
         } else {
           this.$store.commit('campaign/clearErrorsByScope', {
             type: 'plugin',
@@ -91,22 +92,29 @@ export default {
                 validations = plugin.config.alt.validations;
               }
 
-              if (validations && component.container.styleOption.enableElement && plugin.enabled) {
-                let validationsRequired = false;
-                _.each(validations, (validation, pluginIndex) => {
-                  if (plugin.enabled && validation && !plugin.data.validated) {
-                    validationsRequired = true;
+              if (validations && validations.required === true && component.container.styleOption.enableElement && plugin.enabled) {
+                // if the validations are enabled and were never ran we assume they have errors
+                let defaultValue = '';
+                if (component.type === 'text-element' && typeof component.button === 'object') {
+                  defaultValue = component.text.attribute.href;
+                } else if (component.type === 'button-element' && typeof component.button === 'object') {
+                  defaultValue = component.button.attribute.href;
+                } else if (component.type === 'image-element' && typeof component.image === 'object') {
+                  if (plugin.config.validations) {
+                    defaultValue = component.image.attribute.href;
+                  } else if (plugin.config.alt && plugin.config.alt.validations) {
+                    defaultValue = component.image.attribute.alt;
                   }
-                });
-                if (validationsRequired) {
-                  // if the validations are enabled and were never ran we assume they have errors
+                }
+
+                if (_.isEmpty(defaultValue)) {
                   const error = {
                     scope: {
                       type: 'plugin',
                       name: plugin.name,
-                      moduleId: moduleId,
+                      moduleId,
                       columnId: columnIndex,
-                      componentId: componentIndex
+                      componentId: componentIndex,
                     },
                   };
 
@@ -125,11 +133,11 @@ export default {
           scope: {
             type: 'custom',
             elementName,
-            moduleId: moduleId,
+            moduleId,
             idInstance: this.module.idInstance,
           },
         };
-  
+
         this.$store.dispatch('campaign/addErrors', [error]);
       }
     },
@@ -141,8 +149,7 @@ export default {
         _.each(this.module.params.validation, (item, key) => {
           if (key === 'images') {
             _.each(this.module.params.validation[key], (imageElement, key2) => {
-
-              if (typeof imageElement.parentElement === undefined 
+              if (typeof imageElement.parentElement === undefined
                 || (imageElement.parentElement && this.module.data[imageElement.parentElement].enableElement)) {
                 _.each(this.module.params.validation[key][key2], (fieldValidations, field) => {
                   const elementName = `${key2}${field}`;

@@ -1,20 +1,24 @@
 <template>
-  <div class="component-settings height-custom" v-if="ready">
-
+  <div>
     <!-- START: Style -->
-
-    <label-item-container label="STYLES" icon="glyphicon-pencil" v-b-toggle.style></label-item-container>
+    <label-item-container
+      v-b-toggle.style
+      :label="`${_.startCase(component.type.replace('-element', ''))} Styles`"
+      icon="glyphicon-pencil" />
     <b-collapse id="style" visible accordion="module-right">
       <b-card class="default-settings">
-        <group-container v-for="(settingGroup, groupKey) in settings" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-'+component.type+'_')" :label="settingGroup.showLabel ? settingGroup.groupLabel : null" :key="groupKey">
           <component
-            v-for="(setting,i) in settingGroup"
-            :show-setting="showSetting(setting)"
             :is="'input-' + setting.type"
-            @setting-updated="settingUpdatedHandler"
+            v-for="(setting,i) in settingGroup.settings"
+            v-if="$can('std-'+component.type+'_'+setting.aclName)"
+            :key="i+setting.type"
+            :show-setting="showSetting(setting)"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
+            :setting-slot="setting.settingSlot"
+            :max-percentage="setting.maxPercentage"
             :link="setting.link"
             :label="setting.label"
             :placeholder="setting.placeholder"
@@ -23,130 +27,130 @@
             :max-value="setting.maxValue"
             :sub-component="setting.subComponent"
             :is-pixel="setting.isPixel"
+            :is-percentage="setting.isPercentage"
             :options="setting.options"
             :is-disable-percentage="setting.isDisablePercentage"
             :element="setting.subComponent ? component[setting.subComponent] : component"
-            :key="i"></component>
+            @setting-updated="settingUpdatedHandler" />
+        </group-container>
+        <group-container v-if="component.plugins.mobileStyles" key="mobile-styles" label="Mobile Settings">
+          <studio-mobile-styles :plugin="component.plugins.mobileStyles" name="mobileStyles" />
         </group-container>
       </b-card>
     </b-collapse>
-    <!-- END: Style -->
-
-    <!-- START: Funcionalities -->
-    <label-item-container label="FUNCTIONALITIES" icon="glyphicon-tasks" v-b-toggle.funcionalities></label-item-container>
-    <b-collapse id="funcionalities" accordion="module-settings-accordion-right">
+    <!-- Funcionalities -->
+    <label-item-container
+      v-b-tooltip.hover
+      v-b-toggle.functionalities
+      label="Editor Settings"
+      icon="glyphicon-tasks"
+      title="Settings available in the Email Editor" />
+    <b-collapse id="functionalities" accordion="module-settings-accordion-right">
       <b-card class="plugins">
-        <div
-          v-for="(plugin, key) in component.plugins"
-          v-if="!shouldRenderInStyles(plugin)"
-          :class="'plugin-' + plugin.name"
-          :key="key"
-        >
-          <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
-        </div>
+        <group-container
+          v-for="(pluginGroup, groupKey) in pluginsGroups"
+          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+          :key="groupKey"
+          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <component
+            :is="'studio-' + plugin.name"
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+            :key="'std-'+component.id+'-plugin-' + plugin.name"
+            :element="component"
+            :class="'plugin-' + plugin.name"
+            :name="_.camelCase(plugin.name)"
+            :plugin="component.plugins[_.camelCase(plugin.name)]" />
+        </group-container>
       </b-card>
     </b-collapse>
-    <!-- END: Funcionalities -->
-
-    <!-- START: Mobile Settings -->    
-    <label-item-container label="MOBILE" icon="glyphicon-tasks" v-b-toggle.mobile></label-item-container>
-    <b-collapse id="mobile" accordion="module-settings-accordion-right">
-      <b-card class="plugins">
-        <div
-          v-for="(plugin, key) in component.plugins"
-          v-if="shouldRenderInStyles(plugin)"
-          :class="'plugin-' + plugin.name"
-          :key="key"
-        >
-          <component :is="'studio-' + plugin.name" :name="key" :plugin="plugin"></component>
-        </div>
-      </b-card>
-    </b-collapse>
-    <!-- END: Mobile Settings -->
   </div>
 </template>
 
 <script>
-import _ from "lodash";
-import * as elementSettings from "./settings";
-import GroupContainer from "../common/containers/GroupContainer.vue";
-import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
-import settingsDefault from "./settingsDefault";
+import * as elementSettings from './settings';
+import GroupContainer from '../common/containers/GroupContainer.vue';
+import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
+import settingsDefault from './settingsDefault';
+import AclMixing from './mixins/AclMixin';
+import pluginsLayout from './pluginsLayout';
+
 export default {
-  data() {
-    return {
-      ready: false,
-      component: {}
-    };
-  },
   components: {
     GroupContainer,
     LabelItemContainer,
-    "input-border-group": elementSettings.BorderGroup,
-    "input-caret": elementSettings.ButtonCaret,
-    "input-class-input": elementSettings.ClassInput,
-    "input-font-family": elementSettings.FontFamily,
-    "input-font-style": elementSettings.FontStyle,
-    "input-font-weight": elementSettings.FontWeight,
-    "input-generic-color": elementSettings.GenericColor,
-    "input-generic-file": elementSettings.GenericFile,
-    "input-generic-number": elementSettings.GenericNumber,
-    "input-generic-switch": elementSettings.GenericSwitch,
-    "input-generic-text": elementSettings.GenericText,
-    "input-image-size": elementSettings.ImageSize,
-    "input-letter-spacing": elementSettings.LetterSpacing,
-    "input-padding-group": elementSettings.PaddingGroup,
-    "input-text-align": elementSettings.TextAlign,
-    "input-vertical-align": elementSettings.VerticalAlign
+    'input-border-group': elementSettings.BorderGroup,
+    'input-caret': elementSettings.ButtonCaret,
+    'input-horizontal-padding-group': elementSettings.HorizontalPaddingGroup,
+    'input-button-width': elementSettings.ButtonWidth,
+    'input-class-input': elementSettings.ClassInput,
+    'input-font-family': elementSettings.FontFamily,
+    'input-font-weight': elementSettings.FontWeight,
+    'input-generic-color': elementSettings.GenericColor,
+    'input-generic-file': elementSettings.GenericFile,
+    'input-generic-number': elementSettings.GenericNumber,
+    'input-generic-switch': elementSettings.GenericSwitch,
+    'input-generic-text': elementSettings.GenericText,
+    'input-image-size': elementSettings.ImageSize,
+    'input-letter-spacing': elementSettings.LetterSpacing,
+    'input-padding-group': elementSettings.PaddingGroup,
+    'input-text-align': elementSettings.TextAlign,
+    'input-vertical-align': elementSettings.VerticalAlign,
+    'input-generic-code': elementSettings.GenericCode,
   },
+  mixins: [AclMixing],
+  props: ['currentComponent'],
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
-    },
     settings() {
       return settingsDefault[this.component.type]().componentSettings;
-    }
-  },
-  watch: {
-    currentComponent: {
-      handler: function(currentComponent) {
-        let module = this.$store.getters["module/module"];
-        if (!_.isEmpty(currentComponent) && currentComponent.componentId >= 0) {
-          this.component = module.structure.columns[currentComponent.columnId].components[currentComponent.componentId];
-          this.ready = true;
-        } else {
-          this.ready = false;
-        }
-      },
-      deep: true
-    }
+    },
+    pluginsGroups() {
+      return pluginsLayout[this.component.type]().componentPlugins;
+    },
+    module() {
+      return this.$store.getters['module/module'];
+    },
+    component() {
+      return this.module.structure.columns[this.currentComponent.columnId]
+        .components[this.currentComponent.componentId];
+    },
+    _() {
+      return _;
+    },
   },
   methods: {
+    pluginFilter(plugins) {
+      return plugins.filter((plugin) => {
+        return this.$can(`std-${this.component.type}-plugin-${plugin.aclName}`);
+      });
+    },
     saveComponentProperty(link, subComponent, name, value) {
-      let data = {
+      const data = {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
-        subComponent: subComponent,
-        link: link,
+        subComponent,
+        link,
         property: name,
-        value: value
+        value,
       };
-      this.$store.commit("module/saveComponentProperty", data);
-    },
-    shouldRenderInStyles(plugin) {
-      return _.indexOf(plugin.target, "styles") >= 0;
+      this.$store.commit('module/saveComponentProperty', data);
     },
     settingUpdatedHandler(eventData) {
-      this.saveComponentProperty(eventData.link, eventData.subComponent, eventData.name, eventData.value);
+      this.saveComponentProperty(
+        eventData.link,
+        eventData.subComponent,
+        eventData.name,
+        eventData.value,
+      );
     },
     showSetting(setting) {
       if (setting.dependsOn) {
-        let element = setting.dependsOn.subComponent ? this.component[setting.dependsOn.subComponent] : this.component;
+        const element = setting.dependsOn.subComponent
+          ? this.component[setting.dependsOn.subComponent]
+          : this.component;
         return element[setting.dependsOn.link][setting.dependsOn.name];
-      } else {
-        return true;
       }
-    }
-  }
+      return true;
+    },
+  },
 };
 </script>

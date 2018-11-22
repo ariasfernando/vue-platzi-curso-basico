@@ -10,7 +10,8 @@
 			<label>Name</label>
 			{!! Form::text('name', (isset($params['role']['name']))? $params['role']['name'] : '', array (
 				'class' => 'role_name',
-				'id' => 'role_name'
+				'id' => 'role_name',
+				'data-validation' => '{"required":"true"}'
 			)) !!}
 		</div>
 
@@ -31,6 +32,9 @@
 				'id' => 'permissions',
 				'name' => 'permissions[]',
 				'multiple' => 'true',
+				'data-selected-text-format' => 'count > 3',
+				'data-actions-box '=> 'true',
+				'data-live-search'=> 'true',
 			)); !!}
 		</div>
 
