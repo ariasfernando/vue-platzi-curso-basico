@@ -26,7 +26,14 @@ const getters = {
   modules(state, getters, rootState) {
     const fixedModules = rootState.campaign ? rootState.campaign.campaign ? rootState.campaign.campaign.library_config ? rootState.campaign.campaign.library_config.fixedModules ? JSON.parse(rootState.campaign.campaign.library_config.fixedModules) : [] : [] : [] : [];
     return map(state.modules, moduleData => {
-      return setModuleFixedStatus(fixedModules, moduleData);
+      if (moduleData.sub_menu) {
+        moduleData.sub_menu = map(moduleData.sub_menu, subModuleData => {
+          return setModuleFixedStatus(fixedModules, subModuleData);
+        });
+        return moduleData;
+      } else {
+        return setModuleFixedStatus(fixedModules, moduleData);
+      }
     });
   },
 };
