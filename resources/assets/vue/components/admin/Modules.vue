@@ -35,7 +35,7 @@
                 <search-input
                   :dirty="resetSearch"
                   :collection="modules[activeTab]"
-                  :columns-to-filter="['name', 'status']"
+                  :columns-to-filter="['name', 'status', 'libraries']"
                   @filtered="refreshData" />
               </div>
             </div>
