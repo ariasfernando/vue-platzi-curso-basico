@@ -357,13 +357,6 @@ export default {
 
 // New and refacted
 
-p,
-ul,
-ol {
-  margin: 0;
-  padding: 0;
-}
-
 #edit-container {
   .mce-content-body {
     line-height: inherit;
