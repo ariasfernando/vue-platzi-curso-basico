@@ -26,7 +26,7 @@
             <div class="level-item">
               <div class="btn btn-default btn-create">
                 <router-link to="/create">
-                  <i class="glyphicon glyphicon-plus-sign" /> Create a new Module
+                  <i class="glyphicon glyphicon-plus-sign" /> Create New Module
                 </router-link>
               </div>
             </div>
@@ -78,7 +78,7 @@
                     <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
-                <th width="150" class="bold has-text-centered">Actions</th>
+                <th width="150" class="bold">Actions</th>
               </tr>
             </thead>
             <tbody v-if="ready">
@@ -90,7 +90,7 @@
                 <td :title="module.status">
                   <span class="st-rounded-tag">{{ module.status }}</span>
                 </td>
-                <td class="text-right actions icons has-text-centered">
+                <td class="text-left actions icons">
                   <router-link v-if="module.type === 'studio'" :to="'/clone/' + module.moduleId">
                     <i class="glyphicon glyphicon-duplicate" />
                   </router-link>
@@ -370,10 +370,6 @@ $stensul-purple: #514960;
   text-align: center;
   vertical-align: baseline;
   white-space: nowrap;
-}
-
-.has-text-centered {
-  text-align: center;
 }
 </style>
 
