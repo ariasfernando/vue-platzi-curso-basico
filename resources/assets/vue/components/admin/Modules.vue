@@ -26,7 +26,7 @@
             <div class="level-item">
               <div class="btn btn-default btn-create">
                 <router-link to="/create">
-                  <i class="glyphicon glyphicon-plus-sign" /> Create a new Module
+                  <i class="glyphicon glyphicon-plus-sign" /> Create New Module
                 </router-link>
               </div>
             </div>
