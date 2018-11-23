@@ -91,7 +91,7 @@ export default {
   methods: {
     pluginFilter(plugins) {
       return plugins.filter(plugin => {
-        return this.$can(`std-plugin-${plugin.aclName}`);
+        return this.$can(`std-plugin-${plugin.aclName}`) && this.module.plugins[_.camelCase(plugin.name)];
       });
     },
     SettingUpdatedHandler(eventData) {
