@@ -104,7 +104,7 @@ export default {
       return settingsDefault[this.component.type]().componentSettings;
     },
     pluginsGroups() {
-      return pluginsLayout[this.component.type]().componentPlugins;
+      return pluginsLayout[this.component.type] ? pluginsLayout[this.component.type]().componentPlugins : undefined;
     },
     module() {
       return this.$store.getters['module/module'];
@@ -120,7 +120,7 @@ export default {
   methods: {
     pluginFilter(plugins) {
       return plugins.filter((plugin) => {
-        return this.$can(`std-${this.component.type}-plugin-${plugin.aclName}`);
+        return this.$can(`std-${this.component.type}-plugin-${plugin.aclName}`) && this.component.plugins[_.camelCase(plugin.name)];
       });
     },
     saveComponentProperty(link, subComponent, name, value) {
