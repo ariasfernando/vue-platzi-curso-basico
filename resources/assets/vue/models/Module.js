@@ -16,6 +16,7 @@ function Module(data = {}) {
   this.libraries = data.libraries || [];
   this.moduleId = data._id || undefined;
   this.name = data.name || data.title || 'Untitled module';
+  this.description = data.description || null;
   this.title = data.title || data.name;
   this.type = data.type || 'studio';
   this.status = data.status || '';

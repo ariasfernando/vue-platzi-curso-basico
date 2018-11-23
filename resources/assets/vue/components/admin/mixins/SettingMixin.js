@@ -18,6 +18,9 @@ export default {
     'showSetting',
     'sub-component',
     'type',
+    'setting-position',
+    'autosize',
+    'resize',
   ],
   mounted() {
     this.setDefaultValue();
@@ -58,7 +61,8 @@ export default {
   },
   methods: {
     setDefaultValue() {
-      if (this.link !== undefined && this.defaultValue !== undefined && this.element[this.link][this.name] === undefined) {
+      if (this.link !== undefined && this.defaultValue !== undefined
+        && this.element[this.link][this.name] === undefined) {
         // set styleOption to default if is undefined
         this.mainSetting = this.defaultValue;
       }

@@ -3,6 +3,7 @@ module.exports = {
   type: 'studio',
   key: 'text_458798',
   name: 'text',
+  description: 'text',
   structure: {
     columnsStacking: 'normal',
     attribute: {
