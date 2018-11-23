@@ -72,7 +72,7 @@ export default {
     },
     filterOneColumn() {
       this.filteredCollection = _.filter(this.collection, item =>
-        item[this.columnsToFilter].toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
+        item[this.columnsToFilter].toString().toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
     },
     filterManyColumns() {
       this.filteredCollection = [];
