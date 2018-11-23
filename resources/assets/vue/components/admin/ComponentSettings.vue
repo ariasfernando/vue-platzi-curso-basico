@@ -120,7 +120,7 @@ export default {
   methods: {
     pluginFilter(plugins) {
       return plugins.filter((plugin) => {
-        return this.$can(`std-${this.component.type}-plugin-${plugin.aclName}`);
+        return this.$can(`std-${this.component.type}-plugin-${plugin.aclName}`) && this.component.plugins[_.camelCase(plugin.name)];
       });
     },
     saveComponentProperty(link, subComponent, name, value) {
