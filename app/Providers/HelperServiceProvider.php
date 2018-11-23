@@ -5,6 +5,10 @@ namespace Stensul\Providers;
 use LibraryModel as Library;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class HelperServiceProvider
+ * @package Stensul\Providers
+ */
 class HelperServiceProvider extends ServiceProvider
 {
     /**
@@ -52,6 +56,46 @@ class HelperServiceProvider extends ServiceProvider
     public static function isAssoc(array $arr)
     {
         return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
+    /**
+     * Extension of array_search function with multidimensional arrays
+     *
+     * @param $needle
+     * @param $haystack
+     * @param $currentKey
+     * @return boolean | string
+     */
+
+    public static function recursive_array_search($needle, $haystack, $currentKey = '') {
+        foreach($haystack as $key=>$value) {
+            if (is_array($value)) {
+                $nextKey = recursive_array_search($needle,$value, $currentKey . '[' . $key . ']');
+                if ($nextKey) {
+                    return $nextKey;
+                }
+            }
+            else if($value==$needle) {
+                return is_numeric($key) ? $currentKey . '[' .$key . ']' : $currentKey . '["' .$key . '"]';
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Extension of array_column function for more than 2 dimensional arrays
+     *
+     * @param array $haystack
+     * @param $needle
+     * @return array
+     */
+    public static function array_column_recursive(array $haystack, $needle) {
+        $found = [];
+        array_walk_recursive($haystack, function($value, $key) use (&$found, $needle) {
+            if ($key == $needle)
+                $found[] = $value;
+        });
+        return $found;
     }
 
     /**

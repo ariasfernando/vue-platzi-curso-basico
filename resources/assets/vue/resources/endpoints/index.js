@@ -18,6 +18,8 @@ module.exports = {
     getModule: { method: 'get', path: `${baseUrl}/admin/module/edit?moduleId=:moduleId` },
     getCustomModule: { method: 'get', path: `${baseUrl}/template/module?key=:moduleKey&campaign_id=:campaignId` },
     getAllModules: { method: 'get', path: `${baseUrl}/admin/module/modules` },
+    getAllStudioModules: { method: 'get', path: `${baseUrl}/admin/module/modules/studio` },
+    getAllCustomModules: { method: 'get', path: `${baseUrl}/admin/module/modules/custom` },
     saveModule: { method: 'post', path: `${baseUrl}/admin/module/save` },
     deleteModule: { method: 'post', path: `${baseUrl}/admin/module/delete` },
     uploadImage: { method: 'post', path: `${baseUrl}/admin/module/upload-image` },
