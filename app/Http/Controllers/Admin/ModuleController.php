@@ -63,11 +63,13 @@ class ModuleController extends Controller
     /**
      * Get modules.
      *
+     * @param Request $request
+     * @param string $type Module type, null, "custom", "studio"
      * @return array Modules data
      */
-    public function getModules()
+    public function getModules(Request $request, $type = null)
     {
-        return \StensulModule::getModuleList();
+        return \StensulModule::getModuleList(null, $type);
     }
 
     /**

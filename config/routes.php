@@ -166,7 +166,7 @@ if (env("APP_ADMIN", false)) {
             '/admin/module/list'       => 'Admin\ModuleController@getList',
             '/admin/module/create'     => 'Admin\ModuleController@getCreate',
             '/admin/module/edit'       => 'Admin\ModuleController@getEdit',
-            '/admin/module/modules'    => 'Admin\ModuleController@getModules',
+            '/admin/module/modules/{type?}' => 'Admin\ModuleController@getModules',
             '/admin/setting'           => 'Admin\SettingController@getIndex',
         ],
         'post' => [
