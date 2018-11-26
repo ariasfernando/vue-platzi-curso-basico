@@ -66,6 +66,7 @@ class ModuleServiceProvider extends ServiceProvider
                         $modules[$module_key] = $config;
                         $module = new Module(['key' => $module_key]);
                         $libraries = $module->getLibraries();
+                        $modules[$module_key] = json_decode(json_encode($modules[$module_key]), true);
                         $modules[$module_key]['libraries'] = [];
                         foreach ($libraries as $library) {
                             $modules[$module_key]['libraries'][] = $library->name;

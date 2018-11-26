@@ -88,7 +88,7 @@
                   <span v-for="(library) in module.libraries" :key="library" class="st-rounded-tag">{{ library }}</span>
                 </td>
                 <td :title="module.status">
-                  <span class="st-rounded-tag">{{ module.status }}</span>
+                  <span v-if="module.status" class="st-rounded-tag">{{ module.status }}</span>
                 </td>
                 <td class="text-left actions icons">
                   <router-link v-if="module.type === 'studio'" :to="'/clone/' + module.moduleId">
