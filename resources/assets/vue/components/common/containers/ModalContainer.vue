@@ -5,6 +5,7 @@
         <div class="col-sx-12">
           <stui-close @click="$emit('close-modal')" />
           <slot />
+          <slot name="footer" />
           <stui-button v-if="buttonSubmitText" class="button-close-modal" type="primary" @click="$emit('submit-modal')">{{ buttonSubmitText }}</stui-button>
           <stui-button v-if="buttonCloseText" class="button-close-modal" type="primary" @click="$emit('close-modal')">{{ buttonCloseText }}</stui-button>
         </div>
@@ -14,7 +15,7 @@
 </template>
 <script>
 export default {
-  name: 'LabelItemContainer',
+  name: 'ModalContainer',
   props: ['buttonCloseText', 'buttonSubmitText'],
 };
 </script>
