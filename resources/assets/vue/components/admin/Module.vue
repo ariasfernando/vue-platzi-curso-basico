@@ -1,83 +1,81 @@
 <template>
-  <div>
-    <table
-      width="100%"
-      cellspacing="0"
-      cellpadding="0"
-      border="0"
-      align="center"
-      style="width:100%; position: relative;">
-      <tr>
-        <td
-          :background="modulebackgroundImage"
-          :width="module.structure.attribute.width || '100%'"
-          :height="module.structure.attribute.height"
-          :style="[elementBorderPaddingAndHeight(module.structure),{position: 'relative'}]"
-          :valign="module.structure.attribute.valign || 'top'"
-          :bgcolor="module.structure.attribute.bgcolor"
-          class="st-content-component"
-          :class="{[module.structure.attribute.classes]:module.structure.attribute.classes}">
-          <table
-            width="100%"
-            cellpadding="0"
-            cellspacing="0"
-            border="0"
-            style="width: 100%;">
-            <column-manager
-              :key="module.structure.columnsStacking"
-              :module="module"
-              @select-component="selectComponent">
-              <template slot-scope="{columnData}">
-                <draggable
-                  v-model="columnData.column.components"
-                  cellpadding="0"
-                  cellspacing="0"
-                  border="0"
-                  width="100%"
-                  element="table"
-                  :options="options"
-                  :data-col="columnData.columnId"
-                  :class="!columnData.column.components.length ? 'empty-table' : ''"
-                  @add="onAdd">
-                  <template v-if="columnData.column.components.length">
-                    <component
-                      :is="component.type"
-                      v-for="(component, componentId) in columnData.column.components"
-                      :key="component.id"
-                      :module="module"
-                      class="st-component"
-                      :component="component"
-                      :module-id="moduleId"
-                      :column-id="columnData.columnId"
-                      :is-active="currentElement.id === component.id"
-                      :component-id="componentId"
-                      @select-component="selectComponent" />
-                  </template>
-                  <div v-else style="display:table-row;">
-                    <div
-                      align="center"
-                      class="empty-cell empty-col"
-                      height="80"
-                      :data-col="columnData.columnId">
-                      Drag content here
-                    </div>
+  <table
+    width="100%"
+    cellspacing="0"
+    cellpadding="0"
+    border="0"
+    align="center"
+    style="width:100%; position: relative;">
+    <tr>
+      <td
+        :background="modulebackgroundImage"
+        :width="module.structure.attribute.width || '100%'"
+        :height="module.structure.attribute.height"
+        :style="[elementBorderPaddingAndHeight(module.structure),{position: 'relative'}]"
+        :valign="module.structure.attribute.valign || 'top'"
+        :bgcolor="module.structure.attribute.bgcolor"
+        class="st-content-component"
+        :class="{[module.structure.attribute.classes]:module.structure.attribute.classes}">
+        <table
+          width="100%"
+          cellpadding="0"
+          cellspacing="0"
+          border="0"
+          style="width: 100%;">
+          <column-manager
+            :key="module.structure.columnsStacking"
+            :module="module"
+            @select-component="selectComponent">
+            <template slot-scope="{columnData}">
+              <draggable
+                v-model="columnData.column.components"
+                cellpadding="0"
+                cellspacing="0"
+                border="0"
+                width="100%"
+                element="table"
+                :options="options"
+                :data-col="columnData.columnId"
+                :class="!columnData.column.components.length ? 'empty-table' : ''"
+                @add="onAdd">
+                <template v-if="columnData.column.components.length">
+                  <component
+                    :is="component.type"
+                    v-for="(component, componentId) in columnData.column.components"
+                    :key="component.id"
+                    :module="module"
+                    class="st-component"
+                    :component="component"
+                    :module-id="moduleId"
+                    :column-id="columnData.columnId"
+                    :is-active="currentElement.id === component.id"
+                    :component-id="componentId"
+                    @select-component="selectComponent" />
+                </template>
+                <div v-else style="display:table-row;">
+                  <div
+                    align="center"
+                    class="empty-cell empty-col"
+                    height="80"
+                    :data-col="columnData.columnId">
+                    Drag content here
                   </div>
-                </draggable>
-              </template>
-            </column-manager>
-          </table>
-        </td>
-      </tr>
-      <element-selector
-        v-if="isStudio"
-        :left-position="templateWidth/2"
-        :bottom="-90"
-        label="Row"
-        :active="isActiveGeneralSettings"
-        selector-icon="fa fa-cog"
-        @element-selected="moduleSelect" />
-    </table>
-  </div>
+                </div>
+              </draggable>
+            </template>
+          </column-manager>
+        </table>
+      </td>
+    </tr>
+    <element-selector
+      v-if="isStudio"
+      :left-position="templateWidth/2"
+      :bottom="-90"
+      label="Row"
+      :active="isActiveGeneralSettings"
+      selector-icon="fa fa-cog"
+      @element-selected="moduleSelect" />
+  </table>
 </template>
 
 <script>

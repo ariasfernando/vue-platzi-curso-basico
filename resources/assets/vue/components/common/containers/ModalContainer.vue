@@ -3,7 +3,7 @@
     <div class="st-modal">
       <div class="row">
         <div class="col-sx-12">
-          <div class="close-button" @click="$emit('close-modal')">X</div>
+          <stui-close @click="$emit('close-modal')" />
           <slot />
           <stui-button v-if="buttonSubmitText" class="button-close-modal" type="primary" @click="$emit('submit-modal')">{{ buttonSubmitText }}</stui-button>
           <stui-button v-if="buttonCloseText" class="button-close-modal" type="primary" @click="$emit('close-modal')">{{ buttonCloseText }}</stui-button>
@@ -19,13 +19,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.close-button {
-  float: right;
-  color: red;
-  font-weight: 900;
-  clear: both;
-  cursor: pointer;
-}
 .button-close-modal {
     float: right;
 }

@@ -1,12 +1,12 @@
 <template>
-  <button :class="`button-${type}`" @click="$emit('click')">
+  <button :class="`stui-button-${type}`" @click="$emit('click')">
     <slot />
   </button>
 </template>
 
 <script>
 export default {
-  name: 'PrimaryButton',
+  name: 'StuiButton',
   props: {
     type: {
       type: [String],
@@ -16,7 +16,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.button-primary /deep/ {
+.stui-button-primary /deep/ {
   font-size: 13px !important;
   font-weight: 400;
   background: #514960;
