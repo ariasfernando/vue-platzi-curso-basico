@@ -96,10 +96,10 @@ class ModuleServiceProvider extends ServiceProvider
                     $modules[$module->key]['libraries'][] = $library->name;
                 }
             }
-
-            ksort($modules);
-            return $modules;
         }
+
+        ksort($modules);
+        return $modules;
     }
 
     /**
