@@ -4,3 +4,5 @@
 /resources/assets/js/plugins/tinymce/
 /resources/assets/js/vue/
 /public
+/package.json
+/package-lock.json

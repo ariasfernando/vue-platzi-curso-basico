@@ -1,18 +1,24 @@
 <template>
   <div class="col-xs-12 library">
-    <div class="row header" v-sticky="{ zIndex: 999, stickyTop: 0 }">
+    <div v-sticky="{ zIndex: 999, stickyTop: 0 }" class="row header">
       <div class="col-xs-9 header-col">
         <div class="beta-btn-secondary pull-left">
-          <i class="glyphicon glyphicon-menu-left"></i>
+          <i class="glyphicon glyphicon-menu-left" />
           <router-link to="/">Back</router-link>
         </div>
-        <div class="col-xs-11 section-title vertical-center" v-if="library.id"> Edit {{library.name}} Library</div>
-        <div class="col-xs-11 section-title vertical-center" v-if="!library.id">New Library</div>
+        <div v-if="library.id" class="col-xs-11 section-title vertical-center"> Edit {{ library.name }} Library</div>
+        <div v-if="!library.id" class="col-xs-11 section-title vertical-center">New Library</div>
       </div>
 
       <div class="col-xs-3 header-col">
         <div class="vertical-center pull-right">
-          <a class="btn btn-continue beta-btn-secondary" href="#" @click.prevent="saveLibrary" :disabled="errors.any()">Save <i class="glyphicon glyphicon-menu-right"></i></a>
+          <a
+            class="btn btn-continue beta-btn-secondary"
+            href="#"
+            :disabled="errors.any()"
+            @click.prevent="saveLibrary">Save
+            <i class="glyphicon glyphicon-menu-right" />
+          </a>
         </div>
       </div>
     </div>
@@ -26,7 +32,11 @@
                 <br><br>
                 <pre>{{ library.config }}</pre>
               </div>
-              <form id="edit-library" action="/admin/library/edit" method="POST" @submit.prevent="saveLibrary">
+              <form
+                id="edit-library"
+                action="/admin/library/edit"
+                method="POST"
+                @submit.prevent="saveLibrary">
                 <tabs>
                   <tab name="Settings" :selected="true">
                     <div class="row">
@@ -34,7 +44,11 @@
                       <div class="col-md-6">
                         <label for="name">Name</label>
                         <p class="control">
-                          <el-input v-validate="'required'" v-model="library.name" placeholder="Enter name here." :class="{'is-danger': errors.has('name') }"></el-input>
+                          <el-input
+                            v-model="library.name"
+                            v-validate="'required'"
+                            placeholder="Enter name here."
+                            :class="{'is-danger': errors.has('name') }" />
                           <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
                         </p>
                       </div>
@@ -43,39 +57,45 @@
                       <div class="col-md-6">
                         <label for="description">Description</label>
                         <p class="control">
-                          <el-input v-model="library.description" placeholder="Enter description here." name="description"></el-input>
+                          <el-input
+                            v-model="library.description"
+                            placeholder="Enter description here."
+                            name="description" />
                         </p>
                       </div>
                     </div>
 
-                    <div class="row" v-if="campaignConfig.preview.show_preheader">
+                    <div v-if="campaignConfig.preview.show_preheader" class="row">
                       <!-- Field Preheader -->
                       <label for="preheader" class="col-sm-4 control-label">Preheader</label>
                       <p class="control col-sm-1">
-                        <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')"></toggle-button>
+                        <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')" />
                       </p>
 
-                      <div class="col-sm-4" v-show="library.config.preheader">
+                      <div v-show="library.config.preheader" class="col-sm-4">
                         <!-- Preheader default text -->
                         <p class="control">
-                          <el-input v-model="library.config.preheaderDefault" placeholder="Enter preheader default text here." name="preheader"></el-input>
+                          <el-input
+                            v-model="library.config.preheaderDefault"
+                            placeholder="Enter preheader default text here."
+                            name="preheader" />
                         </p>
                       </div>
                     </div>
 
                     <!-- Field Plain text -->
-                    <div class="row" v-if="campaignConfig.process_plaintext">
+                    <div v-if="campaignConfig.process_plaintext" class="row">
                       <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
                       <p class="control col-sm-1">
-                        <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')"></toggle-button>
+                        <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')" />
                       </p>
                     </div>
 
                     <!-- Html to pdf -->
-                    <div class="row" v-if="campaignConfig.download_pdf">
+                    <div v-if="campaignConfig.download_pdf" class="row">
                       <label for="htmlToPdf" class="col-sm-4 control-label">PDF Download</label>
                       <p class="control col-sm-1">
-                        <toggle-button :value="library.config.htmlToPdf" @change="updateToggle('htmlToPdf')"></toggle-button>
+                        <toggle-button :value="library.config.htmlToPdf" @change="updateToggle('htmlToPdf')" />
                       </p>
                     </div>
 
@@ -83,37 +103,41 @@
                     <div class="row">
                       <label for="preheader" class="col-sm-4 control-label">ESP</label>
                       <p class="control col-sm-1">
-                        <toggle-button :value="library.config.esp" @change="updateToggle('esp')"></toggle-button>
+                        <toggle-button :value="library.config.esp" @change="updateToggle('esp')" />
                       </p>
                       <div v-if="library.config.esp" class="col-md-5">
                         <p class="control">
-                          <el-select size="mini" v-model="espProvider" placeholder="Choose ESP">
-                            <el-option v-for="(esp, key) in this.espList" :key="key" :label="esp.title" :value="key"></el-option>
+                          <el-select v-model="espProvider" size="mini" placeholder="Choose ESP">
+                            <el-option
+                              v-for="(esp, key) in espList"
+                              :key="key"
+                              :label="esp.title"
+                              :value="key" />
                           </el-select>
                         </p>
                       </div>
                     </div>
 
                     <!-- Field Tagging -->
-                    <div class="row" v-if="campaignConfig.enable_tagging">
+                    <div v-if="campaignConfig.enable_tagging" class="row">
                       <label for="tagging" class="col-sm-4 control-label">Tags</label>
                       <p class="control col-sm-1">
-                        <toggle-button :value="library.config.tagging" @change="updateToggle('tagging')"></toggle-button>
+                        <toggle-button :value="library.config.tagging" @change="updateToggle('tagging')" />
                       </p>
                     </div>
 
                     <!-- Field Templating -->
-                    <div class="row" v-if="campaignConfig.enable_templating">
+                    <div v-if="campaignConfig.enable_templating" class="row">
                       <label for="templating" class="col-sm-4 control-label">Enable templating</label>
                       <p class="control col-sm-1">
-                        <toggle-button :value="library.config.templating" @change="updateToggle('templating')"></toggle-button>
+                        <toggle-button :value="library.config.templating" @change="updateToggle('templating')" />
                       </p>
                     </div>
-                    <div class="row" v-if="campaignConfig.enable_tracking">
+                    <div v-if="campaignConfig.enable_tracking" class="row">
                       <!-- Field Tracking -->
                       <label for="tracking" class="col-sm-4 control-label">Enable Tracking</label>
                       <p class="control col-sm-1">
-                        <toggle-button :value="library.config.tracking" @change="updateToggle('tracking')"></toggle-button>
+                        <toggle-button :value="library.config.tracking" @change="updateToggle('tracking')" />
                       </p>
                     </div>
                   </tab>
@@ -124,8 +148,15 @@
                       <div class="col-md-4">
                         <label for="templateWidth">Template width</label>
                         <p class="control">
-                          <el-input-number size="mini" v-validate="'required'" v-model="library.config.templateWidth" :class="{'is-danger': errors.has('templateWidth') }" :name="'templateWidth'"></el-input-number>
-                          <span v-show="errors.has('templateWidth')" class="help is-danger">{{ errors.first('templateWidth') }}</span>
+                          <el-input-number
+                            v-model="library.config.templateWidth"
+                            v-validate="'required'"
+                            size="mini"
+                            :class="{'is-danger': errors.has('templateWidth') }"
+                            :name="'templateWidth'" />
+                          <span
+                            v-show="errors.has('templateWidth')"
+                            class="help is-danger">{{ errors.first('templateWidth') }}</span>
                         </p>
                       </div>
 
@@ -133,16 +164,30 @@
                       <div class="col-md-4">
                         <label for="templateMobileWidth">Template Mobile Width</label>
                         <p class="control">
-                          <el-input-number size="mini" v-validate="'required'" v-model="library.config.templateMobileWidth" :class="{'is-danger': errors.has('templateMobileWidth') }" :name="'templateMobileWidth'"></el-input-number>
-                          <span v-show="errors.has('templateMobileWidth')" class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
+                          <el-input-number
+                            v-model="library.config.templateMobileWidth"
+                            v-validate="'required'"
+                            size="mini"
+                            :class="{'is-danger': errors.has('templateMobileWidth') }"
+                            :name="'templateMobileWidth'" />
+                          <span
+                            v-show="errors.has('templateMobileWidth')"
+                            class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
                         </p>
                       </div>
 
                       <div class="col-md-4">
                         <label for="padding">Padding</label>
                         <p class="control">
-                          <el-input-number size="mini" v-validate="'required'" v-model="library.config.padding" :class="{'is-danger': errors.has('padding') }" :name="'padding'"></el-input-number>
-                          <span v-show="errors.has('padding')" class="help is-danger">{{ errors.first('padding') }}</span>
+                          <el-input-number
+                            v-model="library.config.padding"
+                            v-validate="'required'"
+                            size="mini"
+                            :class="{'is-danger': errors.has('padding') }"
+                            :name="'padding'" />
+                          <span
+                            v-show="errors.has('padding')"
+                            class="help is-danger">{{ errors.first('padding') }}</span>
                         </p>
                       </div>
                     </div>
@@ -150,19 +195,38 @@
                     <div class="row">
                       <!-- Field background-color -->
                       <div class="col-md-4">
-                        <input-generic-color @setting-updated="settingUpdatedHandler" class="label-bold" :name="'templateBackgroundColor'" :type="'generic-color'" :link="'config'" :label="'Template Background Color'" :default-value="library.config.templateBackgroundColor" :element="library"></input-generic-color>
+                        <input-generic-color
+                          class="label-bold"
+                          :name="'templateBackgroundColor'"
+                          :type="'generic-color'"
+                          :link="'config'"
+                          :label="'Template Background Color'"
+                          :default-value="library.config.templateBackgroundColor"
+                          :element="library"
+                          @setting-updated="settingUpdatedHandler" />
                       </div>
 
                       <!-- Field content-background-color -->
                       <div class="col-md-4">
-                        <input-generic-color class="label-bold" @setting-updated="settingUpdatedHandler" :name="'contentBackgroundColor'" :type="'generic-color'" :link="'config'" :label="'Content Background Color'" :default-value="library.config.contentBackgroundColor" :element="library"></input-generic-color>
+                        <input-generic-color
+                          class="label-bold"
+                          :name="'contentBackgroundColor'"
+                          :type="'generic-color'"
+                          :link="'config'"
+                          :label="'Content Background Color'"
+                          :default-value="library.config.contentBackgroundColor"
+                          :element="library"
+                          @setting-updated="settingUpdatedHandler" />
                       </div>
 
                       <!-- Field template background palettes -->
                       <div class="col-md-4">
                         <label for="templateBackgroundPalettes">Template background palettes</label>
                         <p class="control">
-                          <el-input v-model="library.config.templateBackgroundPalettes" name="colorPalettes" placeholder='{ "default": "#FFFFFF", "options": { "White": "#FFFFFF", "Black": "#000000" } }"'></el-input>
+                          <el-input
+                            v-model="library.config.templateBackgroundPalettes"
+                            name="colorPalettes"
+                            :placeholder="libConTemBackgroundPalettes" />
                         </p>
                       </div>
                     </div>
@@ -170,20 +234,43 @@
                     <div class="row">
                       <!-- Field font-family -->
                       <div class="col-md-3">
-                        <input-font-family class="label-bold" @setting-updated="settingUpdatedHandler" :name="'fontFamily'" :type="'font-family'" :link="'config'" :label="'Font Family'" :default-value="library.config.fontFamily" :element="library"></input-font-family>
+                        <input-font-family
+                          class="label-bold"
+                          :name="'fontFamily'"
+                          :type="'font-family'"
+                          :link="'config'"
+                          :label="'Font Family'"
+                          :default-value="library.config.fontFamily"
+                          :element="library"
+                          @setting-updated="settingUpdatedHandler" />
                       </div>
 
                       <!-- Field font-color -->
                       <div class="col-md-3">
-                        <input-generic-color class="label-bold" @setting-updated="settingUpdatedHandler" :name="'fontColor'" :type="'generic-color'" :link="'config'" :label="'Font Color'" :default-value="library.config.fontColor" :element="library"></input-generic-color>
+                        <input-generic-color
+                          class="label-bold"
+                          :name="'fontColor'"
+                          :type="'generic-color'"
+                          :link="'config'"
+                          :label="'Font Color'"
+                          :default-value="library.config.fontColor"
+                          :element="library"
+                          @setting-updated="settingUpdatedHandler" />
                       </div>
 
                       <!-- Field font-size -->
                       <div class="col-md-3">
                         <label for="fontSize">Font Size</label>
                         <p class="control">
-                          <el-input-number size="mini" v-validate="'required'" v-model="library.config.fontSize" :class="{'is-danger': errors.has('fontSize') }" :name="'fontSize'"></el-input-number>
-                          <span v-show="errors.has('fontSize')" class="help is-danger">{{ errors.first('fontSize') }}</span>
+                          <el-input-number
+                            v-model="library.config.fontSize"
+                            v-validate="'required'"
+                            size="mini"
+                            :class="{'is-danger': errors.has('fontSize') }"
+                            :name="'fontSize'" />
+                          <span
+                            v-show="errors.has('fontSize')"
+                            class="help is-danger">{{ errors.first('fontSize') }}</span>
                         </p>
                       </div>
 
@@ -191,8 +278,15 @@
                       <div class="col-md-3">
                         <label for="lineHeight">Line Height</label>
                         <p class="control">
-                          <el-input-number size="mini" v-validate="'required'" v-model="library.config.lineHeight" :class="{'is-danger': errors.has('lineHeight') }" :name="'lineHeight'"></el-input-number>
-                          <span v-show="errors.has('lineHeight')" class="help is-danger">{{ errors.first('lineHeight') }}</span>
+                          <el-input-number
+                            v-model="library.config.lineHeight"
+                            v-validate="'required'"
+                            size="mini"
+                            :class="{'is-danger': errors.has('lineHeight') }"
+                            :name="'lineHeight'" />
+                          <span
+                            v-show="errors.has('lineHeight')"
+                            class="help is-danger">{{ errors.first('lineHeight') }}</span>
                         </p>
                       </div>
                     </div>
@@ -200,14 +294,25 @@
                     <div class="row">
                       <!-- Field link-color -->
                       <div class="col-md-3">
-                        <input-generic-color class="label-bold" @setting-updated="settingUpdatedHandler" :name="'linkColor'" :type="'generic-color'" :link="'config'" :label="'Link Color'" :default-value="library.config.linkColor" :element="library"></input-generic-color>
+                        <input-generic-color
+                          class="label-bold"
+                          :name="'linkColor'"
+                          :type="'generic-color'"
+                          :link="'config'"
+                          :label="'Link Color'"
+                          :element="library"
+                          :default-value="library.config.linkColor"
+                          @setting-updated="settingUpdatedHandler" />
                       </div>
 
                       <!-- Field link-decoration -->
                       <div class="col-md-3">
                         <label for="linkDecoration">Link Decoration</label>
                         <p class="control">
-                          <el-button :class="{'fa fa-underline':true,'active': library.config.linkDecoration === 'underline'}" size="mini" @click.native="toggleUnderline"></el-button>
+                          <el-button
+                            :class="{'fa fa-underline':true,'active': library.config.linkDecoration === 'underline'}"
+                            size="mini"
+                            @click.native="toggleUnderline" />
                         </p>
                       </div>
 
@@ -215,7 +320,10 @@
                       <div class="col-md-3">
                         <label for="externalCssLink">External CSS Link</label>
                         <p class="control">
-                          <el-input v-model="library.config.externalCssLink" name="linkColor" placeholder="http://www.example.com/css/styles.css"></el-input>
+                          <el-input
+                            v-model="library.config.externalCssLink"
+                            name="linkColor"
+                            placeholder="http://www.example.com/css/styles.css" />
                         </p>
                       </div>
 
@@ -223,7 +331,10 @@
                       <div class="col-md-3">
                         <label for="colorPalettes">color palettes</label>
                         <p class="control">
-                          <el-input v-model="library.config.colorPalettes" name="colorPalettes" placeholder="{'palette_name':['000000','Black','474646','Gray','79a8c9','Blue','cd202c','Red']}"></el-input>
+                          <el-input
+                            v-model="library.config.colorPalettes"
+                            name="colorPalettes"
+                            :placeholder="libConColPal" />
                         </p>
                       </div>
                     </div>
@@ -232,7 +343,11 @@
                       <!-- Field proprietary styles -->
                       <div class="col-md-12">
                         <label for="propietaryCss">Proprietary Styles</label>
-                        <css-code-editor ref="proprietaryCss" v-model="library.config.propietaryCss"></css-code-editor>
+                        <code-editor
+                          ref="proprietaryCss"
+                          v-model="proprietaryCss"
+                          type="css"
+                          height="300px" />
                       </div>
                     </div>
 
@@ -241,7 +356,12 @@
                       <div class="col-md-12">
                         <label for="prependHtml">Prepend to body</label>
                         <p class="control">
-                          <textarea v-model="library.config.prependHtml" rows="10" name="prependHtml" type="text" placeholder=""></textarea>
+                          <textarea
+                            v-model="library.config.prependHtml"
+                            rows="10"
+                            name="prependHtml"
+                            type="text"
+                            placeholder="" />
                         </p>
                       </div>
                     </div>
@@ -251,7 +371,12 @@
                       <div class="col-md-12">
                         <label for="appendHtml">Append to body</label>
                         <p class="control">
-                          <textarea v-model="library.config.appendHtml" rows="10" name="appendHtml" type="text" placeholder=""></textarea>
+                          <textarea
+                            v-model="library.config.appendHtml"
+                            rows="10"
+                            name="appendHtml"
+                            type="text"
+                            placeholder="" />
                         </p>
                       </div>
                     </div>
@@ -263,7 +388,12 @@
                       <div class="col-md-6">
                         <p>
                           <label for="name">Add module:</label>
-                          <el-autocomplete class="inline-input" v-model="state" :fetch-suggestions="querySearch" placeholder="Please Input" @select="handleSelect"></el-autocomplete>
+                          <el-autocomplete
+                            v-model="state"
+                            class="inline-input"
+                            :fetch-suggestions="querySearch"
+                            placeholder="Please Input"
+                            @select="handleSelect" />
                           |
                           <button class="btn btn-success btn-add-group" @click.prevent="addGroup">Add Group</button>
                         </p>
@@ -271,34 +401,72 @@
                       <div class="col-md-6">
                         <label for="name">Menu</label>
                         <div id="modules-container">
-                          <draggable v-model="library.modules" class="drag-component-menu components-list" :options="{group:'menuList'}">
-                            <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name" :key="'modules-' + group.name">
+                          <draggable
+                            v-model="library.modules"
+                            class="drag-component-menu components-list"
+                            :options="{group:'menuList'}">
+                            <div
+                              v-for="(group, idx) in library.modules"
+                              :id="'modules-' + group.name"
+                              :key="'modules-' + group.name">
                               <div v-if="group.type == 'sub-menu'" :id="'group-container-' + group.name">
                                 <p :class="{ 'control': true }">
-                                  <input v-model="group.name" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('groupName-' + idx) }" :name="'modules[' + idx + '][name]'" type="text" placeholder="Enter group name">
-                                  <span v-show="errors.has('groupName-' + idx)" class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
+                                  <input
+                                    v-model="group.name"
+                                    v-validate="'required'"
+                                    :class="{'input': true, 'is-danger': errors.has('groupName-' + idx) }"
+                                    :name="'modules[' + idx + '][name]'"
+                                    type="text"
+                                    placeholder="Enter group name">
+                                  <span
+                                    v-show="errors.has('groupName-' + idx)"
+                                    class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
                                 </p>
-                                <draggable v-model="group.modules" class="drag-component-menu" @add="onAdd" :options="{group:'menuList'}">
-                                  <template v-for="(module, idx) in group.modules">
-                                    <el-tooltip class="item" effect="light" placement="left" :key="idx">
+                                <draggable
+                                  v-model="group.modules"
+                                  class="drag-component-menu"
+                                  :options="{group:'menuList'}"
+                                  @add="onAdd">
+                                  <template v-for="(module, idm) in group.modules">
+                                    <el-tooltip
+                                      :key="idm"
+                                      class="item"
+                                      effect="light"
+                                      placement="left">
                                       <div slot="content">ID: {{ module.moduleId }}</div>
                                       <li class="component-item list-group-item">
-                                        <input v-model="module.name" v-validate="'required'" :class="{'input': true, 'menu-item' : true }" type="text" placeholder="Enter module name">
-                                        <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(group.modules,idx)"></span>
+                                        <input
+                                          v-model="module.name"
+                                          v-validate="'required'"
+                                          :class="{'input': true, 'menu-item' : true }"
+                                          type="text"
+                                          placeholder="Enter module name">
+                                        <span
+                                          class="glyphicon glyphicon-trash item-remove"
+                                          @click="deleteItem(group.modules,idx)" />
                                       </li>
                                     </el-tooltip>
                                   </template>
                                 </draggable>
                                 <div class="group-remove-container">
-                                  <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)"></span>
-                                  <hr/>
+                                  <span
+                                    class="glyphicon glyphicon-trash group-remove"
+                                    @click.prevent="deleteGroup(idx)" />
+                                  <hr>
                                 </div>
                               </div>
                               <el-tooltip class="item" effect="light" placement="left">
                                 <div slot="content">ID: {{ group.moduleId }}</div>
                                 <li v-if="group.type == 'item'" class="component-item list-group-item">
-                                  <input v-model="group.name" v-validate="'required'" :class="{'input': true , 'menu-item' : true }" type="text" placeholder="Enter module name">
-                                  <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(library.modules,idx)"></span>
+                                  <input
+                                    v-model="group.name"
+                                    v-validate="'required'"
+                                    :class="{'input': true , 'menu-item' : true }"
+                                    type="text"
+                                    placeholder="Enter module name">
+                                  <span
+                                    class="glyphicon glyphicon-trash item-remove"
+                                    @click="deleteItem(library.modules,idx)" />
                                 </li>
                               </el-tooltip>
                             </div>
@@ -311,14 +479,22 @@
                       <div class="col-md-12">
                         <label for="fixedModules">Fixed modules config:</label>
                         <p class="control">
-                          <textarea v-model="library.config.fixedModules" rows="10" name="fixedModules" type="text" placeholder=""></textarea>
+                          <textarea
+                            v-model="library.config.fixedModules"
+                            rows="10"
+                            name="fixedModules"
+                            type="text"
+                            placeholder="" />
                         </p>
                       </div>
                     </div>
                     <!-- Input submit  -->
                     <div class="row">
                       <div class="col-md-12">
-                        <button type="submit" class="btn btn-success pull-right submit-config hidden" :disabled="errors.any()">Submit</button>
+                        <button
+                          type="submit"
+                          class="btn btn-success pull-right submit-config hidden"
+                          :disabled="errors.any()">Submit</button>
                       </div>
                     </div>
                   </tab>
@@ -333,48 +509,50 @@
 </template>
 
 <script>
-import * as elementSettings from "./settings";
-import configService from '../../services/config';
-import CssCodeEditor from './CssCodeEditor';
 import Draggable from 'vuedraggable';
+import VueSticky from 'vue-sticky';
+import * as elementSettings from './settings';
+import configService from '../../services/config';
+import CodeEditor from './CodeEditor.vue';
 import libraryService from '../../services/library';
 import Tab from '../common/Tab.vue';
 import Tabs from '../common/Tabs.vue';
-import VueSticky from 'vue-sticky';
 
 export default {
   name: 'EditLibrary',
   components: {
-    "input-font-family": elementSettings.FontFamily,
-    "input-generic-color": elementSettings.GenericColor,
-    CssCodeEditor,
+    InputFontFamily: elementSettings.FontFamily,
+    InputGenericColor: elementSettings.GenericColor,
+    CodeEditor,
     Draggable,
     Tab,
-    Tabs
+    Tabs,
   },
-  data () {
+  directives: {
+    sticky: VueSticky,
+  },
+  data() {
     return {
       campaignConfig: {},
       espList: {},
       library: {},
       modules: [],
       options: {
-        chosenClass: "chosen-component-menu",
-        dragClass: "drag-component-menu",
-        ghostClass: "ghost-component-menu",
+        chosenClass: 'chosen-component-menu',
+        dragClass: 'drag-component-menu',
+        ghostClass: 'ghost-component-menu',
         group: {
-          name:'menuList',
+          name: 'menuList',
           pull: false,
-          put: false
+          put: false,
         },
-        sort: false
+        sort: false,
       },
       ready: false,
-      state: ''
-    }
-  },
-  directives: {
-    'sticky': VueSticky,
+      state: '',
+      libConColPal: "{'palette_name': ['000000', 'Black', '474646', 'Gray', '79a8c9', 'Blue', 'cd202c', 'Red', ], },",
+      libConTemBackgroundPalettes: "{ 'default': '#FFFFFF', 'options': { 'White': '#FFFFFF', 'Black': '#000000' } }",
+    };
   },
   computed: {
     espProvider: {
@@ -383,15 +561,15 @@ export default {
       },
       set(espProvider) {
         this.library.config.espProvider = espProvider;
-      }
+      },
     },
     fixedModules: {
       get() {
-        return this.library.config.fixedModules ? this.library.config.fixedModules : "";
+        return this.library.config.fixedModules ? this.library.config.fixedModules : '';
       },
       set(fixedModules) {
         this.library.config.fixedModules = JSON.stringify(fixedModules);
-      }
+      },
     },
     proprietaryCss: {
       get() {
@@ -399,8 +577,18 @@ export default {
       },
       set(value) {
         this.library.config.propietaryCss = value;
-      }
-    }
+      },
+    },
+  },
+  mounted() {
+    this.toggleSidebar();
+  },
+  created() {
+    configService.getConfig('campaign')
+      .then((response) => {
+        this.campaignConfig = response;
+        this.loadLibrary();
+      });
   },
   methods: {
     updateToggle(element) {
@@ -411,12 +599,13 @@ export default {
         .then((response) => {
           this.espList = response;
         })
-        .catch((error) => {
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
-            className: 'et-error'
-          });
+        .catch(() => {
+          this.$root.$toast(
+            'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+              className: 'et-error',
+            });
         });
-      let libraryId = this.$route.params.id;
+      const libraryId = this.$route.params.id;
 
       if (libraryId) {
         libraryService.getLibrary(libraryId)
@@ -427,10 +616,11 @@ export default {
             }
             this.ready = true;
           })
-          .catch((error) => {
-            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
-              className: 'et-error'
-            });
+          .catch(() => {
+            this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+                className: 'et-error',
+              });
           });
       } else {
         libraryService.newLibrary()
@@ -439,26 +629,27 @@ export default {
             this.loadModules(response.modules);
             this.ready = true;
           })
-          .catch((error) => {
-            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
-              className: 'et-error'
-            });
+          .catch(() => {
+            this.$root.$toast(
+              'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+                className: 'et-error',
+              });
           });
       }
     },
     saveLibrary() {
-      let formData = {
+      const formData = {
         name: this.library.name,
         description: this.library.description,
         config: this.library.config,
-        modules: this.library.modules
+        modules: this.library.modules,
       };
       if (this.library.id) {
         formData.libraryId = this.library.id;
         libraryService.saveLibrary(formData)
           .then((response) => {
             if (response.message === 'SUCCESS') {
-              window.location.href = this.$_app.config.baseUrl + "/admin/library";
+              window.location.href = `${this.$_app.config.baseUrl}/admin/library`;
             }
           })
           .catch((error) => {
@@ -466,11 +657,11 @@ export default {
               this.$root.$toast(this.$options.filters.parseValidationErrors(error), {
                 className: 'et-error',
                 closeable: true,
-                duration: 10000
+                duration: 10000,
               });
             } else {
               this.$root.$toast('Oops! There was an error', {
-                className: 'et-error'
+                className: 'et-error',
               });
             }
           });
@@ -478,51 +669,50 @@ export default {
         libraryService.createLibrary(formData)
           .then((response) => {
             if (response.message === 'SUCCESS') {
-              window.location.href = this.$_app.config.baseUrl + "/admin/library";
-            } else if ( response.message === 'ERROR_EXISTS' ) {
+              window.location.href = `${this.$_app.config.baseUrl}/admin/library`;
+            } else if (response.message === 'ERROR_EXISTS') {
               this.$root.$toast('Library already exists', {
-                className: 'et-error'
+                className: 'et-error',
               });
             }
           })
           .catch((error) => {
-            const { errors } = error.body;
             if (error.status === 422) {
               this.$root.$toast(this.$options.filters.parseValidationErrors(error), {
                 className: 'et-error',
                 closeable: true,
-                duration: 10000
+                duration: 10000,
               });
             } else {
               this.$root.$toast('Oops! There was an error', {
-                className: 'et-error'
+                className: 'et-error',
               });
             }
           });
       }
     },
     extractErrors(errArr) {
-      let errors = []
-      Object.keys(errArr).forEach(key => {
+      const errors = [];
+      Object.keys(errArr).forEach((key) => {
         errors.push(errArr[key][0]);
       });
       return errors;
     },
     addGroup() {
       this.temporal = this.temporal || 1;
-      let tmpName = 'Unnamed Group ' + this.temporal++;
+      const tmpName = `Unnamed Group ${this.temporal++}`;
       this.library.modules.push({
         name: tmpName,
         type: 'sub-menu',
-        modules: []
+        modules: [],
       });
     },
     addItem(moduleId) {
-      let itemData = {
+      const itemData = {
         name: moduleId,
-        moduleId: moduleId,
+        moduleId,
         type: 'item',
-      }
+      };
       this.library.modules.push(itemData);
     },
     deleteGroup(idx) {
@@ -535,14 +725,14 @@ export default {
       const sidebar = document.getElementById('admin-sidebar');
       sidebar.style.display = 'none';
 
-      var libMargin = document.getElementById('admin-library-container');
+      const libMargin = document.getElementById('admin-library-container');
       libMargin.className -= ('col-xs-12');
 
       const container = document.getElementsByClassName('base-admin')[0];
       container.style.paddingLeft = 0;
     },
     onAdd(e) {
-      let cloneItem = e.item;
+      const cloneItem = e.item;
       if (cloneItem.parentNode) {
         cloneItem.parentNode.removeChild(cloneItem);
       }
@@ -551,21 +741,21 @@ export default {
       this.library.config[eventData.name] = eventData.value;
     },
     querySearch(queryString, cb) {
-      var modules = this.modules;
-      var results = queryString ? modules.filter(this.createFilter(queryString)) : modules;
+      const modules = this.modules;
+      const results = queryString ? modules.filter(this.createFilter(queryString)) : modules;
       // call callback function to return suggestions
       cb(results);
     },
     createFilter(queryString) {
-      return (module) => {
+      return function filter(module) {
         return (module.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
     loadModules(modules) {
-      var modulesToAdd = [];
-      modules.forEach(function (data) {
+      const modulesToAdd = [];
+      modules.forEach((data) => {
         modulesToAdd.push({
-          value:data
+          value: data,
         });
       });
       this.modules = modulesToAdd;
@@ -576,18 +766,8 @@ export default {
     },
     setTab() {
       this.$refs.proprietaryCss.$refs.codemirror.refresh();
-    }
+    },
   },
-  created() {
-    configService.getConfig('campaign')
-      .then((response) => {
-        this.campaignConfig = response;
-        this.loadLibrary();
-      });
-  },
-  mounted() {
-    this.toggleSidebar();
-  }
 };
 </script>
 

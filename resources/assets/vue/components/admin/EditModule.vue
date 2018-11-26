@@ -2,7 +2,7 @@
   <div class="col-xs-12 module">
     <module-header />
     <div class="row">
-      <section v-if="ready" class="col-xs-12 section-container" id="edit-container">
+      <section v-if="ready" id="edit-container" class="col-xs-12 section-container">
         <column-bar-container side="left">
           <general-settings v-if="ready" />
           <elements-settings v-if="ready" />
@@ -11,7 +11,7 @@
         <div class="col-xs-8 module-container" @mouseup="clickModuleContainer">
           <scrollbar-container>
             <div v-if="showRaw" class="module-wrapper">
-              <code-editor v-model="moduleRow" />
+              <code-editor v-model="moduleRow" type="javascript" height="calc(100vh - 126px)" />
             </div>
             <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
               <module />
@@ -32,7 +32,7 @@
 
 <script>
 import CodeEditor from './CodeEditor.vue';
-import ColumnBarContainer from '../common/containers/ColumnBarContainer';
+import ColumnBarContainer from '../common/containers/ColumnBarContainer.vue';
 import ColumnSettings from './partials/ColumnSettings.vue';
 import ComponentSettings from './ComponentSettings.vue';
 import ElementsSettings from './partials/ElementsSettings.vue';
@@ -58,6 +58,11 @@ export default {
     ScrollbarContainer,
     Spinner,
   },
+  data() {
+    return {
+      ready: false,
+    };
+  },
   computed: {
     module() {
       return this.$store.getters['module/module'];
@@ -68,7 +73,7 @@ export default {
       },
       set(values) {
         this.$store.commit('module/setModuleData', JSON.parse(values));
-      }
+      },
     },
     currentComponent() {
       return this.$store.getters['module/currentComponent'];
@@ -102,11 +107,6 @@ export default {
       );
     },
   },
-  data() {
-    return {
-      ready: false,
-    };
-  },
   watch: {
     ready(value) {
       if (value === true) {
@@ -116,6 +116,9 @@ export default {
         }, 100);
       }
     },
+  },
+  created() {
+    this.loadModule();
   },
   methods: {
     loadColumn() {
@@ -132,9 +135,9 @@ export default {
       // TODO: Trigger event editModule.onInit
       this.$store
         .dispatch('module/getModuleData', moduleId)
-        .then(response => {
+        .then(() => {
           if (this.$route.path.match(/^\/clone\//)) {
-            let cloned = Object.assign({}, this.module);
+            const cloned = Object.assign({}, this.module);
             cloned.moduleId = undefined;
             cloned.name = undefined;
             this.$store.commit('module/setModuleData', cloned);
@@ -144,11 +147,11 @@ export default {
           this.ready = true;
           this.$store.commit('global/setLoader', false);
         })
-        .catch(error => {
+        .catch(() => {
           this.$root.$toast(
-            "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.",
-            { className: 'et-error' }
-          );
+            "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.", {
+              className: 'et-error',
+            });
         });
     },
     toggleSidebar() {
@@ -172,9 +175,6 @@ export default {
         });
       }
     },
-  },
-  created() {
-    this.loadModule();
   },
 };
 </script>
