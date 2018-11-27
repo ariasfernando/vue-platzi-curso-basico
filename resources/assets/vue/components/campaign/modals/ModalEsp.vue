@@ -8,15 +8,15 @@
           </slot>
           <slot name="body">
             <eloqua-upload
-              v-if="espProviderConfig.title == 'Eloqua'" 
+              v-if="espProviderConfig.title == 'Eloqua'"
               :esp-provider-config="espProviderConfig"
             ></eloqua-upload>
             <silverpop-upload
-              v-if="espProviderConfig.title == 'Silverpop'" 
+              v-else-if="espProviderConfig.title == 'Silverpop'"
               :esp-provider-config="espProviderConfig"
             ></silverpop-upload>
             <responsys-upload
-              v-if="espProviderConfig.title == 'Responsys'" 
+              v-else-if="espProviderConfig.title == 'Responsys'"
               :esp-provider-config="espProviderConfig"
             ></responsys-upload>
             <default-upload
