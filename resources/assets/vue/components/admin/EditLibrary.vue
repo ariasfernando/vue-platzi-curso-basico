@@ -346,7 +346,7 @@
                         <code-editor
                           ref="proprietaryCss"
                           v-model="proprietaryCss"
-                          type="css"
+                          type="html"
                           height="300px" />
                       </div>
                     </div>
@@ -644,6 +644,16 @@ export default {
         config: this.library.config,
         modules: this.library.modules,
       };
+      if (typeof formData.config.propietaryCss !== 'undefined' && formData.config.propietaryCss !== '') {
+        if (!this.checkCSS(formData.config.propietaryCss)) {
+          this.$root.$toast('Proprietary Css should starts with style tag', {
+            className: 'et-error',
+            closeable: true,
+            duration: 10000,
+          });
+          return;
+        }
+      }
       if (this.library.id) {
         formData.libraryId = this.library.id;
         libraryService.saveLibrary(formData)
@@ -766,6 +776,9 @@ export default {
     },
     setTab() {
       this.$refs.proprietaryCss.$refs.codemirror.refresh();
+    },
+    checkCSS(value) {
+      return value.toString().indexOf('<style>') === 0;
     },
   },
 };
