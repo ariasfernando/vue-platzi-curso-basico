@@ -14,6 +14,7 @@ import 'codemirror/lib/codemirror.css';
 // languages
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
+import 'codemirror/mode/htmlmixed/htmlmixed';
 // theme css
 import 'codemirror/theme/monokai.css';
 // require active-line.js
@@ -26,6 +27,7 @@ import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/hint/javascript-hint';
 import 'codemirror/addon/hint/css-hint';
+import 'codemirror/addon/hint/html-hint';
 // highlightSelectionMatches
 import 'codemirror/addon/scroll/annotatescrollbar';
 import 'codemirror/addon/search/matchesonscrollbar';
@@ -62,7 +64,7 @@ export default {
       type: String,
       default: 'javascript',
       validator(value) {
-        return ['css', 'javascript'].indexOf(value) !== -1;
+        return ['css', 'javascript', 'html'].indexOf(value) !== -1;
       },
     },
     height: {
@@ -81,16 +83,28 @@ export default {
       }
       return Application.utils.isJsonString(this.value) ? JSON.stringify(this.value, null, 4) : String(this.value);
     },
+    mode() {
+      switch (this.type) {
+        case 'css':
+          return 'text/css';
+        case 'html':
+          return 'htmlmixed';
+        case 'javascript':
+          return {
+            name: 'javascript',
+            json: true,
+          };
+        default:
+          return this.type;
+      }
+    },
     options() {
       return {
         tabSize: 4,
         styleActiveLine: true,
         lineNumbers: true,
         line: true,
-        mode: this.type === 'css' ? 'text/css' : {
-          name: 'javascript',
-          json: true,
-        },
+        mode: this.mode,
         lineWrapping: true,
         theme: 'monokai',
         styleSelectedText: false,
