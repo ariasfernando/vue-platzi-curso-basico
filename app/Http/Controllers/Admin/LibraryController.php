@@ -34,6 +34,7 @@ class LibraryController extends Controller
     {
         $this->middleware('AdminAuthenticate');
         $this->middleware('acl.permission:access_admin_libraries');
+        $this->middleware('acl.permission:access_admin_studio_libraries');
     }
 
     /**
