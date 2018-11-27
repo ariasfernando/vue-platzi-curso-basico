@@ -118,32 +118,12 @@
         </div>
       </div>
     </div>
-    <modal-container v-if="modulePreview === true" button-close-text="Close" @close-modal="modulePreview = false">
+    <modal-container
+      v-if="modulePreview === true"
+      button-close-text="Close"
+      :title="moduleSelected.name"
+      @close-modal="modulePreview = false">
       <module-preview :module="moduleSelected" />
-      <footer name="footer" class="clearfix">
-        <div class="columns is-clearfix">
-          <div class="column">
-            <span>Created date</span>
-            <p>{{ moduleSelected.created_at }}</p>
-          </div>
-          <div class="column">
-            <span>Created by</span>
-            <p>{{ moduleSelected.created_by }}</p>
-          </div>
-          <div class="column">
-            <span>Last modified date</span>
-            <p>{{ moduleSelected.updated_at }}</p>
-          </div>
-          <div class="column">
-            <span>Last modified by</span>
-            <p>{{ moduleSelected.updated_by }}</p>
-          </div>
-          <div class="column">
-            <span>Description</span>
-            <p>{{ moduleSelected.description }}</p>
-          </div>
-        </div>
-      </footer>
     </modal-container>
   </section>
 </template>
@@ -408,37 +388,5 @@ $stensul-purple: #514960;
   white-space: nowrap;
 }
 
-$column-gap: 0.75rem !default;
-
-.column {
-  display: block;
-  flex-basis: 0;
-  flex-grow: 1;
-  flex-shrink: 1;
-  padding: $column-gap;
-}
-.columns {
-  display: flex;
-  margin-left: (-$column-gap);
-  margin-right: (-$column-gap);
-  margin-top: (-$column-gap);
-  &:last-child {
-    margin-bottom: (-$column-gap);
-  }
-  &:not(:last-child) {
-    margin-bottom: calc(1.5rem - #{$column-gap});
-  }
-  // Modifiers
-  &.is-centered {
-    justify-content: center;
-  }
-  &.is-vcentered {
-    align-items: center;
-  }
-}
-
-footer span {
-    font-weight: bold;
-  }
 </style>
 

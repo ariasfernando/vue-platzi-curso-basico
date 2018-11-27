@@ -70,7 +70,7 @@ export default {
   margin-left: 0;
   margin-right: 0;
   position: relative;
-
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   .half-setting /deep/ .el-switch {
     margin-top: 4px;
   }

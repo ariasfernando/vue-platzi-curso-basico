@@ -52,10 +52,10 @@ export default {
       return !_.isEmpty(this.$store.getters['campaign/campaign']);
     },
     isStudio() {
-      return this.$store.getters['module/module'] && this.$store.getters['module/module'].moduleId;
+      return this.$router ? this.$router.currentRoute.matched[0].components.default.name === 'EditModule' : false;
     },
     isPreview() {
-      return !this.isStudio && !this.isCampaign;
+      return this.$router ? this.$router.currentRoute.matched[0].components.default.name === 'Modules' : false;
     },
     isInvertedStacking() {
       return this.module.structure.columnsStacking === 'invertedStacking';
