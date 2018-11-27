@@ -22,7 +22,7 @@ function imageDefault() {
           {
             name: 'palette-background-color',
             title: 'Palette Background color',
-            aclName: 'pallete-background-color',
+            aclName: 'palette-background-color',
           },
         ],
       },
