@@ -1655,6 +1655,17 @@ describe('== Module Store ==', () => {
       const objectModule = {
         moduleId: '5b3ce34792f8ef00137bb105',
         name: 'text',
+        description: 'text',
+        created_at: '2018-07-02 16:22:15',
+        updated_at: '2018-07-02 16:22:15',
+        created_by: {
+          _id: '5b3ce34792f8ef00137bb106',
+          email: 'test@stensul.com',
+        },
+        updated_by: {
+          _id: '5b3ce34792f8ef00137bb106',
+          email: 'test@stensul.com',
+        },
         title: 'text',
         type: 'studio',
         status: 'draft',

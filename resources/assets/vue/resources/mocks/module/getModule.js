@@ -3,6 +3,17 @@ module.exports = {
   type: 'studio',
   key: 'text_458798',
   name: 'text',
+  description: 'text',
+  created_at: '2018-07-02 16:22:15',
+  updated_at: '2018-07-02 16:22:15',
+  created_by: {
+    _id: '5b3ce34792f8ef00137bb106',
+    email: 'test@stensul.com',
+  },
+  updated_by: {
+    _id: '5b3ce34792f8ef00137bb106',
+    email: 'test@stensul.com',
+  },
   structure: {
     columnsStacking: 'normal',
     attribute: {
