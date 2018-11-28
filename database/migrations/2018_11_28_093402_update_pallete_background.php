@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -38,7 +39,7 @@ class UpdatePalleteBackground extends Migration
 
                 $modules_data = $campaign->modules_data;
                 foreach ($campaign->modules_data as $key => $module) {
-                    Logging::info('Module moduleId= ' . $module['moduleId']);
+                    Logging::info('Module moduleId= ' . $module['name']);
                     if (isset($module['structure']) && isset($module['structure']['columns'])) {
                         foreach ($module['structure']['columns'] as $column_key => $column_value) {
                             if (isset($column_value['components'])) {
@@ -85,7 +86,7 @@ class UpdatePalleteBackground extends Migration
             foreach ($modules as $key => &$module) {
                 $module_structure = $module->structure;
 
-                Logging::info('Module id= ' . $module['moduleId']);
+                Logging::info('Module id= ' . $module['name']);
                 if (isset($module_structure) && isset($module_structure['columns'])) {
                     foreach ($module_structure['columns'] as $column_key => $column_value) {
                         if (isset($column_value['components'])) {
