@@ -91,6 +91,9 @@
                   <span v-if="module.status" class="st-rounded-tag">{{ module.status }}</span>
                 </td>
                 <td class="text-left actions icons">
+                  <a v-if="module.type === 'studio'" href="#" @click="()=>{moduleSelected = module; modulePreview = true}">
+                    <i class="glyphicon glyphicon-eye-open"></i>
+                  </a>
                   <router-link v-if="module.type === 'studio'" :to="'/clone/' + module.moduleId">
                     <i class="glyphicon glyphicon-duplicate" />
                   </router-link>
@@ -115,6 +118,13 @@
         </div>
       </div>
     </div>
+    <modal-container
+      v-if="modulePreview === true"
+      button-close-text="Close"
+      :title="moduleSelected.name"
+      @close-modal="modulePreview = false">
+      <module-preview :module="moduleSelected" />
+    </modal-container>
   </section>
 </template>
 
@@ -122,12 +132,16 @@
 import moduleService from '../../services/module';
 import SearchInput from './SearchInput.vue';
 import GenericSpinner from '../common/GenericSpinner.vue';
+import ModulePreview from './ModulePreview.vue';
+import ModalContainer from '../common/containers/ModalContainer.vue';
 
 export default {
   name: 'Modules',
   components: {
     SearchInput,
     GenericSpinner,
+    ModulePreview,
+    ModalContainer,
   },
   data() {
     return {
@@ -136,6 +150,8 @@ export default {
         custom: {},
       },
       ready: false,
+      modulePreview: false,
+      moduleSelected: false,
       filteredModules: {
         studio: [],
         custom: [],
@@ -371,5 +387,6 @@ $stensul-purple: #514960;
   vertical-align: baseline;
   white-space: nowrap;
 }
+
 </style>
 

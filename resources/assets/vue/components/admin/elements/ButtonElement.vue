@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
+  <element-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
     <a
       :data-contenteditable-href="component.button.attribute.href || ''"
       :target="component.button.attribute.target || '_blank'"
@@ -31,10 +31,13 @@
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
                   <tiny-mce
-                    :id="editorId"
-                    :style="fontStyles(component.button)"
-                    :value="component.data.text" data-key="text"
-                    :settings="component.plugins.textOptions.config.settings" />
+                    :editor-id="`componentId-${component.id}`"
+                    :font-styles="fontStyles(component.button)"
+                    :text="component.data.text"
+                    :type="component.type"
+                    :text-dirty="component.data.textDirty"
+                    :config="textOptions"
+                    @changeText="changeText" />
                 </td>
                 <td
                   v-if="component.caret.attribute.url"
@@ -50,36 +53,31 @@
                 </td>
               </tr>
             </table>
-            <component-toolbar :component-id="componentId" :column-id="columnId" />
+            <component-toolbar v-if="isStudio" :component-id="componentId" :column-id="columnId" />
           </td>
         </tr>
       </table>
     </a>
-  </module-container>
+  </element-container>
   <!-- CALL TO ACTION ELEMENT ENDS -->
 </template>
 
 <script>
-import _ from 'lodash';
-import TinyMCE from './TinyMce.vue';
+
 import ComponentToolbar from './ComponentToolbar.vue';
-import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
-import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
+import ElementContainer from '../../common/containers/ElementContainer.vue';
+import TinyMce from '../../common/tinyMce.vue';
 
 export default {
   name: 'ButtonElement',
   components: {
-    'tiny-mce': TinyMCE,
     ComponentToolbar,
-    ModuleContainer,
+    ElementContainer,
+    TinyMce,
   },
   mixins: [MobileStylesMixin, ElementMixin],
-  data() {
-    return {
-      editorId: ['editor', this.columnId, this.componentId].join('-'),
-    };
-  },
   computed: {
     buttonContainerWidth() {
       const { behaviour } = this.component;
@@ -123,19 +121,7 @@ export default {
 </script>
 
 <style lang="less">
-@icon-option: #69dac8;
-
 .stx-position-relative {
   position: relative;
-}
-
-.st-cta {
-  td {
-    vertical-align: middle;
-    a {
-      text-decoration: none;
-      display: block;
-    }
-  }
 }
 </style>

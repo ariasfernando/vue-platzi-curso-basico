@@ -1,34 +1,47 @@
 <template>
-  <tr
-    v-if="component.container.styleOption.enableElement !== false"
-    :data-type="component.type"
-    :class="[getMobileClasses(component,'tr'), {'is-active': isActive}]"
-    @mousedown="clickOnComponent">
-    <td
-      width="100%"
-      :height="component.container.attribute.height"
-      :style="elementBorderPaddingAndHeight(component.container)"
-      :valign="component.container.attribute.valign || 'top'"
-      :align="component.container.attribute.align || 'left'"
-      class="stx-position-relative"
-      :bgcolor="component.container.attribute.bgcolor"
-      :class="[getMobileClasses(component,'td:first'), getAttributeClasses(component)]">
-      <slot />
-    </td>
-  </tr>
+  <div class="module-wrapper-width module-wrapper" :class="`stx-${buildingMode}-mode`">
+    <div v-html="templateWidthStyles" />
+    <slot />
+  </div>
 </template>
 
 <script>
-import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
-import ElementMixin from '../../common/mixins/ElementMixin';
-
 export default {
   name: 'ModuleContainer',
-  mixins: [MobileStylesMixin, ElementMixin],
-  methods: {
-    clickOnComponent(e) {
-      this.$emit('select-component', e);
+  props: ['buildingMode', 'widthDesktop', 'widthMobile'],
+
+  computed: {
+    templateWidthStyles() {
+      return `
+        <style>
+          .module-wrapper-width {
+              width: ${this.buildingMode === 'mobile' ? this.widthMobile : this.widthDesktop}px;
+          }
+        </style>`;
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.module-wrapper-width /deep/ {
+  margin: 0 auto;
+  p,
+  ul,
+  ol {
+    padding: 0;
+    margin: 0;
+  }
+  &.stx-desktop-mode .st-hide-desktop {
+    display: none;
+  }
+}
+</style>
+
+<style lang="less">
+.module-wrapper-width.stx-mobile-mode {
+  // Mobile Classes
+  @import '../../../../less/base/commons/mobile/mobile_core_styles.less';
+  @import '../../../../less/base/commons/mobile/mobile_client_styles.less';
+}
+</style>

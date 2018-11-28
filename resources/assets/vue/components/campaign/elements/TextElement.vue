@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <element-container :component="component" @select-component="selectComponentHandler">
     <a
       :data-contenteditable-href="component.text.attribute.href"
       :style="component.text.style.textDecoration || 'text-decoration:none;'"
@@ -21,55 +21,32 @@
             :bgcolor="component.text.attribute.bgcolor"
             :style="[fontStyles(component.text), elementBorderAndPadding(component.text), {width:'100%'}]">
             <tiny-mce
+              :editor-id="`idInstance-${module.idInstance}-componentId-${component.id}`"
               :font-styles="fontStyles(component.text)"
-              :module="module"
-              :component="component"
-              :column-id="columnId"
-              :component-id="componentId"
+              :text="component.data.text"
+              :type="component.type"
+              :text-dirty="component.data.textDirty"
+              :config="component.plugins.textOptions"
               @changeText="changeText" />
           </td>
         </tr>
       </table>
     </a>
-  </module-container>
+  </element-container>
 </template>
 
 <script>
-import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
-import ModuleContainer from '../../common/containers/ModuleContainer.vue';
 import ElementMixin from '../../common/mixins/ElementMixin';
+import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
+import ElementContainer from '../../common/containers/ElementContainer.vue';
 import TinyMce from '../../common/tinyMce.vue';
 
 export default {
   name: 'TextElement',
   components: {
-    ModuleContainer,
+    ElementContainer,
     TinyMce,
   },
   mixins: [MobileStylesMixin, ElementMixin],
-  data() {
-    return {
-      timer: null,
-    };
-  },
-
-  methods: {
-    changeText(value) {
-      if (this.timer) {
-        clearTimeout(this.timer);
-      }
-      this.timer = setTimeout(() => {
-        this.$store.dispatch('campaign/updateText', {
-          moduleId: this.moduleId,
-          columnId: this.columnId,
-          componentId: this.componentId,
-          link: 'data',
-          property: 'text',
-          sync: false,
-          value,
-        });
-      }, 100);
-    },
-  },
 };
 </script>

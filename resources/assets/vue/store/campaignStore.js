@@ -8,6 +8,61 @@ import clone from 'clone';
 import campaignService from '../services/campaign';
 import imageService from '../services/image';
 
+const convertArrayToObject = (element, { subComponent, link }) => {
+  const valueToConvert = subComponent !== undefined && link !== undefined ? element[subComponent] : element;
+  const lastPosition = link === undefined ? subComponent : link;
+  Vue.set(valueToConvert, lastPosition, {});
+  return valueToConvert[lastPosition];
+};
+
+const getElement = (module, elementId) => {
+  let element;
+  _.forEach(module.structure.columns, (column) => {
+    if (column.id === elementId) {
+      element = column;
+      return false;
+    }
+    _.forEach(column.components, (CurrentComponent) => {
+      if (CurrentComponent.id === elementId) {
+        element = CurrentComponent;
+        return false;
+      }
+    });
+    return !element;
+  });
+  return element;
+};
+
+const getModule = (modules, idInstance) => {
+  let module;
+  _.forEach(modules, (currentModule) => {
+    if (currentModule.idInstance === idInstance) {
+      module = currentModule;
+      return false;
+    }
+  });
+  return module;
+};
+
+const getProperties = (element, { subComponent, link }) => {
+  const subElement = subComponent ? element[subComponent] : element;
+  return link ? subElement[link] : subElement;
+};
+
+const searchOrCreateLevel = (data, keys) => {
+  let subData = data;
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (!_.has(subData, [keys[i]])) {
+      Vue.set(subData, [keys[i]], {});
+    }
+    subData = subData[keys[i]];
+  }
+  return {
+    data: subData,
+    property: keys[keys.length - 1],
+  };
+};
+
 function campaignStore() {
   return {
     namespaced: true,
@@ -228,7 +283,27 @@ function campaignStore() {
         };
         state.dirty = true;
       },
+      saveElementProperty(state, { moduleIdInstance, elementId, property, value, ...scope }) {
+        const module = getModule(state.modules, moduleIdInstance);
+        const element = elementId === undefined ? module : getElement(module, elementId);
+        let properties = getProperties(element, scope);
+        if (Array.isArray(properties) && isNaN(property)) {
+          // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
+          properties = convertArrayToObject(element, scope);
+        }
+        Vue.set(properties, property, value);
+        state.dirty = true;
+      },
+      saveElementPluginData(state, { moduleIdInstance, elementId, type, plugin, path, value }) {
+        const module = getModule(state.modules, moduleIdInstance);
+        const element = elementId === undefined ? module : getElement(module, elementId);
+        const pluginData = element.plugins[plugin];
+        const pathArray = _.concat([type || 'data'], path ? path.split('.') : []);
+        const pluginOption = searchOrCreateLevel(pluginData, pathArray);
+        Vue.set(pluginOption.data, pluginOption.property, value);
+      },
       saveComponentProperty(state, data) {
+        // DEPRECATE, use saveElementProperty
         const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
         const subComponent = data.subComponent ? component[data.subComponent] : component;
         const properties = data.link ? subComponent[data.link] : subComponent;

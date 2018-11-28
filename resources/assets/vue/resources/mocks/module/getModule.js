@@ -46,8 +46,8 @@ module.exports = {
         id: 949305,
         type: 'text-element',
         data: {
-          text: '<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.<\/p>', 
-        }, 
+          text: '<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>',
+        },
         container: {
           style: {
             paddingTop: '5px',
@@ -60,7 +60,7 @@ module.exports = {
         },
         text: {
           style: {
-            fontFamily: 'Helvetica, Arial, Sans-serif', 
+            fontFamily: 'Helvetica, Arial, Sans-serif',
             fontSize: '12px',
             color: '#000000',
             fontWeight: 'normal',
@@ -98,7 +98,7 @@ module.exports = {
             target: ['button', 'divider', 'image', 'text'],
             config: {
               defaultColors: [
-                '#ffffff', '#323c44', '#cd263a', '#8d8d8d', '#9e00ff', '#0000ff', 
+                '#ffffff', '#323c44', '#cd263a', '#8d8d8d', '#9e00ff', '#0000ff',
                 '#00da00', '#dada00', '#ff8d00', '#ff00de', '#a65628', '#848484',
               ],
               defaultValue: '#ffffff',
@@ -338,7 +338,7 @@ module.exports = {
           target: ['column'],
           config: {
             defaultColors: [
-              '#ffffff', '#323c44', '#cd263a', '#8d8d8d', '#9e00ff', '#0000ff', 
+              '#ffffff', '#323c44', '#cd263a', '#8d8d8d', '#9e00ff', '#0000ff',
               '#00da00', '#dada00', '#ff8d00', '#ff00de', '#a65628', '#848484',
             ],
             defaultValue: '#ffffff',
@@ -373,7 +373,7 @@ module.exports = {
       target: ['module'],
       config: {
         defaultColors: [
-          '#ffffff', '#323c44', '#cd263a', '#8d8d8d', '#9e00ff', '#0000ff', 
+          '#ffffff', '#323c44', '#cd263a', '#8d8d8d', '#9e00ff', '#0000ff',
           '#00da00', '#dada00', '#ff8d00', '#ff00de', '#a65628', '#848484',
         ],
         defaultValue: '#ffffff',
@@ -384,6 +384,8 @@ module.exports = {
     },
   },
   status: 'draft',
-  updated_at: '2018-07-06 09:10:16',
-  created_at: '2018-07-04 11:09:59',
+  updated_by: 'test@stensul.com',
+  created_by: 'test@stensul.com',
+  updated_at: '2018-07-02 16:22:15',
+  created_at: '2018-07-02 16:22:15',
 };

@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
+  <element-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
     <a
       :data-contenteditable-href="component.text.attribute.href"
       :style="component.text.style.textDecoration || 'text-decoration:none;'"
@@ -21,52 +21,41 @@
             :bgcolor="component.text.attribute.bgcolor"
             :style="[fontStyles(component.text), elementBorderAndPadding(component.text), {width:'100%'}]">
             <tiny-mce
-              :id="editorId"
-              :style="fontStyles(component.text)"
-              :value="component.data.text"
-              data-key="text"
-              :settings="component.plugins.textOptions.config.settings" />
-            <component-toolbar :component-id="componentId" :column-id="columnId" />
+              :editor-id="`componentId-${component.id}`"
+              :font-styles="fontStyles(component.text)"
+              :text="component.data.text"
+              :type="component.type"
+              :text-dirty="component.data.textDirty"
+              :config="textOptions"
+              @changeText="changeText" />
+            <component-toolbar v-if="isStudio" :component-id="componentId" :column-id="columnId" />
           </td>
         </tr>
       </table>
     </a>
-  </module-container>
+  </element-container>
 </template>
 
 <script>
-import TinyMce from './TinyMce.vue';
 import ComponentToolbar from './ComponentToolbar.vue';
-import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
-import ModuleContainer from '../../common/containers/ModuleContainer.vue';
+import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
+import ElementContainer from '../../common/containers/ElementContainer.vue';
+import TinyMce from '../../common/tinyMce.vue';
 
 export default {
   name: 'TextElement',
   components: {
-    TinyMce,
     ComponentToolbar,
-    ModuleContainer,
+    ElementContainer,
+    TinyMce,
   },
   mixins: [MobileStylesMixin, ElementMixin],
-  data() {
-    return {
-      editorId: ['editor', this.columnId, this.componentId].join('-'),
-      dirty: false,
-    };
-  },
 };
 </script>
 
 <style lang="less">
 .stx-position-relative {
   position: relative;
-}
-
-.stx-edit-text {
-  p {
-    margin: 0;
-    padding: 0;
-  }
 }
 </style>

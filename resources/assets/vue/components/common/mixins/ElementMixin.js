@@ -1,5 +1,8 @@
+import textOptions from '../../admin/settingsDefault/TextOptions';
+
 export default {
   props: [
+    'module',
     'module-id',
     'column-id',
     'component-id',
@@ -7,6 +10,11 @@ export default {
     'is-active',
     'column',
   ],
+  data() {
+    return {
+      timer: null,
+    };
+  },
   computed: {
     currentComponent() {
       return this.$store.getters['module/currentComponent'];
@@ -43,15 +51,20 @@ export default {
     isCampaign() {
       return !_.isEmpty(this.$store.getters['campaign/campaign']);
     },
-    module() {
-      return this.isCampaign ? this.$store.getters['campaign/modules'][this.moduleId] :
-        this.$store.getters['module/module'];
+    isStudio() {
+      return this.$router ? this.$router.currentRoute.matched[0].components.default.name === 'EditModule' : false;
+    },
+    isPreview() {
+      return this.$router ? this.$router.currentRoute.matched[0].components.default.name === 'Modules' : false;
     },
     isInvertedStacking() {
       return this.module.structure.columnsStacking === 'invertedStacking';
     },
     buildingMode() {
       return this.isCampaign ? this.$store.getters['campaign/buildingMode'] : this.$store.getters['module/buildingMode'];
+    },
+    textOptions() {
+      return this.isPreview ? false : textOptions();
     },
   },
   methods: {
@@ -126,6 +139,22 @@ export default {
         columnId,
         componentId: undefined,
       });
+    },
+    changeText(value) {
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(() => {
+        this.$store.dispatch(`${this.isCampaign ? 'campaign' : 'module'}/updateText`, {
+          moduleId: this.moduleId,
+          columnId: this.columnId,
+          componentId: this.componentId,
+          link: 'data',
+          property: 'text',
+          sync: false,
+          value,
+        });
+      }, 100);
     },
     isColumnSelect(columnId) {
       return this.currentComponent.columnId === columnId && this.currentComponent.componentId === undefined;

@@ -1,5 +1,5 @@
 <template>
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <element-container :component="component" @select-component="selectComponentHandler">
     <table
       :width="component.container.attribute.width || '100%'"
       :style="{width:widthStyle(component.container.attribute.width || '100%')}"
@@ -61,7 +61,7 @@
         </td>
       </tr>
     </table>
-  </module-container>
+  </element-container>
 <!-- IMAGE ELEMENT ENDS -->
 </template>
 
@@ -69,13 +69,13 @@
 <script>
   import _ from 'lodash';
   import MobileStylesMixin from '../../common/mixins/MobileStylesMixin.js';
-  import ModuleContainer from '../../common/containers/ModuleContainer';
+  import ElementContainer from '../../common/containers/ElementContainer';
   import ElementMixin from '../../common/mixins/ElementMixin.js';
   
   export default {
     name: 'ImageElement',
     components: {
-      ModuleContainer,
+      ElementContainer,
     },
     mixins: [ MobileStylesMixin, ElementMixin],
     computed: {

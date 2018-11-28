@@ -7,6 +7,7 @@
   >
     <td class="stx-toolbar-content stx-position-relative"
         :data-module-id="moduleId"
+        :module-id-instance="module.idInstance"
         :class="{ 'stx-show-error': hasErrors }"
         @click.prevent="config"
         :width="_.get(this.module,'structure.attribute.width','10%')"
@@ -29,6 +30,7 @@
     <td
       class="stx-toolbar-content stx-position-relative"
       :data-module-id="moduleId"
+      :module-id-instance="module.idInstance"
       :background="modulebackgroundImage"
       :width="module.structure.attribute.width || '100%'"
       :height="module.structure.attribute.height"
@@ -38,25 +40,25 @@
       :class=" { 'stx-show-error': hasErrors, 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}">
       <background-image :element="module.structure" :key='modulebackgroundImage' :width="templateInnerWidth">
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
-          <column-manager :module-id="moduleId">
+          <column-manager :module-id="moduleId" :module="module">
             <template slot-scope="{columnData}">
               <component
+                :is="component.type"
                 v-for="(component, componentId) in columnData.column.components"
                 :key="component.id"
-                @select-component="selectComponent"
-                :is="component.type"
                 :component="component"
                 :module-id="moduleId"
+                :module="module"
                 :column-id="columnData.columnId"
-                :component-id="componentId">
-              </component>
+                :component-id="componentId"
+                @select-component="selectComponent" />
             </template>
           </column-manager>
         </template>
       </background-image>
-      <module-toolbar :module-id="moduleId"></module-toolbar>
-      <div class="st-remove-element module-overlay"></div>
-      <div class="st-remove-element default-module-error" style="display:none"></div>
+      <module-toolbar :module-id="moduleId" />
+      <div class="st-remove-element module-overlay" />
+      <div class="st-remove-element default-module-error" style="display:none" />
     </td>
   </tr>
 </template>
@@ -79,6 +81,7 @@
     props: ['moduleId'],
     mixins: [ ElementMixin, validatorMixin ],
     components: {
+      CustomCodeElement,
       BackgroundImage,
       ButtonElement,
       ColumnManager,
@@ -89,17 +92,7 @@
       TextElement,
     },
     created() {
-      if(this.module.type === 'studio'
-          && ((this.module.structure && this.module.structure.columns && this.module.structure.columns.length > 1)
-              || (this.module.structure && this.module.structure.columns && this.module.structure.columns.length === 1
-                  && this.module.structure.columns[0].components.length > 1)
-            )
-        ) {
-        // studio modules with multiple columns or multiple elements which have plugins with validation do not trigger when the module is added
-        // so we need to check a flag to aid the user to open each module and run the validations at least once
-        this.registerStudioModuleDefaultValidationErrors(this.moduleId);
-      }
-      else if(this.module.type === 'custom') {
+      if (this.module.type === 'custom') {
         this.$store.commit('campaign/clearErrorsByModuleId', this.moduleId);
         this.registerCustomModuleDefaultValidationErrors(this.moduleId);
       }

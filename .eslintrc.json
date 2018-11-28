@@ -11,7 +11,8 @@
   },
   "globals": {
     "Application": true,
-    "_": true
+    "_": true,
+    "tinymce": true
   },
   "settings": {
     "import/resolver": "webpack"

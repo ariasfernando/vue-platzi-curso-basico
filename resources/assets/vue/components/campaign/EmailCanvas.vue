@@ -36,6 +36,7 @@
                     v-for="(module, moduleId) in dragList"
                     :key="module.idInstance"
                     :module-id="moduleId"
+                    :module="module"
                   ></module>
               </draggable>
               <draggable

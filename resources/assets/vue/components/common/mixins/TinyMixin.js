@@ -1,8 +1,8 @@
-import _ from 'lodash';
+/* eslint camelcase:0 */
 import Adapter from './tinymce/Adapter';
 
 export default {
-  props: ['name', 'plugin'],
+  props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text'],
   mixins: [
     Adapter,
   ],
@@ -13,24 +13,26 @@ export default {
   },
   computed: {
     textOptions() {
-      return this.component.plugins.textOptions;
+      return this.config;
     },
     $textElement() {
       return $('#' + this.editorId);
     },
+    libraryConfig() {
+      return this.$store.state.campaign.campaign.library_config;
+    },
   },
   methods: {
     setStyles() {
-      const nameComponent = this.component.type;
-      const libraryLinkColor = this.libraryConfig.linkColor;
+      const libraryLinkColor = this.libraryConfig ? this.libraryConfig.linkColor : undefined;
       const editor = tinymce.get(this.editorId);
       const p_fixed_style = editor.settings.p_fixed_style;
       const persist_styles = editor.settings.persist_styles;
       const button_inline_color = editor.settings.button_inline_color;
 
-      if (nameComponent === 'button-element' && button_inline_color) {
+      if (this.type === 'button-element' && button_inline_color) {
         this.changeStyles('p', {
-          color: this.component.button.style.color || libraryLinkColor
+          color: this.fontStyles.color || libraryLinkColor
         });
       }
       if (p_fixed_style && Application.utils.isJsonString(p_fixed_style)) {
@@ -384,7 +386,9 @@ export default {
 
       let toolbar = [];
 
-      if (!_.isEmpty(options)) {
+      if (this.textOptions.config.toolbarString !== undefined) {
+        toolbar = this.textOptions.config.toolbarString;
+      } else if (!_.isEmpty(options)) {
         _.each(options, (option) => {
           toolbar.push(option.key);
         });
@@ -392,21 +396,19 @@ export default {
       } else {
         toolbar = ' ';
       }
-      const editorId = ['editor', this.module.idInstance, this.columnId, this.componentId].join('-');
-
       // Destroy previous instance
-      const previousInstance = tinymce.get(editorId);
+      const previousInstance = tinymce.get(this.editorId);
       if (previousInstance) {
         previousInstance.destroy();
       }
 
 
       const settings = {
-        selector: `#${editorId}`,
-        fixed_toolbar_container: `.toolbar-${editorId}`,
-        document_base_url: `${Application.globals.cdnHost  }/js/tinymce/`,
+        selector: `#${this.editorId}`,
+        fixed_toolbar_container: `.toolbar-${this.editorId}`,
+        document_base_url: `${Application.globals.cdnHost}/js/tinymce/`,
         skin: 'lightgray',
-        skin_url: `${Application.globals.cdnHost  }/css/tinymce/lightgray`,
+        skin_url: `${Application.globals.cdnHost}/css/tinymce/lightgray`,
         toolbar,
         plugins: 'paste advlist autolink lists stlinkextended textcolor sttextcolorextended  stformatsmenu',
         inline: true,
@@ -434,49 +436,55 @@ export default {
         advlist_bullet_styles: 'default',
         advlist_number_styles: 'default',
 
-        init_instance_callback: (editor) => {
+        init_instance_callback: () => {
           _this.setStyles();
         },
         setup(editor) {
           editor.paste_block_drop = true;
+
+
           editor.on('focus', (e) => {
             // Change icon tiny
             // TODO  implement DRY.
-            const $toolbox = $(editor.settings.fixed_toolbar_container);
+            const $toolbar = $(editor.settings.fixed_toolbar_container);
 
-            if ($toolbox.length && !$toolbox.find('div[aria-label="Font Sizes"] .text-size').length) {
+            if ($toolbar.length && !$toolbar.find('div[aria-label="Font Sizes"] .text-size').length) {
               setTimeout(() => {
-                $toolbox.find('div[aria-label="Font Sizes"] button:first').empty();
-                $toolbox.find('div[aria-label="Font Sizes"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
+                $toolbar.find('div[aria-label="Font Sizes"] button:first').empty();
+                $toolbar.find('div[aria-label="Font Sizes"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
               });
             }
-            if ($toolbox.length && !$toolbox.find('div[aria-label="Font Family"] .text-size').length) {
+            if ($toolbar.length && !$toolbar.find('div[aria-label="Font Family"] .text-size').length) {
               setTimeout(() => {
-                $toolbox.find('div[aria-label="Font Family"] button:first').empty();
-                $toolbox.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
+                $toolbar.find('div[aria-label="Font Family"] button:first').empty();
+                $toolbar.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
               });
             }
-            if ($toolbox.length && !$toolbox.find('button:contains("Formats")').length) {
+            if ($toolbar.length && !$toolbar.find('button:contains("Formats")').length) {
               setTimeout(() => {
-                const $button = $toolbox.find("button:contains('Formats')");
+                const $button = $toolbar.find("button:contains('Formats')");
                 $button.parent('div').attr('aria-label', 'Font Format');
                 $button.empty();
                 $button.append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
               });
             }
-            if ($toolbox.length && !$toolbox.find("div[aria-label='Format']").length) {
+            if ($toolbar.length && !$toolbar.find("div[aria-label='Format']").length) {
               setTimeout(() => {
-                $toolbox.find('div[aria-label="Format"] button:first').empty();
-                $toolbox.find('div[aria-label="Format"] button:first')
+                $toolbar.find('div[aria-label="Format"] button:first').empty();
+                $toolbar.find('div[aria-label="Format"] button:first')
                   .append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-bold"></i>');
               });
             }
             // set toolbar width
-            if ($toolbox.length) {
+            if ($toolbar.length) {
               setTimeout(() => {
-                const toolboxWidth = $toolbox.find('.mce-btn-group').width();
-                $toolbox.find('.mce-container-body').width(toolboxWidth);
-                $toolbox.find('.mce-panel').width(toolboxWidth);
+                const toolboxGroups = $toolbar.find('.mce-btn-group');
+                let toolbarWidth = 0;
+                toolboxGroups.each(function (i) {
+                  toolbarWidth += $(this).width() + (i === 0 ? 2 : 7);
+                });
+                $toolbar.find('.mce-container-body').width(toolbarWidth);
+                $toolbar.find('.mce-panel').width(toolbarWidth);
               });
             }
           });
@@ -615,7 +623,7 @@ export default {
       this.validateTiny();
     },
     destroyed() {
-      tinymce.get(editorId).destroy();
+      tinymce.get(this.editorId).destroy();
     },
   },
 };
