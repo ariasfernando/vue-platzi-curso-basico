@@ -2,17 +2,21 @@
   <div class="col-xs-12 library">
     <div class="row header" v-sticky="{ zIndex: 999, stickyTop: 0 }">
       <div class="col-xs-9 header-col">
-        <div class="beta-btn-secondary pull-left">
-          <i class="glyphicon glyphicon-menu-left"></i>
-          <router-link to="/">Back</router-link>
+        <div class="pull-left">
+          <stui-button class="router-remove-underline" type="default">
+            <i class="glyphicon glyphicon-menu-left" />
+            <router-link to="/">Back</router-link>
+          </stui-button>
         </div>
         <div class="col-xs-11 section-title vertical-center" v-if="library.id"> Edit {{library.name}} Library</div>
         <div class="col-xs-11 section-title vertical-center" v-if="!library.id">New Library</div>
       </div>
-
       <div class="col-xs-3 header-col">
         <div class="vertical-center pull-right">
-          <a class="btn btn-continue beta-btn-secondary" href="#" @click.prevent="saveLibrary" :disabled="errors.any()">Save <i class="glyphicon glyphicon-menu-right"></i></a>
+          <stui-button class="btn-margin-right" type="primary">Edit Menu</stui-button>
+          <stui-button type="primary" :disabled="errors.any()" @click="saveLibrary">
+            Save <i class="glyphicon glyphicon-menu-right" />
+          </stui-button>
         </div>
       </div>
     </div>
@@ -721,9 +725,9 @@
     .header {
       color: @stensul-purple;
       background-color: @stensul-white;
-      height: 53px;
+      height: 45px;
       margin-bottom: 20px;
-      padding: 17px 0;
+      padding: 8px 0px;
       box-shadow: 0px 0px 4px #999999;
       margin-top: -3px;
 
@@ -824,7 +828,6 @@
         font-size: 18px;
         font-family: 'Open Sans', Arial, sans-serif;
         font-weight: 300;
-        margin-top: -1px;
       }
 
     }
@@ -873,6 +876,20 @@
       width: 16px;
       height: 16px;
       vertical-align: text-top;
+    }
+
+    .router-remove-underline{
+      a{
+        color: @stensul-purple;
+
+        &:hover{
+          text-decoration: none;
+        }
+      }
+    }
+
+    .btn-margin-right{
+      margin-right: 10px;
     }
 
     .beta-btn-primary{
