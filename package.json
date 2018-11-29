@@ -19,6 +19,7 @@
     "codemirror": "^5.32.0",
     "contrast": "^1.0.1",
     "cropit": "~0.5.1",
+    "cssom": "^0.3.4",
     "del": "^3.0.0",
     "dotenv": "^4.0.0",
     "element-ui": "^2.2.2",
