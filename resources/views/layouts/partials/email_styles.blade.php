@@ -91,10 +91,6 @@
     {{-- Mobile Styles --}}
     @include('layouts.partials.mobile_styles')
 
-    @if(isset($params['campaign_data']['library_config']['propietaryCss']))
-        {{ $params['campaign_data']->getLibraryConfig('propietaryCss') }}
-    @endif
-
     <?php
         if (isset($params['campaign_data']['campaign_fonts'])) {
             if (isset($params['campaign_data']['campaign_fonts']['custom'])) {
@@ -139,6 +135,11 @@
         }
     ?>
 </style>
+
+{{-- Client Styles --}}
+@if(isset($params['campaign_data']['library_config']['propietaryCss']))
+    {!! $params['campaign_data']->getLibraryConfig('propietaryCss') !!}
+@endif
 
 <!--[if mso]>
 	<style>

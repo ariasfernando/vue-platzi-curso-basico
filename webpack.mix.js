@@ -1,6 +1,6 @@
 /* global path */
 /*
- NOTES: .scripts() doesn't work with watch you'll have to run watch again if you're editing legacy 
+ NOTES: .scripts() doesn't work with watch you'll have to run watch again if you're editing legacy
  files (E.g. application-globals.js).
 */
 
@@ -58,7 +58,6 @@ mix
     jQuery: 'jquery',
   })
   .less(`${assetsPath}/less/base/commons/mobile/mobile_core_styles.less`, 'public/css/mobile_core_styles.css')
-  .less(`${assetsPath}/less/base/commons/mobile/mobile_client_styles.less`, 'public/css/mobile_client_styles.css')
   .less(`${assetsPath}/less/base/tool/tool.less`, 'public/css/tool.css')
   .less(`${assetsPath}/less/base/base-v2/admin.less`, 'public/css/admin.css')
   .js([
@@ -209,7 +208,9 @@ mix
         if (writeError) console.error(writeError);
       });
       if (process.env.NODE_ENV === 'development') {
-        console.log('\x1b[37m%s\x1b[36m%s\x1b[0m', `${process.env.APP_NAME} tool running on --> `, process.env.APP_BASE_URL);
+        console.log(
+          '\x1b[37m%s\x1b[36m%s\x1b[0m',
+          `${process.env.APP_NAME} tool running on --> `, process.env.APP_BASE_URL);
       }
     });
   });
