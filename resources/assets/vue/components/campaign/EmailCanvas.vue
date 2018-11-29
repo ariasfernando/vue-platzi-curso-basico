@@ -1,10 +1,15 @@
 <template>
   <div>
-    <back-to-top></back-to-top>
+    <back-to-top />
     <!-- content canvas email -->
-    <div v-if="buildingMode ==='mobile'" v-html="templateWidthStyles"></div>
+    <st-style :content="templateWidthStyles" />
+    <st-style prefix="#emailCanvas" :content="proprietaryCss" />
     <div class="section-box-content section-canvas-container">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+      <table
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        border="0">
         <tr>
           <td
             align="center"
@@ -15,46 +20,45 @@
             @mousedown.stop="handleActive"
             @mouseover="onMouseOver"
             @mouseleave="onMouseLeave">
-              <draggable
-                id="emailCanvas"
-                :class="`stx-${buildingMode}-mode`"
-                class="stx-email-canvas st-wrapper-table"
-                cellspacing="0"
-                cellpadding="0"
-                border="0"
-                v-model="dragList"
-                :width="templateWidth"
-                :style="`width:${templateWidth}px`"
-                :options="options"
-                :element="'table'"
-                :move="onMove"
-                @add="onAdd"
-                @sort="onSort"
-                @choose="onChoose"
-                 v-if="isNotEmptyList">
-                  <module
-                    v-for="(module, moduleId) in dragList"
-                    :key="module.idInstance"
-                    :module-id="moduleId"
-                  ></module>
-              </draggable>
-              <draggable
-                id="emailCanvas"
-                :class="`stx-${buildingMode}-mode empty`"
-                class="stx-email-canvas st-wrapper-table"
-                cellspacing="0"
-                cellpadding="0"
-                border="0"
-                v-model="dragList"
-                :width="templateWidth"
-                :style="`width:${templateWidth}px`"
-                :options="options"
-                :element="'table'"
-                @add="onAdd"
-                @sort="onSort"
-                v-else>
-                  <div class="empty-message">From the module menu on the left, please click or drag a module here to add it to the email workspace.</div>
-              </draggable>
+            <draggable
+              v-if="isNotEmptyList"
+              id="emailCanvas"
+              v-model="dragList"
+              :class="`stx-${buildingMode}-mode`"
+              class="stx-email-canvas st-wrapper-table"
+              cellspacing="0"
+              cellpadding="0"
+              border="0"
+              :width="templateWidth"
+              :style="`width:${templateWidth}px`"
+              :options="options"
+              :element="'table'"
+              :move="onMove"
+              @add="onAdd"
+              @sort="onSort"
+              @choose="onChoose">
+              <module
+                v-for="(module, moduleId) in dragList"
+                :key="module.idInstance"
+                :module-id="moduleId" />
+            </draggable>
+            <draggable
+              v-else
+              id="emailCanvas"
+              v-model="dragList"
+              :class="`stx-${buildingMode}-mode empty`"
+              class="stx-email-canvas st-wrapper-table"
+              cellspacing="0"
+              cellpadding="0"
+              border="0"
+              :width="templateWidth"
+              :style="`width:${templateWidth}px`"
+              :options="options"
+              :element="'table'"
+              @add="onAdd"
+              @sort="onSort">
+              <div class="empty-message">{{ placeholder }}</div>
+            </draggable>
           </td>
         </tr>
       </table>
@@ -63,305 +67,316 @@
 </template>
 
 <script>
-  import clone from 'clone';
-  import _ from 'lodash';
-  import Draggable from 'vuedraggable';
-  import Module from './Module.vue';
-  import EmailActions from './EmailActions.vue';
-  import BackToTop from '../common/BackToTop.vue';
-  import ModuleListMixin from './mixins/moduleListMixin';
+import clone from 'clone';
+import _ from 'lodash';
+import Draggable from 'vuedraggable';
+import BackToTop from '../common/BackToTop.vue';
+import Module from './Module.vue';
+import ModuleListMixin from './mixins/moduleListMixin';
+import StStyle from '../common/StStyle.vue';
 
-  export default {
-    name: 'EmailCanvas',
-    components: {
-      Module,
-      Draggable,
-      'email-actions': EmailActions,
-      BackToTop
-    },
-    mixins: [ ModuleListMixin ],
-    data: {
+export default {
+  name: 'EmailCanvas',
+  components: {
+    Draggable,
+    BackToTop,
+    Module,
+    StStyle,
+  },
+  mixins: [ModuleListMixin],
+  data() {
+    return {
+      options: {
+        group: {
+          name: 'componentsEmailCanvas',
+        },
+        handle: '.icon-move',
+        // Ignore the HTML5 DnD behaviour and force the fallback to kick in (used only for MS Edge)
+        forceFallback: (/Edge/.test(navigator.userAgent)),
+        // Class name for the fallback behaviour (only MS Edge)
+        fallbackClass: 'sortable-fallback',
+        // Class name for the drop placeholder
+        ghostClass: 'ghost-component',
+        // Class name for the chosen item
+        chosenClass: 'chosen-component',
+        // Class name for the dragging item
+        dragClass: 'drag-component',
+        setData: (dataTransfer, dragEl) => {
+          // Is Firefox?
+          const isFirefox = /firefox/i.test(navigator.userAgent);
+          // Hack for Firefox,  FF needs this parameter defined to use setData function
+          dataTransfer.setData('Text', dragEl.textContent);
+          // Get dragGhost element
+          const img = this.dragGhost;
+          if (isFirefox) {
+            // Place it into the DOM tree
+            document.body.appendChild(img);
+          }
+          // Stylize it
+          img.classList.add('custom-drag-ghost');
+          // Set the new stylized "drag image" of the dragged element
+          // The placeholder image is 170x52, this positioning forces the placeholder image: top-right
+          dataTransfer.setDragImage(img, 130, 16);
+        },
+      },
+      title() {
+        let libraryTitle = this.campaign.campaign_data.library_config.title || 'Campaign Editor';
+
+        // Set language name
+        if (this.campaign.campaign_format === 'languages' && this.campaign.locale.langs[this.campaign.locale.name]) {
+          libraryTitle += `(${this.campaign.locale.langs[this.campaign.locale.name]})`;
+        }
+
+        return libraryTitle;
+      },
+      titleCols: 3,
+      buttonsCols: 5,
+      hiddenClass() {
+        return this.campaign.locked ? 'hidden' : '';
+      },
       dragGhost: null,
-      onMouseOver: () => {},
-      onMouseLeave:() => {}
+      placeholder:
+        'From the module menu on the left, please click or drag a module here to add it to the email workspace.',
+    };
+  },
+  computed: {
+    campaignValidated() {
+      return this.$store.state.campaign.campaignValidated;
     },
-    computed: {
-      campaignValidated() {
-        return this.$store.state.campaign.campaignValidated;
+    currentComponent() {
+      return this.$store.getters['campaign/currentComponent'];
+    },
+    dragList: {
+      get() {
+        return this.$store.getters['campaign/modules'];
       },
-      currentComponent() {
-        return this.$store.getters["campaign/currentComponent"];
-      },
-      dragList: {
-        get() {
-          return this.$store.getters['campaign/modules'];
-        },
-        set(value) {
-          this.$store.commit('campaign/updateEmailCanvas', value);
-        }
-      },
-      isNotEmptyList() {
-        return this.dragList.length > 0;
-      },
-      campaign () {
-        return this.$store.state.campaign.campaign;
-      },
-      templateWidth () {
-        return this.$store.getters['campaign/templateWidth'];
-      },
-      templateWidthStyles(){
-        return `
-        <style>
-          #emailCanvas.stx-mobile-mode {
-              width: ${this.$store.getters["campaign/campaign"].library_config.templateMobileWidth}px!important;
-          }
-        </style>`
-      },
-      buildingMode() {
-        return this.$store.getters["campaign/buildingMode"];
-      },
-      items () {
-        return this.$store.getters["library/modules"];
-      },
-      baseUrl (){
-        return this.$_app.config.baseUrl;
-      },
-      activeModule() {
-        const activeModuleId = this.$store.getters["campaign/activeModule"];
-        return this.modules[activeModuleId] || undefined;
-      },
-      defaultTemplateBackgroundColor() {
-        let defaultColor = this.campaign.campaign_data.library_config.templateBackgroundColor;
-
-        if (this.campaign.library_config.templateBackgroundPalettes) {
-          const palettes = JSON.parse(this.campaign.library_config.templateBackgroundPalettes);
-          defaultColor = palettes.default;
-        }
-
-        return defaultColor;
-      },
-      templateBackgroundColor() {
-        return this.campaign.campaign_data.campaign_settings.templateBackgroundColor;
+      set(value) {
+        this.$store.commit('campaign/updateEmailCanvas', value);
       },
     },
-    data () {
-      return {
-        options: {
-          group: {
-            name: 'componentsEmailCanvas'
-          },
-          handle:'.icon-move',
-          // Ignore the HTML5 DnD behaviour and force the fallback to kick in (used only for MS Edge)
-          forceFallback: (/Edge/.test(navigator.userAgent)) ? true : false,
-          // Class name for the fallback behaviour (only MS Edge)
-          fallbackClass: "sortable-fallback",
-          // Class name for the drop placeholder
-          ghostClass: "ghost-component",
-          // Class name for the chosen item
-          chosenClass: "chosen-component",
-          // Class name for the dragging item
-          dragClass: "drag-component",
-          setData: (dataTransfer, dragEl) => {
-            // Is Firefox?
-            const isFirefox = /firefox/i.test(navigator.userAgent);
-            // Hack for Firefox,  FF needs this parameter defined to use setData function
-            dataTransfer.setData('Text', dragEl.textContent);
-            // Get dragGhost element
-            let img = this.dragGhost;
-            if(isFirefox) {
-              // Place it into the DOM tree
-              document.body.appendChild(img);
-            }
-            // Stylize it
-            img.classList.add('custom-drag-ghost');
-            // Set the new stylized "drag image" of the dragged element
-            // The placeholder image is 170x52, this positioning forces the placeholder image: top-right
-            dataTransfer.setDragImage(img, 130, 16);
-          }
-        },
-        title  () {
-          let libraryTitle = this.campaign.campaign_data.library_config.title || 'Campaign Editor';
-
-          // Set language name
-          if (this.campaign.campaign_format === "languages" && this.campaign.locale.langs[this.campaign.locale.name]) {
-            libraryTitle += "(" + this.campaign.locale.langs[this.campaign.locale.name] + ")";
-          }
-
-          return libraryTitle;
-        },
-        titleCols: 3,
-        buttonsCols: 5,
-        hiddenClass () {
-          return this.campaign.locked ? 'hidden' : '';
+    isNotEmptyList() {
+      return this.dragList.length > 0;
+    },
+    campaign() {
+      return this.$store.state.campaign.campaign;
+    },
+    templateWidth() {
+      return this.$store.getters['campaign/templateWidth'];
+    },
+    templateWidthStyles() {
+      return `<style>
+        #emailCanvas.stx-mobile-mode {
+          width: ${this.$store.getters['campaign/libraryConfig'].templateMobileWidth}px!important;
         }
+      </style>`;
+    },
+    proprietaryCss() {
+      return this.$store.getters['campaign/libraryConfig'].propietaryCss;
+    },
+    buildingMode() {
+      return this.$store.getters['campaign/buildingMode'];
+    },
+    items() {
+      return this.$store.getters['library/modules'];
+    },
+    baseUrl() {
+      return this.$_app.config.baseUrl;
+    },
+    activeModule() {
+      const activeModuleId = this.$store.getters['campaign/activeModule'];
+      return this.modules[activeModuleId] || undefined;
+    },
+    defaultTemplateBackgroundColor() {
+      let defaultColor = this.campaign.campaign_data.library_config.templateBackgroundColor;
+
+      if (this.campaign.library_config.templateBackgroundPalettes) {
+        const palettes = JSON.parse(this.campaign.library_config.templateBackgroundPalettes);
+        defaultColor = palettes.default;
       }
+
+      return defaultColor;
     },
-    methods: {
-      onAdd(e) {
-        let cloneEl = e.clone;
-        let moduleKey = $(cloneEl).find('.draggable-item').attr('module-id');
-        let moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
-
-        // Find module in items by type: item or subitem
-        const found = this.findModule(moduleKey, moduleType);
-        const mod = clone(found);
-        this.addModule(mod, e.newIndex);
-
-        // Remove ghost element
-        const cloneItem = e.item;
-        cloneItem.parentNode.removeChild(cloneItem);
-        e.clone.style.opacity = "1";
-      },
-      onMove (evt, originalEvent) {
-        const h = $(".section-canvas-email").height();
-        const target = $(".section-canvas-email");
-
-        let mousePosition = originalEvent.clientY - $(window).scrollTop();
-        let topRegion = 320;
-        let bottomRegion = h - topRegion;
-
-        // Scroll when user drag down
-        if(mousePosition < topRegion || mousePosition > bottomRegion){
-            let distance = originalEvent.clientY - h / 1.5;
-            distance = distance * 0.15; // <- velocity
-            $(target).scrollTop( distance + $(target).scrollTop());
-        }
-
-        // Cannot sort to/from a fixed position
-        if (evt.related && evt.dragged){
-          return !evt.related.classList.contains('stx-fixed') && !evt.dragged.classList.contains('stx-fixed');
-        }
-      },
-      onSort(e){
-        this.$store.commit('campaign/unsetCustomModule');
-        this.$store.commit('campaign/unsetCurrentComponent');
-        this.$store.commit("campaign/unsetCurrentCustomComponent");
-
-        this.$store.commit('campaign/setActiveModule', e.newIndex);
-        this.$store.commit("campaign/setDirty", true);
-
-        if (_.has(this.activeModule, 'type') && this.activeModule.type === 'studio') {
-          // Save current component if module type is studio
-          this.$store.commit('campaign/setCurrentComponent', {
-            moduleId: e.newIndex,
-            columnId: 0,
-            componentId: 0,
-          });
-        } else {
-          // Save customModule if module type is custom
-          this.$store.commit('campaign/setCustomModule', e.newIndex);
-        }
-      },
-      onChoose() {
-        this.$store.commit('campaign/unsetCustomModule');
-        this.$store.commit('campaign/unsetCurrentComponent');
-        this.$store.commit("campaign/unsetCurrentCustomComponent");
-      },
-      onMouseOver () {
-        $("#emailCanvas").addClass("hovered");
-        this.handleEmptyMessage();
-      },
-      onMouseLeave () {
-        $("#emailCanvas").removeClass("hovered");
-        this.handleEmptyMessage();
-      },
-      handleEmptyMessage () {
-        // If is dragging and the list is empty, hide empty message
-        $(".empty-message").is(":visible") && $(".ghost-component").is(":visible")
-          ? $(".empty-message").hide("fast")
-          : $(".empty-message").show()
-      },
-      remove(moduleId) {
-        this.$store.commit("campaign/removeModule", moduleId);
-      },
-      save() {
-        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
-        this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/saveCampaign", {
-          campaign: this.campaign,
-          bodyHtml
-        }).then(response => {
-          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
-          this.$store.commit("global/setLoader", false);
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
-        });
-      },
-      complete() {
-        const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
-        this.$store.commit("global/setLoader", true);
-        this.$store.dispatch("campaign/completeCampaign", {
-          campaign: this.campaign,
-          bodyHtml
-        }).then(response => {
-          this.$root.$toast('This email was saved successfully.', {className: 'et-info'});
-          this.$store.commit("global/setLoader", false);
-          this.$store.commit("campaign/toggleModal", 'modalComplete');
-        }, error => {
-          this.$store.commit("global/setLoader", false);
-          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
-        });
-      },
-      handleActive(e) {
-        const $target = $( e.target );
-        // If it's the email-canvas wrapper
-        if( $target.is( "td.stx-draggable-wrapper" )) {
-          // Clear Current module state
-          this.$store.commit("campaign/unsetActiveModule");
-          this.$store.commit("campaign/unsetCurrentModule");
-          this.$store.commit("campaign/unsetCustomModule");
-          this.$store.commit("campaign/unsetCurrentComponent");
-          this.$store.commit("campaign/unsetCurrentCustomComponent");
-          this.$store.commit("campaign/setToggleModuleSettings", false);
-        }
-        else {
-          // Get module ID
-          const moduleId = _.parseInt($target.closest(".stx-module-wrapper").find("td").attr("data-module-id"));
-          // If it's the config gear icon
-          if( $target.hasClass('icon-config') || $target.hasClass("fa-cogs") ) {
-            // Show module settings
-            this.$store.commit("campaign/setToggleModuleSettings", true);
-            // Set current Module
-            this.$store.commit("campaign/setCurrentModule", moduleId);
-          }
-          else {
-            // Hide module settings
-            this.$store.commit("campaign/setToggleModuleSettings", false);
-            // Set active Module
-            this.$store.commit("campaign/setActiveModule", moduleId);
-            // Clear 3rd column
-            this.$store.commit("campaign/unsetCurrentComponent");
-            this.$store.commit("campaign/unsetCurrentCustomComponent");
-
-            if (this.activeModule && this.activeModule.type === 'studio') {
-              this.$store.commit("campaign/unsetCustomModule");
-            }
-          }
-        }
-      }
+    templateBackgroundColor() {
+      return this.campaign.campaign_data.campaign_settings.templateBackgroundColor;
     },
-    created () {
-      let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.enable_templating);
-      let isTemplate = this.campaign.template;
+  },
+  mounted() {
+    // Prefecth placeholder image
+    this.dragGhost = new Image();
+    this.dragGhost.id = 'drag-image';
+    this.dragGhost.src = `${this.baseUrl}/images/layout/module-placeholder-min.png`;
+  },
+  created() {
+    const saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.enable_templating);
+    const isTemplate = this.campaign.template;
 
-      if (!this.campaign.campaign_data.library_config.building_mode_select) {
-        this.titleCols += 2;
-      };
-
-      if (saveAsTemplate && !isTemplate) {
-        this.buttonsCols += 2;
-      } else {
-        this.titleCols += 2;
-      };
-    },
-    mounted () {
-      // Prefecth placeholder image
-      this.dragGhost = new Image();
-      this.dragGhost.id = 'drag-image';
-      this.dragGhost.src = this.baseUrl + "/images/layout/module-placeholder-min.png";
+    if (!this.campaign.campaign_data.library_config.building_mode_select) {
+      this.titleCols += 2;
     }
-  };
+
+    if (saveAsTemplate && !isTemplate) {
+      this.buttonsCols += 2;
+    } else {
+      this.titleCols += 2;
+    }
+  },
+  methods: {
+    onAdd(e) {
+      const cloneEl = e.clone;
+      const moduleKey = $(cloneEl).find('.draggable-item').attr('module-id');
+      const moduleType = $(cloneEl).find('.draggable-item').attr('module-type');
+
+      // Find module in items by type: item or subitem
+      const found = this.findModule(moduleKey, moduleType);
+      const mod = clone(found);
+      this.addModule(mod, e.newIndex);
+
+      // Remove ghost element
+      const cloneItem = e.item;
+      cloneItem.parentNode.removeChild(cloneItem);
+      e.clone.style.opacity = '1';
+    },
+    onMove(evt, originalEvent) {
+      const h = $('.section-canvas-email').height();
+      const target = $('.section-canvas-email');
+
+      const mousePosition = originalEvent.clientY - $(window).scrollTop();
+      const topRegion = 320;
+      const bottomRegion = h - topRegion;
+
+      // Scroll when user drag down
+      if (mousePosition < topRegion || mousePosition > bottomRegion) {
+        let distance = originalEvent.clientY - (h / 1.5);
+        distance *= 0.15; // <- velocity
+        $(target).scrollTop(distance + $(target).scrollTop());
+      }
+
+      // Cannot sort to/from a fixed position
+      if (evt.related && evt.dragged) {
+        return !evt.related.classList.contains('stx-fixed') && !evt.dragged.classList.contains('stx-fixed');
+      }
+      return true;
+    },
+    onSort(e) {
+      this.$store.commit('campaign/unsetCustomModule');
+      this.$store.commit('campaign/unsetCurrentComponent');
+      this.$store.commit('campaign/unsetCurrentCustomComponent');
+
+      this.$store.commit('campaign/setActiveModule', e.newIndex);
+      this.$store.commit('campaign/setDirty', true);
+
+      if (_.has(this.activeModule, 'type') && this.activeModule.type === 'studio') {
+        // Save current component if module type is studio
+        this.$store.commit('campaign/setCurrentComponent', {
+          moduleId: e.newIndex,
+          columnId: 0,
+          componentId: 0,
+        });
+      } else {
+        // Save customModule if module type is custom
+        this.$store.commit('campaign/setCustomModule', e.newIndex);
+      }
+    },
+    onChoose() {
+      this.$store.commit('campaign/unsetCustomModule');
+      this.$store.commit('campaign/unsetCurrentComponent');
+      this.$store.commit('campaign/unsetCurrentCustomComponent');
+    },
+    onMouseOver() {
+      $('#emailCanvas').addClass('hovered');
+      this.handleEmptyMessage();
+    },
+    onMouseLeave() {
+      $('#emailCanvas').removeClass('hovered');
+      this.handleEmptyMessage();
+    },
+    handleEmptyMessage() {
+      // If is dragging and the list is empty, hide empty message
+      if ($('.empty-message').is(':visible') && $('.ghost-component').is(':visible')) {
+        $('.empty-message').hide('fast');
+      } else {
+        $('.empty-message').show();
+      }
+    },
+    remove(moduleId) {
+      this.$store.commit('campaign/removeModule', moduleId);
+    },
+    save() {
+      const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
+      this.$store.commit('global/setLoader', true);
+      this.$store.dispatch('campaign/saveCampaign', {
+        campaign: this.campaign,
+        bodyHtml,
+      }).then(() => {
+        this.$root.$toast('This email was saved successfully.', {
+          className: 'et-info',
+        });
+        this.$store.commit('global/setLoader', false);
+      }, () => {
+        this.$store.commit('global/setLoader', false);
+        this.$root.$toast(
+          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+            className: 'et-error',
+          });
+      });
+    },
+    complete() {
+      const bodyHtml = document.getElementsByClassName('section-canvas-container')[0].innerHTML;
+      this.$store.commit('global/setLoader', true);
+      this.$store.dispatch('campaign/completeCampaign', {
+        campaign: this.campaign,
+        bodyHtml,
+      }).then(() => {
+        this.$root.$toast('This email was saved successfully.', {
+          className: 'et-info',
+        });
+        this.$store.commit('global/setLoader', false);
+        this.$store.commit('campaign/toggleModal', 'modalComplete');
+      }, () => {
+        this.$store.commit('global/setLoader', false);
+        this.$root.$toast(
+          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {
+            className: 'et-error',
+          });
+      });
+    },
+    handleActive(e) {
+      const $target = $(e.target);
+      // If it's the email-canvas wrapper
+      if ($target.is('td.stx-draggable-wrapper')) {
+        // Clear Current module state
+        this.$store.commit('campaign/unsetActiveModule');
+        this.$store.commit('campaign/unsetCurrentModule');
+        this.$store.commit('campaign/unsetCustomModule');
+        this.$store.commit('campaign/unsetCurrentComponent');
+        this.$store.commit('campaign/unsetCurrentCustomComponent');
+        this.$store.commit('campaign/setToggleModuleSettings', false);
+      } else {
+        // Get module ID
+        const moduleId = _.parseInt($target.closest('.stx-module-wrapper').find('td').attr('data-module-id'));
+        // If it's the config gear icon
+        if ($target.hasClass('icon-config') || $target.hasClass('fa-cogs')) {
+          // Show module settings
+          this.$store.commit('campaign/setToggleModuleSettings', true);
+          // Set current Module
+          this.$store.commit('campaign/setCurrentModule', moduleId);
+        } else {
+          // Hide module settings
+          this.$store.commit('campaign/setToggleModuleSettings', false);
+          // Set active Module
+          this.$store.commit('campaign/setActiveModule', moduleId);
+          // Clear 3rd column
+          this.$store.commit('campaign/unsetCurrentComponent');
+          this.$store.commit('campaign/unsetCurrentCustomComponent');
+
+          if (this.activeModule && this.activeModule.type === 'studio') {
+            this.$store.commit('campaign/unsetCustomModule');
+          }
+        }
+      }
+    },
+  },
+};
 </script>
 
 <style lang="less">
