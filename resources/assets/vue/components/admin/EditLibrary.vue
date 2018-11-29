@@ -18,6 +18,9 @@
     </div>
 
     <div class="row">
+      <!-- dummy module preview -->
+      <dummy-module :config="library.config" />
+
       <section v-if="ready" class="container">
         <div class="simple-text-config admin-library-form">
           <div class="row">
@@ -150,7 +153,7 @@
                                 <label for="templateWidth">Template width</label>
                                 <p class="control">
                                   <el-input-number
-                                    size="mini" 
+                                    size="mini"
                                     v-validate="'required'"
                                     v-model="library.config.templateWidth"
                                     :class="{'is-danger': errors.has('templateWidth') }"
@@ -165,7 +168,7 @@
                                 <label for="templateMobileWidth">Template Mobile Width</label>
                                 <p class="control">
                                   <el-input-number
-                                    size="mini" 
+                                    size="mini"
                                     v-validate="'required'"
                                     v-model="library.config.templateMobileWidth"
                                     :class="{'is-danger': errors.has('templateMobileWidth') }"
@@ -264,7 +267,7 @@
                                 <p class="control">
 
                                   <el-input-number
-                                    size="mini" 
+                                    size="mini"
                                     v-validate="'required'"
                                     v-model="library.config.fontSize"
                                     :class="{'is-danger': errors.has('fontSize') }"
@@ -279,7 +282,7 @@
                                 <label for="lineHeight">Line Height</label>
                                 <p class="control">
                                   <el-input-number
-                                    size="mini" 
+                                    size="mini"
                                     v-validate="'required'"
                                     v-model="library.config.lineHeight"
                                     :class="{'is-danger': errors.has('lineHeight') }"
@@ -311,6 +314,7 @@
                                 <label for="linkDecoration">Link Decoration</label>
                                 <p class="control">
                                   <el-button
+                                    class="link-decoration"
                                     :class="{'fa fa-underline':true,'active': library.config.linkDecoration === 'underline'}"
                                     size="mini"
                                     @click.native="toggleUnderline"
@@ -324,7 +328,7 @@
                                 <p class="control">
                                   <el-input
                                     v-model="library.config.externalCssLink"
-                                    name="linkColor" 
+                                    name="linkColor"
                                     placeholder="http://www.example.com/css/styles.css"
                                   ></el-input>
                                 </p>
@@ -336,7 +340,7 @@
                                 <p class="control">
                                   <el-input
                                     v-model="library.config.colorPalettes"
-                                    name="colorPalettes" 
+                                    name="colorPalettes"
                                     placeholder="{'palette_name':['000000','Black','474646','Gray','79a8c9','Blue','cd202c','Red']}"
                                   ></el-input>
                                 </p>
@@ -388,7 +392,7 @@
 														      placeholder="Please Input"
 														      @select="handleSelect"
 														    ></el-autocomplete>
-																  	| 
+																  	|
                                   <button class="btn btn-success btn-add-group" @click.prevent="addGroup">Add Group</button>
                                 </p>
                               </div>
@@ -471,6 +475,7 @@
   import VueSticky from 'vue-sticky'
   import * as elementSettings from "./settings";
   import Draggable from 'vuedraggable'
+  import DummyModule from './partials/DummyModule.vue'
 
   export default {
     name: 'EditLibrary',
@@ -478,8 +483,9 @@
       Draggable,
       Tabs,
       Tab,
-    "input-font-family": elementSettings.FontFamily,
-    "input-generic-color": elementSettings.GenericColor,
+      "input-font-family": elementSettings.FontFamily,
+      "input-generic-color": elementSettings.GenericColor,
+      DummyModule,
     },
     data () {
       return {
@@ -615,7 +621,7 @@
               }
             });
         }
-        
+
       },
       extractErrors(errArr){
         let errors = []
@@ -637,7 +643,7 @@
       addItem(moduleId) {
         let itemData = {
           name: moduleId,
-          moduleId: moduleId, 
+          moduleId: moduleId,
           type: 'item',
         }
         this.library.modules.push(itemData);
@@ -657,6 +663,13 @@
 
         const container = document.getElementsByClassName('base-admin')[0];
         container.style.paddingLeft = 0;
+      },
+      toggleUnderline() {
+        if (this.library.config.linkDecoration) {
+          this.library.config.linkDecoration = undefined;
+        } else {
+          this.library.config.linkDecoration = 'underline';
+        }
       },
       onAdd(e){
         let cloneItem = e.item;
@@ -921,11 +934,11 @@
     .drag-component-menu{
       min-height: 30px;
       margin-left: 30px;
-      
+
       input{
         width: 50% !important;
       }
-      
+
       hr{
         margin-top: 3px;
         margin-bottom: 10px;
@@ -1094,6 +1107,20 @@
           }
         }
       }
+    }
+  }
+</style>
+<style lang="scss" scoped>
+  .link-decoration {
+    &:focus {
+      background: #fff;
+      border: 1px solid #dcdfe6;
+      color: #606266;
+    }
+    &.active {
+      background-color: #78dcd6;
+      border-color: #78dcd6;
+      color: #ffffff;
     }
   }
 </style>
