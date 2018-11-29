@@ -3,11 +3,14 @@
     <el-row type="flex">
       <el-col>
         <stui-close @click="$emit('close-modal')" />
-        <h4 v-if="title" class="modal-title">{{ title }}</h4>
-        <slot />
+        <h4 v-if="title" class="modal-header-text modal-title">{{ title }}</h4>
+        <h5 v-if="subtitle" class="modal-header-text">{{ subtitle }}</h5>
+        <div class="slot-container">
+          <slot />
+        </div>
         <div class="modal-container-footer">
           <stui-button v-if="buttonSubmitText" class="button-close-modal" type="primary" @click="$emit('submit-modal')">{{ buttonSubmitText }}</stui-button>
-          <stui-button v-if="buttonCloseText" class="button-close-modal" type="primary" @click="$emit('close-modal')">{{ buttonCloseText }}</stui-button>
+          <stui-button v-if="buttonCloseText" class="button-close-modal" :type="buttonSubmitText ? 'default' : 'primary'" :class="buttonSubmitText ? 'btn-divider' : ''" @click="$emit('close-modal')">{{ buttonCloseText }}</stui-button>
         </div>
       </el-col>
     </el-row>
@@ -16,7 +19,7 @@
 <script>
 export default {
   name: 'ModalContainer',
-  props: ['buttonCloseText', 'buttonSubmitText', 'title'],
+  props: ['buttonCloseText', 'buttonSubmitText', 'title', 'subtitle'],
 };
 </script>
 <style lang="scss" scoped>
@@ -26,15 +29,17 @@ export default {
 .button-submit-modal {
   float: right;
 }
+.btn-divider {
+  margin-right: 10px;
+}
+.modal-header-text {
+  color: #666;
+  line-height: 1.1;
+  display: inline;
+}
 .modal-title {
   font-size: 20px;
   font-weight: 300;
-  color: #666;
-  border-bottom: 1px solid #e8e8e8;
-  padding-bottom: 7px;
-  margin-bottom: 20px;
-  margin-top: 0;
-  line-height: 1.1;
 }
 .modal-container-component {
   position: fixed;
@@ -50,15 +55,23 @@ export default {
   > .el-row {
     width: 1160px !important;
     min-height: 450px;
-    overflow: hidden;
+    overflow: auto;
     margin: 0 auto;
     background-color: #fff;
     padding: 25px;
     max-height: 90vh;
   }
 }
-.modal-container-footer {
-  padding: 25px 0px 0px 0px;
-  border-top: 1px solid #DDDDDD;
+.slot-container {
+  border-top: 1px solid #e8e8e8;
+  border-bottom: 1px solid #DDDDDD;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-top: 22px;
+  padding-bottom: 22px;
+  max-height: 85%;
+  overflow: auto;
+  max-height: 85%;
+  min-height: 80%;
 }
 </style>
