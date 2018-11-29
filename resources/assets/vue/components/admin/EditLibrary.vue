@@ -405,14 +405,12 @@
   import Tab from '../common/Tab.vue'
   import VueSticky from 'vue-sticky'
   import * as elementSettings from "./settings";
-  import Draggable from 'vuedraggable'
   import LibraryMenuEditor from './LibraryMenuEditor.vue';
   import ModalContainer from '../common/containers/ModalContainer.vue';
 
   export default {
     name: 'EditLibrary',
     components: {
-      Draggable,
       LibraryMenuEditor,
       ModalContainer,
       Tabs,
@@ -430,18 +428,7 @@
         libraryCopy: {},
         ready: false,
         campaignConfig: {},
-        options: {
-          group:{
-            name:'menuList',
-            pull: false,
-            put: false,
-          },
-          sort: false,
-          ghostClass: "ghost-component-menu",
-          chosenClass: "chosen-component-menu",
-          dragClass: "drag-component-menu"
-        },
-      }
+      };
     },
     directives: {
       'sticky': VueSticky,

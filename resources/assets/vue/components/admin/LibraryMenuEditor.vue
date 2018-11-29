@@ -28,13 +28,13 @@
                         class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
                 </p>
                 <draggable v-model="group.modules" class="drag-component-menu" :options="{group:'menuList'}" @add="onAdd">
-                  <template v-for="(module, idx) in group.modules">
-                    <el-tooltip :key="idx" class="item" effect="light" placement="left">
+                  <template v-for="(module, modIdx) in group.modules">
+                    <el-tooltip :key="modIdx" class="item" effect="light" placement="left">
                       <div slot="content">ID: {{ module.moduleId }}</div>
                       <li class="component-item list-group-item">
                         <input v-model="module.name" v-validate="'required'"
                                :class="{'input': true, 'menu-item' : true }" type="text" placeholder="Enter module name">
-                        <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(group.modules,idx)" />
+                        <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(group.modules,modIdx)" />
                       </li>
                     </el-tooltip>
                   </template>
