@@ -436,7 +436,6 @@ export default {
     &.stx-mobile-mode {
       // Mobile Classes
       @import '../../../less/base/commons/mobile/mobile_core_styles';
-      @import '../../../less/base/commons/mobile/mobile_client_styles';
     }
     span, td, table, div {
       -webkit-font-smoothing: antialiased;
