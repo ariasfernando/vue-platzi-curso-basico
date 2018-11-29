@@ -4,46 +4,40 @@
       <div class="col-xs-9 header-col">
         <div class="pull-left">
           <stui-button class="router-remove-underline" type="default">
-            <i class="glyphicon glyphicon-menu-left"/>
+            <i class="glyphicon glyphicon-menu-left" />
             <router-link to="/">Back</router-link>
           </stui-button>
         </div>
-        <div
-          class="col-xs-11 section-title vertical-center"
-          v-if="library.id"
-        >Edit {{library.name}} Library</div>
-        <div class="col-xs-11 section-title vertical-center" v-if="!library.id">New Library</div>
+        <div class="col-xs-11 section-title vertical-center">
+          {{ library.id ? `Edit ${library.name}` : 'New' }} Library
+        </div>
       </div>
       <div class="col-xs-3 header-col">
         <div class="vertical-center pull-right">
           <stui-button class="btn-margin-right" type="primary" @click="openEditModal">Edit Menu</stui-button>
           <stui-button type="primary" :disabled="errors.any()" @click="saveLibrary">
             Save
-            <i class="glyphicon glyphicon-menu-right"/>
+            <i class="glyphicon glyphicon-menu-right" />
           </stui-button>
         </div>
       </div>
     </div>
-
     <div v-if="ready" class="row">
       <column-bar-container side="left">
-        <label-item-container v-b-toggle.library-settings label="Settings" icon="glyphicon-cog"/>
+        <label-item-container v-b-toggle.library-settings label="Settings" icon="glyphicon-cog" />
         <b-collapse id="library-settings" visible accordion="library-style">
           <b-card class="control">
             <group-container
               v-for="(settingGroup, groupKey) in settingsLayout"
-              :key="`groupKey-${groupKey}`"
-            >
+              :key="`groupKey-${groupKey}`">
               <settings-container
                 :no-label="!settingGroup.showLabel"
-                :label="settingGroup.showLabel"
-              >
+                :label="settingGroup.showLabel">
                 <template slot="setting-bottom">
                   <settings-container
-                    v-for="(setting, settingKey) in getSettings(settingGroup.settings)"
-                    :key="`settingGroup-${groupKey}-setting-${settingKey}`"
-                    :label="setting.label"
-                  >
+                    v-for="(setting) in getSettings(settingGroup.settings)"
+                    :key="`settingGroup-${groupKey}-setting-${setting.name}`"
+                    :label="setting.label">
                     <template :slot="setting.settingSlot || 'setting-bottom'">
                       <component
                         :is="setting.type"
@@ -53,12 +47,11 @@
                         :name="setting.name"
                         :list="getValue(setting.listPath)"
                         :class="{'is-danger': errors.has(setting.name) }"
-                        @change="(value)=>{setValue({value, path:setting.path, name:setting.name})}"
-                      />
+                        @change="(value)=>{setValue({value, path:setting.path, name:setting.name})}" />
                       <span
                         v-show="errors.has(setting.name)"
-                        class="help is-danger"
-                      >{{ errors.first(setting.name) }}</span>
+                        class="help is-danger">
+                        {{ errors.first(setting.name) }}</span>
                     </template>
                   </settings-container>
                 </template>
@@ -67,6 +60,9 @@
           </b-card>
         </b-collapse>
       </column-bar-container>
+
+      <!-- dummy module preview -->
+      <dummy-module :config="library.config" />
     </div>
     <modal-container
       v-if="editMenu"
@@ -75,9 +71,8 @@
       title="Edit Menu "
       subtitle="(Drag modules into the order you prefer)"
       @close-modal="editMenu = false"
-      @submit-modal="saveMenu"
-    >
-      <library-menu-editor :library="libraryCopy" :modules="modules"/>
+      @submit-modal="saveMenu">
+      <library-menu-editor :library="libraryCopy" :modules="modules" />
     </modal-container>
   </div>
 </template>
@@ -86,6 +81,7 @@
   import * as elementSettings from './settings';
   import ColumnBarContainer from '../common/containers/ColumnBarContainer.vue';
   import configService from '../../services/config';
+  import DummyModule from './partials/DummyModule.vue'
   import GroupContainer from '../common/containers/GroupContainer.vue';
   import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
   import LibraryMenuEditor from './LibraryMenuEditor.vue';
@@ -106,6 +102,7 @@
       LibraryMenuEditor,
       ModalContainer,
       SettingsContainer,
+      DummyModule,
     },
     data() {
       return {
@@ -125,22 +122,6 @@
     computed: {
       settingsLayout() {
         return settingsLayout;
-      },
-      espProvider: {
-        get() {
-          return this.library.config.espProvider ? this.library.config.espProvider : null;
-        },
-        set(espProvider) {
-          this.library.config.espProvider = espProvider;
-        },
-      },
-      fixedModules: {
-        get() {
-          return this.library.config.fixedModules ? this.library.config.fixedModules : '';
-        },
-        set(fixedModules) {
-          this.library.config.fixedModules = JSON.stringify(fixedModules);
-        },
       },
     },
     methods: {
@@ -169,12 +150,13 @@
       loadLibrary() {
         libraryService.espProviders()
           .then((response) => {
-            const espList = { none: { label: 'none', value: 'none' } };
+            // const espList = { none: { label: 'none', value: 'none' } };
             _.forEach(response, (esp, key) => {
               response[key].label = esp.title;
               response[key].value = key;
             });
-            this.espList = { ...espList, ...response };
+            // this.espList = { ...espList, ...response }; 
+            this.espList = response;
           })
           .catch(() => {
             this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});

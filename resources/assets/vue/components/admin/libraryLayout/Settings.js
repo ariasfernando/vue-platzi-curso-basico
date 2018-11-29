@@ -18,12 +18,20 @@ export default [
         label: 'Description',
       },
       {
+        name: 'esp',
+        path: 'library.config',
+        type: 'stui-toggle-button',
+        settingSlot: 'setting-right',
+        label: 'ESP',
+      },
+      {
         name: 'espProvider',
         path: 'library.config',
         listPath: 'espList',
         type: 'stui-select',
         settingSlot: 'setting-right',
-        label: 'ESP',
+        label: 'ESP name',
+        dependsOn: [{ path: 'library.config.esp' }],
       },
       {
         name: 'preheader',
@@ -39,7 +47,6 @@ export default [
         path: 'library.config',
         type: 'stui-input-text',
         settingSlot: 'setting-right',
-        noLabel: false,
         dependsOn: [
           { path: 'campaignConfig.preview.show_preheader' },
           { path: 'library.config.preheader' },
