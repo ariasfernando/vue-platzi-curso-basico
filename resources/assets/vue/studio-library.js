@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import VueResource from 'vue-resource/dist/vue-resource';
 import Toast from 'vue-easy-toast';
 import ElementUI from 'element-ui';
+import BootstrapVue from 'bootstrap-vue';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/en';
 import VeeValidate from 'vee-validate';
@@ -11,6 +12,7 @@ import interceptors from './interceptors';
 import store from './store';
 import { studioLibraryRoutes } from './router';
 
+Vue.use(BootstrapVue);
 Vue.use(Bootstrap);
 Vue.use(Toast, {
   horizontalPosition: 'center',

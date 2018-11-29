@@ -1,0 +1,67 @@
+<template>
+  <el-switch
+    v-model="toggled"
+    v-bind="$attrs"
+    :active-color="activeColor"
+    :inactive-color="inactiveColor"
+    :width="width"
+    :disabled="disabled" />
+</template>
+
+<script>
+export default {
+  name: 'ToggleButton',
+  props: {
+    value: {
+      type: Boolean,
+      default: false,
+    },
+    activeColor: {
+      type: String,
+      default: '#78DCD6',
+    },
+    inactiveColor: {
+      type: String,
+      default: '#dcdfe6',
+    },
+    width: {
+      type: Number,
+      default: 40,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    toggled: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.$emit('input', val);
+        this.$emit('change', val);
+      },
+    },
+  },
+};
+</script>
+<style lang="scss" scoped>
+.el-switch /deep/ .el-switch__core {
+  width: 34px !important;
+  height: 18px;
+
+  &:after {
+    width: 14px;
+    height: 14px;
+  }
+}
+.el-switch.is-checked /deep/ .el-switch__core {
+  &:after {
+    margin-left: -15px;
+  }
+}
+.el-switch {
+  float: right;
+}
+</style>
