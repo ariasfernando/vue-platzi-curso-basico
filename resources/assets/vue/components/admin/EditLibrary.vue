@@ -150,13 +150,13 @@
       loadLibrary() {
         libraryService.espProviders()
           .then((response) => {
-            // const espList = { none: { label: 'none', value: 'none' } };
+            // const espList = { none: { label: 'none', value: 'none' } }; We will need this in [STD-444]
             _.forEach(response, (esp, key) => {
               response[key].label = esp.title;
               response[key].value = key;
             });
-            // this.espList = { ...espList, ...response }; 
-            this.espList = response;
+            // this.espList = { ...espList, ...response }; We will need this in [STD-444]
+            this.espList = response; // We will remove this line in [STD-444]
           })
           .catch(() => {
             this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
