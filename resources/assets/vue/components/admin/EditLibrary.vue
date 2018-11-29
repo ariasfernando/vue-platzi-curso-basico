@@ -646,7 +646,7 @@ export default {
       };
       if (typeof formData.config.propietaryCss !== 'undefined' && formData.config.propietaryCss !== '') {
         if (!this.checkCSS(formData.config.propietaryCss)) {
-          this.$root.$toast('Proprietary Css should starts with style tag', {
+          this.$root.$toast('Proprietary Css it must be valid css rules, plus it must start with the style tag', {
             className: 'et-error',
             closeable: true,
             duration: 10000,
@@ -778,7 +778,14 @@ export default {
       this.$refs.proprietaryCss.$refs.codemirror.refresh();
     },
     checkCSS(value) {
-      return value.toString().indexOf('<style>') === 0;
+      const parser = new DOMParser();
+      const el = parser.parseFromString(value.toString(), 'text/xml');
+      if (el.childNodes[0].tagName === 'style') {
+        if (el.childNodes[0].childNodes[0].tagName !== 'parsererror') {
+          return true;
+        }
+      }
+      return false;
     },
   },
 };
