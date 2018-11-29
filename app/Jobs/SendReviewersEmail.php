@@ -120,7 +120,7 @@ class SendReviewersEmail extends Job implements ShouldQueue
             if ($data['send_to_all'] || !isset($reviewer['notified']) || !$reviewer['notified']) {
                 $user = ReviewerModel::active()->find($reviewer['user_id']);
                 $data['reviewer'] = $reviewer;
-                if (EmailSender::sendApprovalsEmail($user, $this->proof, $this->type, $data)) {
+                if ($user && EmailSender::sendApprovalsEmail($user, $this->proof, $this->type, $data)) {
 
                     $date = new UTCDateTime();
                     $reviewer['notified'] = true;
