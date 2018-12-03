@@ -59,6 +59,7 @@
             </group-container>
           </b-card>
         </b-collapse>
+        <button @click="editPropietaryStyles = true">Open modal</button>
       </column-bar-container>
 
       <!-- dummy module preview -->
@@ -74,6 +75,13 @@
       @submit-modal="saveMenu">
       <library-menu-editor :library="libraryCopy" :modules="modules" />
     </modal-container>
+    <modal-container
+      v-if="editPropietaryStyles"
+      button-close-text="Cancel"
+      button-submit-text="Save"
+      title="Add Propietary Styles "
+      @close-modal="editPropietaryStyles = false"
+      @submit-modal="savePropietaryStyles" />
   </div>
 </template>
 
@@ -108,6 +116,7 @@
       return {
         campaignConfig: {},
         editMenu: false,
+        editPropietaryStyles: false,
         espList: {},
         library: {},
         libraryCopy: {},
@@ -197,6 +206,9 @@
         this.library.config.fixedModules = this.libraryCopy.config.fixedModules;
         this.libraryCopy = {};
         this.editMenu = false;
+      },
+      savePropietaryStyles(data) {
+        this.library.config.propietaryCss = data;
       },
       saveLibrary() {
         const formData = {
