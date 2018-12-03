@@ -71,6 +71,7 @@ class ModuleServiceProvider extends ServiceProvider
                         foreach ($libraries as $library) {
                             $modules[$module_key]['libraries'][] = $library->name;
                         }
+                        $modules[$module_key] = (object) $modules[$module_key];
                     }
                 }
             }
@@ -96,6 +97,7 @@ class ModuleServiceProvider extends ServiceProvider
                 foreach ($libraries as $library) {
                     $modules[$module->key]['libraries'][] = $library->name;
                 }
+                $modules[$module->key] = (object) $modules[$module->key];
             }
         }
 

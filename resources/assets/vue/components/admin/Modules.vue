@@ -54,7 +54,7 @@
             :class="{'is-empty': filteredModules[activeTab].length === 0}">
             <thead>
               <tr>
-                <th class="sortable">
+                <th class="sortable name">
                   <a
                     id="name" href="#" class="sortable-option sort-order-desc"
                     data-order-field="name">
@@ -62,7 +62,7 @@
                     <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
-                <th class="sortable">
+                <th class="sortable libraries">
                   <a
                     id="name" href="#" class="sortable-option sort-order-desc"
                     data-order-field="libraries">
@@ -70,7 +70,7 @@
                     <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
-                <th class="sortable">
+                <th class="sortable status">
                   <a
                     id="status" href="#" class="sortable-option sort-order-desc"
                     data-order-field="status">
@@ -78,21 +78,21 @@
                     <i class="glyphicon glyphicon-menu-down" />
                   </a>
                 </th>
-                <th width="150" class="bold">Actions</th>
+                <th class="actions">Actions</th>
               </tr>
             </thead>
             <tbody v-if="ready">
               <tr v-for="(module, id) in filteredModules[activeTab]" :key="id" :data-module="id">
-                <td :title="module.title">{{ module.title }}</td>
-                <td :title="module.libraries">
+                <td :title="module.title" class="name">{{ module.title }}</td>
+                <td :title="module.libraries" class="libraries">
                   <span v-for="(library) in module.libraries" :key="library" class="st-rounded-tag">{{ library }}</span>
                 </td>
-                <td :title="module.status">
+                <td :title="module.status" class="status">
                   <span v-if="module.status" class="st-rounded-tag">{{ module.status }}</span>
                 </td>
                 <td class="text-left actions icons">
                   <a v-if="module.type === 'studio'" href="#" @click="()=>{moduleSelected = module; modulePreview = true}">
-                    <i class="glyphicon glyphicon-eye-open"></i>
+                    <i class="glyphicon glyphicon-eye-open" />
                   </a>
                   <router-link v-if="module.type === 'studio'" :to="'/clone/' + module.moduleId">
                     <i class="glyphicon glyphicon-duplicate" />
@@ -253,9 +253,17 @@ $stensul-purple: #514960;
       }
       th,
       td {
-        width: 25%;
-        &:nth-of-type(2) {
+        &.name {
+          width:30%;
+        }
+        &.libraries {
           width: 40%;
+        }
+        &.status {
+          width:15%;
+        }
+        &.actions{
+          width: 15%;
         }
       }
       th {
