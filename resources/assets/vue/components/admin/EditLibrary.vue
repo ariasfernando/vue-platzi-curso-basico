@@ -1,18 +1,21 @@
 <template>
   <div class="col-xs-12 library">
-    <div class="row header" v-sticky="{ zIndex: 999, stickyTop: 0 }">
-      <div class="col-xs-9 header-col">
+    <div class="row header">
+      <div class="col-xs-5 header-col">
         <div class="pull-left">
           <stui-button class="router-remove-underline" type="default">
             <i class="glyphicon glyphicon-menu-left" />
             <router-link to="/">Back</router-link>
           </stui-button>
         </div>
-        <div class="col-xs-11 section-title vertical-center">
+        <div class="col-xs-10 section-title vertical-center">
           {{ library.id ? `Edit ${library.name}` : 'New' }} Library
         </div>
       </div>
-      <div class="col-xs-3 header-col">
+      <div class="col-xs-2 header-col">
+        <stui-switch-desktop-mobile v-model="buildingMode" />
+      </div>
+      <div class="col-xs-5 header-col">
         <div class="vertical-center pull-right">
           <stui-button class="btn-margin-right" type="primary" @click="openEditModal">Edit Menu</stui-button>
           <stui-button type="primary" :disabled="errors.any()" @click="saveLibrary">
@@ -23,7 +26,7 @@
       </div>
     </div>
     <div v-if="ready" class="row">
-      <column-bar-container side="left">
+      <column-bar-container side="left" class="edit-library-column">
         <label-item-container v-b-toggle.library-settings label="Settings" icon="glyphicon-cog" />
         <b-collapse id="library-settings" visible accordion="library-style">
           <b-card class="control">
@@ -60,9 +63,9 @@
           </b-card>
         </b-collapse>
       </column-bar-container>
-
-      <!-- dummy module preview -->
-      <dummy-module :config="library.config" />
+      <column-bar-container side="left" class="edit-library-column is-center-column">
+        <dummy-module :config="library.config" :building-mode="buildingMode" />
+      </column-bar-container>
     </div>
     <modal-container
       v-if="editMenu"
@@ -89,7 +92,6 @@
   import ModalContainer from '../common/containers/ModalContainer.vue';
   import SettingsContainer from '../common/settings/containers/SettingsContainer.vue';
   import settingsLayout from './libraryLayout/Settings';
-  import VueSticky from 'vue-sticky';
 
   export default {
     name: 'EditLibrary',
@@ -114,10 +116,8 @@
         modules: [],
         ready: false,
         state: '',
+        buildingMode: 'desktop',
       };
-    },
-    directives: {
-      'sticky': VueSticky,
     },
     computed: {
       settingsLayout() {
@@ -302,6 +302,18 @@
   @brand-secondary: @stensul-purple-light;
 
   .library {
+    padding-top: 46px;
+    .edit-library-column {
+      height: calc(100vh - 103px)!important;
+      &.is-center-column {
+        background-color: #f0f0f0;
+        width: calc(100vw - 540px);
+        .scrollbar-container-inner {
+          padding-top: 20px;
+          padding-bottom: 20px;
+        }
+      }
+    }
     .control-label {
       width: 30% !important;
     }
@@ -314,7 +326,12 @@
       height: 46px;
       padding: 7px 0px;
       box-shadow: 0px 0px 4px #999999;
-      margin-top: -3px;
+      z-index: 2;
+      position: fixed;
+      top: 56px;
+      z-index: 2;
+      left: 15px;
+      right: 15px;
 
       .header-col {
         height: 100%;
@@ -326,89 +343,6 @@
         align-items: center;
       }
 
-      .switch {
-        position: relative;
-        height: 27px;
-        width: 100px;
-        background: #C8C8C8;
-        border-radius: 3px;
-        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-        margin: 0 auto;
-      }
-
-      .switch-label {
-        position: relative;
-        z-index: 2;
-        float: left;
-        width: 50px;
-        line-height: 23px;
-        font-size: 16px;
-        color: #fff;
-        text-align: center;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
-        cursor: pointer;
-        margin: 0 !important;
-
-        i {
-          display: inline-block;
-          vertical-align: sub;
-        }
-      }
-
-      .switch-label:active {
-        font-weight: bold;
-      }
-
-      .switch-label-off {
-        padding-left: 2px;
-      }
-
-      .switch-label-on {
-        padding-right: 2px;
-      }
-
-      .switch-input {
-        display: none;
-      }
-
-      .switch-input:checked + .switch-label {
-        font-weight: bold;
-        color: #fff;
-        text-shadow: 0 1px rgba(255, 255, 255, 0.25);
-        -webkit-transition: 0.15s ease-out;
-        -moz-transition: 0.15s ease-out;
-        -o-transition: 0.15s ease-out;
-        transition: 0.15s ease-out;
-      }
-
-      .switch-input:checked + .switch-label-on ~ .switch-selection {
-        left: 50px;
-        /* Note: left: 50% doesn't transition in WebKit */
-      }
-
-      .switch-selection {
-        display: block;
-        position: absolute;
-        z-index: 1;
-        top: 2px;
-        left: 2px;
-        width: 48px;
-        height: 24px;
-        background: @brand-secondary;
-        border-radius: 3px;
-        background-image: -webkit-linear-gradient(top, @brand-primary, @brand-secondary);
-        background-image: -moz-linear-gradient(top, @brand-primary, @brand-secondary);
-        background-image: -o-linear-gradient(top, @brand-primary, @brand-secondary);
-        background-image: linear-gradient(to bottom, @brand-primary, @brand-secondary);
-        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-        -webkit-transition: left 0.15s ease-out;
-        -moz-transition: left 0.15s ease-out;
-        -o-transition: left 0.15s ease-out;
-        transition: left 0.15s ease-out;
-      }
-
       .section-title {
         font-size: 18px;
         font-family: 'Open Sans', Arial, sans-serif;
@@ -417,6 +351,9 @@
 
       .btn-margin-right{
         margin-right: 10px;
+      }
+      .stui-switch-desktop-mobile {
+        margin-top: 2px;
       }
     }
   }
