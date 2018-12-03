@@ -10,7 +10,7 @@
 
     <el-input
       v-else
-      v-model="numberValue"
+      v-model="textValue"
       :controls="false"
       class="custom-col toggleable-text"
       size="mini" />
@@ -24,12 +24,32 @@
 <script>
 
 export default {
-  name: 'InputToggleableNumber',
-  props: ['value', 'falseText', 'defaultValue'],
+  name: 'InputToggleableText',
+
+  props: {
+    value: {
+      type: [String, Number, Object, Boolean],
+      default: false,
+    },
+    falseText: {
+      type: String,
+      default: 'Disabled',
+    },
+    defaultValue: {
+      type: String,
+      default: '',
+    },
+  },
   computed: {
-    numberValue: {
+    textValue: {
       get() {
-        return this.value;
+        if (typeof this.value === 'object') {
+          return JSON.stringify(this.value);
+        } else {
+          return Application.utils.isJsonString(this.value)
+            ? JSON.stringify(this.value)
+            : String(this.value);
+        }
       },
       set(value) {
         this.$emit('input', value);
@@ -39,7 +59,7 @@ export default {
   },
   methods: {
     toggle() {
-      this.numberValue = this.value ? false : this.defaultValue;
+      this.textValue = this.value ? false : this.defaultValue;
     },
   },
 };
@@ -82,6 +102,7 @@ export default {
     &.is-disabled:focus,
     &.is-disabled:hover {
       color: #666666;
+      background-color: #f0f0f0;
       cursor: auto;
     }
   }
@@ -89,7 +110,6 @@ export default {
   .el-icon-setting{
     background: #f8f8f8;
     color: #666666;
-    cursor: inherit;
     border: 1px solid #dcdfe6;
     font-size: 11px;
     font-weight: 300;
@@ -123,7 +143,7 @@ export default {
         border: 1px solid #78dcd6;
       }
     }
-    .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled), 
+    .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled),
     .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){
       border: 1px solid #78dcd6;
     }

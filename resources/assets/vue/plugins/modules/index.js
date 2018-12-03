@@ -16,6 +16,7 @@ import textColorByBackground from './text-color-by-background';
 import textColorByBackgroundForModule from './text-color-by-background-for-module';
 import textOptions from './text-options';
 import toggleElement from './toggle-element';
+import toggleElementSetter from './toggle-element-setter';
 import variableHeight from './variable-height';
 import verticalAlignment from './vertical-alignment';
 
@@ -38,6 +39,7 @@ export default {
   textColorByBackgroundForModule,
   textOptions,
   toggleElement,
+  toggleElementSetter,
   variableHeight,
   verticalAlignment,
 };

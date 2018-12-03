@@ -9,8 +9,19 @@
   import SettingsContainer from "stensul/components/common/settings/containers/SettingsContainer.vue";
 
   export default {
-    props: ['name', 'plugin', 'columnId'],
+    props: ['name', 'columnId'],
     components: { SettingsContainer },
+    computed: {
+      module() {
+        return this.$store.getters["module/module"];
+      },
+      plugin() {
+        const plugin = this.module.structure.columns[this.columnId].plugins[this.name];
+        this.enabled = plugin.enabled;
+
+        return plugin;
+      }
+    },
     methods: {
       toggle(value) {
         const payload = {
