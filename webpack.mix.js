@@ -58,6 +58,7 @@ mix
     jQuery: 'jquery',
   })
   .less(`${assetsPath}/less/base/commons/mobile/mobile_core_styles.less`, 'public/css/mobile_core_styles.css')
+  .less(`${assetsPath}/less/base/commons/mobile/mobile_client_styles.less`, 'public/css/mobile_client_styles.css')
   .less(`${assetsPath}/less/base/tool/tool.less`, 'public/css/tool.css')
   .less(`${assetsPath}/less/base/base-v2/admin.less`, 'public/css/admin.css')
   .js([
