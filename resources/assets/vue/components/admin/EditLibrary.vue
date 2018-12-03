@@ -59,7 +59,7 @@
             </group-container>
           </b-card>
         </b-collapse>
-        <button @click="editPropietaryStyles = true">Open modal</button>
+        <button @click="openPropietaryStyles">Open modal</button>
       </column-bar-container>
 
       <!-- dummy module preview -->
@@ -80,8 +80,10 @@
       button-close-text="Cancel"
       button-submit-text="Save"
       title="Add Propietary Styles "
-      @close-modal="editPropietaryStyles = false"
-      @submit-modal="savePropietaryStyles" />
+      @close-modal="closePropietaryStyles"
+      @submit-modal="savePropietaryStyles" >
+      <code-editor v-model="propietaryStyles" type="css" height="calc(100vh - 126px)" />
+    </modal-container>
   </div>
 </template>
 
@@ -98,6 +100,7 @@
   import SettingsContainer from '../common/settings/containers/SettingsContainer.vue';
   import settingsLayout from './libraryLayout/Settings';
   import VueSticky from 'vue-sticky';
+  import CodeEditor from './CodeEditor.vue';
 
   export default {
     name: 'EditLibrary',
@@ -111,6 +114,7 @@
       ModalContainer,
       SettingsContainer,
       DummyModule,
+      CodeEditor,
     },
     data() {
       return {
@@ -120,6 +124,7 @@
         espList: {},
         library: {},
         libraryCopy: {},
+        propietaryStyles: {},
         modules: [],
         ready: false,
         state: '',
@@ -208,7 +213,15 @@
         this.editMenu = false;
       },
       savePropietaryStyles(data) {
-        this.library.config.propietaryCss = data;
+        this.library.config.propietaryCss = this.propietaryStyles;
+        this.editPropietaryStyles = false;
+      },
+      closePropietaryStyles() {
+        this.editPropietaryStyles = false;
+      },
+      openPropietaryStyles() {
+        this.propietaryStyles = this.library.config.propietaryCss;
+        this.editPropietaryStyles = true;
       },
       saveLibrary() {
         const formData = {
