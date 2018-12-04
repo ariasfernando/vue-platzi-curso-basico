@@ -1,35 +1,29 @@
 <template>
   <div
     class="half-style-setting-padding align-element"
-    :title="`Padding ${this.side}`"
-    v-b-tooltip.hover
-    :data-tooltip="`Padding ${this.side}`"
-      >
+    :title="`Padding ${side}`">
+    <span class="side-title">{{ uppercaseSide }}</span>
     <el-input-number
-      size="mini" 
-      v-validate="'required'"
       v-model="padding"
+      v-validate="'required'"
+      controls-position="right"
+      size="mini"
       :min="min"
-      :controls="true"
-    ></el-input-number>
-    <el-button
-      class="button"
-      disabled="disabled"
-    >px</el-button>
+      :controls="true" />
   </div>
 </template>
 
 <script>
-import _ from "lodash";
-import SettingMixin from "../mixins/SettingMixin.js";
+import _ from 'lodash';
+import SettingMixin from '../mixins/SettingMixin';
 
 export default {
-  name: "Padding",
-  props: ["side", "element"],
+  name: 'Padding',
   mixins: [SettingMixin],
+  props: ['side', 'element'],
   data() {
     return {
-      min: 0
+      min: 0,
     };
   },
   computed: {
@@ -38,14 +32,17 @@ export default {
         return _.parseInt(this.element.style[`padding${this.side}`]) || 0;
       },
       set(value) {
-        this.$emit("setting-updated", {
+        this.$emit('setting-updated', {
           subComponent: this.subComponent,
-          link: "style",
+          link: 'style',
           name: `padding${this.side}`,
-          value: `${value}px`
+          value: `${value}px`,
         });
-      }
-    }
+      },
+    },
+    uppercaseSide() {
+      return this.side.toUpperCase();
+    },
   },
 };
 </script>
@@ -88,21 +85,29 @@ export default {
   }
 }
 .el-input-number--mini {
-  width: 80px;
-  margin-right: 25px;
+  width: 57px;
+  margin-right: 0px;
   float: right;
 }
 .half-style-setting-padding {
-  width: calc(50% - 15px);
-  margin-right: 15px;
+  width: calc(30% - 15px);
+  margin-right: 3px;
   padding: 5px 0;
   float: left;
   position: relative;
-}
-.half-style-setting-padding:nth-of-type(2n + 2) {
-  margin-left: 15px;
-  margin-right: 0;
-  padding-left: 0;
+
+  .side-title {
+    color: #bdbfbb;
+    font-size: 10px;
+    margin-bottom: 2px;
+    font-weight: 100;
+  }
+
+  .el-input-number /deep/ {
+    .el-input-number__decrease, .el-input-number__increase {
+      width: 17px;
+    }
+  }
 }
 </style>
   <style lang="less" >
@@ -111,7 +116,7 @@ export default {
     text-align: center;
   }
   .el-input-number .el-input__inner {
-    padding: 0;
+    padding: 0 17px 0 0;
     border-radius: 2px 0px 0px 2px;
   }
 }

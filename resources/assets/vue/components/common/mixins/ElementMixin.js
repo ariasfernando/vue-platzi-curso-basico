@@ -1,15 +1,24 @@
-import _ from 'lodash';
-
 export default {
   props: [
     'module-id',
     'column-id',
     'component-id',
-    'component'
+    'component',
+    'is-active',
+    'column',
   ],
   computed: {
     currentComponent() {
-      return this.$store.getters["module/currentComponent"];
+      return this.$store.getters['module/currentComponent'];
+    },
+    currentElement() {
+      if (this.currentComponent.componentId !== undefined) {
+        return this.module.structure.columns[this.currentComponent.columnId]
+          .components[this.currentComponent.componentId];
+      } else if (this.currentComponent.columnId !== undefined) {
+        return this.module.structure.columns[this.currentComponent.columnId];
+      }
+      return this.module;
     },
     templateInnerWidth() {
       return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.module.structure);
@@ -20,13 +29,16 @@ export default {
     imageWidth() {
       const width = this.component.image.attribute.width;
       if (_.endsWith(width, '%')) {
-        const imageContainerWidth = this.columnWidth(this.columnId)
-        - this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].container)
-        - this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].content)
-        - this.elementBorderAndPaddingHorizontalSpace(this.component.container);
-        return imageContainerWidth / 100 * _.parseInt(width);
+        const imageContainerWidth = this.columnWidth(this.columnId) -
+          this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].container) -
+          this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].content) -
+          this.elementBorderAndPaddingHorizontalSpace(this.component.container);
+        return ((imageContainerWidth / 100) * _.parseInt(width));
       }
       return width;
+    },
+    imageMaxWidth() {
+      return this.component.image.style.maxWidth || '100%';
     },
     isCampaign() {
       return !_.isEmpty(this.$store.getters['campaign/campaign']);
@@ -37,6 +49,9 @@ export default {
     },
     isInvertedStacking() {
       return this.module.structure.columnsStacking === 'invertedStacking';
+    },
+    buildingMode() {
+      return this.isCampaign ? this.$store.getters['campaign/buildingMode'] : this.$store.getters['module/buildingMode'];
     },
   },
   methods: {
@@ -148,9 +163,9 @@ export default {
     columnWidth(columnId) {
       const width = this.module.structure.columns[columnId].container.attribute.width;
       if (_.endsWith(width, '%')) {
-        return this.templateInnerWidth / 100 * parseFloat(width);
+        return (this.templateInnerWidth / 100) * parseFloat(width);
       }
-      return width;
+      return parseFloat(width);
     },
     columnBgcolor(column) {
       return this.module.structure.columns[column].container.attribute.bgcolor;

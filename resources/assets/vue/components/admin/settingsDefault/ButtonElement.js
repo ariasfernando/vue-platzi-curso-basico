@@ -94,6 +94,13 @@ function buttonDefault() {
           label: 'Element Padding',
         },
         {
+          name: 'padding',
+          type: 'horizontal-padding-group',
+          aclName: 'style_padding',
+          subComponent: 'button',
+          label: 'Content Padding',
+        },
+        {
           link: 'style',
           label: 'Border radius',
           name: 'borderRadius',
