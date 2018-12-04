@@ -1,7 +1,7 @@
 export default [
   {
     // groupLabel: 'groupLabel',
-    styles: [
+    settings: [
       {
         name: 'templateWidth',
         path: 'library.config',
@@ -67,18 +67,18 @@ export default [
         label: 'color palettes',
       },
       {
+        name: 'propietaryCss',
+        path: 'library.config',
+        type: 'stui-input-text',
+        label: 'Propietary Styles',
+      },
+      {
         name: 'templateBackgroundPalettes',
         path: 'library.config',
         type: 'stui-input-text',
         placeholder:
           '{ "default": "#FFFFFF", "options": { "White": "#FFFFFF", "Black": "#000000" } }',
         label: 'Template background palettes',
-      },
-      {
-        name: 'propietaryCss',
-        path: 'library.config',
-        type: 'stui-input-text',
-        label: 'Propietary Styles',
       },
       {
         name: 'prependHtml',

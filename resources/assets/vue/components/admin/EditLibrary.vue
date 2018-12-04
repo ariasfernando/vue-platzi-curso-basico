@@ -30,77 +30,13 @@
         <label-item-container v-b-toggle.library-settings label="Settings" icon="glyphicon-cog" />
         <b-collapse id="library-settings" visible accordion="library">
           <b-card class="control">
-            <group-container
-              v-for="(settingGroup, groupKey) in settingsLayout"
-              :key="`groupKey-${groupKey}`">
-              <settings-container
-                :no-label="!settingGroup.groupLabel"
-                :label="settingGroup.groupLabel">
-                <template slot="setting-bottom">
-                  <settings-container
-                    v-for="(setting) in getSettings(settingGroup.settings)"
-                    :key="`settingGroup-${groupKey}-setting-${setting.name}`"
-                    :label="setting.label">
-                    <template :slot="setting.settingSlot || 'setting-bottom'">
-                      <component
-                        :is="setting.type"
-                        v-validate="setting.validate"
-                        :value="getValue((setting.path !== undefined ? `${setting.path}.`:'')+setting.name)"
-                        :placeholder="setting.placeholder"
-                        :name="setting.name"
-                        :list="getValue(setting.listPath)"
-                        :class="{'is-danger': errors.has(setting.name) }"
-                        @change="(value)=>{setValue({value, path:setting.path, name:setting.name})}" />
-                      <span
-                        v-show="errors.has(setting.name)"
-                        class="help is-danger">
-                        {{ errors.first(setting.name) }}</span>
-                    </template>
-                  </settings-container>
-                </template>
-              </settings-container>
-            </group-container>
+            <settings-group-container :settings-group="settingsLayout" :get-value="getValue" :set-value="setValue" />
           </b-card>
         </b-collapse>
         <label-item-container v-b-toggle.library-styles label="Styles" icon="glyphicon-cog" />
         <b-collapse id="library-styles" accordion="library">
           <b-card class="control">
-            <group-container
-              v-for="(stylesGroup, groupKey) in stylesLayout"
-              :key="`groupKey-${groupKey}`">
-              <settings-container
-                :no-label="!stylesGroup.groupLabel"
-                :label="stylesGroup.groupLabel">
-                <template slot="setting-bottom">
-                  <settings-container
-                    v-for="(style) in getStyles(stylesGroup.styles)"
-                    :key="`stylesGroup-${groupKey}-setting-${style.name}`"
-                    :label="style.label">
-                    <template :slot="style.settingSlot || 'setting-bottom'">
-                      <component
-                        :is="style.type"
-                        v-validate="style.validate"
-                        :value="getValue((style.path !== undefined ? `${style.path}.`:'')+style.name)"
-                        :placeholder="style.placeholder"
-                        :is-numbered="style.isNumbered"
-                        :get-split="style.getSplit"
-                        :set-join="style.setJoin"
-                        :multiple="style.multiple"
-                        :name="style.name"
-                        :list="getValue(style.listPath)"
-                        :class="{'is-danger': errors.has(style.name) }"
-                        :is-small="style.isSmall"
-                        @change="(value)=>{setValue({value, path:style.path, name:style.name})}" />
-                      <span
-                        v-show="errors.has(style.name)"
-                        class="help is-danger">
-                        {{ errors.first(style.name) }}</span>
-                    </template>
-                  </settings-container>
-                </template>
-              </settings-container>
-              <button @click="openPropietaryStyles">Open modal</button>
-            </group-container>
+            <settings-group-container :settings-group="stylesLayout" :get-value="getValue" :set-value="setValue" />
           </b-card>
         </b-collapse>
       </column-bar-container>
@@ -132,6 +68,7 @@
 
 <script>
   import * as elementSettings from './settings';
+  import CodeEditor from './CodeEditor.vue';
   import ColumnBarContainer from '../common/containers/ColumnBarContainer.vue';
   import configService from '../../services/config';
   import DummyModule from './partials/DummyModule.vue'
@@ -142,22 +79,21 @@
   import ModalContainer from '../common/containers/ModalContainer.vue';
   import SettingsContainer from '../common/settings/containers/SettingsContainer.vue';
   import settingsLayout from './libraryLayout/Settings';
+  import SettingsGroupContainer from '../common/containers/SettingsGroupContainer.vue';
   import stylesLayout from './libraryLayout/Styles';
-  import CodeEditor from './CodeEditor.vue';
 
   export default {
     name: 'EditLibrary',
     components: {
-      'input-font-family': elementSettings.FontFamily,
-      'input-generic-color': elementSettings.GenericColor,
+      CodeEditor,
       ColumnBarContainer,
+      DummyModule,
       GroupContainer,
       LabelItemContainer,
       LibraryMenuEditor,
       ModalContainer,
       SettingsContainer,
-      DummyModule,
-      CodeEditor,
+      SettingsGroupContainer,
     },
     data() {
       return {
