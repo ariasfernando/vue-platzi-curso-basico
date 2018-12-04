@@ -32,21 +32,23 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    isDesktop: {
-      type: Boolean,
-      default: true,
+    buildingMode: {
+      type: String,
+      default: 'desktop',
     },
   },
   computed: {
     containerStyle() {
       return {
-        maxWidth: this.config.templateWidth ? `${_.parseInt(this.config.templateWidth) + 30}px` : '600px',
+        backgroundColor: this.config.templateBackgroundColor,
+        padding: this.config.templateBackgroundColor ? '30px' : undefined,
+        maxWidth: this.templateWidth ? `${_.parseInt(this.templateWidth)}px` : '600px',
       };
     },
     moduleStyle() {
       return {
         backgroundColor: this.config.backgroundColor,
-        width: this.isDesktop ? this.config.templateWidth : this.config.templateMobileWidth,
+        width: this.templateWidth,
       };
     },
     bodyStyle() {
@@ -66,6 +68,9 @@ export default {
     imageUrl() {
       return `${this.$_app.config.imageUrl}default/placeholder-16-9-1000x563.jpg`;
     },
+    templateWidth() {
+      return this.buildingMode === 'desktop' ? this.config.templateWidth : this.config.templateMobileWidth;
+    },
   },
 };
 </script>
@@ -75,9 +80,8 @@ export default {
     &-module {
       background-color: #ffffff;
       &-container {
-        background-color: #cdcdcd;
+        box-sizing: content-box;
         margin: 0 auto;
-        padding: $padding;
       }
     }
     &-image {
