@@ -67,12 +67,6 @@ export default [
         label: 'color palettes',
       },
       {
-        name: 'propietaryCss',
-        path: 'library.config',
-        type: 'stui-input-text',
-        label: 'Propietary Styles',
-      },
-      {
         name: 'templateBackgroundPalettes',
         path: 'library.config',
         type: 'stui-input-text',
@@ -91,6 +85,13 @@ export default [
         path: 'library.config',
         type: 'stui-input-text',
         label: 'Append to body',
+      },
+      {
+        click: 'openPropietaryStyles',
+        type: 'stui-button',
+        width: 'full',
+        propType: 'green',
+        text: 'Add Propietary Styles',
       },
     ],
   },

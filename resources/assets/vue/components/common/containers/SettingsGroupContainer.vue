@@ -20,6 +20,14 @@
                 :name="setting.name"
                 :list="getValue(setting.listPath)"
                 :class="{'is-danger': errors.has(setting.name) }"
+                :is-numbered="setting.isNumbered"
+                :get-split="setting.getSplit"
+                :set-join="setting.setJoin"
+                :multiple="setting.multiple"
+                :text="setting.text"
+                :type="setting.propType"
+                :width="setting.width"
+                @click="getValue(setting.click)()"
                 @change="(value)=>{setValue({value, path:setting.path, name:setting.name})}" />
               <span
                 v-show="errors.has(setting.name)"

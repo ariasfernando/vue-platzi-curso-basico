@@ -60,24 +60,21 @@
       button-submit-text="Save"
       title="Add Propietary Styles "
       @close-modal="closePropietaryStyles"
-      @submit-modal="savePropietaryStyles" >
+      @submit-modal="savePropietaryStyles">
       <code-editor v-model="propietaryStyles" type="css" height="calc(100vh - 126px)" />
     </modal-container>
   </div>
 </template>
 
 <script>
-  import * as elementSettings from './settings';
   import CodeEditor from './CodeEditor.vue';
   import ColumnBarContainer from '../common/containers/ColumnBarContainer.vue';
   import configService from '../../services/config';
   import DummyModule from './partials/DummyModule.vue'
-  import GroupContainer from '../common/containers/GroupContainer.vue';
   import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
   import LibraryMenuEditor from './LibraryMenuEditor.vue';
   import libraryService from '../../services/library';
   import ModalContainer from '../common/containers/ModalContainer.vue';
-  import SettingsContainer from '../common/settings/containers/SettingsContainer.vue';
   import settingsLayout from './libraryLayout/Settings';
   import SettingsGroupContainer from '../common/containers/SettingsGroupContainer.vue';
   import stylesLayout from './libraryLayout/Styles';
@@ -88,11 +85,9 @@
       CodeEditor,
       ColumnBarContainer,
       DummyModule,
-      GroupContainer,
       LabelItemContainer,
       LibraryMenuEditor,
       ModalContainer,
-      SettingsContainer,
       SettingsGroupContainer,
     },
     data() {
