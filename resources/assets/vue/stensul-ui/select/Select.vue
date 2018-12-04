@@ -1,9 +1,10 @@
 <template>
   <el-select
+    v-model="localValue"
+    :class="isNumbered ? 'is-numbered' : ''"
     size="mini"
-    :value="value===false?'':value"
-    :placeholder="placeholder"
-    @change="(value)=>change(value)">
+    :multiple="multiple"
+    :placeholder="placeholder">
     <el-option
       v-for="(item) in list"
       :key="item.value"
@@ -30,12 +31,41 @@ export default {
         return [];
       },
     },
-  },
-  methods: {
-    change(value) {
-      this.$emit('input', value);
-      this.$emit('change', value);
+    isNumbered: {
+      type: [Boolean],
+      default: false,
     },
+    getSplit: {
+      type: [String],
+      default: '',
+    },
+    setJoin: {
+      type: [String],
+      default: '',
+    },
+    multiple: {
+      type: [Boolean],
+      default: false,
+    },
+  },
+  computed: {
+    localValue: {
+      get() {
+        const value = this.value;
+        if (this.getSplit) {
+          return value.split(this.getSplit);
+        }
+        return value;
+      },
+      set(newValue) {
+        let value = newValue;
+        if (this.setJoin) {
+          value = newValue.join(this.setJoin);
+        }
+        this.$emit('input', value);
+        this.$emit('change', value);
+      }
+    }
   },
 };
 </script>
@@ -46,5 +76,18 @@ export default {
   .el-input__inner:focus {
     border-color: rgb(120, 220, 214);
   }
+}
+.el-select-dropdown__item.selected{
+  color: #78dcd6!important;
+}
+.is-numbered /deep/ span > span.el-tag.el-tag--info {
+  counter-increment: step-counter;
+  & span::before {
+    content: counter(step-counter);
+    margin-right: 5px;
+  }
+}
+.el-select {
+    width: 100%;
 }
 </style>
