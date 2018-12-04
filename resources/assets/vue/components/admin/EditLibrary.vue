@@ -59,6 +59,7 @@
             </group-container>
           </b-card>
         </b-collapse>
+        <button @click="openPropietaryStyles">Open modal</button>
       </column-bar-container>
 
       <!-- dummy module preview -->
@@ -73,6 +74,15 @@
       @close-modal="editMenu = false"
       @submit-modal="saveMenu">
       <library-menu-editor :library="libraryCopy" :modules="modules" />
+    </modal-container>
+    <modal-container
+      v-if="editPropietaryStyles"
+      button-close-text="Cancel"
+      button-submit-text="Save"
+      title="Add Propietary Styles "
+      @close-modal="closePropietaryStyles"
+      @submit-modal="savePropietaryStyles" >
+      <code-editor v-model="propietaryStyles" type="css" height="calc(100vh - 126px)" />
     </modal-container>
   </div>
 </template>
@@ -90,6 +100,7 @@
   import SettingsContainer from '../common/settings/containers/SettingsContainer.vue';
   import settingsLayout from './libraryLayout/Settings';
   import VueSticky from 'vue-sticky';
+  import CodeEditor from './CodeEditor.vue';
 
   export default {
     name: 'EditLibrary',
@@ -103,14 +114,17 @@
       ModalContainer,
       SettingsContainer,
       DummyModule,
+      CodeEditor,
     },
     data() {
       return {
         campaignConfig: {},
         editMenu: false,
+        editPropietaryStyles: false,
         espList: {},
         library: {},
         libraryCopy: {},
+        propietaryStyles: {},
         modules: [],
         ready: false,
         state: '',
@@ -197,6 +211,17 @@
         this.library.config.fixedModules = this.libraryCopy.config.fixedModules;
         this.libraryCopy = {};
         this.editMenu = false;
+      },
+      savePropietaryStyles(data) {
+        this.library.config.propietaryCss = this.propietaryStyles;
+        this.editPropietaryStyles = false;
+      },
+      closePropietaryStyles() {
+        this.editPropietaryStyles = false;
+      },
+      openPropietaryStyles() {
+        this.propietaryStyles = this.library.config.propietaryCss;
+        this.editPropietaryStyles = true;
       },
       saveLibrary() {
         const formData = {
