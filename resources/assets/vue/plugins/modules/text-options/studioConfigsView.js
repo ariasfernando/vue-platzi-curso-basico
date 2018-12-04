@@ -54,7 +54,7 @@ function configsView() {
         icon: 'font-mce-ico mce-i-forecolor',
       },
       backcolor: {
-        label: 'Background color',
+        label: 'Highlight color',
         icon: 'font-mce-ico mce-i-backcolor',
       },
       link: {
