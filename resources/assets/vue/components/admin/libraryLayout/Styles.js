@@ -1,0 +1,97 @@
+export default [
+  {
+    // groupLabel: 'groupLabel',
+    styles: [
+      {
+        name: 'templateWidth',
+        path: 'library.config',
+        type: 'stui-input-number',
+        validate: 'required',
+        settingSlot: 'setting-half',
+        label: 'Template width',
+      },
+      {
+        name: 'templateMobileWidth',
+        path: 'library.config',
+        type: 'stui-input-number',
+        settingSlot: 'setting-half',
+        validate: 'required',
+        label: 'Mobile Width',
+      },
+      {
+        name: 'templateBackgroundColor',
+        path: 'library.config',
+        settingSlot: 'setting-right',
+        type: 'stui-color-picker',
+        label: 'Template BG',
+      },
+      {
+        name: 'fontFamily',
+        path: 'library.config',
+        type: 'stui-select',
+        isNumbered: true,
+        multiple: true,
+        getSplit: ', ',
+        setJoin: ', ',
+        listPath: 'fontsOptions',
+        label: 'Font Family',
+      },
+      {
+        name: 'linkColor',
+        path: 'library.config',
+        type: 'stui-color-picker',
+        settingSlot: 'setting-half',
+        label: 'Link Color',
+      },
+      {
+        name: 'linkDecoration',
+        path: 'library.config',
+        type: 'stui-icon-checklist',
+        listPath: 'listLinkDecoration',
+        settingSlot: 'setting-half',
+        label: 'Link Decoration',
+      },
+      {
+        name: 'externalCssLink',
+        path: 'library.config',
+        type: 'stui-input-text',
+        placeholder: 'http://www.example.com/css/styles.css',
+        label: 'External CSS Link',
+      },
+      {
+        name: 'colorPalettes',
+        path: 'library.config',
+        type: 'stui-input-text',
+        placeholder:
+          '{"palette_name":["000000","Black","474646","Gray","79a8c9","Blue","cd202c","Red"]}',
+        label: 'color palettes',
+      },
+      {
+        name: 'templateBackgroundPalettes',
+        path: 'library.config',
+        type: 'stui-input-text',
+        placeholder:
+          '{ "default": "#FFFFFF", "options": { "White": "#FFFFFF", "Black": "#000000" } }',
+        label: 'Template background palettes',
+      },
+      {
+        name: 'propietaryCss',
+        path: 'library.config',
+        type: 'stui-input-text',
+        label: 'Propietary Styles',
+      },
+      {
+        name: 'prependHtml',
+        path: 'library.config',
+        type: 'stui-input-text',
+        label: 'Prepend to body',
+      },
+      {
+        name: 'appendHtml',
+        path: 'library.config',
+        type: 'stui-input-text',
+        label: 'Append to body',
+      },
+    ],
+  },
+];

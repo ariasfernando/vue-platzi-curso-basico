@@ -28,14 +28,14 @@
     <div v-if="ready" class="row">
       <column-bar-container side="left" class="edit-library-column">
         <label-item-container v-b-toggle.library-settings label="Settings" icon="glyphicon-cog" />
-        <b-collapse id="library-settings" visible accordion="library-style">
+        <b-collapse id="library-settings" visible accordion="library">
           <b-card class="control">
             <group-container
               v-for="(settingGroup, groupKey) in settingsLayout"
               :key="`groupKey-${groupKey}`">
               <settings-container
-                :no-label="!settingGroup.showLabel"
-                :label="settingGroup.showLabel">
+                :no-label="!settingGroup.groupLabel"
+                :label="settingGroup.groupLabel">
                 <template slot="setting-bottom">
                   <settings-container
                     v-for="(setting) in getSettings(settingGroup.settings)"
@@ -62,7 +62,47 @@
             </group-container>
           </b-card>
         </b-collapse>
-        <button @click="openPropietaryStyles">Open modal</button>
+        <label-item-container v-b-toggle.library-styles label="Styles" icon="glyphicon-cog" />
+        <b-collapse id="library-styles" accordion="library">
+          <b-card class="control">
+            <group-container
+              v-for="(stylesGroup, groupKey) in stylesLayout"
+              :key="`groupKey-${groupKey}`">
+              <settings-container
+                :no-label="!stylesGroup.groupLabel"
+                :label="stylesGroup.groupLabel">
+                <template slot="setting-bottom">
+                  <settings-container
+                    v-for="(style) in getStyles(stylesGroup.styles)"
+                    :key="`stylesGroup-${groupKey}-setting-${style.name}`"
+                    :label="style.label">
+                    <template :slot="style.settingSlot || 'setting-bottom'">
+                      <component
+                        :is="style.type"
+                        v-validate="style.validate"
+                        :value="getValue((style.path !== undefined ? `${style.path}.`:'')+style.name)"
+                        :placeholder="style.placeholder"
+                        :is-numbered="style.isNumbered"
+                        :get-split="style.getSplit"
+                        :set-join="style.setJoin"
+                        :multiple="style.multiple"
+                        :name="style.name"
+                        :list="getValue(style.listPath)"
+                        :class="{'is-danger': errors.has(style.name) }"
+                        :is-small="style.isSmall"
+                        @change="(value)=>{setValue({value, path:style.path, name:style.name})}" />
+                      <span
+                        v-show="errors.has(style.name)"
+                        class="help is-danger">
+                        {{ errors.first(style.name) }}</span>
+                    </template>
+                  </settings-container>
+                </template>
+              </settings-container>
+              <button @click="openPropietaryStyles">Open modal</button>
+            </group-container>
+          </b-card>
+        </b-collapse>
       </column-bar-container>
       <column-bar-container side="left" class="edit-library-column is-center-column">
         <dummy-module :config="library.config" :building-mode="buildingMode" />
@@ -102,6 +142,7 @@
   import ModalContainer from '../common/containers/ModalContainer.vue';
   import SettingsContainer from '../common/settings/containers/SettingsContainer.vue';
   import settingsLayout from './libraryLayout/Settings';
+  import stylesLayout from './libraryLayout/Styles';
   import CodeEditor from './CodeEditor.vue';
 
   export default {
@@ -137,14 +178,50 @@
       settingsLayout() {
         return settingsLayout;
       },
+      stylesLayout() {
+        return stylesLayout;
+      },
+      fontsOptions() {
+        const fontsOptions = [];
+        const temp = {};
+        _.each(this.$_app.config.fonts, (group, index) => {
+          group.map((font) => {
+            if (index === 'custom') {
+              temp[font.name] = font.name;
+            } else {
+              temp[font] = font;
+            }
+          });
+        });
+        Object.keys(temp).forEach((name) => {
+          fontsOptions.push({
+            value: name,
+            label: name,
+          });
+        });
+        return fontsOptions;
+      },
+      listLinkDecoration() {
+        return [
+          {
+            label: 'Underline',
+            enable: 'underline',
+            disabled: 'none',
+            icon: 'fa fa-underline',
+          },
+        ];
+      },
     },
     methods: {
       getSettings(settings) {
         return settings.filter(this.getDependsOn);
       },
-      getDependsOn(setting) {
+      getStyles(styles) {
+        return styles.filter(this.getDependsOn);
+      },
+      getDependsOn(element) {
         let show = true;
-        _.forEach(setting.dependsOn, (dependOn) => {
+        _.forEach(element.dependsOn, (dependOn) => {
           if (!_.get(this, dependOn.path)) {
             show = false;
           }
@@ -318,71 +395,66 @@
 </script>
 
 <style lang='less'>
-  @stensul-purple: #514960;
-  @stensul-white: #FFFFFF;
-  @stensul-purple-light: lighten(@stensul-purple, 20%);
-  @focus: #69dac8;
+@stensul-purple: #514960;
+@stensul-white: #ffffff;
+@stensul-purple-light: lighten(@stensul-purple, 20%);
+@focus: #69dac8;
 
-  @brand-primary: lighten(@stensul-purple, 35%);
-  @brand-secondary: @stensul-purple-light;
+@brand-primary: lighten(@stensul-purple, 35%);
+@brand-secondary: @stensul-purple-light;
 
-  .library {
-    padding-top: 46px;
-    .edit-library-column {
-      height: calc(100vh - 103px)!important;
-      &.is-center-column {
-        background-color: #f0f0f0;
-        // this should be updated to 540 if a 3rd column is added
-        width: calc(100vw - 270px);
-        .scrollbar-container-inner {
-          padding-top: 20px;
-          padding-bottom: 20px;
-          // this should be removed if a 3rd column is added
-          padding-right: 270px;
-        }
-      }
-    }
-    .control-label {
-      width: 30% !important;
-    }
-
-    margin-top: -15px;
-
-    .header {
-      color: @stensul-purple;
-      background-color: @stensul-white;
-      height: 46px;
-      padding: 7px 0px;
-      box-shadow: 0px 0px 4px #999999;
-      z-index: 2;
-      position: fixed;
-      top: 56px;
-      z-index: 2;
-      left: 15px;
-      right: 15px;
-
-      .header-col {
-        height: 100%;
-      }
-
-      .vertical-center {
-        min-height: 100%;
-        display: flex;
-        align-items: center;
-      }
-
-      .section-title {
-        font-size: 18px;
-        font-family: 'Open Sans', Arial, sans-serif;
-        font-weight: 300;
-      }
-
-      .btn-margin-right{
-        margin-right: 10px;
-      }
-      .stui-switch-desktop-mobile {
-        margin-top: 2px;
+.library {
+  padding-top: 46px;
+  margin-top: -15px;
+  .edit-library-column {
+    height: calc(100vh - 103px)!important;
+    &.is-center-column {
+      background-color: #f0f0f0;
+      // this should be updated to 540 if a 3rd column is added
+      width: calc(100vw - 270px);
+      .scrollbar-container-inner {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        // this should be removed if a 3rd column is added
+        padding-right: 270px;
       }
     }
   }
+  .control-label {
+    width: 30% !important;
+  }
+  .header {
+    color: @stensul-purple;
+    background-color: @stensul-white;
+    height: 46px;
+    padding: 7px 0px;
+    box-shadow: 0px 0px 4px #999999;
+    z-index: 2;
+    position: fixed;
+    top: 56px;
+    z-index: 2;
+    left: 15px;
+    right: 15px;
+    .header-col {
+      height: 100%;
+    }
+    .vertical-center {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .section-title {
+      font-size: 18px;
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-weight: 300;
+    }
+
+    .btn-margin-right{
+      margin-right: 10px;
+    }
+    .stui-switch-desktop-mobile {
+      margin-top: 2px;
+    }
+  }
+}
 </style>
