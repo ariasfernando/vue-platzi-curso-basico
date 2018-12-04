@@ -56,6 +56,20 @@ function once(config) {
   return axios(config);
 }
 
+const isValidJson = {
+  getMessage() {
+    return 'Please, enter a valid JSON.';
+  },
+  validate(value) {
+    try {
+      JSON.parse(value);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+}
+
 // Export of custom validators for VeeValidate
 export const customValidators = {
   urlAndDestination : {
@@ -63,5 +77,9 @@ export const customValidators = {
     options: {
       immediate: false,
     },
+  },
+  isValidJson: {
+    method: isValidJson,
+    options: {},
   },
 };

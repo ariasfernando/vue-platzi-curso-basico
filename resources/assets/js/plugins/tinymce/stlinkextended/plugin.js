@@ -1,6 +1,6 @@
 /**
  * plugin.js
- * 
+ *
  * currently, stlinkextended plugin is mounted always even if link option is disabled in editor settings
  * for this reason is why if (linkButton) is in several parts of the code
  */
@@ -16,7 +16,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
     }
     var linkButton = null;
 
-    function createLinkList(callback) {  
+    function createLinkList(callback) {
         return function () {
             var linkList = editor.settings.link_list;
 
@@ -199,8 +199,8 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         selectedElm = selection.getNode();
         anchorElm = dom.getParent(selectedElm, 'a[href]');
         onlyText = isOnlyTextSelected();
-
-        data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : selection.getContent({ format: 'text' });
+        var content = (selectedElm.textContent === selection.getContent()) ? selectedElm.outerHTML : selection.getContent();
+        data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : content;
         data.href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
 
         if (anchorElm) {
@@ -434,9 +434,11 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                                 matches = editor.settings.tag_list.filter(function (tag) {
                                     return tag.value == win.find('#href').value();
                                 });
+                                // Encode only urls
+                                editor.insertContent(dom.createHTML('a', linkAttrs, (!matches.length) ? dom.encode(data.text) : data.text));
+                            } else {
+                                editor.insertContent(dom.createHTML('a', linkAttrs, data.text));
                             }
-                            // Encode only urls
-                            editor.insertContent(dom.createHTML('a', linkAttrs, (!matches.length) ? dom.encode(data.text) : data.text));
                         } else {
                             editor.execCommand('mceInsertLink', false, linkAttrs);
                         }
@@ -457,6 +459,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                             return tag.value == win.find('#href').value();
                         });
                     }
+
                     // Validate only urls
                     if ((editor.settings.link_validate_url === 'url' || editor.settings.link_validate_url === 'urlAndDestination')
                         && !matches.length 
@@ -544,7 +547,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         shortcut: 'Meta+K',
         onclick: createLinkList(showDialog),
         stateSelector: 'a[href]',
-        onPostRender : function() { 
+        onPostRender : function() {
             linkButton = this;
             stLinksExtended.buttons[editor.id] = this;
          },
@@ -587,8 +590,8 @@ var stLinksExtended = {
 
             if (linkButton) {
                 /* If there is no selection, disable the button */
-                if (!textSelection || $.trim( textSelection ) == '') {      
-                    /* But, if button is active, it means that already has a link added, 
+                if (!textSelection || $.trim( textSelection ) == '') {
+                    /* But, if button is active, it means that already has a link added,
                     so we have to enable the button, even if there is no selection made */
                     if (stLinksExtended.buttons[editor.id].active()) {
                         linkButton.disabled(false);
