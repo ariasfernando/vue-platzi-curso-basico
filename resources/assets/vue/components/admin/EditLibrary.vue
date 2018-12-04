@@ -307,10 +307,13 @@
       height: calc(100vh - 103px)!important;
       &.is-center-column {
         background-color: #f0f0f0;
-        width: calc(100vw - 540px);
+        // this should be updated to 540 if a 3rd column is added
+        width: calc(100vw - 270px);
         .scrollbar-container-inner {
           padding-top: 20px;
           padding-bottom: 20px;
+          // this should be removed if a 3rd column is added
+          padding-right: 270px;
         }
       }
     }
