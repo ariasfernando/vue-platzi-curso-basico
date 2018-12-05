@@ -81,9 +81,10 @@
     components: {
       BackgroundImage,
       ButtonElement,
+      ColumnManager,
+      CustomCodeElement,
       DividerElement,
       ImageElement,
-      ColumnManager,
       ModuleToolbar,
       TextElement,
     },

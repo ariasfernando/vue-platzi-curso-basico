@@ -146,7 +146,11 @@ export default {
       $.each($links, (i, element) => {
         const $element = $(element);
         const href = $element.attr('href');
-        $element.attr('href', href.replace('<%', 'LT%').replace('%>', '%GT'));
+        if (href) {
+          $element.attr('href', href.replace('<%', 'LT%').replace('%>', '%GT'));
+        } else {
+          $element.replaceWith($element.html());
+        }
       });
     }
 
