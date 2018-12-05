@@ -13,6 +13,9 @@
     "Application": true,
     "_": true
   },
+  "settings": {
+    "import/resolver": "webpack"
+  },
   "rules": {
     "max-len": [1, { "code": 120}],
     "no-trailing-spaces": 2,
