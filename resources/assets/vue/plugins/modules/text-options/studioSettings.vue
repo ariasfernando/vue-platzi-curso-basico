@@ -230,7 +230,7 @@ export default {
   methods: {
     showSetting(dependsOn) {
       if (dependsOn) {
-        return this.plugin.config[dependsOn.config][dependsOn.name].value;
+        return _.get(this.plugin, `config.${dependsOn.config}.${dependsOn.name}.value`, false);
       }
       return true;
     },
