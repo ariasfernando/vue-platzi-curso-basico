@@ -20,7 +20,10 @@
       </button>
     </div>
     <ul v-if="showTagDropdown && ready" class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content"
-      tabindex="0" style="top: 33px; left: 0; width: 100%;">
+      tabindex="0" style="top: 33px; left: 0; width: 100%; cursor: default;">
+      <li class="ui-autocomplete-category" v-if="$can('access_archive')">Filters</li>
+      <li v-for="filter in filters" :aria-label="filter.label" class="ui-menu-item" tabindex="-1"
+        @click.prevent="addFilterParam(filter)" v-if="$can('access_archive')">{{filter.label}}</li>
       <li class="ui-autocomplete-category">Popular tags</li>
       <li v-for="tag in filteredTagNames.popular" :aria-label="'Popular tags: ' + tag.label" class="ui-menu-item" tabindex="-1"
         @click.prevent="addSearchTerm(tag.label)">{{tag.label}}</li>
@@ -51,6 +54,10 @@
           popular: [],
           tags: []
         },
+        filters : [
+          { label: 'Show Archived Emails', tag: 'Archived', filterTerm: 'archived' },
+          { label: 'Show All Emails', tag: 'All', filterTerm: 'all' }
+        ],
         showTagDropdown: false,
         ready: false
       }
@@ -106,6 +113,10 @@
 
         this.clearModel();
         this.filteredTagNames = clone(this.tagNames);
+        this.closeTagDropdown();
+      },
+      addFilterParam: function(filter) {
+        this.$emit('add-filter-param', filter.filterTerm);
         this.closeTagDropdown();
       },
       closeTagDropdown: function() {

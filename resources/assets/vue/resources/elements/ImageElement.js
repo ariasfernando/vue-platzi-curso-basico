@@ -13,13 +13,13 @@ function imageDefault() {
       attribute: {
         placeholder: 'default/placeholder-16-9-1000x563.jpg',
         href: '',
-        alt: 'Image',
-        title: 'Image',
         width: '100%',
         height: 'auto',
       },
       style: {},
-      styleOption: {},
+      styleOption: {
+        noMobileStretch: true,
+      },
     },
     plugins: {},
     data: {},
