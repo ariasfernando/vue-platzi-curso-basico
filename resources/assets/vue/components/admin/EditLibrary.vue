@@ -214,22 +214,24 @@
         this.editMenu = true;
       },
       saveMenu() {
-        // Add behavior to save library menu
+        const emptyModules = this.libraryCopy.modules.find((element) => {
+          if (element.type === 'sub-menu') {
+            return element.modules.length === 0 || this.areEmptyModules(element.modules);
+          }
+          return element.name === '' || element.moduleId === '';
+        });
+
+        if (emptyModules) return;
+
         this.library.modules = this.libraryCopy.modules;
         this.library.config.fixedModules = this.libraryCopy.config.fixedModules;
         this.libraryCopy = {};
         this.editMenu = false;
       },
-      savePropietaryStyles(data) {
-        this.library.config.propietaryCss = this.propietaryStyles;
-        this.editPropietaryStyles = false;
-      },
-      closePropietaryStyles() {
-        this.editPropietaryStyles = false;
-      },
-      openPropietaryStyles() {
-        this.propietaryStyles = this.library.config.propietaryCss;
-        this.editPropietaryStyles = true;
+      areEmptyModules(modulesList) {
+        return modulesList.find(module => (
+          module.name === '' || module.moduleId === ''
+        ));
       },
       saveLibrary() {
         const formData = {

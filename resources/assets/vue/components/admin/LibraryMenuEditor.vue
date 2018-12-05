@@ -1,64 +1,97 @@
 <template>
-  <div class="simple-text-config admin-library-form">
-    <div class="row">
-      <div class="col-md-6">
-        <p>
-          <label for="name">Add module:</label>
-          <el-autocomplete
-            v-model="state"
-            class="inline-input"
-            :fetch-suggestions="querySearch"
-            placeholder="Please Input"
-            @select="handleSelect" />
-          |
-          <button class="btn btn-success btn-add-group" @click.prevent="addGroup">Add Group</button>
-        </p>
+  <div class="simple-text-config library-menu-container">
+    <div class="row library-menu-buttons-container">
+      <div class="library-menu-buttons">
+        <stui-button type="secondary" @click="addEmptyItem">
+          <i class="glyphicon glyphicon-plus-sign" />
+          Add Module
+        </stui-button>
+        <stui-button type="secondary" @click="addGroup">
+          <i class="glyphicon glyphicon-folder-close" />
+          Add Group
+        </stui-button>
+        <stui-button type="default">
+          <i class="glyphicon glyphicon-cog" />
+          Advanced
+        </stui-button>
       </div>
-      <div class="col-md-6">
-        <label for="name">Menu</label>
+    </div>
+    <div class="row">
+      <div class="col-md-offset-3 col-md-6">
         <div id="modules-container">
           <draggable v-model="library.modules" class="drag-component-menu components-list" :options="{group:'menuList'}">
-            <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name" :key="idx">
-              <div v-if="group.type == 'sub-menu'" :id="'group-container-' + group.name">
-                <p :class="{ 'control': true }">
-                  <input v-model="group.name" v-validate="'required'"
-                         :class="{'input': true, 'is-danger': errors.has('groupName-' + idx) }"
-                         :name="'modules[' + idx + '][name]'" type="text" placeholder="Enter group name">
-                  <span v-show="errors.has('groupName-' + idx)"
-                        class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
-                </p>
+            <div v-for="(group, idx) in library.modules" :id="'modules-' + group.name" :key="idx" class="list-item-container">
+              <div v-if="group.type == 'sub-menu'" :id="'group-container-' + group.name" class="submenu-container">
+                <div class="group-header">
+                  <span :class="{ 'control': true }">
+                    <input v-model="group.name" v-validate="'required'"
+                           :class="{'input': true, 'is-danger': errors.has('groupName-' + idx) }"
+                           :name="'modules[' + idx + '][name]'" type="text" placeholder="Enter group name">
+                    <span v-show="errors.has('groupName-' + idx)"
+                          class="help is-danger">{{ errors.first('groupName-' + idx) }}</span>
+                  </span>
+                  <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)" />
+                </div>
                 <draggable v-model="group.modules" class="drag-component-menu" :options="{group:'menuList'}" @add="onAdd">
                   <template v-for="(module, modIdx) in group.modules">
-                    <el-tooltip :key="modIdx" class="item" effect="light" placement="left">
-                      <div slot="content">ID: {{ module.moduleId }}</div>
-                      <li class="component-item list-group-item">
-                        <input v-model="module.name" v-validate="'required'"
-                               :class="{'input': true, 'menu-item' : true }" type="text" placeholder="Enter module name">
-                        <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(group.modules,modIdx)" />
+                    <div :key="modIdx" class="item inner-item" effect="light" placement="left">
+                      <li class="component-item list-group-item inner">
+                        <span class="glyphicon glyphicon-option-vertical draggable-icon" />
+                        <div class="component-item-description">
+                          <input v-model="module.name" v-validate="'required'"
+                                 :class="{'input': true , 'menu-item' : true }" type="text" placeholder="Enter module name"
+                                 :name="'modules[' + modIdx + '][name]'">
+                          <div class="component-item-id">
+                            <i class="glyphicon glyphicon-chevron-down dropdown-icon" />
+                            <el-autocomplete
+                              v-if="module.moduleId == ''"
+                              v-model="state"
+                              v-validate="'required'"
+                              :name="`module-${modIdx}-autocomplete`"
+                              class="inline-input"
+                              :fetch-suggestions="querySearch"
+                              placeholder="Undefined"
+                              @select="(item) => handleSelect(item, modIdx, idx)" />
+                            <span v-else class="component-item-name">{{ module.moduleId }}</span>
+                          </div>
+                        </div>
+                        <span class="glyphicon glyphicon-trash remove-icon" @click="deleteItem(group.modules,modIdx)" />
                       </li>
-                    </el-tooltip>
+                    </div>
                   </template>
                 </draggable>
-                <div class="group-remove-container">
-                  <span class="glyphicon glyphicon-trash group-remove" @click.prevent="deleteGroup(idx)" />
-                  <hr/>
-                </div>
               </div>
-              <el-tooltip class="item" effect="light" placement="left">
-                <div slot="content">ID: {{ group.moduleId }}</div>
+              <div class="item" effect="light" placement="left">
                 <li v-if="group.type == 'item'" class="component-item list-group-item">
-                  <input v-model="group.name" v-validate="'required'"
-                         :class="{'input': true , 'menu-item' : true }" type="text" placeholder="Enter module name">
-                  <span class="glyphicon glyphicon-trash item-remove" @click="deleteItem(library.modules,idx)" />
+                  <span class="glyphicon glyphicon-option-vertical draggable-icon" />
+                  <div class="component-item-description">
+                    <input v-model="group.name" v-validate="'required'"
+                           :class="{'input': true , 'menu-item' : true }" type="text" placeholder="Enter module name"
+                           :name="'group[' + idx + '][name]'">
+                    <div class="component-item-id">
+                      <i class="glyphicon glyphicon-chevron-down dropdown-icon" />
+                      <el-autocomplete
+                        v-if="group.moduleId == ''"
+                        v-model="state"
+                        v-validate="'required'"
+                        :name="`group-${idx}-autocomplete`"
+                        class="inline-input"
+                        :fetch-suggestions="querySearch"
+                        placeholder="Undefined"
+                        @select="(item) => handleSelect(item, idx)" />
+                      <span v-else class="component-item-name">{{ group.moduleId }}</span>
+                    </div>
+                  </div>
+                  <span class="glyphicon glyphicon-trash remove-icon" @click="deleteItem(library.modules,idx)" />
                 </li>
-              </el-tooltip>
+              </div>
             </div>
           </draggable>
         </div>
       </div>
     </div>
+    <!-- Field fixed modules" -->
     <div class="row">
-      <!-- Field fixed modules" -->
       <div v-if="library.config" class="col-md-12">
         <label for="fixedModules">Fixed modules config:</label>
         <p class="control">
@@ -77,6 +110,7 @@
 </template>
 <script>
 import Draggable from 'vuedraggable';
+import Vue from 'vue';
 
 export default {
   name: 'LibraryMenuEditor',
@@ -114,7 +148,7 @@ export default {
   },
   methods: {
     onAdd(e) {
-      let cloneItem = e.item;
+      const cloneItem = e.item;
       if (cloneItem.parentNode) {
         cloneItem.parentNode.removeChild(cloneItem);
       }
@@ -136,8 +170,8 @@ export default {
       menu.splice(idx, 1);
     },
     querySearch(queryString, cb) {
-      let modules = this.modules;
-      let results = queryString ? modules.filter(this.createFilter(queryString)) : modules;
+      const modules = this.modules;
+      const results = queryString ? modules.filter(this.createFilter(queryString)) : modules;
       // call callback function to return suggestions
       cb(results);
     },
@@ -146,14 +180,26 @@ export default {
         return (module.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    handleSelect(item) {
-      this.addItem(item.value);
+    handleSelect(item, idx, groupIdx) {
+      this.addItem(item.value, idx, groupIdx);
       this.state = '';
     },
-    addItem(moduleId) {
+    addItem(moduleId, idx, groupIdx) {
       const itemData = {
         name: moduleId,
         moduleId,
+        type: 'item',
+      };
+      if (groupIdx || groupIdx === 0) {
+        Vue.set(this.library.modules[groupIdx].modules, idx, itemData);
+      } else {
+        Vue.set(this.library.modules, idx, itemData);
+      }
+    },
+    addEmptyItem() {
+      const itemData = {
+        name: '',
+        moduleId: '',
         type: 'item',
       };
       this.library.modules.push(itemData);
@@ -162,28 +208,81 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.preview-module-container {
-  min-height: 206px;
-  background: #f0f0f0;
+.library-menu-container {
+  box-sizing: border-box;
+  position: relative;
+  padding: 15px;
+  background-color:#f0f0f0;
+  border-radius: 2px;
+
+  .library-menu-buttons-container {
+    margin-bottom: 10px;
+  
+    .library-menu-buttons {
+      float: right;
+      margin-right: 15px;
+    }
+  }
 }
-.mt-20{
-  margin-top: 20px;
+
+.list-item-container {
+  margin-bottom: 5px;
+
+  .submenu-container {
+    background-color: #ffffff;
+    border: 1px solid #ded8d8;
+    border-radius: 4px;
+
+    .group-header {
+      color: #6f6b6b;
+      padding: 10px 10px 0px 10px;
+
+      .group-remove {
+        float: right;
+        color: #808080;
+      }
+    }
+  }
 }
-.settings-container /deep/ label{
-  font-weight: 600;
+
+.list-group-item {
+  background-color: #ffffff;
+
+  &.inner {
+    background-color: #fbfafa;
+  }
 }
+
 .group-remove-container {
   width: 50%;
   text-align: right;
 }
 
-.group-remove {
-  float: none !important;
-  margin-top: 10px;
+.dropdown-icon {
+  position: absolute;
+  top: 5px;
+  pointer-events: none;
 }
 
-.item-remove {
+.inline-input /deep/ {
+  input {
+    height: 20px;
+    border: 0px;
+    background-color: transparent;
+  }
+}
+
+.inner-item {
+  margin: 7px 10px;
+}
+
+.remove-icon {
   float: right;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  right: 5px;
+  color: #808080;
 }
 
 .item-name {
@@ -218,20 +317,22 @@ export default {
   vertical-align: text-top;
 }
 .drag-component-menu{
-  min-height: 30px;
-  margin-left: 30px;
+  min-height: 55px;
 
   input{
     width: 50% !important;
-  }
-
-  hr{
-    margin-top: 3px;
-    margin-bottom: 10px;
+    border: none;
+    font-weight: bold;
+    font-size: 17px;
   }
 
   .menu-item{
-    width: 80% !important;
+    width: 100% !important;
+    border: none;
+    font-size: 17px;
+    color: #666666;
+    font-weight: 500;
+    background-color: transparent;
   }
 }
 .components-list {
@@ -249,14 +350,13 @@ export default {
     cursor: pointer;
     list-style-type: none;
     font-size: 14px;
-    background-color: #f4f4f4;
-    border: 1px solid #d8d8d8 !important;
+    border: 1px solid #eceaea !important;
     padding: 8px;
-    width: 47%;
-    margin-right: 4px;
-    margin-bottom: 4px;
+    width: 100%;
     text-align: center;
     transition: all 0.3s linear;
+    overflow: auto;
+    position: relative;
 
     i {
       margin: 0 5px;
@@ -281,6 +381,34 @@ export default {
       p{
         color: #333333;
       }
+    }
+
+    .component-item-description {
+      float: left;
+      margin-left: 20px;
+      width: 90%;
+    }
+
+    .draggable-icon {
+      float: left;
+      top: 50%;
+      transform: translateY(-50%);
+      position: absolute;
+      left: 5px;
+      color: #808080;
+    }
+
+    .component-item-id {
+      position: relative;
+      text-align: left;
+      i {
+        margin: 0px;
+        font-size: 10px;
+      }
+    }
+
+    .component-item-name {
+      padding-left: 14px;
     }
   }
 
