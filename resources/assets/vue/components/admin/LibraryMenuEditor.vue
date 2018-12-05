@@ -10,10 +10,6 @@
           <i class="glyphicon glyphicon-folder-close" />
           Add Group
         </stui-button>
-        <stui-button type="default">
-          <i class="glyphicon glyphicon-cog" />
-          Advanced
-        </stui-button>
       </div>
     </div>
     <div class="row">
