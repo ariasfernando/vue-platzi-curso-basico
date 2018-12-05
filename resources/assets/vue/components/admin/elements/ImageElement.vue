@@ -72,11 +72,10 @@
         imageUrl(imagePath) {
           if (imagePath === '' || imagePath.includes('default/')) {
             let width = this.component.image.attribute.width;
-            if (width == '100%') {
+            if (width === '100%') {
               width = this.columnWidth(this.columnId);
-            }          
-            return this.createPlaceholder(width, this.component.image.attribute.height, 
-              this.component.plugins.backgroundColor.config.defaultValue);
+            }
+            return this.createPlaceholder(width, this.component.image.attribute.height);
           }
           return this.$_app.config.imageUrl + imagePath;
         },
