@@ -15,17 +15,21 @@ const setModuleFixedStatus = (fixedModules = [], item) => {
   const found = fixedModules.find(fixed => fixed.key === item.key);
   return {
     ...JSON.parse(JSON.stringify(item)),
-    isFixed: found ? true : false,
+    isFixed: !!found,
     fixedPosition: found ? found.pos : undefined,
     type: found ? found.mandatory ? 'virtual' : item.type : item.type,
-    mandatory: found ? found.mandatory ? true : false : false
+    mandatory: found ? !!found.mandatory : false,
   };
 };
 
 const getters = {
   modules(state, getters, rootState) {
     const fixedModules = rootState.campaign ? rootState.campaign.campaign ? rootState.campaign.campaign.library_config ? rootState.campaign.campaign.library_config.fixedModules ? JSON.parse(rootState.campaign.campaign.library_config.fixedModules) : [] : [] : [] : [];
-    return map(state.modules, moduleData => {
+    return map(_.cloneDeep(state.modules), (moduleData) => {
+      if (moduleData.sub_menu) {
+        moduleData.sub_menu = map(moduleData.sub_menu, subModuleData => setModuleFixedStatus(fixedModules, subModuleData));
+        return moduleData;
+      }
       return setModuleFixedStatus(fixedModules, moduleData);
     });
   },
@@ -47,7 +51,7 @@ const actions = {
         context.commit('loadModulesData', response.modules);
       })
       .catch((err) => {
-        context.commit('error', err); 
+        context.commit('error', err);
       });
   },
 };
