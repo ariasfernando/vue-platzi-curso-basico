@@ -16,11 +16,11 @@
             :bgcolor="component.image.attribute.bgcolor"
             style="width:100%;"
           :style="elementBorderAndPadding(component.image)">
-          <a
-            :href="component.image.attribute.href"
-            :alt="component.image.attribute.alt"
-            :title="component.image.attribute.title"
-            :target="component.image.attribute.target || '_blank'"
+            <a 
+              :href="component.image.attribute.href" 
+              :alt="component.image.attribute.alt"
+              :title="component.image.attribute.title"
+              :target="component.image.attribute.target || '_blank'"
             @click.prevent>
               <img
                 :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
@@ -68,10 +68,10 @@ import ElementMixin from "../../common/mixins/ElementMixin";
 import PlaceholderMixin from "../../common/mixins/PlaceholderMixin";
 import ModuleContainer from "../../common/containers/ModuleContainer.vue";
 export default {
-  name: "ImageElement",
+  name: 'ImageElement',
   components: {
     ComponentToolbar,
-    ModuleContainer
+    ModuleContainer,
   },
   mixins: [MobileStylesMixin, ElementMixin, PlaceholderMixin],
   methods: {
@@ -93,7 +93,7 @@ export default {
     mobileStretch() {
       return this.component.image.styleOption.noMobileStretch !== true;
     }
-  }
+  },
 };
 </script>
 
