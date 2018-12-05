@@ -30,10 +30,11 @@ export default {
       return [
         'stui-button',
         `is-${this.type}`,
-        { 'full-width': this.width === 'full' }
+        { 'full-width': this.width === 'full' },
+        { 'is-disabled': this.disabled },
       ];
     },
-  }
+  },
 };
 </script>
 <style lang='scss' scoped>
@@ -79,13 +80,13 @@ export default {
     &:hover {
       background: lighten(#514960, 10%);
       color: #fff;
-      border: 1px solid darken(#514960, 12%);
+      border-color: darken(#514960, 12%);
     }
   }
-  &.is-green {
-    border-color: rgb(120, 220, 214);
-    background-color: rgb(120, 220, 214);
+  &.is-secondary {
     color: #fff;
+    background-color: rgb(120, 220, 214);
+    border: 1px solid transparent;
     &.is-disabled,
     &.is-disabled:active,
     &.is-disabled:focus,
@@ -93,12 +94,11 @@ export default {
       opacity: 0.4;
       border-color: rgb(120, 220, 214);
       background-color: rgb(120, 220, 214);
-      margin-left: 0px;
     }
     &:hover {
       background: lighten(rgb(120, 220, 214), 10%);
       color: #fff;
-      border: 1px solid darken(rgb(120, 220, 214), 12%);
+      border-color: darken(rgb(120, 220, 214), 12%);
     }
   }
   &.full-width {

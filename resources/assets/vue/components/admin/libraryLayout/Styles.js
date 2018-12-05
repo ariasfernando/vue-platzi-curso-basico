@@ -90,7 +90,7 @@ export default [
         click: 'openPropietaryStyles',
         type: 'stui-button',
         width: 'full',
-        propType: 'green',
+        propType: 'secondary',
         text: 'Add Propietary Styles',
       },
     ],
