@@ -159,7 +159,7 @@
         var cleanHtml = campaignCleaner.clean('.section-canvas-container');
 
         if (this.trackingEnabled) {
-          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+          cleanHtml = this.addTrackingParams(cleanHtml);
         }
 
         const bodyHtml = html_beautify(cleanHtml, {
@@ -313,7 +313,7 @@
             this.$store.commit("global/setLoader", false);
             return false;
           }
-          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+          cleanHtml = this.addTrackingParams(cleanHtml);
         }
 
         const bodyHtml = html_beautify(cleanHtml, {
@@ -421,7 +421,7 @@
     created () {
       this.autoSave();
       this.campaignConfig = this.$store.getters["config/config"].campaign;
-      this.trackingEnabled = (this.campaignConfig.enable_tracking && _.has(this.campaign.campaign_data.library_config, 'tracking') && this.campaign.campaign_data.library_config.tracking);
+      this.trackingEnabled = (_.has(this.campaign.campaign_data.library_config, 'tracking') && this.campaign.campaign_data.library_config.tracking);
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;
 

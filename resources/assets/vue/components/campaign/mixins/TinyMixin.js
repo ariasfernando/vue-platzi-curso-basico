@@ -192,7 +192,7 @@ export default {
         // if is not an object, should be a number
         return parseInt(editor.settings.max_lines, 10) || undefined;
       }
-      return false;
+      return undefined;
     },
     tinyMax() {
       const editor = tinymce.get(this.editorId);
